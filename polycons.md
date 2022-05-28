@@ -31,13 +31,37 @@ export class WebGrep extends Construct {
     const worker = new std.Function(this, 'Function', {
       code: __dirname + '/worker.ts',
       env: {
-        RESULTS_TOPIC: props.topic,
+        RESULTS_TOPIC: props.topic.id,
+        QUEUE: urlQueue.id,
         PATTERN: props.pattern,
       }
     });
 
     urlQueue.addWorkerFunction(worker, { concurrency: 100 });
     urlQueue.enqueue(props.rootUrl);
+  }
+}
+```
+
+`worker.ts`
+
+```ts
+import { QueueMessage, TopicClient, QueueClient } from 'pocix-clients';
+
+const results_topic = new TopicClient(process.env.RESULTS_TOPIC);
+const queue = new QueueClient(process.env.QUEUE);
+
+export function handler(message: QueueMessage) {
+  const url = message.body;
+  const html = await download_url(url);
+
+  if (new RegExp(process.ENV.PATTERN).test(html)) {
+    await results_topic.publish(url);    
+  }
+  
+  // find all urls in html
+  for (const url of urls) {
+    await queue.push(url);
   }
 }
 ```
@@ -120,6 +144,7 @@ The above example will make sure to that all SQS queues are encrypted.
 
 TBD
 
+* Runtime code
 * Use projen code generation
 
 
