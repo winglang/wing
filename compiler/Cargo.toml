@@ -1,0 +1,15 @@
+[package]
+name = "wing-compiler"
+version = "0.1.0"
+edition = "2021"
+
+[build-dependencies]
+cc = "1.0.73"
+tree-sitter-cli = "0.20.6"
+tree-sitter = "0.20.6"
+
+[dependencies]
+tree-sitter = "0.20.6"
+clap = { version = "3.2.6", features = ["derive"] }
+sha2 = "0.10"
+base16ct = { version = "0.1", features = ["alloc"] }
