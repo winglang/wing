@@ -14,8 +14,9 @@ fn main() {
         expect("Generating parser");
 
     // Build the wing parser library
+    let parser_src_path = grammar_path.join("src");
     cc::Build::new()
-        .include(grammar_path.join("src"))
-        .file("parser.c")
+        .include(&parser_src_path)
+        .file(parser_src_path.join("parser.c"))
         .compile("tree-sitter-wing");
 }
