@@ -115,7 +115,6 @@ impl Compiler<'_> {
                     }
                 }
                 
-                //js.join("\n");
                 let mut output = vec![];
                 
                 if self.shim {
@@ -126,7 +125,7 @@ impl Compiler<'_> {
 
                 if self.shim {
                     js.insert(0, "super();\n".to_string());
-                    output.push(format!("class MyApp extends {}.cloud.App {{\nconstructur() {}\n}}", STDLIB, Self::render_block(js)));
+                    output.push(format!("class MyApp extends {}.cloud.App {{\nconstructor() {}\n}}", STDLIB, Self::render_block(js)));
                     output.push("new MyApp().synth();".to_string());
                 } else {
                     output.append(&mut js);
