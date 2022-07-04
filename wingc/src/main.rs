@@ -333,8 +333,7 @@ fn main() {
         },
     };
 
-    let out_dir = std::env::current_dir().unwrap()
-        .join(Path::new(&args.out_dir.unwrap_or(format!("{}.out", args.source_file))));
+    let out_dir = PathBuf::from(&args.out_dir.unwrap_or(format!("{}.out", args.source_file)));
     fs::create_dir_all(&out_dir).expect("create output dir");
     let intermediate_dir = out_dir.join(".intermediate");
 
