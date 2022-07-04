@@ -1,10 +1,10 @@
 const { cdk } = require('projen');
 const project = new cdk.JsiiProject({
-  name: 'wing-sdk',
+  name: '@monadahq/wingsdk',
   author: 'Monada, Inc.',
   authorOrganization: true,
   authorAddress: 'ping@monada.co',
-  repository: 'https://github.com/monadahq/wing-sdk.git',
+  repository: 'https://github.com/monadahq/wingsdk.git',
   defaultReleaseBranch: 'main',
   peerDeps: ['constructs@^10'],
   jestOptions: {

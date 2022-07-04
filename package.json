@@ -1,8 +1,8 @@
 {
-  "name": "wing-sdk",
+  "name": "@monadahq/wingsdk",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monadahq/wing-sdk.git"
+    "url": "https://github.com/monadahq/wingsdk.git"
   },
   "scripts": {
     "build": "npx projen build",
