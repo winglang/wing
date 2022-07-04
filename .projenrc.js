@@ -6,7 +6,6 @@ const project = new cdk.JsiiProject({
   authorAddress: 'ping@monada.co',
   repository: 'https://github.com/monadahq/wing-sdk.git',
   defaultReleaseBranch: 'main',
-  minNodeVersion: '18.4.0',
   peerDeps: ['constructs@^10'],
   jestOptions: {
     jestVersion: '^27.0.0', // 28 requires a later typescript version

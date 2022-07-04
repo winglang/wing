@@ -24,10 +24,6 @@ jobs:
         run: |-
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-      - name: Setup Node.js
-        uses: actions/setup-node@v2.2.0
-        with:
-          node-version: 18.4.0
       - name: Install dependencies
         run: yarn install --check-files --frozen-lockfile
       - name: release

@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0.0",
-    "@types/node": "^18",
+    "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "constructs": "10.0.0",
@@ -59,9 +59,6 @@
   },
   "peerDependencies": {
     "constructs": "^10"
-  },
-  "engines": {
-    "node": ">= 18.4.0"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",
