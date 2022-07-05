@@ -419,13 +419,14 @@ The tree node.
 ```typescript
 import { cloud } from '@monadahq/wingsdk'
 
-new cloud.Queue(scope: Construct, id: string)
+new cloud.Queue(scope: Construct, id: string, props?: QueueProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
 
 ---
 
@@ -441,6 +442,12 @@ new cloud.Queue(scope: Construct, id: string)
 
 ---
 
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueProps
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -448,6 +455,7 @@ new cloud.Queue(scope: Construct, id: string)
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.addWorker">addWorker</a></code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.hello">hello</a></code> | *No description.* |
 
 ---
 
@@ -488,6 +496,12 @@ public capture(_symbol: string, _binding: Binding): ICaptureSource
 - *Type:* @monadahq/wingsdk.core.Binding
 
 ---
+
+##### `hello` <a name="hello" id="@monadahq/wingsdk.cloud.Queue.hello"></a>
+
+```typescript
+public hello(): void
+```
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -645,6 +659,34 @@ public readonly bindings: {[ key: string ]: Binding};
 ```
 
 - *Type:* {[ key: string ]: @monadahq/wingsdk.core.Binding}
+
+---
+
+### QueueProps <a name="QueueProps" id="@monadahq/wingsdk.cloud.QueueProps"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.QueueProps.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const queueProps: cloud.QueueProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>@monadahq/wingsdk.core.Duration</code> | *No description.* |
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@monadahq/wingsdk.cloud.QueueProps.property.timeout"></a>
+
+```typescript
+public readonly timeout: Duration;
+```
+
+- *Type:* @monadahq/wingsdk.core.Duration
 
 ---
 
