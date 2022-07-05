@@ -10,12 +10,12 @@ extern "C"
    * @brief the execution environment
    * This essentially tells wingii what language your input program is in
    */
-  typedef enum wingii_runtime_env_t_
+  typedef enum wingii_env_t_
   {
     // format is: <LANGUAGE>_<RUNTIME>_<VERSION>
-    WINGII_RUNTIME_ENV_JAVASCRIPT_NODEJS_16 = 1,
-    WINGII_RUNTIME_ENV_TYPESCRIPT_NODEJS_16,
-  } wingii_runtime_env_t;
+    WINGII_ENV_JAVASCRIPT_NODEJS_16 = 1,
+    WINGII_ENV_TYPESCRIPT_NODEJS_16,
+  } wingii_env_t;
 
   /**
    * @brief the type of input program
@@ -29,21 +29,21 @@ extern "C"
     WINGII_SOURCE_TYPE_FILE,
   } wingii_program_type_t;
 
-  typedef struct wingii_runtime_call_prep_t_
+  typedef struct wingii_call_prep_t_
   {
     const char *const program;
     const char *const context;
     wingii_program_type_t type;
-    wingii_runtime_env_t env;
-  } wingii_runtime_call_prep_t;
+    wingii_env_t env;
+  } wingii_call_prep_t;
 
-  wingii_runtime_call_prep_t *wingii_execute_prep_new(
+  wingii_call_prep_t *wingii_execute_prep(
       const char *const program,
       const char *const context,
       wingii_program_type_t type,
-      wingii_runtime_env_t env);
-  void wingii_execute(const wingii_runtime_call_prep_t *const);
-  void wingii_execute_prep_free(wingii_runtime_call_prep_t *const);
+      wingii_env_t env);
+  void wingii_execute(const wingii_call_prep_t *const);
+  void wingii_execute_free(wingii_call_prep_t *const);
 
 #ifdef __cplusplus
 }

@@ -39,20 +39,21 @@ namespace
 
 extern "C"
 {
-  wingii_runtime_call_prep_t *wingii_execute_prep_new(
+  wingii_call_prep_t *wingii_execute_prep(
       const char *const program,
       const char *const context,
       wingii_program_type_t type,
-      wingii_runtime_env_t env)
+      wingii_env_t env)
   {
-    return new wingii_runtime_call_prep_t{
+    return new wingii_call_prep_t{
         program,
         context,
         type,
         env};
   }
-  void wingii_execute(const wingii_runtime_call_prep_t *const prep)
+  void wingii_execute(const wingii_call_prep_t *const prep)
   {
+    // TODO: actually use "prep"
     std::vector<std::string> arguments;
     std::vector<char *> argv;
     for (const auto &arg : arguments)
@@ -75,8 +76,8 @@ extern "C"
       }
     }
   }
-  void wingii_execute_prep_free(wingii_runtime_call_prep_t *const prep)
+  void wingii_execute_free(wingii_call_prep_t *const prep)
   {
-    delete (wingii_runtime_call_prep_t *)prep;
+    delete (wingii_call_prep_t *)prep;
   }
 }
