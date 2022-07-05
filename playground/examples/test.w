@@ -3,7 +3,8 @@ x := 5s
 bucket := cloud::Bucket()
 //bucket.upload("myfile", "somedata")
 
-my_queue := cloud::Queue(timeout: 10m)
+my_queue := cloud::Queue(timeout: 30m)
+my_queue.hello()
 
 proc worker() {
   console.log("hello, world")
