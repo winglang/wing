@@ -1,0 +1,28 @@
+{
+  "name": "winglang",
+  "version": "0.0.1",
+  "description": "Wing Programming Language implementation",
+  "scripts": {
+    "install": "npm run cmake",
+    "cmake": "npm-run-all cmake:*",
+    "cmake:node": "cmake-js -m -d wingii/vendor/node",
+    "clean": "npm-run-all clean:*",
+    "clean:node": "rm -rf wingii/vendor/node/build",
+    "rebuild": "npm-run-all clean cmake"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monadahq/winglang.git"
+  },
+  "keywords": [],
+  "author": "Wing Developers",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/monadahq/winglang/issues"
+  },
+  "homepage": "https://github.com/monadahq/winglang#readme",
+  "dependencies": {
+    "cmake-js": "^6.3.2",
+    "npm-run-all": "^4.1.5"
+  }
+}

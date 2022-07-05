@@ -1,2 +1,6 @@
 wingc/target/
 wingc/grammar/src
+node_modules/
+wingii/vendor/node/build
+wingii/vendor/node/bin
+
