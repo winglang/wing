@@ -1,0 +1,7 @@
+{
+  "name": "wing-preflight",
+  "description": "A preflight environment for Wing apps",
+  "dependencies": {
+    "@monadahq/wingsdk": "^0.0.2"
+  }
+}
