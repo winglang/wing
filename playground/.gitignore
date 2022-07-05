@@ -1,0 +1,3 @@
+/target/
+*.w.out
+/node_modules/

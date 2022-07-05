@@ -1,0 +1,19 @@
+#!/bin/sh
+scriptdir=$(cd $(dirname $0) && pwd)
+cd $scriptdir
+
+# install sdk
+if [ ! -d node_modules ]; then
+  npm i
+fi
+
+# build wingc
+(
+  cd $scriptdir/../wingc
+  cargo build --quiet
+)
+
+# compile
+mkdir -p target
+$scriptdir/../wingc/target/debug/wingc $1 > target/preflight.js
+node target/preflight.js
