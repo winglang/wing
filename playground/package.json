@@ -1,0 +1,11 @@
+{
+  "name": "wing-preflight",
+  "description": "A preflight environment for Wing apps",
+  "scripts": {
+    "link-sdk": "yarn link @monadahq/wingsdk",
+    "upgrade": "npx npm-check-updates -u && npm install"
+  },
+  "dependencies": {
+    "@monadahq/wingsdk": "^0.0.4"
+  }
+}
