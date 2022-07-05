@@ -11,6 +11,14 @@ You need:
 
 And then run `npm install` to build. `npm run cmake:*` for individual targets.
 
+## Usage
+
+After building, link with `libwingii.so` and use the `wingii.h` header.
+
+## Tests
+
+Tests are executed with `npm run test`. Catch++ is used for native unit tests.
+
 ## Mission
 
 The `wingii` runtime's mission is to allow the Wing compiler (`wingc`), execute
