@@ -36,20 +36,20 @@ negotiated with the runtime at preflight time.
 
 The `wingii` runtime currently supports the following matrix:
 
-| JSII Language | Linux | Windows | MacOS | WebAssembly |
-| :------------ | :---: | :-----: | :---: | :---------: |
-| JavaScript    |  [x]  |    -    |   -   |      -      |
-| TypeScript    |  [x]  |    -    |   -   |      -      |
-| Python ^1^    |   -   |    -    |   -   |      -      |
-| Go ^2^        |   -   |    -    |   -   |      -      |
-| C# ^3^        |   -   |    -    |   -   |      -      |
-| Java ^4^      |   -   |    -    |   -   |      -      |
-| Ruby ^5^      |   -   |    -    |   -   |      -      |
+| JSII Language       |  Linux  | Windows |  MacOS  | WebAssembly |
+| :------------------ | :-----: | :-----: | :-----: | :---------: |
+| JavaScript          | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| TypeScript          | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Python <sup>1</sup> | &#9744; | &#9744; | &#9744; |   &#9744;   |
+| Go <sup>2</sup>     | &#9744; | &#9744; | &#9744; |   &#9744;   |
+| C# <sup>3</sup>     | &#9744; | &#9744; | &#9744; |   &#9744;   |
+| Java <sup>4</sup>   | &#9744; | &#9744; | &#9744; |   &#9744;   |
+| Ruby <sup>5</sup>   | &#9744; | &#9744; | &#9744; |   &#9744;   |
 
 Embedded support is planned with:
 
-- ^1^: Python with [Pyodide](https://pyodide.org)
-- ^2^: Go with [TinyGo](https://tinygo.org)
-- ^3^: C# with [Mono](https://www.mono-project.com)
-- ^4^: Java with [OpenJDK](https://github.com/openjdk/jdk)
-- ^5^: Ruby with [Ruby.wasm](https://github.com/ruby/ruby.wasm)
+<br /><sup>1</sup> Python with [Pyodide](https://pyodide.org)
+<br /><sup>2</sup> Go with [TinyGo](https://tinygo.org)
+<br /><sup>3</sup> C# with [Mono](https://www.mono-project.com)
+<br /><sup>4</sup> Java with [OpenJDK](https://github.com/openjdk/jdk)
+<br /><sup>5</sup> Ruby with [Ruby.wasm](https://github.com/ruby/ruby.wasm)
