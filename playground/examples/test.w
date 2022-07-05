@@ -1,7 +1,7 @@
 use cloud
 x := 5s
 bucket := cloud::Bucket()
-bucket.upload("myfile", "somedata")
+//bucket.upload("myfile", "somedata")
 
 my_queue := cloud::Queue(timeout: 10m)
 
@@ -10,5 +10,7 @@ proc worker() {
   bucket->upload("myfile/hello.txt", "boom boom")
 }
 
+handler := cloud::Function(worker)
 
-my_queue.add_worker(worker)
+// TODO: we need to case-convert from underscore to camelCase as we call into JSII modules
+my_queue.addWorker(handler)
