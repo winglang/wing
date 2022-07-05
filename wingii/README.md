@@ -2,6 +2,15 @@
 
 Wing Programming Language runtime (a.k.a WING Interoperability Interface).
 
+## Build
+
+You need:
+
+- A working C/C++ build environment (e.g. `gcc` or `clang`)
+- CMake installed on PATH
+
+And then run `npm install` to build. `npm run cmake:*` for individual targets.
+
 ## Mission
 
 The `wingii` runtime's mission is to allow the Wing compiler (`wingc`), execute
