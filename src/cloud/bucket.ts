@@ -1,15 +1,9 @@
-
 import { Construct } from 'constructs';
-import { Function } from './lambda';
-import { Binding, ICapturable, ICaptureSource } from './proc';
+import { Binding, ICapturable, ICaptureSource } from '../core';
 
-export class Queue extends Construct implements ICapturable {
+export class Bucket extends Construct implements ICapturable {
   constructor(scope: Construct, id: string) {
     super(scope, id);
-  }
-
-  public addWorker(fn: Function) {
-    fn;
   }
 
   public capture(_symbol: string, _binding: Binding): ICaptureSource {

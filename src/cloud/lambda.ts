@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import { Process } from './proc';
+import { Process } from '../core';
 
 export interface FunctionProps {
   readonly handler: Process;

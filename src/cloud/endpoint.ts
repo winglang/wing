@@ -1,6 +1,5 @@
 import { Construct } from 'constructs';
-import { Process } from './proc';
-
+import { Process } from '../core';
 
 export class Endpoint extends Construct {
   private readonly routes = new Array<Route>();

@@ -1,5 +1,5 @@
 import { Construct } from 'constructs';
-import * as cloud from '../../src';
+import { cloud, core } from '../../src';
 
 export interface PageParserProps {
   readonly outgoing: cloud.Queue;
@@ -25,7 +25,7 @@ export class PageParser extends Construct {
 
     const image_extractor_endpoint = new cloud.Endpoint(this, 'Endpoint');
 
-    const page_parser_handler = new cloud.Process({
+    const page_parser_handler = new core.Process({
       path: __dirname + '/inflight/page-parser',
       bindings: {
         outgoing: {
@@ -48,7 +48,7 @@ export class ImageStore extends Construct {
     super(scope, id);
 
     const bucket = new cloud.Bucket(this, 'Bucket');
-    const image_store_handler = new cloud.Process({
+    const image_store_handler = new core.Process({
       path: __dirname + '/inflight/image-store',
       bindings: {
         bucket: {

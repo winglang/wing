@@ -2,14 +2,14 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
-### App <a name="App" id="@monadahq/wingsdk.App"></a>
+### App <a name="App" id="@monadahq/wingsdk.cloud.App"></a>
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.App.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.App.Initializer"></a>
 
 ```typescript
-import { App } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-new App()
+new cloud.App()
 ```
 
 | **Name** | **Type** | **Description** |
@@ -21,12 +21,12 @@ new App()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.App.synth">synth</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.App.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.App.synth">synth</a></code> | *No description.* |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.App.toString"></a>
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.App.toString"></a>
 
 ```typescript
 public toString(): string
@@ -34,7 +34,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `synth` <a name="synth" id="@monadahq/wingsdk.App.synth"></a>
+##### `synth` <a name="synth" id="@monadahq/wingsdk.cloud.App.synth"></a>
 
 ```typescript
 public synth(): void
@@ -44,21 +44,21 @@ public synth(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.App.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.App.isConstruct"></a>
 
 ```typescript
-import { App } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-App.isConstruct(x: any)
+cloud.App.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.App.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.App.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -70,11 +70,11 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.App.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.App.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -87,32 +87,32 @@ The tree node.
 ---
 
 
-### Bucket <a name="Bucket" id="@monadahq/wingsdk.Bucket"></a>
+### Bucket <a name="Bucket" id="@monadahq/wingsdk.cloud.Bucket"></a>
 
-- *Implements:* <a href="#@monadahq/wingsdk.ICapturable">ICapturable</a>
+- *Implements:* @monadahq/wingsdk.core.ICapturable
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.Bucket.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Bucket.Initializer"></a>
 
 ```typescript
-import { Bucket } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-new Bucket(scope: Construct, id: string)
+new cloud.Bucket(scope: Construct, id: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.Bucket.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.Bucket.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.id"></a>
 
 - *Type:* string
 
@@ -122,12 +122,12 @@ new Bucket(scope: Construct, id: string)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.Bucket.capture">capture</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.capture">capture</a></code> | *No description.* |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.Bucket.toString"></a>
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Bucket.toString"></a>
 
 ```typescript
 public toString(): string
@@ -135,21 +135,21 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `capture` <a name="capture" id="@monadahq/wingsdk.Bucket.capture"></a>
+##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Bucket.capture"></a>
 
 ```typescript
 public capture(_symbol: string, _binding: Binding): ICaptureSource
 ```
 
-###### `_symbol`<sup>Required</sup> <a name="_symbol" id="@monadahq/wingsdk.Bucket.capture.parameter._symbol"></a>
+###### `_symbol`<sup>Required</sup> <a name="_symbol" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._symbol"></a>
 
 - *Type:* string
 
 ---
 
-###### `_binding`<sup>Required</sup> <a name="_binding" id="@monadahq/wingsdk.Bucket.capture.parameter._binding"></a>
+###### `_binding`<sup>Required</sup> <a name="_binding" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._binding"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.Binding">Binding</a>
+- *Type:* @monadahq/wingsdk.core.Binding
 
 ---
 
@@ -157,21 +157,21 @@ public capture(_symbol: string, _binding: Binding): ICaptureSource
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.Bucket.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Bucket.isConstruct"></a>
 
 ```typescript
-import { Bucket } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-Bucket.isConstruct(x: any)
+cloud.Bucket.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.Bucket.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Bucket.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -183,11 +183,11 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.Bucket.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Bucket.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -200,30 +200,30 @@ The tree node.
 ---
 
 
-### Endpoint <a name="Endpoint" id="@monadahq/wingsdk.Endpoint"></a>
+### Endpoint <a name="Endpoint" id="@monadahq/wingsdk.cloud.Endpoint"></a>
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.Endpoint.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Endpoint.Initializer"></a>
 
 ```typescript
-import { Endpoint } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-new Endpoint(scope: Construct, id: string)
+new cloud.Endpoint(scope: Construct, id: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Endpoint.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Endpoint.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Endpoint.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Endpoint.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.Endpoint.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Endpoint.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.Endpoint.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Endpoint.Initializer.parameter.id"></a>
 
 - *Type:* string
 
@@ -233,12 +233,12 @@ new Endpoint(scope: Construct, id: string)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Endpoint.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.Endpoint.onGet">onGet</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Endpoint.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Endpoint.onGet">onGet</a></code> | *No description.* |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.Endpoint.toString"></a>
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Endpoint.toString"></a>
 
 ```typescript
 public toString(): string
@@ -246,21 +246,21 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `onGet` <a name="onGet" id="@monadahq/wingsdk.Endpoint.onGet"></a>
+##### `onGet` <a name="onGet" id="@monadahq/wingsdk.cloud.Endpoint.onGet"></a>
 
 ```typescript
 public onGet(route: string, proc: Process): void
 ```
 
-###### `route`<sup>Required</sup> <a name="route" id="@monadahq/wingsdk.Endpoint.onGet.parameter.route"></a>
+###### `route`<sup>Required</sup> <a name="route" id="@monadahq/wingsdk.cloud.Endpoint.onGet.parameter.route"></a>
 
 - *Type:* string
 
 ---
 
-###### `proc`<sup>Required</sup> <a name="proc" id="@monadahq/wingsdk.Endpoint.onGet.parameter.proc"></a>
+###### `proc`<sup>Required</sup> <a name="proc" id="@monadahq/wingsdk.cloud.Endpoint.onGet.parameter.proc"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.Process">Process</a>
+- *Type:* @monadahq/wingsdk.core.Process
 
 ---
 
@@ -268,21 +268,21 @@ public onGet(route: string, proc: Process): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Endpoint.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Endpoint.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.Endpoint.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Endpoint.isConstruct"></a>
 
 ```typescript
-import { Endpoint } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-Endpoint.isConstruct(x: any)
+cloud.Endpoint.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.Endpoint.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Endpoint.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -294,11 +294,11 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Endpoint.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.Endpoint.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.Endpoint.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Endpoint.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -311,39 +311,39 @@ The tree node.
 ---
 
 
-### Function <a name="Function" id="@monadahq/wingsdk.Function"></a>
+### Function <a name="Function" id="@monadahq/wingsdk.cloud.Function"></a>
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.Function.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Function.Initializer"></a>
 
 ```typescript
-import { Function } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-new Function(scope: Construct, id: string, props: FunctionProps)
+new cloud.Function(scope: Construct, id: string, props: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Function.Initializer.parameter.props">props</a></code> | <code><a href="#@monadahq/wingsdk.FunctionProps">FunctionProps</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.Function.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.Function.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.Function.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.FunctionProps">FunctionProps</a>
+- *Type:* @monadahq/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -351,11 +351,11 @@ new Function(scope: Construct, id: string, props: FunctionProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Function.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.Function.toString"></a>
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Function.toString"></a>
 
 ```typescript
 public toString(): string
@@ -367,21 +367,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.Function.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Function.isConstruct"></a>
 
 ```typescript
-import { Function } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-Function.isConstruct(x: any)
+cloud.Function.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.Function.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Function.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -393,11 +393,11 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.Function.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Function.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -410,32 +410,32 @@ The tree node.
 ---
 
 
-### Queue <a name="Queue" id="@monadahq/wingsdk.Queue"></a>
+### Queue <a name="Queue" id="@monadahq/wingsdk.cloud.Queue"></a>
 
-- *Implements:* <a href="#@monadahq/wingsdk.ICapturable">ICapturable</a>
+- *Implements:* @monadahq/wingsdk.core.ICapturable
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.Queue.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Queue.Initializer"></a>
 
 ```typescript
-import { Queue } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-new Queue(scope: Construct, id: string)
+new cloud.Queue(scope: Construct, id: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.Queue.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.Queue.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id"></a>
 
 - *Type:* string
 
@@ -445,13 +445,13 @@ new Queue(scope: Construct, id: string)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.Queue.addWorker">addWorker</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Queue.capture">capture</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.addWorker">addWorker</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | *No description.* |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.Queue.toString"></a>
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Queue.toString"></a>
 
 ```typescript
 public toString(): string
@@ -459,33 +459,33 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `addWorker` <a name="addWorker" id="@monadahq/wingsdk.Queue.addWorker"></a>
+##### `addWorker` <a name="addWorker" id="@monadahq/wingsdk.cloud.Queue.addWorker"></a>
 
 ```typescript
 public addWorker(fn: Function): void
 ```
 
-###### `fn`<sup>Required</sup> <a name="fn" id="@monadahq/wingsdk.Queue.addWorker.parameter.fn"></a>
+###### `fn`<sup>Required</sup> <a name="fn" id="@monadahq/wingsdk.cloud.Queue.addWorker.parameter.fn"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.Function">Function</a>
+- *Type:* @monadahq/wingsdk.cloud.Function
 
 ---
 
-##### `capture` <a name="capture" id="@monadahq/wingsdk.Queue.capture"></a>
+##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Queue.capture"></a>
 
 ```typescript
 public capture(_symbol: string, _binding: Binding): ICaptureSource
 ```
 
-###### `_symbol`<sup>Required</sup> <a name="_symbol" id="@monadahq/wingsdk.Queue.capture.parameter._symbol"></a>
+###### `_symbol`<sup>Required</sup> <a name="_symbol" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._symbol"></a>
 
 - *Type:* string
 
 ---
 
-###### `_binding`<sup>Required</sup> <a name="_binding" id="@monadahq/wingsdk.Queue.capture.parameter._binding"></a>
+###### `_binding`<sup>Required</sup> <a name="_binding" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._binding"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.Binding">Binding</a>
+- *Type:* @monadahq/wingsdk.core.Binding
 
 ---
 
@@ -493,21 +493,21 @@ public capture(_symbol: string, _binding: Binding): ICaptureSource
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.Queue.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Queue.isConstruct"></a>
 
 ```typescript
-import { Queue } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-Queue.isConstruct(x: any)
+cloud.Queue.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.Queue.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Queue.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -519,11 +519,11 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.Queue.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Queue.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -538,38 +538,38 @@ The tree node.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### Binding <a name="Binding" id="@monadahq/wingsdk.Binding"></a>
+### Binding <a name="Binding" id="@monadahq/wingsdk.core.Binding"></a>
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.Binding.Initializer"></a>
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.Binding.Initializer"></a>
 
 ```typescript
-import { Binding } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-const binding: Binding = { ... }
+const binding: core.Binding = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Binding.property.obj">obj</a></code> | <code><a href="#@monadahq/wingsdk.ICapturable">ICapturable</a></code> | The captured object. |
-| <code><a href="#@monadahq/wingsdk.Binding.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
+| <code><a href="#@monadahq/wingsdk.core.Binding.property.obj">obj</a></code> | <code>@monadahq/wingsdk.core.ICapturable</code> | The captured object. |
+| <code><a href="#@monadahq/wingsdk.core.Binding.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
 
 ---
 
-##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.Binding.property.obj"></a>
+##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.core.Binding.property.obj"></a>
 
 ```typescript
 public readonly obj: ICapturable;
 ```
 
-- *Type:* <a href="#@monadahq/wingsdk.ICapturable">ICapturable</a>
+- *Type:* @monadahq/wingsdk.core.ICapturable
 
 The captured object.
 
 ---
 
-##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.Binding.property.methods"></a>
+##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.Binding.property.methods"></a>
 
 ```typescript
 public readonly methods: string[];
@@ -581,54 +581,54 @@ Which methods are called on the captured object.
 
 ---
 
-### FunctionProps <a name="FunctionProps" id="@monadahq/wingsdk.FunctionProps"></a>
+### FunctionProps <a name="FunctionProps" id="@monadahq/wingsdk.cloud.FunctionProps"></a>
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.FunctionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.FunctionProps.Initializer"></a>
 
 ```typescript
-import { FunctionProps } from '@monadahq/wingsdk'
+import { cloud } from '@monadahq/wingsdk'
 
-const functionProps: FunctionProps = { ... }
+const functionProps: cloud.FunctionProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.FunctionProps.property.handler">handler</a></code> | <code><a href="#@monadahq/wingsdk.Process">Process</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionProps.property.handler">handler</a></code> | <code>@monadahq/wingsdk.core.Process</code> | *No description.* |
 
 ---
 
-##### `handler`<sup>Required</sup> <a name="handler" id="@monadahq/wingsdk.FunctionProps.property.handler"></a>
+##### `handler`<sup>Required</sup> <a name="handler" id="@monadahq/wingsdk.cloud.FunctionProps.property.handler"></a>
 
 ```typescript
 public readonly handler: Process;
 ```
 
-- *Type:* <a href="#@monadahq/wingsdk.Process">Process</a>
+- *Type:* @monadahq/wingsdk.core.Process
 
 ---
 
-### ProcessProps <a name="ProcessProps" id="@monadahq/wingsdk.ProcessProps"></a>
+### ProcessProps <a name="ProcessProps" id="@monadahq/wingsdk.core.ProcessProps"></a>
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.ProcessProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.ProcessProps.Initializer"></a>
 
 ```typescript
-import { ProcessProps } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-const processProps: ProcessProps = { ... }
+const processProps: core.ProcessProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.ProcessProps.property.path">path</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.ProcessProps.property.bindings">bindings</a></code> | <code>{[ key: string ]: <a href="#@monadahq/wingsdk.Binding">Binding</a>}</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.path">path</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.bindings">bindings</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Binding}</code> | *No description.* |
 
 ---
 
-##### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.ProcessProps.property.path"></a>
+##### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.core.ProcessProps.property.path"></a>
 
 ```typescript
 public readonly path: string;
@@ -638,68 +638,68 @@ public readonly path: string;
 
 ---
 
-##### `bindings`<sup>Optional</sup> <a name="bindings" id="@monadahq/wingsdk.ProcessProps.property.bindings"></a>
+##### `bindings`<sup>Optional</sup> <a name="bindings" id="@monadahq/wingsdk.core.ProcessProps.property.bindings"></a>
 
 ```typescript
 public readonly bindings: {[ key: string ]: Binding};
 ```
 
-- *Type:* {[ key: string ]: <a href="#@monadahq/wingsdk.Binding">Binding</a>}
+- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Binding}
 
 ---
 
 ## Classes <a name="Classes" id="Classes"></a>
 
-### Duration <a name="Duration" id="@monadahq/wingsdk.Duration"></a>
+### Duration <a name="Duration" id="@monadahq/wingsdk.core.Duration"></a>
 
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Duration.fromHours">fromHours</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Duration.fromMinutes">fromMinutes</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Duration.fromSeconds">fromSeconds</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.fromHours">fromHours</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.fromMinutes">fromMinutes</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.fromSeconds">fromSeconds</a></code> | *No description.* |
 
 ---
 
-##### `fromHours` <a name="fromHours" id="@monadahq/wingsdk.Duration.fromHours"></a>
+##### `fromHours` <a name="fromHours" id="@monadahq/wingsdk.core.Duration.fromHours"></a>
 
 ```typescript
-import { Duration } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-Duration.fromHours(amount: number)
+core.Duration.fromHours(amount: number)
 ```
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.Duration.fromHours.parameter.amount"></a>
+###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromHours.parameter.amount"></a>
 
 - *Type:* number
 
 ---
 
-##### `fromMinutes` <a name="fromMinutes" id="@monadahq/wingsdk.Duration.fromMinutes"></a>
+##### `fromMinutes` <a name="fromMinutes" id="@monadahq/wingsdk.core.Duration.fromMinutes"></a>
 
 ```typescript
-import { Duration } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-Duration.fromMinutes(amount: number)
+core.Duration.fromMinutes(amount: number)
 ```
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.Duration.fromMinutes.parameter.amount"></a>
+###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromMinutes.parameter.amount"></a>
 
 - *Type:* number
 
 ---
 
-##### `fromSeconds` <a name="fromSeconds" id="@monadahq/wingsdk.Duration.fromSeconds"></a>
+##### `fromSeconds` <a name="fromSeconds" id="@monadahq/wingsdk.core.Duration.fromSeconds"></a>
 
 ```typescript
-import { Duration } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-Duration.fromSeconds(amount: number)
+core.Duration.fromSeconds(amount: number)
 ```
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.Duration.fromSeconds.parameter.amount"></a>
+###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromSeconds.parameter.amount"></a>
 
 - *Type:* number
 
@@ -709,13 +709,13 @@ Duration.fromSeconds(amount: number)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Duration.property.hours">hours</a></code> | <code>number</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Duration.property.minutes">minutes</a></code> | <code>number</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.Duration.property.seconds">seconds</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.property.hours">hours</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.property.minutes">minutes</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.property.seconds">seconds</a></code> | <code>number</code> | *No description.* |
 
 ---
 
-##### `hours`<sup>Required</sup> <a name="hours" id="@monadahq/wingsdk.Duration.property.hours"></a>
+##### `hours`<sup>Required</sup> <a name="hours" id="@monadahq/wingsdk.core.Duration.property.hours"></a>
 
 ```typescript
 public readonly hours: number;
@@ -725,7 +725,7 @@ public readonly hours: number;
 
 ---
 
-##### `minutes`<sup>Required</sup> <a name="minutes" id="@monadahq/wingsdk.Duration.property.minutes"></a>
+##### `minutes`<sup>Required</sup> <a name="minutes" id="@monadahq/wingsdk.core.Duration.property.minutes"></a>
 
 ```typescript
 public readonly minutes: number;
@@ -735,7 +735,7 @@ public readonly minutes: number;
 
 ---
 
-##### `seconds`<sup>Required</sup> <a name="seconds" id="@monadahq/wingsdk.Duration.property.seconds"></a>
+##### `seconds`<sup>Required</sup> <a name="seconds" id="@monadahq/wingsdk.core.Duration.property.seconds"></a>
 
 ```typescript
 public readonly seconds: number;
@@ -746,25 +746,25 @@ public readonly seconds: number;
 ---
 
 
-### Process <a name="Process" id="@monadahq/wingsdk.Process"></a>
+### Process <a name="Process" id="@monadahq/wingsdk.core.Process"></a>
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.Process.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Process.Initializer"></a>
 
 ```typescript
-import { Process } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-new Process(props: ProcessProps)
+new core.Process(props: ProcessProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Process.Initializer.parameter.props">props</a></code> | <code><a href="#@monadahq/wingsdk.ProcessProps">ProcessProps</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Process.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.ProcessProps</code> | *No description.* |
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.Process.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.Process.Initializer.parameter.props"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.ProcessProps">ProcessProps</a>
+- *Type:* @monadahq/wingsdk.core.ProcessProps
 
 ---
 
@@ -774,17 +774,17 @@ new Process(props: ProcessProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.Process.property.captures">captures</a></code> | <code><a href="#@monadahq/wingsdk.ICaptureSource">ICaptureSource</a>[]</code> | The captures of this proc. |
+| <code><a href="#@monadahq/wingsdk.core.Process.property.captures">captures</a></code> | <code>@monadahq/wingsdk.core.ICaptureSource[]</code> | The captures of this proc. |
 
 ---
 
-##### `captures`<sup>Required</sup> <a name="captures" id="@monadahq/wingsdk.Process.property.captures"></a>
+##### `captures`<sup>Required</sup> <a name="captures" id="@monadahq/wingsdk.core.Process.property.captures"></a>
 
 ```typescript
 public readonly captures: ICaptureSource[];
 ```
 
-- *Type:* <a href="#@monadahq/wingsdk.ICaptureSource">ICaptureSource</a>[]
+- *Type:* @monadahq/wingsdk.core.ICaptureSource[]
 
 The captures of this proc.
 
@@ -793,9 +793,9 @@ The captures of this proc.
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
-### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.ICapturable"></a>
+### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* <a href="#@monadahq/wingsdk.Bucket">Bucket</a>, <a href="#@monadahq/wingsdk.Queue">Queue</a>, <a href="#@monadahq/wingsdk.ICapturable">ICapturable</a>
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.core.ICapturable
 
 Indicates that a construct can be captured.
 
@@ -803,50 +803,50 @@ Indicates that a construct can be captured.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.ICapturable.capture">capture</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ICapturable.capture">capture</a></code> | *No description.* |
 
 ---
 
-##### `capture` <a name="capture" id="@monadahq/wingsdk.ICapturable.capture"></a>
+##### `capture` <a name="capture" id="@monadahq/wingsdk.core.ICapturable.capture"></a>
 
 ```typescript
 public capture(symbol: string, binding: Binding): ICaptureSource
 ```
 
-###### `symbol`<sup>Required</sup> <a name="symbol" id="@monadahq/wingsdk.ICapturable.capture.parameter.symbol"></a>
+###### `symbol`<sup>Required</sup> <a name="symbol" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.symbol"></a>
 
 - *Type:* string
 
 ---
 
-###### `binding`<sup>Required</sup> <a name="binding" id="@monadahq/wingsdk.ICapturable.capture.parameter.binding"></a>
+###### `binding`<sup>Required</sup> <a name="binding" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.binding"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.Binding">Binding</a>
+- *Type:* @monadahq/wingsdk.core.Binding
 
 ---
 
 
-### ICaptureSource <a name="ICaptureSource" id="@monadahq/wingsdk.ICaptureSource"></a>
+### ICaptureSource <a name="ICaptureSource" id="@monadahq/wingsdk.core.ICaptureSource"></a>
 
-- *Implemented By:* <a href="#@monadahq/wingsdk.ICaptureSource">ICaptureSource</a>
+- *Implemented By:* @monadahq/wingsdk.core.ICaptureSource
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.ICaptureSource.bind">bind</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ICaptureSource.bind">bind</a></code> | *No description.* |
 
 ---
 
-##### `bind` <a name="bind" id="@monadahq/wingsdk.ICaptureSource.bind"></a>
+##### `bind` <a name="bind" id="@monadahq/wingsdk.core.ICaptureSource.bind"></a>
 
 ```typescript
 public bind(target: ICaptureTarget): void
 ```
 
-###### `target`<sup>Required</sup> <a name="target" id="@monadahq/wingsdk.ICaptureSource.bind.parameter.target"></a>
+###### `target`<sup>Required</sup> <a name="target" id="@monadahq/wingsdk.core.ICaptureSource.bind.parameter.target"></a>
 
-- *Type:* <a href="#@monadahq/wingsdk.ICaptureTarget">ICaptureTarget</a>
+- *Type:* @monadahq/wingsdk.core.ICaptureTarget
 
 ---
 
@@ -854,12 +854,12 @@ public bind(target: ICaptureTarget): void
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.ICaptureSource.property.factoryCode">factoryCode</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.ICaptureSource.property.requireCode">requireCode</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ICaptureSource.property.factoryCode">factoryCode</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ICaptureSource.property.requireCode">requireCode</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `factoryCode`<sup>Required</sup> <a name="factoryCode" id="@monadahq/wingsdk.ICaptureSource.property.factoryCode"></a>
+##### `factoryCode`<sup>Required</sup> <a name="factoryCode" id="@monadahq/wingsdk.core.ICaptureSource.property.factoryCode"></a>
 
 ```typescript
 public readonly factoryCode: string;
@@ -869,7 +869,7 @@ public readonly factoryCode: string;
 
 ---
 
-##### `requireCode`<sup>Required</sup> <a name="requireCode" id="@monadahq/wingsdk.ICaptureSource.property.requireCode"></a>
+##### `requireCode`<sup>Required</sup> <a name="requireCode" id="@monadahq/wingsdk.core.ICaptureSource.property.requireCode"></a>
 
 ```typescript
 public readonly requireCode: string;
@@ -879,31 +879,31 @@ public readonly requireCode: string;
 
 ---
 
-### ICaptureTarget <a name="ICaptureTarget" id="@monadahq/wingsdk.ICaptureTarget"></a>
+### ICaptureTarget <a name="ICaptureTarget" id="@monadahq/wingsdk.core.ICaptureTarget"></a>
 
-- *Implemented By:* <a href="#@monadahq/wingsdk.ICaptureTarget">ICaptureTarget</a>
+- *Implemented By:* @monadahq/wingsdk.core.ICaptureTarget
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.ICaptureTarget.addEnvironment">addEnvironment</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ICaptureTarget.addEnvironment">addEnvironment</a></code> | *No description.* |
 
 ---
 
-##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.ICaptureTarget.addEnvironment"></a>
+##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.core.ICaptureTarget.addEnvironment"></a>
 
 ```typescript
 public addEnvironment(key: string, value: string): void
 ```
 
-###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.ICaptureTarget.addEnvironment.parameter.key"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.core.ICaptureTarget.addEnvironment.parameter.key"></a>
 
 - *Type:* string
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.ICaptureTarget.addEnvironment.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.core.ICaptureTarget.addEnvironment.parameter.value"></a>
 
 - *Type:* string
 
