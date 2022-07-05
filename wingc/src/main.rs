@@ -136,9 +136,11 @@ impl Compiler<'_> {
                 let module_name = self.node_text(&root.named_child(0).unwrap());
                 
                 if let Some(parent_module) = root.named_child(1) {
+                    // use <module_name> from <parent_module>
                     format!("const {} = require('{}/{}').{};", module_name, STDLIB_MODULE, self.node_text(&parent_module), module_name)
                 } else {
-                    format!("const {} = require('{}/{}');", module_name, STDLIB_MODULE, module_name)
+                    // use <module_name>
+                    format!("const {} = require('{}').{};", module_name, STDLIB_MODULE, module_name)
                 }
             },
             "variable_definition" => {
@@ -267,7 +269,7 @@ impl Compiler<'_> {
                     if !bindings.is_empty() { format!("bindings: {}", Self::render_block(&bindings)) } else {"".to_string()}
                 ]);
 
-                format!("const {} = new {}.Process({});", function_name, STDLIB, props_block)
+                format!("const {} = new {}.core.Process({});", function_name, STDLIB, props_block)
             },
             "function_name" => {
                 self.node_text(root).to_string()
@@ -298,10 +300,10 @@ impl Compiler<'_> {
                 self.node_text(root).to_string()
             },
             "seconds" => {
-                format!("{}.Duration.seconds({})", STDLIB, self.node_text(&root.child(0).unwrap()))
+                format!("{}.core.Duration.fromSeconds({})", STDLIB, self.node_text(&root.child(0).unwrap()))
             },
             "minutes" => {
-                format!("{}.Duration.minutes({})", STDLIB, self.node_text(&root.child(0).unwrap()))
+                format!("{}.core.Duration.fromMinutes({})", STDLIB, self.node_text(&root.child(0).unwrap()))
             },
             other => {
                 panic!("Unexpected node type {}", other);
