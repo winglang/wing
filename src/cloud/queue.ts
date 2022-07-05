@@ -4,14 +4,16 @@ import { Binding, Duration, ICapturable, ICaptureSource } from '../core';
 import { Function } from './lambda';
 
 export interface QueueProps {
-  readonly timeout: Duration;
+  readonly timeout?: Duration;
 }
 
 export class Queue extends Construct implements ICapturable {
-  constructor(scope: Construct, id: string, props: QueueProps) {
+  constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
 
-    console.log(`Timeout is ${props.timeout.seconds} seconds`);
+    if (props.timeout) {
+      console.log(`Timeout is ${props.timeout.seconds} seconds`);
+    }
   }
 
   public addWorker(fn: Function) {
