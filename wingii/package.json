@@ -5,11 +5,11 @@
   "scripts": {
     "install": "npm run cmake",
     "cmake": "npm-run-all cmake:*",
-    "cmake:wingii": "cmake-js -m -d wingii",
-    "cmake:node": "cmake-js -m -d wingii/vendor/node",
+    "cmake:node": "cmake-js -m -d vendor/node",
+    "cmake:wingii": "cmake-js -m -d",
     "clean": "npm-run-all clean:*",
-    "clean:node": "rm -rf wingii/vendor/node/build",
-    "clean:wingii": "rm -rf wingii/build",
+    "clean:wingii": "rm -rf build",
+    "clean:node": "rm -rf vendor/node/build",
     "rebuild": "npm-run-all clean cmake"
   },
   "repository": {
