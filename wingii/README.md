@@ -6,8 +6,10 @@ Wing Programming Language runtime (a.k.a WING Interoperability Interface).
 
 You need:
 
-- A working C/C++ build environment (e.g. `gcc` or `clang`)
-- CMake installed on PATH
+- A working C/C++ build environment (e.g. `gcc` or `clang`):
+  - *Debian*: `sudo apt install python3 g++ make python3-pip build-essential`
+- CMake installed on PATH and other config tools:
+  - *Debian*: `sudo apt install cmake autoconf automake libtool pkg-config`
 
 And then run `npm install` to build. `npm run cmake:*` for individual targets.
 
