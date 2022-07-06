@@ -1,52 +1,30 @@
-#ifndef WINGII_H_
-#define WINGII_H_
+#ifndef WINGPF_H_
+#define WINGPF_H_
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
 
-  /**
-   * @brief the execution environment
-   * This essentially tells wingii what language your input program is in
-   */
-  typedef enum wingii_env_t_
+  /** engine type represents environment where preflight is executed */
+  typedef enum wingpf_engine_type_t_
   {
-    // format is: <LANGUAGE>_<RUNTIME>_<VERSION>
-    WINGII_ENV_JAVASCRIPT_NODEJS_16 = 1,
-    WINGII_ENV_TYPESCRIPT_NODEJS_16,
-  } wingii_env_t;
+    WINGPF_ENGINE_JAVASCRIPT_NODEJS_16 = 1,
+    WINGPF_ENGINE_TYPESCRIPT_NODEJS_16,
+  } wingpf_engine_type_t;
 
-  /**
-   * @brief the type of input program
-   * This essentially tells wingii what type of input program you are using
-   * In memory execution might not be supported for all input programs
-   */
-  typedef enum wingii_program_type_t_
-  {
-    // some providers may not support all types
-    WINGII_SOURCE_TYPE_MEMORY = 1,
-    WINGII_SOURCE_TYPE_FILE,
-  } wingii_program_type_t;
+  /** shallow type of preflight execution configuration */
+  typedef struct wingpf_call_prep_t_ wingpf_call_prep_t;
 
-  typedef struct wingii_call_prep_t_
-  {
-    const char *const program;
-    const char *const context;
-    wingii_program_type_t type;
-    wingii_env_t env;
-  } wingii_call_prep_t;
-
-  wingii_call_prep_t *wingii_execute_prep(
-      const char *const program,
-      const char *const context,
-      wingii_program_type_t type,
-      wingii_env_t env);
-  void wingii_execute(const wingii_call_prep_t *const);
-  void wingii_execute_free(wingii_call_prep_t *const);
+  /** wingpf public API, self explanatory: prep, set, call, free. */
+  wingpf_call_prep_t *wingpf_prep(wingpf_engine_type_t const);
+  void wingpf_set_program(wingpf_call_prep_t *const, const char *const program);
+  void wingpf_set_context(wingpf_call_prep_t *const, const char *const context);
+  int wingpf_call(const wingpf_call_prep_t *const);
+  void wingpf_free(wingpf_call_prep_t *const);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !WINGII_H_
+#endif // !WINGPF_H_

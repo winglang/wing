@@ -5,6 +5,7 @@
 #include <string>
 #include <memory>
 #include <cstring>
+#include <cassert>
 #include <iostream>
 
 namespace
@@ -39,45 +40,62 @@ namespace
 
 extern "C"
 {
-  wingii_call_prep_t *wingii_execute_prep(
-      const char *const program,
-      const char *const context,
-      wingii_program_type_t type,
-      wingii_env_t env)
+  struct wingpf_call_prep_t_
   {
-    return new wingii_call_prep_t{
-        program,
-        context,
-        type,
-        env};
+    const char *program;
+    const char *context;
+    wingpf_engine_type_t type;
+  };
+  wingpf_call_prep_t *wingpf_prep(wingpf_engine_type_t const type)
+  {
+    return new wingpf_call_prep_t_{nullptr, nullptr, type};
   }
-  void wingii_execute(const wingii_call_prep_t *const prep)
+  void wingpf_set_program(wingpf_call_prep_t *const instance, const char *const program)
   {
-    // TODO: actually use "prep"
+    assert(instance);
+    if (instance->program == program)
+      return;
+    instance->program = program;
+  }
+  void wingpf_set_context(wingpf_call_prep_t *const instance, const char *const context)
+  {
+    assert(instance);
+    if (instance->context == context)
+      return;
+    instance->context = context;
+  }
+  int wingpf_call(const wingpf_call_prep_t *const instance)
+  {
+    assert(instance);
+    assert(instance->program);
+    assert(instance->context);
+
     std::vector<std::string> arguments;
     std::vector<char *> argv;
+
     for (const auto &arg : arguments)
       argv.push_back((char *)arg.data());
     argv.push_back(nullptr);
     const auto argc = argv.size() - 1;
-    node_options_t options{
-        static_cast<int>(argc),
-        argv.data(),
-        napi_entry};
+
+    script = instance->program;
+    node_options_t options{static_cast<int>(argc), argv.data(), napi_entry};
     const auto ret = node_run(options);
-    // TODO: better error handling
     if (ret.exit_code != 0)
     {
       std::cerr << "program exited with non-zero code: " << ret.exit_code << std::endl;
       if (ret.error != nullptr)
       {
         std::shared_ptr<char> error_message{ret.error};
-        std::cerr << "error message: " << error_message.get() << std::endl;
+        std::cerr << "error message: " << std::string(error_message.get()) << std::endl;
       }
     }
+    return ret.exit_code;
   }
-  void wingii_execute_free(wingii_call_prep_t *const prep)
+  void wingpf_free(wingpf_call_prep_t *const instance)
   {
-    delete (wingii_call_prep_t *)prep;
+    if (!instance)
+      return;
+    delete instance;
   }
 }
