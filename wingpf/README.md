@@ -8,8 +8,10 @@ You need:
 
 - A working C/C++ build environment (e.g. `gcc` or `clang`):
   - _Debian_: `sudo apt install python3 g++ make python3-pip build-essential`
+  - _MacOS_: `brew install llvm`
 - CMake installed on PATH and other config tools:
   - _Debian_: `sudo apt install cmake autoconf automake libtool pkg-config`
+  - _MacOS_: `brew install cmake`
 
 And then run `npm install` to build. `npm run cmake:*` for individual targets.
 
