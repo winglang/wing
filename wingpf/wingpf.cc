@@ -1,5 +1,5 @@
 #include "wingpf.h"
-#include  <node_embedding_api.h>
+#include <node_embedding_api.h>
 
 #include <mutex>
 #include <vector>
@@ -7,6 +7,7 @@
 #include <memory>
 #include <cstring>
 #include <cassert>
+#include <fstream>
 #include <iostream>
 
 namespace
@@ -80,7 +81,8 @@ extern "C"
     assert(instance->program);
     assert(instance->context);
 
-    std::vector<std::string> arguments;
+    std::vector<std::string> arguments{instance->program};
+    std::vector<char> script_buffer;
     std::vector<char *> argv;
 
     for (const auto &arg : arguments)
@@ -88,7 +90,27 @@ extern "C"
     argv.push_back(nullptr);
     const auto argc = argv.size() - 1;
 
-    script = instance->program;
+    // if program is a path, read it first:
+    if (std::strlen(instance->program) < 4096)
+    {
+      std::ifstream script_file(instance->program);
+      if (script_file.good())
+      {
+        // this is HORRIBLY inefficient, but it's a test functionality
+        script_file.seekg(0, std::ios::end);
+        const auto script_size = script_file.tellg();
+        script_file.seekg(0, std::ios::beg);
+        script_buffer = std::vector<char>(script_size);
+        script_file.read(script_buffer.data(), script_size);
+        script_file.close();
+        script = script_buffer.data();
+      }
+    }
+    // if program is not a path, then it's in-memory
+    if (!script)
+    {
+      script = instance->program;
+    }
     node_options_t options{static_cast<int>(argc), argv.data(), napi_entry};
     const auto ret = node_run(options);
     if (ret.exit_code != 0)
@@ -106,7 +128,6 @@ extern "C"
   {
     if (!instance)
       return;
-    std::lock_guard<std::mutex> lock(instance->mutex);
     delete instance;
   }
 }

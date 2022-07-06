@@ -12,6 +12,11 @@ include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include/node
 )
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib)
+add_link_options(LINKER:-z,defs)
+
 add_library(wingpf SHARED wingpf.cc)
-target_link_libraries(wingpf node)
+target_link_libraries(wingpf PRIVATE node)
+target_link_directories(wingpf PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib)
+
+add_executable(wingpf-cli wingpf-cli.cc)
+target_link_libraries(wingpf-cli PRIVATE wingpf)
