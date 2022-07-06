@@ -33,7 +33,10 @@ namespace
     napi_value result;
     if (napi_ok != napi_run_script(env, script_string, &result))
     {
-      std::cerr << "napi_run_script failed." << std::endl;
+      std::cerr << "napi_run_script failed."
+                << std::endl
+                << "are you trying to run a script that does not exist?"
+                << std::endl;
       return nullptr;
     }
     return nullptr;

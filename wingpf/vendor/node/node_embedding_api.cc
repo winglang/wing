@@ -123,7 +123,11 @@ extern "C"
     }
     std::vector<std::string> args{process_args[0]};
 
-    std::vector<std::string> exec_args;
+    std::vector<std::string> exec_args{
+        "--experimental-wasi-unstable-preview1",
+        "--no-global-search-paths",
+        "--no-deprecation",
+        "--no-addons"};
     std::vector<std::string> errors;
     int exit_code = node::InitializeNodeWithArgs(
         &args, &exec_args, &errors,

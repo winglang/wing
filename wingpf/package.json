@@ -6,9 +6,9 @@
     "install": "npm run cmake",
     "cmake": "npm-run-all cmake:*",
     "cmake:node": "cmake-js -m -d vendor/node",
-    "cmake:wingii": "cmake-js -m -d",
+    "cmake:wingpf": "cmake-js -m -d",
     "clean": "npm-run-all clean:*",
-    "clean:wingii": "rm -rf build",
+    "clean:wingpf": "rm -rf build",
     "clean:node": "rm -rf vendor/node/build vendor/node/bin",
     "rebuild": "npm-run-all clean cmake"
   },
