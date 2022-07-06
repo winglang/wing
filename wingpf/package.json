@@ -1,7 +1,7 @@
 {
-  "name": "winglang",
+  "name": "wingpf",
   "version": "0.0.1",
-  "description": "Wing Programming Language implementation",
+  "description": "Wing Programming Language Preflight Runtime",
   "scripts": {
     "install": "npm run cmake",
     "cmake": "npm-run-all cmake:*",
@@ -9,7 +9,7 @@
     "cmake:wingii": "cmake-js -m -d",
     "clean": "npm-run-all clean:*",
     "clean:wingii": "rm -rf build",
-    "clean:node": "rm -rf vendor/node/build",
+    "clean:node": "rm -rf vendor/node/build vendor/node/bin",
     "rebuild": "npm-run-all clean cmake"
   },
   "repository": {
