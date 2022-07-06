@@ -2,6 +2,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const { execSync } = require("child_process");
 
 const patch = `
 #ifndef NODE_C_INTERFACE
@@ -17,3 +18,5 @@ if (!node_cc.includes("NODE_C_INTERFACE")) {
   fs.copyFileSync(path.join(__dirname, "../node_embedding_api.h"), "src/node_embedding_api.h");
   fs.copyFileSync(path.join(__dirname, "../node_embedding_api.cc"), "src/node_embedding_api.cc");
 }
+
+execSync(`sed -i "s@ = shlib_suffix@ = 'so'@g" configure.py`);

@@ -1,5 +1,5 @@
 #include "wingpf.h"
-#include "vendor/node/bin/include/node_embedding_api.h"
+#include  <node_embedding_api.h>
 
 #include <mutex>
 #include <vector>

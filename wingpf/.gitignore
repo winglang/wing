@@ -1,4 +1,4 @@
 node_modules/
 vendor/node/build
-vendor/node/bin
+vendor/node/out
 build
