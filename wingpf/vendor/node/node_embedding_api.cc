@@ -1,9 +1,9 @@
 // originally from: https://github.com/patr0nus/libnode
 
-#include <vector>
-#include <mutex>
 #include <memory>
+#include <mutex>
 #include <optional>
+#include <vector>
 
 #include "node.h"
 #include "node_embedding_api.h"
@@ -44,16 +44,18 @@ namespace
     return vec;
   }
 
-  node_run_result_t RunNodeInstance(
-      node::MultiIsolatePlatform *platform,
-      const std::vector<std::string> &args,
-      const std::vector<std::string> &exec_args,
-      napi_addon_register_func napi_reg_func)
+  node_run_result_t RunNodeInstance(node::MultiIsolatePlatform *platform,
+                                    const std::vector<std::string> &args,
+                                    const std::vector<std::string> &exec_args,
+                                    napi_addon_register_func napi_reg_func)
   {
     std::vector<std::string> errors;
     std::unique_ptr<node::CommonEnvironmentSetup> setup =
         node::CommonEnvironmentSetup::Create(
-            platform, &errors, args, exec_args,
+            platform,
+            &errors,
+            args,
+            exec_args,
             static_cast<node::EnvironmentFlags::Flags>(
                 node::EnvironmentFlags::kDefaultFlags |
                 node::EnvironmentFlags::kNoGlobalSearchPaths));
@@ -69,8 +71,8 @@ namespace
     node_run_result_t result{0, nullptr};
     node::SetProcessExitHandler(env, [&](node::Environment *env, int exit_code)
                                 {
-            result.exit_code = exit_code;
-            node::Stop(env); });
+    result.exit_code = exit_code;
+    node::Stop(env); });
 
     {
       v8::Locker locker(isolate);
@@ -78,19 +80,22 @@ namespace
       v8::HandleScope handle_scope(isolate);
       v8::Context::Scope context_scope(setup->context());
 
-      node::AddLinkedBinding(env, napi_module{
-                                      NAPI_MODULE_VERSION,
-                                      node::ModuleFlags::kLinked,
-                                      nullptr,
-                                      napi_reg_func,
-                                      "__embedder_mod",
-                                      nullptr,
-                                      {0},
-                                  });
+      node::AddLinkedBinding(env,
+                             napi_module{
+                                 NAPI_MODULE_VERSION,
+                                 node::ModuleFlags::kLinked,
+                                 nullptr,
+                                 napi_reg_func,
+                                 "__embedder_mod",
+                                 nullptr,
+                                 {0},
+                             });
 
       v8::MaybeLocal<v8::Value> loadenv_ret = node::LoadEnvironment(
           env,
-          "globalThis.require = require('module').createRequire(process.execPath);"
+          "globalThis.require = "
+          "require('module').createRequire(process.cwd() + '/');"
+          "globalThis.require('ts-node/register/transpile-only');"
           "process._linkedBinding('__embedder_mod');");
 
       if (loadenv_ret.IsEmpty())
@@ -110,27 +115,30 @@ namespace
 
     return result;
   }
-}
+} // namespace
 
 extern "C"
 {
   node_run_result_t node_run(node_options_t options)
   {
-    std::vector<std::string> process_args = create_arg_vec(options.process_argc, options.process_argv);
+    std::vector<std::string> process_args =
+        create_arg_vec(options.process_argc, options.process_argv);
     if (process_args.empty())
     {
       return {1, join_errors({"process args is empty"})};
     }
     std::vector<std::string> args{process_args[0]};
 
-    std::vector<std::string> exec_args{
-        "--experimental-wasi-unstable-preview1",
-        "--no-global-search-paths",
-        "--no-deprecation",
-        "--no-addons"};
+    std::vector<std::string> exec_args{"--experimental-modules",
+                                       "--experimental-wasi-unstable-preview1",
+                                       "--no-global-search-paths",
+                                       "--no-deprecation",
+                                       "--no-addons"};
     std::vector<std::string> errors;
     int exit_code = node::InitializeNodeWithArgs(
-        &args, &exec_args, &errors,
+        &args,
+        &exec_args,
+        &errors,
         static_cast<node::ProcessFlags::Flags>(
             node::ProcessFlags::kDisableCLIOptions |
             node::ProcessFlags::kDisableNodeOptionsEnv));
@@ -139,11 +147,13 @@ extern "C"
     {
       return {exit_code, join_errors(errors)};
     }
-    std::unique_ptr<node::MultiIsolatePlatform> platform = node::MultiIsolatePlatform::Create(4);
+    std::unique_ptr<node::MultiIsolatePlatform> platform =
+        node::MultiIsolatePlatform::Create(4);
     v8::V8::InitializePlatform(platform.get());
     v8::V8::Initialize();
 
-    node_run_result_t result = RunNodeInstance(platform.get(), process_args, exec_args, options.napi_reg_func);
+    node_run_result_t result = RunNodeInstance(
+        platform.get(), process_args, exec_args, options.napi_reg_func);
 
     v8::V8::Dispose();
     v8::V8::ShutdownPlatform();
