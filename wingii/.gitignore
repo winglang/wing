@@ -1,0 +1,4 @@
+node_modules/
+vendor/node/build
+vendor/node/bin
+build
