@@ -20,7 +20,7 @@ extern "C"
   wingpf_call_prep_t *wingpf_prep(wingpf_engine_type_t const);
   void wingpf_set_program(wingpf_call_prep_t *const, const char *const program);
   void wingpf_set_context(wingpf_call_prep_t *const, const char *const context);
-  int wingpf_call(const wingpf_call_prep_t *const);
+  int wingpf_call(wingpf_call_prep_t *const);
   void wingpf_free(wingpf_call_prep_t *const);
 
 #ifdef __cplusplus

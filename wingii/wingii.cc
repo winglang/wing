@@ -1,6 +1,7 @@
 #include "wingii.h"
 #include "vendor/node/bin/include/node_embedding_api.h"
 
+#include <mutex>
 #include <vector>
 #include <string>
 #include <memory>
@@ -42,17 +43,22 @@ extern "C"
 {
   struct wingpf_call_prep_t_
   {
+    std::mutex mutex;
     const char *program;
     const char *context;
     wingpf_engine_type_t type;
   };
   wingpf_call_prep_t *wingpf_prep(wingpf_engine_type_t const type)
   {
-    return new wingpf_call_prep_t_{nullptr, nullptr, type};
+    const auto instance = new wingpf_call_prep_t_();
+    instance->type = type;
+    return instance;
   }
   void wingpf_set_program(wingpf_call_prep_t *const instance, const char *const program)
   {
     assert(instance);
+    std::lock_guard<std::mutex> lock(instance->mutex);
+
     if (instance->program == program)
       return;
     instance->program = program;
@@ -60,13 +66,17 @@ extern "C"
   void wingpf_set_context(wingpf_call_prep_t *const instance, const char *const context)
   {
     assert(instance);
+    std::lock_guard<std::mutex> lock(instance->mutex);
+
     if (instance->context == context)
       return;
     instance->context = context;
   }
-  int wingpf_call(const wingpf_call_prep_t *const instance)
+  int wingpf_call(wingpf_call_prep_t *const instance)
   {
     assert(instance);
+    std::lock_guard<std::mutex> lock(instance->mutex);
+
     assert(instance->program);
     assert(instance->context);
 
@@ -96,6 +106,7 @@ extern "C"
   {
     if (!instance)
       return;
+    std::lock_guard<std::mutex> lock(instance->mutex);
     delete instance;
   }
 }
