@@ -14,7 +14,7 @@ extern "C"
   } wingpf_engine_type_t;
 
   /** shallow type of preflight execution configuration */
-  typedef struct wingpf_call_prep_t_ wingpf_call_prep_t;
+  typedef struct wingpf_context_t_ wingpf_context_t;
 
   /**
    * @brief Prepares preflight execution configuration.
@@ -22,25 +22,25 @@ extern "C"
    * @return preflight execution configuration
    * @note This function is thread-safe.
    */
-  wingpf_call_prep_t *wingpf_prep(wingpf_engine_type_t const);
+  wingpf_context_t *wingpf_prep(wingpf_engine_type_t const);
 
   /**
    * @brief Sets program path on disk to be executed.
    * @param instance preflight execution configuration
-   * @param program program path to be executed
+   * @param program can be either a string in memory or a file path
+   * @note if string length of "program" is less than 4096 AND it exists on disk
+   * then it will be loaded from disk into memory before execution.
    * @note This function is thread-safe.
    */
-  void wingpf_set_program(wingpf_call_prep_t *const, const char *const program);
+  void wingpf_set_program(wingpf_context_t *const, const char *const program);
 
   /**
-   * @brief Sets context path on disk for "program" to execute in.
-   * @details Context works a lot like Docker's context. "program" pointer when
-   * executed, only has access to its context on filesystem and nowhere else.
+   * @brief Sets working directory path on disk for "program" to execute in.
    * @param instance preflight execution configuration
-   * @param context context path of execution
+   * @param workdir path of execution
    * @note This function is thread-safe.
    */
-  void wingpf_set_context(wingpf_call_prep_t *const, const char *const context);
+  void wingpf_set_workdir(wingpf_context_t *const, const char *const workdir);
 
   /**
    * @brief Executes preflight code.
@@ -48,14 +48,14 @@ extern "C"
    * @return 0 on success, non-zero on failure
    * @note This function is thread-safe.
    */
-  int wingpf_call(wingpf_call_prep_t *const);
+  int wingpf_exec(wingpf_context_t *const);
 
   /**
    * @brief Frees preflight execution configuration.
    * @param instance preflight execution configuration
    * @note This function is thread-safe.
    */
-  void wingpf_free(wingpf_call_prep_t *const);
+  void wingpf_free(wingpf_context_t *const);
 
 #ifdef __cplusplus
 }

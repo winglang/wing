@@ -15,9 +15,9 @@ int main(int argc, char *argv[])
     std::cerr << "No context provided." << std::endl;
     return 1;
   }
-  auto instance = std::shared_ptr<wingpf_call_prep_t>(wingpf_prep(WINGPF_ENGINE_JAVASCRIPT_NODEJS_16), [=](auto ptr)
-                                                      { wingpf_free(ptr); });
+  auto instance = std::shared_ptr<wingpf_context_t>(wingpf_prep(WINGPF_ENGINE_JAVASCRIPT_NODEJS_16), [=](auto ptr)
+                                                    { wingpf_free(ptr); });
   wingpf_set_program(instance.get(), argv[1]);
-  wingpf_set_context(instance.get(), argv[2]);
-  return wingpf_call(instance.get());
+  wingpf_set_workdir(instance.get(), argv[2]);
+  return wingpf_exec(instance.get());
 }

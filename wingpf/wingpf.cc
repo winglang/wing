@@ -45,20 +45,20 @@ namespace
 
 extern "C"
 {
-  struct wingpf_call_prep_t_
+  struct wingpf_context_t_
   {
     std::mutex mutex;
     const char *program;
-    const char *context;
+    const char *workdir;
     wingpf_engine_type_t type;
   };
-  wingpf_call_prep_t *wingpf_prep(wingpf_engine_type_t const type)
+  wingpf_context_t *wingpf_prep(wingpf_engine_type_t const type)
   {
-    const auto instance = new wingpf_call_prep_t_();
+    const auto instance = new wingpf_context_t_();
     instance->type = type;
     return instance;
   }
-  void wingpf_set_program(wingpf_call_prep_t *const instance, const char *const program)
+  void wingpf_set_program(wingpf_context_t *const instance, const char *const program)
   {
     assert(instance);
     std::lock_guard<std::mutex> lock(instance->mutex);
@@ -67,22 +67,22 @@ extern "C"
       return;
     instance->program = program;
   }
-  void wingpf_set_context(wingpf_call_prep_t *const instance, const char *const context)
+  void wingpf_set_workdir(wingpf_context_t *const instance, const char *const context)
   {
     assert(instance);
     std::lock_guard<std::mutex> lock(instance->mutex);
 
-    if (instance->context == context)
+    if (instance->workdir == context)
       return;
-    instance->context = context;
+    instance->workdir = context;
   }
-  int wingpf_call(wingpf_call_prep_t *const instance)
+  int wingpf_exec(wingpf_context_t *const instance)
   {
     assert(instance);
     std::lock_guard<std::mutex> lock(instance->mutex);
 
     assert(instance->program);
-    assert(instance->context);
+    assert(instance->workdir);
 
     std::vector<std::string> arguments{instance->program};
     std::vector<char> script_buffer;
@@ -127,7 +127,7 @@ extern "C"
     }
     return ret.exit_code;
   }
-  void wingpf_free(wingpf_call_prep_t *const instance)
+  void wingpf_free(wingpf_context_t *const instance)
   {
     if (!instance)
       return;
