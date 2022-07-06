@@ -311,6 +311,112 @@ The tree node.
 ---
 
 
+### File <a name="File" id="@monadahq/wingsdk.fs.File"></a>
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.File.Initializer"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+new fs.File(scope: Construct, id: string, filename: string, props: FileProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.filename">filename</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.fs.FileProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.File.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.File.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `filename`<sup>Required</sup> <a name="filename" id="@monadahq/wingsdk.fs.File.Initializer.parameter.filename"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.fs.File.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.fs.FileProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.File.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.File.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.File.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.File.isConstruct"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+fs.File.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.File.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.File.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.File.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+
 ### Function <a name="Function" id="@monadahq/wingsdk.cloud.Function"></a>
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Function.Initializer"></a>
@@ -592,6 +698,34 @@ public readonly methods: string[];
 - *Type:* string[]
 
 Which methods are called on the captured object.
+
+---
+
+### FileProps <a name="FileProps" id="@monadahq/wingsdk.fs.FileProps"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.FileProps.Initializer"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+const fileProps: fs.FileProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.FileProps.property.contents">contents</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `contents`<sup>Optional</sup> <a name="contents" id="@monadahq/wingsdk.fs.FileProps.property.contents"></a>
+
+```typescript
+public readonly contents: string;
+```
+
+- *Type:* string
 
 ---
 
