@@ -129,8 +129,6 @@ extern "C"
   }
   void wingpf_free(wingpf_context_t *const instance)
   {
-    if (!instance)
-      return;
     delete instance;
   }
 }
