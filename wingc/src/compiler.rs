@@ -1,12 +1,36 @@
-use tree_sitter::{Node};
-use std::{collections::HashMap};
-use std::fs;
+use clap::*;
+use tree_sitter::{Parser, Language, Node};
 use std::path::PathBuf;
+use std::{collections::HashMap};
+use std::{fs};
 use std::str;
 use sha2::{Sha256, Digest};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
+
+#[derive(clap::Parser, Debug)]
+#[clap(author, version, about, long_about = None)]
+struct Args {
+    #[clap(value_parser)]
+    source_file: String,
+
+    #[clap(value_parser, short, long)]
+    out_dir: Option<String>,
+}
+
+extern "C" { fn tree_sitter_winglang() -> Language; }
+
+struct Capture {
+    symbol: String,
+    method: String
+}
+
+struct Compiler<'a> {
+    out_dir: PathBuf,
+    source: &'a[u8],
+     shim: bool
+}
 
 // fn traverse(root: &Node, i: usize) {
 //     println!("{:indent$}{}", "", root.kind(), indent=i*2);
@@ -16,17 +40,6 @@ const STDLIB_MODULE: &str = "@monadahq/wingsdk";
 //         child_idx += 1;
 //     }
 // }
-
-struct Capture {
-    symbol: String,
-    method: String
-}
-
-pub struct Compiler<'a> {
-    pub out_dir: PathBuf,
-    pub source: &'a[u8],
-    pub shim: bool
-}
 
 impl Compiler<'_> {
     fn node_text<'a>(&'a self, node: &Node) -> &'a str {
@@ -296,4 +309,41 @@ impl Compiler<'_> {
             }
         }
     }
+}
+
+pub fn run() -> String {
+    let args = Args::parse();
+    
+    let language = unsafe { tree_sitter_winglang() };
+    let mut parser = Parser::new();
+    parser.set_language(language).unwrap();
+
+    let source = match fs::read(&args.source_file) {
+        Ok(source) => source,
+        Err(_) => {
+            println!("Error reading source file: {}", &args.source_file);
+            std::process::exit(1);
+        },
+    };
+
+    let tree = match parser.parse(&source[..], None) {
+        Some(tree) => tree,
+        None => {
+            println!("Failed parsing source file: {}", args.source_file);
+            std::process::exit(1);
+        },
+    };
+
+    let out_dir = PathBuf::from(&args.out_dir.unwrap_or(format!("{}.out", args.source_file)));
+    fs::create_dir_all(&out_dir).expect("create output dir");
+    let intermediate_dir = out_dir.join(".intermediate");
+
+    let output = Compiler {
+            out_dir: intermediate_dir,
+            source: &source[..],
+            shim: true
+        }.compile(&tree.root_node());
+
+    //traverse(&tree.root_node(), 0);
+    output
 }
