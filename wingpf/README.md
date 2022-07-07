@@ -23,6 +23,9 @@ After building, link with `libwingpf.so` and use the `wingpf.h` header.
 
 Tests are executed with `npm run test`. Catch++ is used for native unit tests.
 
+Temporarily run tests with: `./build/wingpf-cli tests/main.js .` while being in
+the directory of this file.
+
 ## Mission
 
 The `wingpf` runtime's mission is to allow the Wing compiler (`wingc`), execute
