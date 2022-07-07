@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
     return 1;
   }
   auto instance = std::shared_ptr<wingpf_context_t>(
-      wingpf_prep(WINGPF_ENGINE_JAVASCRIPT_NODEJS_16),
+      wingpf_prep(WINGPF_ENGINE_TYPESCRIPT_NODEJS_16),
       wingpf_free);
   wingpf_set_program(instance.get(), argv[1]);
   wingpf_set_workdir(instance.get(), argv[2]);

@@ -1,47 +1,15 @@
 #include "wingpf.h"
+
+#include <uv.h>
 #include <node_embedding_api.h>
 
 #include <mutex>
+#include <array>
 #include <vector>
 #include <string>
 #include <memory>
 #include <cstring>
 #include <cassert>
-#include <fstream>
-#include <iostream>
-
-namespace
-{
-  static const char *script{nullptr};
-  static napi_value napi_entry(napi_env env, napi_value exports)
-  {
-    if (!script)
-    {
-      std::cerr << "No script provided." << std::endl;
-      return nullptr;
-    }
-    napi_value script_string;
-    if (napi_ok != napi_create_string_utf8(env,
-                                           script,
-                                           std::strlen(script),
-                                           &script_string))
-    {
-      std::cerr << "napi_create_string_utf8 failed." << std::endl;
-      return nullptr;
-    }
-
-    napi_value result;
-    if (napi_ok != napi_run_script(env, script_string, &result))
-    {
-      std::cerr << "napi_run_script failed."
-                << std::endl
-                << "are you trying to run a script that does not exist?"
-                << std::endl;
-      return nullptr;
-    }
-    return nullptr;
-  }
-} // !namespace
 
 extern "C"
 {
@@ -78,54 +46,42 @@ extern "C"
   }
   int wingpf_exec(wingpf_context_t *const instance)
   {
+    int ret = 0;
     assert(instance);
     std::lock_guard<std::mutex> lock(instance->mutex);
 
     assert(instance->program);
     assert(instance->workdir);
 
-    std::vector<std::string> arguments{instance->program};
-    std::vector<char> script_buffer;
-    std::vector<char *> argv;
+    if (instance->type == WINGPF_ENGINE_JAVASCRIPT_NODEJS_16 ||
+        instance->type == WINGPF_ENGINE_TYPESCRIPT_NODEJS_16)
+    {
+      std::vector<const char *> argv({"wingrr",
+                                      "--experimental-modules",
+                                      "--experimental-wasi-unstable-preview1",
+                                      "--no-global-search-paths",
+                                      "--no-deprecation",
+                                      "--no-warnings",
+                                      "--no-addons"});
 
-    for (const auto &arg : arguments)
-      argv.push_back((char *)arg.data());
-    argv.push_back(nullptr);
-    const auto argc = argv.size() - 1;
+      if (instance->type == WINGPF_ENGINE_TYPESCRIPT_NODEJS_16)
+      {
+        argv.push_back("--require");
+        argv.push_back("ts-node/register/transpile-only");
+      }
 
-    // if program is a path, read it first:
-    if (std::strlen(instance->program) < 4096)
-    {
-      std::ifstream script_file(instance->program);
-      if (script_file.good())
-      {
-        // this is HORRIBLY inefficient, but it's a test functionality
-        script_file.seekg(0, std::ios::end);
-        const auto script_size = script_file.tellg();
-        script_file.seekg(0, std::ios::beg);
-        script_buffer = std::vector<char>(script_size);
-        script_file.read(script_buffer.data(), script_size);
-        script_file.close();
-        script = script_buffer.data();
-      }
+      argv.push_back(instance->program);
+      argv.push_back(nullptr);
+
+      size_t buflen = 4096;
+      char buf[buflen];
+      uv_os_getenv("NODE_PATH", buf, &buflen);
+      uv_os_setenv("NODE_PATH", instance->workdir);
+      ret = node_main(argv.size() - 1, const_cast<char **>(argv.data()));
+      uv_os_setenv("NODE_PATH", buf);
     }
-    // if program is not a path, then it's in-memory
-    if (!script)
-    {
-      script = instance->program;
-    }
-    node_options_t options{static_cast<int>(argc), argv.data(), napi_entry};
-    const auto ret = node_run(options);
-    if (ret.exit_code != 0)
-    {
-      std::cerr << "program exited with non-zero code: " << ret.exit_code << std::endl;
-      if (ret.error != nullptr)
-      {
-        std::shared_ptr<char> error_message{ret.error};
-        std::cerr << "error message: " << std::string(error_message.get()) << std::endl;
-      }
-    }
-    return ret.exit_code;
+
+    return ret;
   }
   void wingpf_free(wingpf_context_t *const instance)
   {
