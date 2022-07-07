@@ -12,11 +12,12 @@ int main(int argc, char *argv[])
   }
   if (argc < 3)
   {
-    std::cerr << "No context provided." << std::endl;
+    std::cerr << "No working directory provided." << std::endl;
     return 1;
   }
-  auto instance = std::shared_ptr<wingpf_context_t>(wingpf_prep(WINGPF_ENGINE_JAVASCRIPT_NODEJS_16), [=](auto ptr)
-                                                    { wingpf_free(ptr); });
+  auto instance = std::shared_ptr<wingpf_context_t>(
+      wingpf_prep(WINGPF_ENGINE_JAVASCRIPT_NODEJS_16),
+      wingpf_free);
   wingpf_set_program(instance.get(), argv[1]);
   wingpf_set_workdir(instance.get(), argv[2]);
   return wingpf_exec(instance.get());
