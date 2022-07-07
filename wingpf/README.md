@@ -59,7 +59,7 @@ The `wingpf` runtime currently supports the following matrix:
 | Go <sup>2</sup>     | &#9744; | &#9744; | &#9744; |   &#9744;   |
 | C# <sup>3</sup>     | &#9744; | &#9744; | &#9744; |   &#9744;   |
 | Java <sup>4</sup>   | &#9744; | &#9744; | &#9744; |   &#9744;   |
-| Ruby <sup>5</sup>   | &#9744; | &#9744; | &#9744; |   &#9744;   |
+| Ruby <sup>5</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
 
 Embedded support is planned with:
 
