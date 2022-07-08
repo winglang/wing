@@ -9,8 +9,11 @@ extern "C"
   /** engine type represents environment where preflight is executed */
   typedef enum wingpf_engine_type_t_
   {
-    WINGPF_ENGINE_JAVASCRIPT_NODEJS_16 = 1,
-    WINGPF_ENGINE_TYPESCRIPT_NODEJS_16,
+    WINGPF_ENGINE_JAVASCRIPT_NODEJS = 1,
+    WINGPF_ENGINE_TYPESCRIPT_NODEJS,
+    WINGPF_ENGINE_PYTHON_NODEJS,
+    WINGPF_ENGINE_RUBY_NODEJS,
+    WINGPF_ENGINE_CSHARP_MONO,
   } wingpf_engine_type_t;
 
   /** shallow type of preflight execution configuration */
