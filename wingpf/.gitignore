@@ -3,3 +3,5 @@ vendor/node/build
 vendor/node/out
 build
 dist
+*.exe
+*.dll
