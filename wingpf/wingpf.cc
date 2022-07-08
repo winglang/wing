@@ -60,6 +60,7 @@ extern "C"
                                       "--experimental-modules",
                                       "--experimental-wasi-unstable-preview1",
                                       "--no-global-search-paths",
+                                      "--no-experimental-fetch",
                                       "--no-deprecation",
                                       "--no-warnings",
                                       "--no-addons"});

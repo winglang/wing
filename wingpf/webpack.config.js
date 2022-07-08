@@ -1,12 +1,16 @@
 // originally from: https://github.com/mneil/pyodide-webpack
 
-const fs = require("fs");
 const path = require("path");
 const CopyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
   node: {
-    global: true
+    global: true,
+    __filename: false,
+    __dirname: false,
+  },
+  externalsPresets: {
+    node: true,
   },
   mode: "development",
   entry: "./src/index.js",
@@ -24,7 +28,6 @@ module.exports = {
     hints: false,
   },
   plugins: [
-    // Copy files pyodide.js will load asynchronously
     new CopyPlugin({
       patterns: [
         { from: require.resolve("pyodide/distutils.tar"), to: "pyodide/distutils.tar" },
@@ -39,7 +42,6 @@ module.exports = {
   module: {
     noParse: /pyodide\.js/,
     rules: [
-      // Remove pyodide globals. They are not necessary when using pyodide in webpack
       {
         test: /pyodide\/.+\.js$/,
         loader: "string-replace-loader",
