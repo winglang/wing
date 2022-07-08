@@ -63,13 +63,16 @@ The `wingpf` runtime currently supports the following matrix:
 | Python <sup>1</sup> | &#9745; | &#9744; | &#9744; |   &#9744;   |
 | Go <sup>2</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
 | C# <sup>3</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| Java <sup>4</sup>   | &#9744; | &#9744; | &#9744; |   &#9744;   |
-| Ruby <sup>5</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Ruby <sup>4</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Java <sup>5</sup>   | &#9744; | &#9744; | &#9744; |   &#9744;   |
 
-Embedded support is planned with:
+Embedded support is _offered_ with:
 
 <br /><sup>1</sup> Python with [Pyodide](https://pyodide.org)
 <br /><sup>2</sup> Go with [TinyGo](https://tinygo.org)
 <br /><sup>3</sup> C# with [Mono](https://www.mono-project.com)
-<br /><sup>4</sup> Java with [OpenJDK](https://github.com/openjdk/jdk)
-<br /><sup>5</sup> Ruby with [Ruby.wasm](https://github.com/ruby/ruby.wasm)
+<br /><sup>4</sup> Ruby with [Ruby.wasm](https://github.com/ruby/ruby.wasm)
+
+Embedded support is _planned_ with:
+
+<br /><sup>5</sup> Java with [OpenJDK](https://github.com/openjdk/jdk)
