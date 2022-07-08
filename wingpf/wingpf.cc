@@ -16,8 +16,6 @@
 #include <memory>
 #include <cstring>
 #include <cassert>
-#include <fstream>
-#include <sstream>
 
 #include <libwrr-go.h>
 
@@ -98,15 +96,12 @@ extern "C"
     {
       mono_config_parse(NULL);
       std::shared_ptr<MonoDomain> domain(mono_jit_init("wingrr"), mono_jit_cleanup);
-      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), "wingpf.dll");
+      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), "libwrr-cs.dll");
       MonoImage *image = mono_assembly_get_image(assembly);
       MonoMethodDesc *TypeMethodDesc = mono_method_desc_new("Monada.Wing:Execute(string,string)", false);
       MonoMethod *method = mono_method_desc_search_in_image(TypeMethodDesc, image);
-      std::ifstream program_file_content(instance->program);
-      std::stringstream ss;
-      ss << program_file_content.rdbuf();
       void *args[2];
-      args[0] = mono_string_new(domain.get(), ss.str().c_str());
+      args[0] = mono_string_new(domain.get(), instance->program);
       args[1] = mono_string_new(domain.get(), instance->workdir);
       mono_runtime_invoke(method, nullptr, args, nullptr);
       ret = mono_environment_exitcode_get();
