@@ -12,6 +12,11 @@ You need:
 - CMake installed on PATH and other config tools:
   - _Debian_: `sudo apt install cmake autoconf automake libtool pkg-config`
   - _MacOS_: `brew install cmake`
+- Optional for C# engine: a working Mono installation
+  - _Debian_: [`sudo apt install
+    mono-complete`](https://www.mono-project.com/download/stable/)
+- Optional for Go engine: a working Go installation
+  - _Debian_: [`g install latest`](https://github.com/stefanmaric/g)
 
 And then run `npm install` to build. `npm run cmake:*` for individual targets.
 
