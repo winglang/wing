@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
     engine = WINGPF_ENGINE_RUBY_NODEJS;
   else if (ext == "cs")
     engine = WINGPF_ENGINE_CSHARP_MONO;
+  else if (ext == "go")
+    engine = WINGPF_ENGINE_GO_YAEGI;
   else if (ext != "js")
   {
     std::cerr << "Unknown program extension." << std::endl;

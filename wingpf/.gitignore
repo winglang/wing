@@ -5,3 +5,5 @@ build
 dist
 *.exe
 *.dll
+*.so
+src/go/*.h

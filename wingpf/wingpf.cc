@@ -19,6 +19,8 @@
 #include <fstream>
 #include <sstream>
 
+#include <libwrr-go.h>
+
 extern "C"
 {
   struct wingpf_context_t_
@@ -108,6 +110,13 @@ extern "C"
       args[1] = mono_string_new(domain.get(), instance->workdir);
       mono_runtime_invoke(method, nullptr, args, nullptr);
       ret = mono_environment_exitcode_get();
+    }
+
+    else if (instance->type == WINGPF_ENGINE_GO_YAEGI)
+    {
+      ::GoString program = {instance->program, static_cast<ptrdiff_t>(strlen(instance->program))};
+      ::GoString workdir = {instance->workdir, static_cast<ptrdiff_t>(strlen(instance->workdir))};
+      ::Execute(program, workdir);
     }
 
     return ret;
