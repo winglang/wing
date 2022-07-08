@@ -1,5 +1,5 @@
-module go
+module libwrr-go
 
-go 1.18
+go 1.17
 
 require github.com/traefik/yaegi v0.13.0

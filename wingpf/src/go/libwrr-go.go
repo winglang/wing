@@ -1,5 +1,5 @@
 // build with:
-// go build -o libwrr-go.so -buildmode=c-shared wrr-go.go
+// go build -o libwrr-go.so -buildmode=c-shared libwrr-go.go
 
 package main
 
