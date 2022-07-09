@@ -15,6 +15,7 @@ extern "C"
     WINGPF_ENGINE_RUBY_NODEJS,
     WINGPF_ENGINE_CSHARP_MONO,
     WINGPF_ENGINE_GO_YAEGI,
+    WINGPF_ENGINE_JAVA_JNI,
   } wingpf_engine_type_t;
 
   /** shallow type of preflight execution configuration */

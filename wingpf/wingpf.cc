@@ -1,5 +1,7 @@
 #include "wingpf.h"
 
+#include <jni.h>
+
 #include <uv.h>
 #include <node_embedding_api.h>
 
@@ -112,6 +114,35 @@ extern "C"
       ::GoString program = {instance->program, static_cast<ptrdiff_t>(strlen(instance->program))};
       ::GoString workdir = {instance->workdir, static_cast<ptrdiff_t>(strlen(instance->workdir))};
       ::Execute(program, workdir);
+    }
+
+    else if (instance->type == WINGPF_ENGINE_JAVA_JNI)
+    {
+      JavaVM *jvm;
+      JNIEnv *env;
+      JavaVMInitArgs jvm_args;
+      JavaVMOption *options = new JavaVMOption[3];
+      options[0].optionString = const_cast<char *>("-Djava.compiler=NONE");
+      options[1].optionString = const_cast<char *>("-Djava.class.path=src/java");
+      options[2].optionString = const_cast<char *>("-verbose:none"); // class|module|gc|jni
+      jvm_args.version = JNI_VERSION_1_6;
+      jvm_args.nOptions = 3;
+      jvm_args.options = options;
+      jvm_args.ignoreUnrecognized = false;
+      JNI_CreateJavaVM(&jvm, reinterpret_cast<void **>(&env), &jvm_args);
+      auto MainClass = env->FindClass("libwrr");
+      auto MainMethod = env->GetStaticMethodID(MainClass, "main", "([Ljava/lang/String;)V");
+      auto arg0 = env->NewStringUTF(instance->program);
+      auto arg1 = env->NewStringUTF(instance->workdir);
+      auto argv = env->NewObjectArray(2, env->FindClass("java/lang/String"), nullptr);
+      env->SetObjectArrayElement(argv, 0, arg0);
+      env->SetObjectArrayElement(argv, 1, arg1);
+      env->CallStaticVoidMethod(MainClass, MainMethod, argv);
+      env->DeleteLocalRef(argv);
+      env->DeleteLocalRef(arg1);
+      env->DeleteLocalRef(arg0);
+      jvm->DestroyJavaVM();
+      delete[] options;
     }
 
     return ret;

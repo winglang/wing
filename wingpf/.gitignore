@@ -7,3 +7,4 @@ dist
 *.dll
 *.so
 src/go/*.h
+*.class

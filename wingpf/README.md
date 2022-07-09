@@ -12,11 +12,13 @@ You need:
 - CMake installed on PATH and other config tools:
   - _Debian_: `sudo apt install cmake autoconf automake libtool pkg-config`
   - _MacOS_: `brew install cmake`
-- Optional for C# engine: a working Mono installation
+- Required for C# engine: a working Mono installation
   - _Debian_: [`sudo apt install
     mono-complete`](https://www.mono-project.com/download/stable/)
-- Optional for Go engine: a working Go installation
+- Required for Go engine: a working Go installation
   - _Debian_: [`g install latest`](https://github.com/stefanmaric/g)
+- Required for Java engine: a working Java installation
+  - _Debian_: `sudo apt install openjdk-11-jdk`
 
 And then run `npm install` to build. `npm run cmake:*` for individual targets.
 
@@ -64,15 +66,12 @@ The `wingpf` runtime currently supports the following matrix:
 | Go <sup>2</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
 | C# <sup>3</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
 | Ruby <sup>4</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| Java <sup>5</sup>   | &#9744; | &#9744; | &#9744; |   &#9744;   |
+| Java <sup>5</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
 
 Embedded support is _offered_ with:
 
-<br /><sup>1</sup> Python with [Pyodide](https://pyodide.org)
-<br /><sup>2</sup> Go with [TinyGo](https://tinygo.org)
-<br /><sup>3</sup> C# with [Mono](https://www.mono-project.com)
-<br /><sup>4</sup> Ruby with [Ruby.wasm](https://github.com/ruby/ruby.wasm)
-
-Embedded support is _planned_ with:
-
-<br /><sup>5</sup> Java with [OpenJDK](https://github.com/openjdk/jdk)
+<sup>1</sup> Python with [Pyodide](https://pyodide.org)<br />
+<sup>2</sup> Go with [TinyGo](https://tinygo.org)<br />
+<sup>3</sup> C# with [Mono](https://www.mono-project.com)<br />
+<sup>4</sup> Ruby with [Ruby.wasm](https://github.com/ruby/ruby.wasm)<br />
+<sup>5</sup> Java with [OpenJDK](https://github.com/openjdk/jdk)<br />
