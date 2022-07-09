@@ -13,8 +13,7 @@ You need:
   - _Debian_: `sudo apt install cmake autoconf automake libtool pkg-config`
   - _MacOS_: `brew install cmake`
 - Required for C# engine: a working Mono installation
-  - _Debian_: [`sudo apt install
-    mono-complete`](https://www.mono-project.com/download/stable/)
+  - _Debian_: [`sudo apt install mono-complete`](https://www.mono-project.com/)
 - Required for Go engine: a working Go installation
   - _Debian_: [`g install latest`](https://github.com/stefanmaric/g)
 - Required for Java engine: a working Java installation
@@ -71,7 +70,7 @@ The `wingpf` runtime currently supports the following matrix:
 Embedded support is _offered_ with:
 
 <sup>1</sup> Python with [Pyodide](https://pyodide.org)<br />
-<sup>2</sup> Go with [TinyGo](https://tinygo.org)<br />
+<sup>2</sup> Go with [Yaegi](https://github.com/traefik/yaegi)<br />
 <sup>3</sup> C# with [Mono](https://www.mono-project.com)<br />
 <sup>4</sup> Ruby with [Ruby.wasm](https://github.com/ruby/ruby.wasm)<br />
-<sup>5</sup> Java with [OpenJDK](https://github.com/openjdk/jdk)<br />
+<sup>5</sup> Java with [JNI+JShell](https://docs.oracle.com/javase/9/jshell)
