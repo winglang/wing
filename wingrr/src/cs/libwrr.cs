@@ -1,5 +1,5 @@
 // compile with:
-// csc /target:library /reference:<path to Mono.CSharp.dll> libwrr.cs
+// csc /target:library /reference:Mono.CSharp.dll libwrr.cs
 
 // this is loosely based on the work from:
 // https://github.com/mono/mono/blob/main/mcs/tools/csharp/repl.cs

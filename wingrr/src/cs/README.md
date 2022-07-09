@@ -17,12 +17,8 @@ You need to have a working C# build environment. This can be achieved by either:
 1. Installing Mono Development binary packages <sup>1</sup>
 1. Installing MonoDevelop on MacOS or other supported OSes <sup>2</sup>
 
-Then you need to find the path to your installation's `Mono.CSharp.dll`. There
-might be a couple of them, targeting different .NET versions. You need to pick
-one that matches the Mono version linked into the Rosetta Runtime.
-
 ```bash
-csc /target:library /reference:<path to Mono.CSharp.dll> libwrr-cs.cs
+csc /target:library /reference:Mono.CSharp.dll libwrr-cs.cs
 ```
 
 It is also possible to create the final managed DLL in native Visual Studio on
