@@ -1,8 +1,6 @@
 async function main() {
   console.log("-- testing JS:");
   console.log("Hello From JavaScript!");
-  console.log("-- testing TS:");
-  require("./main.ts");
   const fs = require("fs");
   console.log("-- testing Ruby:");
   const { DefaultRubyVM } = require("ruby-head-wasm-wasi/dist/node.cjs");

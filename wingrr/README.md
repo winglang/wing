@@ -9,17 +9,19 @@ You need:
 - A working C/C++ build environment (e.g. `gcc` or `clang`):
   - _Debian_: `sudo apt install python3 g++ make python3-pip build-essential`
   - _MacOS_: `brew install llvm`
-- CMake installed on PATH and other config tools:
+- CMake installed on PATH and other common config tools:
   - _Debian_: `sudo apt install cmake autoconf automake libtool pkg-config`
   - _MacOS_: `brew install cmake`
-- Required for C# engine: a working Mono installation
+- Required for C# engine: a working Mono 2.2+ installation
   - _Debian_: [`sudo apt install mono-complete`](https://www.mono-project.com/)
-- Required for Go engine: a working Go installation
+- Required for Go engine: a working Go 1.17+ installation
   - _Debian_: [`g install latest`](https://github.com/stefanmaric/g)
-- Required for Java engine: a working Java installation
+- Required for Java engine: a working Java installation with JNI support
   - _Debian_: `sudo apt install openjdk-11-jdk`
 
-And then run `npm install` to build. `npm run cmake:*` for individual targets.
+And then run `npm install` to build.
+
+Final artifact is `wingrr.tar.gz` in your build directory.
 
 ## Usage
 
@@ -27,8 +29,15 @@ After building, link with `libwingrr.so` and use the `wingrr.h` header.
 
 ## Tests
 
-Temporarily run tests with: `./build/wingrr-cli tests/main.js .` while being in
-the directory of this file.
+Make sure your `cwd` is the directory of this file. Temporarily run tests with:
+
+- JS, Python, and Ruby: `./build/wingrr tests/main.js ./`
+- TS: `./build/wingrr tests/main.ts ./`
+- Java: `./build/wingrr tests/hello.java ./`
+- C#: `./build/wingrr tests/hello.cs ./`
+- Go: `./build/wingrr tests/hello.go ./`
+
+Also accessible with `npm test` from the directory of this file.
 
 ## Mission
 

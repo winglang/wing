@@ -19,7 +19,7 @@
 #include <cstring>
 #include <cassert>
 
-#include <libwrr.h>
+#include <libwrr-go.h>
 
 extern "C"
 {
@@ -98,7 +98,7 @@ extern "C"
     {
       mono_config_parse(NULL);
       std::shared_ptr<MonoDomain> domain(mono_jit_init("wingrr"), mono_jit_cleanup);
-      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), "src/cs/libwrr.dll");
+      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), "build/libwrr-cs.dll");
       MonoImage *image = mono_assembly_get_image(assembly);
       MonoMethodDesc *TypeMethodDesc = mono_method_desc_new("Monada.Wing:Execute(string,string)", false);
       MonoMethod *method = mono_method_desc_search_in_image(TypeMethodDesc, image);
@@ -123,7 +123,7 @@ extern "C"
       JavaVMInitArgs jvm_args;
       JavaVMOption *options = new JavaVMOption[3];
       options[0].optionString = const_cast<char *>("-Djava.compiler=NONE");
-      options[1].optionString = const_cast<char *>("-Djava.class.path=src/java");
+      options[1].optionString = const_cast<char *>("-Djava.class.path=build");
       options[2].optionString = const_cast<char *>("-verbose:none"); // class|module|gc|jni
       jvm_args.version = JNI_VERSION_1_6;
       jvm_args.nOptions = 3;

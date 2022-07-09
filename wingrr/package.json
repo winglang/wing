@@ -13,7 +13,13 @@
     "clean:wingrr": "rm -rf build",
     "clean:node": "rm -rf vendor/node/build vendor/node/bin",
     "clean:pyodide": "rm -rf dist",
-    "rebuild": "npm-run-all clean cmake"
+    "rebuild": "npm-run-all clean cmake",
+    "test": "npm-run-all test:*",
+    "test:js": "./build/wingrr tests/main.js ./",
+    "test:ts": "./build/wingrr tests/main.ts ./",
+    "test:java": "./build/wingrr tests/hello.java ./",
+    "test:cs": "./build/wingrr tests/hello.cs ./",
+    "test:go": "./build/wingrr tests/hello.go ./"
   },
   "repository": {
     "type": "git",
