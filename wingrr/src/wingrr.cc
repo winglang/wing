@@ -21,6 +21,11 @@
 
 #include <libwrr-go.h>
 
+#include <pybind11/pybind11.h>
+#include <pybind11/embed.h>
+
+#include <ruby.h>
+
 extern "C"
 {
   struct wingrr_context_t_
@@ -63,10 +68,8 @@ extern "C"
     assert(instance->program);
     assert(instance->workdir);
 
-    if (instance->type == WINGRR_ENGINE_JAVASCRIPT_NODEJS ||
-        instance->type == WINGRR_ENGINE_TYPESCRIPT_NODEJS ||
-        instance->type == WINGRR_ENGINE_PYTHON_NODEJS ||
-        instance->type == WINGRR_ENGINE_RUBY_NODEJS)
+    if (instance->type == WINGRR_ENGINE_JAVASCRIPT ||
+        instance->type == WINGRR_ENGINE_TYPESCRIPT)
     {
       std::vector<const char *> argv({"wingrr",
                                       "--experimental-modules",
@@ -77,7 +80,7 @@ extern "C"
                                       "--no-warnings",
                                       "--no-addons"});
 
-      if (instance->type == WINGRR_ENGINE_TYPESCRIPT_NODEJS)
+      if (instance->type == WINGRR_ENGINE_TYPESCRIPT)
       {
         argv.push_back("--require");
         argv.push_back("ts-node/register/transpile-only");
@@ -94,7 +97,7 @@ extern "C"
       uv_os_setenv("NODE_PATH", buf);
     }
 
-    else if (instance->type == WINGRR_ENGINE_CSHARP_MONO)
+    else if (instance->type == WINGRR_ENGINE_CSHARP)
     {
       mono_config_parse(NULL);
       std::shared_ptr<MonoDomain> domain(mono_jit_init("wingrr"), mono_jit_cleanup);
@@ -109,14 +112,14 @@ extern "C"
       ret = mono_environment_exitcode_get();
     }
 
-    else if (instance->type == WINGRR_ENGINE_GO_YAEGI)
+    else if (instance->type == WINGRR_ENGINE_GO)
     {
       ::GoString program = {instance->program, static_cast<ptrdiff_t>(strlen(instance->program))};
       ::GoString workdir = {instance->workdir, static_cast<ptrdiff_t>(strlen(instance->workdir))};
       ::Execute(program, workdir);
     }
 
-    else if (instance->type == WINGRR_ENGINE_JAVA_JNI)
+    else if (instance->type == WINGRR_ENGINE_JAVA)
     {
       JavaVM *jvm;
       JNIEnv *env;
@@ -143,6 +146,36 @@ extern "C"
       env->DeleteLocalRef(arg0);
       jvm->DestroyJavaVM();
       delete[] options;
+    }
+
+    else if (instance->type == WINGRR_ENGINE_PYTHON)
+    {
+      namespace py = pybind11;
+      using namespace py::literals;
+
+      py::scoped_interpreter guard;
+      py::globals()["__file__"] = instance->program;
+
+      // Disable build of __pycache__ folders
+      py::exec(R"(
+          import sys
+          sys.dont_write_bytecode = True
+      )");
+
+      py::eval_file(instance->program);
+    }
+
+    else if (instance->type == WINGRR_ENGINE_RUBY)
+    {
+      RUBY_INIT_STACK;
+      ruby_init();
+      char *ruby_argv[] = {
+          const_cast<char *>("wingrr"),
+          const_cast<char *>(instance->program),
+          nullptr,
+      };
+      auto ruby_argc = sizeof(ruby_argv) / sizeof(ruby_argv[0]) - 1;
+      ret = ruby_run_node(ruby_options(ruby_argc, ruby_argv));
     }
 
     return ret;

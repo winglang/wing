@@ -19,19 +19,19 @@ int main(int argc, char *argv[])
   }
   std::string workdir(argv[2]);
   std::string ext = program.substr(program.find_last_of(".") + 1);
-  auto engine = WINGRR_ENGINE_JAVASCRIPT_NODEJS;
+  auto engine = WINGRR_ENGINE_JAVASCRIPT;
   if (ext == "ts")
-    engine = WINGRR_ENGINE_TYPESCRIPT_NODEJS;
+    engine = WINGRR_ENGINE_TYPESCRIPT;
   else if (ext == "py")
-    engine = WINGRR_ENGINE_PYTHON_NODEJS;
+    engine = WINGRR_ENGINE_PYTHON;
   else if (ext == "rb")
-    engine = WINGRR_ENGINE_RUBY_NODEJS;
+    engine = WINGRR_ENGINE_RUBY;
   else if (ext == "cs")
-    engine = WINGRR_ENGINE_CSHARP_MONO;
+    engine = WINGRR_ENGINE_CSHARP;
   else if (ext == "go")
-    engine = WINGRR_ENGINE_GO_YAEGI;
+    engine = WINGRR_ENGINE_GO;
   else if (ext == "java")
-    engine = WINGRR_ENGINE_JAVA_JNI;
+    engine = WINGRR_ENGINE_JAVA;
   else if (ext != "js")
   {
     std::cerr << "Unknown program extension." << std::endl;

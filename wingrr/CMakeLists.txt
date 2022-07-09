@@ -5,6 +5,8 @@ project(wingrr)
 include(FindPkgConfig)
 include(ExternalProject)
 find_package(JNI REQUIRED)
+find_package(Ruby REQUIRED)
+find_package(Python3 REQUIRED COMPONENTS Development)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(MONO2 REQUIRED mono-2)
 
@@ -51,24 +53,44 @@ ExternalProject_Add(wingrr-java
   BUILD_IN_SOURCE TRUE
 )
 
+# pybind11 is header-only, used for integration with cpython
+ExternalProject_Add(pybind11
+  URL https://github.com/pybind/pybind11/archive/refs/tags/v2.9.2.zip
+  CONFIGURE_COMMAND "" INSTALL_COMMAND "" BUILD_COMMAND ""
+  EXCLUDE_FROM_ALL FALSE
+  BUILD_IN_SOURCE TRUE
+)
+ExternalProject_Get_property(pybind11 SOURCE_DIR)
+set(PYBIND11_INCLUDE_DIR ${SOURCE_DIR}/include)
+unset(SOURCE_DIR)
+
 # the main library. this is wingrr
 add_library(wingrr SHARED src/wingrr.cc)
-add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java)
+add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11)
 
 # compiler configuration to get everything linked and included
 target_link_options(wingrr PUBLIC LINKER:-z,defs)
 target_link_libraries(wingrr PUBLIC
-  node ${MONO2_LIBRARIES} ${JNI_LIBRARIES} wrr-go)
+  node wrr-go
+  ${Python3_LIBRARIES}
+  ${MONO2_LIBRARIES}
+  ${JNI_LIBRARIES}
+  ${RUBY_LIBRARY}
+)
 target_include_directories(wingrr PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/src/go
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include/node
+  ${PYBIND11_INCLUDE_DIR}
+  ${Python3_INCLUDE_DIRS}
   ${MONO2_INCLUDE_DIRS}
+  ${RUBY_INCLUDE_DIRS}
   ${JNI_INCLUDE_DIRS}
 )
 target_link_directories(wingrr PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib
   ${CMAKE_CURRENT_SOURCE_DIR}/src/go
+  ${Python3_LIBRARY_DIRS}
   ${MONO2_LIBRARY_DIRS}
   ${JNI_LIBRARY_DIRS}
 )

@@ -9,13 +9,13 @@ extern "C"
   /** engine type represents environment where preflight is executed */
   typedef enum wingrr_engine_type_t_
   {
-    WINGRR_ENGINE_JAVASCRIPT_NODEJS = 1,
-    WINGRR_ENGINE_TYPESCRIPT_NODEJS,
-    WINGRR_ENGINE_PYTHON_NODEJS,
-    WINGRR_ENGINE_RUBY_NODEJS,
-    WINGRR_ENGINE_CSHARP_MONO,
-    WINGRR_ENGINE_GO_YAEGI,
-    WINGRR_ENGINE_JAVA_JNI,
+    WINGRR_ENGINE_JAVASCRIPT = 1,
+    WINGRR_ENGINE_TYPESCRIPT = 2,
+    WINGRR_ENGINE_PYTHON = 3,
+    WINGRR_ENGINE_RUBY = 4,
+    WINGRR_ENGINE_CSHARP = 5,
+    WINGRR_ENGINE_GO = 6,
+    WINGRR_ENGINE_JAVA = 7,
   } wingrr_engine_type_t;
 
   /** shallow type of preflight execution configuration */

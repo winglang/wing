@@ -3,29 +3,27 @@
   "version": "0.0.1",
   "description": "Wing Rosetta Runtime",
   "scripts": {
-    "install": "npm-run-all patch cmake",
-    "patch": "node ./src/patch-pyodide.js",
+    "install": "npm-run-all cmake",
     "cmake": "npm-run-all cmake:*",
-    "cmake:pyodide": "webpack",
-    "cmake:node": "cmake-js -m -d vendor/node",
+    "cmake:nodejs": "cmake-js -m -d vendor/node",
     "cmake:wingrr": "cmake-js -m -d",
     "clean": "npm-run-all clean:*",
     "clean:wingrr": "rm -rf build",
-    "clean:node": "rm -rf vendor/node/build vendor/node/bin",
-    "clean:pyodide": "rm -rf dist",
+    "clean:nodejs": "rm -rf vendor/node/build vendor/node/bin",
     "rebuild": "npm-run-all clean cmake",
     "test": "npm-run-all test:*",
-    "test:js": "./build/wingrr tests/main.js ./",
-    "test:ts": "./build/wingrr tests/main.ts ./",
-    "test:java": "./build/wingrr tests/hello.java ./",
+    "test:js": "./build/wingrr tests/hello.js ./",
+    "test:ts": "./build/wingrr tests/hello.ts ./",
+    "test:py": "./build/wingrr tests/hello.py ./",
+    "test:rb": "./build/wingrr tests/hello.rb ./",
     "test:cs": "./build/wingrr tests/hello.cs ./",
-    "test:go": "./build/wingrr tests/hello.go ./"
+    "test:go": "./build/wingrr tests/hello.go ./",
+    "test:java": "./build/wingrr tests/hello.java ./"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/monadahq/winglang.git"
   },
-  "keywords": [],
   "author": "Wing Developers",
   "license": "UNLICENSED",
   "bugs": {
@@ -34,14 +32,7 @@
   "homepage": "https://github.com/monadahq/winglang#readme",
   "dependencies": {
     "cmake-js": "^6.3.2",
-    "copy-webpack-plugin": "^11.0.0",
-    "node-fetch": "^3.2.6",
     "npm-run-all": "^4.1.5",
-    "pyodide": "^0.20.1-alpha.2",
-    "ruby-head-wasm-wasi": "^0.3.0",
-    "string-replace-loader": "^3.1.0",
-    "ts-node": "^10.8.2",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.10.0"
+    "ts-node": "^10.8.2"
   }
 }
