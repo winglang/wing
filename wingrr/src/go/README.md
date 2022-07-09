@@ -1,4 +1,4 @@
-# `libwrr-go`
+# `libwrr.go`
 
 Wing Rosetta Runtime Go Engine.
 

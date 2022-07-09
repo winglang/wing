@@ -1,4 +1,4 @@
-# `libwrr-go`
+# `libwrr.java`
 
 Wing Rosetta Runtime Java Engine.
 

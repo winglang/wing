@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12 FATAL_ERROR)
 
-project(wingpf)
+project(wingrr)
 
 include(FindPkgConfig)
 find_package(JNI REQUIRED)
@@ -22,15 +22,15 @@ include_directories(
 
 add_link_options(LINKER:-z,defs)
 
-add_library(wingpf SHARED wingpf.cc)
-target_link_libraries(wingpf PRIVATE
-  node ${MONO2_LIBRARIES} ${JNI_LIBRARIES} wrr-go)
-target_link_directories(wingpf PRIVATE
+add_library(wingrr SHARED wingrr.cc)
+target_link_libraries(wingrr PRIVATE
+  node ${MONO2_LIBRARIES} ${JNI_LIBRARIES} wrr)
+target_link_directories(wingrr PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib
   ${CMAKE_CURRENT_SOURCE_DIR}/src/go
   ${MONO2_LIBRARY_DIRS}
   ${JNI_LIBRARY_DIRS}
 )
 
-add_executable(wingpf-cli wingpf-cli.cc)
-target_link_libraries(wingpf-cli PRIVATE wingpf)
+add_executable(wingrr-cli wingrr-cli.cc)
+target_link_libraries(wingrr-cli PRIVATE wingrr)

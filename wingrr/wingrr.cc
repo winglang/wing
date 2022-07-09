@@ -1,4 +1,4 @@
-#include "wingpf.h"
+#include "wingrr.h"
 
 #include <jni.h>
 
@@ -19,24 +19,24 @@
 #include <cstring>
 #include <cassert>
 
-#include <libwrr-go.h>
+#include <libwrr.h>
 
 extern "C"
 {
-  struct wingpf_context_t_
+  struct wingrr_context_t_
   {
     std::mutex mutex;
     const char *program;
     const char *workdir;
-    wingpf_engine_type_t type;
+    wingrr_engine_type_t type;
   };
-  wingpf_context_t *wingpf_prep(wingpf_engine_type_t const type)
+  wingrr_context_t *wingrr_prep(wingrr_engine_type_t const type)
   {
-    const auto instance = new wingpf_context_t_();
+    const auto instance = new wingrr_context_t_();
     instance->type = type;
     return instance;
   }
-  void wingpf_set_program(wingpf_context_t *const instance, const char *const program)
+  void wingrr_set_program(wingrr_context_t *const instance, const char *const program)
   {
     assert(instance);
     std::lock_guard<std::mutex> lock(instance->mutex);
@@ -45,7 +45,7 @@ extern "C"
       return;
     instance->program = program;
   }
-  void wingpf_set_workdir(wingpf_context_t *const instance, const char *const context)
+  void wingrr_set_workdir(wingrr_context_t *const instance, const char *const context)
   {
     assert(instance);
     std::lock_guard<std::mutex> lock(instance->mutex);
@@ -54,7 +54,7 @@ extern "C"
       return;
     instance->workdir = context;
   }
-  int wingpf_exec(wingpf_context_t *const instance)
+  int wingrr_exec(wingrr_context_t *const instance)
   {
     int ret = 0;
     assert(instance);
@@ -63,10 +63,10 @@ extern "C"
     assert(instance->program);
     assert(instance->workdir);
 
-    if (instance->type == WINGPF_ENGINE_JAVASCRIPT_NODEJS ||
-        instance->type == WINGPF_ENGINE_TYPESCRIPT_NODEJS ||
-        instance->type == WINGPF_ENGINE_PYTHON_NODEJS ||
-        instance->type == WINGPF_ENGINE_RUBY_NODEJS)
+    if (instance->type == WINGRR_ENGINE_JAVASCRIPT_NODEJS ||
+        instance->type == WINGRR_ENGINE_TYPESCRIPT_NODEJS ||
+        instance->type == WINGRR_ENGINE_PYTHON_NODEJS ||
+        instance->type == WINGRR_ENGINE_RUBY_NODEJS)
     {
       std::vector<const char *> argv({"wingrr",
                                       "--experimental-modules",
@@ -77,7 +77,7 @@ extern "C"
                                       "--no-warnings",
                                       "--no-addons"});
 
-      if (instance->type == WINGPF_ENGINE_TYPESCRIPT_NODEJS)
+      if (instance->type == WINGRR_ENGINE_TYPESCRIPT_NODEJS)
       {
         argv.push_back("--require");
         argv.push_back("ts-node/register/transpile-only");
@@ -94,11 +94,11 @@ extern "C"
       uv_os_setenv("NODE_PATH", buf);
     }
 
-    else if (instance->type == WINGPF_ENGINE_CSHARP_MONO)
+    else if (instance->type == WINGRR_ENGINE_CSHARP_MONO)
     {
       mono_config_parse(NULL);
       std::shared_ptr<MonoDomain> domain(mono_jit_init("wingrr"), mono_jit_cleanup);
-      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), "libwrr-cs.dll");
+      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), "src/cs/libwrr.dll");
       MonoImage *image = mono_assembly_get_image(assembly);
       MonoMethodDesc *TypeMethodDesc = mono_method_desc_new("Monada.Wing:Execute(string,string)", false);
       MonoMethod *method = mono_method_desc_search_in_image(TypeMethodDesc, image);
@@ -109,14 +109,14 @@ extern "C"
       ret = mono_environment_exitcode_get();
     }
 
-    else if (instance->type == WINGPF_ENGINE_GO_YAEGI)
+    else if (instance->type == WINGRR_ENGINE_GO_YAEGI)
     {
       ::GoString program = {instance->program, static_cast<ptrdiff_t>(strlen(instance->program))};
       ::GoString workdir = {instance->workdir, static_cast<ptrdiff_t>(strlen(instance->workdir))};
       ::Execute(program, workdir);
     }
 
-    else if (instance->type == WINGPF_ENGINE_JAVA_JNI)
+    else if (instance->type == WINGRR_ENGINE_JAVA_JNI)
     {
       JavaVM *jvm;
       JNIEnv *env;
@@ -147,7 +147,7 @@ extern "C"
 
     return ret;
   }
-  void wingpf_free(wingpf_context_t *const instance)
+  void wingrr_free(wingrr_context_t *const instance)
   {
     delete instance;
   }

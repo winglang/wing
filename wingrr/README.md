@@ -1,6 +1,6 @@
-# wingpf
+# Wing Rosetta Runtime (`wingrr`)
 
-Wing Preflight Runtime.
+An embedded runtime designed to execute all JSII languages in one place.
 
 ## Build
 
@@ -23,39 +23,27 @@ And then run `npm install` to build. `npm run cmake:*` for individual targets.
 
 ## Usage
 
-After building, link with `libwingpf.so` and use the `wingpf.h` header.
+After building, link with `libwingrr.so` and use the `wingrr.h` header.
 
 ## Tests
 
-Tests are executed with `npm run test`. Catch++ is used for native unit tests.
-
-Temporarily run tests with: `./build/wingpf-cli tests/main.js .` while being in
+Temporarily run tests with: `./build/wingrr-cli tests/main.js .` while being in
 the directory of this file.
 
 ## Mission
 
-The `wingpf` runtime's mission is to allow the Wing compiler (`wingc`), execute
+The `wingrr` runtime's mission is to allow the Wing compiler (`wingc`), execute
 its intermediate format and produce the final result **files**.
 
-`wingpf` is not a normal runtime, as in it does not end at supporting a single
-language. `wingpf` is a runtime that can be used to execute multiple languages
-on multiple platforms at the same time, so `wingc` can focus on what it does
+`wingrr` is not a normal runtime, as in it does not end at supporting a single
+language. `wingrr` is a runtime that can be used to execute multiple languages
+on multiple platforms, at the same time, so `wingc` can focus on what it does
 best, which is producing a usable, synthesizeable `constructs` tree for the
 target language of JSII, at user's choice.
 
-Currently `wingpf` executes arbitrary JavaScript, aimed at supporting all of
-what's needed in Node to get packages such as CDK or Projen to work correctly.
-
-`wingpf` reserves the right to change its execution environment and/or its
-intermediate format at any time. The intermediate format is not to be considered
-a publicly facing layer of the runtime.
-
-The intermediate format is intended to be used by the compiler, and is privately
-negotiated with the runtime at preflight time.
-
 ## Execution Environment Support
 
-The `wingpf` runtime currently supports the following matrix:
+The `wingrr` runtime currently supports the following matrix:
 
 | JSII Language       |  Linux  | Windows |  MacOS  | WebAssembly |
 | :------------------ | :-----: | :-----: | :-----: | :---------: |

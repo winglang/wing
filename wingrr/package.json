@@ -1,16 +1,16 @@
 {
-  "name": "wingpf",
+  "name": "wingrr",
   "version": "0.0.1",
-  "description": "Wing Programming Language Preflight Runtime",
+  "description": "Wing Rosetta Runtime",
   "scripts": {
     "install": "npm-run-all patch cmake",
     "patch": "node ./src/patch-pyodide.js",
     "cmake": "npm-run-all cmake:*",
     "cmake:pyodide": "webpack",
     "cmake:node": "cmake-js -m -d vendor/node",
-    "cmake:wingpf": "cmake-js -m -d",
+    "cmake:wingrr": "cmake-js -m -d",
     "clean": "npm-run-all clean:*",
-    "clean:wingpf": "rm -rf build",
+    "clean:wingrr": "rm -rf build",
     "clean:node": "rm -rf vendor/node/build vendor/node/bin",
     "clean:pyodide": "rm -rf dist",
     "rebuild": "npm-run-all clean cmake"

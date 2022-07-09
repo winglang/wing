@@ -1,4 +1,4 @@
-# `libwrr-cs`
+# `libwrr.cs`
 
 Wing Rosetta Runtime C# Engine.
 

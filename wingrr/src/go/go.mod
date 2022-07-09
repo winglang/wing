@@ -1,4 +1,4 @@
-module libwrr-go
+module libwrr
 
 go 1.17
 

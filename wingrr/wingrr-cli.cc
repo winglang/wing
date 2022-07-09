@@ -1,4 +1,4 @@
-#include "wingpf.h"
+#include "wingrr.h"
 
 #include <memory>
 #include <string>
@@ -19,28 +19,28 @@ int main(int argc, char *argv[])
   }
   std::string workdir(argv[2]);
   std::string ext = program.substr(program.find_last_of(".") + 1);
-  auto engine = WINGPF_ENGINE_JAVASCRIPT_NODEJS;
+  auto engine = WINGRR_ENGINE_JAVASCRIPT_NODEJS;
   if (ext == "ts")
-    engine = WINGPF_ENGINE_TYPESCRIPT_NODEJS;
+    engine = WINGRR_ENGINE_TYPESCRIPT_NODEJS;
   else if (ext == "py")
-    engine = WINGPF_ENGINE_PYTHON_NODEJS;
+    engine = WINGRR_ENGINE_PYTHON_NODEJS;
   else if (ext == "rb")
-    engine = WINGPF_ENGINE_RUBY_NODEJS;
+    engine = WINGRR_ENGINE_RUBY_NODEJS;
   else if (ext == "cs")
-    engine = WINGPF_ENGINE_CSHARP_MONO;
+    engine = WINGRR_ENGINE_CSHARP_MONO;
   else if (ext == "go")
-    engine = WINGPF_ENGINE_GO_YAEGI;
+    engine = WINGRR_ENGINE_GO_YAEGI;
   else if (ext == "java")
-    engine = WINGPF_ENGINE_JAVA_JNI;
+    engine = WINGRR_ENGINE_JAVA_JNI;
   else if (ext != "js")
   {
     std::cerr << "Unknown program extension." << std::endl;
     return 1;
   }
-  auto instance = std::shared_ptr<wingpf_context_t>(
-      wingpf_prep(engine),
-      wingpf_free);
-  wingpf_set_program(instance.get(), argv[1]);
-  wingpf_set_workdir(instance.get(), argv[2]);
-  return wingpf_exec(instance.get());
+  auto instance = std::shared_ptr<wingrr_context_t>(
+      wingrr_prep(engine),
+      wingrr_free);
+  wingrr_set_program(instance.get(), argv[1]);
+  wingrr_set_workdir(instance.get(), argv[2]);
+  return wingrr_exec(instance.get());
 }

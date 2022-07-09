@@ -1,5 +1,5 @@
-#ifndef WINGPF_H_
-#define WINGPF_H_
+#ifndef WINGRR_H_
+#define WINGRR_H_
 
 #ifdef __cplusplus
 extern "C"
@@ -7,19 +7,19 @@ extern "C"
 #endif
 
   /** engine type represents environment where preflight is executed */
-  typedef enum wingpf_engine_type_t_
+  typedef enum wingrr_engine_type_t_
   {
-    WINGPF_ENGINE_JAVASCRIPT_NODEJS = 1,
-    WINGPF_ENGINE_TYPESCRIPT_NODEJS,
-    WINGPF_ENGINE_PYTHON_NODEJS,
-    WINGPF_ENGINE_RUBY_NODEJS,
-    WINGPF_ENGINE_CSHARP_MONO,
-    WINGPF_ENGINE_GO_YAEGI,
-    WINGPF_ENGINE_JAVA_JNI,
-  } wingpf_engine_type_t;
+    WINGRR_ENGINE_JAVASCRIPT_NODEJS = 1,
+    WINGRR_ENGINE_TYPESCRIPT_NODEJS,
+    WINGRR_ENGINE_PYTHON_NODEJS,
+    WINGRR_ENGINE_RUBY_NODEJS,
+    WINGRR_ENGINE_CSHARP_MONO,
+    WINGRR_ENGINE_GO_YAEGI,
+    WINGRR_ENGINE_JAVA_JNI,
+  } wingrr_engine_type_t;
 
   /** shallow type of preflight execution configuration */
-  typedef struct wingpf_context_t_ wingpf_context_t;
+  typedef struct wingrr_context_t_ wingrr_context_t;
 
   /**
    * @brief Prepares preflight execution configuration.
@@ -27,7 +27,7 @@ extern "C"
    * @return preflight execution configuration
    * @note This function is thread-safe.
    */
-  wingpf_context_t *wingpf_prep(wingpf_engine_type_t const);
+  wingrr_context_t *wingrr_prep(wingrr_engine_type_t const);
 
   /**
    * @brief Sets program path on disk to be executed.
@@ -37,7 +37,7 @@ extern "C"
    * then it will be loaded from disk into memory before execution.
    * @note This function is thread-safe.
    */
-  void wingpf_set_program(wingpf_context_t *const, const char *const program);
+  void wingrr_set_program(wingrr_context_t *const, const char *const program);
 
   /**
    * @brief Sets working directory path on disk for "program" to execute in.
@@ -45,7 +45,7 @@ extern "C"
    * @param workdir path of execution
    * @note This function is thread-safe.
    */
-  void wingpf_set_workdir(wingpf_context_t *const, const char *const workdir);
+  void wingrr_set_workdir(wingrr_context_t *const, const char *const workdir);
 
   /**
    * @brief Executes preflight code.
@@ -53,17 +53,17 @@ extern "C"
    * @return 0 on success, non-zero on failure
    * @note This function is thread-safe.
    */
-  int wingpf_exec(wingpf_context_t *const);
+  int wingrr_exec(wingrr_context_t *const);
 
   /**
    * @brief Frees preflight execution configuration.
    * @param instance preflight execution configuration
    * @note This function is thread-safe.
    */
-  void wingpf_free(wingpf_context_t *const);
+  void wingrr_free(wingrr_context_t *const);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // !WINGPF_H_
+#endif // !WINGRR_H_
