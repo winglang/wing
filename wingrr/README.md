@@ -56,6 +56,11 @@ Also accessible with `npm test` from the directory of this file.
 
 Rust crate is tested with its own toolchain (`cargo`) and is executed by `npm`;
 
+To run all tests correctly, you need to have two environment variables set:
+
+1. `WINGRR_ROOT`: FULL path to where your build directory is (usually `./build`)
+1. `LD_LIBRARY_PATH`: Add `WINGRR_ROOT` to your `LD_LIBRARY_PATH` for `cargo`
+
 ## Mission
 
 The `wingrr` runtime's mission is to allow the Wing compiler (`wingc`), execute
