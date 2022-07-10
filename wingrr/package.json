@@ -18,6 +18,7 @@
     "test:rb": "./build/wingrr tests/hello.rb ./",
     "test:cs": "./build/wingrr tests/hello.cs ./",
     "test:go": "./build/wingrr tests/hello.go ./",
+    "test:lua": "./build/wingrr tests/hello.lua ./",
     "test:java": "./build/wingrr tests/hello.java ./"
   },
   "repository": {

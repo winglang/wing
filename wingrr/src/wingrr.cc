@@ -24,6 +24,8 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 
+#include <sol/sol.hpp>
+
 #include <ruby.h>
 
 extern "C"
@@ -176,6 +178,13 @@ extern "C"
       };
       auto ruby_argc = sizeof(ruby_argv) / sizeof(ruby_argv[0]) - 1;
       ret = ruby_run_node(ruby_options(ruby_argc, ruby_argv));
+    }
+
+    else if (instance->type == WINGRR_ENGINE_LUA)
+    {
+      sol::state lua;
+      lua.open_libraries(sol::lib::base);
+      lua.script_file(instance->program);
     }
 
     return ret;

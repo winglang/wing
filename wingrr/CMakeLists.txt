@@ -9,6 +9,7 @@ find_package(Ruby REQUIRED)
 find_package(Python3 REQUIRED COMPONENTS Development)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(MONO2 REQUIRED mono-2)
+pkg_check_modules(LUAJIT REQUIRED luajit)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -64,15 +65,27 @@ ExternalProject_Get_property(pybind11 SOURCE_DIR)
 set(PYBIND11_INCLUDE_DIR ${SOURCE_DIR}/include)
 unset(SOURCE_DIR)
 
+# sol3 is header-only, used for integration with lua jit
+ExternalProject_Add(sol3
+  URL https://github.com/ThePhD/sol2/archive/refs/tags/v3.3.0.zip
+  CONFIGURE_COMMAND "" INSTALL_COMMAND "" BUILD_COMMAND ""
+  EXCLUDE_FROM_ALL FALSE
+  BUILD_IN_SOURCE TRUE
+)
+ExternalProject_Get_property(sol3 SOURCE_DIR)
+set(SOL3_INCLUDE_DIR ${SOURCE_DIR}/include)
+unset(SOURCE_DIR)
+
 # the main library. this is wingrr
 add_library(wingrr SHARED src/wingrr.cc)
-add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11)
+add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11 sol3)
 
 # compiler configuration to get everything linked and included
 target_link_options(wingrr PUBLIC LINKER:-z,defs)
 target_link_libraries(wingrr PUBLIC
   node wrr-go
   ${Python3_LIBRARIES}
+  ${LUAJIT_LIBRARIES}
   ${MONO2_LIBRARIES}
   ${JNI_LIBRARIES}
   ${RUBY_LIBRARY}
@@ -83,9 +96,11 @@ target_include_directories(wingrr PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include/node
   ${PYBIND11_INCLUDE_DIR}
   ${Python3_INCLUDE_DIRS}
+  ${LUAJIT_INCLUDE_DIRS}
   ${MONO2_INCLUDE_DIRS}
   ${RUBY_INCLUDE_DIRS}
   ${JNI_INCLUDE_DIRS}
+  ${SOL3_INCLUDE_DIR}
 )
 target_link_directories(wingrr PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib

@@ -22,6 +22,8 @@ You need:
   - _Ubuntu_: `sudo apt install python3-dev`
 - Required for Ruby engine: a working Ruby dev installation
   - _Ubuntu_: `sudo apt install ruby-dev`
+- Required for Lua engine: a working Lua dev installation
+  - _Ubuntu_: `sudo apt install libluajit-5.1-dev`
 
 And then run `npm install` to build.
 
@@ -44,6 +46,7 @@ Make sure your `cwd` is the directory of this file. Temporarily run tests with:
 - CSharp: `./build/wingrr tests/hello.cs ./`
 - Java: `./build/wingrr tests/hello.java ./`
 - Ruby: `./build/wingrr tests/hello.rb ./`
+- Lua: `./build/wingrr tests/hello.lua ./`
 - Go: `./build/wingrr tests/hello.go ./`
 
 Also accessible with `npm test` from the directory of this file.
@@ -72,6 +75,7 @@ The `wingrr` runtime currently supports the following matrix:
 | C# <sup>3</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
 | Ruby <sup>4</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
 | Java <sup>5</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Lua <sup>6</sup>    | &#9745; | &#9744; | &#9744; |   &#9744;   |
 
 Embedded support is _offered_ with:
 
@@ -80,6 +84,7 @@ Embedded support is _offered_ with:
 <sup>3</sup> C# with [Mono](https://www.mono-project.com)<br />
 <sup>4</sup> Ruby with [Ruby VM](https://github.com/ruby/ruby)<br />
 <sup>5</sup> Java with [JNI+JShell](https://docs.oracle.com/javase/9/jshell)
+<br /><sup>6</sup> Lua with [sol3](https://github.com/ThePhD/sol2)
 
 ## VSCode Setup
 

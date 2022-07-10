@@ -32,6 +32,8 @@ int main(int argc, char *argv[])
     engine = WINGRR_ENGINE_GO;
   else if (ext == "java")
     engine = WINGRR_ENGINE_JAVA;
+  else if (ext == "lua")
+    engine = WINGRR_ENGINE_LUA;
   else if (ext != "js")
   {
     std::cerr << "Unknown program extension." << std::endl;
