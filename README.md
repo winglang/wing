@@ -17,6 +17,8 @@ An RFC is a document that proposes a new initiative or a significant change to a
 
 **When should I write an RFC?** Usually, an RFC is a common practice for major features or complex changes that require that extra vetting. However, the process is designed to be as lightweight as needed and can be used to request feedback on any change. Quite often, even changes that seem obvious and simple at first sight can be significantly improved once a wider group of interested and experienced people have a chance to weigh in.
 
+**Will my RFC be public facing?** For now, when writing RFCs, you should assume the content will remain internal and not worry about "trade secrects". In the future, we will have public-facing RFCs, but these will revolve only around our public-facing products and will not include anything that isn't fit for public review.
+
 ## RFC Process
 
 ### 1. Kick-off
