@@ -6,6 +6,8 @@ An embedded runtime designed to execute all JSII languages in one place.
 
 You need:
 
+- A working Rust build environment:
+  - _Ubuntu_: [`curl -sSf https://sh.rustup.rs | sh`](https://rustup.rs/)
 - A working C/C++ build environment (e.g. `gcc` or `clang`):
   - _Ubuntu_: `sudo apt install python3 g++ make python3-pip build-essential`
   - _MacOS_: `brew install llvm`
@@ -35,8 +37,9 @@ After building, link with `libwingrr.so` and use the `wingrr.h` header.
 
 ## Tests
 
-A test CLI-like utility of the same name will be available in your build folder.
-This utility can be used to quickly identify correct execution of the library.
+A test CLI-like utility of the same name (wingrr) will be available in your
+build folder. This utility can be used to quickly identify correct execution of
+various languages supported without the need of another application.
 
 Make sure your `cwd` is the directory of this file. Temporarily run tests with:
 
@@ -50,6 +53,8 @@ Make sure your `cwd` is the directory of this file. Temporarily run tests with:
 - Go: `./build/wingrr tests/hello.go ./`
 
 Also accessible with `npm test` from the directory of this file.
+
+Rust crate is tested with its own toolchain (`cargo`) and is executed by `npm`;
 
 ## Mission
 

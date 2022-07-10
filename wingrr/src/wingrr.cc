@@ -28,6 +28,27 @@
 
 #include <ruby.h>
 
+namespace
+{
+  std::string _get_runtime_path()
+  {
+    size_t buflen = 4096;
+    char buf[buflen]{0};
+    uv_os_getenv("WINGRR_ROOT", buf, &buflen);
+    if (!buf || buflen == 0 || std::string(buf) == "" && uv_cwd(buf, &buflen) == UV_ENOBUFS)
+      return ".";
+    else
+      return std::string(buf);
+  }
+
+  static const std::string RUNTIME_PATH{_get_runtime_path()};
+
+  std::string _resolve(const std::string &rel)
+  {
+    return RUNTIME_PATH + "/" + rel;
+  }
+}
+
 extern "C"
 {
   struct wingrr_context_t_
@@ -103,7 +124,8 @@ extern "C"
     {
       mono_config_parse(NULL);
       std::shared_ptr<MonoDomain> domain(mono_jit_init("wingrr"), mono_jit_cleanup);
-      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), "build/libwrr-cs.dll");
+      const auto assemblyPath = _resolve("libwrr-cs.dll");
+      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), assemblyPath.c_str());
       MonoImage *image = mono_assembly_get_image(assembly);
       MonoMethodDesc *TypeMethodDesc = mono_method_desc_new("Monada.Wing:Execute(string,string)", false);
       MonoMethod *method = mono_method_desc_search_in_image(TypeMethodDesc, image);
@@ -128,7 +150,8 @@ extern "C"
       JavaVMInitArgs jvm_args;
       JavaVMOption *options = new JavaVMOption[3];
       options[0].optionString = const_cast<char *>("-Djava.compiler=NONE");
-      options[1].optionString = const_cast<char *>("-Djava.class.path=build");
+      std::string classpath = "-Djava.class.path=" + RUNTIME_PATH;
+      options[1].optionString = const_cast<char *>(classpath.data());
       options[2].optionString = const_cast<char *>("-verbose:none"); // class|module|gc|jni
       jvm_args.version = JNI_VERSION_1_6;
       jvm_args.nOptions = 3;
