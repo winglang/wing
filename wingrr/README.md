@@ -95,18 +95,3 @@ Embedded support is _offered_ with:
 <sup>4</sup> Ruby with [Ruby VM](https://github.com/ruby/ruby)<br />
 <sup>5</sup> Java with [JNI+JShell](https://docs.oracle.com/javase/9/jshell)
 <br /><sup>6</sup> Lua with [sol3](https://github.com/ThePhD/sol2)
-
-## VSCode Setup
-
-If you use the C/C++ extension in VSCode, the following paths set the editor up
-for intellisense (Ubuntu 22.04):
-
-```text
-${workspaceFolder}/**
-/usr/include/mono-2.0
-/usr/lib/jvm/java-11-openjdk-amd64/include
-/usr/lib/jvm/java-11-openjdk-amd64/include/linux
-/usr/include/python3.8
-/usr/include/ruby-2.7.0
-/usr/include/x86_64-linux-gnu/ruby-2.7.0
-```
