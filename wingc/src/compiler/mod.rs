@@ -41,6 +41,11 @@ struct Compiler<'a> {
 //     }
 // }
 
+//TODO: delete
+pub fn return_four() -> u32 {
+    4
+}
+
 impl Compiler<'_> {
     fn node_text<'a>(&'a self, node: &Node) -> &'a str {
         return str::from_utf8(&self.source[node.byte_range()]).unwrap();
