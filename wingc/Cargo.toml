@@ -13,3 +13,4 @@ tree-sitter = "0.20.6"
 clap = { version = "3.2.6", features = ["derive"] }
 sha2 = "0.10"
 base16ct = { version = "0.1", features = ["alloc"] }
+rusty-wingrr = { path = "../wingrr/src/rust" }

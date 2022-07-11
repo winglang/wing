@@ -1,5 +1,7 @@
 #!/bin/sh
+
 scriptdir=$(cd $(dirname $0) && pwd)
+reporoot=$(cd $scriptdir/.. && pwd)
 cd $scriptdir
 
 # install sdk
@@ -9,11 +11,13 @@ fi
 
 # build wingc
 (
-  cd $scriptdir/../wingc
+  cd $reporoot/wingc
   cargo build --quiet
 )
 
+#export WINGRR_ROOT=$reporoot/wingrr/build
+#export LD_LIBRARY_PATH=$WINGRR_ROOT
+
 # compile
 mkdir -p target
-$scriptdir/../wingc/target/debug/wingc $1 > target/preflight.js
-node target/preflight.js
+$reporoot/wingc/target/debug/wingc $1

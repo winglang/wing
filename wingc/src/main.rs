@@ -1,3 +1,7 @@
+#![allow(non_upper_case_globals)]
+#![allow(non_camel_case_types)]
+#![allow(non_snake_case)]
+
 use clap::*;
 use tree_sitter::{Parser, Language, Node};
 use std::{collections::HashMap};
@@ -5,6 +9,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::str;
 use sha2::{Sha256, Digest};
+use rusty_wingrr::execute_javascript;
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -348,4 +353,8 @@ fn main() {
     //traverse(&tree.root_node(), 0);
 
     println!("{}", output);
+    let object_file = out_dir.join("wingc.o");
+    let object_file_path_str = object_file.display().to_string();
+    fs::write(object_file, output).expect("Unable to write intermediate file");
+    execute_javascript(&object_file_path_str, ".");
 }
