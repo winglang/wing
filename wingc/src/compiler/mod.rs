@@ -5,6 +5,7 @@ use std::{collections::HashMap};
 use std::{fs};
 use std::str;
 use sha2::{Sha256, Digest};
+mod test;
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -42,6 +43,7 @@ struct Compiler<'a> {
 // }
 
 //TODO: delete
+#[cfg(test)]
 pub fn return_four() -> u32 {
     4
 }
