@@ -2,6 +2,32 @@
 
 An embedded runtime designed to execute all JSII languages in one place.
 
+## Mission
+
+The `wingrr` runtime's mission is to allow the Wing compiler (`wingc`), execute
+its intermediate format and produce the final result **files**.
+
+`wingrr` is not a normal runtime, as in it does not end at supporting a single
+language. `wingrr` is a runtime that can be used to execute multiple languages
+on multiple platforms, at the same time, so `wingc` can focus on what it does
+best, which is producing a usable, synthesizeable `constructs` tree for the
+target language of JSII, at user's choice.
+
+## Execution Environment Support
+
+The `wingrr` runtime currently supports the following matrix:
+
+| JSII Language           |  Linux  | Windows |  MacOS  | WebAssembly |
+| :---------------------- | :-----: | :-----: | :-----: | :---------: |
+| JavaScript <sup>0</sup> | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| TypeScript <sup>0</sup> | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Python <sup>1</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Go <sup>2</sup>         | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| C# <sup>3</sup>         | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Ruby <sup>4</sup>       | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Java <sup>5</sup>       | &#9745; | &#9744; | &#9744; |   &#9744;   |
+| Lua <sup>6</sup>        | &#9745; | &#9744; | &#9744; |   &#9744;   |
+
 ## Build
 
 You need:
@@ -96,34 +122,11 @@ To run all tests correctly, you need to have two environment variables set:
 1. `WINGRR_ROOT`: FULL path to where your build directory is (usually `./build`)
 1. `LD_LIBRARY_PATH`: Add `WINGRR_ROOT` to your `LD_LIBRARY_PATH` for `cargo`
 
-## Mission
+<hr />
 
-The `wingrr` runtime's mission is to allow the Wing compiler (`wingc`), execute
-its intermediate format and produce the final result **files**.
+Language support is offered with:
 
-`wingrr` is not a normal runtime, as in it does not end at supporting a single
-language. `wingrr` is a runtime that can be used to execute multiple languages
-on multiple platforms, at the same time, so `wingc` can focus on what it does
-best, which is producing a usable, synthesizeable `constructs` tree for the
-target language of JSII, at user's choice.
-
-## Execution Environment Support
-
-The `wingrr` runtime currently supports the following matrix:
-
-| JSII Language       |  Linux  | Windows |  MacOS  | WebAssembly |
-| :------------------ | :-----: | :-----: | :-----: | :---------: |
-| JavaScript          | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| TypeScript          | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| Python <sup>1</sup> | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| Go <sup>2</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| C# <sup>3</sup>     | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| Ruby <sup>4</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| Java <sup>5</sup>   | &#9745; | &#9744; | &#9744; |   &#9744;   |
-| Lua <sup>6</sup>    | &#9745; | &#9744; | &#9744; |   &#9744;   |
-
-Embedded support is _offered_ with:
-
+<sup>0</sup> [Java/Type]Script with [N-API](https://nodejs.org/api)<br />
 <sup>1</sup> Python with [pybind11](https://github.com/pybind/pybind11)<br />
 <sup>2</sup> Go with [Yaegi](https://github.com/traefik/yaegi)<br />
 <sup>3</sup> C# with [Mono](https://www.mono-project.com)<br />
