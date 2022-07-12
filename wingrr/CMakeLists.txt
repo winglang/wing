@@ -85,6 +85,9 @@ add_library(wingrr SHARED src/wingrr.cc
   src/engines/java/libwrr-java.cc
   src/engines/go/libwrr-go.cc
   src/engines/cs/libwrr-csharp.cc
+  src/engines/js/libwrr-javascript.cc
+  src/engines/ts/libwrr-typescript.cc
+  src/bridges/js/node_bridge.cc
 )
 add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11 sol3)
 

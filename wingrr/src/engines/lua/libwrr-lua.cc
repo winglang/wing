@@ -24,7 +24,7 @@ namespace wrr
     std::stringstream ss;
     ss << "__dirname__='" << chdir.cwd() << "'";
     m_state->lua.script(ss.str().c_str());
-    auto ret = m_state->lua.script_file(program.c_str());
-    return ret.valid();
+    m_state->lua.script_file(program.c_str());
+    return 0; // fixme
   }
 } // !namespace wrr

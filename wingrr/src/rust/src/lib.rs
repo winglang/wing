@@ -59,42 +59,41 @@ mod tests {
 
     #[test]
     fn javascript() {
-        // known bug: Node is not re-entrant. This test is temporarily disabled.
-        // assert_eq!(0, execute_javascript("../../tests/hello.js", "../../"));
+        assert_eq!(0, execute_javascript("../../tests/hello.js", "./"));
     }
 
     #[test]
     fn typescript() {
-        assert_eq!(0, execute_typescript("../../tests/hello.ts", "../../"));
+        assert_eq!(0, execute_typescript("../../tests/hello.ts", "./"));
     }
 
     #[test]
     fn python() {
-        assert_eq!(0, execute_python("../../tests/hello.py", "../../"));
+        assert_eq!(0, execute_python("../../tests/hello.py", "./"));
     }
 
     #[test]
     fn go() {
-        assert_eq!(0, execute_go("../../tests/hello.go", "../../"));
+        assert_eq!(0, execute_go("../../tests/hello.go", "./"));
     }
 
     #[test]
     fn csharp() {
-        assert_eq!(0, execute_csharp("../../tests/hello.cs", "../../"));
+        assert_eq!(0, execute_csharp("../../tests/hello.cs", "./"));
     }
 
     #[test]
     fn ruby() {
-        assert_eq!(0, execute_ruby("../../tests/hello.rb", "../../"));
+        assert_eq!(0, execute_ruby("../../tests/hello.rb", "./"));
     }
 
     #[test]
     fn java() {
-        assert_eq!(0, execute_java("../../tests/hello.java", "../../"));
+        assert_eq!(0, execute_java("../../tests/hello.java", "./"));
     }
 
     #[test]
     fn lua() {
-        assert_eq!(0, execute_lua("../../tests/hello.lua", "../../"));
+        assert_eq!(0, execute_lua("../../tests/hello.lua", "./"));
     }
 }
