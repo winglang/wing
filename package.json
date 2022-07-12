@@ -43,19 +43,19 @@
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-node": "^0.3.6",
-    "eslint-import-resolver-typescript": "^3.2.0",
+    "eslint-import-resolver-typescript": "^3.2.5",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^27.0.0",
     "jest-junit": "^13",
     "jsii": "^1.61.0",
     "jsii-diff": "^1.61.0",
-    "jsii-docgen": "^7.0.44",
+    "jsii-docgen": "^7.0.49",
     "jsii-pacmak": "^1.61.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^12",
     "prettier": "^2.7.1",
-    "projen": "^0.58.21",
+    "projen": "^0.58.27",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "typescript": "^4.7.4"
@@ -72,7 +72,7 @@
   "jest": {
     "testMatch": [
       "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/(test|src)/**/?(*.)+(spec|test).ts?(x)"
+      "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,

@@ -1,4 +1,4 @@
-const { cdk } = require('projen');
+const { cdk, GithubCredentials } = require('projen');
 
 new cdk.JsiiProject({
   name: 'wing-sdk',
@@ -12,5 +12,8 @@ new cdk.JsiiProject({
   peerDeps: ['constructs@^10'],
   jestOptions: {
     jestVersion: '^27.0.0', // 28 requires a later typescript version
+  },
+  githubOptions: {
+    projenCredentials: GithubCredentials.fromApp(),
   },
 });
