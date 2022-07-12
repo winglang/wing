@@ -1,3 +1,4 @@
 use fs
 
-fs::File("hello1.txt", contents: "world!")
+hello := fs::TextFile("hello2.txt")
+hello.addLine("world!")

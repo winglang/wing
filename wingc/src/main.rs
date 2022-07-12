@@ -38,6 +38,7 @@ struct Capture {
 
 struct Compiler<'a> {
     out_dir: PathBuf,
+    state_file: PathBuf,
     source: &'a[u8],
     shim: bool
 }
@@ -124,8 +125,8 @@ impl Compiler<'_> {
                 output.append(&mut imports);
 
                 if self.shim {
-                    js.insert(0, "super();\n".to_string());
-                    output.push(format!("class MyApp extends {}.cloud.App {{\nconstructor() {}\n}}", STDLIB, Self::render_block(js)));
+                    js.insert(0, format!("super({{ stateFile: '{}' }});\n", self.state_file.display()));
+                    output.push(format!("class MyApp extends {}.core.App {{\nconstructor() {}\n}}", STDLIB, Self::render_block(js)));
                     output.push("new MyApp().synth();".to_string());
                 } else {
                     output.append(&mut js);
@@ -338,9 +339,11 @@ fn main() {
     let out_dir = PathBuf::from(&args.out_dir.unwrap_or(format!("{}.out", args.source_file)));
     fs::create_dir_all(&out_dir).expect("create output dir");
     let intermediate_dir = out_dir.join(".intermediate");
+    let state_file = PathBuf::from(format!("{}.state", args.source_file));
 
     let output = Compiler {
             out_dir: intermediate_dir,
+            state_file: state_file,
             source: &source[..],
             shim: true
         }.compile(&tree.root_node());
