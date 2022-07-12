@@ -31,6 +31,41 @@ And then run `npm install` to build.
 
 Final artifact is `wingrr.tar.gz` in your build directory.
 
+## Architecture
+
+Rosetta runtime is built on two major components:
+
+1. `Engines`: offer a REPL like engine for a specific language.
+1. `Bridges`: optional bridge between an Engine and its underlying language.
+
+The hierarchy of consumption looks like this:
+
+`wingrr.cc < Engine < [ Bridge ]`
+
+To add a new language, you would want to follow the same pattern established in
+the repository. Identify the most commonly used file extension for the language.
+Let's say the extension is `xy` and the Language name is `XYLang`. Following the
+convention, you would create the following files:
+
+```text
+src/engines/xy/libwrr-xylang.cc
+src/engines/xy/libwrr-xylang.hh
+```
+
+And optionally create the following files if your language needs a bridge:
+
+```text
+src/bridges/xy/xylang_bridge.cc
+src/bridges/xy/xylang_bridge.hh
+```
+
+And finally, add your implementation to the following files:
+
+```text
+CMakeLists.txt
+src/wingrr.cc
+```
+
 ## Usage
 
 After building, link with `libwingrr.so` and use the `wingrr.h` header.

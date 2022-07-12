@@ -23,7 +23,7 @@ set(CMAKE_VERBOSE_MAKEFILE ON)
 # The Go engine is built with its own toolchain
 ExternalProject_Add(wingrr-go
   DOWNLOAD_COMMAND ""
-  SOURCE_DIR ${CMAKE_HOME_DIRECTORY}/src/go
+  SOURCE_DIR ${CMAKE_HOME_DIRECTORY}/src/bridges/go
   CONFIGURE_COMMAND go mod tidy
   INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
   <SOURCE_DIR>/libwrr-go.so ${CMAKE_CURRENT_BINARY_DIR}
@@ -35,7 +35,7 @@ ExternalProject_Add(wingrr-go
 # The C# engine is built with its own toolchain
 ExternalProject_Add(wingrr-cs
   DOWNLOAD_COMMAND "" CONFIGURE_COMMAND ""
-  SOURCE_DIR ${CMAKE_HOME_DIRECTORY}/src/cs
+  SOURCE_DIR ${CMAKE_HOME_DIRECTORY}/src/bridges/cs
   INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
   <SOURCE_DIR>/libwrr.dll ${CMAKE_CURRENT_BINARY_DIR}/libwrr-cs.dll
   BUILD_COMMAND csc /target:library /reference:Mono.CSharp.dll libwrr.cs
@@ -46,7 +46,7 @@ ExternalProject_Add(wingrr-cs
 # The Java engine is built with its own toolchain
 ExternalProject_Add(wingrr-java
   DOWNLOAD_COMMAND "" CONFIGURE_COMMAND ""
-  SOURCE_DIR ${CMAKE_HOME_DIRECTORY}/src/java
+  SOURCE_DIR ${CMAKE_HOME_DIRECTORY}/src/bridges/java
   INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
   <SOURCE_DIR>/libwrr.class ${CMAKE_CURRENT_BINARY_DIR}/libwrr.class
   BUILD_COMMAND javac libwrr.java
@@ -102,7 +102,7 @@ target_link_libraries(wingrr PUBLIC
   ${RUBY_LIBRARY}
 )
 target_include_directories(wingrr PRIVATE
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/go
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/bridges/go
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include/node
   ${PYBIND11_INCLUDE_DIR}
@@ -115,7 +115,7 @@ target_include_directories(wingrr PRIVATE
 )
 target_link_directories(wingrr PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/go
+  ${CMAKE_CURRENT_SOURCE_DIR}/src/bridges/go
   ${Python3_LIBRARY_DIRS}
   ${MONO2_LIBRARY_DIRS}
   ${JNI_LIBRARY_DIRS}
