@@ -8,5 +8,5 @@ dist
 *.so
 src/go/*.h
 *.class
-src/rust/target
-src/rust/src/bindings.rs
+src/crate/target
+src/crate/src/bindings.rs
