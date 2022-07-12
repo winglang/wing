@@ -1,6 +1,6 @@
 # `libwrr.java`
 
-Wing Rosetta Runtime Java Engine.
+Wing Rosetta Runtime Java Bridge.
 
 ## Mission
 

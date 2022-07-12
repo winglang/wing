@@ -1,6 +1,6 @@
 # `libwrr.cs`
 
-Wing Rosetta Runtime C# Engine.
+Wing Rosetta Runtime C# Bridge.
 
 ## Mission
 

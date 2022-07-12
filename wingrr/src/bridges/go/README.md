@@ -1,6 +1,6 @@
 # `libwrr.go`
 
-Wing Rosetta Runtime Go Engine.
+Wing Rosetta Runtime Go Bridge.
 
 ## Mission
 
