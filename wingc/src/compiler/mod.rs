@@ -1,8 +1,8 @@
 use clap::*;
 use tree_sitter::{Parser, Language, Node};
-use std::path::PathBuf;
 use std::{collections::HashMap};
-use std::{fs};
+use std::fs;
+use std::path::PathBuf;
 use std::str;
 use sha2::{Sha256, Digest};
 mod test;
@@ -20,18 +20,8 @@ struct Args {
     out_dir: Option<String>,
 }
 
+
 extern "C" { fn tree_sitter_winglang() -> Language; }
-
-struct Capture {
-    symbol: String,
-    method: String
-}
-
-struct Compiler<'a> {
-    out_dir: PathBuf,
-    source: &'a[u8],
-     shim: bool
-}
 
 // fn traverse(root: &Node, i: usize) {
 //     println!("{:indent$}{}", "", root.kind(), indent=i*2);
@@ -42,10 +32,15 @@ struct Compiler<'a> {
 //     }
 // }
 
-//TODO: delete
-#[cfg(test)]
-pub fn return_four() -> u32 {
-    4
+struct Capture {
+    symbol: String,
+    method: String
+}
+
+struct Compiler<'a> {
+    out_dir: PathBuf,
+    source: &'a[u8],
+    shim: bool
 }
 
 impl Compiler<'_> {
