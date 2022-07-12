@@ -24,7 +24,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/embed.h>
 
-#include <sol/sol.hpp>
+#include "engines/lua/libwrr-lua.hh"
 
 #include <ruby.h>
 
@@ -205,9 +205,8 @@ extern "C"
 
     else if (instance->type == WINGRR_ENGINE_LUA)
     {
-      sol::state lua;
-      lua.open_libraries(sol::lib::base);
-      lua.script_file(instance->program);
+      wrr::LuaEngine engine(instance->workdir);
+      ret = engine.execute(instance->program);
     }
 
     return ret;

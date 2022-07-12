@@ -77,7 +77,9 @@ set(SOL3_INCLUDE_DIR ${SOURCE_DIR}/include)
 unset(SOURCE_DIR)
 
 # the main library. this is wingrr
-add_library(wingrr SHARED src/wingrr.cc)
+add_library(wingrr SHARED src/wingrr.cc
+  src/engines/lua/libwrr-lua.cc
+)
 add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11 sol3)
 
 # compiler configuration to get everything linked and included
