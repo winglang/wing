@@ -165,7 +165,6 @@ namespace wrr
     ss << "const fs = require('fs');";
     ss << "const path = require('path');";
     ss << "const prog = path.resolve('" << program << "');";
-    ss << "console.log(prog);";
     ss << "if (prog.endsWith('.ts')) {";
     ss << "  require(prog);";
     ss << "} else {";
