@@ -21,11 +21,9 @@
 
 #include <libwrr-go.h>
 
-#include <pybind11/pybind11.h>
-#include <pybind11/embed.h>
-
 #include "engines/lua/libwrr-lua.hh"
 #include "engines/rb/libwrr-ruby.hh"
+#include "engines/py/libwrr-python.hh"
 
 namespace
 {
@@ -174,19 +172,8 @@ extern "C"
 
     else if (instance->type == WINGRR_ENGINE_PYTHON)
     {
-      namespace py = pybind11;
-      using namespace py::literals;
-
-      py::scoped_interpreter guard;
-      py::globals()["__file__"] = instance->program;
-
-      // Disable build of __pycache__ folders
-      py::exec(R"(
-          import sys
-          sys.dont_write_bytecode = True
-      )");
-
-      py::eval_file(instance->program);
+      wrr::PythonEngine engine(instance->workdir);
+      ret = engine.execute(instance->program);
     }
 
     else if (instance->type == WINGRR_ENGINE_RUBY)

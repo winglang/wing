@@ -80,6 +80,7 @@ unset(SOURCE_DIR)
 add_library(wingrr SHARED src/wingrr.cc
   src/engines/lua/libwrr-lua.cc
   src/engines/rb/libwrr-ruby.cc
+  src/engines/py/libwrr-python.cc
 )
 add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11 sol3)
 
