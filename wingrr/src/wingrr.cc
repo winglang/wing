@@ -3,12 +3,6 @@
 #include <uv.h>
 #include <node_embedding_api.h>
 
-#include <mono/jit/jit.h>
-#include <mono/metadata/assembly.h>
-#include <mono/metadata/environment.h>
-#include <mono/metadata/mono-config.h>
-#include <mono/metadata/debug-helpers.h>
-
 #include <mutex>
 #include <array>
 #include <vector>
@@ -17,12 +11,12 @@
 #include <cstring>
 #include <cassert>
 
-#include <libwrr-go.h>
-
 #include "engines/lua/libwrr-lua.hh"
 #include "engines/rb/libwrr-ruby.hh"
 #include "engines/py/libwrr-python.hh"
 #include "engines/java/libwrr-java.hh"
+#include "engines/go/libwrr-go.hh"
+#include "engines/cs/libwrr-csharp.hh"
 
 namespace
 {
@@ -118,25 +112,14 @@ extern "C"
 
     else if (instance->type == WINGRR_ENGINE_CSHARP)
     {
-      mono_config_parse(NULL);
-      std::shared_ptr<MonoDomain> domain(mono_jit_init("wingrr"), mono_jit_cleanup);
-      const auto assemblyPath = _resolve("libwrr-cs.dll");
-      MonoAssembly *assembly = mono_domain_assembly_open(domain.get(), assemblyPath.c_str());
-      MonoImage *image = mono_assembly_get_image(assembly);
-      MonoMethodDesc *TypeMethodDesc = mono_method_desc_new("Monada.Wing:Execute(string,string)", false);
-      MonoMethod *method = mono_method_desc_search_in_image(TypeMethodDesc, image);
-      void *args[2];
-      args[0] = mono_string_new(domain.get(), instance->program);
-      args[1] = mono_string_new(domain.get(), instance->workdir);
-      mono_runtime_invoke(method, nullptr, args, nullptr);
-      ret = mono_environment_exitcode_get();
+      wrr::CSharpEngine engine(instance->workdir);
+      ret = engine.execute(instance->program);
     }
 
     else if (instance->type == WINGRR_ENGINE_GO)
     {
-      ::GoString program = {instance->program, static_cast<ptrdiff_t>(strlen(instance->program))};
-      ::GoString workdir = {instance->workdir, static_cast<ptrdiff_t>(strlen(instance->workdir))};
-      ::Execute(program, workdir);
+      wrr::GoEngine engine(instance->workdir);
+      ret = engine.execute(instance->program);
     }
 
     else if (instance->type == WINGRR_ENGINE_JAVA)

@@ -83,6 +83,8 @@ add_library(wingrr SHARED src/wingrr.cc
   src/engines/rb/libwrr-ruby.cc
   src/engines/py/libwrr-python.cc
   src/engines/java/libwrr-java.cc
+  src/engines/go/libwrr-go.cc
+  src/engines/cs/libwrr-csharp.cc
 )
 add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11 sol3)
 
