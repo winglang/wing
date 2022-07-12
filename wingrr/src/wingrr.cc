@@ -1,7 +1,5 @@
 #include "wingrr.h"
 
-#include <jni.h>
-
 #include <uv.h>
 #include <node_embedding_api.h>
 
@@ -24,6 +22,7 @@
 #include "engines/lua/libwrr-lua.hh"
 #include "engines/rb/libwrr-ruby.hh"
 #include "engines/py/libwrr-python.hh"
+#include "engines/java/libwrr-java.hh"
 
 namespace
 {
@@ -142,32 +141,8 @@ extern "C"
 
     else if (instance->type == WINGRR_ENGINE_JAVA)
     {
-      JavaVM *jvm;
-      JNIEnv *env;
-      JavaVMInitArgs jvm_args;
-      JavaVMOption *options = new JavaVMOption[3];
-      options[0].optionString = const_cast<char *>("-Djava.compiler=NONE");
-      std::string classpath = "-Djava.class.path=" + RUNTIME_PATH;
-      options[1].optionString = const_cast<char *>(classpath.data());
-      options[2].optionString = const_cast<char *>("-verbose:none"); // class|module|gc|jni
-      jvm_args.version = JNI_VERSION_1_6;
-      jvm_args.nOptions = 3;
-      jvm_args.options = options;
-      jvm_args.ignoreUnrecognized = false;
-      JNI_CreateJavaVM(&jvm, reinterpret_cast<void **>(&env), &jvm_args);
-      auto MainClass = env->FindClass("libwrr");
-      auto MainMethod = env->GetStaticMethodID(MainClass, "main", "([Ljava/lang/String;)V");
-      auto arg0 = env->NewStringUTF(instance->program);
-      auto arg1 = env->NewStringUTF(instance->workdir);
-      auto argv = env->NewObjectArray(2, env->FindClass("java/lang/String"), nullptr);
-      env->SetObjectArrayElement(argv, 0, arg0);
-      env->SetObjectArrayElement(argv, 1, arg1);
-      env->CallStaticVoidMethod(MainClass, MainMethod, argv);
-      env->DeleteLocalRef(argv);
-      env->DeleteLocalRef(arg1);
-      env->DeleteLocalRef(arg0);
-      jvm->DestroyJavaVM();
-      delete[] options;
+      wrr::JavaEngine engine(instance->workdir);
+      ret = engine.execute(instance->program);
     }
 
     else if (instance->type == WINGRR_ENGINE_PYTHON)

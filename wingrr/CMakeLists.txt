@@ -78,9 +78,11 @@ unset(SOURCE_DIR)
 
 # the main library. this is wingrr
 add_library(wingrr SHARED src/wingrr.cc
+  src/utils/runtime-path.cc
   src/engines/lua/libwrr-lua.cc
   src/engines/rb/libwrr-ruby.cc
   src/engines/py/libwrr-python.cc
+  src/engines/java/libwrr-java.cc
 )
 add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11 sol3)
 
