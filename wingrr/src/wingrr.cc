@@ -25,8 +25,7 @@
 #include <pybind11/embed.h>
 
 #include "engines/lua/libwrr-lua.hh"
-
-#include <ruby.h>
+#include "engines/rb/libwrr-ruby.hh"
 
 namespace
 {
@@ -192,15 +191,8 @@ extern "C"
 
     else if (instance->type == WINGRR_ENGINE_RUBY)
     {
-      RUBY_INIT_STACK;
-      ruby_init();
-      char *ruby_argv[] = {
-          const_cast<char *>("wingrr"),
-          const_cast<char *>(instance->program),
-          nullptr,
-      };
-      auto ruby_argc = sizeof(ruby_argv) / sizeof(ruby_argv[0]) - 1;
-      ret = ruby_run_node(ruby_options(ruby_argc, ruby_argv));
+      wrr::RubyEngine engine(instance->workdir);
+      ret = engine.execute(instance->program);
     }
 
     else if (instance->type == WINGRR_ENGINE_LUA)
