@@ -1,7 +1,6 @@
-
-import { Construct } from 'constructs';
-import { Binding, Duration, ICapturable, ICaptureSource } from '../core';
-import { Function } from './lambda';
+import { Construct } from "constructs";
+import { Binding, Duration, ICapturable, ICaptureSource } from "../core";
+import { Function } from "./lambda";
 
 export interface QueueProps {
   readonly timeout?: Duration;
@@ -21,10 +20,10 @@ export class Queue extends Construct implements ICapturable {
   }
 
   public hello() {
-    console.log('world!');
+    console.log("world!");
   }
 
   public capture(_symbol: string, _binding: Binding): ICaptureSource {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
   }
 }

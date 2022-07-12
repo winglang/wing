@@ -1,5 +1,5 @@
-import { Construct } from 'constructs';
-import { Process } from '../core';
+import { Construct } from "constructs";
+import { Process } from "../core";
 
 export class Endpoint extends Construct {
   private readonly routes = new Array<Route>();
@@ -10,7 +10,7 @@ export class Endpoint extends Construct {
 
   public onGet(route: string, proc: Process) {
     this.routes.push({
-      method: 'GET',
+      method: "GET",
       proc,
       url: route,
     });

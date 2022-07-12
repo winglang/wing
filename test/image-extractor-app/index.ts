@@ -1,5 +1,5 @@
-import { Construct } from 'constructs';
-import { cloud, core } from '../../src';
+import { Construct } from "constructs";
+import { cloud, core } from "../../src";
 
 export interface PageParserProps {
   readonly outgoing: cloud.Queue;
@@ -9,9 +9,9 @@ export class ImageExtractor extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const queue = new cloud.Queue(this, 'Queue');
-    new PageParser(this, 'PageParser', { outgoing: queue });
-    new ImageStore(this, 'ImageStore', { incoming: queue });
+    const queue = new cloud.Queue(this, "Queue");
+    new PageParser(this, "PageParser", { outgoing: queue });
+    new ImageStore(this, "ImageStore", { incoming: queue });
   }
 }
 
@@ -23,19 +23,19 @@ export class PageParser extends Construct {
   constructor(scope: Construct, id: string, props: PageParserProps) {
     super(scope, id);
 
-    const image_extractor_endpoint = new cloud.Endpoint(this, 'Endpoint');
+    const image_extractor_endpoint = new cloud.Endpoint(this, "Endpoint");
 
     const page_parser_handler = new core.Process({
-      path: __dirname + '/inflight/page-parser',
+      path: __dirname + "/inflight/page-parser",
       bindings: {
         outgoing: {
           obj: props.outgoing,
-          methods: ['push'],
+          methods: ["push"],
         },
       },
     });
 
-    image_extractor_endpoint.onGet('/image_extractor', page_parser_handler);
+    image_extractor_endpoint.onGet("/image_extractor", page_parser_handler);
   }
 }
 
@@ -47,18 +47,18 @@ export class ImageStore extends Construct {
   constructor(scope: Construct, id: string, props: ImageStoreProps) {
     super(scope, id);
 
-    const bucket = new cloud.Bucket(this, 'Bucket');
+    const bucket = new cloud.Bucket(this, "Bucket");
     const image_store_handler = new core.Process({
-      path: __dirname + '/inflight/image-store',
+      path: __dirname + "/inflight/image-store",
       bindings: {
         bucket: {
           obj: bucket,
-          methods: ['upload'],
+          methods: ["upload"],
         },
       },
     });
 
-    const image_store = new cloud.Function(this, 'Function', {
+    const image_store = new cloud.Function(this, "Function", {
       handler: image_store_handler,
     });
 

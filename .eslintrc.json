@@ -6,7 +6,8 @@
   "root": true,
   "plugins": [
     "@typescript-eslint",
-    "import"
+    "import",
+    "prettier"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -15,7 +16,9 @@
     "project": "./tsconfig.dev.json"
   },
   "extends": [
-    "plugin:import/typescript"
+    "plugin:import/typescript",
+    "prettier",
+    "plugin:prettier/recommended"
   ],
   "settings": {
     "import/parsers": {
@@ -41,101 +44,8 @@
     "coverage"
   ],
   "rules": {
-    "indent": [
-      "off"
-    ],
-    "@typescript-eslint/indent": [
-      "error",
-      2
-    ],
-    "quotes": [
-      "error",
-      "single",
-      {
-        "avoidEscape": true
-      }
-    ],
-    "comma-dangle": [
-      "error",
-      "always-multiline"
-    ],
-    "comma-spacing": [
-      "error",
-      {
-        "before": false,
-        "after": true
-      }
-    ],
-    "no-multi-spaces": [
-      "error",
-      {
-        "ignoreEOLComments": false
-      }
-    ],
-    "array-bracket-spacing": [
-      "error",
-      "never"
-    ],
-    "array-bracket-newline": [
-      "error",
-      "consistent"
-    ],
-    "object-curly-spacing": [
-      "error",
-      "always"
-    ],
-    "object-curly-newline": [
-      "error",
-      {
-        "multiline": true,
-        "consistent": true
-      }
-    ],
-    "object-property-newline": [
-      "error",
-      {
-        "allowAllPropertiesOnSameLine": true
-      }
-    ],
-    "keyword-spacing": [
+    "prettier/prettier": [
       "error"
-    ],
-    "brace-style": [
-      "error",
-      "1tbs",
-      {
-        "allowSingleLine": true
-      }
-    ],
-    "space-before-blocks": [
-      "error"
-    ],
-    "curly": [
-      "error",
-      "multi-line",
-      "consistent"
-    ],
-    "@typescript-eslint/member-delimiter-style": [
-      "error"
-    ],
-    "semi": [
-      "error",
-      "always"
-    ],
-    "max-len": [
-      "error",
-      {
-        "code": 150,
-        "ignoreUrls": true,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true,
-        "ignoreComments": true,
-        "ignoreRegExpLiterals": true
-      }
-    ],
-    "quote-props": [
-      "error",
-      "consistent-as-needed"
     ],
     "@typescript-eslint/no-require-imports": [
       "error"

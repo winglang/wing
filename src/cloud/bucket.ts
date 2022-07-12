@@ -1,5 +1,5 @@
-import { Construct } from 'constructs';
-import { Binding, ICapturable, ICaptureSource } from '../core';
+import { Construct } from "constructs";
+import { Binding, ICapturable, ICaptureSource } from "../core";
 
 export class Bucket extends Construct implements ICapturable {
   constructor(scope: Construct, id: string) {
@@ -7,6 +7,6 @@ export class Bucket extends Construct implements ICapturable {
   }
 
   public capture(_symbol: string, _binding: Binding): ICaptureSource {
-    throw new Error('Method not implemented.');
+    throw new Error("Method not implemented.");
   }
 }

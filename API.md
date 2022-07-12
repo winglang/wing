@@ -2,18 +2,25 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
-### App <a name="App" id="@monadahq/wingsdk.cloud.App"></a>
+### App <a name="App" id="@monadahq/wingsdk.core.App"></a>
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.App.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.App.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-new cloud.App()
+new core.App(props?: AppProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.App.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.AppProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.core.App.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.core.AppProps
 
 ---
 
@@ -21,12 +28,12 @@ new cloud.App()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.App.synth">synth</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.App.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.core.App.synth">synth</a></code> | *No description.* |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.App.toString"></a>
+##### `toString` <a name="toString" id="@monadahq/wingsdk.core.App.toString"></a>
 
 ```typescript
 public toString(): string
@@ -34,7 +41,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `synth` <a name="synth" id="@monadahq/wingsdk.cloud.App.synth"></a>
+##### `synth` <a name="synth" id="@monadahq/wingsdk.core.App.synth"></a>
 
 ```typescript
 public synth(): void
@@ -44,21 +51,21 @@ public synth(): void
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.core.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.App.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.core.App.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { core } from '@monadahq/wingsdk'
 
-cloud.App.isConstruct(x: any)
+core.App.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.App.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.core.App.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -70,11 +77,13 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.core.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.core.App.property.outdir">outdir</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.App.property.stateFile">stateFile</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.App.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.App.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -83,6 +92,26 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.core.App.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+
+---
+
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.App.property.stateFile"></a>
+
+```typescript
+public readonly stateFile: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -311,46 +340,45 @@ The tree node.
 ---
 
 
-### File <a name="File" id="@monadahq/wingsdk.fs.File"></a>
+### FileBase <a name="FileBase" id="@monadahq/wingsdk.fs.FileBase"></a>
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.File.Initializer"></a>
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.FileBase.Initializer"></a>
 
 ```typescript
 import { fs } from '@monadahq/wingsdk'
 
-new fs.File(scope: Construct, id: string, filename: string, props: FileProps)
+new fs.FileBase(scope: Construct, id: string, filePath: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.filename">filename</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.File.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.fs.FileProps</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | construct scope. |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.Initializer.parameter.id">id</a></code> | <code>string</code> | construct id. |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | relative file path. |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.File.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.FileBase.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
+construct scope.
+
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.File.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.FileBase.Initializer.parameter.id"></a>
 
 - *Type:* string
 
+construct id.
+
 ---
 
-##### `filename`<sup>Required</sup> <a name="filename" id="@monadahq/wingsdk.fs.File.Initializer.parameter.filename"></a>
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.FileBase.Initializer.parameter.filePath"></a>
 
 - *Type:* string
 
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.fs.File.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.fs.FileProps
+relative file path.
 
 ---
 
@@ -358,11 +386,12 @@ new fs.File(scope: Construct, id: string, filename: string, props: FileProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.File.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.save">save</a></code> | *No description.* |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.File.toString"></a>
+##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.FileBase.toString"></a>
 
 ```typescript
 public toString(): string
@@ -370,25 +399,37 @@ public toString(): string
 
 Returns a string representation of this construct.
 
+##### `save` <a name="save" id="@monadahq/wingsdk.fs.FileBase.save"></a>
+
+```typescript
+public save(outdir: string): void
+```
+
+###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.FileBase.save.parameter.outdir"></a>
+
+- *Type:* string
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.File.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.File.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.FileBase.isConstruct"></a>
 
 ```typescript
 import { fs } from '@monadahq/wingsdk'
 
-fs.File.isConstruct(x: any)
+fs.FileBase.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.File.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.FileBase.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -400,11 +441,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.File.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.property.filePath">filePath</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.File.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.FileBase.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -413,6 +455,16 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.FileBase.property.filePath"></a>
+
+```typescript
+public readonly filePath: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -512,6 +564,136 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+
+### JsonFile <a name="JsonFile" id="@monadahq/wingsdk.fs.JsonFile"></a>
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.JsonFile.Initializer"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+new fs.JsonFile(scope: Construct, id: string, filePath: string, props: JsonFileProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.fs.JsonFileProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.filePath"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.fs.JsonFileProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.save">save</a></code> | *No description.* |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.JsonFile.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `save` <a name="save" id="@monadahq/wingsdk.fs.JsonFile.save"></a>
+
+```typescript
+public save(outdir: string): void
+```
+
+###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.JsonFile.save.parameter.outdir"></a>
+
+- *Type:* string
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.JsonFile.isConstruct"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+fs.JsonFile.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.JsonFile.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.property.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.JsonFile.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.JsonFile.property.filePath"></a>
+
+```typescript
+public readonly filePath: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -656,7 +838,197 @@ The tree node.
 ---
 
 
+### TextFile <a name="TextFile" id="@monadahq/wingsdk.fs.TextFile"></a>
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.TextFile.Initializer"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+new fs.TextFile(scope: Construct, id: string, filePath: string, props?: TextFileProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.fs.TextFileProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.filePath"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.fs.TextFileProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.save">save</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.addLine">addLine</a></code> | *No description.* |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.TextFile.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `save` <a name="save" id="@monadahq/wingsdk.fs.TextFile.save"></a>
+
+```typescript
+public save(outdir: string): void
+```
+
+###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.TextFile.save.parameter.outdir"></a>
+
+- *Type:* string
+
+---
+
+##### `addLine` <a name="addLine" id="@monadahq/wingsdk.fs.TextFile.addLine"></a>
+
+```typescript
+public addLine(line: string): void
+```
+
+###### `line`<sup>Required</sup> <a name="line" id="@monadahq/wingsdk.fs.TextFile.addLine.parameter.line"></a>
+
+- *Type:* string
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.TextFile.isConstruct"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+fs.TextFile.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.TextFile.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.property.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.TextFile.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.TextFile.property.filePath"></a>
+
+```typescript
+public readonly filePath: string;
+```
+
+- *Type:* string
+
+---
+
+
 ## Structs <a name="Structs" id="Structs"></a>
+
+### AppProps <a name="AppProps" id="@monadahq/wingsdk.core.AppProps"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.AppProps.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+const appProps: core.AppProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.AppProps.property.outdir">outdir</a></code> | <code>string</code> | The root output directory of the app. |
+| <code><a href="#@monadahq/wingsdk.core.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.core.AppProps.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+- *Default:* "."
+
+The root output directory of the app.
+
+---
+
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.AppProps.property.stateFile"></a>
+
+```typescript
+public readonly stateFile: string;
+```
+
+- *Type:* string
+
+The path to a state file which will track all synthesized files.
+
+If a
+statefile is not specified, we won't be able to remove extrenous files.
+
+---
 
 ### Binding <a name="Binding" id="@monadahq/wingsdk.core.Binding"></a>
 
@@ -701,34 +1073,6 @@ Which methods are called on the captured object.
 
 ---
 
-### FileProps <a name="FileProps" id="@monadahq/wingsdk.fs.FileProps"></a>
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.FileProps.Initializer"></a>
-
-```typescript
-import { fs } from '@monadahq/wingsdk'
-
-const fileProps: fs.FileProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.FileProps.property.contents">contents</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `contents`<sup>Optional</sup> <a name="contents" id="@monadahq/wingsdk.fs.FileProps.property.contents"></a>
-
-```typescript
-public readonly contents: string;
-```
-
-- *Type:* string
-
----
-
 ### FunctionProps <a name="FunctionProps" id="@monadahq/wingsdk.cloud.FunctionProps"></a>
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.FunctionProps.Initializer"></a>
@@ -754,6 +1098,36 @@ public readonly handler: Process;
 ```
 
 - *Type:* @monadahq/wingsdk.core.Process
+
+---
+
+### JsonFileProps <a name="JsonFileProps" id="@monadahq/wingsdk.fs.JsonFileProps"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.JsonFileProps.Initializer"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+const jsonFileProps: fs.JsonFileProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFileProps.property.obj">obj</a></code> | <code>any</code> | The object that will be serialized into the file during synthesis. |
+
+---
+
+##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.fs.JsonFileProps.property.obj"></a>
+
+```typescript
+public readonly obj: any;
+```
+
+- *Type:* any
+
+The object that will be serialized into the file during synthesis.
 
 ---
 
@@ -821,6 +1195,34 @@ public readonly timeout: Duration;
 ```
 
 - *Type:* @monadahq/wingsdk.core.Duration
+
+---
+
+### TextFileProps <a name="TextFileProps" id="@monadahq/wingsdk.fs.TextFileProps"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.TextFileProps.Initializer"></a>
+
+```typescript
+import { fs } from '@monadahq/wingsdk'
+
+const textFileProps: fs.TextFileProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.fs.TextFileProps.property.lines">lines</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `lines`<sup>Optional</sup> <a name="lines" id="@monadahq/wingsdk.fs.TextFileProps.property.lines"></a>
+
+```typescript
+public readonly lines: string[];
+```
+
+- *Type:* string[]
 
 ---
 

@@ -11,9 +11,7 @@ export class Duration {
     return new Duration(amount);
   }
 
-  private constructor(public seconds: number) {
-
-  }
+  private constructor(public seconds: number) {}
 
   public get minutes() {
     return this.seconds / 60;
