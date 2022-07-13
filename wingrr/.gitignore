@@ -6,7 +6,7 @@ dist
 *.exe
 *.dll
 *.so
-src/go/*.h
+src/bridges/go/libwrr-go.h
 *.class
 src/crate/target
 src/crate/src/bindings.rs
