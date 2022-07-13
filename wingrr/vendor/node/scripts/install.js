@@ -11,7 +11,6 @@ async function install() {
   await fs.rm(INC_DIR, { recursive: true }).catch(() => {});
   await fs.mkdir(INC_DIR, { recursive: true });
   await fs.cp("../../include/node", INC_DIR, { recursive: true });
-  await fs.copyFile(path.join(__dirname, "..", "node_embedding_api.h"), path.join(INC_DIR, "node_embedding_api.h"));
 
   await fs.rm(LIB_DIR, { recursive: true }).catch(() => {});
   await fs.mkdir(LIB_DIR, { recursive: true });
