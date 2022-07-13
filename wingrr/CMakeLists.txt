@@ -38,7 +38,7 @@ ExternalProject_Add(wingrr-cs
   SOURCE_DIR ${CMAKE_HOME_DIRECTORY}/src/bridges/cs
   INSTALL_COMMAND ${CMAKE_COMMAND} -E copy
   <SOURCE_DIR>/libwrr.dll ${CMAKE_CURRENT_BINARY_DIR}/libwrr-cs.dll
-  BUILD_COMMAND csc /target:library /reference:Mono.CSharp.dll libwrr.cs
+  BUILD_COMMAND mono-csc /target:library /reference:Mono.CSharp.dll libwrr.cs
   EXCLUDE_FROM_ALL FALSE
   BUILD_IN_SOURCE TRUE
 )
