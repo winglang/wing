@@ -1,0 +1,10 @@
+---
+kind: pipeline
+type: docker
+name: winglang-infra
+
+steps:
+  - name: npm install
+    image: node:alpine
+    commands:
+      - echo "works."
