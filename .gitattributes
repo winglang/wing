@@ -4,6 +4,7 @@
 /.eslintrc.json linguist-generated
 /.gitattributes linguist-generated
 /.github/pull_request_template.md linguist-generated
+/.github/workflows/auto-approve.yml linguist-generated
 /.github/workflows/build.yml linguist-generated
 /.github/workflows/pull-request-lint.yml linguist-generated
 /.github/workflows/release.yml linguist-generated

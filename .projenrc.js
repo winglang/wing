@@ -1,4 +1,6 @@
 const { cdk } = require("projen");
+const { GithubCredentials } = require("projen/lib/github");
+
 const project = new cdk.JsiiProject({
   name: "@monadahq/wingsdk",
   author: "Monada, Inc.",
@@ -12,6 +14,14 @@ const project = new cdk.JsiiProject({
     jestVersion: "^27.0.0", // 28 requires a later typescript version
   },
   npmRegistryUrl: "https://npm.pkg.github.com",
+  autoApproveUpgrades: true,
+  autoApproveOptions: {
+    allowedUsernames: ["monada-bot[bot]"],
+    secret: "PROJEN_GITHUB_TOKEN",
+  },
+  githubOptions: {
+    projenCredentials: GithubCredentials.fromApp(),
+  },
 });
 
 project.synth();

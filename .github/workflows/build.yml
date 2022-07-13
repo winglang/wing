@@ -52,10 +52,16 @@ jobs:
       contents: write
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
     steps:
+      - name: Generate token
+        id: generate_token
+        uses: tibdex/github-app-token@7ce9ffdcdeb2ba82b01b51d6584a6a85872336d4
+        with:
+          app_id: ${{ secrets.PROJEN_APP_ID }}
+          private_key: ${{ secrets.PROJEN_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          token: ${{ steps.generate_token.outputs.token }}
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Download patch
