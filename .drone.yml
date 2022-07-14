@@ -1,10 +1,50 @@
 ---
 kind: pipeline
 type: docker
-name: winglang-infra
+name: winglang
 
 steps:
-  - name: npm install
-    image: node:alpine
+  - name: ECR login
+    image: amazon/aws-cli
+    environment:
+      AWS_REGION:
+        from_secret: aws_region
     commands:
-      - echo "works."
+      - aws --version
+      - aws ecr get-login-password --region $AWS_REGION > .docker-login
+
+  - name: ECR pull
+    image: docker
+    environment:
+      AWS_REGION:
+        from_secret: aws_region
+      AWS_ACCOUNT:
+        from_secret: aws_account
+      BUILD_IMAGE:
+        from_secret: build_image
+    commands:
+      - cat .docker-login | docker login -u AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com 2>/dev/null
+      - rm .docker-login
+      - echo $BUILD_IMAGE
+      - docker pull $BUILD_IMAGE
+      - docker tag $BUILD_IMAGE winglang-dev
+    volumes:
+      - name: dind
+        path: /var/run/docker.sock
+
+  - name: Rosetta Runtime tests
+    image: winglang-dev
+    pull: never
+    commands:
+      - |
+        cat <<'EOF' | bash -e
+          source ~/.bashrc
+          cd wingrr
+          npm install
+          npm test
+        EOF
+
+volumes:
+  - name: dind
+    host:
+      path: /var/run/docker.sock
