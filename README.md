@@ -1,5 +1,7 @@
 # The Wing Programming Language
 
+[![Build Status](https://d23zvjtrxh8s3j.cloudfront.net/api/badges/monadahq/winglang/status.svg?ref=refs/heads/runtime)](https://d23zvjtrxh8s3j.cloudfront.net/monadahq/winglang)
+
 This strives to be a complete [winglang](https://github.com/monadahq/rfcs/pull/4) implementation. It's a WIP.
 
 All development is currently under the `dev` branch. I've opened a [PR for to `main`](https://github.com/monadahq/winglang/pull/1) where you're welcome to add any comments/suggestions/questions you have regarding this code.

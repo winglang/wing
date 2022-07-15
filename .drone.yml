@@ -36,8 +36,8 @@ steps:
     image: winglang-dev
     pull: never
     commands:
-      - |
-        cat <<'EOF' | bash -e
+      - >
+        bash -s <<SCRIPT
           source ~/.bashrc
           ln -s /wingrr/vendor/node/out /drone/src/wingrr/vendor/node/out
           ln -s /wingrr/vendor/node/build /drone/src/wingrr/vendor/node/build
@@ -45,7 +45,7 @@ steps:
           npm ci
           npm test
 
-        EOF
+        SCRIPT
 
 volumes:
   - name: dind
