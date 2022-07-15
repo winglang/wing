@@ -39,8 +39,9 @@ steps:
       - |
         cat <<'EOF' | bash -e
           source ~/.bashrc
+          ln -s /wingrr/vendor/node/build wingrr/vendor/node/build
           cd wingrr
-          npm install
+          npm ci
           npm test
         EOF
 
