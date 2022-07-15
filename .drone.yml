@@ -39,8 +39,9 @@ steps:
       - |
         cat <<'EOF' | bash -e
           source ~/.bashrc
-          ln -s /wingrr/vendor/node/build wingrr/vendor/node/build
-          cd wingrr
+          ln -s /wingrr/vendor/node/out /drone/src/wingrr/vendor/node/out
+          ln -s /wingrr/vendor/node/build /drone/src/wingrr/vendor/node/build
+          cd /drone/src/wingrr
           npm ci
           npm test
         EOF
