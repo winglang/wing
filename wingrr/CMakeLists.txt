@@ -16,6 +16,16 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+if(DEFINED ENV{CI})
+  set(NODE_INCLUDE_PREFIX "/usr/local")
+  set(NODE_LIBRARY_PREFIX "/usr/local/lib")
+  set(NODE_LIBRARY_SHARED "${NODE_LIBRARY_PREFIX}/libnode.so.108")
+else()
+  set(NODE_INCLUDE_PREFIX "${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out")
+  set(NODE_LIBRARY_PREFIX "${NODE_INCLUDE_PREFIX}/lib")
+  set(NODE_LIBRARY_SHARED "${NODE_LIBRARY_PREFIX}/libnode.so")
+endif()
+
 # https://gitlab.kitware.com/cmake/community/-/wikis/doc/cmake/RPATH-handling
 # set(CMAKE_SKIP_RPATH TRUE)
 # add_link_options("-Wl,-rpath,./")
@@ -93,8 +103,8 @@ add_dependencies(wingrr wingrr-go wingrr-cs wingrr-java pybind11 sol3)
 
 # compiler configuration to get everything linked and included
 target_link_options(wingrr PUBLIC LINKER:-z,defs)
-target_link_libraries(wingrr PUBLIC
-  node wrr-go
+target_link_libraries(wingrr PUBLIC wrr-go
+  ${NODE_LIBRARY_SHARED}
   ${Python3_LIBRARIES}
   ${LUAJIT_LIBRARIES}
   ${MONO2_LIBRARIES}
@@ -103,8 +113,8 @@ target_link_libraries(wingrr PUBLIC
 )
 target_include_directories(wingrr PRIVATE
   ${CMAKE_CURRENT_SOURCE_DIR}/src/bridges/go
-  ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/include/node
+  ${NODE_INCLUDE_PREFIX}/include/node
+  ${NODE_INCLUDE_PREFIX}/include
   ${PYBIND11_INCLUDE_DIR}
   ${Python3_INCLUDE_DIRS}
   ${LUAJIT_INCLUDE_DIRS}
@@ -114,7 +124,7 @@ target_include_directories(wingrr PRIVATE
   ${SOL3_INCLUDE_DIR}
 )
 target_link_directories(wingrr PUBLIC
-  ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib
+  ${NODE_LIBRARY_PREFIX}
   ${CMAKE_CURRENT_SOURCE_DIR}/src/bridges/go
   ${Python3_LIBRARY_DIRS}
   ${MONO2_LIBRARY_DIRS}
@@ -125,19 +135,3 @@ target_link_directories(wingrr PUBLIC
 add_executable(wingrr-cli src/wingrr-cli.cc)
 target_link_libraries(wingrr-cli PUBLIC wingrr)
 set_target_properties(wingrr-cli PROPERTIES OUTPUT_NAME wingrr)
-add_custom_command(TARGET wingrr-cli POST_BUILD
-  COMMAND ${CMAKE_COMMAND} -E copy
-  ${CMAKE_CURRENT_SOURCE_DIR}/src/wingrr.h
-  ${CMAKE_CURRENT_SOURCE_DIR}/vendor/node/out/lib/libnode.so
-  ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/libwingrr.so
-  ${CMAKE_CURRENT_BINARY_DIR}/
-  COMMAND ${CMAKE_COMMAND} -E tar
-  czf ${CMAKE_CURRENT_BINARY_DIR}/wingrr.tar.gz
-  ${CMAKE_CURRENT_BINARY_DIR}/wingrr
-  ${CMAKE_CURRENT_BINARY_DIR}/wingrr.h
-  ${CMAKE_CURRENT_BINARY_DIR}/libnode.so
-  ${CMAKE_CURRENT_BINARY_DIR}/libwingrr.so
-  ${CMAKE_CURRENT_BINARY_DIR}/libwrr-cs.dll
-  ${CMAKE_CURRENT_BINARY_DIR}/libwrr-go.so
-  ${CMAKE_CURRENT_BINARY_DIR}/libwrr.class
-)

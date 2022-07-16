@@ -55,8 +55,6 @@ You need:
 
 And then run `npm install` to build.
 
-Final artifact is `wingrr.tar.gz` in your build directory.
-
 ## Architecture
 
 Rosetta runtime is built on two major components:

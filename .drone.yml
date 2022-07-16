@@ -20,32 +20,22 @@ steps:
         from_secret: aws_region
       AWS_ACCOUNT:
         from_secret: aws_account
-      BUILD_IMAGE:
-        from_secret: build_image
+      DOCKER_REPO:
+        from_secret: docker_repo
     commands:
       - cat .docker-login | docker login -u AWS --password-stdin $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com 2>/dev/null
       - rm .docker-login
-      - echo $BUILD_IMAGE
-      - docker pull $BUILD_IMAGE
-      - docker tag $BUILD_IMAGE winglang-dev
+      - docker pull $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_REPO:dev
+      - docker tag $AWS_ACCOUNT.dkr.ecr.$AWS_REGION.amazonaws.com/$DOCKER_REPO:dev winglang-dev
     volumes:
       - name: dind
         path: /var/run/docker.sock
 
-  - name: Rosetta Runtime tests
+  - name: wingrr tests
     image: winglang-dev
     pull: never
     commands:
-      - >
-        bash -s <<SCRIPT
-          source ~/.bashrc
-          ln -s /wingrr/vendor/node/out /drone/src/wingrr/vendor/node/out
-          ln -s /wingrr/vendor/node/build /drone/src/wingrr/vendor/node/build
-          cd /drone/src/wingrr
-          npm ci
-          npm test
-
-        SCRIPT
+      - bash wingrr/scripts/build.sh
 
 volumes:
   - name: dind
