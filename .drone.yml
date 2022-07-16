@@ -37,6 +37,16 @@ steps:
     commands:
       - bash wingrr/scripts/build.sh
 
+  - name: wingc tests
+    image: winglang-dev
+    pull: never
+    environment:
+      NPM_TOKEN:
+        from_secret: npm_token
+    commands:
+      - echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN" > ~/.npmrc
+      - bash -c "source ~/.bashrc && cd playground && ./wingc examples/hello.w"
+
 volumes:
   - name: dind
     host:
