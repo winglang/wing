@@ -10,6 +10,7 @@ The project currently includes the [wingc](./wingc) compiler and a [playground](
 
 * [Rust](https://rustup.rs/)
 * [node.js](https://nodejs.org)
+* (while Wing is private): Access to [GitHub private packages](https://github.com/monadahq/internal-kb/blob/main/docs/github-private-packages.md)
 
 ## Playground
 
