@@ -1,3 +1,16 @@
+const PREC = {
+  LOGICAL_OR: 1,
+  LOGICAL_AND: 2,
+  INCLUSIVE_OR: 3,
+  EXCLUSIVE_OR: 4,
+  BITWISE_AND: 5,
+  EQUAL: 6,
+  RELATIONAL: 7,
+  SHIFT: 8,
+  ADD: 9,
+  MULTIPLY: 10,
+};
+
 module.exports = grammar({
   name: 'winglang',
 
@@ -27,17 +40,24 @@ module.exports = grammar({
       $.variable_definition,
       $.function_definition,
       $.proc_definition,
-      $._expression
+      $.for_loop,
+      $.if,
+      $.expression_statement,
+    ),
+
+    expression_statement: $=> seq(
+      $._expression,
+      ';'
     ),
 
     _expression: $ => choice(
+      $.binary_expression,
+      $.unary_expression,
       $.new_expression,
       $._literal,
       $.reference,
       $.function_call,
-      $.for_loop,
-
-      // TODO
+      $._parenthesized_expression,
     ),
 
     for_loop: $ => seq(
@@ -45,6 +65,12 @@ module.exports = grammar({
       $.variable_name,
       'in',
       field("iterable", $._expression),
+      $.block,
+    ),
+
+    if: $ => seq(
+      'if',
+      $._expression,
       $.block,
     ),
 
@@ -149,13 +175,22 @@ module.exports = grammar({
       alias($._identifier, $.symbol),
     ),
 
+    class: $ => seq(
+      optional(seq(
+        $.namespace,
+        '::'
+      )),
+      $.class_name,
+    ),
+
     use_statement: $ => seq(
       'use',
       alias($._identifier, $.module_name),
       optional(seq(
         'from',
         alias($._identifier, $.parent_module)
-      ))
+      )),
+      ';'
     ),
 
 
@@ -163,6 +198,7 @@ module.exports = grammar({
       $.variable_name,
       ':=',
       $.initial_value,
+      ';'
     ),
 
     initial_value: $ => $._expression,
@@ -183,14 +219,6 @@ module.exports = grammar({
       ":",
       alias($._expression, $.keyword_argument_value),
     )),
-
-    class: $ => seq(
-      optional(seq(
-        $.namespace,
-        '::'
-      )),
-      $.class_name,
-    ),
 
     class_name: $ => /[A-Z][a-zA-Z0-9_]*/,
 
@@ -245,7 +273,51 @@ module.exports = grammar({
       '}',
     ),
 
-  }
+    unary_expression: $ => seq(
+      field('op', choice('!', '+','-')), 
+      field('arg', $._expression)
+    ),
+
+    binary_expression: $ => { 
+      const table = [
+        ['+', PREC.ADD],
+        ['-', PREC.ADD],
+        ['*', PREC.MULTIPLY],
+        ['/', PREC.MULTIPLY],
+        ['%', PREC.MULTIPLY],
+        ['||', PREC.LOGICAL_OR],
+        ['&&', PREC.LOGICAL_AND],
+        //['|', PREC.INCLUSIVE_OR],
+        //['^', PREC.EXCLUSIVE_OR],
+        //['&', PREC.BITWISE_AND],
+        ['==', PREC.EQUAL],
+        ['!=', PREC.EQUAL],
+        ['>', PREC.RELATIONAL],
+        ['>=', PREC.RELATIONAL],
+        ['<=', PREC.RELATIONAL],
+        ['<', PREC.RELATIONAL],
+        //['<<', PREC.SHIFT],
+        //['>>', PREC.SHIFT],
+        //['>>>', PREC.SHIFT],
+      ];
+      
+      return choice(...table.map(([operator, precedence]) => {
+        return prec.left(precedence, seq(
+          field('left', $._expression),
+          field('operator', operator),
+          field('right', $._expression)
+        ));
+      }));
+    },
+
+    _parenthesized_expression: $ => seq(
+      '(',
+      $._expression,
+      ')',
+    ),
+
+  },
+
 });
 
 
