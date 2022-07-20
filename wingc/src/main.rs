@@ -222,8 +222,8 @@ impl Compiler<'_> {
                         panic!("Unexpected binary operator {}", other);
                     }
                 },
-                lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())),
-                rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())),
+                lexp: Box::new(self.build_expression(&expression_node.named_child(0).unwrap())),
+                rexp: Box::new(self.build_expression(&expression_node.named_child(1).unwrap())),
             },
             "string" => Expression::Literal(Literal::String(
                 self.node_text(&expression_node).into()
