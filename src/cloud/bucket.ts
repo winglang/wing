@@ -12,12 +12,21 @@ export class Bucket extends Construct implements ICapturable {
     this.bucket = new s3.S3Bucket(this, "Default");
   }
 
-  public capture(consumer: any, _capture: Capture): string {
+  public capture(consumer: any, capture: Capture): string {
     if (!(consumer instanceof Function)) {
       throw new Error("buckets can only be captured by functions for now");
     }
 
     const name = `BUCKET_NAME__${this.node.addr}`;
+
+    const methods = new Set(capture.methods ?? []);
+    if (methods.has("upload")) {
+      consumer.addPolicyStatements({
+        effect: "Allow",
+        action: ["s3:PutObject", "s3:PutObjectAcl"],
+        resource: [`${this.bucket.arn}/*`],
+      });
+    }
 
     consumer.addEnvironment(name, this.bucket.bucket);
 

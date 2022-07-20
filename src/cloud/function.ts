@@ -3,13 +3,15 @@ import { readFileSync, writeFileSync } from "fs";
 import * as path from "path";
 import { join, resolve } from "path";
 import * as aws from "@cdktf/provider-aws";
-import { AssetType, TerraformAsset } from "cdktf";
+import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild";
 import { Capture, ICapturable, Process } from "../core";
 
 export class Function extends Construct {
   private readonly env: Record<string, string> = {};
+  private readonly role: aws.iam.IamRole;
+  private readonly policyStatements: any[] = [];
 
   constructor(scope: Construct, id: string, process: Process) {
     super(scope, id);
@@ -41,7 +43,7 @@ export class Function extends Construct {
     });
 
     // Create Lambda role
-    const role = new aws.iam.IamRole(this, "IamRole", {
+    this.role = new aws.iam.IamRole(this, "IamRole", {
       assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -56,11 +58,22 @@ export class Function extends Construct {
       }),
     });
 
+    new aws.iam.IamRolePolicy(this, "IamRolePolicy", {
+      role: this.role.name,
+      policy: Lazy.stringValue({
+        produce: () =>
+          JSON.stringify({
+            Version: "2012-10-17",
+            Statement: this.policyStatements,
+          }),
+      }),
+    });
+
     // Add execution role for lambda to write to CloudWatch logs
     new aws.iam.IamRolePolicyAttachment(this, "IamRolePolicyAttachment", {
       policyArn:
         "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-      role: role.name,
+      role: this.role.name,
     });
 
     // Create Lambda function
@@ -70,7 +83,7 @@ export class Function extends Construct {
       s3Key: lambdaArchive.key,
       handler: "index.handler",
       runtime: "nodejs16.x",
-      role: role.arn,
+      role: this.role.arn,
       environment: {
         variables: this.env,
       },
@@ -81,6 +94,16 @@ export class Function extends Construct {
 
   public addEnvironment(name: string, value: string) {
     this.env[name] = value;
+  }
+
+  public addPolicyStatements(...statements: PolicyStatement[]) {
+    this.policyStatements.push(
+      ...statements.map((s) => ({
+        Action: s.action,
+        Resource: s.resource,
+        Effect: s.effect,
+      }))
+    );
   }
 
   private rewriteHandler(process: Process) {
@@ -140,4 +163,10 @@ function isPrimitive(value: any) {
   return (
     (typeof value !== "object" && typeof value !== "function") || value === null
   );
+}
+
+interface PolicyStatement {
+  action?: string[];
+  resource?: string[];
+  effect: string;
 }
