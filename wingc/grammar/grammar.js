@@ -35,6 +35,8 @@ module.exports = grammar({
       )
     )),
 
+    _statement_delimiter: $ => ';',
+
     _statement: $ => choice(
       $.use_statement,
       $.variable_definition,
@@ -46,8 +48,8 @@ module.exports = grammar({
     ),
 
     expression_statement: $=> seq(
-      $._expression,
-      ';'
+      field('expression', $._expression),
+      $._statement_delimiter
     ),
 
     _expression: $ => choice(
@@ -62,16 +64,16 @@ module.exports = grammar({
 
     for_loop: $ => seq(
       'for',
-      $.variable_name,
+      field('name', $.variable_name),
       'in',
-      field("iterable", $._expression),
-      $.block,
+      field('iterable', $._expression),
+      field('block', $.block),
     ),
 
     if: $ => seq(
       'if',
-      $._expression,
-      $.block,
+      field('condition', $._expression),
+      field('block', $.block),
     ),
 
     _literal: $ => choice(
@@ -84,22 +86,22 @@ module.exports = grammar({
 
     _duration: $ => choice(
       $.seconds,
-      $.hours,
       $.minutes,
+      $.hours,
     ),
 
     seconds: $ => seq(
-      $.number,
+      field('number', $.number),
       's'
     ),
 
     hours: $ => seq(
-      $.number,
+      field('number', $.number),
       'h'
     ),
 
     minutes: $ => seq(
-      $.number,
+      field('number', $.number),
       'm'
     ),
 
@@ -137,7 +139,7 @@ module.exports = grammar({
         $.function_call_name, 
         $.proc_call_name
       ),
-      $.argument_list,
+      field('args', $.argument_list),
     ),
 
     argument_list: $ => seq(
@@ -155,24 +157,24 @@ module.exports = grammar({
     ),
 
     function_call_name: $ => seq(
-      $.reference,
-      optional(seq('.', $.method_name)),
+      field('reference', $.reference),
+      optional(seq('.', field('method_name', $.method_name))),
     ),
 
     proc_call_name: $ => seq(
       alias($.reference, $.cloud_object),
       '->',
-      $.method_name,
+      field('method_name', $.method_name)
     ),
 
     method_name: $ => $._identifier,
 
     reference: $ => seq(
       optional(seq(
-        $.namespace,
+        field('namespace', $.namespace),
         '::'
       )),
-      alias($._identifier, $.symbol),
+      field('symbol', alias($._identifier, $.symbol)),
     ),
 
     class: $ => seq(
@@ -190,23 +192,23 @@ module.exports = grammar({
         'from',
         alias($._identifier, $.parent_module)
       )),
-      ';'
+      $._statement_delimiter
     ),
 
 
     variable_definition: $ => seq(
-      $.variable_name,
+      field('name', $.variable_name),
       ':=',
-      $.initial_value,
-      ';'
+      field('value', $._initial_value),
+      $._statement_delimiter
     ),
 
-    initial_value: $ => $._expression,
+    _initial_value: $ => $._expression,
     variable_name: $ => $._identifier,
 
     new_expression: $ => seq(
-      $.class,
-      $.argument_list,
+      field('class', $.class),
+      field('args', $.argument_list),
       optional($.new_object_id),
     ),
 
@@ -216,7 +218,7 @@ module.exports = grammar({
 
     keyword_argument: $ => prec(3, seq(
       alias($._identifier, $.keyword_argument_key),
-      ":",
+      ':',
       alias($._expression, $.keyword_argument_value),
     )),
 
@@ -238,24 +240,24 @@ module.exports = grammar({
 
     function_definition: $ => seq(
       'fn',
-      $.function_name,
-      $.parameter_list,
-      $.block,
+      field('function_name', $.function_name),
+      field('parameter_list', $.parameter_list),
+      field('block', $.block),
     ),
 
     proc_definition: $ => seq(
       'proc',
-      $.function_name,
-      $.parameter_list,
-      $.block,
+      field('function_name', $.function_name),
+      field('parameter_list', $.parameter_list),
+      field('block', $.block),
     ),
 
     function_name: $ => $._identifier,
 
     parameter_definition: $ => seq(
-      $.parameter_name,
+      field('name', $._parameter_name),
       ':',
-      $.parameter_type
+      field('type', $._parameter_type),
     ),
 
     parameter_list: $ => seq(
@@ -264,12 +266,12 @@ module.exports = grammar({
       ')',
     ),
 
-    parameter_name: $ => $._identifier,
-    parameter_type: $ => $.type,
+    _parameter_name: $ => $._identifier,
+    _parameter_type: $ => $.type,
 
     block: $ => seq(
       '{',
-      repeat($._statement),
+      field('statements', repeat($._statement)),
       '}',
     ),
 
@@ -320,9 +322,8 @@ module.exports = grammar({
 
 });
 
-
 function commaSep1(rule) {
-  return seq(rule, repeat(seq(',', rule)));
+  return seq(rule, field('value', repeat(seq(',', rule))));
 }
 
 function commaSep(rule) {

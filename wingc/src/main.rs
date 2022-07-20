@@ -6,7 +6,7 @@ use std::path::PathBuf;
 use std::str;
 use sha2::{Sha256, Digest};
 
-use crate::ast::{Scope, Statement, Expression, Reference, ArgList, BinaryOperator, Literal};
+use crate::ast::{ParameterDefinition, Type, Scope, Statement, Expression, Reference, ArgList, BinaryOperator, Literal};
 
 mod ast;
 mod jsify;
@@ -39,6 +39,10 @@ impl Compiler<'_> {
         return str::from_utf8(&self.source[node.byte_range()]).unwrap();
     }
 
+    // fn default_node_text<'a>(&'a self, node: &Node) -> &'a str {
+    //     return self.node_text(&node.named_child(0).unwrap());
+    // }
+
     fn parse_qualified_name(&self, node: &Node) -> String {
         if node.named_child_count() == 1 {
             return String::from(self.node_text(&node.named_child(0).unwrap()));
@@ -47,7 +51,7 @@ impl Compiler<'_> {
             let name = self.node_text(&node.named_child(1).unwrap());
             return format!("{}.{}", namespace, name);
         } else {
-            panic!("Unexpected number of named childer for qualified name {:?}", node);
+            panic!("Unexpected number of named children for qualified name {:?}", node);
         }
     }
     
@@ -100,6 +104,7 @@ impl Compiler<'_> {
     }
 
     fn build_statement(&self, statement_node: &Node) -> Statement {
+        let mut cursor = statement_node.walk();
         match statement_node.kind() {
             "use_statement" => {
                 if let Some(parent_module) = statement_node.named_child(1) {
@@ -122,9 +127,26 @@ impl Compiler<'_> {
             "expression_statement" => Statement::Expression(
                 self.build_expression(&statement_node.named_child(0).unwrap())
             ),
+            "proc_definition" => Statement::ProcessDefinition {
+                name: self.node_text(&statement_node.named_child(0).unwrap()).into(),
+                parameters: statement_node.child_by_field_name("parameter_list").unwrap().children_by_field_name("value", &mut cursor)
+                .map(|st_node| self.build_parameter_definition(&st_node)).collect(),
+                statements: Scope {
+                    // Duped code from wingit
+                    statements: statement_node.children_by_field_name("statements", &mut cursor).map(|st_node| self.build_statement(&st_node)).collect()
+                }
+                
+            },
             other => {
                 panic!("Unexpected statement node type {}", other);
             }
+        }
+    }
+
+    fn build_parameter_definition(&self, parameter_node: &Node) -> ParameterDefinition {
+        ParameterDefinition { 
+            name: self.node_text(&parameter_node.child_by_field_name("name").unwrap()).to_string(), 
+            parameter_type: Type::String // TODO: parse type
         }
     }
 
@@ -212,6 +234,20 @@ impl Compiler<'_> {
             "number" => Expression::Literal(Literal::Number(
                 self.node_text(&expression_node).parse().expect("Number string")
             )),
+            "seconds" => Expression::Literal(Literal::Duration(
+                self.node_text(&expression_node.child_by_field_name("number").unwrap()).parse().expect("Duration string")
+            )),
+            "minutes" => Expression::Literal(Literal::Duration(
+                // Specific "Minutes" duration needed here
+                self.node_text(&expression_node.child_by_field_name("number").unwrap()).parse::<f64>().expect("Duration string") * 60_f64
+            )),
+            "reference" => Expression::Reference(self.build_reference(&expression_node)),
+            "positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
+            "keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
+            "function_call" => Expression::FunctionCall {
+                function: self.build_reference(&expression_node.named_child(0).unwrap()),
+                args: self.build_arg_list(&expression_node.named_child(1).unwrap()),
+            },
             other => {
                 panic!("Unexpected expression node type {}", other);
             }
