@@ -10,6 +10,8 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: ["constructs@^10.0.25"],
   deps: ["cdktf", "@cdktf/provider-aws"],
+  bundledDeps: ["esbuild@0.14.31"],
+  devDeps: ["aws-sdk"],
   prettier: true,
   jestOptions: {
     jestVersion: "^27.0.0", // 28 requires a later typescript version

@@ -39,6 +39,7 @@
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
+    "aws-sdk": "^2.1178.0",
     "constructs": "10.0.25",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
@@ -65,8 +66,12 @@
   },
   "dependencies": {
     "@cdktf/provider-aws": "^8.0.21",
-    "cdktf": "^0.11.2"
+    "cdktf": "^0.11.2",
+    "esbuild": "0.14.31"
   },
+  "bundledDependencies": [
+    "esbuild"
+  ],
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "publishConfig": {

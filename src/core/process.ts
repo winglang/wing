@@ -1,40 +1,27 @@
-/**
- * Indicates that a construct can be captured.
- */
-export interface ICapturable {
-  capture(symbol: string, binding: Binding): ICaptureSource;
-}
-
-export interface ICaptureTarget {
-  addEnvironment(key: string, value: string): void;
-}
-
-export interface ICaptureSource {
-  readonly factoryCode: string;
-  readonly requireCode: string;
-  bind(target: ICaptureTarget): void;
-}
-
-export interface Binding {
+export interface Capture {
   /** The captured object */
-  readonly obj: ICapturable;
+  readonly obj: any;
 
   /** Which methods are called on the captured object */
   readonly methods?: string[];
 }
 
+export interface ICapturable {
+  capture(consumer: any, capture: Capture): string;
+}
+
 export interface ProcessProps {
   readonly path: string;
-  readonly bindings?: { [symbol: string]: Binding };
+  readonly captures?: { [name: string]: Capture };
 }
 
 export class Process {
-  /**
-   * The captures of this proc.
-   */
-  public readonly captures = new Array<ICaptureSource>();
+  public readonly path: string;
+  public readonly captures: { [name: string]: Capture };
 
   constructor(props: ProcessProps) {
-    props;
+    console.log(props);
+    this.path = props.path;
+    this.captures = props.captures ?? {};
   }
 }

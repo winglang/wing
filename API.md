@@ -79,6 +79,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.core.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@monadahq/wingsdk.core.App.property.outdir">outdir</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.App.property.root">root</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.core.App.property.stateFile">stateFile</a></code> | <code>string</code> | *No description.* |
 
 ---
@@ -102,6 +103,16 @@ public readonly outdir: string;
 ```
 
 - *Type:* string
+
+---
+
+##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.core.App.property.root"></a>
+
+```typescript
+public readonly root: Construct;
+```
+
+- *Type:* constructs.Construct
 
 ---
 
@@ -167,18 +178,18 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Bucket.capture"></a>
 
 ```typescript
-public capture(_symbol: string, _binding: Binding): ICaptureSource
+public capture(consumer: any, _capture: Capture): string
 ```
 
-###### `_symbol`<sup>Required</sup> <a name="_symbol" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._symbol"></a>
+###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter.consumer"></a>
 
-- *Type:* string
+- *Type:* any
 
 ---
 
-###### `_binding`<sup>Required</sup> <a name="_binding" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._binding"></a>
+###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._capture"></a>
 
-- *Type:* @monadahq/wingsdk.core.Binding
+- *Type:* @monadahq/wingsdk.core.Capture
 
 ---
 
@@ -476,14 +487,14 @@ public readonly filePath: string;
 ```typescript
 import { cloud } from '@monadahq/wingsdk'
 
-new cloud.Function(scope: Construct, id: string, props: FunctionProps)
+new cloud.Function(scope: Construct, id: string, process: Process)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.process">process</a></code> | <code>@monadahq/wingsdk.core.Process</code> | *No description.* |
 
 ---
 
@@ -499,9 +510,9 @@ new cloud.Function(scope: Construct, id: string, props: FunctionProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.props"></a>
+##### `process`<sup>Required</sup> <a name="process" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.process"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionProps
+- *Type:* @monadahq/wingsdk.core.Process
 
 ---
 
@@ -510,6 +521,7 @@ new cloud.Function(scope: Construct, id: string, props: FunctionProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
 
 ---
 
@@ -520,6 +532,24 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.cloud.Function.addEnvironment"></a>
+
+```typescript
+public addEnvironment(name: string, value: string): void
+```
+
+###### `name`<sup>Required</sup> <a name="name" id="@monadahq/wingsdk.cloud.Function.addEnvironment.parameter.name"></a>
+
+- *Type:* string
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.cloud.Function.addEnvironment.parameter.value"></a>
+
+- *Type:* string
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -700,8 +730,6 @@ public readonly filePath: string;
 
 ### Queue <a name="Queue" id="@monadahq/wingsdk.cloud.Queue"></a>
 
-- *Implements:* @monadahq/wingsdk.core.ICapturable
-
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Queue.Initializer"></a>
 
 ```typescript
@@ -742,7 +770,6 @@ new cloud.Queue(scope: Construct, id: string, props?: QueueProps)
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.addWorker">addWorker</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.hello">hello</a></code> | *No description.* |
 
 ---
@@ -764,24 +791,6 @@ public addWorker(fn: Function): void
 ###### `fn`<sup>Required</sup> <a name="fn" id="@monadahq/wingsdk.cloud.Queue.addWorker.parameter.fn"></a>
 
 - *Type:* @monadahq/wingsdk.cloud.Function
-
----
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Queue.capture"></a>
-
-```typescript
-public capture(_symbol: string, _binding: Binding): ICaptureSource
-```
-
-###### `_symbol`<sup>Required</sup> <a name="_symbol" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._symbol"></a>
-
-- *Type:* string
-
----
-
-###### `_binding`<sup>Required</sup> <a name="_binding" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._binding"></a>
-
-- *Type:* @monadahq/wingsdk.core.Binding
 
 ---
 
@@ -1030,38 +1039,38 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
-### Binding <a name="Binding" id="@monadahq/wingsdk.core.Binding"></a>
+### Capture <a name="Capture" id="@monadahq/wingsdk.core.Capture"></a>
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.Binding.Initializer"></a>
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.Capture.Initializer"></a>
 
 ```typescript
 import { core } from '@monadahq/wingsdk'
 
-const binding: core.Binding = { ... }
+const capture: core.Capture = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Binding.property.obj">obj</a></code> | <code>@monadahq/wingsdk.core.ICapturable</code> | The captured object. |
-| <code><a href="#@monadahq/wingsdk.core.Binding.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.obj">obj</a></code> | <code>any</code> | The captured object. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
 
 ---
 
-##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.core.Binding.property.obj"></a>
+##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.core.Capture.property.obj"></a>
 
 ```typescript
-public readonly obj: ICapturable;
+public readonly obj: any;
 ```
 
-- *Type:* @monadahq/wingsdk.core.ICapturable
+- *Type:* any
 
 The captured object.
 
 ---
 
-##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.Binding.property.methods"></a>
+##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.Capture.property.methods"></a>
 
 ```typescript
 public readonly methods: string[];
@@ -1070,34 +1079,6 @@ public readonly methods: string[];
 - *Type:* string[]
 
 Which methods are called on the captured object.
-
----
-
-### FunctionProps <a name="FunctionProps" id="@monadahq/wingsdk.cloud.FunctionProps"></a>
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.FunctionProps.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-const functionProps: cloud.FunctionProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionProps.property.handler">handler</a></code> | <code>@monadahq/wingsdk.core.Process</code> | *No description.* |
-
----
-
-##### `handler`<sup>Required</sup> <a name="handler" id="@monadahq/wingsdk.cloud.FunctionProps.property.handler"></a>
-
-```typescript
-public readonly handler: Process;
-```
-
-- *Type:* @monadahq/wingsdk.core.Process
 
 ---
 
@@ -1146,7 +1127,7 @@ const processProps: core.ProcessProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.path">path</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.bindings">bindings</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Binding}</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | *No description.* |
 
 ---
 
@@ -1160,13 +1141,13 @@ public readonly path: string;
 
 ---
 
-##### `bindings`<sup>Optional</sup> <a name="bindings" id="@monadahq/wingsdk.core.ProcessProps.property.bindings"></a>
+##### `captures`<sup>Optional</sup> <a name="captures" id="@monadahq/wingsdk.core.ProcessProps.property.captures"></a>
 
 ```typescript
-public readonly bindings: {[ key: string ]: Binding};
+public readonly captures: {[ key: string ]: Capture};
 ```
 
-- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Binding}
+- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
 
 ---
 
@@ -1352,19 +1333,28 @@ new core.Process(props: ProcessProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Process.property.captures">captures</a></code> | <code>@monadahq/wingsdk.core.ICaptureSource[]</code> | The captures of this proc. |
+| <code><a href="#@monadahq/wingsdk.core.Process.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Process.property.path">path</a></code> | <code>string</code> | *No description.* |
 
 ---
 
 ##### `captures`<sup>Required</sup> <a name="captures" id="@monadahq/wingsdk.core.Process.property.captures"></a>
 
 ```typescript
-public readonly captures: ICaptureSource[];
+public readonly captures: {[ key: string ]: Capture};
 ```
 
-- *Type:* @monadahq/wingsdk.core.ICaptureSource[]
+- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
 
-The captures of this proc.
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.core.Process.property.path"></a>
+
+```typescript
+public readonly path: string;
+```
+
+- *Type:* string
 
 ---
 
@@ -1373,9 +1363,7 @@ The captures of this proc.
 
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.core.ICapturable
-
-Indicates that a construct can be captured.
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.core.ICapturable
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -1388,102 +1376,18 @@ Indicates that a construct can be captured.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.core.ICapturable.capture"></a>
 
 ```typescript
-public capture(symbol: string, binding: Binding): ICaptureSource
+public capture(consumer: any, capture: Capture): string
 ```
 
-###### `symbol`<sup>Required</sup> <a name="symbol" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.symbol"></a>
+###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.consumer"></a>
 
-- *Type:* string
-
----
-
-###### `binding`<sup>Required</sup> <a name="binding" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.binding"></a>
-
-- *Type:* @monadahq/wingsdk.core.Binding
+- *Type:* any
 
 ---
 
+###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.capture"></a>
 
-### ICaptureSource <a name="ICaptureSource" id="@monadahq/wingsdk.core.ICaptureSource"></a>
-
-- *Implemented By:* @monadahq/wingsdk.core.ICaptureSource
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ICaptureSource.bind">bind</a></code> | *No description.* |
-
----
-
-##### `bind` <a name="bind" id="@monadahq/wingsdk.core.ICaptureSource.bind"></a>
-
-```typescript
-public bind(target: ICaptureTarget): void
-```
-
-###### `target`<sup>Required</sup> <a name="target" id="@monadahq/wingsdk.core.ICaptureSource.bind.parameter.target"></a>
-
-- *Type:* @monadahq/wingsdk.core.ICaptureTarget
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ICaptureSource.property.factoryCode">factoryCode</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.ICaptureSource.property.requireCode">requireCode</a></code> | <code>string</code> | *No description.* |
-
----
-
-##### `factoryCode`<sup>Required</sup> <a name="factoryCode" id="@monadahq/wingsdk.core.ICaptureSource.property.factoryCode"></a>
-
-```typescript
-public readonly factoryCode: string;
-```
-
-- *Type:* string
-
----
-
-##### `requireCode`<sup>Required</sup> <a name="requireCode" id="@monadahq/wingsdk.core.ICaptureSource.property.requireCode"></a>
-
-```typescript
-public readonly requireCode: string;
-```
-
-- *Type:* string
-
----
-
-### ICaptureTarget <a name="ICaptureTarget" id="@monadahq/wingsdk.core.ICaptureTarget"></a>
-
-- *Implemented By:* @monadahq/wingsdk.core.ICaptureTarget
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ICaptureTarget.addEnvironment">addEnvironment</a></code> | *No description.* |
-
----
-
-##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.core.ICaptureTarget.addEnvironment"></a>
-
-```typescript
-public addEnvironment(key: string, value: string): void
-```
-
-###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.core.ICaptureTarget.addEnvironment.parameter.key"></a>
-
-- *Type:* string
-
----
-
-###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.core.ICaptureTarget.addEnvironment.parameter.value"></a>
-
-- *Type:* string
+- *Type:* @monadahq/wingsdk.core.Capture
 
 ---
 

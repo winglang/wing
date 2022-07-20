@@ -21,6 +21,10 @@
       "type": "build"
     },
     {
+      "name": "aws-sdk",
+      "type": "build"
+    },
+    {
       "name": "constructs",
       "version": "10.0.25",
       "type": "build"
@@ -106,6 +110,11 @@
     {
       "name": "typescript",
       "type": "build"
+    },
+    {
+      "name": "esbuild",
+      "version": "0.14.31",
+      "type": "bundled"
     },
     {
       "name": "constructs",
