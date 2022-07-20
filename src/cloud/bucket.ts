@@ -22,6 +22,6 @@ export class Bucket extends Construct implements ICapturable {
     consumer.addEnvironment(name, this.bucket.bucket);
 
     // const clientPath = require.resolve("./bucket-client");
-    return `new (require('@monadahq/wingsdk/lib/cloud/bucket-client')).cloud.BucketClient(process.env.${name});`;
+    return `new (require('@monadahq/wingsdk/lib/cloud/bucket-client')).BucketClient(process.env.${name});`;
   }
 }
