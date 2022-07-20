@@ -126,13 +126,11 @@ impl Compiler<'_> {
             ),
             "proc_definition" => Statement::ProcessDefinition {
                 name: self.node_text(&statement_node.child_by_field_name("name").unwrap()).into(),
-                parameters: statement_node.child_by_field_name("parameter_list").unwrap().children_by_field_name("value", &mut cursor)
-                .map(|st_node| self.build_parameter_definition(&st_node)).collect(),
+                parameters: statement_node.child_by_field_name("parameter_list").unwrap().named_children(&mut cursor).map(|st_node| self.build_parameter_definition(&st_node)).collect(),
                 statements: Scope {
                     // Duped code from wingit
                     statements: statement_node.child_by_field_name("block").unwrap().children_by_field_name("statements", &mut cursor).map(|st_node| self.build_statement(&st_node)).collect()
                 }
-                
             },
             other => {
                 panic!("Unexpected statement node type {}", other);
@@ -142,15 +140,16 @@ impl Compiler<'_> {
 
     fn build_parameter_definition(&self, parameter_node: &Node) -> ParameterDefinition {
         ParameterDefinition { 
-            name: self.node_text(&parameter_node.child_by_field_name("name").unwrap()).to_string(), 
+            // name: self.node_text(&parameter_node.child_by_field_name("name").unwrap()).to_string(), 
+            name: self.node_text(&parameter_node).to_string(), 
             parameter_type: Type::String // TODO: parse type
         }
     }
 
     fn build_reference(&self, reference_node: &Node) -> Reference {
         let symbol = self.node_text(&reference_node.child_by_field_name("symbol").unwrap()).into();
-        let namespace = if let Some(namespaceNode) = &reference_node.child_by_field_name("namespace") {
-            Some(self.node_text(&namespaceNode).into())
+        let namespace = if let Some(namespace_node) = &reference_node.child_by_field_name("namespace") {
+            Some(self.node_text(&namespace_node).into())
         } else {
             None
         };

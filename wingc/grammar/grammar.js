@@ -255,9 +255,9 @@ module.exports = grammar({
     function_name: $ => $._identifier,
 
     parameter_definition: $ => seq(
-      field('name', $._parameter_name),
+      field('name', $._identifier),
       ':',
-      field('type', $._parameter_type),
+      field('type', $.type),
     ),
 
     parameter_list: $ => seq(
@@ -265,9 +265,6 @@ module.exports = grammar({
       commaSep($.parameter_definition),
       ')',
     ),
-
-    _parameter_name: $ => $._identifier,
-    _parameter_type: $ => $.type,
 
     block: $ => seq(
       '{',
@@ -323,7 +320,7 @@ module.exports = grammar({
 });
 
 function commaSep1(rule) {
-  return seq(rule, field('value', repeat(seq(',', rule))));
+  return seq(rule, repeat(seq(',', rule)));
 }
 
 function commaSep(rule) {
