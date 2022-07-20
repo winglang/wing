@@ -135,10 +135,10 @@ module.exports = grammar({
     )),
 
     function_call: $ => seq(
-      choice(
+      field('call_name', choice(
         $.function_call_name, 
         $.proc_call_name
-      ),
+      )),
       field('args', $.argument_list),
     ),
 
@@ -162,7 +162,7 @@ module.exports = grammar({
     ),
 
     proc_call_name: $ => seq(
-      alias($.reference, $.cloud_object),
+      field('reference', alias($.reference, $.cloud_object)),
       '->',
       field('method_name', $.method_name)
     ),
@@ -179,18 +179,18 @@ module.exports = grammar({
 
     class: $ => seq(
       optional(seq(
-        $.namespace,
+        field('namespace', $.namespace),
         '::'
       )),
-      $.class_name,
+      field('symbol', $.class_name),
     ),
 
     use_statement: $ => seq(
       'use',
-      alias($._identifier, $.module_name),
+      field('module_name', alias($._identifier, $.module_name)),
       optional(seq(
         'from',
-        alias($._identifier, $.parent_module)
+        field('parent_module', alias($._identifier, $.parent_module)),
       )),
       $._statement_delimiter
     ),
@@ -209,7 +209,7 @@ module.exports = grammar({
     new_expression: $ => seq(
       field('class', $.class),
       field('args', $.argument_list),
-      optional($.new_object_id),
+      field('object_id', optional($.new_object_id)),
     ),
 
     new_object_id: $ => seq('as', $.string),
@@ -240,14 +240,14 @@ module.exports = grammar({
 
     function_definition: $ => seq(
       'fn',
-      field('function_name', $.function_name),
+      field('name', $.function_name),
       field('parameter_list', $.parameter_list),
       field('block', $.block),
     ),
 
     proc_definition: $ => seq(
       'proc',
-      field('function_name', $.function_name),
+      field('name', $.function_name),
       field('parameter_list', $.parameter_list),
       field('block', $.block),
     ),
@@ -306,7 +306,7 @@ module.exports = grammar({
       return choice(...table.map(([operator, precedence]) => {
         return prec.left(precedence, seq(
           field('left', $._expression),
-          field('operator', operator),
+          field('op', operator),
           field('right', $._expression)
         ));
       }));

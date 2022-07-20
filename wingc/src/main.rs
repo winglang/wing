@@ -39,10 +39,6 @@ impl Compiler<'_> {
         return str::from_utf8(&self.source[node.byte_range()]).unwrap();
     }
 
-    // fn default_node_text<'a>(&'a self, node: &Node) -> &'a str {
-    //     return self.node_text(&node.named_child(0).unwrap());
-    // }
-
     fn parse_qualified_name(&self, node: &Node) -> String {
         if node.named_child_count() == 1 {
             return String::from(self.node_text(&node.named_child(0).unwrap()));
@@ -107,14 +103,15 @@ impl Compiler<'_> {
         let mut cursor = statement_node.walk();
         match statement_node.kind() {
             "use_statement" => {
-                if let Some(parent_module) = statement_node.named_child(1) {
+                // TODO This grammar for this doesn't make sense yet
+                if let Some(parent_module) = statement_node.child_by_field_name("parent_module") {
                     Statement::Use { 
-                        module_name: self.node_text(&statement_node.named_child(0).unwrap()).into(), 
+                        module_name: self.node_text(&statement_node.child_by_field_name("module_name").unwrap()).into(), 
                         identifier: Some(self.node_text(&parent_module).into())
                     }
                 } else {
                     Statement::Use { 
-                        module_name: self.node_text(&statement_node.named_child(0).unwrap()).into(), 
+                        module_name: self.node_text(&statement_node.child_by_field_name("module_name").unwrap()).into(), 
                         identifier: None
                     }
                 }
@@ -128,12 +125,12 @@ impl Compiler<'_> {
                 self.build_expression(&statement_node.named_child(0).unwrap())
             ),
             "proc_definition" => Statement::ProcessDefinition {
-                name: self.node_text(&statement_node.named_child(0).unwrap()).into(),
+                name: self.node_text(&statement_node.child_by_field_name("name").unwrap()).into(),
                 parameters: statement_node.child_by_field_name("parameter_list").unwrap().children_by_field_name("value", &mut cursor)
                 .map(|st_node| self.build_parameter_definition(&st_node)).collect(),
                 statements: Scope {
                     // Duped code from wingit
-                    statements: statement_node.children_by_field_name("statements", &mut cursor).map(|st_node| self.build_statement(&st_node)).collect()
+                    statements: statement_node.child_by_field_name("block").unwrap().children_by_field_name("statements", &mut cursor).map(|st_node| self.build_statement(&st_node)).collect()
                 }
                 
             },
@@ -151,19 +148,17 @@ impl Compiler<'_> {
     }
 
     fn build_reference(&self, reference_node: &Node) -> Reference {
-        if reference_node.named_child_count() == 1 {
-            Reference {
-                namespace: None,
-                identifier: self.node_text(&reference_node.named_child(0).unwrap()).into(),
-            }
-        } else if reference_node.named_child_count() == 2 {
-            Reference {
-                namespace: Some(self.node_text(&reference_node.named_child(0).unwrap()).into()),
-                identifier: self.node_text(&reference_node.named_child(1).unwrap()).into()
-            }
+        let symbol = self.node_text(&reference_node.child_by_field_name("symbol").unwrap()).into();
+        let namespace = if let Some(namespaceNode) = &reference_node.child_by_field_name("namespace") {
+            Some(self.node_text(&namespaceNode).into())
         } else {
-            panic!("Unexpected number of named childer for qualified name {:?}", reference_node);
-        }
+            None
+        };
+
+        return Reference {
+            namespace: namespace,
+            identifier: symbol,
+        };
     }
 
     fn build_arg_list(&self, arg_list_node: &Node) -> ArgList {
@@ -195,14 +190,14 @@ impl Compiler<'_> {
     fn build_expression(&self, expression_node: &Node) -> Expression {
         match expression_node.kind() {
             "new_expression" => {
-                let class =  self.build_reference(&expression_node.named_child(0).unwrap());
-                let arg_list = if let Some(args_node) = expression_node.named_child(1) {
+                let class =  self.build_reference(&expression_node.child_by_field_name("class").unwrap());
+                let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
                     self.build_arg_list(&args_node)
                 } else {
                     ArgList::new()
                 };
                 
-                let obj_id = expression_node.named_child(2).map(|n| self.node_text(&n).into());
+                let obj_id = expression_node.child_by_field_name("object_id").map(|n| self.node_text(&n).into());
                 Expression::New { 
                     class, 
                     obj_id, 
@@ -210,7 +205,7 @@ impl Compiler<'_> {
                 }
             },
             "binary_expression" => Expression::Binary { 
-                op: match self.node_text(&expression_node.child(1).unwrap()) {
+                op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
                     "+" => BinaryOperator::Add,
                     "-" => BinaryOperator::Sub,
                     "==" => BinaryOperator::Equal,
@@ -228,9 +223,12 @@ impl Compiler<'_> {
                         panic!("Unexpected binary operator {}", other);
                     }
                 },
-                lexp: Box::new(self.build_expression(&expression_node.named_child(0).unwrap())),
-                rexp: Box::new(self.build_expression(&expression_node.named_child(1).unwrap())),
+                lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())),
+                rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())),
             },
+            "string" => Expression::Literal(Literal::String(
+                self.node_text(&expression_node).into()
+            )),
             "number" => Expression::Literal(Literal::Number(
                 self.node_text(&expression_node).parse().expect("Number string")
             )),
@@ -245,8 +243,8 @@ impl Compiler<'_> {
             "positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
             "keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
             "function_call" => Expression::FunctionCall {
-                function: self.build_reference(&expression_node.named_child(0).unwrap()),
-                args: self.build_arg_list(&expression_node.named_child(1).unwrap()),
+                function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap().child_by_field_name("reference").unwrap()),
+                args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
             },
             other => {
                 panic!("Unexpected expression node type {}", other);
