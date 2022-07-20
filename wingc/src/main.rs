@@ -120,14 +120,17 @@ impl Compiler<'_> {
                 
                 if self.shim {
                     output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+                    output.push("const { Construct } = require('constructs');".to_string());
                 }
 
                 output.append(&mut imports);
 
                 if self.shim {
-                    js.insert(0, format!("super({{ stateFile: '{}' }});\n", self.state_file.display()));
-                    output.push(format!("class MyApp extends {}.core.App {{\nconstructor() {}\n}}", STDLIB, Self::render_block(js)));
-                    output.push("new MyApp().synth();".to_string());
+                    js.insert(0, "super(scope, id)".to_string());
+                    output.push(format!("class Root extends Construct {{\nconstructor(scope, id) {}\n}}", Self::render_block(js)));
+                    output.push(format!("const app = new {}.core.App({{ stateFile: '{}' }});", STDLIB, self.state_file.display()));
+                    output.push("new Root(app.root, 'Root');".to_string());
+                    output.push("app.synth();".to_string());
                 } else {
                     output.append(&mut js);
                 }
