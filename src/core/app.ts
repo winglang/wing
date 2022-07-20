@@ -6,6 +6,8 @@ import {
   writeFileSync,
 } from "fs";
 import { isAbsolute, join } from "path";
+import * as aws from "@cdktf/provider-aws";
+import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { FileBase } from "../fs";
 
@@ -26,11 +28,22 @@ export interface AppProps {
 export class App extends Construct {
   public readonly stateFile?: string;
   public readonly outdir: string;
+  public readonly root: Construct;
+
+  private readonly tfapp: cdktf.App;
 
   constructor(props: AppProps = {}) {
     super(undefined as any, "App");
 
-    this.outdir = props.outdir ?? ".";
+    const outdir = props.outdir ?? ".";
+    const app = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
+    const stack = new cdktf.TerraformStack(app, "Stack");
+    this.root = stack;
+
+    new aws.AwsProvider(this.root, "AwsProvider", {});
+
+    this.tfapp = app;
+    this.outdir = outdir;
 
     if (props.stateFile) {
       this.stateFile = isAbsolute(props.stateFile)
@@ -59,6 +72,8 @@ export class App extends Construct {
       console.error(`${filePath}: deleted`);
       rmSync(join(this.outdir, filePath));
     }
+
+    this.tfapp.synth();
   }
 
   /**

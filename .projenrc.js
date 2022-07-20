@@ -8,7 +8,8 @@ const project = new cdk.JsiiProject({
   authorAddress: "ping@monada.co",
   repository: "https://github.com/monadahq/wingsdk.git",
   defaultReleaseBranch: "main",
-  peerDeps: ["constructs@^10"],
+  peerDeps: ["constructs@^10.0.25"],
+  deps: ["cdktf", "@cdktf/provider-aws"],
   prettier: true,
   jestOptions: {
     jestVersion: "^27.0.0", // 28 requires a later typescript version

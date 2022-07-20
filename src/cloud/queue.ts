@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Binding, Duration, ICapturable, ICaptureSource } from "../core";
-import { Function } from "./lambda";
+import { Function } from "./function";
 
 export interface QueueProps {
   readonly timeout?: Duration;

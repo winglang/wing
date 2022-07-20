@@ -1,4 +1,4 @@
 export * from "./bucket";
-export * from "./lambda";
+export * from "./function";
 export * from "./queue";
 export * from "./endpoint";
