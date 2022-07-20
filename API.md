@@ -178,7 +178,7 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Bucket.capture"></a>
 
 ```typescript
-public capture(consumer: any, _capture: Capture): string
+public capture(consumer: any, capture: Capture): string
 ```
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter.consumer"></a>
@@ -187,7 +187,7 @@ public capture(consumer: any, _capture: Capture): string
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._capture"></a>
+###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter.capture"></a>
 
 - *Type:* @monadahq/wingsdk.core.Capture
 
@@ -522,6 +522,7 @@ new cloud.Function(scope: Construct, id: string, process: Process)
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.addPolicyStatements">addPolicyStatements</a></code> | *No description.* |
 
 ---
 
@@ -548,6 +549,18 @@ public addEnvironment(name: string, value: string): void
 ###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.cloud.Function.addEnvironment.parameter.value"></a>
 
 - *Type:* string
+
+---
+
+##### `addPolicyStatements` <a name="addPolicyStatements" id="@monadahq/wingsdk.cloud.Function.addPolicyStatements"></a>
+
+```typescript
+public addPolicyStatements(statements: PolicyStatement): void
+```
+
+###### `statements`<sup>Required</sup> <a name="statements" id="@monadahq/wingsdk.cloud.Function.addPolicyStatements.parameter.statements"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.PolicyStatement
 
 ---
 
@@ -1109,6 +1122,56 @@ public readonly obj: any;
 - *Type:* any
 
 The object that will be serialized into the file during synthesis.
+
+---
+
+### PolicyStatement <a name="PolicyStatement" id="@monadahq/wingsdk.cloud.PolicyStatement"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.PolicyStatement.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const policyStatement: cloud.PolicyStatement = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.PolicyStatement.property.action">action</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.PolicyStatement.property.effect">effect</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.PolicyStatement.property.resource">resource</a></code> | <code>string[]</code> | *No description.* |
+
+---
+
+##### `action`<sup>Optional</sup> <a name="action" id="@monadahq/wingsdk.cloud.PolicyStatement.property.action"></a>
+
+```typescript
+public readonly action: string[];
+```
+
+- *Type:* string[]
+
+---
+
+##### `effect`<sup>Optional</sup> <a name="effect" id="@monadahq/wingsdk.cloud.PolicyStatement.property.effect"></a>
+
+```typescript
+public readonly effect: string;
+```
+
+- *Type:* string
+
+---
+
+##### `resource`<sup>Optional</sup> <a name="resource" id="@monadahq/wingsdk.cloud.PolicyStatement.property.resource"></a>
+
+```typescript
+public readonly resource: string[];
+```
+
+- *Type:* string[]
 
 ---
 

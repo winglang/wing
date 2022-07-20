@@ -59,7 +59,6 @@ export class App extends Construct {
 
     for (const child of this.node.findAll().filter(isFile)) {
       const filePath = child.filePath;
-      console.error(`${filePath}: updated`);
       child.save(this.outdir);
 
       oldFiles.delete(filePath);
@@ -69,11 +68,14 @@ export class App extends Construct {
     this.saveStateFile(newFiles);
 
     for (const filePath of oldFiles) {
-      console.error(`${filePath}: deleted`);
       rmSync(join(this.outdir, filePath));
     }
 
-    this.tfapp.synth();
+    const isTerraformResource = (c: IConstruct): c is cdktf.TerraformResource =>
+      c instanceof cdktf.TerraformResource;
+    if (this.tfapp.node.findAll().find(isTerraformResource)) {
+      this.tfapp.synth();
+    }
   }
 
   /**

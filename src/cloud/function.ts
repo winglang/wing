@@ -101,7 +101,7 @@ export class Function extends Construct {
       ...statements.map((s) => ({
         Action: s.action,
         Resource: s.resource,
-        Effect: s.effect,
+        Effect: s.effect ?? "Allow",
       }))
     );
   }
@@ -165,8 +165,8 @@ function isPrimitive(value: any) {
   );
 }
 
-interface PolicyStatement {
-  action?: string[];
-  resource?: string[];
-  effect: string;
+export interface PolicyStatement {
+  readonly action?: string[];
+  readonly resource?: string[];
+  readonly effect?: string;
 }

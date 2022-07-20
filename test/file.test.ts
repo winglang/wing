@@ -87,7 +87,11 @@ describe("state file", () => {
     new TextFile(app, "TextFile", "another-file.txt", { lines: ["damn!"] });
     app.synth();
 
-    expect(readdirSync(workdir)).toEqual(["another-file.txt", stateFileName]);
+    expect(readdirSync(workdir)).toEqual([
+      "another-file.txt",
+      "cdktf.out",
+      stateFileName,
+    ]);
   });
 
   test("can be absolute path", () => {
@@ -102,7 +106,7 @@ describe("state file", () => {
     });
 
     app.synth();
-    expect(readdirSync(workdir1)).toEqual(["my.json"]);
+    expect(readdirSync(workdir1)).toEqual(["cdktf.out", "my.json"]);
     expect(readdirSync(workdir2)).toEqual(["another.file"]);
   });
 });

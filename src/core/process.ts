@@ -20,7 +20,6 @@ export class Process {
   public readonly captures: { [name: string]: Capture };
 
   constructor(props: ProcessProps) {
-    console.log(props);
     this.path = props.path;
     this.captures = props.captures ?? {};
   }
