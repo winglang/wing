@@ -2,3 +2,4 @@
 *.w.out
 /node_modules/
 *.txt
+/cdktf.out/

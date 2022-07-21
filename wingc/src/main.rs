@@ -125,14 +125,17 @@ impl Compiler<'_> {
                 
                 if self.shim {
                     output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+                    output.push("const { Construct } = require('constructs');".to_string());
                 }
 
                 output.append(&mut imports);
 
                 if self.shim {
-                    js.insert(0, format!("super({{ stateFile: '{}' }});\n", self.state_file.display()));
-                    output.push(format!("class MyApp extends {}.core.App {{\nconstructor() {}\n}}", STDLIB, Self::render_block(js)));
-                    output.push("new MyApp().synth();".to_string());
+                    js.insert(0, "super(scope, id)".to_string());
+                    output.push(format!("class Root extends Construct {{\nconstructor(scope, id) {}\n}}", Self::render_block(js)));
+                    output.push(format!("const app = new {}.core.App({{ stateFile: '{}' }});", STDLIB, self.state_file.display()));
+                    output.push("new Root(app.root, 'Root');".to_string());
+                    output.push("app.synth();".to_string());
                 } else {
                     output.append(&mut js);
                 }
@@ -230,7 +233,7 @@ impl Compiler<'_> {
             "proc_definition" => {
                 let function_name = self.compile(&root.named_child(0).unwrap());
                 let parameter_list = self.compile(&root.named_child(1).unwrap());
-        
+
                 // find all cloud objects referenced in the proc
                 let captures = self.find_captures(&root.named_child(2).unwrap());
         
@@ -240,11 +243,8 @@ impl Compiler<'_> {
         
                 let mut proc_source = vec![];
         
-                for o in captures.iter() {
-                    proc_source.push(format!("const __PROC__{} = <<{}>>", o.symbol, o.symbol));
-                }
-        
-                proc_source.push(format!("exports.proc = async function({}) {};", parameter_list, block));
+                proc_source.push(format!("async function $proc($cap, {}) {};", parameter_list, block));
+
         
                 let proc_dir = self.out_dir.join(format!("proc.{}", procid));
                 
@@ -271,8 +271,8 @@ impl Compiler<'_> {
                 }
 
                 let props_block = Self::render_block([
-                    format!("path: __dirname + \"/{}\",", proc_dir.display()),
-                    if !bindings.is_empty() { format!("bindings: {}", Self::render_block(&bindings)) } else {"".to_string()}
+                    format!("path: \"{}\",", proc_dir.display()),
+                    if !bindings.is_empty() { format!("captures: {}", Self::render_block(&bindings)) } else {"".to_string()}
                 ]);
 
                 format!("const {} = new {}.core.Process({});", function_name, STDLIB, props_block)
@@ -297,7 +297,7 @@ impl Compiler<'_> {
                 let cobject = self.compile(&root.named_child(0).unwrap());
                 let method_name = self.node_text(&root.named_child(1).unwrap());
           
-                format!("await __PROC__{}.{}", cobject, method_name)
+                format!("await $cap.{}.{}", cobject, method_name)
             },
             "cloud_object" => {
                 self.node_text(root).to_string()
