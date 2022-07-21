@@ -11,12 +11,6 @@ extern "C"
   {
     WINGRR_ENGINE_JAVASCRIPT = 1,
     WINGRR_ENGINE_TYPESCRIPT = 2,
-    WINGRR_ENGINE_PYTHON = 3,
-    WINGRR_ENGINE_RUBY = 4,
-    WINGRR_ENGINE_CSHARP = 5,
-    WINGRR_ENGINE_GO = 6,
-    WINGRR_ENGINE_JAVA = 7,
-    WINGRR_ENGINE_LUA = 8,
   } wingrr_engine_type_t;
 
   /** shallow type of preflight execution configuration */

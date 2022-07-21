@@ -34,24 +34,6 @@ pub fn execute_typescript(program: &str, workdir: &str) -> i32 {
         workdir,
     );
 }
-pub fn execute_python(program: &str, workdir: &str) -> i32 {
-    return execute_lang(wingrr_engine_type_t__WINGRR_ENGINE_PYTHON, program, workdir);
-}
-pub fn execute_csharp(program: &str, workdir: &str) -> i32 {
-    return execute_lang(wingrr_engine_type_t__WINGRR_ENGINE_CSHARP, program, workdir);
-}
-pub fn execute_go(program: &str, workdir: &str) -> i32 {
-    return execute_lang(wingrr_engine_type_t__WINGRR_ENGINE_GO, program, workdir);
-}
-pub fn execute_java(program: &str, workdir: &str) -> i32 {
-    return execute_lang(wingrr_engine_type_t__WINGRR_ENGINE_JAVA, program, workdir);
-}
-pub fn execute_lua(program: &str, workdir: &str) -> i32 {
-    return execute_lang(wingrr_engine_type_t__WINGRR_ENGINE_LUA, program, workdir);
-}
-pub fn execute_ruby(program: &str, workdir: &str) -> i32 {
-    return execute_lang(wingrr_engine_type_t__WINGRR_ENGINE_RUBY, program, workdir);
-}
 
 #[cfg(test)]
 mod tests {
@@ -65,35 +47,5 @@ mod tests {
     #[test]
     fn typescript() {
         assert_eq!(0, execute_typescript("../../tests/hello.ts", "./"));
-    }
-
-    #[test]
-    fn python() {
-        assert_eq!(0, execute_python("../../tests/hello.py", "./"));
-    }
-
-    #[test]
-    fn go() {
-        assert_eq!(0, execute_go("../../tests/hello.go", "./"));
-    }
-
-    #[test]
-    fn csharp() {
-        assert_eq!(0, execute_csharp("../../tests/hello.cs", "./"));
-    }
-
-    #[test]
-    fn ruby() {
-        assert_eq!(0, execute_ruby("../../tests/hello.rb", "./"));
-    }
-
-    #[test]
-    fn java() {
-        assert_eq!(0, execute_java("../../tests/hello.java", "./"));
-    }
-
-    #[test]
-    fn lua() {
-        assert_eq!(0, execute_lua("../../tests/hello.lua", "./"));
     }
 }

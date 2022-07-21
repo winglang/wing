@@ -22,18 +22,6 @@ int main(int argc, char *argv[])
   auto engine = WINGRR_ENGINE_JAVASCRIPT;
   if (ext == "ts")
     engine = WINGRR_ENGINE_TYPESCRIPT;
-  else if (ext == "py")
-    engine = WINGRR_ENGINE_PYTHON;
-  else if (ext == "rb")
-    engine = WINGRR_ENGINE_RUBY;
-  else if (ext == "cs")
-    engine = WINGRR_ENGINE_CSHARP;
-  else if (ext == "go")
-    engine = WINGRR_ENGINE_GO;
-  else if (ext == "java")
-    engine = WINGRR_ENGINE_JAVA;
-  else if (ext == "lua")
-    engine = WINGRR_ENGINE_LUA;
   else if (ext != "js")
   {
     std::cerr << "Unknown program extension." << std::endl;

@@ -15,13 +15,7 @@
     "cargo:test": "cargo test --manifest-path src/crate/Cargo.toml -- --test-threads=1",
     "npm:test": "npm-run-all test:*",
     "test:js": "./build/wingrr tests/hello.js ./",
-    "test:ts": "./build/wingrr tests/hello.ts ./",
-    "test:py": "./build/wingrr tests/hello.py ./",
-    "test:rb": "./build/wingrr tests/hello.rb ./",
-    "test:cs": "./build/wingrr tests/hello.cs ./",
-    "test:go": "./build/wingrr tests/hello.go ./",
-    "test:lua": "./build/wingrr tests/hello.lua ./",
-    "test:java": "./build/wingrr tests/hello.java ./"
+    "test:ts": "./build/wingrr tests/hello.ts ./"
   },
   "repository": {
     "type": "git",
