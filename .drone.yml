@@ -4,14 +4,17 @@ type: docker
 name: winglang
 
 steps:
-  - name: ECR login
+  - name: ECR/NPM setup
     image: amazon/aws-cli
     environment:
+      NPM_TOKEN:
+        from_secret: npm_token
       AWS_REGION:
         from_secret: aws_region
     commands:
       - aws --version
       - aws ecr get-login-password --region $AWS_REGION > .docker-login
+      - echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN" > ~/.npmrc
 
   - name: ECR pull
     image: docker
@@ -31,21 +34,18 @@ steps:
       - name: dind
         path: /var/run/docker.sock
 
-  - name: wingrr tests
-    image: winglang-dev
-    pull: never
+  - name: build and test
+    image: docker
+    privileged: true
     commands:
-      - bash wingrr/scripts/build.sh
-
-  - name: wingc tests
-    image: winglang-dev
-    pull: never
-    environment:
-      NPM_TOKEN:
-        from_secret: npm_token
-    commands:
-      - echo "//npm.pkg.github.com/:_authToken=$NPM_TOKEN" > ~/.npmrc
-      - bash -c "source ~/.bashrc && cd playground && ./wingc examples/hello.w"
+      - docker run --privileged --rm tonistiigi/binfmt --install all
+      - docker buildx create --name xbuilder || exit 0
+      - docker buildx use xbuilder
+      - docker buildx inspect --bootstrap
+      # - docker buildx build --platform=linux/arm64,linux/amd64 --tag winglang-build .
+    volumes:
+      - name: dind
+        path: /var/run/docker.sock
 
 volumes:
   - name: dind
