@@ -245,8 +245,9 @@ impl Compiler<'_> {
                 function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap().child_by_field_name("reference").unwrap()),
                 args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
             },
+            "parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
             other => {
-                panic!("Unexpected expression node type {}", other);
+                panic!("Unexpected expression node type {} for node: {:?}", other, expression_node);
             }
         }
     }
@@ -506,4 +507,24 @@ fn main() {
     println!("{:#?}", ast_root);
 
     println!("{}", jsify::jsify(&ast_root, true));
+}
+
+#[cfg(test)]
+mod tests {
+    use std::path::PathBuf;
+    use super::*;
+    use tree_sitter_cli::test::run_tests_at_path;
+
+    #[test]
+    fn test_tree_sitter_parser() {
+        let winglang = unsafe { tree_sitter_winglang() };
+        run_tests_at_path(
+            winglang, 
+            &PathBuf::from("grammar/tests"), 
+            true, 
+            true, 
+            None, 
+            false).expect("Running tests for tree-sitter generated parser");
+    
+    }
 }

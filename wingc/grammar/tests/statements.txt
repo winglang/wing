@@ -1,0 +1,18 @@
+====================
+For loop
+====================
+
+for fox in sox {
+}
+
+---
+
+(source_file
+    (for_loop
+        name: (variable_name)
+        iterable: (reference
+            symbol: (symbol)
+        )
+        block: (block)
+    )
+)

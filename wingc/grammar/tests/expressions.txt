@@ -1,0 +1,64 @@
+====================
+Unary expression
+====================
+
++1;
+
+---
+
+(source_file
+    (expression_statement
+        expression: (unary_expression
+            arg: (number)
+        )
+    )
+)
+
+====================
+Binary expressions
+====================
+
+5 % 1;
+(5+1) % 1;
+5+1 % 1;
+5 % 1 + 1;
+
+---
+
+(source_file
+    (expression_statement
+        expression: (binary_expression
+            left: (number)
+            right: (number)
+        )
+    )
+    (expression_statement
+        expression: (binary_expression
+            left: (parenthesized_expression
+                (binary_expression
+                    left: (number)
+                    right: (number)
+                )
+            )
+            right: (number)
+        )
+    )
+    (expression_statement
+        expression: (binary_expression
+            left: (number)
+            right: (binary_expression
+                left: (number)
+                right: (number)
+            )
+        )
+    )
+    (expression_statement
+        expression: (binary_expression
+            left: (binary_expression
+                left: (number)
+                right: (number)
+            )
+            right: (number)
+        )
+    )
+)

@@ -59,7 +59,7 @@ module.exports = grammar({
       $._literal,
       $.reference,
       $.function_call,
-      $._parenthesized_expression,
+      $.parenthesized_expression,
     ),
 
     for_loop: $ => seq(
@@ -309,7 +309,7 @@ module.exports = grammar({
       }));
     },
 
-    _parenthesized_expression: $ => seq(
+    parenthesized_expression: $ => seq(
       '(',
       $._expression,
       ')',
