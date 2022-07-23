@@ -1,6 +1,5 @@
 use std::path::PathBuf;
 use tree_sitter_cli::generate::generate_parser_in_directory;
-use tree_sitter;
 
 fn main() {
     // Where to find wing's grammar.js
