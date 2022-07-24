@@ -10,6 +10,7 @@ use crate::ast::{ParameterDefinition, Type, Scope, Statement, Expression, Refere
 
 mod ast;
 mod jsify;
+mod type_check;
 
 #[derive(clap::Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -503,6 +504,8 @@ fn main() {
         out_dir: intermediate_dir,
         source: &source[..],
     }.wingit(&tree.root_node());
+
+    type_check::type_check_scope(&ast_root);
 
     println!("{:#?}", ast_root);
 
