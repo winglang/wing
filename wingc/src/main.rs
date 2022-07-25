@@ -148,6 +148,17 @@ impl Compiler<'_> {
                 let statements_nodes = statement_node.children_by_field_name("statements", &mut cursor);
                 Statement::Scope(self.build_scope(statements_nodes))
             },
+            "if" => {
+                let statements_nodes = statement_node.children_by_field_name("block", &mut cursor);
+                let if_statements = self.build_scope(statements_nodes);
+                let else_statements_nodes = statement_node.children_by_field_name("else_block", &mut cursor);
+                let else_statements = self.build_scope(else_statements_nodes);
+                Statement::If {
+                    condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap()), 
+                    statements: if_statements,
+                    else_statements: if else_statements.statements.is_empty() { None } else { Some(else_statements) }
+                }
+            }
             other => {
                 panic!("Unexpected statement node type {} ({:?})", other, statement_node);
             }

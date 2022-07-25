@@ -83,6 +83,10 @@ module.exports = grammar({
       'if',
       field('condition', $._expression),
       field('block', $.block),
+      optional(seq(
+        'else',
+        field('else_block', $.block),
+      ))
     ),
 
     _literal: $ => choice(

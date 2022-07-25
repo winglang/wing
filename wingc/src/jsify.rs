@@ -193,7 +193,13 @@ fn jsify_statement(statement: &Statement) -> String {
 
         },
         Statement::ForLoop { iterator: _, iterable: _, statements: _ } => todo!(),
-        Statement::If { condition: _, statements: _ } => todo!(),
+        Statement::If { condition, statements, else_statements } => {
+            if let Some(else_scope) = else_statements {
+                format!("if ({}) {} else {}", jsify_expression(condition), jsify_scope(statements), jsify_scope(else_scope))
+            } else {
+                format!("if ({}) {}", jsify_expression(condition), jsify_scope(statements))
+            }
+        },
         Statement::Expression(e) => jsify_expression(e),
         Statement::Assignment { variable, value } => {
             format!("{} = {};", variable.identifier, jsify_expression(value))

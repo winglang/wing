@@ -36,3 +36,18 @@ x = 2;
         value: (number)
     )
 )
+
+====================
+If
+====================
+
+if false {}
+
+---
+
+(source_file
+    (if
+        condition: (bool)
+        block: (block)
+    )
+)

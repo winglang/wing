@@ -40,11 +40,21 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Type {
             Literal::Duration(_) => Type::Duration,
             Literal::Boolean(_) => Type::Boolean,
         },
-        Expression::Binary { op: _, lexp, rexp } => {
+        Expression::Binary { op, lexp, rexp } => {
             let ltype = type_check_exp(lexp, env);
             let rtype = type_check_exp(rexp, env);
             validate_type(ltype, rtype, rexp);
-            validate_type(ltype, Type::Number, rexp)
+            if op.boolean_args() {
+                validate_type(ltype, Type::Boolean, rexp);
+            } else if op.numerical_args() {
+                validate_type(ltype, Type::Number, rexp);
+            }
+            
+            if op.boolean_result() {
+                Type::Boolean
+            } else {
+                validate_type(ltype, Type::Number, rexp)
+            }
         }
         Expression::Unary { op: _, exp: unary_exp } => {
             let _type = type_check_exp(&unary_exp, env);
@@ -78,8 +88,19 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
         },
         Statement::FunctionDefinition { name: _, parameters: _, statements: _ } => todo!(),
         Statement::ProcessDefinition { name: _, parameters: _, statements: _ } => todo!(),
-        Statement::ForLoop { iterator: _, iterable: _, statements: _ } => todo!(),
-        Statement::If { condition: _, statements: _ } => todo!(),
+        Statement::ForLoop { iterator: _, iterable: _, statements: _ } => {},
+        Statement::If { condition, statements, else_statements } => {
+            let cond_type = type_check_exp(condition, env);
+            validate_type(cond_type, Type::Boolean, condition);
+
+            let mut scope_env = TypeEnv::new(Some(env));
+            type_check_scope(statements, &mut scope_env);
+
+            if let Some(else_scope) = else_statements {
+                let mut else_scope_env = TypeEnv::new(Some(env));
+                type_check_scope(else_scope, &mut else_scope_env);
+            }
+        },
         Statement::Expression(e) => {
             type_check_exp(e, env);
         },

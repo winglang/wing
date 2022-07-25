@@ -31,6 +31,7 @@ pub enum Statement {
     If {
         condition: Expression,
         statements: Scope,
+        else_statements: Option<Scope>
     },
     Expression(Expression),
     Assignment {
@@ -127,6 +128,49 @@ pub enum BinaryOperator {
     NotEqual,
     LogicalAnd,
     LogicalOr
+}
+
+impl BinaryOperator {
+    pub fn boolean_result(&self) -> bool {
+        use BinaryOperator::*;
+        match self {
+            Greater | 
+            GreaterOrEqual |
+            Less |
+            LessOrEqual |
+            Equal |
+            NotEqual |
+            LogicalAnd |
+            LogicalOr => true,
+            _ => false
+        }
+    }
+
+    pub fn boolean_args(&self) -> bool {
+        use BinaryOperator::*;
+        match self {
+            LogicalAnd |
+            LogicalOr => true,
+            _ => false
+        }
+    }
+
+    pub fn numerical_args(&self) -> bool {
+        use BinaryOperator::*;
+        match self {
+            Add | 
+            Sub |
+            Mul |
+            Div |
+            Mod |
+            Greater |
+            GreaterOrEqual |
+            Less |
+            LessOrEqual => true,
+            _ => false
+                    
+        }
+    }
 }
 
 // TODO: ObjReferene, FuncReference, MethodReference, TypeReference, CapturedObjReference, ProcReference
