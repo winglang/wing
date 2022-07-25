@@ -23,6 +23,11 @@ jobs:
         run: yarn install --check-files
       - name: build
         run: npx projen build
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: coverage
       - id: self_mutation
         name: Find mutations
         run: |-
