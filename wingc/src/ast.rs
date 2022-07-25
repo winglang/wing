@@ -1,5 +1,8 @@
 use std::collections::HashMap;
 
+use crate::type_check;
+use crate::type_env::TypeEnv;
+
 #[derive(Debug)]
 pub enum Statement {
     Use {
@@ -33,21 +36,13 @@ pub enum Statement {
     Assignment {
         variable: Reference,
         value: Expression
-    }
+    },
+    Scope(Scope),
 }
 #[derive(Debug)]
 pub struct ParameterDefinition {
     pub name: String,
-    pub parameter_type: Type,
-}
-
-#[derive(Debug)]
-pub enum Type {
-    Number,
-    String,
-    Duration,
-    Boolean,
-    Custom(Reference)
+    pub parameter_type: type_check::Type,
 }
 
 #[derive(Debug)]
@@ -96,11 +91,12 @@ pub enum Literal {
     String(String),
     Number(f64),
     Duration(f64),
+    Boolean(bool),
 }
 
 #[derive(Debug)]
 pub struct Scope {
-    pub statements: Vec<Statement>
+    pub statements: Vec<Statement>,
 }
 
 #[derive(Debug)]

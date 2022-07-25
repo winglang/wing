@@ -16,3 +16,23 @@ for fox in sox {
         block: (block)
     )
 )
+
+====================
+Variable assignment
+====================
+
+x := 1;
+x = 2;
+
+---
+
+ (source_file
+    (variable_definition
+        name: (variable_name)
+        value: (number)
+    )
+    (assignment
+        name: (variable_name)
+        value: (number)
+    )
+)

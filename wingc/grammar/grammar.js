@@ -40,11 +40,20 @@ module.exports = grammar({
     _statement: $ => choice(
       $.use_statement,
       $.variable_definition,
+      $.assignment,
       $.function_definition,
       $.proc_definition,
       $.for_loop,
       $.if,
       $.expression_statement,
+      $.block,
+    ),
+
+    assignment: $ => seq(
+      field('name', $.variable_name),
+      '=',
+      field('value', $._expression),
+      ';'
     ),
 
     expression_statement: $=> seq(
@@ -79,10 +88,13 @@ module.exports = grammar({
     _literal: $ => choice(
       $.string,
       $.number,
+      $.bool,
       $._duration,
     ),
 
     number: $ => /[1-9][0-9]*/,
+
+    bool: $ => choice('true', 'false'),
 
     _duration: $ => choice(
       $.seconds,
@@ -232,10 +244,10 @@ module.exports = grammar({
     ),
 
     primitive_type: $ => choice(
-      'int',
-      'float',
+      'number',
       'string',
       'bool',
+      'duration',
     ),
 
     function_definition: $ => seq(

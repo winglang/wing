@@ -4,13 +4,15 @@ use std::{collections::HashMap};
 use std::fs;
 use std::path::PathBuf;
 use std::str;
-use sha2::{Sha256, Digest};
+//use sha2::{Sha256, Digest};
 
-use crate::ast::{ParameterDefinition, Type, Scope, Statement, Expression, Reference, ArgList, BinaryOperator, Literal};
+use crate::ast::{ParameterDefinition, Scope, Statement, Expression, Reference, ArgList, BinaryOperator, Literal, UnaryOperator};
+use crate::type_env::TypeEnv;
 
 mod ast;
 mod jsify;
 mod type_check;
+mod type_env;
 
 #[derive(clap::Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -90,13 +92,17 @@ impl Compiler<'_> {
         match root.kind() {
             "source_file" => {
                 let mut cursor = root.walk();
-                Scope {
-                    statements: root.children(&mut cursor).map(|st_node| self.build_statement(&st_node)).collect()
-                }
+                self.build_scope(root.named_children(&mut cursor))
             },
             other => {
                 panic!("Unexpected node type {}", other);
             }
+        }
+    }
+
+    fn build_scope<'a>(&self, statement_iter: impl Iterator<Item = Node<'a>>) -> Scope {
+        Scope {
+            statements: statement_iter.map(|st_node| self.build_statement(&st_node)).collect()
         }
     }
 
@@ -122,29 +128,49 @@ impl Compiler<'_> {
                     var_name: self.node_text(&statement_node.child(0).unwrap()).into(), 
                     initial_value: self.build_expression(&statement_node.child(2).unwrap())
             },
+            "assignment" => Statement::Assignment {
+                variable: Reference { namespace: None, identifier: self.node_text(&statement_node.child_by_field_name("name").unwrap()).into() },
+                value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())
+            },
             "expression_statement" => Statement::Expression(
                 self.build_expression(&statement_node.named_child(0).unwrap())
             ),
             "proc_definition" => Statement::ProcessDefinition {
                 name: self.node_text(&statement_node.child_by_field_name("name").unwrap()).into(),
                 parameters: statement_node.child_by_field_name("parameter_list").unwrap().named_children(&mut cursor).map(|st_node| self.build_parameter_definition(&st_node)).collect(),
-                statements: Scope {
-                    // Duped code from wingit
-                    statements: statement_node.child_by_field_name("block").unwrap().children_by_field_name("statements", &mut cursor).map(|st_node| self.build_statement(&st_node)).collect()
+                statements: {
+                    let block = statement_node.child_by_field_name("block").unwrap();
+                    let statements_nodes = block.children_by_field_name("statements", &mut cursor);
+                    self.build_scope(statements_nodes)
                 }
             },
+            "block" => {
+                let statements_nodes = statement_node.children_by_field_name("statements", &mut cursor);
+                Statement::Scope(self.build_scope(statements_nodes))
+            },
             other => {
-                panic!("Unexpected statement node type {}", other);
+                panic!("Unexpected statement node type {} ({:?})", other, statement_node);
             }
         }
     }
 
     fn build_parameter_definition(&self, parameter_node: &Node) -> ParameterDefinition {
         ParameterDefinition { 
-            // name: self.node_text(&parameter_node.child_by_field_name("name").unwrap()).to_string(), 
-            name: self.node_text(&parameter_node).to_string(), 
-            parameter_type: Type::String // TODO: parse type
+            name: self.node_text(&parameter_node.child_by_field_name("name").unwrap()).to_string(), 
+            parameter_type: self.build_type(&parameter_node.child_by_field_name("type").unwrap()),
         }
+    }
+
+    fn build_type(&self, type_node: &Node) -> type_check::Type {
+        match type_node.kind() {
+            "primitive_type" => type_check::get_type_by_name(self.node_text(type_node)),
+            "class" => {
+                // TODO: handle namespaces
+                type_check::get_type_by_name(self.node_text(&type_node.child_by_field_name("symbol").unwrap()))
+            },
+            other => panic!("Unexpected node type {} for node {:?}", other, type_node)
+        }
+        
     }
 
     fn build_reference(&self, reference_node: &Node) -> Reference {
@@ -226,11 +252,29 @@ impl Compiler<'_> {
                 lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())),
                 rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())),
             },
+            "unary_expression" => Expression::Unary { 
+                op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
+                    "+" => UnaryOperator::Plus,
+                    "-" => UnaryOperator::Minus,
+                    "!" => UnaryOperator::Not,
+                    other => { 
+                        panic!("Unexpected unary operator {}", other);
+                    }
+                },
+                exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())),
+            },
             "string" => Expression::Literal(Literal::String(
                 self.node_text(&expression_node).into()
             )),
             "number" => Expression::Literal(Literal::Number(
                 self.node_text(&expression_node).parse().expect("Number string")
+            )),
+            "bool" => Expression::Literal(Literal::Boolean(
+                match self.node_text(&expression_node) {
+                    "true" => true,
+                    "false" => false,
+                    other=> panic!("Unexpected boolean literal {} for node: {:?}", other, expression_node)
+                }
             )),
             "seconds" => Expression::Literal(Literal::Duration(
                 self.node_text(&expression_node.child_by_field_name("number").unwrap()).parse().expect("Duration string")
@@ -505,7 +549,8 @@ fn main() {
         source: &source[..],
     }.wingit(&tree.root_node());
 
-    type_check::type_check_scope(&ast_root);
+    let mut root_env = TypeEnv::new(None);
+    type_check::type_check_scope(&ast_root, &mut root_env);
 
     println!("{:#?}", ast_root);
 

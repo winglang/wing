@@ -1,6 +1,4 @@
-use std::fmt::format;
-
-use crate::ast::{Statement, Scope, Expression};
+use crate::ast::{Statement, Scope, Expression, Literal, UnaryOperator, BinaryOperator};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -30,7 +28,7 @@ pub fn jsify(scope: &Scope, shim: bool) -> String {
         if line.is_empty() {
             continue;
         }
-        if let Statement::Use { identifier, module_name } = statement {
+        if let Statement::Use { identifier: _, module_name: _ } = statement {
             imports.push(line);
         } else {
             js.push(line);
@@ -73,32 +71,42 @@ fn jsify_scope(scope: &Scope) -> String {
 
 fn jsify_expression(expression: &Expression) -> String {
     match expression {
-        Expression::New { class, obj_id, arg_list } => todo!(),
+        Expression::New { class: _, obj_id: _, arg_list: _ } => todo!(),
         Expression::Literal(lit) => match lit {
-            crate::ast::Literal::String(s) => format!("\"{}\"", s),
-            crate::ast::Literal::Number(n) => format!("{}", n),
-            crate::ast::Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
+            Literal::String(s) => format!("\"{}\"", s),
+            Literal::Number(n) => format!("{}", n),
+            Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
+            Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
         },
-        Expression::Reference(_) => todo!(),
-        Expression::FunctionCall { function, args } => todo!(),
+        Expression::Reference(_ref) => {
+            format!("{}", _ref.identifier)
+        },
+        Expression::FunctionCall { function: _, args: _ } => todo!(),
         Expression::MethodCall(_) => todo!(),
         Expression::CapturedObjMethodCall(_) => todo!(),
-        Expression::Unary { op, exp } => todo!(),
+        Expression::Unary { op, exp } => {
+            let op = match op {
+                UnaryOperator::Plus => "+",
+                UnaryOperator::Minus => "-",
+                UnaryOperator::Not => "!",
+            };
+            format!("({}{})", op, jsify_expression(exp))
+        },
         Expression::Binary { op, lexp, rexp } => {
             let op = match op {
-                crate::ast::BinaryOperator::Add => "+",
-                crate::ast::BinaryOperator::Sub => "-",
-                crate::ast::BinaryOperator::Mul => "*",
-                crate::ast::BinaryOperator::Div => "/",
-                crate::ast::BinaryOperator::Mod => "%",
-                crate::ast::BinaryOperator::Greater => ">",
-                crate::ast::BinaryOperator::GreaterOrEqual => ">=",
-                crate::ast::BinaryOperator::Less => "<",
-                crate::ast::BinaryOperator::LessOrEqual => "<=",
-                crate::ast::BinaryOperator::Equal => "===",
-                crate::ast::BinaryOperator::NotEqual => "!==",
-                crate::ast::BinaryOperator::LogicalAnd => "&&",
-                crate::ast::BinaryOperator::LogicalOr => "||",
+                BinaryOperator::Add => "+",
+                BinaryOperator::Sub => "-",
+                BinaryOperator::Mul => "*",
+                BinaryOperator::Div => "/",
+                BinaryOperator::Mod => "%",
+                BinaryOperator::Greater => ">",
+                BinaryOperator::GreaterOrEqual => ">=",
+                BinaryOperator::Less => "<",
+                BinaryOperator::LessOrEqual => "<=",
+                BinaryOperator::Equal => "===",
+                BinaryOperator::NotEqual => "!==",
+                BinaryOperator::LogicalAnd => "&&",
+                BinaryOperator::LogicalOr => "||",
             };
             format!("({}{}{})", jsify_expression(lexp), op, jsify_expression(rexp))
         },
@@ -118,7 +126,7 @@ fn jsify_statement(statement: &Statement) -> String {
         },
         Statement::VariableDef { var_name, initial_value } => {
             let initial_value = jsify_expression(initial_value);
-            format!("const {} = {};", var_name, initial_value)
+            format!("let {} = {};", var_name, initial_value)
         },
         Statement::FunctionDefinition { name, parameters, statements } => {
             let mut parameter_list = vec![];
@@ -128,7 +136,7 @@ fn jsify_statement(statement: &Statement) -> String {
             
             format!("function {}({}) {}", name, parameter_list.join(", "), jsify_scope(statements))
         },
-        Statement::ProcessDefinition { name, parameters, statements } => {
+        Statement::ProcessDefinition { name: _, parameters: _, statements: _ } => {
             /*
             let parameter_list = vec![];
             for p in parameters {
@@ -184,9 +192,12 @@ fn jsify_statement(statement: &Statement) -> String {
             todo!()
 
         },
-        Statement::ForLoop { iterator, iterable, statements } => todo!(),
-        Statement::If { condition, statements } => todo!(),
+        Statement::ForLoop { iterator: _, iterable: _, statements: _ } => todo!(),
+        Statement::If { condition: _, statements: _ } => todo!(),
         Statement::Expression(e) => jsify_expression(e),
-        Statement::Assignment { variable, value } => todo!(),
+        Statement::Assignment { variable, value } => {
+            format!("{} = {};", variable.identifier, jsify_expression(value))
+        },
+        Statement::Scope(scope) => jsify_scope(scope),
     }
 }
