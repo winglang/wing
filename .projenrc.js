@@ -25,8 +25,6 @@ const project = new cdk.JsiiProject({
   githubOptions: {
     projenCredentials: GithubCredentials.fromApp(),
   },
-  codeCov: true,
-  codeCovTokenSecret: "CODECOV_TOKEN",
 });
 
 project.synth();
