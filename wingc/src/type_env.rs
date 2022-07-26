@@ -22,13 +22,13 @@ impl<'a> TypeEnv<'a> {
 		self.type_map.insert(name.into(), _type);
 	}
 
-    pub fn lookup(&self, name: &str) -> &Type {
-        if let Some(_type) = self.type_map.get(name) {
-            _type
-        } else if let Some(parent_env) = self.parent {
-            parent_env.lookup(name)
-        } else {
-            panic!("Unknown identifier {}", name);
-        }
-    }
+	pub fn lookup(&self, name: &str) -> &Type {
+		if let Some(_type) = self.type_map.get(name) {
+			_type
+		} else if let Some(parent_env) = self.parent {
+			parent_env.lookup(name)
+		} else {
+			panic!("Unknown identifier {}", name);
+		}
+	}
 }
