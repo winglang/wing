@@ -3,14 +3,14 @@ use std::collections::HashMap;
 
 pub struct TypeEnv<'a> {
     type_map: HashMap<String, Type>,
-    parent: Option<&'a TypeEnv<'a>>
+    parent: Option<&'a TypeEnv<'a>>,
 }
 
 impl<'a> TypeEnv<'a> {
     pub fn new(parent: Option<&'a TypeEnv<'a>>) -> Self {
-        Self { 
-            type_map: HashMap::new(), 
-            parent
+        Self {
+            type_map: HashMap::new(),
+            parent,
         }
     }
 
@@ -20,7 +20,6 @@ impl<'a> TypeEnv<'a> {
         }
 
         self.type_map.insert(name.into(), _type);
-
     }
 
     pub fn lookup(&self, name: &str) -> Type {

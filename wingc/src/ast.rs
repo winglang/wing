@@ -7,11 +7,11 @@ use crate::type_env::TypeEnv;
 pub enum Statement {
     Use {
         module_name: String, // Reference?
-        identifier: Option<String>
+        identifier: Option<String>,
     },
     VariableDef {
         var_name: String,
-        initial_value: Expression
+        initial_value: Expression,
     },
     FunctionDefinition {
         name: String,
@@ -31,12 +31,12 @@ pub enum Statement {
     If {
         condition: Expression,
         statements: Scope,
-        else_statements: Option<Scope>
+        else_statements: Option<Scope>,
     },
     Expression(Expression),
     Assignment {
         variable: Reference,
-        value: Expression
+        value: Expression,
     },
     Scope(Scope),
 }
@@ -57,25 +57,27 @@ pub enum Expression {
     Reference(Reference),
     FunctionCall {
         function: Reference,
-        args: ArgList
+        args: ArgList,
     },
     MethodCall(MethodCall),
     CapturedObjMethodCall(MethodCall),
-    Unary { // TODO: Split to LgicalUnary, NumericUnary
+    Unary {
+        // TODO: Split to LgicalUnary, NumericUnary
         op: UnaryOperator,
         exp: Box<Expression>,
     },
-    Binary { // TODO: Split to LgicalBinary, NumericBinary, Bit/String??
+    Binary {
+        // TODO: Split to LgicalBinary, NumericBinary, Bit/String??
         op: BinaryOperator,
         lexp: Box<Expression>,
-        rexp: Box<Expression>
-    }
+        rexp: Box<Expression>,
+    },
 }
 
 #[derive(Debug)]
 pub struct ArgList {
     pub pos_args: Vec<Expression>,
-    pub named_args: HashMap<String, Expression>
+    pub named_args: HashMap<String, Expression>,
 }
 
 impl ArgList {
@@ -104,7 +106,7 @@ pub struct Scope {
 pub struct MethodCall {
     object: Reference, // ObjectReference
     method: String,
-    args: ArgList
+    args: ArgList,
 }
 #[derive(Debug)]
 pub enum UnaryOperator {
@@ -127,48 +129,32 @@ pub enum BinaryOperator {
     Equal,
     NotEqual,
     LogicalAnd,
-    LogicalOr
+    LogicalOr,
 }
 
 impl BinaryOperator {
     pub fn boolean_result(&self) -> bool {
         use BinaryOperator::*;
         match self {
-            Greater | 
-            GreaterOrEqual |
-            Less |
-            LessOrEqual |
-            Equal |
-            NotEqual |
-            LogicalAnd |
-            LogicalOr => true,
-            _ => false
+            Greater | GreaterOrEqual | Less | LessOrEqual | Equal | NotEqual | LogicalAnd
+            | LogicalOr => true,
+            _ => false,
         }
     }
 
     pub fn boolean_args(&self) -> bool {
         use BinaryOperator::*;
         match self {
-            LogicalAnd |
-            LogicalOr => true,
-            _ => false
+            LogicalAnd | LogicalOr => true,
+            _ => false,
         }
     }
 
     pub fn numerical_args(&self) -> bool {
         use BinaryOperator::*;
         match self {
-            Add | 
-            Sub |
-            Mul |
-            Div |
-            Mod |
-            Greater |
-            GreaterOrEqual |
-            Less |
-            LessOrEqual => true,
-            _ => false
-                    
+            Add | Sub | Mul | Div | Mod | Greater | GreaterOrEqual | Less | LessOrEqual => true,
+            _ => false,
         }
     }
 }
@@ -180,4 +166,3 @@ pub struct Reference {
     pub namespace: Option<String>,
     pub identifier: String,
 }
-
