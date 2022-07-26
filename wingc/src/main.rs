@@ -56,16 +56,3 @@ fn main() {
 
 	println!("{}", jsify::jsify(&ast_root, true));
 }
-
-#[cfg(test)]
-mod tests {
-	use std::path::PathBuf;
-	use tree_sitter_cli::test::run_tests_at_path;
-
-	#[test]
-	fn test_tree_sitter_parser() {
-		let winglang = tree_sitter_winglang::language();
-		run_tests_at_path(winglang, &PathBuf::from("grammar/tests"), true, true, None, false)
-			.expect("Running tests for tree-sitter generated parser");
-	}
-}

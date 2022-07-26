@@ -11,15 +11,6 @@ path = "src/lib.rs"
 name = "wingc"
 path = "src/main.rs"
 
-[build-dependencies]
-cc = "1.0.73"
-tree-sitter-cli = "0.20.6"
-tree-sitter = "0.20.6"
-
-[dev-dependencies]
-tree-sitter-cli = "0.20.6"
-tree-sitter = "0.20.6"
-
 [dependencies]
 tree-sitter = "0.20.6"
 clap = { version = "3.2.6", features = ["derive"] }
