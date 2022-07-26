@@ -1,14 +1,14 @@
 use std::fmt::{Display, format};
 
-use crate::type_env::TypeEnv;
 use crate::ast::*;
+use crate::type_env::TypeEnv;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Type {
-    Number,
-    String,
-    Duration,
-    Boolean,
+	Number,
+	String,
+	Duration,
+	Boolean,
     Function(Box<FunctionSignature>)
 }
 
@@ -19,12 +19,12 @@ struct FunctionSignature {
 }
 
 impl Display for Type {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Type::Number => write!(f, "number"),
-            Type::String => write!(f, "string"),
-            Type::Duration => write!(f, "duration"),
-            Type::Boolean => write!(f, "bool"),
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Type::Number => write!(f, "number"),
+			Type::String => write!(f, "string"),
+			Type::Duration => write!(f, "duration"),
+			Type::Boolean => write!(f, "bool"),
             Type::Function(func_sig) => {
                 if let Some(ret_val) = &func_sig.return_val {
                     write!(f, "fn({}) -> {}", func_sig.args.iter().map(|a| format!("{}", a)).collect::<Vec<String>>().join(", "), format!("{}", ret_val))
@@ -32,56 +32,54 @@ impl Display for Type {
                     write!(f, "fn({})", func_sig.args.iter().map(|a| format!("{}", a)).collect::<Vec<String>>().join(","))
                 }
             }
-        }
-    }
+		}
+	}
 }
 
 pub fn get_type_by_name(name: &str) -> Type {
-    match name {
-        "number" => Type::Number,
-        "string" => Type::String,
-        "bool" => Type::Boolean,
-        "duration" => Type::Duration,
+	match name {
+		"number" => Type::Number,
+		"string" => Type::String,
+		"bool" => Type::Boolean,
+		"duration" => Type::Duration,
         _other => todo!() // Type lookup in env... / function types...
-    }
+	}
 }
 
 pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Type {
-    match exp {
-        Expression::Literal(lit) => match lit {
-            Literal::String(_) => Type::String,
-            Literal::Number(_) => Type::Number,
-            Literal::Duration(_) => Type::Duration,
-            Literal::Boolean(_) => Type::Boolean,
-        },
-        Expression::Binary { op, lexp, rexp } => {
-            let ltype = type_check_exp(lexp, env);
-            let rtype = type_check_exp(rexp, env);
-            validate_type(&ltype, &rtype, rexp);
-            if op.boolean_args() {
-                validate_type(&ltype, &Type::Boolean, rexp);
-            } else if op.numerical_args() {
-                validate_type(&ltype, &Type::Number, rexp);
-            }
-            
-            if op.boolean_result() {
-                Type::Boolean
-            } else {
-                validate_type(&ltype, &Type::Number, rexp);
-                ltype
-            }
-        }
-        Expression::Unary { op: _, exp: unary_exp } => {
-            let _type = type_check_exp(&unary_exp, env);
-            // Add bool vs num support here (! => bool, +- => num)
-            validate_type(&_type, &Type::Number, &unary_exp);
-            _type
-        },
-        Expression::Reference(_ref) => {
-            env.lookup(&_ref.identifier).clone()
-        }
-        _ => panic!("Unknonwn type for expression: {:?}", exp)
-    }
+	match exp {
+		Expression::Literal(lit) => match lit {
+			Literal::String(_) => Type::String,
+			Literal::Number(_) => Type::Number,
+			Literal::Duration(_) => Type::Duration,
+			Literal::Boolean(_) => Type::Boolean,
+		},
+		Expression::Binary { op, lexp, rexp } => {
+			let ltype = type_check_exp(lexp, env);
+			let rtype = type_check_exp(rexp, env);
+			validate_type(&ltype, &rtype, rexp);
+			if op.boolean_args() {
+				validate_type(&ltype, &Type::Boolean, rexp);
+			} else if op.numerical_args() {
+				validate_type(&ltype, &Type::Number, rexp);
+			}
+
+			if op.boolean_result() {
+				Type::Boolean
+			} else {
+				validate_type(&ltype, &Type::Number, rexp);
+				ltype
+			}
+		}
+		Expression::Unary { op: _, exp: unary_exp } => {
+			let _type = type_check_exp(&unary_exp, env);
+			// Add bool vs num support here (! => bool, +- => num)
+			validate_type(&_type, &Type::Number, &unary_exp);
+			_type
+		}
+		Expression::Reference(_ref) => env.lookup(&_ref.identifier).clone(),
+		_ => panic!("Unknonwn type for expression: {:?}", exp),
+	}
 }
 
 fn validate_type(actual_type: &Type, expected_type: &Type, value: &Expression) {
@@ -91,9 +89,9 @@ fn validate_type(actual_type: &Type, expected_type: &Type, value: &Expression) {
 }
 
 pub fn type_check_scope(scope: &Scope, env: &mut TypeEnv) {
-    for statement in scope.statements.iter() {
-        type_check_statement(statement, env);
-    }
+	for statement in scope.statements.iter() {
+		type_check_statement(statement, env);
+	}
 }
 
 fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
@@ -109,8 +107,8 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
             let cond_type = type_check_exp(condition, env);
             validate_type(&cond_type, &Type::Boolean, condition);
 
-            let mut scope_env = TypeEnv::new(Some(env));
-            type_check_scope(statements, &mut scope_env);
+			let mut scope_env = TypeEnv::new(Some(env));
+			type_check_scope(statements, &mut scope_env);
 
             if let Some(else_scope) = else_statements {
                 let mut else_scope_env = TypeEnv::new(Some(env));

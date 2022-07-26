@@ -764,6 +764,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-winglang"
+version = "0.0.1"
+dependencies = [
+ "cc",
+ "tree-sitter",
+]
+
+[[package]]
 name = "typenum"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -976,4 +984,5 @@ dependencies = [
  "sha2",
  "tree-sitter",
  "tree-sitter-cli",
+ "tree-sitter-winglang",
 ]
