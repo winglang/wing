@@ -1,14 +1,21 @@
-use std::fmt::Display;
+use std::fmt::{Display, format};
 
 use crate::type_env::TypeEnv;
 use crate::ast::*;
 
-#[derive(PartialEq, Clone, Copy, Debug)]
+#[derive(PartialEq, Clone, Debug)]
 pub enum Type {
     Number,
     String,
     Duration,
     Boolean,
+    Function(Box<FunctionSignature>)
+}
+
+#[derive(PartialEq, Clone, Debug)]
+struct FunctionSignature {
+     args: Vec<Type>,
+     return_val: Option<Type>
 }
 
 impl Display for Type {
@@ -18,6 +25,13 @@ impl Display for Type {
             Type::String => write!(f, "string"),
             Type::Duration => write!(f, "duration"),
             Type::Boolean => write!(f, "bool"),
+            Type::Function(func_sig) => {
+                if let Some(ret_val) = &func_sig.return_val {
+                    write!(f, "fn({}) -> {}", func_sig.args.iter().map(|a| format!("{}", a)).collect::<Vec<String>>().join(", "), format!("{}", ret_val))
+                } else {
+                    write!(f, "fn({})", func_sig.args.iter().map(|a| format!("{}", a)).collect::<Vec<String>>().join(","))
+                }
+            }
         }
     }
 }
@@ -28,7 +42,7 @@ pub fn get_type_by_name(name: &str) -> Type {
         "string" => Type::String,
         "bool" => Type::Boolean,
         "duration" => Type::Duration,
-        _other => todo!() // Type lookup in env...
+        _other => todo!() // Type lookup in env... / function types...
     }
 }
 
@@ -43,35 +57,37 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Type {
         Expression::Binary { op, lexp, rexp } => {
             let ltype = type_check_exp(lexp, env);
             let rtype = type_check_exp(rexp, env);
-            validate_type(ltype, rtype, rexp);
+            validate_type(&ltype, &rtype, rexp);
             if op.boolean_args() {
-                validate_type(ltype, Type::Boolean, rexp);
+                validate_type(&ltype, &Type::Boolean, rexp);
             } else if op.numerical_args() {
-                validate_type(ltype, Type::Number, rexp);
+                validate_type(&ltype, &Type::Number, rexp);
             }
             
             if op.boolean_result() {
                 Type::Boolean
             } else {
-                validate_type(ltype, Type::Number, rexp)
+                validate_type(&ltype, &Type::Number, rexp);
+                ltype
             }
         }
         Expression::Unary { op: _, exp: unary_exp } => {
             let _type = type_check_exp(&unary_exp, env);
-            validate_type(_type, Type::Number, &unary_exp)
+            // Add bool vs num support here (! => bool, +- => num)
+            validate_type(&_type, &Type::Number, &unary_exp);
+            _type
         },
         Expression::Reference(_ref) => {
-            env.lookup(&_ref.identifier)
+            env.lookup(&_ref.identifier).clone()
         }
         _ => panic!("Unknonwn type for expression: {:?}", exp)
     }
 }
 
-fn validate_type(actual_type: Type, expected_type: Type, value: &Expression) -> Type {
+fn validate_type(actual_type: &Type, expected_type: &Type, value: &Expression) {
     if actual_type != expected_type {
         panic!("Expected type {} of {:?} to be {}", actual_type, value, expected_type);
     }
-    actual_type
 }
 
 pub fn type_check_scope(scope: &Scope, env: &mut TypeEnv) {
@@ -91,7 +107,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
         Statement::ForLoop { iterator: _, iterable: _, statements: _ } => {},
         Statement::If { condition, statements, else_statements } => {
             let cond_type = type_check_exp(condition, env);
-            validate_type(cond_type, Type::Boolean, condition);
+            validate_type(&cond_type, &Type::Boolean, condition);
 
             let mut scope_env = TypeEnv::new(Some(env));
             type_check_scope(statements, &mut scope_env);
@@ -106,7 +122,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
         },
         Statement::Assignment { variable, value } => {
             let exp_type = type_check_exp(value, env);
-            validate_type(exp_type, env.lookup(variable.identifier.as_str()), value);
+            validate_type(&exp_type, env.lookup(variable.identifier.as_str()), value);
         },
         Statement::Use { module_name: _, identifier: _ } => todo!(),
         Statement::Scope(scope) => {

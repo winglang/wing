@@ -51,3 +51,48 @@ if false {}
         block: (block)
     )
 )
+
+====================
+Return
+====================
+
+return 1;
+
+---
+
+(source_file
+    (return
+        expression: (number)
+    )
+)
+
+====================
+Function definition
+====================
+
+fn hi(a: number, b: string) -> bool {}
+
+---
+
+(source_file
+    (function_definition
+        name: (function_name)
+        parameter_list: (parameter_list
+            (parameter_definition
+                type: (type
+                    (primitive_type)
+                )
+            )
+            (parameter_definition
+                type: (type
+                    (primitive_type)
+                )
+            )
+        )
+        return_type: (type
+            (primitive_type)
+        )
+        block: (block)
+    )
+)
+

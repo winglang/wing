@@ -23,9 +23,9 @@ impl<'a> TypeEnv<'a> {
 
     }
 
-    pub fn lookup(&self, name: &str) -> Type {
+    pub fn lookup(&self, name: &str) -> &Type {
         if let Some(_type) = self.type_map.get(name) {
-            *_type
+            _type
         } else if let Some(parent_env) = self.parent {
             parent_env.lookup(name)
         } else {

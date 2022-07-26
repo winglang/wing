@@ -47,6 +47,13 @@ module.exports = grammar({
       $.if,
       $.expression_statement,
       $.block,
+      $.return,
+    ),
+
+    return: $ => seq(
+      'return',
+      field('expression', $._expression),
+      ';'
     ),
 
     assignment: $ => seq(
@@ -258,6 +265,10 @@ module.exports = grammar({
       'fn',
       field('name', $.function_name),
       field('parameter_list', $.parameter_list),
+      optional(seq(
+        '->',
+        field('return_type', $.type)
+      )),
       field('block', $.block),
     ),
 
