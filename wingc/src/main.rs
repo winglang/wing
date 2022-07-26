@@ -1,5 +1,5 @@
 use clap::*;
-use tree_sitter::{Parser, Language, Node};
+use tree_sitter::{Node, Parser};
 use std::{collections::HashMap};
 use std::fs;
 use std::path::PathBuf;
@@ -23,9 +23,6 @@ struct Args {
     #[clap(value_parser, short, long)]
     out_dir: Option<String>,
 }
-
-
-extern "C" { fn tree_sitter_winglang() -> Language; }
 
 struct Capture {
     symbol: String,
@@ -124,8 +121,8 @@ impl Compiler<'_> {
                 }
                 
             },
-            "variable_definition" => Statement::VariableDef { 
-                    var_name: self.node_text(&statement_node.child(0).unwrap()).into(), 
+            "variable_definition" => Statement::VariableDef {
+                var_name: self.node_text(&statement_node.child(0).unwrap()).into(), 
                     initial_value: self.build_expression(&statement_node.child(2).unwrap())
             },
             "assignment" => Statement::Assignment {
@@ -531,7 +528,8 @@ impl Compiler<'_> {
 fn main() {
     let args = Args::parse();
     
-    let language = unsafe { tree_sitter_winglang() };
+    
+    let language = tree_sitter_winglang::language();
     let mut parser = Parser::new();
     parser.set_language(language).unwrap();
 
@@ -571,12 +569,11 @@ fn main() {
 #[cfg(test)]
 mod tests {
     use std::path::PathBuf;
-    use super::*;
     use tree_sitter_cli::test::run_tests_at_path;
 
     #[test]
     fn test_tree_sitter_parser() {
-        let winglang = unsafe { tree_sitter_winglang() };
+        let winglang = tree_sitter_winglang::language();
         run_tests_at_path(
             winglang, 
             &PathBuf::from("grammar/tests"), 
