@@ -20,7 +20,7 @@ impl<'a> TypeEnv<'a> {
 	pub fn define(&mut self, symbol: &Symbol, _type: Type) {
 		if self.type_map.contains_key(&symbol.name) {
 			// TODO span is a byte offset, not a line number
-			panic!("Symbol {} already defined at {}", symbol.name, symbol.span);
+			panic!("Symbol {} already defined.", symbol);
 		}
 
 		self.type_map.insert(symbol.name.clone(), _type);
