@@ -175,7 +175,11 @@ fn jsify_statement(statement: &Statement) -> String {
 			format!(
 				"function {}({}) {}",
 				name,
-				parameter_list.join(", "),
+				parameter_list
+					.iter()
+					.map(|x| x.name.as_str())
+					.collect::<Vec<_>>()
+					.join(", "),
 				jsify_scope(statements)
 			)
 		}

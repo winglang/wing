@@ -2,24 +2,54 @@ use std::collections::HashMap;
 
 use crate::type_check;
 
+pub type FileId = usize;
+
+pub type ByteIndex = usize;
+pub type CharacterIndex = usize;
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+pub struct WingSpan {
+	pub start: ByteIndex,
+	pub end: ByteIndex,
+	pub file_id: FileId,
+}
+
+impl std::fmt::Display for WingSpan {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "({}, {})", self.start, self.end)
+	}
+}
+
+#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+pub struct Symbol {
+	pub name: String,
+	pub span: WingSpan,
+}
+
+impl std::fmt::Display for Symbol {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{} {}", self.name, self.span)
+	}
+}
+
 #[derive(Debug)]
 pub enum Statement {
 	Use {
-		module_name: String, // Reference?
-		identifier: Option<String>,
+		module_name: Symbol, // Reference?
+		identifier: Option<Symbol>,
 	},
 	VariableDef {
-		var_name: String,
+		var_name: Symbol,
 		initial_value: Expression,
 	},
 	FunctionDefinition {
-		name: String,
+		name: Symbol,
 		parameters: Vec<ParameterDefinition>,
 		statements: Scope,
 		return_type: Option<type_check::Type>,
 	},
 	ProcessDefinition {
-		name: String,
+		name: Symbol,
 		parameters: Vec<ParameterDefinition>,
 		statements: Scope,
 	},
@@ -43,7 +73,7 @@ pub enum Statement {
 }
 #[derive(Debug)]
 pub struct ParameterDefinition {
-	pub name: String,
+	pub name: Symbol,
 	pub parameter_type: type_check::Type,
 }
 
@@ -51,7 +81,7 @@ pub struct ParameterDefinition {
 pub enum Expression {
 	New {
 		class: Reference, // TypeReference
-		obj_id: Option<String>,
+		obj_id: Option<Symbol>,
 		arg_list: ArgList,
 	},
 	Literal(Literal),
@@ -78,7 +108,7 @@ pub enum Expression {
 #[derive(Debug)]
 pub struct ArgList {
 	pub pos_args: Vec<Expression>,
-	pub named_args: HashMap<String, Expression>,
+	pub named_args: HashMap<Symbol, Expression>,
 }
 
 impl ArgList {
@@ -106,7 +136,7 @@ pub struct Scope {
 #[derive(Debug)]
 pub struct MethodCall {
 	object: Reference, // ObjectReference
-	method: String,
+	method: Symbol,
 	args: ArgList,
 }
 #[derive(Debug)]
@@ -163,6 +193,6 @@ impl BinaryOperator {
 #[derive(Debug)]
 pub struct Reference {
 	//namespace: Option<Vec<String>>,
-	pub namespace: Option<String>,
-	pub identifier: String,
+	pub namespace: Option<Symbol>,
+	pub identifier: Symbol,
 }
