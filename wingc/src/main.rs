@@ -8,6 +8,8 @@ use sha2::{Sha256, Digest};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
+const POLYCONS: &str = "$polycons";
+const POLYCONS_MODULE: &str = "@monadahq/polycons";
 
 #[derive(clap::Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -121,6 +123,7 @@ impl Compiler<'_> {
                 if self.shim {
                     output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
                     output.push("const { Construct } = require('constructs');".to_string());
+                    output.push(format!("const {} = require('{}');", POLYCONS, POLYCONS_MODULE));
                 }
 
                 output.append(&mut imports);
@@ -266,11 +269,12 @@ impl Compiler<'_> {
                 }
 
                 let props_block = Self::render_block([
-                    format!("path: \"{}\",", proc_dir.display()),
+                    format!("code: {}.JSCode.fromFile(\"{}/index.js\"),", POLYCONS, proc_dir.display()),
+                    "entrypoint: \"index.$proc\",".to_string(),
                     if !bindings.is_empty() { format!("captures: {}", Self::render_block(&bindings)) } else {"".to_string()}
                 ]);
 
-                format!("const {} = new {}.core.Process({});", function_name, STDLIB, props_block)
+                format!("const {} = new {}.Process({});", function_name, POLYCONS, props_block)
             },
             "function_name" => {
                 self.node_text(root).to_string()

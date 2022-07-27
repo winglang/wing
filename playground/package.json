@@ -6,6 +6,7 @@
     "upgrade": "npx npm-check-updates -u && npm install"
   },
   "dependencies": {
-    "@monadahq/wingsdk": "^0.0.18"
+    "@monadahq/wingsdk": "^0.0.18",
+    "@monadahq/polycons": "^0.0.0"
   }
 }
