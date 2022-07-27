@@ -96,14 +96,14 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 			validate_type(&_type, &Type::Number, &unary_exp);
 			Some(_type)
 		}
-		Expression::Reference(_ref) => Some(env.lookup(&_ref.identifier.name).clone()),
+		Expression::Reference(_ref) => Some(env.lookup(&_ref.identifier).clone()),
 		Expression::New {
 			class: _,
 			obj_id: _,
 			arg_list: _,
 		} => todo!(),
 		Expression::FunctionCall { function, args } => {
-			let func_type = env.lookup(&function.identifier.name);
+			let func_type = env.lookup(&function.identifier);
 
 			if let Type::Function(func_type) = func_type {
 				// TODO: named args
@@ -150,7 +150,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			initial_value,
 		} => {
 			let exp_type = type_check_exp(initial_value, env).unwrap();
-			env.define(&var_name.name, exp_type);
+			env.define(&var_name, exp_type);
 		}
 		Statement::FunctionDefinition {
 			name,
@@ -167,11 +167,11 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 				return_val: return_type.clone(),
 			});
 			let function_type = Type::Function(func_sig);
-			env.define(&name.name, function_type);
+			env.define(name, function_type);
 
 			let mut function_env = TypeEnv::new(Some(env), return_type.clone());
 			for param in parameters.iter() {
-				function_env.define(&&param.name.name, param.parameter_type.clone());
+				function_env.define(&param.name, param.parameter_type.clone());
 			}
 			type_check_scope(statements, &mut function_env);
 		}
@@ -206,7 +206,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 		}
 		Statement::Assignment { variable, value } => {
 			let exp_type = type_check_exp(value, env).unwrap();
-			validate_type(&exp_type, env.lookup(&variable.identifier.name), value);
+			validate_type(&exp_type, env.lookup(&variable.identifier), value);
 		}
 		Statement::Use {
 			module_name: _,
