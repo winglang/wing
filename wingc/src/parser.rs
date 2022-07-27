@@ -104,10 +104,40 @@ impl Parser<'_> {
 					},
 				}
 			}
+			"function_definition" => Statement::FunctionDefinition {
+				name: self
+					.node_text(&statement_node.child_by_field_name("name").unwrap())
+					.into(),
+				parameters: self.build_parameter_list(&statement_node.child_by_field_name("parameter_list").unwrap()),
+				statements: self.build_scope(statement_node.children_by_field_name("block", &mut cursor)),
+				return_type: if let Some(ret_type_node) = statement_node.child_by_field_name("return_type") {
+					Some(type_check::get_type_by_name(self.node_text(&ret_type_node)))
+				} else {
+					None
+				},
+			},
+			"return" => Statement::Return(self.build_expression(&statement_node.child_by_field_name("expression").unwrap())),
 			other => {
 				panic!("Unexpected statement node type {} ({:?})", other, statement_node);
 			}
 		}
+	}
+
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> Vec<ParameterDefinition> {
+		let mut res = vec![];
+		let mut cursor = parameter_list_node.walk();
+		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
+			res.push(ParameterDefinition {
+				name: self
+					.node_text(&parameter_definition_node.child_by_field_name("name").unwrap())
+					.into(),
+				parameter_type: type_check::get_type_by_name(
+					self.node_text(&parameter_definition_node.child_by_field_name("type").unwrap()),
+				),
+			})
+		}
+
+		res
 	}
 
 	fn build_parameter_definition(&self, parameter_node: &Node) -> ParameterDefinition {

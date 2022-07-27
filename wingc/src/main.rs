@@ -49,7 +49,7 @@ fn main() {
 
 	let ast_root = Parser { source: &source[..] }.wingit(&tree.root_node());
 
-	let mut root_env = TypeEnv::new(None);
+	let mut root_env = TypeEnv::new(None, None);
 	type_check::type_check_scope(&ast_root, &mut root_env);
 
 	println!("{:#?}", ast_root);

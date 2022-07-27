@@ -123,10 +123,27 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			env.define(var_name, exp_type);
 		}
 		Statement::FunctionDefinition {
-			name: _,
-			parameters: _,
-			statements: _,
-		} => todo!(),
+			name,
+			parameters,
+			statements,
+			return_type,
+		} => {
+			let func_sig = Box::new(FunctionSignature {
+				args: parameters
+					.iter()
+					.map(|param_def| param_def.parameter_type.clone())
+					.collect(),
+				return_val: return_type.clone(),
+			});
+			let function_type = Type::Function(func_sig);
+			env.define(name, function_type);
+
+			let mut function_env = TypeEnv::new(Some(env), return_type.clone());
+			for param in parameters.iter() {
+				function_env.define(&param.name, param.parameter_type.clone());
+			}
+			type_check_scope(statements, &mut function_env);
+		}
 		Statement::ProcessDefinition {
 			name: _,
 			parameters: _,
@@ -145,11 +162,11 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			let cond_type = type_check_exp(condition, env);
 			validate_type(&cond_type, &Type::Boolean, condition);
 
-			let mut scope_env = TypeEnv::new(Some(env));
+			let mut scope_env = TypeEnv::new(Some(env), env.return_type.clone());
 			type_check_scope(statements, &mut scope_env);
 
 			if let Some(else_scope) = else_statements {
-				let mut else_scope_env = TypeEnv::new(Some(env));
+				let mut else_scope_env = TypeEnv::new(Some(env), env.return_type.clone());
 				type_check_scope(else_scope, &mut else_scope_env);
 			}
 		}
@@ -165,9 +182,17 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			identifier: _,
 		} => todo!(),
 		Statement::Scope(scope) => {
-			let mut scope_env = TypeEnv::new(Some(env));
+			let mut scope_env = TypeEnv::new(Some(env), env.return_type.clone());
 			for statement in scope.statements.iter() {
 				type_check_statement(statement, &mut scope_env);
+			}
+		}
+		Statement::Return(exp) => {
+			let return_type = type_check_exp(exp, env);
+			if let Some(expected_return_type) = &env.return_type {
+				validate_type(&return_type, expected_return_type, exp);
+			} else {
+				panic!("retun statement outside of function");
 			}
 		}
 	}

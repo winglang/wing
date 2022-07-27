@@ -153,6 +153,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			name,
 			parameters,
 			statements,
+			return_type: _,
 		} => {
 			let mut parameter_list = vec![];
 			for p in parameters {
@@ -251,5 +252,8 @@ fn jsify_statement(statement: &Statement) -> String {
 			format!("{} = {};", variable.identifier, jsify_expression(value))
 		}
 		Statement::Scope(scope) => jsify_scope(scope),
+		Statement::Return(exp) => {
+			format!("return {};", jsify_expression(exp))
+		}
 	}
 }

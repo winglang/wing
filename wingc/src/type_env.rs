@@ -4,13 +4,16 @@ use std::collections::HashMap;
 pub struct TypeEnv<'a> {
 	type_map: HashMap<String, Type>,
 	parent: Option<&'a TypeEnv<'a>>,
+	pub return_type: Option<Type>,
 }
 
 impl<'a> TypeEnv<'a> {
-	pub fn new(parent: Option<&'a TypeEnv<'a>>) -> Self {
+	pub fn new(parent: Option<&'a TypeEnv<'a>>, return_type: Option<Type>) -> Self {
+		assert!(return_type.is_none() || return_type.is_some() && parent.is_some());
 		Self {
 			type_map: HashMap::new(),
 			parent,
+			return_type,
 		}
 	}
 

@@ -282,7 +282,7 @@ module.exports = grammar({
     function_name: $ => $._identifier,
 
     parameter_definition: $ => seq(
-      field('name', $._identifier),
+      field('name', alias($._identifier, $.parameter)),
       ':',
       field('type', $.type),
     ),

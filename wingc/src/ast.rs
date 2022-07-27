@@ -1,7 +1,6 @@
 use std::collections::HashMap;
 
 use crate::type_check;
-use crate::type_env::TypeEnv;
 
 #[derive(Debug)]
 pub enum Statement {
@@ -17,6 +16,7 @@ pub enum Statement {
 		name: String,
 		parameters: Vec<ParameterDefinition>,
 		statements: Scope,
+		return_type: Option<type_check::Type>,
 	},
 	ProcessDefinition {
 		name: String,
@@ -38,6 +38,7 @@ pub enum Statement {
 		variable: Reference,
 		value: Expression,
 	},
+	Return(Expression),
 	Scope(Scope),
 }
 #[derive(Debug)]

@@ -79,11 +79,13 @@ fn hi(a: number, b: string) -> bool {}
         name: (function_name)
         parameter_list: (parameter_list
             (parameter_definition
+                name: (parameter)
                 type: (type
                     (primitive_type)
                 )
             )
             (parameter_definition
+                name: (parameter)
                 type: (type
                     (primitive_type)
                 )
