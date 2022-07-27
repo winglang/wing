@@ -128,6 +128,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			statements,
 			return_type,
 		} => {
+			// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 			let func_sig = Box::new(FunctionSignature {
 				args: parameters
 					.iter()
