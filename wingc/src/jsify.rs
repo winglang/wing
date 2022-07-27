@@ -93,7 +93,19 @@ fn jsify_expression(expression: &Expression) -> String {
 		Expression::Reference(_ref) => {
 			format!("{}", _ref.identifier)
 		}
-		Expression::FunctionCall { function: _, args: _ } => todo!(),
+		Expression::FunctionCall { function, args } => {
+			// TODO: named args
+			format!(
+				"{}({})",
+				function.identifier,
+				args
+					.pos_args
+					.iter()
+					.map(|a| jsify_expression(a))
+					.collect::<Vec<String>>()
+					.join(",")
+			)
+		}
 		Expression::MethodCall(_) => todo!(),
 		Expression::CapturedObjMethodCall(_) => todo!(),
 		Expression::Unary { op, exp } => {
@@ -253,7 +265,11 @@ fn jsify_statement(statement: &Statement) -> String {
 		}
 		Statement::Scope(scope) => jsify_scope(scope),
 		Statement::Return(exp) => {
-			format!("return {};", jsify_expression(exp))
+			if let Some(exp) = exp {
+				format!("return {};", jsify_expression(exp))
+			} else {
+				"return;".into()
+			}
 		}
 	}
 }

@@ -38,7 +38,7 @@ pub enum Statement {
 		variable: Reference,
 		value: Expression,
 	},
-	Return(Expression),
+	Return(Option<Expression>),
 	Scope(Scope),
 }
 #[derive(Debug)]

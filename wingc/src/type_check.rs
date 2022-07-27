@@ -1,4 +1,4 @@
-use std::fmt::{format, Display};
+use std::fmt::Display;
 
 use crate::ast::*;
 use crate::type_env::TypeEnv;
@@ -65,17 +65,17 @@ pub fn get_type_by_name(name: &str) -> Type {
 	}
 }
 
-pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Type {
+pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 	match exp {
 		Expression::Literal(lit) => match lit {
-			Literal::String(_) => Type::String,
-			Literal::Number(_) => Type::Number,
-			Literal::Duration(_) => Type::Duration,
-			Literal::Boolean(_) => Type::Boolean,
+			Literal::String(_) => Some(Type::String),
+			Literal::Number(_) => Some(Type::Number),
+			Literal::Duration(_) => Some(Type::Duration),
+			Literal::Boolean(_) => Some(Type::Boolean),
 		},
 		Expression::Binary { op, lexp, rexp } => {
-			let ltype = type_check_exp(lexp, env);
-			let rtype = type_check_exp(rexp, env);
+			let ltype = type_check_exp(lexp, env).unwrap();
+			let rtype = type_check_exp(rexp, env).unwrap();
 			validate_type(&ltype, &rtype, rexp);
 			if op.boolean_args() {
 				validate_type(&ltype, &Type::Boolean, rexp);
@@ -84,20 +84,50 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Type {
 			}
 
 			if op.boolean_result() {
-				Type::Boolean
+				Some(Type::Boolean)
 			} else {
 				validate_type(&ltype, &Type::Number, rexp);
-				ltype
+				Some(ltype)
 			}
 		}
 		Expression::Unary { op: _, exp: unary_exp } => {
-			let _type = type_check_exp(&unary_exp, env);
+			let _type = type_check_exp(&unary_exp, env).unwrap();
 			// Add bool vs num support here (! => bool, +- => num)
 			validate_type(&_type, &Type::Number, &unary_exp);
-			_type
+			Some(_type)
 		}
-		Expression::Reference(_ref) => env.lookup(&_ref.identifier).clone(),
-		_ => panic!("Unknonwn type for expression: {:?}", exp),
+		Expression::Reference(_ref) => Some(env.lookup(&_ref.identifier).clone()),
+		Expression::New {
+			class: _,
+			obj_id: _,
+			arg_list: _,
+		} => todo!(),
+		Expression::FunctionCall { function, args } => {
+			let func_type = env.lookup(&function.identifier);
+
+			if let Type::Function(func_type) = func_type {
+				// TODO: named args
+				// Arument arity check
+				if args.pos_args.len() != func_type.args.len() {
+					panic!(
+						"Expected {} arguments for function {}, but got {} instead.",
+						func_type.args.len(),
+						function.identifier,
+						args.pos_args.len()
+					)
+				}
+				// Argument type check
+				for (passed_arg, expected_arg) in args.pos_args.iter().zip(func_type.args.iter()) {
+					let passed_arg_type = type_check_exp(passed_arg, env).unwrap();
+					validate_type(&passed_arg_type, &expected_arg, passed_arg);
+				}
+				func_type.return_val.clone()
+			} else {
+				panic!("Identifier {} is not a function", function.identifier)
+			}
+		}
+		Expression::MethodCall(_) => todo!(),
+		Expression::CapturedObjMethodCall(_) => todo!(),
 	}
 }
 
@@ -119,7 +149,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			var_name,
 			initial_value,
 		} => {
-			let exp_type = type_check_exp(initial_value, env);
+			let exp_type = type_check_exp(initial_value, env).unwrap();
 			env.define(var_name, exp_type);
 		}
 		Statement::FunctionDefinition {
@@ -160,7 +190,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			statements,
 			else_statements,
 		} => {
-			let cond_type = type_check_exp(condition, env);
+			let cond_type = type_check_exp(condition, env).unwrap();
 			validate_type(&cond_type, &Type::Boolean, condition);
 
 			let mut scope_env = TypeEnv::new(Some(env), env.return_type.clone());
@@ -175,7 +205,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			type_check_exp(e, env);
 		}
 		Statement::Assignment { variable, value } => {
-			let exp_type = type_check_exp(value, env);
+			let exp_type = type_check_exp(value, env).unwrap();
 			validate_type(&exp_type, env.lookup(variable.identifier.as_str()), value);
 		}
 		Statement::Use {
@@ -189,11 +219,17 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			}
 		}
 		Statement::Return(exp) => {
-			let return_type = type_check_exp(exp, env);
-			if let Some(expected_return_type) = &env.return_type {
-				validate_type(&return_type, expected_return_type, exp);
+			if let Some(return_expression) = exp {
+				let return_type = type_check_exp(return_expression, env).unwrap();
+				if let Some(expected_return_type) = &env.return_type {
+					validate_type(&return_type, expected_return_type, return_expression);
+				} else {
+					panic!("Return statement outside of function cannot return a value.");
+				}
 			} else {
-				panic!("retun statement outside of function");
+				if let Some(expected_return_type) = &env.return_type {
+					panic!("Expected return statement to return type {}", expected_return_type);
+				}
 			}
 		}
 	}

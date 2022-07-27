@@ -62,3 +62,33 @@ Binary expressions
         )
     )
 )
+
+====================
+Function call
+====================
+
+hello(1,a);
+
+---
+
+(source_file
+    (expression_statement
+        expression: (function_call
+            call_name: (function_call_name
+                reference: (reference
+                    symbol: (symbol)
+                )
+            )
+            args: (argument_list
+                (positional_argument
+                    (number)
+                )
+                (positional_argument
+                    (reference
+                        symbol: (symbol)
+                    )
+                )
+            )
+        )
+    )
+)

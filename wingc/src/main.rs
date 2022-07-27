@@ -52,7 +52,5 @@ fn main() {
 	let mut root_env = TypeEnv::new(None, None);
 	type_check::type_check_scope(&ast_root, &mut root_env);
 
-	println!("{:#?}", ast_root);
-
 	println!("{}", jsify::jsify(&ast_root, true));
 }

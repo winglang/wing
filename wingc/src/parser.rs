@@ -116,7 +116,13 @@ impl Parser<'_> {
 					None
 				},
 			},
-			"return" => Statement::Return(self.build_expression(&statement_node.child_by_field_name("expression").unwrap())),
+			"return" => Statement::Return(
+				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
+					Some(self.build_expression(&return_expression_node))
+				} else {
+					None
+				},
+			),
 			other => {
 				panic!("Unexpected statement node type {} ({:?})", other, statement_node);
 			}

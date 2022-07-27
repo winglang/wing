@@ -52,7 +52,7 @@ module.exports = grammar({
 
     return: $ => seq(
       'return',
-      field('expression', $._expression),
+      optional(field('expression', $._expression)),
       ';'
     ),
 
