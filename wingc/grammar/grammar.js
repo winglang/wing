@@ -249,9 +249,24 @@ module.exports = grammar({
 
     namespace: $ => $._identifier,
 
-    type: $ => choice(
+    _type: $ => choice(
       $.primitive_type,
       $.class,
+      $.function_type,
+    ),
+
+    function_type: $ => seq(
+      field('parameter_types', $.parameter_type_list),
+      optional(seq(
+        '->',
+        field('return_type', $._type)
+      )),
+    ),
+
+    parameter_type_list: $ => seq(
+      '(',
+      commaSep($._type),
+      ')',
     ),
 
     primitive_type: $ => choice(
@@ -267,7 +282,7 @@ module.exports = grammar({
       field('parameter_list', $.parameter_list),
       optional(seq(
         '->',
-        field('return_type', $.type)
+        field('return_type', $._type)
       )),
       field('block', $.block),
     ),
@@ -284,7 +299,7 @@ module.exports = grammar({
     parameter_definition: $ => seq(
       field('name', alias($._identifier, $.parameter)),
       ':',
-      field('type', $.type),
+      field('type', $._type),
     ),
 
     parameter_list: $ => seq(

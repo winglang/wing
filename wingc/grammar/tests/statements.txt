@@ -80,21 +80,41 @@ fn hi(a: number, b: string) -> bool {}
         parameter_list: (parameter_list
             (parameter_definition
                 name: (parameter)
-                type: (type
-                    (primitive_type)
-                )
+                type: (primitive_type)
             )
             (parameter_definition
                 name: (parameter)
-                type: (type
-                    (primitive_type)
-                )
+                type: (primitive_type)
             )
         )
-        return_type: (type
-            (primitive_type)
-        )
+        return_type: (primitive_type)
         block: (block)
     )
 )
 
+==================================
+Function with function parameter
+==================================
+
+fn f(callback: (number,number)->bool) -> bool {}
+
+---
+(source_file
+    (function_definition
+        name: (function_name)
+        parameter_list: (parameter_list
+                (parameter_definition
+                    name: (parameter)
+                    type: (function_type
+                        parameter_types: (parameter_type_list
+                            (primitive_type)
+                            (primitive_type)
+                        )
+                        return_type: (primitive_type)
+                    )
+                )
+            )
+        return_type: (primitive_type)
+        block: (block)
+    )
+)

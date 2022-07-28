@@ -114,7 +114,7 @@ impl Parser<'_> {
 				parameters: self.build_parameter_list(&statement_node.child_by_field_name("parameter_list").unwrap()),
 				statements: self.build_scope(statement_node.children_by_field_name("block", &mut cursor)),
 				return_type: if let Some(ret_type_node) = statement_node.child_by_field_name("return_type") {
-					Some(type_check::get_type_by_name(self.node_text(&ret_type_node)))
+					Some(self.build_type(&ret_type_node))
 				} else {
 					None
 				},
@@ -138,9 +138,7 @@ impl Parser<'_> {
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
 			res.push(ParameterDefinition {
 				name: self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap()),
-				parameter_type: type_check::get_type_by_name(
-					self.node_text(&parameter_definition_node.child_by_field_name("type").unwrap()),
-				),
+				parameter_type: self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap()),
 			})
 		}
 
@@ -154,12 +152,22 @@ impl Parser<'_> {
 		}
 	}
 
+	// TODO: this should receive the env in order to lookup user defined types (classes)
 	fn build_type(&self, type_node: &Node) -> type_check::Type {
 		match type_node.kind() {
-			"primitive_type" => type_check::get_type_by_name(self.node_text(type_node)),
-			"class" => {
-				// TODO: handle namespaces
-				type_check::get_type_by_name(self.node_text(&type_node.child_by_field_name("symbol").unwrap()))
+			"primitive_type" => type_check::get_primitive_type_by_name(self.node_text(type_node)),
+			"class" => todo!(),
+			"function_type" => {
+				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
+				let mut cursor = param_type_list_node.walk();
+				let args = param_type_list_node
+					.named_children(&mut cursor)
+					.map(|param_type| self.build_type(&param_type))
+					.collect::<Vec<type_check::Type>>();
+				let return_type = type_node
+					.child_by_field_name("return_type")
+					.map(|n| self.build_type(&n));
+				type_check::Type::Function(Box::new(type_check::FunctionSignature { args, return_type }))
 			}
 			other => panic!("Unexpected node type {} for node {:?}", other, type_node),
 		}
