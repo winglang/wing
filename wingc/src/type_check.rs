@@ -13,9 +13,9 @@ pub enum Type {
 }
 
 #[derive(PartialEq, Clone, Debug)]
-struct FunctionSignature {
-	args: Vec<Type>,
-	return_val: Option<Type>,
+pub struct FunctionSignature {
+	pub args: Vec<Type>,
+	pub return_type: Option<Type>,
 }
 
 impl Display for Type {
@@ -26,7 +26,7 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Function(func_sig) => {
-				if let Some(ret_val) = &func_sig.return_val {
+				if let Some(ret_val) = &func_sig.return_type {
 					write!(
 						f,
 						"fn({}) -> {}",
@@ -55,13 +55,13 @@ impl Display for Type {
 	}
 }
 
-pub fn get_type_by_name(name: &str) -> Type {
+pub fn get_primitive_type_by_name(name: &str) -> Type {
 	match name {
 		"number" => Type::Number,
 		"string" => Type::String,
 		"bool" => Type::Boolean,
 		"duration" => Type::Duration,
-		_other => todo!(), // Type lookup in env... / function types...
+		other => panic!("Type {} is not a primitive type", other),
 	}
 }
 
@@ -121,7 +121,7 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 					let passed_arg_type = type_check_exp(passed_arg, env).unwrap();
 					validate_type(&passed_arg_type, &expected_arg, passed_arg);
 				}
-				func_type.return_val.clone()
+				func_type.return_type.clone()
 			} else {
 				panic!("Identifier {} is not a function", function.identifier)
 			}
@@ -164,7 +164,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 					.iter()
 					.map(|param_def| param_def.parameter_type.clone())
 					.collect(),
-				return_val: return_type.clone(),
+				return_type: return_type.clone(),
 			});
 			let function_type = Type::Function(func_sig);
 			env.define(name, function_type);
