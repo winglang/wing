@@ -150,7 +150,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			initial_value,
 		} => {
 			let exp_type = type_check_exp(initial_value, env).unwrap();
-			env.define(var_name, exp_type);
+			env.define(&var_name, exp_type);
 		}
 		Statement::FunctionDefinition {
 			name,
@@ -206,7 +206,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 		}
 		Statement::Assignment { variable, value } => {
 			let exp_type = type_check_exp(value, env).unwrap();
-			validate_type(&exp_type, env.lookup(variable.identifier.as_str()), value);
+			validate_type(&exp_type, env.lookup(&variable.identifier), value);
 		}
 		Statement::Use {
 			module_name: _,

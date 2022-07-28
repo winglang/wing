@@ -3,12 +3,14 @@ use std::str;
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, Expression, Literal, ParameterDefinition, Reference, Scope, Statement, UnaryOperator,
+	ArgList, BinaryOperator, Expression, Literal, ParameterDefinition, Reference, Scope, Statement, Symbol,
+	UnaryOperator, WingSpan,
 };
 use crate::type_check;
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
+	pub source_name: String,
 }
 
 impl Parser<'_> {
@@ -28,6 +30,18 @@ impl Parser<'_> {
 		return str::from_utf8(&self.source[node.byte_range()]).unwrap();
 	}
 
+	fn node_symbol<'a>(&'a self, node: &Node) -> Symbol {
+		Symbol {
+			span: WingSpan {
+				start: node.byte_range().start,
+				end: node.byte_range().end,
+				// TODO: Implement multi-file support
+				file_id: self.source_name.clone(),
+			},
+			name: self.node_text(node).to_string(),
+		}
+	}
+
 	fn build_scope<'a>(&self, statement_iter: impl Iterator<Item = Node<'a>>) -> Scope {
 		Scope {
 			statements: statement_iter.map(|st_node| self.build_statement(&st_node)).collect(),
@@ -41,38 +55,30 @@ impl Parser<'_> {
 				// TODO This grammar for this doesn't make sense yet
 				if let Some(parent_module) = statement_node.child_by_field_name("parent_module") {
 					Statement::Use {
-						module_name: self
-							.node_text(&statement_node.child_by_field_name("module_name").unwrap())
-							.into(),
-						identifier: Some(self.node_text(&parent_module).into()),
+						module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap()),
+						identifier: Some(self.node_symbol(&parent_module)),
 					}
 				} else {
 					Statement::Use {
-						module_name: self
-							.node_text(&statement_node.child_by_field_name("module_name").unwrap())
-							.into(),
+						module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap()),
 						identifier: None,
 					}
 				}
 			}
 			"variable_definition" => Statement::VariableDef {
-				var_name: self.node_text(&statement_node.child(0).unwrap()).into(),
+				var_name: self.node_symbol(&statement_node.child(0).unwrap()),
 				initial_value: self.build_expression(&statement_node.child(2).unwrap()),
 			},
 			"assignment" => Statement::Assignment {
 				variable: Reference {
 					namespace: None,
-					identifier: self
-						.node_text(&statement_node.child_by_field_name("name").unwrap())
-						.into(),
+					identifier: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
 				},
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap()),
 			},
 			"expression_statement" => Statement::Expression(self.build_expression(&statement_node.named_child(0).unwrap())),
 			"proc_definition" => Statement::ProcessDefinition {
-				name: self
-					.node_text(&statement_node.child_by_field_name("name").unwrap())
-					.into(),
+				name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
 				parameters: statement_node
 					.child_by_field_name("parameter_list")
 					.unwrap()
@@ -105,9 +111,7 @@ impl Parser<'_> {
 				}
 			}
 			"function_definition" => Statement::FunctionDefinition {
-				name: self
-					.node_text(&statement_node.child_by_field_name("name").unwrap())
-					.into(),
+				name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
 				parameters: self.build_parameter_list(&statement_node.child_by_field_name("parameter_list").unwrap()),
 				statements: self.build_scope(statement_node.children_by_field_name("block", &mut cursor)),
 				return_type: if let Some(ret_type_node) = statement_node.child_by_field_name("return_type") {
@@ -134,9 +138,7 @@ impl Parser<'_> {
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
 			res.push(ParameterDefinition {
-				name: self
-					.node_text(&parameter_definition_node.child_by_field_name("name").unwrap())
-					.into(),
+				name: self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap()),
 				parameter_type: self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap()),
 			})
 		}
@@ -146,9 +148,7 @@ impl Parser<'_> {
 
 	fn build_parameter_definition(&self, parameter_node: &Node) -> ParameterDefinition {
 		ParameterDefinition {
-			name: self
-				.node_text(&parameter_node.child_by_field_name("name").unwrap())
-				.to_string(),
+			name: self.node_symbol(&parameter_node.child_by_field_name("name").unwrap()),
 			parameter_type: self.build_type(&parameter_node.child_by_field_name("type").unwrap()),
 		}
 	}
@@ -175,11 +175,9 @@ impl Parser<'_> {
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> Reference {
-		let symbol = self
-			.node_text(&reference_node.child_by_field_name("symbol").unwrap())
-			.into();
+		let symbol = self.node_symbol(&reference_node.child_by_field_name("symbol").unwrap());
 		let namespace = if let Some(namespace_node) = &reference_node.child_by_field_name("namespace") {
-			Some(self.node_text(&namespace_node).into())
+			Some(self.node_symbol(&namespace_node))
 		} else {
 			None
 		};
@@ -202,7 +200,7 @@ impl Parser<'_> {
 				}
 				"keyword_argument" => {
 					named_args.insert(
-						self.node_text(&child.named_child(0).unwrap()).into(),
+						self.node_symbol(&child.named_child(0).unwrap()),
 						self.build_expression(&child.named_child(1).unwrap()),
 					);
 				}
@@ -225,7 +223,7 @@ impl Parser<'_> {
 
 				let obj_id = expression_node
 					.child_by_field_name("object_id")
-					.map(|n| self.node_text(&n).into());
+					.map(|n| self.node_symbol(&n));
 				Expression::New {
 					class,
 					obj_id,
