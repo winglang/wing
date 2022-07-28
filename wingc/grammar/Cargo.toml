@@ -27,3 +27,5 @@ tree-sitter-cli = "0.20.6"
 
 [build-dependencies]
 cc = "1.0"
+tree-sitter-cli = "0.20.6"
+tree-sitter = "~0.20"
