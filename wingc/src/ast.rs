@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use crate::type_check;
 
-pub type FileId = usize;
+pub type FileId = String;
 
 pub type ByteIndex = usize;
 pub type CharacterIndex = usize;
@@ -16,7 +16,7 @@ pub struct WingSpan {
 
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "({}, {})", self.start, self.end)
+		write!(f, "({}, {}) in {}", self.start, self.end, self.file_id)
 	}
 }
 

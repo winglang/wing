@@ -47,7 +47,11 @@ fn main() {
 	let out_dir = PathBuf::from(&args.out_dir.unwrap_or(format!("{}.out", args.source_file)));
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
-	let ast_root = Parser { source: &source[..] }.wingit(&tree.root_node());
+	let ast_root = Parser {
+		source: &source[..],
+		source_name: args.source_file,
+	}
+	.wingit(&tree.root_node());
 
 	let mut root_env = TypeEnv::new(None, None);
 	type_check::type_check_scope(&ast_root, &mut root_env);

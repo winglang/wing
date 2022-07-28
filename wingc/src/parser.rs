@@ -10,6 +10,7 @@ use crate::type_check;
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
+	pub source_name: String,
 }
 
 impl Parser<'_> {
@@ -35,7 +36,7 @@ impl Parser<'_> {
 				start: node.byte_range().start,
 				end: node.byte_range().end,
 				// TODO: Implement multi-file support
-				file_id: 1,
+				file_id: self.source_name.clone(),
 			},
 			name: self.node_text(node).to_string(),
 		}
