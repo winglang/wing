@@ -91,13 +91,13 @@ fn jsify_expression(expression: &Expression) -> String {
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
 		Expression::Reference(_ref) => {
-			format!("{}", _ref.identifier)
+			format!("{}", _ref.identifier.name)
 		}
 		Expression::FunctionCall { function, args } => {
 			// TODO: named args
 			format!(
 				"{}({})",
-				function.identifier,
+				function.identifier.name,
 				args
 					.pos_args
 					.iter()
@@ -147,11 +147,14 @@ fn jsify_statement(statement: &Statement) -> String {
 				// use <module_name> from <parent_module>
 				format!(
 					"const {} = require('{}/{}').{};",
-					module_name, STDLIB_MODULE, module_name, identifier
+					module_name, STDLIB_MODULE, module_name.name, identifier.name
 				)
 			} else {
 				// use <module_name>
-				format!("const {} = require('{}').{};", module_name, STDLIB_MODULE, module_name)
+				format!(
+					"const {} = require('{}').{};",
+					module_name.name, STDLIB_MODULE, module_name.name
+				)
 			}
 		}
 		Statement::VariableDef {
@@ -159,7 +162,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			initial_value,
 		} => {
 			let initial_value = jsify_expression(initial_value);
-			format!("let {} = {};", var_name, initial_value)
+			format!("let {} = {};", var_name.name, initial_value)
 		}
 		Statement::FunctionDefinition(func_def) => {
 			let mut parameter_list = vec![];
@@ -169,7 +172,7 @@ fn jsify_statement(statement: &Statement) -> String {
 
 			format!(
 				"function {}({}) {}",
-				func_def.name,
+				func_def.name.name,
 				parameter_list
 					.iter()
 					.map(|x| x.name.as_str())
@@ -260,7 +263,7 @@ fn jsify_statement(statement: &Statement) -> String {
 		}
 		Statement::Expression(e) => jsify_expression(e),
 		Statement::Assignment { variable, value } => {
-			format!("{} = {};", variable.identifier, jsify_expression(value))
+			format!("{} = {};", variable.identifier.name, jsify_expression(value))
 		}
 		Statement::Scope(scope) => jsify_scope(scope),
 		Statement::Return(exp) => {
