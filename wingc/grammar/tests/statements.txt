@@ -118,3 +118,31 @@ fn f(callback: (number,number)->bool) -> bool {}
         block: (block)
     )
 )
+
+==================================
+Class definition
+==================================
+
+class A {
+    fn do_something() {}
+    a_member: string;
+}
+
+---
+(source_file
+    (class_definition
+        name: (class_name)
+        implementation: (class_implementation
+            (function_definition
+                name: (function_name)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_member
+                name: (variable_name)
+                type: (primitive_type)
+            )
+        )
+    )
+)
+

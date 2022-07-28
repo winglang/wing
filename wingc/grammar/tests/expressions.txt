@@ -74,10 +74,8 @@ hello(1,a);
 (source_file
     (expression_statement
         expression: (function_call
-            call_name: (function_call_name
-                reference: (reference
-                    symbol: (symbol)
-                )
+            call_name: (reference
+                symbol: (symbol)
             )
             args: (argument_list
                 (positional_argument
@@ -89,6 +87,45 @@ hello(1,a);
                     )
                 )
             )
+        )
+    )
+)
+
+====================
+Method call
+====================
+
+obj.method();
+
+---
+
+(source_file
+    (expression_statement
+        expression: (method_call
+            object: (reference
+                symbol: (symbol)
+            )
+            call_name: (reference
+                symbol: (symbol)
+            )
+            args: (argument_list)
+        )
+    )
+)
+
+====================
+New expression
+====================
+
+new A();
+
+---
+
+(source_file
+    (expression_statement
+        expression: (new_expression
+            class: (class_name)
+            args: (argument_list)
         )
     )
 )

@@ -152,28 +152,24 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			let exp_type = type_check_exp(initial_value, env).unwrap();
 			env.define(&var_name, exp_type);
 		}
-		Statement::FunctionDefinition {
-			name,
-			parameters,
-			statements,
-			return_type,
-		} => {
+		Statement::FunctionDefinition(func_def) => {
 			// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 			let func_sig = Box::new(FunctionSignature {
-				args: parameters
+				args: func_def
+					.parameters
 					.iter()
 					.map(|param_def| param_def.parameter_type.clone())
 					.collect(),
-				return_type: return_type.clone(),
+				return_type: func_def.return_type.clone(),
 			});
 			let function_type = Type::Function(func_sig);
-			env.define(name, function_type);
+			env.define(&func_def.name, function_type);
 
-			let mut function_env = TypeEnv::new(Some(env), return_type.clone());
-			for param in parameters.iter() {
+			let mut function_env = TypeEnv::new(Some(env), func_def.return_type.clone());
+			for param in func_def.parameters.iter() {
 				function_env.define(&param.name, param.parameter_type.clone());
 			}
-			type_check_scope(statements, &mut function_env);
+			type_check_scope(&func_def.statements, &mut function_env);
 		}
 		Statement::ProcessDefinition {
 			name: _,
@@ -232,5 +228,10 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 				}
 			}
 		}
+		Statement::Class {
+			name: _,
+			members: _,
+			methods: _,
+		} => todo!(),
 	}
 }

@@ -1,10 +1,10 @@
 use std::collections::HashMap;
-use std::str;
+use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, Expression, Literal, ParameterDefinition, Reference, Scope, Statement, Symbol,
-	UnaryOperator, WingSpan,
+	ArgList, BinaryOperator, ClassMember, Expression, FunctionDefinition, Literal, ParameterDefinition, Reference, Scope,
+	Statement, Symbol, UnaryOperator, WingSpan,
 };
 use crate::type_check;
 
@@ -110,16 +110,7 @@ impl Parser<'_> {
 					},
 				}
 			}
-			"function_definition" => Statement::FunctionDefinition {
-				name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
-				parameters: self.build_parameter_list(&statement_node.child_by_field_name("parameter_list").unwrap()),
-				statements: self.build_scope(statement_node.children_by_field_name("block", &mut cursor)),
-				return_type: if let Some(ret_type_node) = statement_node.child_by_field_name("return_type") {
-					Some(self.build_type(&ret_type_node))
-				} else {
-					None
-				},
-			},
+			"function_definition" => Statement::FunctionDefinition(self.build_function_definition(statement_node)),
 			"return" => Statement::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 					Some(self.build_expression(&return_expression_node))
@@ -127,9 +118,49 @@ impl Parser<'_> {
 					None
 				},
 			),
+			"class_definition" => {
+				let mut members = vec![];
+				let mut methods = vec![];
+				for class_element in statement_node
+					.child_by_field_name("implementation")
+					.unwrap()
+					.named_children(&mut cursor)
+				{
+					match class_element.kind() {
+						"function_definition" => methods.push(self.build_function_definition(&class_element)),
+						"class_member" => members.push(ClassMember {
+							name: self.node_symbol(&class_element.child_by_field_name("name").unwrap()),
+							parameter_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
+						}),
+						other => {
+							panic!("Unexpected class element node type {} ({:?})", other, statement_node)
+						}
+					}
+				}
+
+				Statement::Class {
+					name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
+					members,
+					methods,
+				}
+			}
 			other => {
 				panic!("Unexpected statement node type {} ({:?})", other, statement_node);
 			}
+		}
+	}
+
+	fn build_function_definition(&self, func_def_node: &Node) -> FunctionDefinition {
+		let mut cursor = func_def_node.walk();
+		FunctionDefinition {
+			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap()),
+			parameters: self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap()),
+			statements: self.build_scope(func_def_node.children_by_field_name("block", &mut cursor)),
+			return_type: if let Some(ret_type_node) = func_def_node.child_by_field_name("return_type") {
+				Some(self.build_type(&ret_type_node))
+			} else {
+				None
+			},
 		}
 	}
 
@@ -290,13 +321,7 @@ impl Parser<'_> {
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"function_call" => Expression::FunctionCall {
-				function: self.build_reference(
-					&expression_node
-						.child_by_field_name("call_name")
-						.unwrap()
-						.child_by_field_name("reference")
-						.unwrap(),
-				),
+				function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap()),
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			},
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),

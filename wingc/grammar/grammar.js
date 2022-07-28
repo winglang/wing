@@ -9,6 +9,7 @@ const PREC = {
   SHIFT: 8,
   ADD: 9,
   MULTIPLY: 10,
+  UNARY: 11,
 };
 
 module.exports = grammar({
@@ -48,6 +49,29 @@ module.exports = grammar({
       $.expression_statement,
       $.block,
       $.return,
+      $.class_definition,
+    ),
+
+    class_definition: $ => seq(
+      'class',
+      field('name', alias($._identifier, $.class_name)),
+      field('implementation', $.class_implementation),
+    ),
+
+    class_implementation: $ => seq(
+      '{',
+      repeat(choice(
+        $.function_definition,
+        $.class_member,
+      )),
+      '}',
+    ),
+
+    class_member: $ => seq(
+      field('name', $.variable_name),
+      ':',
+      field('type', $._type),
+      ';',
     ),
 
     return: $ => seq(
@@ -75,6 +99,7 @@ module.exports = grammar({
       $._literal,
       $.reference,
       $.function_call,
+      $.method_call,
       $.parenthesized_expression,
     ),
 
@@ -158,10 +183,14 @@ module.exports = grammar({
     )),
 
     function_call: $ => seq(
-      field('call_name', choice(
-        $.function_call_name, 
-        $.proc_call_name
-      )),
+      field('call_name', $.reference),
+      field('args', $.argument_list),
+    ),
+
+    method_call: $ => seq(
+      field('object', $._expression),
+      '.',
+      field('call_name', $.reference),
       field('args', $.argument_list),
     ),
 
@@ -179,16 +208,16 @@ module.exports = grammar({
       ')'
     ),
 
-    function_call_name: $ => seq(
-      field('reference', $.reference),
-      optional(seq('.', field('method_name', $.method_name))),
-    ),
+    // function_call_name: $ => seq(
+    //   field('reference', $.reference),
+    //   optional(seq('.', field('method_name', $.method_name))),
+    // ),
 
-    proc_call_name: $ => seq(
-      field('reference', alias($.reference, $.cloud_object)),
-      '->',
-      field('method_name', $.method_name)
-    ),
+    // proc_call_name: $ => seq(
+    //   field('reference', alias($.reference, $.cloud_object)),
+    //   '->',
+    //   field('method_name', $.method_name)
+    // ),
 
     method_name: $ => $._identifier,
 
@@ -198,14 +227,6 @@ module.exports = grammar({
         '::'
       )),
       field('symbol', alias($._identifier, $.symbol)),
-    ),
-
-    class: $ => seq(
-      optional(seq(
-        field('namespace', $.namespace),
-        '::'
-      )),
-      field('symbol', $.class_name),
     ),
 
     use_statement: $ => seq(
@@ -230,7 +251,8 @@ module.exports = grammar({
     variable_name: $ => $._identifier,
 
     new_expression: $ => seq(
-      field('class', $.class),
+      'new',
+      field('class', alias($._identifier, $.class_name)),
       field('args', $.argument_list),
       field('object_id', optional($.new_object_id)),
     ),
@@ -245,13 +267,11 @@ module.exports = grammar({
       alias($._expression, $.keyword_argument_value),
     )),
 
-    class_name: $ => /[A-Z][a-zA-Z0-9_]*/,
-
     namespace: $ => $._identifier,
 
     _type: $ => choice(
       $.primitive_type,
-      $.class,
+      alias($._identifier, $.class_type),
       $.function_type,
     ),
 
@@ -318,6 +338,18 @@ module.exports = grammar({
       field('op', choice('!', '+','-')), 
       field('arg', $._expression)
     ),
+
+    unary_expression: $ => choice(...[
+      ['+', PREC.UNARY],
+      ['-', PREC.UNARY],
+      ['!', PREC.UNARY],
+      //['~', PREC.UNARY],
+    ].map(([operator, precedence]) =>
+      prec.left(precedence, seq(
+        field('op', operator),
+        field('arg', $._expression)
+      ))
+    )),    
 
     binary_expression: $ => { 
       const table = [

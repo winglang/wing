@@ -33,6 +33,14 @@ impl std::fmt::Display for Symbol {
 }
 
 #[derive(Debug)]
+pub struct FunctionDefinition {
+	pub name: Symbol,
+	pub parameters: Vec<ParameterDefinition>,
+	pub statements: Scope,
+	pub return_type: Option<type_check::Type>,
+}
+
+#[derive(Debug)]
 pub enum Statement {
 	Use {
 		module_name: Symbol, // Reference?
@@ -42,12 +50,7 @@ pub enum Statement {
 		var_name: Symbol,
 		initial_value: Expression,
 	},
-	FunctionDefinition {
-		name: Symbol,
-		parameters: Vec<ParameterDefinition>,
-		statements: Scope,
-		return_type: Option<type_check::Type>,
-	},
+	FunctionDefinition(FunctionDefinition),
 	ProcessDefinition {
 		name: Symbol,
 		parameters: Vec<ParameterDefinition>,
@@ -70,9 +73,20 @@ pub enum Statement {
 	},
 	Return(Option<Expression>),
 	Scope(Scope),
+	Class {
+		name: Symbol,
+		members: Vec<ClassMember>,
+		methods: Vec<FunctionDefinition>,
+	},
 }
 #[derive(Debug)]
 pub struct ParameterDefinition {
+	pub name: Symbol,
+	pub parameter_type: type_check::Type,
+}
+
+#[derive(Debug)]
+pub struct ClassMember {
 	pub name: Symbol,
 	pub parameter_type: type_check::Type,
 }

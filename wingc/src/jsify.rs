@@ -161,26 +161,21 @@ fn jsify_statement(statement: &Statement) -> String {
 			let initial_value = jsify_expression(initial_value);
 			format!("let {} = {};", var_name, initial_value)
 		}
-		Statement::FunctionDefinition {
-			name,
-			parameters,
-			statements,
-			return_type: _,
-		} => {
+		Statement::FunctionDefinition(func_def) => {
 			let mut parameter_list = vec![];
-			for p in parameters {
+			for p in func_def.parameters.iter() {
 				parameter_list.push(p.name.clone());
 			}
 
 			format!(
 				"function {}({}) {}",
-				name,
+				func_def.name,
 				parameter_list
 					.iter()
 					.map(|x| x.name.as_str())
 					.collect::<Vec<_>>()
 					.join(", "),
-				jsify_scope(statements)
+				jsify_scope(&func_def.statements)
 			)
 		}
 		Statement::ProcessDefinition {
@@ -275,5 +270,10 @@ fn jsify_statement(statement: &Statement) -> String {
 				"return;".into()
 			}
 		}
+		Statement::Class {
+			name: _,
+			members: _,
+			methods: _,
+		} => todo!(),
 	}
 }
