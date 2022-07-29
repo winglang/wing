@@ -105,7 +105,7 @@ module.exports = grammar({
 
     for_loop: $ => seq(
       'for',
-      field('name', $.variable_name),
+      field('iterator', alias($._identifier, $.symbol)),
       'in',
       field('iterable', $._expression),
       field('block', $.block),

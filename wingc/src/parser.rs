@@ -4,8 +4,9 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Expression, FunctionDefinition, Literal, ParameterDefinition, Reference, Scope,
-	Statement, Symbol, UnaryOperator, WingSpan,
+	Statement, Symbol, UnaryOperator,
 };
+use crate::diagnostic::WingSpan;
 use crate::type_check;
 
 pub struct Parser<'a> {
@@ -108,6 +109,16 @@ impl Parser<'_> {
 					} else {
 						Some(else_statements)
 					},
+				}
+			}
+			"for_loop" => {
+				let statements = self.build_scope(statement_node.children_by_field_name("block", &mut cursor));
+				let iterator = self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap());
+				let iterable = self.build_expression(&statement_node.child_by_field_name("iterable").unwrap());
+				Statement::ForLoop {
+					iterator,
+					iterable,
+					statements,
 				}
 			}
 			"function_definition" => Statement::FunctionDefinition(self.build_function_definition(statement_node)),

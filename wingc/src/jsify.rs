@@ -1,4 +1,4 @@
-use crate::ast::{BinaryOperator, Expression, Literal, Scope, Statement, UnaryOperator};
+use crate::ast::{BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -77,6 +77,14 @@ fn jsify_scope(scope: &Scope) -> String {
 	return lines.join("\n");
 }
 
+fn jsify_reference(reference: &Reference) -> String {
+	return format!("{}", jsify_symbol(&reference.identifier));
+}
+
+fn jsify_symbol(symbol: &Symbol) -> String {
+	return format!("{}", symbol.name);
+}
+
 fn jsify_expression(expression: &Expression) -> String {
 	match expression {
 		Expression::New {
@@ -90,14 +98,12 @@ fn jsify_expression(expression: &Expression) -> String {
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
-		Expression::Reference(_ref) => {
-			format!("{}", _ref.identifier.name)
-		}
+		Expression::Reference(_ref) => jsify_reference(_ref),
 		Expression::FunctionCall { function, args } => {
 			// TODO: named args
 			format!(
 				"{}({})",
-				function.identifier.name,
+				jsify_reference(&function),
 				args
 					.pos_args
 					.iter()
@@ -132,7 +138,7 @@ fn jsify_expression(expression: &Expression) -> String {
 				BinaryOperator::LogicalAnd => "&&",
 				BinaryOperator::LogicalOr => "||",
 			};
-			format!("({}{}{})", jsify_expression(lexp), op, jsify_expression(rexp))
+			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
 		}
 	}
 }
@@ -147,13 +153,18 @@ fn jsify_statement(statement: &Statement) -> String {
 				// use <module_name> from <parent_module>
 				format!(
 					"const {} = require('{}/{}').{};",
-					module_name, STDLIB_MODULE, module_name.name, identifier.name
+					jsify_symbol(module_name),
+					STDLIB_MODULE,
+					jsify_symbol(module_name),
+					jsify_symbol(identifier)
 				)
 			} else {
 				// use <module_name>
 				format!(
 					"const {} = require('{}').{};",
-					module_name.name, STDLIB_MODULE, module_name.name
+					jsify_symbol(module_name),
+					STDLIB_MODULE,
+					jsify_symbol(module_name)
 				)
 			}
 		}
@@ -162,22 +173,18 @@ fn jsify_statement(statement: &Statement) -> String {
 			initial_value,
 		} => {
 			let initial_value = jsify_expression(initial_value);
-			format!("let {} = {};", var_name.name, initial_value)
+			format!("const {} = {};", jsify_symbol(var_name), initial_value)
 		}
 		Statement::FunctionDefinition(func_def) => {
 			let mut parameter_list = vec![];
 			for p in func_def.parameters.iter() {
-				parameter_list.push(p.name.clone());
+				parameter_list.push(jsify_symbol(&p.name));
 			}
 
 			format!(
 				"function {}({}) {}",
-				func_def.name.name,
-				parameter_list
-					.iter()
-					.map(|x| x.name.as_str())
-					.collect::<Vec<_>>()
-					.join(", "),
+				jsify_symbol(&func_def.name),
+				parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
 				jsify_scope(&func_def.statements)
 			)
 		}
@@ -241,10 +248,15 @@ fn jsify_statement(statement: &Statement) -> String {
 			todo!()
 		}
 		Statement::ForLoop {
-			iterator: _,
-			iterable: _,
-			statements: _,
-		} => todo!(),
+			iterator,
+			iterable,
+			statements,
+		} => format!(
+			"for(const {} in {}) {}",
+			jsify_symbol(iterator),
+			jsify_expression(iterable),
+			jsify_scope(statements)
+		),
 		Statement::If {
 			condition,
 			statements,
@@ -263,7 +275,7 @@ fn jsify_statement(statement: &Statement) -> String {
 		}
 		Statement::Expression(e) => jsify_expression(e),
 		Statement::Assignment { variable, value } => {
-			format!("{} = {};", variable.identifier.name, jsify_expression(value))
+			format!("{} = {};", jsify_symbol(&variable.identifier), jsify_expression(value))
 		}
 		Statement::Scope(scope) => jsify_scope(scope),
 		Statement::Return(exp) => {
