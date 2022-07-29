@@ -111,16 +111,11 @@ impl Parser<'_> {
 					},
 				}
 			}
-			"for_loop" => {
-				let statements = self.build_scope(statement_node.children_by_field_name("block", &mut cursor));
-				let iterator = self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap());
-				let iterable = self.build_expression(&statement_node.child_by_field_name("iterable").unwrap());
-				Statement::ForLoop {
-					iterator,
-					iterable,
-					statements,
-				}
-			}
+			"for_loop" => Statement::ForLoop {
+				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap()),
+				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap()),
+				statements: self.build_scope(statement_node.children_by_field_name("block", &mut cursor)),
+			},
 			"function_definition" => Statement::FunctionDefinition(self.build_function_definition(statement_node)),
 			"return" => Statement::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
