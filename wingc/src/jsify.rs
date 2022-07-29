@@ -252,7 +252,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			iterable,
 			statements,
 		} => format!(
-			"for(const {} in {}) {}",
+			"for(const {} of {}) {}",
 			jsify_symbol(iterator),
 			jsify_expression(iterable),
 			jsify_scope(statements)
