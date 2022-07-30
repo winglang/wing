@@ -1,0 +1,41 @@
+name: Build
+
+on: push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.10"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        arch: [x64, x86, arm64]
+        exclude:
+          - os: macos-latest
+            arch: x86
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download Infrastructure Binaries
+        uses: robinraju/release-downloader@v1.4
+        with:
+          repository: "monadahq/winglang-infra"
+          tag: "development"
+          fileName: "libnode-${{ matrix.os }}-${{ matrix.arch }}.zip"
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Environment Information
+        run: npx envinfo
