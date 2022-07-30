@@ -51,3 +51,12 @@ jobs:
           cp wingc/target/debug/wingc mkwing/bin
           cp wingrr/build/Release/libwingrr.so mkwing/bin
           cp wingrr/vendor/node/lib/libnode.so mkwing/bin
+          cd mkwing
+          npm pack
+          mv monadahq-mkwing-development.tgz mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          node . ../playground/examples/hello.w
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          path: mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
