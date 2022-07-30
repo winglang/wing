@@ -5,11 +5,9 @@
   "scripts": {
     "install": "npm-run-all cmake",
     "cmake": "npm-run-all cmake:*",
-    "cmake:nodejs": "cmake-js -m -d vendor/node",
     "cmake:wingrr": "cmake-js -m -d",
     "clean": "npm-run-all clean:*",
     "clean:wingrr": "rm -rf build",
-    "clean:nodejs": "rm -rf vendor/node/build vendor/node/bin",
     "rebuild": "npm-run-all clean cmake",
     "test": "npm-run-all *:test",
     "cargo:test": "cargo test --manifest-path src/crate/Cargo.toml -- --test-threads=1",

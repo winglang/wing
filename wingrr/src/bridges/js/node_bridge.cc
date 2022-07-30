@@ -1,3 +1,4 @@
+#define remove_cv_t remove_cv
 #include "node_bridge.hh"
 
 #include <array>
@@ -79,7 +80,7 @@ namespace
     return setup.get();
   }
 
-  auto _node_main(int argc, char *argv[])
+  node::CommonEnvironmentSetup* _node_main(int argc, char *argv[])
   {
     std::vector<std::string> errors;
     std::vector<std::string> args{

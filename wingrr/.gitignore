@@ -1,6 +1,5 @@
-node_modules/
-vendor/node/build
-vendor/node/out
+node_modules
+vendor/node
 build
 dist
 *.exe
@@ -10,3 +9,4 @@ src/bridges/go/libwrr-go.h
 *.class
 src/crate/target
 src/crate/src/bindings.rs
+*.zip

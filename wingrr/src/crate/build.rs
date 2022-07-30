@@ -12,7 +12,7 @@ fn main() {
 
     println!(
         "cargo:rustc-link-search=native={}",
-        Path::new(&dir).join("../../build").display()
+        Path::new(&dir).join("../../build/Release").display()
     );
 
     let bindings = bindgen::Builder::default()
