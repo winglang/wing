@@ -42,7 +42,7 @@ jobs:
       - name: Build Wing
         run: |
           mkdir -p wingrr/vendor/node
-          unzip libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrr/vendor/node
+          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrr/vendor/node
           cd wingrr
           npm ci
           npm test
