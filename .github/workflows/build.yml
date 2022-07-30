@@ -52,6 +52,7 @@ jobs:
           npm test
           cd ../playground
           ./wingc examples/hello.w
+          cd ..
           cp wingc/target/debug/wingc mkwing/bin
           cp wingrr/build/Release/libwingrr.so mkwing/bin
           cp wingrr/vendor/node/lib/libnode.so mkwing/bin
