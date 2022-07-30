@@ -15,7 +15,7 @@ fi
   cargo build --quiet
 )
 
-export WINGRR_ROOT=$reporoot/wingrr/build
+export WINGRR_ROOT=$reporoot/wingrr/build/Release
 export LD_LIBRARY_PATH=$WINGRR_ROOT
 
 # compile

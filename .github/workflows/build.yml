@@ -46,3 +46,6 @@ jobs:
           cd wingrr
           npm ci
           npm test
+          cd ../playground
+          ./wingc examples/hello.w
+
