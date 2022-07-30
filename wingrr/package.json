@@ -9,7 +9,7 @@
     "clean": "npm-run-all clean:*",
     "clean:wingrr": "rm -rf build",
     "rebuild": "npm-run-all clean cmake",
-    "test": "npm-run-all *:test",
+    "test": "LD_LIBRARY_PATH=$(pwd)/build/Release npm-run-all *:test",
     "cargo:test": "cargo test --manifest-path src/crate/Cargo.toml -- --test-threads=1",
     "npm:test": "npm-run-all test:*",
     "test:js": "./build/wingrr tests/hello.js ./",

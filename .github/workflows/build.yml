@@ -39,3 +39,10 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Environment Information
         run: npx envinfo
+      - name: Build Wing
+        run: |
+          mkdir -p wingrr/vendor/node
+          unzip libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrr/vendor/node
+          cd wingrr
+          npm ci
+          npm test
