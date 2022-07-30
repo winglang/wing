@@ -37,6 +37,10 @@ jobs:
         uses: actions/setup-python@v3
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup Private NPM with Github
+        run: |
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> ~/.npmrc
+          echo "@monadahq:registry=https://npm.pkg.github.com/" >> ~/.npmrc
       - name: Environment Information
         run: npx envinfo
       - name: Build Wing
