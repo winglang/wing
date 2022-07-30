@@ -6,7 +6,7 @@
     "upgrade": "npx npm-check-updates -u && npm install"
   },
   "dependencies": {
-    "ts-node": "^10.9.1",
-    "@monadahq/wingsdk": "^0.0.18"
+    "@monadahq/wingsdk": "^0.0.18",
+    "ts-node": "^10.9.1"
   }
 }

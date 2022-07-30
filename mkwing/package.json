@@ -1,0 +1,9 @@
+{
+  "name": "@monadahq/mkwing",
+  "description": "a test cli for wingc",
+  "bin": "index.js",
+  "dependencies": {
+    "@monadahq/wingsdk": "^0.0.18",
+    "ts-node": "^10.9.1"
+  }
+}
