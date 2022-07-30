@@ -56,6 +56,7 @@ jobs:
           cp wingrr/build/Release/libwingrr.so mkwing/bin
           cp wingrr/vendor/node/lib/libnode.so mkwing/bin
           cd mkwing
+          npm ci
           npm pack
           mv monadahq-mkwing-development.tgz mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
           node . ../playground/examples/hello.w
