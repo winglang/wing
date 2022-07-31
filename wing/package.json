@@ -7,6 +7,10 @@
     "index.js",
     "bin/"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monadahq/winglang.git"
+  },
   "dependencies": {
     "@monadahq/wingsdk": "*"
   },
