@@ -26,9 +26,15 @@ const arch = archMap[process.argv[3]];
 assert.ok(os, `Unknown OS: ${process.argv[2]}`);
 assert.ok(arch, `Unknown architecture: ${process.argv[3]}`);
 
-pJson.version = `v${process.env.GITHUB_RUN_ATTEMPT || 0}-${process.env.GITHUB_RUN_ID || "local"}`;
+pJson.description = `Wing Programming Language binaries for ${os}/${arch} platform`;
+pJson.version = `${pJson.version}-dev.${process.env.GITHUB_RUN_ATTEMPT || 0}${process.env.GITHUB_RUN_ID || ""}`;
 pJson.name = `${pJson.name}-${os}-${arch}`;
 pJson.cpu = [arch];
 pJson.os = [os];
+
+delete pJson.scripts;
+delete pJson.dependencies;
+delete pJson.devDependencies;
+delete pJson.optionalDependencies;
 
 fs.writeFileSync(path.join(__dirname, "../package.json"), JSON.stringify(pJson, null, 2), "utf8");

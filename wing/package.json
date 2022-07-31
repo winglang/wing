@@ -1,13 +1,14 @@
 {
   "name": "@monadahq/wing",
-  "version": "development",
-  "description": "winglang binaries",
+  "version": "v1.0.0",
+  "description": "Wing Programming Language Toolkit",
   "bin": "index.js",
   "files": [
     "index.js",
     "bin/"
   ],
   "dependencies": {
-    "@monadahq/wingsdk": "^0.0.18"
-  }
+    "@monadahq/wingsdk": "*"
+  },
+  "optionalDependencies": {}
 }

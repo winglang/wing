@@ -23,6 +23,8 @@ jobs:
         exclude:
           - os: macos-latest
             arch: x86
+          - os: ubuntu-latest
+            arch: arm64
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -66,10 +68,8 @@ jobs:
           cp wingrr/vendor/node/lib/libnode.so wing/bin
 
           cd wing
-          npm ci
-          node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
-          cat package.json
           npm install --no-scripts
+          node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
           npm publish
           npm pack
           mv *.tgz ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
