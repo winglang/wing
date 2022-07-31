@@ -183,9 +183,10 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 		} => {
 			// TODO: Expression must be iterable
 			let exp_type = type_check_exp(iterable, env).unwrap();
-			env.define(&iterator, exp_type);
 
 			let mut scope_env = TypeEnv::new(Some(env), env.return_type.clone());
+			scope_env.define(&iterator, exp_type);
+
 			type_check_scope(statements, &mut scope_env);
 		}
 		Statement::If {
