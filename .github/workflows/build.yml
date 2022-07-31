@@ -7,6 +7,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  NODEJS_VERSION: "16.x"
   PYTHON_VERSION: "3.10"
 
 permissions:
@@ -38,34 +39,46 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Setup Private NPM with Github
-        run: |
-          echo //npm.pkg.github.com/:_authToken=${{ secrets.PROJEN_GITHUB_TOKEN }} >> ~/.npmrc
-          echo @monadahq:registry=https://npm.pkg.github.com/ >> ~/.npmrc
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: "https://npm.pkg.github.com"
       - name: Environment Information
         run: npx envinfo
       - name: Build Wing
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
         run: |
           mkdir -p wingrr/vendor/node
           unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrr/vendor/node
+
           cd wingrr
           npm ci
           npm test
-          cd ../playground
-          ./wingc examples/hello.w
           cd ..
-          cp wingc/target/debug/wingc mkwing/bin
-          cp wingrr/build/Release/libwingrr.* mkwing/bin
-          cp wingrr/vendor/node/lib/libnode.so mkwing/bin
-          cd mkwing
+
+          cd wingc
+          cargo build --release
+          cd ..
+
+          cp wingc/target/release/wingc wing/bin
+          cp wingrr/build/Release/libwingrr.* wing/bin
+          cp wingrr/vendor/node/lib/libnode.so wing/bin
+
+          cd wing
           npm ci
+          node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
+          cat package.json
+          npm install --no-scripts
           npm pack
-          mv monadahq-mkwing-development.tgz ../mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-          node . ../playground/examples/hello.w
+          mv *.tgz ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          cd ..
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
-          name: mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-          path: mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          name: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          path: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
 
   release:
     needs: build
