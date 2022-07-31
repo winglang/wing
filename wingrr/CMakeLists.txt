@@ -28,7 +28,6 @@ add_library(wingrr SHARED src/wingrr.cc
 file(GLOB NODE_LIBRARY_STATIC RELATIVE ${NODE_LIBRARY_PREFIX} ${NODE_LIBRARY_PREFIX}/*.a)
 list(TRANSFORM NODE_LIBRARY_STATIC REPLACE "^lib" "")
 list(TRANSFORM NODE_LIBRARY_STATIC REPLACE "\.a$" "")
-target_link_options(wingrr PUBLIC LINKER:-z,defs)
 target_link_directories(wingrr PRIVATE ${NODE_LIBRARY_PREFIX})
 target_link_libraries(wingrr PRIVATE
 

@@ -1,0 +1,91 @@
+name: Build
+
+on: push
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: "3.10"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, ubuntu-latest]
+        arch: [x64, x86, arm64]
+        exclude:
+          - os: macos-latest
+            arch: x86
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Download Infrastructure Binaries
+        uses: robinraju/release-downloader@v1.4
+        with:
+          repository: "monadahq/winglang-infra"
+          tag: "development"
+          fileName: "libnode-${{ matrix.os }}-${{ matrix.arch }}.zip"
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Set up Python ${{ env.PYTHON_VERSION }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup Private NPM with Github
+        run: |
+          echo //npm.pkg.github.com/:_authToken=${{ secrets.PROJEN_GITHUB_TOKEN }} >> ~/.npmrc
+          echo @monadahq:registry=https://npm.pkg.github.com/ >> ~/.npmrc
+      - name: Environment Information
+        run: npx envinfo
+      - name: Build Wing
+        run: |
+          mkdir -p wingrr/vendor/node
+          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrr/vendor/node
+          cd wingrr
+          npm ci
+          npm test
+          cd ../playground
+          ./wingc examples/hello.w
+          cd ..
+          cp wingc/target/debug/wingc mkwing/bin
+          cp wingrr/build/Release/libwingrr.* mkwing/bin
+          cp wingrr/vendor/node/lib/libnode.so mkwing/bin
+          cd mkwing
+          npm ci
+          npm pack
+          mv monadahq-mkwing-development.tgz ../mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          node . ../playground/examples/hello.w
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          path: mkwing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+      - name: Compute Checksums
+        run: |
+          mkdir dist
+          mv ./*/*.tgz ./dist
+          cd dist
+          echo '## SHA-1 Checksums' > ../checksums.md
+          echo '```' >> ../checksums.md
+          sha1sum --binary *.tgz >> ../checksums.md
+          echo '```' >> ../checksums.md
+      - name: Cut Development Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: development
+          body_path: checksums.md
+          prerelease: true
+          files: dist/*.tgz
