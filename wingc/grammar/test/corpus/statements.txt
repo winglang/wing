@@ -145,3 +145,18 @@ class A {
     )
 )
 
+==================================
+Class inheritance
+==================================
+
+class A extends B {}
+
+---
+(source_file
+    (class_definition
+        name: (class_name)
+        parent: (class_name)
+        implementation: (class_implementation)
+    )
+)
+

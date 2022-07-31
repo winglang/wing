@@ -175,6 +175,9 @@ impl Parser<'_> {
 					name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
 					members,
 					methods,
+					parent: statement_node
+						.child_by_field_name("parent")
+						.map(|n| self.node_symbol(&n)),
 				}
 			}
 			other => {
@@ -292,7 +295,7 @@ impl Parser<'_> {
 	fn build_expression(&self, expression_node: &Node) -> Expression {
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap());
+				let class = self.node_symbol(&expression_node.child_by_field_name("class").unwrap());
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)
 				} else {
@@ -388,6 +391,11 @@ impl Parser<'_> {
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			}),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
+			"method_call" => Expression::MethodCall(MethodCall {
+				object: Box::new(self.build_expression(&expression_node.child_by_field_name("object").unwrap())),
+				method: self.node_symbol(&expression_node.child_by_field_name("call_name").unwrap()),
+				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
+			}),
 			other => {
 				panic!(
 					"Unexpected expression '{}' at {}",

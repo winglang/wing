@@ -98,6 +98,10 @@ module.exports = grammar({
       seq(
         "class",
         field("name", $.identifier),
+        optional(seq(
+          "extends",
+          field('parent', alias($._identifier, $.class_name))
+        )),
         field("implementation", $.class_implementation)
       ),
     class_implementation: ($) =>

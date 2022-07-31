@@ -12,6 +12,29 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Function(Box<FunctionSignature>),
+	Class(Class),
+}
+
+#[derive(Debug, Clone)]
+pub struct Class {
+	name: Symbol,
+	//env: Rc<RefCell<TypeEnv>>, TODO: add env
+	// parent: Option<Box<Class>>, TODO: add parent
+}
+
+impl PartialEq for Class {
+	// TODO: implement type comparisson that takes into account inheritance (compare with parent)
+	fn eq(&self, other: &Self) -> bool {
+		if self.name == other.name {
+			return true;
+		}
+
+		/*if let Some(parent) = self.parent {
+			return *parent == *other;
+		}*/
+
+		false
+	}
 }
 
 #[derive(PartialEq, Clone, Debug)]
@@ -55,6 +78,7 @@ impl Display for Type {
 					)
 				}
 			}
+			Type::Class(_) => todo!(),
 		}
 	}
 }
@@ -250,6 +274,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			name: _,
 			members: _,
 			methods: _,
-		} => todo!(),
+			parent: _,
+		} => {}
 	}
 }

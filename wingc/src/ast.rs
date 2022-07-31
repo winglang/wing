@@ -59,6 +59,7 @@ pub enum Statement {
 		name: Symbol,
 		members: Vec<ClassMember>,
 		methods: Vec<FunctionDefinition>,
+		parent: Option<Symbol>,
 	},
 }
 #[derive(Debug)]
@@ -76,7 +77,7 @@ pub struct ClassMember {
 #[derive(Debug)]
 pub enum Expression {
 	New {
-		class: Reference, // TypeReference
+		class: Symbol, // TypeReference
 		obj_id: Option<Symbol>,
 		arg_list: ArgList,
 	},

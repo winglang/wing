@@ -317,6 +317,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			name: _,
 			members: _,
 			methods: _,
+			parent: _,
 		} => todo!(),
 	}
 }
