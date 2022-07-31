@@ -6,9 +6,9 @@ const assert = require("assert");
 const pJson = require("../package.json");
 
 const osMap = {
-  macos: "darwin",
-  ubuntu: "linux",
-  windows: "win32",
+  "macos-latest": "darwin",
+  "ubuntu-latest": "linux",
+  "windows-latest": "win32",
 };
 
 const archMap = {

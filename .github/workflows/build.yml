@@ -70,6 +70,7 @@ jobs:
           node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
           cat package.json
           npm install --no-scripts
+          npm publish
           npm pack
           mv *.tgz ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
           cd ..
