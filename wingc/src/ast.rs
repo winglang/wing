@@ -1,24 +1,6 @@
 use std::collections::HashMap;
 
-use crate::type_check;
-
-pub type FileId = String;
-
-pub type ByteIndex = usize;
-pub type CharacterIndex = usize;
-
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
-pub struct WingSpan {
-	pub start: ByteIndex,
-	pub end: ByteIndex,
-	pub file_id: FileId,
-}
-
-impl std::fmt::Display for WingSpan {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "({}, {}) in {}", self.start, self.end, self.file_id)
-	}
-}
+use crate::{diagnostic::WingSpan, type_check};
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Symbol {
@@ -57,7 +39,7 @@ pub enum Statement {
 		statements: Scope,
 	},
 	ForLoop {
-		iterator: Reference,
+		iterator: Symbol,
 		iterable: Expression,
 		statements: Scope,
 	},

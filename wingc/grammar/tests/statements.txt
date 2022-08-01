@@ -9,7 +9,7 @@ for fox in sox {
 
 (source_file
     (for_loop
-        name: (variable_name)
+        iterator: (symbol)
         iterable: (reference
             symbol: (symbol)
         )
