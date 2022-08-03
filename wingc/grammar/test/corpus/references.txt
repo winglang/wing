@@ -8,12 +8,16 @@ test1.test2.test3;
 
 (source
   (expression_statement
-    (nested_identifier
-      object: (nested_identifier
-        object: (identifier)
+    (reference 
+      (nested_identifier
+        object: (reference 
+          (nested_identifier
+            object: (reference (identifier))
+            property: (identifier)
+          )
+        )
         property: (identifier)
       )
-      property: (identifier)
     )
   )
 )
@@ -30,11 +34,13 @@ test1.test2.test3();
   (expression_statement
     (method_call
       call_name: (nested_identifier
-        object: (nested_identifier
-          object: (identifier)
-          property: (identifier)
+        object: (reference 
+          (nested_identifier
+            object: (reference (identifier))
+            property: (identifier)
+          )
         )
-         property: (identifier)
+        property: (identifier)
       )
       args: (argument_list)
     )

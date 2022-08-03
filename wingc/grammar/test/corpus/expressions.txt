@@ -74,13 +74,13 @@ hello(1,a);
 (source
     (expression_statement
         (function_call
-            call_name: (identifier)
+            call_name: (reference (identifier))
             args: (argument_list
                 (positional_argument
                     (number)
                 )
                 (positional_argument
-                    (identifier)
+                    (reference (identifier))
                 )
             )
         )
@@ -99,7 +99,7 @@ obj.method();
     (expression_statement
         (method_call
           call_name: (nested_identifier
-            object: (identifier)
+            object: (reference (identifier))
             property: (identifier)
           )
           args: (argument_list)

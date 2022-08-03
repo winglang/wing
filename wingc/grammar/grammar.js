@@ -20,10 +20,10 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   precedences: ($) => [
-    [$.nested_identifier, $.namespaced_identifier, $.method_call, $._reference]
+    [$.nested_identifier, $.namespaced_identifier, $.method_call, $.reference]
   ],
 
-  supertypes: ($) => [$.expression, $._type, $._literal, $._reference],
+  supertypes: ($) => [$.expression, $._type, $._literal],
 
   rules: {
     // Basics
@@ -35,16 +35,16 @@ module.exports = grammar({
       ),
 
     // Identifiers
-    _reference: ($) =>
+    reference: ($) =>
       choice($.identifier, $.namespaced_identifier, $.nested_identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
     namespaced_identifier: ($) =>
-      seq(field("namespace", choice($.identifier, $.namespaced_identifier)), "::", field("name", choice($.identifier, $.nested_identifier))),
+      seq(field("namespace", $.identifier), "::", field("name", choice($.identifier, $.nested_identifier))),
 
     nested_identifier: ($) =>
-      seq(field("object", choice($.identifier, $.nested_identifier)), ".", field("property", $.identifier)),
+      seq(field("object", $.expression), ".", field("property", $.identifier)),
 
     _statement: ($) =>
       choice(
@@ -78,7 +78,7 @@ module.exports = grammar({
       seq("return", optional(field("expression", $.expression)), ";"),
 
     variable_assignment_statement: ($) =>
-      seq(field("name", $._reference), "=", field("value", $.expression), ";"),
+      seq(field("name", $.reference), "=", field("value", $.expression), ";"),
 
     expression_statement: ($) => seq($.expression, ";"),
 
@@ -102,7 +102,7 @@ module.exports = grammar({
     for_in_loop: ($) =>
       seq(
         "for",
-        field("iterator", $._reference),
+        field("iterator", $.reference),
         "in",
         field("iterable", $.expression),
         field("block", $.block)
@@ -122,7 +122,7 @@ module.exports = grammar({
         $.unary_expression,
         $.new_expression,
         $._literal,
-        $._reference,
+        $.reference,
         $.function_call,
         $.method_call,
         $.parenthesized_expression
@@ -135,8 +135,10 @@ module.exports = grammar({
 
     bool: ($) => choice("true", "false"),
 
-    duration: ($) =>
-      seq(field("value", $.number), field("unit", choice("s", "m", "h"))),
+    duration: ($) => choice($.seconds, $.minutes, $.hours),
+    seconds: ($) => seq(field("value", $.number), "s"),
+    minutes: ($) => seq(field("value", $.number), "m"),
+    hours: ($) => seq(field("value", $.number), "h"),
 
     string: ($) =>
       choice(
@@ -163,7 +165,7 @@ module.exports = grammar({
       ),
 
     function_call: ($) =>
-      seq(field("call_name", $._reference), field("args", $.argument_list)),
+      seq(field("call_name", $.reference), field("args", $.argument_list)),
 
     method_call: ($) =>
       seq(

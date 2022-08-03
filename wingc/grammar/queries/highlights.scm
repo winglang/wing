@@ -7,10 +7,8 @@
   namespace: (identifier) @type
   name: (identifier) @variable
 )
-(nested_identifier 
-  object: (identifier) @variable
-  property: (identifier) @property
-)
+(reference (identifier)) @variable
+(reference (nested_identifier property: (identifier))) @property
 
 ; Classes
 
@@ -37,7 +35,7 @@
 
 (keyword_argument_key) @variable.parameter
 (function_call 
-  call_name: (identifier) @function.method
+  call_name: (reference) @function.method
 )
 
 ; Primitives

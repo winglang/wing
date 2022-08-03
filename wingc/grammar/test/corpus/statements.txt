@@ -9,8 +9,8 @@ for fox in sox {
 
 (source
     (for_in_loop
-    iterator: (identifier)
-    iterable: (identifier)
+    iterator: (reference (identifier))
+    iterable: (reference (identifier))
         block: (block)
     )
 )
@@ -31,7 +31,7 @@ x = 2;
         value: (number)
     )
     (variable_assignment_statement
-        name: (identifier)
+        name: (reference (identifier))
         value: (number)
     )
 )
