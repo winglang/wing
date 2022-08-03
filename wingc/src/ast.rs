@@ -131,9 +131,9 @@ pub struct Scope {
 
 #[derive(Debug)]
 pub struct MethodCall {
-	object: Reference, // ObjectReference
-	method: Symbol,
-	args: ArgList,
+	pub object: Reference,
+	pub method: Symbol,
+	pub args: ArgList,
 }
 #[derive(Debug)]
 pub enum UnaryOperator {
