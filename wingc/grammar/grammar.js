@@ -20,6 +20,7 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   precedences: ($) => [
+    [$.new_expression, $.function_call],
     [$.nested_identifier, $.namespaced_identifier, $.method_call, $.reference]
   ],
 
@@ -131,7 +132,8 @@ module.exports = grammar({
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
-    number: ($) => /[1-9][0-9]*/,
+    // TODO: Handle leading zeros
+    number: ($) => /\d+/,
 
     bool: ($) => choice("true", "false"),
 
@@ -203,7 +205,7 @@ module.exports = grammar({
     new_expression: ($) =>
       seq(
         "new",
-        field("class", $.identifier),
+        field("class", $.reference),
         field("args", $.argument_list),
         field("id", optional($.new_object_id))
       ),
@@ -241,7 +243,7 @@ module.exports = grammar({
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(seq("->", field("return_type", $._type))),
-        $.block
+        field("block", $.block)
       ),
 
     inflight_function_definition: ($) =>
@@ -250,7 +252,7 @@ module.exports = grammar({
         "function",
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        $.block
+        field("block", $.block)
       ),
 
     parameter_definition: ($) =>
