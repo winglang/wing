@@ -64,11 +64,11 @@ module.exports = grammar({
     use_statement: ($) =>
       seq(
         "use",
-        field("module_name", alias($.identifier, $.module_name)),
+        field("module_name", $.identifier),
         optional(
           seq(
             "from",
-            field("parent_module", alias($.identifier, $.parent_module))
+            field("parent_module", $.identifier)
           )
         ),
         ";"
