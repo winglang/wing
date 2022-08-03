@@ -93,7 +93,7 @@ fn jsify_expression(expression: &Expression) -> String {
 			arg_list: _,
 		} => todo!(),
 		Expression::Literal(lit) => match lit {
-			Literal::String(s) => format!("\"{}\"", s),
+			Literal::String(s) => format!("{}", s),
 			Literal::Number(n) => format!("{}", n),
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
