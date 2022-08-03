@@ -609,6 +609,7 @@ dependencies = [
  "cc",
  "tree-sitter",
  "tree-sitter-cli",
+ "tree-sitter-loader",
 ]
 
 [[package]]

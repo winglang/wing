@@ -6,9 +6,9 @@ Unary expression
 
 ---
 
-(source_file
+(source
     (expression_statement
-        expression: (unary_expression
+        (unary_expression
             arg: (number)
         )
     )
@@ -25,15 +25,15 @@ Binary expressions
 
 ---
 
-(source_file
+(source
     (expression_statement
-        expression: (binary_expression
+        (binary_expression
             left: (number)
             right: (number)
         )
     )
     (expression_statement
-        expression: (binary_expression
+        (binary_expression
             left: (parenthesized_expression
                 (binary_expression
                     left: (number)
@@ -44,7 +44,7 @@ Binary expressions
         )
     )
     (expression_statement
-        expression: (binary_expression
+        (binary_expression
             left: (number)
             right: (binary_expression
                 left: (number)
@@ -53,7 +53,7 @@ Binary expressions
         )
     )
     (expression_statement
-        expression: (binary_expression
+        (binary_expression
             left: (binary_expression
                 left: (number)
                 right: (number)
@@ -71,20 +71,16 @@ hello(1,a);
 
 ---
 
-(source_file
+(source
     (expression_statement
-        expression: (function_call
-            call_name: (reference
-                symbol: (symbol)
-            )
+        (function_call
+            call_name: (identifier)
             args: (argument_list
                 (positional_argument
                     (number)
                 )
                 (positional_argument
-                    (reference
-                        symbol: (symbol)
-                    )
+                    (identifier)
                 )
             )
         )
@@ -99,16 +95,14 @@ obj.method();
 
 ---
 
-(source_file
+(source
     (expression_statement
-        expression: (method_call
-            object: (reference
-                symbol: (symbol)
-            )
-            call_name: (reference
-                symbol: (symbol)
-            )
-            args: (argument_list)
+        (method_call
+          call_name: (nested_identifier
+            object: (identifier)
+            property: (identifier)
+          )
+          args: (argument_list)
         )
     )
 )
@@ -121,10 +115,10 @@ new A();
 
 ---
 
-(source_file
+(source
     (expression_statement
-        expression: (new_expression
-            class: (class_name)
+        (new_expression
+            class: (identifier)
             args: (argument_list)
         )
     )

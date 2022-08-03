@@ -7,12 +7,10 @@ for fox in sox {
 
 ---
 
-(source_file
-    (for_loop
-        iterator: (symbol)
-        iterable: (reference
-            symbol: (symbol)
-        )
+(source
+    (for_in_loop
+    iterator: (identifier)
+    iterable: (identifier)
         block: (block)
     )
 )
@@ -21,18 +19,19 @@ for fox in sox {
 Variable assignment
 ====================
 
-x := 1;
+x: number := 1;
 x = 2;
 
 ---
 
- (source_file
-    (variable_definition
-        name: (variable_name)
+(source
+    (variable_definition_statement
+        name: (identifier)
+        type: (builtin_type)
         value: (number)
     )
-    (assignment
-        name: (variable_name)
+    (variable_assignment_statement
+        name: (identifier)
         value: (number)
     )
 )
@@ -45,8 +44,8 @@ if false {}
 
 ---
 
-(source_file
-    (if
+(source
+    (if_statement
         condition: (bool)
         block: (block)
     )
@@ -60,8 +59,8 @@ return 1;
 
 ---
 
-(source_file
-    (return
+(source
+    (return_statement
         expression: (number)
     )
 )
@@ -70,25 +69,25 @@ return 1;
 Function definition
 ====================
 
-fn hi(a: number, b: string) -> bool {}
+function hi(a: number, b: string) -> bool {}
 
 ---
 
-(source_file
+(source
     (function_definition
-        name: (function_name)
+        name: (identifier)
         parameter_list: (parameter_list
             (parameter_definition
-                name: (parameter)
-                type: (primitive_type)
+                name: (identifier)
+                type: (builtin_type)
             )
             (parameter_definition
-                name: (parameter)
-                type: (primitive_type)
+                name: (identifier)
+                type: (builtin_type)
             )
         )
-        return_type: (primitive_type)
-        block: (block)
+        return_type: (builtin_type)
+        (block)
     )
 )
 
@@ -96,26 +95,26 @@ fn hi(a: number, b: string) -> bool {}
 Function with function parameter
 ==================================
 
-fn f(callback: (number,number)->bool) -> bool {}
+function f(callback: (number,number)->bool) -> bool {}
 
 ---
-(source_file
+(source
     (function_definition
-        name: (function_name)
+        name: (identifier)
         parameter_list: (parameter_list
                 (parameter_definition
-                    name: (parameter)
+                    name: (identifier)
                     type: (function_type
                         parameter_types: (parameter_type_list
-                            (primitive_type)
-                            (primitive_type)
+                            (builtin_type)
+                            (builtin_type)
                         )
-                        return_type: (primitive_type)
+                        return_type: (builtin_type)
                     )
                 )
             )
-        return_type: (primitive_type)
-        block: (block)
+        return_type: (builtin_type)
+        (block)
     )
 )
 
@@ -124,23 +123,23 @@ Class definition
 ==================================
 
 class A {
-    fn do_something() {}
+    function do_something() {}
     a_member: string;
 }
 
 ---
-(source_file
+(source
     (class_definition
-        name: (class_name)
+        name: (identifier)
         implementation: (class_implementation
             (function_definition
-                name: (function_name)
+                name: (identifier)
                 parameter_list: (parameter_list)
-                block: (block)
+                (block)
             )
             (class_member
-                name: (variable_name)
-                type: (primitive_type)
+                name: (identifier)
+                type: (builtin_type)
             )
         )
     )
