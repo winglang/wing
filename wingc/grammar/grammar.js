@@ -21,7 +21,7 @@ module.exports = grammar({
 
   precedences: ($) => [
     [$.new_expression, $.function_call],
-    [$.nested_identifier, $.namespaced_identifier, $.method_call, $.reference]
+    [$.nested_identifier, $.namespaced_identifier, $.method_call, $.reference],
   ],
 
   supertypes: ($) => [$.expression, $._type, $._literal],
@@ -42,7 +42,11 @@ module.exports = grammar({
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
     namespaced_identifier: ($) =>
-      seq(field("namespace", $.identifier), "::", field("name", choice($.identifier, $.nested_identifier))),
+      seq(
+        field("namespace", $.identifier),
+        "::",
+        field("name", choice($.identifier, $.nested_identifier))
+      ),
 
     nested_identifier: ($) =>
       seq(field("object", $.expression), ".", field("property", $.identifier)),
@@ -66,12 +70,7 @@ module.exports = grammar({
       seq(
         "use",
         field("module_name", $.identifier),
-        optional(
-          seq(
-            "from",
-            field("parent_module", $.identifier)
-          )
-        ),
+        optional(seq("from", field("parent_module", $.identifier))),
         ";"
       ),
 
@@ -84,8 +83,14 @@ module.exports = grammar({
     expression_statement: ($) => seq($.expression, ";"),
 
     variable_definition_statement: ($) =>
-      seq(field("name", $.identifier), optional($._type_annotation), ":=", field("value", $.expression), ";"),
-    
+      seq(
+        field("name", $.identifier),
+        optional($._type_annotation),
+        ":=",
+        field("value", $.expression),
+        ";"
+      ),
+
     _type_annotation: ($) => seq(":", field("type", $._type)),
 
     // Classes
@@ -227,15 +232,8 @@ module.exports = grammar({
 
     parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
-    builtin_type: ($) => 
-      choice(
-        "number", 
-        "string", 
-        "bool", 
-        "duration",
-        "nothing",
-        "anything"
-      ),
+    builtin_type: ($) =>
+      choice("number", "string", "bool", "duration", "nothing", "anything"),
 
     function_definition: ($) =>
       seq(
@@ -256,10 +254,7 @@ module.exports = grammar({
       ),
 
     parameter_definition: ($) =>
-      seq(
-        field("name", $.identifier),
-        $._type_annotation
-      ),
+      seq(field("name", $.identifier), $._type_annotation),
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
 
