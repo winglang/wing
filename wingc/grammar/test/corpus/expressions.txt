@@ -118,7 +118,7 @@ new A();
 (source
     (expression_statement
         (new_expression
-            class: (identifier)
+            class: (reference (identifier))
             args: (argument_list)
         )
     )

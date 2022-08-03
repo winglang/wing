@@ -87,7 +87,7 @@ function hi(a: number, b: string) -> bool {}
             )
         )
         return_type: (builtin_type)
-        (block)
+        block: (block)
     )
 )
 
@@ -114,7 +114,7 @@ function f(callback: (number,number)->bool) -> bool {}
                 )
             )
         return_type: (builtin_type)
-        (block)
+        block: (block)
     )
 )
 
@@ -135,7 +135,7 @@ class A {
             (function_definition
                 name: (identifier)
                 parameter_list: (parameter_list)
-                (block)
+                block: (block)
             )
             (class_member
                 name: (identifier)
