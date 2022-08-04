@@ -1,4 +1,6 @@
+use relative_path::RelativePathBuf;
 use std::collections::HashMap;
+use std::path::Path;
 use std::{str, vec};
 use tree_sitter::Node;
 
@@ -19,7 +21,7 @@ impl Parser<'_> {
 		match root.kind() {
 			"source" => self.build_scope(root),
 			other => {
-				panic!("Unexpected node type {}", other);
+				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
 			}
 		}
 	}
@@ -28,8 +30,8 @@ impl Parser<'_> {
 		return str::from_utf8(&self.source[node.byte_range()]).unwrap();
 	}
 
-	fn build_duration(&self, statement_node: &Node) -> Literal {
-		let child = statement_node.named_child(0).unwrap();
+	fn build_duration(&self, node: &Node) -> Literal {
+		let child = node.named_child(0).unwrap();
 		match child.kind() {
 			"seconds" => Literal::Duration(
 				self
@@ -45,20 +47,24 @@ impl Parser<'_> {
 					.expect("Duration string")
 					* 60_f64,
 			),
-			_ => panic!("Unexpected duration node type"),
+			other => panic!("Unexpected duration node type {} at {}", other, self.node_span(node)),
+		}
+	}
+
+	fn node_span(&self, node: &Node) -> WingSpan {
+		WingSpan {
+			start: node.range().start_point,
+			end: node.range().end_point,
+			start_byte: node.byte_range().start,
+			end_byte: node.byte_range().end,
+			// TODO: Implement multi-file support
+			file_id: RelativePathBuf::from_path(Path::new(&self.source_name)).unwrap(),
 		}
 	}
 
 	fn node_symbol<'a>(&'a self, node: &Node) -> Symbol {
 		Symbol {
-			span: WingSpan {
-				start: node.range().start_point,
-				end: node.range().end_point,
-				start_byte: node.byte_range().start,
-				end_byte: node.byte_range().end,
-				// TODO: Implement multi-file support
-				file_id: self.source_name.clone(),
-			},
+			span: self.node_span(node),
 			name: self.node_text(node).to_string(),
 		}
 	}
@@ -158,7 +164,11 @@ impl Parser<'_> {
 							parameter_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
 						}),
 						other => {
-							panic!("Unexpected class element node type {} ({:?})", other, statement_node)
+							panic!(
+								"Unexpected class element node type {} at {}",
+								other,
+								self.node_span(statement_node)
+							)
 						}
 					}
 				}
@@ -170,7 +180,11 @@ impl Parser<'_> {
 				}
 			}
 			other => {
-				panic!("Unexpected statement node type {} ({:?})", other, statement_node);
+				panic!(
+					"Unexpected statement node type {} at {}",
+					other,
+					self.node_span(statement_node)
+				);
 			}
 		}
 	}
@@ -225,7 +239,7 @@ impl Parser<'_> {
 					.map(|n| self.build_type(&n));
 				type_check::Type::Function(Box::new(type_check::FunctionSignature { args, return_type }))
 			}
-			other => panic!("Unexpected node type {} for node {:?}", other, type_node),
+			other => panic!("Unexpected node type {} at {}", other, self.node_span(type_node)),
 		}
 	}
 
@@ -255,7 +269,7 @@ impl Parser<'_> {
 						self.build_expression(&child.named_child(1).unwrap()),
 					);
 				}
-				other => panic!("Unexpected argument type {}", other),
+				other => panic!("Unexpected argument type {} at {}", other, self.node_span(&child)),
 			}
 		}
 
@@ -297,7 +311,11 @@ impl Parser<'_> {
 					"*" => BinaryOperator::Mul,
 					"/" => BinaryOperator::Div,
 					other => {
-						panic!("Unexpected binary operator {}", other);
+						panic!(
+							"Unexpected binary operator {} at {}",
+							other,
+							self.node_span(&expression_node)
+						);
 					}
 				},
 				lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())),
@@ -309,7 +327,11 @@ impl Parser<'_> {
 					"-" => UnaryOperator::Minus,
 					"!" => UnaryOperator::Not,
 					other => {
-						panic!("Unexpected unary operator {}", other);
+						panic!(
+							"Unexpected unary operator {} at {}",
+							other,
+							self.node_span(&expression_node)
+						);
 					}
 				},
 				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())),
@@ -321,7 +343,11 @@ impl Parser<'_> {
 			"bool" => Expression::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 				"true" => true,
 				"false" => false,
-				other => panic!("Unexpected boolean literal {} for node: {:?}", other, expression_node),
+				other => panic!(
+					"Unexpected boolean literal {} at {}",
+					other,
+					self.node_span(expression_node)
+				),
 			})),
 			"duration" => Expression::Literal(self.build_duration(&expression_node)),
 			"reference" => Expression::Reference(self.build_reference(&expression_node)),
@@ -352,8 +378,9 @@ impl Parser<'_> {
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			other => {
 				panic!(
-					"Unexpected expression node type {} for node: {:?}",
-					other, expression_node
+					"Unexpected expression '{}' at {}",
+					other,
+					self.node_span(expression_node)
 				);
 			}
 		}

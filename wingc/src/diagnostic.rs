@@ -1,6 +1,7 @@
+use relative_path::RelativePathBuf;
 use tree_sitter::Point;
 
-pub type FileId = String;
+pub type FileId = RelativePathBuf;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
 pub type Diagnostics = Vec<Diagnostic>;
@@ -17,7 +18,7 @@ pub struct WingSpan {
 
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{} - {} in {}", self.start, self.end, self.file_id)
+		write!(f, "{}:{}:{}", self.file_id, self.start.row + 1, self.start.column + 1)
 	}
 }
 

@@ -12,6 +12,7 @@ name = "wingc"
 path = "src/main.rs"
 
 [dependencies]
+relative-path = "1.7.2"
 tree-sitter = "0.20.6"
 clap = { version = "3.2.6", features = ["derive"] }
 sha2 = "0.10"
