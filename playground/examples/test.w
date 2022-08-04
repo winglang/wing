@@ -1,17 +1,17 @@
-use cloud
-x := 5s
-bucket := new cloud::Bucket()
-// bucket.upload("myfile", "somedata")
+use cloud;
+x := 5s;
+bucket := new cloud::Bucket();
+bucket.upload("myfile", "somedata");
 
-my_queue := new cloud::Queue(timeout: 30m)
-my_queue.hello()
+my_queue := new cloud::Queue(timeout: 30m);
+my_queue.hello();
 
 inflight function worker() {
-  console.log("hello, world")
-  // bucket.upload("myfile/hello.txt", "boom boom")
+  console.log("hello, world");
+  bucket.upload("myfile/hello.txt", "boom boom");
 }
 
-handler := cloud::Function(worker)
+handler := new cloud::Function(worker);
 
 // TODO: we need to case-convert from underscore to camelCase as we call into JSII modules
-my_queue.addWorker(handler)
+my_queue.addWorker(handler);
