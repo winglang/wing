@@ -7,6 +7,14 @@
     "parsing",
     "incremental"
   ],
+  "tree-sitter": [
+    {
+      "scope": "source.wing",
+      "file-types": [
+        "w"
+      ]
+    }
+  ],
   "dependencies": {
     "nan": "^2.12.1"
   },

@@ -3,8 +3,8 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expression, FunctionDefinition, Literal, ParameterDefinition, Reference, Scope,
-	Statement, Symbol, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Expression, FunctionDefinition, Literal, MethodCall, ParameterDefinition,
+	Reference, Scope, Statement, Symbol, UnaryOperator,
 };
 use crate::diagnostic::WingSpan;
 use crate::type_check;
@@ -17,10 +17,7 @@ pub struct Parser<'a> {
 impl Parser<'_> {
 	pub fn wingit(&self, root: &Node) -> Scope {
 		match root.kind() {
-			"source_file" => {
-				let mut cursor = root.walk();
-				self.build_scope(root.named_children(&mut cursor))
-			}
+			"source" => self.build_scope(root),
 			other => {
 				panic!("Unexpected node type {}", other);
 			}
@@ -31,11 +28,34 @@ impl Parser<'_> {
 		return str::from_utf8(&self.source[node.byte_range()]).unwrap();
 	}
 
+	fn build_duration(&self, statement_node: &Node) -> Literal {
+		let child = statement_node.named_child(0).unwrap();
+		match child.kind() {
+			"seconds" => Literal::Duration(
+				self
+					.node_text(&child.child_by_field_name("value").unwrap())
+					.parse()
+					.expect("Duration string"),
+			),
+			"minutes" => Literal::Duration(
+				// Specific "Minutes" duration needed here
+				self
+					.node_text(&child.child_by_field_name("value").unwrap())
+					.parse::<f64>()
+					.expect("Duration string")
+					* 60_f64,
+			),
+			_ => panic!("Unexpected duration node type"),
+		}
+	}
+
 	fn node_symbol<'a>(&'a self, node: &Node) -> Symbol {
 		Symbol {
 			span: WingSpan {
-				start: node.byte_range().start,
-				end: node.byte_range().end,
+				start: node.range().start_point,
+				end: node.range().end_point,
+				start_byte: node.byte_range().start,
+				end_byte: node.byte_range().end,
 				// TODO: Implement multi-file support
 				file_id: self.source_name.clone(),
 			},
@@ -43,9 +63,14 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_scope<'a>(&self, statement_iter: impl Iterator<Item = Node<'a>>) -> Scope {
+	fn build_scope<'a>(&self, scope_node: &Node) -> Scope {
+		let mut cursor = scope_node.walk();
+
 		Scope {
-			statements: statement_iter.map(|st_node| self.build_statement(&st_node)).collect(),
+			statements: scope_node
+				.named_children(&mut cursor)
+				.map(|st_node| self.build_statement(&st_node))
+				.collect(),
 		}
 	}
 
@@ -66,11 +91,11 @@ impl Parser<'_> {
 					}
 				}
 			}
-			"variable_definition" => Statement::VariableDef {
+			"variable_definition_statement" => Statement::VariableDef {
 				var_name: self.node_symbol(&statement_node.child(0).unwrap()),
 				initial_value: self.build_expression(&statement_node.child(2).unwrap()),
 			},
-			"assignment" => Statement::Assignment {
+			"variable_assignment_statement" => Statement::Assignment {
 				variable: Reference {
 					namespace: None,
 					identifier: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
@@ -78,7 +103,7 @@ impl Parser<'_> {
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap()),
 			},
 			"expression_statement" => Statement::Expression(self.build_expression(&statement_node.named_child(0).unwrap())),
-			"proc_definition" => Statement::ProcessDefinition {
+			"inflight_function_definition" => Statement::ProcessDefinition {
 				name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
 				parameters: statement_node
 					.child_by_field_name("parameter_list")
@@ -88,36 +113,30 @@ impl Parser<'_> {
 					.collect(),
 				statements: {
 					let block = statement_node.child_by_field_name("block").unwrap();
-					let statements_nodes = block.children_by_field_name("statements", &mut cursor);
-					self.build_scope(statements_nodes)
+					self.build_scope(&block)
 				},
 			},
-			"block" => {
-				let statements_nodes = statement_node.children_by_field_name("statements", &mut cursor);
-				Statement::Scope(self.build_scope(statements_nodes))
-			}
-			"if" => {
-				let statements_nodes = statement_node.children_by_field_name("block", &mut cursor);
-				let if_statements = self.build_scope(statements_nodes);
-				let else_statements_nodes = statement_node.children_by_field_name("else_block", &mut cursor);
-				let else_statements = self.build_scope(else_statements_nodes);
+			"block" => Statement::Scope(self.build_scope(statement_node)),
+			"if_statement" => {
+				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
+					Some(self.build_scope(&else_block))
+				} else {
+					None
+				};
 				Statement::If {
 					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap()),
-					statements: if_statements,
-					else_statements: if else_statements.statements.is_empty() {
-						None
-					} else {
-						Some(else_statements)
-					},
+					statements: if_block,
+					else_statements: else_block,
 				}
 			}
-			"for_loop" => Statement::ForLoop {
+			"for_in_loop" => Statement::ForLoop {
 				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap()),
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap()),
-				statements: self.build_scope(statement_node.children_by_field_name("block", &mut cursor)),
+				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			},
 			"function_definition" => Statement::FunctionDefinition(self.build_function_definition(statement_node)),
-			"return" => Statement::Return(
+			"return_statement" => Statement::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 					Some(self.build_expression(&return_expression_node))
 				} else {
@@ -157,11 +176,10 @@ impl Parser<'_> {
 	}
 
 	fn build_function_definition(&self, func_def_node: &Node) -> FunctionDefinition {
-		let mut cursor = func_def_node.walk();
 		FunctionDefinition {
 			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap()),
 			parameters: self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap()),
-			statements: self.build_scope(func_def_node.children_by_field_name("block", &mut cursor)),
+			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			return_type: if let Some(ret_type_node) = func_def_node.child_by_field_name("return_type") {
 				Some(self.build_type(&ret_type_node))
 			} else {
@@ -212,16 +230,12 @@ impl Parser<'_> {
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> Reference {
-		let symbol = self.node_symbol(&reference_node.child_by_field_name("symbol").unwrap());
-		let namespace = if let Some(namespace_node) = &reference_node.child_by_field_name("namespace") {
-			Some(self.node_symbol(&namespace_node))
-		} else {
-			None
-		};
+		// TODO: Handle namespaced and nested references
+		let identifier = self.node_symbol(&reference_node.named_child(0).unwrap());
 
 		return Reference {
-			namespace: namespace,
-			identifier: symbol,
+			namespace: None,
+			identifier,
 		};
 	}
 
@@ -309,20 +323,7 @@ impl Parser<'_> {
 				"false" => false,
 				other => panic!("Unexpected boolean literal {} for node: {:?}", other, expression_node),
 			})),
-			"seconds" => Expression::Literal(Literal::Duration(
-				self
-					.node_text(&expression_node.child_by_field_name("number").unwrap())
-					.parse()
-					.expect("Duration string"),
-			)),
-			"minutes" => Expression::Literal(Literal::Duration(
-				// Specific "Minutes" duration needed here
-				self
-					.node_text(&expression_node.child_by_field_name("number").unwrap())
-					.parse::<f64>()
-					.expect("Duration string")
-					* 60_f64,
-			)),
+			"duration" => Expression::Literal(self.build_duration(&expression_node)),
 			"reference" => Expression::Reference(self.build_reference(&expression_node)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
@@ -330,6 +331,24 @@ impl Parser<'_> {
 				function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap()),
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			},
+			"method_call" => Expression::MethodCall(MethodCall {
+				// TODO: This reference is invalid. It only works for single-layer a.b() calls, not a.b.c() calls.
+				object: self.build_reference(
+					&expression_node
+						.child_by_field_name("call_name")
+						.unwrap()
+						.child_by_field_name("object")
+						.unwrap(),
+				),
+				method: self.node_symbol(
+					&expression_node
+						.child_by_field_name("call_name")
+						.unwrap()
+						.child_by_field_name("property")
+						.unwrap(),
+				),
+				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
+			}),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			other => {
 				panic!(

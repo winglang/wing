@@ -1,14 +1,14 @@
 use cloud
 x := 5s
-bucket := cloud::Bucket()
-//bucket.upload("myfile", "somedata")
+bucket := new cloud::Bucket()
+// bucket.upload("myfile", "somedata")
 
-my_queue := cloud::Queue(timeout: 30m)
+my_queue := new cloud::Queue(timeout: 30m)
 my_queue.hello()
 
-proc worker() {
+inflight function worker() {
   console.log("hello, world")
-  bucket->upload("myfile/hello.txt", "boom boom")
+  // bucket.upload("myfile/hello.txt", "boom boom")
 }
 
 handler := cloud::Function(worker)

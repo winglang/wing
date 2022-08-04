@@ -54,7 +54,7 @@ mod tests {
 	fn run_grammar_tests() {
 		tree_sitter_cli::test::run_tests_at_path(
 			super::language(),
-			&std::path::PathBuf::from("tests"),
+			&std::path::PathBuf::from("test"),
 			true,
 			true,
 			None,
