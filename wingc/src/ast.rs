@@ -33,7 +33,7 @@ pub enum Statement {
 		initial_value: Expression,
 	},
 	FunctionDefinition(FunctionDefinition),
-	ProcessDefinition {
+	InflightFunctionDefinition {
 		name: Symbol,
 		parameters: Vec<ParameterDefinition>,
 		statements: Scope,
@@ -185,10 +185,9 @@ impl BinaryOperator {
 	}
 }
 
-// TODO: ObjReferene, FuncReference, MethodReference, TypeReference, CapturedObjReference, ProcReference
 #[derive(Debug)]
-pub struct Reference {
-	//namespace: Option<Vec<String>>,
-	pub namespace: Option<Symbol>,
-	pub identifier: Symbol,
+pub enum Reference {
+	Identifier(Symbol),
+	NestedIdentifier { object: Box<Expression>, property: Symbol },
+	NamespacedIdentifier { namespace: Symbol, identifier: Symbol },
 }

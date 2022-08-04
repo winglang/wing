@@ -5,6 +5,8 @@ use crate::type_env::TypeEnv;
 
 #[derive(PartialEq, Clone, Debug)]
 pub enum Type {
+	Anything,
+	Nothing,
 	Number,
 	String,
 	Duration,
@@ -21,6 +23,8 @@ pub struct FunctionSignature {
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
+			Type::Anything => write!(f, "anything"),
+			Type::Nothing => write!(f, "nothing"),
 			Type::Number => write!(f, "number"),
 			Type::String => write!(f, "string"),
 			Type::Duration => write!(f, "duration"),
@@ -96,23 +100,26 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 			validate_type(&_type, &Type::Number, &unary_exp);
 			Some(_type)
 		}
-		Expression::Reference(_ref) => Some(env.lookup(&_ref.identifier).clone()),
+		Expression::Reference(_ref) => Some(env.lookup(&_ref).clone()),
 		Expression::New {
 			class: _,
 			obj_id: _,
 			arg_list: _,
-		} => todo!(),
+		} => {
+			println!("Warning: Type checking for New statements is not yet implemented");
+			Some(Type::Anything)
+		}
 		Expression::FunctionCall { function, args } => {
-			let func_type = env.lookup(&function.identifier);
+			let func_type = env.lookup(&function);
 
 			if let Type::Function(func_type) = func_type {
 				// TODO: named args
 				// Arument arity check
 				if args.pos_args.len() != func_type.args.len() {
 					panic!(
-						"Expected {} arguments for function {}, but got {} instead.",
+						"Expected {} arguments for function {:#?}, but got {} instead.",
 						func_type.args.len(),
-						function.identifier,
+						function,
 						args.pos_args.len()
 					)
 				}
@@ -123,11 +130,17 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 				}
 				func_type.return_type.clone()
 			} else {
-				panic!("Identifier {} is not a function", function.identifier)
+				panic!("Identifier {:#?} is not a function", function)
 			}
 		}
-		Expression::MethodCall(_) => todo!(),
-		Expression::CapturedObjMethodCall(_) => todo!(),
+		Expression::MethodCall(_) => {
+			println!("Warning: Type checking for MethodCall is not yet implemented");
+			Some(Type::Anything)
+		}
+		Expression::CapturedObjMethodCall(_) => {
+			println!("Warning: Type checking for CapturedObjectMethodCall statements is not yet implemented");
+			Some(Type::Anything)
+		}
 	}
 }
 
@@ -171,11 +184,11 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			}
 			type_check_scope(&func_def.statements, &mut function_env);
 		}
-		Statement::ProcessDefinition {
+		Statement::InflightFunctionDefinition {
 			name: _,
 			parameters: _,
 			statements: _,
-		} => todo!(),
+		} => println!("Warning: Type checking for InflightFunctionDefinition statements is not yet implemented"),
 		Statement::ForLoop {
 			iterator,
 			iterable,
@@ -210,12 +223,12 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 		}
 		Statement::Assignment { variable, value } => {
 			let exp_type = type_check_exp(value, env).unwrap();
-			validate_type(&exp_type, env.lookup(&variable.identifier), value);
+			validate_type(&exp_type, env.lookup(&variable), value);
 		}
 		Statement::Use {
 			module_name: _,
 			identifier: _,
-		} => todo!(),
+		} => println!("Warning: Type checking for use statements is not yet implemented"),
 		Statement::Scope(scope) => {
 			let mut scope_env = TypeEnv::new(Some(env), env.return_type.clone());
 			for statement in scope.statements.iter() {
@@ -240,6 +253,6 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			name: _,
 			members: _,
 			methods: _,
-		} => todo!(),
+		} => println!("Warning: Type checking for Class statements is not yet implemented"),
 	}
 }

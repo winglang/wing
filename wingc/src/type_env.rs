@@ -1,4 +1,7 @@
-use crate::{ast::Symbol, type_check::Type};
+use crate::{
+	ast::{Reference, Symbol},
+	type_check::Type,
+};
 use std::collections::HashMap;
 
 pub struct TypeEnv<'a> {
@@ -19,20 +22,34 @@ impl<'a> TypeEnv<'a> {
 
 	pub fn define(&mut self, symbol: &Symbol, _type: Type) {
 		if self.type_map.contains_key(&symbol.name) {
-			// TODO span is a byte offset, not a line number
 			panic!("Symbol {} already defined.", symbol);
+		}
+		if let Some(parent_env) = self.parent {
+			if parent_env.type_map.contains_key(&symbol.name) {
+				panic!("Symbol {} already defined in parent scope.", symbol);
+			}
 		}
 
 		self.type_map.insert(symbol.name.clone(), _type);
 	}
 
-	pub fn lookup(&self, symbol: &Symbol) -> &Type {
-		if let Some(_type) = self.type_map.get(&symbol.name) {
-			_type
-		} else if let Some(parent_env) = self.parent {
-			parent_env.lookup(symbol)
-		} else {
-			panic!("Unknown symbol {}", symbol);
+	pub fn lookup(&self, symbol: &Reference) -> &Type {
+		match symbol {
+			Reference::Identifier(identifier) => {
+				if let Some(_type) = self.type_map.get(&identifier.name) {
+					_type
+				} else if let Some(parent_env) = self.parent {
+					parent_env.lookup(symbol)
+				} else {
+					panic!("Unknown symbol {}", identifier);
+				}
+			}
+			// TODO
+			Reference::NestedIdentifier { object: _, property: _ } => &Type::Anything,
+			Reference::NamespacedIdentifier {
+				namespace: _,
+				identifier: _,
+			} => &Type::Anything,
 		}
 	}
 }

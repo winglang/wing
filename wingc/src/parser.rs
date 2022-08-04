@@ -75,6 +75,7 @@ impl Parser<'_> {
 		Scope {
 			statements: scope_node
 				.named_children(&mut cursor)
+				.filter(|child| !child.is_extra())
 				.map(|st_node| self.build_statement(&st_node))
 				.collect(),
 		}
@@ -102,14 +103,11 @@ impl Parser<'_> {
 				initial_value: self.build_expression(&statement_node.child(2).unwrap()),
 			},
 			"variable_assignment_statement" => Statement::Assignment {
-				variable: Reference {
-					namespace: None,
-					identifier: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
-				},
+				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap()),
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap()),
 			},
 			"expression_statement" => Statement::Expression(self.build_expression(&statement_node.named_child(0).unwrap())),
-			"inflight_function_definition" => Statement::ProcessDefinition {
+			"inflight_function_definition" => Statement::InflightFunctionDefinition {
 				name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
 				parameters: statement_node
 					.child_by_field_name("parameter_list")
@@ -243,14 +241,29 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_reference(&self, reference_node: &Node) -> Reference {
-		// TODO: Handle namespaced and nested references
-		let identifier = self.node_symbol(&reference_node.named_child(0).unwrap());
+	fn build_nested_identifier(&self, nested_node: &Node) -> Reference {
+		Reference::NestedIdentifier {
+			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap()),
+			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())),
+		}
+	}
 
-		return Reference {
-			namespace: None,
-			identifier,
-		};
+	fn build_reference(&self, reference_node: &Node) -> Reference {
+		let actual_node = reference_node.named_child(0).unwrap();
+		match actual_node.kind() {
+			"identifier" => Reference::Identifier(self.node_symbol(&actual_node)),
+			"namespaced_identifier" => Reference::NamespacedIdentifier {
+				namespace: self.node_symbol(&actual_node.child_by_field_name("namespace").unwrap()),
+				identifier: self.node_symbol(&actual_node.child_by_field_name("name").unwrap()),
+			},
+			"nested_identifier" => self.build_nested_identifier(&actual_node),
+			other => panic!(
+				"Unexpected node type {} at {} || {:#?}",
+				other,
+				self.node_span(&actual_node),
+				reference_node
+			),
+		}
 	}
 
 	fn build_arg_list(&self, arg_list_node: &Node) -> ArgList {
@@ -358,7 +371,6 @@ impl Parser<'_> {
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			},
 			"method_call" => Expression::MethodCall(MethodCall {
-				// TODO: This reference is invalid. It only works for single-layer a.b() calls, not a.b.c() calls.
 				object: self.build_reference(
 					&expression_node
 						.child_by_field_name("call_name")
