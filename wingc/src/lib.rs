@@ -6,10 +6,10 @@
 use sha2::{Digest, Sha256};
 use std::collections::HashMap;
 use std::ffi::{CStr, CString};
-use std::fs;
 use std::os::raw::c_char;
 use std::path::PathBuf;
 use std::str;
+use std::{fs, mem};
 use tree_sitter::{Language, Node, Parser};
 
 const STDLIB: &str = "$stdlib";
@@ -341,9 +341,13 @@ impl Compiler<'_> {
 }
 
 #[no_mangle]
-pub extern "C" fn compile(source: *const c_char, out_dir: *const c_char) -> *const c_char {
+pub extern "C" fn compile(source: *const c_char, outdir: *const c_char) -> *const c_char {
     let source_file = unsafe { CStr::from_ptr(source).to_str().unwrap() };
-    let out_dir = unsafe { CStr::from_ptr(out_dir).to_str().unwrap() };
+    let out_dir = if outdir != std::ptr::null() {
+        unsafe { CStr::from_ptr(outdir).to_str().unwrap() }
+    } else {
+        Box::leak(format!("{}.out", source_file).into_boxed_str())
+    };
     let language = unsafe { tree_sitter_winglang() };
     let mut parser = Parser::new();
     parser.set_language(language).unwrap();
@@ -383,7 +387,20 @@ pub extern "C" fn compile(source: *const c_char, out_dir: *const c_char) -> *con
 
 #[no_mangle]
 pub extern "C" fn release(s: *const c_char) {
-    unsafe {
-        CString::from_raw(std::mem::transmute(s));
+    let _ = unsafe { CString::from_raw(mem::transmute(s)) };
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{compile, release};
+    use std::ffi::CString;
+    use std::ptr::null;
+
+    #[test]
+    fn does_not_blow_up() {
+        let source = "../playground/examples/hello.w";
+        let source_raw = CString::new(source).unwrap();
+        let intermediate = compile(source_raw.as_ptr(), null());
+        release(intermediate)
     }
 }
