@@ -49,76 +49,10 @@ jobs:
         run: npx envinfo
       - name: Build Wing
         env:
+          RUSTFLAGS: "-C target-cpu=native"
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          mkdir -p wingrr/vendor/node
-          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrr/vendor/node
-
-          cd wingrr
-          npm ci
-          npm test
-          cd ..
-
-          cd wingc
-          cargo build --release
-          cd ..
-
-          cp wingc/target/release/wingc wing/bin
-          cp wingrr/build/Release/libwingrr.* wing/bin
-          cp wingrr/vendor/node/lib/libnode.so wing/bin
-
-          cd wing
-          npm install --no-scripts
-          node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
-          npm publish
-          npm pack
-          mv *.tgz ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-          cd ..
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-          path: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
-      - name: Compute Checksums
-        run: |
-          mkdir dist
-          mv ./*/*.tgz ./dist
-          cd dist
-          echo '## SHA-1 Checksums' > ../checksums.md
-          echo '```' >> ../checksums.md
-          sha1sum --binary *.tgz >> ../checksums.md
-          echo '```' >> ../checksums.md
-      - name: Cut Development Release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: development
-          body_path: checksums.md
-          prerelease: true
-          files: dist/*.tgz
-
-  wrapper:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Setup Private NPM with Github
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: "https://npm.pkg.github.com"
-      - name: Release Toolkit
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: |
-          cd wing
-          node scripts/self-package-json.js
-          npm publish
+          pushd wingc
+            cargo test --release -- --nocapture
+            cargo build --release
+          popd
