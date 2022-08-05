@@ -1,40 +1,21 @@
 #![allow(non_upper_case_globals)]
 #![allow(non_camel_case_types)]
+#![allow(unused_must_use)]
 #![allow(non_snake_case)]
 
-use clap::*;
 use tree_sitter::{Parser, Language, Node};
+use std::ffi::{CString, CStr};
+use std::os::raw::c_char;
 use std::{collections::HashMap};
 use std::fs;
 use std::path::PathBuf;
 use std::str;
 use sha2::{Sha256, Digest};
-use rusty_wingrr::execute_javascript;
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
 
-#[derive(clap::Parser, Debug)]
-#[clap(author, version, about, long_about = None)]
-struct Args {
-    #[clap(value_parser)]
-    source_file: String,
-
-    #[clap(value_parser, short, long)]
-    out_dir: Option<String>,
-}
-
-
 extern "C" { fn tree_sitter_winglang() -> Language; }
-
-// fn traverse(root: &Node, i: usize) {
-//     println!("{:indent$}{}", "", root.kind(), indent=i*2);
-//     let mut child_idx = 0;
-//     while child_idx < root.child_count() {
-//         traverse(&root.child(child_idx).unwrap(), i+1);
-//         child_idx += 1;
-//     }
-// }
 
 struct Capture {
     symbol: String,
@@ -318,46 +299,50 @@ impl Compiler<'_> {
     }
 }
 
-fn main() {
-    let args = Args::parse();
-    
+#[no_mangle]
+pub extern "C" fn compile(source: *const c_char, out_dir: *const c_char) -> *const c_char {
+    let source_file = unsafe { CStr::from_ptr(source).to_str().unwrap() };
+    let out_dir = unsafe { CStr::from_ptr(out_dir).to_str().unwrap() };
     let language = unsafe { tree_sitter_winglang() };
     let mut parser = Parser::new();
     parser.set_language(language).unwrap();
 
-    let source = match fs::read(&args.source_file) {
+    let source = match fs::read(source_file) {
         Ok(source) => source,
         Err(_) => {
-            println!("Error reading source file: {}", &args.source_file);
+            println!("Error reading source file: {}", source_file);
             std::process::exit(1);
-        },
+        }
     };
 
     let tree = match parser.parse(&source[..], None) {
         Some(tree) => tree,
         None => {
-            println!("Failed parsing source file: {}", args.source_file);
+            println!("Failed parsing source file: {}", source_file);
             std::process::exit(1);
-        },
+        }
     };
 
-    let out_dir = PathBuf::from(&args.out_dir.unwrap_or(format!("{}.out", args.source_file)));
-    fs::create_dir_all(&out_dir).expect("create output dir");
-    let intermediate_dir = out_dir.join(".intermediate");
-    let state_file = PathBuf::from(format!("{}.state", args.source_file));
+    let intermediate_dir = PathBuf::from(out_dir);
+    fs::create_dir_all(&intermediate_dir).expect("create output dir");
+    let intermediate_dir = intermediate_dir.join(".intermediate");
+    let state_file = PathBuf::from(format!("{}.state", source_file));
 
     let output = Compiler {
-            out_dir: intermediate_dir,
-            state_file: state_file,
-            source: &source[..],
-            shim: true
-        }.compile(&tree.root_node());
-
-    //traverse(&tree.root_node(), 0);
+        out_dir: intermediate_dir,
+        state_file,
+        source: &source[..],
+        shim: true,
+    }
+    .compile(&tree.root_node());
 
     println!("{}", output);
-    let object_file = out_dir.join("wingc.o");
-    let object_file_path_str = object_file.display().to_string();
-    fs::write(object_file, output).expect("Unable to write intermediate file");
-    execute_javascript(&object_file_path_str, ".");
+    CString::new(output).unwrap().into_raw()
+}
+
+#[no_mangle]
+pub extern "C" fn release(s: *const c_char) {
+    unsafe {
+        CString::from_raw(std::mem::transmute(s));
+    }
 }
