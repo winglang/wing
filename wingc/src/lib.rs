@@ -391,7 +391,7 @@ pub extern "C" fn release(s: *const c_char) {
 }
 
 #[cfg(test)]
-mod tests {
+mod sanity {
     use crate::{compile, release};
     use std::ffi::CString;
     use std::ptr::null;
