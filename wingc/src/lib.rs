@@ -16,6 +16,8 @@ const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
 
 extern "C" {
+    // this is resolved at link time by linking into "grammar/src/parser.c"
+    // this is a generated source, created after "cargo build"
     fn tree_sitter_winglang() -> Language;
 }
 
@@ -341,7 +343,7 @@ impl Compiler<'_> {
 }
 
 #[no_mangle]
-pub extern "C" fn compile(source: *const c_char, outdir: *const c_char) -> *const c_char {
+pub extern "C" fn wingc_compile(source: *const c_char, outdir: *const c_char) -> *const c_char {
     let source_file = unsafe { CStr::from_ptr(source).to_str().unwrap() };
     let out_dir = if outdir != std::ptr::null() {
         unsafe { CStr::from_ptr(outdir).to_str().unwrap() }
@@ -386,13 +388,13 @@ pub extern "C" fn compile(source: *const c_char, outdir: *const c_char) -> *cons
 }
 
 #[no_mangle]
-pub extern "C" fn release(s: *const c_char) {
+pub extern "C" fn wingc_release(s: *const c_char) {
     let _ = unsafe { CString::from_raw(mem::transmute(s)) };
 }
 
 #[cfg(test)]
 mod sanity {
-    use crate::{compile, release};
+    use crate::{wingc_compile, wingc_release};
     use std::ffi::CString;
     use std::ptr::null;
 
@@ -400,7 +402,7 @@ mod sanity {
     fn does_not_blow_up() {
         let source = "../playground/examples/hello.w";
         let source_raw = CString::new(source).unwrap();
-        let intermediate = compile(source_raw.as_ptr(), null());
-        release(intermediate)
+        let intermediate = wingc_compile(source_raw.as_ptr(), null());
+        wingc_release(intermediate)
     }
 }
