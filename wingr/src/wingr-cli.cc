@@ -22,6 +22,8 @@ int main(int argc, char *argv[])
   auto engine = WINGR_ENGINE_JAVASCRIPT;
   if (ext == "ts")
     engine = WINGR_ENGINE_TYPESCRIPT;
+  else if (ext == "w")
+    engine = WINGR_ENGINE_WINGLANG;
   else if (ext != "js")
   {
     std::cerr << "Unknown program extension." << std::endl;

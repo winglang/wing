@@ -11,6 +11,7 @@ extern "C"
   {
     WINGR_ENGINE_JAVASCRIPT = 1,
     WINGR_ENGINE_TYPESCRIPT = 2,
+    WINGR_ENGINE_WINGLANG = 3,
   } wingr_engine_type_t;
 
   /** shallow type of preflight execution configuration */

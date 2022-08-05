@@ -6,6 +6,7 @@
 
 #include "engines/js/libwr-javascript.hh"
 #include "engines/ts/libwr-typescript.hh"
+#include "engines/wing/libwr-wing.hh"
 
 extern "C"
 {
@@ -51,6 +52,12 @@ extern "C"
     if (instance->type == WINGR_ENGINE_TYPESCRIPT)
     {
       wing::TypeScriptEngine engine(instance->workdir);
+      ret = engine.execute(instance->program);
+    }
+
+    if (instance->type == WINGR_ENGINE_WINGLANG)
+    {
+      wing::WingEngine engine(instance->workdir);
       ret = engine.execute(instance->program);
     }
 
