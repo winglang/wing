@@ -7,7 +7,6 @@ const child_process = require("child_process");
 function bin() {
   try {
     // we're being accessed through the wrapper
-    throw new Error();
     const native = require.resolve(`@monadahq/wing-${process.platform}-${process.arch}`);
     return path.join(path.dirname(native), "bin");
   } catch {
