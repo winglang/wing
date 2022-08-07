@@ -383,7 +383,6 @@ pub extern "C" fn wingc_compile(source: *const c_char, outdir: *const c_char) ->
     }
     .compile(&tree.root_node());
 
-    println!("{}", output);
     CString::new(output).unwrap().into_raw()
 }
 

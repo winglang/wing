@@ -1,6 +1,6 @@
 module.exports = (_env) => {
   const config = {
-    mode: "development",
+    mode: "production",
     entry: {
       setup: "./src/setup.js",
       entry: "./src/entry.js",
@@ -10,6 +10,9 @@ module.exports = (_env) => {
       path: __dirname + "/build",
     },
     devtool: false,
+    externals: {
+      "ts-node": "ts-node",
+    },
     externalsPresets: {
       node: true,
     },

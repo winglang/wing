@@ -109,6 +109,17 @@ namespace
 
 int main(int argc, char *argv[])
 {
+  // make sure script name is always fixed.
+  int new_argc = argc + 1;
+  char **new_argv = new char *[new_argc];
+  new_argv[0] = argv[0];
+  new_argv[1] = strdup("wing.js");
+  for (int i = 1; i < argc; i++)
+    new_argv[i + 1] = argv[i];
+  new_argv[new_argc] = nullptr;
+  argc = new_argc;
+  argv = new_argv;
+
   argv = uv_setup_args(argc, argv);
   std::vector<std::string> args(argv, argv + argc);
   std::vector<std::string> exec_args;

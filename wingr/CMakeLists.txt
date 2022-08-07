@@ -27,7 +27,6 @@ add_executable(wingr
 # webpack target that builds the src/entry.js
 add_custom_target(bundle ALL npx webpack
   COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/src/wingr.cc
-  DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/setup.bundle.js ${CMAKE_CURRENT_BINARY_DIR}/entry.bundle.js
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/entry.js
 )

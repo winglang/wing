@@ -51,3 +51,10 @@ jobs:
             cargo test --release -- --nocapture
             cargo build --release
           popd
+
+          mkdir -p wingr/vendor/node
+          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingr/vendor/node
+          pushd wingr
+            npm install
+            npm test
+          popd
