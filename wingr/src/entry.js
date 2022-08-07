@@ -13,12 +13,14 @@
     .action((input, options) => {
       const ext = path.extname(input);
       if (ext === ".w") {
-        const out = WingCompiler.compile(input, options.context);
-        console.log(out);
+        const inputSource = WingCompiler.compile(input, options.context);
+        vm.runInThisContext(inputSource);
+        process.exit(0);
       }
       if (ext === ".js") {
         const inputSource = fs.readFileSync(input, "utf8");
         vm.runInThisContext(inputSource);
+        process.exit(0);
       }
     })
     .parse();
