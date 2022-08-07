@@ -106,8 +106,7 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 			obj_id: _,
 			arg_list: _,
 		} => {
-			println!("Warning: Type checking for New statements is not yet implemented");
-			Some(Type::Anything)
+			todo!()
 		}
 		Expression::FunctionCall { function, args } => {
 			let func_type = env.lookup(&function);
@@ -134,12 +133,10 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 			}
 		}
 		Expression::MethodCall(_) => {
-			println!("Warning: Type checking for MethodCall is not yet implemented");
-			Some(Type::Anything)
+			todo!()
 		}
 		Expression::CapturedObjMethodCall(_) => {
-			println!("Warning: Type checking for CapturedObjectMethodCall statements is not yet implemented");
-			Some(Type::Anything)
+			todo!()
 		}
 	}
 }
@@ -188,7 +185,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			name: _,
 			parameters: _,
 			statements: _,
-		} => println!("Warning: Type checking for InflightFunctionDefinition statements is not yet implemented"),
+		} => todo!(),
 		Statement::ForLoop {
 			iterator,
 			iterable,
@@ -228,7 +225,7 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 		Statement::Use {
 			module_name: _,
 			identifier: _,
-		} => println!("Warning: Type checking for use statements is not yet implemented"),
+		} => todo!(),
 		Statement::Scope(scope) => {
 			let mut scope_env = TypeEnv::new(Some(env), env.return_type.clone());
 			for statement in scope.statements.iter() {
@@ -253,6 +250,6 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			name: _,
 			members: _,
 			methods: _,
-		} => println!("Warning: Type checking for Class statements is not yet implemented"),
+		} => todo!(),
 	}
 }
