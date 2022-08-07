@@ -18,13 +18,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
-        arch: [x64, x86, arm64]
-        exclude:
-          - os: macos-latest
-            arch: x86
-          - os: ubuntu-latest
-            arch: arm64
+        os: [ubuntu-latest]
+        arch: [x64, x86]
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
