@@ -3129,9 +3129,9 @@ globrex@^0.1.2:
   integrity sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==
 
 got@^12.1.0:
-  version "12.3.0"
-  resolved "https://registry.yarnpkg.com/got/-/got-12.3.0.tgz#744625bcb072e7b1fd41a706e0af2bd1f73a2c64"
-  integrity sha512-7uK06aluHF0UibYFBX3lFUZ2FG/W0KS4O4EqAIrbWIdbPxIT33r6ZJy7Zy+pdh0CP/ZbF3zBa7Fd9dCn7vGPBg==
+  version "12.3.1"
+  resolved "https://registry.yarnpkg.com/got/-/got-12.3.1.tgz#79d6ebc0cb8358c424165698ddb828be56e74684"
+  integrity sha512-tS6+JMhBh4iXMSXF6KkIsRxmloPln31QHDlcb6Ec3bzxjjFJFr/8aXdpyuLmVc9I4i2HyBHYw1QU5K1ruUdpkw==
   dependencies:
     "@sindresorhus/is" "^5.2.0"
     "@szmarczak/http-timer" "^5.0.1"
@@ -3196,7 +3196,7 @@ has-property-descriptors@^1.0.0:
   dependencies:
     get-intrinsic "^1.1.1"
 
-has-symbols@^1.0.1, has-symbols@^1.0.2, has-symbols@^1.0.3:
+has-symbols@^1.0.2, has-symbols@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/has-symbols/-/has-symbols-1.0.3.tgz#bb7b2c4349251dce87b125f7bdf874aa7c8b39f8"
   integrity sha512-l3LCuF6MgDNwTDKkdYGEihYjt5pRPbEg46rtlmnSPlUbgmB8LOIrKJbYYFBSbnPaJexMKtiPO8hmeRjRz2Td+A==
@@ -4195,10 +4195,10 @@ jsii-diff@^1.63.2:
     log4js "^6.6.1"
     yargs "^16.2.0"
 
-jsii-docgen@^7.0.63:
-  version "7.0.63"
-  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-7.0.63.tgz#8864d1060fc5d7981d3707dea9e8f58913d39062"
-  integrity sha512-0qLeHc/JHwZblNq1wP9DPbBx4c8PYuDmvqpiqYxN17+p1P9zi5DgTKmOONOdUXEgpFJMhzj9rF6YeeGT/wXisA==
+jsii-docgen@^7.0.64:
+  version "7.0.64"
+  resolved "https://registry.yarnpkg.com/jsii-docgen/-/jsii-docgen-7.0.64.tgz#87943a9110967a0fd0babfe06cc08f24c32f90ad"
+  integrity sha512-v0JxNkspMm2GnJDZjGvB0riaot1HKcNHrojhAAesjPJLENBiHcUzOAkjXRF/7hgvdH/IVsHsrm1MsRE37lGaZQ==
   dependencies:
     "@jsii/spec" "^1.63.2"
     case "^1.6.3"
@@ -5011,13 +5011,13 @@ object-keys@^1.1.1:
   integrity sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==
 
 object.assign@^4.1.2:
-  version "4.1.2"
-  resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.2.tgz#0ed54a342eceb37b38ff76eb831a0e788cb63940"
-  integrity sha512-ixT2L5THXsApyiUPYKmW+2EHpXXe5Ii3M+f4e+aJFAHao5amFRW6J0OO6c/LU8Be47utCx2GL89hxGB6XSmKuQ==
+  version "4.1.3"
+  resolved "https://registry.yarnpkg.com/object.assign/-/object.assign-4.1.3.tgz#d36b7700ddf0019abb6b1df1bb13f6445f79051f"
+  integrity sha512-ZFJnX3zltyjcYJL0RoCJuzb+11zWGyaDbjgxZbdV7rFEcHQuYxrZqhow67aA7xpes6LhojyFDaBKAFfogQrikA==
   dependencies:
-    call-bind "^1.0.0"
-    define-properties "^1.1.3"
-    has-symbols "^1.0.1"
+    call-bind "^1.0.2"
+    define-properties "^1.1.4"
+    has-symbols "^1.0.3"
     object-keys "^1.1.1"
 
 object.values@^1.1.5:
@@ -5339,10 +5339,10 @@ progress@^2.0.3:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-projen@^0.61.0:
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/projen/-/projen-0.61.0.tgz#1969550a2d092d9e7ee715ec7e4c1aa7649f414a"
-  integrity sha512-rH4cTJsrZlgJKErCw7nOcILeKdgW2XxQC+I+/xF4ztybgCEiqN4xAtdynetgfwtWt5Wd6X3QU3RyvWbEFahtNg==
+projen@^0.61.1:
+  version "0.61.1"
+  resolved "https://registry.yarnpkg.com/projen/-/projen-0.61.1.tgz#bfb70fe1fa022b5cd3f6c112482ed06bf99d19c6"
+  integrity sha512-p1neu6V1dK0uL1N0oivXSqrYFX93LMYGXAP1DqNDSIRCMFsvkjTsjvIEZyPYChgT+WAGDl94fvCkwUNgps0dtA==
   dependencies:
     "@iarna/toml" "^2.2.5"
     case "^1.6.3"
