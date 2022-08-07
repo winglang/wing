@@ -217,10 +217,11 @@ fn jsify_statement(statement: &Statement) -> String {
 			)
 		}
 		Statement::InflightFunctionDefinition {
-			name,
+			name: _,
 			parameters: _,
 			statements: _,
 		} => {
+			todo!();
 			/*
 			let parameter_list = vec![];
 			for p in parameters {
@@ -273,8 +274,6 @@ fn jsify_statement(statement: &Statement) -> String {
 
 			format!("const {} = new {}.core.Process({});", function_name, STDLIB, props_block)
 			*/
-			// TODO implement inflight functions
-			format!("// \"{}\" definition", name.name)
 		}
 		Statement::ForLoop {
 			iterator,
