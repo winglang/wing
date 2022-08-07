@@ -1,0 +1,26 @@
+{
+  "name": "@monadahq/wing",
+  "version": "v1.0.0",
+  "description": "Wing Programming Language Toolkit",
+  "bin": "index.js",
+  "files": [
+    "index.js",
+    "bin/"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/monadahq/winglang.git"
+  },
+  "dependencies": {
+    "@monadahq/wingsdk": "*"
+  },
+  "optionalDependencies": {
+    "@monadahq/wing-darwin-arm64": "*",
+    "@monadahq/wing-darwin-x64": "*",
+    "@monadahq/wing-linux-ia32": "*",
+    "@monadahq/wing-linux-x64": "*"
+  }
+}
