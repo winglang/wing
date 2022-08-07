@@ -1,4 +1,4 @@
-use crate::ast::{BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
+use crate::ast::{ArgList, BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -78,20 +78,51 @@ fn jsify_scope(scope: &Scope) -> String {
 }
 
 fn jsify_reference(reference: &Reference) -> String {
-	return format!("{}", jsify_symbol(&reference.identifier));
+	match reference {
+		Reference::Identifier(identifier) => jsify_symbol(identifier),
+		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol(property),
+		Reference::NamespacedIdentifier { namespace, identifier } => {
+			jsify_symbol(namespace) + "." + &jsify_symbol(identifier)
+		}
+	}
 }
 
 fn jsify_symbol(symbol: &Symbol) -> String {
 	return format!("{}", symbol.name);
 }
 
+fn jsify_arg_list(arg_list: &ArgList) -> String {
+	if !arg_list.pos_args.is_empty() && !arg_list.named_args.is_empty() {
+		// TODO?
+		// JS doesn't support named args, this is probably to pass props to a construct. Can't mix that with positional args.
+		panic!("Cannot use positional and named arguments in the same call");
+	}
+
+	let mut args = vec![];
+
+	if !arg_list.pos_args.is_empty() {
+		for arg in arg_list.pos_args.iter() {
+			args.push(jsify_expression(arg));
+		}
+		return args.join(",");
+	} else if !arg_list.named_args.is_empty() {
+		for arg in arg_list.named_args.iter() {
+			args.push(format!("{}: {}", arg.0.name, jsify_expression(arg.1)));
+		}
+		return format!("{{{}}}", args.join(","));
+	} else {
+		return "".to_string();
+	}
+}
+
 fn jsify_expression(expression: &Expression) -> String {
 	match expression {
 		Expression::New {
-			class: _,
+			class,
+			// TODO
 			obj_id: _,
-			arg_list: _,
-		} => todo!(),
+			arg_list,
+		} => format!("new {}({})", jsify_reference(&class), jsify_arg_list(&arg_list)),
 		Expression::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
 			Literal::Number(n) => format!("{}", n),
@@ -100,19 +131,16 @@ fn jsify_expression(expression: &Expression) -> String {
 		},
 		Expression::Reference(_ref) => jsify_reference(_ref),
 		Expression::FunctionCall { function, args } => {
-			// TODO: named args
+			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args))
+		}
+		Expression::MethodCall(method_call) => {
 			format!(
-				"{}({})",
-				jsify_reference(&function),
-				args
-					.pos_args
-					.iter()
-					.map(|a| jsify_expression(a))
-					.collect::<Vec<String>>()
-					.join(",")
+				"{}.{}({})",
+				jsify_reference(&method_call.object),
+				jsify_symbol(&method_call.method),
+				jsify_arg_list(&method_call.args)
 			)
 		}
-		Expression::MethodCall(_) => todo!(),
 		Expression::CapturedObjMethodCall(_) => todo!(),
 		Expression::Unary { op, exp } => {
 			let op = match op {
@@ -188,11 +216,12 @@ fn jsify_statement(statement: &Statement) -> String {
 				jsify_scope(&func_def.statements)
 			)
 		}
-		Statement::ProcessDefinition {
+		Statement::InflightFunctionDefinition {
 			name: _,
 			parameters: _,
 			statements: _,
 		} => {
+			todo!();
 			/*
 			let parameter_list = vec![];
 			for p in parameters {
@@ -245,7 +274,6 @@ fn jsify_statement(statement: &Statement) -> String {
 
 			format!("const {} = new {}.core.Process({});", function_name, STDLIB, props_block)
 			*/
-			todo!()
 		}
 		Statement::ForLoop {
 			iterator,
@@ -275,7 +303,7 @@ fn jsify_statement(statement: &Statement) -> String {
 		}
 		Statement::Expression(e) => jsify_expression(e),
 		Statement::Assignment { variable, value } => {
-			format!("{} = {};", jsify_symbol(&variable.identifier), jsify_expression(value))
+			format!("{} = {};", jsify_reference(&variable), jsify_expression(value))
 		}
 		Statement::Scope(scope) => jsify_scope(scope),
 		Statement::Return(exp) => {
