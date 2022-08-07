@@ -49,31 +49,29 @@ jobs:
         run: npx envinfo
       - name: Build Wing
         env:
+          RUSTFLAGS: "-C target-cpu=native"
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          mkdir -p wingrr/vendor/node
-          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrr/vendor/node
+          pushd wingc
+            cargo test --release -- --nocapture
+            cargo build --release
+          popd
 
-          cd wingrr
-          npm ci
-          npm test
-          cd ..
+          mkdir -p wingr/vendor/node
+          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingr/vendor/node
+          pushd wingr
+            npm install
+            npm test
+          popd
 
-          cd wingc
-          cargo build --release
-          cd ..
-
-          cp wingc/target/release/wingc wing/bin
-          cp wingrr/build/Release/libwingrr.* wing/bin
-          cp wingrr/vendor/node/lib/libnode.so wing/bin
-
-          cd wing
+          cp wingr/build/wingr wing/bin
+          pushd wing
           npm install --no-scripts
           node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
           npm publish
           npm pack
           mv *.tgz ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-          cd ..
+          popd
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
