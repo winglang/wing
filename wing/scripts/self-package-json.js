@@ -1,5 +1,9 @@
 #!/usr/bin/env node
 
+// this script prepares the package.json file for publishing "wing" package
+// itself to npm and other relevant release holders. Currently it makes sure
+// development version is stamped properly on Github Workflows.
+
 const fs = require("fs");
 const path = require("path");
 const pJson = require("../package.json");

@@ -1,5 +1,11 @@
 #!/usr/bin/env node
 
+// this script prepares the package.json file for publishing sub "wing-X-Y"
+// packages for different architectures to npm and other relevant release
+// holders. Currently it makes sure development version is stamped properly on
+// Github Workflows. It also removes "scripts" and "devDependencies" from the
+// package.json file. It also adds arch/platform tags to the package.json file.
+
 const fs = require("fs");
 const path = require("path");
 const assert = require("assert");
