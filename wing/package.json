@@ -1,7 +1,7 @@
 {
   "name": "@monadahq/wing",
-  "version": "v1.0.0",
-  "description": "Wing Programming Language Toolkit",
+  "version": "0.1.0",
+  "description": "Wing Programming Language",
   "bin": "index.js",
   "files": [
     "index.js",
