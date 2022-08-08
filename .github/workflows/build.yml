@@ -62,15 +62,16 @@ jobs:
           pushd wingr
             npm install
             npm test
+            pushd build
+              cp wingr ../../wing/bin
+              tar -zcf ../../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz wingr
+            popd
           popd
 
-          cp wingr/build/wingr wing/bin
           pushd wing
-          npm install --no-scripts
-          node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
-          npm publish
-          npm pack
-          mv *.tgz ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
+            npm install --no-scripts
+            node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
+            npm publish
           popd
 
       - name: Upload Artifact
