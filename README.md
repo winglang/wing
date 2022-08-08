@@ -8,6 +8,8 @@ Wing Programming Language reference implementation.
 - [node.js](https://nodejs.org)
 - [CMake](https://cmake.org/)
 
+You also need to `npm login` into `@monadahq`.
+
 ## `wingc` Compiler
 
 The compiler is under `wingc` and you can use standard Rust workflows:
