@@ -7,7 +7,9 @@ const child_process = require("child_process");
 function bin() {
   try {
     // we're being accessed through the wrapper
-    const native = require.resolve(`@monadahq/wing-${process.platform}-${process.arch}`);
+    const native = require.resolve(
+      `@monadahq/wing-${process.platform}-${process.arch}`
+    );
     return path.join(path.dirname(native), "bin");
   } catch {
     // we're being accessed directly
@@ -21,8 +23,11 @@ process.env.LD_LIBRARY_PATH = binariesPath;
 process.env.DYLD_LIBRARY_PATH = binariesPath;
 process.env.DYLD_FALLBACK_LIBRARY_PATH = binariesPath;
 
-// Ensure @monadahq/wingsdk is available
-child_process.execSync("npm list @monadahq/wingsdk || npm i --no-save @monadahq/wingsdk");
-
 // Spawn "wingr" binary and forward stdio to it
-child_process.execSync(`${path.join(binariesPath, "wingr")} ${process.argv.slice(2).join(" ")}`, { stdio: "inherit" });
+child_process.spawnSync(
+  path.join(binariesPath, "wingr"),
+  process.argv.slice(2),
+  {
+    stdio: "inherit",
+  }
+);
