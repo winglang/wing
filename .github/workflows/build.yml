@@ -49,25 +49,19 @@ jobs:
         run: npx envinfo
       - name: Build Wing
         env:
-          RUSTFLAGS: "-C target-cpu=native"
-          CFLAGS: "-arch ${{ matrix.arch }}"
-          CXXFLAGS: "-arch ${{ matrix.arch }}"
-          LDFLAGS: "-arch ${{ matrix.arch }}"
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
           pushd wingc
-            if [${{ matrix.arch }} == "arm64"] && [${{ matrix.os }} == "macos-latest"]; then
-                CARGO_EX_ARGS="--target aarch64-apple-darwin"
-            else
-                CARGO_EX_ARGS=""
-            fi
-            cargo test --release $CARGO_EX_ARGS -- --nocapture
-            cargo build --release $CARGO_EX_ARGS
+            cargo test --release -- --nocapture
+            cargo build --release
           popd
 
           mkdir -p wingrt/vendor/node
           unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrt/vendor/node
           pushd wingrt
+            export CFLAGS = "-arch ${{ matrix.arch }}"
+            export CXXFLAGS = "-arch ${{ matrix.arch }}"
+            export LDFLAGS = "-arch ${{ matrix.arch }}"
             npm install
             npm test
             pushd build
