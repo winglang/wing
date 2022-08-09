@@ -1,0 +1,37 @@
+/**
+ * @see https://www.electron.build/configuration/configuration
+ */
+{
+  appId: 'YourAppID',
+  productName: 'YourAppName',
+  copyright: 'Copyright © 2022 Monada',
+  asar: true,
+  directories: {
+    output: 'release/${version}',
+    buildResources: 'electron/resources',
+  },
+  files: ['dist'],
+  win: {
+    target: [
+      {
+        target: 'nsis',
+        arch: ['x64'],
+      },
+    ],
+    artifactName: '${productName}-Windows-${version}-Setup.${ext}',
+  },
+  nsis: {
+    oneClick: false,
+    perMachine: false,
+    allowToChangeInstallationDirectory: true,
+    deleteAppDataOnUninstall: false,
+  },
+  mac: {
+    target: ['dmg'],
+    artifactName: '${productName}-Mac-${version}-Installer.${ext}',
+  },
+  linux: {
+    target: ['AppImage'],
+    artifactName: '${productName}-Linux-${version}.${ext}',
+  },
+}
