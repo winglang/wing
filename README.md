@@ -17,7 +17,7 @@ The compiler is under `wingc` and you can use standard Rust workflows:
 - `cargo build` - builds the code
 - `cargo test` - runs tests
 
-## `wingr` Runtime
+## `wingrt` Runtime
 
 The runtime that executes output of the compiler.
 
@@ -27,7 +27,7 @@ building a special variant of Node, blood sacrifice, and dark rituals.
 Pre-built binaries are available at:
 [winglang-infra](https://github.com/monadahq/winglang-infra).
 
-Get the binaries for your platform and place them under `wingr/vender/node`.
+Get the binaries for your platform and place them under `wingrt/vender/node`.
 
 You also need to build the compiler (`wingc`) first: `cargo build --release`.
 

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
 
-project(wingr)
+project(wingrt)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_ENABLE_EXPORTS ON)
@@ -19,32 +19,32 @@ list(TRANSFORM NODE_LIBRARY_STATIC REPLACE "^lib" "")
 list(TRANSFORM NODE_LIBRARY_STATIC REPLACE "\.a$" "")
 
 # main target
-add_executable(wingr
+add_executable(wingrt
   ../wingc/grammar/src/parser.c
-  src/wingr.cc
+  src/wingrt.cc
 )
 
 # webpack target that builds the src/entry.js
 add_custom_target(bundle ALL npx webpack
-  COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/src/wingr.cc
+  COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_SOURCE_DIR}/src/wingrt.cc
   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
   SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/entry.js
 )
 
-add_dependencies(wingr bundle)
+add_dependencies(wingrt bundle)
 
 # v8 headers are not properly guarded against multiple C++ ABIs
-target_compile_definitions(wingr PRIVATE -Dremove_cv_t=remove_cv)
+target_compile_definitions(wingrt PRIVATE -Dremove_cv_t=remove_cv)
 
-target_link_directories(wingr PRIVATE
+target_link_directories(wingrt PRIVATE
   ${NODE_LIBRARY_PREFIX}
   ../wingc/target/release
 )
-target_link_libraries(wingr PRIVATE
+target_link_libraries(wingrt PRIVATE
   uv node v8_libplatform ${NODE_LIBRARY_STATIC}
   Threads::Threads ${CMAKE_DL_LIBS} m wingc
 )
-target_include_directories(wingr PRIVATE
+target_include_directories(wingrt PRIVATE
   ${NODE_INCLUDE_PREFIX}/include/node
   ${NODE_INCLUDE_PREFIX}/include
   ../wingc/grammar/src

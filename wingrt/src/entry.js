@@ -6,7 +6,7 @@
   const { Command } = require("commander");
   const program = new Command();
   program
-    .name("wingr")
+    .name("wingrt")
     .description("Wing Runtime CLI")
     .version("0.0.0-dev.0")
     .argument("<input>", "input to run/compile")

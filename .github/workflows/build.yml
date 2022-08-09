@@ -57,14 +57,14 @@ jobs:
             cargo build --release
           popd
 
-          mkdir -p wingr/vendor/node
-          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingr/vendor/node
-          pushd wingr
+          mkdir -p wingrt/vendor/node
+          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrt/vendor/node
+          pushd wingrt
             npm install
             npm test
             pushd build
-              cp wingr ../../wing/bin
-              tar -zcf ../../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz wingr
+              cp wingrt ../../wing/bin
+              tar -zcf ../../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz wingrt
             popd
           popd
 

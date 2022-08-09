@@ -1,5 +1,5 @@
 {
-  "name": "wingr",
+  "name": "wingrt",
   "version": "0.0.1",
   "description": "Wing Runtime",
   "scripts": {
@@ -8,8 +8,8 @@
     "clean": "rm -rf build",
     "rebuild": "npm-run-all clean cmake",
     "test": "npm-run-all test:*",
-    "test:js": "./build/wingr tests/hello.js ./",
-    "test:w": "./build/wingr tests/hello.w ./"
+    "test:js": "./build/wingrt tests/hello.js ./",
+    "test:w": "./build/wingrt tests/hello.w ./"
   },
   "repository": {
     "type": "git",

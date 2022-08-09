@@ -23,9 +23,9 @@ process.env.LD_LIBRARY_PATH = binariesPath;
 process.env.DYLD_LIBRARY_PATH = binariesPath;
 process.env.DYLD_FALLBACK_LIBRARY_PATH = binariesPath;
 
-// Spawn "wingr" binary and forward stdio to it
+// Spawn "wingrt" binary and forward stdio to it
 child_process.spawnSync(
-  path.join(binariesPath, "wingr"),
+  path.join(binariesPath, "wingrt"),
   process.argv.slice(2),
   {
     stdio: "inherit",

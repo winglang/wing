@@ -25,7 +25,7 @@ INCTXT(WingRuntimeEntryBundle, "entry.bundle.js");
 #define NAPI_ASSERT(condition)                                                 \
   if (!(condition))                                                            \
   {                                                                            \
-    napi_fatal_error("wingr", NAPI_AUTO_LENGTH, #condition, NAPI_AUTO_LENGTH); \
+    napi_fatal_error("wingrt", NAPI_AUTO_LENGTH, #condition, NAPI_AUTO_LENGTH); \
     assert(false);                                                             \
   }
 /** @brief asserts napi operation returned with "napi_ok" */
@@ -142,12 +142,12 @@ namespace
 
   /**
    * @brief modifies the input argc and argv to make sure script name is always
-   * fixed to "wingr.js" and also passes some default Node args into runtime.
+   * fixed to "wingrt.js" and also passes some default Node args into runtime.
    * @param argc original argc
    * @param argv original argv
    * @return char** modified argv
    */
-  char **wingr_setup_args(int &argc, char **argv)
+  char **wingrt_setup_args(int &argc, char **argv)
   {
     static const std::vector<std::string> args{
         "--experimental-modules",
@@ -156,7 +156,7 @@ namespace
         "--no-experimental-fetch",
         "--no-deprecation",
         "--no-warnings",
-        "wingr.js", // leaving this here makes sure script name is always fixed
+        "wingrt.js", // leaving this here makes sure script name is always fixed
     };
     int new_argc = argc + args.size();
     char **new_argv = new char *[new_argc + 1];
@@ -173,7 +173,7 @@ namespace
 
 int main(int argc, char *argv[])
 {
-  argv = wingr_setup_args(argc, argv);
+  argv = wingrt_setup_args(argc, argv);
   argv = uv_setup_args(argc, argv);
   std::vector<std::string> args(argv, argv + argc);
   std::vector<std::string> exec_args;
