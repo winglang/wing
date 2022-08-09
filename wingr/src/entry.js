@@ -2,6 +2,7 @@
   const fs = require("fs");
   const vm = require("vm");
   const path = require("path");
+
   const { Command } = require("commander");
   const program = new Command();
   program
@@ -14,6 +15,7 @@
       const ext = path.extname(input);
       if (ext === ".w") {
         const inputSource = WingCompiler.compile(input, options.context);
+        console.debug("Running JS:\n", inputSource);
         vm.runInThisContext(inputSource);
         process.exit(0);
       }
