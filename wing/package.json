@@ -17,6 +17,9 @@
   "dependencies": {
     "@monadahq/wingsdk": "*"
   },
+  "bundledDependencies": [
+    "@monadahq/wingsdk"
+  ],
   "optionalDependencies": {
     "@monadahq/wing-darwin-arm64": "*",
     "@monadahq/wing-darwin-x64": "*",
