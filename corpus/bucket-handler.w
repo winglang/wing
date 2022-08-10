@@ -2,7 +2,6 @@ use cloud
 
 bucket := cloud::Bucket()
 bucket2 := cloud::Bucket() as "OtherBucket"
-value := "hello"
 
 proc handler() {
   bucket->upload("file.txt", value->toString())

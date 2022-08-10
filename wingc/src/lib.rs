@@ -399,7 +399,7 @@ mod sanity {
 
     #[test]
     fn does_not_blow_up() {
-        let source = "sanity.w";
+        let source = "../corpus/text-file.w";
         let source_raw = CString::new(source).unwrap();
         let intermediate = wingc_compile(source_raw.as_ptr(), null());
         wingc_release(intermediate)
