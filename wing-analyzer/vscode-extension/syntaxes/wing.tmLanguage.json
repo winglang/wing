@@ -1,0 +1,54 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "Wing",
+	"scopeName": "source.wing",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#comment"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [
+				{
+					"name": "keyword.control.wing",
+					"match": "\\b(?:as|class|else|for|from|function|if|in|new|return|inflight|proc|use)\\b"
+				},
+				{
+					"name": "keyword.other.wing",
+					"match": "\\b(?:true|false|anything|nothing|nil)\\b"
+				}
+			]
+		},
+		"comment":{
+			"patterns": [
+				{
+					"name": "comment.line",
+					"match": "//.*"
+				},
+				{
+					"name": "comment.block",
+					"begin": "/\\*",
+					"end": "\\*/"
+				}
+			]
+		},
+		"strings": {
+			"name": "string.quoted.double.wing",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.wing",
+					"match": "\\\\."
+				}
+			]
+		}
+	}
+}
