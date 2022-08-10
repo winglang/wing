@@ -17,6 +17,4 @@ dist
 /.projenrc.js
 tsconfig.tsbuildinfo
 /.eslintrc.json
-/.prettierignore
-/.prettierrc.json
 /coverage/

@@ -92,7 +92,7 @@
           "exec": "vite build"
         },
         {
-          "exec": "electron-builder"
+          "exec": "electron-builder --publish=never"
         }
       ]
     },
