@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::{diagnostic::WingSpan, type_check};
+use crate::diagnostic::WingSpan;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Symbol {
@@ -14,12 +14,34 @@ impl std::fmt::Display for Symbol {
 	}
 }
 
+#[derive(Debug, Clone)]
+pub enum Type {
+	Number,
+	String,
+	Bool,
+	Duration,
+	FunctionSignature(FunctionSignature),
+	Class(Symbol),
+}
+
+#[derive(Debug, Clone)]
+pub struct FunctionSignature {
+	pub parameters: Vec<Type>,
+	pub return_type: Option<Box<Type>>,
+}
+
 #[derive(Debug)]
 pub struct FunctionDefinition {
 	pub name: Symbol,
+	pub parameters: Vec<Symbol>,
+	pub statements: Scope,
+	pub signature: FunctionSignature,
+}
+
+#[derive(Debug)]
+pub struct Constructor {
 	pub parameters: Vec<ParameterDefinition>,
 	pub statements: Scope,
-	pub return_type: Option<type_check::Type>,
 }
 
 #[derive(Debug)]
@@ -59,19 +81,20 @@ pub enum Statement {
 		name: Symbol,
 		members: Vec<ClassMember>,
 		methods: Vec<FunctionDefinition>,
+		constructor: Constructor,
 		parent: Option<Symbol>,
 	},
 }
 #[derive(Debug)]
 pub struct ParameterDefinition {
 	pub name: Symbol,
-	pub parameter_type: type_check::Type,
+	pub parameter_type: Type,
 }
 
 #[derive(Debug)]
 pub struct ClassMember {
 	pub name: Symbol,
-	pub parameter_type: type_check::Type,
+	pub member_type: Type,
 }
 
 #[derive(Debug)]
@@ -95,7 +118,7 @@ pub enum Expression {
 		exp: Box<Expression>,
 	},
 	Binary {
-		// TODO: Split to LgicalBinary, NumericBinary, Bit/String??
+		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
 		lexp: Box<Expression>,
 		rexp: Box<Expression>,

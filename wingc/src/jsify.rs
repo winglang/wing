@@ -206,7 +206,7 @@ fn jsify_statement(statement: &Statement) -> String {
 		Statement::FunctionDefinition(func_def) => {
 			let mut parameter_list = vec![];
 			for p in func_def.parameters.iter() {
-				parameter_list.push(jsify_symbol(&p.name));
+				parameter_list.push(jsify_symbol(p));
 			}
 
 			format!(
@@ -318,6 +318,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			members: _,
 			methods: _,
 			parent: _,
+			constructor: _,
 		} => todo!(),
 	}
 }

@@ -105,7 +105,7 @@ module.exports = grammar({
         field("implementation", $.class_implementation)
       ),
     class_implementation: ($) =>
-      seq("{", repeat(choice($.function_definition, $.class_member)), "}"),
+      seq("{", repeat(choice($.constructor, $.function_definition, $.class_member)), "}"),
     class_member: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
 
@@ -238,6 +238,13 @@ module.exports = grammar({
 
     builtin_type: ($) =>
       choice("number", "string", "bool", "duration", "nothing", "anything"),
+
+    constructor: ($) => 
+      seq(
+        "constructor",
+        field("parameter_list", $.parameter_list),
+        field("block", $.block),
+      ),
 
     function_definition: ($) =>
       seq(

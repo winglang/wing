@@ -123,6 +123,7 @@ Class definition
 ==================================
 
 class A {
+    constructor() {}
     function do_something() {}
     a_member: string;
 }
@@ -132,6 +133,9 @@ class A {
     (class_definition
         name: (identifier)
         implementation: (class_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
             (function_definition
                 name: (identifier)
                 parameter_list: (parameter_list)

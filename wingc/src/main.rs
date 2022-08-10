@@ -3,6 +3,9 @@ use clap::*;
 use std::fs;
 use std::path::PathBuf;
 
+use crate::ast::*;
+use crate::diagnostic::*;
+use crate::type_check::TypeChecker;
 use crate::type_env::TypeEnv;
 
 mod ast;
@@ -54,8 +57,78 @@ fn main() {
 	}
 	.wingit(&tree.root_node());
 
+	//println!("{:?}", ast_root);
+	// let ast_root = Scope {
+	// 	statements: vec![
+	// 		Statement::VariableDef {
+	// 			var_name: Symbol {
+	// 				name: "y".into(),
+	// 				span: WingSpan {
+	// 					start: 0,
+	// 					end: 1,
+	// 					file_id: "tmp1.w".into(),
+	// 				},
+	// 			},
+	// 			initial_value: Expression::Literal(Literal::Boolean(true)),
+	// 		},
+	// 		Statement::FunctionDefinition(FunctionDefinition {
+	// 			name: Symbol {
+	// 				name: "hi".into(),
+	// 				span: WingSpan {
+	// 					start: 15,
+	// 					end: 17,
+	// 					file_id: "tmp1.w".into(),
+	// 				},
+	// 			},
+	// 			parameters: vec![
+	// 				Symbol {
+	// 					name: "a".into(),
+	// 					span: WingSpan {
+	// 						start: 18,
+	// 						end: 19,
+	// 						file_id: "tmp1.w".into(),
+	// 					},
+	// 				},
+	// 				Symbol {
+	// 					name: "b".into(),
+	// 					span: WingSpan {
+	// 						start: 29,
+	// 						end: 30,
+	// 						file_id: "tmp1.w".into(),
+	// 					},
+	// 				},
+	// 			],
+	// 			statements: Scope {
+	// 				statements: vec![Statement::Scope(Scope {
+	// 					statements: vec![Statement::Return(Some(Expression::Binary {
+	// 						op: BinaryOperator::Greater,
+	// 						lexp: Box::new(Expression::Reference(Reference {
+	// 							namespace: None,
+	// 							identifier: Symbol {
+	// 								name: "a".into(),
+	// 								span: WingSpan {
+	// 									start: 59,
+	// 									end: 60,
+	// 									file_id: "tmp1.w".into(),
+	// 								},
+	// 							},
+	// 						})),
+	// 						rexp: Box::new(Expression::Literal(Literal::Number(7.0))),
+	// 					}))],
+	// 				})],
+	// 			},
+	// 			signature: FunctionSignature {
+	// 				parameters: vec![Type::Number, Type::Bool],
+	// 				return_type: Some(Box::new(Type::Bool)),
+	// 			},
+	// 		}),
+	// 	],
+	// };
+
 	let mut root_env = TypeEnv::new(None, None);
-	type_check::type_check_scope(&ast_root, &mut root_env);
+
+	let mut tc = TypeChecker::new();
+	tc.type_check_scope(&ast_root, &mut root_env);
 
 	println!("{}", jsify::jsify(&ast_root, true));
 }
