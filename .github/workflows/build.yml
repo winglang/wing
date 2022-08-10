@@ -59,9 +59,6 @@ jobs:
           mkdir -p wingrt/vendor/node
           unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrt/vendor/node
           pushd wingrt
-            export CFLAGS="-arch ${{ matrix.arch }}"
-            export CXXFLAGS="-arch ${{ matrix.arch }}"
-            export LDFLAGS="-arch ${{ matrix.arch }}"
             npm install
             npm test
             pushd build
