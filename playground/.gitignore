@@ -1,4 +1,0 @@
-/target/
-*.w.out
-/node_modules/
-/cdktf.out/
