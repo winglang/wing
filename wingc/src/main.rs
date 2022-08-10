@@ -57,7 +57,7 @@ fn main() {
 	}
 	.wingit(&tree.root_node());
 
-	//println!("{:?}", ast_root);
+	// println!("{:?}", ast_root);
 	// let ast_root = Scope {
 	// 	statements: vec![
 	// 		Statement::VariableDef {

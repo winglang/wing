@@ -1,5 +1,7 @@
 use std::fmt::{Debug, Display};
+use std::mem::replace;
 use std::ops::Deref;
+use std::thread::panicking;
 
 use crate::ast::{Type as AstType, *};
 use crate::type_env::TypeEnv;
@@ -19,7 +21,7 @@ pub enum Type {
 
 pub struct Class {
 	name: Symbol, // TODO: do we really need the name here, we should alway get here through a Class Type in some env which has the name of the type
-	env: Box<TypeEnv>,
+	env: TypeEnv,
 	parent: Option<TypeRef>, // Must be a Type::Class type
 }
 
@@ -111,6 +113,12 @@ impl From<&Box<Type>> for TypeRef {
 impl From<TypeRef> for &Type {
 	fn from(t: TypeRef) -> Self {
 		unsafe { &*t.0 }
+	}
+}
+
+impl From<TypeRef> for &mut Type {
+	fn from(t: TypeRef) -> Self {
+		unsafe { &mut *(t.0 as *mut Type) }
 	}
 }
 
@@ -254,10 +262,46 @@ impl TypeChecker {
 			}
 			Expression::Reference(_ref) => Some(env.lookup(&_ref.identifier)),
 			Expression::New {
-				class: _,
-				obj_id: _,
-				arg_list: _,
-			} => todo!(),
+				class,
+				obj_id,
+				arg_list,
+			} => {
+				// Lookup the class in the env
+				let class_type = env.lookup(class);
+
+				let class_env = if let &Type::Class(ref class) = class_type.into() {
+					&class.env
+				} else {
+					panic!("Expected {} to be of class type", class);
+				};
+
+				// Type check args against constructor
+				let constructor_type = class_env.lookup(&Symbol {
+					name: "constructor".into(),
+					span: class.span.clone(),
+				});
+
+				let constructor_sig = if let &Type::Function(ref sig) = constructor_type.into() {
+					sig
+				} else {
+					panic!(
+						"Expected {} to be of a constructor for class {}",
+						constructor_type, class
+					);
+				};
+
+				// Verify return type (This should never fail since we define the constructors return type during AST building)
+				self.validate_type(constructor_sig.return_type.unwrap(), class_type, exp);
+				// TODO: named args
+				// Verify arity
+				if arg_list.pos_args.len() != constructor_sig.args.len() {
+					panic!("Expected {} args but got {} when calling {}'s constructor", );
+				}
+				// Verify passed arguments match the constructor
+				for arg  arg
+
+				Some(class_type)
+			}
 			Expression::FunctionCall { function, args } => {
 				let func_type = env.lookup(&function.identifier);
 
@@ -446,16 +490,21 @@ impl TypeChecker {
 					None
 				};
 
-				// Add myself to the current environment (so class implementation can reference itself)
-				// self.types.add_type(Type::Class(Class{ name, env: todo!(), parent: todo!() }))
-				// env.define(name, type)
+				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
+				let dummy_env = TypeEnv::new(Some(env), None);
 
-				// Create environment representing this class
+				// Create the class type and add it to the current environment (so class implementation can reference itself)
+				let class_type = self.types.add_type(Type::Class(Class {
+					name: name.clone(),
+					env: dummy_env,
+					parent: parent_class,
+				}));
+				env.define(name, class_type);
+
+				// Create a the real class environment to be filled with the class AST types
 				let mut class_env = TypeEnv::new(Some(env), None);
 
 				// Add members to the class env
-				// TODO: we need to somehow add ourselves to the current env before adding all class members to the class env, so if there's a member of
-				//   my own type it'll resolve correctly. Currently `class A { a: A }` will fail or resolve `a` to an outer `A`. (same for methods below).
 				for member in members.iter() {
 					let member_type = self.resolve_type(&member.member_type, env);
 					class_env.define(&member.name, member_type);
@@ -465,11 +514,19 @@ impl TypeChecker {
 					let mut sig = method.signature.clone();
 
 					// Add myself as first parameter to all class methods (self)
-					sig.parameters.insert(0, AstType::Class(name.clone())); // TODO: this'll probably fail us since we don't have ourselves in the env yet..
+					sig.parameters.insert(0, AstType::Class(name.clone()));
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env);
 					class_env.define(&method.name, method_type);
 				}
+
+				// Replace the dummy class environment with the real one before type checking the methods
+				let class_env = if let &mut Type::Class(ref mut class) = class_type.into() {
+					replace(&mut class.env, class_env);
+					&class.env
+				} else {
+					panic!("Class type {} isn't a class?!", name);
+				};
 
 				// Type check methods
 				for method in methods.iter() {
@@ -498,14 +555,6 @@ impl TypeChecker {
 					// Check function scope
 					self.type_check_scope(&method.statements, &mut method_env);
 				}
-
-				// Define a new class type and add it to the environment
-				let t = self.types.add_type(Type::Class(Class {
-					name: name.clone(),
-					env: Box::new(class_env),
-					parent: parent_class,
-				}));
-				env.define(name, t)
 			}
 		}
 	}
