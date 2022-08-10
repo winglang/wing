@@ -1,6 +1,7 @@
 name: Build
 
-on: push
+on:
+  push:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
@@ -70,16 +71,26 @@ jobs:
           pushd wing
             npm install --no-scripts
             node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
+          popd
+
+      - name: Publish Wing
+        if: ${{ github.ref == 'refs/heads/main' }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: |
+          pushd wing
             npm publish
           popd
 
       - name: Upload Artifact
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
           path: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
 
   release:
+    if: ${{ github.ref == 'refs/heads/main' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -104,6 +115,7 @@ jobs:
 
   wrapper:
     needs: build
+    if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
