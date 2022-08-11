@@ -169,7 +169,7 @@ impl Parser<'_> {
 							let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap());
 							constructor = Some(Constructor {
 								parameters: parameters.iter().map(|p| p.name.clone()).collect(),
-								statements: self.build_scope(class_element.children_by_field_name("block", &mut class_element.walk())),
+								statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 								signature: FunctionSignature {
 									parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
 									return_type: Some(Box::new(Type::Class(name.clone()))),
@@ -245,15 +245,14 @@ impl Parser<'_> {
 		}
 	}
 
-	// TODO: this should receive the env in order to lookup user defined types (classes) -> actually no, this should be done in the type checking phase..
 	fn build_type(&self, type_node: &Node) -> Type {
 		match type_node.kind() {
-			"primitive_type" => match self.node_text(type_node) {
+			"builtin_type" => match self.node_text(type_node) {
 				"number" => Type::Number,
 				"string" => Type::String,
 				"bool" => Type::Bool,
 				"duration" => Type::Duration,
-				other => panic!("Unexpected primitive type {}", other),
+				other => panic!("Unexpected builtin type {}", other),
 			},
 			"class" => Type::Class(self.node_symbol(type_node)),
 			"function_type" => {
@@ -405,28 +404,10 @@ impl Parser<'_> {
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			},
 			"method_call" => Expression::MethodCall(MethodCall {
-				object: self.build_reference(
-					&expression_node
-						.child_by_field_name("call_name")
-						.unwrap()
-						.child_by_field_name("object")
-						.unwrap(),
-				),
-				method: self.node_symbol(
-					&expression_node
-						.child_by_field_name("call_name")
-						.unwrap()
-						.child_by_field_name("property")
-						.unwrap(),
-				),
+				method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap()),
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			}),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"method_call" => Expression::MethodCall(MethodCall {
-				object: Box::new(self.build_expression(&expression_node.child_by_field_name("object").unwrap())),
-				method: self.node_symbol(&expression_node.child_by_field_name("call_name").unwrap()),
-				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
-			}),
 			other => {
 				panic!(
 					"Unexpected expression '{}' at {}",

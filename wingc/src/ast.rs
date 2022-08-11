@@ -156,8 +156,7 @@ pub struct Scope {
 
 #[derive(Debug)]
 pub struct MethodCall {
-	pub object: Reference,
-	pub method: Symbol,
+	pub method: Reference,
 	pub args: ArgList,
 }
 #[derive(Debug)]

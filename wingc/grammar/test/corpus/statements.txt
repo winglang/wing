@@ -156,10 +156,10 @@ Class inheritance
 class A extends B {}
 
 ---
-(source_file
+(source
     (class_definition
-        name: (class_name)
-        parent: (class_name)
+        name: (identifier)
+        parent: (identifier)
         implementation: (class_implementation)
     )
 )

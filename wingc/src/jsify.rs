@@ -1,6 +1,6 @@
-==== BASE ====
-use crate::ast::{BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
-==== BASE ====
+use crate::ast::{
+	ArgList, BinaryOperator, ClassMember, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator,
+};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -125,11 +125,7 @@ fn jsify_expression(expression: &Expression) -> String {
 			obj_id: _,
 			arg_list,
 		} => {
-			format!(
-				"new {}({})",
-				jsify_reference(&class),
-				jsify_arg_list(&arg_list)
-			)
+			format!("new {}({})", jsify_symbol(&class), jsify_arg_list(&arg_list))
 		}
 		Expression::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
@@ -143,9 +139,8 @@ fn jsify_expression(expression: &Expression) -> String {
 		}
 		Expression::MethodCall(method_call) => {
 			format!(
-				"{}.{}({})",
-				jsify_reference(&method_call.object),
-				jsify_symbol(&method_call.method),
+				"{}({})",
+				jsify_reference(&method_call.method),
 				jsify_arg_list(&method_call.args)
 			)
 		}

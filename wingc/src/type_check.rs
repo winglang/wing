@@ -258,7 +258,7 @@ impl TypeChecker {
 				self.validate_type(_type, self.types.number(), &unary_exp);
 				Some(_type)
 			}
-			Expression::Reference(_ref) => Some(env.lookup(&_ref.identifier)),
+			Expression::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
 			Expression::New {
 				class,
 				obj_id: _,
@@ -310,16 +310,16 @@ impl TypeChecker {
 				Some(class_type) // TODO: I'm still not sure if it's enough to just use the Type::Class here or if I need a Type::ClassInstance in our type system
 			}
 			Expression::FunctionCall { function, args } => {
-				let func_type = env.lookup(&function.identifier);
+				let func_type = self.resolve_reference(function, env);
 
 				if let &Type::Function(ref func_type) = func_type.into() {
 					// TODO: named args
 					// Argument arity check
 					if args.pos_args.len() != func_type.args.len() {
 						panic!(
-							"Expected {} arguments for function {}, but got {} instead.",
+							"Expected {} arguments for function {:?}, but got {} instead.",
 							func_type.args.len(),
-							function.identifier,
+							function,
 							args.pos_args.len()
 						)
 					}
@@ -331,35 +331,24 @@ impl TypeChecker {
 
 					func_type.return_type
 				} else {
-					panic!("Identifier {} is not a function", function.identifier)
+					panic!("Identifier {:?} is not a function", function)
 				}
 			}
 			Expression::MethodCall(method_call) => {
-				// Get class
-				let class = {
-					let t = self.type_check_exp(&method_call.object, env).unwrap();
-					if let &Type::Class(ref class) = t.into() {
-						class
-					} else {
-						panic!("{:?} is not a class object", method_call.object);
-					}
-				};
-
 				// Find method in class's environment
-				let method_type = class.env.lookup(&method_call.method);
+				let method_type = self.resolve_reference(&method_call.method, env);
 				let method_sig = if let &Type::Function(ref sig) = method_type.into() {
 					sig
 				} else {
-					panic!("Symbol {} is not a method of {}", method_call.method, class.name);
+					panic!("Identifier {:?} is not a method", method_call.method);
 				};
 
 				// Verify arity
 				// TODO named args
 				if method_sig.args.len() != method_call.args.pos_args.len() + 1 {
 					panic!(
-						"Expected {} arguments when calling {}.{} but got {}",
+						"Expected {} arguments when calling {:?} but got {}",
 						method_sig.args.len() - 1,
-						class.name,
 						method_call.method,
 						method_call.args.pos_args.len()
 					);
@@ -378,8 +367,6 @@ impl TypeChecker {
 
 	fn validate_type(&self, actual_type: TypeRef, expected_type: TypeRef, value: &Expression) {
 		if actual_type != expected_type {
-			println!("{}", self.types.number());
-			println!("{}", actual_type);
 			panic!("Expected type {} of {:?} to be {}", actual_type, value, expected_type);
 		}
 	}
@@ -443,7 +430,7 @@ impl TypeChecker {
 				// Add this function to the env
 				env.define(&func_def.name, function_type);
 
-				let mut function_env = TypeEnv::new(Some(env), return_type);
+				let mut function_env = TypeEnv::new(Some(env), return_type, false);
 				for (param, param_type) in func_def.parameters.iter().zip(args.iter()) {
 					function_env.define(&param, *param_type);
 				}
@@ -463,7 +450,7 @@ impl TypeChecker {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env).unwrap();
 
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type);
+				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
 				scope_env.define(&iterator, exp_type);
 
 				self.type_check_scope(statements, &mut scope_env);
@@ -476,11 +463,11 @@ impl TypeChecker {
 				let cond_type = self.type_check_exp(condition, env).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type);
+				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
 				self.type_check_scope(statements, &mut scope_env);
 
 				if let Some(else_scope) = else_statements {
-					let mut else_scope_env = TypeEnv::new(Some(env), env.return_type);
+					let mut else_scope_env = TypeEnv::new(Some(env), env.return_type, false);
 					self.type_check_scope(else_scope, &mut else_scope_env);
 				}
 			}
@@ -489,14 +476,14 @@ impl TypeChecker {
 			}
 			Statement::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env).unwrap();
-				self.validate_type(exp_type, env.lookup(&variable.identifier), value);
+				self.validate_type(exp_type, self.resolve_reference(variable, env), value);
 			}
 			Statement::Use {
 				module_name: _,
 				identifier: _,
 			} => todo!(),
 			Statement::Scope(scope) => {
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type);
+				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
 				for statement in scope.statements.iter() {
 					self.type_check_statement(statement, &mut scope_env);
 				}
@@ -535,7 +522,7 @@ impl TypeChecker {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = TypeEnv::new(None, None);
+				let dummy_env = TypeEnv::new(None, None, true);
 
 				// Create the class type and add it to the current environment (so class implementation can reference itself)
 				let class_type = self.types.add_type(Type::Class(Class {
@@ -546,7 +533,7 @@ impl TypeChecker {
 				env.define(name, class_type);
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = TypeEnv::new(parent_class_env, None);
+				let mut class_env = TypeEnv::new(parent_class_env, None, true);
 
 				// Add members to the class env
 				for member in members.iter() {
@@ -596,7 +583,7 @@ impl TypeChecker {
 					};
 
 					// Create method environment and prime it with args
-					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type);
+					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
@@ -610,6 +597,27 @@ impl TypeChecker {
 					self.type_check_scope(&method.statements, &mut method_env);
 				}
 			}
+		}
+	}
+
+	fn resolve_reference(&self, reference: &Reference, env: &TypeEnv) -> TypeRef {
+		match reference {
+			Reference::Identifier(symbol) => env.lookup(symbol),
+			Reference::NestedIdentifier { object, property } => {
+				// Get class
+				let class = {
+					let t = self.type_check_exp(object, env).unwrap();
+					if let &Type::Class(ref class) = t.into() {
+						class
+					} else {
+						panic!("{:?} does not resolve to a class object", object);
+					}
+				};
+
+				// Find property in class's environment
+				class.env.lookup(property)
+			}
+			Reference::NamespacedIdentifier { namespace, identifier } => todo!(),
 		}
 	}
 }
