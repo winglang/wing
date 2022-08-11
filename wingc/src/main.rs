@@ -6,6 +6,7 @@ use std::path::PathBuf;
 use crate::type_env::TypeEnv;
 
 mod ast;
+mod diagnostic;
 mod jsify;
 mod parser;
 mod type_check;
