@@ -20,6 +20,12 @@ pub struct FunctionSignature {
 	pub return_type: Option<Type>,
 }
 
+#[deprecated = "Remember to implement this!"]
+pub fn unimplemented_type() -> Option<Type> {
+	println!("Skipping unimplemented type check");
+	return Some(Type::Anything);
+}
+
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
@@ -105,15 +111,13 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 			class: _,
 			obj_id: _,
 			arg_list: _,
-		} => {
-			todo!()
-		}
+		} => unimplemented_type(),
 		Expression::FunctionCall { function, args } => {
 			let func_type = env.lookup(&function);
 
 			if let Type::Function(func_type) = func_type {
 				// TODO: named args
-				// Arument arity check
+				// Argument arity check
 				if args.pos_args.len() != func_type.args.len() {
 					panic!(
 						"Expected {} arguments for function {:#?}, but got {} instead.",
@@ -132,12 +136,8 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 				panic!("Identifier {:#?} is not a function", function)
 			}
 		}
-		Expression::MethodCall(_) => {
-			todo!()
-		}
-		Expression::CapturedObjMethodCall(_) => {
-			todo!()
-		}
+		Expression::MethodCall(_) => unimplemented_type(),
+		Expression::CapturedObjMethodCall(_) => unimplemented_type(),
 	}
 }
 
@@ -185,7 +185,9 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			name: _,
 			parameters: _,
 			statements: _,
-		} => todo!(),
+		} => {
+			unimplemented_type();
+		}
 		Statement::ForLoop {
 			iterator,
 			iterable,
@@ -225,7 +227,9 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 		Statement::Use {
 			module_name: _,
 			identifier: _,
-		} => todo!(),
+		} => {
+			unimplemented_type();
+		}
 		Statement::Scope(scope) => {
 			let mut scope_env = TypeEnv::new(Some(env), env.return_type.clone());
 			for statement in scope.statements.iter() {
@@ -250,6 +254,8 @@ fn type_check_statement(statement: &Statement, env: &mut TypeEnv) {
 			name: _,
 			members: _,
 			methods: _,
-		} => todo!(),
+		} => {
+			unimplemented_type();
+		}
 	}
 }

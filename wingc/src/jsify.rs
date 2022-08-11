@@ -1,7 +1,89 @@
+use std::{collections::HashMap, fs};
+
+use sha2::{Digest, Sha256};
+
 use crate::ast::{ArgList, BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
+
+struct Capture {
+	symbol: String,
+	method: String,
+}
+
+fn find_captures_from_expression(node: &Expression) -> Vec<Capture> {
+	let mut res: Vec<Capture> = vec![];
+
+	// TODO Hack, assume it's of the form `capture.method()`
+	// Without type info, this is the best we can do
+	if let Expression::MethodCall(m) = node {
+		if let Reference::Identifier(symbol) = &m.object {
+			if symbol.name == "console" {
+				// TODO Extra hack, ignore console.log for now
+				return res;
+			}
+			res.push(Capture {
+				symbol: symbol.name.to_string(),
+				method: m.method.name.to_string(),
+			});
+		}
+	}
+
+	res
+}
+
+fn find_captures(node: &Scope) -> Vec<Capture> {
+	let mut res: Vec<Capture> = vec![];
+	for statement in &node.statements {
+		match statement {
+			Statement::VariableDef { initial_value, .. } => {
+				res.append(&mut find_captures_from_expression(&initial_value));
+			}
+			Statement::ForLoop {
+				iterable, statements, ..
+			} => {
+				res.append(&mut find_captures_from_expression(&iterable));
+				res.append(&mut find_captures(&statements));
+			}
+			Statement::If {
+				condition,
+				statements,
+				else_statements,
+			} => {
+				res.append(&mut find_captures_from_expression(&condition));
+				res.append(&mut find_captures(&statements));
+				if let Some(else_statements) = else_statements {
+					res.append(&mut find_captures(&else_statements));
+				}
+			}
+			Statement::Expression(exp) => res.append(&mut find_captures_from_expression(&exp)),
+			Statement::Assignment { value, .. } => res.append(&mut find_captures_from_expression(&value)),
+			Statement::Return(exp) => {
+				if exp.is_some() {
+					res.append(&mut find_captures_from_expression(exp.as_ref().unwrap()));
+				}
+			}
+			Statement::Scope(s) => res.append(&mut find_captures(&s)),
+			_ => {}
+		}
+	}
+
+	// if node.kind() == "proc_call_name" {
+	// 	let cloud_object = self.node_text(&node.named_child(0).unwrap());
+	// 	let method_name = self.node_text(&node.named_child(1).unwrap());
+	// 	res.push(Capture {
+	// 		symbol: cloud_object.to_string(),
+	// 		method: method_name.to_string(),
+	// 	});
+	// }
+
+	// let mut cursor = node.walk();
+	// for child in node.children(&mut cursor) {
+	// 	res.append(&mut self.find_captures(&child));
+	// }
+	res
+}
 
 fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
 	let mut lines = vec![];
@@ -217,63 +299,81 @@ fn jsify_statement(statement: &Statement) -> String {
 			)
 		}
 		Statement::InflightFunctionDefinition {
-			name: _,
-			parameters: _,
-			statements: _,
+			name,
+			parameters,
+			statements,
 		} => {
-			todo!();
-			/*
-			let parameter_list = vec![];
+			let mut parameter_list = vec![];
 			for p in parameters {
-					parameter_list.push(p.name);
+				parameter_list.push(p.name.name.clone());
 			}
 
-			// find all cloud objects referenced in the proc
-			let captures = self.find_captures(&root.named_child(2).unwrap());
+			// TODO Hack
+			let out_dir = format!("{}.out", name.span.file_id.to_string());
 
-			let block = self.compile2(&root.named_child(2).unwrap());
+			// find all cloud objects referenced in the proc
+			let captures = find_captures(statements);
+
+			let block = jsify_scope(statements);
 
 			let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 
-			let mut proc_source = vec![];
-
-			for o in captures.iter() {
-					proc_source.push(format!("const __PROC__{} = <<{}>>", o.symbol, o.symbol));
-			}
-
-			proc_source.push(format!("exports.proc = async function({}) {};", parameter_list, block));
-
-			let proc_dir = self.out_dir.join(format!("proc.{}", procid));
-
-			fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
-			fs::write(proc_dir.join("index.js"), proc_source.join("\n")).expect("Writing inflight proc source");
-
 			let mut methods_per_object = HashMap::new();
 			for capture in captures.iter() {
-					if !methods_per_object.contains_key(&capture.symbol) {
-							methods_per_object.insert(capture.symbol.clone(), vec![]);
-					}
-					methods_per_object.get_mut(&capture.symbol).unwrap().push(capture.method.clone());
+				if !methods_per_object.contains_key(&capture.symbol) {
+					methods_per_object.insert(capture.symbol.clone(), vec![]);
+				}
+				methods_per_object
+					.get_mut(&capture.symbol)
+					.unwrap()
+					.push(capture.method.clone());
 			}
 
 			let mut bindings = vec![];
+			let mut capture_names = vec![];
 			for (symbol, methods) in methods_per_object {
-					bindings.push(
-							format!("{}: {},", symbol, Self::render_block([
-									format!("obj: {},",symbol),
-									format!("methods: [{}]", methods.iter().map(|x| format!("\"{}\"", x)).collect::<Vec<_>>().join(","))
-									]))
-
-					);
+				capture_names.push(symbol.clone());
+				bindings.push(format!(
+					"{}: {},",
+					symbol,
+					render_block([
+						format!("obj: {},", symbol),
+						format!(
+							"methods: [{}]",
+							methods
+								.iter()
+								.map(|x| format!("\"{}\"", x))
+								.collect::<Vec<_>>()
+								.join(",")
+						)
+					])
+				));
 			}
 
-			let props_block = Self::render_block([
-					format!("path: __dirname + \"/{}\",", proc_dir.display()),
-					if !bindings.is_empty() { format!("bindings: {}", Self::render_block(&bindings)) } else {"".to_string()}
+			let mut proc_source = vec![];
+
+			proc_source.push(format!(
+				"async function $proc({{ {} }}, {}) {};",
+				capture_names.join(", "),
+				parameter_list.join(", "),
+				block
+			));
+
+			let proc_dir = format!("{}/proc.{}", out_dir, procid);
+
+			fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
+			fs::write(format!("{}/index.js", proc_dir), proc_source.join("\n")).expect("Writing inflight proc source");
+
+			let props_block = render_block([
+				format!("path: \"{}\",", proc_dir),
+				if !bindings.is_empty() {
+					format!("captures: {}", render_block(&bindings))
+				} else {
+					"".to_string()
+				},
 			]);
 
-			format!("const {} = new {}.core.Process({});", function_name, STDLIB, props_block)
-			*/
+			format!("const {} = new {}.core.Process({});", name.name, STDLIB, props_block)
 		}
 		Statement::ForLoop {
 			iterator,
