@@ -142,7 +142,7 @@ pub fn type_check_exp(exp: &Expression, env: &TypeEnv) -> Option<Type> {
 }
 
 fn validate_type(actual_type: &Type, expected_type: &Type, value: &Expression) {
-	if actual_type != expected_type {
+	if actual_type != expected_type && actual_type != &Type::Anything {
 		panic!("Expected type {} of {:?} to be {}", actual_type, value, expected_type);
 	}
 }
