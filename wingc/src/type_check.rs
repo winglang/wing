@@ -14,7 +14,7 @@ pub enum Type {
 	Boolean,
 	Function(Box<FunctionSignature>),
 	Class(Class),
-	ClassInstance(*const Class),
+	ClassInstance(*const Class), // TODO: Unused, do i need it??
 }
 
 pub struct Class {
@@ -91,7 +91,7 @@ impl Display for Type {
 					)
 				}
 			}
-			Type::Class(_) => todo!(),
+			Type::Class(class) => write!(f, "{}", class.name),
 			Type::ClassInstance(_) => todo!(),
 		}
 	}
