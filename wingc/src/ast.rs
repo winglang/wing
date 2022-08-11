@@ -40,8 +40,9 @@ pub struct FunctionDefinition {
 
 #[derive(Debug)]
 pub struct Constructor {
-	pub parameters: Vec<ParameterDefinition>,
+	pub parameters: Vec<Symbol>,
 	pub statements: Scope,
+	pub signature: FunctionSignature,
 }
 
 #[derive(Debug)]

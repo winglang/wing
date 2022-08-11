@@ -150,6 +150,7 @@ impl Parser<'_> {
 				let mut members = vec![];
 				let mut methods = vec![];
 				let mut constructor = None;
+				let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap());
 				for class_element in statement_node
 					.child_by_field_name("implementation")
 					.unwrap()
@@ -165,9 +166,14 @@ impl Parser<'_> {
 							if let Some(_) = constructor {
 								panic!("Multiple constructors defined in class {:?}", statement_node);
 							}
+							let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap());
 							constructor = Some(Constructor {
-								parameters: self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap()),
+								parameters: parameters.iter().map(|p| p.name.clone()).collect(),
 								statements: self.build_scope(class_element.children_by_field_name("block", &mut class_element.walk())),
+								signature: FunctionSignature {
+									parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+									return_type: Some(Box::new(Type::Class(name.clone()))),
+								},
 							})
 						}
 						other => {
@@ -185,7 +191,7 @@ impl Parser<'_> {
 				}
 
 				Statement::Class {
-					name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
+					name,
 					members,
 					methods,
 					parent: statement_node

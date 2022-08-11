@@ -1,7 +1,5 @@
 use std::fmt::{Debug, Display};
 use std::mem::replace;
-use std::ops::Deref;
-use std::thread::panicking;
 
 use crate::ast::{Type as AstType, *};
 use crate::type_env::TypeEnv;
@@ -263,9 +261,11 @@ impl TypeChecker {
 			Expression::Reference(_ref) => Some(env.lookup(&_ref.identifier)),
 			Expression::New {
 				class,
-				obj_id,
+				obj_id: _,
 				arg_list,
 			} => {
+				// TODO: obj_id ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
+
 				// Lookup the class in the env
 				let class_type = env.lookup(class);
 
@@ -295,12 +295,19 @@ impl TypeChecker {
 				// TODO: named args
 				// Verify arity
 				if arg_list.pos_args.len() != constructor_sig.args.len() {
-					panic!("Expected {} args but got {} when calling {}'s constructor", );
+					panic!(
+						"Expected {} args but got {} when instantiating {}",
+						constructor_sig.args.len(),
+						arg_list.pos_args.len(),
+						class
+					);
 				}
 				// Verify passed arguments match the constructor
-				for arg  arg
+				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
+					self.validate_type(*arg_type, self.type_check_exp(arg_expr, env).unwrap(), arg_expr);
+				}
 
-				Some(class_type)
+				Some(class_type) // TODO: I'm still not sure if it's enough to just use the Type::Class here or if I need a Type::ClassInstance in our type system
 			}
 			Expression::FunctionCall { function, args } => {
 				let func_type = env.lookup(&function.identifier);
@@ -327,7 +334,44 @@ impl TypeChecker {
 					panic!("Identifier {} is not a function", function.identifier)
 				}
 			}
-			Expression::MethodCall(_) => todo!(),
+			Expression::MethodCall(method_call) => {
+				// Get class
+				let class = {
+					let t = self.type_check_exp(&method_call.object, env).unwrap();
+					if let &Type::Class(ref class) = t.into() {
+						class
+					} else {
+						panic!("{:?} is not a class object", method_call.object);
+					}
+				};
+
+				// Find method in class's environment
+				let method_type = class.env.lookup(&method_call.method);
+				let method_sig = if let &Type::Function(ref sig) = method_type.into() {
+					sig
+				} else {
+					panic!("Symbol {} is not a method of {}", method_call.method, class.name);
+				};
+
+				// Verify arity
+				// TODO named args
+				if method_sig.args.len() != method_call.args.pos_args.len() + 1 {
+					panic!(
+						"Expected {} arguments when calling {}.{} but got {}",
+						method_sig.args.len() - 1,
+						class.name,
+						method_call.method,
+						method_call.args.pos_args.len()
+					);
+				}
+				// Verify argument types (we run from last to first to skip "this" argument)
+				for (arg_type, param_exp) in method_sig.args.iter().rev().zip(method_call.args.pos_args.iter().rev()) {
+					let param_type = self.type_check_exp(param_exp, env).unwrap();
+					self.validate_type(param_type, *arg_type, param_exp);
+				}
+
+				method_sig.return_type
+			}
 			Expression::CapturedObjMethodCall(_) => todo!(),
 		}
 	}
@@ -479,19 +523,19 @@ impl TypeChecker {
 				constructor,
 			} => {
 				// Verify parent is actually a known Class
-				let parent_class = if let Some(parent_symbol) = parent {
+				let (parent_class, parent_class_env) = if let Some(parent_symbol) = parent {
 					let t = env.lookup(parent_symbol);
-					if let &Type::Class(ref _class) = t.into() {
-						Some(t)
+					if let &Type::Class(ref class) = t.into() {
+						(Some(t), Some(&class.env as *const TypeEnv))
 					} else {
 						panic!("Class {}'s parent {} is not a class", name, parent_symbol);
 					}
 				} else {
-					None
+					(None, None)
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = TypeEnv::new(Some(env), None);
+				let dummy_env = TypeEnv::new(None, None);
 
 				// Create the class type and add it to the current environment (so class implementation can reference itself)
 				let class_type = self.types.add_type(Type::Class(Class {
@@ -502,7 +546,7 @@ impl TypeChecker {
 				env.define(name, class_type);
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = TypeEnv::new(Some(env), None);
+				let mut class_env = TypeEnv::new(parent_class_env, None);
 
 				// Add members to the class env
 				for member in members.iter() {
@@ -519,6 +563,16 @@ impl TypeChecker {
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env);
 					class_env.define(&method.name, method_type);
 				}
+
+				// Add the constructor to the class env
+				let constructor_type = self.resolve_type(&AstType::FunctionSignature(constructor.signature.clone()), env);
+				class_env.define(
+					&Symbol {
+						name: "constructor".into(),
+						span: name.span.clone(),
+					},
+					constructor_type,
+				);
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				let class_env = if let &mut Type::Class(ref mut class) = class_type.into() {

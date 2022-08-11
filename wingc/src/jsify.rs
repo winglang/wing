@@ -1,4 +1,6 @@
-use crate::ast::{ArgList, BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
+==== BASE ====
+use crate::ast::{BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
+==== BASE ====
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -122,7 +124,13 @@ fn jsify_expression(expression: &Expression) -> String {
 			// TODO
 			obj_id: _,
 			arg_list,
-		} => format!("new {}({})", jsify_reference(&class), jsify_arg_list(&arg_list)),
+		} => {
+			format!(
+				"new {}({})",
+				jsify_reference(&class),
+				jsify_arg_list(&arg_list)
+			)
+		}
 		Expression::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
 			Literal::Number(n) => format!("{}", n),
@@ -203,19 +211,11 @@ fn jsify_statement(statement: &Statement) -> String {
 			let initial_value = jsify_expression(initial_value);
 			format!("const {} = {};", jsify_symbol(var_name), initial_value)
 		}
-		Statement::FunctionDefinition(func_def) => {
-			let mut parameter_list = vec![];
-			for p in func_def.parameters.iter() {
-				parameter_list.push(jsify_symbol(p));
-			}
-
-			format!(
-				"function {}({}) {}",
-				jsify_symbol(&func_def.name),
-				parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
-				jsify_scope(&func_def.statements)
-			)
-		}
+		Statement::FunctionDefinition(func_def) => jsify_function(
+			format!("function {}", jsify_symbol(&func_def.name)).as_str(),
+			&func_def.parameters,
+			&func_def.statements,
+		),
 		Statement::InflightFunctionDefinition {
 			name: _,
 			parameters: _,
@@ -314,11 +314,50 @@ fn jsify_statement(statement: &Statement) -> String {
 			}
 		}
 		Statement::Class {
-			name: _,
-			members: _,
-			methods: _,
-			parent: _,
-			constructor: _,
-		} => todo!(),
+			name,
+			members,
+			methods,
+			parent,
+			constructor,
+		} => {
+			format!(
+				"class {}{}\n{{\n{}\n{}\n{}\n}}",
+				jsify_symbol(name),
+				if let Some(parent) = parent {
+					format!(" extends {}", jsify_symbol(parent))
+				} else {
+					"".to_string()
+				},
+				jsify_function("constructor", &constructor.parameters, &constructor.statements),
+				members
+					.iter()
+					.map(|m| jsify_class_member(m))
+					.collect::<Vec<String>>()
+					.join("\n"),
+				methods
+					.iter()
+					.map(|f| jsify_function(jsify_symbol(&f.name).as_str(), &f.parameters, &f.statements))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
+		}
 	}
+}
+
+fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope) -> String {
+	let mut parameter_list = vec![];
+	for p in parameters.iter() {
+		parameter_list.push(jsify_symbol(p));
+	}
+
+	format!(
+		"{}({}) {}",
+		name,
+		parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
+		jsify_scope(body)
+	)
+}
+
+fn jsify_class_member(member: &ClassMember) -> String {
+	format!("{};", jsify_symbol(&member.name))
 }
