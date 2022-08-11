@@ -1,7 +1,8 @@
 use cloud
 x := 5s
 bucket := cloud::Bucket()
-//bucket.upload("myfile", "somedata")
+
+// bucket.upload("myfile", "somedata")
 
 my_queue := cloud::Queue(timeout: 30m)
 my_queue.hello()
