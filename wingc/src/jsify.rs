@@ -68,20 +68,6 @@ fn find_captures(node: &Scope) -> Vec<Capture> {
 			_ => {}
 		}
 	}
-
-	// if node.kind() == "proc_call_name" {
-	// 	let cloud_object = self.node_text(&node.named_child(0).unwrap());
-	// 	let method_name = self.node_text(&node.named_child(1).unwrap());
-	// 	res.push(Capture {
-	// 		symbol: cloud_object.to_string(),
-	// 		method: method_name.to_string(),
-	// 	});
-	// }
-
-	// let mut cursor = node.walk();
-	// for child in node.children(&mut cursor) {
-	// 	res.append(&mut self.find_captures(&child));
-	// }
 	res
 }
 
