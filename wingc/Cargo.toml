@@ -10,9 +10,11 @@ tree-sitter-cli = "0.20.6"
 tree-sitter = "0.20.6"
 
 [dependencies]
+relative-path = "1.7.2"
 tree-sitter = "0.20.6"
 sha2 = "0.10"
 base16ct = { version = "0.1", features = ["alloc"] }
+tree-sitter-winglang = { path = "./grammar" }
 
 [lib]
 crate-type = ["staticlib"]

@@ -1,0 +1,166 @@
+====================
+For loop
+====================
+
+for fox in sox {
+}
+
+---
+
+(source
+    (for_in_loop
+    iterator: (reference (identifier))
+    iterable: (reference (identifier))
+        block: (block)
+    )
+)
+
+====================
+Variable assignment
+====================
+
+x: number := 1;
+x = 2;
+
+---
+
+(source
+    (variable_definition_statement
+        name: (identifier)
+        type: (builtin_type)
+        value: (number)
+    )
+    (variable_assignment_statement
+        name: (reference (identifier))
+        value: (number)
+    )
+)
+
+====================
+If
+====================
+
+if false {}
+
+---
+
+(source
+    (if_statement
+        condition: (bool)
+        block: (block)
+    )
+)
+
+====================
+Return
+====================
+
+return 1;
+
+---
+
+(source
+    (return_statement
+        expression: (number)
+    )
+)
+
+====================
+Function definition
+====================
+
+function hi(a: number, b: string) -> bool {}
+
+---
+
+(source
+    (function_definition
+        name: (identifier)
+        parameter_list: (parameter_list
+            (parameter_definition
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (parameter_definition
+                name: (identifier)
+                type: (builtin_type)
+            )
+        )
+        return_type: (builtin_type)
+        block: (block)
+    )
+)
+
+==================================
+Function with function parameter
+==================================
+
+function f(callback: (number,number)->bool) -> bool {}
+
+---
+(source
+    (function_definition
+        name: (identifier)
+        parameter_list: (parameter_list
+                (parameter_definition
+                    name: (identifier)
+                    type: (function_type
+                        parameter_types: (parameter_type_list
+                            (builtin_type)
+                            (builtin_type)
+                        )
+                        return_type: (builtin_type)
+                    )
+                )
+            )
+        return_type: (builtin_type)
+        block: (block)
+    )
+)
+
+==================================
+Class definition
+==================================
+
+class A {
+    constructor() {}
+    function do_something() {}
+    a_member: string;
+}
+
+---
+(source
+    (class_definition
+        name: (identifier)
+        implementation: (class_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
+            (function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+        )
+    )
+)
+
+==================================
+Class inheritance
+==================================
+
+class A extends B {}
+
+---
+(source
+    (class_definition
+        name: (identifier)
+        parent: (identifier)
+        implementation: (class_implementation)
+    )
+)
+

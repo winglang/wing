@@ -1,0 +1,45 @@
+====================
+Nested blocks
+====================
+
+{
+    {
+        {}
+    }
+}
+
+---
+
+(source
+    (block
+        (block
+          (block)
+        )
+    )
+)
+
+====================
+Multiple statements in block
+====================
+
+{
+    1;
+    2;
+    3;
+}
+
+---
+
+(source
+    (block
+        (expression_statement
+          (number)
+        )
+        (expression_statement
+          (number)
+        )
+        (expression_statement
+          (number)
+        )
+    )
+)
