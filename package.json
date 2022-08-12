@@ -39,7 +39,7 @@
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-sdk": "^2.1192.0",
+    "aws-sdk": "^2.1193.0",
     "constructs": "10.0.25",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
@@ -65,7 +65,7 @@
     "constructs": "^10.0.25"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^9.0.11",
+    "@cdktf/provider-aws": "^9.0.12",
     "cdktf": "^0.12.0",
     "esbuild": "0.14.31"
   },
