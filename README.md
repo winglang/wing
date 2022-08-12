@@ -1,43 +1,63 @@
 # The Wing Programming Language
 
-This strives to be a complete [winglang](https://github.com/monadahq/rfcs/pull/4) implementation. It's a WIP.
-
-All development is currently under the `dev` branch. I've opened a [PR for to `main`](https://github.com/monadahq/winglang/pull/1) where you're welcome to add any comments/suggestions/questions you have regarding this code.
-
-The project currently includes the [wingc](./wingc) compiler and a [playground](./playground/).
+Wing Programming Language reference implementation.
 
 ## Prerequisites
 
-* [Rust](https://rustup.rs/)
-* [node.js](https://nodejs.org)
+- [Rust](https://rustup.rs/)
+- [node.js](https://nodejs.org)
+- [CMake](https://cmake.org/)
 
-## Playground
+You also need to `npm login` into `@monadahq`.
 
-After installing the prerequisites, you are ready to go play!
+## `wingc` Compiler
 
-```sh
-cd playground
-./wingc examples/test.w
+The compiler is under `wingc` and you can use standard Rust workflows:
+
+- `cargo build` - builds the code
+- `cargo test` - runs tests
+
+## `wingrt` Runtime
+
+The runtime that executes output of the compiler.
+
+Currently local compilation is complicated and takes a lot of time, it requires
+building a special variant of Node, blood sacrifice, and dark rituals.
+
+Pre-built binaries are available at:
+[winglang-infra](https://github.com/monadahq/winglang-infra).
+
+Get the binaries for your platform and place them under `wingrt/vender/node`.
+
+You also need to build the compiler (`wingc`) first: `cargo build --release`.
+
+After that you should be able to build and run the runtime tests with:
+
+```bash
+npm install
+npm test
+# incremental recompiles
+npm run cmake
 ```
 
-> The `playground/wingc` script above will take care of building teh compiler and installing the SDK in the playground. It will compile and executes the preflight code of the program.
+## `wing`
 
-## Compiler
-
-The compiler code is under `wingc` and you can use standard Rust development workflows:
-
-* `cargo build` - builds the code
-* `cargo test` - runs tests
+The meta wrapper CLI binary, Wing's `cargo`.
 
 ## Wing SDK
 
-The Wing SDK is the standard library of the Wing programming language. The SDK is maintained under the [monadahq/wingsdk](https://github.com/monadahq/wingsdk) repository and released as a private npm module called [`@monadahq/wingsdk`](https://github.com/monadahq/wingsdk/packages/1519521).
+The Wing SDK is the standard library of the Wing programming language. The SDK
+is maintained under the [monadahq/wingsdk](https://github.com/monadahq/wingsdk)
+repository and released as a private npm module called
+[`@monadahq/wingsdk`](https://github.com/monadahq/wingsdk/packages/1519521).
 
-The playground in this repository has a `package.json` file that simply takes a dependency on the SDK package, so running `npm install` will bring it over.
+The `wing` folder in this repository has a `package.json` file that simply takes
+a dependency on the SDK package, so running `npm install` will bring it over.
 
 ### Local SDK Development
 
-If you wish to develop the SDK alongside the compiler, simply clone the SDK repository side-by-side with the compiler and use `npm link` in the playground:
+If you wish to develop the SDK alongside the compiler, simply clone the SDK
+repository side-by-side with the compiler and use `npm link` in the playground:
 
 Clone and build the SDK, and capture it as a linked package:
 
@@ -77,7 +97,8 @@ cd ~/workspace/winglang/playground
 
 After local development
 
-Once a new version of the SDK is pushed to `main` of the `wingsdk` repository, a new release will be published.
+Once a new version of the SDK is pushed to `main` of the `wingsdk` repository, a
+new release will be published.
 
 Now, you can upgrade the SDK version of the playground using:
 
@@ -86,7 +107,8 @@ cd playground
 npm run upgrade
 ```
 
-You'll see that `package.json` and `package-lock.json` files are changed with the new version.
+You'll see that `package.json` and `package-lock.json` files are changed with
+the new version.
 
 ## License
 

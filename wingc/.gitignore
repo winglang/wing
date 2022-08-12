@@ -1,2 +1,4 @@
 /target/
-*.out/
+/grammar/src/
+*.w.out/
+wingc.h
