@@ -16,6 +16,7 @@ The compiler is under `wingc` and you can use standard Rust workflows:
 
 - `cargo build` - builds the code
 - `cargo test` - runs tests
+- `cargo test -- --nocapture` - runs tests with output to see compilation results
 
 ## `wingrt` Runtime
 
@@ -65,7 +66,6 @@ Clone and build the SDK, and capture it as a linked package:
 cd ~/workspace
 git clone git@github.com:monadahq/wingsdk
 cd wingsdk
-yarn
 yarn build
 yarn link
 ```
@@ -93,22 +93,9 @@ cd ~/workspace/winglang/playground
 ./wingc examples/test.w
 ```
 
-### Upgrading SDK
+### Language Corpus
 
-After local development
-
-Once a new version of the SDK is pushed to `main` of the `wingsdk` repository, a
-new release will be published.
-
-Now, you can upgrade the SDK version of the playground using:
-
-```sh
-cd playground
-npm run upgrade
-```
-
-You'll see that `package.json` and `package-lock.json` files are changed with
-the new version.
+Examples of Wing code are located in the [corpus](./corpus) directory.
 
 ## License
 
