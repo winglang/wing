@@ -3,14 +3,15 @@ use clap::*;
 use std::fs;
 use std::path::PathBuf;
 
+use crate::type_check::TypeChecker;
 use crate::type_env::TypeEnv;
 
-mod ast;
-mod diagnostic;
-mod jsify;
-mod parser;
-mod type_check;
-mod type_env;
+pub mod ast;
+pub mod diagnostic;
+pub mod jsify;
+pub mod parser;
+pub mod type_check;
+pub mod type_env;
 
 #[derive(clap::Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
@@ -54,8 +55,10 @@ fn main() {
 	}
 	.wingit(&tree.root_node());
 
-	let mut root_env = TypeEnv::new(None, None);
-	type_check::type_check_scope(&ast_root, &mut root_env);
+	let mut root_env = TypeEnv::new(None, None, false);
+
+	let mut tc = TypeChecker::new();
+	tc.type_check_scope(&ast_root, &mut root_env);
 
 	println!("{}", jsify::jsify(&ast_root, true));
 }

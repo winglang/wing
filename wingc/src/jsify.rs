@@ -2,7 +2,9 @@ use std::{collections::HashMap, fs};
 
 use sha2::{Digest, Sha256};
 
-use crate::ast::{ArgList, BinaryOperator, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator};
+use crate::ast::{
+	ArgList, BinaryOperator, ClassMember, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator,
+};
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
@@ -18,15 +20,17 @@ fn find_captures_from_expression(node: &Expression) -> Vec<Capture> {
 	// TODO Hack, assume it's of the form `capture.method()`
 	// Without type info, this is the best we can do
 	if let Expression::MethodCall(m) = node {
-		if let Reference::Identifier(symbol) = &m.object {
+		if let Reference::Identifier(symbol) = &m.method {
 			if symbol.name == "console" {
 				// TODO Extra hack, ignore console.log for now
 				return res;
 			}
-			res.push(Capture {
-				symbol: symbol.name.to_string(),
-				method: m.method.name.to_string(),
-			});
+			if let Reference::Identifier(method) = &m.method {
+				res.push(Capture {
+					symbol: symbol.name.clone(),
+					method: method.name.clone(),
+				});
+			}
 		}
 	}
 
@@ -190,7 +194,9 @@ fn jsify_expression(expression: &Expression) -> String {
 			// TODO
 			obj_id: _,
 			arg_list,
-		} => format!("new {}({})", jsify_reference(&class), jsify_arg_list(&arg_list)),
+		} => {
+			format!("new {}({})", jsify_symbol(&class), jsify_arg_list(&arg_list))
+		}
 		Expression::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
 			Literal::Number(n) => format!("{}", n),
@@ -203,9 +209,8 @@ fn jsify_expression(expression: &Expression) -> String {
 		}
 		Expression::MethodCall(method_call) => {
 			format!(
-				"{}.{}({})",
-				jsify_reference(&method_call.object),
-				jsify_symbol(&method_call.method),
+				"{}({})",
+				jsify_reference(&method_call.method),
 				jsify_arg_list(&method_call.args)
 			)
 		}
@@ -271,19 +276,11 @@ fn jsify_statement(statement: &Statement) -> String {
 			let initial_value = jsify_expression(initial_value);
 			format!("const {} = {};", jsify_symbol(var_name), initial_value)
 		}
-		Statement::FunctionDefinition(func_def) => {
-			let mut parameter_list = vec![];
-			for p in func_def.parameters.iter() {
-				parameter_list.push(jsify_symbol(&p.name));
-			}
-
-			format!(
-				"function {}({}) {}",
-				jsify_symbol(&func_def.name),
-				parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
-				jsify_scope(&func_def.statements)
-			)
-		}
+		Statement::FunctionDefinition(func_def) => jsify_function(
+			format!("function {}", jsify_symbol(&func_def.name)).as_str(),
+			&func_def.parameters,
+			&func_def.statements,
+		),
 		Statement::InflightFunctionDefinition {
 			name,
 			parameters,
@@ -400,9 +397,50 @@ fn jsify_statement(statement: &Statement) -> String {
 			}
 		}
 		Statement::Class {
-			name: _,
-			members: _,
-			methods: _,
-		} => todo!(),
+			name,
+			members,
+			methods,
+			parent,
+			constructor,
+		} => {
+			format!(
+				"class {}{}\n{{\n{}\n{}\n{}\n}}",
+				jsify_symbol(name),
+				if let Some(parent) = parent {
+					format!(" extends {}", jsify_symbol(parent))
+				} else {
+					"".to_string()
+				},
+				jsify_function("constructor", &constructor.parameters, &constructor.statements),
+				members
+					.iter()
+					.map(|m| jsify_class_member(m))
+					.collect::<Vec<String>>()
+					.join("\n"),
+				methods
+					.iter()
+					.map(|f| jsify_function(jsify_symbol(&f.name).as_str(), &f.parameters, &f.statements))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
+		}
 	}
+}
+
+fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope) -> String {
+	let mut parameter_list = vec![];
+	for p in parameters.iter() {
+		parameter_list.push(jsify_symbol(p));
+	}
+
+	format!(
+		"{}({}) {}",
+		name,
+		parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
+		jsify_scope(body)
+	)
+}
+
+fn jsify_class_member(member: &ClassMember) -> String {
+	format!("{};", jsify_symbol(&member.name))
 }

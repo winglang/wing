@@ -1,6 +1,6 @@
-mod ast;
-mod diagnostic;
-mod jsify;
-mod parser;
-mod type_check;
-mod type_env;
+pub mod ast;
+pub mod diagnostic;
+pub mod jsify;
+pub mod parser;
+pub mod type_check;
+pub mod type_env;

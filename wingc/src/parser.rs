@@ -5,11 +5,10 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expression, FunctionDefinition, Literal, MethodCall, ParameterDefinition,
-	Reference, Scope, Statement, Symbol, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Constructor, Expression, FunctionDefinition, FunctionSignature, Literal,
+	MethodCall, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::WingSpan;
-use crate::type_check;
 
 pub struct Parser<'a> {
 	pub source: &'a [u8],
@@ -150,6 +149,8 @@ impl Parser<'_> {
 			"class_definition" => {
 				let mut members = vec![];
 				let mut methods = vec![];
+				let mut constructor = None;
+				let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap());
 				for class_element in statement_node
 					.child_by_field_name("implementation")
 					.unwrap()
@@ -159,8 +160,22 @@ impl Parser<'_> {
 						"function_definition" => methods.push(self.build_function_definition(&class_element)),
 						"class_member" => members.push(ClassMember {
 							name: self.node_symbol(&class_element.child_by_field_name("name").unwrap()),
-							parameter_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
+							member_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
 						}),
+						"constructor" => {
+							if let Some(_) = constructor {
+								panic!("Multiple constructors defined in class {:?}", statement_node);
+							}
+							let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap());
+							constructor = Some(Constructor {
+								parameters: parameters.iter().map(|p| p.name.clone()).collect(),
+								statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
+								signature: FunctionSignature {
+									parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+									return_type: Some(Box::new(Type::Class(name.clone()))),
+								},
+							})
+						}
 						other => {
 							panic!(
 								"Unexpected class element node type {} at {}",
@@ -171,10 +186,18 @@ impl Parser<'_> {
 					}
 				}
 
+				if let None = constructor {
+					panic!("No constructor defined in class {:?}", statement_node);
+				}
+
 				Statement::Class {
-					name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
+					name,
 					members,
 					methods,
+					parent: statement_node
+						.child_by_field_name("parent")
+						.map(|n| self.node_symbol(&n)),
+					constructor: constructor.unwrap(),
 				}
 			}
 			other => {
@@ -188,14 +211,16 @@ impl Parser<'_> {
 	}
 
 	fn build_function_definition(&self, func_def_node: &Node) -> FunctionDefinition {
+		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap());
 		FunctionDefinition {
 			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap()),
-			parameters: self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap()),
+			parameters: parameters.iter().map(|p| p.name.clone()).collect(),
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
-			return_type: if let Some(ret_type_node) = func_def_node.child_by_field_name("return_type") {
-				Some(self.build_type(&ret_type_node))
-			} else {
-				None
+			signature: FunctionSignature {
+				parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+				return_type: func_def_node
+					.child_by_field_name("return_type")
+					.map(|rt| Box::new(self.build_type(&rt))),
 			},
 		}
 	}
@@ -220,22 +245,30 @@ impl Parser<'_> {
 		}
 	}
 
-	// TODO: this should receive the env in order to lookup user defined types (classes)
-	fn build_type(&self, type_node: &Node) -> type_check::Type {
+	fn build_type(&self, type_node: &Node) -> Type {
 		match type_node.kind() {
-			"primitive_type" => type_check::get_primitive_type_by_name(self.node_text(type_node)),
-			"class" => todo!(),
+			"builtin_type" => match self.node_text(type_node) {
+				"number" => Type::Number,
+				"string" => Type::String,
+				"bool" => Type::Bool,
+				"duration" => Type::Duration,
+				other => panic!("Unexpected builtin type {}", other),
+			},
+			"class" => Type::Class(self.node_symbol(type_node)),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
-				let args = param_type_list_node
+				let parameters = param_type_list_node
 					.named_children(&mut cursor)
 					.map(|param_type| self.build_type(&param_type))
-					.collect::<Vec<type_check::Type>>();
+					.collect::<Vec<Type>>();
 				let return_type = type_node
 					.child_by_field_name("return_type")
-					.map(|n| self.build_type(&n));
-				type_check::Type::Function(Box::new(type_check::FunctionSignature { args, return_type }))
+					.map(|n| Box::new(self.build_type(&n)));
+				Type::FunctionSignature(FunctionSignature {
+					parameters,
+					return_type,
+				})
 			}
 			other => panic!("Unexpected node type {} at {}", other, self.node_span(type_node)),
 		}
@@ -292,7 +325,7 @@ impl Parser<'_> {
 	fn build_expression(&self, expression_node: &Node) -> Expression {
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap());
+				let class = self.node_symbol(&expression_node.child_by_field_name("class").unwrap());
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)
 				} else {
@@ -371,20 +404,7 @@ impl Parser<'_> {
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			},
 			"method_call" => Expression::MethodCall(MethodCall {
-				object: self.build_reference(
-					&expression_node
-						.child_by_field_name("call_name")
-						.unwrap()
-						.child_by_field_name("object")
-						.unwrap(),
-				),
-				method: self.node_symbol(
-					&expression_node
-						.child_by_field_name("call_name")
-						.unwrap()
-						.child_by_field_name("property")
-						.unwrap(),
-				),
+				method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap()),
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap()),
 			}),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
