@@ -623,7 +623,10 @@ impl TypeChecker {
 				// Find property in class's environment
 				class.env.lookup(property)
 			}
-			Reference::NamespacedIdentifier { namespace, identifier } => todo!(),
+			Reference::NamespacedIdentifier {
+				namespace: _,
+				identifier: _,
+			} => todo!(),
 		}
 	}
 }

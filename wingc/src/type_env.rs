@@ -25,7 +25,7 @@ impl TypeEnv {
 		}
 
 		// Avoid variable shadowing
-		if let Some(parent_env) = self.parent {
+		if let Some(_parent_env) = self.parent {
 			if let Some(parent_type) = self.try_lookup(&symbol) {
 				// If we're a class we allow "symbol shadowing" for methods
 				if !(self.is_class
