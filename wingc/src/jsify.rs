@@ -274,7 +274,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			initial_value,
 		} => {
 			let initial_value = jsify_expression(initial_value);
-			format!("const {} = {};", jsify_symbol(var_name), initial_value)
+			format!("let {} = {};", jsify_symbol(var_name), initial_value)
 		}
 		Statement::FunctionDefinition(func_def) => jsify_function(
 			format!("function {}", jsify_symbol(&func_def.name)).as_str(),
