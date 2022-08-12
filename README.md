@@ -66,6 +66,7 @@ Clone and build the SDK, and capture it as a linked package:
 cd ~/workspace
 git clone git@github.com:monadahq/wingsdk
 cd wingsdk
+yarn
 yarn build
 yarn link
 ```
