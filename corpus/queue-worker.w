@@ -1,8 +1,8 @@
-use cloud
-x := 5s
-bucket := cloud::Bucket()
+use cloud;
+x := 5s;
+bucket := cloud::Bucket();
 
-// bucket.upload("myfile", "somedata")
+// bucket.upload("myfile", "somedata");
 
 my_queue := new cloud::Queue(timeout: 30m);
 my_queue.hello();
