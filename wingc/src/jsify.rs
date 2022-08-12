@@ -122,7 +122,7 @@ pub fn jsify(scope: &Scope, shim: bool) -> String {
 	if shim {
 		js.insert(0, "super();\n".to_string());
 		output.push(format!(
-			"class MyApp extends {}.cloud.App {{\nconstructor() {}\n}}",
+			"class MyApp extends {}.core.App {{\nconstructor() {}\n}}",
 			STDLIB,
 			render_block(js)
 		));
