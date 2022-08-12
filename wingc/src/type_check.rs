@@ -372,7 +372,7 @@ impl TypeChecker {
 	}
 
 	fn validate_type(&self, actual_type: TypeRef, expected_type: TypeRef, value: &Expression) {
-		if actual_type != expected_type {
+		if actual_type != expected_type && actual_type.0 != &Type::Anything {
 			panic!("Expected type {} of {:?} to be {}", actual_type, value, expected_type);
 		}
 	}
@@ -447,7 +447,9 @@ impl TypeChecker {
 				name: _,
 				parameters: _,
 				statements: _,
-			} => todo!(),
+			} => {
+				unimplemented_type();
+			}
 			Statement::ForLoop {
 				iterator,
 				iterable,
