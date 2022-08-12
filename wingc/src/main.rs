@@ -3,17 +3,15 @@ use clap::*;
 use std::fs;
 use std::path::PathBuf;
 
-use crate::ast::*;
-use crate::diagnostic::*;
 use crate::type_check::TypeChecker;
 use crate::type_env::TypeEnv;
 
-mod ast;
-mod diagnostic;
-mod jsify;
-mod parser;
-mod type_check;
-mod type_env;
+pub mod ast;
+pub mod diagnostic;
+pub mod jsify;
+pub mod parser;
+pub mod type_check;
+pub mod type_env;
 
 #[derive(clap::Parser, Debug)]
 #[clap(author, version, about, long_about = None)]

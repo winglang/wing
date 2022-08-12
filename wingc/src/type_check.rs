@@ -36,7 +36,7 @@ impl PartialEq for Type {
 	fn eq(&self, other: &Self) -> bool {
 		match (self, other) {
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
-			(Self::Class(l0), Self::Class(r0)) => {
+			(Self::Class(l0), Self::Class(_)) => {
 				// If our parent is equal to `other` then treat both classes as equal (inheritance)
 				if let Some(parent) = l0.parent {
 					let parent_type: &Type = parent.into();
@@ -54,6 +54,12 @@ impl PartialEq for Type {
 pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: Option<TypeRef>,
+}
+
+#[deprecated = "Remember to implement this!"]
+pub fn unimplemented_type() -> Option<Type> {
+	println!("Skipping unimplemented type check");
+	return Some(Type::Anything);
 }
 
 impl Display for Type {
