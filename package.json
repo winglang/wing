@@ -56,7 +56,7 @@
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
     "prettier": "^2.7.1",
-    "projen": "^0.61.8",
+    "projen": "^0.61.9",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "typescript": "^4.7.4"
@@ -65,7 +65,7 @@
     "constructs": "^10.0.25"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^9.0.13",
+    "@cdktf/provider-aws": "^9.0.14",
     "cdktf": "^0.12.0",
     "esbuild": "0.14.31"
   },
