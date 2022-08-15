@@ -10,6 +10,9 @@
             "type": "extensionHost",
             "request": "launch",
             "outFiles": ["${workspaceFolder}/lib/**/*.js"],
+            "env": {
+              "SERVER_PATH": "${workspaceRoot}/wing-analyzer/language-server/target/debug/wing-language-server"
+            },
             "args": [
                 "--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}/wing-analyzer/vscode-extension"
             ]
