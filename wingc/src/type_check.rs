@@ -1,5 +1,4 @@
 use std::fmt::{Debug, Display};
-use std::mem::replace;
 
 use crate::ast::{Type as AstType, *};
 use crate::type_env::TypeEnv;
@@ -571,7 +570,7 @@ impl TypeChecker {
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				let class_env = if let &mut Type::Class(ref mut class) = class_type.into() {
-					replace(&mut class.env, class_env);
+					class.env = class_env;
 					&class.env
 				} else {
 					panic!("Class type {} isn't a class?!", name);
