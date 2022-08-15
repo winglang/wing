@@ -9,7 +9,7 @@
     "rebuild": "npm-run-all clean cmake",
     "test": "npm-run-all test:*",
     "test:js": "./build/wingrt tests/hello.js ./",
-    "test:w": "./build/wingrt ../corpus/math.w ./"
+    "test:w": "./build/wingrt ../corpus/simple/math.w ./"
   },
   "repository": {
     "type": "git",
