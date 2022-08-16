@@ -24,8 +24,15 @@ jobs:
         exclude:
           - os: macos-latest
             arch: x86
+          - os: macos-latest
+            arch: x64
+            # TODO TESTING
           - os: ubuntu-latest
             arch: arm64
+          - os: ubuntu-latest
+            arch: x64
+          - os: ubuntu-latest
+            arch: x86
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
@@ -35,7 +42,7 @@ jobs:
         with:
           repository: "monadahq/winglang-infra"
           tag: "development"
-          fileName: "libnode-${{ matrix.os }}-${{ matrix.arch }}.zip"
+          fileName: "actual-libnode-${{ matrix.os }}-${{ matrix.arch }}.zip"
           token: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v3
@@ -51,14 +58,20 @@ jobs:
       - name: Build Wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+          CMAKE_OSX_ARCHITECTURES: arm64
         run: |
+          export CC="clang"
+          export CXX="clang++"
+          export CFLAGS="-arch arm64"
+          export CXXFLAGS="-arch arm64"
+          export LDFLAGS="-arch arm64"
           pushd wingc
-            cargo test --release -- --nocapture
-            cargo build --release
+            cargo test --release --target aarch64-apple-darwin -- --nocapture
+            cargo build --release --target aarch64-apple-darwin
           popd
 
           mkdir -p wingrt/vendor/node
-          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrt/vendor/node
+          unzip -q actual-libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrt/vendor/node
           pushd wingrt
             npm install
             npm test
