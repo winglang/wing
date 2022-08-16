@@ -3,7 +3,8 @@ use std::{collections::HashMap, fs};
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expression, Literal, Reference, Scope, Statement, Symbol, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Expression, FunctionDefinition, Literal, Reference, Scope, Statement, Symbol,
+	UnaryOperator,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -276,87 +277,16 @@ fn jsify_statement(statement: &Statement) -> String {
 			let initial_value = jsify_expression(initial_value);
 			format!("let {} = {};", jsify_symbol(var_name), initial_value)
 		}
-		Statement::FunctionDefinition(func_def) => jsify_function(
-			format!("function {}", jsify_symbol(&func_def.name)).as_str(),
-			&func_def.parameters,
-			&func_def.statements,
-		),
-		Statement::InflightFunctionDefinition {
-			name,
-			parameters,
-			statements,
-		} => {
-			let mut parameter_list = vec![];
-			for p in parameters {
-				parameter_list.push(p.name.name.clone());
+		Statement::FunctionDefinition(func_def) => {
+			if func_def.signature.inflight {
+				jsify_inflight_function(func_def)
+			} else {
+				jsify_function(
+					format!("function {}", jsify_symbol(&func_def.name)).as_str(),
+					&func_def.parameters,
+					&func_def.statements,
+				)
 			}
-
-			// TODO Hack
-			let out_dir = format!("{}.out", name.span.file_id.to_string());
-
-			// find all cloud objects referenced in the proc
-			let captures = find_captures(statements);
-
-			let block = jsify_scope(statements);
-
-			let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
-
-			let mut methods_per_object = HashMap::new();
-			for capture in captures.iter() {
-				if !methods_per_object.contains_key(&capture.symbol) {
-					methods_per_object.insert(capture.symbol.clone(), vec![]);
-				}
-				methods_per_object
-					.get_mut(&capture.symbol)
-					.unwrap()
-					.push(capture.method.clone());
-			}
-
-			let mut bindings = vec![];
-			let mut capture_names = vec![];
-			for (symbol, methods) in methods_per_object {
-				capture_names.push(symbol.clone());
-				bindings.push(format!(
-					"{}: {},",
-					symbol,
-					render_block([
-						format!("obj: {},", symbol),
-						format!(
-							"methods: [{}]",
-							methods
-								.iter()
-								.map(|x| format!("\"{}\"", x))
-								.collect::<Vec<_>>()
-								.join(",")
-						)
-					])
-				));
-			}
-
-			let mut proc_source = vec![];
-
-			proc_source.push(format!(
-				"async function $proc({{ {} }}, {}) {};",
-				capture_names.join(", "),
-				parameter_list.join(", "),
-				block
-			));
-
-			let proc_dir = format!("{}/proc.{}", out_dir, procid);
-
-			fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
-			fs::write(format!("{}/index.js", proc_dir), proc_source.join("\n")).expect("Writing inflight proc source");
-
-			let props_block = render_block([
-				format!("path: \"{}\",", proc_dir),
-				if !bindings.is_empty() {
-					format!("captures: {}", render_block(&bindings))
-				} else {
-					"".to_string()
-				},
-			]);
-
-			format!("const {} = new {}.core.Process({});", name.name, STDLIB, props_block)
 		}
 		Statement::ForLoop {
 			iterator,
@@ -424,7 +354,79 @@ fn jsify_statement(statement: &Statement) -> String {
 					.join("\n")
 			)
 		}
+		Statement::Resource {
+			name: _,
+			members: _,
+			methods: _,
+			constructor: _,
+			parent: _,
+		} => todo!(),
 	}
+}
+
+fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
+	let mut parameter_list = vec![];
+	for p in func_def.parameters.iter() {
+		parameter_list.push(p.name.clone());
+	}
+	// TODO Hack
+	let out_dir = format!("{}.out", func_def.name.span.file_id.to_string());
+	// find all cloud objects referenced in the proc
+	let captures = find_captures(&func_def.statements);
+	let block = jsify_scope(&func_def.statements);
+	let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
+	let mut methods_per_object = HashMap::new();
+	for capture in captures.iter() {
+		if !methods_per_object.contains_key(&capture.symbol) {
+			methods_per_object.insert(capture.symbol.clone(), vec![]);
+		}
+		methods_per_object
+			.get_mut(&capture.symbol)
+			.unwrap()
+			.push(capture.method.clone());
+	}
+	let mut bindings = vec![];
+	let mut capture_names = vec![];
+	for (symbol, methods) in methods_per_object {
+		capture_names.push(symbol.clone());
+		bindings.push(format!(
+			"{}: {},",
+			symbol,
+			render_block([
+				format!("obj: {},", symbol),
+				format!(
+					"methods: [{}]",
+					methods
+						.iter()
+						.map(|x| format!("\"{}\"", x))
+						.collect::<Vec<_>>()
+						.join(",")
+				)
+			])
+		));
+	}
+	let mut proc_source = vec![];
+	proc_source.push(format!(
+		"async function $proc({{ {} }}, {}) {};",
+		capture_names.join(", "),
+		parameter_list.join(", "),
+		block
+	));
+	let proc_dir = format!("{}/proc.{}", out_dir, procid);
+	fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
+	fs::write(format!("{}/index.js", proc_dir), proc_source.join("\n")).expect("Writing inflight proc source");
+	let props_block = render_block([
+		format!("path: \"{}\",", proc_dir),
+		if !bindings.is_empty() {
+			format!("captures: {}", render_block(&bindings))
+		} else {
+			"".to_string()
+		},
+	]);
+	format!(
+		"const {} = new {}.core.Process({});",
+		func_def.name.name, STDLIB, props_block
+	)
 }
 
 fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope) -> String {

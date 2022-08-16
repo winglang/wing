@@ -419,6 +419,10 @@ impl TypeChecker {
 			Statement::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
+				if func_def.signature.inflight {
+					unimplemented_type(); // TODO: what typechecking do we need here???
+				}
+
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
 				// TODO: why not just use `self.resolve_type(&AstType::FunctionSignature(sig), env);`??
 				let mut args = vec![];
@@ -441,13 +445,6 @@ impl TypeChecker {
 				}
 				// TODO: we created `function_env` but `type_check_scope` will also create a wrapper env for the scope which is redundant
 				self.type_check_scope(&func_def.statements, &mut function_env);
-			}
-			Statement::InflightFunctionDefinition {
-				name: _,
-				parameters: _,
-				statements: _,
-			} => {
-				unimplemented_type();
 			}
 			Statement::ForLoop {
 				iterator,
@@ -604,6 +601,13 @@ impl TypeChecker {
 					self.type_check_scope(&method.statements, &mut method_env);
 				}
 			}
+			Statement::Resource {
+				name: _,
+				members: _,
+				methods: _,
+				constructor: _,
+				parent: _,
+			} => todo!(),
 		}
 	}
 

@@ -28,6 +28,7 @@ pub enum Type {
 pub struct FunctionSignature {
 	pub parameters: Vec<Type>,
 	pub return_type: Option<Box<Type>>,
+	pub inflight: bool,
 }
 
 #[derive(Debug)]
@@ -56,11 +57,6 @@ pub enum Statement {
 		initial_value: Expression,
 	},
 	FunctionDefinition(FunctionDefinition),
-	InflightFunctionDefinition {
-		name: Symbol,
-		parameters: Vec<ParameterDefinition>,
-		statements: Scope,
-	},
 	ForLoop {
 		iterator: Symbol,
 		iterable: Expression,
@@ -85,6 +81,13 @@ pub enum Statement {
 		constructor: Constructor,
 		parent: Option<Symbol>,
 	},
+	Resource {
+		name: Symbol,
+		members: Vec<ClassMember>,
+		methods: Vec<FunctionDefinition>,
+		constructor: Constructor,
+		parent: Option<Symbol>,
+	},
 }
 #[derive(Debug)]
 pub struct ParameterDefinition {
@@ -96,6 +99,7 @@ pub struct ParameterDefinition {
 pub struct ClassMember {
 	pub name: Symbol,
 	pub member_type: Type,
+	pub inflight: bool,
 }
 
 #[derive(Debug)]
@@ -114,7 +118,7 @@ pub enum Expression {
 	MethodCall(MethodCall),
 	CapturedObjMethodCall(MethodCall),
 	Unary {
-		// TODO: Split to LgicalUnary, NumericUnary
+		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
 		exp: Box<Expression>,
 	},

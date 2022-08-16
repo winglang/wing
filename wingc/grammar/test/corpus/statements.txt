@@ -164,3 +164,62 @@ class A extends B {}
     )
 )
 
+==================================
+Resource definition
+==================================
+
+resource A {
+    constructor() {}
+    function preflight_func() {}
+    inflight function inflight_func() {}
+    pf_member: string;
+    inflight if_member: string;
+}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        implementation: (resource_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
+            (function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (inflight_function_definition
+                (inflight_specifier)
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (resource_inflight_member
+                (inflight_specifier)
+                name: (identifier)
+                type: (builtin_type)
+            )
+        )
+    )
+)
+
+==================================
+Resource inheritance
+==================================
+
+resource A extends B {}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        parent: (identifier)
+        implementation: (resource_implementation)
+    )
+)
+

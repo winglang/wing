@@ -51,6 +51,9 @@ module.exports = grammar({
     nested_identifier: ($) =>
       seq(field("object", $.expression), ".", field("property", $.identifier)),
 
+    inflight_specifier: ($) =>
+        choice("inflight", "~"),
+
     _statement: ($) =>
       choice(
         $.block,
@@ -62,6 +65,7 @@ module.exports = grammar({
         $.function_definition,
         $.inflight_function_definition,
         $.class_definition,
+        $.resource_definition,
         $.for_in_loop,
         $.if_statement
       ),
@@ -108,6 +112,23 @@ module.exports = grammar({
       seq("{", repeat(choice($.constructor, $.function_definition, $.class_member)), "}"),
     class_member: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
+
+    resource_definition: ($) =>
+      seq(
+        "resource",
+        field("name", $.identifier),
+        optional(seq(
+          "extends",
+          field('parent', $.identifier)
+        )),
+        field("implementation", $.resource_implementation)
+      ),
+    resource_implementation: ($) =>
+      seq("{", repeat(choice($.constructor, $.function_definition, $.inflight_function_definition, $.class_member, $.resource_inflight_member)), "}"),
+    class_member: ($) =>
+      seq(field("name", $.identifier), $._type_annotation, ";"),
+    resource_inflight_member: ($) =>
+      seq($.inflight_specifier, field("name", $.identifier), $._type_annotation, ";"),
 
     for_in_loop: ($) =>
       seq(
@@ -230,6 +251,7 @@ module.exports = grammar({
 
     function_type: ($) =>
       seq(
+        optional(field("inflight", $.inflight_specifier)),
         field("parameter_types", $.parameter_type_list),
         optional(seq("->", field("return_type", $._type)))
       ),
@@ -257,7 +279,7 @@ module.exports = grammar({
 
     inflight_function_definition: ($) =>
       seq(
-        "inflight",
+        $.inflight_specifier,
         "function",
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),

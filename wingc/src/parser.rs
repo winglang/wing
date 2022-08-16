@@ -81,7 +81,6 @@ impl Parser<'_> {
 	}
 
 	fn build_statement(&self, statement_node: &Node) -> Statement {
-		let mut cursor = statement_node.walk();
 		match statement_node.kind() {
 			"use_statement" => {
 				// TODO This grammar for this doesn't make sense yet
@@ -106,19 +105,6 @@ impl Parser<'_> {
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap()),
 			},
 			"expression_statement" => Statement::Expression(self.build_expression(&statement_node.named_child(0).unwrap())),
-			"inflight_function_definition" => Statement::InflightFunctionDefinition {
-				name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap()),
-				parameters: statement_node
-					.child_by_field_name("parameter_list")
-					.unwrap()
-					.named_children(&mut cursor)
-					.map(|st_node| self.build_parameter_definition(&st_node))
-					.collect(),
-				statements: {
-					let block = statement_node.child_by_field_name("block").unwrap();
-					self.build_scope(&block)
-				},
-			},
 			"block" => Statement::Scope(self.build_scope(statement_node)),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
@@ -138,7 +124,10 @@ impl Parser<'_> {
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap()),
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			},
-			"function_definition" => Statement::FunctionDefinition(self.build_function_definition(statement_node)),
+			"function_definition" => Statement::FunctionDefinition(self.build_function_definition(statement_node, false)),
+			"inflight_function_definition" => {
+				Statement::FunctionDefinition(self.build_function_definition(statement_node, true))
+			}
 			"return_statement" => Statement::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 					Some(self.build_expression(&return_expression_node))
@@ -146,60 +135,8 @@ impl Parser<'_> {
 					None
 				},
 			),
-			"class_definition" => {
-				let mut members = vec![];
-				let mut methods = vec![];
-				let mut constructor = None;
-				let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap());
-				for class_element in statement_node
-					.child_by_field_name("implementation")
-					.unwrap()
-					.named_children(&mut cursor)
-				{
-					match class_element.kind() {
-						"function_definition" => methods.push(self.build_function_definition(&class_element)),
-						"class_member" => members.push(ClassMember {
-							name: self.node_symbol(&class_element.child_by_field_name("name").unwrap()),
-							member_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
-						}),
-						"constructor" => {
-							if let Some(_) = constructor {
-								panic!("Multiple constructors defined in class {:?}", statement_node);
-							}
-							let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap());
-							constructor = Some(Constructor {
-								parameters: parameters.iter().map(|p| p.name.clone()).collect(),
-								statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
-								signature: FunctionSignature {
-									parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
-									return_type: Some(Box::new(Type::Class(name.clone()))),
-								},
-							})
-						}
-						other => {
-							panic!(
-								"Unexpected class element node type {} at {}",
-								other,
-								self.node_span(statement_node)
-							)
-						}
-					}
-				}
-
-				if let None = constructor {
-					panic!("No constructor defined in class {:?}", statement_node);
-				}
-
-				Statement::Class {
-					name,
-					members,
-					methods,
-					parent: statement_node
-						.child_by_field_name("parent")
-						.map(|n| self.node_symbol(&n)),
-					constructor: constructor.unwrap(),
-				}
-			}
+			"class_definition" => self.build_class_statement(statement_node, false),
+			"resource_definition" => self.build_class_statement(statement_node, true),
 			other => {
 				panic!(
 					"Unexpected statement node type {} at {}",
@@ -210,7 +147,81 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node) -> FunctionDefinition {
+	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> Statement {
+		let mut cursor = statement_node.walk();
+		let mut members = vec![];
+		let mut methods = vec![];
+		let mut constructor = None;
+		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap());
+		for class_element in statement_node
+			.child_by_field_name("implementation")
+			.unwrap()
+			.named_children(&mut cursor)
+		{
+			match (class_element.kind(), is_resource) {
+				("function_definition", _) => methods.push(self.build_function_definition(&class_element, false)),
+				("inflight_function_definition", true) => methods.push(self.build_function_definition(&class_element, false)),
+				("class_member", _) => members.push(ClassMember {
+					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap()),
+					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
+					inflight: false,
+				}),
+				("constructor", _) => {
+					if let Some(_) = constructor {
+						panic!("Multiple constructors defined in class {:?}", statement_node);
+					}
+					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap());
+					constructor = Some(Constructor {
+						parameters: parameters.iter().map(|p| p.name.clone()).collect(),
+						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
+						signature: FunctionSignature {
+							parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+							return_type: Some(Box::new(Type::Class(name.clone()))),
+							inflight: false,
+						},
+					})
+				}
+				(other, _) => {
+					panic!(
+						"Unexpected {} element node type {} at {}",
+						if is_resource { "resource" } else { "class" },
+						other,
+						self.node_span(statement_node)
+					)
+				}
+			}
+		}
+		if let None = constructor {
+			panic!(
+				"No constructor defined in {} {:?}",
+				if is_resource { "resource" } else { "class" },
+				statement_node
+			);
+		}
+
+		let parent = statement_node
+			.child_by_field_name("parent")
+			.map(|n| self.node_symbol(&n));
+		if is_resource {
+			Statement::Resource {
+				name,
+				members,
+				methods,
+				parent,
+				constructor: constructor.unwrap(),
+			}
+		} else {
+			Statement::Class {
+				name,
+				members,
+				methods,
+				parent,
+				constructor: constructor.unwrap(),
+			}
+		}
+	}
+
+	fn build_function_definition(&self, func_def_node: &Node, inflight: bool) -> FunctionDefinition {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap());
 		FunctionDefinition {
 			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap()),
@@ -221,6 +232,7 @@ impl Parser<'_> {
 				return_type: func_def_node
 					.child_by_field_name("return_type")
 					.map(|rt| Box::new(self.build_type(&rt))),
+				inflight,
 			},
 		}
 	}
@@ -236,13 +248,6 @@ impl Parser<'_> {
 		}
 
 		res
-	}
-
-	fn build_parameter_definition(&self, parameter_node: &Node) -> ParameterDefinition {
-		ParameterDefinition {
-			name: self.node_symbol(&parameter_node.child_by_field_name("name").unwrap()),
-			parameter_type: self.build_type(&parameter_node.child_by_field_name("type").unwrap()),
-		}
 	}
 
 	fn build_type(&self, type_node: &Node) -> Type {
@@ -268,6 +273,7 @@ impl Parser<'_> {
 				Type::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
+					inflight: type_node.child_by_field_name("inflight").is_some(),
 				})
 			}
 			other => panic!("Unexpected node type {} at {}", other, self.node_span(type_node)),
