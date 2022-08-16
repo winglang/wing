@@ -20,6 +20,6 @@
 /.projen/tasks.json linguist-generated
 /API.md linguist-generated
 /LICENSE linguist-generated
+/package-lock.json linguist-generated
 /package.json linguist-generated
 /tsconfig.dev.json linguist-generated
-/yarn.lock linguist-generated

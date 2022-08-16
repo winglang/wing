@@ -1,5 +1,4 @@
-const { cdk } = require("projen");
-const { GithubCredentials } = require("projen/lib/github");
+const { cdk, javascript, github } = require("projen");
 
 const project = new cdk.JsiiProject({
   name: "@monadahq/wingsdk",
@@ -22,8 +21,9 @@ const project = new cdk.JsiiProject({
     allowedUsernames: ["monada-bot[bot]"],
     secret: "PROJEN_GITHUB_TOKEN",
   },
+  packageManager: javascript.NodePackageManager.NPM,
   githubOptions: {
-    projenCredentials: GithubCredentials.fromApp(),
+    projenCredentials: github.GithubCredentials.fromApp(),
   },
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
