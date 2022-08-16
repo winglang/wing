@@ -60,15 +60,18 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
           CMAKE_OSX_ARCHITECTURES: arm64
         run: |
+          rustup target add aarch64-apple-darwin
           export CC="clang"
           export CXX="clang++"
           export CFLAGS="-arch arm64"
           export CXXFLAGS="-arch arm64"
           export LDFLAGS="-arch arm64"
-          rustup target add aarch64-apple-darwin
+          export SDKROOT=$(xcrun -sdk macosx --show-sdk-path)
+          export MACOSX_DEPLOYMENT_TARGET=$(xcrun -sdk macosx --show-sdk-platform-version)
+          
           pushd wingc
-            cargo test --release --target aarch64-apple-darwin -- --nocapture
-            cargo build --release --target aarch64-apple-darwin
+            cargo test --release --target=aarch64-apple-darwin -- --nocapture
+            cargo build --release --target=aarch64-apple-darwin
           popd
 
           mkdir -p wingrt/vendor/node
