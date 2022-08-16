@@ -65,6 +65,7 @@ jobs:
           export CFLAGS="-arch arm64"
           export CXXFLAGS="-arch arm64"
           export LDFLAGS="-arch arm64"
+          rustup target add aarch64-apple-darwin
           pushd wingc
             cargo test --release --target aarch64-apple-darwin -- --nocapture
             cargo build --release --target aarch64-apple-darwin
