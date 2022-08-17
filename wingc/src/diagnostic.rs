@@ -5,7 +5,7 @@ pub type FileId = RelativePathBuf;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
 pub type Diagnostics = Vec<Diagnostic>;
-pub type DiagnosticResult<T> = Result<T, Diagnostics>;
+pub type DiagnosticResult<T> = Result<T, Diagnostic>;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct WingSpan {
@@ -22,14 +22,22 @@ impl std::fmt::Display for WingSpan {
 	}
 }
 
+#[derive(Debug, Clone)]
 pub enum DiagnosticLevel {
 	Error,
 	Warning,
 	Note,
 }
 
+#[derive(Debug, Clone)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: WingSpan,
 	pub level: DiagnosticLevel,
+}
+
+impl std::fmt::Display for Diagnostic {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{:?} at {}\n{}", self.level, self.span, self.message)
+	}
 }

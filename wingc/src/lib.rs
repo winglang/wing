@@ -1,6 +1,7 @@
 use ast::Scope;
 
 use crate::parser::Parser;
+use std::cell::RefCell;
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use std::path::PathBuf;
@@ -40,6 +41,7 @@ pub fn parse(source_file: &str) -> Scope {
 	return Parser {
 		source: &source[..],
 		source_name: source_file.to_string(),
+		diagnostics: RefCell::new(Vec::new()),
 	}
 	.wingit(&tree.root_node());
 }
