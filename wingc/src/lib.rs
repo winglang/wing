@@ -38,12 +38,23 @@ pub fn parse(source_file: &str) -> Scope {
 		}
 	};
 
-	return Parser {
+	let wing_parser = Parser {
 		source: &source[..],
 		source_name: source_file.to_string(),
 		diagnostics: RefCell::new(Vec::new()),
+	};
+
+	let scope = wing_parser.wingit(&tree.root_node());
+
+	for diagnostic in wing_parser.diagnostics.borrow().iter() {
+		println!("{}", diagnostic);
 	}
-	.wingit(&tree.root_node());
+
+	if wing_parser.diagnostics.borrow().len() > 0 {
+		std::process::exit(1);
+	}
+
+	scope
 }
 
 pub fn type_check(scope: &Scope) -> TypeEnv {

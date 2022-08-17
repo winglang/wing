@@ -19,18 +19,12 @@ pub struct Parser<'a> {
 
 impl Parser<'_> {
 	pub fn wingit(&self, root: &Node) -> Scope {
-		let scope = match root.kind() {
+		match root.kind() {
 			"source" => self.build_scope(root),
 			other => {
 				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
 			}
-		};
-
-		for diagnostic in self.diagnostics.borrow().iter() {
-			println!("{}", diagnostic);
 		}
-
-		scope
 	}
 
 	fn add_error<Val>(&self, message: String, node: &Node) -> DiagnosticResult<Val> {
@@ -206,7 +200,12 @@ impl Parser<'_> {
 						}),
 						"constructor" => {
 							if let Some(_) = constructor {
-								panic!("Multiple constructors defined in class {:?}", statement_node);
+								self
+									.add_error::<Node>(
+										format!("Multiple constructors defined in class {:?}", statement_node),
+										&class_element,
+									)
+									.err();
 							}
 							let parameters =
 								self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
@@ -220,17 +219,18 @@ impl Parser<'_> {
 							})
 						}
 						other => {
-							panic!(
-								"Unexpected class element node type {} at {}",
-								other,
-								self.node_span(statement_node)
-							)
+							self
+								.add_error::<Node>(format!("Unexpected class element node type {}", other), &class_element)
+								.err();
 						}
 					}
 				}
 
-				if let None = constructor {
-					panic!("No constructor defined in class {:?}", statement_node);
+				if constructor.is_none() {
+					self.add_error::<Node>(
+						format!("No constructor defined in class {:?}", statement_node),
+						&statement_node,
+					)?;
 				}
 
 				Ok(Statement::Class {
@@ -289,7 +289,7 @@ impl Parser<'_> {
 				"string" => Ok(Type::String),
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
-				other => panic!("Unexpected builtin type {}", other),
+				other => self.add_error(format!("Unexpected builtin type {}", other), type_node),
 			},
 			"class" => Ok(Type::Class(self.node_symbol(type_node)?)),
 			"function_type" => {
@@ -307,7 +307,7 @@ impl Parser<'_> {
 					return_type,
 				}))
 			}
-			other => panic!("Unexpected node type {} at {}", other, self.node_span(type_node)),
+			other => self.add_error(format!("Unexpected type node {}", other), type_node),
 		}
 	}
 
@@ -327,11 +327,9 @@ impl Parser<'_> {
 				identifier: self.node_symbol(&actual_node.child_by_field_name("name").unwrap())?,
 			}),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
-			other => panic!(
-				"Unexpected node type {} at {} || {:#?}",
-				other,
-				self.node_span(&actual_node),
-				reference_node
+			other => self.add_error(
+				format!("Unexpected node type {} || {:#?}", other, reference_node),
+				&actual_node,
 			),
 		}
 	}
@@ -352,7 +350,11 @@ impl Parser<'_> {
 						self.build_expression(&child.named_child(1).unwrap())?,
 					);
 				}
-				other => panic!("Unexpected argument type {} at {}", other, self.node_span(&child)),
+				other => {
+					self
+						.add_error::<ArgList>(format!("Unexpected argument type {}", other), &child)
+						.err();
+				}
 			}
 		}
 
@@ -379,6 +381,8 @@ impl Parser<'_> {
 				})
 			}
 			"binary_expression" => Ok(Expression::Binary {
+				lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
+				rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 					"+" => BinaryOperator::Add,
 					"-" => BinaryOperator::Sub,
@@ -394,28 +398,16 @@ impl Parser<'_> {
 					"*" => BinaryOperator::Mul,
 					"/" => BinaryOperator::Div,
 					other => {
-						panic!(
-							"Unexpected binary operator {} at {}",
-							other,
-							self.node_span(&expression_node)
-						);
+						self.add_error::<BinaryOperator>(format!("Unexpected binary operator {}", other), expression_node)?
 					}
 				},
-				lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
-				rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 			}),
 			"unary_expression" => Ok(Expression::Unary {
 				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 					"+" => UnaryOperator::Plus,
 					"-" => UnaryOperator::Minus,
 					"!" => UnaryOperator::Not,
-					other => {
-						panic!(
-							"Unexpected unary operator {} at {}",
-							other,
-							self.node_span(&expression_node)
-						);
-					}
+					other => self.add_error::<UnaryOperator>(format!("Unexpected unary operator {}", other), expression_node)?,
 				},
 				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
 			}),
@@ -429,11 +421,7 @@ impl Parser<'_> {
 				match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
-					other => panic!(
-						"Unexpected boolean literal {} at {}",
-						other,
-						self.node_span(expression_node)
-					),
+					other => self.add_error(format!("Unexpected boolean literal {}", other), expression_node)?,
 				},
 			))),
 			"duration" => Ok(Expression::Literal(self.build_duration(&expression_node)?)),
