@@ -15,6 +15,12 @@ impl std::fmt::Display for Symbol {
 }
 
 #[derive(Debug, Clone)]
+pub enum Flight {
+	In,
+	Pre,
+}
+
+#[derive(Debug, Clone)]
 pub enum Type {
 	Number,
 	String,
@@ -28,7 +34,7 @@ pub enum Type {
 pub struct FunctionSignature {
 	pub parameters: Vec<Type>,
 	pub return_type: Option<Box<Type>>,
-	pub inflight: bool,
+	pub flight: Flight,
 }
 
 #[derive(Debug)]
@@ -99,7 +105,7 @@ pub struct ParameterDefinition {
 pub struct ClassMember {
 	pub name: Symbol,
 	pub member_type: Type,
-	pub inflight: bool,
+	pub flight: Flight,
 }
 
 #[derive(Debug)]

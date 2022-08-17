@@ -3,8 +3,8 @@ use std::{collections::HashMap, fs};
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expression, FunctionDefinition, Literal, Reference, Scope, Statement, Symbol,
-	UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Expression, Flight, FunctionDefinition, Literal, Reference, Scope, Statement,
+	Symbol, UnaryOperator,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -277,17 +277,14 @@ fn jsify_statement(statement: &Statement) -> String {
 			let initial_value = jsify_expression(initial_value);
 			format!("let {} = {};", jsify_symbol(var_name), initial_value)
 		}
-		Statement::FunctionDefinition(func_def) => {
-			if func_def.signature.inflight {
-				jsify_inflight_function(func_def)
-			} else {
-				jsify_function(
-					format!("function {}", jsify_symbol(&func_def.name)).as_str(),
-					&func_def.parameters,
-					&func_def.statements,
-				)
-			}
-		}
+		Statement::FunctionDefinition(func_def) => match func_def.signature.flight {
+			Flight::In => jsify_inflight_function(func_def),
+			Flight::Pre => jsify_function(
+				format!("function {}", jsify_symbol(&func_def.name)).as_str(),
+				&func_def.parameters,
+				&func_def.statements,
+			),
+		},
 		Statement::ForLoop {
 			iterator,
 			iterable,

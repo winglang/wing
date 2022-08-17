@@ -5,8 +5,8 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expression, FunctionDefinition, FunctionSignature, Literal,
-	MethodCall, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Constructor, Expression, Flight, FunctionDefinition, FunctionSignature,
+	Literal, MethodCall, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::WingSpan;
 
@@ -124,9 +124,11 @@ impl Parser<'_> {
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap()),
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			},
-			"function_definition" => Statement::FunctionDefinition(self.build_function_definition(statement_node, false)),
+			"function_definition" => {
+				Statement::FunctionDefinition(self.build_function_definition(statement_node, Flight::Pre))
+			}
 			"inflight_function_definition" => {
-				Statement::FunctionDefinition(self.build_function_definition(statement_node, true))
+				Statement::FunctionDefinition(self.build_function_definition(statement_node, Flight::In))
 			}
 			"return_statement" => Statement::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
@@ -159,12 +161,17 @@ impl Parser<'_> {
 			.named_children(&mut cursor)
 		{
 			match (class_element.kind(), is_resource) {
-				("function_definition", _) => methods.push(self.build_function_definition(&class_element, false)),
-				("inflight_function_definition", true) => methods.push(self.build_function_definition(&class_element, false)),
+				("function_definition", true) => methods.push(self.build_function_definition(&class_element, Flight::Pre)),
+				("inflight_function_definition", _) => methods.push(self.build_function_definition(&class_element, Flight::In)),
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap()),
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
-					inflight: false,
+					flight: Flight::Pre,
+				}),
+				("inflight_class_member", _) => members.push(ClassMember {
+					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap()),
+					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap()),
+					flight: Flight::In,
 				}),
 				("constructor", _) => {
 					if let Some(_) = constructor {
@@ -177,7 +184,7 @@ impl Parser<'_> {
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
 							return_type: Some(Box::new(Type::Class(name.clone()))),
-							inflight: false,
+							flight: if is_resource { Flight::Pre } else { Flight::In }, // TODO: for now classes can only be constructed inflight
 						},
 					})
 				}
@@ -221,7 +228,7 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, inflight: bool) -> FunctionDefinition {
+	fn build_function_definition(&self, func_def_node: &Node, flight: Flight) -> FunctionDefinition {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap());
 		FunctionDefinition {
 			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap()),
@@ -232,7 +239,7 @@ impl Parser<'_> {
 				return_type: func_def_node
 					.child_by_field_name("return_type")
 					.map(|rt| Box::new(self.build_type(&rt))),
-				inflight,
+				flight,
 			},
 		}
 	}
@@ -273,7 +280,11 @@ impl Parser<'_> {
 				Type::FunctionSignature(FunctionSignature {
 					parameters,
 					return_type,
-					inflight: type_node.child_by_field_name("inflight").is_some(),
+					flight: if type_node.child_by_field_name("inflight").is_some() {
+						Flight::In
+					} else {
+						Flight::Pre
+					},
 				})
 			}
 			other => panic!("Unexpected node type {} at {}", other, self.node_span(type_node)),

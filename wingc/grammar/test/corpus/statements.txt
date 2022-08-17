@@ -124,7 +124,7 @@ Class definition
 
 class A {
     constructor() {}
-    function do_something() {}
+    ~function do_something() {}
     a_member: string;
 }
 
@@ -136,7 +136,7 @@ class A {
             (constructor
                 parameter_list: (parameter_list)
                 block: (block))
-            (function_definition
+            (inflight_function_definition
                 name: (identifier)
                 parameter_list: (parameter_list)
                 block: (block)
@@ -190,7 +190,6 @@ resource A {
                 block: (block)
             )
             (inflight_function_definition
-                (inflight_specifier)
                 name: (identifier)
                 parameter_list: (parameter_list)
                 block: (block)
@@ -199,8 +198,7 @@ resource A {
                 name: (identifier)
                 type: (builtin_type)
             )
-            (resource_inflight_member
-                (inflight_specifier)
+            (inflight_class_member
                 name: (identifier)
                 type: (builtin_type)
             )

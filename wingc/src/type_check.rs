@@ -419,7 +419,15 @@ impl TypeChecker {
 			Statement::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
-				if func_def.signature.inflight {
+				if matches!(func_def.signature.flight, Flight::In) {
+					/* Typecheck inflight:
+					 1. We can't declare resources.
+					 2. We can't instantiate resources.
+					 3. We can't reference preflight functions.
+
+
+					*/
+
 					unimplemented_type(); // TODO: what typechecking do we need here???
 				}
 
