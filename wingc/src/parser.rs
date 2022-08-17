@@ -105,9 +105,7 @@ impl Parser<'_> {
 			statements: scope_node
 				.named_children(&mut cursor)
 				.filter(|child| !child.is_extra())
-				.map(|st_node| self.build_statement(&st_node))
-				.filter(|st| st.is_ok())
-				.map(|st| st.unwrap())
+				.filter_map(|st_node| self.build_statement(&st_node).ok())
 				.collect(),
 		}
 	}
@@ -146,7 +144,7 @@ impl Parser<'_> {
 					.child_by_field_name("parameter_list")
 					.unwrap()
 					.named_children(&mut cursor)
-					.map(|st_node| self.build_parameter_definition(&st_node).unwrap())
+					.filter_map(|st_node| self.build_parameter_definition(&st_node).ok())
 					.collect(),
 				statements: {
 					let block = statement_node.child_by_field_name("block").unwrap();
@@ -297,7 +295,7 @@ impl Parser<'_> {
 				let mut cursor = param_type_list_node.walk();
 				let parameters = param_type_list_node
 					.named_children(&mut cursor)
-					.map(|param_type| self.build_type(&param_type).unwrap())
+					.filter_map(|param_type| self.build_type(&param_type).ok())
 					.collect::<Vec<Type>>();
 				let return_type = type_node
 					.child_by_field_name("return_type")
