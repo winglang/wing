@@ -7,6 +7,7 @@ Wing Programming Language reference implementation.
 - [Rust](https://rustup.rs/)
 - [node.js](https://nodejs.org)
 - [CMake](https://cmake.org/)
+- [openssl](https://www.openssl.org/)
 
 You also need to `npm login` into `@monadahq`.
 
