@@ -84,7 +84,8 @@ impl Parser<'_> {
 				// Specific "Minutes" duration needed here
 				value_text.unwrap().parse::<f64>().expect("Duration string") * 60_f64,
 			)),
-			other => self.add_error(format!("Expected duration value, found {}", other), &node),
+			"ERROR" => self.add_error(format!("Expected duration value"), &node),
+			other => panic!("Unexpected duration type {} || {:#?}", other, node),
 		}
 	}
 
@@ -217,11 +218,12 @@ impl Parser<'_> {
 								},
 							})
 						}
-						other => {
+						"ERROR" => {
 							self
-								.add_error::<Node>(format!("Unexpected class element node type {}", other), &class_element)
+								.add_error::<Node>(format!("Expected class element node"), &class_element)
 								.err();
 						}
+						other => panic!("Unexpected class element node type {} || {:#?}", other, class_element),
 					}
 				}
 
@@ -242,7 +244,8 @@ impl Parser<'_> {
 					constructor: constructor.unwrap(),
 				})
 			}
-			other => self.add_error(format!("Unexpected {}", other), statement_node),
+			"ERROR" => self.add_error(format!("Expected statement"), statement_node),
+			other => panic!("Unexpected statement type {} || {:#?}", other, statement_node),
 		}
 	}
 
@@ -288,7 +291,8 @@ impl Parser<'_> {
 				"string" => Ok(Type::String),
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
-				other => self.add_error(format!("Unexpected builtin type {}", other), type_node),
+				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
+				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
 			"class" => Ok(Type::Class(self.node_symbol(type_node)?)),
 			"function_type" => {
@@ -306,7 +310,8 @@ impl Parser<'_> {
 					return_type,
 				}))
 			}
-			other => self.add_error(format!("Unexpected type node {}", other), type_node),
+			"ERROR" => self.add_error(format!("Expected type"), type_node),
+			other => panic!("Unexpected type {} || {:#?}", other, type_node),
 		}
 	}
 
@@ -326,10 +331,8 @@ impl Parser<'_> {
 				identifier: self.node_symbol(&actual_node.child_by_field_name("name").unwrap())?,
 			}),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
-			other => self.add_error(
-				format!("Unexpected node type {} || {:#?}", other, reference_node),
-				&actual_node,
-			),
+			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
+			other => panic!("Unexpected type node {} || {:#?}", other, reference_node),
 		}
 	}
 
@@ -349,11 +352,12 @@ impl Parser<'_> {
 						self.build_expression(&child.named_child(1).unwrap())?,
 					);
 				}
-				other => {
+				"ERROR" => {
 					self
-						.add_error::<ArgList>(format!("Unexpected argument type {}", other), &child)
+						.add_error::<ArgList>(format!("Expected argument type"), &child)
 						.err();
 				}
+				other => panic!("Unexpected argument type {} || {:#?}", other, child),
 			}
 		}
 
@@ -396,9 +400,8 @@ impl Parser<'_> {
 					"%" => BinaryOperator::Mod,
 					"*" => BinaryOperator::Mul,
 					"/" => BinaryOperator::Div,
-					other => {
-						self.add_error::<BinaryOperator>(format!("Unexpected binary operator {}", other), expression_node)?
-					}
+					"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
+					other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
 				},
 			}),
 			"unary_expression" => Ok(Expression::Unary {
@@ -406,7 +409,8 @@ impl Parser<'_> {
 					"+" => UnaryOperator::Plus,
 					"-" => UnaryOperator::Minus,
 					"!" => UnaryOperator::Not,
-					other => self.add_error::<UnaryOperator>(format!("Unexpected unary operator {}", other), expression_node)?,
+					"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
+					other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
 				},
 				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
 			}),
@@ -420,7 +424,8 @@ impl Parser<'_> {
 				match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
-					other => self.add_error(format!("Unexpected boolean literal {}", other), expression_node)?,
+					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
+					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
 				},
 			))),
 			"duration" => Ok(Expression::Literal(self.build_duration(&expression_node)?)),
@@ -436,7 +441,8 @@ impl Parser<'_> {
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 			})),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			other => self.add_error(format!("Unexpected {}", other), expression_node),
+			"ERROR" => self.add_error(format!("Expected expression"), expression_node),
+			other => panic!("Unexpected expression {} || {:#?}", other, expression_node),
 		}
 	}
 }
