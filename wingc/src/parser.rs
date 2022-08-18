@@ -70,19 +70,14 @@ impl Parser<'_> {
 	}
 
 	fn build_duration(&self, node: &Node) -> DiagnosticResult<Literal> {
-		let value = node.named_child(0);
-		let value_text = if let Some(value) = value {
-			let value_field = self.get_child_field(&value, "value")?;
-			Ok(self.node_text(&value_field))
-		} else {
-			self.add_error(format!("Expected duration value"), &node)
-		};
+		let value = self.check_error(node.named_child(0).unwrap(), "duration")?;
+		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
 
-		match value.unwrap().kind() {
-			"seconds" => Ok(Literal::Duration(value_text.unwrap().parse().expect("Duration string"))),
+		match value_text {
+			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
 			"minutes" => Ok(Literal::Duration(
 				// Specific "Minutes" duration needed here
-				value_text.unwrap().parse::<f64>().expect("Duration string") * 60_f64,
+				value_text.parse::<f64>().expect("Duration string") * 60_f64,
 			)),
 			"ERROR" => self.add_error(format!("Expected duration value"), &node),
 			other => panic!("Unexpected duration type {} || {:#?}", other, node),
