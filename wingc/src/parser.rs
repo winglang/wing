@@ -34,7 +34,7 @@ impl Parser<'_> {
 			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move
-		self.diagnostics.borrow_mut().push(diag.clone());
+		self.diagnostics.borrow_mut().push(diag);
 
 		Err(())
 	}
