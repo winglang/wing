@@ -41,7 +41,7 @@ pub fn parse(source_file: &str) -> Scope {
 	let wing_parser = Parser {
 		source: &source[..],
 		source_name: source_file.to_string(),
-		diagnostics: RefCell::new(Vec::new()),
+		diagnostics: RefCell::new(Diagnostics::new()),
 	};
 
 	let scope = wing_parser.wingit(&tree.root_node());
