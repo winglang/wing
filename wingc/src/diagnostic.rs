@@ -5,7 +5,7 @@ pub type FileId = RelativePathBuf;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
 pub type Diagnostics = Vec<Diagnostic>;
-pub type DiagnosticResult<T> = Result<T, Diagnostic>;
+pub type DiagnosticResult<T> = Result<T, ()>;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct WingSpan {

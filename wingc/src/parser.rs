@@ -27,7 +27,7 @@ impl Parser<'_> {
 		}
 	}
 
-	fn add_error<Val>(&self, message: String, node: &Node) -> DiagnosticResult<Val> {
+	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
 		let diag = Diagnostic {
 			message,
 			span: self.node_span(node),
@@ -35,7 +35,8 @@ impl Parser<'_> {
 		};
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag.clone());
-		Err(diag)
+
+		Err(())
 	}
 
 	fn node_text<'a>(&'a self, node: &Node) -> &'a str {
