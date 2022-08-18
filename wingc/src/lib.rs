@@ -1,4 +1,5 @@
 use ast::Scope;
+use diagnostic::Diagnostics;
 
 use crate::parser::Parser;
 use std::cell::RefCell;
