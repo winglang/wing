@@ -59,7 +59,7 @@ jobs:
           cargo test --release -- --nocapture
           cargo build --release
 
-      - name: Build WingRT
+      - name: Build Wing Runtime
         working-directory: wingrt
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
@@ -69,7 +69,7 @@ jobs:
           npm ci
           npm test
           cp build/wingrt ../wing/bin
-          tar -zcf ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz wingrt
+          tar -zcf ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz build/wingrt
 
       - name: Build Wing CLI
         working-directory: wingrt
