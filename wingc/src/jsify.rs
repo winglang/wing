@@ -20,15 +20,15 @@ fn find_captures_from_expression(node: &Expression) -> Vec<Capture> {
 	// TODO Hack, assume it's of the form `capture.method()`
 	// Without type info, this is the best we can do
 	if let Expression::MethodCall(m) = node {
-		if let Reference::Identifier(symbol) = &m.method {
-			if symbol.name == "console" {
-				// TODO Extra hack, ignore console.log for now
-				return res;
-			}
-			if let Reference::Identifier(method) = &m.method {
+		if let Reference::NestedIdentifier { object, property } = &m.method {
+			if let Expression::Reference(Reference::Identifier(object)) = &**object {
+				if object.name == "console" {
+					// TODO Extra hack, ignore console.log for now
+					return res;
+				}
 				res.push(Capture {
-					symbol: symbol.name.clone(),
-					method: method.name.clone(),
+					symbol: object.name.clone(),
+					method: property.name.clone(),
 				});
 			}
 		}
