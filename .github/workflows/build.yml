@@ -98,6 +98,8 @@ jobs:
   build:
     needs: build-native
     runs-on: ubuntu-latest
+    steps:
+      - name: Build Validation
 
   release:
     if: ${{ github.ref == 'refs/heads/main' }}
