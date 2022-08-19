@@ -66,7 +66,7 @@ jobs:
         run: |
           mkdir -p vendor/node
           unzip -q ../libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d vendor/node
-          npm ci --ignore-scripts
+          npm ci
           npm test
           cp build/wingrt ../wing/bin
           tar -zcf ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz wingrt
