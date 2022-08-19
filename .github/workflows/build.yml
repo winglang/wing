@@ -72,7 +72,7 @@ jobs:
           tar -zcf ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz build/wingrt
 
       - name: Build Wing CLI
-        working-directory: wingrt
+        working-directory: wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
