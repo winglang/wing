@@ -39,7 +39,7 @@
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
-    "aws-sdk": "^2.1198.0",
+    "aws-sdk": "^2.1199.0",
     "constructs": "10.0.25",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
@@ -56,7 +56,7 @@
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
     "prettier": "^2.7.1",
-    "projen": "^0.61.17",
+    "projen": "^0.61.20",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "typescript": "^4.7.4"
@@ -65,7 +65,7 @@
     "constructs": "^10.0.25"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^9.0.14",
+    "@cdktf/provider-aws": "^9.0.15",
     "cdktf": "^0.12.1",
     "esbuild": "0.14.31"
   },
