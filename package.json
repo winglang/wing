@@ -21,6 +21,9 @@
     "post-upgrade": "npx projen post-upgrade",
     "pre-compile": "npx projen pre-compile",
     "release": "npx projen release",
+    "sandbox:deploy": "npx projen sandbox:deploy",
+    "sandbox:destroy": "npx projen sandbox:destroy",
+    "sandbox:synth": "npx projen sandbox:synth",
     "test": "npx projen test",
     "test:update": "npx projen test:update",
     "test:watch": "npx projen test:watch",
@@ -35,11 +38,14 @@
     "organization": true
   },
   "devDependencies": {
+    "@monadahq/polycons": "0.0.11",
+    "@monadahq/wing-local": "^0.0.2",
     "@types/jest": "^27.0.0",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "aws-sdk": "^2.1199.0",
+    "cdktf-cli": "^0.12.1",
     "constructs": "10.0.25",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",
@@ -59,18 +65,22 @@
     "projen": "^0.61.20",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
+    "tsx": "*",
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
+    "@monadahq/polycons": "^0.0.11",
     "constructs": "^10.0.25"
   },
   "dependencies": {
     "@cdktf/provider-aws": "^9.0.15",
     "cdktf": "^0.12.1",
-    "esbuild": "0.14.31"
+    "esbuild": "0.14.31",
+    "node-fetch": "3.2.1"
   },
   "bundledDependencies": [
-    "esbuild"
+    "esbuild",
+    "node-fetch"
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",

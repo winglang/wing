@@ -6,10 +6,9 @@ import {
   writeFileSync,
 } from "fs";
 import { isAbsolute, join } from "path";
-import * as aws from "@cdktf/provider-aws";
-import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import { FileBase } from "../fs";
+import { Synthesizer } from "./synth";
 
 export interface AppProps {
   /**
@@ -19,31 +18,24 @@ export interface AppProps {
   readonly stateFile?: string;
 
   /**
-   * The root output directory of the app.
-   * @default "."
+   * A synthesizer that handles setting up a CDK framework and registering a
+   * polycon factory.
    */
-  readonly outdir?: string;
+  readonly synthesizer: Synthesizer;
 }
 
 export class App extends Construct {
   public readonly stateFile?: string;
   public readonly outdir: string;
   public readonly root: Construct;
+  private readonly synthesizer: Synthesizer;
 
-  private readonly tfapp: cdktf.App;
-
-  constructor(props: AppProps = {}) {
+  constructor(props: AppProps) {
     super(undefined as any, "App");
 
-    const outdir = props.outdir ?? ".";
-    const app = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
-    const stack = new cdktf.TerraformStack(app, "Stack");
-    this.root = stack;
-
-    new aws.AwsProvider(this.root, "AwsProvider", {});
-
-    this.tfapp = app;
-    this.outdir = outdir;
+    this.synthesizer = props.synthesizer;
+    this.root = this.synthesizer.root;
+    this.outdir = this.synthesizer.outdir;
 
     if (props.stateFile) {
       this.stateFile = isAbsolute(props.stateFile)
@@ -71,11 +63,7 @@ export class App extends Construct {
       rmSync(join(this.outdir, filePath));
     }
 
-    const isTerraformResource = (c: IConstruct): c is cdktf.TerraformResource =>
-      c instanceof cdktf.TerraformResource;
-    if (this.tfapp.node.findAll().find(isTerraformResource)) {
-      this.tfapp.synth();
-    }
+    this.synthesizer.synth();
   }
 
   /**

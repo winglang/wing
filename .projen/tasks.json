@@ -198,6 +198,33 @@
         }
       ]
     },
+    "sandbox:deploy": {
+      "name": "sandbox:deploy",
+      "steps": [
+        {
+          "exec": "cdktf deploy"
+        }
+      ],
+      "cwd": "test/sandbox"
+    },
+    "sandbox:destroy": {
+      "name": "sandbox:destroy",
+      "steps": [
+        {
+          "exec": "cdktf destroy"
+        }
+      ],
+      "cwd": "test/sandbox"
+    },
+    "sandbox:synth": {
+      "name": "sandbox:synth",
+      "steps": [
+        {
+          "exec": "tsx main.ts --tsconfig ../../tsconfig.dev.json"
+        }
+      ],
+      "cwd": "test/sandbox"
+    },
     "test": {
       "name": "test",
       "description": "Run tests",
@@ -255,19 +282,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='constructs,esbuild'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild,node-fetch'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='constructs,esbuild'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild,node-fetch'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='constructs,esbuild'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild,node-fetch'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='constructs,esbuild'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild,node-fetch'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='constructs,esbuild'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild,node-fetch'"
         },
         {
           "exec": "npm install"

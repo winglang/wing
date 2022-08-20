@@ -1,4 +1,5 @@
-import { readdirSync, readFileSync, statSync } from "fs";
+import { mkdtempSync, readdirSync, readFileSync, statSync } from "fs";
+import { tmpdir } from "os";
 import { extname, join } from "path";
 import { App } from "../src/core";
 
@@ -31,4 +32,8 @@ export function directorySnapshot(root: string) {
 export function appSnapshot(app: App): Record<string, any> {
   app.synth();
   return directorySnapshot(app.outdir);
+}
+
+export function mkdtemp() {
+  return mkdtempSync(join(tmpdir(), "wingsdk."));
 }

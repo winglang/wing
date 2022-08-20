@@ -1,6 +1,15 @@
 {
   "dependencies": [
     {
+      "name": "@monadahq/polycons",
+      "version": "0.0.11",
+      "type": "build"
+    },
+    {
+      "name": "@monadahq/wing-local",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "version": "^27.0.0",
       "type": "build"
@@ -22,6 +31,10 @@
     },
     {
       "name": "aws-sdk",
+      "type": "build"
+    },
+    {
+      "name": "cdktf-cli",
       "type": "build"
     },
     {
@@ -108,6 +121,10 @@
       "type": "build"
     },
     {
+      "name": "tsx",
+      "type": "build"
+    },
+    {
       "name": "typescript",
       "type": "build"
     },
@@ -115,6 +132,16 @@
       "name": "esbuild",
       "version": "0.14.31",
       "type": "bundled"
+    },
+    {
+      "name": "node-fetch",
+      "version": "3.2.1",
+      "type": "bundled"
+    },
+    {
+      "name": "@monadahq/polycons",
+      "version": "^0.0.11",
+      "type": "peer"
     },
     {
       "name": "constructs",

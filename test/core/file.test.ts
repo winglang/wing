@@ -1,17 +1,21 @@
-import { mkdtempSync, readdirSync, writeFileSync } from "fs";
-import { tmpdir } from "os";
+import { readdirSync, writeFileSync } from "fs";
 import { join } from "path";
-import { App } from "../src/core";
-import { JsonFile, TextFile } from "../src/fs";
-import { appSnapshot } from "./util";
+import { App } from "../../src/core";
+import { JsonFile, TextFile } from "../../src/fs";
+import { appSnapshot, mkdtemp } from "../util";
+import { NoopSynthesizer } from "./fixtures";
 
 test("nothing in output directory if there are no files", () => {
-  const app = new App({ outdir: mkdtemp() });
+  const app = new App({
+    synthesizer: new NoopSynthesizer({ outdir: mkdtemp() }),
+  });
   expect(appSnapshot(app)).toStrictEqual({});
 });
 
 test("files are saved in the output directory", () => {
-  const app = new App({ outdir: mkdtemp() });
+  const app = new App({
+    synthesizer: new NoopSynthesizer({ outdir: mkdtemp() }),
+  });
   const obj: any = { hello: "world" };
   new JsonFile(app, "JsonFile", "my-file.json", { obj });
   obj.mutate = 123;
@@ -33,7 +37,9 @@ test("files are saved in the output directory", () => {
 describe("state file", () => {
   test("no state file by default", () => {
     const workdir = mkdtemp();
-    const app = new App({ outdir: workdir });
+    const app = new App({
+      synthesizer: new NoopSynthesizer({ outdir: workdir }),
+    });
     new TextFile(app, "TextFile", "myfile.txt", {
       lines: ["boom"],
     });
@@ -45,7 +51,7 @@ describe("state file", () => {
   test("no state file if there are no files", () => {
     const workdir = mkdtemp();
     const app = new App({
-      outdir: workdir,
+      synthesizer: new NoopSynthesizer({ outdir: workdir }),
       stateFile: "state.file",
     });
 
@@ -55,7 +61,7 @@ describe("state file", () => {
   test("state file includes list of generated files", () => {
     const workdir = mkdtemp();
     const app = new App({
-      outdir: workdir,
+      synthesizer: new NoopSynthesizer({ outdir: workdir }),
       stateFile: "state.file",
     });
 
@@ -80,18 +86,14 @@ describe("state file", () => {
     );
 
     const app = new App({
-      outdir: workdir,
+      synthesizer: new NoopSynthesizer({ outdir: workdir }),
       stateFile: stateFileName,
     });
 
     new TextFile(app, "TextFile", "another-file.txt", { lines: ["damn!"] });
     app.synth();
 
-    expect(readdirSync(workdir)).toEqual([
-      "another-file.txt",
-      "cdktf.out",
-      stateFileName,
-    ]);
+    expect(readdirSync(workdir)).toEqual(["another-file.txt", stateFileName]);
   });
 
   test("can be absolute path", () => {
@@ -99,18 +101,14 @@ describe("state file", () => {
     const workdir2 = mkdtemp();
     const app = new App({
       stateFile: join(workdir2, "another.file"),
-      outdir: workdir1,
+      synthesizer: new NoopSynthesizer({ outdir: workdir1 }),
     });
     new JsonFile(app, "JsonFile", "my.json", {
       obj: { fo: 123 },
     });
 
     app.synth();
-    expect(readdirSync(workdir1)).toEqual(["cdktf.out", "my.json"]);
+    expect(readdirSync(workdir1)).toEqual(["my.json"]);
     expect(readdirSync(workdir2)).toEqual(["another.file"]);
   });
 });
-
-function mkdtemp() {
-  return mkdtempSync(join(tmpdir(), "wingsdk."));
-}
