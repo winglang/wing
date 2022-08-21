@@ -6,7 +6,8 @@ Wing Programming Language reference implementation.
 
 - [Rust](https://rustup.rs/)
 - [node.js](https://nodejs.org)
-- [CMake](https://cmake.org/)
+- [CMake](https://cmake.org/) - or on Mac - `arch -arm64 brew install cmake`
+- **Graphviz** - run `arch -arm64 brew install graphviz`
 
 You also need to `npm login` into `@monadahq`.
 
@@ -20,7 +21,7 @@ The compiler is under `wingc` and you can use standard Rust workflows:
 
 ## `wingrt` Runtime
 
-The runtime that executes output of the compiler.
+The runtime that executes output of the compiler - it is under `wingrt`.
 
 Currently local compilation is complicated and takes a lot of time, it requires
 building a special variant of Node, blood sacrifice, and dark rituals.
@@ -28,9 +29,14 @@ building a special variant of Node, blood sacrifice, and dark rituals.
 Pre-built binaries are available at:
 [winglang-infra](https://github.com/monadahq/winglang-infra).
 
-Get the binaries for your platform and place them under `wingrt/vender/node`.
+Get the binaries for your platform and place them under `wingrt/vendor/node`.
 
 You also need to build the compiler (`wingc`) first: `cargo build --release`.
+
+Then you should make sure that you've setup Github private packages on your machine.
+Instructions are in [this KB](https://github.com/monadahq/mona-kb/blob/main/docs/github-private-packages.md).
+
+You should also make sure you have cmake installed, see [here](http://cmake.org), or on Mac just use `arch -arm64 brew install cmake`
 
 After that you should be able to build and run the runtime tests with:
 
