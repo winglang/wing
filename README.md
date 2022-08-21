@@ -29,7 +29,8 @@ building a special variant of Node, blood sacrifice, and dark rituals.
 Pre-built binaries are available at:
 [winglang-infra](https://github.com/monadahq/winglang-infra).
 
-Get the binaries for your platform and place them under `wingrt/vendor/node`.
+Get the binaries for your platform and place them under `wingrt/vendor/node`. For this, you need to unzip the file and put the "include" and "lib" folders directly under `wingrt/vendor/node`.
+If you are on an apple silicone Mac then use `actual-libnode-macos-latest-arm64.zip` and not `libnode-macos-latest-arm64.zip`.
 
 You also need to build the compiler (`wingc`) first: `cargo build --release`.
 
@@ -45,6 +46,15 @@ npm install
 npm test
 # incremental recompiles
 npm run cmake
+```
+**Troubleshoot #1:** if you get this error: "fatal error: 'v8.h' file not found" then you need to make sure you put the pre-built binaries correctly in `wingrt/vendor/node`.
+
+**Troubleshoot #2:** if you get this error: "linker command failed with exit code 1 (use -v to see invocation)" then you need to run `npm run clean`.
+
+IF everything is fine, then you should be able to run the CLI with:
+
+```bash
+./build/wingrt 
 ```
 
 ## `wing`
