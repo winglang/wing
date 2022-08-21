@@ -1,4 +1,8 @@
-# Winglang repository - key files/folders map
+# Contribution Guide
+
+TODO
+
+## Repository Structure
 
 > Below are selected folders and files
 
