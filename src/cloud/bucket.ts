@@ -13,7 +13,13 @@ export const BUCKET_ID = "wingsdk.cloud.Bucket";
 /**
  * Properties for `Bucket`.
  */
-export interface BucketProps {}
+export interface BucketProps {
+  /**
+   * Whether objects in the bucket are publicly accessible.
+   * @default false
+   */
+  readonly public?: boolean;
+}
 
 /**
  * Functionality shared between all `Bucket` implementations.

@@ -2446,6 +2446,26 @@ import { cloud } from '@monadahq/wingsdk'
 const bucketProps: cloud.BucketProps = { ... }
 ```
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketProps.property.public">public</a></code> | <code>boolean</code> | Whether objects in the bucket are publicly accessible. |
+
+---
+
+##### `public`<sup>Optional</sup> <a name="public" id="@monadahq/wingsdk.cloud.BucketProps.property.public"></a>
+
+```typescript
+public readonly public: boolean;
+```
+
+- *Type:* boolean
+- *Default:* false
+
+Whether objects in the bucket are publicly accessible.
+
+---
 
 ### Capture <a name="Capture" id="@monadahq/wingsdk.core.Capture"></a>
 

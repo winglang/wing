@@ -10,8 +10,11 @@ export class Bucket
   extends cloud.BucketBase
   implements cloud.IBucket, IResource
 {
+  private readonly public: boolean;
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
+
+    this.public = props.public ?? false;
   }
 
   /** @internal */
@@ -20,7 +23,9 @@ export class Bucket
       id: this.node.id,
       type: "cloud.Bucket",
       path: this.node.path,
-      props: {},
+      props: {
+        public: this.public,
+      },
       callers: [],
       callees: [],
     };

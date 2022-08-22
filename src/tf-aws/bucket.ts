@@ -7,13 +7,52 @@ import { Function } from "./function";
 
 export class Bucket extends cloud.BucketBase implements cloud.IBucket {
   private readonly bucket: s3.S3Bucket;
+  private readonly public: boolean;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
-    props;
+    this.public = props.public ?? false;
 
     this.bucket = new s3.S3Bucket(this, "Default");
+
+    // (at-rest) data encryption with Amazon S3-managed keys
+    new s3.S3BucketServerSideEncryptionConfigurationA(this, "Encryption", {
+      bucket: this.bucket.bucket,
+      rule: [
+        {
+          applyServerSideEncryptionByDefault: {
+            sseAlgorithm: "AES256",
+          },
+        },
+      ],
+    });
+
+    if (this.public) {
+      const policy = {
+        Version: "2012-10-17",
+        Statement: [
+          {
+            Effect: "Allow",
+            Principal: "*",
+            Action: ["s3:GetObject"],
+            Resource: [`${this.bucket.arn}/*`],
+          },
+        ],
+      };
+      new s3.S3BucketPolicy(this, "PublicPolicy", {
+        bucket: this.bucket.bucket,
+        policy: JSON.stringify(policy),
+      });
+    } else {
+      new s3.S3BucketPublicAccessBlock(this, "PublicAccessBlock", {
+        bucket: this.bucket.bucket,
+        blockPublicAcls: true,
+        blockPublicPolicy: true,
+        ignorePublicAcls: true,
+        restrictPublicBuckets: true,
+      });
+    }
   }
 
   public capture(consumer: any, capture: Capture): Code {
