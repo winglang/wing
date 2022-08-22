@@ -333,7 +333,15 @@ impl Parser<'_> {
 	fn build_expression(&self, expression_node: &Node) -> Expression {
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.node_symbol(&expression_node.child_by_field_name("class").unwrap());
+				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap());
+				// This should be a type name so it cannot be a nested reference
+				if matches!(class, Reference::NestedIdentifier { object: _, property: _ }) {
+					panic!(
+						"Expected a reference to a class or resource type, instead got {:?}",
+						class
+					)
+				}
+				//let class = self.node_symbol(&expression_node.child_by_field_name("class").unwrap());
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)
 				} else {

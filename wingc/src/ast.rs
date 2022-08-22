@@ -106,7 +106,7 @@ pub struct ClassMember {
 #[derive(Debug)]
 pub enum Expression {
 	New {
-		class: Symbol,
+		class: Reference,
 		obj_id: Option<Symbol>,
 		obj_scope: Option<Box<Expression>>,
 		arg_list: ArgList,

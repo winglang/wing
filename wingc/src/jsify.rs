@@ -196,7 +196,7 @@ fn jsify_expression(expression: &Expression) -> String {
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
-			format!("new {}({})", jsify_symbol(&class), jsify_arg_list(&arg_list))
+			format!("new {}({})", jsify_reference(&class), jsify_arg_list(&arg_list))
 		}
 		Expression::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),

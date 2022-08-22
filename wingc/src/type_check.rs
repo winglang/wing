@@ -230,6 +230,7 @@ struct Types {
 	string_idx: usize,
 	bool_idx: usize,
 	duration_idx: usize,
+	anything_idx: usize,
 }
 
 impl Types {
@@ -243,6 +244,8 @@ impl Types {
 		let bool_idx = types.len() - 1;
 		types.push(Box::new(Type::Duration));
 		let duration_idx = types.len() - 1;
+		types.push(Box::new(Type::Anything));
+		let anything_idx = types.len() - 1;
 
 		Self {
 			types,
@@ -250,6 +253,7 @@ impl Types {
 			string_idx,
 			bool_idx,
 			duration_idx,
+			anything_idx,
 		}
 	}
 
@@ -267,6 +271,10 @@ impl Types {
 
 	pub fn duration(&self) -> TypeRef {
 		(&self.types[self.duration_idx]).into()
+	}
+
+	pub fn anything(&self) -> TypeRef {
+		(&self.types[self.anything_idx]).into()
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
@@ -335,17 +343,26 @@ impl TypeChecker {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
 				// Lookup the type in the env
-				let type_ = env.lookup(class);
-				let class_env = match type_.into() {
-					&Type::Class(ref class) => &class.env,
-					&Type::Resource(ref class) => &class.env, // TODO: don't allow resource instantiation inflight
-					_ => panic!("Expected {} to be a resource or class type", class),
+				let type_ = self.resolve_reference(class, env);
+				// TODO: hack to support namespaced identifiers (basically stdlib cloud::Bucket), we skip type-checking and resolve them to Anything
+				if matches!(type_.into(), &Type::Anything) {
+					_ = unimplemented_type();
+					return Some(type_);
+				}
+
+				let (class_env, class_symbol) = match type_.into() {
+					&Type::Class(ref class) => (&class.env, &class.name),
+					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
+					_ => panic!(
+						"Expected {:?} to be a resource or class type but it's a {}",
+						class, type_
+					),
 				};
 
 				// Type check args against constructor
 				let constructor_type = class_env.lookup(&Symbol {
 					name: "constructor".into(),
-					span: class.span.clone(),
+					span: class_symbol.span.clone(),
 				});
 
 				let constructor_sig = if let &Type::Function(ref sig) = constructor_type.into() {
@@ -353,7 +370,7 @@ impl TypeChecker {
 				} else {
 					panic!(
 						"Expected {} to be of a constructor for class {}",
-						constructor_type, class
+						constructor_type, class_symbol
 					);
 				};
 
@@ -366,7 +383,7 @@ impl TypeChecker {
 						"Expected {} args but got {} when instantiating {}",
 						constructor_sig.args.len(),
 						arg_list.pos_args.len(),
-						class
+						type_
 					);
 				}
 				// Verify passed arguments match the constructor
@@ -434,6 +451,12 @@ impl TypeChecker {
 			Expression::MethodCall(method_call) => {
 				// Find method in class's environment
 				let method_type = self.resolve_reference(&method_call.method, env);
+
+				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud::Bucket().upload())
+				if matches!(method_type.into(), &Type::Anything) {
+					return Some(self.types.anything());
+				}
+
 				let method_sig = if let &Type::Function(ref sig) = method_type.into() {
 					sig
 				} else {
@@ -606,7 +629,7 @@ impl TypeChecker {
 			Statement::Use {
 				module_name: _,
 				identifier: _,
-			} => todo!(),
+			} => _ = unimplemented_type(),
 			Statement::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
 				for statement in scope.statements.iter() {
@@ -746,7 +769,12 @@ impl TypeChecker {
 					let instance = self.type_check_exp(object, env).unwrap();
 					let instance_type = match instance.into() {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
-						_ => panic!("{} does not resolve to a class instance or resource object", instance),
+						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud::Bucket)
+						&Type::Anything => return instance,
+						_ => panic!(
+							"{} in {:?} does not resolve to a class instance or resource object",
+							instance, reference
+						),
 					};
 
 					match instance_type.into() {
@@ -761,7 +789,12 @@ impl TypeChecker {
 			Reference::NamespacedIdentifier {
 				namespace: _,
 				identifier: _,
-			} => todo!(),
+			} => {
+				// TODO: for now all namespaced identifiers resolve to `anything` since we don't know what they are,
+				// this is better than failing just because it's a way to do our mock `use cloud; cloud::Bucket()` support.
+				_ = unimplemented_type();
+				self.types.anything()
+			}
 		}
 	}
 }
