@@ -235,16 +235,19 @@ module.exports = grammar({
         "new",
         field("class", $.reference),
         field("args", $.argument_list),
-        field("id", optional($.new_object_id))
+        field("id", optional($.new_object_id)),
+        field("scope", optional($.new_object_scope)),
       ),
 
     new_object_id: ($) => seq("as", $.string),
+
+    new_object_scope: ($) => prec.right(seq("in", $.expression)),
 
     _type: ($) =>
       choice(
         $.builtin_type,
         alias($.identifier, $.class_type),
-        $.function_type
+        $.function_type,
       ),
 
     function_type: ($) =>

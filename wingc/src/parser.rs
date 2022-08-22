@@ -209,22 +209,13 @@ impl Parser<'_> {
 		let parent = statement_node
 			.child_by_field_name("parent")
 			.map(|n| self.node_symbol(&n));
-		if is_resource {
-			Statement::Resource {
-				name,
-				members,
-				methods,
-				parent,
-				constructor: constructor.unwrap(),
-			}
-		} else {
-			Statement::Class {
-				name,
-				members,
-				methods,
-				parent,
-				constructor: constructor.unwrap(),
-			}
+		Statement::Class {
+			name,
+			members,
+			methods,
+			parent,
+			constructor: constructor.unwrap(),
+			is_resource,
 		}
 	}
 
@@ -349,13 +340,15 @@ impl Parser<'_> {
 					ArgList::new()
 				};
 
-				let obj_id = expression_node
-					.child_by_field_name("object_id")
-					.map(|n| self.node_symbol(&n));
+				let obj_id = expression_node.child_by_field_name("id").map(|n| self.node_symbol(&n));
+				let obj_scope = expression_node
+					.child_by_field_name("scope")
+					.map(|n| Box::new(self.build_expression(&n)));
 				Expression::New {
 					class,
 					obj_id,
 					arg_list,
+					obj_scope,
 				}
 			}
 			"binary_expression" => Expression::Binary {

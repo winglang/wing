@@ -192,9 +192,9 @@ fn jsify_expression(expression: &Expression) -> String {
 	match expression {
 		Expression::New {
 			class,
-			// TODO
-			obj_id: _,
+			obj_id: _, // TODO
 			arg_list,
+			obj_scope: _, // TODO
 		} => {
 			format!("new {}({})", jsify_symbol(&class), jsify_arg_list(&arg_list))
 		}
@@ -329,7 +329,12 @@ fn jsify_statement(statement: &Statement) -> String {
 			methods,
 			parent,
 			constructor,
+			is_resource,
 		} => {
+			if *is_resource {
+				todo!()
+			}
+
 			format!(
 				"class {}{}\n{{\n{}\n{}\n{}\n}}",
 				jsify_symbol(name),
@@ -351,13 +356,6 @@ fn jsify_statement(statement: &Statement) -> String {
 					.join("\n")
 			)
 		}
-		Statement::Resource {
-			name: _,
-			members: _,
-			methods: _,
-			constructor: _,
-			parent: _,
-		} => todo!(),
 	}
 }
 

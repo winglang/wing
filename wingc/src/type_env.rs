@@ -19,6 +19,10 @@ impl TypeEnv {
 		}
 	}
 
+	pub fn is_root(&self) -> bool {
+		self.parent.is_none()
+	}
+
 	pub fn define(&mut self, symbol: &Symbol, _type: TypeRef) {
 		if self.type_map.contains_key(&symbol.name) {
 			panic!("Symbol {} already defined.", symbol);
@@ -26,7 +30,7 @@ impl TypeEnv {
 
 		// Avoid variable shadowing
 		if let Some(_parent_env) = self.parent {
-			if let Some(parent_type) = self.try_lookup(&symbol) {
+			if let Some(parent_type) = self.try_lookup(&symbol.name) {
 				// If we're a class we allow "symbol shadowing" for methods
 				if !(self.is_class
 					&& matches!(parent_type.into(), &Type::Function(_))
@@ -39,17 +43,19 @@ impl TypeEnv {
 		self.type_map.insert(symbol.name.clone(), _type);
 	}
 
-	fn try_lookup(&self, symbol: &Symbol) -> Option<TypeRef> {
-		if let Some(_type) = self.type_map.get(&symbol.name) {
+	pub fn try_lookup(&self, symbol_name: &str) -> Option<TypeRef> {
+		if let Some(_type) = self.type_map.get(symbol_name) {
 			Some(*_type)
 		} else if let Some(parent_env) = self.parent {
-			unsafe { &*parent_env }.try_lookup(symbol)
+			unsafe { &*parent_env }.try_lookup(symbol_name)
 		} else {
 			None
 		}
 	}
 
 	pub fn lookup(&self, symbol: &Symbol) -> TypeRef {
-		self.try_lookup(symbol).expect(&format!("Unknown symbol {}", symbol))
+		self
+			.try_lookup(&symbol.name)
+			.expect(&format!("Unknown symbol {}", &symbol.name))
 	}
 }

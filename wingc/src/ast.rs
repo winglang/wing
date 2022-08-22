@@ -86,15 +86,10 @@ pub enum Statement {
 		methods: Vec<FunctionDefinition>,
 		constructor: Constructor,
 		parent: Option<Symbol>,
-	},
-	Resource {
-		name: Symbol,
-		members: Vec<ClassMember>,
-		methods: Vec<FunctionDefinition>,
-		constructor: Constructor,
-		parent: Option<Symbol>,
+		is_resource: bool,
 	},
 }
+
 #[derive(Debug)]
 pub struct ParameterDefinition {
 	pub name: Symbol,
@@ -111,8 +106,9 @@ pub struct ClassMember {
 #[derive(Debug)]
 pub enum Expression {
 	New {
-		class: Symbol, // TypeReference
+		class: Symbol,
 		obj_id: Option<Symbol>,
+		obj_scope: Option<Box<Expression>>,
 		arg_list: ArgList,
 	},
 	Literal(Literal),
