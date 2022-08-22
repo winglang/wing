@@ -535,34 +535,6 @@ impl TypeChecker {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
 				if matches!(func_def.signature.flight, Flight::In) {
-					/* Typecheck inflight:
-					1. TODO: We can't declare resources.
-					2. TODO: We can't instantiate resources.
-					3. TODO: We can't reference preflight functions.
-					4. TODO: We can't define preflight function types (signatures).
-					5. TODO: What do we do when instantiating a class with preflight members? They need to actually be inflight now.
-					6. TODO: What do we do when defining a new class with preflight members? They need to actually be inflight now.
-					7. TODO: Any access to a resource not declared inflight (not an argument) needs to "do a capture" (what's that?):
-					7.1	Indicate the symbol accesses the resource:
-					7.1.1 If we access the resource through a local symbol add a reference to the captured resource in the symbol's: resources
-
-					8. TODO: On each access to a resource we need
-
-					are captures at the scope level or variable level?
-					I think captures happen at the boundary between in/preflight. This is always a pre-flight function/method call code which accepts an inflight signature.
-					When this happens I need to capture. So 7 above isn't relevant here.
-					When I TC these boundaries
-					----------------
-					* any *reference* to resource defined in preflight will capture: we find the resource *instance* (what? how? look at current code) and
-						a. add the resource to the boundary's capture list for preflight. (we might be able to collect this later from b.)
-						b. add the resource to the scope's capture list if not there already for inflight client gen.
-					* any *assignment* of a resource in inflight code will add the captured object's instance (!) to the *symbol's captured object* list
-						this is so we can keep track of different resource objects referenced by this symbol.
-					* any method call on a resource in inflight will add the method to all the objects..??
-
-
-					*/
-
 					unimplemented_type(); // TODO: what typechecking do we need here???
 				}
 
