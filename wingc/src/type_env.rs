@@ -1,4 +1,8 @@
-use crate::{ast::Symbol, type_check::Type, type_check::TypeRef};
+use crate::{
+	ast::{Flight, Symbol},
+	type_check::Type,
+	type_check::TypeRef,
+};
 use std::collections::HashMap;
 
 pub struct TypeEnv {
@@ -6,16 +10,18 @@ pub struct TypeEnv {
 	parent: Option<*const TypeEnv>,
 	pub return_type: Option<TypeRef>,
 	is_class: bool,
+	pub flight: Flight,
 }
 
 impl TypeEnv {
-	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool) -> Self {
+	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool, flight: Flight) -> Self {
 		assert!(return_type.is_none() || return_type.is_some() && parent.is_some());
 		Self {
 			type_map: HashMap::new(),
 			parent,
 			return_type,
 			is_class,
+			flight,
 		}
 	}
 
@@ -53,9 +59,25 @@ impl TypeEnv {
 		}
 	}
 
+	pub fn try_lookup_ext(&self, symbol_name: &str) -> Option<(TypeRef, Flight)> {
+		if let Some(_type) = self.type_map.get(symbol_name) {
+			Some((*_type, self.flight))
+		} else if let Some(parent_env) = self.parent {
+			unsafe { &*parent_env }.try_lookup_ext(symbol_name)
+		} else {
+			None
+		}
+	}
+
 	pub fn lookup(&self, symbol: &Symbol) -> TypeRef {
 		self
 			.try_lookup(&symbol.name)
+			.expect(&format!("Unknown symbol {}", &symbol.name))
+	}
+
+	pub fn lookup_ext(&self, symbol: &Symbol) -> (TypeRef, Flight) {
+		self
+			.try_lookup_ext(&symbol.name)
 			.expect(&format!("Unknown symbol {}", &symbol.name))
 	}
 }

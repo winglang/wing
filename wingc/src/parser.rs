@@ -77,6 +77,7 @@ impl Parser<'_> {
 				.filter(|child| !child.is_extra())
 				.map(|st_node| self.build_statement(&st_node))
 				.collect(),
+			env: None, // env should be set later when scope is type-checked
 		}
 	}
 

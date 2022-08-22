@@ -215,7 +215,6 @@ fn jsify_expression(expression: &Expression) -> String {
 				jsify_arg_list(&method_call.args)
 			)
 		}
-		Expression::CapturedObjMethodCall(_) => todo!(),
 		Expression::Unary { op, exp } => {
 			let op = match op {
 				UnaryOperator::Plus => "+",

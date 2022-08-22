@@ -1,6 +1,8 @@
 use std::collections::HashMap;
+use std::fmt::Debug;
 
 use crate::diagnostic::WingSpan;
+use crate::type_env::TypeEnv;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
 pub struct Symbol {
@@ -14,7 +16,7 @@ impl std::fmt::Display for Symbol {
 	}
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum Flight {
 	In,
 	Pre,
@@ -118,7 +120,6 @@ pub enum Expression {
 		args: ArgList,
 	},
 	MethodCall(MethodCall),
-	CapturedObjMethodCall(MethodCall),
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
@@ -155,9 +156,23 @@ pub enum Literal {
 	Boolean(bool),
 }
 
-#[derive(Debug)]
 pub struct Scope {
 	pub statements: Vec<Statement>,
+	pub env: Option<TypeEnv>, // None after parsing, set to Some during type checking phase
+}
+
+impl Scope {
+	pub fn set_env(&mut self, env: TypeEnv) {
+		assert!(self.env.is_none());
+		self.env = Some(env);
+	}
+}
+
+impl Debug for Scope {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		// Ignore env when debug printing scope
+		f.debug_struct("Scope").field("statements", &self.statements).finish()
+	}
 }
 
 #[derive(Debug)]

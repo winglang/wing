@@ -162,7 +162,7 @@ impl From<TypeRef> for &mut Type {
 }
 
 impl TypeRef {
-	fn as_resource_object(&self) -> Option<&Type> {
+	pub fn as_resource_object(&self) -> Option<&Type> {
 		if let &Type::ResourceObject(_) = (*self).into() {
 			Some((*self).into())
 		} else {
@@ -222,7 +222,7 @@ impl Debug for TypeRef {
 	}
 }
 
-struct Types {
+pub struct Types {
 	// TODO: Remove the box and change TypeRef to just be an index into the types array
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	types: Vec<Box<Type>>,
@@ -283,13 +283,13 @@ impl Types {
 	}
 }
 
-pub struct TypeChecker {
-	types: Types,
+pub struct TypeChecker<'a> {
+	types: &'a mut Types,
 }
 
-impl TypeChecker {
-	pub fn new() -> Self {
-		Self { types: Types::new() }
+impl<'a> TypeChecker<'a> {
+	pub fn new(types: &'a mut Types) -> Self {
+		Self { types: types }
 	}
 
 	pub fn get_primitive_type_by_name(&self, name: &str) -> TypeRef {
@@ -302,7 +302,7 @@ impl TypeChecker {
 		}
 	}
 
-	pub fn type_check_exp(&mut self, exp: &Expression, env: &TypeEnv) -> Option<TypeRef> {
+	fn type_check_exp(&mut self, exp: &Expression, env: &TypeEnv) -> Option<TypeRef> {
 		match exp {
 			Expression::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
@@ -481,7 +481,6 @@ impl TypeChecker {
 
 				method_sig.return_type
 			}
-			Expression::CapturedObjMethodCall(_) => todo!(),
 		}
 	}
 
@@ -491,9 +490,9 @@ impl TypeChecker {
 		}
 	}
 
-	pub fn type_check_scope(&mut self, scope: &Scope, env: &mut TypeEnv) {
-		for statement in scope.statements.iter() {
-			self.type_check_statement(statement, env);
+	pub fn type_check_scope(&mut self, scope: &mut Scope) {
+		for statement in scope.statements.iter_mut() {
+			self.type_check_statement(statement, scope.env.as_mut().unwrap());
 		}
 	}
 
@@ -522,7 +521,7 @@ impl TypeChecker {
 		}
 	}
 
-	fn type_check_statement(&mut self, statement: &Statement, env: &mut TypeEnv) {
+	fn type_check_statement(&mut self, statement: &mut Statement, env: &mut TypeEnv) {
 		match statement {
 			Statement::VariableDef {
 				var_name,
@@ -554,12 +553,13 @@ impl TypeChecker {
 				// Add this function to the env
 				env.define(&func_def.name, function_type);
 
-				let mut function_env = TypeEnv::new(Some(env), return_type, false);
+				let mut function_env = TypeEnv::new(Some(env), return_type, false, func_def.signature.flight);
 				for (param, param_type) in func_def.parameters.iter().zip(args.iter()) {
 					function_env.define(&param, *param_type);
 				}
+				func_def.statements.set_env(function_env);
 				// TODO: we created `function_env` but `type_check_scope` will also create a wrapper env for the scope which is redundant
-				self.type_check_scope(&func_def.statements, &mut function_env);
+				self.type_check_scope(&mut func_def.statements);
 			}
 			Statement::ForLoop {
 				iterator,
@@ -569,10 +569,11 @@ impl TypeChecker {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env).unwrap();
 
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
+				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				scope_env.define(&iterator, exp_type);
+				statements.set_env(scope_env);
 
-				self.type_check_scope(statements, &mut scope_env);
+				self.type_check_scope(statements);
 			}
 			Statement::If {
 				condition,
@@ -582,12 +583,12 @@ impl TypeChecker {
 				let cond_type = self.type_check_exp(condition, env).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
-				self.type_check_scope(statements, &mut scope_env);
+				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight));
+				self.type_check_scope(statements);
 
 				if let Some(else_scope) = else_statements {
-					let mut else_scope_env = TypeEnv::new(Some(env), env.return_type, false);
-					self.type_check_scope(else_scope, &mut else_scope_env);
+					else_scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight));
+					self.type_check_scope(else_scope);
 				}
 			}
 			Statement::Expression(e) => {
@@ -603,8 +604,8 @@ impl TypeChecker {
 				identifier: _,
 			} => _ = unimplemented_type(),
 			Statement::Scope(scope) => {
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
-				for statement in scope.statements.iter() {
+				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
+				for statement in scope.statements.iter_mut() {
 					self.type_check_statement(statement, &mut scope_env);
 				}
 			}
@@ -635,6 +636,8 @@ impl TypeChecker {
 					unimplemented_type();
 				}
 
+				let env_flight = if *is_resource { Flight::Pre } else { Flight::In };
+
 				// Verify parent is actually a known Class
 				let (parent_class, parent_class_env) = if let Some(parent_symbol) = parent {
 					let t = env.lookup(parent_symbol);
@@ -648,7 +651,7 @@ impl TypeChecker {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = TypeEnv::new(None, None, true);
+				let dummy_env = TypeEnv::new(None, None, true, env_flight);
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -664,7 +667,7 @@ impl TypeChecker {
 				env.define(name, class_type);
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = TypeEnv::new(parent_class_env, None, true);
+				let mut class_env = TypeEnv::new(parent_class_env, None, true, env_flight);
 
 				// Add members to the class env
 				for member in members.iter() {
@@ -701,8 +704,26 @@ impl TypeChecker {
 					_ => panic!("Expected {} to be a class or resource ", name),
 				};
 
+				// Type check constructor
+				let constructor_sig = if let &Type::Function(ref s) = constructor_type.into() {
+					s
+				} else {
+					panic!(
+						"Constructor of {} isn't defined as a function in the class environment",
+						name
+					)
+				};
+				// Create constructor environment and prime it with args
+				let mut constructor_env = TypeEnv::new(Some(env), constructor_sig.return_type, false, env_flight);
+				for (param, param_type) in constructor.parameters.iter().zip(constructor_sig.args.iter()) {
+					constructor_env.define(&param, *param_type);
+				}
+				constructor.statements.set_env(constructor_env);
+				// Check function scope
+				self.type_check_scope(&mut constructor.statements);
+
 				// Type check methods
-				for method in methods.iter() {
+				for method in methods.iter_mut() {
 					// Lookup the method in the class_env
 					let method_type = class_env.lookup(&method.name);
 					let method_sig = if let &Type::Function(ref s) = method_type.into() {
@@ -715,7 +736,7 @@ impl TypeChecker {
 					};
 
 					// Create method environment and prime it with args
-					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false);
+					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false, env_flight);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
@@ -725,8 +746,9 @@ impl TypeChecker {
 					for (param, param_type) in actual_parameters.iter().zip(method_sig.args.iter()) {
 						method_env.define(&param, *param_type);
 					}
+					method.statements.set_env(method_env);
 					// Check function scope
-					self.type_check_scope(&method.statements, &mut method_env);
+					self.type_check_scope(&mut method.statements);
 				}
 			}
 		}
