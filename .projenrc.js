@@ -22,6 +22,7 @@ const project = new cdk.JsiiProject({
     secret: "PROJEN_GITHUB_TOKEN",
   },
   packageManager: javascript.NodePackageManager.NPM,
+  gitignore: [".DS_Store"],
   githubOptions: {
     projenCredentials: github.GithubCredentials.fromApp(),
   },
