@@ -42,6 +42,7 @@ const project = new cdk.JsiiProject({
 // use types from wing-local to ensure that the local CDK
 // generates the correct types for the simulator
 project.addDevDeps("@monadahq/wing-local");
+project.addDevDeps("@monadahq/wingsdk-clients");
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");
