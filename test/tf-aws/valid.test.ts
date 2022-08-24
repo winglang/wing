@@ -12,6 +12,13 @@ test("sample app is valid terraform", () => {
     synthesizer: new tfaws.Synthesizer({ outdir: mkdtemp() }),
   });
   new cloud.Bucket(app.root, "Bucket");
+  const inflight = new core.Inflight({
+    code: core.NodeJsCode.fromInline(
+      `exports.greeter = async (name) => { console.log("Hello, " + name); } `
+    ),
+    entrypoint: "exports.greeter",
+  });
+  new cloud.Function(app.root, "Function", inflight);
 
   expect(cdktf.Testing.toBeValidTerraform(tfSynth(app))).toBe(true);
 });

@@ -1,0 +1,75 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`function captures a bucket 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"Function_IamRole_678BE84C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"s3:PutObject*\\\\\\",\\\\\\"s3:Abort*\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Bucket.arn}\\\\\\",\\\\\\"\${aws_s3_bucket.Bucket.arn}/*\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"Function_LambdaFunction_27600CF9\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"BUCKET_NAME__Bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Bucket\\": {
+      },
+      \\"Function_Bucket_CC3697BD\\": {
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"Bucket_PublicAccessBlock_A34F3B5C\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"Bucket_Encryption_016FDA0C\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"key\\": \\"c83ba82ab737b318be3084bef5b7996129facf99b8.08c45ab9252275a692bc704556c59505.zip\\",
+        \\"source\\": \\"assets/Function_Asset_212D1EED/08C45AB9252275A692BC704556C59505/archive.zip\\"
+      }
+    }
+  }
+}"
+`;

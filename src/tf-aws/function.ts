@@ -1,18 +1,20 @@
 import * as crypto from "crypto";
-import { readFileSync, writeFileSync } from "fs";
+import { mkdtempSync, readFileSync, unlinkSync, writeFileSync } from "fs";
+import * as os from "os";
 import { join, dirname, basename, resolve } from "path";
 import * as aws from "@cdktf/provider-aws";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild";
 import * as cloud from "../cloud";
+import { FunctionImplProps } from "../cloud";
 import {
   Capture,
   Code,
   ICapturable,
   Language,
   NodeJsCode,
-  Process,
+  Inflight,
 } from "../core";
 
 export class Function extends cloud.FunctionBase {
@@ -20,31 +22,44 @@ export class Function extends cloud.FunctionBase {
   private readonly role: aws.iam.IamRole;
   private readonly policyStatements: any[] = [];
 
-  constructor(scope: Construct, id: string, process: Process) {
-    super(scope, id, process);
+  constructor(scope: Construct, id: string, props: FunctionImplProps) {
+    super(scope, id, props);
 
-    if (process.code.language !== Language.NODE_JS) {
+    const inflight = props.inflight;
+
+    for (const [key, value] of Object.entries(props.env ?? {})) {
+      this.addEnvironment(key, value);
+    }
+
+    if (inflight.code.language !== Language.NODE_JS) {
       throw new Error("Only JavaScript code is currently supported.");
     }
 
-    const code = this.rewriteHandler(process);
+    const code = this.rewriteHandler(inflight);
 
-    // Create Lambda executable
-    const asset = new TerraformAsset(this, "Asset", {
-      path: resolve(code.path),
-      type: AssetType.FILE,
-    });
-
-    // Create unique S3 bucket that hosts Lambda executable
-    const bucket = new aws.s3.S3Bucket(this, "Bucket");
+    // bundled code is guaranteed to be in a fresh directory
+    const codeDir = resolve(code.path, "..");
 
     // calculate a md5 hash of the contents of asset.path
-    const hash = crypto
+    const codeHash = crypto
       .createHash("md5")
       .update(readFileSync(code.path))
       .digest("hex");
 
-    const objectKey = `${hash}${this.node.id}.zip`;
+    // Create Lambda executable
+    const asset = new TerraformAsset(this, "Asset", {
+      path: codeDir,
+      type: AssetType.ARCHIVE,
+    });
+
+    // Create unique S3 bucket for hosting Lambda code
+    const bucket = new aws.s3.S3Bucket(this, "Bucket");
+
+    // Choose an object name so that:
+    // - whenever code changes, the object name changes
+    // - even if two functions have the same code, they get different names
+    //   (separation of concerns)
+    const objectKey = `${this.node.addr}.${codeHash}.zip`;
 
     // Upload Lambda zip file to newly created S3 bucket
     const lambdaArchive = new aws.s3.S3Object(this, "S3Object", {
@@ -69,14 +84,31 @@ export class Function extends cloud.FunctionBase {
       }),
     });
 
+    // Add policy to Lambda role for any custom policy statements, such as
+    // those needed by captures
     new aws.iam.IamRolePolicy(this, "IamRolePolicy", {
       role: this.role.name,
       policy: Lazy.stringValue({
-        produce: () =>
-          JSON.stringify({
-            Version: "2012-10-17",
-            Statement: this.policyStatements,
-          }),
+        produce: () => {
+          if (this.policyStatements.length > 0) {
+            return JSON.stringify({
+              Version: "2012-10-17",
+              Statement: this.policyStatements,
+            });
+          } else {
+            // policy must contain at least one statement, so include a no-op statement
+            return JSON.stringify({
+              Version: "2012-10-17",
+              Statement: [
+                {
+                  Effect: "Allow",
+                  Action: "none:null",
+                  Resource: "*",
+                },
+              ],
+            });
+          }
+        },
       }),
     });
 
@@ -100,7 +132,8 @@ export class Function extends cloud.FunctionBase {
       },
     });
 
-    this.addEnvironment("wing", "0.0.0");
+    // terraform rejects templates with zero environment variables
+    this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
   }
 
   public capture(_consumer: any, _capture: Capture): Code {
@@ -121,30 +154,51 @@ export class Function extends cloud.FunctionBase {
     );
   }
 
-  private rewriteHandler(process: Process): Code {
+  /**
+   * Precondition: user provides some the path to a JavaScript file that
+   * contains a handler function.
+   *
+   * Postcondition: we return the path to a JavaScript file that has been
+   * rewritten to include all dependencies and captured values, and which has
+   * been isolated into its own directory so that it can be zipped up and
+   * uploaded to S3.
+   *
+   * High level process:
+   * 1. Read the file (let's say its path is path/to/foo.js)
+   * 2. Create a new javascript file named path/to/foo.new.js, including a map
+   *    of all capture clients, a new handler that calls the original handler
+   *    with the clients passed in, and a copy of the user's code from
+   *    path/to/foo.js.
+   * 3. Use esbuild to bundle all dependencies, outputting the result to a file
+   *    in a temporary directory.
+   */
+  private rewriteHandler(inflight: Inflight): Code {
     const lines = new Array<string>();
 
-    const code = process.code;
+    const originalCode = inflight.code;
 
-    const absolutePath = resolve(code.path);
+    const absolutePath = resolve(originalCode.path);
     const workdir = dirname(absolutePath);
-    const filename = basename(code.path);
+    const filename = basename(absolutePath);
 
     lines.push("const $cap = {}");
-    for (const [name, capture] of Object.entries(process.captures)) {
+    for (const [name, capture] of Object.entries(inflight.captures)) {
       const clientCode = this.createClient(name, capture);
       lines.push(`$cap["${name}"] = ${clientCode.text};`);
     }
     lines.push();
-    lines.push(code.text);
+    lines.push(originalCode.text);
     lines.push();
     lines.push("exports.handler = async function(event) {");
-    lines.push("  return await $proc($cap, event);");
+    lines.push(`  return await ${inflight.entrypoint}($cap, event);`);
     lines.push("};");
 
     const content = lines.join("\n");
     const filenamenew = filename + ".new.js";
     writeFileSync(join(workdir, filenamenew), content);
+
+    const tempdir = mkdtemp("wingsdk.");
+    const outfile = join(tempdir, "index.js");
 
     esbuild.buildSync({
       bundle: true,
@@ -152,13 +206,17 @@ export class Function extends cloud.FunctionBase {
       platform: "node",
       absWorkingDir: workdir,
       entryPoints: [filenamenew],
-      outfile: absolutePath,
+      outfile,
       minify: false,
+      // AWS Lambda includes the aws-sdk in all Node Lambda functions, so
+      // we can safely omit it from bundled code
       external: ["aws-sdk"],
-      allowOverwrite: true,
     });
 
-    return code;
+    // clean up the intermediate file
+    unlinkSync(join(workdir, filenamenew));
+
+    return NodeJsCode.fromFile(outfile);
   }
 
   private createClient(name: string, capture: Capture): Code {
@@ -188,4 +246,8 @@ export interface PolicyStatement {
   readonly action?: string[];
   readonly resource?: string[];
   readonly effect?: string;
+}
+
+function mkdtemp(prefix: string): string {
+  return mkdtempSync(join(os.tmpdir(), prefix));
 }

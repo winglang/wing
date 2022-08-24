@@ -9,7 +9,7 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: ["constructs@^10.0.25", "@monadahq/polycons@^0.0.11"],
   deps: ["cdktf", "@cdktf/provider-aws"],
-  bundledDeps: ["esbuild@0.14.31"],
+  bundledDeps: ["esbuild@0.14.31", "@monadahq/wingsdk-clients"],
   devDeps: [],
   prettier: true,
   jestOptions: {
@@ -42,7 +42,6 @@ const project = new cdk.JsiiProject({
 // use types from wing-local to ensure that the local CDK
 // generates the correct types for the simulator
 project.addDevDeps("@monadahq/wing-local");
-project.addDevDeps("@monadahq/wingsdk-clients");
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");

@@ -1,7 +1,7 @@
 import type { BucketSchema } from "@monadahq/wing-local";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { LOCAL_CLIENTS_PATH } from "../constants";
+import { CLIENTS_PACKAGE_PATH } from "../constants";
 import { Capture, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
@@ -36,7 +36,7 @@ export class Bucket
       throw new Error("buckets can only be captured by a function for now");
     }
     return NodeJsCode.fromInline(
-      `new (require("${LOCAL_CLIENTS_PATH}")).BucketClient("${this.node.id}");`
+      `new (require("${CLIENTS_PACKAGE_PATH}")).local.BucketClient("${this.node.id}");`
     );
   }
 }

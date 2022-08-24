@@ -1,16 +1,17 @@
-import { writeFileSync } from "fs";
+import { unlinkSync, writeFileSync } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import type { FunctionSchema } from "@monadahq/wing-local";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild";
 import * as cloud from "../cloud";
+import { FunctionImplProps } from "../cloud";
 import {
   Capture,
   Code,
   ICapturable,
   Language,
   NodeJsCode,
-  Process,
+  Inflight,
 } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
@@ -19,14 +20,16 @@ export class Function extends cloud.FunctionBase implements IResource {
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
-  constructor(scope: Construct, id: string, process: Process) {
-    super(scope, id, process);
+  constructor(scope: Construct, id: string, props: FunctionImplProps) {
+    super(scope, id, props);
 
-    if (process.code.language !== Language.NODE_JS) {
+    const inflight = props.inflight;
+
+    if (inflight.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is currently supported.");
     }
 
-    const bundledCode = this.rewriteHandler(process);
+    const bundledCode = this.rewriteHandler(inflight);
 
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
@@ -59,17 +62,21 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.env[name] = value;
   }
 
-  private rewriteHandler(process: Process): Code {
+  /**
+   * Rewrite the handler code to include the captured variables and bundle
+   * any dependencies.
+   */
+  private rewriteHandler(inflight: Inflight): Code {
     const lines = new Array<string>();
 
-    const code = process.code;
+    const code = inflight.code;
 
     const absolutePath = resolve(code.path);
     const workdir = dirname(absolutePath);
     const filename = basename(code.path);
 
     lines.push("const $cap = {}");
-    for (const [name, capture] of Object.entries(process.captures)) {
+    for (const [name, capture] of Object.entries(inflight.captures)) {
       const clientCode = this.createClient(name, capture);
       lines.push(`$cap["${name}"] = ${clientCode.text};`);
     }
@@ -92,9 +99,12 @@ export class Function extends cloud.FunctionBase implements IResource {
       entryPoints: [filenamenew],
       outfile: absolutePath,
       minify: false,
-      external: ["aws-sdk"],
+      external: [],
       allowOverwrite: true,
     });
+
+    // clean up the temporary file
+    unlinkSync(join(workdir, filenamenew));
 
     return code;
   }

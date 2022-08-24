@@ -1,7 +1,7 @@
 import { s3 } from "@cdktf/provider-aws";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { TERRAFORM_AWS_CLIENTS_PATH } from "../constants";
+import { CLIENTS_PACKAGE_PATH } from "../constants";
 import { Capture, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 
@@ -16,7 +16,7 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
 
     this.bucket = new s3.S3Bucket(this, "Default");
 
-    // (at-rest) data encryption with Amazon S3-managed keys
+    // best practice: (at-rest) data encryption with Amazon S3-managed keys
     new s3.S3BucketServerSideEncryptionConfigurationA(this, "Encryption", {
       bucket: this.bucket.bucket,
       rule: [
@@ -63,18 +63,27 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
     const name = `BUCKET_NAME__${this.node.id}`;
 
     const methods = new Set(capture.methods ?? []);
-    if (methods.has("upload")) {
+    if (methods.has("put")) {
       consumer.addPolicyStatements({
         effect: "Allow",
-        action: ["s3:PutObject", "s3:PutObjectAcl"],
-        resource: [`${this.bucket.arn}/*`],
+        action: ["s3:PutObject*", "s3:Abort*"],
+        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+      });
+    }
+    if (methods.has("get")) {
+      consumer.addPolicyStatements({
+        effect: "Allow",
+        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
 
+    // The bucket name needs to be passed through an environment variable since
+    // it may not be resolved until deployment time.
     consumer.addEnvironment(name, this.bucket.bucket);
 
     return NodeJsCode.fromInline(
-      `new (require("${TERRAFORM_AWS_CLIENTS_PATH}")).BucketClient(process.env.${name});`
+      `new (require("${CLIENTS_PACKAGE_PATH}")).aws.BucketClient(process.env["${name}"]);`
     );
   }
 }

@@ -262,7 +262,7 @@ new cloud.Bucket(scope: Construct, id: string, props?: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -280,7 +280,7 @@ Returns a string representation of this construct.
 public capture(_consumer: any, _capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._consumer"></a>
 
@@ -401,7 +401,7 @@ new local.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.local.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.local.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.local.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -419,7 +419,7 @@ Returns a string representation of this construct.
 public capture(consumer: any, _capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.local.Bucket.capture.parameter.consumer"></a>
 
@@ -540,7 +540,7 @@ new tfaws.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -558,7 +558,7 @@ Returns a string representation of this construct.
 public capture(consumer: any, capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.tfaws.Bucket.capture.parameter.consumer"></a>
 
@@ -681,7 +681,7 @@ new cloud.BucketBase(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -699,7 +699,7 @@ Returns a string representation of this construct.
 public capture(consumer: any, capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.BucketBase.capture.parameter.consumer"></a>
 
@@ -915,14 +915,15 @@ Represents a serverless function.
 ```typescript
 import { cloud } from '@monadahq/wingsdk'
 
-new cloud.Function(scope: Construct, id: string, process: Process)
+new cloud.Function(scope: Construct, id: string, inflight: Inflight, props?: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.process">process</a></code> | <code>@monadahq/wingsdk.core.Process</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
@@ -938,9 +939,15 @@ new cloud.Function(scope: Construct, id: string, process: Process)
 
 ---
 
-##### `process`<sup>Required</sup> <a name="process" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.process"></a>
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* @monadahq/wingsdk.core.Process
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -949,7 +956,7 @@ new cloud.Function(scope: Construct, id: string, process: Process)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -967,7 +974,7 @@ Returns a string representation of this construct.
 public capture(_consumer: any, _capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.cloud.Function.capture.parameter._consumer"></a>
 
@@ -1054,14 +1061,14 @@ with a fresh copy without any consequences.
 ```typescript
 import { local } from '@monadahq/wingsdk'
 
-new local.Function(scope: Construct, id: string, process: Process)
+new local.Function(scope: Construct, id: string, props: FunctionImplProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.process">process</a></code> | <code>@monadahq/wingsdk.core.Process</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionImplProps</code> | *No description.* |
 
 ---
 
@@ -1077,9 +1084,9 @@ new local.Function(scope: Construct, id: string, process: Process)
 
 ---
 
-##### `process`<sup>Required</sup> <a name="process" id="@monadahq/wingsdk.local.Function.Initializer.parameter.process"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.local.Function.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.core.Process
+- *Type:* @monadahq/wingsdk.cloud.FunctionImplProps
 
 ---
 
@@ -1088,7 +1095,7 @@ new local.Function(scope: Construct, id: string, process: Process)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.local.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.local.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.local.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 | <code><a href="#@monadahq/wingsdk.local.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
 
 ---
@@ -1107,7 +1114,7 @@ Returns a string representation of this construct.
 public capture(_consumer: any, _capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.local.Function.capture.parameter._consumer"></a>
 
@@ -1210,14 +1217,14 @@ with a fresh copy without any consequences.
 ```typescript
 import { tfaws } from '@monadahq/wingsdk'
 
-new tfaws.Function(scope: Construct, id: string, process: Process)
+new tfaws.Function(scope: Construct, id: string, props: FunctionImplProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.process">process</a></code> | <code>@monadahq/wingsdk.core.Process</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionImplProps</code> | *No description.* |
 
 ---
 
@@ -1233,9 +1240,9 @@ new tfaws.Function(scope: Construct, id: string, process: Process)
 
 ---
 
-##### `process`<sup>Required</sup> <a name="process" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.process"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.core.Process
+- *Type:* @monadahq/wingsdk.cloud.FunctionImplProps
 
 ---
 
@@ -1244,7 +1251,7 @@ new tfaws.Function(scope: Construct, id: string, process: Process)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | *No description.* |
 
@@ -1264,7 +1271,7 @@ Returns a string representation of this construct.
 public capture(_consumer: any, _capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.tfaws.Function.capture.parameter._consumer"></a>
 
@@ -1383,14 +1390,14 @@ Functionality shared between all `Function` implementations.
 ```typescript
 import { cloud } from '@monadahq/wingsdk'
 
-new cloud.FunctionBase(scope: Construct, id: string, process: Process)
+new cloud.FunctionBase(scope: Construct, id: string, props: FunctionImplProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.process">process</a></code> | <code>@monadahq/wingsdk.core.Process</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionImplProps</code> | *No description.* |
 
 ---
 
@@ -1406,9 +1413,9 @@ new cloud.FunctionBase(scope: Construct, id: string, process: Process)
 
 ---
 
-##### `process`<sup>Required</sup> <a name="process" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.process"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.core.Process
+- *Type:* @monadahq/wingsdk.cloud.FunctionImplProps
 
 ---
 
@@ -1417,7 +1424,7 @@ new cloud.FunctionBase(scope: Construct, id: string, process: Process)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -1435,7 +1442,7 @@ Returns a string representation of this construct.
 public capture(consumer: any, capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.FunctionBase.capture.parameter.consumer"></a>
 
@@ -1686,7 +1693,7 @@ new cloud.Queue(scope: Construct, id: string, props: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -1704,7 +1711,7 @@ Returns a string representation of this construct.
 public capture(_consumer: any, _capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._consumer"></a>
 
@@ -1825,7 +1832,7 @@ new tfaws.Queue(scope: Construct, id: string, props?: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 | <code><a href="#@monadahq/wingsdk.tfaws.Queue.addWorker">addWorker</a></code> | *No description.* |
 
 ---
@@ -1844,7 +1851,7 @@ Returns a string representation of this construct.
 public capture(_consumer: any, _capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.tfaws.Queue.capture.parameter._consumer"></a>
 
@@ -1979,7 +1986,7 @@ new cloud.QueueBase(scope: Construct, id: string, props: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.QueueBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -1997,7 +2004,7 @@ Returns a string representation of this construct.
 public capture(consumer: any, capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.QueueBase.capture.parameter.consumer"></a>
 
@@ -2119,7 +2126,7 @@ dash `--`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Resource.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.cloud.Resource.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -2137,7 +2144,7 @@ Returns a string representation of this construct.
 public capture(consumer: any, capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.Resource.capture.parameter.consumer"></a>
 
@@ -2471,7 +2478,7 @@ Whether objects in the bucket are publicly accessible.
 
 Capture information.
 
-A capture is a reference from a Process to a
+A capture is a reference from an Inflight to a
 construction-time object or value.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.Capture.Initializer"></a>
@@ -2512,6 +2519,157 @@ public readonly methods: string[];
 - *Type:* string[]
 
 Which methods are called on the captured object.
+
+---
+
+### FunctionImplProps <a name="FunctionImplProps" id="@monadahq/wingsdk.cloud.FunctionImplProps"></a>
+
+Properties for `Function`.
+
+This is the type used for concrete implementations of cloud.Function.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.FunctionImplProps.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const functionImplProps: cloud.FunctionImplProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionImplProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionImplProps.property.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | The code that will be executed by the function. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@monadahq/wingsdk.cloud.FunctionImplProps.property.env"></a>
+
+```typescript
+public readonly env: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Environment variables to pass to the function.
+
+---
+
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.FunctionImplProps.property.inflight"></a>
+
+```typescript
+public readonly inflight: Inflight;
+```
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+The code that will be executed by the function.
+
+---
+
+### FunctionProps <a name="FunctionProps" id="@monadahq/wingsdk.cloud.FunctionProps"></a>
+
+Properties for `Function`.
+
+This is the type users see when constructing a cloud.Function instance.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.FunctionProps.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const functionProps: cloud.FunctionProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@monadahq/wingsdk.cloud.FunctionProps.property.env"></a>
+
+```typescript
+public readonly env: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+
+Environment variables to pass to the function.
+
+---
+
+### InflightProps <a name="InflightProps" id="@monadahq/wingsdk.core.InflightProps"></a>
+
+Options for `Inflight`.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.InflightProps.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+const inflightProps: core.InflightProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.InflightProps.property.code">code</a></code> | <code>@monadahq/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
+| <code><a href="#@monadahq/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function to run. |
+| <code><a href="#@monadahq/wingsdk.core.InflightProps.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | Capture information. |
+
+---
+
+##### `code`<sup>Required</sup> <a name="code" id="@monadahq/wingsdk.core.InflightProps.property.code"></a>
+
+```typescript
+public readonly code: Code;
+```
+
+- *Type:* @monadahq/wingsdk.core.Code
+
+Reference to code containing the entrypoint function.
+
+---
+
+##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@monadahq/wingsdk.core.InflightProps.property.entrypoint"></a>
+
+```typescript
+public readonly entrypoint: string;
+```
+
+- *Type:* string
+
+Name of the exported function to run.
+
+---
+
+*Example*
+
+```typescript
+"exports.handler"
+```
+
+
+##### `captures`<sup>Optional</sup> <a name="captures" id="@monadahq/wingsdk.core.InflightProps.property.captures"></a>
+
+```typescript
+public readonly captures: {[ key: string ]: Capture};
+```
+
+- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
+
+Capture information.
+
+During runtime, a map containing all captured values
+will be passed as the first argument of the entrypoint function.
+
+Each key here will be the key for the final value in the map.
 
 ---
 
@@ -2592,69 +2750,6 @@ public readonly resource: string[];
 ```
 
 - *Type:* string[]
-
----
-
-### ProcessProps <a name="ProcessProps" id="@monadahq/wingsdk.core.ProcessProps"></a>
-
-Options for `Process`.
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.ProcessProps.Initializer"></a>
-
-```typescript
-import { core } from '@monadahq/wingsdk'
-
-const processProps: core.ProcessProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.code">code</a></code> | <code>@monadahq/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
-| <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function which will be run. |
-| <code><a href="#@monadahq/wingsdk.core.ProcessProps.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | Capture information. |
-
----
-
-##### `code`<sup>Required</sup> <a name="code" id="@monadahq/wingsdk.core.ProcessProps.property.code"></a>
-
-```typescript
-public readonly code: Code;
-```
-
-- *Type:* @monadahq/wingsdk.core.Code
-
-Reference to code containing the entrypoint function.
-
----
-
-##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@monadahq/wingsdk.core.ProcessProps.property.entrypoint"></a>
-
-```typescript
-public readonly entrypoint: string;
-```
-
-- *Type:* string
-
-Name of the exported function which will be run.
-
----
-
-##### `captures`<sup>Optional</sup> <a name="captures" id="@monadahq/wingsdk.core.ProcessProps.property.captures"></a>
-
-```typescript
-public readonly captures: {[ key: string ]: Capture};
-```
-
-- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
-
-Capture information.
-
-During runtime, a map containing all captured values
-will be passed as the first argument of the entrypoint function.
-
-Each key here will be the key for the final value in the map.
 
 ---
 
@@ -2969,6 +3064,84 @@ public readonly seconds: number;
 ---
 
 
+### Inflight <a name="Inflight" id="@monadahq/wingsdk.core.Inflight"></a>
+
+Represents a unit of application code that can be executed at runtime within a cloud resource.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Inflight.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+new core.Inflight(props: InflightProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Inflight.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.InflightProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.Inflight.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.core.InflightProps
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Inflight.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | Capture information. |
+| <code><a href="#@monadahq/wingsdk.core.Inflight.property.code">code</a></code> | <code>@monadahq/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
+| <code><a href="#@monadahq/wingsdk.core.Inflight.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function which will be run. |
+
+---
+
+##### `captures`<sup>Required</sup> <a name="captures" id="@monadahq/wingsdk.core.Inflight.property.captures"></a>
+
+```typescript
+public readonly captures: {[ key: string ]: Capture};
+```
+
+- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
+
+Capture information.
+
+During runtime, a map containing all captured values
+will be passed as the first argument of the entrypoint function.
+
+Each key here will be the key for the final value in the map.
+
+---
+
+##### `code`<sup>Required</sup> <a name="code" id="@monadahq/wingsdk.core.Inflight.property.code"></a>
+
+```typescript
+public readonly code: Code;
+```
+
+- *Type:* @monadahq/wingsdk.core.Code
+
+Reference to code containing the entrypoint function.
+
+---
+
+##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@monadahq/wingsdk.core.Inflight.property.entrypoint"></a>
+
+```typescript
+public readonly entrypoint: string;
+```
+
+- *Type:* string
+
+Name of the exported function which will be run.
+
+---
+
+
 ### NodeJsCode <a name="NodeJsCode" id="@monadahq/wingsdk.core.NodeJsCode"></a>
 
 Reference to a piece of Node.js code.
@@ -3178,87 +3351,6 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 ---
 
 
-
-
-### Process <a name="Process" id="@monadahq/wingsdk.core.Process"></a>
-
-Runtime code with a named entrypoint.
-
-Typically this represents code
-that exists to be run outside of the scope of a `constructs` application.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Process.Initializer"></a>
-
-```typescript
-import { core } from '@monadahq/wingsdk'
-
-new core.Process(props: ProcessProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Process.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.ProcessProps</code> | *No description.* |
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.Process.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.core.ProcessProps
-
----
-
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Process.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | Capture information. |
-| <code><a href="#@monadahq/wingsdk.core.Process.property.code">code</a></code> | <code>@monadahq/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
-| <code><a href="#@monadahq/wingsdk.core.Process.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function which will be run. |
-
----
-
-##### `captures`<sup>Required</sup> <a name="captures" id="@monadahq/wingsdk.core.Process.property.captures"></a>
-
-```typescript
-public readonly captures: {[ key: string ]: Capture};
-```
-
-- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
-
-Capture information.
-
-During runtime, a map containing all captured values
-will be passed as the first argument of the entrypoint function.
-
-Each key here will be the key for the final value in the map.
-
----
-
-##### `code`<sup>Required</sup> <a name="code" id="@monadahq/wingsdk.core.Process.property.code"></a>
-
-```typescript
-public readonly code: Code;
-```
-
-- *Type:* @monadahq/wingsdk.core.Code
-
-Reference to code containing the entrypoint function.
-
----
-
-##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@monadahq/wingsdk.core.Process.property.entrypoint"></a>
-
-```typescript
-public readonly entrypoint: string;
-```
-
-- *Type:* string
-
-Name of the exported function which will be run.
-
----
 
 
 ### Synthesizer <a name="Synthesizer" id="@monadahq/wingsdk.core.Synthesizer"></a>
@@ -3534,7 +3626,7 @@ Represents something that is capturable.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ICapturable.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in a Process. |
+| <code><a href="#@monadahq/wingsdk.core.ICapturable.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
 
 ---
 
@@ -3544,7 +3636,7 @@ Represents something that is capturable.
 public capture(consumer: any, capture: Capture): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in a Process.
+Captures the resource for a given consumer so that it can be used in an Inflight.
 
 ###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.consumer"></a>
 

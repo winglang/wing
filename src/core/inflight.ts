@@ -3,7 +3,7 @@ import { tmpdir } from "os";
 import { join } from "path";
 
 /**
- * Capture information. A capture is a reference from a Process to a
+ * Capture information. A capture is a reference from an Inflight to a
  * construction-time object or value.
  */
 export interface Capture {
@@ -24,7 +24,7 @@ export interface Capture {
 export interface ICapturable {
   /**
    * Captures the resource for a given consumer so that it can be used
-   * in a Process.
+   * in an Inflight.
    */
   capture(consumer: any, capture: Capture): Code;
 }
@@ -74,7 +74,7 @@ export class NodeJsCode extends Code {
    * Reference code directly from a string.
    */
   public static fromInline(text: string) {
-    const tempdir = mkdtempSync(join(tmpdir(), "polycons-"));
+    const tempdir = mkdtempSync(join(tmpdir(), "wingsdk."));
     const file = join(tempdir, "index.js");
     writeFileSync(file, text);
     return new NodeJsCode(file);
@@ -88,15 +88,17 @@ export class NodeJsCode extends Code {
 }
 
 /**
- * Options for `Process`.
+ * Options for `Inflight`.
  */
-export interface ProcessProps {
+export interface InflightProps {
   /**
    * Reference to code containing the entrypoint function.
    */
   readonly code: Code;
   /**
-   * Name of the exported function which will be run.
+   * Name of the exported function to run.
+   *
+   * @example "exports.handler"
    */
   readonly entrypoint: string;
   /**
@@ -109,10 +111,10 @@ export interface ProcessProps {
 }
 
 /**
- * Runtime code with a named entrypoint. Typically this represents code
- * that exists to be run outside of the scope of a `constructs` application.
+ * Represents a unit of application code that can be executed at runtime
+ * within a cloud resource.
  */
-export class Process {
+export class Inflight {
   /**
    * Reference to code containing the entrypoint function.
    */
@@ -129,7 +131,7 @@ export class Process {
    */
   public readonly captures: { [name: string]: Capture };
 
-  constructor(props: ProcessProps) {
+  constructor(props: InflightProps) {
     this.code = props.code;
     this.entrypoint = props.entrypoint;
     this.captures = props.captures ?? {};

@@ -3,6 +3,10 @@ import { tmpdir } from "os";
 import { extname, join } from "path";
 import { App } from "../src/core";
 
+export function cdktfResourcesOf(template: string): string[] {
+  return Object.keys(JSON.parse(template).resource).sort();
+}
+
 export function directorySnapshot(root: string) {
   const snapshot: Record<string, any> = {};
 
@@ -36,4 +40,8 @@ export function appSnapshot(app: App): Record<string, any> {
 
 export function mkdtemp() {
   return mkdtempSync(join(tmpdir(), "wingsdk."));
+}
+
+export function readJsonSync(file: string) {
+  return JSON.parse(readFileSync(file, "utf-8"));
 }

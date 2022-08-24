@@ -8,9 +8,23 @@ class Root extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    new cloud.Bucket(this, "bucket", {
-      public: true,
+    const bucket = new cloud.Bucket(this, "Bucket");
+    const inflight = new core.Inflight({
+      code: core.NodeJsCode.fromInline(
+        `async function $proc($cap, event) {
+          console.log("Hello, " + event.name);
+          await $cap.bucket.put("hello.txt", JSON.stringify(event));
+        }`
+      ),
+      entrypoint: "$proc",
+      captures: {
+        bucket: {
+          obj: bucket,
+          methods: ["put"],
+        },
+      },
     });
+    new cloud.Function(this, "Function", inflight);
   }
 }
 
