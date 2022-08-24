@@ -18,6 +18,7 @@ export const FUNCTION_ID = "wingsdk.cloud.Function";
 export interface FunctionProps {
   /**
    * Environment variables to pass to the function.
+   * @default - No environment variables.
    */
   readonly env?: { [key: string]: string };
 }

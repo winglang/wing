@@ -2552,6 +2552,7 @@ public readonly env: {[ key: string ]: string};
 ```
 
 - *Type:* {[ key: string ]: string}
+- *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
@@ -2598,6 +2599,7 @@ public readonly env: {[ key: string ]: string};
 ```
 
 - *Type:* {[ key: string ]: string}
+- *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
