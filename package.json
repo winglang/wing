@@ -38,7 +38,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@monadahq/polycons": "0.0.11",
+    "@monadahq/polycons": "0.0.36",
     "@monadahq/wing-local": "^0.0.2",
     "@types/jest": "^27.0.0",
     "@types/node": "^14",
@@ -68,7 +68,7 @@
     "typescript": "^4.7.4"
   },
   "peerDependencies": {
-    "@monadahq/polycons": "^0.0.11",
+    "@monadahq/polycons": "^0.0.36",
     "constructs": "^10.0.25"
   },
   "dependencies": {

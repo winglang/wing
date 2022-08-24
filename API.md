@@ -1061,14 +1061,15 @@ with a fresh copy without any consequences.
 ```typescript
 import { local } from '@monadahq/wingsdk'
 
-new local.Function(scope: Construct, id: string, props: FunctionImplProps)
+new local.Function(scope: Construct, id: string, inflight: Inflight, props: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionImplProps</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.local.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
@@ -1084,9 +1085,15 @@ new local.Function(scope: Construct, id: string, props: FunctionImplProps)
 
 ---
 
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.local.Function.Initializer.parameter.inflight"></a>
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
 ##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.local.Function.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionImplProps
+- *Type:* @monadahq/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -1217,14 +1224,15 @@ with a fresh copy without any consequences.
 ```typescript
 import { tfaws } from '@monadahq/wingsdk'
 
-new tfaws.Function(scope: Construct, id: string, props: FunctionImplProps)
+new tfaws.Function(scope: Construct, id: string, inflight: Inflight, props: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionImplProps</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
@@ -1240,9 +1248,15 @@ new tfaws.Function(scope: Construct, id: string, props: FunctionImplProps)
 
 ---
 
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.inflight"></a>
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
 ##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionImplProps
+- *Type:* @monadahq/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -1390,14 +1404,15 @@ Functionality shared between all `Function` implementations.
 ```typescript
 import { cloud } from '@monadahq/wingsdk'
 
-new cloud.FunctionBase(scope: Construct, id: string, props: FunctionImplProps)
+new cloud.FunctionBase(scope: Construct, id: string, inflight: Inflight, props: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionImplProps</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
@@ -1413,9 +1428,15 @@ new cloud.FunctionBase(scope: Construct, id: string, props: FunctionImplProps)
 
 ---
 
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.inflight"></a>
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
 ##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionImplProps
+- *Type:* @monadahq/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -2522,54 +2543,6 @@ Which methods are called on the captured object.
 
 ---
 
-### FunctionImplProps <a name="FunctionImplProps" id="@monadahq/wingsdk.cloud.FunctionImplProps"></a>
-
-Properties for `Function`.
-
-This is the type used for concrete implementations of cloud.Function.
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.FunctionImplProps.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-const functionImplProps: cloud.FunctionImplProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionImplProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionImplProps.property.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | The code that will be executed by the function. |
-
----
-
-##### `env`<sup>Optional</sup> <a name="env" id="@monadahq/wingsdk.cloud.FunctionImplProps.property.env"></a>
-
-```typescript
-public readonly env: {[ key: string ]: string};
-```
-
-- *Type:* {[ key: string ]: string}
-- *Default:* No environment variables.
-
-Environment variables to pass to the function.
-
----
-
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.FunctionImplProps.property.inflight"></a>
-
-```typescript
-public readonly inflight: Inflight;
-```
-
-- *Type:* @monadahq/wingsdk.core.Inflight
-
-The code that will be executed by the function.
-
----
-
 ### FunctionProps <a name="FunctionProps" id="@monadahq/wingsdk.cloud.FunctionProps"></a>
 
 Properties for `Function`.
@@ -3263,7 +3236,7 @@ new local.PolyconFactory()
 ##### `resolve` <a name="resolve" id="@monadahq/wingsdk.local.PolyconFactory.resolve"></a>
 
 ```typescript
-public resolve(polyconId: string, scope: IConstruct, id: string, props?: any): IConstruct
+public resolve(polyconId: string, scope: IConstruct, id: string, args: any): IConstruct
 ```
 
 Resolve the parameters needed for creating a specific polycon into a concrete construct.
@@ -3286,7 +3259,7 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.local.PolyconFactory.resolve.parameter.props"></a>
+###### `args`<sup>Required</sup> <a name="args" id="@monadahq/wingsdk.local.PolyconFactory.resolve.parameter.args"></a>
 
 - *Type:* any
 
@@ -3323,7 +3296,7 @@ new tfaws.PolyconFactory()
 ##### `resolve` <a name="resolve" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve"></a>
 
 ```typescript
-public resolve(polyconId: string, scope: IConstruct, id: string, props?: any): IConstruct
+public resolve(polyconId: string, scope: IConstruct, id: string, args: any): IConstruct
 ```
 
 Resolve the parameters needed for creating a specific polycon into a concrete construct.
@@ -3346,7 +3319,7 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 ---
 
-###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.props"></a>
+###### `args`<sup>Required</sup> <a name="args" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.args"></a>
 
 - *Type:* any
 

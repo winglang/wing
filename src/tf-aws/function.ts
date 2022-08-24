@@ -7,7 +7,7 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild";
 import * as cloud from "../cloud";
-import { FunctionImplProps } from "../cloud";
+import { FunctionProps } from "../cloud";
 import {
   Capture,
   Code,
@@ -22,10 +22,13 @@ export class Function extends cloud.FunctionBase {
   private readonly role: aws.iam.IamRole;
   private readonly policyStatements: any[] = [];
 
-  constructor(scope: Construct, id: string, props: FunctionImplProps) {
-    super(scope, id, props);
-
-    const inflight = props.inflight;
+  constructor(
+    scope: Construct,
+    id: string,
+    inflight: Inflight,
+    props: FunctionProps
+  ) {
+    super(scope, id, inflight, props);
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);

@@ -4,7 +4,7 @@ import type { FunctionSchema } from "@monadahq/wing-local";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild";
 import * as cloud from "../cloud";
-import { FunctionImplProps } from "../cloud";
+import { FunctionProps } from "../cloud";
 import {
   Capture,
   Code,
@@ -20,10 +20,13 @@ export class Function extends cloud.FunctionBase implements IResource {
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
-  constructor(scope: Construct, id: string, props: FunctionImplProps) {
-    super(scope, id, props);
-
-    const inflight = props.inflight;
+  constructor(
+    scope: Construct,
+    id: string,
+    inflight: Inflight,
+    props: FunctionProps
+  ) {
+    super(scope, id, inflight, props);
 
     if (inflight.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is currently supported.");

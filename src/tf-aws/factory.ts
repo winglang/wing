@@ -10,15 +10,15 @@ export class PolyconFactory implements IPolyconFactory {
     polyconId: string,
     scope: IConstruct,
     id: string,
-    props?: any
+    ...args: any[]
   ): IConstruct {
     switch (polyconId) {
       case BUCKET_ID:
-        return new Bucket(scope, id, props);
+        return new Bucket(scope, id, args[0]);
       case FUNCTION_ID:
-        return new Function(scope, id, props);
+        return new Function(scope, id, args[0], args[1]);
       case QUEUE_ID:
-        return new Queue(scope, id, props);
+        return new Queue(scope, id, args[0]);
       default:
         throw new Error(`Type ${polyconId} not implemented.`);
     }

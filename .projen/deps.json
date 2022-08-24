@@ -2,7 +2,7 @@
   "dependencies": [
     {
       "name": "@monadahq/polycons",
-      "version": "0.0.11",
+      "version": "0.0.36",
       "type": "build"
     },
     {
@@ -135,7 +135,7 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "^0.0.11",
+      "version": "^0.0.36",
       "type": "peer"
     },
     {
