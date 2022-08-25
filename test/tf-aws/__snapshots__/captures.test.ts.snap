@@ -66,8 +66,8 @@ exports[`function captures a bucket 1`] = `
     \\"aws_s3_object\\": {
       \\"Function_S3Object_C62A0C2D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
-        \\"key\\": \\"c83ba82ab737b318be3084bef5b7996129facf99b8.08c45ab9252275a692bc704556c59505.zip\\",
-        \\"source\\": \\"assets/Function_Asset_212D1EED/08C45AB9252275A692BC704556C59505/archive.zip\\"
+        \\"key\\": \\"c83ba82ab737b318be3084bef5b7996129facf99b8.75eef45bb7fca6e0fec5450e5135dcdf.zip\\",
+        \\"source\\": \\"assets/Function_Asset_212D1EED/75EEF45BB7FCA6E0FEC5450E5135DCDF/archive.zip\\"
       }
     }
   }

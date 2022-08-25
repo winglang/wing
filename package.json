@@ -61,7 +61,7 @@
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
     "prettier": "^2.7.1",
-    "projen": "^0.61.26",
+    "projen": "^0.61.27",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "tsx": "*",
@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "@cdktf/provider-aws": "^9.0.15",
-    "@monadahq/wingsdk-clients": "^0.2.1",
+    "@monadahq/wingsdk-clients": "^0.3.0",
     "cdktf": "^0.12.1",
     "esbuild": "0.14.31"
   },
