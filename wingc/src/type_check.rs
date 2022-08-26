@@ -69,7 +69,7 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
-			// Fo all other types (built-ins) we compare the enum value
+			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
 	}
