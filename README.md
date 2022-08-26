@@ -1,64 +1,64 @@
 # Wing Language Reference
 
-- [Wing Language Reference](#wing-language-reference)
-  - [1. General](#1-general)
-    - [1.1 Types](#11-types)
-      - [1.1.1 Primitive Types](#111-primitive-types)
-      - [1.1.2 Container Types](#112-container-types)
-    - [1.2 Debugging Utilities](#12-debugging-utilities)
-    - [1.3 Phase Modifiers](#13-phase-modifiers)
-    - [1.4 Storage Modifiers](#14-storage-modifiers)
-    - [1.5 Visibility](#15-visibility)
-    - [1.6 Mutability](#16-mutability)
-    - [1.7 Optionality](#17-optionality)
-    - [1.8 Type Inference](#18-type-inference)
-    - [1.9 Error Handling](#19-error-handling)
-    - [1.10 Formatting](#110-formatting)
-    - [1.11 Memory Management](#111-memory-management)
-  - [2. Expressions](#2-expressions)
-    - [2.1 bring expression](#21-bring-expression)
-    - [2.2 break expression](#22-break-expression)
-    - [2.3 continue expression](#23-continue-expression)
-    - [2.4 return expression](#24-return-expression)
-    - [2.5 await Expression](#25-await-expression)
-  - [3. Statements](#3-statements)
-    - [3.1 if statement](#31-if-statement)
-    - [3.2 for statement](#32-for-statement)
-    - [3.3 while statement](#33-while-statement)
-  - [4. Declarations](#4-declarations)
-    - [4.1 Structs](#41-structs)
-    - [4.2 Interfaces](#42-interfaces)
-    - [4.3 Classes](#43-classes)
-    - [4.4 Resources](#44-resources)
-    - [4.5 Variables](#45-variables)
-    - [4.6 Functions](#46-functions)
-      - [4.6.1 Free Functions](#461-free-functions)
-      - [4.6.2 Closures](#462-closures)
-      - [4.6.3 Futures](#463-futures)
-    - [4.7 Arrays](#47-arrays)
-    - [4.8 Enumeration](#48-enumeration)
-  - [5. Module System](#5-module-system)
-    - [5.1 Imports](#51-imports)
-    - [5.2 Exports](#52-exports)
-  - [6. Dependency Injection](#6-dependency-injection)
-    - [6.1 Pure Resources](#61-pure-resources)
-    - [6.2 Symbol Resolution](#62-symbol-resolution)
-  - [7. Miscellaneous](#7-miscellaneous)
-    - [7.1 Strings](#71-strings)
-      - [7.1.1 Normal strings "..."](#711-normal-strings-)
-      - [7.1.2 Shell strings \`...\`](#712-shell-strings-)
-    - [7.2 Comments](#72-comments)
-    - [7.3 Operators](#73-operators)
-      - [7.3.1 Relational Operators](#731-relational-operators)
-      - [7.3.2 Logical Operators](#732-logical-operators)
-      - [7.3.3 Bitwise Operators](#733-bitwise-operators)
-      - [7.3.4 Mathematics Operators](#734-mathematics-operators)
-      - [7.3.5 Operator Precedence](#735-operator-precedence)
-      - [7.3.6 Short Circuiting](#736-short-circuiting)
-      - [7.3.7 Non-numeric Operators](#737-non-numeric-operators)
-    - [7.4 Kitchen Sink](#74-kitchen-sink)
-    - [7.6 Standard Library](#76-standard-library)
-    - [7.7 Credits](#77-credits)
+- [1. General](#1-general)
+  - [1.1 Types](#11-types)
+    - [1.1.1 Primitive Types](#111-primitive-types)
+    - [1.1.2 Container Types](#112-container-types)
+    - [1.1.3 Function Types](#113-function-types)
+  - [1.2 Debugging Utilities](#12-debugging-utilities)
+  - [1.3 Phase Modifiers](#13-phase-modifiers)
+  - [1.4 Storage Modifiers](#14-storage-modifiers)
+  - [1.5 Access Modifiers](#15-access-modifiers)
+  - [1.6 Mutability](#16-mutability)
+  - [1.7 Optionality](#17-optionality)
+  - [1.8 Type Inference](#18-type-inference)
+  - [1.9 Error Handling](#19-error-handling)
+  - [1.10 Formatting](#110-formatting)
+  - [1.11 Memory Management](#111-memory-management)
+  - [1.12 Documentation Style](#112-documentation-style)
+- [2. Expressions](#2-expressions)
+  - [2.1 bring expression](#21-bring-expression)
+  - [2.2 break expression](#22-break-expression)
+  - [2.3 continue expression](#23-continue-expression)
+  - [2.4 return expression](#24-return-expression)
+  - [2.5 await Expression](#25-await-expression)
+- [3. Statements](#3-statements)
+  - [3.1 if statement](#31-if-statement)
+  - [3.2 for statement](#32-for-statement)
+  - [3.3 while statement](#33-while-statement)
+- [4. Declarations](#4-declarations)
+  - [4.1 Structs](#41-structs)
+  - [4.2 Classes](#42-classes)
+  - [4.3 Resources](#43-resources)
+  - [4.4 Interfaces](#44-interfaces)
+  - [4.5 Variables](#45-variables)
+  - [4.6 Functions](#46-functions)
+    - [4.6.1 Free Functions](#461-free-functions)
+    - [4.6.2 Closures](#462-closures)
+    - [4.6.3 Promises](#463-promises)
+  - [4.7 Arrays](#47-arrays)
+  - [4.8 Enumeration](#48-enumeration)
+- [5. Module System](#5-module-system)
+  - [5.1 Imports](#51-imports)
+  - [5.2 Exports](#52-exports)
+- [6. Dependency Injection](#6-dependency-injection)
+  - [6.1 Pure Resources](#61-pure-resources)
+  - [6.2 Symbol Resolution](#62-symbol-resolution)
+- [7. Miscellaneous](#7-miscellaneous)
+  - [7.1 Strings](#71-strings)
+    - [7.1.1 Normal strings "..."](#711-normal-strings-)
+    - [7.1.2 Shell strings \`...\`](#712-shell-strings-)
+  - [7.2 Comments](#72-comments)
+  - [7.3 Operators](#73-operators)
+    - [7.3.1 Relational Operators](#731-relational-operators)
+    - [7.3.2 Logical Operators](#732-logical-operators)
+    - [7.3.3 Bitwise Operators](#733-bitwise-operators)
+    - [7.3.4 Mathematics Operators](#734-mathematics-operators)
+    - [7.3.5 Operator Precedence](#735-operator-precedence)
+    - [7.3.6 Short Circuiting](#736-short-circuiting)
+    - [7.3.7 Equality](#737-equality)
+  - [7.4 Kitchen Sink](#74-kitchen-sink)
+  - [7.7 Credits](#77-credits)
 
 ## 1. General
 
@@ -79,9 +79,9 @@
 > let x = 1;                  // x is a number
 > let y = "Hello";            // y is a string
 > let z = true;               // z is a boolean
-> let w : any = 1;            // w is an any
-> let a : mut = "World";      // a is a mutable string
-> let q : opt number = nil;   // q is an optional number
+> let w: any = 1;             // w is an any
+> let a: mut = "World";       // a is a mutable string
+> let q: number? = nil;       // q is an optional number
 > ```
 >
 > ```TS
@@ -100,40 +100,53 @@
 
 #### 1.1.2 Container Types
 
-| Name           | Extra information                     |
-| -------------- | ------------------------------------- |
-| `set<T>`       | set type (array of unique items)      |
-| `map<T>`       | map type (key-value with string keys) |
-| `enum<T>`      | enum type (enumerations of constants) |
-| `array<T>`     | dynamic array of a certain type       |
-| `class<T>`     | class type (object)                   |
-| `future<T>`    | future type (promise)                 |
-| `struct<T>`    | struct type (structural shape)        |
-| `resource<T>`  | resource type (composite)             |
-| `interface<T>` | interface type (contract)             |
-
-Motivation for these types is full compatibility with the JSII type system. Due
-to polyglot nature of Wing, container types are meant to represent types which
-are semi-portable and representable in other programming languages.
+| Name            | Extra information                     |
+| --------------- | ------------------------------------- |
+| `set<T>`        | set type (array of unique items)      |
+| `map<T>`        | map type (key-value with string keys) |
+| `array<T>`      | variable size array of a certain type |
+| `promise<T>`    | promises type (async code)            |
 
 > ```TS
 > // Wing program:
-> let z : set<number> = { 1, 2, 3 };
-> let y : map<number> = { "a": 1, "b": 2 };
-> let x = [1, 2, 3];      // x is array<number>
-> let w = SampleClass();  // w is class<SampleClass>
+> let z: {1, 2, 3};
+> let y: {"a": 1, "b": 2};
+> let x = [1, 2, 3];
+> let w = new SampleClass();
 > ```
 >
 > ```TS
 > // Equivalent TypeScript:
-> const z: Set<number> = new Set([1, 2, 3]);
-> const y: Map<string, number> = new Map([["a", 1], ["b", 2]]);
-> const x: number[] = [1, 2, 3];
-> const w: SampleClass = new SampleClass();
+> const z: Set<number> = Object.freeze(new Set([1, 2, 3]));
+> const y: Map<string, number> = Object.freeze(new Map([["a", 1], ["b", 2]]));
+> const x: number[] = Object.freeze([1, 2, 3]);
+> const w: SampleClass = Object.freeze(new SampleClass());
 > ```
->
-> Code samples for `future<T>`, `struct<T>`, `resource<T>`, and `interface<T>`
-> are not shown here. They are shown in their sections respectively.
+
+[`▲ top`][top]
+
+---
+
+#### 1.1.3 Function Types
+
+Function type annotations are written as if they were closure declarations, with
+the difference that body is replaced with return type annotation. Phase of the
+function is determined with `=>` or `~>` operators. Latter being inflight.
+
+> ```TS
+> // Wing program:
+> // type annotation in wing: (number) => number
+> let f1 = (x: number): number => { return x + 1; };
+> // type annotation in wing: (number, string) ~> nil
+> let f2 = (x: number, s: string) ~> { /* no-op */ };
+> ```
+> 
+> ```TS
+> // Equivalent TypeScript:
+> const f1: freeze((x: number): number => { return x + 1; });
+> const f2: freeze((x: number, s: string): undefined => { });
+> ```
+
 
 [`▲ top`][top]
 
@@ -141,12 +154,11 @@ are semi-portable and representable in other programming languages.
 
 ### 1.2 Debugging Utilities
 
-| Name    | Extra information                                          |
-| ------- | ---------------------------------------------------------- |
-| `print` | prints anything serializable.                              |
-| `panic` | exits with a serializable, dumps the trace + a core dump   |
-| `check` | asserts a condition and _panics_ if evaluated to false     |
-| `event` | records an arbitrary event, acts like a black-hole of data |
+| Name     | Extra information                                        |
+| -------- | -------------------------------------------------------- |
+| `print`  | prints anything serializable.                            |
+| `panic`  | exits with a serializable, dumps the trace + a core dump |
+| `assert` | checks a condition and _panics_ if evaluated to false    |
 
 Wing is a statically typed language, so attempting to redefine any of the above
 functions, just like any other "symbol" will result in a compile-time error.
@@ -158,8 +170,7 @@ new variadic functions. Functions above are exception to this rule:
 > // Wing program:
 > print(23, "Hello", true);
 > panic("Something went wrong", [1,2]);
-> check(x > 0, x < 10);
-> event("Something happened", { "x": 1, "y": 2 });
+> assert(x > 0, x < 10);
 > ```
 >
 > ```TS
@@ -174,28 +185,6 @@ new variadic functions. Functions above are exception to this rule:
 > })();
 > // multiple assertions
 > (() => { assert.ok(x > 0); assert.ok(x < 10); })();
-> // record an arbitrary "struct" with Google Analytics backend
-> (() => {
->   const { GA_TRACKING_ID } = process.env;
->   const event = [ "Something happened", { "x": 1, "y": 2 } ];
->   if (GA_TRACKING_ID) {
->     const data = {
->       "v": '1',
->       "tid": GA_TRACKING_ID,
->       "cid": '555', // when trace() is available, use trace.id
->       "t": 'event', // Event hit type. Fixed.
->       "ec": "wing", // Event category.
->       "ea": "record", // Event action.
->       // event label is source information for debugging
->       "el": 'event("Something happened", { "x": 1, "y": 2 });',
->       "ev": event,
->     };
->
->     await fetch('http://www.google-analytics.com/debug/collect', {
->       params: data,
->     }).catch(console.error);
->   }
-> })();
 > ```
 
 [`▲ top`][top]
@@ -203,6 +192,15 @@ new variadic functions. Functions above are exception to this rule:
 ---
 
 ### 1.3 Phase Modifiers
+
+In Wing, we differentiate between code that executes during compilation and code
+that executes after the application has been deployed by referring to them as
+**preflight** and **inflight** code respectively.
+
+The default (and implicit) execution context in Wing is preflight. This is
+because in cloud applications, the entrypoint is definition of the app's cloud
+infrastructure (and not the code that runs within a specific machine within this
+system).
 
 | Name        | Extra information                          |
 | ----------- | ------------------------------------------ |
@@ -248,7 +246,7 @@ the type name and the `.` operator.
 
 ---
 
-### 1.5 Visibility
+### 1.5 Access Modifiers
 
 Visibility inference is done with the following rules:
 
@@ -258,16 +256,12 @@ Visibility inference is done with the following rules:
 - `internal`: visibility is "internal" (C# internal).
 
 Accessing field, member, or structured data is done with `.`.  
-Wing does not support `->` or `::` or any other form of accessing addressed and
-structured data.
+> Wing does not support `->` or `::` or any other form of accessing addressed
+> and structured data.
 
 Visibility modifiers can be applied to members of classes, resources, and free
 functions. If applied to free functions, the rules are applied at module level.
 `protected` and `internal` are not available for free functions.
-
-Users coming from C# and TypeScript notice that there is no `readonly` in Wing.
-Data is immutable by default, therefore public none `mut` fields automatically
-become `readonly`.
 
 [`▲ top`][top]
 
@@ -277,21 +271,25 @@ become `readonly`.
 
 Mutability in Wing is a lot like TypeScript but with an inverted `const`. Every
 thing is immutable (`const`) by default, unless otherwise specified with the
-`mut` keyword after `let` and before type name.
-`mut mut` is invalid.
+`mut` keyword after `let` and before type name.  
+> `mut mut` is invalid.
+
+Users coming from C# and TypeScript notice that there is no `readonly` in Wing.
+Data is immutable by default, therefore public none `mut` fields automatically
+become `readonly`.
 
 > ```TS
 > // Wing program:
-> let x : mut = 1;
-> let y : mut = "Hello";
-> let z : mut opt = nil;
+> let x: mut = 1;
+> let y: mut = "Hello";
+> let z: mut? = nil;
 > ```
 >
 > ```TS
 > // Equivalent TypeScript:
 > let x: number = 1;
 > let y: string = "Hello";
-> let z: number? = undefined;
+> let z: any = undefined;
 > ```
 
 [`▲ top`][top]
@@ -300,12 +298,11 @@ thing is immutable (`const`) by default, unless otherwise specified with the
 
 ### 1.7 Optionality
 
-Keyword **opt** can mark a type as optional.
+Symbol **?** can mark a type as optional.
 Optionality means the value behind type can be either present or nil.
 
-Rules of optionality applies to the entire new container type of `type opt` and
-not the value behind it (`type`).  
-`opt opt` is invalid.
+Rules of optionality applies to the entire new container type of `type?` and not
+the value behind it (`type`).  
 
 The only way to "cast" an optional value to a non-optional value is to use the
 `??` operator. This forces a value to be present for the l-value (left hand side
@@ -313,7 +310,7 @@ of the assignment operator).
 
 > ```TS
 > // Wing program:
-> let x : opt = 44;
+> let x: ? = 44;
 > let y = x ?? 55;
 > ```
 >
@@ -345,13 +342,13 @@ type is inferred iff a default value is provided.
 > // Wing program:
 > let i = 5;
 > let m = i;
-> let n : mut = 5;
-> let arr_opt : mut opt array<mut number>;
+> let n: mut = 5;
+> let arr_opt: mut array<mut number>?;
 > let arr: mut array<number> = [];
 > let copy = arr;
-> let i1 : opt = nil;
-> let i2 : number opt = i;
-> let j1 : mut = 1;
+> let i1: ? = nil;
+> let i2: number? = i;
+> let j1: mut = 1;
 > let j2 = j1;
 > ```
 >
@@ -363,7 +360,7 @@ type is inferred iff a default value is provided.
 > let arr_opt: number[]? = undefined;
 > let arr: number[] = [];
 > let copy: number[] = arr;
-> const i1: number? = undefined;
+> const i1: any = undefined;
 > const i2: number? = i;
 > let j1: number = 1;
 > const j2: number = j1;
@@ -377,14 +374,14 @@ type is inferred iff a default value is provided.
 
 Exceptions and `try/catch/finally` is the error mechanism. Mechanics directly
 translate to JavaScript. If exception is uncaught, it crashes your app with a
-`panic` call. You can create a new exception with `error`.  
+`panic` call. You can create a new exception with `throw`.  
 In the presence of `try`, `catch` is required but `finally` is optional.
 
 > ```TS
 > // Wing program:
 > try {
->   let x : mut opt = 1;
->   error("hello exception");
+>   let x: mut? = 1;
+>   throw("hello exception");
 > } catch e {
 >   print(e);
 > } finally {
@@ -414,7 +411,8 @@ Wing is opinionated about formatting and whitespace. The opinion is:
 
 - indentations of lines are 2 spaces
 - each statement must end with a semicolon
-- everywhere ":" is needed, it must be surrounded by spaces " : "
+- interface names start with capital letter "I"
+- enum members must be written as ALL_CAPS_SNAKE_CASE
 - class, struct, interface, and resource names must be TitleCased
 - every other declaration name must be snake_cased unless otherwise specified
 
@@ -425,7 +423,22 @@ Wing is opinionated about formatting and whitespace. The opinion is:
 ### 1.11 Memory Management
 
 There is no implicit memory de-allocation function, dynamic memory is managed by
-Wing and is garbage collected (Relying on JSII target GC for the meantime).
+Wing and is garbage collected (relying on JSII target GC for the meantime).
+
+[`▲ top`][top]
+
+---
+
+### 1.12 Documentation Style
+
+> ```TS
+> /*\
+> |*|  Document your code with meaningful comments.
+> |*|
+> |*|  You can use Markdown for formatting.
+> |*|  Compiler can generate documentation for you from markdowns.
+> \*/
+> ```
 
 [`▲ top`][top]
 
@@ -476,18 +489,19 @@ return expr; // exits function, returning result of "expr".
 
 ### 2.5 await Expression
 
-**await** expression allows to wait for a future and grab its execution result.
-"await" and "future" are semantically similar to JavaScript's promises.  
+**await** expression allows to wait for a promise and grab its execution result.
+"await" and "promise" are semantically similar to JavaScript's promises.  
 "await" expression is only valid in async function declarations.
+awaiting non promises in Wing is a no-op just like in JavaScript.
 
 > ```Rust
 > // Wing program:
-> async fn foo() : number {
->   let x = await some_future();
+> async fn foo(): number {
+>   let x = await some_promise();
 >   return x;
 > }
-> fn boo() : future<number> {
->   let x = some_future();
+> fn boo(): promise<number> {
+>   let x = some_promise();
 >   return x;
 > }
 > ```
@@ -495,11 +509,11 @@ return expr; // exits function, returning result of "expr".
 > ```TS
 > // Equivalent TypeScript:
 > async function foo(): number {
->   const x = await some_future();
+>   const x = await some_promise();
 >   return x;
 > }
-> function foo(): Promise<number> {
->   const x = some_future();
+> function boo(): Promise<number> {
+>   const x = some_promise();
 >   return x;
 > }
 > ```
@@ -514,7 +528,7 @@ return expr; // exits function, returning result of "expr".
 
 Flow control can be done with `if/elif/else` statements.  
 The `if` statement is optionally followed by `elif` and `else`.  
-Parenthesis are not required around the condition.
+"If" statement condition expression in Wing is not surrounded by parenthesis.
 
 > ```TS
 > // Wing program:
@@ -548,8 +562,9 @@ Parenthesis are not required around the condition.
 
 ### 3.2 for statement
 
-For..in statement is used to iterate over an array or set.
-type annotation after an iteratee (left hand side of `in`) is optional.
+`for..in` statement is used to iterate over an array or set.  
+type annotation after an iteratee (left hand side of `in`) is optional.  
+"For" statement condition expression in Wing is not surrounded by parenthesis.
 
 > ```TS
 > // Wing program:
@@ -558,7 +573,7 @@ type annotation after an iteratee (left hand side of `in`) is optional.
 > for item in arr {
 >   print(item);
 > }
-> for item : number in set {
+> for item: number in set {
 >   print(item);
 > }
 > for item in 0..100 {
@@ -587,7 +602,8 @@ type annotation after an iteratee (left hand side of `in`) is optional.
 
 ### 3.3 while statement
 
-while statement is used to execute a block of code while a condition is true.
+while statement is used to execute a block of code while a condition is true.  
+"While" statement condition expression in Wing is not surrounded by parenthesis.
 
 > ```TS
 > // Wing program:
@@ -620,30 +636,30 @@ Array, set, and map of above types is also allowed in struct field definition.
 Visibility, storage and phase modifiers are not allowed in struct fields.
 
 Structs cannot inherit from interfaces, resources or classes.  
-Structs can inherit from other structs.
+Structs can inherit from multiple other structs.
 
 > ```Rust
 > // Wing program:
 > struct MyDataModel1 {
->   field1 : number;
->   field2 : string;
+>   field1: number;
+>   field2: string;
 > };
 > struct MyDataModel2 {
->   field3 : number;
->   field4 : opt bool;
+>   field3: number;
+>   field4: bool?;
 > };
-> struct MyDataModel3 implements struct<MyDataModel1>, struct<MyDataModel2> {
->   field5 : string;
+> struct MyDataModel3 implements MyDataModel1, MyDataModel2 {
+>   field5: string;
 > }
-> let s1 : struct<MyDataModel1> = { field1 : 1, field2 : "sample" };
-> let s2 : struct<MyDataModel2> = { field3 : 1, field4 : true };
-> let s3 : struct<MyDataModel2> = { field3 : 1, field4 : nil };
-> let s4 : struct<MyDataModel3> = {
->   field1 : 12,
->   field2 : "sample", 
->   field3 : 11,
->   field4 : false,
->   field5 : "sample"
+> let s1: = new MyDataModel1 { field1: 1, field2: "sample" };
+> let s2: = new MyDataModel2 { field3: 1, field4: true };
+> let s3: = new MyDataModel2 { field3: 1, field4: nil };
+> let s4: = new MyDataModel3 {
+>   field1: 12,
+>   field2: "sample", 
+>   field3: 11,
+>   field4: false,
+>   field5: "sample"
 > };
 > ```
 >
@@ -678,7 +694,221 @@ Structs can inherit from other structs.
 
 ---
 
-### 4.2 Interfaces
+### 4.2 Classes
+
+Class consists of fields and methods in any order,
+The class system is single-dispatch class based object orientated system.
+
+A class member function that has the name **new** is considered to be a class
+constructor (or initializer, or allocator).
+
+```TS
+class Name extends Base
+  implements MyInterface1, MyInterface2 {
+  new() {
+    // default constructor implementation
+    // order is up to user
+    this.field1 = 1;
+    this.field2 = "sample";
+  }
+
+  // class fields (private by default)
+  field1: number;
+  field2: string;
+
+  // private methods
+  private_method(arg:type, arg:type, ...): type {
+    // concrete implementation
+  }
+  static static_method(arg:type, arg:type, ...);
+  // visible to outside the instance
+  public public_method(arg:type, arg:type, ...);
+  // visible to children only
+  protected internal_method(type:arg, type:arg, ...) { }
+  // public in current compilation unit only
+  internal protect_method3(type:arg, type:arg, ...): type { }
+}
+```
+
+Default initialization does not exist in Wing. All member fields must be
+initialized in the constructor. Absent initialization is a compile error.
+
+Member function and field access in constructor with the "this" keyword before
+all fields are initialized is invalid and should throw a compile error.
+
+```TS
+class Foo {
+  x: number;
+  new() { this.x = 1; }
+}
+class Bar {
+  y: number;
+  z: Foo;
+  new() {
+    this.y = 1;
+    this.z = new Foo();
+  }
+  public print() {
+    print(this.y);
+  }
+}
+let a = new Bar();
+a.print(); // prints 20.
+```
+
+Overloading methods is allowed. This means functions can be overloaded with many
+signatures only varying in the number of arguments and their unique type order.
+Overloading the constructor is also allowed.  
+Inheritance is allowed with the `extends` keyword. `super` can be used to access
+the base class, immediately up the inheritance chain (parent class).
+
+```TS
+class Foo {
+  x: number;
+  new() { this.x = 0; }
+  public method() { }
+}
+class Boo extends Foo {
+  new() { super(); this.x = 10; }
+  public override method() {
+    // override implementation
+  }
+}
+```
+
+`extends` keyword accepts classes as its right hand side
+and accepts resources iff left hand side is also a resource.
+
+You can use the keyword `final` to stop the inheritance.
+
+```TS
+class Foo {
+  x: number;
+  new() { this.x = 0; }
+  public method() { }
+}
+class Boo final extends Foo {
+  new() { super(); this.x = 10; }
+  public override method() {
+    // override implementation
+  }
+}
+// compile error
+// class FinalBoo extends Boo {}
+```
+
+By default all methods are virtual. But if you are about to override a method,
+you need to explicitly provide the keyword **override**.  
+Static, private, and internal methods cannot be and are not virtual.  
+
+Statics are not inherited.  
+As a result, statics can be overridden mid hierarchy chain. Access to statics is
+through the class name that originally defined it `<class name>.Foo`.  
+
+Child class must not introduce additional signatures (overloads) for overridden
+(virtual) methods.
+
+Multiple inheritance is invalid and forbidden.  
+Multiple implementations of various interfaces is allowed.  
+Multiple implementations of the same interface is invalid and forbidden.
+
+[`▲ top`][top]
+
+---
+
+### 4.3 Resources
+
+Resources provide first class composite pattern support in Wing. They are
+modeled and leverage the [construct programming
+model](https://github.com/aws/constructs) and as such are fully interoperable
+with CDK constructs.  
+Resources can be defined like so:
+
+```TS
+// Wing Code:
+resource Foo {
+  new() { /* initialize preflight fields */ } // preflight constructor
+  new~() {} // optional client initializer
+  fin() {} // optional sync finalizer
+  async fin() {} // async finalizer (can be either sync or async)
+
+  // inflight members
+  foo~(arg:number): number { return arg; }
+  boo~(): number { return 32; }
+  field1~: number;
+  field2~: string;
+  field3~: bool;
+
+  // preflight members
+  foo(arg:number): number { return arg; }
+  boo(): number { return 32; }
+  field1: number;
+  field2: string;
+  field3: bool;
+}
+```
+
+Resources all have a scope and a unique ID. Compiler provides an implicit scope
+and ID for each resource, both overrideable by user-defined ones in constructor.
+
+The implicit scope is akin to "this" in regular CDK.  
+The implicit ID is the type name of the resource combined with its occurrence in
+a Wing program top down (`Bucket0`, `Bucket1`, ...). This is similar to how the
+"key" of React components work in the JSX world.  
+Resources instantiated at block scope level are assigned the root app construct
+as their default implicit scope.
+
+Resource instantiation syntax is as follows:
+
+```pre
+let <name>[: <type>] = <resource> [be <id>] [in <scope>];
+```
+
+```TS
+// Wing Code:
+let a = Foo(); // with default scope and id
+let a = Foo() in scope; // with user-defined scope
+let a = Foo() be "custom-id" in scope; // with user-defined scope and id
+let a = Foo(...) be "custom-id" in scope; // with constructor arguments
+```
+
+"id" must be of type string. It can also be a string literal with substitution
+support (normal strings as well as shell strings).  
+"scope" must be a variable of resource type.
+
+In addition to the `new` keyword for defining constructors, resources have a
+unique `fin` definable method that offer async finalization of a resource in
+preflight time.  
+Order of execution of async finalization is not guaranteed.
+
+Resources can be captured into inflight functions and once that happens, inside
+the capture block only the inflight members are available. This new "type" is an
+anonymous type, but guarantees to implement the same interface for two captures
+of the same resource type in preflight. You can reference this type name with
+the same type name as the resource type.
+
+Resources can extend other resources (but not structs) and implement interfaces.
+Resources can extend classes and all parent class methods are assumed preflight.
+
+```TS
+// Wing Code:
+class MyResourcePreflightImplementation { /* ... */ };
+interface IMyResourceInflightInterface { /* ... */ };
+resource MyResource
+  extends MyResourcePreflightImplementation
+  implements IMyResourceInflightInterface {
+    // inflight implementation
+  }
+```
+
+Access to "tree" behind all resources is done with the `nodeof(resource)` call.
+The tree is the constructs tree that enables composition of resources.
+
+[`▲ top`][top]
+
+---
+
+### 4.4 Interfaces
 
 Interfaces represent a contract that a class or resource must fulfill.  
 Interfaces are defined with the `interface` keyword.  
@@ -687,37 +917,36 @@ Both preflight and inflight signatures are allowed.
 that are separated with commas.
 
 All methods of an interface are public by default and cannot be of any other
-type of visibility (private, protected, etc.). public keyword is optional.
+type of visibility (private, protected, etc.). public keyword is compile error.
 
 > ```TS
 > // Wing program:
-> interface MyInterface1 {
->   field1 : number;
->   method1(x : number) : string;
+> interface IMyInterface1 {
+>   field1: number;
+>   method1(x: number): string;
 > };
-> interface MyInterface2 {
->   field2~ : string;
->   method2~() : string;
+> interface IMyInterface2 {
+>   field2~: string;
+>   method2~(): string;
 > };
-> class MyClass implements interface<MyInterface1> {
->   field1 : number;
->   new(x : number) {
+> class MyClass implements IMyInterface1 {
+>   field1: number;
+>   new(x: number) {
 >     // preflight constructor
 >     this.field1 = x;
 >   }
->   method1(x : number) : string {
+>   method1(x: number): string {
 >     return "sample: ${x}";
 >   }
 > };
-> resource MyResource
->   extends class<MyClass>
->   implements interface<MyInterface1>, interface<MyInterface2> {
->   field2~ : string;
+> resource MyResource extends MyClass
+>   implements IMyInterface1, IMyInterface2 {
+>   field2~: string;
 >   new~() {
 >     // inflight client initialization
 >     this.field2~ = "sample";
 >   }
->   method2~() : string {
+>   method2~(): string {
 >     return this.field2~;
 >   }
 > };
@@ -770,212 +999,10 @@ type of visibility (private, protected, etc.). public keyword is optional.
 
 ---
 
-### 4.3 Classes
-
-Class consists of fields and methods in any order,
-The class system is single-dispatch class based object orientated system.
-
-A class member function that has the name **new** is considered to be a class
-constructor (or initializer, or allocator).
-
-A Default constructor is simply a constructor that can be called without any
-arguments (constructor can have default function arguments).
-
-There is no implicit default constructor in a class offered by the compiler.
-
-```TS
-class Name
-  extends class<Base>
-  implements interface<MyInterface1>, interface<MyInterface2> {
-  new() {
-    // default constructor implementation
-    // order is up to user
-    this.field1 = 1;
-    this.field2 = "sample";
-  }
-
-  // class fields
-  field1: number;
-  field2: string,
-
-  // private methods
-  private_method(arg:type, arg:type, ...) : type {
-    // concrete implementation
-  }
-  static static_method(arg:type, arg:type, ...);
-  // visible to outside the instance
-  public public_method(arg:type, arg:type, ...);
-  // visible to children only
-  protected internal_method(type:arg, type:arg, ...) { }
-  // public in current compilation unit only
-  internal protect_method3(type:arg, type:arg, ...) : type { }
-}
-```
-
-Default initialization does not exist in Wing. All member fields must be
-initialized in the constructor. Absent initialization is a compile error.
-
-Member function and field access in constructor with the "this" keyword before
-all fields are initialized is invalid and should throw a compile error.
-
-```TS
-class Foo {
-  x: number;
-  new() { this.x = 1; }
-}
-class Bar {
-  y: number;
-  z: Foo;
-  new() {
-    this.y = 1;
-    this.z = Foo();
-  }
-  public print() {
-    print(this.y);
-  }
-}
-let a = Bar();
-a.print(); // prints 20.
-```
-
-Overloading methods is allowed.  
-Overloading the constructor is allowed.  
-Inheritance is allowed with the `extends` keyword. `super` can be used to access
-the base class, immediately up the inheritance chain (parent class).
-
-```TS
-class Foo {
-  x: number;
-  new() { this.x = 0; }
-  public method() { }
-}
-class Boo extends Foo {
-  new() { super(); this.x = 10; }
-  public override method() {
-    // override implementation
-  }
-}
-```
-
-`extends` keyword accepts classes, interfaces and records as its right hand side
-and accepts resources iff left hand side is also a resource.
-
-You can use the keyword `final` to stop the inheritance.
-
-```TS
-class Foo {
-  x: number;
-  new() { this.x = 0; }
-  public method() { }
-}
-class Boo final extends Foo {
-  new() { super(); this.x = 10; }
-  public override method() {
-    // override implementation
-  }
-}
-// compile error
-// class FinalBoo extends Boo {}
-```
-
-By default all methods are virtual. But if you are about to override a method,
-you need to explicitly provide the keyword **override**.  
-Static, private, and internal methods cannot be and are not virtual.
-
-Child class must not introduce additional signatures for overridden methods.
-
-Multiple inheritance is invalid and forbidden.  
-Multiple implementations of various interfaces is allowed.  
-Multiple implementations of the same interface is invalid and forbidden.
-
-[`▲ top`][top]
-
----
-
-### 4.4 Resources
-
-Resources provide first class composite pattern support in Wing.  
-Resources can be defined like so:
-
-```TS
-// Wing Code:
-resource Foo {
-  new() {} // preflight constructor
-  new~() {} // optional client initializer
-  fin() {} // sync finalizer
-  // async fin() {} // async finalizer (can be either sync or async)
-
-  // inflight members
-  inflight foo(arg:number) : number { return arg; }
-  boo~() : number { return 32; }
-  inflight field1 : number;
-  inflight field2 : string;
-  field3~ : bool;
-
-  // preflight members
-  foo(arg:number) : number { return arg; }
-  boo() : number { return 32; }
-  field1 : number;
-  field2 : string;
-  field3 : bool;
-}
-```
-
-Resources all have a scope and a unique ID. Compiler provides an implicit scope
-and ID for each resource, both overrideable by user-defined ones in constructor.
-
-Resource instantiation syntax is as follows:
-
-```pre
-let <name> [: <type>] = <resource> [be <id>] [in <scope>];
-```
-
-```TS
-// Wing Code:
-let a = Foo(); // with default scope and id
-let a = Foo() in scope; // with user-defined scope
-let a = Foo() be "custom-id" in scope; // with user-defined scope and id
-let a = Foo(...) be "custom-id" in scope; // with constructor arguments
-```
-
-"id" must be of type string. It can also be a string literal.  
-"scope" must be a variable of resource type.
-
-In addition to the `new` keyword for defining constructors, resources have a
-unique `fin` definable method that offer async finalization of a resource in
-preflight time.  
-Order of execution of async finalization is not guaranteed.
-
-Resources can be captured into inflight functions and once that happens, inside
-the capture block only the inflight members are available. This new "type" is an
-anonymous type, but guarantees to implement the same interface for two captures
-of the same resource type in preflight.
-
-Resources can extend other resources (but not structs) and implement interfaces.
-Resources can extend classes and all parent class methods are assumed preflight.
-
-```TS
-// Wing Code:
-class MyResourcePreflightImplementation { /* ... */ };
-interface MyResourceInflightInterface { /* ... */ };
-resource MyResource
-  extends class<MyResourcePreflightImplementation>
-  implements interface<MyResourceInflightInterface> {
-    // inflight implementation
-  }
-```
-
-Access to "tree" behind all resources is done with the `nodeof(resource)` call.
-The tree is the constructs tree that enables composition of resources.
-
-[`▲ top`][top]
-
----
-
 ### 4.5 Variables
 
 ```pre
-let <name> [: <type>] = <value>;
+let <name>[: <type>] = <value>;
 ```
 
 Assignment operator is `=` and is optional if a default value is given or both
@@ -985,8 +1012,8 @@ Assignment operator is `=` and is optional if a default value is given or both
 > ```TS
 > // Wing Code:
 > let n = 10;
-> let s : string = "hello";
-> let a : opt mut string;
+> let s: string = "hello";
+> let a: mut string?;
 > a = "world";
 > ```
 >
@@ -1007,7 +1034,7 @@ Assignment operator is `=` and is optional if a default value is given or both
 #### 4.6.1 Free Functions
 
 ```pre
-[inflight|preflight] fn <name>[~](<args>)[: <return_type>] {
+fn <name>[~](<args>)[: <return_type>] {
   <body>
 }
 ```
@@ -1015,9 +1042,10 @@ Assignment operator is `=` and is optional if a default value is given or both
 Function definition starts with keyword **fn**, name and a list of arguments in
 parenthesis. These definition are always at block level.  
 List of arguments starts with one or more parameter names, separated by comma.
+Parameter names must be all followed by a type annotation.  
 After comma, a colon is followed by a type expression.  
 After parenthesis, an optional colon with a type specifier can be specified to
-forward declare the return type.  
+forward declare the return type. If missing, `nil` is assumed.  
 Function body must be enclosed in { } block.  
 Default argument values must be compile time constants.  
 Function argument type can be inferred only if it has default argument value.  
@@ -1027,8 +1055,8 @@ argument name.
 In all definitions, presence of `~` indicates "inflight-ness".  
 
 It is possible to have functions with same name but both preflight and inflight.
-In that case, if both definitions are in the same scope, caller must supply the
-`~` character after the function's name in the call signature.
+It is impossible to interact with preflight functions from inflight code and
+vice versa.
 
 Function names are all snake_case and lower case.  
 If return statement missing, `return nil` is assumed.  
@@ -1036,26 +1064,26 @@ If return type is missing, `: nil` is assumed.
 
 > ```Rust
 > // Wing Code:
-> fn foo(x : number, y = 12) {
+> fn foo(x: number, y = 12) {
 >   print("preflight", x + y);
 > }
 > // inflight block level function
-> fn foo~(x : number, y : number = 16) {
+> fn foo~(x: number, y: number = 16) {
 >   print("inflight", x + y);
 > }
 > struct MyProps {
->   x : number;
->   y : number;
->   z : number;
+>   x: number;
+>   y: number;
+>   z: number;
 > }
 > // use a struct as an argument with the expansion operator
-> let s : struct<MyProps> = { x = 1, y = 2, z = 3 };
+> let s: MyProps = { x = 1, y = 2, z = 3 };
 > // inflight block level function (full keyword)
-> inflight fn boo(props: struct<MyProps>) {
+> fn boo~(props: MyProps) {
 >   print(props);
 > }
 > // preflight block level function (optional with full keyword)
-> preflight fn too(props: struct<MyProps>, a = 12) {
+> preflight fn too(props: MyProps, a = 12) {
 >   print(props);
 > }
 > ```
@@ -1075,12 +1103,14 @@ Of the captured variables, only their inflight members are accessible inside the
 scope of another inflight function. It is possible to have both a preflight and
 an inflight member with the same name.
 
-Resources are not usable inside inflight functions. Also when a Resource is
+Resources cannot be defined inside inflight functions. Also when a resource is
 captured inside an inflight function, it no longer is the original type. The
 captured type is opaque and only known to the compiler.
 
 If "bring" expression is used to import non Wing code, it is assumed that the
 imported code is safe to be executed in either preflight or inflight.
+
+If JSII constructs code is imported, it is treated as a resource.
 
 [`▲ top`][top]
 
@@ -1090,33 +1120,31 @@ imported code is safe to be executed in either preflight or inflight.
 
 It is possible to create closures.  
 It is not possible to create named closures.  
-However, it is possible to create anonymous closures and assign to variables.  
-Inflight closures as well as preflight closures are supported.
+However, it is possible to create anonymous closures and assign to variables
+(function literals). Inflight closures are also supported.
 
 > ```TS
 > // Wing Code:
-> let f1 = (a, b) => { print(a + b) };
-> // inflight closures
-> let f2 = (a, b) ~> { print(a + b) };
-> // full syntax
-> let f3 = (a : number, b : number) : nil => { print(a + b) };
+> let f1 = (a: number, b: number): nil => { print(a + b) };
+> // inflight closure:
+> let f2 = (a: number, b: number) ~> { print(a + b) };
 > ```
 
 [`▲ top`][top]
 
 ---
 
-#### 4.6.3 Futures
+#### 4.6.3 Promises
 
-Futures (a.k.a promises) in Wing are defined with `future<T>` syntax.  
-Functions that use the keyword "await" in their body must return a future.
+Promises (a.k.a futures) in Wing are defined with `promise<T>` syntax.  
+Functions that use the keyword "await" in their body must return a promise.
 
 > ```Rust
 > // Wing Code:
-> fn number() : future<number> {
+> fn number(): promise<number> {
 >   return 23;
 > }
-> fn handler() : future<nil>
+> fn handler(): promise<nil>
 > {
 >   let t = await number();
 >   print(t);
@@ -1125,10 +1153,10 @@ Functions that use the keyword "await" in their body must return a future.
 >
 > ```TS
 > // Equivalent TypeScript:
-> async function number() : number {
+> async function number(): number {
 >   return 23;
 > }
-> async function handler() : undefined {
+> async function handler(): undefined {
 >   const t: number = await number();
 >   console.log(t);
 > }
@@ -1172,8 +1200,8 @@ Numeric ranged arrays are supported: `[0..10]`.
 Enumeration type (enum) is a type that groups a list of named constant members.
 Enumeration is defined by writing **enum**, followed by enumeration name and a
 list of comma-separated constants in a {}. Last comma is optional in single line
-definitions but forbidden in multi line definitions.
-Naming convention for enums is to use "TitleCase".
+definitions but required in multi line definitions.  
+Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 
 > ```TS
 > // Wing Code:
@@ -1218,11 +1246,11 @@ either with or without an extension. If there is no extension, file path is
 treated as a Wing import, otherwise it is treated as a JSII import.  
 In case of Wing, quotes around the file path are optional.  
 The expression is followed by a `bring` keyword and a list of names to import.  
-Names can be renamed with `as` keyword.
+Names can be renamed with `as` keyword.  
+`bring *;` is invalid. It is not possible to import an entire namespace unbound.
 
 > ```TS
 > // Wing Code:
-> from std bring *;
 > from std bring * as std2;
 > from std bring io;
 > from std bring io as io2;
@@ -1243,7 +1271,6 @@ To promote polyglot programming, A string literal can also be placed after
 
 > ```TS
 > // Wing Code:
-> from "cdk-spa" bring *;
 > from "cdk-spa" bring * as spa;
 > from "cdk-spa" bring SomeConstruct;
 > from "cdk-spa" bring SomeConstruct as SomeConstruct2;
@@ -1258,10 +1285,6 @@ To promote polyglot programming, A string literal can also be placed after
 > import { SomeConstruct as SomeConstruct2 } from 'cdk-spa';
 > import { SomeConstruct, OtherType as module } from 'cdk-spa';
 > ```
-
-Motivation for the notation and the way bring expression is designed the way it
-is, is to make it easier for IDEs and other similar tools to autocomplete all
-named imports after typing the module path.
 
 [`▲ top`][top]
 
@@ -1291,7 +1314,7 @@ meant to be resolved by the compiler at compile time based on options provided.
 These resources must always implement at least one interface.
 
 ```TS
-resource MyPureResource implements interface<BucketApi>;
+resource MyPureResource implements IBucketApi;
 ```
 
 `MyPureResource` is a pure resource. A resource with no concrete implementation.
@@ -1321,7 +1344,7 @@ pure resources to concrete implementation at compile time:
     ```Rust
     from cloud bring aws;
     from lib/my-resources bring MyPureResource;
-    public fn build(ctx: mut Context) : Context {
+    public fn build(ctx: mut Context): Context {
       ctx.resolver.assign(MyPureResource, aws.s3.Bucket);
       // OR:
       ctx.resolver.assign(
@@ -1407,15 +1430,23 @@ Internally compiler calls the host environment's command processor (e.g.
 >
 > ```TS
 > // Equivalent TypeScript:
-> const name = await new Promise((resolve, reject) => {
->   const child_process = require("child_process");
->   let process = child_process.exec(`echo "World"`, (err, stdout, stderr) => {
->   if (err) {
->     console.error(err);
->     throw new Error({ stderr, code: process.exitCode });
+> const name = (() => {
+>   let _stdout = "";
+>   try {
+>     const { stdout, stderr, status } = spawnSync('echo', ['hello'], {
+>       shell: true
+>     });
+>     if (status !== 0) {
+>       throw new Error(stderr.toString());
+>     } else {
+>       _stdout = stdout.toString();
+>       return _stdout;
+>     }
+>   } catch(error){
+>     console.error('Error', error.message);
+>     throw error;
 >   }
->   resolve(stdout);
-> });
+> })();
 > let s = `Hello, ${name}!`;
 > ```
 
@@ -1550,7 +1581,7 @@ Note that bitwise logic operators do not perform short-circuiting.
 
 ---
 
-#### 7.3.7 Non-numeric Operators
+#### 7.3.7 Equality
 
 Of the operators above, the following can be used with non-numeric operands:
 
@@ -1572,17 +1603,22 @@ from std bring math;
 from cloud bring poly;
 
 // single line comment about "file"
-let file = fs.File({ content: 'hello world!' });
+let file = fs.File(content: 'hello world!');
 let file2 = fs.File() be "my-file";
 file2.write('hello file2!');
 
+struct UploaderOptions {
+  message: str?;
+  foo: number?;
+}
+
 resource Uploader {
-  // "fs.File" is also a Resource
-  public output : fs.File;
-  // "poly.serverless.Bucket" is also a Resource
-  public bucket : poly.serverless.Bucket;
+  // "fs.File" is a Resource
+  public output: fs.File;
+  // "poly.serverless.Bucket" is a Resource
+  public bucket: poly.serverless.Bucket;
   // constructor with one argument
-  new(file : fs.File) {
+  new(file: fs.File, opts: UploaderOptions = {}) {
     this.output = file;
     this.bucket = poly.storage.Bucket() be "uploader-bucket-${file.ext}";
   }
@@ -1591,16 +1627,16 @@ resource Uploader {
     panic('not implemented');
   }
   // this is called in inflight. "bucket.upload" is inflight itself
-  public upload~() : bool {
+  public upload~(): bool {
     try {
       let filename = math.random() * 100;
-      if this.bucket.upload({
+      if this.bucket.upload(
         key: "/path/to/${filename}.txt",
         file: this.output
-      }) {
+      ) {
         print("uploaded ${filename}");
       } else {
-        error("upload failed");
+        throw("upload failed");
       }
     } catch err {
       panic(err);
@@ -1613,7 +1649,7 @@ let uploader = Uploader(file) be "my-uploader";
 let root = nodeof(uploader).root;
 
 // make a lambda handler that consumes the uploader and uploads the file
-fn~ handler() {
+fn handler~() {
   if uploader.upload() {
     print('uploaded!');
   } else {
@@ -1627,37 +1663,12 @@ let function = poly.serverless.Function({
   timeout: "60s"
 });
 
-trace("function created: ${function.name}")
-event({ successful_build: "${`bash -c 'date'`}" })
+print("function created: ${function.name}")
 ```
 
 [`▲ top`][top]
 
 ---
-
-### 7.6 Standard Library
-
-| Module  | Name    | Description                                      |
-| ------- | ------- | ------------------------------------------------ |
-| `std`   | `io`    | standard io and stream operations                |
-| `std`   | `fs`    | filesystem and directory operations              |
-| `std`   | `fi`    | flight information (os, process, platform, etc.) |
-| `std`   | `bb`    | black box (error reporting, core dumps, etc.)    |
-| `std`   | `ct`    | control tower (monitoring and observability)     |
-| `std`   | `vm`    | preflight runtime interface                      |
-| `std`   | `log`   | standard logging library                         |
-| `std`   | `net`   | native networking (TCP, UDP, MQTT, etc.)         |
-| `std`   | `http`  | http(s) library                                  |
-| `std`   | `math`  | math and matrix library                          |
-| `cloud` | `poly`  | high level cloud abstractions                    |
-| `cloud` | `aws`   | aws cloud abstractions                           |
-| `cloud` | `gcp`   | gcp cloud abstractions                           |
-| `cloud` | `azure` | azure cloud abstractions                         |
-
-[`▲ top`][top]
-
----
-
 ### 7.7 Credits
 
 - <https://github.com/WheretIB/nullc>
