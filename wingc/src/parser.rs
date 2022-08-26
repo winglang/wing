@@ -341,7 +341,7 @@ impl Parser<'_> {
 						class
 					)
 				}
-				//let class = self.node_symbol(&expression_node.child_by_field_name("class").unwrap());
+
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)
 				} else {
