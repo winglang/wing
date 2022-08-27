@@ -132,7 +132,7 @@ impl Parser<'_> {
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 			}),
 			"expression_statement" => Ok(Statement::Expression(
-				self.build_expression(&statement_node.named_child(0).unwrap())?
+				self.build_expression(&statement_node.named_child(0).unwrap())?,
 			)),
 			"block" => Ok(Statement::Scope(self.build_scope(statement_node))),
 			"if_statement" => {
@@ -154,10 +154,10 @@ impl Parser<'_> {
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			}),
 			"function_definition" => Ok(Statement::FunctionDefinition(
-				self.build_function_definition(statement_node, Flight::Pre)?
+				self.build_function_definition(statement_node, Flight::Pre)?,
 			)),
 			"inflight_function_definition" => Ok(Statement::FunctionDefinition(
-				self.build_function_definition(statement_node, Flight::In)?
+				self.build_function_definition(statement_node, Flight::In)?,
 			)),
 			"return_statement" => Ok(Statement::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
@@ -178,7 +178,7 @@ impl Parser<'_> {
 		let mut members = vec![];
 		let mut methods = vec![];
 		let mut constructor = None;
-		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap());
+		let name = self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?;
 		for class_element in statement_node
 			.child_by_field_name("implementation")
 			.unwrap()
@@ -186,7 +186,9 @@ impl Parser<'_> {
 		{
 			match (class_element.kind(), is_resource) {
 				("function_definition", true) => methods.push(self.build_function_definition(&class_element, Flight::Pre)?),
-				("inflight_function_definition", _) => methods.push(self.build_function_definition(&class_element, Flight::In)?),
+				("inflight_function_definition", _) => {
+					methods.push(self.build_function_definition(&class_element, Flight::In)?)
+				}
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
@@ -217,7 +219,7 @@ impl Parser<'_> {
 						},
 					})
 				}
-				("ERROR",_) => {
+				("ERROR", _) => {
 					self
 						.add_error::<Node>(format!("Expected class element node"), &class_element)
 						.err();
@@ -227,19 +229,15 @@ impl Parser<'_> {
 						"Unexpected {} element node type {} || {:#?}",
 						if is_resource { "resource" } else { "class" },
 						other,
-						class_element)
-					)
+						class_element
+					);
 				}
 			}
 		}
 		if constructor.is_none() {
-			panic!(
-				"No constructor defined in {} {:?}",
-				if is_resource { "resource" } else { "class" },
-				statement_node
-			);
 			self.add_error::<Node>(
-				format!("No constructor defined in {} {:?}", 
+				format!(
+					"No constructor defined in {} {:?}",
 					if is_resource { "resource" } else { "class" },
 					statement_node
 				),
@@ -250,14 +248,14 @@ impl Parser<'_> {
 		let parent = statement_node
 			.child_by_field_name("parent")
 			.map(|n| self.node_symbol(&n).unwrap());
-		Statement::Class {
+		Ok(Statement::Class {
 			name,
 			members,
 			methods,
 			parent,
 			constructor: constructor.unwrap(),
 			is_resource,
-		}
+		})
 	}
 
 	fn build_function_definition(&self, func_def_node: &Node, flight: Flight) -> DiagnosticResult<FunctionDefinition> {
@@ -363,9 +361,7 @@ impl Parser<'_> {
 					);
 				}
 				"ERROR" => {
-					self
-						.add_error::<ArgList>(format!("Expected argument type"), &child)
-						.err();
+					_ = self.add_error::<ArgList>(format!("Expected argument type"), &child);
 				}
 				other => panic!("Unexpected argument type {} || {:#?}", other, child),
 			}
@@ -377,13 +373,16 @@ impl Parser<'_> {
 	fn build_expression(&self, expression_node: &Node) -> DiagnosticResult<Expression> {
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap());
+				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap())?;
 				// This should be a type name so it cannot be a nested reference
 				if matches!(class, Reference::NestedIdentifier { object: _, property: _ }) {
-					panic!(
-						"Expected a reference to a class or resource type, instead got {:?}",
-						class
-					)
+					_ = self.add_error::<Expression>(
+						format!(
+							"Expected a reference to a class or resource type, instead got {:?}",
+							class
+						),
+						expression_node,
+					);
 				}
 
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
@@ -392,12 +391,16 @@ impl Parser<'_> {
 					Ok(ArgList::new())
 				};
 
-				let obj_id = expression_node.child_by_field_name("id").map(|n| self.node_symbol(&n).unwrap());
-				let obj_scope = expression_node
-					.child_by_field_name("scope")
-					.map(|n| Box::new(self.build_expression(&n)?));
+				let obj_id = expression_node
+					.child_by_field_name("id")
+					.map(|n| self.node_symbol(&n).unwrap());
+				let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
+					Some(Box::new(self.build_expression(&scope_expr_node)?))
+				} else {
+					None
+				};
 				Ok(Expression::New {
-					class: class?,
+					class,
 					obj_id,
 					arg_list: arg_list?,
 					obj_scope,
