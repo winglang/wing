@@ -15,21 +15,25 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-native:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, ubuntu-latest]
-        arch: [x64, x86, arm64]
-        exclude:
+        include:
           - os: macos-latest
-            arch: x86
+            arch: x64
           - os: ubuntu-latest
-            arch: arm64
+            arch: x64
+          # TODO libnode build currently invalid for the following configs
+          # - os: macos-latest
+          #   arch: arm64
+          # - os: ubuntu-latest
+          #   arch: x86
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Download Infrastructure Binaries
         uses: robinraju/release-downloader@v1.4
         with:
@@ -37,50 +41,51 @@ jobs:
           tag: "development"
           fileName: "libnode-${{ matrix.os }}-${{ matrix.arch }}.zip"
           token: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+
       - name: Set up Python ${{ env.PYTHON_VERSION }}
         uses: actions/setup-python@v3
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+
       - name: Setup Private NPM with Github
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: "https://npm.pkg.github.com"
-      - name: Environment Information
-        run: npx envinfo
-      - name: Build Wing
+
+      - name: Build WingC Library
+        working-directory: wingc
+        run: |
+          cargo test --release -- --nocapture
+          cargo build --release
+
+      - name: Build Wing Runtime
+        working-directory: wingrt
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          pushd wingc
-            cargo test --release -- --nocapture
-            cargo build --release
-          popd
+          mkdir -p vendor/node
+          unzip -q ../libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d vendor/node
+          npm ci
+          npm test
+          cp build/wingrt ../wing/bin
+          tar -zcf ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz build/wingrt
 
-          mkdir -p wingrt/vendor/node
-          unzip -q libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d wingrt/vendor/node
-          pushd wingrt
-            npm install
-            npm test
-            pushd build
-              cp wingrt ../../wing/bin
-              tar -zcf ../../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz wingrt
-            popd
-          popd
-
-          pushd wing
-            npm install --no-scripts
-            node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
-          popd
+      - name: Build Wing CLI
+        working-directory: wing
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: |
+          npm ci --ignore-scripts
+          node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
 
       - name: Publish Wing
         if: ${{ github.ref == 'refs/heads/main' }}
+        working-directory: wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: |
-          pushd wing
-            npm publish
-          popd
+        run: npm publish
+
 
       - name: Upload Artifact
         if: ${{ github.ref == 'refs/heads/main' }}
@@ -89,13 +94,22 @@ jobs:
           name: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
           path: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
 
+  # Purposely Empty to be a required check for all matrix entries from build-native
+  build:
+    needs: build-native
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Validation
+        run: echo "Build Successful"
+
   release:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: build
+    needs: build-native
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifacts
         uses: actions/download-artifact@v2
+
       - name: Compute Checksums
         run: |
           mkdir dist
@@ -105,6 +119,7 @@ jobs:
           echo '```' >> ../checksums.md
           sha1sum --binary *.tgz >> ../checksums.md
           echo '```' >> ../checksums.md
+
       - name: Cut Development Release
         uses: softprops/action-gh-release@v1
         with:
@@ -114,17 +129,19 @@ jobs:
           files: dist/*.tgz
 
   wrapper:
-    needs: build
+    needs: build-native
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Setup Private NPM with Github
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: "https://npm.pkg.github.com"
+
       - name: Release Toolkit
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
