@@ -124,7 +124,7 @@ Class definition
 
 class A {
     constructor() {}
-    function do_something() {}
+    ~function do_something() {}
     a_member: string;
 }
 
@@ -136,7 +136,7 @@ class A {
             (constructor
                 parameter_list: (parameter_list)
                 block: (block))
-            (function_definition
+            (inflight_function_definition
                 name: (identifier)
                 parameter_list: (parameter_list)
                 block: (block)
@@ -161,6 +161,63 @@ class A extends B {}
         name: (identifier)
         parent: (identifier)
         implementation: (class_implementation)
+    )
+)
+
+==================================
+Resource definition
+==================================
+
+resource A {
+    constructor() {}
+    function preflight_func() {}
+    inflight function inflight_func() {}
+    pf_member: string;
+    inflight if_member: string;
+}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        implementation: (resource_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
+            (function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (inflight_function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (inflight_class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+        )
+    )
+)
+
+==================================
+Resource inheritance
+==================================
+
+resource A extends B {}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        parent: (identifier)
+        implementation: (resource_implementation)
     )
 )
 

@@ -1,7 +1,8 @@
+use cloud;
 
 // type checking for captures not currently supported
 // TODO Update once supported
-bucket := 0;
+bucket := new cloud::Bucket();
 
 inflight function test() {
   x := -1;
