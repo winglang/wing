@@ -81,7 +81,7 @@ resource DenyList {
 }
 
 fn main() {
-  deny_list = DenyList();
+  let deny_list = DenyList();
 
   fn ~filter_fn(event: cloud.QueueEvent) {
     let package_name = event.data["package_name"];
