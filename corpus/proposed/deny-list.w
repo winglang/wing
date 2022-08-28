@@ -43,7 +43,7 @@ fn main() {
     let package_name = event.data["package_name"];
     let version = event.data["version"];
     let reason = event.data["reason"];
-    if (deny_list.lookup(package_name, version)) {
+    if deny_list.lookup(package_name, version) {
       print("Package rejected: " + package_name);
     } else {
       print("Package accepted: " + package_name);
