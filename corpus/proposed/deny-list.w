@@ -1,4 +1,5 @@
 bring cloud;
+bring fs;
 
 struct DenyListRule {
   package_name: string;
@@ -6,16 +7,59 @@ struct DenyListRule {
   reason: string;
 }
 
+struct DenyListProps {
+  rules: DenyListRule[];
+  package_data_bucket: cloud.Bucket;
+  package_data_key_prefix: str;
+  prune_on_change?: bool;
+  prune_period?: duration;
+  on_change_handler?: cloud.Function;
+}
+
 resource DenyList {
-  bucket: cloud.Bucket;
-  new() {
-    this.bucket = cloud.Bucket();
+  _bucket: cloud.Bucket;
+  _object_key: str;
+  _prune: Prune;
+
+  new(props: DenyListProps) {
+    let object_key = "deny-list.json";
+    let rules_dir = this.write_to_file(props.rules, this.object_key);
+    let bucket = cloud.Bucket();
+    bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true)
+
+    let prune = Prune(
+      package_data_bucket: props.package_data_bucket,
+      package_data_key_prefix: props.package_data_key_prefix,
+      deny_list: this,
+      on_change_handler: props.on_change_handler,
+    );
+
+    if props.prune_on_change ?? true {
+      bucket.on_upload(prune.prune_handler, filters: [{ prefix: object_key, suffix: object_key }])
+    }
+
+    let prune_period = props.prune_period ?? 5m;
+    if prune_period && prune_period > 0 {
+      prune.prune_handler.add_schedule(prune_period.to_rate())
+    }
+
+    this._bucket = bucket;
+    this._prune = prune;
+    this._object_key = object_key;
+  }
+
+  _write_to_file(list: DenyListRule[], filename: str): str {
+    let tmpdir = fs.mkdtemp();
+    let filepath = "${tmpdir}/${filename}";
+    let map = create_deny_list_map(list);
+    fs.write_json(filepath, map);
+    return tmpdir;
   }
 
   ~rules: map<string, DenyListRule>;
 
   ~new() {
-    this.rules = this.bucket.get("deny-list.json") ?? {};
+    this.rules = this._bucket.get(this._object_key) ?? {};
   }
 
   public ~lookup(name: str, version: str): DenyListRule? {
@@ -32,7 +76,7 @@ resource DenyList {
       version: version,
       reason: reason,
     };
-    this.bucket.set("deny-list.json", this.rules);
+    this._bucket.set(this._object_key, this.rules);
   }
 }
 
