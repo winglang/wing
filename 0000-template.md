@@ -16,39 +16,51 @@ Stage Date: Fill in with date of last stage change
 
 > Write one sentence which is a brief description of the feature from a user perspective ("impact on users").
 
-## Working Backwards
-<!---
-When writing am RFC, take into consideration that your readers will not have as much context as you do initially. Use this section to inform them about the solution *and* the problem(s) it solves. 
+<!--
+Our RFCs have 3 sections: requirements -> design -> implementation. See each section for some guidance.
 -->
 
-> This section should contain one or more "artifacts from the future", as if the feature was already released and we are publishing its CHANGELOG, README, CONTRIBUTING.md and optionally a PRESS RELEASE. This is the most important section of your RFC. It's a powerful thought exercise which will challenge you to truly think about this feature from a user's point of view.
->
-> Choose *one or more* of the options below:
->
-> * **CHANGELOG**: Write the changelog entry for this feature in conventional form (e.g. `feat(wing): object typing`). If this change includes a breaking change, include a `BREAKING CHANGE` clause with information on how to migrate. If migration is complicated, refer to a fictional GitHub issue and add its contents here.
->
-> * **README**: If this is a new feature, write the README section which describes this new feature. It should describe the feature and walk users through usage examples and description of the various options and behavior.
->
-> * **PRESS RELEASE**: If this is a major feature (~6 months of work), write the press release which announces this feature. The press release is a single page that includes 7 paragraphs: (1) summary, (2) problem, (3) solution, (4) leader quote, (5) user experience, (6) customer testimonial and (7) one sentence call to action.
+## Requirements
 
+<!-- 
+This section is a "shopping list" of requirements for this feature.
 
-## Public FAQ
+We try to start by identifing the use cases that are expected to be addressed by this RFC. 
+Ideally they should not inform the design or implementation but rather state the problems/pains/results
+that our users expect to achieve with this RFC.
 
-> This section should include answers to questions readers will likely ask about this release. Similar to the "working backwards" section, this section should be written in a language as if the feature is now released.
->
-> The template includes some common questions, feel free to add any questions that might be relevant to this feature or omit questions that you feel are not applicable.
+NOTES:
+* It is highly recommended to split functional and non-functional requirements.
+* Requirements should be prioritized P0 (must), P1 (nice to have) or P2 (future).
+* It is also recommended to give requirements an identifier that will make them easier to reference later.
+-->
 
-### What are we launching today?
+### Functional
 
-> What exactly are we launching? Is this a new feature in an existing module? A new module? A whole framework? A change?
+* REQ01 (P1): bla bla bla
+* REQ02 (P0): another requirement
 
-### Why should I use this feature?
+### Non-Functional
 
-> Describe use cases that are addressed by this feature.
+* REQ03 (P1): bla bla bla
 
-## Internal FAQ
+## Design
 
-> The goal of this section is to help decide if this RFC should be implemented. It should include answers to questions that the team is likely ask. Contrary to the rest of the RFC, answers should be written "from the present" and likely discuss design approach, implementation plans, alternative considered and other considerations that will help decide if this RFC should be implemented.
+<!--
+This section works backwards from an the end user. It should be written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.
+-->
+
+## Implementation
+
+<!--
+This section has a list of topics related to the implementation. We have some examples/ideas for topics below. Feel free to add as needed
+
+The goal of this section is to help decide if this RFC should be implemented. 
+It should include answers to questions that the team is likely ask. 
+Contrary to the rest of the RFC, answers should be written "from the present" and likely 
+discuss approach, implementation plans, alternative considered and other considerations that will 
+help decide if this RFC should be implemented.
+-->
 
 ### Why are we doing this?
 
