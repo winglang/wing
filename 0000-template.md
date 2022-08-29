@@ -16,7 +16,16 @@ Stage Date: Fill in with date of last stage change
 
 > One sentence which is a brief description of the feature from a user perspective.
 
-This RFCs have 3 sections: Requirements -> Design -> Implementation. See each section for some guidance.
+<!--
+This RFCs have 3 sections: Requirements -> Design -> Implementation. We intentionally start with *Design* since it
+is a great way to introduice the feature to readers.
+-->
+
+## Design
+
+<!--
+This section works backwards from an the end user. It is written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.
+-->
 
 ## Requirements
 
@@ -42,11 +51,6 @@ NOTES:
 
 * REQ03 (P1): bla bla bla
 
-## Design
-
-<!--
-This section works backwards from an the end user. It is written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.
--->
 
 ## Implementation
 
