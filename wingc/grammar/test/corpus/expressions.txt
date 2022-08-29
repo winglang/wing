@@ -123,3 +123,22 @@ new A();
         )
     )
 )
+
+================================
+New expression with id and scope
+================================
+
+new A() as "b" in c;
+
+---
+
+(source
+    (expression_statement
+        (new_expression
+            class: (reference (identifier))
+            args: (argument_list)
+            id: (new_object_id (string))
+            scope: (new_object_scope (reference (identifier)))
+        )
+    )
+)

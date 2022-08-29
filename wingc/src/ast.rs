@@ -15,6 +15,12 @@ impl std::fmt::Display for Symbol {
 }
 
 #[derive(Debug, Clone)]
+pub enum Flight {
+	In,
+	Pre,
+}
+
+#[derive(Debug, Clone)]
 pub enum Type {
 	Number,
 	String,
@@ -28,6 +34,7 @@ pub enum Type {
 pub struct FunctionSignature {
 	pub parameters: Vec<Type>,
 	pub return_type: Option<Box<Type>>,
+	pub flight: Flight,
 }
 
 #[derive(Debug)]
@@ -56,11 +63,6 @@ pub enum Statement {
 		initial_value: Expression,
 	},
 	FunctionDefinition(FunctionDefinition),
-	InflightFunctionDefinition {
-		name: Symbol,
-		parameters: Vec<ParameterDefinition>,
-		statements: Scope,
-	},
 	ForLoop {
 		iterator: Symbol,
 		iterable: Expression,
@@ -84,8 +86,10 @@ pub enum Statement {
 		methods: Vec<FunctionDefinition>,
 		constructor: Constructor,
 		parent: Option<Symbol>,
+		is_resource: bool,
 	},
 }
+
 #[derive(Debug)]
 pub struct ParameterDefinition {
 	pub name: Symbol,
@@ -96,13 +100,15 @@ pub struct ParameterDefinition {
 pub struct ClassMember {
 	pub name: Symbol,
 	pub member_type: Type,
+	pub flight: Flight,
 }
 
 #[derive(Debug)]
 pub enum Expression {
 	New {
-		class: Symbol, // TypeReference
+		class: Reference,
 		obj_id: Option<Symbol>,
+		obj_scope: Option<Box<Expression>>,
 		arg_list: ArgList,
 	},
 	Literal(Literal),
@@ -114,7 +120,7 @@ pub enum Expression {
 	MethodCall(MethodCall),
 	CapturedObjMethodCall(MethodCall),
 	Unary {
-		// TODO: Split to LgicalUnary, NumericUnary
+		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
 		exp: Box<Expression>,
 	},

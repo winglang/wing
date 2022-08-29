@@ -13,7 +13,9 @@ pub enum Type {
 	Boolean,
 	Function(Box<FunctionSignature>),
 	Class(Class),
-	ClassInstance(*const Class), // TODO: Unused, do i need it??
+	Resource(Class),
+	ResourceObject(TypeRef), // Reference to a Resource type
+	ClassInstance(TypeRef),  // Reference to a Class type
 }
 
 pub struct Class {
@@ -33,6 +35,10 @@ impl Debug for Class {
 
 impl PartialEq for Type {
 	fn eq(&self, other: &Self) -> bool {
+		// If references are the same this is the same type, if not then compare content
+		if std::ptr::eq(self, other) {
+			return true;
+		}
 		match (self, other) {
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
@@ -43,7 +49,27 @@ impl PartialEq for Type {
 				}
 				false
 			}
-			(Self::ClassInstance(l0), Self::ClassInstance(r0)) => l0 == r0,
+			(Self::Resource(l0), Self::Resource(_)) => {
+				// If our parent is equal to `other` then treat both classes as equal (inheritance)
+				if let Some(parent) = l0.parent {
+					let parent_type: &Type = parent.into();
+					return parent_type.eq(other);
+				}
+				false
+			}
+			(Self::ClassInstance(l0), Self::ClassInstance(r0)) => {
+				// Class instances are of the same type if they are instances of the same Class
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(Self::ResourceObject(l0), Self::ResourceObject(r0)) => {
+				// Resource objects are of the same type if they are objects of the same Resource
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
 	}
@@ -97,7 +123,17 @@ impl Display for Type {
 				}
 			}
 			Type::Class(class) => write!(f, "{}", class.name),
-			Type::ClassInstance(_) => todo!(),
+			Type::Resource(class) => write!(f, "{}", class.name),
+			Type::ResourceObject(resource) => {
+				let resource_type_name = resource
+					.as_resource()
+					.expect("Resource object must reference to a resource");
+				write!(f, "object of {}", resource_type_name)
+			}
+			Type::ClassInstance(class) => {
+				let class_type_name = class.as_class().expect("Class instance must reference to a class");
+				write!(f, "instance of {}", class_type_name)
+			}
 		}
 	}
 }
@@ -122,6 +158,32 @@ impl From<TypeRef> for &Type {
 impl From<TypeRef> for &mut Type {
 	fn from(t: TypeRef) -> Self {
 		unsafe { &mut *(t.0 as *mut Type) }
+	}
+}
+
+impl TypeRef {
+	fn as_resource_object(&self) -> Option<&Type> {
+		if let &Type::ResourceObject(_) = (*self).into() {
+			Some((*self).into())
+		} else {
+			None
+		}
+	}
+
+	fn as_resource(&self) -> Option<&Type> {
+		if let &Type::Resource(_) = (*self).into() {
+			Some((*self).into())
+		} else {
+			None
+		}
+	}
+
+	fn as_class(&self) -> Option<&Type> {
+		if let &Type::Class(_) = (*self).into() {
+			Some((*self).into())
+		} else {
+			None
+		}
 	}
 }
 
@@ -168,6 +230,7 @@ struct Types {
 	string_idx: usize,
 	bool_idx: usize,
 	duration_idx: usize,
+	anything_idx: usize,
 }
 
 impl Types {
@@ -181,6 +244,8 @@ impl Types {
 		let bool_idx = types.len() - 1;
 		types.push(Box::new(Type::Duration));
 		let duration_idx = types.len() - 1;
+		types.push(Box::new(Type::Anything));
+		let anything_idx = types.len() - 1;
 
 		Self {
 			types,
@@ -188,6 +253,7 @@ impl Types {
 			string_idx,
 			bool_idx,
 			duration_idx,
+			anything_idx,
 		}
 	}
 
@@ -205,6 +271,10 @@ impl Types {
 
 	pub fn duration(&self) -> TypeRef {
 		(&self.types[self.duration_idx]).into()
+	}
+
+	pub fn anything(&self) -> TypeRef {
+		(&self.types[self.anything_idx]).into()
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
@@ -232,7 +302,7 @@ impl TypeChecker {
 		}
 	}
 
-	pub fn type_check_exp(&self, exp: &Expression, env: &TypeEnv) -> Option<TypeRef> {
+	pub fn type_check_exp(&mut self, exp: &Expression, env: &TypeEnv) -> Option<TypeRef> {
 		match exp {
 			Expression::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
@@ -266,24 +336,33 @@ impl TypeChecker {
 			Expression::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
 			Expression::New {
 				class,
-				obj_id: _,
+				obj_id: _, // TODO
 				arg_list,
+				obj_scope, // TODO
 			} => {
-				// TODO: obj_id ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
+				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
-				// Lookup the class in the env
-				let class_type = env.lookup(class);
+				// Lookup the type in the env
+				let type_ = self.resolve_reference(class, env);
+				// TODO: hack to support namespaced identifiers (basically stdlib cloud::Bucket), we skip type-checking and resolve them to Anything
+				if matches!(type_.into(), &Type::Anything) {
+					_ = unimplemented_type();
+					return Some(type_);
+				}
 
-				let class_env = if let &Type::Class(ref class) = class_type.into() {
-					&class.env
-				} else {
-					panic!("Expected {} to be of class type", class);
+				let (class_env, class_symbol) = match type_.into() {
+					&Type::Class(ref class) => (&class.env, &class.name),
+					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
+					_ => panic!(
+						"Expected {:?} to be a resource or class type but it's a {}",
+						class, type_
+					),
 				};
 
 				// Type check args against constructor
 				let constructor_type = class_env.lookup(&Symbol {
 					name: "constructor".into(),
-					span: class.span.clone(),
+					span: class_symbol.span.clone(),
 				});
 
 				let constructor_sig = if let &Type::Function(ref sig) = constructor_type.into() {
@@ -291,12 +370,12 @@ impl TypeChecker {
 				} else {
 					panic!(
 						"Expected {} to be of a constructor for class {}",
-						constructor_type, class
+						constructor_type, class_symbol
 					);
 				};
 
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
-				self.validate_type(constructor_sig.return_type.unwrap(), class_type, exp);
+				self.validate_type(constructor_sig.return_type.unwrap(), type_, exp);
 				// TODO: named args
 				// Verify arity
 				if arg_list.pos_args.len() != constructor_sig.args.len() {
@@ -304,15 +383,45 @@ impl TypeChecker {
 						"Expected {} args but got {} when instantiating {}",
 						constructor_sig.args.len(),
 						arg_list.pos_args.len(),
-						class
+						type_
 					);
 				}
 				// Verify passed arguments match the constructor
 				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
-					self.validate_type(*arg_type, self.type_check_exp(arg_expr, env).unwrap(), arg_expr);
+					let arg_expr_type = self.type_check_exp(arg_expr, env).unwrap();
+					self.validate_type(arg_expr_type, *arg_type, arg_expr);
 				}
 
-				Some(class_type) // TODO: I'm still not sure if it's enough to just use the Type::Class here or if I need a Type::ClassInstance in our type system
+				// If this is a Resource then create a new type for this resource object
+				if type_.as_resource().is_some() {
+					// Get reference to resource object's scope
+					let obj_scope_type = if let Some(obj_scope) = obj_scope {
+						Some(self.type_check_exp(obj_scope, env).unwrap())
+					} else {
+						// If we're in the root env then we have no object scope
+						if env.is_root() {
+							None
+						} else {
+							Some(env.try_lookup("this".into()).unwrap())
+						}
+					};
+
+					// Verify the object scope is an actually ResourceObject
+					if let Some(obj_scope_type) = obj_scope_type {
+						if obj_scope_type.as_resource_object().is_none() {
+							panic!(
+								"Expected scope {:?} to be a resource object, instead found {}",
+								obj_scope, obj_scope_type
+							)
+						}
+					}
+
+					// Create new type for this resource object
+					// TODO: make sure there's no existing object with this scope/id, fail if there is! -> this can only be done in synth because I can't evaluate the scope expression here.. handle this somehow with source mapping
+					Some(self.types.add_type(Type::ResourceObject(type_))) // TODO: don't create new type if one already exists.
+				} else {
+					Some(self.types.add_type(Type::ClassInstance(type_))) // TODO: don't create new type if one already exists.
+				}
 			}
 			Expression::FunctionCall { function, args } => {
 				let func_type = self.resolve_reference(function, env);
@@ -342,6 +451,12 @@ impl TypeChecker {
 			Expression::MethodCall(method_call) => {
 				// Find method in class's environment
 				let method_type = self.resolve_reference(&method_call.method, env);
+
+				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud::Bucket().upload())
+				if matches!(method_type.into(), &Type::Anything) {
+					return Some(self.types.anything());
+				}
+
 				let method_sig = if let &Type::Function(ref sig) = method_type.into() {
 					sig
 				} else {
@@ -419,6 +534,10 @@ impl TypeChecker {
 			Statement::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
+				if matches!(func_def.signature.flight, Flight::In) {
+					unimplemented_type(); // TODO: what typechecking do we need here???
+				}
+
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
 				// TODO: why not just use `self.resolve_type(&AstType::FunctionSignature(sig), env);`??
 				let mut args = vec![];
@@ -441,13 +560,6 @@ impl TypeChecker {
 				}
 				// TODO: we created `function_env` but `type_check_scope` will also create a wrapper env for the scope which is redundant
 				self.type_check_scope(&func_def.statements, &mut function_env);
-			}
-			Statement::InflightFunctionDefinition {
-				name: _,
-				parameters: _,
-				statements: _,
-			} => {
-				unimplemented_type();
 			}
 			Statement::ForLoop {
 				iterator,
@@ -483,12 +595,13 @@ impl TypeChecker {
 			}
 			Statement::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env).unwrap();
-				self.validate_type(exp_type, self.resolve_reference(variable, env), value);
+				let var_type = self.resolve_reference(variable, env);
+				self.validate_type(exp_type, var_type, value);
 			}
 			Statement::Use {
 				module_name: _,
 				identifier: _,
-			} => todo!(),
+			} => _ = unimplemented_type(),
 			Statement::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false);
 				for statement in scope.statements.iter() {
@@ -515,7 +628,13 @@ impl TypeChecker {
 				methods,
 				parent,
 				constructor,
+				is_resource,
 			} => {
+				// TODO: if is_resource then....
+				if *is_resource {
+					unimplemented_type();
+				}
+
 				// Verify parent is actually a known Class
 				let (parent_class, parent_class_env) = if let Some(parent_symbol) = parent {
 					let t = env.lookup(parent_symbol);
@@ -531,12 +650,17 @@ impl TypeChecker {
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
 				let dummy_env = TypeEnv::new(None, None, true);
 
-				// Create the class type and add it to the current environment (so class implementation can reference itself)
-				let class_type = self.types.add_type(Type::Class(Class {
+				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
+				let class_spec = Class {
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,
-				}));
+				};
+				let class_type = self.types.add_type(if *is_resource {
+					Type::Resource(class_spec)
+				} else {
+					Type::Class(class_spec)
+				});
 				env.define(name, class_type);
 
 				// Create a the real class environment to be filled with the class AST types
@@ -569,11 +693,12 @@ impl TypeChecker {
 				);
 
 				// Replace the dummy class environment with the real one before type checking the methods
-				let class_env = if let &mut Type::Class(ref mut class) = class_type.into() {
-					class.env = class_env;
-					&class.env
-				} else {
-					panic!("Class type {} isn't a class?!", name);
+				let class_env = match class_type.into() {
+					&mut Type::Class(ref mut class) | &mut Type::Resource(ref mut class) => {
+						class.env = class_env;
+						&class.env
+					}
+					_ => panic!("Expected {} to be a class or resource ", name),
 				};
 
 				// Type check methods
@@ -607,17 +732,26 @@ impl TypeChecker {
 		}
 	}
 
-	fn resolve_reference(&self, reference: &Reference, env: &TypeEnv) -> TypeRef {
+	fn resolve_reference(&mut self, reference: &Reference, env: &TypeEnv) -> TypeRef {
 		match reference {
 			Reference::Identifier(symbol) => env.lookup(symbol),
 			Reference::NestedIdentifier { object, property } => {
 				// Get class
 				let class = {
-					let t = self.type_check_exp(object, env).unwrap();
-					if let &Type::Class(ref class) = t.into() {
-						class
-					} else {
-						panic!("{:?} does not resolve to a class object", object);
+					let instance = self.type_check_exp(object, env).unwrap();
+					let instance_type = match instance.into() {
+						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
+						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud::Bucket)
+						&Type::Anything => return instance,
+						_ => panic!(
+							"{} in {:?} does not resolve to a class instance or resource object",
+							instance, reference
+						),
+					};
+
+					match instance_type.into() {
+						&Type::Class(ref class) | &Type::Resource(ref class) => class,
+						_ => panic!("Expected {} to be a class or resource type", instance_type),
 					}
 				};
 
@@ -627,7 +761,12 @@ impl TypeChecker {
 			Reference::NamespacedIdentifier {
 				namespace: _,
 				identifier: _,
-			} => todo!(),
+			} => {
+				// TODO: for now all namespaced identifiers resolve to `anything` since we don't know what they are,
+				// this is better than failing just because it's a way to do our mock `use cloud; cloud::Bucket()` support.
+				_ = unimplemented_type();
+				self.types.anything()
+			}
 		}
 	}
 }
