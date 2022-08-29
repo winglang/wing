@@ -69,7 +69,7 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
-			// Fo all other types (built-ins) we compare the enum value
+			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
 	}
@@ -713,6 +713,7 @@ impl<'a> TypeChecker<'a> {
 						name
 					)
 				};
+
 				// Create constructor environment and prime it with args
 				let mut constructor_env = TypeEnv::new(Some(env), constructor_sig.return_type, false, env_flight);
 				for (param, param_type) in constructor.parameters.iter().zip(constructor_sig.args.iter()) {

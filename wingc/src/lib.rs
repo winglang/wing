@@ -1,6 +1,8 @@
 use ast::Scope;
+use diagnostic::Diagnostics;
 
 use crate::parser::Parser;
+use std::cell::RefCell;
 use std::ffi::{CStr, CString};
 use std::os::raw::c_char;
 use std::path::PathBuf;
@@ -40,11 +42,23 @@ pub fn parse(source_file: &str) -> Scope {
 		}
 	};
 
-	return Parser {
+	let wing_parser = Parser {
 		source: &source[..],
 		source_name: source_file.to_string(),
+		diagnostics: RefCell::new(Diagnostics::new()),
+	};
+
+	let scope = wing_parser.wingit(&tree.root_node());
+
+	for diagnostic in wing_parser.diagnostics.borrow().iter() {
+		println!("{}", diagnostic);
 	}
-	.wingit(&tree.root_node());
+
+	if wing_parser.diagnostics.borrow().len() > 0 {
+		std::process::exit(1);
+	}
+
+	scope
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) {
