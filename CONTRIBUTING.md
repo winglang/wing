@@ -23,7 +23,7 @@ is a great place to get started on this process.
 You also need to `npm login` into `@monadahq`.
 
 ## Orientation
-This is a [CDK for Terraform](https://www.terraform.io/cdktf) [JSII](https://github.com/aws/jsii) [Projen](https://github.com/projen/projen) project. So its package json and other resources are generated from the `.projenrc.js` file in the root. After modifying it, run `npx projen` to regenerate the resources.
+This is a [CDK for Terraform](https://www.terraform.io/cdktf) [JSII](https://github.com/aws/jsii) [Projen](https://github.com/projen/projen) project. So its package.json and other resources are generated from the `.projenrc.js` file in the root. After modifying it, run `npx projen` to regenerate the resources.
 
 ### src folder
 Contains the cloud resources for different targets: local and aws at the moment.
