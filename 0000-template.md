@@ -14,11 +14,9 @@ Stage: Fill in with current stage in the RFC lifecycle
 Stage Date: Fill in with date of last stage change
 -->
 
-> Write one sentence which is a brief description of the feature from a user perspective ("impact on users").
+> One sentence which is a brief description of the feature from a user perspective.
 
-<!--
-Our RFCs have 3 sections: requirements -> design -> implementation. See each section for some guidance.
--->
+This RFCs have 3 sections: Requirements -> Design -> Implementation. See each section for some guidance.
 
 ## Requirements
 
@@ -47,7 +45,7 @@ NOTES:
 ## Design
 
 <!--
-This section works backwards from an the end user. It should be written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.
+This section works backwards from an the end user. It is written as one or more "artifacts from the future" such as the getting started documentation (readme), user interface wireframes (or link to them), press release, changelog entry, etc.
 -->
 
 ## Implementation
