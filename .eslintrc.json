@@ -18,7 +18,8 @@
   "extends": [
     "plugin:import/typescript",
     "prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
+    "plugin:unicorn/recommended"
   ],
   "settings": {
     "import/parsers": {
@@ -33,7 +34,8 @@
         "project": "./tsconfig.dev.json",
         "alwaysTryTypes": true
       }
-    }
+    },
+    "import/internal-regex": "^@monadahq/"
   },
   "ignorePatterns": [
     "*.js",
@@ -70,16 +72,14 @@
       "error"
     ],
     "import/order": [
-      "warn",
+      "error",
       {
-        "groups": [
-          "builtin",
-          "external"
-        ],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true
-        }
+        },
+        "newlines-between": "always",
+        "warnOnUnassignedImports": true
       }
     ],
     "no-duplicate-imports": [
@@ -130,12 +130,38 @@
           "method"
         ]
       }
-    ]
+    ],
+    "unicorn/prefer-module": "off",
+    "unicorn/no-useless-undefined": [
+      "error",
+      {
+        "checkArguments": false
+      }
+    ],
+    "unicorn/prefer-top-level-await": "off",
+    "unicorn/filename-case": [
+      "error",
+      {
+        "cases": {
+          "pascalCase": true,
+          "camelCase": true
+        }
+      }
+    ],
+    "unicorn/prevent-abbreviations": "off"
   },
   "overrides": [
     {
       "files": [
-        ".projenrc.ts",
+        ".projenrc.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": [
         "test/**/*",
         "src/**/*",
         ".storybook/**/*"

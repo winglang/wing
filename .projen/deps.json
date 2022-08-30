@@ -120,6 +120,10 @@
       "type": "build"
     },
     {
+      "name": "eslint-plugin-unicorn",
+      "type": "build"
+    },
+    {
       "name": "eslint",
       "version": "^8",
       "type": "build"

@@ -93,17 +93,53 @@ for (const tsconfig of tsconfigFiles) {
   }
 }
 
-project.tryFindObjectFile(".eslintrc.json")?.addOverride("overrides", [
-  {
-    files: [".projenrc.ts", "test/**/*", "src/**/*", ".storybook/**/*"],
+project.addGitIgnore("*.env");
+project.addGitIgnore("/release");
+
+if (project.eslint) {
+  project.eslint.addOverride({
+    files: ["test/**/*", "src/**/*", ".storybook/**/*"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
       "import/no-extraneous-dependencies": "off",
     },
-  },
-]);
+  });
+  project.addDevDeps("eslint-plugin-unicorn");
+  project.eslint.addExtends("plugin:unicorn/recommended");
+  project.eslint.addRules({
+    "unicorn/prefer-module": "off",
+    "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
+    "unicorn/prefer-top-level-await": "off",
+    "unicorn/filename-case": [
+      "error",
+      {
+        cases: {
+          pascalCase: true,
+          camelCase: true,
+        },
+      },
+    ],
+    "unicorn/prevent-abbreviations": "off",
+  });
 
-project.addGitIgnore("*.env");
-project.addGitIgnore("/release");
+  // Enforce import order.
+  project.eslint.addRules({
+    "import/order": [
+      "error",
+      {
+        alphabetize: {
+          order: "asc",
+          caseInsensitive: true,
+        },
+        "newlines-between": "always",
+        warnOnUnassignedImports: true,
+      },
+    ],
+  });
+  project.eslint.config.settings = {
+    ...project.eslint.config.settings,
+    "import/internal-regex": "^@monadahq/",
+  };
+}
 
 project.synth();

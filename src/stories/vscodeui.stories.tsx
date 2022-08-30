@@ -474,10 +474,7 @@ function Vscodeui(props: VscodeuiProps) {
 
                           // eslint-disable-next-line @typescript-eslint/no-shadow
                           setOpenedTabs(([...openedTabs]) => {
-                            openedTabs.splice(
-                              openedTabs.findIndex((tab) => tab === item.text),
-                              1,
-                            );
+                            openedTabs.splice(openedTabs.indexOf(item.text), 1);
                             console.log({ item, openedTabs });
                             return openedTabs;
                           });
