@@ -3413,7 +3413,7 @@ Place in the construct tree where all users constructs will get added.
 ```typescript
 import { local } from '@monadahq/wingsdk'
 
-new local.Synthesizer(props: SynthesizerProps)
+new local.Synthesizer(props?: SynthesizerProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -3422,7 +3422,7 @@ new local.Synthesizer(props: SynthesizerProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.local.Synthesizer.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.local.Synthesizer.Initializer.parameter.props"></a>
 
 - *Type:* @monadahq/wingsdk.core.SynthesizerProps
 
@@ -3489,7 +3489,7 @@ Place in the construct tree where all users constructs will get added.
 ```typescript
 import { tfaws } from '@monadahq/wingsdk'
 
-new tfaws.Synthesizer(props: SynthesizerProps)
+new tfaws.Synthesizer(props?: SynthesizerProps)
 ```
 
 | **Name** | **Type** | **Description** |
@@ -3498,7 +3498,7 @@ new tfaws.Synthesizer(props: SynthesizerProps)
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Synthesizer.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Synthesizer.Initializer.parameter.props"></a>
 
 - *Type:* @monadahq/wingsdk.core.SynthesizerProps
 

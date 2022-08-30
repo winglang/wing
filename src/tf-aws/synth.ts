@@ -11,7 +11,7 @@ export class Synthesizer extends SynthesizerBase {
   public readonly root: Construct;
   private readonly app: cdktf.App;
 
-  constructor(props: SynthesizerProps) {
+  constructor(props: SynthesizerProps = {}) {
     super(props);
     this.outdir = props.outdir ?? ".";
     this.app = new cdktf.App({ outdir: join(this.outdir, "cdktf.out") });

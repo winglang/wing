@@ -12,7 +12,7 @@ export class Synthesizer extends SynthesizerBase {
   public readonly root: Construct;
   private readonly app: App;
 
-  constructor(props: SynthesizerProps) {
+  constructor(props: SynthesizerProps = {}) {
     super(props);
     this.outdir = props.outdir ?? ".";
     const artifactdir = join(this.outdir, "local.out");
