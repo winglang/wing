@@ -28,6 +28,10 @@ jobs:
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
         env:
           PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - name: Install dependencies
         run: npm ci
       - name: release
@@ -56,7 +60,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
@@ -83,7 +87,7 @@ jobs:
     steps:
       - uses: actions/setup-node@v3
         with:
-          node-version: 14.x
+          node-version: 16.x
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:

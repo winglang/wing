@@ -15,6 +15,7 @@ const project = new cdk.JsiiProject({
   jestOptions: {
     jestVersion: "^27.0.0", // 28 requires a later typescript version
   },
+  workflowNodeVersion: "16.x",
   npmRegistryUrl: "https://npm.pkg.github.com",
   autoApproveUpgrades: true,
   autoApproveOptions: {
@@ -86,5 +87,16 @@ buildWorkflow.addOverride(
 buildWorkflow.addOverride("jobs.package-js.steps.2.env", {
   PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
 });
+
+// until https://github.com/projen/projen/pull/2074 is merged
+buildWorkflow.addOverride("jobs.package-js.steps.0.with.node-version", "16.x");
+releaseWorkflow.addOverride(
+  "jobs.release_github.steps.0.with.node-version",
+  "16.x"
+);
+releaseWorkflow.addOverride(
+  "jobs.release_npm.steps.0.with.node-version",
+  "16.x"
+);
 
 project.synth();
