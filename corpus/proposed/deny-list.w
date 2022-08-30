@@ -16,11 +16,10 @@ resource DenyList {
   _object_key: str;
 
   new(props: DenyListProps) {
-    this._bucket = bucket;
+    this._bucket = cloud.Bucket();
     this._object_key = "deny-list.json";
 
     let rules_dir = this._write_to_file(props.rules, this._object_key);
-    let bucket = cloud.Bucket();
     bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
   }
 
