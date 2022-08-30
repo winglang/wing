@@ -1,7 +1,7 @@
 import { s3 } from "@cdktf/provider-aws";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CLIENTS_PACKAGE_PATH } from "../constants";
+import { TERRAFORM_AWS_CLIENTS_PATH } from "../constants";
 import { Capture, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 
@@ -83,7 +83,7 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
     consumer.addEnvironment(name, this.bucket.bucket);
 
     return NodeJsCode.fromInline(
-      `new (require("${CLIENTS_PACKAGE_PATH}")).aws.BucketClient(process.env["${name}"]);`
+      `new (require("${TERRAFORM_AWS_CLIENTS_PATH}")).BucketClient(process.env["${name}"]);`
     );
   }
 }

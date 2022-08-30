@@ -40,6 +40,11 @@ const project = new cdk.JsiiProject({
   ],
 });
 
+// use a more recent version of jest-resolve so that tests will not error
+// when using require("@scope/package/path")
+// https://github.com/facebook/jest/pull/11961
+project.package.addPackageResolutions("jest-resolve@^28");
+
 // jsii doesn't allow overriding arbitrary fields of tsconfig.json, so this is a workaround
 project.compileTask.prependExec(
   `replace-in-file "lib: ['lib.es2020.d.ts']" "lib: ['lib.es2020.d.ts','lib.dom.d.ts']" node_modules/jsii/lib/compiler.js`
