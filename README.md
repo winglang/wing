@@ -16,6 +16,7 @@
   - [1.10 Formatting](#110-formatting)
   - [1.11 Memory Management](#111-memory-management)
   - [1.12 Documentation Style](#112-documentation-style)
+  - [1.13 Execution Model](#113-execution-model)
 - [2. Expressions](#2-expressions)
   - [2.1 bring expression](#21-bring-expression)
   - [2.2 break expression](#22-break-expression)
@@ -40,6 +41,8 @@
   - [4.8 Enumeration](#48-enumeration)
 - [5. Module System](#5-module-system)
   - [5.1 Imports](#51-imports)
+    - [5.1.1 Verbose Notation](#511-verbose-notation)
+    - [5.1.2 Shorthand Notation](#512-shorthand-notation)
   - [5.2 Exports](#52-exports)
 - [6. Dependency Injection](#6-dependency-injection)
   - [6.1 Pure Resources](#61-pure-resources)
@@ -58,7 +61,7 @@
     - [7.3.6 Short Circuiting](#736-short-circuiting)
     - [7.3.7 Equality](#737-equality)
   - [7.4 Kitchen Sink](#74-kitchen-sink)
-  - [7.7 Credits](#77-credits)
+  - [7.5 Credits](#75-credits)
 
 ## 1. General
 
@@ -66,31 +69,34 @@
 
 #### 1.1.1 Primitive Types
 
-| Name     | Extra information                         |
-| -------- | ----------------------------------------- |
-| `nil`    | represents the absence of a value or type |
-| `any`    | represents everything and anything        |
-| `bool`   | represents true or false                  |
-| `number` | represents numbers (doubles)              |
-| `string` | UTF-16 encoded strings                    |
+| Name   | Extra information                         |
+| ------ | ----------------------------------------- |
+| `nil`  | represents the absence of a value or type |
+| `any`  | represents everything and anything        |
+| `num`  | represents numbers (doubles)              |
+| `str`  | UTF-16 encoded strings                    |
+| `bool` | represents true or false                  |
+
+User defined explicit "any" is supported if declared by the user.  
+Implicit "any" resolved by the compiler is a compile error.
 
 > ```TS
-> // Wing program:
-> let x = 1;                  // x is a number
-> let y = "Hello";            // y is a string
+> // Wing Code:
+> let x = 1;                  // x is a num
+> let v = 23.6;               // v is a num
+> let y = "Hello";            // y is a str
 > let z = true;               // z is a boolean
 > let w: any = 1;             // w is an any
-> let a: mut = "World";       // a is a mutable string
-> let q: number? = nil;       // q is an optional number
+> let q: num? = nil;          // q is an optional num
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const x: number = 1;
+> const v: number = 23.6;
 > const y: string = "Hello";
 > const z: boolean = true;
 > const w: any = 1;
-> let a: string = "World";
 > const q: number? = undefined;
 > ```
 
@@ -100,27 +106,33 @@
 
 #### 1.1.2 Container Types
 
-| Name            | Extra information                     |
-| --------------- | ------------------------------------- |
-| `set<T>`        | set type (array of unique items)      |
-| `map<T>`        | map type (key-value with string keys) |
-| `array<T>`      | variable size array of a certain type |
-| `promise<T>`    | promises type (async code)            |
+| Name         | Extra information                     |
+| ------------ | ------------------------------------- |
+| `set<T>`     | set type (array of unique items)      |
+| `map<T>`     | map type (key-value with string keys) |
+| `array<T>`   | variable size array of a certain type |
+| `promise<T>` | promises type (async code)            |
 
 > ```TS
-> // Wing program:
-> let z: {1, 2, 3};
-> let y: {"a": 1, "b": 2};
-> let x = [1, 2, 3];
-> let w = new SampleClass();
+> // Wing Code:
+> let z = {1, 2, 3};          // immutable set
+> let zm = new set<num>();    // mutable set
+> let y = {"a": 1, "b": 2};   // immutable map
+> let ym = new map<num>();    // mutable map
+> let x = [1, 2, 3];          // immutable array
+> let xm = new array<num>();  // mutable array
+> let w = new SampleClass();  // mutable class instance
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const z: Set<number> = Object.freeze(new Set([1, 2, 3]));
+> const zm: Set<number> = new Set();
 > const y: Map<string, number> = Object.freeze(new Map([["a", 1], ["b", 2]]));
+> const ym: Map<string, number> = new Map();
 > const x: number[] = Object.freeze([1, 2, 3]);
-> const w: SampleClass = Object.freeze(new SampleClass());
+> const xm: number[] = [];
+> const w: SampleClass = new SampleClass();
 > ```
 
 [`▲ top`][top]
@@ -133,18 +145,22 @@ Function type annotations are written as if they were closure declarations, with
 the difference that body is replaced with return type annotation. Phase of the
 function is determined with `=>` or `~>` operators. Latter being inflight.
 
+```pre
+(argName1: <argType1>, argName2: <argType2>, ...) => <returnType>
+```
+
 > ```TS
-> // Wing program:
-> // type annotation in wing: (number) => number
-> let f1 = (x: number): number => { return x + 1; };
-> // type annotation in wing: (number, string) ~> nil
-> let f2 = (x: number, s: string) ~> { /* no-op */ };
+> // Wing Code:
+> // type annotation in wing: (num) => num
+> let f1 = (x: num): num => { return x + 1; };
+> // type annotation in wing: (num, str) ~> nil
+> let f2 = (x: num, s: str) ~> { /* no-op */ };
 > ```
 > 
 > ```TS
-> // Equivalent TypeScript:
-> const f1: freeze((x: number): number => { return x + 1; });
-> const f2: freeze((x: number, s: string): undefined => { });
+> // Equivalent TypeScript Code:
+> const f1 = Object.freeze((x: number): number => { return x + 1; });
+> const f2 = Object.freeze((x: number, s: string): undefined => { });
 > ```
 
 
@@ -161,20 +177,22 @@ function is determined with `=>` or `~>` operators. Latter being inflight.
 | `assert` | checks a condition and _panics_ if evaluated to false    |
 
 Wing is a statically typed language, so attempting to redefine any of the above
-functions, just like any other "symbol" will result in a compile-time error.
+functions, just like any other "symbol" will result in a compile-time error.  
+Above functions are accept variadic arguments of any type.
 
-variadic arguments are not supported in Wing at syntax level for users to define
-new variadic functions. Functions above are exception to this rule:
+"panic" is a fatal call by design. If intention is error handling, panic is the
+last resort. Exceptions are non fatal and should be used instead for effectively
+communicating errors to the user.
 
 > ```TS
-> // Wing program:
+> // Wing Code:
 > print(23, "Hello", true);
 > panic("Something went wrong", [1,2]);
 > assert(x > 0, x < 10);
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > console.log(23, "Hello", true);
 > // calling panic in wing is fatal
 > (() => {
@@ -211,36 +229,52 @@ Multiple phase modifiers are invalid and forbidden.
 Phase modifier is allowed in the context of defining interfaces, and resources.
 Example code is shown in the [resources](#44-resources) section.
 
+In Wing, language features are designed to help the programmer in both writing
+compute code and orchestration of cloud appliances. As a result, most features
+are considered "compute" and is inflight/preflight independent. This includes
+all features that are commonly found in other general purpose languages.  
+Classes, primitives, structs, and closures are all compute.
+
+Resources on the other hand are designed to bridge the gap between the compute
+code and the infrastructure orchestration. What can pass through this "bridge"
+are interfaces and immutable data structures. Learn more about resources and how
+immutable data helps bridging the gap in their respective sections.
+
+As a result, resources are sensitive to being preflight and inflight, since they
+do not perform pure "compute". Their computation is target dependent and is only
+resolved at compile time.
+
 [`▲ top`][top]
 
 ---
 
 ### 1.4 Storage Modifiers
 
+A storage modifier is a keyword that specifies the placement of a function or
+variable in the program memory once compiled. Some declarations might have a
+temporary storage (such as a local closure definition), while others might have
+a permanent storage (such as a global variable).
+
 Currently the only storage modifier is `static`. `static` indicates a definition
-is only available once per program. All statics must be defined inline.  
+is only available once per program and for the entire duration of that program.
+All statics must be defined inline and initialized right away.  
 Statics are not allowed on structs or interfaces.
 
-Variables declared at block scope with the specifier static have static storage
-duration and are initialized the first time control passes through their
-declaration (unless their initialization is "nil" or constant-initialization,
-which can be performed before the block is first entered). On all further calls,
-the declaration is skipped. Statics are both supported in inflight as well as
-preflight mode of execution.
+Statics are both supported in inflight as well as preflight mode of execution.
 
 A declaration for a static member is a member declaration whose declaration
 specifiers contain the keyword static. The keyword static must appear before
 other specifiers. More details in the [classes](#43-classes) section.
 
 The name of any static data member and static member function must be different
-from the name of the containing class.
+from the name of the containing class regardless of the casing.
 
 Code samples for `static` are not shown here. They are shown in the relevant
 sections below.
 
 To avoid confusion, it is invalid to have a static and a non-static with the
-same name. Overriding a static is allowed however. Accessing static is done via
-the type name and the `.` operator.
+same name. Overloading a static is allowed however.  
+Accessing static is done via the type name and the `.` operator.
 
 [`▲ top`][top]
 
@@ -250,18 +284,17 @@ the type name and the `.` operator.
 
 Visibility inference is done with the following rules:
 
-- if no visibility modifier is specified, the default is `private`.
-- `public`: visibility is "public" (visible everywhere)
-- `protected`: visibility is "protected" (visible to self and derived classes)
-- `internal`: visibility is "internal" (C# internal).
+- if symbols' name starts with an underscore, visibility is `private`.
+- if symbols' name does not start with an underscore and lacks any other access
+  modifier, its visibility is `public`.
+- `protected`: visibility is "protected" (public to self and derived classes).
+- `internal`: visibility is "internal" (public to current compilation unit).
 
 Accessing field, member, or structured data is done with `.`.  
-> Wing does not support `->` or `::` or any other form of accessing addressed
-> and structured data.
 
-Visibility modifiers can be applied to members of classes, resources, and free
-functions. If applied to free functions, the rules are applied at module level.
-`protected` and `internal` are not available for free functions.
+Visibility modifiers can be applied to members of classes and resources.  
+Mixing `_` convention with `protected` and `internal` is not allowed.  
+Mixing `protected` and `internal` is not allowed.
 
 [`▲ top`][top]
 
@@ -269,28 +302,29 @@ functions. If applied to free functions, the rules are applied at module level.
 
 ### 1.6 Mutability
 
-Mutability in Wing is a lot like TypeScript but with an inverted `const`. Every
-thing is immutable (`const`) by default, unless otherwise specified with the
-`mut` keyword after `let` and before type name.  
-> `mut mut` is invalid.
+In Wing we have two classes of "data": immutable and mutable.
 
-Users coming from C# and TypeScript notice that there is no `readonly` in Wing.
-Data is immutable by default, therefore public none `mut` fields automatically
-become `readonly`.
+Immutable data is data that is capture-able from preflight safely into inflight.
+All primitive types are immutable (`bool`, `str`, `num`, and `nil`).  
+Resources are also immutable by design and can be captured into inflight.  
+Container types and structs of primitive types and resources are also immutable.
 
-> ```TS
-> // Wing program:
-> let x: mut = 1;
-> let y: mut = "Hello";
-> let z: mut? = nil;
-> ```
->
-> ```TS
-> // Equivalent TypeScript:
-> let x: number = 1;
-> let y: string = "Hello";
-> let z: any = undefined;
-> ```
+Optionality modifier `?` applied to any type does not change the mutability of
+the underlying type. Read more about optionality in its section below.
+
+Re-assignment to variables that are defined with `let` is not allowed in Wing.
+Re-assignment to class fields is allowed if field is accessed through the "this"
+keyword in class method definitions and it's marked with `mut`. Examples in the
+class section below.
+
+`mut` is available in the body of class and struct declarations.  
+Assigning `mut` to immutables of the same type is allowed.
+
+As a result of classes being able to represent mutable data, it is impossible to
+capture them into inflight. Classes remain a pure compute feature in Wing.  
+If a struct contains `mut` keyword or other classes, or other structs containing
+the former, the struct becomes immutable and cannot be captured. This includes
+container types of mutable data as well.
 
 [`▲ top`][top]
 
@@ -298,26 +332,27 @@ become `readonly`.
 
 ### 1.7 Optionality
 
-Symbol **?** can mark a type as optional.
+Symbol `?` can mark a type as optional.  
 Optionality means the value behind type can be either present or nil.
 
-Rules of optionality applies to the entire new container type of `type?` and not
+Rules of optionality apply to the entire new container type of `type?` and not
 the value behind it (`type`).  
 
-The only way to "cast" an optional value to a non-optional value is to use the
-`??` operator. This forces a value to be present for the l-value (left hand side
-of the assignment operator).
+Using the `??` operator allows one to safely access the value behind an optional
+variable by always providing a default, in case the variable is nil. This forces
+a value to be present for the l-value (left hand side of the assignment operator
+and guarantees what's returned is type-stripped from its `?` keyword).
 
 > ```TS
-> // Wing program:
-> let x: ? = 44;
+> // Wing Code:
+> let x? = 44;
 > let y = x ?? 55;
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const x: number? = 44;
-> const y = x ?? 55;
+> const y: number = x ?? 55;
 > ```
 
 [`▲ top`][top]
@@ -327,7 +362,8 @@ of the assignment operator).
 ### 1.8 Type Inference
 
 Type can optionally be put between name and the equal sign, using a colon.  
-Partial type inference is allowed while using `mut` and/or `opt` keywords.
+Partial type inference is allowed while using the `?` keyword immediately after
+the variable name.
 
 When type annotation is missing, type will be inferred from r-value type.  
 r-value refers to the right hand side of an assignment here.
@@ -339,31 +375,25 @@ Function arguments and their return type is always required. Function argument
 type is inferred iff a default value is provided.
 
 > ```TS
-> // Wing program:
+> // Wing Code:
 > let i = 5;
 > let m = i;
-> let n: mut = 5;
-> let arr_opt: mut array<mut number>?;
-> let arr: mut array<number> = [];
+> let arr_opt? = new array<number>();
+> let arr: array<number> = [];
 > let copy = arr;
-> let i1: ? = nil;
+> let i1? = nil;
 > let i2: number? = i;
-> let j1: mut = 1;
-> let j2 = j1;
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const i: number = 5;
 > const m: number = i;
-> let n: number = 5;
-> let arr_opt: number[]? = undefined;
-> let arr: number[] = [];
-> let copy: number[] = arr;
+> const arr_opt: number[]? = [];
+> const arr: number[] = Object.freeze([]);
+> const copy: number[] = Object.freeze([...arr]);
 > const i1: any = undefined;
 > const i2: number? = i;
-> let j1: number = 1;
-> const j2: number = j1;
 > ```
 
 [`▲ top`][top]
@@ -374,30 +404,38 @@ type is inferred iff a default value is provided.
 
 Exceptions and `try/catch/finally` is the error mechanism. Mechanics directly
 translate to JavaScript. If exception is uncaught, it crashes your app with a
-`panic` call. You can create a new exception with `throw`.  
+`panic` call. You can create a new exception with `throw`.
+
 In the presence of `try`, `catch` is required but `finally` is optional.
 
+`panic` is meant to be fatal error handling.  
+`throw` is meant to be recoverable error handling.
+
+An uncaught exception is considered user error but a panic call is not. Compiler
+must guarantee exception safety by throwing a compile error if an exception is
+expected from a call and it is not being caught.
+
 > ```TS
-> // Wing program:
+> // Wing Code:
 > try {
->   let x: mut? = 1;
+>   let x? = 1;
 >   throw("hello exception");
 > } catch e {
 >   print(e);
 > } finally {
->   x = nil;
+>   print("done);
 > }
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > try {
 >   let x: number? = 1;
 >   throw new Error("hello exception");
 > } catch (e) {
 >   console.log(e);
 > } finally {
->   x = undefined;
+>   console.log("done");
 > }
 > ```
 
@@ -412,9 +450,24 @@ Wing is opinionated about formatting and whitespace. The opinion is:
 - indentations of lines are 2 spaces
 - each statement must end with a semicolon
 - interface names start with capital letter "I"
-- enum members must be written as ALL_CAPS_SNAKE_CASE
+- enum members must be written in ALL_CAPS_SNAKE_CASE
 - class, struct, interface, and resource names must be TitleCased
 - every other declaration name must be snake_cased unless otherwise specified
+- open curly brace must be at the same line of any declaration that requires it
+
+If you are reading this section as a user and you are caught off guard by this
+section, the philosophy behind this section is to end all unnecessary formatting
+debates and instead make developers focus on writing the logic of their code.
+
+We, as in Wing developers, find ourselves constantly applying this formatting to
+languages that are not even opinionated about it. Therefore, we seize the moment
+to make sure Wing code looks and feels uniform across the board.
+
+Formatting is enforced by the compiler, however this is not enforced IFF it
+occurs in a non entrypoint `.w` file AND the offending code is a direct import
+and usage of a JSII module. This is to ensure isolated compatibility with third
+party JSII modules. Users cannot explicitly turn formatting off. Compiler must
+emit warnings for all implicit JSII formatting violations.
 
 [`▲ top`][top]
 
@@ -444,6 +497,27 @@ Wing and is garbage collected (relying on JSII target GC for the meantime).
 
 ---
 
+### 1.13 Execution Model
+
+Execution model currently is delegated to the JSII target. This means if you are
+targeting JSII with Node, Wing will use the event based IO that Node offers.
+
+Program entrypoint in Wing is not like a typical entrypoint in other programs.
+Rather it is an orchestration "manifest". This orchestration manifest contains
+pure compute instruction acting on mostly immutable data.
+
+Some of these instructions are executed in preflight and some are inflight.
+
+Entrypoint is always a wing source with an extension of `.w`. Within this entry
+point, a root resource is made available for all subsequent resources that are
+initialized with the `def` keyword. Type of the root resource is determined by
+the target being used by the compiler. The root resource might be of type `App`
+in AWS CDK or `TerraformApp` in case of CDK for Terraform target.
+
+[`▲ top`][top]
+
+---
+
 ## 2. Expressions
 
 ### 2.1 bring expression
@@ -458,8 +532,28 @@ this document: [Module System](#5-module-system).
 
 ### 2.2 break expression
 
-**break** expression allows to end execution of a cycle.  
-`break;` is a "cycle-breaker".
+**break** expression allows to end execution of a cycle. This includes for and
+while loops currently.
+
+> ```TS
+> // Wing Code:
+> for let i in 1..10 {
+>   if i > 5 {
+>     break;
+>   }
+>   print(i);
+> }
+> ```
+>
+> ```TS
+> // Equivalent TypeScript Code:
+> for (let i = 1; i < 10; i++) {
+>   if (i > 5) {
+>     break;
+>   }
+>   console.log(i);
+> }
+> ```
 
 [`▲ top`][top]
 
@@ -467,8 +561,28 @@ this document: [Module System](#5-module-system).
 
 ### 2.3 continue expression
 
-**continue** expression allows to skip to the next iteration of a cycle.  
-`continue;` skips to the end of current cycle.
+**continue** expression allows to skip to the next iteration of a cycle. This
+includes for and while loops currently.
+
+> ```TS
+> // Wing Code:
+> for let i in 1..10 {
+>   if i > 5 {
+>     continue;
+>   }
+>   print(i);
+> }
+> ```
+>   
+> ```TS
+> // Equivalent TypeScript Code:
+> for (let i = 1; i < 10; i++) {
+>   if (i > 5) {
+>     continue;
+>   }
+>   console.log(i);
+> }
+> ```
 
 [`▲ top`][top]
 
@@ -476,12 +590,30 @@ this document: [Module System](#5-module-system).
 
 ### 2.4 return expression
 
-**return** expression allows to return a value or exit from a function.
+**return** expression allows to return a value or exit from a called context.  
+In case of a missing "return" statement in a method definition, the method will
+return `nil` implicitly and inherently its return type becomes also `nil` if no
+other type annotation with `?` is provided.
 
-```TS
-return; // exits function, returning void type (nil).
-return expr; // exits function, returning result of "expr".
-```
+> ```TS
+> // Wing Code:
+> class MyClass {
+>   myPublicMethod() {}
+>   _myPrivateMethod(): nil {}
+>   protected myProtectedMethod(): nil { return nil; }
+>   internal myInternalMethod(): str { return "hi!"; }
+> }
+> ```
+> 
+> ```TS
+> // Equivalent TypeScript Code:
+> class MyClass {
+>   public myPublicMethod(): void {}
+>   private myPrivateMethod(): undefined {}
+>   protected myProtectedMethod(): undefined { return undefined; }
+>   public __wing__internal_myInternalMethod(): string { return "hi!"; }
+> }
+> ```
 
 [`▲ top`][top]
 
@@ -491,32 +623,36 @@ return expr; // exits function, returning result of "expr".
 
 **await** expression allows to wait for a promise and grab its execution result.
 "await" and "promise" are semantically similar to JavaScript's promises.  
-"await" expression is only valid in async function declarations.
+"await" expression is only valid in async function declarations.  
 awaiting non promises in Wing is a no-op just like in JavaScript.
 
 > ```Rust
 > // Wing program:
-> async fn foo(): number {
->   let x = await some_promise();
->   return x;
-> }
-> fn boo(): promise<number> {
->   let x = some_promise();
->   return x;
+> class MyClass {
+>   async foo(): number {
+>     let x = await some_promise();
+>     return x;
+>   }
+>   boo(): promise<number> {
+>     let x = some_promise();
+>     return x;
+>   }
 > }
 > ```
 >
 > ```TS
 > // Equivalent TypeScript:
-> async function foo(): number {
->   const x = await some_promise();
->   return x;
+> class MyClass {
+>   async foo(): number {
+>     let x = await some_promise();
+>     return x;
+>   }
+>   boo(): Promise<number> {
+>     let x = some_promise();
+>     return x;
+>   }
 > }
-> function boo(): Promise<number> {
->   const x = some_promise();
->   return x;
-> }
-> ```
+>  ```
 
 [`▲ top`][top]
 
@@ -1241,6 +1377,8 @@ code. Comments before the first bring expression are valid.
 
 ### 5.1 Imports
 
+#### 5.1.1 Verbose Notation
+
 "bring" expression starts with `from` keyword and followed by a file path,
 either with or without an extension. If there is no extension, file path is
 treated as a Wing import, otherwise it is treated as a JSII import.  
@@ -1285,6 +1423,20 @@ To promote polyglot programming, A string literal can also be placed after
 > import { SomeConstruct as SomeConstruct2 } from 'cdk-spa';
 > import { SomeConstruct, OtherType as module } from 'cdk-spa';
 > ```
+
+[`▲ top`][top]
+
+---
+
+#### 5.1.2 Shorthand Notation
+
+The verbose notation of from <bag> bring * can be shortened to bring <bag>.
+
+```TS
+bring std; // from std bring *;
+bring cloud; // from cloud bring *;
+bring "path/to/what.js"; // from "path/to/what.js" bring *;
+```
 
 [`▲ top`][top]
 
@@ -1669,7 +1821,7 @@ print("function created: ${function.name}")
 [`▲ top`][top]
 
 ---
-### 7.7 Credits
+### 7.5 Credits
 
 - <https://github.com/WheretIB/nullc>
 - <https://github.com/chaos-lang/chaos>
