@@ -67,13 +67,6 @@ library, please ... TODO: complete this section when we have a test FW. <!-- TOD
 This project uses [jest](https://jestjs.io/) testing framework. Please refer to the documentation on it if you are not 
 familiar with it. 
 
-When writing tests, group together common functionality under test using a `describe` function. Individual tests are 
-written in `it` functions. For example:
-
-```typescript
-
-```
-
 All changes need to have tests. Feature changes should have full test coverage and bug fixes should be verified first
 through new tests. 
 
