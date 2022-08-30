@@ -76,11 +76,11 @@
     "@cdktf/provider-aws": "^9.0.15",
     "@monadahq/wingsdk-clients": "^0.3.0",
     "cdktf": "^0.12.2",
-    "esbuild": "^0.15.6"
+    "esbuild-wasm": "^0.15.6"
   },
   "bundledDependencies": [
     "@monadahq/wingsdk-clients",
-    "esbuild"
+    "esbuild-wasm"
   ],
   "main": "lib/index.js",
   "license": "Apache-2.0",

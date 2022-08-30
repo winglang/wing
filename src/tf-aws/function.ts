@@ -5,7 +5,7 @@ import { join, dirname, basename, resolve } from "path";
 import * as aws from "@cdktf/provider-aws";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
-import * as esbuild from "esbuild";
+import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
 import { FunctionProps } from "../cloud";
 import {

@@ -9,7 +9,7 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: ["constructs@^10.0.25", "@monadahq/polycons@^0.0.36"],
   deps: ["cdktf", "@cdktf/provider-aws"],
-  bundledDeps: ["esbuild", "@monadahq/wingsdk-clients"],
+  bundledDeps: ["esbuild-wasm", "@monadahq/wingsdk-clients"],
   devDeps: ["replace-in-file"],
   prettier: true,
   jestOptions: {

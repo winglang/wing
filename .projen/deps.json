@@ -133,7 +133,7 @@
       "type": "bundled"
     },
     {
-      "name": "esbuild",
+      "name": "esbuild-wasm",
       "type": "bundled"
     },
     {

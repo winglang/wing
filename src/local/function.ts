@@ -2,7 +2,7 @@ import { unlinkSync, writeFileSync } from "fs";
 import { basename, dirname, join, resolve } from "path";
 import type { FunctionSchema } from "@monadahq/wing-local";
 import { Construct } from "constructs";
-import * as esbuild from "esbuild";
+import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
 import { FunctionProps } from "../cloud";
 import {
