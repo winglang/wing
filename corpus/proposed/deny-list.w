@@ -34,17 +34,17 @@ resource DenyList {
     return tmpdir;
   }
 
-  ^ _rules: mut_map<DenyListRule>;
+  ^^ _rules: mut_map<DenyListRule>;
 
-  ^ new() {
+  ^^ new() {
     this._rules = this._bucket.get(this._object_key) ?? new mut_map<DenyListRule>();
   }
 
-  ^ lookup(name: str, version: str): DenyListRule? {
+  ^^ lookup(name: str, version: str): DenyListRule? {
     return this._rules.get(name) ?? this.rules.get("${name}/v${version})];
   }
 
-  ^ add_rule(rule: DenyListRule) {
+  ^^ add_rule(rule: DenyListRule) {
     append_rule(this.rules, rule)
     this._bucket.upload(this._object_key, this.rules);
   }
