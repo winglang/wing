@@ -1,5 +1,7 @@
 use tree_sitter::{Node, Tree};
 
+use crate::prep::ParseResult;
+
 #[derive(Debug)]
 pub struct ErrorInfo {
     pub start: usize,
@@ -18,7 +20,7 @@ pub fn errors_from_tree<'a>(list: &'a mut Vec<ErrorInfo>, node: &'a Node) {
 
     if node.child_count() > 0 && node.has_error() {
         let mut cursor = node.walk();
-        for child in node.children(&mut cursor)  {
+        for child in node.children(&mut cursor) {
             if child.has_error() {
                 errors_from_tree(list, &child);
             }
@@ -32,4 +34,16 @@ pub fn errors_from_ast(ast: &Tree) -> Vec<ErrorInfo> {
     errors_from_tree(errors.as_mut(), &ast.root_node());
 
     return errors;
+}
+
+pub fn errors_from_parse_result(parse_result: &ParseResult) -> Vec<ErrorInfo> {
+    return parse_result
+        .diagnostics
+        .iter()
+        .map(|diagnostic| ErrorInfo {
+            start: diagnostic.span.start_byte,
+            end: diagnostic.span.end_byte,
+            length: diagnostic.span.end_byte - diagnostic.span.start_byte,
+        })
+        .collect();
 }

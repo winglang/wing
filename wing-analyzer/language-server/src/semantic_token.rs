@@ -1,5 +1,8 @@
 use tower_lsp::lsp_types::{CompletionItemKind, SemanticTokenType, SymbolKind};
 use tree_sitter::{Query, QueryCursor, Tree};
+use wingc::{ast, diagnostic::WingSpan};
+
+use crate::prep::ParseResult;
 
 pub const LEGEND_TYPE: &[SemanticTokenType] = &[
     SemanticTokenType::VARIABLE,
@@ -42,6 +45,65 @@ pub struct RelativeCompletionToken {
 pub fn get_token_type(token_type: &SemanticTokenType) -> usize {
     LEGEND_TYPE.iter().position(|x| x == token_type).unwrap()
 }
+
+pub fn token_from_span(span: WingSpan, token_type: SemanticTokenType) -> RelativeSemanticToken {
+    RelativeSemanticToken {
+        start: span.start_byte,
+        end: span.end_byte,
+        length: span.end_byte - span.start_byte,
+        token_type: get_token_type(&token_type),
+    }
+}
+
+// pub fn semantic_token_from_parse_result(parse_result: &ParseResult) -> Vec<RelativeSemanticToken> {
+//     let mut tokens: Vec<RelativeSemanticToken> = vec![];
+
+//     for statement in parse_result.ast.statements.iter() {
+//         match statement {
+//             ast::Statement::Use {
+//                 module_name,
+//                 identifier,
+//             } => {
+//                 tokens.push(token_from_span(
+//                     module_name.span,
+//                     SemanticTokenType::INTERFACE,
+//                 ));
+//                 if let Some(identifier) = identifier {
+//                     tokens.push(token_from_span(identifier.span, SemanticTokenType::STRUCT));
+//                 }
+//             }
+//             ast::Statement::VariableDef {
+//                 var_name,
+//                 initial_value,
+//             } => todo!(),
+//             ast::Statement::FunctionDefinition(_) => todo!(),
+//             ast::Statement::ForLoop {
+//                 iterator,
+//                 iterable,
+//                 statements,
+//             } => todo!(),
+//             ast::Statement::If {
+//                 condition,
+//                 statements,
+//                 else_statements,
+//             } => todo!(),
+//             ast::Statement::Expression(_) => todo!(),
+//             ast::Statement::Assignment { variable, value } => todo!(),
+//             ast::Statement::Return(_) => todo!(),
+//             ast::Statement::Scope(_) => todo!(),
+//             ast::Statement::Class {
+//                 name,
+//                 members,
+//                 methods,
+//                 constructor,
+//                 parent,
+//                 is_resource,
+//             } => todo!(),
+//         };
+//     }
+
+//     tokens
+// }
 
 pub fn semantic_token_from_ast(source: &str, ast: &Tree) -> Vec<RelativeSemanticToken> {
     let query = Query::new(ast.language(), tree_sitter_winglang::HIGHLIGHTS_QUERY).unwrap();

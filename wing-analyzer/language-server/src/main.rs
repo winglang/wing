@@ -1,5 +1,6 @@
 use dashmap::DashMap;
-use errors::errors_from_ast;
+use errors::{errors_from_ast, errors_from_parse_result};
+use prep::{parse_text, ParseResult};
 use ropey::Rope;
 use semantic_token::{
     completions_from_ast, semantic_token_from_ast, RelativeSemanticToken, LEGEND_TYPE,
@@ -13,12 +14,13 @@ use tower_lsp::{Client, LanguageServer, LspService, Server};
 use tree_sitter::Tree;
 
 pub mod errors;
+pub mod prep;
 pub mod semantic_token;
 
 #[derive(Debug)]
 struct Backend {
     client: Client,
-    ast_map: DashMap<String, Tree>,
+    ast_map: DashMap<String, ParseResult>,
     document_map: DashMap<String, Rope>,
     semantic_token_map: DashMap<String, Vec<RelativeSemanticToken>>,
 }
@@ -79,7 +81,7 @@ impl LanguageServer for Backend {
             let mut im_complete_tokens = self.semantic_token_map.get_mut(&uri)?;
             let rope = self.document_map.get(&uri)?;
             let ast = self.ast_map.get(&uri)?;
-            let extends_tokens = semantic_token_from_ast(rope.to_string().as_str(), &ast);
+            let extends_tokens = semantic_token_from_ast(rope.to_string().as_str(), &ast.tree);
             im_complete_tokens.extend(extends_tokens);
             im_complete_tokens.sort_by(|a, b| a.start.cmp(&b.start));
             let mut pre_line = 0;
@@ -168,7 +170,7 @@ impl LanguageServer for Backend {
         let completions = || -> Option<Vec<CompletionItem>> {
             let rope = self.document_map.get(&uri.to_string())?;
             let ast = self.ast_map.get(&uri.to_string())?;
-            let completions = completions_from_ast(rope.to_string().as_str(), &ast);
+            let completions = completions_from_ast(rope.to_string().as_str(), &ast.tree);
             let mut ret = Vec::with_capacity(completions.len());
             for item in completions {
                 // It's not using the offset
@@ -283,9 +285,25 @@ impl Backend {
         self.document_map
             .insert(params.uri.to_string(), rope.clone());
 
-        let ast = compile(&params.text.as_bytes());
-        let semantic_tokens = semantic_token_from_ast(rope.to_string().as_str(), &ast);
-        let errors = errors_from_ast(&ast);
+        let result = std::panic::catch_unwind(|| {
+            parse_text(params.uri.to_string().as_str(), &params.text.as_bytes())
+        });
+
+        if result.is_err() {
+            self.client
+                .log_message(MessageType::INFO, format!("parsed"))
+                .await;
+            panic!("{:#?}", result.unwrap_err());
+        }
+
+        let parse_result = result.unwrap();
+        self.client
+            .log_message(MessageType::INFO, format!("parsed"))
+            .await;
+
+        let semantic_tokens =
+            semantic_token_from_ast(rope.to_string().as_str(), &parse_result.tree);
+        let errors = errors_from_parse_result(&parse_result);
 
         self.client
             .log_message(MessageType::INFO, format!("{:?}", errors))
@@ -323,7 +341,7 @@ impl Backend {
             .publish_diagnostics(params.uri.clone(), diagnostics, Some(params.version))
             .await;
 
-        self.ast_map.insert(params.uri.to_string(), ast);
+        self.ast_map.insert(params.uri.to_string(), parse_result);
 
         self.semantic_token_map
             .insert(params.uri.to_string(), semantic_tokens);
