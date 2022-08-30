@@ -50,7 +50,7 @@ resource DenyList {
   }
 }
 
-fn append_rule(map: mut map<DenyListRule>, rule: DenyListRule) {
+fn append_rule(map: mut_map<DenyListRule>, rule: DenyListRule) {
   let suffix = version != nil ? "/v${rule.version}" : "";
   let path = "${rule.package_name}${suffix}";
   map[path] = rule;
