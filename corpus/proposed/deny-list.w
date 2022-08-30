@@ -2,13 +2,13 @@ bring cloud;
 bring fs;
 
 struct DenyListRule {
-  package_name: string;
-  version: string?;
-  reason: string;
+  package_name: str;
+  version: str?;
+  reason: str;
 }
 
 struct DenyListProps {
-  rules: DenyListRule[];
+  rules: array<DenyListRule>;
 }
 
 resource DenyList {
@@ -16,19 +16,18 @@ resource DenyList {
   _object_key: str;
 
   new(props: DenyListProps) {
-    let object_key = "deny-list.json";
-    let rules_dir = this.write_to_file(props.rules, this.object_key);
+    this._bucket = bucket;
+    this._object_key = "deny-list.json";
+
+    let rules_dir = this._write_to_file(props.rules, this._object_key);
     let bucket = cloud.Bucket();
     bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
-
-    this._bucket = bucket;
-    this._object_key = object_key;
   }
 
-  _write_to_file(list: DenyListRule[], filename: str): str {
+  _write_to_file(list: array<DenyListRule>, filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map: mut = {};
+    let map = new map<DenyListRule>();
     for rule in list {
       append_rule(map, rule);
     }
@@ -36,10 +35,10 @@ resource DenyList {
     return tmpdir;
   }
 
-  ~rules: map<string, DenyListRule>;
+  ~rules: map<DenyListRule>;
 
   ~new() {
-    this.rules = this._bucket.get(this._object_key) ?? {};
+    this.rules = this._bucket.get(this._object_key) ?? new map<DenyListRule>();
   }
 
   public ~lookup(name: str, version: str): DenyListRule? {
@@ -52,7 +51,7 @@ resource DenyList {
   }
 }
 
-fn append_rule(map: mut map<string, DenyListRule>, rule: DenyListRule) {
+fn append_rule(map: mut map<DenyListRule>, rule: DenyListRule) {
   let suffix = version != nil ? "/v${rule.version}" : "";
   let path = "${rule.package_name}${suffix}";
   map[path] = rule;
@@ -65,10 +64,10 @@ fn main() {
     let package_name = event.data["package_name"];
     let version = event.data["version"];
     let reason = event.data["reason"];
-    if deny_list.lookup(package_name, version) {
-      print("Package rejected: " + package_name);
+    if deny_list.lookup(package_name, version) != nil {
+      print("Package rejected: ${package_name}");
     } else {
-      print("Package accepted: " + package_name);
+      print("Package accepted: ${package_name}");
     }
   }
 
