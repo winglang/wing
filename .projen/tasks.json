@@ -87,6 +87,9 @@
       "description": "Only compile",
       "steps": [
         {
+          "exec": "replace-in-file \"lib: ['lib.es2020.d.ts']\" \"lib: ['lib.es2020.d.ts','lib.dom.d.ts']\" node_modules/jsii/lib/compiler.js"
+        },
+        {
           "exec": "jsii --silence-warnings=reserved-word"
         }
       ]
@@ -282,19 +285,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,constructs,esbuild'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
         },
         {
           "exec": "npm install"

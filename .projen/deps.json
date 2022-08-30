@@ -107,6 +107,10 @@
       "type": "build"
     },
     {
+      "name": "replace-in-file",
+      "type": "build"
+    },
+    {
       "name": "standard-version",
       "version": "^9",
       "type": "build"
@@ -130,7 +134,6 @@
     },
     {
       "name": "esbuild",
-      "version": "0.14.31",
       "type": "bundled"
     },
     {

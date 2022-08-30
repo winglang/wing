@@ -62,6 +62,7 @@
     "npm-check-updates": "^15",
     "prettier": "^2.7.1",
     "projen": "^0.61.30",
+    "replace-in-file": "^6.3.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "tsx": "*",
@@ -75,7 +76,7 @@
     "@cdktf/provider-aws": "^9.0.15",
     "@monadahq/wingsdk-clients": "^0.3.0",
     "cdktf": "^0.12.2",
-    "esbuild": "0.14.31"
+    "esbuild": "^0.15.6"
   },
   "bundledDependencies": [
     "@monadahq/wingsdk-clients",

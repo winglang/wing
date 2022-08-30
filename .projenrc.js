@@ -9,8 +9,8 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: ["constructs@^10.0.25", "@monadahq/polycons@^0.0.36"],
   deps: ["cdktf", "@cdktf/provider-aws"],
-  bundledDeps: ["esbuild@0.14.31", "@monadahq/wingsdk-clients"],
-  devDeps: [],
+  bundledDeps: ["esbuild", "@monadahq/wingsdk-clients"],
+  devDeps: ["replace-in-file"],
   prettier: true,
   jestOptions: {
     jestVersion: "^27.0.0", // 28 requires a later typescript version
@@ -38,6 +38,11 @@ const project = new cdk.JsiiProject({
     },
   ],
 });
+
+// jsii doesn't allow overriding arbitrary fields of tsconfig.json, so this is a workaround
+project.compileTask.prependExec(
+  `replace-in-file "lib: ['lib.es2020.d.ts']" "lib: ['lib.es2020.d.ts','lib.dom.d.ts']" node_modules/jsii/lib/compiler.js`
+);
 
 // use types from wing-local to ensure that the local CDK
 // generates the correct types for the simulator
