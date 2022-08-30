@@ -49,6 +49,5 @@ jspm_packages/
 /.eslintrc.json
 /.editorconfig
 /coverage/
-/.npmrc
 *.env
 /release

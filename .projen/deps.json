@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@heroicons/react",
+      "type": "build"
+    },
+    {
       "name": "@monadahq/mona-projen",
       "type": "build"
     },
@@ -64,6 +68,10 @@
       "type": "build"
     },
     {
+      "name": "@vitest/coverage-c8",
+      "type": "build"
+    },
+    {
       "name": "autoprefixer",
       "type": "build"
     },
@@ -73,6 +81,10 @@
     },
     {
       "name": "c8",
+      "type": "build"
+    },
+    {
+      "name": "classnames",
       "type": "build"
     },
     {

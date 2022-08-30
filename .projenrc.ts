@@ -29,14 +29,17 @@ const project = new TypeScriptProject({
     "typescript",
     "vite",
     "vite-plugin-electron",
+    "@heroicons/react",
+    "classnames",
   ],
 });
 
 project.addTask("dev").exec("vite");
 project.compileTask.exec("vite build");
-project.compileTask.exec("electron-builder --publish=never");
+// project.compileTask.exec("electron-builder --publish=never");
 project.addTask("storybook").exec("start-storybook -p 6006");
 project.addTask("build-storybook").exec("build-storybook");
+project.tasks.tryFind("package")?.reset();
 
 project.package.addField("main", "dist/electron/main/index.js");
 project.package.addField("env", {
