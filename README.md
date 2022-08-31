@@ -122,7 +122,7 @@ Implicit "any" resolved by the compiler is a compile error.
 > let y = {"a": 1, "b": 2};   // immutable map
 > let ym = mut_map<num>();    // mutable map
 > let x = [1, 2, 3];          // immutable list (type is list<num>)
-> let xm = mut_arr<num>();    // mutable array
+> let xm = mut_list<num>();   // mutable list (array)
 > let w = SampleClass();      // class instance (mutability unknown)
 > ```
 >
@@ -1155,11 +1155,14 @@ type of visibility (private, protected, etc.).
 
 ### 4.5 Variables
 
+> Let let be let. (Elad B. 2022)
+
 ```pre
 let <name>[: <type>] = <value>;
 ```
 
 Assignment operator is `=`.  
+Assignment declaration keyword is `let`.  
 Type annotation is optional if a default value is given.  
 
 > ```TS
@@ -1764,7 +1767,7 @@ struct DenyListRule {
 }
 
 struct DenyListProps {
-  rules: mut_arr<DenyListRule>;
+  rules: mut_list<DenyListRule>;
 }
 
 resource DenyList {
@@ -1779,7 +1782,7 @@ resource DenyList {
     this._bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
   }
 
-  _write_to_file(list: mut_arr<DenyListRule>, filename: str): str {
+  _write_to_file(list: mut_list<DenyListRule>, filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
     let map = mut_map<DenyListRule>();
