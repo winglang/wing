@@ -18,7 +18,7 @@ impl std::fmt::Display for Symbol {
 	}
 }
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Flight {
 	In,
 	Pre,

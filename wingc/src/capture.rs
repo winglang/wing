@@ -57,8 +57,22 @@ pub fn find_inflights_to_scan(ast_root: &Scope) {
 }
 
 fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) {
-	if let Reference::NestedIdentifier { object, property: _ } = reference {
-		scan_captures_in_expression(&object, env)
+	if let Reference::NestedIdentifier { object, property } = reference {
+		scan_captures_in_expression(&object, env);
+
+		// If the expression evaluates to a resource we should check what method of the resource we're accessing
+		if let &Type::ResourceObject(res) = object.evaluated_type.borrow().unwrap().into() {
+			let res = res.as_resource().unwrap();
+			let (prop_type, flight) = res.env.lookup_ext(property);
+			let func = prop_type.as_function_sig().unwrap();
+			if matches!(func.flight, Flight::Pre) {
+				panic!("Can't access preflight method {} inflight", property);
+			}
+			println!(
+				"We seem to be accessing the preflight method {}.{} {} inflight!",
+				res.name.name, property.name, property.span
+			);
+		}
 	}
 
 	// TODO: named args

@@ -19,7 +19,7 @@ pub enum Type {
 }
 
 pub struct Class {
-	name: Symbol, // TODO: do we really need the name here, we should alway get here through a Class Type in some env which has the name of the type
+	pub name: Symbol,
 	pub env: TypeEnv,
 	parent: Option<TypeRef>, // Must be a Type::Class type
 }
@@ -79,6 +79,7 @@ impl PartialEq for Type {
 pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: Option<TypeRef>,
+	pub flight: Flight,
 }
 
 #[deprecated = "Remember to implement this!"]
@@ -186,7 +187,7 @@ impl TypeRef {
 		}
 	}
 
-	fn as_function_sig(&self) -> Option<&FunctionSignature> {
+	pub fn as_function_sig(&self) -> Option<&FunctionSignature> {
 		if let &Type::Function(ref sig) = (*self).into() {
 			Some(sig)
 		} else {
@@ -520,6 +521,7 @@ impl<'a> TypeChecker<'a> {
 				let sig = FunctionSignature {
 					args,
 					return_type: ast_sig.return_type.as_ref().map(|t| self.resolve_type(t, env)),
+					flight: ast_sig.flight,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(Box::new(sig)))
