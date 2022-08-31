@@ -1,5 +1,6 @@
 # Wing Language Specification
 
+- [0. Preface](#0-preface)
 - [1. General](#1-general)
   - [1.1 Types](#11-types)
     - [1.1.1 Primitive Types](#111-primitive-types)
@@ -62,6 +63,27 @@
     - [7.3.7 Equality](#737-equality)
   - [7.4 Kitchen Sink](#74-kitchen-sink)
   - [7.5 Credits](#75-credits)
+
+## 0. Preface
+
+The wing programming language (aka winglang[<sup>RFC</sup>][rfc]) is a general
+purpose programming language designed for building applications for the cloud.
+
+What makes wing special? Traditional programming languages are designed around
+the premise of telling a single machine what to do. The output of the compiler
+is a program that can be executed on that machine. But cloud applications are
+distributed systems that consist of code running across multiple machines and
+which intimately use various cloud resources and services to achieve their
+business goals.
+
+Wing’s goal is to allow developers to express all pieces of a cloud application
+using the same programming language. This way, we can leverage the power of the
+compiler to deeply understand the intent of the developer and implement them
+through the mechanics of the cloud.
+
+[`▲ top`][top]
+
+---
 
 ## 1. General
 
@@ -311,7 +333,10 @@ Mixing `protected` and `internal` is not allowed.
 
 In Wing we have two classes of "data": immutable and mutable.
 
-Immutable data is data that is capture-able from preflight safely into inflight.
+Immutable data is important in Wing because it can cross machine boundaries
+safely in a distributed system. In Wing, this implies that only immutable data
+is capture-able from preflight safely into inflight.
+
 All primitive types are immutable (`bool`, `str`, `num`, and `nil`).  
 Resources are also immutable by design and can be captured into inflight.  
 Immutable container types (`map`, `set` and `list`) as well as structs of
@@ -669,7 +694,7 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > class MyClass {
 >   async foo(): number {
 >     let x = await some_promise();
@@ -708,7 +733,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const x: number = 1;
 > const y: string = "sample";
 > if (x === 2) {
@@ -746,7 +771,7 @@ type annotation after an iteratee (left hand side of `in`) is optional.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const arr: number[] = Object.freeze([1, 2, 3]);
 > const set: Set<number> = Object.freeze(new Set([1, 2, 3]));
 > for (const item of arr) {
@@ -780,7 +805,7 @@ while statement is used to execute a block of code while a condition is true.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > while (call_some_function()) {
 >   console.log("hello");
 > }
@@ -830,7 +855,7 @@ Structs can inherit from multiple other structs.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > interface MyDataModel1 {
 >   public readonly field1: number;
 >   public readonly field2: string;
@@ -1122,7 +1147,7 @@ type of visibility (private, protected, etc.).
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > interface MyInterface1 {
 >   public readonly field1: number;
 >   public method1(x: number): string;
@@ -1173,7 +1198,7 @@ Type annotation is optional if a default value is given.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const n: number = 10;
 > const s: string = "hello";
 > ```
@@ -1233,7 +1258,7 @@ Functions that use the keyword "await" in their body must return a promise.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const number = Object.freeze((): number {
 >   return 23;
 > })
@@ -1305,7 +1330,7 @@ Lists are similar to dynamically sized arrays or vectors in other languages.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const list1: number[] = Object.freeze([1, 2, 3]);
 > const list2: string[] = Object.freeze(["a", "b", "c"]);
 > const list3: string[] = ["a1", "b2", "c3"];
@@ -1337,7 +1362,7 @@ Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > enum SomeEnum { ONE, TWO, THREE };
 > enum MyFoo {
 >   A,
@@ -1475,7 +1500,7 @@ Names can be renamed with `as` keyword.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > import * from 'std';
 > import * as std2 from 'std';
 > import { io } from 'std';
@@ -1495,7 +1520,7 @@ To promote polyglot programming, A string literal can also be placed after
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > import * from 'cdk-spa';
 > import * as spa from 'cdk-spa';
 > import { SomeConstruct } from 'cdk-spa';
@@ -1582,7 +1607,7 @@ Processing unicode escape sequences happens in these strings.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const name = "World";
 > const s = `Hello, ${name}!`; // with substitution
 > const l = s.length; // length of string
@@ -1618,7 +1643,7 @@ Internally compiler calls the host environment's command processor (e.g.
 > ```
 >
 > ```TS
-> // Equivalent TypeScript:
+> // Equivalent TypeScript Code:
 > const name = (() => {
 >   let _stdout = "";
 >   try {
@@ -1915,3 +1940,4 @@ queue.add_consumer(filter);
 - <https://github.com/vlang/v>
 
 [top]: #wing-language-reference
+[rfc]: https://github.com/monadahq/rfcs/blob/main/0044-winglang-requirements.md
