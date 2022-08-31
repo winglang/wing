@@ -24,10 +24,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           working-directory: wing-analyzer/vscode-extension
-      - name: Bundle
-        working-directory: wing-analyzer/vscode-extension
-        run: npm run bundle
-      - name: Package
+      - name: Create VSIX
         working-directory: wing-analyzer/vscode-extension
         run: npm run package
       - name: Upload extension
@@ -35,7 +32,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
-          path: wing-analyzer/vscode-extension/wing.vsix
+          path: wing-analyzer/vscode-extension/vscode-wing.vsix
   build-native:
     strategy:
       fail-fast: false
@@ -139,8 +136,7 @@ jobs:
           cd dist
           echo '## SHA-1 Checksums' > ../checksums.md
           echo '```' >> ../checksums.md
-          sha1sum --binary *.tgz >> ../checksums.md
-          sha1sum --binary *.vsix >> ../checksums.md
+          sha1sum --binary * >> ../checksums.md
           echo '```' >> ../checksums.md
 
       - name: Cut Development Release
@@ -149,9 +145,8 @@ jobs:
           tag_name: development
           body_path: checksums.md
           prerelease: true
-          files: |
-            dist/*.tgz
-            dist/*.vsix
+          files: dist/*
+          
 
   wrapper:
     needs:
