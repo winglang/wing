@@ -1,7 +1,9 @@
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::Debug;
 
 use crate::diagnostic::WingSpan;
+use crate::type_check::TypeRef;
 use crate::type_env::TypeEnv;
 
 #[derive(Debug, PartialEq, Eq, Hash, Clone)]
@@ -106,11 +108,11 @@ pub struct ClassMember {
 }
 
 #[derive(Debug)]
-pub enum Expression {
+pub enum ExpressionType {
 	New {
 		class: Reference,
 		obj_id: Option<Symbol>,
-		obj_scope: Option<Box<Expression>>,
+		obj_scope: Option<Box<RefCell<Expression>>>,
 		arg_list: ArgList,
 	},
 	Literal(Literal),
@@ -123,19 +125,25 @@ pub enum Expression {
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
-		exp: Box<Expression>,
+		exp: Box<RefCell<Expression>>,
 	},
 	Binary {
 		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
-		lexp: Box<Expression>,
-		rexp: Box<Expression>,
+		lexp: Box<RefCell<Expression>>,
+		rexp: Box<RefCell<Expression>>,
 	},
 }
 
 #[derive(Debug)]
+pub struct Expression {
+	pub expression_variant: ExpressionType,
+	pub evaluated_type: RefCell<Option<TypeRef>>,
+}
+
+#[derive(Debug)]
 pub struct ArgList {
-	pub pos_args: Vec<Expression>,
+	pub pos_args: Vec<RefCell<Expression>>,
 	pub named_args: HashMap<Symbol, Expression>,
 }
 
@@ -233,6 +241,12 @@ impl BinaryOperator {
 #[derive(Debug)]
 pub enum Reference {
 	Identifier(Symbol),
-	NestedIdentifier { object: Box<Expression>, property: Symbol },
-	NamespacedIdentifier { namespace: Symbol, identifier: Symbol },
+	NestedIdentifier {
+		object: Box<RefCell<Expression>>,
+		property: Symbol,
+	},
+	NamespacedIdentifier {
+		namespace: Symbol,
+		identifier: Symbol,
+	},
 }

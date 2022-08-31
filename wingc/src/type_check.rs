@@ -310,39 +310,39 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_exp(&mut self, exp: &Expression, env: &TypeEnv) -> Option<TypeRef> {
-		match exp {
-			Expression::Literal(lit) => match lit {
+	fn type_check_exp(&mut self, exp: &mut Expression, env: &TypeEnv) -> Option<TypeRef> {
+		let t = match &exp.expression_variant {
+			ExpressionType::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
 				Literal::Number(_) => Some(self.types.number()),
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
 			},
-			Expression::Binary { op, lexp, rexp } => {
-				let ltype = self.type_check_exp(lexp, env).unwrap();
-				let rtype = self.type_check_exp(rexp, env).unwrap();
-				self.validate_type(ltype, rtype, rexp);
+			ExpressionType::Binary { op, lexp, rexp } => {
+				let ltype = self.type_check_exp(&mut lexp.borrow_mut(), env).unwrap();
+				let rtype = self.type_check_exp(&mut rexp.borrow_mut(), env).unwrap();
+				self.validate_type(ltype, rtype, &rexp.borrow());
 				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), rexp);
+					self.validate_type(ltype, self.types.bool(), &rexp.borrow());
 				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), rexp);
+					self.validate_type(ltype, self.types.number(), &rexp.borrow());
 				}
 
 				if op.boolean_result() {
 					Some(self.types.bool())
 				} else {
-					self.validate_type(ltype, self.types.number(), rexp);
+					self.validate_type(ltype, self.types.number(), &rexp.borrow());
 					Some(ltype)
 				}
 			}
-			Expression::Unary { op: _, exp: unary_exp } => {
-				let _type = self.type_check_exp(&unary_exp, env).unwrap();
+			ExpressionType::Unary { op: _, exp: unary_exp } => {
+				let _type = self.type_check_exp(&mut unary_exp.borrow_mut(), env).unwrap();
 				// Add bool vs num support here (! => bool, +- => num)
-				self.validate_type(_type, self.types.number(), &unary_exp);
+				self.validate_type(_type, self.types.number(), &unary_exp.borrow());
 				Some(_type)
 			}
-			Expression::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
-			Expression::New {
+			ExpressionType::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
+			ExpressionType::New {
 				class,
 				obj_id: _, // TODO
 				arg_list,
@@ -396,15 +396,15 @@ impl<'a> TypeChecker<'a> {
 				}
 				// Verify passed arguments match the constructor
 				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
-					let arg_expr_type = self.type_check_exp(arg_expr, env).unwrap();
-					self.validate_type(arg_expr_type, *arg_type, arg_expr);
+					let arg_expr_type = self.type_check_exp(&mut arg_expr.borrow_mut(), env).unwrap();
+					self.validate_type(arg_expr_type, *arg_type, &mut arg_expr.borrow_mut());
 				}
 
 				// If this is a Resource then create a new type for this resource object
 				if type_.as_resource().is_some() {
 					// Get reference to resource object's scope
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
-						Some(self.type_check_exp(obj_scope, env).unwrap())
+						Some(self.type_check_exp(&mut obj_scope.borrow_mut(), env).unwrap())
 					} else {
 						// If we're in the root env then we have no object scope
 						if env.is_root() {
@@ -431,7 +431,7 @@ impl<'a> TypeChecker<'a> {
 					Some(self.types.add_type(Type::ClassInstance(type_))) // TODO: don't create new type if one already exists.
 				}
 			}
-			Expression::FunctionCall { function, args } => {
+			ExpressionType::FunctionCall { function, args } => {
 				let func_type = self.resolve_reference(function, env);
 
 				if let &Type::Function(ref func_type) = func_type.into() {
@@ -447,8 +447,8 @@ impl<'a> TypeChecker<'a> {
 					}
 					// Argument type check
 					for (passed_arg, expected_arg) in args.pos_args.iter().zip(func_type.args.iter()) {
-						let passed_arg_type = self.type_check_exp(passed_arg, env).unwrap();
-						self.validate_type(passed_arg_type, *expected_arg, passed_arg);
+						let passed_arg_type = self.type_check_exp(&mut passed_arg.borrow_mut(), env).unwrap();
+						self.validate_type(passed_arg_type, *expected_arg, &mut passed_arg.borrow_mut());
 					}
 
 					func_type.return_type
@@ -456,7 +456,7 @@ impl<'a> TypeChecker<'a> {
 					panic!("Identifier {:?} is not a function", function)
 				}
 			}
-			Expression::MethodCall(method_call) => {
+			ExpressionType::MethodCall(method_call) => {
 				// Find method in class's environment
 				let method_type = self.resolve_reference(&method_call.method, env);
 
@@ -483,13 +483,15 @@ impl<'a> TypeChecker<'a> {
 				}
 				// Verify argument types (we run from last to first to skip "this" argument)
 				for (arg_type, param_exp) in method_sig.args.iter().rev().zip(method_call.args.pos_args.iter().rev()) {
-					let param_type = self.type_check_exp(param_exp, env).unwrap();
-					self.validate_type(param_type, *arg_type, param_exp);
+					let param_type = self.type_check_exp(&mut param_exp.borrow_mut(), env).unwrap();
+					self.validate_type(param_type, *arg_type, &param_exp.borrow());
 				}
 
 				method_sig.return_type
 			}
-		}
+		};
+		exp.evaluated_type = t;
+		t
 	}
 
 	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expression) {
@@ -778,7 +780,7 @@ impl<'a> TypeChecker<'a> {
 			Reference::NestedIdentifier { object, property } => {
 				// Get class
 				let class = {
-					let instance = self.type_check_exp(object, env).unwrap();
+					let instance = self.type_check_exp(&mut object.borrow_mut(), env).unwrap();
 					let instance_type = match instance.into() {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
 						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud::Bucket)

@@ -3,8 +3,8 @@ use std::{collections::HashMap, fs};
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expression, Flight, FunctionDefinition, Literal, Reference, Scope, Statement,
-	Symbol, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Expression, ExpressionType, Flight, FunctionDefinition, Literal, Reference,
+	Scope, Statement, Symbol, UnaryOperator,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -20,9 +20,9 @@ fn find_captures_from_expression(node: &Expression) -> Vec<Capture> {
 
 	// TODO Hack, assume it's of the form `capture.method()`
 	// Without type info, this is the best we can do
-	if let Expression::MethodCall(m) = node {
+	if let ExpressionType::MethodCall(m) = &node.expression_variant {
 		if let Reference::NestedIdentifier { object, property } = &m.method {
-			if let Expression::Reference(Reference::Identifier(object)) = &**object {
+			if let ExpressionType::Reference(Reference::Identifier(object)) = &object.borrow().expression_variant {
 				if object.name == "console" {
 					// TODO Extra hack, ignore console.log for now
 					return res;
@@ -153,7 +153,9 @@ fn jsify_scope(scope: &Scope) -> String {
 fn jsify_reference(reference: &Reference) -> String {
 	match reference {
 		Reference::Identifier(identifier) => jsify_symbol(identifier),
-		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol(property),
+		Reference::NestedIdentifier { object, property } => {
+			jsify_expression(&object.borrow()) + "." + &jsify_symbol(property)
+		}
 		Reference::NamespacedIdentifier { namespace, identifier } => {
 			jsify_symbol(namespace) + "." + &jsify_symbol(identifier)
 		}
@@ -175,7 +177,7 @@ fn jsify_arg_list(arg_list: &ArgList) -> String {
 
 	if !arg_list.pos_args.is_empty() {
 		for arg in arg_list.pos_args.iter() {
-			args.push(jsify_expression(arg));
+			args.push(jsify_expression(&arg.borrow()));
 		}
 		return args.join(",");
 	} else if !arg_list.named_args.is_empty() {
@@ -189,8 +191,8 @@ fn jsify_arg_list(arg_list: &ArgList) -> String {
 }
 
 fn jsify_expression(expression: &Expression) -> String {
-	match expression {
-		Expression::New {
+	match &expression.expression_variant {
+		ExpressionType::New {
 			class,
 			obj_id: _, // TODO
 			arg_list,
@@ -198,32 +200,32 @@ fn jsify_expression(expression: &Expression) -> String {
 		} => {
 			format!("new {}({})", jsify_reference(&class), jsify_arg_list(&arg_list))
 		}
-		Expression::Literal(lit) => match lit {
+		ExpressionType::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
 			Literal::Number(n) => format!("{}", n),
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
-		Expression::Reference(_ref) => jsify_reference(_ref),
-		Expression::FunctionCall { function, args } => {
+		ExpressionType::Reference(_ref) => jsify_reference(&_ref),
+		ExpressionType::FunctionCall { function, args } => {
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args))
 		}
-		Expression::MethodCall(method_call) => {
+		ExpressionType::MethodCall(method_call) => {
 			format!(
 				"{}({})",
 				jsify_reference(&method_call.method),
 				jsify_arg_list(&method_call.args)
 			)
 		}
-		Expression::Unary { op, exp } => {
+		ExpressionType::Unary { op, exp } => {
 			let op = match op {
 				UnaryOperator::Plus => "+",
 				UnaryOperator::Minus => "-",
 				UnaryOperator::Not => "!",
 			};
-			format!("({}{})", op, jsify_expression(exp))
+			format!("({}{})", op, jsify_expression(&exp.borrow()))
 		}
-		Expression::Binary { op, lexp, rexp } => {
+		ExpressionType::Binary { op, lexp, rexp } => {
 			let op = match op {
 				BinaryOperator::Add => "+",
 				BinaryOperator::Sub => "-",
@@ -239,7 +241,12 @@ fn jsify_expression(expression: &Expression) -> String {
 				BinaryOperator::LogicalAnd => "&&",
 				BinaryOperator::LogicalOr => "||",
 			};
-			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
+			format!(
+				"({} {} {})",
+				jsify_expression(&lexp.borrow()),
+				op,
+				jsify_expression(&rexp.borrow())
+			)
 		}
 	}
 }

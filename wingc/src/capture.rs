@@ -1,5 +1,5 @@
 use crate::{
-	ast::{ArgList, Expression, Flight, Reference, Scope, Statement},
+	ast::{ArgList, Expression, ExpressionType, Flight, Reference, Scope, Statement},
 	type_env::TypeEnv,
 };
 
@@ -57,18 +57,18 @@ pub fn find_inflights_to_scan(ast_root: &Scope) {
 
 fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) {
 	if let Reference::NestedIdentifier { object, property: _ } = reference {
-		scan_captures_in_expression(object, env)
+		scan_captures_in_expression(&object.borrow(), env)
 	}
 
 	// TODO: named args
 	for arg in args.pos_args.iter() {
-		scan_captures_in_expression(arg, env);
+		scan_captures_in_expression(&arg.borrow(), env);
 	}
 }
 
 fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
-	match exp {
-		Expression::New {
+	match &exp.expression_variant {
+		ExpressionType::New {
 			class: _,
 			obj_id: _,
 			obj_scope: _,
@@ -76,31 +76,31 @@ fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
 		} => {
 			// TODO: named args
 			for e in arg_list.pos_args.iter() {
-				scan_captures_in_expression(e, env);
+				scan_captures_in_expression(&e.borrow(), env);
 			}
 		}
-		Expression::Reference(r) => match r {
+		ExpressionType::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
-				let (t, f) = env.lookup_ext(symbol);
+				let (t, f) = env.lookup_ext(&symbol);
 				if t.as_resource_object().is_some() && matches!(f, Flight::Pre) {
 					println!("We seem to be accessing the preflight resource {} inflight!", symbol);
 				}
 			}
-			Reference::NestedIdentifier { object, property: _ } => scan_captures_in_expression(object, env),
+			Reference::NestedIdentifier { object, property: _ } => scan_captures_in_expression(&object.borrow(), env),
 			Reference::NamespacedIdentifier {
 				namespace: _,
 				identifier: _,
 			} => todo!(),
 		},
-		Expression::FunctionCall { function, args } => scan_captures_in_call(function, args, env),
-		Expression::MethodCall(mc) => scan_captures_in_call(&mc.method, &mc.args, env),
-		Expression::Unary { op: _, exp } => scan_captures_in_expression(exp, env),
-		Expression::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(lexp, env);
-			scan_captures_in_expression(rexp, env);
+		ExpressionType::FunctionCall { function, args } => scan_captures_in_call(&function, &args, env),
+		ExpressionType::MethodCall(mc) => scan_captures_in_call(&mc.method, &mc.args, env),
+		ExpressionType::Unary { op: _, exp } => scan_captures_in_expression(&exp.borrow(), env),
+		ExpressionType::Binary { op: _, lexp, rexp } => {
+			scan_captures_in_expression(&lexp.borrow(), env);
+			scan_captures_in_expression(&rexp.borrow(), env);
 		}
-		Expression::Literal(_) => (),
+		ExpressionType::Literal(_) => (),
 	}
 }
 
