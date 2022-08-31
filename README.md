@@ -1217,7 +1217,7 @@ can they return any resources. They do pure "compute" operations.
 
 #### 4.6.2 Promises
 
-Promises (a.k.a futures) in Wing are defined with `promise<T>` syntax.  
+Promises in Wing are defined with `promise<T>` syntax.  
 Functions that use the keyword "await" in their body must return a promise.
 
 > ```TS
