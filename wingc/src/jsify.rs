@@ -331,7 +331,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			is_resource,
 		} => {
 			if *is_resource {
-				todo!()
+				// TODO...
 			}
 
 			format!(
