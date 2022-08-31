@@ -63,7 +63,7 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) {
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
 		if let &Type::ResourceObject(res) = object.evaluated_type.borrow().unwrap().into() {
 			let res = res.as_resource().unwrap();
-			let (prop_type, flight) = res.env.lookup_ext(property);
+			let (prop_type, _flight) = res.env.lookup_ext(property);
 			let func = prop_type.as_function_sig().unwrap();
 			if matches!(func.flight, Flight::Pre) {
 				panic!("Can't access preflight method {} inflight", property);
