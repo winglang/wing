@@ -38,8 +38,9 @@
     - [4.6.2 Promises](#462-promises)
     - [4.6.3 Struct Expansion](#463-struct-expansion)
     - [4.6.4 Variadic Arguments](#464-variadic-arguments)
-  - [4.7 Arrays](#47-arrays)
+  - [4.7 Lists](#47-lists)
   - [4.8 Enumeration](#48-enumeration)
+  - [4.9 Computed Properties](#49-computed-properties)
 - [5. Module System](#5-module-system)
   - [5.1 Imports](#51-imports)
     - [5.1.1 Verbose Notation](#511-verbose-notation)
@@ -313,15 +314,15 @@ In Wing we have two classes of "data": immutable and mutable.
 Immutable data is data that is capture-able from preflight safely into inflight.
 All primitive types are immutable (`bool`, `str`, `num`, and `nil`).  
 Resources are also immutable by design and can be captured into inflight.  
-Container types and structs of primitive types and resources are also immutable.
+Immutable container types (`map`, `set` and `list`) as well as structs of
+immutable types are also immutable.
 
 Optionality modifier `?` applied to any type does not change the mutability of
 the underlying type. Read more about optionality in its section below.
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
-Re-assignment to class fields is allowed if field is accessed through the "this"
-keyword in class method definitions and it's marked with `rw`. Examples in the
-class section below.
+Re-assignment to class fields is allowed if field is marked with `rw`.  
+Examples in the class section below.
 
 `rw` is available in the body of class declarations.  
 Assigning `rw` to immutables of the same type is allowed.
@@ -511,8 +512,8 @@ Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
 
 In Wing, writing and executing at root block scope level is forbidden except for
-the root main entrypoint of the program. Root block scope is considered special
-and compiler generates special instructions to properly assign all resources to
+the entrypoint of the program. Root block scope is considered special and
+compiler generates special instructions to properly assign all resources to
 their respective scopes recursively down the constructs tree based on entry.
 
 Entrypoint is always a wing source with an extension of `.w`. Within this entry
@@ -725,7 +726,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 ### 3.2 for statement
 
-`for..in` statement is used to iterate over an array or set.  
+`for..in` statement is used to iterate over a list or set.  
 type annotation after an iteratee (left hand side of `in`) is optional.  
 "For" statement condition expression in Wing is not surrounded by parenthesis.
 
@@ -798,7 +799,7 @@ Structs are defined with the `struct` keyword.
 Structs are "bags" of immutable data.
 
 Structs can only have fields of primitive types, resources, and other structs.  
-Array, set, and map of above types is also allowed in struct field definition.  
+List, set, and map of above types is also allowed in struct field definition.  
 Visibility, storage and phase modifiers are not allowed in struct fields.
 
 Structs can inherit from multiple other structs.
@@ -813,7 +814,7 @@ Structs can inherit from multiple other structs.
 >   field3: num;
 >   field4: bool?;
 > };
-> struct MyDataModel3 impl MyDataModel1, MyDataModel2 {
+> struct MyDataModel3 extends MyDataModel1, MyDataModel2 {
 >   field5: str;
 > }
 > let s1 = MyDataModel1 { field1: 1, field2: "sample" };
@@ -955,8 +956,8 @@ class Boo extends Foo {
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
-Classes can implement interfaces iff the interfaces does not contain `~`.
-You can use the keyword `final` to stop the inheritance chain.
+Classes can implement interfaces iff the interfaces does not contain `~`. You
+can use the keyword `final` to stop the inheritance chain.
 
 ```TS
 class Foo {
@@ -1088,8 +1089,8 @@ Resources can extend other resources (but not structs) and implement interfaces.
 Interfaces represent a contract that a class or resource must fulfill.  
 Interfaces are defined with the `interface` keyword.  
 Both preflight and inflight signatures are allowed.  
-`impl` keyword is used to implement an interface or multiple interfaces
-that are separated with commas.
+`impl` keyword is used to implement an interface or multiple interfaces that are
+separated with commas.
 
 All methods of an interface are implicitly public and cannot be of any other
 type of visibility (private, protected, etc.).
@@ -1208,7 +1209,7 @@ However, it is possible to create anonymous closures and assign to variables
 > ```
 
 `->` closure types are special in which the user can write phase independent or
-"phase-shared" closures. These closures cannot consume any resources, neither 
+"phase-shared" closures. These closures cannot consume any resources, neither
 can they return any resources. They do pure "compute" operations.
 
 [`▲ top`][top]
@@ -1222,10 +1223,10 @@ Functions that use the keyword "await" in their body must return a promise.
 
 > ```TS
 > // Wing Code:
-> let number = (): promise<num> {
+> let number = (): promise<num> => {
 >   return 23;
 > }
-> let handler = (): promise<nil> {
+> let handler = (): promise<nil> => {
 >   let t = await number();
 >   print(t);
 > }
@@ -1274,7 +1275,7 @@ f(1, 2, a: 3, b: 4);
 If the last argument of a function type is the `...args` keyword followed by a
 `list` type, then the function accepts typed variadic arguments. Expansion of
 variadic arguments is not supported currently and the container of variadic
-arguments is accessible with the `args` key like a normal array instance.
+arguments is accessible with the `args` key like a normal list instance.
 
 ```TS
 let f = (x: num, ...args: list<num>) => {
@@ -1288,32 +1289,27 @@ f(1, 2, 3, 4, 5, 6, 34..100);
 
 ---
 
-### 4.7 Arrays
+### 4.7 Lists
 
-Arrays are dynamically sized in Wing and are defined with the `[]` syntax.  
-Individual array items are also accessed with the `[]` syntax.
-You can call `sizeof` to get the size of the array.
-Numeric ranged arrays are supported: `[0..10]`.
-
-Do note `[N..M]` allocates an array in-place and returns it as r-value.  
-However, `N..M` is an iterator and can't be assigned to a variable.
+Lists are dynamically sized in Wing and are defined with the `[]` syntax.  
+Individual list items are also accessed with the `[]` syntax. You can call
+`sizeof` to get the size of the list.  
+Lists are similar to dynamically sized arrays or vectors in other languages.
 
 > ```TS
 > // Wing Code:
-> let arr1 = [1, 2, 3];
-> let arr1_2 = [1..3];
-> let arr2 = ["a", "b", "c"];
-> let arr3 = list(arr2);
-> let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
+> let list1 = [1, 2, 3];
+> let list2 = ["a", "b", "c"];
+> let list3 = list(list2);
+> let l = sizeof(list1) + sizeof(list2) + sizeof(list3) + list1[0];
 > ```
 >
 > ```TS
 > // Equivalent TypeScript:
-> const arr1: number[] = Object.freeze([1, 2, 3]);
-> const arr1_2: number[] = Object.freeze([1, 2, 3]);
-> const arr2: string[] = Object.freeze(["a", "b", "c"]);
-> const arr3: string[] = ["a1", "b2", "c3"];
-> const l = arr1.length + arr2.length + arr3.length + arr1[0];
+> const list1: number[] = Object.freeze([1, 2, 3]);
+> const list2: string[] = Object.freeze(["a", "b", "c"]);
+> const list3: string[] = ["a1", "b2", "c3"];
+> const l = list1.length + list2.length + list3.length + list1[0];
 > ```
 
 [`▲ top`][top]
@@ -1379,6 +1375,70 @@ if some_val == "ONE" {
   // whatever1
 } elif some_val == "TWO" {
   // whatever2
+}
+```
+
+[`▲ top`][top]
+
+---
+
+### 4.9 Computed Properties
+
+You may use the following syntax to define computed properties.  
+Computed properties are syntactic sugar for getters and setters which themselves
+are syntactic sugar for methods, therefore omitting either one is acceptable.  
+
+"Read block" must always return a value of the same type as the property.
+
+Keyword `new` can be used inside the write block to access the incoming r-value
+of the assignment (write) operation. `new` is always the same type as the type
+of the property itself.  
+
+Both preflight and inflight computed properties are allowed.  
+Keyword `rw` behind computed properties is not allowed.  
+Async computed properties are not allowed.
+
+```TS
+// Wing Code:
+struct Vec2 {
+  x: num;
+  y: num;
+}
+
+class Rect {
+  rw size: Vec2;
+  rw origin: Vec2;
+  // computed property with a getter and setter block
+  center: Vec2 {
+    read {
+      let center_x = origin.x + (size.width / 2);
+      let center_y = origin.y + (size.height / 2);
+      return Vec2(x: center_x, y: center_y);
+    }
+    write {
+      origin.x = new.x - (size.width / 2);
+      origin.y = new.y - (size.height / 2);
+    }
+  };
+}
+```
+
+```TS
+// Equivalent TypeScript Code:
+interface Vec2 { x: number; y: number; }
+class Rect {
+  size: Vec2;
+  origin: Vec2;
+  // computed property with a getter and setter block
+  get center(): Vec2 {
+    let center_x = origin.x + (size.width / 2);
+    let center_y = origin.y + (size.height / 2);
+    return Vec2(x: center_x, y: center_y);
+  }
+  set center(_new: Vec2) {
+    origin.x = _new.x - (size.width / 2);
+    origin.y = _new.y - (size.height / 2);
+  }
 }
 ```
 
@@ -1535,11 +1595,11 @@ Processing unicode escape sequences happens in these strings.
 #### 7.1.2 Shell strings \`...\`
 
 If string is enclosed with backticks, the contents of that string will be
-interpreted as a shell command and its output will be used as a string.
-`` `echo "Hello"` `` is equal to `"Hello"`.  
+interpreted as a shell command and its output will be used as a string. `` `echo
+"Hello"` `` is equal to `"Hello"`.  
 The string inside the backtick is evaluated in shell at compile time and its
-stdout is returned as a string. If command exits with non-zero, this throws
-with an exception containing the stderr of the command and its return code.
+stdout is returned as a string. If command exits with non-zero, this throws with
+an exception containing the stderr of the command and its return code.
 
 The string is evaluated at compile time as a escape hatch for ops workflows.
 
