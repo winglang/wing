@@ -1,4 +1,4 @@
-# The wing Programming Language - Requirements
+# The Wing Programming Language - Requirements
 
 - **Author(s):**: @eladb
 - **Submission Date**: {2022-05-28}
