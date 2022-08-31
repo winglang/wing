@@ -97,8 +97,8 @@ fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
 					let (prop_type, flight) = res.env.lookup_ext(property);
 					if prop_type.as_resource_object().is_some() && matches!(flight, Flight::Pre) {
 						println!(
-							"We seem to be accessing the preflight resource {:?}.{} inflight!",
-							object, property
+							"We seem to be accessing the preflight resource {} {} inflight!",
+							r, property.span
 						);
 					}
 				}

@@ -1,6 +1,6 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::fmt::Debug;
+use std::fmt::{Debug, Display};
 
 use crate::diagnostic::WingSpan;
 use crate::type_check::TypeRef;
@@ -252,4 +252,22 @@ pub enum Reference {
 	Identifier(Symbol),
 	NestedIdentifier { object: Box<Expression>, property: Symbol },
 	NamespacedIdentifier { namespace: Symbol, identifier: Symbol },
+}
+
+impl Display for Reference {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match &self {
+			Reference::Identifier(symb) => write!(f, "{}", symb.name),
+			Reference::NestedIdentifier { object, property } => {
+				let obj_str = match &object.expression_variant {
+					ExpressionType::Reference(r) => format!("{}", r),
+					_ => "object".to_string(), // TODO!
+				};
+				write!(f, "{}.{}", obj_str, property.name)
+			}
+			Reference::NamespacedIdentifier { namespace, identifier } => {
+				write!(f, "{}::{}", namespace.name, identifier.name)
+			}
+		}
+	}
 }
