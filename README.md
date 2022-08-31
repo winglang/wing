@@ -1,4 +1,4 @@
-# Wing Language Reference
+# Wing Language Specification
 
 - [1. General](#1-general)
   - [1.1 Types](#11-types)
