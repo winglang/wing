@@ -1,5 +1,6 @@
 use crate::{
 	ast::{ArgList, Expression, ExpressionType, Flight, Reference, Scope, Statement},
+	type_check::Type,
 	type_env::TypeEnv,
 };
 
@@ -57,12 +58,12 @@ pub fn find_inflights_to_scan(ast_root: &Scope) {
 
 fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) {
 	if let Reference::NestedIdentifier { object, property: _ } = reference {
-		scan_captures_in_expression(&object.borrow(), env)
+		scan_captures_in_expression(&object, env)
 	}
 
 	// TODO: named args
 	for arg in args.pos_args.iter() {
-		scan_captures_in_expression(&arg.borrow(), env);
+		scan_captures_in_expression(&arg, env);
 	}
 }
 
@@ -76,7 +77,7 @@ fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
 		} => {
 			// TODO: named args
 			for e in arg_list.pos_args.iter() {
-				scan_captures_in_expression(&e.borrow(), env);
+				scan_captures_in_expression(e, env);
 			}
 		}
 		ExpressionType::Reference(r) => match r {
@@ -87,7 +88,21 @@ fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
 					println!("We seem to be accessing the preflight resource {} inflight!", symbol);
 				}
 			}
-			Reference::NestedIdentifier { object, property: _ } => scan_captures_in_expression(&object.borrow(), env),
+			Reference::NestedIdentifier { object, property } => {
+				scan_captures_in_expression(object, env);
+
+				// If the expression evaluates to a resource we should check if we need to capture the property as well
+				if let &Type::ResourceObject(res) = object.evaluated_type.borrow().unwrap().into() {
+					let res = res.as_resource().unwrap();
+					let (prop_type, flight) = res.env.lookup_ext(property);
+					if prop_type.as_resource_object().is_some() && matches!(flight, Flight::Pre) {
+						println!(
+							"We seem to be accessing the preflight resource {:?}.{} inflight!",
+							object, property
+						);
+					}
+				}
+			}
 			Reference::NamespacedIdentifier {
 				namespace: _,
 				identifier: _,
@@ -95,10 +110,10 @@ fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
 		},
 		ExpressionType::FunctionCall { function, args } => scan_captures_in_call(&function, &args, env),
 		ExpressionType::MethodCall(mc) => scan_captures_in_call(&mc.method, &mc.args, env),
-		ExpressionType::Unary { op: _, exp } => scan_captures_in_expression(&exp.borrow(), env),
+		ExpressionType::Unary { op: _, exp } => scan_captures_in_expression(exp, env),
 		ExpressionType::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(&lexp.borrow(), env);
-			scan_captures_in_expression(&rexp.borrow(), env);
+			scan_captures_in_expression(lexp, env);
+			scan_captures_in_expression(rexp, env);
 		}
 		ExpressionType::Literal(_) => (),
 	}

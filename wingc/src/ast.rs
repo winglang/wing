@@ -112,7 +112,7 @@ pub enum ExpressionType {
 	New {
 		class: Reference,
 		obj_id: Option<Symbol>,
-		obj_scope: Option<Box<RefCell<Expression>>>,
+		obj_scope: Option<Box<Expression>>,
 		arg_list: ArgList,
 	},
 	Literal(Literal),
@@ -125,13 +125,13 @@ pub enum ExpressionType {
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
-		exp: Box<RefCell<Expression>>,
+		exp: Box<Expression>,
 	},
 	Binary {
 		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
-		lexp: Box<RefCell<Expression>>,
-		rexp: Box<RefCell<Expression>>,
+		lexp: Box<Expression>,
+		rexp: Box<Expression>,
 	},
 }
 
@@ -141,9 +141,18 @@ pub struct Expression {
 	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
+impl Expression {
+	pub fn new(expression_variant: ExpressionType) -> Self {
+		Self {
+			expression_variant,
+			evaluated_type: RefCell::new(None),
+		}
+	}
+}
+
 #[derive(Debug)]
 pub struct ArgList {
-	pub pos_args: Vec<RefCell<Expression>>,
+	pub pos_args: Vec<Expression>,
 	pub named_args: HashMap<Symbol, Expression>,
 }
 
@@ -241,12 +250,6 @@ impl BinaryOperator {
 #[derive(Debug)]
 pub enum Reference {
 	Identifier(Symbol),
-	NestedIdentifier {
-		object: Box<RefCell<Expression>>,
-		property: Symbol,
-	},
-	NamespacedIdentifier {
-		namespace: Symbol,
-		identifier: Symbol,
-	},
+	NestedIdentifier { object: Box<Expression>, property: Symbol },
+	NamespacedIdentifier { namespace: Symbol, identifier: Symbol },
 }

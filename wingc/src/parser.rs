@@ -328,9 +328,7 @@ impl Parser<'_> {
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
 		Ok(Reference::NestedIdentifier {
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
-			object: Box::new(RefCell::new(
-				self.build_expression(&nested_node.child_by_field_name("object").unwrap())?,
-			)),
+			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 		})
 	}
 
@@ -356,7 +354,7 @@ impl Parser<'_> {
 		for child in arg_list_node.named_children(&mut cursor) {
 			match child.kind() {
 				"positional_argument" => {
-					pos_args.push(RefCell::new(self.build_expression(&child)?));
+					pos_args.push(self.build_expression(&child)?);
 				}
 				"keyword_argument" => {
 					named_args.insert(
@@ -399,106 +397,78 @@ impl Parser<'_> {
 					.child_by_field_name("id")
 					.map(|n| self.node_symbol(&n).unwrap());
 				let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
-					Some(Box::new(RefCell::new(self.build_expression(&scope_expr_node)?)))
+					Some(Box::new(self.build_expression(&scope_expr_node)?))
 				} else {
 					None
 				};
-				Ok(Expression {
-					expression_variant: ExpressionType::New {
-						class,
-						obj_id,
-						arg_list: arg_list?,
-						obj_scope,
-					},
-					evaluated_type: None,
-				})
+				Ok(Expression::new(ExpressionType::New {
+					class,
+					obj_id,
+					arg_list: arg_list?,
+					obj_scope,
+				}))
 			}
-			"binary_expression" => Ok(Expression {
-				expression_variant: ExpressionType::Binary {
-					lexp: Box::new(RefCell::new(
-						self.build_expression(&expression_node.child_by_field_name("left").unwrap())?,
-					)),
-					rexp: Box::new(RefCell::new(
-						self.build_expression(&expression_node.child_by_field_name("right").unwrap())?,
-					)),
-					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"+" => BinaryOperator::Add,
-						"-" => BinaryOperator::Sub,
-						"==" => BinaryOperator::Equal,
-						"!=" => BinaryOperator::NotEqual,
-						">" => BinaryOperator::Greater,
-						">=" => BinaryOperator::GreaterOrEqual,
-						"<" => BinaryOperator::Less,
-						"<=" => BinaryOperator::LessOrEqual,
-						"&&" => BinaryOperator::LogicalAnd,
-						"||" => BinaryOperator::LogicalOr,
-						"%" => BinaryOperator::Mod,
-						"*" => BinaryOperator::Mul,
-						"/" => BinaryOperator::Div,
-						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
-						other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
-					},
+			"binary_expression" => Ok(Expression::new(ExpressionType::Binary {
+				lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
+				rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
+				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
+					"+" => BinaryOperator::Add,
+					"-" => BinaryOperator::Sub,
+					"==" => BinaryOperator::Equal,
+					"!=" => BinaryOperator::NotEqual,
+					">" => BinaryOperator::Greater,
+					">=" => BinaryOperator::GreaterOrEqual,
+					"<" => BinaryOperator::Less,
+					"<=" => BinaryOperator::LessOrEqual,
+					"&&" => BinaryOperator::LogicalAnd,
+					"||" => BinaryOperator::LogicalOr,
+					"%" => BinaryOperator::Mod,
+					"*" => BinaryOperator::Mul,
+					"/" => BinaryOperator::Div,
+					"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
+					other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
 				},
-				evaluated_type: None,
-			}),
-			"unary_expression" => Ok(Expression {
-				expression_variant: ExpressionType::Unary {
-					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"+" => UnaryOperator::Plus,
-						"-" => UnaryOperator::Minus,
-						"!" => UnaryOperator::Not,
-						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
-						other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
-					},
-					exp: Box::new(RefCell::new(
-						self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?,
-					)),
+			})),
+			"unary_expression" => Ok(Expression::new(ExpressionType::Unary {
+				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
+					"+" => UnaryOperator::Plus,
+					"-" => UnaryOperator::Minus,
+					"!" => UnaryOperator::Not,
+					"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
+					other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
 				},
-				evaluated_type: None,
-			}),
-			"string" => Ok(Expression {
-				expression_variant: ExpressionType::Literal(Literal::String(self.node_text(&expression_node).into())),
-				evaluated_type: None,
-			}),
-			"number" => Ok(Expression {
-				expression_variant: ExpressionType::Literal(Literal::Number(
-					self.node_text(&expression_node).parse().expect("Number string"),
-				)),
-				evaluated_type: None,
-			}),
-			"bool" => Ok(Expression {
-				expression_variant: ExpressionType::Literal(Literal::Boolean(match self.node_text(&expression_node) {
+				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
+			})),
+			"string" => Ok(Expression::new(ExpressionType::Literal(Literal::String(
+				self.node_text(&expression_node).into(),
+			)))),
+			"number" => Ok(Expression::new(ExpressionType::Literal(Literal::Number(
+				self.node_text(&expression_node).parse().expect("Number string"),
+			)))),
+			"bool" => Ok(Expression::new(ExpressionType::Literal(Literal::Boolean(
+				match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
 					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
-				})),
-				evaluated_type: None,
-			}),
-			"duration" => Ok(Expression {
-				expression_variant: ExpressionType::Literal(self.build_duration(&expression_node)?),
-				evaluated_type: None,
-			}),
-			"reference" => Ok(Expression {
-				expression_variant: ExpressionType::Reference(self.build_reference(&expression_node)?),
-				evaluated_type: None,
-			}),
+				},
+			)))),
+			"duration" => Ok(Expression::new(ExpressionType::Literal(
+				self.build_duration(&expression_node)?,
+			))),
+			"reference" => Ok(Expression::new(ExpressionType::Reference(
+				self.build_reference(&expression_node)?,
+			))),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"function_call" => Ok(Expression {
-				expression_variant: ExpressionType::FunctionCall {
-					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
-					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-				},
-				evaluated_type: None,
-			}),
-			"method_call" => Ok(Expression {
-				expression_variant: ExpressionType::MethodCall(MethodCall {
-					method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap())?,
-					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-				}),
-				evaluated_type: None,
-			}),
+			"function_call" => Ok(Expression::new(ExpressionType::FunctionCall {
+				function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
+				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
+			})),
+			"method_call" => Ok(Expression::new(ExpressionType::MethodCall(MethodCall {
+				method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap())?,
+				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
+			}))),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"ERROR" => self.add_error(format!("Expected expression"), expression_node),
 			other => panic!("Unexpected expression {} || {:#?}", other, expression_node),

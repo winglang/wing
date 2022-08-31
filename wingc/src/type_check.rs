@@ -20,7 +20,7 @@ pub enum Type {
 
 pub struct Class {
 	name: Symbol, // TODO: do we really need the name here, we should alway get here through a Class Type in some env which has the name of the type
-	env: TypeEnv,
+	pub env: TypeEnv,
 	parent: Option<TypeRef>, // Must be a Type::Class type
 }
 
@@ -125,10 +125,10 @@ impl Display for Type {
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
 			Type::ResourceObject(resource) => {
-				let resource_type_name = resource
+				let resource_type = resource
 					.as_resource()
 					.expect("Resource object must reference to a resource");
-				write!(f, "object of {}", resource_type_name)
+				write!(f, "object of {}", resource_type.name.name)
 			}
 			Type::ClassInstance(class) => {
 				let class_type_name = class.as_class().expect("Class instance must reference to a class");
@@ -170,9 +170,9 @@ impl TypeRef {
 		}
 	}
 
-	fn as_resource(&self) -> Option<&Type> {
-		if let &Type::Resource(_) = (*self).into() {
-			Some((*self).into())
+	pub fn as_resource(&self) -> Option<&Class> {
+		if let &Type::Resource(ref res) = (*self).into() {
+			Some(res)
 		} else {
 			None
 		}
@@ -310,7 +310,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_exp(&mut self, exp: &mut Expression, env: &TypeEnv) -> Option<TypeRef> {
+	fn type_check_exp(&mut self, exp: &Expression, env: &TypeEnv) -> Option<TypeRef> {
 		let t = match &exp.expression_variant {
 			ExpressionType::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
@@ -319,26 +319,26 @@ impl<'a> TypeChecker<'a> {
 				Literal::Boolean(_) => Some(self.types.bool()),
 			},
 			ExpressionType::Binary { op, lexp, rexp } => {
-				let ltype = self.type_check_exp(&mut lexp.borrow_mut(), env).unwrap();
-				let rtype = self.type_check_exp(&mut rexp.borrow_mut(), env).unwrap();
-				self.validate_type(ltype, rtype, &rexp.borrow());
+				let ltype = self.type_check_exp(lexp, env).unwrap();
+				let rtype = self.type_check_exp(rexp, env).unwrap();
+				self.validate_type(ltype, rtype, rexp);
 				if op.boolean_args() {
-					self.validate_type(ltype, self.types.bool(), &rexp.borrow());
+					self.validate_type(ltype, self.types.bool(), rexp);
 				} else if op.numerical_args() {
-					self.validate_type(ltype, self.types.number(), &rexp.borrow());
+					self.validate_type(ltype, self.types.number(), rexp);
 				}
 
 				if op.boolean_result() {
 					Some(self.types.bool())
 				} else {
-					self.validate_type(ltype, self.types.number(), &rexp.borrow());
+					self.validate_type(ltype, self.types.number(), rexp);
 					Some(ltype)
 				}
 			}
 			ExpressionType::Unary { op: _, exp: unary_exp } => {
-				let _type = self.type_check_exp(&mut unary_exp.borrow_mut(), env).unwrap();
+				let _type = self.type_check_exp(unary_exp, env).unwrap();
 				// Add bool vs num support here (! => bool, +- => num)
-				self.validate_type(_type, self.types.number(), &unary_exp.borrow());
+				self.validate_type(_type, self.types.number(), unary_exp);
 				Some(_type)
 			}
 			ExpressionType::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
@@ -396,15 +396,15 @@ impl<'a> TypeChecker<'a> {
 				}
 				// Verify passed arguments match the constructor
 				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
-					let arg_expr_type = self.type_check_exp(&mut arg_expr.borrow_mut(), env).unwrap();
-					self.validate_type(arg_expr_type, *arg_type, &mut arg_expr.borrow_mut());
+					let arg_expr_type = self.type_check_exp(arg_expr, env).unwrap();
+					self.validate_type(arg_expr_type, *arg_type, arg_expr);
 				}
 
 				// If this is a Resource then create a new type for this resource object
 				if type_.as_resource().is_some() {
 					// Get reference to resource object's scope
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
-						Some(self.type_check_exp(&mut obj_scope.borrow_mut(), env).unwrap())
+						Some(self.type_check_exp(obj_scope, env).unwrap())
 					} else {
 						// If we're in the root env then we have no object scope
 						if env.is_root() {
@@ -447,8 +447,8 @@ impl<'a> TypeChecker<'a> {
 					}
 					// Argument type check
 					for (passed_arg, expected_arg) in args.pos_args.iter().zip(func_type.args.iter()) {
-						let passed_arg_type = self.type_check_exp(&mut passed_arg.borrow_mut(), env).unwrap();
-						self.validate_type(passed_arg_type, *expected_arg, &mut passed_arg.borrow_mut());
+						let passed_arg_type = self.type_check_exp(passed_arg, env).unwrap();
+						self.validate_type(passed_arg_type, *expected_arg, passed_arg);
 					}
 
 					func_type.return_type
@@ -483,14 +483,14 @@ impl<'a> TypeChecker<'a> {
 				}
 				// Verify argument types (we run from last to first to skip "this" argument)
 				for (arg_type, param_exp) in method_sig.args.iter().rev().zip(method_call.args.pos_args.iter().rev()) {
-					let param_type = self.type_check_exp(&mut param_exp.borrow_mut(), env).unwrap();
-					self.validate_type(param_type, *arg_type, &param_exp.borrow());
+					let param_type = self.type_check_exp(param_exp, env).unwrap();
+					self.validate_type(param_type, *arg_type, param_exp);
 				}
 
 				method_sig.return_type
 			}
 		};
-		exp.evaluated_type = t;
+		*exp.evaluated_type.borrow_mut() = t;
 		t
 	}
 
@@ -780,7 +780,7 @@ impl<'a> TypeChecker<'a> {
 			Reference::NestedIdentifier { object, property } => {
 				// Get class
 				let class = {
-					let instance = self.type_check_exp(&mut object.borrow_mut(), env).unwrap();
+					let instance = self.type_check_exp(object, env).unwrap();
 					let instance_type = match instance.into() {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
 						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud::Bucket)
