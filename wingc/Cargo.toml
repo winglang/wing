@@ -16,6 +16,9 @@ sha2 = "0.10"
 base16ct = { version = "0.1", features = ["alloc"] }
 tree-sitter-winglang = { path = "./grammar" }
 
+[profile.release]
+debug = true
+
 [lib]
 crate-type = ["staticlib", "rlib"]
 bench = false
