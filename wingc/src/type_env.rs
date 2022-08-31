@@ -50,13 +50,7 @@ impl TypeEnv {
 	}
 
 	pub fn try_lookup(&self, symbol_name: &str) -> Option<TypeRef> {
-		if let Some(_type) = self.type_map.get(symbol_name) {
-			Some(*_type)
-		} else if let Some(parent_env) = self.parent {
-			unsafe { &*parent_env }.try_lookup(symbol_name)
-		} else {
-			None
-		}
+		self.try_lookup_ext(symbol_name).map(|res| res.0)
 	}
 
 	pub fn try_lookup_ext(&self, symbol_name: &str) -> Option<(TypeRef, Flight)> {
@@ -70,9 +64,7 @@ impl TypeEnv {
 	}
 
 	pub fn lookup(&self, symbol: &Symbol) -> TypeRef {
-		self
-			.try_lookup(&symbol.name)
-			.expect(&format!("Unknown symbol {}", &symbol.name))
+		self.lookup_ext(symbol).0
 	}
 
 	pub fn lookup_ext(&self, symbol: &Symbol) -> (TypeRef, Flight) {
