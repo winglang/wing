@@ -88,6 +88,10 @@ repository and released as a private npm module called
 The `wing` folder in this repository has a `package.json` file that simply takes
 a dependency on the SDK package, so running `npm install` will bring it over.
 
+## VSCode Language Support
+
+The extension located in [wing-analyzer/vscode-extension](wing-analyzer/vscode-extension). An [installable](https://code.visualstudio.com/docs/editor/extension-marketplace#_install-from-a-vsix) VSIX is published on every push to main and is available in the [artifacts](https://github.com/monadahq/winglang/releases/download/development/vscode-wing.vsix) on the release page.
+
 ### Local SDK Development
 
 If you wish to develop the SDK alongside the compiler, simply clone the SDK
