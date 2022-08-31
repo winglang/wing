@@ -1,23 +1,23 @@
 import {
-  ArrowNarrowDownIcon,
-  ArrowNarrowRightIcon,
+  ArrowLongDownIcon,
+  ArrowLongRightIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   CubeIcon,
-  XIcon,
-} from "@heroicons/react/outline";
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import {
-  // ArrowNarrowDownIcon,
-  // ArrowNarrowRightIcon,
+  // ArrowLongDownIcon,
+  // ArrowLongRightIcon,
   // ChevronDownIcon,
   // ChevronRightIcon,
   // CubeIcon,
-  // XIcon,
+  // XMarkIcon,
   ChartBarIcon,
   ChartPieIcon,
   CogIcon,
   MapIcon,
-} from "@heroicons/react/solid";
+} from "@heroicons/react/24/solid";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import classNames from "classnames";
 import React, { useState, useEffect } from "react";
@@ -480,7 +480,7 @@ function Vscodeui(props: VscodeuiProps) {
                           });
                         }}
                       >
-                        <XIcon
+                        <XMarkIcon
                           className="w-4 h-4 text-slate-600"
                           aria-hidden="true"
                         />
@@ -503,7 +503,7 @@ function Vscodeui(props: VscodeuiProps) {
                 />
                 endpoint
                 <div className="ml-2 -mr-1 hover:bg-slate-100 p-1 rounded">
-                  <XIcon
+                  <XMarkIcon
                     className="w-4 h-4 text-slate-600"
                     aria-hidden="true"
                   />
@@ -582,14 +582,14 @@ function Vscodeui(props: VscodeuiProps) {
                           </div>
                         </div>
                         <div className="flex justify-around">
-                          <ArrowNarrowDownIcon
+                          <ArrowLongDownIcon
                             className="w-4 h-4 text-slate-600"
                             aria-hidden="true"
                           />
                         </div>
                         <div className="flex justify-around">
                           <div className="flex items-center gap-2 cursor-default">
-                            <ArrowNarrowRightIcon
+                            <ArrowLongRightIcon
                               className="w-4 h-4 text-slate-600"
                               aria-hidden="true"
                             />
@@ -597,14 +597,14 @@ function Vscodeui(props: VscodeuiProps) {
                               {relationships.self.icon}
                               {relationships.self.name}
                             </div>
-                            <ArrowNarrowRightIcon
+                            <ArrowLongRightIcon
                               className="w-4 h-4 text-slate-600"
                               aria-hidden="true"
                             />
                           </div>
                         </div>
                         <div className="flex justify-around">
-                          <ArrowNarrowDownIcon
+                          <ArrowLongDownIcon
                             className="w-4 h-4 text-slate-600"
                             aria-hidden="true"
                           />
@@ -708,7 +708,7 @@ function Vscodeui(props: VscodeuiProps) {
                           <tr className="uppercase text-sm font-medium text-slate-700 border-b">
                             <th>
                               <div className="px-2 py-1 flex items-center gap-1.5">
-                                <ArrowNarrowDownIcon
+                                <ArrowLongDownIcon
                                   className="w-4 h-4"
                                   aria-hidden="true"
                                 />

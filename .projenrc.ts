@@ -122,6 +122,11 @@ if (project.eslint) {
     "unicorn/prevent-abbreviations": "off",
   });
 
+  // Do not error on shadow
+  project.eslint.addRules({
+    "@typescript-eslint/no-shadow": "warn",
+  });
+
   // Enforce import order.
   project.eslint.addRules({
     "import/order": [
