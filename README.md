@@ -105,25 +105,25 @@ Implicit "any" resolved by the compiler is a compile error.
 
 #### 1.1.2 Container Types
 
-| Name         | Extra information                     |
-| ------------ | ------------------------------------- |
-| `set<T>`     | set type (set of unique items)        |
-| `map<T>`     | map type (key-value with string keys) |
-| `arr<T>`     | variable size array of a certain type |
-| `mut_set<T>` | mutable set type                      |
-| `mut_map<T>` | mutable map type                      |
-| `mut_arr<T>` | mutable array type                    |
-| `promise<T>` | promise type (async code)             |
+| Name          | Extra information                            |
+| ------------- | -------------------------------------------- |
+| `set<T>`      | set type (set of unique items)               |
+| `map<T>`      | map type (key-value with string keys)        |
+| `list<T>`     | variable size list (array) of a certain type |
+| `mut_set<T>`  | mutable set type                             |
+| `mut_map<T>`  | mutable map type                             |
+| `mut_list<T>` | mutable list (array) type                    |
+| `promise<T>`  | promise type (async code)                    |
 
 > ```TS
 > // Wing Code:
-> let z = {1, 2, 3};              // immutable set (type is set<num>)
-> let zm = new mut_set<num>();    // mutable set
-> let y = {"a": 1, "b": 2};       // immutable map
-> let ym = new mut_map<num>();    // mutable map
-> let x = [1, 2, 3];              // immutable arr (type is arr<num>)
-> let xm = new mut_arr<num>();    // mutable array
-> let w = new SampleClass();      // class instance (mutability unknown)
+> let z = {1, 2, 3};          // immutable set (type is set<num>)
+> let zm = mut_set<num>();    // mutable set
+> let y = {"a": 1, "b": 2};   // immutable map
+> let ym = mut_map<num>();    // mutable map
+> let x = [1, 2, 3];          // immutable list (type is list<num>)
+> let xm = mut_arr<num>();    // mutable array
+> let w = SampleClass();      // class instance (mutability unknown)
 > ```
 >
 > ```TS
@@ -233,7 +233,7 @@ infrastructure (and not the code that runs within a specific machine within this
 cloud infrastructure).
 
 Phase modifier `~` is allowed in the context of declaring interface and resource
-members. Example code is shown in the [resources](#44-resources) section.
+members. Example code is shown in the [resources](#43-resources) section.
 
 Design of language features in Wing loosely follow the design of WebAssembly and
 its relation to WASI. Some features are designed to be "compute" and independent
@@ -266,7 +266,7 @@ Statics are both supported in inflight as well as preflight mode of execution.
 
 A declaration for a static member is a member declaration whose declaration
 specifiers contain the keyword static. The keyword static must appear before
-other specifiers. More details in the [classes](#43-classes) section.
+other specifiers. More details in the [classes](#42-classes) section.
 
 The name of any static data member and static member function must be different
 from the name of the containing class regardless of the casing.
@@ -382,8 +382,8 @@ type is inferred iff a default value is provided.
 > // Wing Code:
 > let i = 5;
 > let m = i;
-> let arr_opt? = new arr<num>();
-> let arr: arr<num> = [];
+> let arr_opt? = list<num>();
+> let arr: list<num> = [];
 > let copy = arr;
 > let i1? = nil;
 > let i2: num? = i;
@@ -864,12 +864,12 @@ Structs can inherit from multiple other structs.
 Classes consist of fields and methods in any order.  
 The class system is single-dispatch class based object orientated system.
 
-A class member function that has the name **new** is considered to be a class
+A class member function that has the name **init** is considered to be a class
 constructor (or initializer, or allocator).
 
 ```TS
 class Name extends Base impl MyInterface1, MyInterface2 {
-  new() {
+  init() {
     // constructor implementation
     // order is up to user
     this._field1 = 1;
@@ -906,23 +906,23 @@ to JavaScript and TypeScript in their "strict" mode.
 ```TS
 class Foo {
   x: num;
-  new() { this.x = 1; }
+  init() { this.x = 1; }
 }
 class Bar {
   y: num;
   z: Foo;
-  new() {
+  init() {
     // this.print() // is compile error here
     this.y = 1;
     // this.print() // is also compile error here
-    this.z = new Foo();
+    this.z = Foo();
     this.print(); // OK to call here
   }
   public print() {
     print(this.y);
   }
 }
-let a = new Bar();
+let a = Bar();
 a.print(); // prints 20.
 ```
 
@@ -939,11 +939,11 @@ their "strict" mode.
 ```TS
 class Foo {
   x: num;
-  new() { this.x = 0; }
+  init() { this.x = 0; }
   public method() { }
 }
 class Boo extends Foo {
-  new() {
+  init() {
     // this.x = 10; // compile error
     super();
     this.x = 10; // OK
@@ -961,11 +961,11 @@ You can use the keyword `final` to stop the inheritance chain.
 ```TS
 class Foo {
   x: num;
-  new() { this.x = 0; }
+  init() { this.x = 0; }
   public method() { }
 }
 final class Boo extends Foo {
-  new() { super(); this.x = 10; }
+  init() { super(); this.x = 10; }
   public override method() {
     // override implementation
   }
@@ -1006,10 +1006,13 @@ Resources can be defined like so:
 ```TS
 // Wing Code:
 resource Foo {
-  def() { /* initialize preflight fields */ } // preflight constructor
-  ~ def() {} // optional client initializer
+  init() { /* initialize preflight fields */ } // preflight constructor
+  ~ init() {} // optional client initializer
   fin() {} // optional sync finalizer
   async fin() {} // async finalizer (can be either sync or async)
+
+  // phase independent fields (advanced usage only)
+  - foo(arg: num): num { return arg; }
 
   // inflight members
   ~ foo(arg: num): num { return arg; }
@@ -1047,26 +1050,26 @@ must all have an explicit id.
 Resources instantiated at block scope root level of entrypoint are assigned the
 root app construct as their default implicit scope.
 
-Resource instantiation syntax uses the `def` keyword (compare to classes where
-the `new` keyword is used).
+Resource instantiation syntax uses the `let` keyword the same way variables are
+declared in Wing. The difference is `be/in` keywords afterwards.
 
 ```pre
-let <name>[: <type>] = def <resource> [be <id>] [in <scope>];
+let <name>[: <type>] = <resource> [be <id>] [in <scope>];
 ```
 
 ```TS
 // Wing Code:
-let a = def Foo(); // with default scope and id
-let a = def Foo() in scope; // with user-defined scope
-let a = def Foo() be "custom-id" in scope; // with user-defined scope and id
-let a = def Foo(...) be "custom-id" in scope; // with constructor arguments
+let a = Foo(); // with default scope and id
+let a = Foo() in scope; // with user-defined scope
+let a = Foo() be "custom-id" in scope; // with user-defined scope and id
+let a = Foo(...) be "custom-id" in scope; // with constructor arguments
 ```
 
 "id" must be of type string. It can also be a string literal with substitution
 support (normal strings as well as shell strings).  
 "scope" must be a variable of resource type.
 
-In addition to the `def` keyword for defining initializers, resources have a
+In addition to the `init` keyword for defining initializers, resources have a
 unique `fin` definable method that offers async finalization of a resource in
 preflight time.  
 Order of execution of async finalization is not guaranteed.
@@ -1103,7 +1106,7 @@ type of visibility (private, protected, etc.).
 > };
 > resource MyResource impl IMyInterface1, IMyInterface2 {
 >   ~ field2: str;
->   ~ new(x: num) {
+>   ~ init(x: num) {
 >     // inflight client initialization
 >     this.field2 = "sample";
 >     this.field1 = x;
@@ -1242,9 +1245,10 @@ Functions that use the keyword "await" in their body must return a promise.
 
 #### 4.6.3 Struct Expansion
 
-If the last argument of a function type is a struct, then the struct in the call
+If the last argument of a function call is a struct, then the struct in the call
 is "expandable" with a special `:` syntax.  
-In this calling signature, order of struct members do not matter.
+In this calling signature, order of struct members do not matter.  
+Partial struct expansion is not allowed.
 
 ```TS
 struct MyStruct {
@@ -1264,13 +1268,13 @@ f(1, 2, a: 3, b: 4);
 
 #### 4.6.4 Variadic Arguments
 
-If the last argument of a function type is the `...args` keyword followed by an
-`arr` type, then the function accepts typed variadic arguments. Expansion of
+If the last argument of a function type is the `...args` keyword followed by a
+`list` type, then the function accepts typed variadic arguments. Expansion of
 variadic arguments is not supported currently and the container of variadic
 arguments is accessible with the `args` key like a normal array instance.
 
 ```TS
-let f = (x: num, ...args: arr<num>) => {
+let f = (x: num, ...args: list<num>) => {
   print(x + y + sizeof(args));
 }
 // last arguments are expanded into their struct
@@ -1296,7 +1300,7 @@ However, `N..M` is an iterator and can't be assigned to a variable.
 > let arr1 = [1, 2, 3];
 > let arr1_2 = [1..3];
 > let arr2 = ["a", "b", "c"];
-> let arr3 = new arr(arr2);
+> let arr3 = list(arr2);
 > let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
 > ```
 >
@@ -1478,7 +1482,7 @@ of JSII modules currently.
 
 ```ts
 bring "aws-cdk-lib" as cdk;
-let bucket = def cdk.aws_s3.Bucket(
+let bucket = cdk.aws_s3.Bucket(
   public_access: true,
 );
 ```
@@ -1701,7 +1705,8 @@ the first operand is `true`, the second operand is not evaluated.
 Note that bitwise logic operators do not perform short-circuiting.
 
 In conditionals, if an optional type is used as the only r-value expression of
-the condition statement, it's equivalent to checking it against `nil`:
+the condition statement, it's equivalent to checking it against `nil`. Note that
+using a `bool?` type in this short-circuit is a compile error due to ambiguity.
 
 ```TS
 let x? = 1;
@@ -1733,11 +1738,11 @@ Of the operators supported, the following can be used with non-numeric operands:
 When these operators are used on immutable data, values are checked for equality
 as well as types. When these operators are used on mutable data, types and refs
 are checked for equality. Concept of "refs" is loosely defined as "any object"
-that's instantiated with `new` currently and then gets reassigned to other names
-until a mutable method is called on it, which then turns into a whole new "ref".
+that's instantiated through a class currently and then gets reassigned to other
+names until a mutable method is called on it, which then turns into a new "ref".
 
 This behavior is the same as JavaScript with the addition of structural equality
-for immutable data.
+for immutable data (on top of nominal typing).
 
 [`▲ top`][top]
 
@@ -1766,7 +1771,7 @@ resource DenyList {
   _bucket: cloud.Bucket;
   _object_key: str;
 
-  new(props: DenyListProps) {
+  init(props: DenyListProps) {
     this._bucket = cloud.Bucket();
     this._object_key = "deny-list.json";
 
@@ -1777,7 +1782,7 @@ resource DenyList {
   _write_to_file(list: mut_arr<DenyListRule>, filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map = new mut_map<DenyListRule>();
+    let map = mut_map<DenyListRule>();
     for rule in list {
       append_rule(map, rule);
     }
@@ -1787,9 +1792,9 @@ resource DenyList {
 
   ~ rules: mut_map<DenyListRule>?;
 
-  ~ new() {
+  ~ init() {
     // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._object_key) ?? new mut_map<DenyListRule>();
+    this.rules = this._bucket.get(this._object_key) ?? mut_map<DenyListRule>();
   }
 
   ~ lookup(name: str, version: str): DenyListRule? {
