@@ -1,13 +1,9 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
-import type {
-  WingLocalSchema,
-  ResourceSchema,
-  ConstructSchema,
-} from "@monadahq/wing-local";
 import { Construct, IConstruct } from "constructs";
 import { FileBase } from "../fs";
 import { isResource } from "./resource";
+import { ConstructSchema, ResourceSchema, WingLocalSchema } from "./schema";
 
 export interface AppProps {
   readonly outdir: string;
@@ -26,7 +22,7 @@ export class App extends Construct {
       f.save(this.outdir);
     }
 
-    const root: ResourceSchema = toSchema(this);
+    const root: ConstructSchema = constructToSchema(this);
 
     const contents: WingLocalSchema = {
       version: "winglocal-0.1",

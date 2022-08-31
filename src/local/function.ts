@@ -1,6 +1,5 @@
 import { unlinkSync, writeFileSync } from "fs";
 import { basename, dirname, join, resolve } from "path";
-import type { FunctionSchema } from "@monadahq/wing-local";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
@@ -15,6 +14,7 @@ import {
 } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
+import { FunctionSchema } from "./schema";
 
 export class Function extends cloud.FunctionBase implements IResource {
   private readonly env: Record<string, string> = {};

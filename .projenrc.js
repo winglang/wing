@@ -45,14 +45,10 @@ const project = new cdk.JsiiProject({
 // https://github.com/facebook/jest/pull/11961
 project.package.addPackageResolutions("jest-resolve@^28");
 
-// jsii doesn't allow overriding arbitrary fields of tsconfig.json, so this is a workaround
+// allow referencing DOM types (used by esbuild)
 project.compileTask.prependExec(
   `replace-in-file "lib: ['lib.es2020.d.ts']" "lib: ['lib.es2020.d.ts','lib.dom.d.ts']" node_modules/jsii/lib/compiler.js`
 );
-
-// use types from wing-local to ensure that the local CDK
-// generates the correct types for the simulator
-project.addDevDeps("@monadahq/wing-local");
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");

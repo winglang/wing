@@ -1,5 +1,5 @@
-import type { ResourceSchema } from "@monadahq/wing-local";
 import { IConstruct } from "constructs";
+import { ResourceSchema } from "./schema";
 
 export interface IResource extends IConstruct {
   /** @internal */

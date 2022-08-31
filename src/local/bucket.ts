@@ -1,10 +1,10 @@
-import type { BucketSchema } from "@monadahq/wing-local";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { LOCAL_CLIENTS_PATH } from "../constants";
 import { Capture, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
+import { BucketSchema } from "./schema";
 
 export class Bucket
   extends cloud.BucketBase
