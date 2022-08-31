@@ -73,13 +73,13 @@ impl Parser<'_> {
 		let value = self.check_error(node.named_child(0).unwrap(), "duration")?;
 		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
 
-		match value_text {
+		match value.kind() {
 			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
 			"minutes" => Ok(Literal::Duration(
 				// Specific "Minutes" duration needed here
 				value_text.parse::<f64>().expect("Duration string") * 60_f64,
 			)),
-			"ERROR" => self.add_error(format!("Expected duration value"), &node),
+			"ERROR" => self.add_error(format!("Expected duration type"), &node),
 			other => panic!("Unexpected duration type {} || {:#?}", other, node),
 		}
 	}
@@ -131,9 +131,11 @@ impl Parser<'_> {
 				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 			}),
-			"expression_statement" => Ok(Statement::Expression(
-				self.build_expression(&statement_node.named_child(0).unwrap())?,
-			)),
+			"expression_statement" => Ok(Statement::Expression(if statement_node.named_child_count() > 1 {
+				self.add_error(format!("Expected expression"), &statement_node)?
+			} else {
+				self.build_expression(&statement_node.named_child(0).unwrap())?
+			})),
 			"block" => Ok(Statement::Scope(self.build_scope(statement_node))),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
@@ -370,7 +372,8 @@ impl Parser<'_> {
 		Ok(ArgList { pos_args, named_args })
 	}
 
-	fn build_expression(&self, expression_node: &Node) -> DiagnosticResult<Expression> {
+	fn build_expression(&self, exp_node: &Node) -> DiagnosticResult<Expression> {
+		let expression_node = &self.check_error(*exp_node, "Expression")?;
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap())?;
@@ -464,8 +467,13 @@ impl Parser<'_> {
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 			})),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"ERROR" => self.add_error(format!("Expected expression"), expression_node),
-			other => panic!("Unexpected expression {} || {:#?}", other, expression_node),
+			other => {
+				if expression_node.has_error() {
+					self.add_error(format!("Expected expression"), expression_node)
+				} else {
+					panic!("Unexpected expression {} || {:#?}", other, expression_node);
+				}
+			}
 		}
 	}
 }
