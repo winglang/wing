@@ -1939,5 +1939,5 @@ queue.add_consumer(filter);
 - <https://github.com/thesephist/ink>
 - <https://github.com/vlang/v>
 
-[top]: #wing-language-reference
+[top]: #wing-language-specification
 [rfc]: https://github.com/monadahq/rfcs/blob/main/0044-winglang-requirements.md
