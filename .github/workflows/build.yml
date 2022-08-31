@@ -15,6 +15,28 @@ permissions:
   contents: write
 
 jobs:
+  build-vscode:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: wing-analyzer/vscode-extension
+      - name: Bundle
+        working-directory: wing-analyzer/vscode-extension
+        run: npm run bundle
+      - name: Package
+        working-directory: wing-analyzer/vscode-extension
+        run: npm run package
+      - name: Upload extension
+        # TODO Always running rn, just for testing
+        # if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: vscode-wing.vsix
+          path: wing-analyzer/vscode-extension/wing.vsix
   build-native:
     strategy:
       fail-fast: false
@@ -129,7 +151,9 @@ jobs:
           files: dist/*.tgz
 
   wrapper:
-    needs: build-native
+    needs:
+      - build-vscode
+      - build-native
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:
