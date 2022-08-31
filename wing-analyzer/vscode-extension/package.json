@@ -12,7 +12,7 @@
   },
   "scripts": {
     "bundle": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle",
-    "package": "npm run bundle && vsce package -o wing.vsix"
+    "package": "npm run bundle && vsce package -o vscode-wing.vsix"
   },
   "categories": [
     "Programming Languages"
