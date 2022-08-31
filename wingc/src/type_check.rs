@@ -185,6 +185,14 @@ impl TypeRef {
 			None
 		}
 	}
+
+	fn as_function_sig(&self) -> Option<&FunctionSignature> {
+		if let &Type::Function(ref sig) = (*self).into() {
+			Some(sig)
+		} else {
+			None
+		}
+	}
 }
 
 // impl Deref for TypeRef {
@@ -538,26 +546,17 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
-				// TODO: why not just use `self.resolve_type(&AstType::FunctionSignature(sig), env);`??
-				let mut args = vec![];
-				let ast_sig = &func_def.signature;
-				for arg in ast_sig.parameters.iter() {
-					args.push(self.resolve_type(arg, env));
-				}
-				let return_type = ast_sig.return_type.as_ref().map(|t| self.resolve_type(&t, env));
-				let function_type = self.types.add_type(Type::Function(Box::new(FunctionSignature {
-					args: args.clone(),
-					return_type,
-				})));
+				let function_type = self.resolve_type(&AstType::FunctionSignature(func_def.signature.clone()), env);
+				let sig = function_type.as_function_sig().unwrap();
 
 				// Add this function to the env
 				env.define(&func_def.name, function_type);
 
-				let mut function_env = TypeEnv::new(Some(env), return_type, false, func_def.signature.flight);
-				for (param, param_type) in func_def.parameters.iter().zip(args.iter()) {
-					function_env.define(&param, *param_type);
-				}
+				// Create an environment for the function
+				let mut function_env = TypeEnv::new(Some(env), sig.return_type, false, func_def.signature.flight);
+				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
 				func_def.statements.set_env(function_env);
+
 				// TODO: we created `function_env` but `type_check_scope` will also create a wrapper env for the scope which is redundant
 				self.type_check_scope(&mut func_def.statements);
 			}
@@ -671,7 +670,13 @@ impl<'a> TypeChecker<'a> {
 
 				// Add members to the class env
 				for member in members.iter() {
-					let member_type = self.resolve_type(&member.member_type, env);
+					let mut member_type = self.resolve_type(&member.member_type, env);
+					// If the type is a class/resource then indicate it's an instance/object (and not the class/resource itself)
+					if member_type.as_class().is_some() {
+						member_type = self.types.add_type(Type::ClassInstance(member_type));
+					} else if member_type.as_resource().is_some() {
+						member_type = self.types.add_type(Type::ResourceObject(member_type));
+					}
 					class_env.define(&member.name, member_type);
 				}
 				// Add methods to the class env
@@ -716,9 +721,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create constructor environment and prime it with args
 				let mut constructor_env = TypeEnv::new(Some(env), constructor_sig.return_type, false, env_flight);
-				for (param, param_type) in constructor.parameters.iter().zip(constructor_sig.args.iter()) {
-					constructor_env.define(&param, *param_type);
-				}
+				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 				constructor.statements.set_env(constructor_env);
 				// Check function scope
 				self.type_check_scope(&mut constructor.statements);
@@ -744,14 +747,28 @@ impl<'a> TypeChecker<'a> {
 						span: method.name.span.clone(),
 					}];
 					actual_parameters.extend(method.parameters.clone());
-					for (param, param_type) in actual_parameters.iter().zip(method_sig.args.iter()) {
-						method_env.define(&param, *param_type);
-					}
+					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
 					method.statements.set_env(method_env);
 					// Check function scope
 					self.type_check_scope(&mut method.statements);
 				}
 			}
+		}
+	}
+
+	fn add_arguments_to_env(&mut self, arg_names: &Vec<Symbol>, sig: &FunctionSignature, env: &mut TypeEnv) {
+		assert!(arg_names.len() == sig.args.len());
+		for (arg, arg_type) in arg_names.iter().zip(sig.args.iter()) {
+			// If the type is a class/resource then indicate it's an instance/object (and not the class/resource itself)
+			let actual_arg_type = if arg_type.as_class().is_some() {
+				self.types.add_type(Type::ClassInstance(*arg_type))
+			} else if arg_type.as_resource().is_some() {
+				self.types.add_type(Type::ResourceObject(*arg_type))
+			} else {
+				*arg_type
+			};
+
+			env.define(&arg, actual_arg_type);
 		}
 	}
 
