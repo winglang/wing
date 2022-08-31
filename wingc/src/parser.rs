@@ -298,7 +298,7 @@ impl Parser<'_> {
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
-			"class" => Ok(Type::Class(self.node_symbol(type_node)?)),
+			"class_type" => Ok(Type::Class(self.node_symbol(type_node)?)),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
