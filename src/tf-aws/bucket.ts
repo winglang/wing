@@ -1,8 +1,8 @@
 import { s3 } from "@cdktf/provider-aws";
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { TERRAFORM_AWS_CLIENTS_PATH } from "../constants";
-import { Capture, Code, NodeJsCode } from "../core";
+import { CaptureMetadata, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 
 export class Bucket extends cloud.BucketBase implements cloud.IBucket {
@@ -55,23 +55,23 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
     }
   }
 
-  public capture(consumer: any, capture: Capture): Code {
-    if (!(consumer instanceof Function)) {
+  public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+    if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by tfaws.Function for now");
     }
 
     const name = `BUCKET_NAME__${this.node.id}`;
 
-    const methods = new Set(capture.methods ?? []);
+    const methods = new Set(metadata.methods ?? []);
     if (methods.has("put")) {
-      consumer.addPolicyStatements({
+      captureScope.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
     if (methods.has("get")) {
-      consumer.addPolicyStatements({
+      captureScope.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
@@ -80,10 +80,10 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    consumer.addEnvironment(name, this.bucket.bucket);
+    captureScope.addEnvironment(name, this.bucket.bucket);
 
     return NodeJsCode.fromInline(
-      `new (require("${TERRAFORM_AWS_CLIENTS_PATH}")).BucketClient(process.env["${name}"]);`
+      `new (require("${TERRAFORM_AWS_CLIENTS_PATH}")).BucketClient(process.env["${name}"])`
     );
   }
 }

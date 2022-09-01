@@ -1,21 +1,12 @@
 import * as crypto from "crypto";
-import { mkdtempSync, readFileSync, unlinkSync, writeFileSync } from "fs";
-import * as os from "os";
-import { join, dirname, basename, resolve } from "path";
+import { readFileSync } from "fs";
+import { resolve } from "path";
 import * as aws from "@cdktf/provider-aws";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
-import { Construct } from "constructs";
-import * as esbuild from "esbuild-wasm";
+import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { FunctionProps } from "../cloud";
-import {
-  Capture,
-  Code,
-  ICapturable,
-  Language,
-  NodeJsCode,
-  Inflight,
-} from "../core";
+import { Code, Language, Inflight, CaptureMetadata } from "../core";
 
 export class Function extends cloud.FunctionBase {
   private readonly env: Record<string, string> = {};
@@ -38,7 +29,12 @@ export class Function extends cloud.FunctionBase {
       throw new Error("Only JavaScript code is currently supported.");
     }
 
-    const code = this.rewriteHandler(inflight);
+    const captureClients = inflight.makeClients(this);
+    const code = inflight.bundle({
+      captureScope: this,
+      captureClients,
+      external: ["aws-sdk"],
+    });
 
     // bundled code is guaranteed to be in a fresh directory
     const codeDir = resolve(code.path, "..");
@@ -62,7 +58,7 @@ export class Function extends cloud.FunctionBase {
     // - whenever code changes, the object name changes
     // - even if two functions have the same code, they get different names
     //   (separation of concerns)
-    const objectKey = `${this.node.addr}.${codeHash}.zip`;
+    const objectKey = `asset.${this.node.addr}.${codeHash}.zip`;
 
     // Upload Lambda zip file to newly created S3 bucket
     const lambdaArchive = new aws.s3.S3Object(this, "S3Object", {
@@ -139,7 +135,7 @@ export class Function extends cloud.FunctionBase {
     this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
   }
 
-  public capture(_consumer: any, _capture: Capture): Code {
+  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 
@@ -156,101 +152,10 @@ export class Function extends cloud.FunctionBase {
       }))
     );
   }
-
-  /**
-   * Precondition: user provides some the path to a JavaScript file that
-   * contains a handler function.
-   *
-   * Postcondition: we return the path to a JavaScript file that has been
-   * rewritten to include all dependencies and captured values, and which has
-   * been isolated into its own directory so that it can be zipped up and
-   * uploaded to S3.
-   *
-   * High level process:
-   * 1. Read the file (let's say its path is path/to/foo.js)
-   * 2. Create a new javascript file named path/to/foo.new.js, including a map
-   *    of all capture clients, a new handler that calls the original handler
-   *    with the clients passed in, and a copy of the user's code from
-   *    path/to/foo.js.
-   * 3. Use esbuild to bundle all dependencies, outputting the result to a file
-   *    in a temporary directory.
-   */
-  private rewriteHandler(inflight: Inflight): Code {
-    const lines = new Array<string>();
-
-    const originalCode = inflight.code;
-
-    const absolutePath = resolve(originalCode.path);
-    const workdir = dirname(absolutePath);
-    const filename = basename(absolutePath);
-
-    lines.push("const $cap = {}");
-    for (const [name, capture] of Object.entries(inflight.captures)) {
-      const clientCode = this.createClient(name, capture);
-      lines.push(`$cap["${name}"] = ${clientCode.text};`);
-    }
-    lines.push();
-    lines.push(originalCode.text);
-    lines.push();
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${inflight.entrypoint}($cap, event);`);
-    lines.push("};");
-
-    const content = lines.join("\n");
-    const filenamenew = filename + ".new.js";
-    writeFileSync(join(workdir, filenamenew), content);
-
-    const tempdir = mkdtemp("wingsdk.");
-    const outfile = join(tempdir, "index.js");
-
-    esbuild.buildSync({
-      bundle: true,
-      target: "node16",
-      platform: "node",
-      absWorkingDir: workdir,
-      entryPoints: [filenamenew],
-      outfile,
-      minify: false,
-      // AWS Lambda includes the aws-sdk in all Node Lambda functions, so
-      // we can safely omit it from bundled code
-      external: ["aws-sdk"],
-    });
-
-    // clean up the intermediate file
-    unlinkSync(join(workdir, filenamenew));
-
-    return NodeJsCode.fromFile(outfile);
-  }
-
-  private createClient(name: string, capture: Capture): Code {
-    if (isPrimitive(capture.obj)) {
-      return NodeJsCode.fromInline(JSON.stringify(capture.obj));
-    }
-
-    if (
-      typeof capture.obj == "object" &&
-      typeof capture.obj.capture === "function"
-    ) {
-      const c: ICapturable = capture.obj;
-      return c.capture(this, capture);
-    }
-
-    throw new Error(`unable to capture "${name}", no "capture" method`);
-  }
-}
-
-function isPrimitive(value: any) {
-  return (
-    (typeof value !== "object" && typeof value !== "function") || value === null
-  );
 }
 
 export interface PolicyStatement {
   readonly action?: string[];
   readonly resource?: string[];
   readonly effect?: string;
-}
-
-function mkdtemp(prefix: string): string {
-  return mkdtempSync(join(os.tmpdir(), prefix));
 }

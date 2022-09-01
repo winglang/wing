@@ -1,6 +1,6 @@
 import { Polycons } from "@monadahq/polycons";
-import { Construct } from "constructs";
-import { Capture, Code, Inflight } from "../core";
+import { Construct, IConstruct } from "constructs";
+import { CaptureMetadata, Code, Inflight } from "../core";
 import { IResource, Resource } from "./resource";
 
 export interface IFunction extends IResource {}
@@ -43,7 +43,10 @@ export abstract class FunctionBase extends Resource implements IFunction {
     props;
   }
 
-  public abstract capture(consumer: any, capture: Capture): Code;
+  public abstract capture(
+    captureScope: IConstruct,
+    metadata: CaptureMetadata
+  ): Code;
 }
 
 /**
@@ -66,7 +69,7 @@ export class Function extends FunctionBase {
     ) as Function;
   }
 
-  public capture(_consumer: any, _capture: Capture): Code {
+  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

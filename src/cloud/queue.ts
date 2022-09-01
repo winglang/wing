@@ -1,6 +1,6 @@
 import { Polycons } from "@monadahq/polycons";
-import { Construct } from "constructs";
-import { Capture, Code, Duration } from "../core";
+import { Construct, IConstruct } from "constructs";
+import { CaptureMetadata, Code, Duration } from "../core";
 import { IResource, Resource } from "./resource";
 
 export interface IQueue extends IResource {}
@@ -31,7 +31,10 @@ export abstract class QueueBase extends Resource implements IQueue {
     props;
   }
 
-  public abstract capture(consumer: any, capture: Capture): Code;
+  public abstract capture(
+    captureScope: IConstruct,
+    metadata: CaptureMetadata
+  ): Code;
 }
 
 /**
@@ -43,7 +46,7 @@ export class Queue extends QueueBase {
     return Polycons.newInstance(QUEUE_ID, scope, id, props) as Queue;
   }
 
-  public capture(_consumer: any, _capture: Capture): Code {
+  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

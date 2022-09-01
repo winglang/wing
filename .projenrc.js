@@ -6,6 +6,7 @@ const project = new cdk.JsiiProject({
   authorOrganization: true,
   authorAddress: "ping@monada.co",
   repository: "https://github.com/monadahq/wingsdk.git",
+  stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: ["constructs@^10.0.25", "@monadahq/polycons@^0.0.36"],
   deps: ["cdktf", "@cdktf/provider-aws"],

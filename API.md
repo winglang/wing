@@ -262,7 +262,7 @@ new cloud.Bucket(scope: Construct, id: string, props?: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -277,20 +277,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Bucket.capture"></a>
 
 ```typescript
-public capture(_consumer: any, _capture: Capture): Code
+public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._consumer"></a>
+###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._capture"></a>
+###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -401,7 +401,7 @@ new local.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.local.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.local.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.local.Bucket.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -416,20 +416,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.local.Bucket.capture"></a>
 
 ```typescript
-public capture(consumer: any, _capture: Capture): Code
+public capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.local.Bucket.capture.parameter.consumer"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.local.Bucket.capture.parameter.captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.local.Bucket.capture.parameter._capture"></a>
+###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.local.Bucket.capture.parameter._metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -540,7 +540,7 @@ new tfaws.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -555,20 +555,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.tfaws.Bucket.capture"></a>
 
 ```typescript
-public capture(consumer: any, capture: Capture): Code
+public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.tfaws.Bucket.capture.parameter.consumer"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.tfaws.Bucket.capture.parameter.captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.tfaws.Bucket.capture.parameter.capture"></a>
+###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.tfaws.Bucket.capture.parameter.metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -681,7 +681,7 @@ new cloud.BucketBase(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -696,20 +696,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.BucketBase.capture"></a>
 
 ```typescript
-public capture(consumer: any, capture: Capture): Code
+public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.BucketBase.capture.parameter.consumer"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.BucketBase.capture.parameter.captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.cloud.BucketBase.capture.parameter.capture"></a>
+###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.BucketBase.capture.parameter.metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -956,7 +956,7 @@ new cloud.Function(scope: Construct, id: string, inflight: Inflight, props?: Fun
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -971,20 +971,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Function.capture"></a>
 
 ```typescript
-public capture(_consumer: any, _capture: Capture): Code
+public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.cloud.Function.capture.parameter._consumer"></a>
+###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.cloud.Function.capture.parameter._captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.cloud.Function.capture.parameter._capture"></a>
+###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.cloud.Function.capture.parameter._metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -1102,7 +1102,7 @@ new local.Function(scope: Construct, id: string, inflight: Inflight, props: Func
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.local.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.local.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.local.Function.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 | <code><a href="#@monadahq/wingsdk.local.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
 
 ---
@@ -1118,20 +1118,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.local.Function.capture"></a>
 
 ```typescript
-public capture(_consumer: any, _capture: Capture): Code
+public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.local.Function.capture.parameter._consumer"></a>
+###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.local.Function.capture.parameter._captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.local.Function.capture.parameter._capture"></a>
+###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.local.Function.capture.parameter._metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -1265,7 +1265,7 @@ new tfaws.Function(scope: Construct, id: string, inflight: Inflight, props: Func
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Function.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | *No description.* |
 
@@ -1282,20 +1282,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.tfaws.Function.capture"></a>
 
 ```typescript
-public capture(_consumer: any, _capture: Capture): Code
+public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.tfaws.Function.capture.parameter._consumer"></a>
+###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.tfaws.Function.capture.parameter._captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.tfaws.Function.capture.parameter._capture"></a>
+###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.tfaws.Function.capture.parameter._metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -1445,7 +1445,7 @@ new cloud.FunctionBase(scope: Construct, id: string, inflight: Inflight, props: 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -1460,20 +1460,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.FunctionBase.capture"></a>
 
 ```typescript
-public capture(consumer: any, capture: Capture): Code
+public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.FunctionBase.capture.parameter.consumer"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.FunctionBase.capture.parameter.captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.cloud.FunctionBase.capture.parameter.capture"></a>
+###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.FunctionBase.capture.parameter.metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -1714,7 +1714,7 @@ new cloud.Queue(scope: Construct, id: string, props: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -1729,20 +1729,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Queue.capture"></a>
 
 ```typescript
-public capture(_consumer: any, _capture: Capture): Code
+public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._consumer"></a>
+###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._capture"></a>
+###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -1853,7 +1853,7 @@ new tfaws.Queue(scope: Construct, id: string, props?: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 | <code><a href="#@monadahq/wingsdk.tfaws.Queue.addWorker">addWorker</a></code> | *No description.* |
 
 ---
@@ -1869,20 +1869,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.tfaws.Queue.capture"></a>
 
 ```typescript
-public capture(_consumer: any, _capture: Capture): Code
+public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_consumer`<sup>Required</sup> <a name="_consumer" id="@monadahq/wingsdk.tfaws.Queue.capture.parameter._consumer"></a>
+###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.tfaws.Queue.capture.parameter._captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `_capture`<sup>Required</sup> <a name="_capture" id="@monadahq/wingsdk.tfaws.Queue.capture.parameter._capture"></a>
+###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.tfaws.Queue.capture.parameter._metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -2007,7 +2007,7 @@ new cloud.QueueBase(scope: Construct, id: string, props: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.QueueBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -2022,20 +2022,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.QueueBase.capture"></a>
 
 ```typescript
-public capture(consumer: any, capture: Capture): Code
+public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.QueueBase.capture.parameter.consumer"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.QueueBase.capture.parameter.captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.cloud.QueueBase.capture.parameter.capture"></a>
+###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.QueueBase.capture.parameter.metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -2147,7 +2147,7 @@ dash `--`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Resource.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.cloud.Resource.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -2162,20 +2162,20 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Resource.capture"></a>
 
 ```typescript
-public capture(consumer: any, capture: Capture): Code
+public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.cloud.Resource.capture.parameter.consumer"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.Resource.capture.parameter.captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.cloud.Resource.capture.parameter.capture"></a>
+###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.Resource.capture.parameter.metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 
@@ -2514,8 +2514,20 @@ const capture: core.Capture = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.obj">obj</a></code> | <code>any</code> | The captured object. |
 | <code><a href="#@monadahq/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.obj">obj</a></code> | <code>any</code> | The captured object. |
+
+---
+
+##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.Capture.property.methods"></a>
+
+```typescript
+public readonly methods: string[];
+```
+
+- *Type:* string[]
+
+Which methods are called on the captured object.
 
 ---
 
@@ -2531,7 +2543,27 @@ The captured object.
 
 ---
 
-##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.Capture.property.methods"></a>
+### CaptureMetadata <a name="CaptureMetadata" id="@monadahq/wingsdk.core.CaptureMetadata"></a>
+
+Extra metadata associated with a capture.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.CaptureMetadata.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+const captureMetadata: core.CaptureMetadata = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
+
+---
+
+##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.CaptureMetadata.property.methods"></a>
 
 ```typescript
 public readonly methods: string[];
@@ -2575,6 +2607,64 @@ public readonly env: {[ key: string ]: string};
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+### InflightBundleOptions <a name="InflightBundleOptions" id="@monadahq/wingsdk.core.InflightBundleOptions"></a>
+
+Options for `Inflight.bundle`.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.InflightBundleOptions.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+const inflightBundleOptions: core.InflightBundleOptions = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.InflightBundleOptions.property.captureClients">captureClients</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Code}</code> | A map of capture clients that can be bundled with the Inflight's code. |
+| <code><a href="#@monadahq/wingsdk.core.InflightBundleOptions.property.captureScope">captureScope</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given capture scope. |
+| <code><a href="#@monadahq/wingsdk.core.InflightBundleOptions.property.external">external</a></code> | <code>string[]</code> | List of dependencies to exclude from the bundle. |
+
+---
+
+##### `captureClients`<sup>Required</sup> <a name="captureClients" id="@monadahq/wingsdk.core.InflightBundleOptions.property.captureClients"></a>
+
+```typescript
+public readonly captureClients: {[ key: string ]: Code};
+```
+
+- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Code}
+
+A map of capture clients that can be bundled with the Inflight's code.
+
+---
+
+##### `captureScope`<sup>Optional</sup> <a name="captureScope" id="@monadahq/wingsdk.core.InflightBundleOptions.property.captureScope"></a>
+
+```typescript
+public readonly captureScope: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+Associate the inflight bundle with a given capture scope.
+
+---
+
+##### `external`<sup>Optional</sup> <a name="external" id="@monadahq/wingsdk.core.InflightBundleOptions.property.external"></a>
+
+```typescript
+public readonly external: string[];
+```
+
+- *Type:* string[]
+
+List of dependencies to exclude from the bundle.
 
 ---
 
@@ -3041,7 +3131,7 @@ public readonly seconds: number;
 
 ### Inflight <a name="Inflight" id="@monadahq/wingsdk.core.Inflight"></a>
 
-Represents a unit of application code that can be executed at runtime within a cloud resource.
+Represents a unit of application code that can be executed by a cloud resource.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Inflight.Initializer"></a>
 
@@ -3063,6 +3153,56 @@ new core.Inflight(props: InflightProps)
 
 ---
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Inflight.bundle">bundle</a></code> | Bundle this inflight process so that it can be used in the given capture scope. |
+| <code><a href="#@monadahq/wingsdk.core.Inflight.makeClients">makeClients</a></code> | Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime. |
+
+---
+
+##### `bundle` <a name="bundle" id="@monadahq/wingsdk.core.Inflight.bundle"></a>
+
+```typescript
+public bundle(options: InflightBundleOptions): Code
+```
+
+Bundle this inflight process so that it can be used in the given capture scope.
+
+Returns the path to a JavaScript file that has been rewritten to include
+all dependencies and captured values or clients. The file is isolated in
+its own directory so that it can be zipped up and uploaded to cloud
+providers.
+
+High level implementation:
+1. Read the file (let's say its path is path/to/foo.js)
+2. Create a new javascript file named path/to/foo.prebundle.js, including a
+    map of all capture clients, a new handler that calls the original
+    handler with the clients passed in, and a copy of the user's code from
+    path/to/foo.js.
+3. Use esbuild to bundle all dependencies, outputting the result to
+    path/to/foo.js.bundle/index.js.
+
+###### `options`<sup>Required</sup> <a name="options" id="@monadahq/wingsdk.core.Inflight.bundle.parameter.options"></a>
+
+- *Type:* @monadahq/wingsdk.core.InflightBundleOptions
+
+---
+
+##### `makeClients` <a name="makeClients" id="@monadahq/wingsdk.core.Inflight.makeClients"></a>
+
+```typescript
+public makeClients(captureScope: IConstruct): {[ key: string ]: Code}
+```
+
+Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime.
+
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.core.Inflight.makeClients.parameter.captureScope"></a>
+
+- *Type:* constructs.IConstruct
+
+---
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3558,6 +3698,50 @@ Place in the construct tree where all users constructs will get added.
 ---
 
 
+### Testing <a name="Testing" id="@monadahq/wingsdk.core.Testing"></a>
+
+Testing utilities.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Testing.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+new core.Testing()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Testing.inspectPrebundledCode">inspectPrebundledCode</a></code> | Obtain a reference to the prebundled Code for a given capture scope. |
+
+---
+
+##### `inspectPrebundledCode` <a name="inspectPrebundledCode" id="@monadahq/wingsdk.core.Testing.inspectPrebundledCode"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+core.Testing.inspectPrebundledCode(captureScope: IConstruct)
+```
+
+Obtain a reference to the prebundled Code for a given capture scope.
+
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.core.Testing.inspectPrebundledCode.parameter.captureScope"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IBucket <a name="IBucket" id="@monadahq/wingsdk.cloud.IBucket"></a>
@@ -3595,33 +3779,33 @@ with a fresh copy without any consequences.
 
 - *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.local.Bucket, @monadahq/wingsdk.local.Function, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable
 
-Represents something that is capturable.
+Represents something that is capturable by an Inflight.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ICapturable.capture">capture</a></code> | Captures the resource for a given consumer so that it can be used in an Inflight. |
+| <code><a href="#@monadahq/wingsdk.core.ICapturable.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.core.ICapturable.capture"></a>
 
 ```typescript
-public capture(consumer: any, capture: Capture): Code
+public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
 ```
 
-Captures the resource for a given consumer so that it can be used in an Inflight.
+Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `consumer`<sup>Required</sup> <a name="consumer" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.consumer"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.captureScope"></a>
 
-- *Type:* any
+- *Type:* constructs.IConstruct
 
 ---
 
-###### `capture`<sup>Required</sup> <a name="capture" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.capture"></a>
+###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.metadata"></a>
 
-- *Type:* @monadahq/wingsdk.core.Capture
+- *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
 ---
 

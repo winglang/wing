@@ -1,5 +1,5 @@
-import { Construct } from "constructs";
-import { Capture, Code, ICapturable } from "../core";
+import { Construct, IConstruct } from "constructs";
+import { CaptureMetadata, Code, ICapturable } from "../core";
 
 export interface IResource {
   /**
@@ -18,5 +18,8 @@ export abstract class Resource
   implements IResource, ICapturable
 {
   public abstract readonly stateful: boolean;
-  public abstract capture(consumer: any, capture: Capture): Code;
+  public abstract capture(
+    captureScope: IConstruct,
+    metadata: CaptureMetadata
+  ): Code;
 }

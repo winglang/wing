@@ -1,6 +1,6 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { Capture, Code } from "../core";
+import { CaptureMetadata, Code } from "../core";
 
 export class Queue extends cloud.QueueBase implements cloud.IQueue {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -15,7 +15,7 @@ export class Queue extends cloud.QueueBase implements cloud.IQueue {
     fn;
   }
 
-  public capture(_consumer: any, _capture: Capture): Code {
+  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

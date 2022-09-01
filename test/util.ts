@@ -3,8 +3,36 @@ import { tmpdir } from "os";
 import { extname, join } from "path";
 import { App } from "../src/core";
 
-export function cdktfResourcesOf(template: string): string[] {
-  return Object.keys(JSON.parse(template).resource).sort();
+export function tfResourcesOf(templateStr: string): string[] {
+  return Object.keys(JSON.parse(templateStr).resource).sort();
+}
+
+export function tfSanitize(templateStr: string): string {
+  const template = JSON.parse(templateStr);
+
+  // remove names of assets whose hashes are sensitive to changes based
+  // on the file system layout
+  return JSON.stringify(
+    template,
+    (key, value) => {
+      if (
+        key === "key" &&
+        typeof value === "string" &&
+        value.match(/^asset\..*\.zip$/)
+      ) {
+        return "<key>";
+      }
+      if (
+        key === "source" &&
+        typeof value === "string" &&
+        value.match(/^assets\/.*\/archive.zip$/)
+      ) {
+        return "<source>";
+      }
+      return value;
+    },
+    2
+  );
 }
 
 export function directorySnapshot(root: string) {

@@ -1,7 +1,7 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { LOCAL_CLIENTS_PATH } from "../constants";
-import { Capture, Code, NodeJsCode } from "../core";
+import { CaptureMetadata, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
 import { BucketSchema } from "./schema";
@@ -31,8 +31,8 @@ export class Bucket
     };
   }
 
-  public capture(consumer: any, _capture: Capture): Code {
-    if (!(consumer instanceof Function)) {
+  public capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+    if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by a function for now");
     }
     return NodeJsCode.fromInline(

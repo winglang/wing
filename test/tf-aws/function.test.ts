@@ -3,7 +3,7 @@ import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
-import { cdktfResourcesOf } from "../util";
+import { tfResourcesOf, tfSanitize } from "../util";
 
 test("basic function", () => {
   const output = cdktf.Testing.synthScope((scope) => {
@@ -19,7 +19,7 @@ test("basic function", () => {
     new cloud.Function(scope, "Function", inflight);
   });
 
-  expect(cdktfResourcesOf(output)).toEqual([
+  expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for Lambda
     "aws_iam_role_policy", // policy for role
     "aws_iam_role_policy_attachment", // execution policy for role
@@ -27,7 +27,7 @@ test("basic function", () => {
     "aws_s3_bucket", // S3 bucket for code
     "aws_s3_object", // S3 object for code
   ]);
-  expect(output).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("basic function with environment variables", () => {
@@ -59,5 +59,5 @@ test("basic function with environment variables", () => {
       },
     })
   ).toEqual(true);
-  expect(output).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
 });

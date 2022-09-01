@@ -1,17 +1,7 @@
-import { unlinkSync, writeFileSync } from "fs";
-import { basename, dirname, join, resolve } from "path";
-import { Construct } from "constructs";
-import * as esbuild from "esbuild-wasm";
+import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { FunctionProps } from "../cloud";
-import {
-  Capture,
-  Code,
-  ICapturable,
-  Language,
-  NodeJsCode,
-  Inflight,
-} from "../core";
+import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema";
@@ -32,7 +22,8 @@ export class Function extends cloud.FunctionBase implements IResource {
       throw new Error("Only Node.js code is currently supported.");
     }
 
-    const bundledCode = this.rewriteHandler(inflight);
+    const captureClients = inflight.makeClients(this);
+    const bundledCode = inflight.bundle({ captureScope: this, captureClients });
 
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
@@ -41,7 +32,7 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.code = NodeJsCode.fromFile(assetPath);
   }
 
-  public capture(_consumer: any, _capture: Capture): Code {
+  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 
@@ -64,73 +55,4 @@ export class Function extends cloud.FunctionBase implements IResource {
   public addEnvironment(name: string, value: string) {
     this.env[name] = value;
   }
-
-  /**
-   * Rewrite the handler code to include the captured variables and bundle
-   * any dependencies.
-   */
-  private rewriteHandler(inflight: Inflight): Code {
-    const lines = new Array<string>();
-
-    const code = inflight.code;
-
-    const absolutePath = resolve(code.path);
-    const workdir = dirname(absolutePath);
-    const filename = basename(code.path);
-
-    lines.push("const $cap = {}");
-    for (const [name, capture] of Object.entries(inflight.captures)) {
-      const clientCode = this.createClient(name, capture);
-      lines.push(`$cap["${name}"] = ${clientCode.text};`);
-    }
-    lines.push();
-    lines.push(code.text);
-    lines.push();
-    lines.push("exports.handler = async function(event) {");
-    lines.push("  return await $proc($cap, event);");
-    lines.push("};");
-
-    const content = lines.join("\n");
-    const filenamenew = filename + ".new.js";
-    writeFileSync(join(workdir, filenamenew), content);
-
-    esbuild.buildSync({
-      bundle: true,
-      target: "node16",
-      platform: "node",
-      absWorkingDir: workdir,
-      entryPoints: [filenamenew],
-      outfile: absolutePath,
-      minify: false,
-      external: [],
-      allowOverwrite: true,
-    });
-
-    // clean up the temporary file
-    unlinkSync(join(workdir, filenamenew));
-
-    return code;
-  }
-
-  private createClient(name: string, capture: Capture): Code {
-    if (isPrimitive(capture.obj)) {
-      return NodeJsCode.fromInline(JSON.stringify(capture.obj));
-    }
-
-    if (
-      typeof capture.obj == "object" &&
-      typeof capture.obj.capture === "function"
-    ) {
-      const c: ICapturable = capture.obj;
-      return c.capture(this, capture);
-    }
-
-    throw new Error(`unable to capture "${name}", no "capture" method`);
-  }
-}
-
-function isPrimitive(value: any) {
-  return (
-    (typeof value !== "object" && typeof value !== "function") || value === null
-  );
 }

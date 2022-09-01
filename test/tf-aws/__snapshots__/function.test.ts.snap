@@ -36,14 +36,13 @@ exports[`basic function 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"Function_Bucket_CC3697BD\\": {
-      }
+      \\"Function_Bucket_CC3697BD\\": {}
     },
     \\"aws_s3_object\\": {
       \\"Function_S3Object_C62A0C2D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
-        \\"key\\": \\"c83ba82ab737b318be3084bef5b7996129facf99b8.138a5b05e087726a9b80c365fc5f7894.zip\\",
-        \\"source\\": \\"assets/Function_Asset_212D1EED/138A5B05E087726A9B80C365FC5F7894/archive.zip\\"
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
       }
     }
   }
@@ -88,14 +87,13 @@ exports[`basic function with environment variables 1`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"Function_Bucket_CC3697BD\\": {
-      }
+      \\"Function_Bucket_CC3697BD\\": {}
     },
     \\"aws_s3_object\\": {
       \\"Function_S3Object_C62A0C2D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
-        \\"key\\": \\"c83ba82ab737b318be3084bef5b7996129facf99b8.138a5b05e087726a9b80c365fc5f7894.zip\\",
-        \\"source\\": \\"assets/Function_Asset_212D1EED/138A5B05E087726A9B80C365FC5F7894/archive.zip\\"
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
       }
     }
   }
