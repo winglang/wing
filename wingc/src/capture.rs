@@ -4,7 +4,7 @@ use crate::{
 	type_env::TypeEnv,
 };
 
-pub fn find_inflights_to_scan(ast_root: &Scope) {
+pub fn scan_captures(ast_root: &Scope) {
 	for s in ast_root.statements.iter() {
 		match s {
 			Statement::FunctionDefinition(func_def) => {
@@ -16,18 +16,18 @@ pub fn find_inflights_to_scan(ast_root: &Scope) {
 				iterator: _,
 				iterable: _,
 				statements,
-			} => find_inflights_to_scan(&statements),
+			} => scan_captures(&statements),
 			crate::ast::Statement::If {
 				condition: _,
 				statements,
 				else_statements,
 			} => {
-				find_inflights_to_scan(statements);
+				scan_captures(statements);
 				if let Some(else_statements) = else_statements {
-					find_inflights_to_scan(else_statements);
+					scan_captures(else_statements);
 				}
 			}
-			Statement::Scope(s) => find_inflights_to_scan(s),
+			Statement::Scope(s) => scan_captures(s),
 			Statement::Class {
 				name: _,
 				members: _,
@@ -40,14 +40,14 @@ pub fn find_inflights_to_scan(ast_root: &Scope) {
 					Flight::In => {
 						scan_captures_in_scope(&constructor.statements);
 					}
-					Flight::Pre => find_inflights_to_scan(&constructor.statements),
+					Flight::Pre => scan_captures(&constructor.statements),
 				}
 				for m in methods.iter() {
 					match m.signature.flight {
 						Flight::In => {
 							scan_captures_in_scope(&m.statements);
 						}
-						Flight::Pre => find_inflights_to_scan(&m.statements),
+						Flight::Pre => scan_captures(&m.statements),
 					}
 				}
 			}
