@@ -6,9 +6,8 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expression, ExpressionType, Flight, FunctionDefinition,
-	FunctionSignature, Literal, MethodCall, ParameterDefinition, Reference, Scope, Statement, Symbol, Type,
-	UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
+	Literal, MethodCall, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -372,13 +371,13 @@ impl Parser<'_> {
 		Ok(ArgList { pos_args, named_args })
 	}
 
-	fn build_expression(&self, expression_node: &Node) -> DiagnosticResult<Expression> {
+	fn build_expression(&self, expression_node: &Node) -> DiagnosticResult<Expr> {
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap())?;
 				// This should be a type name so it cannot be a nested reference
 				if matches!(class, Reference::NestedIdentifier { object: _, property: _ }) {
-					_ = self.add_error::<Expression>(
+					_ = self.add_error::<Expr>(
 						format!(
 							"Expected a reference to a class or resource type, instead got {:?}",
 							class
@@ -401,14 +400,14 @@ impl Parser<'_> {
 				} else {
 					None
 				};
-				Ok(Expression::new(ExpressionType::New {
+				Ok(Expr::new(ExprType::New {
 					class,
 					obj_id,
 					arg_list: arg_list?,
 					obj_scope,
 				}))
 			}
-			"binary_expression" => Ok(Expression::new(ExpressionType::Binary {
+			"binary_expression" => Ok(Expr::new(ExprType::Binary {
 				lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
 				rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
@@ -429,7 +428,7 @@ impl Parser<'_> {
 					other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
 				},
 			})),
-			"unary_expression" => Ok(Expression::new(ExpressionType::Unary {
+			"unary_expression" => Ok(Expr::new(ExprType::Unary {
 				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 					"+" => UnaryOperator::Plus,
 					"-" => UnaryOperator::Minus,
@@ -439,13 +438,13 @@ impl Parser<'_> {
 				},
 				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
 			})),
-			"string" => Ok(Expression::new(ExpressionType::Literal(Literal::String(
+			"string" => Ok(Expr::new(ExprType::Literal(Literal::String(
 				self.node_text(&expression_node).into(),
 			)))),
-			"number" => Ok(Expression::new(ExpressionType::Literal(Literal::Number(
+			"number" => Ok(Expr::new(ExprType::Literal(Literal::Number(
 				self.node_text(&expression_node).parse().expect("Number string"),
 			)))),
-			"bool" => Ok(Expression::new(ExpressionType::Literal(Literal::Boolean(
+			"bool" => Ok(Expr::new(ExprType::Literal(Literal::Boolean(
 				match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
@@ -453,19 +452,15 @@ impl Parser<'_> {
 					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
 				},
 			)))),
-			"duration" => Ok(Expression::new(ExpressionType::Literal(
-				self.build_duration(&expression_node)?,
-			))),
-			"reference" => Ok(Expression::new(ExpressionType::Reference(
-				self.build_reference(&expression_node)?,
-			))),
+			"duration" => Ok(Expr::new(ExprType::Literal(self.build_duration(&expression_node)?))),
+			"reference" => Ok(Expr::new(ExprType::Reference(self.build_reference(&expression_node)?))),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"function_call" => Ok(Expression::new(ExpressionType::FunctionCall {
+			"function_call" => Ok(Expr::new(ExprType::FunctionCall {
 				function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 			})),
-			"method_call" => Ok(Expression::new(ExpressionType::MethodCall(MethodCall {
+			"method_call" => Ok(Expr::new(ExprType::MethodCall(MethodCall {
 				method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap())?,
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 			}))),

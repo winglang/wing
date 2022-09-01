@@ -311,15 +311,15 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_exp(&mut self, exp: &Expression, env: &TypeEnv) -> Option<TypeRef> {
-		let t = match &exp.expression_variant {
-			ExpressionType::Literal(lit) => match lit {
+	fn type_check_exp(&mut self, exp: &Expr, env: &TypeEnv) -> Option<TypeRef> {
+		let t = match &exp.variant {
+			ExprType::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
 				Literal::Number(_) => Some(self.types.number()),
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
 			},
-			ExpressionType::Binary { op, lexp, rexp } => {
+			ExprType::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
 				let rtype = self.type_check_exp(rexp, env).unwrap();
 				self.validate_type(ltype, rtype, rexp);
@@ -336,14 +336,14 @@ impl<'a> TypeChecker<'a> {
 					Some(ltype)
 				}
 			}
-			ExpressionType::Unary { op: _, exp: unary_exp } => {
+			ExprType::Unary { op: _, exp: unary_exp } => {
 				let _type = self.type_check_exp(unary_exp, env).unwrap();
 				// Add bool vs num support here (! => bool, +- => num)
 				self.validate_type(_type, self.types.number(), unary_exp);
 				Some(_type)
 			}
-			ExpressionType::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
-			ExpressionType::New {
+			ExprType::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
+			ExprType::New {
 				class,
 				obj_id: _, // TODO
 				arg_list,
@@ -432,7 +432,7 @@ impl<'a> TypeChecker<'a> {
 					Some(self.types.add_type(Type::ClassInstance(type_))) // TODO: don't create new type if one already exists.
 				}
 			}
-			ExpressionType::FunctionCall { function, args } => {
+			ExprType::FunctionCall { function, args } => {
 				let func_type = self.resolve_reference(function, env);
 
 				if let &Type::Function(ref func_type) = func_type.into() {
@@ -457,7 +457,7 @@ impl<'a> TypeChecker<'a> {
 					panic!("Identifier {:?} is not a function", function)
 				}
 			}
-			ExpressionType::MethodCall(method_call) => {
+			ExprType::MethodCall(method_call) => {
 				// Find method in class's environment
 				let method_type = self.resolve_reference(&method_call.method, env);
 
@@ -495,7 +495,7 @@ impl<'a> TypeChecker<'a> {
 		t
 	}
 
-	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expression) {
+	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) {
 		if actual_type != expected_type && actual_type.0 != &Type::Anything {
 			panic!("Expected type {} of {:?} to be {}", actual_type, value, expected_type);
 		}

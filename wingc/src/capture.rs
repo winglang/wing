@@ -1,5 +1,5 @@
 use crate::{
-	ast::{ArgList, Expression, ExpressionType, Flight, Reference, Scope, Statement},
+	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, Statement},
 	type_check::Type,
 	type_env::TypeEnv,
 };
@@ -81,9 +81,9 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) {
 	}
 }
 
-fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
-	match &exp.expression_variant {
-		ExpressionType::New {
+fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) {
+	match &exp.variant {
+		ExprType::New {
 			class: _,
 			obj_id: _,
 			obj_scope: _,
@@ -94,7 +94,7 @@ fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
 				scan_captures_in_expression(e, env);
 			}
 		}
-		ExpressionType::Reference(r) => match r {
+		ExprType::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
 				let (t, f) = env.lookup_ext(&symbol);
@@ -122,14 +122,14 @@ fn scan_captures_in_expression(exp: &Expression, env: &TypeEnv) {
 				identifier: _,
 			} => todo!(),
 		},
-		ExpressionType::FunctionCall { function, args } => scan_captures_in_call(&function, &args, env),
-		ExpressionType::MethodCall(mc) => scan_captures_in_call(&mc.method, &mc.args, env),
-		ExpressionType::Unary { op: _, exp } => scan_captures_in_expression(exp, env),
-		ExpressionType::Binary { op: _, lexp, rexp } => {
+		ExprType::FunctionCall { function, args } => scan_captures_in_call(&function, &args, env),
+		ExprType::MethodCall(mc) => scan_captures_in_call(&mc.method, &mc.args, env),
+		ExprType::Unary { op: _, exp } => scan_captures_in_expression(exp, env),
+		ExprType::Binary { op: _, lexp, rexp } => {
 			scan_captures_in_expression(lexp, env);
 			scan_captures_in_expression(rexp, env);
 		}
-		ExpressionType::Literal(_) => (),
+		ExprType::Literal(_) => (),
 	}
 }
 

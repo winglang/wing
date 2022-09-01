@@ -64,25 +64,25 @@ pub enum Statement {
 	},
 	VariableDef {
 		var_name: Symbol,
-		initial_value: Expression,
+		initial_value: Expr,
 	},
 	FunctionDefinition(FunctionDefinition),
 	ForLoop {
 		iterator: Symbol,
-		iterable: Expression,
+		iterable: Expr,
 		statements: Scope,
 	},
 	If {
-		condition: Expression,
+		condition: Expr,
 		statements: Scope,
 		else_statements: Option<Scope>,
 	},
-	Expression(Expression),
+	Expression(Expr),
 	Assignment {
 		variable: Reference,
-		value: Expression,
+		value: Expr,
 	},
-	Return(Option<Expression>),
+	Return(Option<Expr>),
 	Scope(Scope),
 	Class {
 		name: Symbol,
@@ -108,11 +108,11 @@ pub struct ClassMember {
 }
 
 #[derive(Debug)]
-pub enum ExpressionType {
+pub enum ExprType {
 	New {
 		class: Reference,
 		obj_id: Option<Symbol>,
-		obj_scope: Option<Box<Expression>>,
+		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
 	},
 	Literal(Literal),
@@ -125,26 +125,26 @@ pub enum ExpressionType {
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
-		exp: Box<Expression>,
+		exp: Box<Expr>,
 	},
 	Binary {
 		// TODO: Split to LogicalBinary, NumericBinary, Bit/String??
 		op: BinaryOperator,
-		lexp: Box<Expression>,
-		rexp: Box<Expression>,
+		lexp: Box<Expr>,
+		rexp: Box<Expr>,
 	},
 }
 
 #[derive(Debug)]
-pub struct Expression {
-	pub expression_variant: ExpressionType,
+pub struct Expr {
+	pub variant: ExprType,
 	pub evaluated_type: RefCell<Option<TypeRef>>,
 }
 
-impl Expression {
-	pub fn new(expression_variant: ExpressionType) -> Self {
+impl Expr {
+	pub fn new(expression_variant: ExprType) -> Self {
 		Self {
-			expression_variant,
+			variant: expression_variant,
 			evaluated_type: RefCell::new(None),
 		}
 	}
@@ -152,8 +152,8 @@ impl Expression {
 
 #[derive(Debug)]
 pub struct ArgList {
-	pub pos_args: Vec<Expression>,
-	pub named_args: HashMap<Symbol, Expression>,
+	pub pos_args: Vec<Expr>,
+	pub named_args: HashMap<Symbol, Expr>,
 }
 
 impl ArgList {
@@ -250,7 +250,7 @@ impl BinaryOperator {
 #[derive(Debug)]
 pub enum Reference {
 	Identifier(Symbol),
-	NestedIdentifier { object: Box<Expression>, property: Symbol },
+	NestedIdentifier { object: Box<Expr>, property: Symbol },
 	NamespacedIdentifier { namespace: Symbol, identifier: Symbol },
 }
 
@@ -259,8 +259,8 @@ impl Display for Reference {
 		match &self {
 			Reference::Identifier(symb) => write!(f, "{}", symb.name),
 			Reference::NestedIdentifier { object, property } => {
-				let obj_str = match &object.expression_variant {
-					ExpressionType::Reference(r) => format!("{}", r),
+				let obj_str = match &object.variant {
+					ExprType::Reference(r) => format!("{}", r),
 					_ => "object".to_string(), // TODO!
 				};
 				write!(f, "{}.{}", obj_str, property.name)

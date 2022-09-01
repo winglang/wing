@@ -3,8 +3,8 @@ use std::{collections::HashMap, fs};
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expression, ExpressionType, Flight, FunctionDefinition, Literal, Reference,
-	Scope, Statement, Symbol, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Expr, ExprType, Flight, FunctionDefinition, Literal, Reference, Scope,
+	Statement, Symbol, UnaryOperator,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -15,14 +15,14 @@ struct Capture {
 	method: String,
 }
 
-fn find_captures_from_expression(node: &Expression) -> Vec<Capture> {
+fn find_captures_from_expression(node: &Expr) -> Vec<Capture> {
 	let mut res: Vec<Capture> = vec![];
 
 	// TODO Hack, assume it's of the form `capture.method()`
 	// Without type info, this is the best we can do
-	if let ExpressionType::MethodCall(m) = &node.expression_variant {
+	if let ExprType::MethodCall(m) = &node.variant {
 		if let Reference::NestedIdentifier { object, property } = &m.method {
-			if let ExpressionType::Reference(Reference::Identifier(object)) = &object.expression_variant {
+			if let ExprType::Reference(Reference::Identifier(object)) = &object.variant {
 				if object.name == "console" {
 					// TODO Extra hack, ignore console.log for now
 					return res;
@@ -188,9 +188,9 @@ fn jsify_arg_list(arg_list: &ArgList) -> String {
 	}
 }
 
-fn jsify_expression(expression: &Expression) -> String {
-	match &expression.expression_variant {
-		ExpressionType::New {
+fn jsify_expression(expression: &Expr) -> String {
+	match &expression.variant {
+		ExprType::New {
 			class,
 			obj_id: _, // TODO
 			arg_list,
@@ -198,24 +198,24 @@ fn jsify_expression(expression: &Expression) -> String {
 		} => {
 			format!("new {}({})", jsify_reference(&class), jsify_arg_list(&arg_list))
 		}
-		ExpressionType::Literal(lit) => match lit {
+		ExprType::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
 			Literal::Number(n) => format!("{}", n),
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
-		ExpressionType::Reference(_ref) => jsify_reference(&_ref),
-		ExpressionType::FunctionCall { function, args } => {
+		ExprType::Reference(_ref) => jsify_reference(&_ref),
+		ExprType::FunctionCall { function, args } => {
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args))
 		}
-		ExpressionType::MethodCall(method_call) => {
+		ExprType::MethodCall(method_call) => {
 			format!(
 				"{}({})",
 				jsify_reference(&method_call.method),
 				jsify_arg_list(&method_call.args)
 			)
 		}
-		ExpressionType::Unary { op, exp } => {
+		ExprType::Unary { op, exp } => {
 			let op = match op {
 				UnaryOperator::Plus => "+",
 				UnaryOperator::Minus => "-",
@@ -223,7 +223,7 @@ fn jsify_expression(expression: &Expression) -> String {
 			};
 			format!("({}{})", op, jsify_expression(exp))
 		}
-		ExpressionType::Binary { op, lexp, rexp } => {
+		ExprType::Binary { op, lexp, rexp } => {
 			let op = match op {
 				BinaryOperator::Add => "+",
 				BinaryOperator::Sub => "-",

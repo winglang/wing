@@ -9,7 +9,7 @@ use std::path::PathBuf;
 use std::{fs, mem};
 
 use crate::ast::Flight;
-use crate::capture::find_inflights_to_scan;
+use crate::capture::scan_captures;
 use crate::type_check::{TypeChecker, Types};
 use crate::type_env::TypeEnv;
 
@@ -75,7 +75,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Type check everything and build typed symbol environment
 	type_check(&mut scope, &mut types);
 	// Analyze inflight captures
-	find_inflights_to_scan(&scope);
+	scan_captures(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
