@@ -1357,8 +1357,8 @@ Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 >   B,
 >   C,
 > };
-> let x: enum<MyFoo> = MyFoo.B;
-> let y = x; // type is enum<MyFoo>
+> let x = MyFoo.B;
+> let y = x; // type is MyFoo
 > ```
 >
 > ```TS
