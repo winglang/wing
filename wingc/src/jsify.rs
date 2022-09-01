@@ -252,7 +252,7 @@ fn jsify_expression(expression: &Expr) -> String {
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
 		ExprType::FunctionCall { function, args } => {
-			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args))
+			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
 		}
 		ExprType::MethodCall(method_call) => {
 			format!(
