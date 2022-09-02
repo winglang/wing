@@ -99,16 +99,18 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
         const filePath = `${tmpdir()}/${EXTENSION_FILENAME}`;
 
         try {
-            await fetchAssetFile(octokit, {
-                id: assetId,
-                outputPath: filePath,
-                owner: WINGLANG_REPO_OWNER,
-                repo: WINGLANG_REPO_NAME,
-                token: githubToken,
-            });
+          await fetchAssetFile(octokit, {
+            id: assetId,
+            outputPath: filePath,
+            owner: WINGLANG_REPO_OWNER,
+            repo: WINGLANG_REPO_NAME,
+            token: githubToken,
+          });
         } catch (e) {
-            vscode.window.showErrorMessage(`[Wing] Could not download update: ${e}`);
-            return;
+          vscode.window.showErrorMessage(
+            `[Wing] Could not download update: ${e}`
+          );
+          return;
         }
 
         await vscode.commands.executeCommand(
@@ -137,7 +139,6 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     context.globalState.update(STATE_LAST_UPDATE_CHECK, now);
   }
 }
-
 
 // https://github.com/dsaltares/fetch-gh-release-asset/blob/d9376dacd30fd38f49238586cd2e9295a8307f4c/index.ts#L69
 const fetchAssetFile = async (
