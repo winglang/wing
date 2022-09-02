@@ -34,7 +34,7 @@ resource DenyList {
     return tmpdir;
   }
 
-  ~ _rules: mut_map<DenyListRule>;
+  ~ _rules: MutMap<DenyListRule>;
 
   ~ new() {
     this._rules = this._bucket.get(this._object_key) ?? new mut_map<DenyListRule>();
