@@ -132,11 +132,9 @@ impl Parser<'_> {
 				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 			}),
-			"expression_statement" => Ok(Statement::Expression(if statement_node.named_child_count() > 1 {
-				self.add_error(format!("Expected expression"), &statement_node)?
-			} else {
-				self.build_expression(&statement_node.named_child(0).unwrap())?
-			})),
+			"expression_statement" => Ok(Statement::Expression(
+				self.build_expression(&statement_node.named_child(0).unwrap())?,
+			)),
 			"block" => Ok(Statement::Scope(self.build_scope(statement_node))),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
