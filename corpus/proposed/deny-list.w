@@ -57,7 +57,7 @@ fn append_rule(map: mut_map<DenyListRule>, rule: DenyListRule) {
 }
 
 let deny_list = def DenyList();
-let filter = def cloud.Function((event: cloud.QueueEvent) ~> {
+let filter = cloud.Function((event: cloud.QueueEvent) ~> {
   let package_name = event.data["package_name"];
   let version = event.data["version"];
   let reason = event.data["reason"];
