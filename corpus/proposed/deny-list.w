@@ -15,7 +15,7 @@ resource DenyList {
   _bucket: cloud.Bucket;
   _object_key: str;
 
-  new(props: DenyListProps) {
+  init(props: DenyListProps) {
     this._bucket = def cloud.Bucket();
     this._object_key = "deny-list.json";
 
