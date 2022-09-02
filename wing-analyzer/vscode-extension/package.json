@@ -11,12 +11,18 @@
     "url": "https://github.com/monadahq/winglang.git"
   },
   "scripts": {
-    "bundle": "esbuild ./src/extension.ts --outfile=lib/extension.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle",
-    "package": "vsce package -o wing.vsix"
+    "bundle": "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle",
+    "package": "npm run bundle && vsce package -o vscode-wing.vsix"
   },
   "categories": [
     "Programming Languages"
   ],
+  "activationEvents": [
+    "onLanguage:wing"
+  ],
+  "publisher": "Monada",
+  "main": "lib/index.js",
+  "icon": "resources/logo.png",
   "contributes": {
     "languages": [
       {

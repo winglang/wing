@@ -17,5 +17,5 @@ base16ct = { version = "0.1", features = ["alloc"] }
 tree-sitter-winglang = { path = "./grammar" }
 
 [lib]
-crate-type = ["staticlib"]
+crate-type = ["staticlib", "rlib"]
 bench = false
