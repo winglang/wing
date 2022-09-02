@@ -16,7 +16,7 @@ resource DenyList {
   _object_key: str;
 
   init(props: DenyListProps) {
-    this._bucket = def cloud.Bucket();
+    this._bucket = cloud.Bucket();
     this._object_key = "deny-list.json";
 
     let rules_dir = this._write_to_file(props.rules, this._object_key);
