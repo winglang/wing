@@ -8,7 +8,7 @@ const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
 const WINGLANG_REPO_NAME = "winglang";
 const WINGLANG_REPO_OWNER = "monadahq";
-const UPDATE_FREQUENCY_MS = 1 * 60 * 60 * 1000; // 1 hour
+const UPDATE_RATE_LIMIT_MS = 1 * 60 * 60 * 1000; // 1 hour
 
 const CFG_UPDATES_GITHUB_TOKEN = "updates.githubToken";
 const CFG_UPDATES_SOURCE_TAG = "updates.sourceTag";
@@ -34,8 +34,8 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     context.globalState.get<number>(STATE_LAST_UPDATE_CHECK) ?? -1;
   const now = Date.now();
 
-  // Skip update if has been checked before and time diff is less than UPDATE_FREQUENCY_MS
-  if (lastUpdateCheck >= 0 && now - lastUpdateCheck <= UPDATE_FREQUENCY_MS) {
+  // Skip update if has been checked before and time diff is less than UPDATE_RATE_LIMIT_MS
+  if (lastUpdateCheck >= 0 && now - lastUpdateCheck <= UPDATE_RATE_LIMIT_MS) {
     return;
   }
 
