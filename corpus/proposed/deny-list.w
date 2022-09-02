@@ -68,5 +68,5 @@ let filter = def cloud.Function((event: cloud.QueueEvent) ~> {
   }
 });
 
-let queue = def cloud.Queue();
+let queue = cloud.Queue();
 queue.add_consumer(filter);
