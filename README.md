@@ -92,6 +92,8 @@ a dependency on the SDK package, so running `npm install` will bring it over.
 
 The extension located in [wing-analyzer/vscode-extension](wing-analyzer/vscode-extension). An [installable](https://code.visualstudio.com/docs/editor/extension-marketplace#_install-from-a-vsix) VSIX is published on every push to main and is available in the [artifacts](https://github.com/monadahq/winglang/releases/download/development/vscode-wing.vsix) on the release page.
 
+Note: After installing, the extensions can self update if provided a Github PAT with private repo permissions. Check the vscode settings for this extension for more details.
+
 ### Local SDK Development
 
 If you wish to develop the SDK alongside the compiler, simply clone the SDK

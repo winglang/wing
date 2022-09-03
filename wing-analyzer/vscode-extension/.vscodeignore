@@ -1,6 +1,7 @@
-.vscode/
-.vscode-test/
-src/
-*.vsix
-.gitignore
-node_modules/
+**
+
+!lib/
+!resources/
+!syntaxes/
+!language-configuration.json
+!LICENSE

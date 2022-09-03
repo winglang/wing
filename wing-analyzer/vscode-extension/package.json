@@ -1,8 +1,13 @@
 {
   "name": "wing",
+  "publisher": "Monada",
+  "preview": true,
+  "private": true,
   "displayName": "Wing [Alpha]",
-  "description": "Wing Language Support ",
+  "description": "Wing Language Support",
   "version": "0.0.1",
+  "main": "lib/index.js",
+  "icon": "resources/logo.png",
   "engines": {
     "vscode": "^1.70.0"
   },
@@ -20,9 +25,6 @@
   "activationEvents": [
     "onLanguage:wing"
   ],
-  "publisher": "Monada",
-  "main": "lib/index.js",
-  "icon": "resources/logo.png",
   "contributes": {
     "languages": [
       {
@@ -45,12 +47,33 @@
       {
         "language": "wing",
         "scopeName": "source.wing",
-        "path": "./syntaxes/wing.tmLanguage.json"
+        "path": "syntaxes/wing.tmLanguage.json"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Wing",
+      "properties": {
+        "wing.updates.githubToken": {
+          "type": "string",
+          "default": "",
+          "description": "PAT to check for and download new versions of this extension from the winglang repo. Leave empty to disable automatic updates.\nNOTE: PAT must have private repo permission."
+        },
+        "wing.updates.sourceTag": {
+          "type": "string",
+          "default": "development",
+          "description": "Release tag to retrieve updates from."
+        }
+      }
+    }
   },
   "devDependencies": {
+    "@types/node": "^16.11.56",
+    "@types/vscode": "^1.70.0",
     "esbuild": "^0.14.54",
     "vsce": "^2.10.0"
+  },
+  "dependencies": {
+    "node-fetch": "^3.2.10",
+    "octokit": "^2.0.7"
   }
 }
