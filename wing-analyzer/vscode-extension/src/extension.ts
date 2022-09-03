@@ -1,8 +1,8 @@
-import * as vscode from "vscode";
-import { tmpdir } from "os";
-import { Octokit } from "octokit";
-import fetch from "node-fetch";
 import { writeFile } from "fs/promises";
+import { tmpdir } from "os";
+import fetch, { HeadersInit } from "node-fetch";
+import { Octokit } from "octokit";
+import * as vscode from "vscode";
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
@@ -19,12 +19,12 @@ export async function activate(context: vscode.ExtensionContext) {
   // TODO activate language server
 
   // Check for updates
-  checkForUpdates(context);
+  await checkForUpdates(context);
 }
 
 export async function checkForUpdates(context: vscode.ExtensionContext) {
   if (context.extensionMode === vscode.ExtensionMode.Development) {
-    vscode.window.showWarningMessage(
+    void vscode.window.showWarningMessage(
       `[Wing] Skipping updates in development mode`
     );
     return;
@@ -52,7 +52,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     });
 
     if (latestRelease.status !== 200) {
-      vscode.window.showErrorMessage(
+      void vscode.window.showErrorMessage(
         `[Wing] Could not check for updates: ${latestRelease.data}`
       );
       return;
@@ -62,12 +62,15 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     for (let line of latestRelease.data.body?.split("\n") ?? []) {
       line = line.trim();
       if (line.endsWith("*" + EXTENSION_FILENAME)) {
-        const sha1 = line.split(" ")[0];
+        // TODO better err handling
+        const sha1 = line.split(" ")[0]!;
         if (sha1.length === 40) {
           latestHash = sha1;
           break;
         } else {
-          vscode.window.showWarningMessage(`[Wing] Checksum invalid: ${sha1}`);
+          void vscode.window.showWarningMessage(
+            `[Wing] Checksum invalid: ${sha1}`
+          );
         }
       }
     }
@@ -80,14 +83,14 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
       hasSavedVersion && installedReleaseChecksum !== latestReleaseChecksum;
 
     if (!hasSavedVersion) {
-      context.globalState.update(
+      await context.globalState.update(
         STATE_INSTALLED_RELEASE_CHECKSUM,
         latestReleaseChecksum
       );
     }
 
     if (doUpdate) {
-      vscode.window.showInformationMessage(
+      void vscode.window.showInformationMessage(
         `[Wing] New version available! Updating automatically...`
       );
 
@@ -107,7 +110,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
             token: githubToken,
           });
         } catch (e) {
-          vscode.window.showErrorMessage(
+          void vscode.window.showErrorMessage(
             `[Wing] Could not download update: ${e}`
           );
           return;
@@ -118,25 +121,27 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
           vscode.Uri.parse(filePath)
         );
 
-        context.globalState.update(
+        await context.globalState.update(
           STATE_INSTALLED_RELEASE_CHECKSUM,
           latestReleaseChecksum
         );
 
-        vscode.window
+        void vscode.window
           .showInformationMessage(
             `[Wing] Reload window for update to take effect?`,
             "Ok"
           )
           .then((selectedAction) => {
             if (selectedAction === "Ok") {
-              vscode.commands.executeCommand("workbench.action.reloadWindow");
+              void vscode.commands.executeCommand(
+                "workbench.action.reloadWindow"
+              );
             }
           });
       }
     }
 
-    context.globalState.update(STATE_LAST_UPDATE_CHECK, now);
+    await context.globalState.update(STATE_LAST_UPDATE_CHECK, now);
   }
 }
 
