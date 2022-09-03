@@ -26,7 +26,7 @@ jobs:
           working-directory: wing-analyzer/vscode-extension
       - name: Create VSIX
         working-directory: wing-analyzer/vscode-extension
-        run: npm run package
+        run: npm run build
       - name: Upload extension
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
