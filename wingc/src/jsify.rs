@@ -208,8 +208,11 @@ fn is_resource(reference: &Reference) -> bool {
 			// For now return false, but we need to lookup the identifier in our env
 			false
 		}
-		Reference::NestedIdentifier { object, property } => false,
-		Reference::NamespacedIdentifier { namespace, identifier } => {
+		Reference::NestedIdentifier { object: _, property: _ } => false,
+		Reference::NamespacedIdentifier {
+			namespace,
+			identifier: _,
+		} => {
 			// TODO: for now anything under "cloud" is a resource
 			if namespace.name == "cloud" {
 				true
