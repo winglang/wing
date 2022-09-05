@@ -372,7 +372,7 @@ impl Parser<'_> {
 	}
 
 	fn build_expression(&self, exp_node: &Node) -> DiagnosticResult<Expr> {
-		let expr_node = &self.check_error(*exp_node, "Expression")?;
+		let expression_node = &self.check_error(*exp_node, "Expression")?;
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap())?;
