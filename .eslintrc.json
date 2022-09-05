@@ -137,6 +137,7 @@
       }
     ],
     "unicorn/prefer-top-level-await": "off",
+    "unicorn/consistent-function-scoping": "warn",
     "unicorn/filename-case": [
       "error",
       {

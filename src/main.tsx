@@ -1,14 +1,16 @@
+import { ipcRenderer } from "electron";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
 import App from "./App";
-// import './samples/node-api'
 import "./assets/styles/index.css";
 
-ReactDOM.createRoot(document.querySelector("#root")!).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-);
+void ipcRenderer.invoke("getLocalServerPort").then((localServerPort) => {
+  ReactDOM.createRoot(document.querySelector("#root")!).render(
+    <React.StrictMode>
+      <App localServerPort={localServerPort} />
+    </React.StrictMode>,
+  );
 
-postMessage({ payload: "removeLoading" }, "*");
+  postMessage({ payload: "removeLoading" }, "*");
+});

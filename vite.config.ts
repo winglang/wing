@@ -1,9 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { rmSync } from "node:fs";
 import path from "node:path";
+
 import react from "@vitejs/plugin-react";
 import { Plugin, UserConfig, defineConfig } from "vite";
 import electron from "vite-plugin-electron";
+
 import pkg from "./package.json";
 
 rmSync(path.join(__dirname, "dist"), { recursive: true, force: true }); // v14.14.0
@@ -41,8 +43,8 @@ export default defineConfig({
           },
         },
       },
-      // // Enables use of Node.js API in the Electron-Renderer
-      // renderer: {},
+      // Enables use of Node.js API in the Electron-Renderer
+      renderer: {},
     }),
     renderBuiltUrl(),
   ],
@@ -61,17 +63,20 @@ function withDebug(config: UserConfig): UserConfig {
       ...config.build,
       sourcemap: true,
     };
-    config.plugins = (config.plugins || []).concat({
-      name: "electron-vite-debug",
-      // eslint-disable-next-line @typescript-eslint/no-shadow
-      configResolved(config) {
-        const index = config.plugins.findIndex(
-          (p) => p.name === "electron-main-watcher",
-        );
-        // At present, Vite can only modify plugins in configResolved hook.
-        (config.plugins as Plugin[]).splice(index, 1);
+    config.plugins = [
+      ...(config.plugins ?? []),
+      {
+        name: "electron-vite-debug",
+        // eslint-disable-next-line @typescript-eslint/no-shadow
+        configResolved(config) {
+          const index = config.plugins.findIndex(
+            (p) => p.name === "electron-main-watcher",
+          );
+          // At present, Vite can only modify plugins in configResolved hook.
+          (config.plugins as Plugin[]).splice(index, 1);
+        },
       },
-    });
+    ];
   }
   return config;
 }
@@ -79,7 +84,7 @@ function withDebug(config: UserConfig): UserConfig {
 // Only worked Vite@3.x #52
 function renderBuiltUrl(): Plugin {
   // https://github.com/vitejs/vite/blob/main/packages/vite/src/node/constants.ts#L84-L124
-  const KNOWN_ASSET_TYPES = [
+  const KNOWN_ASSET_TYPES = new Set([
     // images
     "png",
     "jpe?g",
@@ -111,7 +116,7 @@ function renderBuiltUrl(): Plugin {
     "webmanifest",
     "pdf",
     "txt",
-  ];
+  ]);
 
   return {
     name: "render-built-url",
@@ -119,7 +124,7 @@ function renderBuiltUrl(): Plugin {
       config.experimental = {
         renderBuiltUrl(filename, type) {
           if (
-            KNOWN_ASSET_TYPES.includes(path.extname(filename).slice(1)) &&
+            KNOWN_ASSET_TYPES.has(path.extname(filename).slice(1)) &&
             type.hostType === "js"
           ) {
             // Avoid Vite relative-path assets handling

@@ -1,5 +1,8 @@
 import { release } from "node:os";
 import { join } from "node:path";
+// import fetch from "node-fetch";
+
+// console.log(fetch);
 
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { app, BrowserWindow, shell, ipcMain } from "electron";
@@ -7,6 +10,11 @@ import { app, BrowserWindow, shell, ipcMain } from "electron";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
+import log from "electron-log";
+
+import { createCloudServer } from "./cloudServer";
+
+// TODO [sa] add auto-updater
 
 // Disable GPU Acceleration for Windows 7
 if (release().startsWith("6.1")) app.disableHardwareAcceleration();
@@ -33,14 +41,14 @@ let win: BrowserWindow | undefined;
 // Here, you can also use other preload
 const preload = join(__dirname, "../preload/index.js");
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin
-const url = `http://${process.env.VITE_DEV_SERVER_HOST}:${process.env.VITE_DEV_SERVER_PORT}`;
+const url = `http://${process.env.VITE_DEV_SERVER_HOSTNAME}:${process.env.VITE_DEV_SERVER_PORT}`;
 const indexHtml = join(ROOT_PATH.dist, "index.html");
 
 async function createWindow() {
   await installExtension(REACT_DEVELOPER_TOOLS.id);
 
   win = new BrowserWindow({
-    title: "Main window",
+    title: "Wing Console",
     icon: join(ROOT_PATH.public, "favicon.svg"),
     webPreferences: {
       preload,
@@ -71,7 +79,35 @@ async function createWindow() {
   });
 }
 
-void app.whenReady().then(createWindow);
+const getCloudFile = (): string => {
+  // TODO [sa] remove comment
+  // const cloudFileArg = process.argv.slice(2).find(arg => arg.startsWith('--cloudFile='));
+  // if(!cloudFileArg) {
+  //   throw new Error(`no cloud application file was provided`);
+  // }
+  // return cloudFileArg.replace('--cloudFile=', '');
+  return join(__dirname, "../../../test/demo.wx");
+};
+
+void app
+  .whenReady()
+  .then(async () => {
+    const cloudFile = getCloudFile();
+    if (!cloudFile) {
+      log.error("no cloud application file was provided");
+    }
+
+    log.info(`calling cloud server create function with file ${cloudFile}`);
+    const server = await createCloudServer({
+      filename: cloudFile,
+    });
+
+    ipcMain.handle("getLocalServerPort", () => server.port);
+
+    log.info(`cloud server started on port ${server.port}`);
+    app.on("will-quit", server.closeServer);
+  })
+  .then(createWindow);
 
 app.on("window-all-closed", () => {
   win = undefined;
@@ -110,3 +146,5 @@ ipcMain.handle("open-win", (event, arg) => {
     // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
   }
 });
+
+ipcMain.handle("ha", () => "ho");

@@ -3,6 +3,12 @@ import { TypeScriptProject } from "@monadahq/mona-projen";
 const project = new TypeScriptProject({
   name: "wing-console",
   description: "The Wing Console",
+  deps: [
+    "chokidar",
+    "electron-log",
+    "@monadahq/wing-local-server",
+    "@monadahq/wing-local-client",
+  ],
   devDeps: [
     "@monadahq/mona-projen",
     "@babel/core",
@@ -31,6 +37,8 @@ const project = new TypeScriptProject({
     "vite-plugin-electron",
     "@heroicons/react",
     "classnames",
+    "react-query",
+    "@trpc/react",
   ],
 });
 
@@ -95,6 +103,7 @@ for (const tsconfig of tsconfigFiles) {
 
 project.addGitIgnore("*.env");
 project.addGitIgnore("/release");
+project.addGitIgnore("/storybook-static");
 
 if (project.eslint) {
   project.eslint.addOverride({
@@ -110,6 +119,7 @@ if (project.eslint) {
     "unicorn/prefer-module": "off",
     "unicorn/no-useless-undefined": ["error", { checkArguments: false }],
     "unicorn/prefer-top-level-await": "off",
+    "unicorn/consistent-function-scoping": "warn",
     "unicorn/filename-case": [
       "error",
       {
