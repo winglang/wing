@@ -1,7 +1,7 @@
 use cloud;
 
-bucket := cloud::Bucket();
-bucket2 := cloud::Bucket() as "OtherBucket";
+let bucket = cloud::Bucket();
+let bucket2 = cloud::Bucket() as "OtherBucket";
 
 proc handler() {
   bucket->upload("file.txt", value->toString());

@@ -19,7 +19,7 @@ for fox in sox {
 Variable assignment
 ====================
 
-x: number := 1;
+let x: number = 1;
 x = 2;
 
 ---

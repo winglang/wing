@@ -88,9 +88,10 @@ module.exports = grammar({
 
     variable_definition_statement: ($) =>
       seq(
+        "let",
         field("name", $.identifier),
         optional($._type_annotation),
-        ":=",
+        "=",
         field("value", $.expression),
         ";"
       ),
