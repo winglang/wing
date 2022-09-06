@@ -6,7 +6,7 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expression, Flight, FunctionDefinition, FunctionSignature,
+	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
 	Literal, MethodCall, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
@@ -73,13 +73,13 @@ impl Parser<'_> {
 		let value = self.check_error(node.named_child(0).unwrap(), "duration")?;
 		let value_text = self.node_text(&self.get_child_field(&value, "value")?);
 
-		match value_text {
+		match value.kind() {
 			"seconds" => Ok(Literal::Duration(value_text.parse().expect("Duration string"))),
 			"minutes" => Ok(Literal::Duration(
 				// Specific "Minutes" duration needed here
 				value_text.parse::<f64>().expect("Duration string") * 60_f64,
 			)),
-			"ERROR" => self.add_error(format!("Expected duration value"), &node),
+			"ERROR" => self.add_error(format!("Expected duration type"), &node),
 			other => panic!("Unexpected duration type {} || {:#?}", other, node),
 		}
 	}
@@ -104,6 +104,7 @@ impl Parser<'_> {
 				.filter(|child| !child.is_extra())
 				.filter_map(|st_node| self.build_statement(&st_node).ok())
 				.collect(),
+			env: None, // env should be set later when scope is type-checked
 		}
 	}
 
@@ -297,7 +298,7 @@ impl Parser<'_> {
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
-			"class" => Ok(Type::Class(self.node_symbol(type_node)?)),
+			"class_type" => Ok(Type::Class(self.node_symbol(type_node)?)),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
@@ -370,13 +371,14 @@ impl Parser<'_> {
 		Ok(ArgList { pos_args, named_args })
 	}
 
-	fn build_expression(&self, expression_node: &Node) -> DiagnosticResult<Expression> {
+	fn build_expression(&self, exp_node: &Node) -> DiagnosticResult<Expr> {
+		let expression_node = &self.check_error(*exp_node, "Expression")?;
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap())?;
 				// This should be a type name so it cannot be a nested reference
 				if matches!(class, Reference::NestedIdentifier { object: _, property: _ }) {
-					_ = self.add_error::<Expression>(
+					_ = self.add_error::<Expr>(
 						format!(
 							"Expected a reference to a class or resource type, instead got {:?}",
 							class
@@ -399,14 +401,14 @@ impl Parser<'_> {
 				} else {
 					None
 				};
-				Ok(Expression::New {
+				Ok(Expr::new(ExprType::New {
 					class,
 					obj_id,
 					arg_list: arg_list?,
 					obj_scope,
-				})
+				}))
 			}
-			"binary_expression" => Ok(Expression::Binary {
+			"binary_expression" => Ok(Expr::new(ExprType::Binary {
 				lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
 				rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
@@ -426,8 +428,8 @@ impl Parser<'_> {
 					"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
 					other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
 				},
-			}),
-			"unary_expression" => Ok(Expression::Unary {
+			})),
+			"unary_expression" => Ok(Expr::new(ExprType::Unary {
 				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 					"+" => UnaryOperator::Plus,
 					"-" => UnaryOperator::Minus,
@@ -436,36 +438,41 @@ impl Parser<'_> {
 					other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
 				},
 				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
-			}),
-			"string" => Ok(Expression::Literal(Literal::String(
+			})),
+			"string" => Ok(Expr::new(ExprType::Literal(Literal::String(
 				self.node_text(&expression_node).into(),
-			))),
-			"number" => Ok(Expression::Literal(Literal::Number(
+			)))),
+			"number" => Ok(Expr::new(ExprType::Literal(Literal::Number(
 				self.node_text(&expression_node).parse().expect("Number string"),
-			))),
-			"bool" => Ok(Expression::Literal(Literal::Boolean(
+			)))),
+			"bool" => Ok(Expr::new(ExprType::Literal(Literal::Boolean(
 				match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
 					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
 				},
-			))),
-			"duration" => Ok(Expression::Literal(self.build_duration(&expression_node)?)),
-			"reference" => Ok(Expression::Reference(self.build_reference(&expression_node)?)),
+			)))),
+			"duration" => Ok(Expr::new(ExprType::Literal(self.build_duration(&expression_node)?))),
+			"reference" => Ok(Expr::new(ExprType::Reference(self.build_reference(&expression_node)?))),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"function_call" => Ok(Expression::FunctionCall {
+			"function_call" => Ok(Expr::new(ExprType::FunctionCall {
 				function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-			}),
-			"method_call" => Ok(Expression::MethodCall(MethodCall {
+			})),
+			"method_call" => Ok(Expr::new(ExprType::MethodCall(MethodCall {
 				method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap())?,
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-			})),
+			}))),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"ERROR" => self.add_error(format!("Expected expression"), expression_node),
-			other => panic!("Unexpected expression {} || {:#?}", other, expression_node),
+			other => {
+				if expression_node.has_error() {
+					self.add_error(format!("Expected expression"), expression_node)
+				} else {
+					panic!("Unexpected expression {} || {:#?}", other, expression_node);
+				}
+			}
 		}
 	}
 }

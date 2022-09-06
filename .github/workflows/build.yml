@@ -15,6 +15,24 @@ permissions:
   contents: write
 
 jobs:
+  build-vscode:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: wing-analyzer/vscode-extension
+      - name: Create VSIX
+        working-directory: wing-analyzer/vscode-extension
+        run: npm run build
+      - name: Upload extension
+        if: ${{ github.ref == 'refs/heads/main' }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: vscode-wing.vsix
+          path: wing-analyzer/vscode-extension/vscode-wing.vsix
   build-native:
     strategy:
       fail-fast: false
@@ -114,10 +132,11 @@ jobs:
         run: |
           mkdir dist
           mv ./*/*.tgz ./dist
+          mv ./*/*.vsix ./dist
           cd dist
           echo '## SHA-1 Checksums' > ../checksums.md
           echo '```' >> ../checksums.md
-          sha1sum --binary *.tgz >> ../checksums.md
+          sha1sum --binary * >> ../checksums.md
           echo '```' >> ../checksums.md
 
       - name: Cut Development Release
@@ -126,10 +145,13 @@ jobs:
           tag_name: development
           body_path: checksums.md
           prerelease: true
-          files: dist/*.tgz
+          files: dist/*
+          
 
   wrapper:
-    needs: build-native
+    needs:
+      - build-vscode
+      - build-native
     if: ${{ github.ref == 'refs/heads/main' }}
     runs-on: ubuntu-latest
     steps:

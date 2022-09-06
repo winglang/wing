@@ -9,7 +9,7 @@
             "name": "Debug Extension",
             "type": "extensionHost",
             "request": "launch",
-            "outFiles": ["${workspaceFolder}/lib/**/*.js"],
+            "outFiles": ["${workspaceFolder}/wing-analyzer/vscode-extension/lib/**/*.js"],
             "env": {
               "SERVER_PATH": "${workspaceRoot}/wing-analyzer/language-server/target/debug/wing-language-server"
             },

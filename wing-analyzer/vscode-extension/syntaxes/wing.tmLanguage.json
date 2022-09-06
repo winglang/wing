@@ -1,54 +1,104 @@
 {
-	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
-	"name": "Wing",
-	"scopeName": "source.wing",
-	"patterns": [
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "Wing",
+  "scopeName": "source.wing",
+  "patterns": [
+    {
+      "include": "#template-string"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#type-primitive"
+    },
 		{
-			"include": "#keywords"
+			"include": "#statement"
 		},
 		{
-			"include": "#strings"
-		},
-		{
-			"include": "#comment"
+			"name": "support.type.builtin.js",
+			"match": "(?<!\\.|\\$)\\b(this|true|false|nil)\\b(?!\\$)"
 		}
-	],
-	"repository": {
-		"keywords": {
-			"patterns": [
-				{
-					"name": "keyword.control.wing",
-					"match": "\\b(?:as|class|else|for|from|function|if|in|new|return|inflight|proc|use)\\b"
-				},
-				{
-					"name": "keyword.other.wing",
-					"match": "\\b(?:true|false|anything|nothing|nil)\\b"
-				}
-			]
-		},
-		"comment":{
-			"patterns": [
-				{
-					"name": "comment.line",
-					"match": "//.*"
-				},
-				{
-					"name": "comment.block",
-					"begin": "/\\*",
-					"end": "\\*/"
-				}
-			]
-		},
-		"strings": {
-			"name": "string.quoted.double.wing",
+  ],
+  "repository": {
+		"template-string": {
+			"name": "string.quoted.double",
 			"begin": "\"",
 			"end": "\"",
 			"patterns": [
 				{
-					"name": "constant.character.escape.wing",
-					"match": "\\\\."
+					"include": "#template-element"
+				},
+				{
+					"include": "#string-character-escape"
 				}
 			]
-		}
-	}
+		},
+		"string-character-escape": {
+			"name": "constant.character.escape.wing",
+			"match": "\\\\(x\\h{2}|[0-2][0-7]{0,2}|3[0-6][0-7]?|37[0-7]?|[4-7][0-7]?|.|$)"
+		},
+    "template-element": {
+      "patterns": [
+        {
+          "name": "meta.template.expression.wing",
+          "begin": "\\$\\{",
+          "beginCaptures": {
+            "0": {
+              "name": "punctuation.definition.template-expression.begin.wing"
+            }
+          },
+          "end": "\\}",
+          "endCaptures": {
+            "0": {
+              "name": "punctuation.definition.template-expression.end.wing"
+            }
+          }
+        }
+      ]
+    },
+    "comment": {
+      "patterns": [
+        {
+          "name": "comment.line",
+          "match": "//.*"
+        },
+        {
+          "name": "comment.block",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+		"statement": {
+			"patterns": [
+				{
+					"include": "#comment"
+				}
+			]
+		},
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.wing",
+          "match": "\\b(?:as|class|else|for|from|function|if|in|new|return|inflight|proc|use|fn|resource|be|let|break|continue|protected|internal|rw|try|throw|catch|finally|bring|struct|def|shape)\\b"
+        }
+      ]
+    },
+    "type-primitive": {
+      "name": "support.type.wing",
+      "match": "\\b(?:str|num|string|number|bool|nil|any|list|set|mut_map|mut_set|future)\\b"
+    },
+    "numbers": {
+      "patterns": [
+        {
+          "name": "constant.numeric.wing",
+          "match": "\\b(?:[1-9][0-9]+[smh]?)\\b"
+        }
+      ]
+    }
+  }
 }
