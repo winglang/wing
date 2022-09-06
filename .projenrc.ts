@@ -97,6 +97,8 @@ for (const tsconfig of tsconfigFiles) {
       ".storybook/**/*",
       ".projenrc.ts",
       "vite.config.ts",
+      "tailwind.config.cjs",
+      "postcss.config.cjs",
     ]);
   }
 }

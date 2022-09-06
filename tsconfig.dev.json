@@ -49,7 +49,9 @@
     "test/**/*",
     ".storybook/**/*",
     ".projenrc.ts",
-    "vite.config.ts"
+    "vite.config.ts",
+    "tailwind.config.cjs",
+    "postcss.config.cjs"
   ],
   "exclude": [
     "node_modules"
