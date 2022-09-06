@@ -67,7 +67,6 @@
   "<"
   "<="
   "="
-  ":="
   "=="
   "!"
   "!="
@@ -86,14 +85,14 @@
 
 [
   "as"
+  "bring"
   "class"
   "else"
   "for"
-  "from"
-  "function"
   "if"
   "in"
+  "init"
+  "inflight"
   "new"
   "return"
-  "inflight"
 ] @keyword
