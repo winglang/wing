@@ -321,7 +321,7 @@ infrastructure (and not the code that runs within a specific machine within this
 cloud infrastructure).
 
 Phase modifier `~` is allowed in the context of declaring interface and resource
-members. Example code is shown in the [resources](#43-resources) section.
+members. Example code is shown in the [resources](#33-resources) section.
 
 Design of language features in Wing loosely follow the design of WebAssembly and
 its relation to WASI. Some features are designed to be "compute" and independent
@@ -369,7 +369,7 @@ Statics are both supported in inflight as well as preflight mode of execution.
 
 A declaration for a static member is a member declaration whose declaration
 specifiers contain the keyword static. The keyword static must appear before
-other specifiers. More details in the [classes](#42-classes) section.
+other specifiers. More details in the [classes](#32-classes) section.
 
 The name of any static data member and static member function must be different
 from the name of the containing class regardless of the casing.
@@ -644,7 +644,7 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 "bring" statement can be used to import and reuse code from other Wing files or
 other JSII supported languages. The statement is detailed in its own section in
-this document: [Module System](#5-module-system).
+this document: [Module System](#4-module-system).
 
 [`▲ top`][top]
 
