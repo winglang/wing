@@ -1,4 +1,4 @@
-use cloud;
+bring cloud;
 let x = 5s;
 let bucket = cloud::Bucket();
 

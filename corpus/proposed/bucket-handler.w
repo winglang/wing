@@ -1,4 +1,4 @@
-use cloud;
+bring cloud;
 
 let bucket = cloud::Bucket();
 let bucket2 = cloud::Bucket() as "OtherBucket";

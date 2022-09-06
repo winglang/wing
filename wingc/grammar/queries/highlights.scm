@@ -85,14 +85,13 @@
 
 [
   "as"
+  "bring"
   "class"
   "else"
   "for"
-  "from"
-  "function"
   "if"
   "in"
+  "inflight"
   "new"
   "return"
-  "inflight"
 ] @keyword
