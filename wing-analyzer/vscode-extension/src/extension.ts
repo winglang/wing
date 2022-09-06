@@ -2,7 +2,14 @@ import { writeFile } from "fs/promises";
 import { tmpdir } from "os";
 import fetch, { HeadersInit } from "node-fetch";
 import { Octokit } from "octokit";
-import * as vscode from "vscode";
+import {
+  window,
+  workspace,
+  ExtensionContext,
+  ExtensionMode,
+  commands,
+  Uri,
+} from "vscode";
 
 import {
   Executable,
@@ -31,9 +38,9 @@ export function deactivate() {
   return client?.stop();
 }
 
-export async function activate(context: vscode.ExtensionContext) {
+export async function activate(context: ExtensionContext) {
   const traceOutputChannel = window.createOutputChannel(server_name);
-  traceOutputChannel.show()
+  traceOutputChannel.show();
   const command = process.env.SERVER_PATH || server_id;
   const run: Executable = {
     command,
@@ -54,16 +61,21 @@ export async function activate(context: vscode.ExtensionContext) {
   };
 
   // Create the language client and start the client.
-  client = new LanguageClient(server_id, server_name, serverOptions, clientOptions);
+  client = new LanguageClient(
+    server_id,
+    server_name,
+    serverOptions,
+    clientOptions
+  );
   client.start();
 
   // Check for updates
   await checkForUpdates(context);
 }
 
-export async function checkForUpdates(context: vscode.ExtensionContext) {
-  if (context.extensionMode === vscode.ExtensionMode.Development) {
-    void vscode.window.showWarningMessage(
+export async function checkForUpdates(context: ExtensionContext) {
+  if (context.extensionMode === ExtensionMode.Development) {
+    void window.showWarningMessage(
       `[Wing] Skipping updates in development mode`
     );
     return;
@@ -78,7 +90,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     return;
   }
 
-  const configuration = vscode.workspace.getConfiguration(EXTENSION_NAME);
+  const configuration = workspace.getConfiguration(EXTENSION_NAME);
   const githubToken = configuration.get<string>(CFG_UPDATES_GITHUB_TOKEN);
   const sourceTag = configuration.get<string>(CFG_UPDATES_SOURCE_TAG);
 
@@ -91,7 +103,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     });
 
     if (latestRelease.status !== 200) {
-      void vscode.window.showErrorMessage(
+      void window.showErrorMessage(
         `[Wing] Could not check for updates: ${latestRelease.data}`
       );
       return;
@@ -107,9 +119,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
           latestHash = sha1;
           break;
         } else {
-          void vscode.window.showWarningMessage(
-            `[Wing] Checksum invalid: ${sha1}`
-          );
+          void window.showWarningMessage(`[Wing] Checksum invalid: ${sha1}`);
         }
       }
     }
@@ -129,7 +139,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     }
 
     if (doUpdate) {
-      void vscode.window.showInformationMessage(
+      void window.showInformationMessage(
         `[Wing] New version available! Updating automatically...`
       );
 
@@ -149,15 +159,15 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
             token: githubToken,
           });
         } catch (e) {
-          void vscode.window.showErrorMessage(
+          void window.showErrorMessage(
             `[Wing] Could not download update: ${e}`
           );
           return;
         }
 
-        await vscode.commands.executeCommand(
+        await commands.executeCommand(
           "workbench.extensions.installExtension",
-          vscode.Uri.parse(filePath)
+          Uri.parse(filePath)
         );
 
         await context.globalState.update(
@@ -165,16 +175,14 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
           latestReleaseChecksum
         );
 
-        void vscode.window
+        void window
           .showInformationMessage(
             `[Wing] Reload window for update to take effect?`,
             "Ok"
           )
           .then((selectedAction) => {
             if (selectedAction === "Ok") {
-              void vscode.commands.executeCommand(
-                "workbench.action.reloadWindow"
-              );
+              void commands.executeCommand("workbench.action.reloadWindow");
             }
           });
       }
