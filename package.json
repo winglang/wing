@@ -53,14 +53,14 @@
     "eslint-plugin-prettier": "^4.2.1",
     "jest": "^27.0.0",
     "jest-junit": "^13",
-    "jsii": "^1.66.0",
-    "jsii-diff": "^1.66.0",
-    "jsii-docgen": "^7.0.75",
-    "jsii-pacmak": "^1.66.0",
+    "jsii": "^1.67.0",
+    "jsii-diff": "^1.67.0",
+    "jsii-docgen": "^7.0.76",
+    "jsii-pacmak": "^1.67.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
     "prettier": "^2.7.1",
-    "projen": "^0.61.41",
+    "projen": "^0.61.44",
     "replace-in-file": "^6.3.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
@@ -72,10 +72,10 @@
     "constructs": "^10.0.25"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^9.0.19",
-    "@monadahq/wingsdk-clients": "^0.4.1",
+    "@cdktf/provider-aws": "^9.0.21",
+    "@monadahq/wingsdk-clients": "^0.5.0",
     "cdktf": "^0.12.2",
-    "esbuild-wasm": "^0.15.6"
+    "esbuild-wasm": "^0.15.7"
   },
   "bundledDependencies": [
     "@monadahq/wingsdk-clients",
@@ -138,6 +138,8 @@
     }
   },
   "overrides": {
+    "@types/responselike": "1.0.0",
+    "got": "12.3.1",
     "@types/prettier": "2.6.0",
     "jest-resolve": "^28"
   },
