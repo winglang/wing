@@ -73,3 +73,7 @@ export class Function extends FunctionBase {
     throw new Error("Method not implemented.");
   }
 }
+
+export enum FunctionInflightMethods {
+  INVOKE = "invoke",
+}

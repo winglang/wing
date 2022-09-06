@@ -3,6 +3,7 @@ import { tmpdir } from "os";
 import { basename, dirname, join, resolve } from "path";
 import { IConstruct } from "constructs";
 import * as esbuild from "esbuild-wasm";
+import { CLIENTS_PACKAGE } from "../constants";
 import { PREBUNDLE_SYMBOL } from "./internal";
 
 /**
@@ -277,4 +278,21 @@ function isPrimitive(value: any) {
 
 function mkdtemp(prefix: string): string {
   return mkdtempSync(join(tmpdir(), prefix));
+}
+
+export class InflightClient {
+  public static for(
+    targetCloud: string,
+    resource: string,
+    clientClass: string,
+    args: string[]
+  ): Code {
+    const clientPath = require.resolve(
+      `${CLIENTS_PACKAGE}/${targetCloud.toLowerCase()}/${resource.toLowerCase()}`
+    );
+    return NodeJsCode.fromInline(
+      `new (require("${clientPath}")).${clientClass}(${args.join(", ")})`
+    );
+  }
+  private constructor() {}
 }

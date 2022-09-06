@@ -54,3 +54,8 @@ export class Bucket extends BucketBase {
     throw new Error("Method not implemented.");
   }
 }
+
+export enum BucketInflightMethods {
+  PUT = "put",
+  GET = "get",
+}

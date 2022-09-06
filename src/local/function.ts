@@ -1,7 +1,14 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { FunctionProps } from "../cloud";
-import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
+import {
+  Code,
+  Language,
+  NodeJsCode,
+  Inflight,
+  CaptureMetadata,
+  InflightClient,
+} from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema";
@@ -32,8 +39,13 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.code = NodeJsCode.fromFile(assetPath);
   }
 
-  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    throw new Error("Method not implemented.");
+  public capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+    if (!(captureScope instanceof Function)) {
+      throw new Error("functions can only be captured by a function for now");
+    }
+    return InflightClient.for("local", "function", "FunctionClient", [
+      `"${this.node.id}"]`,
+    ]);
   }
 
   /** @internal */

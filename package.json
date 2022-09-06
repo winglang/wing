@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "@cdktf/provider-aws": "^9.0.19",
-    "@monadahq/wingsdk-clients": "^0.3.0",
+    "@monadahq/wingsdk-clients": "^0.4.1",
     "cdktf": "^0.12.2",
     "esbuild-wasm": "^0.15.6"
   },

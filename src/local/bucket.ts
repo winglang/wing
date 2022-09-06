@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { LOCAL_CLIENTS_PATH } from "../constants";
-import { CaptureMetadata, Code, NodeJsCode } from "../core";
+import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
 import { BucketSchema } from "./schema";
@@ -35,8 +34,8 @@ export class Bucket
     if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by a function for now");
     }
-    return NodeJsCode.fromInline(
-      `new (require("${LOCAL_CLIENTS_PATH}")).BucketClient("${this.node.id}");`
-    );
+    return InflightClient.for("local", "function", "BucketClient", [
+      `process.env["${this.node.id}"]`,
+    ]);
   }
 }

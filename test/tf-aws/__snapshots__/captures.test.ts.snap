@@ -2,7 +2,7 @@
 
 exports[`function captures a bucket 1`] = `
 "const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/node_modules/@monadahq/wingsdk-clients/lib/aws/index.js\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+$cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/node_modules/@monadahq/wingsdk-clients/lib/aws/bucket.js\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
           await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
@@ -84,6 +84,110 @@ exports[`function captures a bucket 2`] = `
 }"
 `;
 
+exports[`function captures a function 1`] = `
+"const $cap = {};
+async function $proc($cap, event) {
+          console.log(\\"Event: \\" + JSON.stringify(event));
+          return { greeting: \\"Hello, \\" + event.name + \\"!\\" };
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures a function 2`] = `
+"const $cap = {};
+$cap[\\"function\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/node_modules/@monadahq/wingsdk-clients/lib/aws/function.js\\")).FunctionClient(process.env[\\"FUNCTION_NAME__Function1\\"]);
+async function $proc($cap, event) {
+          console.log(\\"Event: \\" + JSON.stringify(event));
+          const data = await $cap.function.invoke({ name: \\"world\\" });
+          console.log(\\"Greeting: \\" + data.greeting);
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures a function 3`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"Function1_IamRole_8B9BC80D\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      },
+      \\"Function2_IamRole_62EBED55\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"Function1_IamRolePolicy_C0724D18\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function1_IamRole_8B9BC80D.name}\\"
+      },
+      \\"Function2_IamRolePolicy_E46C9D6B\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"lambda:InvokeFunction\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_lambda_function.Function1_LambdaFunction_2C21275B.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function2_IamRole_62EBED55.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"Function1_IamRolePolicyAttachment_0393C78B\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Function1_IamRole_8B9BC80D.name}\\"
+      },
+      \\"Function2_IamRolePolicyAttachment_1D579508\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Function2_IamRole_62EBED55.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"Function1_LambdaFunction_2C21275B\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function1\\"
+          }
+        },
+        \\"function_name\\": \\"Function1\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Function1_IamRole_8B9BC80D.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Function1_Bucket_115DE947.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function1_S3Object_AFBA38E0.key}\\"
+      },
+      \\"Function2_LambdaFunction_86A5B94E\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"FUNCTION_NAME__Function1\\": \\"\${aws_lambda_function.Function1_LambdaFunction_2C21275B.arn}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function2\\"
+          }
+        },
+        \\"function_name\\": \\"Function2\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Function2_IamRole_62EBED55.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Function2_Bucket_4249B6E3.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function2_S3Object_6F3ED347.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Function1_Bucket_115DE947\\": {},
+      \\"Function2_Bucket_4249B6E3\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"Function1_S3Object_AFBA38E0\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Function1_Bucket_115DE947.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"Function2_S3Object_6F3ED347\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Function2_Bucket_4249B6E3.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
 exports[`function captures some primitives 1`] = `
 "const $cap = {};
 $cap[\\"num\\"] = 5;
@@ -151,7 +255,7 @@ exports[`function captures some primitives 2`] = `
 
 exports[`two functions reusing the same inflight 1`] = `
 "const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/node_modules/@monadahq/wingsdk-clients/lib/aws/index.js\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+$cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/node_modules/@monadahq/wingsdk-clients/lib/aws/bucket.js\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
           await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
@@ -163,7 +267,7 @@ exports.handler = async function(event) {
 
 exports[`two functions reusing the same inflight 2`] = `
 "const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/node_modules/@monadahq/wingsdk-clients/lib/aws/index.js\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+$cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/node_modules/@monadahq/wingsdk-clients/lib/aws/bucket.js\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
           await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));

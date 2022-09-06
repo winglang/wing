@@ -1118,12 +1118,12 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.local.Function.capture"></a>
 
 ```typescript
-public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
+public capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code
 ```
 
 Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.local.Function.capture.parameter._captureScope"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.local.Function.capture.parameter.captureScope"></a>
 
 - *Type:* constructs.IConstruct
 
@@ -1282,18 +1282,18 @@ Returns a string representation of this construct.
 ##### `capture` <a name="capture" id="@monadahq/wingsdk.tfaws.Function.capture"></a>
 
 ```typescript
-public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
+public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
 ```
 
 Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
 
-###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.tfaws.Function.capture.parameter._captureScope"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.tfaws.Function.capture.parameter.captureScope"></a>
 
 - *Type:* constructs.IConstruct
 
 ---
 
-###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.tfaws.Function.capture.parameter._metadata"></a>
+###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.tfaws.Function.capture.parameter.metadata"></a>
 
 - *Type:* @monadahq/wingsdk.core.CaptureMetadata
 
@@ -3257,6 +3257,51 @@ Name of the exported function which will be run.
 ---
 
 
+### InflightClient <a name="InflightClient" id="@monadahq/wingsdk.core.InflightClient"></a>
+
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.InflightClient.for">for</a></code> | *No description.* |
+
+---
+
+##### `for` <a name="for" id="@monadahq/wingsdk.core.InflightClient.for"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+core.InflightClient.for(targetCloud: string, resource: string, clientClass: string, args: string[])
+```
+
+###### `targetCloud`<sup>Required</sup> <a name="targetCloud" id="@monadahq/wingsdk.core.InflightClient.for.parameter.targetCloud"></a>
+
+- *Type:* string
+
+---
+
+###### `resource`<sup>Required</sup> <a name="resource" id="@monadahq/wingsdk.core.InflightClient.for.parameter.resource"></a>
+
+- *Type:* string
+
+---
+
+###### `clientClass`<sup>Required</sup> <a name="clientClass" id="@monadahq/wingsdk.core.InflightClient.for.parameter.clientClass"></a>
+
+- *Type:* string
+
+---
+
+###### `args`<sup>Required</sup> <a name="args" id="@monadahq/wingsdk.core.InflightClient.for.parameter.args"></a>
+
+- *Type:* string[]
+
+---
+
+
+
 ### NodeJsCode <a name="NodeJsCode" id="@monadahq/wingsdk.core.NodeJsCode"></a>
 
 Reference to a piece of Node.js code.
@@ -3929,6 +3974,42 @@ The tree node.
 ---
 
 ## Enums <a name="Enums" id="Enums"></a>
+
+### BucketInflightMethods <a name="BucketInflightMethods" id="@monadahq/wingsdk.cloud.BucketInflightMethods"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | *No description.* |
+
+---
+
+##### `PUT` <a name="PUT" id="@monadahq/wingsdk.cloud.BucketInflightMethods.PUT"></a>
+
+---
+
+
+##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
+
+---
+
+
+### FunctionInflightMethods <a name="FunctionInflightMethods" id="@monadahq/wingsdk.cloud.FunctionInflightMethods"></a>
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE">INVOKE</a></code> | *No description.* |
+
+---
+
+##### `INVOKE` <a name="INVOKE" id="@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE"></a>
+
+---
+
 
 ### Language <a name="Language" id="@monadahq/wingsdk.core.Language"></a>
 

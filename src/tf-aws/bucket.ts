@@ -1,8 +1,8 @@
 import { s3 } from "@cdktf/provider-aws";
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { TERRAFORM_AWS_CLIENTS_PATH } from "../constants";
-import { CaptureMetadata, Code, NodeJsCode } from "../core";
+import { BucketInflightMethods } from "../cloud";
+import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
 
 export class Bucket extends cloud.BucketBase implements cloud.IBucket {
@@ -60,17 +60,17 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
       throw new Error("buckets can only be captured by tfaws.Function for now");
     }
 
-    const name = `BUCKET_NAME__${this.node.id}`;
+    const env = `BUCKET_NAME__${this.node.id}`;
 
     const methods = new Set(metadata.methods ?? []);
-    if (methods.has("put")) {
+    if (methods.has(BucketInflightMethods.PUT)) {
       captureScope.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.has("get")) {
+    if (methods.has(BucketInflightMethods.GET)) {
       captureScope.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
@@ -80,10 +80,10 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
 
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(name, this.bucket.bucket);
+    captureScope.addEnvironment(env, this.bucket.bucket);
 
-    return NodeJsCode.fromInline(
-      `new (require("${TERRAFORM_AWS_CLIENTS_PATH}")).BucketClient(process.env["${name}"])`
-    );
+    return InflightClient.for("aws", "bucket", "BucketClient", [
+      `process.env["${env}"]`,
+    ]);
   }
 }

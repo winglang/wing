@@ -5,10 +5,17 @@ import * as aws from "@cdktf/provider-aws";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { FunctionProps } from "../cloud";
-import { Code, Language, Inflight, CaptureMetadata } from "../core";
+import { FunctionInflightMethods, FunctionProps } from "../cloud";
+import {
+  Code,
+  Language,
+  Inflight,
+  CaptureMetadata,
+  InflightClient,
+} from "../core";
 
 export class Function extends cloud.FunctionBase {
+  private readonly function: aws.lambdafunction.LambdaFunction;
   private readonly env: Record<string, string> = {};
   private readonly role: aws.iam.IamRole;
   private readonly policyStatements: any[] = [];
@@ -119,24 +126,51 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Create Lambda function
-    new aws.lambdafunction.LambdaFunction(this, "LambdaFunction", {
-      functionName: this.node.id,
-      s3Bucket: bucket.bucket,
-      s3Key: lambdaArchive.key,
-      handler: "index.handler",
-      runtime: "nodejs16.x",
-      role: this.role.arn,
-      environment: {
-        variables: this.env,
-      },
-    });
+    this.function = new aws.lambdafunction.LambdaFunction(
+      this,
+      "LambdaFunction",
+      {
+        functionName: this.node.id,
+        s3Bucket: bucket.bucket,
+        s3Key: lambdaArchive.key,
+        handler: "index.handler",
+        runtime: "nodejs16.x",
+        role: this.role.arn,
+        environment: {
+          variables: this.env,
+        },
+      }
+    );
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
   }
 
-  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    throw new Error("Method not implemented.");
+  public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+    if (!(captureScope instanceof Function)) {
+      throw new Error(
+        "functions can only be captured by tfaws.Function for now"
+      );
+    }
+
+    const env = `FUNCTION_NAME__${this.node.id}`;
+
+    const methods = new Set(metadata.methods ?? []);
+    if (methods.has(FunctionInflightMethods.INVOKE)) {
+      captureScope.addPolicyStatements({
+        effect: "Allow",
+        action: ["lambda:InvokeFunction"],
+        resource: [`${this.function.arn}`],
+      });
+    }
+
+    // The function name needs to be passed through an environment variable since
+    // it may not be resolved until deployment time.
+    captureScope.addEnvironment(env, this.function.arn);
+
+    return InflightClient.for("aws", "function", "FunctionClient", [
+      `process.env["${env}"]`,
+    ]);
   }
 
   public addEnvironment(name: string, value: string) {
