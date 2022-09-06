@@ -110,23 +110,17 @@ impl Parser<'_> {
 
 	fn build_statement(&self, statement_node: &Node) -> DiagnosticResult<Statement> {
 		match statement_node.kind() {
-			"use_statement" => {
-				// TODO This grammar for this doesn't make sense yet
-				if let Some(parent_module) = statement_node.child_by_field_name("parent_module") {
-					Ok(Statement::Use {
-						module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-						identifier: Some(self.node_symbol(&parent_module)?),
-					})
+			"short_import_statement" => Ok(Statement::Use {
+				module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
+				identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
+					Some(self.node_symbol(&identifier)?)
 				} else {
-					Ok(Statement::Use {
-						module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-						identifier: None,
-					})
-				}
-			}
+					None
+				},
+			}),
 			"variable_definition_statement" => Ok(Statement::VariableDef {
-				var_name: self.node_symbol(&statement_node.child(0).unwrap())?,
-				initial_value: self.build_expression(&statement_node.child(2).unwrap())?,
+				var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
+				initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 			}),
 			"variable_assignment_statement" => Ok(Statement::Assignment {
 				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
@@ -154,9 +148,6 @@ impl Parser<'_> {
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			}),
-			"function_definition" => Ok(Statement::FunctionDefinition(
-				self.build_function_definition(statement_node, Flight::Pre)?,
-			)),
 			"inflight_function_definition" => Ok(Statement::FunctionDefinition(
 				self.build_function_definition(statement_node, Flight::In)?,
 			)),

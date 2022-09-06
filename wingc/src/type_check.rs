@@ -807,7 +807,7 @@ impl<'a> TypeChecker<'a> {
 				identifier: _,
 			} => {
 				// TODO: for now all namespaced identifiers resolve to `anything` since we don't know what they are,
-				// this is better than failing just because it's a way to do our mock `use cloud; cloud::Bucket()` support.
+				// this is better than failing just because it's a way to do our mock `bring cloud; cloud::Bucket()` support.
 				_ = unimplemented_type();
 				self.types.anything()
 			}
