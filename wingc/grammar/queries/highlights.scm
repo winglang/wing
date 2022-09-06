@@ -91,6 +91,7 @@
   "for"
   "if"
   "in"
+  "init"
   "inflight"
   "new"
   "return"
