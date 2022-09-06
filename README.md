@@ -22,14 +22,14 @@
   - [1.12 Documentation Style](#112-documentation-style)
   - [1.13 Execution Model](#113-execution-model)
 - [2. Statements](#2-statements)
-  - [2.1 bring statement](#21-bring-statement)
-  - [2.2 break statement](#22-break-statement)
-  - [2.3 continue statement](#23-continue-statement)
-  - [2.4 return statement](#24-return-statement)
-  - [2.5 await Statement](#25-await-statement)
-  - [2.6 if statement](#26-if-statement)
-  - [2.7 for statement](#27-for-statement)
-  - [2.8 while statement](#28-while-statement)
+  - [2.1 bring](#21-bring)
+  - [2.2 break](#22-break)
+  - [2.3 continue](#23-continue)
+  - [2.4 return](#24-return)
+  - [2.5 await](#25-await)
+  - [2.6 if](#26-if)
+  - [2.7 for](#27-for)
+  - [2.8 while](#28-while)
 - [3. Declarations](#3-declarations)
   - [3.1 Structs](#31-structs)
   - [3.2 Classes](#32-classes)
@@ -60,11 +60,10 @@
   - [6.3 Operators](#63-operators)
     - [6.3.1 Relational Operators](#631-relational-operators)
     - [6.3.2 Logical Operators](#632-logical-operators)
-    - [6.3.3 Bitwise Operators](#633-bitwise-operators)
-    - [6.3.4 Mathematics Operators](#634-mathematics-operators)
-    - [6.3.5 Operator Precedence](#635-operator-precedence)
-    - [6.3.6 Short Circuiting](#636-short-circuiting)
-    - [6.3.7 Equality](#637-equality)
+    - [6.3.3 Mathematics Operators](#633-mathematics-operators)
+    - [6.3.4 Operator Precedence](#634-operator-precedence)
+    - [6.3.5 Short Circuiting](#635-short-circuiting)
+    - [6.3.6 Equality](#636-equality)
   - [6.4 Kitchen Sink](#64-kitchen-sink)
   - [6.5 Roadmap and Bucket List](#65-roadmap-and-bucket-list)
   - [6.6 Credits](#66-credits)
@@ -114,13 +113,14 @@ the mechanics of the cloud.
 
 #### 1.1.1 Primitive Types
 
-| Name   | Extra information                         |
-| ------ | ----------------------------------------- |
-| `nil`  | represents the absence of a value or type |
-| `any`  | represents everything and anything        |
-| `num`  | represents numbers (doubles)              |
-| `str`  | UTF-16 encoded strings                    |
-| `bool` | represents true or false                  |
+| Name   | Extra information                  |
+| ------ | ---------------------------------- |
+| `void` | represents the absence of a type   |
+| `nil`  | represents the absence of a value  |
+| `any`  | represents everything and anything |
+| `num`  | represents numbers (doubles)       |
+| `str`  | UTF-16 encoded strings             |
+| `bool` | represents true or false           |
 
 User defined explicit "any" is supported iff declared by the user.  
 Almost all types can be implicitly resolved by the compiler except for "any".  
@@ -557,11 +557,11 @@ expected from a call and it is not being caught.
 
 Wing enforces minor formatting and tries to be as close as possible to JSII:
 
-- each statement must end with a semicolon
-- interface names start with capital letter "I"
-- class, struct, interface, and resource names must be TitleCased
-- every other declaration name must be snake_cased unless otherwise specified
-- members of classes, interfaces, and resources cannot share the same
+- Each statement must end with a semicolon
+- Interface names start with capital letter "I"
+- Class, struct, interface, and resource names must be TitleCased
+- Every other declaration name must be snake_cased unless otherwise specified
+- Members of classes, interfaces, and resources cannot share the same
   TitleCased representation as the declaring expression itself.
 - Parentheses are optional in expressions. Any wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
@@ -640,7 +640,7 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ## 2. Statements
 
-### 2.1 bring statement
+### 2.1 bring
 
 "bring" statement can be used to import and reuse code from other Wing files or
 other JSII supported languages. The statement is detailed in its own section in
@@ -650,7 +650,7 @@ this document: [Module System](#5-module-system).
 
 ---
 
-### 2.2 break statement
+### 2.2 break
 
 **break** statement allows to end execution of a cycle. This includes for and
 while loops currently.
@@ -679,7 +679,7 @@ while loops currently.
 
 ---
 
-### 2.3 continue statement
+### 2.3 continue
 
 **continue** statement allows to skip to the next iteration of a cycle. This
 includes for and while loops currently.
@@ -708,18 +708,15 @@ includes for and while loops currently.
 
 ---
 
-### 2.4 return statement
+### 2.4 return
 
 **return** statement allows to return a value or exit from a called context.  
-In case of a missing "return" statement in a method definition, the method will
-return `nil` implicitly and inherently its return type becomes also `nil` if no
-other type annotation with `?` is provided.
 
 > ```TS
 > // Wing Code:
 > class MyClass {
 >   myPublicMethod() {}
->   _myPrivateMethod(): nil {}
+>   _myPrivateMethod(): void {}
 >   protected myProtectedMethod(): nil { return nil; }
 >   internal _myInternalMethod(): str { return "hi!"; }
 > }
@@ -740,7 +737,7 @@ other type annotation with `?` is provided.
 
 ---
 
-### 2.5 await Statement
+### 2.5 await
 
 **await** statement allows to wait for a promise and grab its execution result.
 "await" and "promise" are semantically similar to JavaScript's promises.  
@@ -754,7 +751,7 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 >     let x = await some_promise();
 >     return x;
 >   }
->   boo(): promise<num> {
+>   boo(): Promise<num> {
 >     let x = some_promise();
 >     return x;
 >   }
@@ -779,7 +776,7 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 
 ---
 
-### 2.6 if statement
+### 2.6 if
 
 Flow control can be done with `if/elif/else` statements.  
 The `if` statement is optionally followed by `elif` and `else`.  
@@ -814,10 +811,11 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 ---
 
-### 2.7 for statement
+### 2.7 for
 
 `for..in` statement is used to iterate over a list or set.  
-type annotation after an iteratee (left hand side of `in`) is optional.  
+Type annotation after an iteratee (left hand side of `in`) is optional.  
+The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 
 > ```TS
 > // Wing program:
@@ -856,7 +854,7 @@ type annotation after an iteratee (left hand side of `in`) is optional.
 
 ---
 
-### 2.8 while statement
+### 2.8 while
 
 while statement is used to execute a block of code while a condition is true.  
 
@@ -1081,8 +1079,7 @@ Multiple inheritance is invalid and forbidden.
 Multiple implementations of various interfaces is allowed.  
 Multiple implementations of the same interface is invalid and forbidden.
 
-In methods if return statement is missing, `return nil` is assumed.  
-In methods if return type is missing, `: nil` is assumed.
+In methods if return type is missing, `: void` is assumed.
 
 [`▲ top`][top]
 
@@ -1100,8 +1097,8 @@ Resources can be defined like so:
 resource Foo {
   init() { /* initialize preflight fields */ } // preflight constructor
   ~ init() {} // optional client initializer
-  fin() {} // optional sync finalizer
-  async fin() {} // async finalizer (can be either sync or async)
+  finalizer() {} // optional sync finalizer
+  async finalizer() {} // async finalizer (can be either sync or async)
 
   // phase independent fields (advanced usage only)
   = foo(arg: num): num { return arg; }
@@ -1162,8 +1159,8 @@ support (normal strings as well as shell strings).
 "scope" must be an expression of resource type.
 
 In addition to the `init` keyword for defining initializers, resources have a
-unique `fin` definable method that offers async finalization of a resource in
-preflight time.  
+unique `finalizer` definable method that offers async finalization of a resource
+in preflight time.  
 Order of execution of async finalization is not guaranteed.
 
 Resources can be captured into inflight functions and once that happens, inside
@@ -1292,11 +1289,11 @@ However, it is possible to create anonymous closures and assign to variables
 > let f2 = (a: num, b: num) => { print(a + b); }
 > // OR:
 > // preflight closure:
-> let f4 = (a: num, b: num): nil -> { print(a + b); }
+> let f4 = (a: num, b: num): void -> { print(a + b); }
 > // inflight closure:
-> let f5 = (a: num, b: num): nil ~> { print(a + b); }
+> let f5 = (a: num, b: num): void ~> { print(a + b); }
 > // phase independent closure:
-> let f6 = (a: num, b: num): nil => { print(a + b); }
+> let f6 = (a: num, b: num): void => { print(a + b); }
 > ```
 
 `=>` closure types are special in which the user can write phase independent or
@@ -1309,15 +1306,16 @@ can they return any resources. They do pure "compute" operations.
 
 #### 3.6.2 Promises
 
-Promises in Wing are defined with `promise<T>` syntax.  
+Promises in Wing are defined with `Promise<T>` syntax.  
 Functions that use the keyword "await" in their body must return a promise.
 
 > ```TS
 > // Wing Code:
-> let number = (): promise<num> -> {
+> let number = (): Promise<num> -> {
 >   return 23;
 > }
-> let handler = (): promise<nil> -> {
+> // handler returns Promise<void>
+> let handler = async (): void -> {
 >   let t = await number();
 >   print(t);
 > }
@@ -1325,10 +1323,10 @@ Functions that use the keyword "await" in their body must return a promise.
 >
 > ```TS
 > // Equivalent TypeScript Code:
-> const number = Object.freeze((): number {
+> const number = Object.freeze((): number => {
 >   return 23;
 > })
-> const handler = Object.freeze((): undefined {
+> const handler = Object.freeze((): void => {
 >   const t: number = await number();
 >   console.log(t);
 > })
@@ -1795,22 +1793,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 6.3.3 Bitwise Operators
-
-| Operator | Description                 | Example  |
-| -------- | --------------------------- | -------- |
-| `&`      | Binary AND                  | `a & b`  |
-| `\|`     | Binary OR                   | `a \| b` |
-| `^`      | Binary XOR                  | `a ^ b`  |
-| `~`      | Binary One's Complement     | `~a`     |
-| `<<`     | Binary Left Shift Operator  | `a << 1` |
-| `>>`     | Binary Right Shift Operator | `a >> 1` |
-
-[`▲ top`][top]
-
----
-
-#### 6.3.4 Mathematics Operators
+#### 6.3.3 Mathematics Operators
 
 | Operator | Description    | Example |
 | -------- | -------------- | ------- |
@@ -1826,18 +1809,14 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 6.3.5 Operator Precedence
+#### 6.3.4 Operator Precedence
 
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| +x, -x, ~x           | Unary plus, Unary minus, Bitwise NOT              |
+| +x, -x               | Unary plus, Unary minus                           |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
-| <<, >>               | Bitwise shift operators                           |
-| &                    | Bitwise AND                                       |
-| ^                    | Bitwise XOR                                       |
-| \|                   | Bitwise OR                                        |
 | ==, !=, >, >=, <, <= | Comparisons, Identity, operators                  |
 | !                    | Logical NOT                                       |
 | &&                   | Logical AND                                       |
@@ -1853,7 +1832,7 @@ determined by associativity.
 
 ---
 
-#### 6.3.6 Short Circuiting
+#### 6.3.5 Short Circuiting
 
 For the built-in logical NOT operators, the result is `true` if the operand is
 `false`. Otherwise, the result is `false`.
@@ -1893,7 +1872,7 @@ if x != nil {
 
 ---
 
-#### 6.3.7 Equality
+#### 6.3.6 Equality
 
 Of the operators supported, the following can be used with non-numeric operands:
 
