@@ -1,11 +1,14 @@
 # Wing Language Specification
 
 - [0. Preface](#0-preface)
+  - [0.1 Motivation](#01-motivation)
+  - [0.2 Design Tenets](#02-design-tenets)
 - [1. General](#1-general)
   - [1.1 Types](#11-types)
     - [1.1.1 Primitive Types](#111-primitive-types)
     - [1.1.2 Container Types](#112-container-types)
     - [1.1.3 Function Types](#113-function-types)
+    - [1.1.4 JSON type](#114-json-type)
   - [1.2 Debugging Utilities](#12-debugging-utilities)
   - [1.3 Phase Modifiers](#13-phase-modifiers)
   - [1.4 Storage Modifiers](#14-storage-modifiers)
@@ -18,53 +21,57 @@
   - [1.11 Memory Management](#111-memory-management)
   - [1.12 Documentation Style](#112-documentation-style)
   - [1.13 Execution Model](#113-execution-model)
-- [2. Expressions](#2-expressions)
-  - [2.1 bring expression](#21-bring-expression)
-  - [2.2 break expression](#22-break-expression)
-  - [2.3 continue expression](#23-continue-expression)
-  - [2.4 return expression](#24-return-expression)
-  - [2.5 await Expression](#25-await-expression)
-- [3. Statements](#3-statements)
-  - [3.1 if statement](#31-if-statement)
-  - [3.2 for statement](#32-for-statement)
-  - [3.3 while statement](#33-while-statement)
-- [4. Declarations](#4-declarations)
-  - [4.1 Structs](#41-structs)
-  - [4.2 Classes](#42-classes)
-  - [4.3 Resources](#43-resources)
-  - [4.4 Interfaces](#44-interfaces)
-  - [4.5 Variables](#45-variables)
-  - [4.6 Functions](#46-functions)
-    - [4.6.1 Closures](#461-closures)
-    - [4.6.2 Promises](#462-promises)
-    - [4.6.3 Struct Expansion](#463-struct-expansion)
-    - [4.6.4 Variadic Arguments](#464-variadic-arguments)
-  - [4.7 Lists](#47-lists)
-  - [4.8 Enumeration](#48-enumeration)
-  - [4.9 Computed Properties](#49-computed-properties)
-- [5. Module System](#5-module-system)
-  - [5.1 Imports](#51-imports)
-    - [5.1.1 Verbose Notation](#511-verbose-notation)
-    - [5.1.2 Shorthand Notation](#512-shorthand-notation)
-  - [5.2 Exports](#52-exports)
-- [6. JSII Interoperability](#6-jsii-interoperability)
-- [7. Miscellaneous](#7-miscellaneous)
-  - [7.1 Strings](#71-strings)
-    - [7.1.1 Normal strings "..."](#711-normal-strings-)
-    - [7.1.2 Shell strings \`...\`](#712-shell-strings-)
-  - [7.2 Comments](#72-comments)
-  - [7.3 Operators](#73-operators)
-    - [7.3.1 Relational Operators](#731-relational-operators)
-    - [7.3.2 Logical Operators](#732-logical-operators)
-    - [7.3.3 Bitwise Operators](#733-bitwise-operators)
-    - [7.3.4 Mathematics Operators](#734-mathematics-operators)
-    - [7.3.5 Operator Precedence](#735-operator-precedence)
-    - [7.3.6 Short Circuiting](#736-short-circuiting)
-    - [7.3.7 Equality](#737-equality)
-  - [7.4 Kitchen Sink](#74-kitchen-sink)
-  - [7.5 Credits](#75-credits)
+- [2. Statements](#2-statements)
+  - [2.1 bring statement](#21-bring-statement)
+  - [2.2 break statement](#22-break-statement)
+  - [2.3 continue statement](#23-continue-statement)
+  - [2.4 return statement](#24-return-statement)
+  - [2.5 await Statement](#25-await-statement)
+  - [2.6 if statement](#26-if-statement)
+  - [2.7 for statement](#27-for-statement)
+  - [2.8 while statement](#28-while-statement)
+- [3. Declarations](#3-declarations)
+  - [3.1 Structs](#31-structs)
+  - [3.2 Classes](#32-classes)
+  - [3.3 Resources](#33-resources)
+  - [3.4 Interfaces](#34-interfaces)
+  - [3.5 Variables](#35-variables)
+  - [3.6 Functions](#36-functions)
+    - [3.6.1 Closures](#361-closures)
+    - [3.6.2 Promises](#362-promises)
+    - [3.6.3 Struct Expansion](#363-struct-expansion)
+    - [3.6.4 Variadic Arguments](#364-variadic-arguments)
+  - [3.7 Lists](#37-lists)
+  - [3.8 Enumeration](#38-enumeration)
+  - [3.9 Computed Properties](#39-computed-properties)
+- [4. Module System](#4-module-system)
+  - [4.1 Imports](#41-imports)
+    - [4.1.1 Verbose Notation](#411-verbose-notation)
+    - [4.1.2 Shorthand Notation](#412-shorthand-notation)
+  - [4.2 Exports](#42-exports)
+- [5. JSII Interoperability](#5-jsii-interoperability)
+  - [5.1 External Libraries](#51-external-libraries)
+  - [5.2 Internal Libraries](#52-internal-libraries)
+- [6. Miscellaneous](#6-miscellaneous)
+  - [6.1 Strings](#61-strings)
+    - [6.1.1 Normal strings "..."](#611-normal-strings-)
+    - [6.1.2 Shell strings \`...\`](#612-shell-strings-)
+  - [6.2 Comments](#62-comments)
+  - [6.3 Operators](#63-operators)
+    - [6.3.1 Relational Operators](#631-relational-operators)
+    - [6.3.2 Logical Operators](#632-logical-operators)
+    - [6.3.3 Bitwise Operators](#633-bitwise-operators)
+    - [6.3.4 Mathematics Operators](#634-mathematics-operators)
+    - [6.3.5 Operator Precedence](#635-operator-precedence)
+    - [6.3.6 Short Circuiting](#636-short-circuiting)
+    - [6.3.7 Equality](#637-equality)
+  - [6.4 Kitchen Sink](#64-kitchen-sink)
+  - [6.5 Roadmap and Bucket List](#65-roadmap-and-bucket-list)
+  - [6.6 Credits](#66-credits)
 
 ## 0. Preface
+
+### 0.1 Motivation
 
 The wing programming language (aka winglang[<sup>RFC</sup>][rfc]) is a general
 purpose programming language designed for building applications for the cloud.
@@ -78,8 +85,24 @@ business goals.
 
 Wing’s goal is to allow developers to express all pieces of a cloud application
 using the same programming language. This way, we can leverage the power of the
-compiler to deeply understand the intent of the developer and implement them
-through the mechanics of the cloud.
+compiler to deeply understand the intent of the developer and implement it with
+the mechanics of the cloud.
+
+[`▲ top`][top]
+
+---
+
+### 0.2 Design Tenets
+
+- Developer Experience (DX) is priority #1 for Wing.
+- Syntax design aims to be concise and minimal, while being "batteries included"
+- at the same time in terms of tooling and DX.
+- Developers coming from other mainstream cloud languages (C#, Java, and TS)
+  should feel right at home.
+- Public facing APIs and syntax are designed to be compatible with JSII. Wing
+  Libraries are JSII libraries themselves.
+- All clouds are treated equally.
+- Syntactic sugar comes last.
 
 [`▲ top`][top]
 
@@ -100,7 +123,8 @@ through the mechanics of the cloud.
 | `bool` | represents true or false                  |
 
 User defined explicit "any" is supported iff declared by the user.  
-Implicit "any" resolved by the compiler is a compile error.
+Almost all types can be implicitly resolved by the compiler except for "any".  
+"any" must be explicitly declared and annotated.
 
 > ```TS
 > // Wing Code:
@@ -128,24 +152,24 @@ Implicit "any" resolved by the compiler is a compile error.
 
 #### 1.1.2 Container Types
 
-| Name          | Extra information                            |
-| ------------- | -------------------------------------------- |
-| `set<T>`      | set type (set of unique items)               |
-| `map<T>`      | map type (key-value with string keys)        |
-| `list<T>`     | variable size list (array) of a certain type |
-| `mut_set<T>`  | mutable set type                             |
-| `mut_map<T>`  | mutable map type                             |
-| `mut_list<T>` | mutable list (array) type                    |
-| `promise<T>`  | promise type (async code)                    |
+| Name         | Extra information                            |
+| ------------ | -------------------------------------------- |
+| `Set<T>`     | set type (set of unique items)               |
+| `Map<T>`     | map type (key-value with string keys)        |
+| `List<T>`    | variable size list (array) of a certain type |
+| `MutSet<T>`  | mutable set type                             |
+| `MutMap<T>`  | mutable map type                             |
+| `MutList<T>` | mutable list (array) type                    |
+| `Promise<T>` | promise type (async code)                    |
 
 > ```TS
 > // Wing Code:
-> let z = {1, 2, 3};          // immutable set (type is set<num>)
-> let zm = mut_set<num>();    // mutable set
+> let z = {1, 2, 3};          // immutable set
+> let zm = MutSet<num>();     // mutable set
 > let y = {"a": 1, "b": 2};   // immutable map
-> let ym = mut_map<num>();    // mutable map
-> let x = [1, 2, 3];          // immutable list (type is list<num>)
-> let xm = mut_list<num>();   // mutable list (array)
+> let ym = MutMap<num>();     // mutable map
+> let x = [1, 2, 3];          // immutable list
+> let xm = MutList<num>();    // mutable list
 > let w = SampleClass();      // class instance (mutability unknown)
 > ```
 >
@@ -168,7 +192,7 @@ Implicit "any" resolved by the compiler is a compile error.
 
 Function type annotations are written as if they were closure declarations, with
 the difference that body is replaced with return type annotation. Phase of the
-function is determined with `=>` or `~>` operators. Latter being inflight. `->`
+function is determined with `->` or `~>` operators. Latter being inflight. `=>`
 indicates a special type of function that is phase independent. Learn more about
 them in the closure section.
 
@@ -178,19 +202,60 @@ them in the closure section.
 
 > ```TS
 > // Wing Code:
-> // type annotation in wing: (num) => num
-> let f1 = (x: num): num => { return x + 1; };
+> // type annotation in wing: (num) -> num
+> let f1 = (x: num): num -> { return x + 1; };
 > // type annotation in wing: (num, str) ~> nil
 > let f2 = (x: num, s: str) ~> { /* no-op */ };
-> // type annotation in wing: (num, num) -> nil
-> let f3 = (a: num, b: num) -> { print(a + b) };
+> // type annotation in wing: (num, num) => nil
+> let f3 = (a: num, b: num) => { print(a + b); };
 > ```
 > 
 > ```TS
 > // Equivalent TypeScript Code:
-> const f1 = Object.freeze((x: number): number => { return x + 1; });
-> const f2 = Object.freeze((x: number, s: string): undefined => { });
-> const f3 = Object.freeze((a: number, b: number): undefined => { print(a+b) });
+> const f1 = Object.freeze((x: number): number -> { return x + 1; });
+> const f2 = Object.freeze((x: number, s: string): undefined -> { });
+> const f3 = Object.freeze((a: number, b: number): undefined -> { print(a+b) });
+> ```
+
+
+[`▲ top`][top]
+
+---
+
+#### 1.1.4 JSON type
+
+A special data type is available in Wing called `json`. This type represents an
+arbitrary JSON value. This type can currently by assigned to from `any`. During
+the assignment, the compiler internally knows about the length of this type and
+attempts to read it as either a JSON string or a BSON buffer.
+
+Since casting is not allowed in Wing, `json` data type is `any`'s interface with
+the outside world. `json` can be casted back to `any` at any time.  
+All structs can be casted to `json` and back to `any` at any time as well.  
+`json` cannot be casted to any other type.
+
+"json" is immutable be design. Meaning that once parsed from its `any` buffer,
+it cannot be modified anymore.
+
+> ```TS
+> // Wing Code:
+> // assuming fetch_some_data_with_jsii() returns "any":
+> let data: json = await fetch_some_data_with_jsii();
+> print(data.[0].["prop-1"].id);
+> print(data.name);
+> ```
+> 
+> ```TS
+> // Equivalent TypeScript Code:
+> const data: any = Object.freeze(await (async () -> {
+>   try {
+>     return JSON.parse(await fetch_some_data_with_jsii());
+>   } catch(err) {
+>     throw new Error(`Failed to parse JSON from any: ${err.message}`);
+>   }
+> })());
+> console.log(data[0]["prop-1"].id);
+> console.log(data.name);
 > ```
 
 
@@ -219,7 +284,7 @@ communicating errors to the user.
 
 > ```TS
 > // Wing Code:
-> print(23, "Hello", true);
+> print(23, "Hello", true, { "a": 1, "b": 2 });
 > throw("a recoverable error occurred");
 > panic("a fatal error encountered", [1,2]);
 > assert(x > 0, x < 10);
@@ -230,14 +295,14 @@ communicating errors to the user.
 > console.log(23, "Hello", true);
 > // throws
 > // calling panic in wing is fatal
-> (() => {
+> (() -> {
 >   console.error("Something went wrong", [1,2]);
 >   // generate core dump
 >   // show stack trace
 >   process.exit(1);
 > })();
 > // multiple assertions
-> (() => { assert.ok(x > 0); assert.ok(x < 10); })();
+> (() -> { assert.ok(x > 0); assert.ok(x < 10); })();
 > ```
 
 [`▲ top`][top]
@@ -263,11 +328,26 @@ its relation to WASI. Some features are designed to be "compute" and independent
 of the underlying phase of the operation. Classes fall into this category. You
 may use these features regardless of the execution phase.
 
-Some features on other hand are "phase-aware" and are available during specific
-phases and/or their behavior changes. Resources fall into this category.
+Some features on the other hand are "phase-aware" and are available during
+specific phases and/or their behavior changes. Resources fall into this
+category.
 
 Bridge between preflight and inflight is crossed with the help of immutable data
-structures, "structs", and capture mechanic in Wing.
+structures, "structs", and capture mechanic in Wing. In addition, preflight can
+receive an inflight function as an argument. This enables resources to define
+code that will be executed on the deployed resource (lambda functions, docker,
+virtual machines etc).
+
+You will encounter the following symbols while writing or reading Wing code:
+
+| Symbol      | Phase       |
+| ----------- | ----------- |
+| `->` or `-` | preflight   |
+| `~>` or `~` | inflight    |
+| `=>` or `=` | independent |
+
+Phase independent code is an advanced use case of Wing where lots of logic needs
+to be shared among phases. This is not recommended for most use cases.
 
 [`▲ top`][top]
 
@@ -339,18 +419,19 @@ is capture-able from preflight safely into inflight.
 
 All primitive types are immutable (`bool`, `str`, `num`, and `nil`).  
 Resources are also immutable by design and can be captured into inflight.  
-Immutable container types (`map`, `set` and `list`) as well as structs of
+Immutable container types (`Map`, `Set` and `List`) as well as structs of
 immutable types are also immutable.
 
 Optionality modifier `?` applied to any type does not change the mutability of
 the underlying type. Read more about optionality in its section below.
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
-Re-assignment to class fields is allowed if field is marked with `rw`.  
+Re-assignment to class fields is allowed if field is marked with `readwrite`.  
 Examples in the class section below.
 
-`rw` is available in the body of class declarations.  
-Assigning `rw` to immutables of the same type is allowed.
+`readwrite` is available in the body of class declarations.  
+Assigning `readwrite` to immutables of the same type is allowed. That is similar
+to assigning non `readonly`s to `readonly`s in TypeScript.
 
 As a result of classes being able to represent mutable data, capturing them into
 inflight is not supported. However, you may declare new classes inside inflight
@@ -408,8 +489,8 @@ type is inferred iff a default value is provided.
 > // Wing Code:
 > let i = 5;
 > let m = i;
-> let arr_opt? = list<num>();
-> let arr: list<num> = [];
+> let arr_opt? = List<num>();
+> let arr: List<num> = [];
 > let copy = arr;
 > let i1? = nil;
 > let i2: num? = i;
@@ -433,8 +514,7 @@ type is inferred iff a default value is provided.
 ### 1.9 Error Handling
 
 Exceptions and `try/catch/finally` is the error mechanism. Mechanics directly
-translate to JavaScript. If exception is uncaught, it crashes your app with a
-`panic` call. You can create a new exception with `throw`.
+translate to JavaScript. You can create a new exception with a `throw` call.
 
 In the presence of `try`, `catch` is required but `finally` is optional.
 
@@ -453,7 +533,7 @@ expected from a call and it is not being caught.
 > } catch e {
 >   print(e);
 > } finally {
->   print("done);
+>   print("done");
 > }
 > ```
 >
@@ -475,29 +555,17 @@ expected from a call and it is not being caught.
 
 ### 1.10 Formatting
 
-Wing is opinionated about formatting and whitespace. The opinion is:
+Wing enforces minor formatting and tries to be as close as possible to JSII:
 
-- indentations of lines are 2 spaces
 - each statement must end with a semicolon
 - interface names start with capital letter "I"
-- enum members must be written in ALL_CAPS_SNAKE_CASE
 - class, struct, interface, and resource names must be TitleCased
 - every other declaration name must be snake_cased unless otherwise specified
-- open curly brace must be at the same line of any declaration that requires it
-
-If you are reading this section as a user and you are caught off guard by this
-section, the philosophy behind this section is to end all unnecessary formatting
-debates and instead make developers focus on writing the logic of their code.
-
-We, as in Wing developers, find ourselves constantly applying this formatting to
-languages that are not even opinionated about it. Therefore, we seize the moment
-to make sure Wing code looks and feels uniform across the board.
-
-Formatting is enforced by the compiler, however this is not enforced IFF it
-occurs in a non entrypoint `.w` file AND the offending code is a direct import
-and usage of a JSII module. This is to ensure isolated compatibility with third
-party JSII modules. Users cannot explicitly turn formatting off. Compiler must
-emit warnings for all implicit JSII formatting violations.
+- members of classes, interfaces, and resources cannot share the same
+  TitleCased representation as the declaring expression itself.
+- Parentheses are optional in expressions. Any wing expression can be surrounded
+  by parentheses to enforce precedence, which implies that the expression inside
+  an if/for/while statement may be surrounded by parentheses.
 
 [`▲ top`][top]
 
@@ -570,21 +638,21 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
-## 2. Expressions
+## 2. Statements
 
-### 2.1 bring expression
+### 2.1 bring statement
 
-"bring" expression can be used to import and reuse code from other Wing files or
-other JSII supported languages. The expression is detailed in its own section in
+"bring" statement can be used to import and reuse code from other Wing files or
+other JSII supported languages. The statement is detailed in its own section in
 this document: [Module System](#5-module-system).
 
 [`▲ top`][top]
 
 ---
 
-### 2.2 break expression
+### 2.2 break statement
 
-**break** expression allows to end execution of a cycle. This includes for and
+**break** statement allows to end execution of a cycle. This includes for and
 while loops currently.
 
 > ```TS
@@ -611,9 +679,9 @@ while loops currently.
 
 ---
 
-### 2.3 continue expression
+### 2.3 continue statement
 
-**continue** expression allows to skip to the next iteration of a cycle. This
+**continue** statement allows to skip to the next iteration of a cycle. This
 includes for and while loops currently.
 
 > ```TS
@@ -640,9 +708,9 @@ includes for and while loops currently.
 
 ---
 
-### 2.4 return expression
+### 2.4 return statement
 
-**return** expression allows to return a value or exit from a called context.  
+**return** statement allows to return a value or exit from a called context.  
 In case of a missing "return" statement in a method definition, the method will
 return `nil` implicitly and inherently its return type becomes also `nil` if no
 other type annotation with `?` is provided.
@@ -672,11 +740,11 @@ other type annotation with `?` is provided.
 
 ---
 
-### 2.5 await Expression
+### 2.5 await Statement
 
-**await** expression allows to wait for a promise and grab its execution result.
+**await** statement allows to wait for a promise and grab its execution result.
 "await" and "promise" are semantically similar to JavaScript's promises.  
-"await" expression is only valid in `async` function declarations.  
+"await" statement is only valid in `async` function declarations.  
 awaiting non promises in Wing is a no-op just like in JavaScript.
 
 > ```TS
@@ -711,13 +779,10 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 
 ---
 
-## 3. Statements
-
-### 3.1 if statement
+### 2.6 if statement
 
 Flow control can be done with `if/elif/else` statements.  
 The `if` statement is optionally followed by `elif` and `else`.  
-"If" statement condition expression in Wing is not surrounded by parenthesis.
 
 > ```TS
 > // Wing program:
@@ -749,11 +814,10 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 ---
 
-### 3.2 for statement
+### 2.7 for statement
 
 `for..in` statement is used to iterate over a list or set.  
 type annotation after an iteratee (left hand side of `in`) is optional.  
-"For" statement condition expression in Wing is not surrounded by parenthesis.
 
 > ```TS
 > // Wing program:
@@ -792,10 +856,9 @@ type annotation after an iteratee (left hand side of `in`) is optional.
 
 ---
 
-### 3.3 while statement
+### 2.8 while statement
 
 while statement is used to execute a block of code while a condition is true.  
-"While" statement condition expression in Wing is not surrounded by parenthesis.
 
 > ```TS
 > // Wing program:
@@ -815,9 +878,9 @@ while statement is used to execute a block of code while a condition is true.
 
 ---
 
-## 4. Declarations
+## 3. Declarations
 
-### 4.1 Structs
+### 3.1 Structs
 
 Structs are loosely modeled after typed JSON literals in JavaScript.  
 Structs are defined with the `struct` keyword.  
@@ -844,7 +907,7 @@ Structs can inherit from multiple other structs.
 > }
 > let s1 = MyDataModel1 { field1: 1, field2: "sample" };
 > let s2 = MyDataModel2 { field3: 1, field4: true };
-> let s3 = MyDataModel2 { field3: 1, field4: nil };
+> let s3 = MyDataModel2 { field3: 1 };
 > let s4 = MyDataModel3 {
 >   field1: 12,
 >   field2: "sample", 
@@ -885,7 +948,7 @@ Structs can inherit from multiple other structs.
 
 ---
 
-### 4.2 Classes
+### 3.2 Classes
 
 Classes consist of fields and methods in any order.  
 The class system is single-dispatch class based object orientated system.
@@ -894,7 +957,7 @@ A class member function that has the name **init** is considered to be a class
 constructor (or initializer, or allocator).
 
 ```TS
-class Name extends Base impl MyInterface1, MyInterface2 {
+class Name extends Base impl IMyInterface1, IMyInterface2 {
   init() {
     // constructor implementation
     // order is up to user
@@ -921,6 +984,9 @@ class Name extends Base impl MyInterface1, MyInterface2 {
 
 Default initialization does not exist in Wing. All member fields must be
 initialized in the constructor. Absent initialization is a compile error.
+All field types, including the optional types must be initialized. Optionals
+are initialized to `nil` if omitted, unless the type is `nil?`, which in that
+case, absent initialization is a compile error.
 
 Member function and field access in constructor with the "this" keyword before
 all fields are initialized is invalid and should throw a compile error.
@@ -1022,7 +1088,7 @@ In methods if return type is missing, `: nil` is assumed.
 
 ---
 
-### 4.3 Resources
+### 3.3 Resources
 
 Resources provide first class composite pattern support in Wing. They are
 modeled after and leverage the [constructs](https://github.com/aws/constructs)
@@ -1038,7 +1104,7 @@ resource Foo {
   async fin() {} // async finalizer (can be either sync or async)
 
   // phase independent fields (advanced usage only)
-  - foo(arg: num): num { return arg; }
+  = foo(arg: num): num { return arg; }
 
   // inflight members
   ~ foo(arg: num): num { return arg; }
@@ -1059,8 +1125,8 @@ resource Foo {
   field3: bool;
 
   // re-assignable class fields, read about them in the mutability section
-  rw field4: num;
-  rw field5: str;
+  readwrite field4: num;
+  readwrite field5: str;
 }
 ```
 
@@ -1088,12 +1154,12 @@ let <name>[: <type>] = <resource> [be <id>] [in <scope>];
 let a = Foo(); // with default scope and id
 let a = Foo() in scope; // with user-defined scope
 let a = Foo() be "custom-id" in scope; // with user-defined scope and id
-let a = Foo(...) be "custom-id" in scope; // with constructor arguments
+let a = Foo(...) be "custom-id2" in scope; // with constructor arguments
 ```
 
 "id" must be of type string. It can also be a string literal with substitution
 support (normal strings as well as shell strings).  
-"scope" must be a variable of resource type.
+"scope" must be an expression of resource type.
 
 In addition to the `init` keyword for defining initializers, resources have a
 unique `fin` definable method that offers async finalization of a resource in
@@ -1109,7 +1175,7 @@ Resources can extend other resources (but not structs) and implement interfaces.
 
 ---
 
-### 4.4 Interfaces
+### 3.4 Interfaces
 
 Interfaces represent a contract that a class or resource must fulfill.  
 Interfaces are defined with the `interface` keyword.  
@@ -1148,17 +1214,17 @@ type of visibility (private, protected, etc.).
 >
 > ```TS
 > // Equivalent TypeScript Code:
-> interface MyInterface1 {
+> interface IMyInterface1 {
 >   public readonly field1: number;
 >   public method1(x: number): string;
 > }
-> interface MyInterface2 {
+> interface IMyInterface2 {
 >   public readonly __inflight__field2: string;
 >   public __inflight__method2(): string;
 > }
 > // this is only shown as a hypothetical sample
 > class MyResource extends constructs.Construct
->   implements MyInterface1, MyInterface2 {
+>   implements IMyInterface1, IMyInterface2 {
 >   public readonly field1: number;
 >   public readonly __inflight__field2: string;
 >   public __inflight__constructor() {
@@ -1179,7 +1245,7 @@ type of visibility (private, protected, etc.).
 
 ---
 
-### 4.5 Variables
+### 3.5 Variables
 
 > Let let be let. (Elad B. 2022)
 
@@ -1207,9 +1273,9 @@ Type annotation is optional if a default value is given.
 
 ---
 
-### 4.6 Functions
+### 3.6 Functions
 
-#### 4.6.1 Closures
+#### 3.6.1 Closures
 
 It is possible to create closures.  
 It is not possible to create named closures.  
@@ -1219,21 +1285,21 @@ However, it is possible to create anonymous closures and assign to variables
 > ```TS
 > // Wing Code:
 > // preflight closure:
-> let f1 = (a: num, b: num) => { print(a + b) };
+> let f1 = (a: num, b: num) -> { print(a + b); }
 > // inflight closure:
-> let f2 = (a: num, b: num) ~> { print(a + b) };
+> let f2 = (a: num, b: num) ~> { print(a + b); }
 > // phase independent closure:
-> let f2 = (a: num, b: num) -> { print(a + b) };
+> let f2 = (a: num, b: num) => { print(a + b); }
 > // OR:
 > // preflight closure:
-> let f4 = (a: num, b: num): nil => { print(a + b) };
+> let f4 = (a: num, b: num): nil -> { print(a + b); }
 > // inflight closure:
-> let f5 = (a: num, b: num): nil ~> { print(a + b) };
+> let f5 = (a: num, b: num): nil ~> { print(a + b); }
 > // phase independent closure:
-> let f6 = (a: num, b: num): nil -> { print(a + b) };
+> let f6 = (a: num, b: num): nil => { print(a + b); }
 > ```
 
-`->` closure types are special in which the user can write phase independent or
+`=>` closure types are special in which the user can write phase independent or
 "phase-shared" closures. These closures cannot consume any resources, neither
 can they return any resources. They do pure "compute" operations.
 
@@ -1241,17 +1307,17 @@ can they return any resources. They do pure "compute" operations.
 
 ---
 
-#### 4.6.2 Promises
+#### 3.6.2 Promises
 
 Promises in Wing are defined with `promise<T>` syntax.  
 Functions that use the keyword "await" in their body must return a promise.
 
 > ```TS
 > // Wing Code:
-> let number = (): promise<num> => {
+> let number = (): promise<num> -> {
 >   return 23;
 > }
-> let handler = (): promise<nil> => {
+> let handler = (): promise<nil> -> {
 >   let t = await number();
 >   print(t);
 > }
@@ -1272,38 +1338,41 @@ Functions that use the keyword "await" in their body must return a promise.
 
 ---
 
-#### 4.6.3 Struct Expansion
+#### 3.6.3 Struct Expansion
 
 If the last argument of a function call is a struct, then the struct in the call
 is "expandable" with a special `:` syntax.  
 In this calling signature, order of struct members do not matter.  
-Partial struct expansion is not allowed.
+Partial struct expansion in terms of supplying less number of arguments than the
+number of fields on type of the struct expected is not allowed. Omitting `nil`s
+is allowed with the same rules as explicit initialization in class constructors.
 
 ```TS
 struct MyStruct {
   field1: num;
   field2: num;
 };
-let f = (x: num, y: num, z: MyStruct) => {
-  print(x + y + z.a + z.b);
+let f = (x: num, y: num, z: MyStruct) -> {
+  print(x + y + z.field1 + z.field2);
 }
 // last arguments are expanded into their struct
-f(1, 2, a: 3, b: 4);
+f(1, 2, field1: 3, field2: 4);
+// f(1, 2, field1: 3); // can't do this, partial expansion is not allowed
 ```
 
 [`▲ top`][top]
 
 ---
 
-#### 4.6.4 Variadic Arguments
+#### 3.6.4 Variadic Arguments
 
 If the last argument of a function type is the `...args` keyword followed by a
-`list` type, then the function accepts typed variadic arguments. Expansion of
+`List` type, then the function accepts typed variadic arguments. Expansion of
 variadic arguments is not supported currently and the container of variadic
 arguments is accessible with the `args` key like a normal list instance.
 
 ```TS
-let f = (x: num, ...args: list<num>) => {
+let f = (x: num, ...args: List<num>) -> {
   print(x + y + sizeof(args));
 }
 // last arguments are expanded into their struct
@@ -1314,7 +1383,7 @@ f(1, 2, 3, 4, 5, 6, 34..100);
 
 ---
 
-### 4.7 Lists
+### 3.7 Lists
 
 Lists are dynamically sized in Wing and are defined with the `[]` syntax.  
 Individual list items are also accessed with the `[]` syntax. You can call
@@ -1325,7 +1394,7 @@ Lists are similar to dynamically sized arrays or vectors in other languages.
 > // Wing Code:
 > let list1 = [1, 2, 3];
 > let list2 = ["a", "b", "c"];
-> let list3 = list(list2);
+> let list3 = List<str>(list2);
 > let l = sizeof(list1) + sizeof(list2) + sizeof(list3) + list1[0];
 > ```
 >
@@ -1341,7 +1410,7 @@ Lists are similar to dynamically sized arrays or vectors in other languages.
 
 ---
 
-### 4.8 Enumeration
+### 3.8 Enumeration
 
 Enumeration type (enum) is a type that groups a list of named constant members.
 Enumeration is defined by writing **enum**, followed by enumeration name and a
@@ -1407,7 +1476,7 @@ if some_val == "ONE" {
 
 ---
 
-### 4.9 Computed Properties
+### 3.9 Computed Properties
 
 You may use the following syntax to define computed properties.  
 Computed properties are syntactic sugar for getters and setters which themselves
@@ -1420,7 +1489,7 @@ of the assignment (write) operation. `new` is always the same type as the type
 of the property itself.  
 
 Both preflight and inflight computed properties are allowed.  
-Keyword `rw` behind computed properties is not allowed.  
+Keyword `readwrite` behind computed properties is not allowed.  
 Async computed properties are not allowed.
 
 ```TS
@@ -1431,9 +1500,9 @@ struct Vec2 {
 }
 
 class Rect {
-  rw size: Vec2;
-  rw origin: Vec2;
-  // computed property with a getter and setter block
+  readwrite size: Vec2;
+  readwrite origin: Vec2;
+
   center: Vec2 {
     read {
       let center_x = origin.x + (size.width / 2);
@@ -1471,7 +1540,7 @@ class Rect {
 
 ---
 
-## 5. Module System
+## 4. Module System
 
 The module system in Wing uses the "bring" expression to reuse code.  
 **bring** expression allows code to "import" functions, classes and variables
@@ -1479,9 +1548,9 @@ from other files, to allow reusability.
 **bring** expression is only allowed at the top of the file before any other
 code. Comments before the first bring expression are valid.
 
-### 5.1 Imports
+### 4.1 Imports
 
-#### 5.1.1 Verbose Notation
+#### 4.1.1 Verbose Notation
 
 "bring" expression starts with `from` keyword and followed by a file path,
 either with or without an extension. If there is no extension, file path is
@@ -1532,7 +1601,7 @@ To promote polyglot programming, A string literal can also be placed after
 
 ---
 
-#### 5.1.2 Shorthand Notation
+#### 4.1.2 Shorthand Notation
 
 The verbose notation of `from <module> bring * as <name>` can be shortened to
 `bring <module>` in case of importing Wing code and `bring <jsii> as <name>` for
@@ -1548,7 +1617,7 @@ bring "path/to/what.js" as what; // from "path/to/what.js" bring * as what;
 
 ---
 
-### 5.2 Exports
+### 4.2 Exports
 
 In preflight, anything with `public` at block scope level is importable.  
 This includes functions, classes, structs, interfaces and resources.  
@@ -1562,7 +1631,9 @@ and no deployment system in the inflight body to synthesize inflight resources.
 
 ---
 
-## 6. JSII Interoperability
+## 5. JSII Interoperability
+
+### 5.1 External Libraries
 
 You may import JSII modules in Wing and they are considered resources if their
 JSII type manifest shows that the JSII module is a construct. Wing is a consumer
@@ -1575,13 +1646,18 @@ let bucket = cdk.aws_s3.Bucket(
 );
 ```
 
+### 5.2 Internal Libraries
+
+Wing libraries themselves are JSII modules. They can be used in all other JSII
+supported languages.
+
 [`▲ top`][top]
 
 ---
 
-## 7. Miscellaneous
+## 6. Miscellaneous
 
-### 7.1 Strings
+### 6.1 Strings
 
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
@@ -1591,7 +1667,7 @@ You can call `sizeof` to get the length of the string.
 
 ---
 
-#### 7.1.1 Normal strings "..."
+#### 6.1.1 Normal strings "..."
 
 The string inside the double quotes is processed, and all notations of form
 `${<expression>}` are substituted from their respective scopes. The behavior is
@@ -1617,7 +1693,7 @@ Processing unicode escape sequences happens in these strings.
 
 ---
 
-#### 7.1.2 Shell strings \`...\`
+#### 6.1.2 Shell strings \`...\`
 
 If string is enclosed with backticks, the contents of that string will be
 interpreted as a shell command and its output will be used as a string. `` `echo
@@ -1644,7 +1720,7 @@ Internally compiler calls the host environment's command processor (e.g.
 >
 > ```TS
 > // Equivalent TypeScript Code:
-> const name = (() => {
+> const name = (() -> {
 >   let _stdout = "";
 >   try {
 >     const { stdout, stderr, status } = spawnSync('echo', ['hello'], {
@@ -1668,7 +1744,7 @@ Internally compiler calls the host environment's command processor (e.g.
 
 ---
 
-### 7.2 Comments
+### 6.2 Comments
 
 Single line comments start with a `//` and continue to the end of the line.  
 Multi-line comments are supported with the `/* ... */` syntax.  
@@ -1686,13 +1762,13 @@ Commenting in Wing has a style that's described earlier in this document.
 
 ---
 
-### 7.3 Operators
+### 6.3 Operators
 
 Unary operators are not supported except outline below.  
 Arithmetic assignment operators are not supported.  
 Ternary or conditional operators are not supported.
 
-#### 7.3.1 Relational Operators
+#### 6.3.1 Relational Operators
 
 | Operator | Description                                      | Example  |
 | -------- | ------------------------------------------------ | -------- |
@@ -1707,7 +1783,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 7.3.2 Logical Operators
+#### 6.3.2 Logical Operators
 
 | Operator | Description          | Example    |
 | -------- | -------------------- | ---------- |
@@ -1719,7 +1795,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 7.3.3 Bitwise Operators
+#### 6.3.3 Bitwise Operators
 
 | Operator | Description                 | Example  |
 | -------- | --------------------------- | -------- |
@@ -1734,7 +1810,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 7.3.4 Mathematics Operators
+#### 6.3.4 Mathematics Operators
 
 | Operator | Description    | Example |
 | -------- | -------------- | ------- |
@@ -1750,7 +1826,7 @@ Ternary or conditional operators are not supported.
 
 ---
 
-#### 7.3.5 Operator Precedence
+#### 6.3.5 Operator Precedence
 
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
@@ -1777,7 +1853,7 @@ determined by associativity.
 
 ---
 
-#### 7.3.6 Short Circuiting
+#### 6.3.6 Short Circuiting
 
 For the built-in logical NOT operators, the result is `true` if the operand is
 `false`. Otherwise, the result is `false`.
@@ -1795,6 +1871,7 @@ Note that bitwise logic operators do not perform short-circuiting.
 In conditionals, if an optional type is used as the only r-value expression of
 the condition statement, it's equivalent to checking it against `nil`. Note that
 using a `bool?` type in this short-circuit is a compile error due to ambiguity.
+Using a `nil?` type is also ambiguous and results in a compile error.
 
 ```TS
 let x? = 1;
@@ -1816,7 +1893,7 @@ if x != nil {
 
 ---
 
-#### 7.3.7 Equality
+#### 6.3.7 Equality
 
 Of the operators supported, the following can be used with non-numeric operands:
 
@@ -1836,7 +1913,7 @@ for immutable data (on top of nominal typing).
 
 ---
 
-### 7.4 Kitchen Sink
+### 6.4 Kitchen Sink
 
 This is an example with almost every feature of the Wing, showing you a whole
 picture of what the syntax feels like.
@@ -1852,7 +1929,7 @@ struct DenyListRule {
 }
 
 struct DenyListProps {
-  rules: mut_list<DenyListRule>;
+  rules: MutList<DenyListRule >;
 }
 
 resource DenyList {
@@ -1867,10 +1944,10 @@ resource DenyList {
     this._bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
   }
 
-  _write_to_file(list: mut_list<DenyListRule>, filename: str): str {
+  _write_to_file(list: MutList<DenyListRule>,  filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map = mut_map<DenyListRule>();
+    let map = MutMap<DenyListRule>(); 
     for rule in list {
       append_rule(map, rule);
     }
@@ -1878,11 +1955,11 @@ resource DenyList {
     return tmpdir;
   }
 
-  ~ rules: mut_map<DenyListRule>?;
+  ~ rules: MutMap<DenyListRule>?; 
 
   ~ init() {
     // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._object_key) ?? mut_map<DenyListRule>();
+    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>(); 
   }
 
   ~ lookup(name: str, version: str): DenyListRule? {
@@ -1895,7 +1972,7 @@ resource DenyList {
   }
 }
 
-let maybe_suffix = () -> {
+let maybe_suffix = () => {
   if version != nil {
     return "/v${version}";
   } else {
@@ -1903,7 +1980,7 @@ let maybe_suffix = () -> {
   }
 }
 
-let append_rule = (map: mut_map<DenyListRule>, rule: DenyListRule) -> {
+let append_rule = (map: MutMap<DenyListRule>,  rule: DenyListRule) => {
   let suffix = maybe_suffix();
   let path = "${rule.package_name}${suffix}";
   map[path] = rule;
@@ -1930,7 +2007,26 @@ queue.add_consumer(filter);
 
 ---
 
-### 7.5 Credits
+### 6.5 Roadmap and Bucket List
+
+- [ ] Make the language `async` by default.
+- [ ] Make inflight functions `async` by default.
+- [ ] First class support for `regx`, `glob`, and `cron` types.
+- [ ] Support of math operations over `date` and `duration` types.
+- [ ] First class support of `yaml`, `toml`, and `xml` for `any` casting.
+- [ ] Add `time`, `date`, and `durations` as first class types with syntax.
+- [ ] More useful enums: Support for Enum Classes and Swift style enums.
+- [ ] Reflection: add an extended `typeof` operator to get type information.
+- [ ] Advanced OOP: Support for `abstract` and `private` implementations.
+- [ ] Develop a conformance test suite for ISO certification.
+- [ ] Inlined Resources: Support for `pure` resources.
+- [ ] Launch a formal spec site with ECMA standards.
+
+[`▲ top`][top]
+
+---
+
+### 6.6 Credits
 
 - <https://github.com/WheretIB/nullc>
 - <https://github.com/chaos-lang/chaos>
