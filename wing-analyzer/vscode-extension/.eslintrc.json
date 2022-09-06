@@ -1,0 +1,146 @@
+{
+  "env": {
+    "jest": true,
+    "node": true
+  },
+  "root": true,
+  "plugins": [
+    "@typescript-eslint",
+    "import",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module",
+    "project": "./tsconfig.dev.json"
+  },
+  "extends": [
+    "plugin:import/typescript",
+    "prettier",
+    "plugin:prettier/recommended"
+  ],
+  "settings": {
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "node": {},
+      "typescript": {
+        "project": "./tsconfig.dev.json",
+        "alwaysTryTypes": true
+      }
+    }
+  },
+  "ignorePatterns": [
+    "*.js",
+    "!.projenrc.ts",
+    "*.d.ts",
+    "node_modules/",
+    "*.generated.ts",
+    "coverage",
+    "!.projenrc.ts",
+    "!projenrc/**/*.ts"
+  ],
+  "rules": {
+    "prettier/prettier": [
+      "error"
+    ],
+    "@typescript-eslint/no-require-imports": [
+      "error"
+    ],
+    "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/test/**",
+          "**/build-tools/**",
+          "**/projenrc/**",
+          ".projenrc.ts",
+          "projenrc/**/*.ts"
+        ],
+        "optionalDependencies": false,
+        "peerDependencies": true
+      }
+    ],
+    "import/no-unresolved": [
+      "error"
+    ],
+    "import/order": [
+      "warn",
+      {
+        "groups": [
+          "builtin",
+          "external"
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "no-duplicate-imports": [
+      "error"
+    ],
+    "no-shadow": [
+      "off"
+    ],
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
+    "key-spacing": [
+      "error"
+    ],
+    "no-multiple-empty-lines": [
+      "error"
+    ],
+    "@typescript-eslint/no-floating-promises": [
+      "error"
+    ],
+    "no-return-await": [
+      "off"
+    ],
+    "@typescript-eslint/return-await": [
+      "error"
+    ],
+    "no-trailing-spaces": [
+      "error"
+    ],
+    "dot-notation": [
+      "error"
+    ],
+    "no-bitwise": [
+      "error"
+    ],
+    "@typescript-eslint/member-ordering": [
+      "error",
+      {
+        "default": [
+          "public-static-field",
+          "public-static-method",
+          "protected-static-field",
+          "protected-static-method",
+          "private-static-field",
+          "private-static-method",
+          "field",
+          "constructor",
+          "method"
+        ]
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": [
+        ".projenrc.ts"
+      ],
+      "rules": {
+        "@typescript-eslint/no-require-imports": "off",
+        "import/no-extraneous-dependencies": "off"
+      }
+    }
+  ]
+}

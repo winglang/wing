@@ -8,10 +8,13 @@ use std::os::raw::c_char;
 use std::path::PathBuf;
 use std::{fs, mem};
 
-use crate::type_check::TypeChecker;
+use crate::ast::Flight;
+use crate::capture::scan_captures;
+use crate::type_check::{TypeChecker, Types};
 use crate::type_env::TypeEnv;
 
 pub mod ast;
+pub mod capture;
 pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
@@ -58,17 +61,21 @@ pub fn parse(source_file: &str) -> Scope {
 	scope
 }
 
-pub fn type_check(scope: &Scope) -> TypeEnv {
-	let mut root_env = TypeEnv::new(None, None, false);
-	let mut tc = TypeChecker::new();
-	tc.type_check_scope(&scope, &mut root_env);
-
-	return root_env;
+pub fn type_check(scope: &mut Scope, types: &mut Types) {
+	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
+	let mut tc = TypeChecker::new(types);
+	tc.type_check_scope(scope);
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
-	let scope = parse(source_file);
-	type_check(&scope);
+	// Create universal types collection (need to keep this alive during entire compilation)
+	let mut types = Types::new();
+	// Build our AST
+	let mut scope = parse(source_file);
+	// Type check everything and build typed symbol environment
+	type_check(&mut scope, &mut types);
+	// Analyze inflight captures
+	scan_captures(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));

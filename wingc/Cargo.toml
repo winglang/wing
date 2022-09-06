@@ -5,7 +5,7 @@ edition = "2021"
 
 [build-dependencies]
 cc = "1.0.73"
-cbindgen = "0.20.0"
+cbindgen = "0.24.3"
 tree-sitter-cli = "0.20.6"
 tree-sitter = "0.20.6"
 
@@ -17,5 +17,5 @@ base16ct = { version = "0.1", features = ["alloc"] }
 tree-sitter-winglang = { path = "./grammar" }
 
 [lib]
-crate-type = ["staticlib"]
+crate-type = ["staticlib", "rlib"]
 bench = false
