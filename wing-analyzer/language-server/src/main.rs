@@ -1,5 +1,5 @@
 use dashmap::DashMap;
-use errors::{errors_from_ast, errors_from_parse_result};
+use errors::errors_from_ast;
 use prep::{parse_text, ParseResult};
 use ropey::Rope;
 use semantic_token::{
@@ -303,7 +303,7 @@ impl Backend {
 
         let semantic_tokens =
             semantic_token_from_ast(rope.to_string().as_str(), &parse_result.tree);
-        let errors = errors_from_parse_result(&parse_result);
+        let errors = errors_from_ast(&parse_result.tree);
 
         self.client
             .log_message(MessageType::INFO, format!("{:?}", errors))

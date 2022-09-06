@@ -36,14 +36,14 @@ pub fn errors_from_ast(ast: &Tree) -> Vec<ErrorInfo> {
     return errors;
 }
 
-pub fn errors_from_parse_result(parse_result: &ParseResult) -> Vec<ErrorInfo> {
-    return parse_result
-        .diagnostics
-        .iter()
-        .map(|diagnostic| ErrorInfo {
-            start: diagnostic.span.start_byte,
-            end: diagnostic.span.end_byte,
-            length: diagnostic.span.end_byte - diagnostic.span.start_byte,
-        })
-        .collect();
-}
+// pub fn errors_from_parse_result(parse_result: &ParseResult) -> Vec<ErrorInfo> {
+//     return parse_result
+//         .diagnostics
+//         .iter()
+//         .map(|diagnostic| ErrorInfo {
+//             start: diagnostic.span.start_byte,
+//             end: diagnostic.span.end_byte,
+//             length: diagnostic.span.end_byte - diagnostic.span.start_byte,
+//         })
+//         .collect();
+// }

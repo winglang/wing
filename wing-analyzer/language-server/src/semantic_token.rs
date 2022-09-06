@@ -1,8 +1,6 @@
 use tower_lsp::lsp_types::{CompletionItemKind, SemanticTokenType, SymbolKind};
 use tree_sitter::{Query, QueryCursor, Tree};
-use wingc::{ast, diagnostic::WingSpan};
-
-use crate::prep::ParseResult;
+use wingc::diagnostic::WingSpan;
 
 pub const LEGEND_TYPE: &[SemanticTokenType] = &[
     SemanticTokenType::VARIABLE,

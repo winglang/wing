@@ -1,12 +1,10 @@
-use std::cell::RefCell;
 use tree_sitter::Tree;
-use wingc::{ast::Scope, diagnostic::Diagnostics, parser::Parser};
 
 #[derive(Debug)]
 pub struct ParseResult {
     pub tree: Tree,
-    pub ast: Scope,
-    pub diagnostics: Diagnostics,
+    // pub ast: Scope,
+    // pub diagnostics: Diagnostics,
 }
 
 pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
@@ -22,25 +20,27 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
         }
     };
 
-    let wing_parser = Parser {
-        source: &text[..],
-        source_name: source_file.to_string(),
-        diagnostics: RefCell::new(Diagnostics::new()),
-    };
+    // NOTE: Currently not including the actual wingc code because it's not async-friendly
 
-    let scope = wing_parser.wingit(&tree.root_node());
+    // let wing_parser = Parser {
+    //     source: &text[..],
+    //     source_name: source_file.to_string(),
+    //     diagnostics: RefCell::new(Diagnostics::new()),
+    // };
 
-    for diagnostic in wing_parser.diagnostics.borrow().iter() {
-        println!("{}", diagnostic);
-    }
+    // let scope = wing_parser.wingit(&tree.root_node());
 
-    if wing_parser.diagnostics.borrow().len() > 0 {
-        std::process::exit(1);
-    }
+    // for diagnostic in wing_parser.diagnostics.borrow().iter() {
+    //     println!("{}", diagnostic);
+    // }
+
+    // if wing_parser.diagnostics.borrow().len() > 0 {
+    //     std::process::exit(1);
+    // }
 
     return ParseResult {
-        ast: scope,
+        // ast: scope,
         tree,
-        diagnostics: wing_parser.diagnostics.borrow().clone(),
+        // diagnostics: wing_parser.diagnostics.borrow().clone(),
     };
 }
