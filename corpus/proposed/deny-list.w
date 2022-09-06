@@ -41,7 +41,7 @@ resource DenyList {
   }
 
   ~ lookup(name: str, version: str): DenyListRule? {
-    return this._rules.get(name) ?? this.rules.get("${name}/v${version})];
+    return this._rules.get(name) ?? this.rules.get("${name}/v${version}")];
   }
 
   ~ add_rule(rule: DenyListRule) {
