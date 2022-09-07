@@ -120,7 +120,7 @@ jobs:
           mv wing-language-server-*.tgz ./server-bin
           cd server-bin
           ls -al
-          ls *.tgz | xargs -n1 tar -zxf
+          for f in *.tgz; do tar -zxf "$f"; done
           ls -al
           rm wing-language-server-*.tgz
           ls -al
