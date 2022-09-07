@@ -87,7 +87,7 @@ jobs:
         run: npm publish
 
       - name: Upload Wing CLI
-        # if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
@@ -100,7 +100,7 @@ jobs:
           mv target/release/wing-language-server target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
       - name: Upload Wing Language Server
-        # if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
@@ -116,9 +116,7 @@ jobs:
         uses: actions/download-artifact@v2
       - name: Prepare language server binaries
         run: |          
-          ls -al wing-language-server-*
           cp -r wing-language-server-* ./wing-analyzer/vscode-extension/resources
-          ls -al wing-language-server-*
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
@@ -127,7 +125,7 @@ jobs:
         working-directory: wing-analyzer/vscode-extension
         run: npm run build
       - name: Upload extension
-        # if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
@@ -154,8 +152,7 @@ jobs:
       - name: Compute Checksums
         run: |
           mkdir dist
-          mv ./*/*.tgz ./dist
-          mv ./*/*.vsix ./dist
+          mv ./*/* ./dist
           cd dist
           echo '## SHA-1 Checksums' > ../checksums.md
           echo '```' >> ../checksums.md
