@@ -118,10 +118,9 @@ jobs:
           working-directory: wing-analyzer/vscode-extension
       - name: Download Artifacts
         uses: actions/download-artifact@v2
-      - name: Move language server binaries
-        working-directory: wing-analyzer/vscode-extension
+      - name: Extract language server binaries
         run: |
-          tar -zcf wing-${{ matrix.os }}-${{ matrix.arch }}.tgz wing-analyzer/vscode-extension/resources
+          tar -zxcf wing-language-server-*.tgz wing-analyzer/vscode-extension/resources
       - name: Create VSIX
         working-directory: wing-analyzer/vscode-extension
         run: npm run build
