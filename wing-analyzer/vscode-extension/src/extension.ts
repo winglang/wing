@@ -67,7 +67,7 @@ export async function activate(context: ExtensionContext) {
     serverOptions,
     clientOptions
   );
-  client.start();
+  await client.start();
 
   // Check for updates
   await checkForUpdates(context);
