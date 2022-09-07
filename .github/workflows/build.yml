@@ -120,7 +120,7 @@ jobs:
         uses: actions/download-artifact@v2
       - name: Extract language server binaries
         run: |
-          tar -zxcf wing-language-server-*.tgz wing-analyzer/vscode-extension/resources
+          tar -zxf wing-language-server-*.tgz wing-analyzer/vscode-extension/resources
       - name: Create VSIX
         working-directory: wing-analyzer/vscode-extension
         run: npm run build
