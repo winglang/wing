@@ -97,7 +97,7 @@ jobs:
         working-directory: wing-analyzer/language-server
         run: |
           cargo build --release
-          tar -zcf ../../wing-language-server-${{ matrix.os }}-${{ matrix.arch }}.tgz target/release/wing-language-server
+          tar -C target/release -zcf ../../wing-language-server-${{ matrix.os }}-${{ matrix.arch }}.tgz wing-language-server
 
       - name: Upload Wing Language Server
         # if: ${{ github.ref == 'refs/heads/main' }}
@@ -125,7 +125,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           working-directory: wing-analyzer/vscode-extension
-      - name: Extract language server binaries
+      - name: Move language server binaries
         working-directory: server-bin
         run: |
           mv * ../wing-analyzer/vscode-extension/resources
