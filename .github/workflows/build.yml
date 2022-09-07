@@ -118,7 +118,7 @@ jobs:
           mkdir server-bin
           mv ./*/*.tgz ./server-bin
           cd server-bin
-          tar -zxf *
+          tar --one-top-level -zxf *
           rm wing-language-server-*.tgz
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
@@ -127,7 +127,7 @@ jobs:
       - name: Move language server binaries
         working-directory: server-bin
         run: |
-          mv * ../wing-analyzer/vscode-extension/resources
+          cp -r * ./wing-analyzer/vscode-extension/resources
       - name: Create VSIX
         working-directory: wing-analyzer/vscode-extension
         run: npm run build
