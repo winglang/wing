@@ -119,8 +119,9 @@ jobs:
           mv ./*/*.tgz ./server-bin
           cd server-bin
           ls -al
-          tar --one-top-level -zxf *.tgz
+          ls *.tgz | xargs -n1 tar --one-top-level -zxf
           rm wing-language-server-*.tgz
+          ls -al
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
