@@ -119,7 +119,7 @@ jobs:
           mkdir server-bin
           mv ./*/*.tgz ./server-bin
           cd server-bin
-          tar -zxf * .
+          tar -zxf *
           rm wing-language-server-*.tgz
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
