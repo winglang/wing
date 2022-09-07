@@ -117,11 +117,12 @@ jobs:
         run: |          
           mkdir server-bin
           ls -al
-          mv ./*/*.tgz ./server-bin
+          mv wing-language-server-*.tgz ./server-bin
           ls -al
           cd server-bin
           ls -al
           ls *.tgz | xargs -n1 tar --one-top-level -zxf
+          ls -al
           rm wing-language-server-*.tgz
           ls -al
       - name: Install dependencies
