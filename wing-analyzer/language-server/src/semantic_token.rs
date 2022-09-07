@@ -1,5 +1,6 @@
-use tower_lsp::lsp_types::{CompletionItemKind, SemanticTokenType, SymbolKind};
-use tree_sitter::{Query, QueryCursor, Tree};
+use tower_lsp::lsp_types::{CompletionItemKind, Position, SemanticTokenType};
+use tree_sitter::{Node, Tree};
+use tree_sitter_traversal::{traverse, Order};
 use wingc::diagnostic::WingSpan;
 
 pub const LEGEND_TYPE: &[SemanticTokenType] = &[
@@ -53,249 +54,91 @@ pub fn token_from_span(span: WingSpan, token_type: SemanticTokenType) -> Relativ
     }
 }
 
-// pub fn semantic_token_from_parse_result(parse_result: &ParseResult) -> Vec<RelativeSemanticToken> {
-//     let mut tokens: Vec<RelativeSemanticToken> = vec![];
+// visit all nodes in tree-sitter tree
+pub fn semantic_token_from_ast(tree: &Tree) -> Vec<RelativeSemanticToken> {
+    let nodes: Vec<Node<'_>> = traverse(tree.walk(), Order::Pre).collect::<Vec<_>>();
+    let mut semantic_tokens: Vec<RelativeSemanticToken> = Vec::new();
 
-//     for statement in parse_result.ast.statements.iter() {
-//         match statement {
-//             ast::Statement::Use {
-//                 module_name,
-//                 identifier,
-//             } => {
-//                 tokens.push(token_from_span(
-//                     module_name.span,
-//                     SemanticTokenType::INTERFACE,
-//                 ));
-//                 if let Some(identifier) = identifier {
-//                     tokens.push(token_from_span(identifier.span, SemanticTokenType::STRUCT));
-//                 }
-//             }
-//             ast::Statement::VariableDef {
-//                 var_name,
-//                 initial_value,
-//             } => todo!(),
-//             ast::Statement::FunctionDefinition(_) => todo!(),
-//             ast::Statement::ForLoop {
-//                 iterator,
-//                 iterable,
-//                 statements,
-//             } => todo!(),
-//             ast::Statement::If {
-//                 condition,
-//                 statements,
-//                 else_statements,
-//             } => todo!(),
-//             ast::Statement::Expression(_) => todo!(),
-//             ast::Statement::Assignment { variable, value } => todo!(),
-//             ast::Statement::Return(_) => todo!(),
-//             ast::Statement::Scope(_) => todo!(),
-//             ast::Statement::Class {
-//                 name,
-//                 members,
-//                 methods,
-//                 constructor,
-//                 parent,
-//                 is_resource,
-//             } => todo!(),
-//         };
-//     }
+    for node in nodes {
+        let kind = node.kind();
 
-//     tokens
-// }
+        let token = if let Some(kind) = map_kind_to_token_type(kind) {
+            Some(RelativeSemanticToken {
+                start: node.start_byte(),
+                end: node.end_byte(),
+                length: node.end_byte() - node.start_byte(),
+                token_type: get_token_type(&kind),
+            })
+        } else {
+            None
+        };
 
-pub fn semantic_token_from_ast(source: &str, ast: &Tree) -> Vec<RelativeSemanticToken> {
-    let query = Query::new(ast.language(), tree_sitter_winglang::HIGHLIGHTS_QUERY).unwrap();
+        if let Some(token) = token {
+            semantic_tokens.push(token);
+        }
+    }
 
-    QueryCursor::new()
-        .captures(&query, ast.root_node(), source.as_bytes())
-        .filter_map(|(mat, capture_index)| {
-            let capture = mat.captures[capture_index];
-            let capture_name = &query.capture_names()[capture.index as usize];
-            let node = capture.node;
-
-            let kind = get_capture_kind(capture_name.as_str());
-
-            if let Some(kind) = kind {
-                Some(RelativeSemanticToken {
-                    start: node.start_byte(),
-                    end: node.end_byte(),
-                    length: node.end_byte() - node.start_byte(),
-                    token_type: get_token_type(&kind.2),
-                })
-            } else {
-                if node.is_extra() {
-                    Some(RelativeSemanticToken {
-                        start: node.start_byte(),
-                        end: node.end_byte(),
-                        length: node.end_byte() - node.start_byte(),
-                        token_type: get_token_type(&SemanticTokenType::COMMENT),
-                    })
-                } else {
-                    None
-                }
-            }
-        })
-        .collect()
+    return semantic_tokens;
 }
 
-pub fn completions_from_ast(source: &str, ast: &Tree) -> Vec<RelativeCompletionToken> {
-    let query = Query::new(ast.language(), tree_sitter_winglang::HIGHLIGHTS_QUERY).unwrap();
+pub fn completions_from_ast(
+    source: &str,
+    tree: &Tree,
+    position: Position,
+) -> Vec<RelativeCompletionToken> {
+    let nodes: Vec<Node<'_>> = traverse(tree.walk(), Order::Pre).collect::<Vec<_>>();
+    let mut completions: Vec<RelativeCompletionToken> = Vec::new();
 
-    QueryCursor::new()
-        .captures(&query, ast.root_node(), source.as_bytes())
-        .filter_map(|(mat, capture_index)| {
-            let capture = mat.captures[capture_index];
-            let capture_name = &query.capture_names()[capture.index as usize];
-            let node = capture.node;
+    for node in nodes {
+        if node.start_position().row >= position.line.try_into().unwrap() {
+            continue;
+        }
 
-            let kind = get_capture_kind(capture_name.as_str());
+        let kind = node.kind();
 
-            if let Some(kind) = kind {
-                Some(RelativeCompletionToken {
-                    text: node.utf8_text(source.as_bytes()).unwrap().to_string(),
-                    kind: kind.0,
-                })
-            } else {
-                None
+        match kind {
+            "variable_definition_statement" => {
+                let name = node.child_by_field_name("name").unwrap();
+                let name_text = name.utf8_text(source.as_bytes()).unwrap();
+                let completion = RelativeCompletionToken {
+                    text: name_text.to_string(),
+                    kind: CompletionItemKind::VARIABLE,
+                };
+                completions.push(completion);
             }
-        })
-        .collect()
+            _ => (),
+        }
+    }
+
+    return completions;
 }
 
-fn get_capture_kind(
-    capture_name: &str,
-) -> Option<(CompletionItemKind, SymbolKind, SemanticTokenType)> {
-    match capture_name {
-        "variable" => Some((
-            CompletionItemKind::VARIABLE,
-            SymbolKind::VARIABLE,
-            SemanticTokenType::VARIABLE,
-        )),
-        "function" | "function.macro" => Some((
-            CompletionItemKind::FUNCTION,
-            SymbolKind::FUNCTION,
-            SemanticTokenType::FUNCTION,
-        )),
-        "type" => Some((
-            CompletionItemKind::TYPE_PARAMETER,
-            SymbolKind::TYPE_PARAMETER,
-            SemanticTokenType::TYPE_PARAMETER,
-        )),
-        "label" => Some((
-            CompletionItemKind::TEXT,
-            SymbolKind::STRING,
-            SemanticTokenType::STRING,
-        )),
-        "module" => Some((
-            CompletionItemKind::MODULE,
-            SymbolKind::MODULE,
-            SemanticTokenType::NAMESPACE,
-        )),
-        "keyword" | "repeat" | "keyword.operator" | "keyword.return" => Some((
-            CompletionItemKind::KEYWORD,
-            SymbolKind::KEY,
-            SemanticTokenType::KEYWORD,
-        )),
-        "struct" => Some((
-            CompletionItemKind::STRUCT,
-            SymbolKind::STRUCT,
-            SemanticTokenType::STRUCT,
-        )),
-        "enum" => Some((
-            CompletionItemKind::ENUM,
-            SymbolKind::ENUM,
-            SemanticTokenType::ENUM,
-        )),
-        "number" | "character" | "boolean" => Some((
-            CompletionItemKind::VALUE,
-            SymbolKind::NUMBER,
-            SemanticTokenType::NUMBER,
-        )),
-        "interface" => Some((
-            CompletionItemKind::INTERFACE,
-            SymbolKind::INTERFACE,
-            SemanticTokenType::INTERFACE,
-        )),
-        "constant" | "constant.builtin" => Some((
-            CompletionItemKind::CONSTANT,
-            SymbolKind::CONSTANT,
-            SemanticTokenType::ENUM_MEMBER,
-        )),
-        "string" | "string.escape" => Some((
-            CompletionItemKind::TEXT,
-            SymbolKind::STRING,
-            SemanticTokenType::STRING,
-        )),
-        "include" => Some((
-            CompletionItemKind::MODULE,
-            SymbolKind::MODULE,
-            SemanticTokenType::NAMESPACE,
-        )),
-        "parameter" => Some((
-            CompletionItemKind::VARIABLE,
-            SymbolKind::VARIABLE,
-            SemanticTokenType::PARAMETER,
-        )),
-        "property" => Some((
-            CompletionItemKind::PROPERTY,
-            SymbolKind::PROPERTY,
-            SemanticTokenType::PROPERTY,
-        )),
-        "method" => Some((
-            CompletionItemKind::METHOD,
-            SymbolKind::METHOD,
-            SemanticTokenType::METHOD,
-        )),
-        "constructor" => Some((
-            CompletionItemKind::CONSTRUCTOR,
-            SymbolKind::CONSTRUCTOR,
-            SemanticTokenType::METHOD,
-        )),
-        "field" => Some((
-            CompletionItemKind::FIELD,
-            SymbolKind::FIELD,
-            SemanticTokenType::PROPERTY,
-        )),
-        "package" => Some((
-            CompletionItemKind::MODULE,
-            SymbolKind::MODULE,
-            SemanticTokenType::NAMESPACE,
-        )),
-        "namespace" => Some((
-            CompletionItemKind::MODULE,
-            SymbolKind::MODULE,
-            SemanticTokenType::NAMESPACE,
-        )),
-        "class" => Some((
-            CompletionItemKind::CLASS,
-            SymbolKind::CLASS,
-            SemanticTokenType::CLASS,
-        )),
-        "enum_member" => Some((
-            CompletionItemKind::ENUM_MEMBER,
-            SymbolKind::ENUM_MEMBER,
-            SemanticTokenType::ENUM_MEMBER,
-        )),
-        "getter" => Some((
-            CompletionItemKind::PROPERTY,
-            SymbolKind::PROPERTY,
-            SemanticTokenType::PROPERTY,
-        )),
-        "setter" => Some((
-            CompletionItemKind::PROPERTY,
-            SymbolKind::PROPERTY,
-            SemanticTokenType::PROPERTY,
-        )),
-        "operator"
-        | "punctuation"
-        | "punctuation.bracket"
-        | "punctuation.delimiter"
-        | "punctuation.special"
-        | "conditional" => Some((
-            CompletionItemKind::OPERATOR,
-            SymbolKind::OPERATOR,
-            SemanticTokenType::OPERATOR,
-        )),
+fn map_kind_to_token_type(kind: &str) -> Option<SemanticTokenType> {
+    match kind {
+        "class_type" => Some(SemanticTokenType::TYPE),
+        "builtin_type" => Some(SemanticTokenType::TYPE),
+        "number" => Some(SemanticTokenType::NUMBER),
+        "duration" => Some(SemanticTokenType::NUMBER),
+        "string" => Some(SemanticTokenType::STRING),
+        "comment" => Some(SemanticTokenType::COMMENT),
+
+        "variable" => Some(SemanticTokenType::VARIABLE),
+        "type_parameter" => Some(SemanticTokenType::TYPE_PARAMETER),
+        "struct" => Some(SemanticTokenType::STRUCT),
+        "property" => Some(SemanticTokenType::PROPERTY),
+        "parameter" => Some(SemanticTokenType::PARAMETER),
+        "operator" => Some(SemanticTokenType::OPERATOR),
+        "namespace" => Some(SemanticTokenType::NAMESPACE),
+        "modifier" => Some(SemanticTokenType::MODIFIER),
+        "method" => Some(SemanticTokenType::METHOD),
+        "macro" => Some(SemanticTokenType::MACRO),
+        "keyword" => Some(SemanticTokenType::KEYWORD),
+        "interface" => Some(SemanticTokenType::INTERFACE),
+        "function" => Some(SemanticTokenType::FUNCTION),
+        "enum" => Some(SemanticTokenType::ENUM),
+        "enum_member" => Some(SemanticTokenType::ENUM_MEMBER),
+        "class_type" => Some(SemanticTokenType::CLASS),
+        "event" => Some(SemanticTokenType::EVENT),
         _ => None,
     }
 }

@@ -81,7 +81,7 @@ impl LanguageServer for Backend {
             let mut im_complete_tokens = self.semantic_token_map.get_mut(&uri)?;
             let rope = self.document_map.get(&uri)?;
             let ast = self.ast_map.get(&uri)?;
-            let extends_tokens = semantic_token_from_ast(rope.to_string().as_str(), &ast.tree);
+            let extends_tokens = semantic_token_from_ast(&ast.tree);
             im_complete_tokens.extend(extends_tokens);
             im_complete_tokens.sort_by(|a, b| a.start.cmp(&b.start));
             let mut pre_line = 0;
@@ -166,11 +166,12 @@ impl LanguageServer for Backend {
 
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
         let uri = params.text_document_position.text_document.uri;
-        // let position = params.text_document_position.position;
+        let position = params.text_document_position.position;
+
         let completions = || -> Option<Vec<CompletionItem>> {
             let rope = self.document_map.get(&uri.to_string())?;
             let ast = self.ast_map.get(&uri.to_string())?;
-            let completions = completions_from_ast(rope.to_string().as_str(), &ast.tree);
+            let completions = completions_from_ast(rope.to_string().as_str(), &ast.tree, position);
             let mut ret = Vec::with_capacity(completions.len());
             for item in completions {
                 // It's not using the offset
@@ -301,8 +302,7 @@ impl Backend {
             .log_message(MessageType::INFO, format!("parsed"))
             .await;
 
-        let semantic_tokens =
-            semantic_token_from_ast(rope.to_string().as_str(), &parse_result.tree);
+        let semantic_tokens = semantic_token_from_ast(&parse_result.tree);
         let errors = errors_from_ast(&parse_result.tree);
 
         self.client

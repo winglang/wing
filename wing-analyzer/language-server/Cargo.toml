@@ -15,3 +15,4 @@ serde = { version = "1.0", features = ["derive"] }
 dashmap = "5.1.0"
 wingc = { path = "../../wingc" }
 tree-sitter-winglang = { path = "../../wingc/grammar" }
+tree-sitter-traversal = "0.1.2"

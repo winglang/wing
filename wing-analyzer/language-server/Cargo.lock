@@ -1281,6 +1281,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "tree-sitter-traversal"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df8a158225e4a4d8505f071340bba9edd109b23f01b70540dccb7c799868f307"
+dependencies = [
+ "tree-sitter",
+]
+
+[[package]]
 name = "tree-sitter-winglang"
 version = "0.0.1"
 dependencies = [
@@ -1548,6 +1557,7 @@ dependencies = [
  "tokio",
  "tower-lsp",
  "tree-sitter",
+ "tree-sitter-traversal",
  "tree-sitter-winglang",
  "wingc",
 ]
