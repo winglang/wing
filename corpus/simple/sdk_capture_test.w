@@ -1,8 +1,8 @@
-use cloud;
+bring cloud;
 
-bucket := new cloud::Bucket();
+let bucket = new cloud::Bucket();
 
-inflight function handler() {
+inflight handler() {
   bucket.upload("file.txt", "data");
 }
 
