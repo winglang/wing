@@ -116,7 +116,9 @@ jobs:
       - name: Prepare language server binaries
         run: |          
           mkdir server-bin
+          ls -al
           mv ./*/*.tgz ./server-bin
+          ls -al
           cd server-bin
           ls -al
           ls *.tgz | xargs -n1 tar --one-top-level -zxf
