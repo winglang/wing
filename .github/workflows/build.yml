@@ -87,7 +87,7 @@ jobs:
         run: npm publish
 
       - name: Upload Wing CLI
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
@@ -126,7 +126,7 @@ jobs:
         working-directory: wing-analyzer/vscode-extension
         run: npm run build
       - name: Upload extension
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
