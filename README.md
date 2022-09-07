@@ -555,7 +555,7 @@ expected from a call and it is not being caught.
 
 ### 1.10 Formatting
 
-Wing enforces minor formatting and tries to be as close as possible to JSII:
+Wing recommends the following formatting and naming conventions:
 
 - Each statement must end with a semicolon
 - Interface names start with capital letter "I"
