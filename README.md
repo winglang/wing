@@ -263,7 +263,7 @@ it cannot be modified anymore.
 
 ---
 
-### 1.2 Debugging Utilities
+### 1.2 Utility Functions
 
 | Name     | Extra information                                        |
 | -------- | -------------------------------------------------------- |
