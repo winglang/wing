@@ -1,7 +1,6 @@
 use tower_lsp::lsp_types::{CompletionItemKind, Position, SemanticTokenType};
-use tree_sitter::{Node, Tree};
+use tree_sitter::{Node, Point, Tree};
 use tree_sitter_traversal::{traverse, Order};
-use wingc::diagnostic::WingSpan;
 
 pub const LEGEND_TYPE: &[SemanticTokenType] = &[
     SemanticTokenType::VARIABLE,
@@ -39,19 +38,11 @@ pub struct RelativeSemanticToken {
 pub struct RelativeCompletionToken {
     pub text: String,
     pub kind: CompletionItemKind,
+    pub detail: Option<String>,
 }
 
 pub fn get_token_type(token_type: &SemanticTokenType) -> usize {
     LEGEND_TYPE.iter().position(|x| x == token_type).unwrap()
-}
-
-pub fn token_from_span(span: WingSpan, token_type: SemanticTokenType) -> RelativeSemanticToken {
-    RelativeSemanticToken {
-        start: span.start_byte,
-        end: span.end_byte,
-        length: span.end_byte - span.start_byte,
-        token_type: get_token_type(&token_type),
-    }
 }
 
 // visit all nodes in tree-sitter tree
@@ -89,9 +80,88 @@ pub fn completions_from_ast(
     let nodes: Vec<Node<'_>> = traverse(tree.walk(), Order::Pre).collect::<Vec<_>>();
     let mut completions: Vec<RelativeCompletionToken> = Vec::new();
 
+    let point = Point::new(
+        position.line.try_into().unwrap(),
+        position.character.try_into().unwrap(),
+    );
+    let node: Option<Node> = tree.root_node().descendant_for_point_range(point, point);
+    if let Some(node) = node {
+        completions.push(RelativeCompletionToken {
+            text: format!("_0 {:#?}", node),
+            kind: CompletionItemKind::SNIPPET,
+            detail: Some("Node".to_string()),
+        });
+        if node.parent().is_some() {
+            completions.push(RelativeCompletionToken {
+                text: format!("_1 {:#?}", node.parent().unwrap()),
+                kind: CompletionItemKind::SNIPPET,
+                detail: Some("Parent".to_string()),
+            });
+        }
+        if node.next_sibling().is_some() {
+            completions.push(RelativeCompletionToken {
+                text: format!("_2 {:#?}", node.next_sibling().unwrap()),
+                kind: CompletionItemKind::SNIPPET,
+                detail: Some("Next".to_string()),
+            });
+        }
+        if node.prev_sibling().is_some() {
+            completions.push(RelativeCompletionToken {
+                text: format!("_3 {:#?}", node.prev_sibling().unwrap()),
+                kind: CompletionItemKind::SNIPPET,
+                detail: Some("Prev".to_string()),
+            });
+        }
+
+        match node.kind() {
+            "source" => {
+                let keywords = vec![
+                    "as", "bring", "class", "else", "for", "if", "in", "init", "inflight", "new",
+                ];
+                completions.extend(
+                    keywords
+                        .iter()
+                        .map(|x| RelativeCompletionToken {
+                            text: x.to_string(),
+                            kind: CompletionItemKind::KEYWORD,
+                            detail: None,
+                        })
+                        .collect::<Vec<_>>(),
+                );
+            }
+            "block" | "ERROR" => {
+                let keywords = vec![
+                    "class", "else", "for", "if", "in", "inflight", "new", "return",
+                ];
+                completions.extend(
+                    keywords
+                        .iter()
+                        .map(|x| RelativeCompletionToken {
+                            text: x.to_string(),
+                            kind: CompletionItemKind::KEYWORD,
+                            detail: None,
+                        })
+                        .collect::<Vec<_>>(),
+                );
+                let builtin_types = vec!["bool", "number", "string"];
+                completions.extend(
+                    builtin_types
+                        .iter()
+                        .map(|x| RelativeCompletionToken {
+                            text: x.to_string(),
+                            kind: CompletionItemKind::TYPE_PARAMETER,
+                            detail: None,
+                        })
+                        .collect::<Vec<_>>(),
+                );
+            }
+            _ => {}
+        }
+    }
+
     for node in nodes {
         if node.start_position().row >= position.line.try_into().unwrap() {
-            continue;
+            break;
         }
 
         let kind = node.kind();
@@ -103,6 +173,7 @@ pub fn completions_from_ast(
                 let completion = RelativeCompletionToken {
                     text: name_text.to_string(),
                     kind: CompletionItemKind::VARIABLE,
+                    detail: None,
                 };
                 completions.push(completion);
             }
@@ -121,24 +192,6 @@ fn map_kind_to_token_type(kind: &str) -> Option<SemanticTokenType> {
         "duration" => Some(SemanticTokenType::NUMBER),
         "string" => Some(SemanticTokenType::STRING),
         "comment" => Some(SemanticTokenType::COMMENT),
-
-        "variable" => Some(SemanticTokenType::VARIABLE),
-        "type_parameter" => Some(SemanticTokenType::TYPE_PARAMETER),
-        "struct" => Some(SemanticTokenType::STRUCT),
-        "property" => Some(SemanticTokenType::PROPERTY),
-        "parameter" => Some(SemanticTokenType::PARAMETER),
-        "operator" => Some(SemanticTokenType::OPERATOR),
-        "namespace" => Some(SemanticTokenType::NAMESPACE),
-        "modifier" => Some(SemanticTokenType::MODIFIER),
-        "method" => Some(SemanticTokenType::METHOD),
-        "macro" => Some(SemanticTokenType::MACRO),
-        "keyword" => Some(SemanticTokenType::KEYWORD),
-        "interface" => Some(SemanticTokenType::INTERFACE),
-        "function" => Some(SemanticTokenType::FUNCTION),
-        "enum" => Some(SemanticTokenType::ENUM),
-        "enum_member" => Some(SemanticTokenType::ENUM_MEMBER),
-        "class_type" => Some(SemanticTokenType::CLASS),
-        "event" => Some(SemanticTokenType::EVENT),
         _ => None,
     }
 }

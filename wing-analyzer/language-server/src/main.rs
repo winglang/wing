@@ -5,13 +5,9 @@ use ropey::Rope;
 use semantic_token::{
     completions_from_ast, semantic_token_from_ast, RelativeSemanticToken, LEGEND_TYPE,
 };
-use serde::{Deserialize, Serialize};
-use serde_json::Value;
 use tower_lsp::jsonrpc::Result;
-use tower_lsp::lsp_types::notification::Notification;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
-use tree_sitter::Tree;
 
 pub mod errors;
 pub mod prep;
@@ -180,7 +176,7 @@ impl LanguageServer for Backend {
                     label: text.to_string(),
                     insert_text: Some(text.to_string()),
                     kind: Some(item.kind),
-                    detail: Some(text.to_string()),
+                    detail: item.detail,
                     ..Default::default()
                 });
             }
@@ -217,20 +213,6 @@ impl LanguageServer for Backend {
             .await;
     }
 
-    async fn execute_command(&self, _: ExecuteCommandParams) -> Result<Option<Value>> {
-        self.client
-            .log_message(MessageType::INFO, "command executed!")
-            .await;
-
-        match self.client.apply_edit(WorkspaceEdit::default()).await {
-            Ok(res) if res.applied => self.client.log_message(MessageType::INFO, "applied").await,
-            Ok(_) => self.client.log_message(MessageType::INFO, "rejected").await,
-            Err(err) => self.client.log_message(MessageType::ERROR, err).await,
-        }
-
-        Ok(None)
-    }
-
     async fn did_open(&self, params: DidOpenTextDocumentParams) {
         self.client
             .log_message(MessageType::INFO, "file opened!")
@@ -265,16 +247,6 @@ impl LanguageServer for Backend {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-struct InlayHintParams {
-    path: String,
-}
-
-enum CustomNotification {}
-impl Notification for CustomNotification {
-    type Params = InlayHintParams;
-    const METHOD: &'static str = "custom/notification";
-}
 struct TextDocumentItem {
     uri: Url,
     text: String,
@@ -316,14 +288,8 @@ impl Backend {
             .into_iter()
             .filter_map(|item| {
                 let diagnostic = || -> Option<Diagnostic> {
-                    // let start_line = rope.try_char_to_line(span.start)?;
-                    // let first_char = rope.try_line_to_char(start_line)?;
-                    // let start_column = span.start - first_char;
                     let start_position = offset_to_position(item.start, &rope)?;
                     let end_position = offset_to_position(item.end, &rope)?;
-                    // let end_line = rope.try_char_to_line(span.end)?;
-                    // let first_char = rope.try_line_to_char(end_line)?;
-                    // let end_column = span.end - first_char;
                     Some(Diagnostic::new_simple(
                         Range::new(start_position, end_position),
                         "Parse Error".to_string(),
@@ -370,18 +336,4 @@ fn offset_to_position(offset: usize, rope: &Rope) -> Option<Position> {
     let first_char = rope.try_line_to_char(line).ok()?;
     let column = offset - first_char;
     Some(Position::new(line as u32, column as u32))
-}
-
-fn compile(source: &[u8]) -> Tree {
-    let language = tree_sitter_winglang::language();
-    let mut parser = tree_sitter::Parser::new();
-    parser.set_language(language).unwrap();
-
-    match parser.parse(&source[..], None) {
-        Some(tree) => tree,
-        None => {
-            println!("Failed parsing source");
-            std::process::exit(1);
-        }
-    }
 }
