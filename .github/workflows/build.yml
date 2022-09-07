@@ -112,15 +112,23 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
+      - name: Prepare language server binaries
+        run: |          
+          mkdir server-bin
+          mv ./*/*.tgz ./server-bin
+          cd server-bin
+          tar -zxf * .
+          rm wing-language-server-*.tgz
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
           working-directory: wing-analyzer/vscode-extension
-      - name: Download Artifacts
-        uses: actions/download-artifact@v2
       - name: Extract language server binaries
+        working-directory: server-bin
         run: |
-          tar -zxf wing-language-server-*.tgz wing-analyzer/vscode-extension/resources
+          mv * ../wing-analyzer/vscode-extension/resources
       - name: Create VSIX
         working-directory: wing-analyzer/vscode-extension
         run: npm run build
