@@ -103,7 +103,7 @@ jobs:
         # if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
-          name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}.tgz
+          name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
           path: wing-analyzer/language-server/target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
   build-vscode:
@@ -116,22 +116,13 @@ jobs:
         uses: actions/download-artifact@v2
       - name: Prepare language server binaries
         run: |          
-          mkdir server-bin
-          mv wing-language-server-*.tgz ./server-bin
-          cd server-bin
-          ls -al
-          for f in *.tgz; do tar -zxf "$f"; done
-          ls -al
-          rm wing-language-server-*.tgz
-          ls -al
+          ls -al wing-language-server-*
+          cp -r wing-language-server-* ./wing-analyzer/vscode-extension/resources
+          ls -al wing-language-server-*
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
           working-directory: wing-analyzer/vscode-extension
-      - name: Move language server binaries
-        working-directory: server-bin
-        run: |
-          cp -r * ./wing-analyzer/vscode-extension/resources
       - name: Create VSIX
         working-directory: wing-analyzer/vscode-extension
         run: npm run build
