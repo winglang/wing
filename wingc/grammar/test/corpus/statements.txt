@@ -19,7 +19,7 @@ for fox in sox {
 Variable assignment
 ====================
 
-x: number := 1;
+let x: number = 1;
 x = 2;
 
 ---
@@ -66,15 +66,15 @@ return 1;
 )
 
 ====================
-Function definition
+Inflight Function definition
 ====================
 
-function hi(a: number, b: string) -> bool {}
+inflight hi(a: number, b: string) {}
 
 ---
 
 (source
-    (function_definition
+    (inflight_function_definition
         name: (identifier)
         parameter_list: (parameter_list
             (parameter_definition
@@ -86,20 +86,19 @@ function hi(a: number, b: string) -> bool {}
                 type: (builtin_type)
             )
         )
-        return_type: (builtin_type)
         block: (block)
     )
 )
 
 ==================================
-Function with function parameter
+Inflight Function with function parameter
 ==================================
 
-function f(callback: (number,number)->bool) -> bool {}
+~ f(callback: (number,number)->bool) {}
 
 ---
 (source
-    (function_definition
+    (inflight_function_definition
         name: (identifier)
         parameter_list: (parameter_list
                 (parameter_definition
@@ -113,7 +112,6 @@ function f(callback: (number,number)->bool) -> bool {}
                     )
                 )
             )
-        return_type: (builtin_type)
         block: (block)
     )
 )
@@ -123,8 +121,8 @@ Class definition
 ==================================
 
 class A {
-    constructor() {}
-    ~function do_something() {}
+    init() {}
+    ~do_something() {}
     a_member: string;
 }
 
@@ -169,9 +167,9 @@ Resource definition
 ==================================
 
 resource A {
-    constructor() {}
-    function preflight_func() {}
-    inflight function inflight_func() {}
+    init() {}
+    preflight_func() {}
+    inflight inflight_func() {}
     pf_member: string;
     inflight if_member: string;
 }

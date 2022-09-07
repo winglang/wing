@@ -1,4 +1,4 @@
 use fs;
 
-hello := fs::TextFile("hello.txt");
+let hello = fs::TextFile("hello.txt");
 hello.addLine("world!");

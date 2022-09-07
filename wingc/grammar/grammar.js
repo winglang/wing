@@ -57,24 +57,24 @@ module.exports = grammar({
     _statement: ($) =>
       choice(
         $.block,
-        $.use_statement,
+        $.short_import_statement,
         $.expression_statement,
         $.variable_definition_statement,
         $.variable_assignment_statement,
         $.return_statement,
-        $.function_definition,
-        $.inflight_function_definition,
         $.class_definition,
         $.resource_definition,
         $.for_in_loop,
-        $.if_statement
+        $.if_statement,
+        // TODO Remove free functions whenever possible
+        $.inflight_function_definition
       ),
 
-    use_statement: ($) =>
+    short_import_statement: ($) =>
       seq(
-        "use",
+        "bring",
         field("module_name", $.identifier),
-        optional(seq("from", field("parent_module", $.identifier))),
+        optional(seq("as", field("alias", $.identifier))),
         ";"
       ),
 
@@ -88,9 +88,10 @@ module.exports = grammar({
 
     variable_definition_statement: ($) =>
       seq(
+        "let",
         field("name", $.identifier),
         optional($._type_annotation),
-        ":=",
+        "=",
         field("value", $.expression),
         ";"
       ),
@@ -264,14 +265,13 @@ module.exports = grammar({
 
     constructor: ($) => 
       seq(
-        "constructor",
+        "init",
         field("parameter_list", $.parameter_list),
         field("block", $.block),
       ),
 
     function_definition: ($) =>
       seq(
-        "function",
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(seq("->", field("return_type", $._type))),
@@ -281,7 +281,6 @@ module.exports = grammar({
     inflight_function_definition: ($) =>
       seq(
         $._inflight_specifier,
-        "function",
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         field("block", $.block)
