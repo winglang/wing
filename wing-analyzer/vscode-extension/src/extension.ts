@@ -1,5 +1,7 @@
+import { execSync } from "child_process";
+import { existsSync } from "fs";
 import { writeFile } from "fs/promises";
-import { tmpdir } from "os";
+import { platform, tmpdir } from "os";
 import fetch, { HeadersInit } from "node-fetch";
 import { Octokit } from "octokit";
 import {
@@ -29,8 +31,8 @@ const CFG_UPDATES_SOURCE_TAG = "updates.sourceTag";
 const STATE_INSTALLED_RELEASE_CHECKSUM = "wing.installedReleaseChecksum";
 const STATE_LAST_UPDATE_CHECK = "wing.lastUpdateCheck";
 
-const server_name = "Wing Language Server";
-const server_id = "wing-language-server";
+const LANGUAGE_SERVER_NAME = "Wing Language Server";
+const LANGUAGE_SERVER_ID = "wing-language-server";
 
 let client: LanguageClient;
 
@@ -39,11 +41,49 @@ export function deactivate() {
 }
 
 export async function activate(context: ExtensionContext) {
-  const traceOutputChannel = window.createOutputChannel(server_name);
+  await start_language_server(context);
+
+  await checkForUpdates(context);
+}
+
+async function start_language_server(context: ExtensionContext) {
+  const traceOutputChannel = window.createOutputChannel(LANGUAGE_SERVER_NAME);
   traceOutputChannel.show();
-  const command = process.env.SERVER_PATH || server_id;
+
+  let serverPath = process.env.SERVER_PATH;
+  if (!serverPath) {
+    // TODO this is pretty ugly
+    // TODO workflow should place these in ways that make more sense
+    switch (platform()) {
+      case "darwin":
+        serverPath = context.asAbsolutePath(
+          "resources/wing-language-server-macos-latest-x64/wing-language-server-macos-latest-x64"
+        );
+        break;
+      case "linux":
+        serverPath = context.asAbsolutePath(
+          "resources/wing-language-server-ubuntu-latest-x64/wing-language-server-ubuntu-latest-x64"
+        );
+        break;
+      default:
+        throw new Error("Unsupported platform");
+    }
+  }
+
+  if (!existsSync(serverPath)) {
+    void window.showWarningMessage(
+      `[Wing] Language server not found at ${serverPath}`
+    );
+    return;
+  }
+
+  // HMM?
+  if (platform() !== "win32") {
+    execSync(`chmod +x ${serverPath}`);
+  }
+
   const run: Executable = {
-    command,
+    command: serverPath,
     options: {
       env: {
         ...process.env,
@@ -62,15 +102,13 @@ export async function activate(context: ExtensionContext) {
 
   // Create the language client and start the client.
   client = new LanguageClient(
-    server_id,
-    server_name,
+    LANGUAGE_SERVER_ID,
+    LANGUAGE_SERVER_NAME,
     serverOptions,
     clientOptions
   );
-  await client.start();
 
-  // Check for updates
-  await checkForUpdates(context);
+  await client.start();
 }
 
 export async function checkForUpdates(context: ExtensionContext) {
