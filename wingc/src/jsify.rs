@@ -9,6 +9,7 @@ use crate::ast::{
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
+const SYNTHESIZER: &str = "$synthesizer";
 
 struct Capture {
 	symbol: String,
@@ -116,12 +117,16 @@ pub fn jsify(scope: &Scope, shim: bool) -> String {
 
 	if shim {
 		output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+		output.push(format!(
+			"const {} = process.env.WING_LOCAL ? new {}.local.Synthesizer({{}}) : new {}.tfaws.Synthesizer({{}});",
+			SYNTHESIZER, STDLIB, STDLIB
+		));
 	}
 
 	output.append(&mut imports);
 
 	if shim {
-		js.insert(0, "super();\n".to_string());
+		js.insert(0, format!("super({{ synthesizer: {} }});\n", SYNTHESIZER));
 		output.push(format!(
 			"class MyApp extends {}.core.App {{\nconstructor() {}\n}}",
 			STDLIB,
@@ -164,7 +169,7 @@ fn jsify_symbol(symbol: &Symbol) -> String {
 	return format!("{}", symbol.name);
 }
 
-fn jsify_arg_list(arg_list: &ArgList) -> String {
+fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> String {
 	if !arg_list.pos_args.is_empty() && !arg_list.named_args.is_empty() {
 		// TODO?
 		// JS doesn't support named args, this is probably to pass props to a construct. Can't mix that with positional args.
@@ -173,7 +178,15 @@ fn jsify_arg_list(arg_list: &ArgList) -> String {
 
 	let mut args = vec![];
 
-	if !arg_list.pos_args.is_empty() {
+	if let Some(scope_str) = scope {
+		args.push(scope_str.to_string());
+	}
+
+	if let Some(id_str) = id {
+		args.push(format!("\"{}\"", id_str));
+	}
+
+	if !arg_list.pos_args.is_empty() || !args.is_empty() {
 		for arg in arg_list.pos_args.iter() {
 			args.push(jsify_expression(arg));
 		}
@@ -188,6 +201,28 @@ fn jsify_arg_list(arg_list: &ArgList) -> String {
 	}
 }
 
+// TODO: move this into Reference (but note this will only work after type checking is done on Reference)
+fn is_resource(reference: &Reference) -> bool {
+	match reference {
+		Reference::Identifier(_) => {
+			// For now return false, but we need to lookup the identifier in our env
+			false
+		}
+		Reference::NestedIdentifier { object: _, property: _ } => false,
+		Reference::NamespacedIdentifier {
+			namespace,
+			identifier: _,
+		} => {
+			// TODO: for now anything under "cloud" is a resource
+			if namespace.name == "cloud" {
+				true
+			} else {
+				false
+			}
+		}
+	}
+}
+
 fn jsify_expression(expression: &Expr) -> String {
 	match &expression.variant {
 		ExprType::New {
@@ -196,7 +231,21 @@ fn jsify_expression(expression: &Expr) -> String {
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
-			format!("new {}({})", jsify_reference(&class), jsify_arg_list(&arg_list))
+			if is_resource(class) {
+				// If this is a resource then add the scope and id to the arg list
+				format!(
+					"new {}({})",
+					jsify_reference(&class),
+					// TODO: get actual scope and id
+					jsify_arg_list(&arg_list, Some("this.root"), Some(&format!("{}", class)))
+				)
+			} else {
+				format!(
+					"new {}({})",
+					jsify_reference(&class),
+					jsify_arg_list(&arg_list, None, None)
+				)
+			}
 		}
 		ExprType::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
@@ -206,13 +255,13 @@ fn jsify_expression(expression: &Expr) -> String {
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
 		ExprType::FunctionCall { function, args } => {
-			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args))
+			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
 		}
 		ExprType::MethodCall(method_call) => {
 			format!(
 				"{}({})",
 				jsify_reference(&method_call.method),
-				jsify_arg_list(&method_call.args)
+				jsify_arg_list(&method_call.args, None, None)
 			)
 		}
 		ExprType::Unary { op, exp } => {
@@ -408,9 +457,11 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 	));
 	let proc_dir = format!("{}/proc.{}", out_dir, procid);
 	fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
-	fs::write(format!("{}/index.js", proc_dir), proc_source.join("\n")).expect("Writing inflight proc source");
+	let file_path = format!("{}/index.js", proc_dir);
+	fs::write(&file_path, proc_source.join("\n")).expect("Writing inflight proc source");
 	let props_block = render_block([
-		format!("path: \"{}\",", proc_dir),
+		format!("code: {}.core.NodeJsCode.fromFile(\"{}\"),", STDLIB, &file_path),
+		format!("entrypoint: \"$proc\","),
 		if !bindings.is_empty() {
 			format!("captures: {}", render_block(&bindings))
 		} else {
@@ -418,7 +469,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 		},
 	]);
 	format!(
-		"const {} = new {}.core.Process({});",
+		"const {} = new {}.core.Inflight({});",
 		func_def.name.name, STDLIB, props_block
 	)
 }
