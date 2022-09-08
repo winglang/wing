@@ -1,14 +1,16 @@
 # Wing Language Specification
 
-* **Original Inventor:** Elad B. (@eladb)
-* **Current Owner:** Sepehr L. (@3p3r)
-* **Contributors (A-Z):**
-  *  Chris R. (@Chriscbr)
-  *  Eyal K. (@ekeren)
-  *  Mark MC. (@MarkMcCulloh)
-  *  Shai B. (@ShaiBer)
-  *  Uri B. (@staycoolcall911)
-  *  Yoav S. (@yoav-steinberg)
+> * **Original Inventor:** Elad B. ([@eladb](https://github.com/eladb))
+> * **Current Owner:** Sepehr L. ([@3p3r](https://github.com/3p3r))
+> * **Contributors (A-Z):**
+>   *  Chris R. ([@Chriscbr](https://github.com/Chriscbr))
+>   *  Eyal K. ([@ekeren](https://github.com/ekeren))
+>   *  Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
+>   *  Shai B. ([@ShaiBer](https://github.com/ShaiBer))
+>   *  Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
+>   *  Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))
+
+---
 
 - [0. Preface](#0-preface)
   - [0.1 Motivation](#01-motivation)
@@ -19,7 +21,7 @@
     - [1.1.2 Container Types](#112-container-types)
     - [1.1.3 Function Types](#113-function-types)
     - [1.1.4 Struct type](#114-struct-type)
-  - [1.2 Debugging Utilities](#12-debugging-utilities)
+  - [1.2 Utility Functions](#12-utility-functions)
   - [1.3 Phase Modifiers](#13-phase-modifiers)
   - [1.4 Storage Modifiers](#14-storage-modifiers)
   - [1.5 Access Modifiers](#15-access-modifiers)
@@ -548,8 +550,8 @@ Wing recommends the following formatting and naming conventions:
 
 - Interface names should start with capital letter "I"
 - Class, struct, interface, and resource names should be TitleCased
-- Members of classes, interfaces, and resources cannot share the same
-  TitleCased representation as the declaring expression itself.
+- Members of classes, interfaces, and resources cannot share the same TitleCased
+  representation as the declaring expression itself.
 - Parentheses are optional in expressions. Any wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
   an if/for/while statement may be surrounded by parentheses.
@@ -968,10 +970,10 @@ class Name extends Base impl IMyInterface1, IMyInterface2 {
 ```
 
 Default initialization does not exist in Wing. All member fields must be
-initialized in the constructor. Absent initialization is a compile error.
-All field types, including the optional types must be initialized. Optionals
-are initialized to `nil` if omitted, unless the type is `nil?`, which in that
-case, absent initialization is a compile error.
+initialized in the constructor. Absent initialization is a compile error. All
+field types, including the optional types must be initialized. Optionals are
+initialized to `nil` if omitted, unless the type is `nil?`, which in that case,
+absent initialization is a compile error.
 
 Member function and field access in constructor with the "this" keyword before
 all fields are initialized is invalid and should throw a compile error.
