@@ -1,14 +1,14 @@
+use completions::completions_from_ast;
 use dashmap::DashMap;
 use errors::errors_from_ast;
 use prep::{parse_text, ParseResult};
 use ropey::Rope;
-use semantic_token::{
-    completions_from_ast, semantic_token_from_ast, RelativeSemanticToken, LEGEND_TYPE,
-};
+use semantic_token::{semantic_token_from_ast, AbsoluteSemanticToken, LEGEND_TYPE};
 use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
 
+pub mod completions;
 pub mod errors;
 pub mod prep;
 pub mod semantic_token;
@@ -18,7 +18,7 @@ struct Backend {
     client: Client,
     ast_map: DashMap<String, ParseResult>,
     document_map: DashMap<String, Rope>,
-    semantic_token_map: DashMap<String, Vec<RelativeSemanticToken>>,
+    semantic_token_map: DashMap<String, Vec<AbsoluteSemanticToken>>,
 }
 
 #[tower_lsp::async_trait]
@@ -54,7 +54,7 @@ impl LanguageServer for Backend {
                                     token_types: LEGEND_TYPE.clone().into(),
                                     token_modifiers: vec![],
                                 },
-                                range: Some(true),
+                                range: Some(false),
                                 full: Some(SemanticTokensFullOptions::Bool(true)),
                             },
                             static_registration_options: StaticRegistrationOptions::default(),
@@ -70,119 +70,83 @@ impl LanguageServer for Backend {
         params: SemanticTokensParams,
     ) -> Result<Option<SemanticTokensResult>> {
         let uri = params.text_document.uri.to_string();
-        self.client
-            .log_message(MessageType::LOG, "semantic_token_full")
-            .await;
-        let semantic_tokens = || -> Option<Vec<SemanticToken>> {
-            let mut im_complete_tokens = self.semantic_token_map.get_mut(&uri)?;
-            let rope = self.document_map.get(&uri)?;
-            let ast = self.ast_map.get(&uri)?;
-            let extends_tokens = semantic_token_from_ast(&ast.tree);
-            im_complete_tokens.extend(extends_tokens);
-            im_complete_tokens.sort_by(|a, b| a.start.cmp(&b.start));
-            let mut pre_line = 0;
-            let mut pre_start = 0;
-            let semantic_tokens = im_complete_tokens
-                .iter()
-                .filter_map(|token| {
-                    let line = rope.try_byte_to_line(token.start as usize).ok()? as u32;
-                    let first = rope.try_line_to_char(line as usize).ok()? as u32;
-                    let start = rope.try_byte_to_char(token.start as usize).ok()? as u32 - first;
-                    let delta_line = line - pre_line;
-                    let delta_start = if delta_line == 0 {
-                        start - pre_start
-                    } else {
-                        start
-                    };
-                    let ret = Some(SemanticToken {
-                        delta_line,
-                        delta_start,
-                        length: token.length as u32,
-                        token_type: token.token_type as u32,
-                        token_modifiers_bitset: 0,
-                    });
-                    pre_line = line;
-                    pre_start = start;
-                    ret
-                })
-                .collect::<Vec<_>>();
-            Some(semantic_tokens)
-        }();
-        if let Some(semantic_token) = semantic_tokens {
-            return Ok(Some(SemanticTokensResult::Tokens(SemanticTokens {
-                result_id: None,
-                data: semantic_token,
-            })));
-        }
-        Ok(None)
-    }
+        let absolute_tokens = self.semantic_token_map.get(&uri).unwrap();
+        let mut last_line = 0;
+        let mut last_char = 0;
 
-    async fn semantic_tokens_range(
-        &self,
-        params: SemanticTokensRangeParams,
-    ) -> Result<Option<SemanticTokensRangeResult>> {
-        let uri = params.text_document.uri.to_string();
-        let semantic_tokens = || -> Option<Vec<SemanticToken>> {
-            let im_complete_tokens = self.semantic_token_map.get(&uri)?;
-            let rope = self.document_map.get(&uri)?;
-            let mut pre_line = 0;
-            let mut pre_start = 0;
-            let semantic_tokens = im_complete_tokens
-                .iter()
-                .filter_map(|token| {
-                    let line = rope.try_byte_to_line(token.start as usize).ok()? as u32;
-                    let first = rope.try_line_to_char(line as usize).ok()? as u32;
-                    let start = rope.try_byte_to_char(token.start as usize).ok()? as u32 - first;
-                    let ret = Some(SemanticToken {
-                        delta_line: line - pre_line,
-                        delta_start: if start >= pre_start {
-                            start - pre_start
-                        } else {
-                            start
-                        },
-                        length: token.length as u32,
-                        token_type: token.token_type as u32,
-                        token_modifiers_bitset: 0,
-                    });
-                    pre_line = line;
-                    pre_start = start;
-                    ret
-                })
-                .collect::<Vec<_>>();
-            Some(semantic_tokens)
-        }();
-        if let Some(semantic_token) = semantic_tokens {
-            return Ok(Some(SemanticTokensRangeResult::Tokens(SemanticTokens {
-                result_id: None,
-                data: semantic_token,
-            })));
+        // convert absolute tokens to relative tokens
+        // this logic is specific to this endpoint for perf reasons
+        let mut relative_tokens: Vec<SemanticToken> = Vec::new();
+        for token in absolute_tokens.iter() {
+            let line = token.start.row - last_line;
+            let char;
+            if line == 0 {
+                char = token.start.column - last_char;
+            } else {
+                char = token.start.column;
+            }
+            relative_tokens.push(SemanticToken {
+                delta_line: line as u32,
+                delta_start: char as u32,
+                length: token.length as u32,
+                token_type: token.token_type as u32,
+                token_modifiers_bitset: 0,
+            });
+            last_line = token.start.row;
+            last_char = token.start.column;
         }
-        Ok(None)
+
+        if relative_tokens.len() == 0 {
+            return Ok(None);
+        }
+        self.client
+            .log_message(
+                MessageType::INFO,
+                format!("absolute tokens: {:?}", *absolute_tokens),
+            )
+            .await;
+        self.client
+            .log_message(
+                MessageType::INFO,
+                format!("relative tokens: {:?}", relative_tokens),
+            )
+            .await;
+
+        return Ok(Some(SemanticTokensResult::Tokens(SemanticTokens {
+            result_id: None,
+            data: relative_tokens,
+        })));
     }
 
     async fn completion(&self, params: CompletionParams) -> Result<Option<CompletionResponse>> {
         let uri = params.text_document_position.text_document.uri;
         let position = params.text_document_position.position;
 
-        let completions = || -> Option<Vec<CompletionItem>> {
-            let rope = self.document_map.get(&uri.to_string())?;
-            let ast = self.ast_map.get(&uri.to_string())?;
-            let completions = completions_from_ast(rope.to_string().as_str(), &ast.tree, position);
-            let mut ret = Vec::with_capacity(completions.len());
-            for item in completions {
-                // It's not using the offset
-                let text = item.text.as_str();
-                ret.push(CompletionItem {
-                    label: text.to_string(),
-                    insert_text: Some(text.to_string()),
-                    kind: Some(item.kind),
-                    detail: item.detail,
-                    ..Default::default()
-                });
-            }
-            Some(ret)
-        }();
-        Ok(completions.map(CompletionResponse::Array))
+        let rope = self.document_map.get(&uri.to_string());
+        let ast = self.ast_map.get(&uri.to_string());
+        if rope.is_none() || ast.is_none() {
+            return Ok(None);
+        }
+
+        let completions = completions_from_ast(
+            rope.unwrap().to_string().as_str(),
+            &ast.unwrap().tree,
+            position,
+        );
+        let mut ret = Vec::with_capacity(completions.len());
+        for item in completions {
+            // It's not using the offset
+            let text = item.text.as_str();
+            ret.push(CompletionItem {
+                label: text.to_string(),
+                insert_text: Some(text.to_string()),
+                kind: Some(item.kind),
+                detail: item.detail,
+                ..Default::default()
+            });
+        }
+
+        Ok(Some(CompletionResponse::Array(ret)))
     }
 
     async fn initialized(&self, _: InitializedParams) {
@@ -252,44 +216,35 @@ struct TextDocumentItem {
     text: String,
     version: i32,
 }
+
 impl Backend {
     async fn on_change(&self, params: TextDocumentItem) {
         let rope = ropey::Rope::from_str(&params.text);
         self.document_map
             .insert(params.uri.to_string(), rope.clone());
 
-        let result = std::panic::catch_unwind(|| {
-            parse_text(params.uri.to_string().as_str(), &params.text.as_bytes())
-        });
+        // TODO NOTE: This can still panic
+        let parse_result = parse_text(params.uri.to_string().as_str(), &params.text.as_bytes());
 
-        if result.is_err() {
-            self.client
-                .log_message(MessageType::INFO, format!("parsed"))
-                .await;
-            panic!("{:#?}", result.unwrap_err());
-        }
-
-        let parse_result = result.unwrap();
         self.client
-            .log_message(MessageType::INFO, format!("parsed"))
+            .log_message(MessageType::INFO, format!("Parsed!"))
             .await;
 
         let semantic_tokens = semantic_token_from_ast(&parse_result.tree);
         let errors = errors_from_ast(&parse_result.tree);
 
-        self.client
-            .log_message(MessageType::INFO, format!("{:?}", errors))
-            .await;
-        // self.client
-        //     .log_message(MessageType::INFO, format!("{:?}", ast.root_node().child(0)))
-        //     .await;
-
         let diagnostics = errors
             .into_iter()
             .filter_map(|item| {
                 let diagnostic = || -> Option<Diagnostic> {
-                    let start_position = offset_to_position(item.start, &rope)?;
-                    let end_position = offset_to_position(item.end, &rope)?;
+                    let start_position = Position {
+                        line: item.start.row as u32,
+                        character: item.start.column as u32,
+                    };
+                    let end_position = Position {
+                        line: item.end.row as u32,
+                        character: item.end.column as u32,
+                    };
                     Some(Diagnostic::new_simple(
                         Range::new(start_position, end_position),
                         "Parse Error".to_string(),
@@ -298,10 +253,6 @@ impl Backend {
                 diagnostic
             })
             .collect::<Vec<_>>();
-
-        // self.client
-        //     .log_message(MessageType::INFO, &format!("{:?}", semantic_tokens))
-        //     .await;
 
         self.client
             .publish_diagnostics(params.uri.clone(), diagnostics, Some(params.version))
@@ -329,11 +280,4 @@ async fn main() {
     })
     .finish();
     Server::new(stdin, stdout, socket).serve(service).await;
-}
-
-fn offset_to_position(offset: usize, rope: &Rope) -> Option<Position> {
-    let line = rope.try_char_to_line(offset).ok()?;
-    let first_char = rope.try_line_to_char(line).ok()?;
-    let column = offset - first_char;
-    Some(Position::new(line as u32, column as u32))
 }

@@ -1,18 +1,16 @@
-use tree_sitter::{Node, Tree};
+use tree_sitter::{Node, Point, Tree};
 
 #[derive(Debug)]
 pub struct ErrorInfo {
-    pub start: usize,
-    pub end: usize,
-    pub length: usize,
+    pub start: Point,
+    pub end: Point,
 }
 
 pub fn errors_from_tree<'a>(list: &'a mut Vec<ErrorInfo>, node: &'a Node) {
     if node.is_error() {
         list.push(ErrorInfo {
-            start: node.start_byte(),
-            end: node.end_byte(),
-            length: node.end_byte() - node.start_byte(),
+            start: node.start_position(),
+            end: node.end_position(),
         });
     }
 
