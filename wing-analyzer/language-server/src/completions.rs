@@ -23,34 +23,6 @@ pub fn completions_from_ast(
     );
     let node: Option<Node> = tree.root_node().descendant_for_point_range(point, point);
     if let Some(node) = node {
-        // TODO these "_*" items are all silly debug things
-        completions.push(WingCompletionItem {
-            text: format!("_0 {:#?}", node),
-            kind: CompletionItemKind::SNIPPET,
-            detail: Some("Node".to_string()),
-        });
-        if node.parent().is_some() {
-            completions.push(WingCompletionItem {
-                text: format!("_1 {:#?}", node.parent().unwrap()),
-                kind: CompletionItemKind::SNIPPET,
-                detail: Some("Parent".to_string()),
-            });
-        }
-        if node.next_sibling().is_some() {
-            completions.push(WingCompletionItem {
-                text: format!("_2 {:#?}", node.next_sibling().unwrap()),
-                kind: CompletionItemKind::SNIPPET,
-                detail: Some("Next".to_string()),
-            });
-        }
-        if node.prev_sibling().is_some() {
-            completions.push(WingCompletionItem {
-                text: format!("_3 {:#?}", node.prev_sibling().unwrap()),
-                kind: CompletionItemKind::SNIPPET,
-                detail: Some("Prev".to_string()),
-            });
-        }
-
         match node.kind() {
             "source" => {
                 let keywords = vec![
