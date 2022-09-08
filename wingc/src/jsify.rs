@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fs};
+use std::fs;
 
 use sha2::{Digest, Sha256};
 
@@ -10,72 +10,6 @@ use crate::ast::{
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
 const SYNTHESIZER: &str = "$synthesizer";
-
-struct Capture {
-	symbol: String,
-	method: String,
-}
-
-fn find_captures_from_expression(node: &Expr) -> Vec<Capture> {
-	let mut res: Vec<Capture> = vec![];
-
-	// TODO Hack, assume it's of the form `capture.method()`
-	// Without type info, this is the best we can do
-	if let ExprType::MethodCall(m) = &node.variant {
-		if let Reference::NestedIdentifier { object, property } = &m.method {
-			if let ExprType::Reference(Reference::Identifier(object)) = &object.variant {
-				if object.name == "console" {
-					// TODO Extra hack, ignore console.log for now
-					return res;
-				}
-				res.push(Capture {
-					symbol: object.name.clone(),
-					method: property.name.clone(),
-				});
-			}
-		}
-	}
-
-	res
-}
-
-fn find_captures(node: &Scope) -> Vec<Capture> {
-	let mut res: Vec<Capture> = vec![];
-	for statement in &node.statements {
-		match statement {
-			Statement::VariableDef { initial_value, .. } => {
-				res.append(&mut find_captures_from_expression(&initial_value));
-			}
-			Statement::ForLoop {
-				iterable, statements, ..
-			} => {
-				res.append(&mut find_captures_from_expression(&iterable));
-				res.append(&mut find_captures(&statements));
-			}
-			Statement::If {
-				condition,
-				statements,
-				else_statements,
-			} => {
-				res.append(&mut find_captures_from_expression(&condition));
-				res.append(&mut find_captures(&statements));
-				if let Some(else_statements) = else_statements {
-					res.append(&mut find_captures(&else_statements));
-				}
-			}
-			Statement::Expression(exp) => res.append(&mut find_captures_from_expression(&exp)),
-			Statement::Assignment { value, .. } => res.append(&mut find_captures_from_expression(&value)),
-			Statement::Return(exp) => {
-				if exp.is_some() {
-					res.append(&mut find_captures_from_expression(exp.as_ref().unwrap()));
-				}
-			}
-			Statement::Scope(s) => res.append(&mut find_captures(&s)),
-			_ => {}
-		}
-	}
-	res
-}
 
 fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
 	let mut lines = vec![];
@@ -412,34 +346,22 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 	for p in func_def.parameters.iter() {
 		parameter_list.push(p.name.clone());
 	}
-	// TODO Hack
 	let out_dir = format!("{}.out", func_def.name.span.file_id.to_string());
-	// find all cloud objects referenced in the proc
-	let captures = find_captures(&func_def.statements);
 	let block = jsify_scope(&func_def.statements);
 	let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
-	let mut methods_per_object = HashMap::new();
-	for capture in captures.iter() {
-		if !methods_per_object.contains_key(&capture.symbol) {
-			methods_per_object.insert(capture.symbol.clone(), vec![]);
-		}
-		methods_per_object
-			.get_mut(&capture.symbol)
-			.unwrap()
-			.push(capture.method.clone());
-	}
 	let mut bindings = vec![];
 	let mut capture_names = vec![];
-	for (symbol, methods) in methods_per_object {
-		capture_names.push(symbol.clone());
+	for cap in func_def.captures.borrow().as_ref().unwrap().iter() {
+		capture_names.push(cap.object.name.clone());
 		bindings.push(format!(
 			"{}: {},",
-			symbol,
+			cap.object.name,
 			render_block([
-				format!("obj: {},", symbol),
+				format!("obj: {},", cap.object.name),
 				format!(
 					"methods: [{}]",
-					methods
+					cap
+						.methods
 						.iter()
 						.map(|x| format!("\"{}\"", x))
 						.collect::<Vec<_>>()

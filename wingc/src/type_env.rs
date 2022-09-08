@@ -3,10 +3,10 @@ use crate::{
 	type_check::Type,
 	type_check::TypeRef,
 };
-use std::collections::HashMap;
+use std::collections::{hash_map, HashMap, HashSet};
 
 pub struct TypeEnv {
-	type_map: HashMap<String, TypeRef>,
+	pub(crate) type_map: HashMap<String, TypeRef>,
 	parent: Option<*const TypeEnv>,
 	pub return_type: Option<TypeRef>,
 	is_class: bool,
@@ -70,6 +70,47 @@ impl TypeEnv {
 	pub fn lookup_ext(&self, symbol: &Symbol) -> (TypeRef, Flight) {
 		self
 			.try_lookup_ext(&symbol.name)
-			.expect(&format!("Unknown symbol {}", &symbol.name))
+			.expect(&format!("Unknown symbol {} at {}", &symbol.name, &symbol.span))
+	}
+
+	pub fn iter(&self) -> TypeEnvIter {
+		TypeEnvIter::new(self)
+	}
+}
+
+pub struct TypeEnvIter<'a> {
+	items: HashSet<String>,
+	curr_env: &'a TypeEnv,
+	curr_pos: hash_map::Iter<'a, String, TypeRef>,
+}
+
+impl<'a> TypeEnvIter<'a> {
+	fn new(env: &'a TypeEnv) -> Self {
+		TypeEnvIter {
+			items: HashSet::new(),
+			curr_env: env,
+			curr_pos: env.type_map.iter(),
+		}
+	}
+}
+
+impl<'a> Iterator for TypeEnvIter<'a> {
+	type Item = (String, TypeRef);
+
+	fn next(&mut self) -> Option<Self::Item> {
+		if let Some((name, _type)) = self.curr_pos.next() {
+			if self.items.contains(name) {
+				self.next()
+			} else {
+				self.items.insert(name.clone());
+				Some((name.clone(), *_type))
+			}
+		} else if let Some(parent_env) = self.curr_env.parent {
+			unsafe { self.curr_env = &*parent_env };
+			self.curr_pos = self.curr_env.type_map.iter();
+			self.next()
+		} else {
+			None
+		}
 	}
 }

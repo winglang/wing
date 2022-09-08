@@ -263,6 +263,7 @@ impl Parser<'_> {
 					.map(|rt| Box::new(self.build_type(&rt).unwrap())),
 				flight,
 			},
+			captures: RefCell::new(None),
 		})
 	}
 
