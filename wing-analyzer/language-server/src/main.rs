@@ -99,18 +99,6 @@ impl LanguageServer for Backend {
         if relative_tokens.len() == 0 {
             return Ok(None);
         }
-        self.client
-            .log_message(
-                MessageType::INFO,
-                format!("absolute tokens: {:?}", *absolute_tokens),
-            )
-            .await;
-        self.client
-            .log_message(
-                MessageType::INFO,
-                format!("relative tokens: {:?}", relative_tokens),
-            )
-            .await;
 
         return Ok(Some(SemanticTokensResult::Tokens(SemanticTokens {
             result_id: None,
