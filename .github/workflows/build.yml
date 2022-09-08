@@ -143,9 +143,32 @@ jobs:
       - name: Build Validation
         run: echo "Build Successful"
 
+  wrapper:
+    needs:
+      - build
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Private NPM with Github
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Release Toolkit
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: |
+          cd wing
+          node scripts/self-package-json.js
+          npm publish
+
   release:
     if: ${{ github.ref == 'refs/heads/main' }}
-    needs: build-native
+    needs: wrapper
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifacts
@@ -168,28 +191,4 @@ jobs:
           body_path: checksums.md
           prerelease: true
           files: dist/*
-          
 
-  wrapper:
-    needs:
-      - build-vscode
-      - build-native
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Setup Private NPM with Github
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: "https://npm.pkg.github.com"
-
-      - name: Release Toolkit
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: |
-          cd wing
-          node scripts/self-package-json.js
-          npm publish
