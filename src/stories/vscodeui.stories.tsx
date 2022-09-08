@@ -1,285 +1,28 @@
 import {
   ArrowLongDownIcon,
   ArrowLongRightIcon,
-  ChevronDownIcon,
   ChevronRightIcon,
-  CubeIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
-import {
-  // ArrowLongDownIcon,
-  // ArrowLongRightIcon,
-  // ChevronDownIcon,
-  // ChevronRightIcon,
-  // CubeIcon,
-  // XMarkIcon,
-  ChartBarIcon,
-  ChartPieIcon,
-  CogIcon,
-  MapIcon,
-} from "@heroicons/react/24/solid";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import classNames from "classnames";
 import React, { useState, useEffect } from "react";
 
+import { TreeMenu, TreeMenuItem } from "@/components/TreeMenu";
+import {
+  breadcrumbs,
+  logs,
+  meta,
+  relationships,
+  treeMenuItems,
+} from "@/stories/mockData";
+import { flattenTreeMenuItems } from "@/stories/utils";
+
 interface VscodeuiProps {}
 
-const breadcrumbs = [
-  { icon: undefined, text: "Resources" },
-  {
-    icon: <CubeIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />,
-    text: "image-scrapper",
-  },
-  {
-    icon: <CubeIcon className="w-4 h-4 text-purple-500" aria-hidden="true" />,
-    text: "endpoint",
-  },
-];
-
-const meta = {
-  name: "endpoint",
-  source: {
-    fileName: "demo.w",
-    line: 20,
-    column: 2,
-  },
-};
-
-interface Relationships {
-  self: {
-    icon: React.ReactNode;
-    name: string;
-  };
-  parent:
-    | {
-        icon: React.ReactNode;
-        name: string;
-      }
-    | undefined;
-  children: {
-    icon: React.ReactNode;
-    name: string;
-  }[];
-  callers: {
-    icon: React.ReactNode;
-    name: string;
-  }[];
-  callees: {
-    icon: React.ReactNode;
-    name: string;
-  }[];
-}
-
-const relationships: Relationships = {
-  self: {
-    icon: <CubeIcon className="w-4 h-4 text-violet-500" aria-hidden="true" />,
-    name: "endpoint",
-  },
-  parent: {
-    icon: <CubeIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />,
-    name: "image-scrapper",
-  },
-  children: [
-    // {
-    //   icon: <CubeIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />,
-    //   name: "child-1",
-    // },
-  ],
-  callers: [],
-  callees: [
-    {
-      icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
-      name: "scrape-images",
-    },
-  ],
-};
-
-interface TreeMenuItem {
-  icon?: React.ReactNode;
-  text: string;
-  children?: TreeMenuItem[];
-}
-const treeMenu: TreeMenuItem[] = [
-  {
-    icon: <MapIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />,
-    text: "Map view",
-  },
-  {
-    icon: (
-      <ChartPieIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />
-    ),
-    text: "Event explorer",
-  },
-  {
-    icon: (
-      <ChartBarIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />
-    ),
-    text: "Logs",
-  },
-  {
-    icon: <CogIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />,
-    text: "Resources",
-    children: [
-      {
-        icon: (
-          <CubeIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />
-        ),
-        text: "image-scrapper",
-        children: [
-          {
-            icon: (
-              <CubeIcon
-                className="w-4 h-4 text-violet-500"
-                aria-hidden="true"
-              />
-            ),
-            text: "endpoint",
-          },
-          {
-            icon: (
-              <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />
-            ),
-            text: "scrape-images",
-          },
-        ],
-      },
-      {
-        icon: (
-          <CubeIcon className="w-4 h-4 text-emerald-500" aria-hidden="true" />
-        ),
-        text: "queue",
-      },
-      {
-        icon: (
-          <CubeIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />
-        ),
-        text: "image-uploader",
-        children: [
-          {
-            icon: (
-              <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />
-            ),
-            text: "upload-image",
-          },
-        ],
-      },
-    ],
-  },
-];
-
-function flattenTreeMenuItems(items: TreeMenuItem[]): TreeMenuItem[] {
-  return items.flatMap((item) => {
-    return [
-      item,
-      ...(item.children ? flattenTreeMenuItems(item.children) : []),
-    ];
-  });
-}
-const flattenedTreeMenu = flattenTreeMenuItems(treeMenu);
-function findItem(text: string) {
-  return flattenedTreeMenu.find((item) => item.text === text);
-}
-
-interface MenuItemProps {
-  item: TreeMenuItem;
-  selectedItem?: string;
-  openedMenuItems?: string[];
-  indentationLevel?: number;
-  onItemClick?: (item: TreeMenuItem) => void;
-}
-
-function MenuItem({
-  item,
-  selectedItem,
-  openedMenuItems = [],
-  indentationLevel = 0,
-  onItemClick,
-}: MenuItemProps) {
-  // const [open, setOpen] = useState(() => openedMenuItems.includes(item.text));
-  // useEffect(() => {
-  //   setOpen(openedMenuItems.includes(item.text));
-  // }, [item.text, openedMenuItems]);
-  const open = openedMenuItems.includes(item.text);
-  const hasChildren = !item.children || item.children.length === 0;
-
-  return (
-    <>
-      <button
-        type="button"
-        className={classNames(
-          "w-full cursor-pointer hover:bg-slate-200",
-          selectedItem === item.text && "bg-slate-200",
-        )}
-        tabIndex={-1}
-        onClick={() => {
-          onItemClick?.(item);
-        }}
-      >
-        <div
-          className="px-4 py-0.5 flex items-center"
-          style={{ marginLeft: `${8 * indentationLevel}px` }}
-        >
-          {open ? (
-            <ChevronDownIcon
-              className={classNames("w-4 h-4 text-slate-500 mr-1.5", {
-                invisible: hasChildren,
-              })}
-              aria-hidden="true"
-            />
-          ) : (
-            <ChevronRightIcon
-              className={classNames("w-4 h-4 text-slate-500 mr-1.5", {
-                invisible: hasChildren,
-              })}
-              aria-hidden="true"
-            />
-          )}
-          {item.icon && <div className="mr-1.5">{item.icon}</div>}
-          <span>{item.text}</span>
-        </div>
-      </button>
-      {open && (
-        <MenuItems
-          items={item.children ?? []}
-          selectedItem={selectedItem}
-          openedMenuItems={openedMenuItems}
-          indentationLevel={indentationLevel + 1}
-          onItemClick={onItemClick}
-        />
-      )}
-    </>
-  );
-}
-
-interface MenuItemsProps {
-  items: TreeMenuItem[];
-  selectedItem?: string;
-  openedMenuItems?: string[];
-  indentationLevel?: number;
-  onItemClick?: (item: TreeMenuItem) => void;
-}
-
-function MenuItems({
-  items,
-  selectedItem,
-  openedMenuItems = [],
-  indentationLevel = 0,
-  onItemClick,
-}: MenuItemsProps) {
-  return (
-    <>
-      {items.map((item) => (
-        <MenuItem
-          key={item.text}
-          item={item}
-          selectedItem={selectedItem}
-          openedMenuItems={openedMenuItems}
-          indentationLevel={indentationLevel}
-          onItemClick={onItemClick}
-        />
-      ))}
-    </>
-  );
+const flattenedTreeMenu = flattenTreeMenuItems(treeMenuItems);
+function findItem(label: string) {
+  return flattenedTreeMenu.find((item) => item.label === label);
 }
 
 function Tabs() {
@@ -372,30 +115,41 @@ function Tabs() {
   // );
 }
 
-const logs = [
-  {
-    timestamp: "Oct 20 15:48:34:743",
-    content: '"GET /api/v1/fraud-check/ HTTP/1.1" 200 17',
-  },
-];
-
 function Vscodeui(props: VscodeuiProps) {
   const [openedTabs, setOpenedTabs] = useState(["image-scrapper", "endpoint"]);
-  const [selectedTab, setSelectedTab] = useState(1);
-  const [selectedItem, setSelectedItem] = useState<string | undefined>(
-    "endpoint",
-  );
+  const [selectedTab, setSelectedTab] = useState(6);
+  const [selectedItemId, setSelectedItemId] = useState<string | undefined>("6");
+  const [openMenuItemIds, setOpenMenuItemIds] = useState<string[]>(["4", "5"]);
+
   useEffect(() => {
     if (selectedTab >= openedTabs.length) {
       setSelectedTab(openedTabs.length - 1);
     } else {
-      setSelectedItem(openedTabs[selectedTab]);
+      setSelectedItemId(openedTabs[selectedTab]);
     }
-  });
-  const [openedMenuItems, setOpenedMenuItems] = useState<string[]>(() => [
-    "Resources",
-    "image-scrapper",
-  ]);
+  }, []);
+
+  const enrichTreeMenuItems = (tree: TreeMenuItem[]): TreeMenuItem[] => {
+    return tree.map((item) => {
+      return {
+        ...item,
+        children: item.children ? enrichTreeMenuItems(item.children) : [],
+        onTreeItemClick: (item) => {
+          setOpenMenuItemIds(([...openedMenuItems]) => {
+            const index = openedMenuItems.indexOf(item.id);
+            if (index !== -1) {
+              openedMenuItems.splice(index, 1);
+              return openedMenuItems;
+            }
+
+            openedMenuItems.push(item.id);
+            return openedMenuItems;
+          });
+          setSelectedItemId(item.id);
+        },
+      };
+    });
+  };
 
   return (
     <div className="fixed inset-0 flex flex-col p-8">
@@ -406,36 +160,12 @@ function Vscodeui(props: VscodeuiProps) {
           <div className="rounded-full w-3 h-3 bg-green-500"></div>
         </div>
         <div className="flex-1 flex text-sm text-slate-800 border border-t-0 border-slate-200 rounded-b-xl overflow-hidden">
-          <div className="bg-slate-100 flex flex-col gap-1">
-            <div className="h-8" />
-            <div className="px-4 flex items-center">
-              {/* <ChevronDownIcon className="w-4 h-4 mr-1.5" aria-hidden="true" /> */}
-              <span className="uppercase text-sm font-semibold">
-                Wing-Console
-              </span>
-            </div>
-            <div className="flex flex-col">
-              <MenuItems
-                items={treeMenu}
-                selectedItem={selectedItem}
-                openedMenuItems={openedMenuItems}
-                onItemClick={(item) => {
-                  // eslint-disable-next-line @typescript-eslint/no-shadow
-                  setOpenedMenuItems(([...openedMenuItems]) => {
-                    const index = openedMenuItems.indexOf(item.text);
-                    if (index !== -1) {
-                      openedMenuItems.splice(index, 1);
-                      return openedMenuItems;
-                    }
-
-                    openedMenuItems.push(item.text);
-                    return openedMenuItems;
-                  });
-                }}
-              />
-            </div>
-          </div>
-
+          <TreeMenu
+            title={"Wing Console"}
+            selectedItemId={selectedItemId}
+            items={enrichTreeMenuItems(treeMenuItems)}
+            openMenuItemIds={openMenuItemIds}
+          />
           <div className="flex-1 flex flex-col bg-slate-100">
             {openedTabs.length > 0 && (
               <div className="flex h-8">
@@ -445,11 +175,11 @@ function Vscodeui(props: VscodeuiProps) {
                     return;
                   }
 
-                  const isSelected = item.text === selectedItem;
+                  const isSelected = item.id === selectedItemId;
 
                   return (
                     <div
-                      key={item.text}
+                      key={item.id}
                       className={classNames(
                         "relative flex items-center px-3 cursor-pointer group",
                         isSelected ? "bg-white" : "bg-slate-200",
@@ -459,7 +189,7 @@ function Vscodeui(props: VscodeuiProps) {
                       }}
                     >
                       {item?.icon && <div className="mr-1.5">{item.icon}</div>}
-                      {item?.text}
+                      {item?.label}
                       <button
                         type="button"
                         className={classNames(
@@ -474,7 +204,7 @@ function Vscodeui(props: VscodeuiProps) {
 
                           // eslint-disable-next-line @typescript-eslint/no-shadow
                           setOpenedTabs(([...openedTabs]) => {
-                            openedTabs.splice(openedTabs.indexOf(item.text), 1);
+                            openedTabs.splice(openedTabs.indexOf(item.id), 1);
                             console.log({ item, openedTabs });
                             return openedTabs;
                           });
@@ -513,7 +243,7 @@ function Vscodeui(props: VscodeuiProps) {
             )}
 
             <div className="flex-1 bg-white px-3 py-1.5">
-              {selectedItem && (
+              {selectedItemId && (
                 <>
                   <div className="flex items-center gap-1 text-xs text-slate-500">
                     {breadcrumbs.map((breadcrumb, breadcrumbIndex) => (
@@ -725,7 +455,7 @@ function Vscodeui(props: VscodeuiProps) {
 
                         <tbody>
                           {logs.map((entry) => (
-                            <tr>
+                            <tr key={entry.timestamp}>
                               <td className="px-2 py-1">{entry.timestamp}</td>
                               <td className="px-2 py-1">{entry.content}</td>
                             </tr>

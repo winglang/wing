@@ -40,6 +40,11 @@ const project = new TypeScriptProject({
     "react-query",
     "@trpc/react",
   ],
+  // @ts-ignore
+  workflowGitIdentity: {
+    name: "monabot",
+    email: "monabot@monada.co",
+  },
 });
 
 project.addTask("dev").exec("vite");
