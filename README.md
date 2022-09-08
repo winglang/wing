@@ -1,5 +1,15 @@
 # Wing Language Specification
 
+* **Original Inventor:** Elad B. (@eladb)
+* **Current Owner:** Sepehr L. (@3p3r)
+* **Contributors (A-Z):**
+  *  Chris R. (@Chriscbr)
+  *  Eyal K. (@ekeren)
+  *  Mark MC. (@MarkMcCulloh)
+  *  Shai B. (@ShaiBer)
+  *  Uri B. (@staycoolcall911)
+  *  Yoav S. (@yoav-steinberg)
+
 - [0. Preface](#0-preface)
   - [0.1 Motivation](#01-motivation)
   - [0.2 Design Tenets](#02-design-tenets)
@@ -8,16 +18,16 @@
     - [1.1.1 Primitive Types](#111-primitive-types)
     - [1.1.2 Container Types](#112-container-types)
     - [1.1.3 Function Types](#113-function-types)
-    - [1.1.4 JSON type](#114-json-type)
+    - [1.1.4 Struct type](#114-struct-type)
   - [1.2 Debugging Utilities](#12-debugging-utilities)
   - [1.3 Phase Modifiers](#13-phase-modifiers)
   - [1.4 Storage Modifiers](#14-storage-modifiers)
   - [1.5 Access Modifiers](#15-access-modifiers)
-  - [1.6 Mutability](#16-mutability)
+  - [1.6 Reassignability](#16-reassignability)
   - [1.7 Optionality](#17-optionality)
   - [1.8 Type Inference](#18-type-inference)
   - [1.9 Error Handling](#19-error-handling)
-  - [1.10 Formatting](#110-formatting)
+  - [1.10 Recommended Formatting](#110-recommended-formatting)
   - [1.11 Memory Management](#111-memory-management)
   - [1.12 Documentation Style](#112-documentation-style)
   - [1.13 Execution Model](#113-execution-model)
@@ -41,13 +51,11 @@
     - [3.6.2 Promises](#362-promises)
     - [3.6.3 Struct Expansion](#363-struct-expansion)
     - [3.6.4 Variadic Arguments](#364-variadic-arguments)
-  - [3.7 Lists](#37-lists)
+  - [3.7 Arrays](#37-arrays)
   - [3.8 Enumeration](#38-enumeration)
   - [3.9 Computed Properties](#39-computed-properties)
 - [4. Module System](#4-module-system)
   - [4.1 Imports](#41-imports)
-    - [4.1.1 Verbose Notation](#411-verbose-notation)
-    - [4.1.2 Shorthand Notation](#412-shorthand-notation)
   - [4.2 Exports](#42-exports)
 - [5. JSII Interoperability](#5-jsii-interoperability)
   - [5.1 External Libraries](#51-external-libraries)
@@ -65,7 +73,7 @@
     - [6.3.5 Short Circuiting](#635-short-circuiting)
     - [6.3.6 Equality](#636-equality)
   - [6.4 Kitchen Sink](#64-kitchen-sink)
-  - [6.5 Roadmap and Bucket List](#65-roadmap-and-bucket-list)
+  - [6.5 Roadmap](#65-roadmap)
   - [6.6 Credits](#66-credits)
 
 ## 0. Preface
@@ -152,15 +160,15 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 
 #### 1.1.2 Container Types
 
-| Name         | Extra information                            |
-| ------------ | -------------------------------------------- |
-| `Set<T>`     | set type (set of unique items)               |
-| `Map<T>`     | map type (key-value with string keys)        |
-| `List<T>`    | variable size list (array) of a certain type |
-| `MutSet<T>`  | mutable set type                             |
-| `MutMap<T>`  | mutable map type                             |
-| `MutList<T>` | mutable list (array) type                    |
-| `Promise<T>` | promise type (async code)                    |
+| Name          | Extra information                     |
+| ------------- | ------------------------------------- |
+| `Set<T>`      | set type (set of unique items)        |
+| `Map<T>`      | map type (key-value with string keys) |
+| `Array<T>`    | variable size array of a certain type |
+| `MutSet<T>`   | mutable set type                      |
+| `MutMap<T>`   | mutable map type                      |
+| `MutArray<T>` | mutable array type                    |
+| `Promise<T>`  | promise type (async code)             |
 
 > ```TS
 > // Wing Code:
@@ -168,8 +176,8 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > let zm = MutSet<num>();     // mutable set
 > let y = {"a": 1, "b": 2};   // immutable map
 > let ym = MutMap<num>();     // mutable map
-> let x = [1, 2, 3];          // immutable list
-> let xm = MutList<num>();    // mutable list
+> let x = [1, 2, 3];          // immutable array
+> let xm = MutArray<num>();   // mutable array
 > let w = SampleClass();      // class instance (mutability unknown)
 > ```
 >
@@ -204,9 +212,9 @@ them in the closure section.
 > // Wing Code:
 > // type annotation in wing: (num) -> num
 > let f1 = (x: num): num -> { return x + 1; };
-> // type annotation in wing: (num, str) ~> nil
+> // type annotation in wing: (num, str) ~> void
 > let f2 = (x: num, s: str) ~> { /* no-op */ };
-> // type annotation in wing: (num, num) => nil
+> // type annotation in wing: (num, num) => void
 > let f3 = (a: num, b: num) => { print(a + b); };
 > ```
 > 
@@ -222,25 +230,26 @@ them in the closure section.
 
 ---
 
-#### 1.1.4 JSON type
+#### 1.1.4 Struct type
 
-A special data type is available in Wing called `json`. This type represents an
-arbitrary JSON value. This type can currently by assigned to from `any`. During
-the assignment, the compiler internally knows about the length of this type and
-attempts to read it as either a JSON string or a BSON buffer.
+A special data type is available in Wing called `Struct`. Not to be confused
+with definable structs which are outlined in their own section below. This type
+represents an arbitrary JSON value. This type can currently by assigned to and
+from `any`. During the assignment, the compiler internally knows about the
+length of this type and attempts to read it as either a JSON string or buffer.
 
-Since casting is not allowed in Wing, `json` data type is `any`'s interface with
-the outside world. `json` can be casted back to `any` at any time.  
-All structs can be casted to `json` and back to `any` at any time as well.  
-`json` cannot be casted to any other type.
+Since casting is not allowed in Wing, `Struct` data type is `any`'s interface
+with the outside world. `Struct` can be casted back to `any` at any time.  
+All structs can be casted to `Struct` and back to `any` at any time as well.  
+`Struct` cannot be casted to any other type.
 
-"json" is immutable be design. Meaning that once parsed from its `any` buffer,
+"Struct" is immutable be design. Meaning that once parsed from its `any` buffer,
 it cannot be modified anymore.
 
 > ```TS
 > // Wing Code:
 > // assuming fetch_some_data_with_jsii() returns "any":
-> let data: json = await fetch_some_data_with_jsii();
+> let data: Struct = await fetch_some_data_with_jsii();
 > print(data.[0].["prop-1"].id);
 > print(data.name);
 > ```
@@ -389,16 +398,13 @@ Accessing static is done via the type name and the `.` operator.
 
 Visibility inference is done with the following rules:
 
-- if symbols' name starts with an underscore, visibility is `private`.
-- if symbols' name does not start with an underscore and lacks any other access
-  modifier, its visibility is `public`.
-- `protected`: visibility is "protected" (public to self and derived classes).
-  In this case the symbol _must_ not begin with an underscore (since "protected"
-  is part of the public api of the module).
-- `internal`: visibility is "internal" (public to current compilation unit). In
-  this case, the symbol _must_ begin with an underscore (since "internal"s are
-  not part of the public api of the module). This is also aligned with JSII
-  internal.
+- Default visibility is `private` for all members. If modifiers are missing, the
+  symbol is assumed private by the compiler and not exported.
+- `public` is to declare a symbol that is visible for and exported publicly.
+- `protected` is to declare a symbol that is visible for and exported publicly
+  but only for the class and its subclasses.
+- `internal` is to declare a symbol that is visible for and exported publicly
+  but only for the current compilation unit.
 
 Accessing fields, members, or structured data is done with `.`.
 
@@ -409,33 +415,16 @@ Mixing `protected` and `internal` is not allowed.
 
 ---
 
-### 1.6 Mutability
-
-In Wing we have two classes of "data": immutable and mutable.
-
-Immutable data is important in Wing because it can cross machine boundaries
-safely in a distributed system. In Wing, this implies that only immutable data
-is capture-able from preflight safely into inflight.
-
-All primitive types are immutable (`bool`, `str`, `num`, and `nil`).  
-Resources are also immutable by design and can be captured into inflight.  
-Immutable container types (`Map`, `Set` and `List`) as well as structs of
-immutable types are also immutable.
-
-Optionality modifier `?` applied to any type does not change the mutability of
-the underlying type. Read more about optionality in its section below.
+### 1.6 Reassignability
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
-Re-assignment to class fields is allowed if field is marked with `readwrite`.  
+
+Re-assignment to class fields is allowed if field is marked with `readwrite`.
 Examples in the class section below.
 
 `readwrite` is available in the body of class declarations.  
 Assigning `readwrite` to immutables of the same type is allowed. That is similar
 to assigning non `readonly`s to `readonly`s in TypeScript.
-
-As a result of classes being able to represent mutable data, capturing them into
-inflight is not supported. However, you may declare new classes inside inflight
-code and have new objects instantiated in inflight.
 
 [`▲ top`][top]
 
@@ -489,8 +478,8 @@ type is inferred iff a default value is provided.
 > // Wing Code:
 > let i = 5;
 > let m = i;
-> let arr_opt? = List<num>();
-> let arr: List<num> = [];
+> let arr_opt? = Array<num>();
+> let arr: Array<num> = [];
 > let copy = arr;
 > let i1? = nil;
 > let i2: num? = i;
@@ -553,14 +542,12 @@ expected from a call and it is not being caught.
 
 ---
 
-### 1.10 Formatting
+### 1.10 Recommended Formatting
 
 Wing recommends the following formatting and naming conventions:
 
-- Each statement must end with a semicolon
-- Interface names start with capital letter "I"
-- Class, struct, interface, and resource names must be TitleCased
-- Every other declaration name must be snake_cased unless otherwise specified
+- Interface names should start with capital letter "I"
+- Class, struct, interface, and resource names should be TitleCased
 - Members of classes, interfaces, and resources cannot share the same
   TitleCased representation as the declaring expression itself.
 - Parentheses are optional in expressions. Any wing expression can be surrounded
@@ -813,7 +800,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 ### 2.7 for
 
-`for..in` statement is used to iterate over a list or set.  
+`for..in` statement is used to iterate over a array or set.  
 Type annotation after an iteratee (left hand side of `in`) is optional.  
 The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 
@@ -885,7 +872,7 @@ Structs are defined with the `struct` keyword.
 Structs are "bags" of immutable data.
 
 Structs can only have fields of primitive types, resources, and other structs.  
-List, set, and map of above types is also allowed in struct field definition.  
+Array, set, and map of above types is also allowed in struct field definition.  
 Visibility, storage and phase modifiers are not allowed in struct fields.
 
 Structs can inherit from multiple other structs.
@@ -968,11 +955,11 @@ class Name extends Base impl IMyInterface1, IMyInterface2 {
   _field2: str;
 
   // static method (access with Name.static_method(...))
-  static static_method(arg: type, arg: type, ...) { /* impl */ }
+  public static static_method(arg: type, arg: type, ...) { /* impl */ }
   // private method
   _private_method(arg: type, arg: type, ...): type { /* impl */ }
   // visible to outside the instance
-  public_method(arg:type, arg:type, ...) { /* impl */ }
+  public public_method(arg:type, arg:type, ...) { /* impl */ }
   // visible to children only
   protected protected_method(type:arg, type:arg, ...) { /* impl */ }
   // public in current compilation unit only
@@ -1365,12 +1352,12 @@ f(1, 2, field1: 3, field2: 4);
 #### 3.6.4 Variadic Arguments
 
 If the last argument of a function type is the `...args` keyword followed by a
-`List` type, then the function accepts typed variadic arguments. Expansion of
+`Array` type, then the function accepts typed variadic arguments. Expansion of
 variadic arguments is not supported currently and the container of variadic
-arguments is accessible with the `args` key like a normal list instance.
+arguments is accessible with the `args` key like a normal array instance.
 
 ```TS
-let f = (x: num, ...args: List<num>) -> {
+let f = (x: num, ...args: Array<num>) -> {
   print(x + y + sizeof(args));
 }
 // last arguments are expanded into their struct
@@ -1381,27 +1368,27 @@ f(1, 2, 3, 4, 5, 6, 34..100);
 
 ---
 
-### 3.7 Lists
+### 3.7 Arrays
 
-Lists are dynamically sized in Wing and are defined with the `[]` syntax.  
-Individual list items are also accessed with the `[]` syntax. You can call
-`sizeof` to get the size of the list.  
-Lists are similar to dynamically sized arrays or vectors in other languages.
+Arrays are dynamically sized in Wing and are defined with the `[]` syntax.  
+Individual array items are also accessed with the `[]` syntax. You can call
+`sizeof` to get the size of the array.  
+Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 > ```TS
 > // Wing Code:
-> let list1 = [1, 2, 3];
-> let list2 = ["a", "b", "c"];
-> let list3 = List<str>(list2);
-> let l = sizeof(list1) + sizeof(list2) + sizeof(list3) + list1[0];
+> let arr1 = [1, 2, 3];
+> let arr2 = ["a", "b", "c"];
+> let arr3 = Array<str>(arr2);
+> let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
 > ```
 >
 > ```TS
 > // Equivalent TypeScript Code:
-> const list1: number[] = Object.freeze([1, 2, 3]);
-> const list2: string[] = Object.freeze(["a", "b", "c"]);
-> const list3: string[] = ["a1", "b2", "c3"];
-> const l = list1.length + list2.length + list3.length + list1[0];
+> const arr1: number[] = Object.freeze([1, 2, 3]);
+> const arr2: string[] = Object.freeze(["a", "b", "c"]);
+> const arr3: string[] = ["a1", "b2", "c3"];
+> const l = arr1.length + arr2.length + arr3.length + arr1[0];
 > ```
 
 [`▲ top`][top]
@@ -1548,62 +1535,8 @@ code. Comments before the first bring expression are valid.
 
 ### 4.1 Imports
 
-#### 4.1.1 Verbose Notation
-
-"bring" expression starts with `from` keyword and followed by a file path,
-either with or without an extension. If there is no extension, file path is
-treated as a Wing import, otherwise it is treated as a JSII import.  
-In case of Wing, quotes around the file path are optional.  
-The expression is followed by a `bring` keyword and a list of names to import.  
-Names can be renamed with `as` keyword.  
-`bring *;` is invalid. It is not possible to import an entire namespace unbound.
-
-> ```TS
-> // Wing Code:
-> from std bring * as std2;
-> from std bring io;
-> from std bring io as io2;
-> from std bring io, fs, name as module;
-> ```
->
-> ```TS
-> // Equivalent TypeScript Code:
-> import * from 'std';
-> import * as std2 from 'std';
-> import { io } from 'std';
-> import { io as io2 } from 'std';
-> import { io, fs, name as module } from 'std';
-> ```
-
-To promote polyglot programming, A string literal can also be placed after
-**bring**. This allows importing and reusing code from JSII packages:
-
-> ```TS
-> // Wing Code:
-> from "cdk-spa" bring * as spa;
-> from "cdk-spa" bring SomeConstruct;
-> from "cdk-spa" bring SomeConstruct as SomeConstruct2;
-> from "cdk-spa" bring SomeConstruct, OtherType as module;
-> ```
->
-> ```TS
-> // Equivalent TypeScript Code:
-> import * from 'cdk-spa';
-> import * as spa from 'cdk-spa';
-> import { SomeConstruct } from 'cdk-spa';
-> import { SomeConstruct as SomeConstruct2 } from 'cdk-spa';
-> import { SomeConstruct, OtherType as module } from 'cdk-spa';
-> ```
-
-[`▲ top`][top]
-
----
-
-#### 4.1.2 Shorthand Notation
-
-The verbose notation of `from <module> bring * as <name>` can be shortened to
-`bring <module>` in case of importing Wing code and `bring <jsii> as <name>` for
-JSII imports across your Wing source code.
+To import a JSII / Wing package under a named import, you may use the following
+syntax:
 
 ```TS
 bring std; // from std bring * as std;
@@ -1908,7 +1841,7 @@ struct DenyListRule {
 }
 
 struct DenyListProps {
-  rules: MutList<DenyListRule >;
+  rules: MutArray<DenyListRule >;
 }
 
 resource DenyList {
@@ -1923,7 +1856,7 @@ resource DenyList {
     this._bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
   }
 
-  _write_to_file(list: MutList<DenyListRule>,  filename: str): str {
+  _write_to_file(list: MutArray<DenyListRule>,  filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
     let map = MutMap<DenyListRule>(); 
@@ -1986,7 +1919,7 @@ queue.add_consumer(filter);
 
 ---
 
-### 6.5 Roadmap and Bucket List
+### 6.5 Roadmap
 
 - [ ] Make the language `async` by default.
 - [ ] Make inflight functions `async` by default.
@@ -1997,9 +1930,13 @@ queue.add_consumer(filter);
 - [ ] More useful enums: Support for Enum Classes and Swift style enums.
 - [ ] Reflection: add an extended `typeof` operator to get type information.
 - [ ] Advanced OOP: Support for `abstract` and `private` implementations.
+- [ ] Enforce naming conventions on public APIs (required by JSII).
 - [ ] Develop a conformance test suite for ISO certification.
 - [ ] Inlined Resources: Support for `pure` resources.
 - [ ] Launch a formal spec site with ECMA standards.
+- [ ] Built-in automatic formatter and linter.
+- [ ] Distributed concurrency primitives.
+- [ ] Distributed data structures.
 
 [`▲ top`][top]
 
