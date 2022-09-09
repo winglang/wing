@@ -79,7 +79,7 @@ impl TypeEnv {
 }
 
 pub struct TypeEnvIter<'a> {
-	items: HashSet<String>,
+	seen_keys: HashSet<String>,
 	curr_env: &'a TypeEnv,
 	curr_pos: hash_map::Iter<'a, String, TypeRef>,
 }
@@ -87,7 +87,7 @@ pub struct TypeEnvIter<'a> {
 impl<'a> TypeEnvIter<'a> {
 	fn new(env: &'a TypeEnv) -> Self {
 		TypeEnvIter {
-			items: HashSet::new(),
+			seen_keys: HashSet::new(),
 			curr_env: env,
 			curr_pos: env.type_map.iter(),
 		}
@@ -99,10 +99,10 @@ impl<'a> Iterator for TypeEnvIter<'a> {
 
 	fn next(&mut self) -> Option<Self::Item> {
 		if let Some((name, _type)) = self.curr_pos.next() {
-			if self.items.contains(name) {
+			if self.seen_keys.contains(name) {
 				self.next()
 			} else {
-				self.items.insert(name.clone());
+				self.seen_keys.insert(name.clone());
 				Some((name.clone(), *_type))
 			}
 		} else if let Some(parent_env) = self.curr_env.parent {

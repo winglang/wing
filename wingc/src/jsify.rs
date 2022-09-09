@@ -346,6 +346,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 	for p in func_def.parameters.iter() {
 		parameter_list.push(p.name.clone());
 	}
+	// TODO Hack: We don't have enough information to get the true out_dir, this is just an assumption for the current impl
 	let out_dir = format!("{}.out", func_def.name.span.file_id.to_string());
 	let block = jsify_scope(&func_def.statements);
 	let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());

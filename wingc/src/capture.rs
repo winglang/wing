@@ -37,7 +37,7 @@ pub fn scan_captures(ast_root: &Scope) {
 			}
 			Statement::Scope(s) => scan_captures(s),
 			Statement::Class {
-				name,
+				name: _,
 				members: _,
 				methods,
 				constructor,
@@ -137,7 +137,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 					});
 				}
 			}
-			Reference::NestedIdentifier { object, property } => {
+			Reference::NestedIdentifier { object, property: _ } => {
 				res.extend(scan_captures_in_expression(object, env));
 
 				// If the expression evaluates to a resource we should check if we need to capture the property as well
