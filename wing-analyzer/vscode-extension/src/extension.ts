@@ -41,21 +41,25 @@ export function deactivate() {
 }
 
 export async function activate(context: ExtensionContext) {
-  await start_language_server(context);
+  const activationActivities = [
+    checkForUpdates(context),
+    startLanguageServer(context),
+  ];
 
-  await checkForUpdates(context);
+  await Promise.all(activationActivities);
 }
 
 async function startLanguageServer(context: ExtensionContext) {
   const traceOutputChannel = window.createOutputChannel(LANGUAGE_SERVER_NAME);
   traceOutputChannel.show();
 
-  let serverPath = process.env.SERVER_PATH;
+  let serverPath = process.env.WING_LSP_SERVER_PATH;
   if (!serverPath) {
-    // TODO this is pretty ugly
+    // TODO The excessive nesting is pretty ugly
     // TODO workflow should place these in ways that make more sense
     switch (platform()) {
       case "darwin":
+        // Currently, we only have darwin x64 builds. Users must have rosetta available to run this on arm64.
         serverPath = context.asAbsolutePath(
           "resources/wing-language-server-macos-latest-x64/wing-language-server-macos-latest-x64"
         );
@@ -77,8 +81,8 @@ async function startLanguageServer(context: ExtensionContext) {
     return;
   }
 
-  // HMM?
   if (platform() !== "win32") {
+    // This feels ugly, but I'm not sure it's reasonably avoidable
     execSync(`chmod +x ${serverPath}`);
   }
 
