@@ -46,7 +46,7 @@ export async function activate(context: ExtensionContext) {
   await checkForUpdates(context);
 }
 
-async function start_language_server(context: ExtensionContext) {
+async function startLanguageServer(context: ExtensionContext) {
   const traceOutputChannel = window.createOutputChannel(LANGUAGE_SERVER_NAME);
   traceOutputChannel.show();
 
