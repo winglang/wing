@@ -25,4 +25,9 @@ fn main() {
         .build()
         .generate_to_file(Path::new(JSII_RUST_OUT).to_str().unwrap())
         .unwrap();
+    
+    // prepend "use serde::{Deserialize, Serialize};" to the generated file
+    let mut contents = fs::read_to_string(JSII_RUST_OUT).unwrap();
+    contents = format!("use serde::{{Deserialize, Serialize}};\n{}", contents);
+    fs::write(JSII_RUST_OUT, contents).unwrap();
 }
