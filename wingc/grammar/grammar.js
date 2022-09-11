@@ -155,9 +155,9 @@ module.exports = grammar({
         $.reference,
         $.function_call,
         $.method_call,
-        $.preflight_anonymous_closure,
-        $.inflight_anonymous_closure,
-        $.pure_anonymous_closure,
+        $.preflight_closure,
+        $.inflight_closure,
+        $.pure_closure,
         $.parenthesized_expression
       ),
 
@@ -346,9 +346,9 @@ module.exports = grammar({
       );
     },
 
-    preflight_anonymous_closure: ($) => anonymousClosure($, "->"),
-    inflight_anonymous_closure: ($) => anonymousClosure($, "~>"),
-    pure_anonymous_closure: ($) => anonymousClosure($, "=>"),
+    preflight_closure: ($) => anonymousClosure($, "->"),
+    inflight_closure: ($) => anonymousClosure($, "~>"),
+    pure_closure: ($) => anonymousClosure($, "=>"),
 
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
   },

@@ -153,7 +153,7 @@ preflight anonymous closure
 
 (source
     (expression_statement
-        (preflight_anonymous_closure
+        (preflight_closure
             (parameter_list
                 (parameter_definition
                     (identifier)
@@ -181,7 +181,7 @@ inflight anonymous closure
 
 (source
     (expression_statement
-        (inflight_anonymous_closure
+        (inflight_closure
             (parameter_list)
             (block
                 (return_statement

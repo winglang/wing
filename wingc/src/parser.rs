@@ -458,13 +458,9 @@ impl Parser<'_> {
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 			}))),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"preflight_anonymous_closure" => {
-				self.add_error(format!("Anonymous closures not implemented yet"), expression_node)
-			}
-			"inflight_anonymous_closure" => {
-				self.add_error(format!("Anonymous closures not implemented yet"), expression_node)
-			}
-			"pure_anonymous_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"pure_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			other => {
 				if expression_node.has_error() {
 					self.add_error(format!("Expected expression"), expression_node)
