@@ -155,6 +155,9 @@ module.exports = grammar({
         $.reference,
         $.function_call,
         $.method_call,
+        $.preflight_anonymous_closure,
+        $.inflight_anonymous_closure,
+        $.pure_anonymous_closure,
         $.parenthesized_expression
       ),
 
@@ -343,9 +346,21 @@ module.exports = grammar({
       );
     },
 
+    preflight_anonymous_closure: ($) => anonymousClosure($, "->"),
+    inflight_anonymous_closure: ($) => anonymousClosure($, "~>"),
+    pure_anonymous_closure: ($) => anonymousClosure($, "=>"),
+
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
   },
 });
+
+function anonymousClosure($, arrow) {
+  return seq(
+    field("parameter_list", $.parameter_list),
+    arrow,
+    field("block", $.block)
+  );
+}
 
 function commaSep1(rule) {
   return seq(rule, repeat(seq(",", rule)));
