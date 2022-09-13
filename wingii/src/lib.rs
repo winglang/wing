@@ -81,6 +81,10 @@ pub mod type_system {
             }
         }
 
+        pub fn get_assembly(&self, name: SchemaName) -> Option<&Assembly> {
+            self.assemblies.get(&name)
+        }
+
         pub fn load(&mut self, file_or_directory: &str) -> Result<SchemaName, Box<dyn Error>> {
             if Path::new(file_or_directory).is_dir() {
                 self.load_module(file_or_directory, Some(true))

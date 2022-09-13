@@ -8,6 +8,8 @@ use std::path::PathBuf;
 
 #[cfg(test)]
 mod tests {
+    use crate::type_system::TypeSystem;
+
     use super::*;
     use std::fs;
 
@@ -43,6 +45,17 @@ mod tests {
                 .unwrap();
         assert_eq!(assembly.name, "jsii-test-dep"); // TODO: write a better test
         remove_temp_assembly(assembly_path);
+    }
+
+    #[test]
+    fn can_load_assembly_with_type_system() {
+        let mut type_system = TypeSystem::new();
+        let name = type_system
+            .load("src/constructs")
+            .unwrap();
+        assert_eq!(name, "constructs");
+        let assembly = type_system.get_assembly(name).unwrap();
+        assert_eq!(assembly.name, "constructs");
     }
 }
 
