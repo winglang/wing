@@ -39,7 +39,7 @@ pub mod spec {
 
     pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly, Box<dyn Error>> {
         let path = Path::new(path_to_file);
-        let manifest = fs::read_to_string(path.join(SPEC_FILE_NAME))?;
+        let manifest = fs::read_to_string(path)?;
         let manifest = serde_json::from_str(&manifest)?;
         if is_assembly_redirect(&manifest) {
             let redirect = manifest.get("filename").unwrap().as_str().unwrap();
