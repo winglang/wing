@@ -13,6 +13,9 @@ serde_json = "1.0"
 serde_derive = "1.0"
 serde_repr = "0.1.7"
 
+[dev-dependencies]
+rand = "0.8.5"
+
 [build-dependencies]
 anyhow = { version = "1" }
 schemafy_core = { version = "0.6.0" }

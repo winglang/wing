@@ -1,34 +1,55 @@
 extern crate serde;
 extern crate serde_json;
 
+#[cfg(test)]
+mod test;
+
 mod jsii;
 mod util;
 
 pub mod spec {
     use crate::jsii::Assembly;
     use std::error::Error;
+    use std::fs;
+    use std::path::Path;
 
     pub const SPEC_FILE_NAME: &str = ".jsii";
+    pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
 
-    pub fn find_assembly_file(path: &str) -> Result<String, Box<dyn Error>> {
-        let path = std::path::Path::new(path);
-        let mut current = path;
-        loop {
-            let spec_file = current.join(SPEC_FILE_NAME);
-            if spec_file.exists() {
-                return Ok(spec_file.to_str().unwrap().to_string());
-            }
-            current = current
-                .parent()
-                .ok_or(format!("Could not find {} file", SPEC_FILE_NAME))?;
+    pub fn find_assembly_file(directory: &str) -> Result<String, Box<dyn Error>> {
+        let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
+        if dot_jsii_file.exists() {
+            Ok(dot_jsii_file.to_str().unwrap().to_string())
+        } else {
+            Err(format!(
+                "Expected to find ${} file in ${}, but no such file found",
+                SPEC_FILE_NAME, directory
+            )
+            .into())
         }
     }
 
-    pub fn load_assembly_from_file(file: &str) -> Result<Assembly, Box<dyn Error>> {
-        let path = std::path::Path::new(file);
-        let manifest = std::fs::read_to_string(path.join(SPEC_FILE_NAME))?;
-        let assembly: Assembly = serde_json::from_str(&manifest)?;
-        Ok(assembly)
+    pub fn is_assembly_redirect(obj: &serde_json::Value) -> bool {
+        if let Some(schema) = obj.get("schema") {
+            schema.as_str().unwrap() == REDIRECT_FIELD
+        } else {
+            false
+        }
+    }
+
+    pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly, Box<dyn Error>> {
+        let path = Path::new(path_to_file);
+        let manifest = fs::read_to_string(path.join(SPEC_FILE_NAME))?;
+        let manifest = serde_json::from_str(&manifest)?;
+        if is_assembly_redirect(&manifest) {
+            let redirect = manifest.get("filename").unwrap().as_str().unwrap();
+            let redirect_path = Path::new(redirect);
+            let redirect_manifest = fs::read_to_string(redirect_path)?;
+            let redirect_manifest = serde_json::from_str(&redirect_manifest)?;
+            Ok(serde_json::from_value(redirect_manifest)?)
+        } else {
+            Ok(serde_json::from_value(manifest)?)
+        }
     }
 
     pub fn load_assembly_from_path(path: &str) -> Result<Assembly, Box<dyn Error>> {

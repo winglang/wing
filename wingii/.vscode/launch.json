@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug selected unit test",
+      "cargo": {
+        "args": ["test", "--no-run"],
+        "filter": {
+          "name": "wingii",
+          "kind": "lib"
+        }
+      },
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}
