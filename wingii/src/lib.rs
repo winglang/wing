@@ -64,6 +64,7 @@ pub mod type_system {
     use crate::util::package_json;
     use std::collections::HashMap;
     use std::error::Error;
+    use std::path::Path;
 
     pub struct TypeSystem {
         assemblies: HashMap<String, Assembly>,
@@ -78,23 +79,31 @@ pub mod type_system {
             }
         }
 
-        pub fn load_assembly(&mut self, path: &str) -> Result<Assembly, Box<dyn Error>> {
-            Ok(spec::load_assembly_from_path(path)?)
+        pub fn load(&mut self, file_or_directory: &str) -> Result<(), Box<dyn Error>> {
+            if Path::new(file_or_directory).is_dir() {
+                self.load_module(file_or_directory, Some(true))
+            } else {
+                self.load_file(file_or_directory, Some(true))
+            }
         }
 
-        pub fn add_root(&mut self, assembly: &Assembly) -> Result<(), Box<dyn Error>> {
+        fn load_assembly(&mut self, path: &str) -> Result<Assembly, Box<dyn Error>> {
+            Ok(spec::load_assembly_from_file(path)?)
+        }
+
+        fn add_root(&mut self, assembly: &Assembly) -> Result<(), Box<dyn Error>> {
             if !(self.roots.iter().any(|a| a == &assembly.name)) {
                 self.roots.push(assembly.name.clone());
             }
             Ok(())
         }
 
-        pub fn add_assembly(
+        fn add_assembly(
             &mut self,
             assembly: Assembly,
             is_root: bool,
         ) -> Result<(), Box<dyn Error>> {
-            if !(self.assemblies.contains_key(&assembly.name)) {
+            if !self.assemblies.contains_key(&assembly.name) {
                 self.assemblies
                     .insert(assembly.name.clone(), assembly.clone());
             }
@@ -104,53 +113,39 @@ pub mod type_system {
             Ok(())
         }
 
-        pub fn load_file(
-            &mut self,
-            path: &str,
-            is_root: Option<bool>,
-        ) -> Result<(), Box<dyn Error>> {
-            let assembly = spec::load_assembly_from_path(path)?;
+        fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<(), Box<dyn Error>> {
+            let assembly = spec::load_assembly_from_path(file)?;
             self.add_assembly(assembly, is_root.unwrap_or(false))
         }
 
-        pub fn load_module(
+        fn load_module(
             &mut self,
             module_directory: &str,
             is_root: Option<bool>,
         ) -> Result<(), Box<dyn Error>> {
-            // append "package.json"
             let file_path = std::path::Path::new(module_directory).join("package.json");
-            // parse package.json
             let package_json = std::fs::read_to_string(file_path)?;
             let package: serde_json::Value = serde_json::from_str(&package_json)?;
-            // get the "jsii" section
             let _ = package
                 .get("jsii")
-                .ok_or("Could not find jsii section in package.json")?;
-            // load the assembly
-            let asm = self.load_assembly(module_directory)?;
-            // check if assembly already exists
+                .ok_or(format!("not a jsii module: {}", module_directory))?;
+            let assembly_file = spec::find_assembly_file(module_directory)?;
+            let asm = self.load_assembly(&assembly_file)?;
             if self.assemblies.contains_key(&asm.name) {
-                // get a reference to the current assembly
                 let existing = self.assemblies.get(&asm.name).unwrap();
-                // check if the version is the same
                 if existing.version != asm.version {
-                    // if not, throw an error
                     return Err(format!(
-                        "Assembly {} already exists with version {}",
-                        asm.name, existing.version
+                        "Assembly {} already exists with version {}. Got {}",
+                        asm.name, existing.version, asm.version
                     )
                     .into());
                 }
-                // make sure the assembly is marked as a root
                 if is_root.unwrap_or(false) {
                     self.add_root(&asm)?;
                 }
                 return Ok(());
             }
-            // add the assembly to the type system
             self.add_assembly(asm, is_root.unwrap_or(false))?;
-            // make an array of strings for the bundled dependencies
             let bundled = package_json::bundled_dependencies_of(&package);
             let deps = package_json::dependencies_of(&package);
             for dep in deps {

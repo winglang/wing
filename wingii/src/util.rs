@@ -2,6 +2,9 @@ extern crate serde;
 extern crate serde_json;
 
 pub mod package_json {
+    use node_resolve::resolve_from;
+    use std::{fs, path::PathBuf};
+
     pub fn dependencies_of(package_json: &serde_json::Value) -> Vec<String> {
         // merge both dependencies and peerDependencies and return the list of keys
         let mut deps = Vec::new();
@@ -38,24 +41,50 @@ pub mod package_json {
         deps
     }
 
-    pub fn find_dependency_directory(dependency_name: &str, search_start: &str) -> Option<String> {
-        // find the directory of a dependency by searching upwards from the given directory
-        let mut current_dir = std::path::Path::new(search_start);
+    pub fn find_up(
+        mut directory: PathBuf,
+        predicate: impl Fn(&PathBuf) -> bool,
+    ) -> Option<PathBuf> {
         loop {
-            let package_json_path = current_dir.join("package.json");
-            if package_json_path.exists() {
-                let package_json = std::fs::read_to_string(package_json_path).unwrap();
-                let package: serde_json::Value = serde_json::from_str(&package_json).unwrap();
-                if let Some(name) = package.get("name") {
-                    if name.as_str().unwrap() == dependency_name {
-                        return Some(current_dir.to_str().unwrap().to_string());
-                    }
-                }
+            if predicate(&directory) {
+                return Some(directory);
             }
-            if current_dir.parent().is_none() {
+
+            let parent = directory.parent();
+            if parent.is_none() {
                 return None;
             }
-            current_dir = current_dir.parent().unwrap();
+            directory = parent.unwrap().to_path_buf();
+        }
+    }
+
+    pub fn find_package_json_up(package_name: &str, directory: PathBuf) -> Option<PathBuf> {
+        find_up(directory, |dir| {
+            let package_json = dir.join("package.json");
+            if package_json.exists() {
+                let package_json = fs::read_to_string(&package_json).unwrap();
+                let package_json: serde_json::Value = serde_json::from_str(&package_json).unwrap();
+                package_json.get("name").unwrap().as_str().unwrap() == package_name
+            } else {
+                false
+            }
+        })
+    }
+
+    pub fn find_dependency_directory(dependency_name: &str, search_start: &str) -> Option<String> {
+        let entrypoint = resolve_from(dependency_name, PathBuf::from(search_start)).unwrap();
+        let dep_pkg_json_path = find_package_json_up(dependency_name, entrypoint).unwrap();
+        if dep_pkg_json_path.exists() {
+            Some(
+                dep_pkg_json_path
+                    .parent()
+                    .unwrap()
+                    .to_str()
+                    .unwrap()
+                    .to_string(),
+            )
+        } else {
+            None
         }
     }
 }
