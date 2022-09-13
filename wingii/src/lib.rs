@@ -59,6 +59,8 @@ pub mod spec {
 }
 
 pub mod type_system {
+    type SchemaName = String;
+
     use crate::jsii::Assembly;
     use crate::spec;
     use crate::util::package_json;
@@ -79,7 +81,7 @@ pub mod type_system {
             }
         }
 
-        pub fn load(&mut self, file_or_directory: &str) -> Result<(), Box<dyn Error>> {
+        pub fn load(&mut self, file_or_directory: &str) -> Result<SchemaName, Box<dyn Error>> {
             if Path::new(file_or_directory).is_dir() {
                 self.load_module(file_or_directory, Some(true))
             } else {
@@ -102,7 +104,7 @@ pub mod type_system {
             &mut self,
             assembly: Assembly,
             is_root: bool,
-        ) -> Result<(), Box<dyn Error>> {
+        ) -> Result<SchemaName, Box<dyn Error>> {
             if !self.assemblies.contains_key(&assembly.name) {
                 self.assemblies
                     .insert(assembly.name.clone(), assembly.clone());
@@ -110,10 +112,10 @@ pub mod type_system {
             if is_root {
                 self.add_root(&assembly)?;
             }
-            Ok(())
+            Ok(assembly.name)
         }
 
-        fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<(), Box<dyn Error>> {
+        fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<SchemaName, Box<dyn Error>> {
             let assembly = spec::load_assembly_from_path(file)?;
             self.add_assembly(assembly, is_root.unwrap_or(false))
         }
@@ -122,7 +124,7 @@ pub mod type_system {
             &mut self,
             module_directory: &str,
             is_root: Option<bool>,
-        ) -> Result<(), Box<dyn Error>> {
+        ) -> Result<SchemaName, Box<dyn Error>> {
             let file_path = std::path::Path::new(module_directory).join("package.json");
             let package_json = std::fs::read_to_string(file_path)?;
             let package: serde_json::Value = serde_json::from_str(&package_json)?;
@@ -143,9 +145,9 @@ pub mod type_system {
                 if is_root.unwrap_or(false) {
                     self.add_root(&asm)?;
                 }
-                return Ok(());
+                return Ok(asm.name);
             }
-            self.add_assembly(asm, is_root.unwrap_or(false))?;
+            let root = self.add_assembly(asm, is_root.unwrap_or(false))?;
             let bundled = package_json::bundled_dependencies_of(&package);
             let deps = package_json::dependencies_of(&package);
             for dep in deps {
@@ -155,7 +157,7 @@ pub mod type_system {
                     self.load_module(&dep_dir, None)?;
                 }
             }
-            Ok(())
+            Ok(root)
         }
     }
 }
