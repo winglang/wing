@@ -128,7 +128,7 @@ new A();
 New expression with id and scope
 ================================
 
-new A() as "b" in c;
+new A() as 'b' in c;
 
 ---
 
@@ -147,7 +147,7 @@ new A() as "b" in c;
 preflight anonymous closure
 ================================
 
-(a: number) -> { return a; };
+(a: num): num -> { return a; };
 
 ---
 
@@ -160,6 +160,7 @@ preflight anonymous closure
                     (builtin_type)
                 )
             )
+            (builtin_type)
             (block
                 (return_statement
                     (reference
@@ -175,7 +176,7 @@ preflight anonymous closure
 inflight anonymous closure
 ================================
 
-() ~> { return 1; };
+(): num ~> { return 1; };
 
 ---
 
@@ -183,11 +184,129 @@ inflight anonymous closure
     (expression_statement
         (inflight_closure
             (parameter_list)
+            (builtin_type)
             (block
                 (return_statement
                     (number)
                 )
             )
+        )
+    )
+)
+
+================================
+Template string
+================================
+
+"cool ${test}";
+
+---
+
+(source
+    (expression_statement
+        (string
+            (template_substitution
+                (reference
+                    (identifier)
+                )
+            )
+        )
+    )
+)
+
+================================
+?? operator
+================================
+
+maybeVal ?? 2;
+
+---
+
+(source
+    (expression_statement
+        (binary_expression
+            (reference
+                (identifier)
+            )
+            (number)
+        )
+    )
+)
+
+
+================================
+Set Literal
+================================
+
+{ 1, 2, 3 };
+
+---
+
+(source
+    (expression_statement
+        (set_literal
+            (number)
+            (number)
+            (number)
+        )
+    )
+)
+
+================================
+Empty Map Literal
+================================
+
+{};
+
+---
+
+(source
+    (expression_statement
+        (map_literal)
+    )
+)
+
+================================
+Map Literal
+================================
+
+{ a: 1, "a": 2, b: 3,};
+
+---
+
+(source
+    (expression_statement
+        (map_literal
+            (map_literal_member
+                (identifier)
+                (number)
+            )
+            (map_literal_member
+                (string)
+                (number)
+            )
+            (map_literal_member
+                (identifier)
+                (number)
+            )
+        )
+    )
+)
+
+================================
+Array Literal
+================================
+
+[1, 2, 3,];
+
+---
+
+(source
+    (expression_statement
+        (array_literal
+            (number)
+            (number)
+            (number)
         )
     )
 )
