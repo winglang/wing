@@ -145,8 +145,8 @@ module.exports = grammar({
       ),
     inflight_class_member: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
         field("phase_modifier", $._inflight_specifier),
+        optional(field("access_modifier", $.access_modifier)),
         field("name", $.identifier),
         $._type_annotation,
         ";"
@@ -342,6 +342,7 @@ module.exports = grammar({
     function_definition: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional("async"),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         optional(field("return_type", $._type_annotation)),
@@ -350,8 +351,9 @@ module.exports = grammar({
 
     inflight_function_definition: ($) =>
       seq(
-        optional(field("access_modifier", $.access_modifier)),
         field("phase_modifier", $._inflight_specifier),
+        optional(field("access_modifier", $.access_modifier)),
+        optional("async"),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
         field("block", $.block)
@@ -458,6 +460,7 @@ module.exports = grammar({
 
 function anonymousClosure($, arrow) {
   return seq(
+    optional("async"),
     field("parameter_list", $.parameter_list),
     optional(field("return_type", $._type_annotation)),
     arrow,
