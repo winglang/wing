@@ -21,6 +21,7 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   precedences: ($) => [
+    [$.map_literal, $.set_literal],
     [$.new_expression, $.function_call],
     [$.nested_identifier, $.namespaced_identifier, $.method_call, $.reference],
   ],
@@ -50,13 +51,12 @@ module.exports = grammar({
       ),
 
     nested_identifier: ($) =>
-      seq(field("object", $.expression), ".", field("property", $.identifier)),
+      seq(field("object", $.expression), choice(".", "?."), field("property", $.identifier)),
 
     _inflight_specifier: ($) => choice("inflight", "~"),
 
     _statement: ($) =>
       choice(
-        $.block,
         $.short_import_statement,
         $.expression_statement,
         $.variable_definition_statement,
@@ -200,6 +200,7 @@ module.exports = grammar({
         $.pure_closure,
         $.template_string,
         $.await_expression,
+        $._collection_literal,
         $.parenthesized_expression
       ),
 
@@ -433,6 +434,13 @@ module.exports = grammar({
 
     await_expression: ($) => prec.right(seq("await", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
+
+    _collection_literal: ($) => choice($.array_literal, $.set_literal, $.map_literal),
+    array_literal: ($) => seq("[", commaSep($.expression), "]"),
+    set_literal: ($) => seq("{", commaSep($.expression), "}"),
+    map_literal: ($) => seq("{", commaSep($.map_literal_member), "}"),
+
+    map_literal_member: ($) => seq(choice($.identifier, $._stringy), ":", $.expression),
   },
 });
 

@@ -232,3 +232,81 @@ maybeVal ?? 2;
         )
     )
 )
+
+
+================================
+Set Literal
+================================
+
+{ 1, 2, 3 };
+
+---
+
+(source
+    (expression_statement
+        (set_literal
+            (number)
+            (number)
+            (number)
+        )
+    )
+)
+
+================================
+Empty Map Literal
+================================
+
+{};
+
+---
+
+(source
+    (expression_statement
+        (map_literal)
+    )
+)
+
+================================
+Map Literal
+================================
+
+{ a: 1, "a": 2, b: 3,};
+
+---
+
+(source
+    (expression_statement
+        (map_literal
+            (map_literal_member
+                (identifier)
+                (number)
+            )
+            (map_literal_member
+                (template_string)
+                (number)
+            )
+            (map_literal_member
+                (identifier)
+                (number)
+            )
+        )
+    )
+)
+
+================================
+Array Literal
+================================
+
+[1, 2, 3,];
+
+---
+
+(source
+    (expression_statement
+        (array_literal
+            (number)
+            (number)
+            (number)
+        )
+    )
+)
