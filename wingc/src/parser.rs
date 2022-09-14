@@ -118,10 +118,18 @@ impl Parser<'_> {
 					None
 				},
 			}),
-			"variable_definition_statement" => Ok(Statement::VariableDef {
-				var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
-				initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-			}),
+			"variable_definition_statement" => {
+				let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+				Ok(Statement::VariableDef {
+					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
+					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+					type_,
+				})
+			}
 			"variable_assignment_statement" => Ok(Statement::Assignment {
 				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
@@ -283,8 +291,8 @@ impl Parser<'_> {
 	fn build_type(&self, type_node: &Node) -> DiagnosticResult<Type> {
 		match type_node.kind() {
 			"builtin_type" => match self.node_text(type_node) {
-				"number" => Ok(Type::Number),
-				"string" => Ok(Type::String),
+				"num" => Ok(Type::Number),
+				"str" => Ok(Type::String),
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
