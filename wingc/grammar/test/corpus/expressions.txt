@@ -142,3 +142,52 @@ new A() as "b" in c;
         )
     )
 )
+
+================================
+preflight anonymous closure
+================================
+
+(a: number) -> { return a; };
+
+---
+
+(source
+    (expression_statement
+        (preflight_closure
+            (parameter_list
+                (parameter_definition
+                    (identifier)
+                    (builtin_type)
+                )
+            )
+            (block
+                (return_statement
+                    (reference
+                        (identifier)
+                    )
+                )
+            )
+        )
+    )
+)
+
+================================
+inflight anonymous closure
+================================
+
+() ~> { return 1; };
+
+---
+
+(source
+    (expression_statement
+        (inflight_closure
+            (parameter_list)
+            (block
+                (return_statement
+                    (number)
+                )
+            )
+        )
+    )
+)
