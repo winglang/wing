@@ -194,6 +194,9 @@ module.exports = grammar({
         $.reference,
         $.function_call,
         $.method_call,
+        $.preflight_closure,
+        $.inflight_closure,
+        $.pure_closure,
         $.template_string,
         $.await_expression,
         $.parenthesized_expression
@@ -422,10 +425,22 @@ module.exports = grammar({
       );
     },
 
+    preflight_closure: ($) => anonymousClosure($, "->"),
+    inflight_closure: ($) => anonymousClosure($, "~>"),
+    pure_closure: ($) => anonymousClosure($, "=>"),
+
     await_expression: ($) => prec.right(seq("await", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
   },
 });
+
+function anonymousClosure($, arrow) {
+  return seq(
+    field("parameter_list", $.parameter_list),
+    arrow,
+    field("block", $.block)
+  );
+}
 
 function commaSep1(rule) {
   return seq(rule, repeat(seq(",", rule)), optional(","));
