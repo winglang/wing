@@ -447,7 +447,7 @@ module.exports = grammar({
 function anonymousClosure($, arrow) {
   return seq(
     field("parameter_list", $.parameter_list),
-    field("return_type", $._type_annotation),
+    optional(field("return_type", $._type_annotation)),
     arrow,
     field("block", $.block)
   );
