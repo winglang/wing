@@ -29,7 +29,7 @@ module.exports = grammar({
   rules: {
     // Basics
     source: ($) => repeat($._statement),
-    block: ($) => seq("{", repeat($._statement), "}"),
+    block: ($) => seq("{", optional(repeat($._statement)), "}"),
     comment: ($) =>
       token(
         choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
@@ -312,15 +312,15 @@ module.exports = grammar({
       ),
 
     function_type: ($) =>
-      seq(
+    prec.right(seq(
         optional(field("inflight", $._inflight_specifier)),
         field("parameter_types", $.parameter_type_list),
         optional(seq("->", field("return_type", $._type)))
-      ),
+      )),
 
     parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
-    builtin_type: ($) => choice("num", "nil", "bool", "any", "str"),
+    builtin_type: ($) => choice("num", "nil", "bool", "any", "str", "void"),
 
     constructor: ($) =>
       seq(
@@ -437,6 +437,7 @@ module.exports = grammar({
 function anonymousClosure($, arrow) {
   return seq(
     field("parameter_list", $.parameter_list),
+    field("return_type", $._type_annotation),
     arrow,
     field("block", $.block)
   );

@@ -147,7 +147,7 @@ new A() as 'b' in c;
 preflight anonymous closure
 ================================
 
-(a: number) -> { return a; };
+(a: num): num -> { return a; };
 
 ---
 
@@ -160,6 +160,7 @@ preflight anonymous closure
                     (builtin_type)
                 )
             )
+            (builtin_type)
             (block
                 (return_statement
                     (reference
@@ -175,7 +176,7 @@ preflight anonymous closure
 inflight anonymous closure
 ================================
 
-() ~> { return 1; };
+(): num ~> { return 1; };
 
 ---
 
@@ -183,6 +184,7 @@ inflight anonymous closure
     (expression_statement
         (inflight_closure
             (parameter_list)
+            (builtin_type)
             (block
                 (return_statement
                     (number)
