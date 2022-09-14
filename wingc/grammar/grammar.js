@@ -78,7 +78,7 @@ module.exports = grammar({
     short_import_statement: ($) =>
       seq(
         "bring",
-        field("module_name", choice($.identifier, $._stringy)),
+        field("module_name", choice($.identifier, $.string)),
         optional(seq("as", field("alias", $.identifier))),
         ";"
       ),
@@ -204,7 +204,6 @@ module.exports = grammar({
         $.preflight_closure,
         $.inflight_closure,
         $.pure_closure,
-        $.template_string,
         $.await_expression,
         $._collection_literal,
         $.parenthesized_expression,
@@ -224,12 +223,7 @@ module.exports = grammar({
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
 
-    _stringy: ($) => choice($.string, $.template_string),
     string: ($) =>
-      choice(
-        seq("'", repeat(choice($._string_fragment, $._escape_sequence)), "'")
-      ),
-    template_string: ($) =>
       seq(
         '"',
         repeat(
@@ -243,17 +237,12 @@ module.exports = grammar({
       ),
     _template_string_fragment: ($) => token.immediate(prec(1, /[^$"\\]+/)),
     template_substitution: ($) => seq("${", $.expression, "}"),
-
-    // Workaround to https://github.com/tree-sitter/tree-sitter/issues/1156
-    // We give names to the token() constructs containing a regexp
-    // so as to obtain a node in the CST.
-    //
-    _string_fragment: ($) => token.immediate(prec(1, /[^'\\]+/)),
     _escape_sequence: ($) =>
       token.immediate(
         seq(
           "\\",
           choice(
+            "$",
             /[^xu0-7]/,
             /[0-7]{1,3}/,
             /x[0-9a-fA-F]{2}/,
@@ -308,7 +297,7 @@ module.exports = grammar({
         field("scope", optional($.new_object_scope))
       ),
 
-    new_object_id: ($) => seq("as", $._stringy),
+    new_object_id: ($) => seq("as", $.string),
 
     new_object_scope: ($) => prec.right(seq("in", $.expression)),
 
@@ -453,7 +442,7 @@ module.exports = grammar({
     map_literal: ($) => seq("{", commaSep($.map_literal_member), "}"),
 
     map_literal_member: ($) =>
-      seq(choice($.identifier, $._stringy), ":", $.expression),
+      seq(choice($.identifier, $.string), ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
   },

@@ -204,7 +204,7 @@ Template string
 
 (source
     (expression_statement
-        (template_string
+        (string
             (template_substitution
                 (reference
                     (identifier)
@@ -282,7 +282,7 @@ Map Literal
                 (number)
             )
             (map_literal_member
-                (template_string)
+                (string)
                 (number)
             )
             (map_literal_member
