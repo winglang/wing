@@ -124,6 +124,7 @@ module.exports = grammar({
         repeat(
           choice(
             $.constructor,
+            $.function_definition,
             $.inflight_function_definition,
             $.class_member,
             $.inflight_class_member
@@ -133,14 +134,14 @@ module.exports = grammar({
       ),
     class_member: ($) =>
       seq(
-        field("access_modifier", optional($.access_modifier)),
+        optional(field("access_modifier", $.access_modifier)),
         field("name", $.identifier),
         $._type_annotation,
         ";"
       ),
     inflight_class_member: ($) =>
       seq(
-        field("access_modifier", optional($.access_modifier)),
+        optional(field("access_modifier", $.access_modifier)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         $._type_annotation,
@@ -333,16 +334,16 @@ module.exports = grammar({
 
     function_definition: ($) =>
       seq(
-        field("access_modifier", optional($.access_modifier)),
+        optional(field("access_modifier", $.access_modifier)),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
-        optional(seq("->", field("return_type", $._type))),
+        optional(field("return_type", $._type_annotation)),
         field("block", $.block)
       ),
 
     inflight_function_definition: ($) =>
       seq(
-        field("access_modifier", optional($.access_modifier)),
+        optional(field("access_modifier", $.access_modifier)),
         field("phase_modifier", $._inflight_specifier),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
