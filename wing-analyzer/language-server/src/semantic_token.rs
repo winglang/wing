@@ -34,13 +34,14 @@ pub struct AbsoluteSemanticToken {
     pub token_type: usize,
 }
 
+// TODO Use a more efficient lookup method (map or compile-time lookup)
 pub fn get_token_type(token_type: &SemanticTokenType) -> usize {
     LEGEND_TYPE.iter().position(|x| x == token_type).unwrap()
 }
 
 // visit all nodes in tree-sitter tree
 pub fn semantic_token_from_ast(tree: &Tree) -> Vec<AbsoluteSemanticToken> {
-    let nodes: Vec<Node<'_>> = traverse(tree.walk(), Order::Pre).collect::<Vec<_>>();
+    let nodes = traverse(tree.walk(), Order::Pre);
     let mut semantic_tokens: Vec<AbsoluteSemanticToken> = Vec::new();
 
     for node in nodes {

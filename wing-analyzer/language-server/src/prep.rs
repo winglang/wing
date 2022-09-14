@@ -20,7 +20,7 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
         }
     };
 
-    // NOTE: Currently not including the actual wingc code because it's not async-friendly
+    // TODO: Currently not including the actual wingc code because it's not async-friendly
 
     // let wing_parser = Parser {
     //     source: &text[..],

@@ -26,7 +26,7 @@ pub fn completions_from_ast(
         match node.kind() {
             "source" => {
                 let keywords = vec![
-                    "as", "bring", "class", "else", "for", "if", "in", "init", "inflight", "new",
+                    "as", "bring", "class", "else", "for", "if", "in", "inflight", "new",
                 ];
                 completions.extend(
                     keywords
