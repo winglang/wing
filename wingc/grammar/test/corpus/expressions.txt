@@ -213,3 +213,22 @@ Template string
         )
     )
 )
+
+================================
+?? operator
+================================
+
+maybeVal ?? 2;
+
+---
+
+(source
+    (expression_statement
+        (binary_expression
+            (reference
+                (identifier)
+            )
+            (number)
+        )
+    )
+)

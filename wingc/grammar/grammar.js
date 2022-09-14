@@ -10,6 +10,7 @@ const PREC = {
   ADD: 9,
   MULTIPLY: 10,
   UNARY: 11,
+  NIL_COALESCING: 12,
 };
 
 module.exports = grammar({
@@ -409,6 +410,7 @@ module.exports = grammar({
         //['<<', PREC.SHIFT],
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
+        ["??", PREC.NIL_COALESCING],
       ];
 
       return choice(
