@@ -51,7 +51,11 @@ module.exports = grammar({
       ),
 
     nested_identifier: ($) =>
-      seq(field("object", $.expression), choice(".", "?."), field("property", $.identifier)),
+      seq(
+        field("object", $.expression),
+        choice(".", "?."),
+        field("property", $.identifier)
+      ),
 
     _inflight_specifier: ($) => choice("inflight", "~"),
 
@@ -202,7 +206,8 @@ module.exports = grammar({
         $.template_string,
         $.await_expression,
         $._collection_literal,
-        $.parenthesized_expression
+        $.parenthesized_expression,
+        $.structured_access_expression
       ),
 
     // Primitives
@@ -315,11 +320,13 @@ module.exports = grammar({
       ),
 
     function_type: ($) =>
-    prec.right(seq(
-        optional(field("inflight", $._inflight_specifier)),
-        field("parameter_types", $.parameter_type_list),
-        optional(seq("->", field("return_type", $._type)))
-      )),
+      prec.right(
+        seq(
+          optional(field("inflight", $._inflight_specifier)),
+          field("parameter_types", $.parameter_type_list),
+          optional(seq("->", field("return_type", $._type)))
+        )
+      ),
 
     parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
@@ -436,12 +443,16 @@ module.exports = grammar({
     await_expression: ($) => prec.right(seq("await", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
 
-    _collection_literal: ($) => choice($.array_literal, $.set_literal, $.map_literal),
+    _collection_literal: ($) =>
+      choice($.array_literal, $.set_literal, $.map_literal),
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
     set_literal: ($) => seq("{", commaSep($.expression), "}"),
     map_literal: ($) => seq("{", commaSep($.map_literal_member), "}"),
 
-    map_literal_member: ($) => seq(choice($.identifier, $._stringy), ":", $.expression),
+    map_literal_member: ($) =>
+      seq(choice($.identifier, $._stringy), ":", $.expression),
+    structured_access_expression: ($) =>
+      prec.right(seq($.expression, "[", $.expression, "]")),
   },
 });
 
