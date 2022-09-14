@@ -219,3 +219,21 @@ resource A extends B {}
     )
 )
 
+==================================
+Struct definition
+==================================
+
+struct Test {
+    cool: number;
+}
+
+---
+(source
+    (struct_definition
+        (identifier)
+        (struct_field
+            (identifier)
+            (builtin_type)
+        )
+    )
+)

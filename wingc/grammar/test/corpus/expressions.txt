@@ -128,7 +128,7 @@ new A();
 New expression with id and scope
 ================================
 
-new A() as "b" in c;
+new A() as 'b' in c;
 
 ---
 
@@ -139,6 +139,26 @@ new A() as "b" in c;
             args: (argument_list)
             id: (new_object_id (string))
             scope: (new_object_scope (reference (identifier)))
+        )
+    )
+)
+
+================================
+Template string
+================================
+
+"cool ${test}";
+
+---
+
+(source
+    (expression_statement
+        (template_string
+            (template_substitution
+                (reference
+                    (identifier)
+                )
+            )
         )
     )
 )
