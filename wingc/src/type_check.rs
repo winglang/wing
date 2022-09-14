@@ -545,8 +545,13 @@ impl<'a> TypeChecker<'a> {
 			Statement::VariableDef {
 				var_name,
 				initial_value,
+				type_,
 			} => {
 				let exp_type = self.type_check_exp(initial_value, env).unwrap();
+				if let Some(t) = type_ {
+					let explicit_type = self.resolve_type(t, env);
+					self.validate_type(exp_type, explicit_type, initial_value);
+				}
 				env.define(&var_name, exp_type);
 			}
 			Statement::FunctionDefinition(func_def) => {

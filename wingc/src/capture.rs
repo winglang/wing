@@ -183,6 +183,7 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 			Statement::VariableDef {
 				var_name: _,
 				initial_value,
+				type_: _,
 			} => res.extend(scan_captures_in_expression(initial_value, env)),
 			Statement::FunctionDefinition(func_def) => res.extend(scan_captures_in_scope(&func_def.statements)),
 			Statement::ForLoop {

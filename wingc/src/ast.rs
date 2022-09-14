@@ -71,6 +71,7 @@ pub enum Statement {
 	VariableDef {
 		var_name: Symbol,
 		initial_value: Expr,
+		type_: Option<Type>,
 	},
 	FunctionDefinition(FunctionDefinition),
 	ForLoop {

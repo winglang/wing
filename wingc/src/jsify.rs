@@ -255,6 +255,7 @@ fn jsify_statement(statement: &Statement) -> String {
 		Statement::VariableDef {
 			var_name,
 			initial_value,
+			type_: _,
 		} => {
 			let initial_value = jsify_expression(initial_value);
 			format!("let {} = {};", jsify_symbol(var_name), initial_value)
