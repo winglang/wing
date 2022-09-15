@@ -252,7 +252,7 @@ it cannot be modified anymore.
 > // Wing Code:
 > // assuming fetch_some_data_with_jsii() returns "any":
 > let data: Struct = await fetch_some_data_with_jsii();
-> print(data.[0].["prop-1"].id);
+> print(data[0]["prop-1"].id);
 > print(data.name);
 > ```
 > 
@@ -1106,9 +1106,9 @@ resource Foo {
   boo(): num { return 32; }
   
   // preflight fields
-  field1: num;
-  field2: str;
-  field3: bool;
+  field4: num;
+  field5: str;
+  field6: bool;
 
   // re-assignable class fields, read about them in the mutability section
   readwrite field4: num;
@@ -1156,6 +1156,10 @@ Resources can be captured into inflight functions and once that happens, inside
 the capture block only the inflight members are available.
 
 Resources can extend other resources (but not structs) and implement interfaces.
+
+Declaration of fields with different phases is not allowed due to requirement of
+having inflight fields of same name being implicitly initialized by the compiler  
+but declaration of methods with different phases is allowed.
 
 [`▲ top`][top]
 
@@ -1863,7 +1867,7 @@ resource DenyList {
     let filepath = "${tmpdir}/${filename}";
     let map = MutMap<DenyListRule>(); 
     for rule in list {
-      append_rule(map, rule);
+      DenyList._append_rule(map, rule);
     }
     fs.write_json(filepath, map);
     return tmpdir;
@@ -1881,23 +1885,23 @@ resource DenyList {
   }
 
   ~ add_rule(rule: DenyListRule) {
-    append_rule(this.rules, rule)
+    DenyList._append_rule(this.rules, rule);
     this._bucket.set(this._object_key, this.rules);
   }
-}
 
-let maybe_suffix = () => {
-  if version != nil {
-    return "/v${version}";
-  } else {
-    return "";
+  = static _append_rule(map: MutMap<DenyListRule>, rule: DenyListRule) {
+    let suffix = DenyList._maybe_suffix(rule.version);
+    let path = "${rule.package_name}${suffix}";
+    map[path] = rule;
   }
-}
 
-let append_rule = (map: MutMap<DenyListRule>,  rule: DenyListRule) => {
-  let suffix = maybe_suffix();
-  let path = "${rule.package_name}${suffix}";
-  map[path] = rule;
+  = static _maybe_suffix(version: str?): str {
+    if version {
+      return "/v${version}";
+    } else {
+      return "";
+    }
+  }
 }
 
 let deny_list = DenyList();
@@ -1927,7 +1931,6 @@ queue.add_consumer(filter);
 - [ ] Make inflight functions `async` by default.
 - [ ] First class support for `regx`, `glob`, and `cron` types.
 - [ ] Support of math operations over `date` and `duration` types.
-- [ ] First class support of `yaml`, `toml`, and `xml` for `any` casting.
 - [ ] Add `time`, `date`, and `durations` as first class types with syntax.
 - [ ] More useful enums: Support for Enum Classes and Swift style enums.
 - [ ] Reflection: add an extended `typeof` operator to get type information.
