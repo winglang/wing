@@ -551,8 +551,10 @@ impl<'a> TypeChecker<'a> {
 				if let Some(t) = type_ {
 					let explicit_type = self.resolve_type(t, env);
 					self.validate_type(exp_type, explicit_type, initial_value);
+					env.define(var_name, explicit_type);
+				} else {
+					env.define(var_name, exp_type);
 				}
-				env.define(&var_name, exp_type);
 			}
 			Statement::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
