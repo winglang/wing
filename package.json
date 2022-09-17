@@ -55,12 +55,12 @@
     "jest-junit": "^13",
     "jsii": "^1.67.0",
     "jsii-diff": "^1.67.0",
-    "jsii-docgen": "^7.0.85",
+    "jsii-docgen": "^7.0.86",
     "jsii-pacmak": "^1.67.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
     "prettier": "^2.7.1",
-    "projen": "^0.62.8",
+    "projen": "^0.62.9",
     "replace-in-file": "^6.3.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
@@ -72,7 +72,7 @@
     "constructs": "^10.0.25"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^9.0.29",
+    "@cdktf/provider-aws": "^9.0.31",
     "@monadahq/wingsdk-clients": "^0.5.1",
     "cdktf": "^0.12.2",
     "esbuild-wasm": "^0.15.7"
