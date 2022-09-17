@@ -298,7 +298,7 @@ impl Parser<'_> {
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
-			"field_nested_identifier" => Ok(self.build_field_nested_identifier(&type_node)?),
+			"nested_type_identifier" => Ok(self.build_nested_type_identifier(&type_node)?),
 			"class_type" => Ok(Type::Class(self.node_symbol(type_node)?)),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
@@ -332,7 +332,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_field_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Type> {
+	fn build_nested_type_identifier(&self, nested_node: &Node) -> DiagnosticResult<Type> {
 		let mut cursor = nested_node.walk();
 		Ok(Type::FieldNestedIdentifier {
 			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,

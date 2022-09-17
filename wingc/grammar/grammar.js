@@ -22,7 +22,7 @@ module.exports = grammar({
 
   precedences: ($) => [
     [$.builtin_type, $.identifier],
-    [$.field_nested_identifier, $.nested_identifier, $.reference],
+    [$.nested_type_identifier, $.nested_identifier, $.reference],
     [$.map_literal, $.set_literal],
     [$.new_expression, $.function_call],
     [$.nested_identifier, $.method_call, $.reference],
@@ -45,7 +45,7 @@ module.exports = grammar({
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
-    field_nested_identifier: ($) =>
+    nested_type_identifier: ($) =>
       prec.right(seq(
         field("object", $.identifier),
         repeat(seq(".", field("fields", $.identifier)))
@@ -292,7 +292,7 @@ module.exports = grammar({
     new_expression: ($) =>
       seq(
         "new",
-        field("class", choice($.field_nested_identifier, $.builtin_container_type)),
+        field("class", choice($.nested_type_identifier, $.builtin_container_type)),
         field("args", $.argument_list),
         field("id", optional($.new_object_id)),
         field("scope", optional($.new_object_scope))
@@ -304,7 +304,7 @@ module.exports = grammar({
 
     _type: ($) =>
       choice(
-        seq($.field_nested_identifier, optional("?")),
+        seq($.nested_type_identifier, optional("?")),
         seq($.builtin_type, optional("?")),
         seq($.builtin_container_type, optional("?")),
         $.function_type
