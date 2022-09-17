@@ -1,4 +1,4 @@
-use std::{borrow::Borrow, fs};
+use std::fs;
 
 use sha2::{Digest, Sha256};
 
@@ -93,17 +93,6 @@ fn jsify_reference(reference: &Reference) -> String {
 	match reference {
 		Reference::Identifier(identifier) => jsify_symbol(identifier),
 		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol(property),
-		// Reference::FieldNestedIdentifier { root, fields } => {
-		// 	format!(
-		// 		"{}.{}",
-		// 		jsify_symbol(root),
-		// 		fields
-		// 			.iter()
-		// 			.map(|f| jsify_symbol(f))
-		// 			.collect::<Vec<String>>()
-		// 			.join(".")
-		// 	)
-		// }
 	}
 }
 
@@ -263,24 +252,17 @@ fn jsify_statement(statement: &Statement) -> String {
 			module_name,
 			identifier,
 		} => {
-			if let Some(identifier) = identifier {
-				// use <module_name> from <parent_module>
-				format!(
-					"const {} = require('{}/{}').{};",
-					jsify_symbol(module_name),
-					STDLIB_MODULE,
-					jsify_symbol(module_name),
-					jsify_symbol(identifier)
-				)
-			} else {
-				// use <module_name>
-				format!(
-					"const {} = require('{}').{};",
-					jsify_symbol(module_name),
-					STDLIB_MODULE,
-					jsify_symbol(module_name)
-				)
-			}
+			format!(
+				"const {} = require('{}').{};",
+				jsify_symbol(if let Some(identifier) = identifier {
+					// use alias
+					identifier
+				} else {
+					module_name
+				}),
+				STDLIB_MODULE,
+				jsify_symbol(module_name)
+			)
 		}
 		Statement::VariableDef {
 			var_name,
