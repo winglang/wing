@@ -253,15 +253,18 @@ fn jsify_statement(statement: &Statement) -> String {
 			identifier,
 		} => {
 			format!(
-				"const {} = require('{}').{};",
+				"const {} = {};",
 				jsify_symbol(if let Some(identifier) = identifier {
 					// use alias
 					identifier
 				} else {
 					module_name
 				}),
-				STDLIB_MODULE,
-				jsify_symbol(module_name)
+				if module_name.name.starts_with("\"./") {
+					format!("require({})", module_name.name)
+				} else {
+					format!("require('{}').{}", STDLIB_MODULE, module_name.name)
+				}
 			)
 		}
 		Statement::VariableDef {
