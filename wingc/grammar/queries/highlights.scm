@@ -3,10 +3,6 @@
 (variable_definition_statement 
   name: (identifier) @variable
 )
-(namespaced_identifier 
-  namespace: (identifier) @type
-  name: (identifier) @variable
-)
 (reference (identifier)) @variable
 (reference (nested_identifier property: (identifier))) @property
 

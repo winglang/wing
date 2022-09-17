@@ -35,6 +35,7 @@ pub enum Type {
 	Duration,
 	FunctionSignature(FunctionSignature),
 	Class(Symbol),
+	FieldNestedIdentifier { root: Symbol, fields: Vec<Symbol> },
 }
 
 #[derive(Debug, Clone)]
@@ -117,7 +118,7 @@ pub struct ClassMember {
 #[derive(Debug)]
 pub enum ExprType {
 	New {
-		class: Reference,
+		class: Type,
 		obj_id: Option<Symbol>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
@@ -254,7 +255,6 @@ impl BinaryOperator {
 pub enum Reference {
 	Identifier(Symbol),
 	NestedIdentifier { object: Box<Expr>, property: Symbol },
-	NamespacedIdentifier { namespace: Symbol, identifier: Symbol },
 }
 
 impl Display for Reference {
@@ -267,9 +267,6 @@ impl Display for Reference {
 					_ => "object".to_string(), // TODO!
 				};
 				write!(f, "{}.{}", obj_str, property.name)
-			}
-			Reference::NamespacedIdentifier { namespace, identifier } => {
-				write!(f, "{}::{}", namespace.name, identifier.name)
 			}
 		}
 	}

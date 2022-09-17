@@ -21,9 +21,11 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   precedences: ($) => [
+    [$.builtin_type, $.identifier],
+    [$.field_nested_identifier, $.nested_identifier, $.reference],
     [$.map_literal, $.set_literal],
     [$.new_expression, $.function_call],
-    [$.nested_identifier, $.namespaced_identifier, $.method_call, $.reference],
+    [$.nested_identifier, $.method_call, $.reference],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -39,17 +41,16 @@ module.exports = grammar({
 
     // Identifiers
     reference: ($) =>
-      choice($.identifier, $.namespaced_identifier, $.nested_identifier),
+      choice($.identifier, $.nested_identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
-    namespaced_identifier: ($) =>
-      seq(
-        field("namespace", $.identifier),
-        "::",
-        field("name", choice($.identifier, $.nested_identifier))
-      ),
-
+    field_nested_identifier: ($) =>
+      prec.right(seq(
+        field("object", $.identifier),
+        repeat(seq(".", field("fields", $.identifier)))
+      )),
+    
     nested_identifier: ($) =>
       seq(
         field("object", $.expression),
@@ -291,7 +292,7 @@ module.exports = grammar({
     new_expression: ($) =>
       seq(
         "new",
-        field("class", choice($.builtin_container_type, $.class_type)),
+        field("class", $.field_nested_identifier),
         field("args", $.argument_list),
         field("id", optional($.new_object_id)),
         field("scope", optional($.new_object_scope))
@@ -303,13 +304,11 @@ module.exports = grammar({
 
     _type: ($) =>
       choice(
-        seq($.class_type, optional("?")),
+        seq($.field_nested_identifier, optional("?")),
         seq($.builtin_type, optional("?")),
         seq($.builtin_container_type, optional("?")),
         $.function_type
       ),
-
-    class_type: ($) => seq($.identifier, optional(repeat(seq(".", $.identifier)))),
 
     function_type: ($) =>
       prec.right(

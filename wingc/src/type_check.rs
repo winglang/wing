@@ -359,7 +359,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
 				// Lookup the type in the env
-				let type_ = self.resolve_reference(class, env);
+				let type_ = self.resolve_type(class, env);
 				// TODO: hack to support namespaced identifiers (basically stdlib cloud::Bucket), we skip type-checking and resolve them to Anything
 				if matches!(type_.into(), &Type::Anything) {
 					_ = unimplemented_type();
@@ -537,6 +537,10 @@ impl<'a> TypeChecker<'a> {
 				// Lookup this class name in the current environment
 				env.lookup(&class_name)
 			}
+			AstType::FieldNestedIdentifier { root: _, fields: _ } => {
+				// TODO This should be updated to support "bring"
+				self.types.anything()
+			}
 		}
 	}
 
@@ -617,9 +621,17 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(exp_type, var_type, value);
 			}
 			Statement::Use {
-				module_name: _,
-				identifier: _,
-			} => _ = unimplemented_type(),
+				module_name,
+				identifier,
+			} => {
+				// TODO: for now all namespaced identifiers resolve to `anything` since we don't know what they are,
+				// this is better than failing just because it's a way to do our mock `bring cloud; cloud::Bucket()` support.
+				if let Some(identifier) = identifier {
+					env.define(identifier, self.types.anything());
+				} else {
+					env.define(module_name, self.types.anything());
+				}
+			}
 			Statement::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				for statement in scope.statements.iter_mut() {
@@ -815,15 +827,6 @@ impl<'a> TypeChecker<'a> {
 
 				// Find property in class's environment
 				class.env.lookup(property)
-			}
-			Reference::NamespacedIdentifier {
-				namespace: _,
-				identifier: _,
-			} => {
-				// TODO: for now all namespaced identifiers resolve to `anything` since we don't know what they are,
-				// this is better than failing just because it's a way to do our mock `bring cloud; cloud::Bucket()` support.
-				_ = unimplemented_type();
-				self.types.anything()
 			}
 		}
 	}

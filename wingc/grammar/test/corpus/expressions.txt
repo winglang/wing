@@ -118,7 +118,7 @@ new A();
 (source
     (expression_statement
         (new_expression
-            class: (class_type (identifier))
+            class: (field_nested_identifier object: (identifier))
             args: (argument_list)
         )
     )
@@ -135,7 +135,7 @@ new A() as "b" in c;
 (source
     (expression_statement
         (new_expression
-            class: (class_type (identifier))
+            class: (field_nested_identifier object: (identifier))
             args: (argument_list)
             id: (new_object_id (string))
             scope: (new_object_scope (reference (identifier)))
