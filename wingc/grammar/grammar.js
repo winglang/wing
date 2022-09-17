@@ -291,7 +291,7 @@ module.exports = grammar({
     new_expression: ($) =>
       seq(
         "new",
-        field("class", $.reference),
+        field("class", choice($.builtin_container_type, $.class_type)),
         field("args", $.argument_list),
         field("id", optional($.new_object_id)),
         field("scope", optional($.new_object_scope))
@@ -303,11 +303,13 @@ module.exports = grammar({
 
     _type: ($) =>
       choice(
+        seq($.class_type, optional("?")),
         seq($.builtin_type, optional("?")),
-        seq(alias($.identifier, $.class_type), optional("?")),
         seq($.builtin_container_type, optional("?")),
         $.function_type
       ),
+
+    class_type: ($) => seq($.identifier, optional(repeat(seq(".", $.identifier)))),
 
     function_type: ($) =>
       prec.right(
@@ -359,7 +361,7 @@ module.exports = grammar({
     builtin_container_type: ($) =>
       seq(
         field(
-          "type",
+          "collection_type",
           choice(
             "Set",
             "Map",
@@ -371,7 +373,7 @@ module.exports = grammar({
           )
         ),
         "<",
-        field("type", $._type),
+        field("type_parameter", $._type),
         ">"
       ),
 

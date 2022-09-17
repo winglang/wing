@@ -118,7 +118,7 @@ new A();
 (source
     (expression_statement
         (new_expression
-            class: (reference (identifier))
+            class: (class_type (identifier))
             args: (argument_list)
         )
     )
@@ -128,14 +128,14 @@ new A();
 New expression with id and scope
 ================================
 
-new A() as 'b' in c;
+new A() as "b" in c;
 
 ---
 
 (source
     (expression_statement
         (new_expression
-            class: (reference (identifier))
+            class: (class_type (identifier))
             args: (argument_list)
             id: (new_object_id (string))
             scope: (new_object_scope (reference (identifier)))
@@ -307,6 +307,44 @@ Array Literal
             (number)
             (number)
             (number)
+        )
+    )
+)
+
+================================
+Container Type Annotation
+================================
+
+let a: Array<num> = [];
+
+---
+
+(source
+    (variable_definition_statement
+        (identifier)
+        (builtin_container_type
+            (builtin_type)
+        )
+        (array_literal)
+    )
+)
+
+================================
+Container Type Constructor Invocation
+================================
+
+let a = new Map<num>();
+
+---
+
+(source
+    (variable_definition_statement
+        (identifier)
+        (new_expression
+            (builtin_container_type
+                (builtin_type)
+            )
+            (argument_list)
         )
     )
 )
