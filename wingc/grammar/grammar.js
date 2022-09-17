@@ -292,7 +292,7 @@ module.exports = grammar({
     new_expression: ($) =>
       seq(
         "new",
-        field("class", $.field_nested_identifier),
+        field("class", choice($.field_nested_identifier, $.builtin_container_type)),
         field("args", $.argument_list),
         field("id", optional($.new_object_id)),
         field("scope", optional($.new_object_scope))

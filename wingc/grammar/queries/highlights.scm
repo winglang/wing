@@ -8,7 +8,7 @@
 
 ; Classes
 
-(class_type) @type
+(field_nested_identifier) @type
 (class_member 
   name: (identifier) @member
 ) 
@@ -76,7 +76,6 @@
   ";"
   "."
   ","
-  "::"
 ] @punctuation.delimiter
 
 [
