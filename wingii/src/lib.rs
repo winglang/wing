@@ -5,18 +5,19 @@ extern crate serde_json;
 mod test;
 
 mod jsii;
+mod types;
 mod util;
 
 pub mod spec {
     use crate::jsii::Assembly;
-    use std::error::Error;
+    use crate::types::WingIIResult;
     use std::fs;
     use std::path::Path;
 
     pub const SPEC_FILE_NAME: &str = ".jsii";
     pub const REDIRECT_FIELD: &str = "jsii/file-redirect";
 
-    pub fn find_assembly_file(directory: &str) -> Result<String, Box<dyn Error>> {
+    pub fn find_assembly_file(directory: &str) -> WingIIResult<String> {
         let dot_jsii_file = Path::new(directory).join(SPEC_FILE_NAME);
         if dot_jsii_file.exists() {
             Ok(dot_jsii_file.to_str().unwrap().to_string())
@@ -37,7 +38,7 @@ pub mod spec {
         }
     }
 
-    pub fn load_assembly_from_file(path_to_file: &str) -> Result<Assembly, Box<dyn Error>> {
+    pub fn load_assembly_from_file(path_to_file: &str) -> WingIIResult<Assembly> {
         let path = Path::new(path_to_file);
         let manifest = fs::read_to_string(path)?;
         let manifest = serde_json::from_str(&manifest)?;
@@ -52,7 +53,7 @@ pub mod spec {
         }
     }
 
-    pub fn load_assembly_from_path(path: &str) -> Result<Assembly, Box<dyn Error>> {
+    pub fn load_assembly_from_path(path: &str) -> WingIIResult<Assembly> {
         let file = find_assembly_file(path)?;
         load_assembly_from_file(&file)
     }
@@ -63,9 +64,9 @@ pub mod type_system {
 
     use crate::jsii::Assembly;
     use crate::spec;
+    use crate::types::{WingIIResult, WingIIResultVoid};
     use crate::util::package_json;
     use std::collections::HashMap;
-    use std::error::Error;
     use std::path::Path;
 
     pub struct TypeSystem {
@@ -85,7 +86,7 @@ pub mod type_system {
             self.assemblies.get(&name)
         }
 
-        pub fn load(&mut self, file_or_directory: &str) -> Result<SchemaName, Box<dyn Error>> {
+        pub fn load(&mut self, file_or_directory: &str) -> WingIIResult<SchemaName> {
             if Path::new(file_or_directory).is_dir() {
                 self.load_module(file_or_directory, Some(true))
             } else {
@@ -93,22 +94,18 @@ pub mod type_system {
             }
         }
 
-        fn load_assembly(&mut self, path: &str) -> Result<Assembly, Box<dyn Error>> {
+        fn load_assembly(&mut self, path: &str) -> WingIIResult<Assembly> {
             Ok(spec::load_assembly_from_file(path)?)
         }
 
-        fn add_root(&mut self, assembly: &Assembly) -> Result<(), Box<dyn Error>> {
+        fn add_root(&mut self, assembly: &Assembly) -> WingIIResultVoid {
             if !(self.roots.iter().any(|a| a == &assembly.name)) {
                 self.roots.push(assembly.name.clone());
             }
             Ok(())
         }
 
-        fn add_assembly(
-            &mut self,
-            assembly: Assembly,
-            is_root: bool,
-        ) -> Result<SchemaName, Box<dyn Error>> {
+        fn add_assembly(&mut self, assembly: Assembly, is_root: bool) -> WingIIResult<SchemaName> {
             if !self.assemblies.contains_key(&assembly.name) {
                 self.assemblies
                     .insert(assembly.name.clone(), assembly.clone());
@@ -119,7 +116,7 @@ pub mod type_system {
             Ok(assembly.name)
         }
 
-        fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<SchemaName, Box<dyn Error>> {
+        fn load_file(&mut self, file: &str, is_root: Option<bool>) -> WingIIResult<SchemaName> {
             let assembly = spec::load_assembly_from_path(file)?;
             self.add_assembly(assembly, is_root.unwrap_or(false))
         }
@@ -128,7 +125,7 @@ pub mod type_system {
             &mut self,
             module_directory: &str,
             is_root: Option<bool>,
-        ) -> Result<SchemaName, Box<dyn Error>> {
+        ) -> WingIIResult<SchemaName> {
             let file_path = std::path::Path::new(module_directory).join("package.json");
             let package_json = std::fs::read_to_string(file_path)?;
             let package: serde_json::Value = serde_json::from_str(&package_json)?;
