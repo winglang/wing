@@ -77,8 +77,6 @@ pub mod package_json {
         if dep_pkg_json_path.exists() {
             Some(
                 dep_pkg_json_path
-                    .parent()
-                    .unwrap()
                     .to_str()
                     .unwrap()
                     .to_string(),

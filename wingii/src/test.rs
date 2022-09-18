@@ -47,11 +47,13 @@ mod tests {
     }
 
     #[test]
-    fn can_load_assembly_with_type_system() {
+    fn can_load_constructs_assembly_with_type_system() {
         let mut type_system = TypeSystem::new();
-        let name = type_system
-            .load("src/constructs")
-            .unwrap();
+        let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+            .join("src")
+            .join("fixtures")
+            .join("constructs");
+        let name = type_system.load(fixture_path.to_str().unwrap()).unwrap();
         assert_eq!(name, "constructs");
         let assembly = type_system.get_assembly(name).unwrap();
         assert_eq!(assembly.name, "constructs");
