@@ -17,7 +17,6 @@ mod tests {
     fn does_not_blow_up() {
         let assembly_path = create_temp_assembly();
         remove_temp_assembly(assembly_path);
-        assert_eq!(2 + 2, 4);
     }
 
     #[test]
