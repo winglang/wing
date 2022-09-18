@@ -43,7 +43,7 @@ pub mod spec {
         let manifest = fs::read_to_string(path)?;
         let manifest = serde_json::from_str(&manifest)?;
         if is_assembly_redirect(&manifest) {
-            let redirect = manifest.get("filename").unwrap().as_str().unwrap();
+            let redirect = manifest.get("filename").ok_or("Malformed jsii redirect".into())?.as_str().ok_or("Malformed jsii redirect".into())?;
             let redirect_path = Path::new(redirect);
             let redirect_manifest = fs::read_to_string(redirect_path)?;
             let redirect_manifest = serde_json::from_str(&redirect_manifest)?;
