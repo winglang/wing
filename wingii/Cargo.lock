@@ -1269,7 +1269,6 @@ dependencies = [
  "node-resolve",
  "rand",
  "reqwest",
- "schemafy_core",
  "schemafy_lib",
  "serde",
  "serde_derive",
