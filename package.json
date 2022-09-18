@@ -38,11 +38,14 @@
     "organization": true
   },
   "devDependencies": {
+    "@cdktf/provider-aws": "9.0.26",
     "@monadahq/polycons": "0.0.36",
     "@types/jest": "^27.0.0",
-    "@types/node": "^14",
+    "@types/node": "^16",
+    "@types/node-fetch": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
+    "cdktf": "0.12.2",
     "cdktf-cli": "^0.12.2",
     "constructs": "10.0.25",
     "eslint": "^8",
@@ -68,19 +71,34 @@
     "typescript": "^4.8.3"
   },
   "peerDependencies": {
+    "@cdktf/provider-aws": "^9.0.26",
     "@monadahq/polycons": "^0.0.36",
+    "cdktf": "^0.12.2",
     "constructs": "^10.0.25"
   },
   "dependencies": {
-    "@cdktf/provider-aws": "^9.0.32",
-    "@monadahq/wingsdk-clients": "^0.5.1",
-    "cdktf": "^0.12.2",
-    "esbuild-wasm": "^0.15.7"
+    "@aws-sdk/client-lambda": "^3.16.0",
+    "@aws-sdk/client-s3": "^3.163.0",
+    "@aws-sdk/util-utf8-node": "^3.109.0",
+    "@trpc/client": "^9.27.2",
+    "esbuild-wasm": "^0.15.7",
+    "filenamify": "*",
+    "node-fetch": "^2.6.7",
+    "piscina": "*"
   },
   "bundledDependencies": [
-    "@monadahq/wingsdk-clients",
-    "esbuild-wasm"
+    "@aws-sdk/client-lambda",
+    "@aws-sdk/client-s3",
+    "@aws-sdk/util-utf8-node",
+    "@trpc/client",
+    "esbuild-wasm",
+    "filenamify",
+    "node-fetch",
+    "piscina"
   ],
+  "engines": {
+    "node": ">= 16.16.0"
+  },
   "main": "lib/index.js",
   "license": "Apache-2.0",
   "publishConfig": {
@@ -135,7 +153,11 @@
     "tsc": {
       "outDir": "lib",
       "rootDir": "src"
-    }
+    },
+    "excludeTypescript": [
+      "src/**/*.inflight.ts",
+      "src/**/*.sim.ts"
+    ]
   },
   "overrides": {
     "@types/responselike": "1.0.0",

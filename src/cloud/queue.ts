@@ -30,11 +30,6 @@ export abstract class QueueBase extends Resource implements IQueue {
 
     props;
   }
-
-  public abstract capture(
-    captureScope: IConstruct,
-    metadata: CaptureMetadata
-  ): Code;
 }
 
 /**

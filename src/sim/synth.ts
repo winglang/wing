@@ -15,7 +15,7 @@ export class Synthesizer extends SynthesizerBase {
   constructor(props: SynthesizerProps = {}) {
     super(props);
     this.outdir = props.outdir ?? ".";
-    const artifactdir = join(this.outdir, "local.out");
+    const artifactdir = join(this.outdir, "sim.out");
     this.app = new App({ outdir: artifactdir });
     this.root = this.app;
     mkdirSync(artifactdir, { recursive: true });

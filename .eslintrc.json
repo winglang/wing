@@ -125,6 +125,33 @@
           "method"
         ]
       }
+    ],
+    "import/no-restricted-paths": [
+      "error",
+      {
+        "zones": [
+          {
+            "target": "**/!(*.inflight.ts|*.sim.ts)",
+            "from": "**/*.inflight.ts",
+            "message": "Preflight code should not import from inflight code."
+          },
+          {
+            "target": "**/!(*.inflight.ts|*.sim.ts)",
+            "from": "**/*.sim.ts",
+            "message": "Preflight code should not import from simulation code."
+          },
+          {
+            "target": "**/*.sim.ts",
+            "from": "**/*.inflight.ts",
+            "message": "Simulation code should not import from inflight code."
+          },
+          {
+            "target": "**/*.inflight.ts",
+            "from": "**/*.sim.ts",
+            "message": "Inflight code should not import from simulation code."
+          }
+        ]
+      }
     ]
   },
   "overrides": [

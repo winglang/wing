@@ -1,8 +1,5 @@
-// copied from @monadahq/wing-local
-// TODO: move to another library?
-
-/** Schema for wing.local.json */
-export interface WingLocalSchema {
+/** Schema for simulator.json */
+export interface WingSimulatorSchema {
   /** Schema version. */
   readonly version: string;
   /** The resource at the root of the tree. */

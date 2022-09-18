@@ -87,10 +87,10 @@
       "description": "Only compile",
       "steps": [
         {
-          "exec": "replace-in-file \"lib: ['lib.es2020.d.ts']\" \"lib: ['lib.es2020.d.ts','lib.dom.d.ts']\" node_modules/jsii/lib/compiler.js"
+          "exec": "jsii --silence-warnings=reserved-word"
         },
         {
-          "exec": "jsii --silence-warnings=reserved-word"
+          "exec": "tsc -p tsconfig.nonjsii.json"
         }
       ]
     },
@@ -175,7 +175,12 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation"
+      "description": "Prepare the project for compilation",
+      "steps": [
+        {
+          "exec": "replace-in-file \"lib: ['lib.es2020.d.ts']\" \"lib: ['lib.es2020.d.ts','lib.dom.d.ts']\" node_modules/jsii/lib/compiler.js"
+        }
+      ]
     },
     "release": {
       "name": "release",
@@ -233,7 +238,7 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all --updateSnapshot"
+          "exec": "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8"
         },
         {
           "spawn": "eslint"

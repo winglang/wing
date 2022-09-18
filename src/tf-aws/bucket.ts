@@ -4,7 +4,6 @@ import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
-
 export class Bucket extends cloud.BucketBase implements cloud.IBucket {
   private readonly bucket: s3.S3Bucket;
   private readonly public: boolean;
@@ -82,7 +81,7 @@ export class Bucket extends cloud.BucketBase implements cloud.IBucket {
     // it may not be resolved until deployment time.
     captureScope.addEnvironment(env, this.bucket.bucket);
 
-    return InflightClient.for("aws", "bucket", "BucketClient", [
+    return InflightClient.for(__filename, "BucketClient", [
       `process.env["${env}"]`,
     ]);
   }

@@ -168,7 +168,7 @@ export class Function extends cloud.FunctionBase {
     // it may not be resolved until deployment time.
     captureScope.addEnvironment(env, this.function.arn);
 
-    return InflightClient.for("aws", "function", "FunctionClient", [
+    return InflightClient.for(__filename, "FunctionClient", [
       `process.env["${env}"]`,
     ]);
   }

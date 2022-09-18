@@ -2,6 +2,7 @@ import { Polycons } from "@monadahq/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code } from "../core";
 import { IResource, Resource } from "./resource";
+import { Void } from "./shared";
 
 export interface IBucket extends IResource {}
 
@@ -34,11 +35,6 @@ export abstract class BucketBase extends Resource implements IBucket {
 
     props;
   }
-
-  public abstract capture(
-    captureScope: IConstruct,
-    metadata: CaptureMetadata
-  ): Code;
 }
 
 /**
@@ -55,6 +51,17 @@ export class Bucket extends BucketBase {
   }
 }
 
+/**
+ * Inflight interface for `Bucket`.
+ */
+export interface IBucketClient {
+  put(key: string, body: string): Promise<Void>;
+  get(key: string): Promise<string>;
+}
+
+/**
+ * List of inflight operations available for `Bucket`.
+ */
 export enum BucketInflightMethods {
   PUT = "put",
   GET = "get",

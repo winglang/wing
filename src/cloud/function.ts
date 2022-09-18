@@ -42,11 +42,6 @@ export abstract class FunctionBase extends Resource implements IFunction {
     inflight;
     props;
   }
-
-  public abstract capture(
-    captureScope: IConstruct,
-    metadata: CaptureMetadata
-  ): Code;
 }
 
 /**
@@ -74,6 +69,16 @@ export class Function extends FunctionBase {
   }
 }
 
+/**
+ * Inflight interface for `Function`.
+ */
+export interface IFunctionClient {
+  invoke(payload: string): Promise<string>;
+}
+
+/**
+ * List of inflight operations available for `Function`.
+ */
 export enum FunctionInflightMethods {
   INVOKE = "invoke",
 }

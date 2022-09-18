@@ -43,8 +43,8 @@ export class Function extends cloud.FunctionBase implements IResource {
     if (!(captureScope instanceof Function)) {
       throw new Error("functions can only be captured by a function for now");
     }
-    return InflightClient.for("local", "function", "FunctionClient", [
-      `"${this.node.id}"]`,
+    return InflightClient.for(__filename, "FunctionClient", [
+      `"${this.node.id}"`,
     ]);
   }
 

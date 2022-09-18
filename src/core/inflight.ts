@@ -3,7 +3,6 @@ import { tmpdir } from "os";
 import { basename, dirname, join, resolve } from "path";
 import { IConstruct } from "constructs";
 import * as esbuild from "esbuild-wasm";
-import { CLIENTS_PACKAGE } from "../constants";
 import { PREBUNDLE_SYMBOL } from "./internal";
 
 /**
@@ -282,16 +281,16 @@ function mkdtemp(prefix: string): string {
 
 export class InflightClient {
   public static for(
-    targetCloud: string,
-    resource: string,
+    filename: string,
     clientClass: string,
     args: string[]
   ): Code {
-    const clientPath = require.resolve(
-      `${CLIENTS_PACKAGE}/${targetCloud.toLowerCase()}/${resource.toLowerCase()}`
-    );
+    const inflightDir = dirname(filename);
+    const inflightFile = basename(filename).split(".")[0] + ".inflight";
     return NodeJsCode.fromInline(
-      `new (require("${clientPath}")).${clientClass}(${args.join(", ")})`
+      `new (require("${require.resolve(
+        `${inflightDir}/${inflightFile}`
+      )}")).${clientClass}(${args.join(", ")})`
     );
   }
   private constructor() {}

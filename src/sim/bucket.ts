@@ -34,8 +34,8 @@ export class Bucket
     if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by a function for now");
     }
-    return InflightClient.for("local", "function", "BucketClient", [
-      `process.env["${this.node.id}"]`,
+    return InflightClient.for(__filename, "BucketClient", [
+      `"${this.node.id}"`,
     ]);
   }
 }

@@ -1,11 +1,11 @@
 import { Bucket, Function } from "../../src/cloud";
 import { App, NodeJsCode, Inflight } from "../../src/core";
-import * as local from "../../src/local";
+import * as sim from "../../src/sim";
 import { mkdtemp } from "../util";
 
 test("each cloud resource can be identified as stateful or not", () => {
   const app = new App({
-    synthesizer: new local.Synthesizer({ outdir: mkdtemp() }),
+    synthesizer: new sim.Synthesizer({ outdir: mkdtemp() }),
   });
   const bucket = new Bucket(app.root, "bucket", {});
   const fn = new Function(app.root, "fn", makeInflight());

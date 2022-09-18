@@ -3,7 +3,7 @@ import { join } from "path";
 import { Construct, IConstruct } from "constructs";
 import { FileBase } from "../fs";
 import { isResource } from "./resource";
-import { ConstructSchema, ResourceSchema, WingLocalSchema } from "./schema";
+import { ConstructSchema, ResourceSchema, WingSimulatorSchema } from "./schema";
 
 export interface AppProps {
   readonly outdir: string;
@@ -24,12 +24,12 @@ export class App extends Construct {
 
     const root: ConstructSchema = constructToSchema(this);
 
-    const contents: WingLocalSchema = {
-      version: "winglocal-0.1",
+    const contents: WingSimulatorSchema = {
+      version: "wingsimulator-0.1",
       root,
     };
     writeFileSync(
-      join(this.outdir, "wing.local.json"),
+      join(this.outdir, "simulator.json"),
       JSON.stringify(contents, null, 2)
     );
   }
