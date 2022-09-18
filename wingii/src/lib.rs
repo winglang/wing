@@ -22,7 +22,7 @@ pub mod spec {
             Ok(dot_jsii_file.to_str().unwrap().to_string())
         } else {
             Err(format!(
-                "Expected to find ${} file in ${}, but no such file found",
+                "Expected to find {} file in {}, but no such file found",
                 SPEC_FILE_NAME, directory
             )
             .into())
