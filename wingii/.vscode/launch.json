@@ -4,7 +4,7 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug selected unit test",
+      "name": "Debug WingII tests",
       "cargo": {
         "args": ["test", "--no-run"],
         "filter": {
