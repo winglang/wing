@@ -83,6 +83,7 @@
   },
   "dependencies": {
     "@monadahq/wing-local-client": "^0.0.3",
+    "@monadahq/wing-local-schema": "*",
     "@monadahq/wing-local-server": "^0.0.5",
     "chokidar": "^3.5.3",
     "electron-log": "^4.4.8"

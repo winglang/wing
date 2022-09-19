@@ -203,6 +203,10 @@
       "type": "runtime"
     },
     {
+      "name": "@monadahq/wing-local-schema",
+      "type": "runtime"
+    },
+    {
       "name": "@monadahq/wing-local-server",
       "type": "runtime"
     },

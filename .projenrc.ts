@@ -8,6 +8,7 @@ const project = new TypeScriptProject({
     "electron-log",
     "@monadahq/wing-local-server",
     "@monadahq/wing-local-client",
+    "@monadahq/wing-local-schema",
   ],
   devDeps: [
     "@monadahq/mona-projen",
