@@ -38,7 +38,7 @@ pub struct Diagnostic {
 
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-	// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
+		// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
 		write!(f, "{:?} at {}\n{}", self.level, self.span, self.message)
 	}
 }

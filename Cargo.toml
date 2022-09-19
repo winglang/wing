@@ -1,2 +1,7 @@
 [workspace]
-members = ["apps/*", "libs/*"]
+members = [
+  "apps/wing-language-server",
+
+  "libs/wingc",
+  "libs/tree-sitter-wing"
+]
