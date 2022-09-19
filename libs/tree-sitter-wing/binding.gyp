@@ -1,7 +1,7 @@
 {
   "targets": [
     {
-      "target_name": "tree_sitter_winglang_binding",
+      "target_name": "tree_sitter_wing_binding",
       "include_dirs": [
         "<!(node -e \"require('nan')\")",
         "src"

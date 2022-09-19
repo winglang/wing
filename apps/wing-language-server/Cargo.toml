@@ -11,4 +11,4 @@ tokio = { version = "1.17.0", features = ["full"] }
 tower-lsp = { version = "0.17.0"}
 dashmap = "5.1.0"
 tree-sitter-traversal = "0.1.2"
-tree-sitter-winglang = { path = "../../wingc/grammar" }
+tree-sitter-wing = { path = "../../libs/tree-sitter-wing" }

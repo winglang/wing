@@ -22,7 +22,7 @@ pub mod type_check;
 pub mod type_env;
 
 pub fn parse(source_file: &str) -> Scope {
-	let language = tree_sitter_winglang::language();
+	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
 

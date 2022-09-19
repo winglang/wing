@@ -11,7 +11,7 @@ fn main() {
 			include_guard: Some("WINGC_BUILD_H_".to_string()),
 			..Default::default()
 		})
-		.exclude_item("tree_sitter_winglang")
+		.exclude_item("tree_sitter_wing")
 		.generate()
 		.expect("Unable to generate bindings")
 		.write_to_file("wingc.h");
