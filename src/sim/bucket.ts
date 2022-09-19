@@ -2,13 +2,9 @@ import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
-import { IResource } from "./resource";
 import { BucketSchema } from "./schema";
 
-export class Bucket
-  extends cloud.BucketBase
-  implements cloud.IBucket, IResource
-{
+export class Bucket extends cloud.BucketBase {
   private readonly public: boolean;
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);

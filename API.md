@@ -360,8 +360,6 @@ with a fresh copy without any consequences.
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.sim.Bucket"></a>
 
-- *Implements:* @monadahq/wingsdk.cloud.IBucket, @monadahq/wingsdk.sim.IResource
-
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Bucket.Initializer"></a>
 
 ```typescript
@@ -499,8 +497,6 @@ with a fresh copy without any consequences.
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.tfaws.Bucket"></a>
 
-- *Implements:* @monadahq/wingsdk.cloud.IBucket
-
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Bucket.Initializer"></a>
 
 ```typescript
@@ -637,8 +633,6 @@ with a fresh copy without any consequences.
 
 
 ### BucketBase <a name="BucketBase" id="@monadahq/wingsdk.cloud.BucketBase"></a>
-
-- *Implements:* @monadahq/wingsdk.cloud.IBucket
 
 Functionality shared between all `Bucket` implementations.
 
@@ -1395,8 +1389,6 @@ with a fresh copy without any consequences.
 
 ### FunctionBase <a name="FunctionBase" id="@monadahq/wingsdk.cloud.FunctionBase"></a>
 
-- *Implements:* @monadahq/wingsdk.cloud.IFunction
-
 Functionality shared between all `Function` implementations.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer"></a>
@@ -1671,441 +1663,9 @@ public readonly filePath: string;
 ---
 
 
-### Queue <a name="Queue" id="@monadahq/wingsdk.cloud.Queue"></a>
-
-Represents a serverless queue.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Queue.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-new cloud.Queue(scope: Construct, id: string, props: QueueProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Queue.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Queue.capture"></a>
-
-```typescript
-public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.cloud.Queue.capture.parameter._metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Queue.isConstruct"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-cloud.Queue.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Queue.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Queue.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Queue.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-
-### Queue <a name="Queue" id="@monadahq/wingsdk.tfaws.Queue"></a>
-
-- *Implements:* @monadahq/wingsdk.cloud.IQueue
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Queue.Initializer"></a>
-
-```typescript
-import { tfaws } from '@monadahq/wingsdk'
-
-new tfaws.Queue(scope: Construct, id: string, props?: QueueProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.addWorker">addWorker</a></code> | *No description.* |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.tfaws.Queue.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.tfaws.Queue.capture"></a>
-
-```typescript
-public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.tfaws.Queue.capture.parameter._captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.tfaws.Queue.capture.parameter._metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
-
-##### `addWorker` <a name="addWorker" id="@monadahq/wingsdk.tfaws.Queue.addWorker"></a>
-
-```typescript
-public addWorker(fn: IFunction): void
-```
-
-###### `fn`<sup>Required</sup> <a name="fn" id="@monadahq/wingsdk.tfaws.Queue.addWorker.parameter.fn"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.IFunction
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.tfaws.Queue.isConstruct"></a>
-
-```typescript
-import { tfaws } from '@monadahq/wingsdk'
-
-tfaws.Queue.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.tfaws.Queue.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.tfaws.Queue.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.tfaws.Queue.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-
-### QueueBase <a name="QueueBase" id="@monadahq/wingsdk.cloud.QueueBase"></a>
-
-- *Implements:* @monadahq/wingsdk.cloud.IQueue
-
-Functionality shared between all `Queue` implementations.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.QueueBase.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-new cloud.QueueBase(scope: Construct, id: string, props: QueueProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.QueueBase.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.QueueBase.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.QueueBase.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.QueueBase.capture.parameter.metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.QueueBase.isConstruct"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-cloud.QueueBase.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.QueueBase.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.QueueBase.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.QueueBase.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-
 ### Resource <a name="Resource" id="@monadahq/wingsdk.cloud.Resource"></a>
 
-- *Implements:* @monadahq/wingsdk.cloud.IResource, @monadahq/wingsdk.core.ICapturable
+- *Implements:* @monadahq/wingsdk.core.ICapturable
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Resource.Initializer"></a>
 
@@ -2815,36 +2375,6 @@ public readonly resource: string[];
 ```
 
 - *Type:* string[]
-
----
-
-### QueueProps <a name="QueueProps" id="@monadahq/wingsdk.cloud.QueueProps"></a>
-
-Properties for `Queue`.
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.QueueProps.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-const queueProps: cloud.QueueProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>@monadahq/wingsdk.core.Duration</code> | *No description.* |
-
----
-
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@monadahq/wingsdk.cloud.QueueProps.property.timeout"></a>
-
-```typescript
-public readonly timeout: Duration;
-```
-
-- *Type:* @monadahq/wingsdk.core.Duration
 
 ---
 
@@ -3799,37 +3329,6 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
-### IBucket <a name="IBucket" id="@monadahq/wingsdk.cloud.IBucket"></a>
-
-- *Extends:* @monadahq/wingsdk.cloud.IResource
-
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.cloud.IBucket
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IBucket.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.IBucket.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.cloud.IBucketClient"></a>
 
 - *Implemented By:* @monadahq/wingsdk.cloud.IBucketClient
@@ -3878,7 +3377,7 @@ public put(key: string, body: string): Void
 
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.core.ICapturable
 
 Represents something that is capturable by an Inflight.
 
@@ -3911,37 +3410,6 @@ Captures the resource so that it can be referenced inside an Inflight executed i
 ---
 
 
-### IFunction <a name="IFunction" id="@monadahq/wingsdk.cloud.IFunction"></a>
-
-- *Extends:* @monadahq/wingsdk.cloud.IResource
-
-- *Implemented By:* @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.cloud.IFunction
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IFunction.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.IFunction.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.cloud.IFunctionClient"></a>
 
 - *Implemented By:* @monadahq/wingsdk.cloud.IFunctionClient
@@ -3969,71 +3437,11 @@ public invoke(payload: string): string
 ---
 
 
-### IQueue <a name="IQueue" id="@monadahq/wingsdk.cloud.IQueue"></a>
-
-- *Extends:* @monadahq/wingsdk.cloud.IResource
-
-- *Implemented By:* @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.cloud.IQueue
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IQueue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.IQueue.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-### IResource <a name="IResource" id="@monadahq/wingsdk.cloud.IResource"></a>
-
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.cloud.IBucket, @monadahq/wingsdk.cloud.IFunction, @monadahq/wingsdk.cloud.IQueue, @monadahq/wingsdk.cloud.IResource
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IResource.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.IResource.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
 ### IResource <a name="IResource" id="@monadahq/wingsdk.sim.IResource"></a>
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.IResource
+- *Implemented By:* @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.IResource
 
 
 #### Properties <a name="Properties" id="Properties"></a>

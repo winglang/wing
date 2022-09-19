@@ -1,7 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code, ICapturable } from "../core";
 
-export interface IResource {
+export abstract class Resource extends Construct implements ICapturable {
   /**
    * Whether a resource is stateful, i.e. it stores information that is not
    * defined by your application.
@@ -10,13 +10,6 @@ export interface IResource {
    * transactions or events, and can typically be replaced by a cloud provider
    * with a fresh copy without any consequences.
    */
-  readonly stateful: boolean;
-}
-
-export abstract class Resource
-  extends Construct
-  implements IResource, ICapturable
-{
   public abstract readonly stateful: boolean;
   public abstract capture(
     captureScope: IConstruct,

@@ -1,10 +1,8 @@
 import { Polycons } from "@monadahq/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code } from "../core";
-import { IResource, Resource } from "./resource";
+import { Resource } from "./resource";
 import { Void } from "./shared";
-
-export interface IBucket extends IResource {}
 
 /**
  * Global identifier for `Bucket`.
@@ -25,7 +23,7 @@ export interface BucketProps {
 /**
  * Functionality shared between all `Bucket` implementations.
  */
-export abstract class BucketBase extends Resource implements IBucket {
+export abstract class BucketBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: BucketProps) {
     super(scope, id);

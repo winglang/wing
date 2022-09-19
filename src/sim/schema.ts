@@ -51,15 +51,6 @@ export interface EndpointSchema extends BaseResourceSchema {
   };
 }
 
-/** Schema for cloud.Queue */
-export interface QueueSchema extends BaseResourceSchema {
-  readonly type: "cloud.Queue";
-  readonly props: {
-    /** How long a queue's consumers have to process a message. (TODO: format?) */
-    readonly timeout: string;
-  };
-}
-
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: "cloud.Bucket";
@@ -81,6 +72,5 @@ export interface ConstructSchema extends BaseResourceSchema {
 export type ResourceSchema =
   | FunctionSchema
   | EndpointSchema
-  | QueueSchema
   | BucketSchema
   | ConstructSchema;

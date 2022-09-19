@@ -1,9 +1,7 @@
 import { Polycons } from "@monadahq/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code, Inflight } from "../core";
-import { IResource, Resource } from "./resource";
-
-export interface IFunction extends IResource {}
+import { Resource } from "./resource";
 
 /**
  * Global identifier for `Function`.
@@ -26,7 +24,7 @@ export interface FunctionProps {
 /**
  * Functionality shared between all `Function` implementations.
  */
-export abstract class FunctionBase extends Resource implements IFunction {
+export abstract class FunctionBase extends Resource {
   public readonly stateful = false;
   constructor(
     scope: Construct,
