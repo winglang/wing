@@ -15,11 +15,6 @@
       "type": "build"
     },
     {
-      "name": "@types/node-fetch",
-      "version": "^2.6.2",
-      "type": "build"
-    },
-    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -130,6 +125,10 @@
       "type": "build"
     },
     {
+      "name": "ts-node",
+      "type": "build"
+    },
+    {
       "name": "tsx",
       "type": "build"
     },
@@ -150,20 +149,7 @@
       "type": "bundled"
     },
     {
-      "name": "@trpc/client",
-      "type": "bundled"
-    },
-    {
       "name": "esbuild-wasm",
-      "type": "bundled"
-    },
-    {
-      "name": "filenamify",
-      "type": "bundled"
-    },
-    {
-      "name": "node-fetch",
-      "version": "^2.6.7",
       "type": "bundled"
     },
     {

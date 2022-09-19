@@ -42,7 +42,6 @@
     "@monadahq/polycons": "0.0.36",
     "@types/jest": "^27.0.0",
     "@types/node": "^16",
-    "@types/node-fetch": "^2.6.2",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "cdktf": "0.12.2",
@@ -67,6 +66,7 @@
     "replace-in-file": "^6.3.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
+    "ts-node": "^10.9.1",
     "tsx": "^3.9.0",
     "typescript": "^4.8.3"
   },
@@ -80,20 +80,14 @@
     "@aws-sdk/client-lambda": "^3.171.0",
     "@aws-sdk/client-s3": "^3.171.0",
     "@aws-sdk/util-utf8-node": "^3.170.0",
-    "@trpc/client": "^9.27.2",
     "esbuild-wasm": "^0.15.8",
-    "filenamify": "*",
-    "node-fetch": "^2.6.7",
     "piscina": "*"
   },
   "bundledDependencies": [
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-s3",
     "@aws-sdk/util-utf8-node",
-    "@trpc/client",
     "esbuild-wasm",
-    "filenamify",
-    "node-fetch",
     "piscina"
   ],
   "engines": {

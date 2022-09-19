@@ -37,11 +37,13 @@
   },
   "ignorePatterns": [
     "*.js",
-    "!.projenrc.js",
+    "!.projenrc.ts",
     "*.d.ts",
     "node_modules/",
     "*.generated.ts",
-    "coverage"
+    "coverage",
+    "!.projenrc.ts",
+    "!projenrc/**/*.ts"
   ],
   "rules": {
     "prettier/prettier": [
@@ -55,7 +57,10 @@
       {
         "devDependencies": [
           "**/test/**",
-          "**/build-tools/**"
+          "**/build-tools/**",
+          "**/projenrc/**",
+          ".projenrc.ts",
+          "projenrc/**/*.ts"
         ],
         "optionalDependencies": false,
         "peerDependencies": true
@@ -131,24 +136,24 @@
       {
         "zones": [
           {
-            "target": "**/!(*.inflight.ts|*.sim.ts)",
+            "target": "**/!(*.inflight.ts|*.sim.ts|*.test.ts)",
             "from": "**/*.inflight.ts",
-            "message": "Preflight code should not import from inflight code."
+            "message": "Importing inflight code in a preflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           },
           {
-            "target": "**/!(*.inflight.ts|*.sim.ts)",
+            "target": "**/!(*.inflight.ts|*.sim.ts|*.test.ts)",
             "from": "**/*.sim.ts",
-            "message": "Preflight code should not import from simulation code."
+            "message": "Importing simulator code in a preflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           },
           {
             "target": "**/*.sim.ts",
             "from": "**/*.inflight.ts",
-            "message": "Simulation code should not import from inflight code."
+            "message": "Importing inflight code in a simulator module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           },
           {
             "target": "**/*.inflight.ts",
             "from": "**/*.sim.ts",
-            "message": "Inflight code should not import from simulation code."
+            "message": "Importing simulator code in a inflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           }
         ]
       }
@@ -157,7 +162,7 @@
   "overrides": [
     {
       "files": [
-        ".projenrc.js"
+        ".projenrc.ts"
       ],
       "rules": {
         "@typescript-eslint/no-require-imports": "off",

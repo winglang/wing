@@ -16,6 +16,8 @@ export interface BaseResourceSchema {
   readonly type: string;
   /** The resource-specific properties needed to create this resource. */
   readonly props?: { [key: string]: any };
+  /** The resource-specific attributes that are set after the resource is created. */
+  readonly attributes?: { [key: string]: any };
   /** IDs of resources that this resource is called, triggered, or captured by. */
   readonly callers?: string[];
   /** IDs of resources that this resource calls, triggers, or captures. */
@@ -33,6 +35,7 @@ export interface FunctionSchema extends BaseResourceSchema {
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
   };
+  readonly attributes?: {};
 }
 
 /** Schema for cloud.Endpoint */
@@ -60,13 +63,17 @@ export interface QueueSchema extends BaseResourceSchema {
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: "cloud.Bucket";
-  // readonly props: {};
+  readonly props: {};
+  readonly attributes?: {
+    /** The address of the bucket on the local file system. */
+    readonly bucketAddr: string;
+  };
 }
 
 /** Schema for ordinary constructs */
 export interface ConstructSchema extends BaseResourceSchema {
   readonly type: "constructs.Construct";
-  // readonly props: {};
+  readonly props: {};
   /** The resource's children indexed by their IDs. */
   readonly children?: { [key: string]: ResourceSchema };
 }

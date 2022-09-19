@@ -1,11 +1,11 @@
-const { cdk, github, javascript, JsonFile } = require("projen");
+import { cdk, github, javascript, JsonFile } from "projen";
 
 const project = new cdk.JsiiProject({
   name: "@monadahq/wingsdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
-  repository: "https://github.com/monadahq/wingsdk.git",
+  repositoryUrl: "https://github.com/monadahq/wingsdk.git",
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [
@@ -21,14 +21,11 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-s3",
     "@aws-sdk/client-lambda",
     "@aws-sdk/util-utf8-node",
-    // simulator client dependencies
-    "node-fetch@^2.6.7",
-    "@trpc/client",
+    // simulator client dependencies (none)
     // simulator implementation dependencies
     "piscina",
-    "filenamify",
   ],
-  devDeps: ["replace-in-file", "@types/node-fetch@^2.6.2"],
+  devDeps: ["replace-in-file"],
   prettier: true,
   jestOptions: {
     jestVersion: "^27.0.0", // 28 requires a later typescript version
@@ -57,6 +54,7 @@ const project = new cdk.JsiiProject({
       },
     },
   ],
+  projenrcTs: true,
 });
 
 // use a more recent version of jest-resolve so that tests will not error
@@ -91,20 +89,20 @@ project.addTask("sandbox:destroy", {
 const releaseWorkflow = project.tryFindObjectFile(
   ".github/workflows/release.yml"
 );
-releaseWorkflow.addOverride(
+releaseWorkflow!.addOverride(
   "jobs.release_npm.steps.2.run",
   "mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN"
 );
-releaseWorkflow.addOverride("jobs.release_npm.steps.2.env", {
+releaseWorkflow!.addOverride("jobs.release_npm.steps.2.env", {
   PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
 });
 
 const buildWorkflow = project.tryFindObjectFile(".github/workflows/build.yml");
-buildWorkflow.addOverride(
+buildWorkflow!.addOverride(
   "jobs.package-js.steps.2.run",
   "mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN"
 );
-buildWorkflow.addOverride("jobs.package-js.steps.2.env", {
+buildWorkflow!.addOverride("jobs.package-js.steps.2.env", {
   PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
 });
 
@@ -116,7 +114,7 @@ buildWorkflow.addOverride("jobs.package-js.steps.2.env", {
 // the root of the package, so accessing them requires barrel imports:
 // const { BucketClient } = require("wingsdk/lib/aws/bucket.inflight");
 const pkgJson = project.tryFindObjectFile("package.json");
-pkgJson.addOverride("jsii.excludeTypescript", [
+pkgJson!.addOverride("jsii.excludeTypescript", [
   "src/**/*.inflight.ts",
   "src/**/*.sim.ts",
 ]);
@@ -132,32 +130,61 @@ const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
 });
 project.compileTask.exec(`tsc -p ${tsconfigNonJsii.path}`);
 
+enum Zone {
+  PREFLIGHT = "preflight",
+  INFLIGHT = "inflight",
+  SIMULATOR = "simulator",
+  TEST = "test",
+}
+
+function zonePattern(zone: Zone): string {
+  switch (zone) {
+    case Zone.PREFLIGHT:
+      return pathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
+    case Zone.TEST:
+      return "**/*.test.ts";
+    case Zone.INFLIGHT:
+      return "**/*.inflight.ts";
+    case Zone.SIMULATOR:
+      return "**/*.sim.ts";
+  }
+}
+
+function pathsNotEndingIn(patterns: string[]) {
+  return `**/!(${patterns.join("|")})`;
+}
+
+interface DisallowImportsRule {
+  target: string;
+  from: string;
+  message: string;
+}
+
+/**
+ * Disallow imports from a specific zone to another zone.
+ *
+ * @param target The file that should not import from the `from` file
+ * @param from The file that should not be imported into the `target` file
+ * @returns
+ */
+function disallowImportsRule(target: Zone, from: Zone): DisallowImportsRule {
+  return {
+    target: zonePattern(target),
+    from: zonePattern(from),
+    message: `Importing ${from} code in a ${target} module is not allowed. Add "// eslint-disable-next-line import/no-restricted-paths" to disable.`,
+  };
+}
+
 // Prevent unsafe imports between preflight and inflight and simulator code
-project.eslint.addRules({
+project.eslint!.addRules({
   "import/no-restricted-paths": [
     "error",
     {
       zones: [
-        {
-          target: "**/!(*.inflight.ts|*.sim.ts)",
-          from: "**/*.inflight.ts",
-          message: "Preflight code should not import from inflight code.",
-        },
-        {
-          target: "**/!(*.inflight.ts|*.sim.ts)",
-          from: "**/*.sim.ts",
-          message: "Preflight code should not import from simulation code.",
-        },
-        {
-          target: "**/*.sim.ts",
-          from: "**/*.inflight.ts",
-          message: "Simulation code should not import from inflight code.",
-        },
-        {
-          target: "**/*.inflight.ts",
-          from: "**/*.sim.ts",
-          message: "Inflight code should not import from simulation code.",
-        },
+        disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
+        disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
+        disallowImportsRule(Zone.SIMULATOR, Zone.INFLIGHT),
+        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],
