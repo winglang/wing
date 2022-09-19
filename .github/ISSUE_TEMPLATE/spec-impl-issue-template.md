@@ -5,6 +5,7 @@ about: Issue template for winglang spec impl - please reference the relevant par
 title: ''
 labels: spec-impl
 assignees: ''
+area: Language
 
 ---
 
