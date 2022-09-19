@@ -13,6 +13,7 @@ import {
 } from "@heroicons/react/24/solid";
 import React from "react";
 
+import { Breadcrumb } from "@/components/Breadcrumbs";
 import { TreeMenuItem } from "@/components/TreeMenu";
 
 export const treeMenuItems: TreeMenuItem[] = [
@@ -119,25 +120,50 @@ export const treeMenuItems: TreeMenuItem[] = [
   },
 ];
 
-export const breadcrumbs = [
-  { icon: undefined, text: "Resources" },
+export const breadcrumbs: Breadcrumb[] = [
   {
+    id: "1",
+    name: "resources",
+    onClick: (id: string) => console.log(id),
+    current: false,
+    icon: <CogIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />,
+  },
+  {
+    id: "2",
+    onClick: (id: string) => console.log(id),
     icon: (
       <CubeTransparentIcon
         className="w-4 h-4 text-slate-500"
         aria-hidden="true"
       />
     ),
-    text: "image-scrapper",
+    name: "image-scrapper",
+    current: false,
   },
   {
+    id: "3",
+    current: false,
+    onClick: (id: string) => console.log(id),
     icon: (
-      <CubeTransparentIcon
-        className="w-4 h-4 text-purple-500"
-        aria-hidden="true"
-      />
+      <ArchiveBoxIcon className="w-4 h-4 text-orange-500" aria-hidden="true" />
     ),
-    text: "endpoint",
+    name: "bucket",
+  },
+  {
+    id: "4",
+    current: false,
+    onClick: (id: string) => console.log(id),
+    icon: <BoltIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
+    name: "function",
+  },
+  {
+    id: "5",
+    onClick: (id: string) => console.log(id),
+    icon: (
+      <GlobeAltIcon className="w-4 h-4 text-purple-500" aria-hidden="true" />
+    ),
+    name: "endpoint",
+    current: true,
   },
 ];
 

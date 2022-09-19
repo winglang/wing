@@ -8,6 +8,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 import classNames from "classnames";
 import React, { useState, useEffect } from "react";
 
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { TreeMenu, TreeMenuItem } from "@/components/TreeMenu";
 import {
   breadcrumbs,
@@ -246,27 +247,7 @@ function Vscodeui(props: VscodeuiProps) {
               {selectedItemId && (
                 <>
                   <div className="flex items-center gap-1 text-xs text-slate-500">
-                    {breadcrumbs.map((breadcrumb, breadcrumbIndex) => (
-                      <div
-                        key={breadcrumb.text}
-                        className="flex items-center gap-1 cursor-pointer hover:text-slate-800"
-                      >
-                        {/* {breadcrumbIndex > 0 && (
-                      <ChevronRightIcon
-                        className="w-3 h-3"
-                        aria-hidden="true"
-                      />
-                    )} */}
-                        {breadcrumb.icon}
-                        <span>{breadcrumb.text}</span>
-                        {breadcrumbIndex < breadcrumbs.length - 1 && (
-                          <ChevronRightIcon
-                            className="w-3 h-3"
-                            aria-hidden="true"
-                          />
-                        )}
-                      </div>
-                    ))}
+                    <Breadcrumbs breadcrumbs={breadcrumbs} />
                   </div>
 
                   <div className="py-1.5 flex gap-2">
