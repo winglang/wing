@@ -20,7 +20,7 @@ list(TRANSFORM NODE_LIBRARY_STATIC REPLACE "\.a$" "")
 
 # main target
 add_executable(wingrt
-  ../wingc/grammar/src/parser.c
+  ../../libs/tree-sitter-wing/src/parser.c
   src/wingrt.cc
 )
 
@@ -38,7 +38,7 @@ target_compile_definitions(wingrt PRIVATE -Dremove_cv_t=remove_cv)
 
 target_link_directories(wingrt PRIVATE
   ${NODE_LIBRARY_PREFIX}
-  ../wingc/target/release
+  ../../libs/wingc/target/release
 )
 target_link_libraries(wingrt PRIVATE
   uv node v8_libplatform ${NODE_LIBRARY_STATIC}
@@ -47,5 +47,5 @@ target_link_libraries(wingrt PRIVATE
 target_include_directories(wingrt PRIVATE
   ${NODE_INCLUDE_PREFIX}/include/node
   ${NODE_INCLUDE_PREFIX}/include
-  ../wingc/grammar/src
+  ../../libs/tree-sitter-wing/src
 )
