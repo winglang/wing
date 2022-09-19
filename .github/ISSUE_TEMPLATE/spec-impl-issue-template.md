@@ -6,8 +6,8 @@ title: ''
 labels: spec-impl
 assignees: ''
 area: Language
-Projects: Monada
-Milestone: MVP-1
+projects: Monada
+milestone: MVP-1
 
 ---
 
