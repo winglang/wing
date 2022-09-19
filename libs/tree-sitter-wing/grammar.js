@@ -14,7 +14,7 @@ const PREC = {
 };
 
 module.exports = grammar({
-  name: "winglang",
+  name: "wing",
 
   extras: ($) => [$.comment, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
 
