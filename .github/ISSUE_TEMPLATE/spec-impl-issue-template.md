@@ -7,6 +7,7 @@ labels: spec-impl
 assignees: ''
 area: Language
 Projects: Monada
+Milestone: MVP-1
 
 ---
 
