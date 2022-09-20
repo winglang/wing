@@ -1,18 +1,31 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
+use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
 
-use crate::capture::Capture;
+use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
 use crate::type_check::TypeRef;
 use crate::type_env::TypeEnv;
 
-#[derive(Debug, PartialEq, Eq, Hash, Clone)]
+#[derive(Debug, Eq, Clone)]
 pub struct Symbol {
 	pub name: String,
 	pub span: WingSpan,
+}
+
+impl Hash for Symbol {
+	fn hash<H: Hasher>(&self, state: &mut H) {
+		self.name.hash(state);
+	}
+}
+
+impl PartialEq for Symbol {
+	fn eq(&self, other: &Self) -> bool {
+		self.name == other.name
+	}
 }
 
 impl std::fmt::Display for Symbol {
@@ -52,7 +65,7 @@ pub struct FunctionDefinition {
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 	#[derivative(Debug = "ignore")]
-	pub captures: RefCell<Option<Vec<Capture>>>,
+	pub captures: RefCell<Option<Captures>>,
 }
 
 #[derive(Debug)]

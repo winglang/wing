@@ -353,19 +353,18 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 	let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 	let mut bindings = vec![];
 	let mut capture_names = vec![];
-	for cap in func_def.captures.borrow().as_ref().unwrap().iter() {
-		capture_names.push(cap.object.name.clone());
+	for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
+		capture_names.push(obj.name.clone());
 		bindings.push(format!(
 			"{}: {},",
-			cap.object.name,
+			obj.name,
 			render_block([
-				format!("obj: {},", cap.object.name),
+				format!("obj: {},", obj.name),
 				format!(
 					"methods: [{}]",
-					cap
-						.methods
+					cap_def
 						.iter()
-						.map(|x| format!("\"{}\"", x))
+						.map(|x| format!("\"{}\"", x.method))
 						.collect::<Vec<_>>()
 						.join(",")
 				)
