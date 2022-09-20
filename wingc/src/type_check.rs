@@ -621,17 +621,9 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(exp_type, var_type, value);
 			}
 			Statement::Use {
-				module_name,
-				identifier,
-			} => {
-				// TODO: for now all namespaced identifiers resolve to `anything` since we don't know what they are,
-				// this is better than failing just because it's a way to do our mock `bring cloud; cloud::Bucket()` support.
-				if let Some(identifier) = identifier {
-					env.define(identifier, self.types.anything());
-				} else {
-					env.define(module_name, self.types.anything());
-				}
-			}
+				module_name: _,
+				identifier: _,
+			} => _ = unimplemented_type(),
 			Statement::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				for statement in scope.statements.iter_mut() {

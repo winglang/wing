@@ -384,7 +384,6 @@ impl Parser<'_> {
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_type(&expression_node.child_by_field_name("class").unwrap())?;
-				// This should be a type name so it cannot be a nested reference
 
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)
