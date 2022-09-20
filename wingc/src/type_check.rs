@@ -360,7 +360,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the type in the env
 				let type_ = self.resolve_type(class, env);
-				// TODO: hack to support namespaced identifiers (basically stdlib cloud::Bucket), we skip type-checking and resolve them to Anything
+				// TODO: hack to support custom types (basically stdlib cloud.Bucket), we skip type-checking and resolve them to Anything
 				if matches!(type_.into(), &Type::Anything) {
 					_ = unimplemented_type();
 					return Some(type_);
@@ -468,7 +468,7 @@ impl<'a> TypeChecker<'a> {
 				// Find method in class's environment
 				let method_type = self.resolve_reference(&method_call.method, env);
 
-				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud::Bucket().upload())
+				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(method_type.into(), &Type::Anything) {
 					return Some(self.types.anything());
 				}
@@ -803,7 +803,7 @@ impl<'a> TypeChecker<'a> {
 					let instance = self.type_check_exp(object, env).unwrap();
 					let instance_type = match instance.into() {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
-						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud::Bucket)
+						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
 						&Type::Anything => return instance,
 						_ => panic!(
 							"{} in {:?} does not resolve to a class instance or resource object",
