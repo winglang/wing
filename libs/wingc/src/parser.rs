@@ -214,7 +214,10 @@ impl Parser<'_> {
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
-							return_type: Some(Box::new(Type::Class(name.clone()))),
+							return_type: Some(Box::new(Type::CustomType {
+								root: name.clone(),
+								fields: vec![],
+							})),
 							flight: if is_resource { Flight::Pre } else { Flight::In }, // TODO: for now classes can only be constructed inflight
 						},
 					})
@@ -298,7 +301,7 @@ impl Parser<'_> {
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
-			"class_type" => Ok(Type::Class(self.node_symbol(type_node)?)),
+			"custom_type" => Ok(self.build_custom_type(&type_node)?),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();
@@ -326,8 +329,19 @@ impl Parser<'_> {
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
 		Ok(Reference::NestedIdentifier {
-			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
+			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
+		})
+	}
+
+	fn build_custom_type(&self, nested_node: &Node) -> DiagnosticResult<Type> {
+		let mut cursor = nested_node.walk();
+		Ok(Type::CustomType {
+			root: self.node_symbol(&nested_node.child_by_field_name("object").unwrap())?,
+			fields: nested_node
+				.children_by_field_name("fields", &mut cursor)
+				.map(|n| self.node_symbol(&n).unwrap())
+				.collect(),
 		})
 	}
 
@@ -335,10 +349,6 @@ impl Parser<'_> {
 		let actual_node = reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
 			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
-			"namespaced_identifier" => Ok(Reference::NamespacedIdentifier {
-				namespace: self.node_symbol(&actual_node.child_by_field_name("namespace").unwrap())?,
-				identifier: self.node_symbol(&actual_node.child_by_field_name("name").unwrap())?,
-			}),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
 			other => panic!("Unexpected type node {} || {:#?}", other, reference_node),
@@ -375,17 +385,7 @@ impl Parser<'_> {
 		let expression_node = &self.check_error(*exp_node, "Expression")?;
 		match expression_node.kind() {
 			"new_expression" => {
-				let class = self.build_reference(&expression_node.child_by_field_name("class").unwrap())?;
-				// This should be a type name so it cannot be a nested reference
-				if matches!(class, Reference::NestedIdentifier { object: _, property: _ }) {
-					_ = self.add_error::<Expr>(
-						format!(
-							"Expected a reference to a class or resource type, instead got {:?}",
-							class
-						),
-						expression_node,
-					);
-				}
+				let class = self.build_type(&expression_node.child_by_field_name("class").unwrap())?;
 
 				let arg_list = if let Some(args_node) = expression_node.child_by_field_name("args") {
 					self.build_arg_list(&args_node)

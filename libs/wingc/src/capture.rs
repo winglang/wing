@@ -154,10 +154,6 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				// 	}
 				// }
 			}
-			Reference::NamespacedIdentifier {
-				namespace: _,
-				identifier: _,
-			} => todo!(),
 		},
 		ExprType::FunctionCall { function, args } => res.extend(scan_captures_in_call(&function, &args, env)),
 		ExprType::MethodCall(mc) => res.extend(scan_captures_in_call(&mc.method, &mc.args, env)),
