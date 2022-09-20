@@ -73,15 +73,9 @@ pub mod package_json {
 
     pub fn find_dependency_directory(dependency_name: &str, search_start: &str) -> Option<String> {
         let entrypoint = resolve_from(dependency_name, PathBuf::from(search_start));
-        if entrypoint.is_err() {
-            return None;
-        }
-        let entrypoint = entrypoint.unwrap();
+        let entrypoint = entrypoint.ok()?;
         let dep_pkg_json_path = find_package_json_up(dependency_name, entrypoint);
-        if dep_pkg_json_path.is_none() {
-            return None;
-        }
-        let dep_pkg_json_path = dep_pkg_json_path.unwrap();
+        let dep_pkg_json_path = dep_pkg_json_path?;
         if dep_pkg_json_path.exists() {
             Some(dep_pkg_json_path.to_str().unwrap().to_string())
         } else {
