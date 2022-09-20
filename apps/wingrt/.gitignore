@@ -1,9 +1,0 @@
-vendor/node
-build
-dist
-*.exe
-*.dll
-*.so
-*-go.h
-*.class
-*.zip
