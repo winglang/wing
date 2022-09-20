@@ -344,7 +344,6 @@ impl Parser<'_> {
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
-		println!("build_reference {:#?}", reference_node);
 		let actual_node = reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
 			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
