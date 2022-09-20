@@ -128,7 +128,7 @@ new A();
 New expression with id and scope
 ================================
 
-new A() as 'b' in c;
+new A() as "b" in c;
 
 ---
 
