@@ -2,6 +2,9 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 
+use derivative::Derivative;
+
+use crate::capture::Capture;
 use crate::diagnostic::WingSpan;
 use crate::type_check::TypeRef;
 use crate::type_env::TypeEnv;
@@ -41,12 +44,15 @@ pub struct FunctionSignature {
 	pub flight: Flight,
 }
 
-#[derive(Debug)]
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct FunctionDefinition {
 	pub name: Symbol,
 	pub parameters: Vec<Symbol>,
 	pub statements: Scope,
 	pub signature: FunctionSignature,
+	#[derivative(Debug = "ignore")]
+	pub captures: RefCell<Option<Vec<Capture>>>,
 }
 
 #[derive(Debug)]
@@ -65,6 +71,7 @@ pub enum Statement {
 	VariableDef {
 		var_name: Symbol,
 		initial_value: Expr,
+		type_: Option<Type>,
 	},
 	FunctionDefinition(FunctionDefinition),
 	ForLoop {
@@ -173,8 +180,11 @@ pub enum Literal {
 	Boolean(bool),
 }
 
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct Scope {
 	pub statements: Vec<Statement>,
+	#[derivative(Debug = "ignore")]
 	pub env: Option<TypeEnv>, // None after parsing, set to Some during type checking phase
 }
 
@@ -182,13 +192,6 @@ impl Scope {
 	pub fn set_env(&mut self, env: TypeEnv) {
 		assert!(self.env.is_none());
 		self.env = Some(env);
-	}
-}
-
-impl Debug for Scope {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		// Ignore env when debug printing scope
-		f.debug_struct("Scope").field("statements", &self.statements).finish()
 	}
 }
 

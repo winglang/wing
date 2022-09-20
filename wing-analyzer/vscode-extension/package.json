@@ -49,7 +49,8 @@
   "dependencies": {
     "@types/vscode": "^1.70.0",
     "node-fetch": "^3.2.10",
-    "octokit": "^2.0.7"
+    "octokit": "^2.0.7",
+    "vscode-languageclient": "^8.0.2"
   },
   "engines": {
     "vscode": "^1.70.0"

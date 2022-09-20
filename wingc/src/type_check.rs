@@ -1,5 +1,7 @@
 use std::fmt::{Debug, Display};
 
+use derivative::Derivative;
+
 use crate::ast::{Type as AstType, *};
 use crate::type_env::TypeEnv;
 
@@ -18,18 +20,22 @@ pub enum Type {
 	ClassInstance(TypeRef),  // Reference to a Class type
 }
 
+#[derive(Derivative)]
+#[derivative(Debug)]
 pub struct Class {
 	pub name: Symbol,
-	pub env: TypeEnv,
 	parent: Option<TypeRef>, // Must be a Type::Class type
+	#[derivative(Debug = "ignore")]
+	pub env: TypeEnv,
 }
 
-impl Debug for Class {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		f.debug_struct("Class")
-			.field("name", &self.name)
-			.field("parent", &self.parent)
-			.finish()
+impl Class {
+	pub fn methods(&self) -> impl Iterator<Item = (String, TypeRef)> + '_ {
+		self
+			.env
+			.iter()
+			.filter(|(_, t)| t.as_function_sig().is_some())
+			.map(|(s, t)| (s.clone(), t.clone()))
 	}
 }
 
@@ -163,9 +169,10 @@ impl From<TypeRef> for &mut Type {
 }
 
 impl TypeRef {
-	pub fn as_resource_object(&self) -> Option<&Type> {
-		if let &Type::ResourceObject(_) = (*self).into() {
-			Some((*self).into())
+	pub fn as_resource_object(&self) -> Option<&Class> {
+		if let &Type::ResourceObject(ref res_obj) = (*self).into() {
+			let res = res_obj.as_resource().unwrap();
+			Some(res)
 		} else {
 			None
 		}
@@ -194,15 +201,15 @@ impl TypeRef {
 			None
 		}
 	}
+
+	pub fn is_anything(&self) -> bool {
+		if let &Type::Anything = (*self).into() {
+			true
+		} else {
+			false
+		}
+	}
 }
-
-// impl Deref for TypeRef {
-//     type Target = Type;
-
-//     fn deref(&self) -> &Self::Target {
-//         (*self).into()
-//     }
-// }
 
 impl Display for TypeRef {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -538,9 +545,16 @@ impl<'a> TypeChecker<'a> {
 			Statement::VariableDef {
 				var_name,
 				initial_value,
+				type_,
 			} => {
 				let exp_type = self.type_check_exp(initial_value, env).unwrap();
-				env.define(&var_name, exp_type);
+				if let Some(t) = type_ {
+					let explicit_type = self.resolve_type(t, env);
+					self.validate_type(exp_type, explicit_type, initial_value);
+					env.define(var_name, explicit_type);
+				} else {
+					env.define(var_name, exp_type);
+				}
 			}
 			Statement::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
@@ -744,7 +758,7 @@ impl<'a> TypeChecker<'a> {
 					};
 
 					// Create method environment and prime it with args
-					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false, env_flight);
+					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false, method_sig.flight);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),

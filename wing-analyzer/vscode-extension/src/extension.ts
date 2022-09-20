@@ -1,8 +1,24 @@
+import { execSync } from "child_process";
+import { existsSync } from "fs";
 import { writeFile } from "fs/promises";
-import { tmpdir } from "os";
+import { platform, tmpdir } from "os";
 import fetch, { HeadersInit } from "node-fetch";
 import { Octokit } from "octokit";
-import * as vscode from "vscode";
+import {
+  window,
+  workspace,
+  ExtensionContext,
+  ExtensionMode,
+  commands,
+  Uri,
+} from "vscode";
+
+import {
+  Executable,
+  LanguageClient,
+  LanguageClientOptions,
+  ServerOptions,
+} from "vscode-languageclient/node";
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
@@ -15,16 +31,93 @@ const CFG_UPDATES_SOURCE_TAG = "updates.sourceTag";
 const STATE_INSTALLED_RELEASE_CHECKSUM = "wing.installedReleaseChecksum";
 const STATE_LAST_UPDATE_CHECK = "wing.lastUpdateCheck";
 
-export async function activate(context: vscode.ExtensionContext) {
-  // TODO activate language server
+const LANGUAGE_SERVER_NAME = "Wing Language Server";
+const LANGUAGE_SERVER_ID = "wing-language-server";
 
-  // Check for updates
-  await checkForUpdates(context);
+let client: LanguageClient;
+
+export function deactivate() {
+  return client?.stop();
 }
 
-export async function checkForUpdates(context: vscode.ExtensionContext) {
-  if (context.extensionMode === vscode.ExtensionMode.Development) {
-    void vscode.window.showWarningMessage(
+export async function activate(context: ExtensionContext) {
+  const activationActivities = [
+    checkForUpdates(context),
+    startLanguageServer(context),
+  ];
+
+  await Promise.all(activationActivities);
+}
+
+async function startLanguageServer(context: ExtensionContext) {
+  const traceOutputChannel = window.createOutputChannel(LANGUAGE_SERVER_NAME);
+  traceOutputChannel.show();
+
+  let serverPath = process.env.WING_LSP_SERVER_PATH;
+  if (!serverPath) {
+    // TODO The excessive nesting is pretty ugly
+    // TODO workflow should place these in ways that make more sense
+    switch (platform()) {
+      case "darwin":
+        // Currently, we only have darwin x64 builds. Users must have rosetta available to run this on arm64.
+        serverPath = context.asAbsolutePath(
+          "resources/wing-language-server-macos-latest-x64/wing-language-server-macos-latest-x64"
+        );
+        break;
+      case "linux":
+        serverPath = context.asAbsolutePath(
+          "resources/wing-language-server-ubuntu-latest-x64/wing-language-server-ubuntu-latest-x64"
+        );
+        break;
+      default:
+        throw new Error("Unsupported platform");
+    }
+  }
+
+  if (!existsSync(serverPath)) {
+    void window.showWarningMessage(
+      `[Wing] Language server not found at ${serverPath}`
+    );
+    return;
+  }
+
+  if (platform() !== "win32") {
+    // This feels ugly, but I'm not sure it's reasonably avoidable
+    execSync(`chmod +x ${serverPath}`);
+  }
+
+  const run: Executable = {
+    command: serverPath,
+    options: {
+      env: {
+        ...process.env,
+        RUST_LOG: "debug",
+      },
+    },
+  };
+  const serverOptions: ServerOptions = {
+    run,
+    debug: run,
+  };
+  let clientOptions: LanguageClientOptions = {
+    documentSelector: [{ scheme: "file", language: "wing", pattern: "**/*.w" }],
+    traceOutputChannel,
+  };
+
+  // Create the language client and start the client.
+  client = new LanguageClient(
+    LANGUAGE_SERVER_ID,
+    LANGUAGE_SERVER_NAME,
+    serverOptions,
+    clientOptions
+  );
+
+  await client.start();
+}
+
+export async function checkForUpdates(context: ExtensionContext) {
+  if (context.extensionMode === ExtensionMode.Development) {
+    void window.showWarningMessage(
       `[Wing] Skipping updates in development mode`
     );
     return;
@@ -39,7 +132,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     return;
   }
 
-  const configuration = vscode.workspace.getConfiguration(EXTENSION_NAME);
+  const configuration = workspace.getConfiguration(EXTENSION_NAME);
   const githubToken = configuration.get<string>(CFG_UPDATES_GITHUB_TOKEN);
   const sourceTag = configuration.get<string>(CFG_UPDATES_SOURCE_TAG);
 
@@ -52,7 +145,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     });
 
     if (latestRelease.status !== 200) {
-      void vscode.window.showErrorMessage(
+      void window.showErrorMessage(
         `[Wing] Could not check for updates: ${latestRelease.data}`
       );
       return;
@@ -68,9 +161,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
           latestHash = sha1;
           break;
         } else {
-          void vscode.window.showWarningMessage(
-            `[Wing] Checksum invalid: ${sha1}`
-          );
+          void window.showWarningMessage(`[Wing] Checksum invalid: ${sha1}`);
         }
       }
     }
@@ -90,7 +181,7 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
     }
 
     if (doUpdate) {
-      void vscode.window.showInformationMessage(
+      void window.showInformationMessage(
         `[Wing] New version available! Updating automatically...`
       );
 
@@ -110,15 +201,15 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
             token: githubToken,
           });
         } catch (e) {
-          void vscode.window.showErrorMessage(
+          void window.showErrorMessage(
             `[Wing] Could not download update: ${e}`
           );
           return;
         }
 
-        await vscode.commands.executeCommand(
+        await commands.executeCommand(
           "workbench.extensions.installExtension",
-          vscode.Uri.parse(filePath)
+          Uri.parse(filePath)
         );
 
         await context.globalState.update(
@@ -126,16 +217,14 @@ export async function checkForUpdates(context: vscode.ExtensionContext) {
           latestReleaseChecksum
         );
 
-        void vscode.window
+        void window
           .showInformationMessage(
             `[Wing] Reload window for update to take effect?`,
             "Ok"
           )
           .then((selectedAction) => {
             if (selectedAction === "Ok") {
-              void vscode.commands.executeCommand(
-                "workbench.action.reloadWindow"
-              );
+              void commands.executeCommand("workbench.action.reloadWindow");
             }
           });
       }

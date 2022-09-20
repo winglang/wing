@@ -35,7 +35,12 @@ const project = new TypeScriptAppProject({
     },
   },
 
-  deps: [`@types/vscode@^${VSCODE_BASE_VERSION}`, "octokit", "node-fetch"],
+  deps: [
+    `@types/vscode@^${VSCODE_BASE_VERSION}`,
+    "octokit",
+    "node-fetch",
+    "vscode-languageclient",
+  ],
   devDeps: ["@types/node", "esbuild", "vsce"],
 });
 
