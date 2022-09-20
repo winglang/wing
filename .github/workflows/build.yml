@@ -53,6 +53,12 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: "https://npm.pkg.github.com"
 
+      - name: Build WingII Crate
+        working-directory: wingii
+        run: |
+          cargo test --release -- --nocapture
+          cargo build --release
+
       - name: Build WingC Library
         working-directory: libs/wingc
         run: |
