@@ -38,7 +38,7 @@ target_compile_definitions(wingrt PRIVATE -Dremove_cv_t=remove_cv)
 
 target_link_directories(wingrt PRIVATE
   ${NODE_LIBRARY_PREFIX}
-  ../../libs/wingc/target/release
+  ../../target/release
 )
 target_link_libraries(wingrt PRIVATE
   uv node v8_libplatform ${NODE_LIBRARY_STATIC}
