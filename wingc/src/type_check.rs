@@ -533,13 +533,14 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(Box::new(sig)))
 			}
-			AstType::Class(class_name) => {
-				// Lookup this class name in the current environment
-				env.lookup(&class_name)
-			}
-			AstType::CustomType { root: _, fields: _ } => {
-				// TODO This should be updated to support "bring"
-				self.types.anything()
+			AstType::CustomType { root, fields } => {
+				if fields.is_empty() {
+					// TODO Hack For classes in the current env
+					env.lookup(root)
+				} else {
+					// TODO This should be updated to support "bring"
+					self.types.anything()
+				}
 			}
 		}
 	}
@@ -706,7 +707,13 @@ impl<'a> TypeChecker<'a> {
 					let mut sig = method.signature.clone();
 
 					// Add myself as first parameter to all class methods (self)
-					sig.parameters.insert(0, AstType::Class(name.clone()));
+					sig.parameters.insert(
+						0,
+						AstType::CustomType {
+							root: name.clone(),
+							fields: vec![],
+						},
+					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env);
 					class_env.define(&method.name, method_type);

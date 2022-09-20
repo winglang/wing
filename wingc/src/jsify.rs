@@ -166,15 +166,19 @@ fn is_resource_type(typ: &Type) -> bool {
 fn jsify_type(typ: &Type) -> String {
 	match typ {
 		Type::CustomType { root, fields } => {
-			format!(
-				"{}.{}",
-				jsify_symbol(root),
-				fields
-					.iter()
-					.map(|f| jsify_symbol(f))
-					.collect::<Vec<String>>()
-					.join(".")
-			)
+			if fields.is_empty() {
+				return jsify_symbol(root);
+			} else {
+				format!(
+					"{}.{}",
+					jsify_symbol(root),
+					fields
+						.iter()
+						.map(|f| jsify_symbol(f))
+						.collect::<Vec<String>>()
+						.join(".")
+				)
+			}
 		}
 		_ => todo!(),
 	}

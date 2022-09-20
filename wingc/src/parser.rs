@@ -214,7 +214,10 @@ impl Parser<'_> {
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
-							return_type: Some(Box::new(Type::Class(name.clone()))),
+							return_type: Some(Box::new(Type::CustomType {
+								root: name.clone(),
+								fields: vec![],
+							})),
 							flight: if is_resource { Flight::Pre } else { Flight::In }, // TODO: for now classes can only be constructed inflight
 						},
 					})
@@ -299,7 +302,6 @@ impl Parser<'_> {
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
 			"custom_type" => Ok(self.build_custom_type(&type_node)?),
-			"class_type" => Ok(Type::Class(self.node_symbol(type_node)?)),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
 				let mut cursor = param_type_list_node.walk();

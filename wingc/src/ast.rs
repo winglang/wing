@@ -34,7 +34,6 @@ pub enum Type {
 	Bool,
 	Duration,
 	FunctionSignature(FunctionSignature),
-	Class(Symbol),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
 
