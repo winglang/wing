@@ -1,3 +1,4 @@
+import { GlobeAltIcon } from "@heroicons/react/20/solid";
 import {
   ArrowLongDownIcon,
   ArrowLongRightIcon,
@@ -6,9 +7,10 @@ import {
 } from "@heroicons/react/24/outline";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import classNames from "classnames";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { BaseNodeAttributes } from "@/components/NodeAttributes";
 import { TreeMenu, TreeMenuItem } from "@/components/TreeMenu";
 import {
   breadcrumbs,
@@ -251,125 +253,175 @@ function Vscodeui(props: VscodeuiProps) {
                   </div>
 
                   <div className="py-1.5 flex gap-2">
-                    <div className="flex-1 bg-slate-100 p-4 flex gap-2">
-                      <div className="flex-1 flex flex-col justify-around items-end pb-3.5">
-                        <div className="flex flex-col gap-0.5 items-center">
-                          <span className="text-xs font-medium text-slate-600">
-                            callers
-                          </span>
-                          {relationships.callers.length === 0 && (
-                            <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
-                              <span className="px-2 italic text-slate-500">
-                                no callers
-                              </span>
-                            </div>
-                          )}
-                          {relationships.callers.map((resource) => (
-                            <div
-                              key={resource.name}
-                              className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100"
-                            >
-                              {resource.icon}
-                              {resource.name}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      <div className="flex flex-col gap-2">
-                        <div className="flex flex-col items-center gap-0.5">
-                          <span className="text-xs font-medium text-slate-600">
-                            parent
-                          </span>
-                          <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
-                            {relationships.parent && (
-                              <>
-                                {relationships.parent.icon}
-                                {relationships.parent.name}
-                              </>
+                    <div className="flex-1">
+                      <div className=" bg-slate-100 p-4 flex gap-2">
+                        <div className="flex-1 flex flex-col justify-around items-end pb-3.5">
+                          <div className="flex flex-col gap-0.5 items-center">
+                            <span className="text-xs font-medium text-slate-600">
+                              callers
+                            </span>
+                            {relationships.callers.length === 0 && (
+                              <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
+                                <span className="px-2 italic text-slate-500">
+                                  no callers
+                                </span>
+                              </div>
                             )}
-                            {!relationships.parent && (
-                              <span className="px-2 italic">no parent</span>
-                            )}
+                            {relationships.callers.map((resource) => (
+                              <div
+                                key={resource.name}
+                                className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100"
+                              >
+                                {resource.icon}
+                                {resource.name}
+                              </div>
+                            ))}
                           </div>
                         </div>
-                        <div className="flex justify-around">
-                          <ArrowLongDownIcon
-                            className="w-4 h-4 text-slate-600"
-                            aria-hidden="true"
-                          />
-                        </div>
-                        <div className="flex justify-around">
-                          <div className="flex items-center gap-2 cursor-default">
-                            <ArrowLongRightIcon
-                              className="w-4 h-4 text-slate-600"
-                              aria-hidden="true"
-                            />
-                            <div className="bg-white border flex items-center gap-2 px-6 py-3 shadow">
-                              {relationships.self.icon}
-                              {relationships.self.name}
+                        <div className="flex flex-col gap-2">
+                          <div className="flex flex-col items-center gap-0.5">
+                            <span className="text-xs font-medium text-slate-600">
+                              parent
+                            </span>
+                            <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
+                              {relationships.parent && (
+                                <>
+                                  {relationships.parent.icon}
+                                  {relationships.parent.name}
+                                </>
+                              )}
+                              {!relationships.parent && (
+                                <span className="px-2 italic">no parent</span>
+                              )}
                             </div>
-                            <ArrowLongRightIcon
+                          </div>
+                          <div className="flex justify-around">
+                            <ArrowLongDownIcon
                               className="w-4 h-4 text-slate-600"
                               aria-hidden="true"
                             />
                           </div>
-                        </div>
-                        <div className="flex justify-around">
-                          <ArrowLongDownIcon
-                            className="w-4 h-4 text-slate-600"
-                            aria-hidden="true"
-                          />
-                        </div>
-                        <div className="flex flex-col gap-0.5 items-center">
-                          <span className="text-xs font-medium text-slate-600">
-                            children
-                          </span>
+                          <div className="flex justify-around">
+                            <div className="flex items-center gap-2 cursor-default">
+                              <ArrowLongRightIcon
+                                className="w-4 h-4 text-slate-600"
+                                aria-hidden="true"
+                              />
+                              <div className="bg-white border flex items-center gap-2 px-6 py-3 shadow">
+                                {relationships.self.icon}
+                                {relationships.self.name}
+                              </div>
+                              <ArrowLongRightIcon
+                                className="w-4 h-4 text-slate-600"
+                                aria-hidden="true"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-around">
+                            <ArrowLongDownIcon
+                              className="w-4 h-4 text-slate-600"
+                              aria-hidden="true"
+                            />
+                          </div>
+                          <div className="flex flex-col gap-0.5 items-center">
+                            <span className="text-xs font-medium text-slate-600">
+                              children
+                            </span>
 
-                          {relationships.children.length === 0 && (
-                            <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
-                              <span className="px-2 italic text-slate-500">
-                                no children
-                              </span>
-                            </div>
-                          )}
-                          {relationships.children.map((resource) => (
-                            <div
-                              key={resource.name}
-                              className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100"
-                            >
-                              {resource.icon}
-                              {resource.name}
-                            </div>
-                          ))}
+                            {relationships.children.length === 0 && (
+                              <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
+                                <span className="px-2 italic text-slate-500">
+                                  no children
+                                </span>
+                              </div>
+                            )}
+                            {relationships.children.map((resource) => (
+                              <div
+                                key={resource.name}
+                                className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100"
+                              >
+                                {resource.icon}
+                                {resource.name}
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                      <div className="flex-1 flex flex-col justify-around items-start pb-3.5">
-                        <div className="flex flex-col gap-0.5 items-center">
-                          <span className="text-xs font-medium text-slate-600">
-                            callees
-                          </span>
+                        <div className="flex-1 flex flex-col justify-around items-start pb-3.5">
+                          <div className="flex flex-col gap-0.5 items-center">
+                            <span className="text-xs font-medium text-slate-600">
+                              callees
+                            </span>
 
-                          {relationships.callees.length === 0 && (
-                            <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
-                              <span className="px-2 italic text-slate-500">
-                                no callees
-                              </span>
-                            </div>
-                          )}
-                          {relationships.callees.map((resource) => (
-                            <div
-                              key={resource.name}
-                              className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100"
-                            >
-                              {resource.icon}
-                              {resource.name}
-                            </div>
-                          ))}
+                            {relationships.callees.length === 0 && (
+                              <div className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100">
+                                <span className="px-2 italic text-slate-500">
+                                  no callees
+                                </span>
+                              </div>
+                            )}
+                            {relationships.callees.map((resource) => (
+                              <div
+                                key={resource.name}
+                                className="bg-slate-50 border border-slate-200 shadow text-xs px-2.5 py-1 flex items-center gap-1.5 cursor-pointer hover:bg-slate-100"
+                              >
+                                {resource.icon}
+                                {resource.name}
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       </div>
                     </div>
 
-                    <dl className="px-4 flex-1 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+                    <BaseNodeAttributes
+                      attributes={[
+                        {
+                          key: "ID",
+                          value:
+                            "Custom::S3AutoDeleteObjectsCustomResourceProvider",
+                        },
+                        {
+                          key: "Path",
+                          value:
+                            "App/construct-hub-dev/Custom::S3AutoDeleteObjectsCustomResourceProvider",
+                        },
+                        {
+                          key: "Type",
+                          value: "cloud.Endpoint",
+                          render: () => (
+                            <div className="truncate cursor-default">
+                              <div className="inline-flex items-center gap-1 px-1 bg-slate-100 border border-slate-200 rounded max-w-full truncate">
+                                <GlobeAltIcon
+                                  className="w-3.5 h-3.5 text-violet-500"
+                                  aria-hidden="true"
+                                />
+                                <div className="truncate">cloud.Function</div>
+                              </div>
+                            </div>
+                          ),
+                        },
+                        {
+                          key: "Source File",
+                          value: "/Users/Wing/Code/wing-demo/src/demo.w",
+                          render: () => (
+                            <button className="font-medium text-indigo-600 hover:text-indigo-500">
+                              {meta.source.fileName} ({meta.source.line}:
+                              {meta.source.column})
+                            </button>
+                          ),
+                        },
+                        {
+                          key: "URL",
+                          value: "http://localhost:3012",
+                          render: () => (
+                            <button className="font-medium text-indigo-600 hover:text-indigo-500">
+                              http://localhost:3012
+                            </button>
+                          ),
+                        },
+                      ]}
+                    />
+                    {/* <dl className="px-4 flex-1 grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
                       <div className="sm:col-span-1">
                         <dt className="font-medium text-slate-500">Name</dt>
                         <dd className="mt-1 text-sm text-slate-900">
@@ -400,7 +452,7 @@ function Vscodeui(props: VscodeuiProps) {
                           </button>
                         </dd>
                       </div>
-                    </dl>
+                    </dl> */}
                   </div>
 
                   <div className="pt-4">

@@ -6,6 +6,7 @@ const project = new TypeScriptProject({
   deps: [
     "chokidar",
     "electron-log",
+    "@monadahq/wing-local-schema",
     "@monadahq/wing-local-server",
     "@monadahq/wing-local-client",
     "@monadahq/wing-local-schema",
@@ -33,6 +34,7 @@ const project = new TypeScriptProject({
     "react-dom",
     "sass",
     "tailwindcss",
+    "@tailwindcss/forms",
     "typescript",
     "vite",
     "vite-plugin-electron",
@@ -40,6 +42,7 @@ const project = new TypeScriptProject({
     "classnames",
     "react-query",
     "@trpc/react",
+    "react-draggable",
   ],
   // @ts-ignore
   workflowGitIdentity: {
@@ -150,6 +153,14 @@ if (project.eslint) {
     "import/order": [
       "error",
       {
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+        ],
         alphabetize: {
           order: "asc",
           caseInsensitive: true,
@@ -159,10 +170,10 @@ if (project.eslint) {
       },
     ],
   });
-  project.eslint.config.settings = {
-    ...project.eslint.config.settings,
-    "import/internal-regex": "^@monadahq/",
-  };
+  // project.eslint.config.settings = {
+  //   ...project.eslint.config.settings,
+  //   "import/internal-regex": "^@monadahq/",
+  // };
 }
 
 project.synth();

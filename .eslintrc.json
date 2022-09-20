@@ -34,8 +34,7 @@
         "project": "./tsconfig.dev.json",
         "alwaysTryTypes": true
       }
-    },
-    "import/internal-regex": "^@monadahq/"
+    }
   },
   "ignorePatterns": [
     "*.js",
@@ -74,6 +73,14 @@
     "import/order": [
       "error",
       {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
         "alphabetize": {
           "order": "asc",
           "caseInsensitive": true

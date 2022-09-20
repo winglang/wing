@@ -41,6 +41,10 @@
       "type": "build"
     },
     {
+      "name": "@tailwindcss/forms",
+      "type": "build"
+    },
+    {
       "name": "@trpc/react",
       "type": "build"
     },
@@ -159,6 +163,10 @@
     },
     {
       "name": "react-dom",
+      "type": "build"
+    },
+    {
+      "name": "react-draggable",
       "type": "build"
     },
     {
