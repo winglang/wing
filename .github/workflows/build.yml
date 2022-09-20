@@ -66,7 +66,6 @@ jobs:
         run: |
           mkdir -p vendor/node
           unzip -q ../../libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d vendor/node
-          ls
           npm ci
           npm test
           cp build/wingrt ../wing/bin
@@ -77,7 +76,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          ls
           npm ci --ignore-scripts
           node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
 
