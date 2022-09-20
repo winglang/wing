@@ -537,7 +537,7 @@ impl<'a> TypeChecker<'a> {
 				// Lookup this class name in the current environment
 				env.lookup(&class_name)
 			}
-			AstType::FieldNestedIdentifier { root: _, fields: _ } => {
+			AstType::CustomType { root: _, fields: _ } => {
 				// TODO This should be updated to support "bring"
 				self.types.anything()
 			}

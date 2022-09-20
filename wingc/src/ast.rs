@@ -35,7 +35,7 @@ pub enum Type {
 	Duration,
 	FunctionSignature(FunctionSignature),
 	Class(Symbol),
-	FieldNestedIdentifier { root: Symbol, fields: Vec<Symbol> },
+	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
 
 #[derive(Debug, Clone)]

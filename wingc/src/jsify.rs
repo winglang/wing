@@ -156,7 +156,7 @@ fn is_resource(reference: &Reference) -> bool {
 
 fn is_resource_type(typ: &Type) -> bool {
 	// TODO: for now anything under "cloud" is a resource
-	if let Type::FieldNestedIdentifier { root, fields } = typ {
+	if let Type::CustomType { root, fields } = typ {
 		root.name == "cloud"
 	} else {
 		false
@@ -165,7 +165,7 @@ fn is_resource_type(typ: &Type) -> bool {
 
 fn jsify_type(typ: &Type) -> String {
 	match typ {
-		Type::FieldNestedIdentifier { root, fields } => {
+		Type::CustomType { root, fields } => {
 			format!(
 				"{}.{}",
 				jsify_symbol(root),

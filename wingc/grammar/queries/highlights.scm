@@ -8,7 +8,7 @@
 
 ; Classes
 
-(nested_type_identifier) @type
+(custom_type) @type
 (class_member 
   name: (identifier) @member
 ) 
