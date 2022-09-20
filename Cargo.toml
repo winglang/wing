@@ -2,6 +2,7 @@
 members = [
   "apps/wing-language-server",
 
+  "libs/tree-sitter-wing",
   "libs/wingc",
-  "libs/tree-sitter-wing"
+  "libs/wingii",
 ]
