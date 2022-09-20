@@ -53,26 +53,32 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: "https://npm.pkg.github.com"
 
+      - name: Build WingII Crate
+        working-directory: libs/wingii
+        run: |
+          cargo test --release -- --nocapture
+          cargo build --release
+
       - name: Build WingC Library
-        working-directory: wingc
+        working-directory: libs/wingc
         run: |
           cargo test --release -- --nocapture
           cargo build --release
 
       - name: Build Wing Runtime
-        working-directory: wingrt
+        working-directory: apps/wingrt
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
           mkdir -p vendor/node
-          unzip -q ../libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d vendor/node
+          unzip -q ../../libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d vendor/node
           npm ci
           npm test
           cp build/wingrt ../wing/bin
-          tar -zcf ../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz build/wingrt
+          tar -zcf ../../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz build/wingrt
 
       - name: Build Wing CLI
-        working-directory: wing
+        working-directory: apps/wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
@@ -81,7 +87,7 @@ jobs:
 
       - name: Publish Wing
         if: ${{ github.ref == 'refs/heads/main' }}
-        working-directory: wing
+        working-directory: apps/wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: npm publish
@@ -94,17 +100,17 @@ jobs:
           path: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
 
       - name: Build Wing Language Server
-        working-directory: wing-analyzer/language-server
+        working-directory: apps/wing-language-server
         run: |
           cargo build --release
-          mv target/release/wing-language-server target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+          mv ../../target/release/wing-language-server ../../target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
       - name: Upload Wing Language Server
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
-          path: wing-analyzer/language-server/target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+          path: target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
   build-vscode:
     needs: build-native
@@ -118,20 +124,20 @@ jobs:
       - name: Prepare language server binaries
         if: ${{ github.ref == 'refs/heads/main' }}
         run: |          
-          cp -r wing-language-server-* ./wing-analyzer/vscode-extension/resources
+          cp -r wing-language-server-* ./apps/vscode-wing/resources
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
-          working-directory: wing-analyzer/vscode-extension
+          working-directory: apps/vscode-wing
       - name: Create VSIX
-        working-directory: wing-analyzer/vscode-extension
+        working-directory: apps/vscode-wing
         run: npm run build
       - name: Upload extension
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
-          path: wing-analyzer/vscode-extension/vscode-wing.vsix
+          path: apps/vscode-wing/vscode-wing.vsix
 
   # Purposely Empty to be a required check for all matrix entries from build-native
   build:
@@ -162,7 +168,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          cd wing
+          cd apps/wing
           node scripts/self-package-json.js
           npm publish
 

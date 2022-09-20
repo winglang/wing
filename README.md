@@ -13,7 +13,7 @@ You also need to `npm login` into `@monadahq`.
 
 ## `wingc` Compiler
 
-The compiler is under `wingc` and you can use standard Rust workflows:
+The compiler is under `libs/wingc` and you can use standard Rust workflows:
 
 - `cargo build` - builds the code
 - `cargo test` - runs tests
@@ -21,7 +21,7 @@ The compiler is under `wingc` and you can use standard Rust workflows:
 
 ## `wingrt` Runtime
 
-The runtime that executes output of the compiler - it is under `wingrt`.
+The runtime that executes output of the compiler - it is under `apps/wingrt`.
 
 Currently local compilation is complicated and takes a lot of time, it requires
 building a special variant of Node, blood sacrifice, and dark rituals.
@@ -29,12 +29,12 @@ building a special variant of Node, blood sacrifice, and dark rituals.
 Pre-built binaries are available at:
 [winglang-infra](https://github.com/monadahq/winglang-infra).
 
-Get the binaries for your platform and place them under `wingrt/vendor/node`. For this, you need to unzip the file and put the "include" and "lib" folders directly under `wingrt/vendor/node`.
+Get the binaries for your platform and place them under `apps/wingrt/vendor/node`. For this, you need to unzip the file and put the "include" and "lib" folders directly under `apps/wingrt/vendor/node`.
 If you are on an apple silicone Mac then use `actual-libnode-macos-latest-arm64.zip` and not `libnode-macos-latest-arm64.zip`.
 
 You also need to build the compiler (`wingc`) first: 
 ```bash
-cd ../wingc
+cd ../libs/wingc
 cargo build --release
 ```
 
@@ -46,7 +46,7 @@ You should also make sure you have cmake installed, see [here](http://cmake.org)
 After that you should be able to build and run the runtime tests with:
 
 ```bash
-cd ../wingrt
+cd apps/wingrt
 npm install
 npm test
 # incremental recompiles
@@ -60,7 +60,7 @@ IF everything is fine, then you should be able to run the CLI with:
 ```
 ## Troubleshooting
 
-**Troubleshoot #1:** if you get this error: "fatal error: 'v8.h' file not found" then you need to make sure you put the pre-built binaries correctly in `wingrt/vendor/node`.
+**Troubleshoot #1:** if you get this error: "fatal error: 'v8.h' file not found" then you need to make sure you put the pre-built binaries correctly in `apps/wingrt/vendor/node`.
 
 **Troubleshoot #2:** if you get this error: "linker command failed with exit code 1 (use -v to see invocation)" then you need to run `npm run clean` from wingrt folder.
 
@@ -70,7 +70,7 @@ IF everything is fine, then you should be able to run the CLI with:
 ```bash
 rustup toolchain install stable-aarch64-apple-darwin
 rustup default stable-aarch64-apple-darwin
-cd ../wingc
+cd libs/wingc
 cargo clean
 ```
 
@@ -133,9 +133,9 @@ cd ~/workspace/winglang/playground
 ./wingc examples/test.w
 ```
 
-### Language Corpus
+### Language Examples
 
-Examples of Wing code are located in the [corpus](./corpus) directory.
+Examples of Wing code are located in the [examples](./examples) directory.
 
 ## License
 
