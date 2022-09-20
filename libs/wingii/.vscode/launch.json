@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "Debug WingII tests",
+      "cargo": {
+        "args": ["test", "--no-run"],
+        "filter": {
+          "name": "wingii",
+          "kind": "lib"
+        }
+      },
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

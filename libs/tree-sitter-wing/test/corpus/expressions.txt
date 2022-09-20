@@ -1,0 +1,312 @@
+====================
+Unary expression
+====================
+
++1;
+
+---
+
+(source
+    (expression_statement
+        (unary_expression
+            arg: (number)
+        )
+    )
+)
+
+====================
+Binary expressions
+====================
+
+5 * 1;
+(5+1) % 1;
+5+1 % 1;
+5 % 1 + 1;
+
+---
+
+(source
+    (expression_statement
+        (binary_expression
+            left: (number)
+            right: (number)
+        )
+    )
+    (expression_statement
+        (binary_expression
+            left: (parenthesized_expression
+                (binary_expression
+                    left: (number)
+                    right: (number)
+                )
+            )
+            right: (number)
+        )
+    )
+    (expression_statement
+        (binary_expression
+            left: (number)
+            right: (binary_expression
+                left: (number)
+                right: (number)
+            )
+        )
+    )
+    (expression_statement
+        (binary_expression
+            left: (binary_expression
+                left: (number)
+                right: (number)
+            )
+            right: (number)
+        )
+    )
+)
+
+====================
+Function call
+====================
+
+hello(1,a);
+
+---
+
+(source
+    (expression_statement
+        (function_call
+            call_name: (reference (identifier))
+            args: (argument_list
+                (positional_argument
+                    (number)
+                )
+                (positional_argument
+                    (reference (identifier))
+                )
+            )
+        )
+    )
+)
+
+====================
+Method call
+====================
+
+obj.method();
+
+---
+
+(source
+    (expression_statement
+        (method_call
+          call_name: (nested_identifier
+            object: (reference (identifier))
+            property: (identifier)
+          )
+          args: (argument_list)
+        )
+    )
+)
+
+====================
+New expression
+====================
+
+new A();
+
+---
+
+(source
+    (expression_statement
+        (new_expression
+            class: (reference (identifier))
+            args: (argument_list)
+        )
+    )
+)
+
+================================
+New expression with id and scope
+================================
+
+new A() as "b" in c;
+
+---
+
+(source
+    (expression_statement
+        (new_expression
+            class: (reference (identifier))
+            args: (argument_list)
+            id: (new_object_id (string))
+            scope: (new_object_scope (reference (identifier)))
+        )
+    )
+)
+
+================================
+preflight anonymous closure
+================================
+
+(a: num): num -> { return a; };
+
+---
+
+(source
+    (expression_statement
+        (preflight_closure
+            (parameter_list
+                (parameter_definition
+                    (identifier)
+                    (builtin_type)
+                )
+            )
+            (builtin_type)
+            (block
+                (return_statement
+                    (reference
+                        (identifier)
+                    )
+                )
+            )
+        )
+    )
+)
+
+================================
+inflight anonymous closure
+================================
+
+(): num ~> { return 1; };
+
+---
+
+(source
+    (expression_statement
+        (inflight_closure
+            (parameter_list)
+            (builtin_type)
+            (block
+                (return_statement
+                    (number)
+                )
+            )
+        )
+    )
+)
+
+================================
+Template string
+================================
+
+"cool ${test}";
+
+---
+
+(source
+    (expression_statement
+        (string
+            (template_substitution
+                (reference
+                    (identifier)
+                )
+            )
+        )
+    )
+)
+
+================================
+?? operator
+================================
+
+maybeVal ?? 2;
+
+---
+
+(source
+    (expression_statement
+        (binary_expression
+            (reference
+                (identifier)
+            )
+            (number)
+        )
+    )
+)
+
+
+================================
+Set Literal
+================================
+
+{ 1, 2, 3 };
+
+---
+
+(source
+    (expression_statement
+        (set_literal
+            (number)
+            (number)
+            (number)
+        )
+    )
+)
+
+================================
+Empty Map Literal
+================================
+
+{};
+
+---
+
+(source
+    (expression_statement
+        (map_literal)
+    )
+)
+
+================================
+Map Literal
+================================
+
+{ a: 1, "a": 2, b: 3,};
+
+---
+
+(source
+    (expression_statement
+        (map_literal
+            (map_literal_member
+                (identifier)
+                (number)
+            )
+            (map_literal_member
+                (string)
+                (number)
+            )
+            (map_literal_member
+                (identifier)
+                (number)
+            )
+        )
+    )
+)
+
+================================
+Array Literal
+================================
+
+[1, 2, 3,];
+
+---
+
+(source
+    (expression_statement
+        (array_literal
+            (number)
+            (number)
+            (number)
+        )
+    )
+)
