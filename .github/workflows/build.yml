@@ -54,7 +54,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: Build WingII Crate
-        working-directory: wingii
+        working-directory: libs/wingii
         run: |
           cargo test --release -- --nocapture
           cargo build --release
