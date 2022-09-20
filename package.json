@@ -1,0 +1,9 @@
+{
+  "name": "@monadahq/winglang",
+  "workspaces": [
+    "apps/wing",
+    "apps/wingrt",
+
+    "libs/tree-sitter-wing"
+  ]
+}
