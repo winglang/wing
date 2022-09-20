@@ -1,7 +1,6 @@
 [workspace]
 members = [
   "apps/wing-language-server",
-
   "libs/tree-sitter-wing",
   "libs/wingc",
   "libs/wingii",

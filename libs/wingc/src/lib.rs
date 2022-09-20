@@ -110,7 +110,7 @@ mod sanity {
 
 	#[test]
 	fn can_compile_simple_files() {
-		let paths = fs::read_dir("../../corpus/simple").unwrap();
+		let paths = fs::read_dir("../../examples/simple").unwrap();
 
 		for entry in paths {
 			if let Ok(entry) = entry {
