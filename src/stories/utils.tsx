@@ -6,11 +6,7 @@ import {
   CubeIcon,
   GlobeAltIcon,
 } from "@heroicons/react/24/outline";
-import {
-  ConstructSchema,
-  ResourceSchema,
-  WingLocalSchema,
-} from "@monadahq/wing-local-schema";
+import { ResourceSchema, WingLocalSchema } from "@monadahq/wing-local-schema";
 import React, { ReactNode } from "react";
 
 import { TreeMenuItem } from "@/components/TreeMenu";
@@ -26,27 +22,17 @@ export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
   });
 };
 
-export const constructHubTreeToTreeMenuItems = (): TreeMenuItem[] => {
+export const WingSchemaToTreeMenuItems = (
+  schema: WingLocalSchema,
+): TreeMenuItem[] => {
   const tree: TreeMenuItem[] = [];
-  const getItemIcon = (item: any): React.ReactNode => {
-    if (item?.attributes?.["aws:cdk:cloudformation:type"]) {
-      return getResourceIcon(item.attributes["aws:cdk:cloudformation:type"]);
-    }
-
-    return (
-      <CubeTransparentIcon
-        className="w-4 h-4 text-slate-500"
-        aria-hidden="true"
-      />
-    );
-  };
   const buildTree = (node: any, parent: TreeMenuItem | undefined) => {
     const item: TreeMenuItem = {
       id: node.path,
       label: node.id,
       children: [],
       parentId: parent?.id,
-      icon: getItemIcon(node),
+      icon: getResourceIcon(node.type),
     };
     if (parent) {
       parent.children?.push(item);
@@ -60,46 +46,85 @@ export const constructHubTreeToTreeMenuItems = (): TreeMenuItem[] => {
       });
     }
   };
-  buildTree(constructHubTree.tree, undefined);
+  buildTree(schema.root, undefined);
   return tree;
 };
 
-export const constructHubTreeToWingSchema = (): WingLocalSchema => {
-  const nodeTypeAndProps = (
-    node: any,
-  ): {
-    type: string;
-    props: Record<string, any>;
-  } => {
-    if (node?.attributes?.["aws:cdk:cloudformation:type"]) {
-      switch (node.attributes["aws:cdk:cloudformation:type"]) {
-        case "AWS::S3::Bucket":
-          return {
-            type: "cloud.Bucket",
-            props: {},
-          };
-        case "AWS::Lambda::Function":
-          return {
-            type: "cloud.Function",
-            props: {
-              sourceCodeFile: "func.js",
-              sourceCodeLanguage: "javascript",
-              environmentVariables: {
-                FOO: "bar",
-              },
-            },
-          };
-        case "AWS::SQS::Queue":
-          return { type: "cloud.Queue", props: { timeout: "3000" } };
-        default:
-          // TODO: update schema to support custom resources
-          return { type: "cloud.Custom", props: {} };
-      }
-    } else {
-      return { type: "constructs.Construct", props: {} };
+// resource id is not unique, so we need to use the path
+const getConstructHubResourcePaths = (): string[] => {
+  const resourceIds: string[] = [];
+  const getResourceIds = (node: any) => {
+    if (isContHubResource(node)) {
+      resourceIds.push(node.path);
+    }
+    if (node.children && Object.keys(node.children).length > 0) {
+      // eslint-disable-next-line unicorn/no-array-for-each
+      Object.keys(node.children).forEach((child: any) => {
+        getResourceIds(node.children[child]);
+      });
     }
   };
+  getResourceIds(constructHubTree.tree.children["construct-hub-dev"]);
+  return resourceIds;
+};
 
+const getRandomArrayOfResourcesPaths = (resourcesArray: any[]): string[] => {
+  // random index array
+  const arrayLength = Math.floor(Math.random() * 8);
+  if (!arrayLength) return [];
+
+  const indexArray = Array.from({ length: arrayLength }, () =>
+    Math.floor(Math.random() * resourcesArray.length),
+  );
+  // random resource paths array
+  const resourcePaths = [];
+  for (let i = 0; i < arrayLength; i++) {
+    // @ts-ignore
+    resourcePaths.push(resourcesArray[indexArray[i]]);
+  }
+  return resourcePaths;
+};
+
+const isContHubResource = (node: any): boolean => {
+  return node?.attributes?.["aws:cdk:cloudformation:type"] !== undefined;
+};
+
+const hubNodeTypeAndProps = (
+  node: any,
+): {
+  type: string;
+  props: Record<string, any>;
+} => {
+  if (isContHubResource(node)) {
+    switch (node.attributes["aws:cdk:cloudformation:type"]) {
+      case "AWS::S3::Bucket":
+        return {
+          type: "cloud.Bucket",
+          props: {},
+        };
+      case "AWS::Lambda::Function":
+        return {
+          type: "cloud.Function",
+          props: {
+            sourceCodeFile: "func.js",
+            sourceCodeLanguage: "javascript",
+            environmentVariables: {
+              FOO: "bar",
+            },
+          },
+        };
+      case "AWS::SQS::Queue":
+        return { type: "cloud.Queue", props: { timeout: "3000" } };
+      default:
+        // TODO: update schema to support custom resources
+        return { type: "cloud.Custom", props: {} };
+    }
+  } else {
+    return { type: "constructs.Construct", props: {} };
+  }
+};
+
+export const constructHubTreeToWingSchema = (): WingLocalSchema => {
   const tree: WingLocalSchema = {
     version: "1.0.0",
     root: {
@@ -110,19 +135,28 @@ export const constructHubTreeToWingSchema = (): WingLocalSchema => {
     },
   };
 
+  const resourcePathsArray = getConstructHubResourcePaths();
+
   // TODO: fix types
   const buildTree = (node: any, parent: any | undefined) => {
     const item: {
       path: string;
       children?: {};
+      callers?: string[];
+      callees?: string[];
       id: string;
       type: string;
       props: Record<string, any>;
     } = {
       id: node.id,
       path: node.path,
-      ...nodeTypeAndProps(node),
+      ...hubNodeTypeAndProps(node),
     };
+
+    if (isContHubResource(node)) {
+      item.callers = getRandomArrayOfResourcesPaths(resourcePathsArray);
+      item.callees = getRandomArrayOfResourcesPaths(resourcePathsArray);
+    }
 
     if (node.children) {
       item.children = {};
@@ -144,20 +178,8 @@ export const constructHubTreeToWingSchema = (): WingLocalSchema => {
   return tree;
 };
 
-function getResourceIcon(resourceType: string) {
-  switch (resourceType) {
-    case "AWS::S3::Bucket":
-      return getResourceIcon2("cloud.Bucket");
-    case "AWS::Lambda::Function":
-      return getResourceIcon2("cloud.Function");
-    case "AWS::SQS::Queue":
-      return getResourceIcon2("cloud.Queue");
-    default:
-      return getResourceIcon2("constructs.Construct");
-  }
-}
-
-function getResourceIcon2(resourceType: ResourceSchema["type"]) {
+function getResourceIcon(resourceType: ResourceSchema["type"]) {
+  console.log(resourceType);
   switch (resourceType) {
     case "cloud.Bucket":
       return (
@@ -178,6 +200,13 @@ function getResourceIcon2(resourceType: ResourceSchema["type"]) {
     case "cloud.Endpoint":
       return (
         <GlobeAltIcon className="w-4 h-4 text-indigo-500" aria-hidden="true" />
+      );
+    case "constructs.Construct":
+      return (
+        <CubeTransparentIcon
+          className="w-4 h-4 text-slate-500"
+          aria-hidden="true"
+        />
       );
     default:
       return <CubeIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />;

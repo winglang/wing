@@ -1,6 +1,9 @@
 import { WingLocalSchema } from "@monadahq/wing-local-schema";
 
-import { constructHubTreeToTreeMenuItems } from "@/stories/utils";
+import {
+  constructHubTreeToWingSchema,
+  WingSchemaToTreeMenuItems,
+} from "@/stories/utils";
 
 import { RightResizableWidget } from "./RightResizableWidget";
 import { TopResizableWidget } from "./TopResizableWidget";
@@ -16,7 +19,9 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
       <div className="flex-1 flex">
         <RightResizableWidget className="w-60 min-w-[62px] overflow-x-auto">
           <div className="h-full flex">
-            <TreeMenu items={constructHubTreeToTreeMenuItems()} />
+            <TreeMenu
+              items={WingSchemaToTreeMenuItems(constructHubTreeToWingSchema())}
+            />
           </div>
         </RightResizableWidget>
         <div className="flex-1 bg-green-100"></div>

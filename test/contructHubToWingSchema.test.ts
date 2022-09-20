@@ -1,9 +1,9 @@
-import { test } from "vitest";
+import { test, expect } from "vitest";
 
 import { constructHubTreeToWingSchema } from "@/stories/utils";
 
 test("tree", async () => {
   const tree = await constructHubTreeToWingSchema();
-
-  console.log(JSON.stringify(tree, undefined, 2));
+  // expect(tree).toMatchSnapshot();
+  console.log(tree);
 });

@@ -4,8 +4,9 @@ import React, { useEffect, useState } from "react";
 import { TreeMenu, TreeMenuItem } from "@/components/TreeMenu";
 import { treeMenuItems } from "@/stories/mockData";
 import {
-  constructHubTreeToTreeMenuItems,
+  WingSchemaToTreeMenuItems,
   flattenTreeMenuItems,
+  constructHubTreeToWingSchema,
 } from "@/stories/utils";
 
 const TreeMenuStory: ComponentStory<typeof TreeMenu> = (args) => {
@@ -119,5 +120,5 @@ ConstructHubStory.parameters = {
 };
 ConstructHubStory.args = {
   title: "Construct-Hub",
-  items: constructHubTreeToTreeMenuItems(),
+  items: WingSchemaToTreeMenuItems(constructHubTreeToWingSchema()),
 };
