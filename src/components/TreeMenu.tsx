@@ -25,7 +25,7 @@ export const TreeMenu = ({
   items,
 }: TreeMenuProps) => {
   return (
-    <div className="bg-slate-100 flex flex-col gap-1 overflow-auto">
+    <div className="w-full bg-slate-100 flex flex-col gap-1 overflow-auto">
       <div className="h-8" />
       <div className="px-4 flex items-center">
         <span className="uppercase text-sm font-semibold">{title}</span>

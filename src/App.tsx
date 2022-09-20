@@ -1,11 +1,9 @@
 import { createWingLocalClient } from "@monadahq/wing-local-client";
 import { WingLocalSchema } from "@monadahq/wing-local-schema";
-import { ipcRenderer } from "electron";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { RightResizableWidget } from "./components/RightResizableWidget";
-import { TopResizableWidget } from "./components/TopResizableWidget";
+import { VscodeLayout } from "./components/VscodeLayout";
 import { trpc } from "./utils/trpc";
 import { useIpcEventListener } from "./utils/useIpcEventListener";
 
@@ -33,22 +31,7 @@ const App = ({ localServerPort }: AppProps) => {
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <div className="h-full flex flex-col">
-          <div className="flex-1 flex">
-            <RightResizableWidget className="w-60 min-w-[62px] overflow-x-auto">
-              <div className="h-full bg-blue-100"></div>
-            </RightResizableWidget>
-            <div className="flex-1 bg-green-100"></div>
-          </div>
-
-          <TopResizableWidget className="h-60 min-h-[62px] overflow-y-auto">
-            <div className="bg-red-100">
-              <pre className="p-4 text-xs">
-                {JSON.stringify(schema, undefined, 2)}
-              </pre>
-            </div>
-          </TopResizableWidget>
-        </div>
+        <VscodeLayout schema={schema} />
       </QueryClientProvider>
     </trpc.Provider>
   );
