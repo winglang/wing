@@ -366,10 +366,13 @@ impl Parser<'_> {
 					pos_args.push(self.build_expression(&child)?);
 				}
 				"keyword_argument" => {
-					named_args.insert(
-						self.node_symbol(&child.named_child(0).unwrap())?,
-						self.build_expression(&child.named_child(1).unwrap())?,
-					);
+					let arg_name_node = &child.named_child(0).unwrap();
+					let arg_name = self.node_symbol(arg_name_node)?;
+					if named_args.contains_key(&arg_name) {
+						_ = self.add_error::<ArgList>(format!("Duplicate argument name"), arg_name_node);
+					} else {
+						named_args.insert(arg_name, self.build_expression(&child.named_child(1).unwrap())?);
+					}
 				}
 				"ERROR" => {
 					_ = self.add_error::<ArgList>(format!("Expected argument type"), &child);
