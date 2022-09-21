@@ -1,9 +1,9 @@
 # Wing Language Specification
 
-> * **Original Inventor:** Elad B. ([@eladb](https://github.com/eladb))
 > * **Current Owner:** Sepehr L. ([@3p3r](https://github.com/3p3r))
 > * **Contributors (A-Z):**
 >   *  Chris R. ([@Chriscbr](https://github.com/Chriscbr))
+>   *  Elad B. ([@eladb](https://github.com/eladb))
 >   *  Eyal K. ([@ekeren](https://github.com/ekeren))
 >   *  Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
 >   *  Shai B. ([@ShaiBer](https://github.com/ShaiBer))
