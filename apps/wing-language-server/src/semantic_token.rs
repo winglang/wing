@@ -82,12 +82,6 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 			}
 			_ => None,
 		},
-		"namespaced_identifier" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::TYPE));
-			}
-			_ => None,
-		},
 		_ => None,
 	}
 }

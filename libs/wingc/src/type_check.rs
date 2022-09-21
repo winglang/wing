@@ -359,8 +359,8 @@ impl<'a> TypeChecker<'a> {
 				// TODO: obj_id, obj_scope ignored, should use it once we support Type::Resource and then remove it from Classes (fail if a class has an id if grammar doesn't handle this for us)
 
 				// Lookup the type in the env
-				let type_ = self.resolve_reference(class, env);
-				// TODO: hack to support namespaced identifiers (basically stdlib cloud::Bucket), we skip type-checking and resolve them to Anything
+				let type_ = self.resolve_type(class, env);
+				// TODO: hack to support custom types (basically stdlib cloud.Bucket), we skip type-checking and resolve them to Anything
 				if matches!(type_.into(), &Type::Anything) {
 					_ = unimplemented_type();
 					return Some(type_);
@@ -468,7 +468,7 @@ impl<'a> TypeChecker<'a> {
 				// Find method in class's environment
 				let method_type = self.resolve_reference(&method_call.method, env);
 
-				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud::Bucket().upload())
+				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(method_type.into(), &Type::Anything) {
 					return Some(self.types.anything());
 				}
@@ -533,9 +533,14 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each function_sig resolution
 				self.types.add_type(Type::Function(Box::new(sig)))
 			}
-			AstType::Class(class_name) => {
-				// Lookup this class name in the current environment
-				env.lookup(&class_name)
+			AstType::CustomType { root, fields } => {
+				if fields.is_empty() {
+					// TODO Hack For classes in the current env
+					env.lookup(root)
+				} else {
+					// TODO This should be updated to support "bring"
+					self.types.anything()
+				}
 			}
 		}
 	}
@@ -702,7 +707,13 @@ impl<'a> TypeChecker<'a> {
 					let mut sig = method.signature.clone();
 
 					// Add myself as first parameter to all class methods (self)
-					sig.parameters.insert(0, AstType::Class(name.clone()));
+					sig.parameters.insert(
+						0,
+						AstType::CustomType {
+							root: name.clone(),
+							fields: vec![],
+						},
+					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env);
 					class_env.define(&method.name, method_type);
@@ -799,7 +810,7 @@ impl<'a> TypeChecker<'a> {
 					let instance = self.type_check_exp(object, env).unwrap();
 					let instance_type = match instance.into() {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
-						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud::Bucket)
+						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
 						&Type::Anything => return instance,
 						_ => panic!(
 							"{} in {:?} does not resolve to a class instance or resource object",
@@ -815,15 +826,6 @@ impl<'a> TypeChecker<'a> {
 
 				// Find property in class's environment
 				class.env.lookup(property)
-			}
-			Reference::NamespacedIdentifier {
-				namespace: _,
-				identifier: _,
-			} => {
-				// TODO: for now all namespaced identifiers resolve to `anything` since we don't know what they are,
-				// this is better than failing just because it's a way to do our mock `bring cloud; cloud::Bucket()` support.
-				_ = unimplemented_type();
-				self.types.anything()
 			}
 		}
 	}

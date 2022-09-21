@@ -3,16 +3,12 @@
 (variable_definition_statement 
   name: (identifier) @variable
 )
-(namespaced_identifier 
-  namespace: (identifier) @type
-  name: (identifier) @variable
-)
 (reference (identifier)) @variable
 (reference (nested_identifier property: (identifier))) @property
 
 ; Classes
 
-(class_type) @type
+(custom_type) @type
 (class_member 
   name: (identifier) @member
 ) 
@@ -80,7 +76,6 @@
   ";"
   "."
   ","
-  "::"
 ] @punctuation.delimiter
 
 [

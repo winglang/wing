@@ -4,7 +4,7 @@ use sha2::{Digest, Sha256};
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Expr, ExprType, Flight, FunctionDefinition, Literal, Reference, Scope,
-	Statement, Symbol, UnaryOperator,
+	Statement, Symbol, Type, UnaryOperator,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -93,9 +93,6 @@ fn jsify_reference(reference: &Reference) -> String {
 	match reference {
 		Reference::Identifier(identifier) => jsify_symbol(identifier),
 		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol(property),
-		Reference::NamespacedIdentifier { namespace, identifier } => {
-			jsify_symbol(namespace) + "." + &jsify_symbol(identifier)
-		}
 	}
 }
 
@@ -142,18 +139,48 @@ fn is_resource(reference: &Reference) -> bool {
 			// For now return false, but we need to lookup the identifier in our env
 			false
 		}
-		Reference::NestedIdentifier { object: _, property: _ } => false,
-		Reference::NamespacedIdentifier {
-			namespace,
-			identifier: _,
-		} => {
+		Reference::NestedIdentifier { object, property: _ } => {
 			// TODO: for now anything under "cloud" is a resource
-			if namespace.name == "cloud" {
-				true
+			if let ExprType::Reference(identifier) = &object.variant {
+				if let Reference::Identifier(identifier) = identifier {
+					identifier.name == "cloud"
+				} else {
+					false
+				}
 			} else {
 				false
 			}
 		}
+	}
+}
+
+fn is_resource_type(typ: &Type) -> bool {
+	// TODO: for now anything under "cloud" is a resource
+	if let Type::CustomType { root, fields } = typ {
+		root.name == "cloud"
+	} else {
+		false
+	}
+}
+
+fn jsify_type(typ: &Type) -> String {
+	match typ {
+		Type::CustomType { root, fields } => {
+			if fields.is_empty() {
+				return jsify_symbol(root);
+			} else {
+				format!(
+					"{}.{}",
+					jsify_symbol(root),
+					fields
+						.iter()
+						.map(|f| jsify_symbol(f))
+						.collect::<Vec<String>>()
+						.join(".")
+				)
+			}
+		}
+		_ => todo!(),
 	}
 }
 
@@ -165,20 +192,16 @@ fn jsify_expression(expression: &Expr) -> String {
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
-			if is_resource(class) {
+			if is_resource_type(class) {
 				// If this is a resource then add the scope and id to the arg list
 				format!(
 					"new {}({})",
-					jsify_reference(&class),
+					jsify_type(class),
 					// TODO: get actual scope and id
-					jsify_arg_list(&arg_list, Some("this.root"), Some(&format!("{}", class)))
+					jsify_arg_list(&arg_list, Some("this.root"), Some(&format!("{}", jsify_type(class))))
 				)
 			} else {
-				format!(
-					"new {}({})",
-					jsify_reference(&class),
-					jsify_arg_list(&arg_list, None, None)
-				)
+				format!("new {}({})", jsify_type(&class), jsify_arg_list(&arg_list, None, None))
 			}
 		}
 		ExprType::Literal(lit) => match lit {
@@ -233,24 +256,21 @@ fn jsify_statement(statement: &Statement) -> String {
 			module_name,
 			identifier,
 		} => {
-			if let Some(identifier) = identifier {
-				// use <module_name> from <parent_module>
-				format!(
-					"const {} = require('{}/{}').{};",
-					jsify_symbol(module_name),
-					STDLIB_MODULE,
-					jsify_symbol(module_name),
-					jsify_symbol(identifier)
-				)
-			} else {
-				// use <module_name>
-				format!(
-					"const {} = require('{}').{};",
-					jsify_symbol(module_name),
-					STDLIB_MODULE,
-					jsify_symbol(module_name)
-				)
-			}
+			format!(
+				"const {} = {};",
+				jsify_symbol(if let Some(identifier) = identifier {
+					// use alias
+					identifier
+				} else {
+					module_name
+				}),
+				if module_name.name.starts_with("\"./") {
+					// TODO so many assumptions here, would only wort with a JS file
+					format!("require({})", module_name.name)
+				} else {
+					format!("require('{}').{}", STDLIB_MODULE, module_name.name)
+				}
+			)
 		}
 		Statement::VariableDef {
 			var_name,
