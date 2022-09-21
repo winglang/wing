@@ -49,11 +49,13 @@ guide](./CONTRIBUTING.md).*
 To install Wing, you will need the following installed on your system:
 
 1. [Node.js](https://nodejs.org/en/) (version 16.x or above).
-1. [Terraform](https://terraform.io/downloads) is needed to deploy to the cloud.
-1. [AWS
-   CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) is
-   needed to configure local credentials.
 1. [VSCode](https://code.visualstudio.com/) is our supported IDE.
+
+In order to deploy the "Hello, World" example below to AWS, you will also need:
+
+1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) 
+   is only needed to configure local credentials.
+1. [Terraform](https://terraform.io/downloads) is needed to deploy to the cloud.
 
 #### Authenticate to GitHub Packages
 
@@ -104,9 +106,9 @@ Create a new file called `hello.w` with the following code:
 ```ts
 bring cloud;
 
-let queue = cloud.Queue();
+let queue = new cloud.Queue();
 
-queue.onMessage((message) ~> {
+queue.on_message((message) ~> {
   print("Hello, ${message}!");
 });
 ```
@@ -229,3 +231,5 @@ As such, our focus for this sprint is:
 - Finalize the work to setup the Discord server for the community.
 - Make sure `docs/wingsdk-api.md` is generated (basically it's projen's `API.md` of the Wing SDK).
 - Continuous release of Wing Console (from its own repository), separate version line.
+- Since we require node.js installed on your system, there is currently no immediate need to bundle the node 
+  runtime into the compiler.
