@@ -31,7 +31,7 @@ export function TopResizableWidget(props: TopResizableWidgetProps) {
           }
         }}
       >
-        <div className="absolute inset-x-0 top-0 h-2 cursor-ns-resize" />
+        <div className="absolute inset-x-0 -top-1 h-2 cursor-ns-resize" />
       </DraggableCore>
 
       {children}

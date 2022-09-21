@@ -17,7 +17,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
   return (
     <div className="h-full flex flex-col">
       <div className="flex-1 flex">
-        <RightResizableWidget className="w-60 min-w-[62px] overflow-x-auto">
+        <RightResizableWidget className="w-60 min-w-[62px]">
           <div className="h-full flex">
             <TreeMenu
               items={WingSchemaToTreeMenuItems(constructHubTreeToWingSchema())}
