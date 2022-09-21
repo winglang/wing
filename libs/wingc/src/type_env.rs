@@ -13,6 +13,9 @@ pub struct TypeEnv {
 	pub flight: Flight,
 }
 
+// TODO See TypeRef for why this is necessary
+unsafe impl Send for TypeEnv {}
+
 impl TypeEnv {
 	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool, flight: Flight) -> Self {
 		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
