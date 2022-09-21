@@ -143,8 +143,8 @@ Terraform.
 First, we need to compile our program to AWS:
 
 ```sh
-$ wing compile --target tf-aws hello.w
-Compiling to target "tf-aws"...
+$ wing build --target tf-aws hello.w
+Build for target "tf-aws"...
 ```
 
 Now, let's deploy our program to AWS:
