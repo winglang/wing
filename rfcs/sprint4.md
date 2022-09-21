@@ -228,7 +228,6 @@ As such, our focus for this sprint is:
 - Set up the workflows required for **continuous releases** - every commit to `main` should result in a full 
   release, with the appropriate version bump (based on conventional commits), release notes in GitHub and 
   artifacts pushed to the relevant repositories.
-- Finalize the work to setup the Discord server for the community.
 - Make sure `docs/wingsdk-api.md` is generated (basically it's projen's `API.md` of the Wing SDK).
 - Continuous release of Wing Console (from its own repository), separate version line.
 - Since we require node.js installed on your system, there is currently no immediate need to bundle the node 
