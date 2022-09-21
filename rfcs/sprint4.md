@@ -23,7 +23,7 @@ is what I see...
 
 ## Welcome!
 
-Wing is a cloud-oriented programming language. It is a statically typed,
+Wing is the first cloud oriented programming language. It is a statically typed,
 compiled language that allows developers to describe both the infrastructure and
 the behavior of their cloud applications within a single codebase.
 
