@@ -178,8 +178,7 @@ export const constructHubTreeToWingSchema = (): WingLocalSchema => {
   return tree;
 };
 
-function getResourceIcon(resourceType: ResourceSchema["type"]) {
-  console.log(resourceType);
+export function getResourceIcon(resourceType: ResourceSchema["type"]) {
   switch (resourceType) {
     case "cloud.Bucket":
       return (

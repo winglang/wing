@@ -21,7 +21,7 @@ export const Breadcrumbs = (props: BreadcrumbsProps) => {
         {breadcrumbs.map((breadcrumb, index) => (
           <li key={breadcrumb.id}>
             <div className="flex items-center justify-between">
-              {breadcrumb.icon}
+              <div className={"flex-shrink-0"}>{breadcrumb.icon}</div>
               <button
                 onClick={() => breadcrumb.onClick(breadcrumb.id)}
                 className={classNames(
