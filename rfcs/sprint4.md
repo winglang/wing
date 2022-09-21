@@ -206,5 +206,26 @@ Come as you are, say hi, ask questions, help friends, geek out!
 
 TBD
 
+---
 
+## Notes
 
+The primary goal of sprint 4 is to allow us to start inviting external folks to join our private beta as users
+and contributors to the project. 
+
+As such, our focus for this sprint is:
+
+- Consolidate everything related to Wing into a the [monadahq/winglang](github.com/monadahq/winglang/) GitHub repo. This includes:
+  - The [Wing SDK](github.com/monadahq/wingsdk)
+  - The [language spec](https://github.com/monadahq/winglang-spec) - should go under `docs/winglang-spec.md`
+  - The [language requirements RFC](https://github.com/monadahq/rfcs/blob/main/0044-winglang-requirements.md) - 
+    should go under `rfcs/winglang-reqs.md`
+  - All issues should also be transfered into this repository.
+- Updating the main README file to match this RFC as close as possible.
+- Update CONTRIBUTING.md to provide step-by-step instructions on how to setup a development environment, compile the toolchain, etc.
+- Set up the workflows required for **continuous releases** - every commit to `main` should result in a full 
+  release, with the appropriate version bump (based on conventional commits), release notes in GitHub and 
+  artifacts pushed to the relevant repositories.
+- Finalize the work to setup the Discord server for the community.
+- Make sure `docs/wingsdk-api.md` is generated (basically it's projen's `API.md` of the Wing SDK).
+- Continuous release of Wing Console (from its own repository), separate version line.
