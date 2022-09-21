@@ -2,6 +2,8 @@ import { CubeIcon, GlobeAltIcon } from "@heroicons/react/20/solid";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import { ConstructSchema, ResourceSchema } from "@monadahq/wing-local-schema";
 
+import { ResourceIcon } from "@/stories/utils";
+
 export interface NodeAttribute {
   key: string;
   value?: string;
@@ -49,21 +51,6 @@ export function BaseNodeAttributes({ attributes }: BaseNodeAttributesProps) {
   );
 }
 
-function getResourceIcon(node: ResourceSchema) {
-  if (node.type === "cloud.Endpoint") {
-    return (
-      <GlobeAltIcon
-        className="w-3.5 h-3.5 text-violet-500"
-        aria-hidden="true"
-      />
-    );
-  }
-
-  // if (node.type === "constructs.Construct")
-
-  return <CubeIcon className="w-3.5 h-3.5 text-gray-500" aria-hidden="true" />;
-}
-
 function getBaseAttributes(node: ResourceSchema) {
   return [
     {
@@ -80,7 +67,11 @@ function getBaseAttributes(node: ResourceSchema) {
       render: () => (
         <div className="truncate cursor-auto select-none">
           <div className="inline-flex items-center gap-1 px-1 bg-slate-100 border border-slate-200 rounded max-w-full truncate">
-            {getResourceIcon(node)}
+            <ResourceIcon
+              resourceType={node.type}
+              className="w-4 h-4"
+              aria-hidden="true"
+            />
             <div className="truncate">{node.type}</div>
           </div>
         </div>

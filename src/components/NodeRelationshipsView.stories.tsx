@@ -5,6 +5,9 @@ import { CubeIcon } from "@heroicons/react/24/outline";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { useEffect, useState } from "react";
 
+import { useConstructHubNodeMap } from "@/stories/mockData";
+import { Node } from "@/utils/nodeMap";
+
 import { NodeRelationshipsView, Relationships } from "./NodeRelationshipsView";
 
 export default {
@@ -421,61 +424,16 @@ ScrollableRelationships.args = {
   },
 };
 
-interface ConstructHubNode {
-  id: string;
-  path: string;
-  constructInfo?: Record<string, string>;
-  children?: Record<string, ConstructHubNode>;
-}
-
-function visit(
-  parent: ConstructHubNode | undefined,
-  node: ConstructHubNode,
-  callback: (
-    parent: ConstructHubNode | undefined,
-    child: ConstructHubNode,
-  ) => void,
-) {
-  callback(parent, node);
-
-  for (const child of Object.values(node.children ?? {})) {
-    callback(node, child);
-
-    visit(node, child, callback);
-  }
-}
-
-interface Node {
-  id: string;
-  path: string;
-  parent: string | undefined;
-  constructInfo?: Record<string, string>;
-  children: string[];
-}
-
-function buildNodeMap(node: ConstructHubNode) {
-  let nodes: Record<string, Node> = {};
-
-  visit(undefined, node, (parent, node) => {
-    nodes = {
-      ...nodes,
-      [node.path]: {
-        id: node.id,
-        path: node.path,
-        parent: parent?.path,
-        children: Object.values(node.children ?? {}).map((child) => child.path),
-      },
-    };
-  });
-
-  return nodes;
-}
-
 export const ConstructHubExample: ComponentStory<
   typeof NodeRelationshipsView
 > = (props) => {
-  const [nodeMap, setNodeMap] = useState<Record<string, Node>>();
+  const nodeMap = useConstructHubNodeMap();
   const [currentNode, setCurrentNode] = useState<Node | undefined>();
+  useEffect(() => {
+    if (nodeMap) {
+      setCurrentNode(nodeMap[""]);
+    }
+  }, [nodeMap]);
   const [relationships, setRelationships] = useState<Relationships>();
   useEffect(() => {
     if (!currentNode) {
@@ -522,13 +480,6 @@ export const ConstructHubExample: ComponentStory<
       }),
     });
   }, [currentNode]);
-  useEffect(() => {
-    void import("../assets/construct-hub-tree.json").then((constructHub) => {
-      const nodeMap = buildNodeMap(constructHub.tree);
-      setNodeMap(nodeMap);
-      setCurrentNode(nodeMap[""]);
-    });
-  }, []);
 
   return (
     <div className="flex flex-col gap-4">

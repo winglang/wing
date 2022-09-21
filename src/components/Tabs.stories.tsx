@@ -2,7 +2,7 @@ import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { useEffect, useState } from "react";
 
 import { Tab, Tabs } from "@/components/Tabs";
-import { getResourceIcon } from "@/stories/utils";
+import { ResourceIcon } from "@/stories/utils";
 
 const TabsStory: ComponentStory<typeof Tabs> = (args) => {
   const [tabs, setTabs] = useState<Tab[]>([]);
@@ -44,27 +44,29 @@ Primary.args = {
       id: "1",
       name: "Bucket",
       onClick: (id: string) => console.log(id),
-      icon: getResourceIcon("cloud.Bucket"),
+      icon: <ResourceIcon resourceType="cloud.Bucket" className="w-4 h-4" />,
       current: false,
     },
     {
       id: "2",
       name: "Function",
       onClick: (id: string) => console.log(id),
-      icon: getResourceIcon("cloud.Function"),
+      icon: <ResourceIcon resourceType="cloud.Function" className="w-4 h-4" />,
       current: true,
     },
     {
       id: "3",
       name: "Construct",
-      icon: getResourceIcon("constructs.Construct"),
+      icon: (
+        <ResourceIcon resourceType="constructs.Construct" className="w-4 h-4" />
+      ),
       onClick: (id: string) => console.log(id),
       current: false,
     },
     {
       id: "4",
       name: "endpoint",
-      icon: getResourceIcon("cloud.Endpoint"),
+      icon: <ResourceIcon resourceType="cloud.Endpoint" className="w-4 h-4" />,
       onClick: (id: string) => console.log(id),
       current: false,
     },

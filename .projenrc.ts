@@ -170,10 +170,15 @@ if (project.eslint) {
       },
     ],
   });
-  // project.eslint.config.settings = {
-  //   ...project.eslint.config.settings,
-  //   "import/internal-regex": "^@monadahq/",
-  // };
+
+  // Tell eslint that imports that begin with "@/" are internal to this repository.
+  project.eslint.config.settings = {
+    ...project.eslint.config.settings,
+    "import/internal-regex": "^@/",
+  };
 }
+
+// Fix installation problems due to Projen adding some package overrides.
+project.tryFindObjectFile("package.json")?.addOverride("overrides", {});
 
 project.synth();

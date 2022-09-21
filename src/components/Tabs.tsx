@@ -9,53 +9,10 @@ export interface Tab {
   onClick: (id: string) => void;
   onCloseClick?: (id: string) => void;
 }
+
 export interface TabsProps {
   tabs: Tab[];
 }
-export const Tabs1 = (props: TabsProps) => {
-  const { tabs } = props;
-  return (
-    <div>
-      <div className="sm:hidden">
-        <label htmlFor="tabs" className="sr-only">
-          Select a tab
-        </label>
-        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
-        <select
-          id="tabs"
-          name="tabs"
-          className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-          defaultValue={tabs?.find((tab) => tab.current)?.name}
-        >
-          {tabs.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
-          ))}
-        </select>
-      </div>
-      <div className="hidden sm:block">
-        <div className="border-b border-slate-200">
-          <nav className="-mb-px flex space-x-8" aria-label="Tabs">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => tab.onClick(tab.id)}
-                className={classNames(
-                  tab.current
-                    ? "border-indigo-500 text-indigo-600"
-                    : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300",
-                  "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm",
-                )}
-                aria-current={tab.current ? "page" : undefined}
-              >
-                {tab.name}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </div>
-    </div>
-  );
-};
 
 export const Tabs = (props: TabsProps) => {
   const { tabs } = props;
@@ -73,8 +30,8 @@ export const Tabs = (props: TabsProps) => {
                 )}
                 onClick={() => tab.onClick(tab.id)}
               >
-                {tab?.icon && <div className="mr-1.5">{tab.icon}</div>}
-                {tab?.name}
+                {tab.icon && <div className="mr-1.5">{tab.icon}</div>}
+                {tab.name}
                 <button
                   type="button"
                   className={classNames(
@@ -84,7 +41,7 @@ export const Tabs = (props: TabsProps) => {
                   )}
                   onClick={(event) => {
                     event.stopPropagation();
-                    tab?.onCloseClick?.(tab.id);
+                    tab.onCloseClick?.(tab.id);
                   }}
                 >
                   <XMarkIcon

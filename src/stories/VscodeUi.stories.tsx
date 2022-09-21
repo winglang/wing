@@ -162,13 +162,15 @@ function Vscodeui(props: VscodeuiProps) {
           <div className="rounded-full w-3 h-3 bg-yellow-500"></div>
           <div className="rounded-full w-3 h-3 bg-green-500"></div>
         </div>
-        <div className="flex-1 flex text-sm text-slate-800 border border-t-0 border-slate-200 rounded-b-xl overflow-hidden">
-          <TreeMenu
-            title={"Wing Console"}
-            selectedItemId={selectedItemId}
-            items={enrichTreeMenuItems(treeMenuItems)}
-            openMenuItemIds={openMenuItemIds}
-          />
+        <div className="flex-1 flex items-stretch text-sm text-slate-800 border border-t-0 border-slate-200 rounded-b-xl overflow-hidden">
+          <div className="w-64 flex-grow-0 h-full flex">
+            <TreeMenu
+              title={"Wing Console"}
+              selectedItemId={selectedItemId}
+              items={enrichTreeMenuItems(treeMenuItems)}
+              openMenuItemIds={openMenuItemIds}
+            />
+          </div>
           <div className="flex-1 flex flex-col bg-slate-100">
             {openedTabs.length > 0 && (
               <div className="flex h-8">
@@ -508,7 +510,7 @@ function Vscodeui(props: VscodeuiProps) {
 }
 
 export default {
-  title: "Playground/VscodeLikeUi",
+  title: "Playground/VscodeUi",
   component: Vscodeui,
 } as ComponentMeta<typeof Vscodeui>;
 

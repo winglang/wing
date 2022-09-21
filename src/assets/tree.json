@@ -1,0 +1,40 @@
+{
+  "version": "winglocal-0.1",
+  "root": {
+    "id": "image-extractor-app",
+    "path": "image-extractor-app",
+    "type": "constructs.Construct",
+    "children": {
+      "ImageStore": {
+        "id": "ImageStore",
+        "path": "image-extractor-app/ImageStore",
+        "type": "constructs.Construct",
+        "children": {
+          "ImageStore.cloud.Function": {
+            "id": "ImageStore.cloud.Function",
+            "path": "image-extractor-app/ImageStore/ImageStore.cloud.Function",
+            "type": "cloud.Function",
+            "props": {
+              "sourceCodeFile": "image-store.js",
+              "sourceCodeLanguage": "javascript",
+              "environmentVariables": {}
+            },
+            "callers": [],
+            "callees": ["ImageStore.cloud.Bucket"]
+          },
+          "ImageStore.cloud.Bucket": {
+            "id": "ImageStore.cloud.Bucket",
+            "path": "image-extractor-app/ImageStore/ImageStore.cloud.Bucket",
+            "type": "cloud.Bucket",
+            "props": {},
+            "callers": ["ImageStore.cloud.Function"],
+            "callees": []
+          }
+        },
+        "props": {},
+        "callers": [],
+        "callees": []
+      }
+    }
+  }
+}

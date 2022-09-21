@@ -1,5 +1,5 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Breadcrumb, Breadcrumbs } from "@/components/Breadcrumbs";
 import { breadcrumbs } from "@/stories/mockData";

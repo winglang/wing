@@ -11,10 +11,12 @@ import {
   CogIcon,
   MapIcon,
 } from "@heroicons/react/24/solid";
-import React from "react";
+import { WingLocalSchema, ResourceSchema } from "@monadahq/wing-local-schema";
+import React, { useEffect, useState } from "react";
 
 import { Breadcrumb } from "@/components/Breadcrumbs";
 import { TreeMenuItem } from "@/components/TreeMenu";
+import { buildNodeMap, NodeMap } from "@/utils/nodeMap";
 
 export const treeMenuItems: TreeMenuItem[] = [
   {
@@ -246,3 +248,79 @@ export const logs = [
     content: '"GET /api/v1/fraud-check/ HTTP/1.1" 200 17',
   },
 ];
+
+interface ConstructHubNode {
+  id: string;
+  path: string;
+  constructInfo?: Record<string, string>;
+  attributes?: Record<string, any>;
+  children?: Record<string, ConstructHubNode>;
+}
+
+function visitConstructHub(
+  parent: ConstructHubNode | undefined,
+  node: ConstructHubNode,
+  callback: (
+    parent: ConstructHubNode | undefined,
+    child: ConstructHubNode,
+  ) => void,
+) {
+  callback(parent, node);
+
+  for (const child of Object.values(node.children ?? {})) {
+    visitConstructHub(node, child, callback);
+  }
+}
+
+export function buildConstructHubNodeMap(node: ConstructHubNode): NodeMap {
+  let nodes: NodeMap = {};
+
+  visitConstructHub(undefined, node, (parent, node) => {
+    nodes = {
+      ...nodes,
+      [node.path]: {
+        id: node.id,
+        path: node.path,
+        type: node.constructInfo?.fqn ?? "",
+        parent: parent?.path,
+        children: Object.values(node.children ?? {}).map((child) => child.path),
+        constructInfo: node.constructInfo,
+        attributes: node.attributes,
+      },
+    };
+  });
+
+  return nodes;
+}
+
+export function useConstructHubNodeMap() {
+  const [nodeMap, setNodeMap] = useState<NodeMap>();
+
+  useEffect(() => {
+    void import("../assets/construct-hub-tree.json").then((constructHub) => {
+      const nodeMap = buildConstructHubNodeMap(constructHub.tree);
+      setNodeMap(nodeMap);
+    });
+  }, []);
+
+  return nodeMap;
+}
+
+export function useTreeNodeMap() {
+  const [nodeMap, setNodeMap] = useState<{
+    schema?: WingLocalSchema;
+    nodeMap?: NodeMap;
+  }>({});
+
+  useEffect(() => {
+    void import("../assets/tree.json").then((schema) => {
+      const nodeMap = buildNodeMap((schema as WingLocalSchema).root);
+      setNodeMap({
+        schema: schema as WingLocalSchema,
+        nodeMap,
+      });
+    });
+  }, []);
+
+  return nodeMap;
+}

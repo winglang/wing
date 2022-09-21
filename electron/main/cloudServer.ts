@@ -1,10 +1,10 @@
+import { createWingLocalServer } from "@monadahq/wing-local-server";
 import chokidar from "chokidar";
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { ipcMain } from "electron";
 import log from "electron-log";
 
 import BrowserWindow = Electron.BrowserWindow;
-import { createWingLocalServer } from "@monadahq/wing-local-server";
 
 // import { ipcMain } from "electron";
 

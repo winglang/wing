@@ -7,7 +7,8 @@ import {
   GlobeAltIcon,
 } from "@heroicons/react/24/outline";
 import { ResourceSchema, WingLocalSchema } from "@monadahq/wing-local-schema";
-import React, { ReactNode } from "react";
+import classNames from "classnames";
+import React from "react";
 
 import { TreeMenuItem } from "@/components/TreeMenu";
 
@@ -32,7 +33,7 @@ export const WingSchemaToTreeMenuItems = (
       label: node.id,
       children: [],
       parentId: parent?.id,
-      icon: getResourceIcon(node.type),
+      icon: <ResourceIcon resourceType={node.type} />,
     };
     if (parent) {
       parent.children?.push(item);
@@ -178,36 +179,73 @@ export const constructHubTreeToWingSchema = (): WingLocalSchema => {
   return tree;
 };
 
-export function getResourceIcon(resourceType: ResourceSchema["type"]) {
+const getResourceIconComponent = (resourceType: ResourceSchema["type"]) => {
   switch (resourceType) {
     case "cloud.Bucket":
-      return (
-        <ArchiveBoxIcon
-          className="w-4 h-4 text-orange-500"
-          aria-hidden="true"
-        />
-      );
+      return ArchiveBoxIcon;
     case "cloud.Function":
-      return <BoltIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />;
+      return BoltIcon;
     case "cloud.Queue":
-      return (
-        <QueueListIcon
-          className="w-4 h-4 text-emerald-500"
-          aria-hidden="true"
-        />
-      );
+      return QueueListIcon;
     case "cloud.Endpoint":
-      return (
-        <GlobeAltIcon className="w-4 h-4 text-indigo-500" aria-hidden="true" />
-      );
+      return GlobeAltIcon;
     case "constructs.Construct":
-      return (
-        <CubeTransparentIcon
-          className="w-4 h-4 text-slate-500"
-          aria-hidden="true"
-        />
-      );
+      return CubeTransparentIcon;
     default:
-      return <CubeIcon className="w-4 h-4 text-slate-400" aria-hidden="true" />;
+      return CubeIcon;
   }
+};
+
+const getResourceIconColors = (options: {
+  resourceType: ResourceSchema["type"];
+  darkenOnGroupHover?: boolean;
+}) => {
+  switch (options.resourceType) {
+    case "cloud.Bucket":
+      return [
+        "text-orange-500 dark:text-orange-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-orange-600 dark:group-hover:text-orange-300",
+      ];
+    case "cloud.Function":
+      return [
+        "text-sky-500 dark:text-sky-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-sky-600 dark:group-hover:text-sky-300",
+      ];
+    case "cloud.Queue":
+      return [
+        "text-emerald-500 dark:text-emerald-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-emerald-600 dark:group-hover:text-emerald-300",
+      ];
+    case "cloud.Endpoint":
+      return [
+        "text-indigo-500 dark:text-indigo-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-indigo-600 dark:group-hover:text-indigo-300",
+      ];
+    default:
+      return [
+        "text-slate-500 dark:text-slate-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-slate-600 dark:group-hover:text-slate-300",
+      ];
+  }
+};
+
+export interface ResourceIconProps extends React.SVGProps<SVGSVGElement> {
+  resourceType: ResourceSchema["type"];
+  darkenOnGroupHover?: boolean;
 }
+
+export const ResourceIcon = ({
+  resourceType,
+  darkenOnGroupHover,
+  className,
+  ...props
+}: ResourceIconProps) => {
+  const Component = getResourceIconComponent(resourceType);
+  const colors = getResourceIconColors({ resourceType, darkenOnGroupHover });
+  return <Component className={classNames(className, colors)} {...props} />;
+};
