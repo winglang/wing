@@ -17,7 +17,7 @@ is what I see...
 
 # The Wing Programming Language
 
-> Wing is currently in private beta and can only used by invited users. Please
+> Wing is currently in private beta and can only be used by invited users. Please
 > avoid sharing any information about Wing with anyone outside of the beta
 > program.
 
@@ -176,7 +176,7 @@ Now that you've written your first Wing program, what's next? Here are some
 resources to help you get started:
 
 - [Wing Language Specification](./docs/winglang-spec.md)
-- [Wing SDK Reference](./docs/winglang-sdk-api.md)
+- [Wing SDK Reference](./docs/wingsdk-api.md)
 
 ## Staying up to date
 
@@ -184,7 +184,7 @@ The entire Wing toolchain is continuously released. We follow [semantic
 versioning](https://semver.org/) and release notes are available in the
 [Releases](https://github.com/monadahq/winglang/releases) pages on GitHub.
 
-To update to toolchain to the latest, run the following command:
+To update the toolchain to the latest, run the following command:
 
 ```sh
 $ npm update -g @monadahq/wing
@@ -217,7 +217,7 @@ and contributors to the project.
 
 As such, our focus for this sprint is:
 
-- Consolidate everything related to Wing into a the [monadahq/winglang](github.com/monadahq/winglang/) GitHub repo. This includes:
+- Consolidate everything related to Wing into the [monadahq/winglang](github.com/monadahq/winglang/) GitHub repo. This includes:
   - The [Wing SDK](github.com/monadahq/wingsdk)
   - The [language spec](https://github.com/monadahq/winglang-spec) - should go under `docs/winglang-spec.md`
   - The [language requirements RFC](https://github.com/monadahq/rfcs/blob/main/0044-winglang-requirements.md) - 
