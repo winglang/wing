@@ -1,4 +1,11 @@
-import { EndpointSchema, ResourceSchema } from "@monadahq/wing-local-schema";
+import {
+  EndpointSchema,
+  FunctionSchema,
+  ResourceSchema,
+} from "@monadahq/wing-local-schema";
+import { useState } from "react";
+
+import { trpc } from "@/utils/trpc";
 
 export interface NodeInteractionViewProps {
   node: ResourceSchema;
@@ -8,18 +15,18 @@ export function NodeInteractionView({ node }: NodeInteractionViewProps) {
   switch (node.type) {
     case "cloud.Endpoint":
       return <EndpointInteractionView node={node} />;
+    case "cloud.Function":
+      return <FunctionInteractionView node={node} />;
     default:
       return <div>Node Type [{node.type}] not implemented yet.</div>;
   }
 }
 
-export interface EndpointInteractionViewProps {
+interface EndpointInteractionViewProps {
   node: EndpointSchema;
 }
 
-export function EndpointInteractionView({
-  node,
-}: EndpointInteractionViewProps) {
+function EndpointInteractionView({ node }: EndpointInteractionViewProps) {
   return (
     <form
       method="POST"
@@ -134,6 +141,76 @@ export function EndpointInteractionView({
                   message: "ok",
                 })}
               </code>
+            </pre>
+          </div>
+        </div>
+      </div>
+    </form>
+  );
+}
+
+interface FunctionInteractionViewProps {
+  node: FunctionSchema;
+}
+
+function FunctionInteractionView({ node }: FunctionInteractionViewProps) {
+  const invoke = trpc.useMutation("function.Invoke");
+  const [input, setInput] = useState("");
+  return (
+    <form
+      method="POST"
+      onSubmit={(event) => {
+        event.preventDefault();
+        invoke.mutate({
+          input,
+          resourceId: node.path,
+        });
+        setInput("");
+      }}
+    >
+      <div className="shadow sm:overflow-hidden sm:rounded-md">
+        <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+          <div>
+            <label
+              htmlFor="payload"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Payload
+            </label>
+            <div className="mt-1">
+              <textarea
+                rows={4}
+                name="payload"
+                id="payload"
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                value={input}
+                onInput={(event) => setInput(event.currentTarget.value)}
+              />
+            </div>
+          </div>
+
+          <div className="flex gap-4 items-end">
+            <div>
+              <button
+                type="submit"
+                className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div className="space-y-6 bg-gray-100 px-4 py-5 sm:p-6">
+          <div>
+            <span className="block text-sm font-medium text-gray-500">
+              Response
+            </span>
+          </div>
+
+          <div>
+            <pre className="text-sm">
+              <code>{JSON.stringify(invoke.error ?? invoke.data)}</code>
             </pre>
           </div>
         </div>
