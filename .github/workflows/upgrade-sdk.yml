@@ -40,8 +40,8 @@ jobs:
         name: Upload patch
         uses: actions/upload-artifact@v2
         with:
-          name: .repo.patch
-          path: .repo.patch
+          name: libs/wingsdk/.repo.patch
+          path: libs/wingsdk/.repo.patch
   pr:
     name: Create Pull Request
     needs: upgrade
@@ -65,7 +65,7 @@ jobs:
       - name: Download patch
         uses: actions/download-artifact@v3
         with:
-          name: .repo.patch
+          name: libs/wingsdk/.repo.patch
           path: ${{ runner.temp }}
       - name: Apply patch
         run: '[ -s ${{ runner.temp }}/.repo.patch ] && git apply ${{ runner.temp }}/.repo.patch || echo "Empty patch. Skipping."'
