@@ -22,6 +22,21 @@ jobs:
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
         env:
           PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Codesign executable
+        run: |-
+          echo $CSC_LINK | base64 --decode > $HOME/certificate.p12 
+          security create-keychain -p $CSC_KEY_PASSWORD build.keychain 
+          security default-keychain -s build.keychain 
+          security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain 
+          security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign 
+          security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain
+        env:
+          CSC_LINK: ${{ secrets.CSC_LINK }}
+          CSC_KEY_PASSWORD: ${{ secrets.CSC_KEY_PASSWORD }}
+      - name: set GH_TOKEN
+        run: echo 'GH_TOKEN=${{ secrets.PROJEN_GITHUB_TOKEN }}' >> $GITHUB_ENV
+        env:
+          GH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
       - name: Install dependencies
         run: npm ci
       - name: Upgrade dependencies

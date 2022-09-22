@@ -2,8 +2,8 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  appId: 'YourAppID',
-  productName: 'YourAppName',
+  appId: 'co.monada.wingConsole',
+  productName: 'WingConsole',
   copyright: 'Copyright © 2022 Monada',
   asar: true,
   directories: {
@@ -18,7 +18,7 @@
         arch: ['x64'],
       },
     ],
-    artifactName: '${productName}-Windows-${version}-Setup.${ext}',
+    artifactName: '${productName}-${version}-Setup.${ext}',
   },
   nsis: {
     oneClick: false,
@@ -28,7 +28,10 @@
   },
   mac: {
     target: ['dmg'],
-    artifactName: '${productName}-Mac-${version}-Installer.${ext}',
+    artifactName: '${productName}-${version}.${ext}',
+  },
+  dmg: {
+    sign: true,
   },
   linux: {
     target: ['AppImage'],

@@ -45,15 +45,43 @@ const project = new TypeScriptProject({
     "react-draggable",
   ],
   // @ts-ignore
+  workflowRunsOn: ["macos-latest"],
+  // @ts-ignore
   workflowGitIdentity: {
     name: "monabot",
     email: "monabot@monada.co",
   },
+  workflowBootstrapSteps: [
+    ...TypeScriptProject.setupSteps(),
+    {
+      name: "Codesign executable",
+      run:
+        "echo $CSC_LINK | base64 --decode > $HOME/certificate.p12 \n" +
+        "security create-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
+        "security default-keychain -s build.keychain \n" +
+        "security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
+        "security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign \n" +
+        "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain",
+      env: {
+        CSC_LINK: "${{ secrets.CSC_LINK }}",
+        CSC_KEY_PASSWORD: "${{ secrets.CSC_KEY_PASSWORD }}",
+      },
+    },
+    {
+      name: "set GH_TOKEN",
+      run: "echo 'GH_TOKEN=${{ secrets.PROJEN_GITHUB_TOKEN }}' >> $GITHUB_ENV",
+      env: {
+        GH_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
+      },
+    },
+  ],
 });
-
 project.addTask("dev").exec("vite");
 project.compileTask.exec("vite build");
-// project.compileTask.exec("electron-builder --publish=never");
+// TODO: track https://github.com/electron-userland/electron-builder/issues/6411
+project.compileTask.exec(
+  "npm exec electron-builder --publish=never --config=electron-builder.json5",
+);
 project.addTask("storybook").exec("start-storybook -p 6006");
 project.addTask("build-storybook").exec("build-storybook");
 project.tasks.tryFind("package")?.reset();
