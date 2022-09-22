@@ -55,6 +55,7 @@ const project = new cdk.JsiiProject({
       },
     },
   ],
+  github: false,
   projenrcTs: true,
 });
 
@@ -83,28 +84,6 @@ project.addTask("sandbox:deploy", {
 project.addTask("sandbox:destroy", {
   exec: "cdktf destroy",
   cwd: sandboxDir,
-});
-
-// fix publishing steps so they can also install private dependencies
-// so so hacky :/
-const releaseWorkflow = project.tryFindObjectFile(
-  ".github/workflows/release.yml"
-);
-releaseWorkflow!.addOverride(
-  "jobs.release_npm.steps.2.run",
-  "mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN"
-);
-releaseWorkflow!.addOverride("jobs.release_npm.steps.2.env", {
-  PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
-});
-
-const buildWorkflow = project.tryFindObjectFile(".github/workflows/build.yml");
-buildWorkflow!.addOverride(
-  "jobs.package-js.steps.2.run",
-  "mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN"
-);
-buildWorkflow!.addOverride("jobs.package-js.steps.2.env", {
-  PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
 });
 
 // Set up the project so that:
