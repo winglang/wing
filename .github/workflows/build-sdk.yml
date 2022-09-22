@@ -46,7 +46,7 @@ jobs:
         name: Upload patch
         uses: actions/upload-artifact@v2
         with:
-          name: libs/wingsdk/.repo.patch
+          name: .repo.patch
           path: libs/wingsdk/.repo.patch
 
       - name: Fail build on mutation
@@ -58,7 +58,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v2.1.1
         with:
-          name: libs/wingsdk/build-artifact
+          name: build-artifact
           path: libs/wingsdk/dist
   self-mutation:
     needs: build
@@ -107,7 +107,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
-          name: libs/wingsdk/build-artifact
+          name: build-artifact
           path: libs/wingsdk/dist
       - name: Prepare Repository
         run: mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN

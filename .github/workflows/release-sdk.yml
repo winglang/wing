@@ -49,7 +49,7 @@ jobs:
         if: ${{ steps.git_remote.outputs.latest_commit == github.sha }}
         uses: actions/upload-artifact@v2.1.1
         with:
-          name: libs/wingsdk/build-artifact
+          name: build-artifact
           path: libs/wingsdk/dist
   release_github:
     name: Publish to GitHub Releases
@@ -65,7 +65,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
-          name: lib/wingsdk/build-artifact
+          name: build-artifact
           path: lib/wingsdk/dist
       - name: Prepare Repository
         run: mv dist .repo
@@ -92,7 +92,7 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v3
         with:
-          name: libs/wingsdk/build-artifact
+          name: build-artifact
           path: libs/wingsdk/dist
       - name: Prepare Repository
         run: mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
