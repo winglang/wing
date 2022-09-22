@@ -54,7 +54,7 @@ export interface VSCodeDebugger {
 }
 
 export interface VSCodeGrammar {
-  readonly language: string;
+  readonly language?: string;
   readonly scopeName: string;
   readonly path: string;
   readonly injectTo?: string[];

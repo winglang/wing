@@ -77,7 +77,6 @@ const contributes: VSCodeExtensionContributions = {
     },
     {
       // https://github.com/mjbvz/vscode-fenced-code-block-grammar-injection-example
-      language: "wing",
       scopeName: "markdown.wing.codeblock",
       path: "syntaxes/codeblock.json",
       injectTo: ["text.html.markdown"],

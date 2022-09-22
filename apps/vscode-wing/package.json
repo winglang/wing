@@ -95,7 +95,6 @@
         "path": "syntaxes/wing.tmLanguage.json"
       },
       {
-        "language": "wing",
         "scopeName": "markdown.wing.codeblock",
         "path": "syntaxes/codeblock.json",
         "injectTo": [
