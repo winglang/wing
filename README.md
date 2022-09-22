@@ -140,3 +140,10 @@ Examples of Wing code are located in the [examples](./examples) directory.
 ## License
 
 TBD
+
+
+```wing
+bring cloud;
+
+
+```
