@@ -109,21 +109,39 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
           <ResourceIcon resourceType={currentNode.type} className="w-4 h-4" />
         ),
       },
-      children: currentNode.children.map((childPath) => {
-        const childNode = nodeMap?.find(childPath);
-        if (!childNode) {
-          throw new Error(`Node [${childPath}] doesn't exist`);
+      children: currentNode.children.map((path) => {
+        const node = nodeMap?.find(path);
+        if (!node) {
+          throw new Error(`Node [${path}] doesn't exist`);
         }
         return {
-          id: childNode.id,
-          path: childNode.path,
-          icon: (
-            <ResourceIcon resourceType={childNode.type} className="w-4 h-4" />
-          ),
+          id: node.id,
+          path: node.path,
+          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
         };
       }),
-      callees: [],
-      callers: [],
+      callees: currentNode.callees.map((path) => {
+        const node = nodeMap?.find(path);
+        if (!node) {
+          throw new Error(`Node [${path}] doesn't exist`);
+        }
+        return {
+          id: node.id,
+          path: node.path,
+          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
+        };
+      }),
+      callers: currentNode.callers.map((path) => {
+        const node = nodeMap?.find(path);
+        if (!node) {
+          throw new Error(`Node [${path}] doesn't exist`);
+        }
+        return {
+          id: node.id,
+          path: node.path,
+          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
+        };
+      }),
     };
     return relationships;
   }, [currentNode]);
@@ -198,6 +216,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
                       <div className="flex-grow-0 flex-shrink-0 max-w-lg w-full">
                         {relationships && (
                           <NodeRelationshipsView
+                            key={currentNode?.path}
                             relationships={relationships}
                             onNodeClick={(path) => {
                               treeMenu.expand(path);

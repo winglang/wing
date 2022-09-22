@@ -9,6 +9,8 @@ export interface Node {
   constructInfo?: Record<string, string>;
   attributes?: Record<string, any>;
   children: string[];
+  callers: string[];
+  callees: string[];
   schema: ResourceSchema;
 }
 
@@ -66,6 +68,8 @@ export function buildNodeMap(schema: ResourceSchema) {
           ? Object.values(node.children ?? {}).map((child) => child.path)
           : [],
       attributes: node.props ?? {},
+      callees: node.callees ?? [],
+      callers: node.callers ?? [],
       schema: node,
     };
 
