@@ -1,5 +1,6 @@
 use std::fmt::{Debug, Display};
 
+use colored::Colorize;
 use derivative::Derivative;
 use serde_json::Value;
 use wingii::jsii;
@@ -11,7 +12,6 @@ use crate::type_env::TypeEnv;
 #[derive(Debug)]
 pub enum Type {
 	Anything,
-	Nothing,
 	Number,
 	String,
 	Duration,
@@ -111,7 +111,6 @@ impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			Type::Anything => write!(f, "anything"),
-			Type::Nothing => write!(f, "nothing"),
 			Type::Number => write!(f, "number"),
 			Type::String => write!(f, "string"),
 			Type::Duration => write!(f, "duration"),
@@ -682,8 +681,6 @@ impl<'a> TypeChecker<'a> {
 							env: namespace_env,
 						}));
 						env.define(module_name, namespace);
-
-						println!("Loaded assembly: {}", assembly.name);
 					}
 				}
 			}
@@ -911,7 +908,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		let jsii_class = jsii_types.find_class(&fqn);
-		if jsii_class.is_none() {
+		if jsii_class.is_none() || jsii_class.as_ref().unwrap().kind != "class" {
 			println!(
 				"Type {} is not a class in the JSII assembly {}",
 				fqn, jsii_assembly.name
@@ -922,7 +919,7 @@ impl<'a> TypeChecker<'a> {
 		let mut is_resource = false;
 
 		// Get the base class of the JSII class
-		let base_class = if let Some(base_class_name) = jsii_class.base {
+		let base_class = if let Some(base_class_name) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
 			if base_class_name == RESOURCE_CLASS_FQN {
 				println!("Hack: no need to define base class {}", base_class_name);
@@ -957,42 +954,35 @@ impl<'a> TypeChecker<'a> {
 		};
 		println!("got here! we can define {}", type_name);
 
-		// Create class's environment
-		let mut class_env = TypeEnv::new(Some(env), None, true, env.flight);
-
-		// Add methods to the class environment
-		if let Some(methods) = jsii_class.methods {
-			for m in methods {
-				if let Some(jsii_return_type) = m.returns {
-					//env.try_lookup(jsii_return_type.)
-					println!("Found method {} with return type {:?}", m.name, jsii_return_type);
-				} else {
-					println!("Method {} has no return type", m.name);
-					//None
-				}
-				// self.types.add_type(Type::Function(FunctionSignature { args: (), return_type: (), flight: env.flight }));
-				// env.define(m.name, type)
-			}
-		}
-		// Add properties to the class environment
-		if let Some(properties) = jsii_class.properties {
-			for p in properties {
-				println!("Found property {} with type {:?}", p.name, p.type_);
-				class_env.define(
-					&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
-					self.jsii_type_ref_to_wing_type(&p.type_),
-				);
-			}
-		}
-		println!("Finally adding type {}", type_name);
-		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
-
 		// If our base class is a resource then we are a resource
 		if let Some(base_class) = base_class {
 			is_resource = base_class.as_resource().is_some();
 		}
 
+		// Create class's environment
+		let mut class_env = TypeEnv::new(Some(env), None, true, env.flight);
+
+		// Add methods and properties to the class environment
+		self.add_jsii_interface_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env);
+		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
+
 		let new_type = if is_resource {
+			// Look for a client interface for this resource
+			let client_interface = jsii_types.find_interface(&format!("{}I{}Client", prefix, type_name));
+			if let Some(client_interface) = client_interface {
+				if client_interface.kind == "interface" {
+					// Add client interface's methods to the class environment
+					self.add_jsii_interface_members_to_class_env(&client_interface, false, Flight::In, &mut class_env);
+				} else {
+					println!(
+						"Hu?? {} is not an interface it's a {}",
+						client_interface.name, client_interface.kind
+					);
+				}
+			} else {
+				println!("Resource {} doesn't not seem to have a client", type_name.bold());
+			}
+
 			println!("{} is a resource", type_name);
 			Type::Resource(Class {
 				name: new_type_symbol.clone(),
@@ -1009,24 +999,94 @@ impl<'a> TypeChecker<'a> {
 		};
 
 		// Finally create a new type in the wing type system and define it in the module's namespace
+		println!("Finally adding type {}", type_name.bold());
 		let new_type = self.types.add_type(new_type);
 		env.define(&new_type_symbol, new_type);
 		Some(new_type)
 	}
 
-	fn jsii_type_ref_to_wing_type(&self, jsii_type_ref: &jsii::TypeReference) -> TypeRef {
+	fn add_jsii_interface_members_to_class_env<T: JsiiInterface>(
+		&mut self,
+		jsii_class: &T,
+		is_resource: bool,
+		flight: Flight,
+		class_env: &mut TypeEnv,
+	) {
+		assert!(!is_resource || flight == Flight::Pre);
+		if let Some(methods) = &jsii_class.methods() {
+			for m in methods {
+				// TODO: skip internal methods (for now we skip `capture` until we mark it as internal)
+				if is_resource && m.name == "capture" {
+					println!("Skipping capture method on resource");
+					continue;
+				}
+
+				println!("Adding method {} to class", m.name);
+
+				let return_type = if let Some(jsii_return_type) = &m.returns {
+					self.jsii_optional_type_to_wing_type(&jsii_return_type)
+				} else {
+					None
+				};
+
+				let mut arg_types = vec![];
+				if let Some(args) = &m.parameters {
+					for arg in args {
+						// TODO: handle arg.variadic and arg.optional
+						arg_types.push(self.jsii_type_ref_to_wing_type(&arg.type_).unwrap());
+					}
+				}
+
+				let method_sig = self.types.add_type(Type::Function(FunctionSignature {
+					args: arg_types,
+					return_type,
+					flight,
+				}));
+				class_env.define(&Self::jsii_name_to_symbol(&m.name, &m.location_in_module), method_sig)
+			}
+		}
+		// Add properties to the class environment
+		if let Some(properties) = &jsii_class.properties() {
+			for p in properties {
+				println!("Found property {} with type {:?}", p.name.bold(), p.type_);
+				if flight == Flight::In {
+					todo!("No support for inflight properties yet");
+				}
+				class_env.define(
+					&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
+					self.jsii_type_ref_to_wing_type(&p.type_).unwrap(),
+				);
+			}
+		}
+	}
+
+	fn jsii_optional_type_to_wing_type(&self, jsii_optional_type: &jsii::OptionalValue) -> Option<TypeRef> {
+		if let Some(true) = jsii_optional_type.optional {
+			// TODO: we assume Some(false) and None are both non-optional - verify!!
+			panic!("TODO: handle optional types");
+		}
+		self.jsii_type_ref_to_wing_type(&jsii_optional_type.type_)
+	}
+
+	fn jsii_type_ref_to_wing_type(&self, jsii_type_ref: &jsii::TypeReference) -> Option<TypeRef> {
 		if let serde_json::Value::Object(obj) = jsii_type_ref {
 			if let Some(Value::String(primitive_name)) = obj.get("primitive") {
 				match primitive_name.as_str() {
-					"string" => self.types.string(),
-					"number" => self.types.number(),
-					"boolean" => self.types.bool(),
-					"any" => self.types.anything(),
+					"string" => Some(self.types.string()),
+					"number" => Some(self.types.number()),
+					"boolean" => Some(self.types.bool()),
+					"any" => Some(self.types.anything()),
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
-			} else if let Some(Value::Object(o)) = obj.get("collection") {
+			} else if let Some(Value::String(s)) = obj.get("fqn") {
+				if s == "@monadahq/wingsdk.cloud.Void" {
+					None
+				} else {
+					panic!("TODO: handle non-primitive type {:?}", jsii_type_ref);
+				}
+			} else if let Some(Value::Object(_)) = obj.get("collection") {
 				// TODO: handle JSII to Wing collection type conversion, for now return any
-				self.types.anything()
+				Some(self.types.anything())
 			} else {
 				panic!("TODO: handle non-primitive type {:?}", jsii_type_ref);
 			}
@@ -1063,5 +1123,28 @@ impl<'a> TypeChecker<'a> {
 			name: name.to_string(),
 			span,
 		}
+	}
+}
+
+trait JsiiInterface {
+	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
+	fn properties<'a>(&'a self) -> &'a Option<Vec<jsii::Property>>;
+}
+
+impl JsiiInterface for jsii::ClassType {
+	fn methods(&self) -> &Option<Vec<jsii::Method>> {
+		&self.methods
+	}
+	fn properties(&self) -> &Option<Vec<jsii::Property>> {
+		&self.properties
+	}
+}
+
+impl JsiiInterface for jsii::InterfaceType {
+	fn methods(&self) -> &Option<Vec<jsii::Method>> {
+		&self.methods
+	}
+	fn properties(&self) -> &Option<Vec<jsii::Property>> {
+		&self.properties
 	}
 }
