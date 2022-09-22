@@ -1,12 +1,8 @@
-import {
-  ChevronDownIcon,
-  ChevronRightIcon,
-  MinusSmallIcon,
-  PlusSmallIcon,
-  Square2StackIcon,
-} from "@heroicons/react/24/outline";
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import React from "react";
+
+import { Square2StackMinusIcon, Square2StackPlusIcon } from "./icons";
 
 export interface TreeMenuItem {
   id: string;
@@ -44,52 +40,31 @@ export const TreeMenu = ({
 
         <div className="flex items-center">
           <button
-            className="p-0.5 hover:bg-slate-200 rounded relative group"
+            className="p-0.5 hover:bg-slate-200 rounded group"
             onClick={onExpandAll}
             title="Expand All"
           >
-            <Square2StackIcon
+            <Square2StackPlusIcon
               className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
               aria-hidden="true"
             />
-            <div
-              className="absolute inset-0"
-              style={{ left: "4.5px", top: "8px" }}
-            >
-              <PlusSmallIcon
-                className="w-2 h-2 text-slate-600 group-hover:text-slate-700"
-                aria-hidden="true"
-              />
-            </div>
           </button>
 
           <button
-            className="p-0.5 hover:bg-slate-200 rounded relative group"
+            className="p-0.5 hover:bg-slate-200 rounded group"
             onClick={onCollapseAll}
             title="Collapse All"
           >
-            <Square2StackIcon
+            <Square2StackMinusIcon
               className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
               aria-hidden="true"
             />
-            <div
-              className="absolute inset-0"
-              style={{ left: "4.5px", top: "8px" }}
-            >
-              <MinusSmallIcon
-                className="w-2 h-2 text-slate-600 group-hover:text-slate-700"
-                aria-hidden="true"
-              />
-            </div>
           </button>
         </div>
       </div>
       <div className="relative h-full">
         <div className="absolute inset-0">
           <div className="h-full w-full text-sm text-slate-800 bg-slate-100 flex flex-col gap-1 overflow-y-overlay scroller transition-colors ease-in-out duration-700 border-transparent scrollbar-w-2.5 hover:border-slate-500/10 hover:duration-700">
-            {/* <div className="px-4 flex items-center">
-              <span className="uppercase text-sm font-semibold">{title}</span>
-            </div> */}
             <div className="flex flex-col">
               <MenuItems
                 items={items}
