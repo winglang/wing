@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bucket is public 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_s3_bucket\\": {
+      \\"Bucket\\": {
+      }
+    },
+    \\"aws_s3_bucket_policy\\": {
+      \\"Bucket_PublicPolicy_9F2BCFC1\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.Bucket.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"Bucket_Encryption_016FDA0C\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    }
+  }
+}"
+`;
+
+exports[`default bucket behavior 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_s3_bucket\\": {
+      \\"Bucket\\": {
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"Bucket_PublicAccessBlock_A34F3B5C\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"Bucket_Encryption_016FDA0C\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    }
+  }
+}"
+`;
