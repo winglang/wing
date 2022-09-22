@@ -1,0 +1,101 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`default queue behavior 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_sqs_queue\\": {
+      \\"Queue\\": {
+      }
+    }
+  }
+}"
+`;
+
+exports[`queue with a consumer function 1`] = `
+"const $cap = {};
+async function $proc($cap, event) {
+          console.log(\\"Received \\" + event.name);
+        }
+async function $sqsEventWrapper($cap, event) {
+  for (const record of event.Records ?? []) {
+    await $proc($cap, JSON.parse(record.body));
+  }
+}
+exports.handler = async function(event) {
+  return await $sqsEventWrapper($cap, event);
+};"
+`;
+
+exports[`queue with a consumer function 2`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"Queue_OnMessage-03929de99b90eb35_IamRolePolicy_7DC3626C\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.Queue.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"Queue_OnMessage-03929de99b90eb35_IamRolePolicyAttachment_464849B7\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17.name}\\"
+      }
+    },
+    \\"aws_lambda_event_source_mapping\\": {
+      \\"Queue_EventSourceMapping_8332F7DC\\": {
+        \\"batch_size\\": 1,
+        \\"event_source_arn\\": \\"\${aws_sqs_queue.Queue.arn}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.Queue_OnMessage-03929de99b90eb35_BF6B4C38.function_name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"Queue_OnMessage-03929de99b90eb35_BF6B4C38\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"OnMessage-03929de99b90eb35\\"
+          }
+        },
+        \\"function_name\\": \\"OnMessage-03929de99b90eb35\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Queue_OnMessage-03929de99b90eb35_Bucket_9A1D57A7.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Queue_OnMessage-03929de99b90eb35_S3Object_3C4534CC.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Queue_OnMessage-03929de99b90eb35_Bucket_9A1D57A7\\": {
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"Queue_OnMessage-03929de99b90eb35_S3Object_3C4534CC\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Queue_OnMessage-03929de99b90eb35_Bucket_9A1D57A7.bucket}\\",
+        \\"key\\": \\"asset.c89d6457819e68ac65c1a63faccb1bece3caa7f692.0feadeec255c9dc15348d0846bfdb0b5.zip\\",
+        \\"source\\": \\"assets/Queue_OnMessage-03929de99b90eb35_Asset_B9A60CF7/0FEADEEC255C9DC15348D0846BFDB0B5/archive.zip\\"
+      }
+    },
+    \\"aws_sqs_queue\\": {
+      \\"Queue\\": {
+        \\"visibility_timeout_seconds\\": 30
+      }
+    }
+  }
+}"
+`;
+
+exports[`queue with custom timeout 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_sqs_queue\\": {
+      \\"Queue\\": {
+        \\"visibility_timeout_seconds\\": 30
+      }
+    }
+  }
+}"
+`;
