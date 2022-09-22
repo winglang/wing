@@ -53,8 +53,28 @@ mod tests {
 			.join("constructs");
 		let name = type_system.load(fixture_path.to_str().unwrap()).unwrap();
 		assert_eq!(name, "constructs");
-		let assembly = type_system.get_assembly(name).unwrap();
+		let assembly = type_system.find_assembly(&name).unwrap();
 		assert_eq!(assembly.name, "constructs");
+	}
+
+	#[test]
+	fn can_query_basic_types() {
+		let mut type_system = TypeSystem::new();
+		let fixture_path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+			.join("src")
+			.join("fixtures")
+			.join("constructs");
+		let name = type_system.load(fixture_path.to_str().unwrap()).unwrap();
+		assert_eq!(name, "constructs");
+		// find class with fqn "constructs.Construct"
+		let construct = type_system.find_class("constructs.Construct").unwrap();
+		assert_eq!(construct.name, "Construct");
+		// find enum with fqn "constructs.ConstructOrder"
+		let construct_order = type_system.find_enum("constructs.ConstructOrder").unwrap();
+		assert_eq!(construct_order.name, "ConstructOrder");
+		// find interface with fqn "constructs.IConstruct"
+		let i_construct = type_system.find_interface("constructs.IConstruct").unwrap();
+		assert_eq!(i_construct.name, "IConstruct");
 	}
 }
 
