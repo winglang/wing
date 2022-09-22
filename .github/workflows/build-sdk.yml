@@ -30,7 +30,6 @@ jobs:
           node-version: 16.x
       - name: Install dependencies
         run: npm install
-        cwd
       - name: build
         run: npx projen build
       - name: Upload coverage to Codecov
