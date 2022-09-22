@@ -10,6 +10,10 @@
       "type": "build"
     },
     {
+      "name": "@types/aws-lambda",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "version": "^27.0.0",
       "type": "build"
@@ -142,6 +146,10 @@
     },
     {
       "name": "@aws-sdk/client-s3",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/client-sqs",
       "type": "bundled"
     },
     {

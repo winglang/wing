@@ -11,7 +11,10 @@ export abstract class Resource extends Construct implements ICapturable {
    * with a fresh copy without any consequences.
    */
   public abstract readonly stateful: boolean;
-  public abstract capture(
+  /**
+   * @internal
+   */
+  public abstract _capture(
     captureScope: IConstruct,
     metadata: CaptureMetadata
   ): Code;

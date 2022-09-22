@@ -262,7 +262,6 @@ new cloud.Bucket(scope: Construct, id: string, props?: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -273,26 +272,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Bucket.capture"></a>
-
-```typescript
-public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.cloud.Bucket.capture.parameter._metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -360,6 +339,8 @@ with a fresh copy without any consequences.
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.sim.Bucket"></a>
 
+- *Implements:* @monadahq/wingsdk.sim.IResource
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Bucket.Initializer"></a>
 
 ```typescript
@@ -399,7 +380,6 @@ new sim.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -410,26 +390,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.sim.Bucket.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.sim.Bucket.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.sim.Bucket.capture.parameter._metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -536,7 +496,6 @@ new tfaws.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -547,26 +506,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.tfaws.Bucket.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.tfaws.Bucket.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.tfaws.Bucket.capture.parameter.metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -675,7 +614,6 @@ new cloud.BucketBase(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -686,26 +624,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.BucketBase.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.BucketBase.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.BucketBase.capture.parameter.metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -950,7 +868,6 @@ new cloud.Function(scope: Construct, id: string, inflight: Inflight, props?: Fun
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -961,26 +878,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Function.capture"></a>
-
-```typescript
-public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `_captureScope`<sup>Required</sup> <a name="_captureScope" id="@monadahq/wingsdk.cloud.Function.capture.parameter._captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.cloud.Function.capture.parameter._metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -1096,7 +993,6 @@ new sim.Function(scope: Construct, id: string, inflight: Inflight, props: Functi
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.Function.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 | <code><a href="#@monadahq/wingsdk.sim.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
 
 ---
@@ -1108,26 +1004,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.sim.Function.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.sim.Function.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `_metadata`<sup>Required</sup> <a name="_metadata" id="@monadahq/wingsdk.sim.Function.capture.parameter._metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 ##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.sim.Function.addEnvironment"></a>
 
@@ -1259,7 +1135,6 @@ new tfaws.Function(scope: Construct, id: string, inflight: Inflight, props: Func
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | *No description.* |
 
@@ -1272,26 +1147,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.tfaws.Function.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.tfaws.Function.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.tfaws.Function.capture.parameter.metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 ##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.tfaws.Function.addEnvironment"></a>
 
@@ -1437,7 +1292,6 @@ new cloud.FunctionBase(scope: Construct, id: string, inflight: Inflight, props: 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -1448,26 +1302,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.FunctionBase.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.FunctionBase.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.FunctionBase.capture.parameter.metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -1663,6 +1497,560 @@ public readonly filePath: string;
 ---
 
 
+### Queue <a name="Queue" id="@monadahq/wingsdk.cloud.Queue"></a>
+
+Represents a serverless queue.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Queue.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+new cloud.Queue(scope: Construct, id: string, props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Queue.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.cloud.Queue.onMessage"></a>
+
+```typescript
+public onMessage(_inflight: Inflight, _props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `_inflight`<sup>Required</sup> <a name="_inflight" id="@monadahq/wingsdk.cloud.Queue.onMessage.parameter._inflight"></a>
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
+###### `_props`<sup>Optional</sup> <a name="_props" id="@monadahq/wingsdk.cloud.Queue.onMessage.parameter._props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Queue.isConstruct"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+cloud.Queue.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Queue.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Queue.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Queue.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### Queue <a name="Queue" id="@monadahq/wingsdk.sim.Queue"></a>
+
+- *Implements:* @monadahq/wingsdk.sim.IResource
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Queue.Initializer"></a>
+
+```typescript
+import { sim } from '@monadahq/wingsdk'
+
+new sim.Queue(scope: Construct, id: string, props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.sim.Queue.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.sim.Queue.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.sim.Queue.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.sim.Queue.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.sim.Queue.onMessage"></a>
+
+```typescript
+public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.sim.Queue.onMessage.parameter.inflight"></a>
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.sim.Queue.onMessage.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.sim.Queue.isConstruct"></a>
+
+```typescript
+import { sim } from '@monadahq/wingsdk'
+
+sim.Queue.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.sim.Queue.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.sim.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.sim.Queue.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.sim.Queue.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### Queue <a name="Queue" id="@monadahq/wingsdk.tfaws.Queue"></a>
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Queue.Initializer"></a>
+
+```typescript
+import { tfaws } from '@monadahq/wingsdk'
+
+new tfaws.Queue(scope: Construct, id: string, props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.tfaws.Queue.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.tfaws.Queue.onMessage"></a>
+
+```typescript
+public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.tfaws.Queue.onMessage.parameter.inflight"></a>
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Queue.onMessage.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.tfaws.Queue.isConstruct"></a>
+
+```typescript
+import { tfaws } from '@monadahq/wingsdk'
+
+tfaws.Queue.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.tfaws.Queue.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.tfaws.Queue.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.tfaws.Queue.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### QueueBase <a name="QueueBase" id="@monadahq/wingsdk.cloud.QueueBase"></a>
+
+Functionality shared between all `Queue` implementations.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.QueueBase.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+new cloud.QueueBase(scope: Construct, id: string, props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.QueueBase.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.cloud.QueueBase.onMessage"></a>
+
+```typescript
+public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.QueueBase.onMessage.parameter.inflight"></a>
+
+- *Type:* @monadahq/wingsdk.core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.QueueBase.onMessage.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.QueueBase.isConstruct"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+cloud.QueueBase.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.QueueBase.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.QueueBase.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.QueueBase.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ### Resource <a name="Resource" id="@monadahq/wingsdk.cloud.Resource"></a>
 
 - *Implements:* @monadahq/wingsdk.core.ICapturable
@@ -1707,7 +2095,6 @@ dash `--`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Resource.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
 
 ---
 
@@ -1718,26 +2105,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.cloud.Resource.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.cloud.Resource.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.cloud.Resource.capture.parameter.metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -2344,7 +2711,7 @@ const policyStatement: tfaws.PolicyStatement = { ... }
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.action">action</a></code> | <code>string[]</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.effect">effect</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.resource">resource</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.resource">resource</a></code> | <code>string \| string[]</code> | *No description.* |
 
 ---
 
@@ -2371,10 +2738,90 @@ public readonly effect: string;
 ##### `resource`<sup>Optional</sup> <a name="resource" id="@monadahq/wingsdk.tfaws.PolicyStatement.property.resource"></a>
 
 ```typescript
-public readonly resource: string[];
+public readonly resource: string | string[];
 ```
 
-- *Type:* string[]
+- *Type:* string | string[]
+
+---
+
+### QueueOnMessageProps <a name="QueueOnMessageProps" id="@monadahq/wingsdk.cloud.QueueOnMessageProps"></a>
+
+Options for Queue.onMessage.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.QueueOnMessageProps.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const queueOnMessageProps: cloud.QueueOnMessageProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueOnMessageProps.property.batchSize">batchSize</a></code> | <code>number</code> | The maximum number of messages to send to subscribers at once. |
+
+---
+
+##### `env`<sup>Optional</sup> <a name="env" id="@monadahq/wingsdk.cloud.QueueOnMessageProps.property.env"></a>
+
+```typescript
+public readonly env: {[ key: string ]: string};
+```
+
+- *Type:* {[ key: string ]: string}
+- *Default:* No environment variables.
+
+Environment variables to pass to the function.
+
+---
+
+##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@monadahq/wingsdk.cloud.QueueOnMessageProps.property.batchSize"></a>
+
+```typescript
+public readonly batchSize: number;
+```
+
+- *Type:* number
+- *Default:* 1
+
+The maximum number of messages to send to subscribers at once.
+
+---
+
+### QueueProps <a name="QueueProps" id="@monadahq/wingsdk.cloud.QueueProps"></a>
+
+Properties for `Queue`.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.QueueProps.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const queueProps: cloud.QueueProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>@monadahq/wingsdk.core.Duration</code> | How long a queue's consumers have to process a message. |
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@monadahq/wingsdk.cloud.QueueProps.property.timeout"></a>
+
+```typescript
+public readonly timeout: Duration;
+```
+
+- *Type:* @monadahq/wingsdk.core.Duration
+- *Default:* Duration.fromSeconds(10)
+
+How long a queue's consumers have to process a message.
 
 ---
 
@@ -2536,9 +2983,22 @@ new core.Code()
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Code.property.hash">hash</a></code> | <code>string</code> | Generate a hash of the code contents. |
 | <code><a href="#@monadahq/wingsdk.core.Code.property.language">language</a></code> | <code>@monadahq/wingsdk.core.Language</code> | The language of the code. |
 | <code><a href="#@monadahq/wingsdk.core.Code.property.path">path</a></code> | <code>string</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
 | <code><a href="#@monadahq/wingsdk.core.Code.property.text">text</a></code> | <code>string</code> | The code contents. |
+
+---
+
+##### `hash`<sup>Required</sup> <a name="hash" id="@monadahq/wingsdk.core.Code.property.hash"></a>
+
+```typescript
+public readonly hash: string;
+```
+
+- *Type:* string
+
+Generate a hash of the code contents.
 
 ---
 
@@ -2892,9 +3352,22 @@ Reference code directly from a string.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>string</code> | Generate a hash of the code contents. |
 | <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>@monadahq/wingsdk.core.Language</code> | The language of the code. |
 | <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>string</code> | *No description.* |
 | <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>string</code> | The code contents. |
+
+---
+
+##### `hash`<sup>Required</sup> <a name="hash" id="@monadahq/wingsdk.core.NodeJsCode.property.hash"></a>
+
+```typescript
+public readonly hash: string;
+```
+
+- *Type:* string
+
+Generate a hash of the code contents.
 
 ---
 
@@ -3377,37 +3850,10 @@ public put(key: string, body: string): Void
 
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.core.ICapturable
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable
 
 Represents something that is capturable by an Inflight.
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ICapturable.capture">capture</a></code> | Captures the resource so that it can be referenced inside an Inflight executed in the given scope. |
-
----
-
-##### `capture` <a name="capture" id="@monadahq/wingsdk.core.ICapturable.capture"></a>
-
-```typescript
-public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code
-```
-
-Captures the resource so that it can be referenced inside an Inflight executed in the given scope.
-
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.captureScope"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-###### `metadata`<sup>Required</sup> <a name="metadata" id="@monadahq/wingsdk.core.ICapturable.capture.parameter.metadata"></a>
-
-- *Type:* @monadahq/wingsdk.core.CaptureMetadata
-
----
 
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.cloud.IFunctionClient"></a>
@@ -3437,11 +3883,42 @@ public invoke(payload: string): string
 ---
 
 
+### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.cloud.IQueueClient"></a>
+
+- *Implemented By:* @monadahq/wingsdk.cloud.IQueueClient
+
+Inflight interface for `Queue`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
+
+---
+
+##### `push` <a name="push" id="@monadahq/wingsdk.cloud.IQueueClient.push"></a>
+
+```typescript
+public push(message: string): Void
+```
+
+Push a message to the queue.
+
+###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.IQueueClient.push.parameter.message"></a>
+
+- *Type:* string
+
+Payload to send to the queue.
+
+---
+
+
 ### IResource <a name="IResource" id="@monadahq/wingsdk.sim.IResource"></a>
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.IResource
+- *Implemented By:* @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.sim.IResource
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -3519,6 +3996,23 @@ The language of a piece of code.
 ---
 
 ##### `NODE_JS` <a name="NODE_JS" id="@monadahq/wingsdk.core.Language.NODE_JS"></a>
+
+---
+
+
+### QueueInflightMethods <a name="QueueInflightMethods" id="@monadahq/wingsdk.cloud.QueueInflightMethods"></a>
+
+List of inflight operations available for `Queue`.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH">PUSH</a></code> | *No description.* |
+
+---
+
+##### `PUSH` <a name="PUSH" id="@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
 
 ---
 

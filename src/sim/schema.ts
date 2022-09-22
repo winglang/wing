@@ -24,6 +24,8 @@ export interface BaseResourceSchema {
   readonly callees?: string[];
 }
 
+export type FunctionId = string;
+
 /** Schema for cloud.Function */
 export interface FunctionSchema extends BaseResourceSchema {
   readonly type: "cloud.Function";
@@ -47,7 +49,26 @@ export interface EndpointSchema extends BaseResourceSchema {
     /** The HTTP request path, such as "/users". */
     readonly requestPath: string;
     /** ID of the resource that should handle any requests sent to the endpoint. */
-    readonly targetId: string;
+    readonly targetId: FunctionId;
+  };
+}
+
+/** Schema for cloud.Queue.props.subscribers */
+export interface QueueSubscriber {
+  /** Function ID that should be called. */
+  readonly subscriberFunctionId: FunctionId;
+  /** Maximum number of messages that will be batched together to the subscriber. */
+  readonly batchSize: number;
+}
+
+/** Schema for cloud.Queue */
+export interface QueueSchema extends BaseResourceSchema {
+  readonly type: "cloud.Queue";
+  readonly props: {
+    /** How long a queue's consumers have to process a message, in milliseconds */
+    readonly timeout: number;
+    /** Function that should process queue messages. */
+    readonly subscribers: QueueSubscriber[];
   };
 }
 
@@ -72,5 +93,6 @@ export interface ConstructSchema extends BaseResourceSchema {
 export type ResourceSchema =
   | FunctionSchema
   | EndpointSchema
+  | QueueSchema
   | BucketSchema
   | ConstructSchema;

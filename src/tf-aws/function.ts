@@ -126,27 +126,26 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Create Lambda function
-    this.function = new aws.lambdafunction.LambdaFunction(
-      this,
-      "LambdaFunction",
-      {
-        functionName: this.node.id,
-        s3Bucket: bucket.bucket,
-        s3Key: lambdaArchive.key,
-        handler: "index.handler",
-        runtime: "nodejs16.x",
-        role: this.role.arn,
-        environment: {
-          variables: this.env,
-        },
-      }
-    );
+    this.function = new aws.lambdafunction.LambdaFunction(this, "Default", {
+      functionName: this.node.id,
+      s3Bucket: bucket.bucket,
+      s3Key: lambdaArchive.key,
+      handler: "index.handler",
+      runtime: "nodejs16.x",
+      role: this.role.arn,
+      environment: {
+        variables: this.env,
+      },
+    });
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
   }
 
-  public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+  /**
+   * @internal
+   */
+  public _capture(captureScope: IConstruct, metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
       throw new Error(
         "functions can only be captured by tfaws.Function for now"
@@ -186,10 +185,15 @@ export class Function extends cloud.FunctionBase {
       }))
     );
   }
+
+  /** @internal */
+  public get _functionName(): string {
+    return this.function.functionName;
+  }
 }
 
 export interface PolicyStatement {
   readonly action?: string[];
-  readonly resource?: string[];
+  readonly resource?: string[] | string;
   readonly effect?: string;
 }

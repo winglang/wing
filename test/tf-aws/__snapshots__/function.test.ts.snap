@@ -21,7 +21,7 @@ exports[`basic function 1`] = `
       }
     },
     \\"aws_lambda_function\\": {
-      \\"Function_LambdaFunction_27600CF9\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Function\\"
@@ -70,7 +70,7 @@ exports[`basic function with environment variables 1`] = `
       }
     },
     \\"aws_lambda_function\\": {
-      \\"Function_LambdaFunction_27600CF9\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"BOOM\\": \\"BAM\\",

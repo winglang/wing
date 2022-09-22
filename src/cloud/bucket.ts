@@ -44,7 +44,10 @@ export class Bucket extends BucketBase {
     return Polycons.newInstance(BUCKET_ID, scope, id, props) as Bucket;
   }
 
-  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  /**
+   * @internal
+   */
+  public _capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

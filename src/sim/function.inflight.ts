@@ -3,6 +3,7 @@ import { IFunctionClient } from "../cloud";
 
 export class FunctionClient implements IFunctionClient {
   private readonly client: Piscina;
+  private _timesCalled: number = 0;
 
   constructor(props: {
     sourceCodeFile: string;
@@ -20,9 +21,15 @@ export class FunctionClient implements IFunctionClient {
     });
   }
 
-  public async invoke(payload: any): Promise<any> {
-    return this.client.run(payload, {
+  public async invoke(payload: string): Promise<string> {
+    this._timesCalled += 1;
+    let result = await this.client.run(payload, {
       name: "handler",
     });
+    return result;
+  }
+
+  public get timesCalled() {
+    return this._timesCalled;
   }
 }

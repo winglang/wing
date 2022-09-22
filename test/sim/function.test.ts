@@ -2,21 +2,21 @@ import * as path from "path";
 import { FunctionClient } from "../../src/sim/function.inflight";
 import { init as initFunction } from "../../src/sim/function.sim";
 
+const SOURCE_CODE_FILE = path.join(__dirname, "fixtures", "greeter.js");
+const SOURCE_CODE_LANGUAGE = "javascript";
+
 test("invoke function", async () => {
   // GIVEN
-  const SOURCE_CODE_FILE = path.join(__dirname, "fixtures", "greeter.js");
-  const SOURCE_CODE_LANGUAGE = "javascript";
-  const ENVIRONMENT_VARIABLES = {};
-  const functionData = await initFunction({
+  await initFunction();
+  const client = new FunctionClient({
     sourceCodeFile: SOURCE_CODE_FILE,
     sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-    environmentVariables: ENVIRONMENT_VARIABLES,
+    environmentVariables: {},
   });
-  const client = new FunctionClient(functionData);
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await client.invoke(PAYLOAD);
+  const response = await client.invoke(JSON.stringify(PAYLOAD));
 
   // THEN
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
@@ -24,22 +24,21 @@ test("invoke function", async () => {
 
 test("invoke function with environment variables", async () => {
   // GIVEN
-  const SOURCE_CODE_FILE = path.join(__dirname, "fixtures", "greeter.js");
-  const SOURCE_CODE_LANGUAGE = "javascript";
-  const ENVIRONMENT_VARIABLES = {
-    TEST_VAR_1: "test-value-1",
-  };
-  const functionData = await initFunction({
+  await initFunction();
+  const client = new FunctionClient({
     sourceCodeFile: SOURCE_CODE_FILE,
     sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-    environmentVariables: ENVIRONMENT_VARIABLES,
+    environmentVariables: {
+      TEST_VAR_1: "test-value-1",
+    },
   });
-  const client = new FunctionClient(functionData);
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await client.invoke(PAYLOAD);
+  const response = await client.invoke(JSON.stringify(PAYLOAD));
 
   // THEN
-  expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}! What's up?` });
+  expect(response).toEqual({
+    msg: `Hello, ${PAYLOAD.name}! What's up?`,
+  });
 });

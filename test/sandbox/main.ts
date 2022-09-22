@@ -1,5 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
+import { QueueInflightMethods } from "../../src/cloud";
 import * as core from "../../src/core";
 // import * as local from "../../src/local";
 import * as tfaws from "../../src/tf-aws";
@@ -8,23 +9,32 @@ class Root extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const bucket = new cloud.Bucket(this, "Bucket");
-    const inflight = new core.Inflight({
+    const queue = new cloud.Queue(this, "Queue");
+    const pusher = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          console.log("Hello, " + event.name);
-          await $cap.bucket.put("hello.txt", JSON.stringify(event));
+          await $cap.queue.push(JSON.stringify(event));
         }`
       ),
       entrypoint: "$proc",
       captures: {
-        bucket: {
-          obj: bucket,
-          methods: ["put"],
+        queue: {
+          obj: queue,
+          methods: [QueueInflightMethods.PUSH],
         },
       },
     });
-    new cloud.Function(this, "Function", inflight);
+    new cloud.Function(this, "Function", pusher);
+
+    const processor = new core.Inflight({
+      code: core.NodeJsCode.fromInline(
+        `async function $proc($cap, event) {
+          console.log("Received " + event.name);
+        }`
+      ),
+      entrypoint: "$proc",
+    });
+    queue.onMessage(processor);
   }
 }
 

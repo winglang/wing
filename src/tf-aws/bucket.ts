@@ -54,7 +54,10 @@ export class Bucket extends cloud.BucketBase {
     }
   }
 
-  public capture(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+  /**
+   * @internal
+   */
+  public _capture(captureScope: IConstruct, metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by tfaws.Function for now");
     }

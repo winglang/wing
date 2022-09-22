@@ -7,7 +7,7 @@ test("put and get objects from bucket", async () => {
   const client = new BucketClient(bucketAddr);
 
   const KEY = "greeting.txt";
-  const VALUE = { msg: "Hello world!" };
+  const VALUE = JSON.stringify({ msg: "Hello world!" });
 
   // WHEN
   await client.put(KEY, VALUE);

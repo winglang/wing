@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, unlinkSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join, resolve } from "path";
@@ -33,8 +34,10 @@ export interface ICapturable {
   /**
    * Captures the resource so that it can be referenced inside an Inflight
    * executed in the given scope.
+   *
+   * @internal
    */
-  capture(captureScope: IConstruct, metadata: CaptureMetadata): Code;
+  _capture(captureScope: IConstruct, metadata: CaptureMetadata): Code;
 }
 
 /**
@@ -57,6 +60,13 @@ export abstract class Code {
    */
   public get text(): string {
     return readFileSync(this.path, "utf-8");
+  }
+
+  /**
+   * Generate a hash of the code contents.
+   */
+  public get hash(): string {
+    return createHash("sha512").update(this.text).digest("hex");
   }
 }
 
@@ -260,13 +270,13 @@ function createClient(
 
   if (
     typeof capture.obj == "object" &&
-    typeof capture.obj.capture === "function"
+    typeof capture.obj._capture === "function"
   ) {
     const c: ICapturable = capture.obj;
-    return c.capture(captureScope, capture);
+    return c._capture(captureScope, capture);
   }
 
-  throw new Error(`unable to capture "${captureName}", no "capture" method`);
+  throw new Error(`unable to capture "${captureName}", no "_capture" method`);
 }
 
 function isPrimitive(value: any) {

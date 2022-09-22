@@ -39,10 +39,16 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.code = NodeJsCode.fromFile(assetPath);
   }
 
-  public capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  /**
+   * @internal
+   */
+  public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
-      throw new Error("functions can only be captured by a function for now");
+      throw new Error(
+        "functions can only be captured by a sim.Function for now"
+      );
     }
+    // FIXME
     return InflightClient.for(__filename, "FunctionClient", [
       `"${this.node.id}"`,
     ]);

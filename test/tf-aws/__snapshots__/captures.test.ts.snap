@@ -5,7 +5,7 @@ exports[`function captures a bucket 1`] = `
 $cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/src/tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
-          await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
+          await $cap.bucket.put(\\"hello.txt\\", Serializable.fromJSON(event));
         }
 exports.handler = async function(event) {
   return await $proc($cap, event);
@@ -33,7 +33,7 @@ exports[`function captures a bucket 2`] = `
       }
     },
     \\"aws_lambda_function\\": {
-      \\"Function_LambdaFunction_27600CF9\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"BUCKET_NAME__Bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
@@ -100,8 +100,8 @@ exports[`function captures a function 2`] = `
 $cap[\\"function\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/src/tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME__Function1\\"]);
 async function $proc($cap, event) {
           console.log(\\"Event: \\" + JSON.stringify(event));
-          const data = await $cap.function.invoke({ name: \\"world\\" });
-          console.log(\\"Greeting: \\" + data.greeting);
+          const data = await $cap.function.invoke($Serializable.fromJSON({ name: \\"world\\" }));
+          console.log(\\"Greeting: \\" + data.value().greeting);
         }
 exports.handler = async function(event) {
   return await $proc($cap, event);
@@ -125,7 +125,7 @@ exports[`function captures a function 3`] = `
         \\"role\\": \\"\${aws_iam_role.Function1_IamRole_8B9BC80D.name}\\"
       },
       \\"Function2_IamRolePolicy_E46C9D6B\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"lambda:InvokeFunction\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_lambda_function.Function1_LambdaFunction_2C21275B.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"lambda:InvokeFunction\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_lambda_function.Function1.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.Function2_IamRole_62EBED55.name}\\"
       }
     },
@@ -140,7 +140,7 @@ exports[`function captures a function 3`] = `
       }
     },
     \\"aws_lambda_function\\": {
-      \\"Function1_LambdaFunction_2C21275B\\": {
+      \\"Function1\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Function1\\"
@@ -153,10 +153,10 @@ exports[`function captures a function 3`] = `
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Function1_Bucket_115DE947.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.Function1_S3Object_AFBA38E0.key}\\"
       },
-      \\"Function2_LambdaFunction_86A5B94E\\": {
+      \\"Function2\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"FUNCTION_NAME__Function1\\": \\"\${aws_lambda_function.Function1_LambdaFunction_2C21275B.arn}\\",
+            \\"FUNCTION_NAME__Function1\\": \\"\${aws_lambda_function.Function1.arn}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function2\\"
           }
         },
@@ -183,6 +183,122 @@ exports[`function captures a function 3`] = `
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
+    }
+  }
+}"
+`;
+
+exports[`function captures a queue 1`] = `
+"const $cap = {};
+$cap[\\"queue\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/src/tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL__Queue\\"]);
+async function $proc($cap) {
+          await $cap.queue.push(Serializable.fromJSON({ name: \\"Alice\\" }));
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures a queue 2`] = `
+"const $cap = {};
+async function $proc($cap, event) {
+          console.log(\\"Received \\" + event.name);
+        }
+async function $sqsEventWrapper($cap, event) {
+  for (const record of event.Records ?? []) {
+    await $proc($cap, JSON.parse(record.body));
+  }
+}
+exports.handler = async function(event) {
+  return await $sqsEventWrapper($cap, event);
+};"
+`;
+
+exports[`function captures a queue 3`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"Function_IamRole_678BE84C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      },
+      \\"Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:SendMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.Queue.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      },
+      \\"Queue_OnMessage-03929de99b90eb35_IamRolePolicy_7DC3626C\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.Queue.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      },
+      \\"Queue_OnMessage-03929de99b90eb35_IamRolePolicyAttachment_464849B7\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17.name}\\"
+      }
+    },
+    \\"aws_lambda_event_source_mapping\\": {
+      \\"Queue_EventSourceMapping_8332F7DC\\": {
+        \\"batch_size\\": 1,
+        \\"event_source_arn\\": \\"\${aws_sqs_queue.Queue.arn}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.Queue_OnMessage-03929de99b90eb35_BF6B4C38.function_name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"Function\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"QUEUE_URL__Queue\\": \\"\${aws_sqs_queue.Queue.url}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\"
+      },
+      \\"Queue_OnMessage-03929de99b90eb35_BF6B4C38\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"OnMessage-03929de99b90eb35\\"
+          }
+        },
+        \\"function_name\\": \\"OnMessage-03929de99b90eb35\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Queue_OnMessage-03929de99b90eb35_IamRole_E8433C17.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Queue_OnMessage-03929de99b90eb35_Bucket_9A1D57A7.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Queue_OnMessage-03929de99b90eb35_S3Object_3C4534CC.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Function_Bucket_CC3697BD\\": {},
+      \\"Queue_OnMessage-03929de99b90eb35_Bucket_9A1D57A7\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"Queue_OnMessage-03929de99b90eb35_S3Object_3C4534CC\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Queue_OnMessage-03929de99b90eb35_Bucket_9A1D57A7.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    },
+    \\"aws_sqs_queue\\": {
+      \\"Queue\\": {}
     }
   }
 }"
@@ -224,7 +340,7 @@ exports[`function captures some primitives 2`] = `
       }
     },
     \\"aws_lambda_function\\": {
-      \\"Function_LambdaFunction_27600CF9\\": {
+      \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Function\\"
@@ -258,7 +374,7 @@ exports[`two functions reusing the same inflight 1`] = `
 $cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/src/tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
-          await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
+          await $cap.bucket.put(\\"hello.txt\\", Serializable.fromJSON(event));
         }
 exports.handler = async function(event) {
   return await $proc($cap, event);
@@ -270,7 +386,7 @@ exports[`two functions reusing the same inflight 2`] = `
 $cap[\\"bucket\\"] = new (require(\\"/home/runner/work/wingsdk/wingsdk/src/tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
-          await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
+          await $cap.bucket.put(\\"hello.txt\\", Serializable.fromJSON(event));
         }
 exports.handler = async function(event) {
   return await $proc($cap, event);
@@ -309,7 +425,7 @@ exports[`two functions reusing the same inflight 3`] = `
       }
     },
     \\"aws_lambda_function\\": {
-      \\"Function1_LambdaFunction_2C21275B\\": {
+      \\"Function1\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"BUCKET_NAME__Bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",
@@ -323,7 +439,7 @@ exports[`two functions reusing the same inflight 3`] = `
         \\"s3_bucket\\": \\"\${aws_s3_bucket.Function1_Bucket_115DE947.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.Function1_S3Object_AFBA38E0.key}\\"
       },
-      \\"Function2_LambdaFunction_86A5B94E\\": {
+      \\"Function2\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"BUCKET_NAME__Bucket\\": \\"\${aws_s3_bucket.Bucket.bucket}\\",

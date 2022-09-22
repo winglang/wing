@@ -62,7 +62,10 @@ export class Function extends FunctionBase {
     ) as Function;
   }
 
-  public capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  /**
+   * @internal
+   */
+  public _capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

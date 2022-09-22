@@ -4,6 +4,7 @@ import * as cloud from "../../src/cloud";
 import {
   BucketInflightMethods,
   FunctionInflightMethods,
+  QueueInflightMethods,
 } from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
@@ -62,7 +63,7 @@ test("function captures a bucket", () => {
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
           console.log("Hello, " + event.name);
-          await $cap.bucket.put("hello.txt", JSON.stringify(event));
+          await $cap.bucket.put("hello.txt", Serializable.fromJSON(event));
         }`
       ),
       entrypoint: "$proc",
@@ -111,8 +112,8 @@ test("function captures a function", () => {
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
           console.log("Event: " + JSON.stringify(event));
-          const data = await $cap.function.invoke({ name: "world" });
-          console.log("Greeting: " + data.greeting);
+          const data = await $cap.function.invoke($Serializable.fromJSON({ name: "world" }));
+          console.log("Greeting: " + data.value().greeting);
         }`
       ),
       entrypoint: "$proc",
@@ -150,7 +151,7 @@ test("two functions reusing the same inflight", () => {
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
           console.log("Hello, " + event.name);
-          await $cap.bucket.put("hello.txt", JSON.stringify(event));
+          await $cap.bucket.put("hello.txt", Serializable.fromJSON(event));
         }`
       ),
       entrypoint: "$proc",
@@ -177,6 +178,57 @@ test("two functions reusing the same inflight", () => {
     "aws_s3_bucket_public_access_block",
     "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_object",
+  ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+});
+
+test("function captures a queue", () => {
+  const output = cdktf.Testing.synthScope((scope) => {
+    const factory = new tfaws.PolyconFactory();
+    Polycons.register(scope, factory);
+
+    const queue = new cloud.Queue(scope, "Queue");
+    const pusher = new core.Inflight({
+      code: core.NodeJsCode.fromInline(
+        `async function $proc($cap) {
+          await $cap.queue.push(Serializable.fromJSON({ name: "Alice" }));
+        }`
+      ),
+      entrypoint: "$proc",
+      captures: {
+        queue: {
+          obj: queue,
+          methods: [QueueInflightMethods.PUSH],
+        },
+      },
+    });
+    const pusherFn = new cloud.Function(scope, "Function", pusher);
+
+    const processor = new core.Inflight({
+      code: core.NodeJsCode.fromInline(
+        `async function $proc($cap, event) {
+          console.log("Received " + event.name);
+        }`
+      ),
+      entrypoint: "$proc",
+    });
+    const processorFn = queue.onMessage(processor);
+
+    expect(core.Testing.inspectPrebundledCode(pusherFn).text).toMatchSnapshot();
+    expect(
+      core.Testing.inspectPrebundledCode(processorFn).text
+    ).toMatchSnapshot();
+  });
+
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_iam_role",
+    "aws_iam_role_policy",
+    "aws_iam_role_policy_attachment",
+    "aws_lambda_event_source_mapping",
+    "aws_lambda_function",
+    "aws_s3_bucket",
+    "aws_s3_object",
+    "aws_sqs_queue",
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
 });

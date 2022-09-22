@@ -20,12 +20,13 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     "@aws-sdk/client-s3",
     "@aws-sdk/client-lambda",
+    "@aws-sdk/client-sqs",
     "@aws-sdk/util-utf8-node",
     // simulator client dependencies (none)
     // simulator implementation dependencies
     "piscina",
   ],
-  devDeps: ["replace-in-file"],
+  devDeps: ["replace-in-file", "@types/aws-lambda"],
   prettier: true,
   jestOptions: {
     jestVersion: "^27.0.0", // 28 requires a later typescript version
