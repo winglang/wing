@@ -1,8 +1,11 @@
 use std::fmt::{Debug, Display};
 
 use derivative::Derivative;
+use serde_json::Value;
+use wingii::jsii;
 
 use crate::ast::{Type as AstType, *};
+use crate::diagnostic::{CharacterLocation, WingSpan};
 use crate::type_env::TypeEnv;
 
 #[derive(Debug)]
@@ -13,11 +16,21 @@ pub enum Type {
 	String,
 	Duration,
 	Boolean,
-	Function(Box<FunctionSignature>),
+	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
 	ResourceObject(TypeRef), // Reference to a Resource type
 	ClassInstance(TypeRef),  // Reference to a Class type
+	Namespace(Namespace),
+}
+
+const RESOURCE_CLASS_FQN: &'static str = "@monadahq/wingsdk.cloud.Resource";
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct Namespace {
+	pub name: String,
+	#[derivative(Debug = "ignore")]
+	pub env: TypeEnv,
 }
 
 #[derive(Derivative)]
@@ -141,6 +154,7 @@ impl Display for Type {
 				let class_type_name = class.as_class().expect("Class instance must reference to a class");
 				write!(f, "instance of {}", class_type_name)
 			}
+			Type::Namespace(namespace) => write!(f, "{}", namespace.name),
 		}
 	}
 }
@@ -207,6 +221,14 @@ impl TypeRef {
 			true
 		} else {
 			false
+		}
+	}
+
+	pub fn as_namespace(&self) -> Option<&Namespace> {
+		if let &Type::Namespace(ref ns) = (*self).into() {
+			Some(ns)
+		} else {
+			None
 		}
 	}
 }
@@ -531,7 +553,7 @@ impl<'a> TypeChecker<'a> {
 					flight: ast_sig.flight,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
-				self.types.add_type(Type::Function(Box::new(sig)))
+				self.types.add_type(Type::Function(sig))
 			}
 			AstType::CustomType { root, fields } => {
 				if fields.is_empty() {
@@ -622,9 +644,49 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(exp_type, var_type, value);
 			}
 			Statement::Use {
-				module_name: _,
+				module_name,
 				identifier: _,
-			} => _ = unimplemented_type(),
+			} => {
+				_ = {
+					// Create a new env for the imported module's namespace
+					let mut namespace_env = TypeEnv::new(Some(env), None, false, env.flight);
+
+					// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
+					if module_name.name == "cloud" {
+						let mut wingii_types = wingii::type_system::TypeSystem::new();
+						let name = wingii_types.load("../../node_modules/@monadahq/wingsdk").unwrap();
+						let prefix = format!("{}.{}.", name, module_name.name);
+						println!("Loaded JSII assembly {}", name);
+						let assembly = wingii_types.find_assembly(&name).unwrap();
+						for type_name in assembly.types.as_ref().unwrap().keys() {
+							// Skip types outside the imported namespace
+							if !type_name.starts_with(&prefix) {
+								println!("Skipping {} (outside of module {})", type_name, module_name.name);
+								continue;
+							}
+							let type_name = type_name.strip_prefix(&prefix).unwrap();
+
+							// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
+							// and might have already defined the current type internally
+							println!("Going to import {}", type_name);
+							if namespace_env.try_lookup(type_name).is_some() {
+								println!("Type {} already defined, skipping", type_name);
+								continue;
+							}
+							self.import_jsii_type(type_name, &prefix, assembly, &wingii_types, &mut namespace_env);
+						}
+
+						// Create a namespace for the imported module
+						let namespace = self.types.add_type(Type::Namespace(Namespace {
+							name: module_name.name.clone(),
+							env: namespace_env,
+						}));
+						env.define(module_name, namespace);
+
+						println!("Loaded assembly: {}", assembly.name);
+					}
+				}
+			}
 			Statement::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				for statement in scope.statements.iter_mut() {
@@ -827,6 +889,179 @@ impl<'a> TypeChecker<'a> {
 				// Find property in class's environment
 				class.env.lookup(property)
 			}
+		}
+	}
+
+	fn import_jsii_type(
+		&mut self,
+		type_name: &str,
+		prefix: &str,
+		jsii_assembly: &jsii::Assembly,
+		jsii_types: &wingii::type_system::TypeSystem,
+		env: &mut TypeEnv,
+	) -> Option<TypeRef> {
+		// TODO: avoid infinite recursion by keeping a set of type names we already tried to define
+
+		// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
+		println!("Defining type {}", type_name);
+		let fqn = format!("{}{}", prefix, type_name);
+		if fqn == RESOURCE_CLASS_FQN {
+			println!("Hack: no need to define {}", type_name);
+			return None;
+		}
+
+		let jsii_class = jsii_types.find_class(&fqn);
+		if jsii_class.is_none() {
+			println!(
+				"Type {} is not a class in the JSII assembly {}",
+				fqn, jsii_assembly.name
+			);
+			return None;
+		}
+		let jsii_class = jsii_class.unwrap();
+		let mut is_resource = false;
+
+		// Get the base class of the JSII class
+		let base_class = if let Some(base_class_name) = jsii_class.base {
+			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
+			if base_class_name == RESOURCE_CLASS_FQN {
+				println!("Hack: no need to define base class {}", base_class_name);
+				is_resource = true;
+				None
+			} else {
+				let base_class_name = base_class_name.strip_prefix(prefix).unwrap();
+				println!("going to lookup base class {}", base_class_name);
+				let base_class_type = if let Some(base_class_type) = env.try_lookup(&base_class_name) {
+					Some(base_class_type)
+				} else {
+					// If the base class isn't defined yet then define it first (recursive call)
+					let base_class_type = self.import_jsii_type(&base_class_name, prefix, jsii_assembly, jsii_types, env);
+					if base_class_type.is_none()
+					/* && base_class_name != RESOURCE_CLASS_FQN*/
+					{
+						panic!("Failed to define base class {}", base_class_name);
+					}
+					base_class_type
+				};
+
+				// Validate the base class is either a class or a resource
+				if let Some(base_class_type) = base_class_type {
+					if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
+						panic!("Base class {} of {} is not a resource", base_class_name, type_name);
+					}
+				}
+				base_class_type
+			}
+		} else {
+			None
+		};
+		println!("got here! we can define {}", type_name);
+
+		// Create class's environment
+		let mut class_env = TypeEnv::new(Some(env), None, true, env.flight);
+
+		// Add methods to the class environment
+		if let Some(methods) = jsii_class.methods {
+			for m in methods {
+				if let Some(jsii_return_type) = m.returns {
+					//env.try_lookup(jsii_return_type.)
+					println!("Found method {} with return type {:?}", m.name, jsii_return_type);
+				} else {
+					println!("Method {} has no return type", m.name);
+					//None
+				}
+				// self.types.add_type(Type::Function(FunctionSignature { args: (), return_type: (), flight: env.flight }));
+				// env.define(m.name, type)
+			}
+		}
+		// Add properties to the class environment
+		if let Some(properties) = jsii_class.properties {
+			for p in properties {
+				println!("Found property {} with type {:?}", p.name, p.type_);
+				class_env.define(
+					&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
+					self.jsii_type_ref_to_wing_type(&p.type_),
+				);
+			}
+		}
+		println!("Finally adding type {}", type_name);
+		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
+
+		// If our base class is a resource then we are a resource
+		if let Some(base_class) = base_class {
+			is_resource = base_class.as_resource().is_some();
+		}
+
+		let new_type = if is_resource {
+			println!("{} is a resource", type_name);
+			Type::Resource(Class {
+				name: new_type_symbol.clone(),
+				env: class_env,
+				parent: base_class,
+			})
+		} else {
+			println!("{} is a class", type_name);
+			Type::Class(Class {
+				name: new_type_symbol.clone(),
+				env: class_env,
+				parent: base_class,
+			})
+		};
+
+		// Finally create a new type in the wing type system and define it in the module's namespace
+		let new_type = self.types.add_type(new_type);
+		env.define(&new_type_symbol, new_type);
+		Some(new_type)
+	}
+
+	fn jsii_type_ref_to_wing_type(&self, jsii_type_ref: &jsii::TypeReference) -> TypeRef {
+		if let serde_json::Value::Object(obj) = jsii_type_ref {
+			if let Some(Value::String(primitive_name)) = obj.get("primitive") {
+				match primitive_name.as_str() {
+					"string" => self.types.string(),
+					"number" => self.types.number(),
+					"boolean" => self.types.bool(),
+					"any" => self.types.anything(),
+					_ => panic!("TODO: handle primitive type {}", primitive_name),
+				}
+			} else if let Some(Value::Object(o)) = obj.get("collection") {
+				// TODO: handle JSII to Wing collection type conversion, for now return any
+				self.types.anything()
+			} else {
+				panic!("TODO: handle non-primitive type {:?}", jsii_type_ref);
+			}
+		} else {
+			panic!("Expected JSII type reference {:?} to be an object", jsii_type_ref);
+		}
+	}
+
+	fn jsii_name_to_symbol(name: &str, jsii_source_location: &Option<jsii::SourceLocation>) -> Symbol {
+		let span = if let Some(jsii_source_location) = jsii_source_location {
+			WingSpan {
+				start: CharacterLocation {
+					row: jsii_source_location.line as usize,
+					column: 0,
+				},
+				end: CharacterLocation {
+					row: jsii_source_location.line as usize,
+					column: 0,
+				},
+				start_byte: 0,
+				end_byte: 0,
+				file_id: (&jsii_source_location.filename).into(),
+			}
+		} else {
+			WingSpan {
+				start: CharacterLocation { row: 0, column: 0 },
+				end: CharacterLocation { row: 0, column: 0 },
+				start_byte: 0,
+				end_byte: 0,
+				file_id: "".into(),
+			}
+		};
+		Symbol {
+			name: name.to_string(),
+			span,
 		}
 	}
 }

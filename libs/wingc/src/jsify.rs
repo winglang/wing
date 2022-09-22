@@ -132,31 +132,9 @@ fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> 
 	}
 }
 
-// TODO: move this into Reference (but note this will only work after type checking is done on Reference)
-fn is_resource(reference: &Reference) -> bool {
-	match reference {
-		Reference::Identifier(_) => {
-			// For now return false, but we need to lookup the identifier in our env
-			false
-		}
-		Reference::NestedIdentifier { object, property: _ } => {
-			// TODO: for now anything under "cloud" is a resource
-			if let ExprType::Reference(identifier) = &object.variant {
-				if let Reference::Identifier(identifier) = identifier {
-					identifier.name == "cloud"
-				} else {
-					false
-				}
-			} else {
-				false
-			}
-		}
-	}
-}
-
 fn is_resource_type(typ: &Type) -> bool {
 	// TODO: for now anything under "cloud" is a resource
-	if let Type::CustomType { root, fields } = typ {
+	if let Type::CustomType { root, fields: _ } = typ {
 		root.name == "cloud"
 	} else {
 		false
