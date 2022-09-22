@@ -1,8 +1,10 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React, { useEffect, useState } from "react";
 
-import { TreeMenu, TreeMenuItem } from "@/components/TreeMenu";
-import { treeMenuItems } from "@/stories/mockData";
+import { TreeMenu } from "@/components/TreeMenu";
+import { useTreeMenuItems } from "@/components/useTreeMenuItems";
+import { Button } from "@/design-system/button";
+import { treeMenuItems as treeMenuItemsMock } from "@/stories/mockData";
 import {
   WingSchemaToTreeMenuItems,
   flattenTreeMenuItems,
@@ -10,61 +12,45 @@ import {
 } from "@/stories/utils";
 
 const TreeMenuStory: ComponentStory<typeof TreeMenu> = (args) => {
-  const [selectedItemId, setSelectedItemId] = useState<string | undefined>(
-    args?.selectedItemId || undefined,
-  );
-  const [openMenuItemIds, setOpenMenuItemIds] = useState<string[]>(
-    args?.openMenuItemIds || [],
-  );
+  const treeMenu = useTreeMenuItems({
+    treeMenuItems: args?.items ?? treeMenuItemsMock,
+    selectedItemId: args?.selectedItemId,
+    openMenuItemIds: args?.openMenuItemIds,
+  });
 
   useEffect(() => {
     if (!args?.selectedItemId) {
       return;
     }
-    const flattenedItems = flattenTreeMenuItems(args?.items || treeMenuItems);
+    const flattenedItems = flattenTreeMenuItems(args?.items || treeMenu.items);
     let parentId = flattenedItems.find(
       (item) => item.id === args.selectedItemId,
     )?.parentId;
     while (parentId) {
-      updateOpenedMenuItems(parentId);
+      treeMenu.toggle(parentId);
       parentId = flattenedItems.find((item) => item.id === parentId)?.parentId;
     }
   }, []);
 
-  const updateOpenedMenuItems = (id: string) => {
-    setOpenMenuItemIds(([...openedMenuItems]) => {
-      const index = openedMenuItems.indexOf(id);
-      if (index !== -1) {
-        openedMenuItems.splice(index, 1);
-        return openedMenuItems;
-      }
-
-      openedMenuItems.push(id);
-      return openedMenuItems;
-    });
-  };
-
-  const enrichTreeMenuItems = (tree: TreeMenuItem[]): TreeMenuItem[] => {
-    return tree.map((item) => {
-      return {
-        ...item,
-        children: item.children ? enrichTreeMenuItems(item.children) : [],
-        onTreeItemClick: (item) => {
-          updateOpenedMenuItems(item.id);
-          setSelectedItemId(item.id);
-        },
-      };
-    });
-  };
-
   return (
-    <div className="flex-1 h-[600px] flex text-sm text-slate-800 border border-t-0 border-slate-200 overflow-hidden">
-      <TreeMenu
-        items={enrichTreeMenuItems(args?.items || treeMenuItems)}
-        selectedItemId={selectedItemId}
-        openMenuItemIds={openMenuItemIds}
-        title={args?.title || "Wing Console"}
-      />
+    <div>
+      <div className="flex gap-2 mb-4">
+        <Button onClick={treeMenu.expandAll} label="Open All" />
+        <Button onClick={treeMenu.collapseAll} label="Close All" />
+      </div>
+
+      <div className="flex-1 h-[600px] flex text-sm text-slate-800 border border-t-0 border-slate-200 overflow-hidden">
+        <TreeMenu
+          items={treeMenu.items}
+          selectedItemId={treeMenu.currentItemId}
+          openMenuItemIds={treeMenu.openItemIds}
+          onItemClick={(item) => {
+            treeMenu.toggle(item.id);
+            treeMenu.setCurrent(item.id);
+          }}
+          title={args?.title || "Wing Console"}
+        />
+      </div>
     </div>
   );
 };

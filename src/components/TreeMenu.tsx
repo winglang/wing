@@ -1,4 +1,10 @@
-import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
+import {
+  ChevronDownIcon,
+  ChevronRightIcon,
+  MinusSmallIcon,
+  PlusSmallIcon,
+  Square2StackIcon,
+} from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import React from "react";
 
@@ -8,7 +14,6 @@ export interface TreeMenuItem {
   label: string;
   parentId?: string;
   children?: TreeMenuItem[];
-  onTreeItemClick?: (item: TreeMenuItem) => void;
 }
 
 export interface TreeMenuProps {
@@ -16,6 +21,9 @@ export interface TreeMenuProps {
   selectedItemId?: string;
   openMenuItemIds?: string[];
   items: TreeMenuItem[];
+  onItemClick?: (item: TreeMenuItem) => void;
+  onExpandAll?: () => void;
+  onCollapseAll?: () => void;
 }
 
 export const TreeMenu = ({
@@ -23,24 +31,77 @@ export const TreeMenu = ({
   selectedItemId,
   openMenuItemIds = [],
   items,
+  onItemClick,
+  onExpandAll,
+  onCollapseAll,
 }: TreeMenuProps) => {
   return (
-    <div className="w-full text-sm text-slate-800 bg-slate-100 flex flex-col gap-1 overflow-auto">
-      <div className="h-8" />
-      <div className="px-4 flex items-center">
-        <span className="uppercase text-sm font-semibold">{title}</span>
+    <>
+      <div className="h-8 flex-shrink-0 flex items-center justify-between gap-1 px-4">
+        <div className="flex items-center">
+          <span className="uppercase text-sm font-semibold">{title}</span>
+        </div>
+
+        <div className="flex items-center">
+          <button
+            className="p-0.5 hover:bg-slate-200 rounded relative group"
+            onClick={onExpandAll}
+            title="Expand All"
+          >
+            <Square2StackIcon
+              className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute inset-0"
+              style={{ left: "4.5px", top: "8px" }}
+            >
+              <PlusSmallIcon
+                className="w-2 h-2 text-slate-600 group-hover:text-slate-700"
+                aria-hidden="true"
+              />
+            </div>
+          </button>
+
+          <button
+            className="p-0.5 hover:bg-slate-200 rounded relative group"
+            onClick={onCollapseAll}
+            title="Collapse All"
+          >
+            <Square2StackIcon
+              className="w-4 h-4 text-slate-600 group-hover:text-slate-700 rotate-90"
+              aria-hidden="true"
+            />
+            <div
+              className="absolute inset-0"
+              style={{ left: "4.5px", top: "8px" }}
+            >
+              <MinusSmallIcon
+                className="w-2 h-2 text-slate-600 group-hover:text-slate-700"
+                aria-hidden="true"
+              />
+            </div>
+          </button>
+        </div>
       </div>
-      <div className="flex flex-col">
-        <MenuItems
-          items={items}
-          selectedItem={selectedItemId}
-          openedMenuItems={openMenuItemIds}
-          onItemClick={(item) => {
-            item.onTreeItemClick?.(item);
-          }}
-        />
+      <div className="relative h-full">
+        <div className="absolute inset-0">
+          <div className="h-full w-full text-sm text-slate-800 bg-slate-100 flex flex-col gap-1 overflow-y-overlay scroller transition-colors ease-in-out duration-700 border-transparent scrollbar-w-2.5 hover:border-slate-500/10 hover:duration-700">
+            {/* <div className="px-4 flex items-center">
+              <span className="uppercase text-sm font-semibold">{title}</span>
+            </div> */}
+            <div className="flex flex-col">
+              <MenuItems
+                items={items}
+                selectedItem={selectedItemId}
+                openedMenuItems={openMenuItemIds}
+                onItemClick={onItemClick}
+              />
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
@@ -98,7 +159,7 @@ function MenuItem({
       <button
         type="button"
         className={classNames(
-          "w-full cursor-pointer hover:bg-slate-200",
+          "w-full cursor-pointer group hover:bg-slate-200/50",
           selectedItem === item.id && "bg-slate-200",
         )}
         tabIndex={-1}
@@ -112,21 +173,39 @@ function MenuItem({
         >
           {open ? (
             <ChevronDownIcon
-              className={classNames("w-4 h-4 text-slate-500 mr-1.5", {
-                invisible: hasChildren,
-              })}
+              className={classNames(
+                "w-4 h-4 text-slate-500 mr-1.5 flex-shrink-0 group-hover:text-slate-600",
+                {
+                  invisible: hasChildren,
+                  "text-slate-600": selectedItem === item.id,
+                },
+              )}
               aria-hidden="true"
             />
           ) : (
             <ChevronRightIcon
-              className={classNames("w-4 h-4 text-slate-500 mr-1.5", {
-                invisible: hasChildren,
-              })}
+              className={classNames(
+                "w-4 h-4 text-slate-500 mr-1.5 flex-shrink-0 group-hover:text-slate-600",
+                {
+                  invisible: hasChildren,
+                  "text-slate-600": selectedItem === item.id,
+                },
+              )}
               aria-hidden="true"
             />
           )}
-          {item.icon && <div className="mr-1.5">{item.icon}</div>}
-          <span>{item.label}</span>
+          {item.icon && <div className="mr-1.5 flex-shrink-0">{item.icon}</div>}
+          <span
+            title={item.label}
+            className={classNames(
+              "truncate text-slate-800 group-hover:text-slate-900",
+              {
+                "text-slate-900": selectedItem === item.id,
+              },
+            )}
+          >
+            {item.label}
+          </span>
         </div>
       </button>
       {open && (

@@ -33,7 +33,13 @@ export const WingSchemaToTreeMenuItems = (
       label: node.id,
       children: [],
       parentId: parent?.id,
-      icon: <ResourceIcon resourceType={node.type} />,
+      icon: (
+        <ResourceIcon
+          resourceType={node.type}
+          className="w-4 h-4"
+          darkenOnGroupHover
+        />
+      ),
     };
     if (parent) {
       parent.children?.push(item);
@@ -221,9 +227,9 @@ const getResourceIconColors = (options: {
       ];
     case "cloud.Endpoint":
       return [
-        "text-indigo-500 dark:text-indigo-400",
+        "text-sky-500 dark:text-sky-400",
         options.darkenOnGroupHover &&
-          "group-hover:text-indigo-600 dark:group-hover:text-indigo-300",
+          "group-hover:text-sky-600 dark:group-hover:text-sky-300",
       ];
     default:
       return [

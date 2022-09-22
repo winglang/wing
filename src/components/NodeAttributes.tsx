@@ -51,7 +51,7 @@ export function BaseNodeAttributes({ attributes }: BaseNodeAttributesProps) {
   );
 }
 
-function getBaseAttributes(node: ResourceSchema) {
+function getBaseAttributes(node: ResourceSchema): NodeAttribute[] {
   return [
     {
       key: "ID",
@@ -81,7 +81,7 @@ function getBaseAttributes(node: ResourceSchema) {
     //   key: "Source File",
     //   value: "/Users/Wing/Code/wing-demo/src/demo.w",
     //   render: () => (
-    //     <button className="font-medium text-indigo-600 hover:text-indigo-500">
+    //     <button className="font-medium text-sky-600 hover:text-sky-500">
     //       {meta.source.fileName} ({meta.source.line}:{meta.source.column})
     //     </button>
     //   ),
@@ -95,6 +95,28 @@ function getNodeAttributes(node: ResourceSchema) {
   // if (node.type === "cloud.Endpoint") {
   //   attributes = [...attributes, {key: "URL", value: node.props.}]
   // }
+
+  if (node.type === "cloud.Function") {
+    attributes = [
+      ...attributes,
+      { key: "Filename", value: node.props.sourceCodeFile },
+      { key: "Language", value: node.props.sourceCodeLanguage },
+      {
+        key: "Environment",
+        value: JSON.stringify(node.props.environmentVariables),
+        render: () => (
+          <pre className="bg-slate-100 px-1 rounded border text-slate-700">
+            {JSON.stringify(node.props.environmentVariables)}
+          </pre>
+        ),
+      },
+    ];
+  } else if (node.type === "cloud.Queue") {
+    attributes = [
+      ...attributes,
+      { key: "Timeout", value: `${node.props.timeout}ms` },
+    ];
+  }
 
   return attributes;
 }

@@ -44,7 +44,7 @@ export const Base = () => {
             key: "Source File",
             value: "/Users/Wing/Code/wing-demo/src/demo.w",
             render: () => (
-              <button className="font-medium text-indigo-600 hover:text-indigo-500">
+              <button className="font-medium text-sky-600 hover:text-sky-500">
                 {meta.source.fileName} ({meta.source.line}:{meta.source.column})
               </button>
             ),
@@ -53,7 +53,7 @@ export const Base = () => {
             key: "URL",
             value: "http://localhost:3012",
             render: () => (
-              <button className="font-medium text-indigo-600 hover:text-indigo-500">
+              <button className="font-medium text-sky-600 hover:text-sky-500">
                 http://localhost:3012
               </button>
             ),

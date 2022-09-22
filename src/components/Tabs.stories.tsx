@@ -1,29 +1,23 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import { useEffect, useState } from "react";
 
-import { Tab, Tabs } from "@/components/Tabs";
+import { Tabs } from "@/components/Tabs";
 import { ResourceIcon } from "@/stories/utils";
 
+import { useTabs } from "./useTabs";
+
 const TabsStory: ComponentStory<typeof Tabs> = (args) => {
-  const [tabs, setTabs] = useState<Tab[]>([]);
-  useEffect(() => {
-    setTabs(() => {
-      return args.tabs.map((tab) => ({
-        ...tab,
-        onClick: (id: string) => {
-          setTabs((prevState) => {
-            return prevState.map((item) => ({
-              ...item,
-              current: item.id === id,
-            }));
-          });
-        },
-      }));
-    });
-  }, []);
+  const tabs = useTabs({
+    tabs: args.tabs,
+    currentTabId: args.currentTabId,
+  });
+
   return (
     <div className="flex-1 h-20 bg-white px-1.5 py-1.5">
-      <Tabs tabs={tabs} />
+      <Tabs
+        tabs={tabs.tabs}
+        currentTabId={tabs.currentTabId}
+        onTabClicked={(tab) => tabs.setCurrentTabId(tab.id)}
+      />
     </div>
   );
 };
@@ -43,16 +37,12 @@ Primary.args = {
     {
       id: "1",
       name: "Bucket",
-      onClick: (id: string) => console.log(id),
       icon: <ResourceIcon resourceType="cloud.Bucket" className="w-4 h-4" />,
-      current: false,
     },
     {
       id: "2",
       name: "Function",
-      onClick: (id: string) => console.log(id),
       icon: <ResourceIcon resourceType="cloud.Function" className="w-4 h-4" />,
-      current: true,
     },
     {
       id: "3",
@@ -60,15 +50,12 @@ Primary.args = {
       icon: (
         <ResourceIcon resourceType="constructs.Construct" className="w-4 h-4" />
       ),
-      onClick: (id: string) => console.log(id),
-      current: false,
     },
     {
       id: "4",
       name: "endpoint",
       icon: <ResourceIcon resourceType="cloud.Endpoint" className="w-4 h-4" />,
-      onClick: (id: string) => console.log(id),
-      current: false,
     },
   ],
+  currentTabId: "2",
 };

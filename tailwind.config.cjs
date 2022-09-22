@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-require-imports, import/no-extraneous-dependencies */
+const { default: plugin } = require("tailwindcss");
 const colors = require("tailwindcss/colors");
 
 /** @type {import('tailwindcss').Config} */
@@ -15,5 +16,30 @@ module.exports = {
       },
     },
   },
-  plugins: [require("@tailwindcss/forms")],
+  plugins: [
+    require("@tailwindcss/forms"),
+    // require("tailwind-scrollbar"),
+    // plugin(
+    //   function ({ matchUtilities, theme }) {
+    //     matchUtilities(
+    //       {
+    //         tab: (value) => ({
+    //           tabSize: value,
+    //         }),
+    //       },
+    //       { values: theme("tabSize") },
+    //     );
+    //   },
+    //   {
+    //     theme: {
+    //       tabSize: {
+    //         1: "1",
+    //         2: "2",
+    //         4: "4",
+    //         8: "8",
+    //       },
+    //     },
+    //   },
+    // ),
+  ],
 };

@@ -4,45 +4,50 @@ import classNames from "classnames";
 export interface Breadcrumb {
   id: string;
   name: string;
-  current: boolean;
-  onClick: (id: string) => void;
   icon?: React.ReactNode;
 }
+
 export interface BreadcrumbsProps {
   breadcrumbs: Breadcrumb[];
+  onBreadcrumbClicked?: (breadcrumb: Breadcrumb) => void;
 }
 
 export const Breadcrumbs = (props: BreadcrumbsProps) => {
-  const { breadcrumbs } = props;
+  const { breadcrumbs, onBreadcrumbClicked } = props;
+  const numBreadcrumbs = breadcrumbs.length;
 
   return (
     <nav className="flex" aria-label="Breadcrumb">
-      <ol role="list" className="flex items-center text-xs text-slate-500">
-        {breadcrumbs.map((breadcrumb, index) => (
-          <li key={breadcrumb.id}>
-            <div className="flex items-center justify-between">
-              <div className={"flex-shrink-0"}>{breadcrumb.icon}</div>
+      <ol role="list" className="p-2 flex items-center text-xs text-slate-500">
+        {breadcrumbs.map((breadcrumb, index) => {
+          const isLastBreadcrumb = index === numBreadcrumbs - 1;
+          return (
+            <li
+              key={breadcrumb.id}
+              className="group flex items-center justify-between"
+            >
               <button
-                onClick={() => breadcrumb.onClick(breadcrumb.id)}
+                onClick={() => onBreadcrumbClicked?.(breadcrumb)}
                 className={classNames(
-                  "ml-1 text-sm font-small text-gray-500 cursor-pointer hover:text-slate-800",
-                  {
-                    ["font-bold"]: breadcrumb.current,
-                  },
+                  "flex items-center gap-1 text-sm font-small text-gray-500 whitespace-nowrap hover:text-slate-800",
+                  // {
+                  //   ["font-bold"]: isLastBreadcrumb,
+                  // },
                 )}
-                aria-current={breadcrumb.current ? "page" : undefined}
+                aria-current={isLastBreadcrumb ? "page" : undefined}
               >
+                <div className={"flex-shrink-0"}>{breadcrumb.icon}</div>
                 {breadcrumb.name}
+                {!isLastBreadcrumb && (
+                  <ChevronRightIcon
+                    className="-ml-0.5 h-5 w-5 flex-shrink-0 text-slate-500 group-hover:text-slate-600"
+                    aria-hidden="true"
+                  />
+                )}
               </button>
-              {index < breadcrumbs.length - 1 && (
-                <ChevronRightIcon
-                  className="h-5 w-5 flex-shrink-0 text-slate-500"
-                  aria-hidden="true"
-                />
-              )}
-            </div>
-          </li>
-        ))}
+            </li>
+          );
+        })}
       </ol>
     </nav>
   );

@@ -4,13 +4,10 @@ import { expect, test } from "vitest";
 import { buildNodeMap } from "./nodeMap";
 
 test("builds node map from tree.json", async () => {
-  const nodes = await (async () => {
-    const tree = (await import("../assets/tree.json")) as WingLocalSchema;
+  const tree = (await import("../assets/tree.json")) as WingLocalSchema;
+  const nodeMap = buildNodeMap(tree.root);
 
-    return buildNodeMap(tree.root);
-  })();
-
-  expect(nodes).toEqual({
+  expect(nodeMap.record).toMatchObject({
     "": {
       id: "image-extractor-app",
       path: "image-extractor-app",

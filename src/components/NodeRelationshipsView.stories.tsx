@@ -1,14 +1,7 @@
-import { readFileSync } from "node:fs";
-
-import { InformationCircleIcon } from "@heroicons/react/20/solid";
 import { CubeIcon } from "@heroicons/react/24/outline";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { useEffect, useState } from "react";
 
-import { useConstructHubNodeMap } from "@/stories/mockData";
-import { Node } from "@/utils/nodeMap";
-
-import { NodeRelationshipsView, Relationships } from "./NodeRelationshipsView";
+import { NodeRelationshipsView } from "./NodeRelationshipsView";
 
 export default {
   title: "Components/NodeRelationshipsView",
@@ -422,96 +415,4 @@ ScrollableRelationships.args = {
       },
     ],
   },
-};
-
-export const ConstructHubExample: ComponentStory<
-  typeof NodeRelationshipsView
-> = (props) => {
-  const nodeMap = useConstructHubNodeMap();
-  const [currentNode, setCurrentNode] = useState<Node | undefined>();
-  useEffect(() => {
-    if (nodeMap) {
-      setCurrentNode(nodeMap[""]);
-    }
-  }, [nodeMap]);
-  const [relationships, setRelationships] = useState<Relationships>();
-  useEffect(() => {
-    if (!currentNode) {
-      setRelationships(undefined);
-      return;
-    }
-
-    const parent =
-      currentNode.parent !== undefined
-        ? nodeMap?.[currentNode.parent]
-        : undefined;
-    setRelationships({
-      callees: [],
-      callers: [],
-      parent:
-        parent !== undefined
-          ? {
-              id: parent.id,
-              path: parent.path,
-              icon: (
-                <CubeIcon
-                  className="w-4 h-4 text-slate-500"
-                  aria-hidden="true"
-                />
-              ),
-            }
-          : undefined,
-      self: {
-        id: currentNode.id,
-        path: currentNode.path,
-        icon: (
-          <CubeIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />
-        ),
-      },
-      children: currentNode.children.map((path) => {
-        const child = nodeMap?.[path];
-        return {
-          id: child?.id ?? "<not found>",
-          path,
-          icon: (
-            <CubeIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />
-          ),
-        };
-      }),
-    });
-  }, [currentNode]);
-
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="rounded-md bg-blue-50 p-4">
-        <div className="flex">
-          <div className="flex-shrink-0">
-            <InformationCircleIcon
-              className="h-5 w-5 text-blue-400"
-              aria-hidden="true"
-            />
-          </div>
-          <div className="ml-3 flex-1 md:flex md:justify-between">
-            <p className="text-sm text-blue-700">
-              This story uses the Construct Hub's tree.json file. You can click
-              on the items to navigate back and forth. The usage relationship is
-              hidden because we don't have that data.
-            </p>
-          </div>
-        </div>
-      </div>
-      <div className="max-w-lg">
-        {relationships && (
-          <NodeRelationshipsView
-            hideUsageRelationship
-            relationships={relationships}
-            onNodeClick={(name) => {
-              const node = nodeMap?.[name];
-              setCurrentNode(node);
-            }}
-          />
-        )}
-      </div>
-    </div>
-  );
 };

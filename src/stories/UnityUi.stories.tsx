@@ -1,8 +1,4 @@
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import {
-  CubeIcon as OutlineCubeIcon,
-  CubeTransparentIcon,
-} from "@heroicons/react/24/outline";
 import { CubeIcon } from "@heroicons/react/24/solid";
 import {
   ConstructSchema,

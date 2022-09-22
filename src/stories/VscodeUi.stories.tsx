@@ -46,7 +46,7 @@ function Tabs() {
         <select
           id="tabs"
           name="tabs"
-          className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          className="block w-full pl-3 pr-10 py-2 text-base border-slate-300 focus:outline-none focus:ring-sky-500 focus:border-sky-500 sm:text-sm rounded-md"
           defaultValue={tabs.find((tab) => tab.current)?.name}
         >
           {tabs.map((tab) => (
@@ -63,7 +63,7 @@ function Tabs() {
                 href={tab.href}
                 className={classNames(
                   tab.current
-                    ? "border-indigo-500 text-indigo-600"
+                    ? "border-sky-500 text-sky-600"
                     : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300",
                   "whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm",
                 )}
@@ -87,7 +87,7 @@ function Tabs() {
   //       <select
   //         id="tabs"
   //         name="tabs"
-  //         className="block w-full focus:ring-indigo-500 focus:border-indigo-500 border-slate-300 rounded-md"
+  //         className="block w-full focus:ring-sky-500 focus:border-sky-500 border-slate-300 rounded-md"
   //         defaultValue={tabs.find((tab) => tab.current)?.name}
   //       >
   //         {tabs.map((tab) => (
@@ -123,6 +123,18 @@ function Vscodeui(props: VscodeuiProps) {
   const [selectedTab, setSelectedTab] = useState(6);
   const [selectedItemId, setSelectedItemId] = useState<string | undefined>("6");
   const [openMenuItemIds, setOpenMenuItemIds] = useState<string[]>(["4", "5"]);
+  const toggleMenuItem = (itemId: string) => {
+    setOpenMenuItemIds(([...openedMenuItems]) => {
+      const index = openedMenuItems.indexOf(itemId);
+      if (index !== -1) {
+        openedMenuItems.splice(index, 1);
+        return openedMenuItems;
+      }
+
+      openedMenuItems.push(itemId);
+      return openedMenuItems;
+    });
+  };
 
   useEffect(() => {
     if (selectedTab >= openedTabs.length) {
@@ -131,28 +143,6 @@ function Vscodeui(props: VscodeuiProps) {
       setSelectedItemId(openedTabs[selectedTab]);
     }
   }, []);
-
-  const enrichTreeMenuItems = (tree: TreeMenuItem[]): TreeMenuItem[] => {
-    return tree.map((item) => {
-      return {
-        ...item,
-        children: item.children ? enrichTreeMenuItems(item.children) : [],
-        onTreeItemClick: (item) => {
-          setOpenMenuItemIds(([...openedMenuItems]) => {
-            const index = openedMenuItems.indexOf(item.id);
-            if (index !== -1) {
-              openedMenuItems.splice(index, 1);
-              return openedMenuItems;
-            }
-
-            openedMenuItems.push(item.id);
-            return openedMenuItems;
-          });
-          setSelectedItemId(item.id);
-        },
-      };
-    });
-  };
 
   return (
     <div className="fixed inset-0 flex flex-col p-8">
@@ -167,8 +157,12 @@ function Vscodeui(props: VscodeuiProps) {
             <TreeMenu
               title={"Wing Console"}
               selectedItemId={selectedItemId}
-              items={enrichTreeMenuItems(treeMenuItems)}
+              items={treeMenuItems}
               openMenuItemIds={openMenuItemIds}
+              onItemClick={(item) => {
+                toggleMenuItem(item.id);
+                setSelectedItemId(item.id);
+              }}
             />
           </div>
           <div className="flex-1 flex flex-col bg-slate-100">
@@ -406,7 +400,7 @@ function Vscodeui(props: VscodeuiProps) {
                           key: "Source File",
                           value: "/Users/Wing/Code/wing-demo/src/demo.w",
                           render: () => (
-                            <button className="font-medium text-indigo-600 hover:text-indigo-500">
+                            <button className="font-medium text-sky-600 hover:text-sky-500">
                               {meta.source.fileName} ({meta.source.line}:
                               {meta.source.column})
                             </button>
@@ -416,7 +410,7 @@ function Vscodeui(props: VscodeuiProps) {
                           key: "URL",
                           value: "http://localhost:3012",
                           render: () => (
-                            <button className="font-medium text-indigo-600 hover:text-indigo-500">
+                            <button className="font-medium text-sky-600 hover:text-sky-500">
                               http://localhost:3012
                             </button>
                           ),
@@ -448,7 +442,7 @@ function Vscodeui(props: VscodeuiProps) {
                       <div className="sm:col-span-1">
                         <dt className="font-medium text-slate-500">Source</dt>
                         <dd className="mt-1 text-sm text-slate-900">
-                          <button className="font-medium text-indigo-600 hover:text-indigo-500">
+                          <button className="font-medium text-sky-600 hover:text-sky-500">
                             {meta.source.fileName} ({meta.source.line}:
                             {meta.source.column})
                           </button>

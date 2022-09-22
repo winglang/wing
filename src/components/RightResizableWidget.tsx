@@ -31,7 +31,7 @@ export function RightResizableWidget(props: RightResizableWidgetProps) {
           }
         }}
       >
-        <div className="absolute inset-y-0 -right-1 w-2 cursor-ew-resize" />
+        <div className="absolute inset-y-0 -right-0.5 w-1 cursor-ew-resize transition-colors ease-in-out hover:bg-sky-500 z-10" />
       </DraggableCore>
 
       {children}

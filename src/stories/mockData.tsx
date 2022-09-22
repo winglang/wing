@@ -16,7 +16,7 @@ import React, { useEffect, useState } from "react";
 
 import { Breadcrumb } from "@/components/Breadcrumbs";
 import { TreeMenuItem } from "@/components/TreeMenu";
-import { buildNodeMap, NodeMap } from "@/utils/nodeMap";
+import { buildNodeMap, Node, NodeMap, NodeRecord } from "@/utils/nodeMap";
 
 export const treeMenuItems: TreeMenuItem[] = [
   {
@@ -126,13 +126,10 @@ export const breadcrumbs: Breadcrumb[] = [
   {
     id: "1",
     name: "resources",
-    onClick: (id: string) => console.log(id),
-    current: false,
     icon: <CogIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />,
   },
   {
     id: "2",
-    onClick: (id: string) => console.log(id),
     icon: (
       <CubeTransparentIcon
         className="w-4 h-4 text-slate-500"
@@ -140,12 +137,9 @@ export const breadcrumbs: Breadcrumb[] = [
       />
     ),
     name: "image-scrapper",
-    current: false,
   },
   {
     id: "3",
-    current: false,
-    onClick: (id: string) => console.log(id),
     icon: (
       <ArchiveBoxIcon className="w-4 h-4 text-orange-500" aria-hidden="true" />
     ),
@@ -153,19 +147,15 @@ export const breadcrumbs: Breadcrumb[] = [
   },
   {
     id: "4",
-    current: false,
-    onClick: (id: string) => console.log(id),
     icon: <BoltIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
     name: "function",
   },
   {
     id: "5",
-    onClick: (id: string) => console.log(id),
     icon: (
       <GlobeAltIcon className="w-4 h-4 text-purple-500" aria-hidden="true" />
     ),
     name: "endpoint",
-    current: true,
   },
 ];
 
@@ -272,39 +262,50 @@ function visitConstructHub(
   }
 }
 
-export function buildConstructHubNodeMap(node: ConstructHubNode): NodeMap {
-  let nodes: NodeMap = {};
+// export function buildConstructHubNodeMap(node: ConstructHubNode): NodeRecord {
+//   let nodes: NodeRecord = {};
 
-  visitConstructHub(undefined, node, (parent, node) => {
-    nodes = {
-      ...nodes,
-      [node.path]: {
-        id: node.id,
-        path: node.path,
-        type: node.constructInfo?.fqn ?? "",
-        parent: parent?.path,
-        children: Object.values(node.children ?? {}).map((child) => child.path),
-        constructInfo: node.constructInfo,
-        attributes: node.attributes,
-      },
-    };
-  });
+//   visitConstructHub(undefined, node, (parent, node) => {
+//     const newNode: Node = {
+//       id: node.id,
+//       path: node.path,
+//       type: (node.constructInfo?.fqn ?? "") as any,
+//       parent: parent?.path,
+//       children: Object.values(node.children ?? {}).map((child) => child.path),
+//       constructInfo: node.constructInfo,
+//       attributes: node.attributes,
+//       schema: node,
+//     };
+//     nodes = {
+//       ...nodes,
+//       [node.path]: {
+//         id: node.id,
+//         path: node.path,
+//         type: (node.constructInfo?.fqn ?? "") as any,
+//         parent: parent?.path,
+//         children: Object.values(node.children ?? {}).map((child) => child.path),
+//         constructInfo: node.constructInfo,
+//         attributes: node.attributes,
+//         schema: node,
+//       },
+//     };
+//   });
 
-  return nodes;
-}
+//   return nodes;
+// }
 
-export function useConstructHubNodeMap() {
-  const [nodeMap, setNodeMap] = useState<NodeMap>();
+// export function useConstructHubNodeMap() {
+//   const [nodeMap, setNodeMap] = useState<NodeRecord>();
 
-  useEffect(() => {
-    void import("../assets/construct-hub-tree.json").then((constructHub) => {
-      const nodeMap = buildConstructHubNodeMap(constructHub.tree);
-      setNodeMap(nodeMap);
-    });
-  }, []);
+//   useEffect(() => {
+//     void import("../assets/construct-hub-tree.json").then((constructHub) => {
+//       const nodeMap = buildConstructHubNodeMap(constructHub.tree);
+//       setNodeMap(nodeMap);
+//     });
+//   }, []);
 
-  return nodeMap;
-}
+//   return nodeMap;
+// }
 
 export function useTreeNodeMap() {
   const [nodeMap, setNodeMap] = useState<{
