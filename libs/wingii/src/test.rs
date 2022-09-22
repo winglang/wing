@@ -75,6 +75,9 @@ mod tests {
 		// find interface with fqn "constructs.IConstruct"
 		let i_construct = type_system.find_interface("constructs.IConstruct").unwrap();
 		assert_eq!(i_construct.name, "IConstruct");
+		// make sure incorrect fqn type query by kind returns None
+		let i_construct = type_system.find_class("constructs.IConstruct");
+		assert_eq!(i_construct, None);
 	}
 }
 
