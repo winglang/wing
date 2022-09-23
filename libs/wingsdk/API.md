@@ -2942,22 +2942,6 @@ public readonly lines: string[];
 
 ---
 
-### Void <a name="Void" id="@monadahq/wingsdk.cloud.Void"></a>
-
-This type exists as a placeholder for wherever "void" should be used in Promise interfaces.
-
-This exists as a workaround for
-https://github.com/aws/jsii/issues/51
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.Void.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-const void: cloud.Void = { ... }
-```
-
-
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### Code <a name="Code" id="@monadahq/wingsdk.core.Code"></a>
@@ -3832,7 +3816,7 @@ public get(key: string): string
 ##### `put` <a name="put" id="@monadahq/wingsdk.cloud.IBucketClient.put"></a>
 
 ```typescript
-public put(key: string, body: string): Void
+public put(key: string, body: string): void
 ```
 
 ###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.put.parameter.key"></a>
@@ -3900,7 +3884,7 @@ Inflight interface for `Queue`.
 ##### `push` <a name="push" id="@monadahq/wingsdk.cloud.IQueueClient.push"></a>
 
 ```typescript
-public push(message: string): Void
+public push(message: string): void
 ```
 
 Push a message to the queue.

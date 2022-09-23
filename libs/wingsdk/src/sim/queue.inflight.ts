@@ -1,4 +1,4 @@
-import { IQueueClient, Void } from "../cloud";
+import { IQueueClient } from "../cloud";
 import { FunctionClient } from "./function.inflight";
 
 // TODO: move core logic of queue simulation to queue.sim.ts
@@ -19,9 +19,8 @@ export class QueueClient implements IQueueClient {
     this.intervalId = setInterval(() => this.poll(), 100); // every 0.1 seconds
   }
 
-  public async push(message: string): Promise<Void> {
+  public async push(message: string): Promise<void> {
     this.messages.push(message);
-    return {};
   }
 
   private poll() {

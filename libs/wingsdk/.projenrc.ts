@@ -1,4 +1,4 @@
-import { cdk, github, javascript, JsonFile } from "projen";
+import { cdk, javascript, JsonFile } from "projen";
 
 const project = new cdk.JsiiProject({
   name: "@monadahq/wingsdk",
@@ -29,32 +29,14 @@ const project = new cdk.JsiiProject({
   devDeps: ["replace-in-file", "@types/aws-lambda"],
   prettier: true,
   jestOptions: {
-    jestVersion: "^27.0.0", // 28 requires a later typescript version
+    jestVersion: "^27.0.0", // 28 requires a later typescript version than the one used by JSII
   },
   minNodeVersion: "16.16.0",
-  workflowNodeVersion: "16.x",
   npmRegistryUrl: "https://npm.pkg.github.com",
-  autoApproveUpgrades: true,
-  autoApproveOptions: {
-    allowedUsernames: ["monada-bot[bot]"],
-    secret: "PROJEN_GITHUB_TOKEN",
-  },
   packageManager: javascript.NodePackageManager.NPM,
   gitignore: [".DS_Store"],
-  githubOptions: {
-    projenCredentials: github.GithubCredentials.fromApp(),
-  },
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
-  workflowBootstrapSteps: [
-    {
-      name: "Login to private npm registry",
-      run: "npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
-      env: {
-        PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
-      },
-    },
-  ],
   github: false,
   projenrcTs: true,
 });
@@ -169,5 +151,11 @@ project.eslint!.addRules({
     },
   ],
 });
+
+project.npmignore?.addPatterns(
+  "tsconfig.nonjsii.json",
+  ".prettierignore",
+  ".prettierrc.json"
+);
 
 project.synth();

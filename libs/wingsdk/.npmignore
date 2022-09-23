@@ -20,3 +20,6 @@ dist
 tsconfig.tsbuildinfo
 /.eslintrc.json
 !.jsii
+tsconfig.nonjsii.json
+.prettierignore
+.prettierrc.json

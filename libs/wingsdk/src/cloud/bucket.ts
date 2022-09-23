@@ -2,7 +2,6 @@ import { Polycons } from "@monadahq/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code } from "../core";
 import { Resource } from "./resource";
-import { Void } from "./shared";
 
 /**
  * Global identifier for `Bucket`.
@@ -56,7 +55,7 @@ export class Bucket extends BucketBase {
  * Inflight interface for `Bucket`.
  */
 export interface IBucketClient {
-  put(key: string, body: string): Promise<Void>;
+  put(key: string, body: string): Promise<void>;
   get(key: string): Promise<string>;
 }
 
