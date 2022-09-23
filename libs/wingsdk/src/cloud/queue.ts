@@ -3,7 +3,6 @@ import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code, Duration, Inflight } from "../core";
 import { Function, FunctionProps } from "./function";
 import { Resource } from "./resource";
-import { Void } from "./shared";
 
 /**
  * Global identifier for `Queue`.
@@ -87,7 +86,7 @@ export interface IQueueClient {
    * Push a message to the queue.
    * @param message Payload to send to the queue.
    */
-  push(message: string): Promise<Void>;
+  push(message: string): Promise<void>;
 }
 
 /**

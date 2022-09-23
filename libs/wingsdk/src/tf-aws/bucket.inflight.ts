@@ -5,21 +5,20 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { IBucketClient, Void } from "../cloud";
+import { IBucketClient } from "../cloud";
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,
     private readonly s3Client = new S3Client({})
   ) {}
 
-  public async put(key: string, body: string): Promise<Void> {
+  public async put(key: string, body: string): Promise<void> {
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
       Key: key,
       Body: body,
     });
     await this.s3Client.send(command);
-    return {};
   }
 
   public async get(key: string): Promise<string> {

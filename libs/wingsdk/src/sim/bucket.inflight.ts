@@ -1,14 +1,13 @@
 import * as fs from "fs";
 import * as path from "path";
-import { IBucketClient, Void } from "../cloud";
+import { IBucketClient } from "../cloud";
 
 export class BucketClient implements IBucketClient {
   constructor(private readonly bucketAddr: string) {}
 
-  public async put(key: string, value: string): Promise<Void> {
+  public async put(key: string, value: string): Promise<void> {
     const filename = path.join(this.bucketAddr, key);
     await fs.promises.writeFile(filename, value);
-    return {};
   }
 
   public async get(key: string): Promise<string> {
