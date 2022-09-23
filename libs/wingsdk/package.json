@@ -38,7 +38,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@cdktf/provider-aws": "9.0.36",
+    "@cdktf/provider-aws": "9.0.37",
     "@monadahq/polycons": "0.0.36",
     "@types/aws-lambda": "^8.10.104",
     "@types/jest": "^27.0.0",
@@ -58,12 +58,12 @@
     "jest-junit": "^13",
     "jsii": "^1.68.0",
     "jsii-diff": "^1.68.0",
-    "jsii-docgen": "^7.0.90",
+    "jsii-docgen": "^7.0.91",
     "jsii-pacmak": "^1.68.0",
     "json-schema": "^0.4.0",
     "npm-check-updates": "^15",
     "prettier": "^2.7.1",
-    "projen": "^0.62.13",
+    "projen": "^0.62.16",
     "replace-in-file": "^6.3.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
@@ -72,7 +72,7 @@
     "typescript": "^4.8.3"
   },
   "peerDependencies": {
-    "@cdktf/provider-aws": "^9.0.36",
+    "@cdktf/provider-aws": "^9.0.37",
     "@monadahq/polycons": "^0.0.36",
     "cdktf": "^0.12.2",
     "constructs": "^10.0.25"
@@ -82,7 +82,7 @@
     "@aws-sdk/client-s3": "^3.171.0",
     "@aws-sdk/client-sqs": "^3.171.0",
     "@aws-sdk/util-utf8-node": "^3.170.0",
-    "esbuild-wasm": "^0.15.8",
+    "esbuild-wasm": "^0.15.9",
     "piscina": "*"
   },
   "bundledDependencies": [
