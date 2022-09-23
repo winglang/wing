@@ -1,7 +1,7 @@
-use relative_path::RelativePathBuf;
+// use relative_path::RelativePathBuf;
 use tree_sitter::Point;
 
-pub type FileId = RelativePathBuf;
+pub type FileId = String;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
 pub type Diagnostics = Vec<Diagnostic>;

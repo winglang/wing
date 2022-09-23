@@ -19,6 +19,19 @@ The compiler is under `libs/wingc` and you can use standard Rust workflows:
 - `cargo test` - runs tests
 - `cargo test -- --nocapture` - runs tests with output to see compilation results
 
+If intent is to compile for WebAssembly, following tooling is needed:
+
+- `rustup target add wasm32-wasi` - adds WASI target to Cargo
+- `wasicc` that comes with WasiEnv (<https://github.com/wasienv/wasienv>)
+
+At this stage, WASI builds are two-step builds. You need to run the native build
+once to get `.rlib` and `.a` outputs (WASI's `ld` just needs to check for these
+files to be present) and then run:
+
+```
+CC="wasicc" CFLAGS="-m32 -Wl,--whole-archive" cargo build --target wasm32-wasi
+```
+
 ## `wingrt` Runtime
 
 The runtime that executes output of the compiler - it is under `apps/wingrt`.

@@ -91,7 +91,7 @@ impl Parser<'_> {
 			start_byte: node.byte_range().start,
 			end_byte: node.byte_range().end,
 			// TODO: Implement multi-file support
-			file_id: RelativePathBuf::from_path(Path::new(&self.source_name)).unwrap(),
+			file_id: self.source_name.to_string(),
 		}
 	}
 

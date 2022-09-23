@@ -1,3 +1,4 @@
+use std::env;
 use ast::Scope;
 use diagnostic::Diagnostics;
 
@@ -28,8 +29,8 @@ pub fn parse(source_file: &str) -> Scope {
 
 	let source = match fs::read(&source_file) {
 		Ok(source) => source,
-		Err(_) => {
-			println!("Error reading source file: {}", &source_file);
+		Err(err) => {
+			println!("Error reading source file: {}: {:?}", &source_file, err);
 			std::process::exit(1);
 		}
 	};
@@ -123,4 +124,14 @@ mod sanity {
 			}
 		}
 	}
+}
+
+pub fn main() {
+	let args: Vec<String> = env::args().collect();
+	dbg!(args.clone());
+	let source = &args[2];
+	println!("Compiling {}...", source);
+	let outdir = args.get(3).map(|s| s.as_str());
+	println!("outdir: {:?}", outdir);
+	println!("{:?}", compile(source, outdir));
 }
