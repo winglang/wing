@@ -15,11 +15,9 @@ base16ct = { version = "0.1.1", features = ["alloc"] }
 derivative = "2.2.0"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
 
-# [lib]
-# crate-type = ["staticlib", "rlib"]
-# path = "src/lib.rs"
-# bench = false
+[lib]
+path = "src/lib.rs"
 
 [[bin]]
-name = "wingc-cli"
+name = "wingc"
 path = "src/bin.rs"

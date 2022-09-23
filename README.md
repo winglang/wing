@@ -21,15 +21,13 @@ The compiler is under `libs/wingc` and you can use standard Rust workflows:
 
 If intent is to compile for WebAssembly, following tooling is needed:
 
-- `rustup target add wasm32-wasi` - adds WASI target to Cargo
-- `wasicc` that comes with WasiEnv (<https://github.com/wasienv/wasienv>)
+- `cargo install cargo-wasi` - Adds WASI target to Cargo
+- `wasiconfigure` that comes with WasiEnv (<https://github.com/wasienv/wasienv>)
 
-At this stage, WASI builds are two-step builds. You need to run the native build
-once to get `.rlib` and `.a` outputs (WASI's `ld` just needs to check for these
-files to be present) and then run:
+With cargo-wasi and wasienv installed, you can build for WASM with:
 
-```
-CC="wasicc" CFLAGS="-m32 -Wl,--whole-archive" cargo build --target wasm32-wasi
+```shell
+wasiconfigure cargo wasi build
 ```
 
 ## `wingrt` Runtime

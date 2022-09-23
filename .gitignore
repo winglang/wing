@@ -21,9 +21,6 @@ target/
 libs/wingii/src/jsii-spec.json
 libs/wingii/src/jsii.rs
 
-# wingc
-libs/wingc/wingc.h
-
 # tree-sitter-wing
 libs/tree-sitter-wing/src/
 libs/tree-sitter-wing/log.html
