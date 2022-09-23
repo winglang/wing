@@ -11,6 +11,7 @@ import { NodeAttributes } from "./NodeAttributes";
 import { NodeInteractionView } from "./NodeInteractionView";
 import { NodeRelationshipsView, Relationships } from "./NodeRelationshipsView";
 import { RightResizableWidget } from "./RightResizableWidget";
+import { ScrollableArea } from "./ScrollableArea";
 import { Tabs } from "./Tabs";
 import { TopResizableWidget } from "./TopResizableWidget";
 import { TreeMenu } from "./TreeMenu";
@@ -192,7 +193,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
             <div className="h-full flex flex-col">
               <div className="flex-0 w-full h-9 relative">
                 {tabs.currentTabId !== undefined && (
-                  <div className="absolute inset-0 overflow-x-overlay overflow-y-hidden scroller transition-colors ease-in-out duration-700 border-transparent scrollbar-h-[3px] hover:border-slate-500/10 hover:duration-700">
+                  <ScrollableArea overflowX scrollbarSize="xs">
                     <Breadcrumbs
                       breadcrumbs={breadcrumbs}
                       onBreadcrumbClicked={(breadcrumb) => {
@@ -205,12 +206,12 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
                         });
                       }}
                     />
-                  </div>
+                  </ScrollableArea>
                 )}
               </div>
 
               <div className="flex-1 h-full w-full relative min-w-[32rem]">
-                <div className="absolute inset-0 overflow-y-overlay overflow-x-overlay scroller transition-colors ease-in-out duration-700 border-transparent scrollbar-w-2.5 scrollbar-h-2.5 hover:border-slate-500/10 hover:duration-700">
+                <ScrollableArea overflowX overflowY>
                   <div className="p-2 space-y-8 divide-y divide-slate-200">
                     <div className="flex gap-2">
                       <div className="flex-grow-0 flex-shrink-0 max-w-lg w-full">
@@ -237,7 +238,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
                       <NodeInteractionView node={currentNode?.schema} />
                     )}
                   </div>
-                </div>
+                </ScrollableArea>
               </div>
             </div>
           </div>
@@ -262,11 +263,11 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
               </div>
 
               <div className="flex-1 relative">
-                <div className="absolute inset-0 overflow-y-overlay overflow-x-overlay scroller transition-colors ease-in-out duration-700 border-transparent scrollbar-w-2.5 scrollbar-h-2.5 hover:border-slate-500/10 hover:duration-700">
+                <ScrollableArea overflowX overflowY>
                   <pre className="p-4 text-xs">
                     {JSON.stringify(schema, undefined, 2)}
                   </pre>
-                </div>
+                </ScrollableArea>
               </div>
             </div>
           </TopResizableWidget>

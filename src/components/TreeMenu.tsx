@@ -3,6 +3,7 @@ import classNames from "classnames";
 import React from "react";
 
 import { Square2StackMinusIcon, Square2StackPlusIcon } from "./icons";
+import { ScrollableArea } from "./ScrollableArea";
 
 export interface TreeMenuItem {
   id: string;
@@ -64,7 +65,10 @@ export const TreeMenu = ({
       </div>
       <div className="relative h-full">
         <div className="absolute inset-0">
-          <div className="h-full w-full text-sm text-slate-800 bg-slate-100 flex flex-col gap-1 overflow-y-overlay scroller transition-colors ease-in-out duration-700 border-transparent scrollbar-w-2.5 hover:border-slate-500/10 hover:duration-700">
+          <ScrollableArea
+            overflowY
+            className="h-full w-full text-sm text-slate-800 bg-slate-100 flex flex-col gap-1"
+          >
             <div className="flex flex-col">
               <MenuItems
                 items={items}
@@ -73,7 +77,7 @@ export const TreeMenu = ({
                 onItemClick={onItemClick}
               />
             </div>
-          </div>
+          </ScrollableArea>
         </div>
       </div>
     </>

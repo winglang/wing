@@ -1,6 +1,8 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 
+import { ScrollableArea } from "./ScrollableArea";
+
 export interface Tab {
   id: string;
   name: string;
@@ -22,7 +24,12 @@ export const Tabs = (props: TabsProps) => {
 
   return (
     <div className="flex-1 relative w-full text-sm h-8 bg-slate-100 select-none">
-      <div className="absolute inset-0 flex gap-px overflow-x-overlay overflow-y-hidden scroller transition-colors ease-in-out duration-700 border-transparent scrollbar-h-[3px] hover:border-slate-500/10 hover:duration-700">
+      <ScrollableArea
+        overflowX
+        overflowY
+        scrollbarSize="xs"
+        className="flex gap-px"
+      >
         {tabs.map((tab) => {
           const isCurrent = tab.id === currentTabId;
           return (
@@ -56,7 +63,7 @@ export const Tabs = (props: TabsProps) => {
             </div>
           );
         })}
-      </div>
+      </ScrollableArea>
     </div>
   );
 };
