@@ -1,0 +1,47 @@
+<html>
+  <link rel="stylesheet" href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/default.min.css">
+  <script type="module">
+    import hljs from 'https://unpkg.com/@highlightjs/cdn-assets@11.6.0/es/highlight.min.js';
+    import javascript from 'https://unpkg.com/@highlightjs/cdn-assets@11.6.0/es/languages/javascript.min.js';
+    hljs.registerLanguage('javascript', javascript);
+
+    import MyWorker from './worker?worker'
+
+    window.worker = new MyWorker()
+    
+    window.onload = async function() {
+      const code = document.getElementById('code')
+      const result = document.getElementById('result')
+
+      code.addEventListener('input', async function(d) {
+        worker.postMessage(code.value)
+      })
+
+      worker.addEventListener('message', function(e) {
+        result.textContent = e.data
+        hljs.highlightAll();
+      })
+    };
+  </script>
+  <body>
+    <h1>Wing Playground</h1>
+    <div style="display: flex; height: 100%;width: 100%;">
+      <textarea style="width: 30%;" id="code"></textarea>
+      <pre style="width: 70%;"><code class="language-javascript" id="result"></code></pre>
+    </div>
+  </body>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+    }
+    textarea {
+      font-family: monospace;
+      font-size: 16px;
+      resize: none;
+      outline: none;
+      white-space: pre-wrap;
+    }
+  </style>
+</html>

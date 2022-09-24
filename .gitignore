@@ -25,6 +25,7 @@ libs/wingii/src/jsii.rs
 libs/tree-sitter-wing/src/
 libs/tree-sitter-wing/log.html
 libs/tree-sitter-wing/*.wasm
+libs/tree-sitter-wing/build/
 
 # wingrt
 apps/wingrt/vendor/node
@@ -40,3 +41,6 @@ apps/wingrt/*.zip
 # wing
 apps/wing/wasm/*
 !apps/wing/wasm/.gitkeep
+
+# wing-playground
+apps/wing-playground/dist
