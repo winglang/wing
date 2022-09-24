@@ -10,7 +10,7 @@ and submit pull requests to the GitHub repository.
   - [Orientation](#orientation)
     - [`src` folder](#src-folder)
     - [`test` folder](#test-folder)
-  - [Building the project](#building-the-project)
+  - [Setting up and building the project](#setting-up-and-building-the-project)
   - [Testing](#testing)
     - [Sandbox](#sandbox)
   - [Creating a resource](#creating-a-resource)
@@ -68,7 +68,7 @@ Contains tests for the different parts of the SDK.
 
 It also includes a `sandbox` folder which is a root of a CDK for TF project that you can use to deploy a mock app to the cloud or to our local simulator.
 
-## Building the project
+## Setting up and building the project
 
 Install the dependencies using npm:
 
@@ -88,7 +88,8 @@ To compile the project's code without linting or running tests, run:
 $ npm run compile
 ```
 
-Dependencies can be added by editing the `.projenrc.ts` file and running `npx projen` after making the edits. If the dependency is a JSII library[2], you should add it to the `peerDeps` section - otherwise, you should add it to the `bundledDeps` section.
+Dependencies can be added by editing the `.projenrc.ts` file and running `npx projen` after making the edits.
+If the dependency is a JSII library[2], you should add it to the list named `peerDeps` - otherwise, you should add it to `bundledDeps`.
 
 > [2] JSII libraries are npm packages that are compiled with JSII. They are usually published to npm with the `cdk` keyword, and they will have a `.jsii` file at their root.
 
