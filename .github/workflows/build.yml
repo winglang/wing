@@ -9,7 +9,6 @@ concurrency:
 
 env:
   NODEJS_VERSION: "18.x"
-  PYTHON_VERSION: "3.10"
 
 permissions:
   contents: write
@@ -31,7 +30,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Install wasi-sdk
-        run: sudo scripts/setup_wasi.sh
+        run: scripts/setup_wasi.sh
 
       - name: Install cargo-wasi
         run: cargo install cargo-wasi
@@ -39,11 +38,11 @@ jobs:
       - name: Build WingC
         working-directory: libs/wingc
         run: |
-          cargo wasi build --release
+          cargo wasi build --bin wingc --release
           mv ../../target/wasm32-wasi/release/wingc.wasm ../../apps/wing/wasm/wingc.wasm
 
       - name: Publish Wing
-        # if: ${{ github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         working-directory: apps/wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
@@ -79,11 +78,6 @@ jobs:
           fileName: "libnode-${{ matrix.os }}-${{ matrix.arch }}.zip"
           token: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
 
-      - name: Set up Python ${{ env.PYTHON_VERSION }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
       - name: Setup Private NPM with Github
         uses: actions/setup-node@v3
         with:
@@ -103,7 +97,7 @@ jobs:
         working-directory: libs/wingc
         run: |
           cargo test --release -- --nocapture
-          cargo build --release
+          cargo build --lib --release
 
       - name: Build Wing Language Server
         working-directory: apps/wing-language-server

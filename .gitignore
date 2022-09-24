@@ -27,17 +27,6 @@ libs/tree-sitter-wing/log.html
 libs/tree-sitter-wing/*.wasm
 libs/tree-sitter-wing/build/
 
-# wingrt
-apps/wingrt/vendor/node
-apps/wingrt/build
-apps/wingrt/dist
-apps/wingrt/*.exe
-apps/wingrt/*.dll
-apps/wingrt/*.so
-apps/wingrt/*-go.h
-apps/wingrt/*.class
-apps/wingrt/*.zip
-
 # wing
 apps/wing/wasm/*
 !apps/wing/wasm/.gitkeep
