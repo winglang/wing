@@ -143,14 +143,16 @@ A resource in the SDK has several pieces:
   * A class that implements the polycon API and can produce the resource's simulation schema. For example, [`src/sim/bucket.ts`](./src/sim/bucket.ts).
   * An `init` function that creates the resource simulation. For example, [`src/sim/bucket.sim.ts`](./src/sim/bucket.sim.ts).
   * A class that implements the inflight API that interacts with the simulation. This class may require parameters that are provided from the `init` function. For example, [`src/sim/bucket.inflight.ts`](./src/sim/bucket.inflight.ts).
+  * Unit tests for the simulator implementation. For example, [`test/sim/bucket.test.ts`](./test/sim/bucket.test.ts).
 * An implementation for each target cloud (currently just AWS). This includes:
   * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](./src/tf-aws/bucket.ts).
   * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/tf-aws/bucket.inflight.ts`](./src/tf-aws/bucket.inflight.ts).
+  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](./test/tf-aws/bucket.test.ts) and [`test/tf-aws/capture.test.ts`](./test/tf-aws/captures.test.ts).
 
 If you are implementing a new resource (or implementing an existing resource for a new cloud provider), try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
 
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
-You can also join us on our [Discord server](https://discord.gg/5tEWeXkZJg) to ask questions (or just say hi)!
+You can also join us on our [Discord server](https://discord.gg/7wrggS3dZU) to ask questions (or just say hi)!
 
 ## Submitting a pull request
 
