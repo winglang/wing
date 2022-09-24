@@ -41,7 +41,7 @@ These tools are needed to run integration tests that deploy the resources to clo
 - [Terraform CLI](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - (optional) [CDK for Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/cdktf-install?in=terraform/cdktf) - not required if you are using just the commands added to npm in the projen def file
 
-You also need to `npm login` into `@monadahq` in order to install private npm packages.
+To build the project, you also need to `npm login` into `@monadahq` in order to install private npm packages.
 Use the instructions [here](https://github.com/monadahq/mona-kb/blob/main/docs/github-private-packages.md#consuming-packages-from-your-development-environment).
 
 ## Orientation
