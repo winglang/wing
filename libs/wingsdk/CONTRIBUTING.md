@@ -151,6 +151,8 @@ A resource in the SDK has several pieces:
 
 If you are implementing a new resource (or implementing an existing resource for a new cloud provider), try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
 
+For more information about designing resources, check out the Wing SDK design guidelines (TODO).
+
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
 You can also join us on our [Discord server](https://discord.gg/7wrggS3dZU) to ask questions (or just say hi)!
 
