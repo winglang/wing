@@ -8,13 +8,47 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  NODEJS_VERSION: "16.x"
+  NODEJS_VERSION: "18.x"
   PYTHON_VERSION: "3.10"
 
 permissions:
   contents: write
 
 jobs:
+  build-wing-cli:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: apps/wing
+
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install Wasienv
+        run: curl https://raw.githubusercontent.com/wasienv/wasienv/master/install.sh | sh
+
+      - name: Install cargo-wasi
+        run: cargo install cargo-wasi
+
+      - name: Build WingC
+        working-directory: libs/wingc
+        run: |
+          source $HOME/.wasienv/wasienv.sh
+          wasiconfigure cargo wasi build
+          mv ../../target/wasm32-wasi/debug/wingc.wasm ../../apps/wing/bin/wingc.wasm
+
+      - name: Publish Wing
+        if: ${{ github.ref == 'refs/heads/main' }}
+        working-directory: apps/wing
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: npm publish
+
   build-native:
     strategy:
       fail-fast: false
@@ -68,40 +102,6 @@ jobs:
           cargo test --release -- --nocapture
           cargo build --release
 
-      - name: Build Wing Runtime
-        working-directory: apps/wingrt
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: |
-          mkdir -p vendor/node
-          unzip -q ../../libnode-${{ matrix.os }}-${{ matrix.arch }}.zip -d vendor/node
-          npm ci
-          npm test
-          cp build/wingrt ../wing/bin
-          tar -zcf ../../wing-${{ matrix.os }}-${{ matrix.arch }}.tgz build/wingrt
-
-      - name: Build Wing CLI
-        working-directory: apps/wing
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: |
-          npm ci --ignore-scripts
-          node scripts/dist-package-json.js ${{ matrix.os }} ${{ matrix.arch }}
-
-      - name: Publish Wing
-        if: ${{ github.ref == 'refs/heads/main' }}
-        working-directory: apps/wing
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm publish
-
-      - name: Upload Wing CLI
-        if: ${{ github.ref == 'refs/heads/main' }}
-        uses: actions/upload-artifact@v2
-        with:
-          name: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-          path: wing-${{ matrix.os }}-${{ matrix.arch }}.tgz
-
       - name: Build Wing Language Server
         working-directory: apps/wing-language-server
         run: |
@@ -149,6 +149,7 @@ jobs:
   # Purposely Empty to be a required check for all matrix entries from build-native
   build:
     needs:
+      - build-wing-cli
       - build-native
       - build-vscode
       - build-sdk

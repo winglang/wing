@@ -34,7 +34,7 @@ const wasi = new WASI({
 const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
 
 const wasm = await WebAssembly.compile(
-  await fs.promises.readFile("../../target/wasm32-wasi/debug/wingc.wasm")
+  await fs.promises.readFile("./bin/wingc.wasm")
 );
 const instance = await WebAssembly.instantiate(wasm, importObject);
 wasi.start(instance);

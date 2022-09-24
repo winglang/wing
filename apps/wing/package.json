@@ -9,7 +9,7 @@
   ],
   "type": "module",
   "engines": {
-    "node": ">=12"
+    "node": ">=18"
   },
   "repository": {
     "type": "git",
@@ -20,11 +20,5 @@
   },
   "bundledDependencies": [
     "@monadahq/wingsdk"
-  ],
-  "optionalDependencies": {
-    "@monadahq/wing-darwin-arm64": "*",
-    "@monadahq/wing-darwin-x64": "*",
-    "@monadahq/wing-linux-ia32": "*",
-    "@monadahq/wing-linux-x64": "*"
-  }
+  ]
 }
