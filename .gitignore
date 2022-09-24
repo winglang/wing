@@ -38,5 +38,5 @@ apps/wingrt/*.class
 apps/wingrt/*.zip
 
 # wing
-apps/wing/bin/*
-!apps/wing/bin/.gitkeep
+apps/wing/wasm/*
+!apps/wing/wasm/.gitkeep

@@ -1,8 +1,7 @@
-#! node --experimental-wasi-unstable-preview1
-
-
+#!/usr/bin/env node --experimental-wasi-unstable-preview1
 
 import * as fs from "fs";
+import * as url from "url";
 import { argv, env, exit } from "process";
 import { execSync } from "child_process"
 
@@ -35,7 +34,7 @@ const wasi = new WASI({
 const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
 
 const wasm = await WebAssembly.compile(
-  await fs.promises.readFile("./wasm/wingc.wasm")
+  await fs.promises.readFile(url.fileURLToPath(new URL("./wasm/wingc.wasm", import.meta.url)))
 );
 const instance = await WebAssembly.instantiate(wasm, importObject);
 wasi.start(instance);

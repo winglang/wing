@@ -7,6 +7,8 @@
     "wasm/"
   ],
   "module": "index.js",
+  "main": "index.js",
+  "bin": "index.js",
   "type": "module",
   "engines": {
     "node": ">=18"
