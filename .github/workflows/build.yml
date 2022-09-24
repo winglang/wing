@@ -47,11 +47,11 @@ jobs:
         env:
           WASI_SDK_PATH: /opt/wasi-sdk
         run: |
-          cargo wasi build
-          mv ../../target/wasm32-wasi/debug/wingc.wasm ../../apps/wing/bin/wingc.wasm
+          cargo wasi build --release
+          mv ../../target/wasm32-wasi/release/wingc.wasm ../../apps/wing/bin/wingc.wasm
 
       - name: Publish Wing
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         working-directory: apps/wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
