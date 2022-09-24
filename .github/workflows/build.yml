@@ -21,6 +21,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Setup Private NPM with Github
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: "https://npm.pkg.github.com"
+
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
         with:
