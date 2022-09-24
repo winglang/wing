@@ -3,10 +3,14 @@ use wingc::compile;
 
 pub fn main() {
 	let args: Vec<String> = env::args().collect();
-	dbg!(args.clone());
 	let source = &args[2];
-	println!("Compiling {}...", source);
+	println!("Compiling: {}", source);
 	let outdir = args.get(3).map(|s| s.as_str());
-	println!("outdir: {:?}", outdir);
+	if outdir.is_some() {
+		println!("Output Directory: {}", outdir.unwrap());
+	}
+
+	println!("========================================");
 	println!("{}", compile(source, outdir));
+	println!("========================================");
 }
