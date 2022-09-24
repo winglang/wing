@@ -57,6 +57,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
           npm ci
+          scripts/self-package-json.js
           npm publish
 
   build-native:
