@@ -27,11 +27,6 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: "https://npm.pkg.github.com"
 
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: apps/wing
-
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
 
@@ -53,7 +48,9 @@ jobs:
         working-directory: apps/wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm publish
+        run: |
+          npm ci
+          npm publish
 
   build-native:
     strategy:
