@@ -5,6 +5,7 @@
 import * as fs from "fs";
 import { argv, env, exit } from "process";
 import { execSync } from "child_process"
+
 let WASI
 try {
   // check if experimental WASI is enabled
@@ -34,7 +35,7 @@ const wasi = new WASI({
 const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
 
 const wasm = await WebAssembly.compile(
-  await fs.promises.readFile("./bin/wingc.wasm")
+  await fs.promises.readFile("./wasm/wingc.wasm")
 );
 const instance = await WebAssembly.instantiate(wasm, importObject);
 wasi.start(instance);
