@@ -30,17 +30,24 @@ jobs:
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Install Wasienv
-        run: curl https://raw.githubusercontent.com/wasienv/wasienv/master/install.sh | sh
+      - name: Install wasi-sdk dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y --no-install-recommends curl ca-certificates patch make
+          wasi_sdk_url='https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-16/wasi-sdk-16.0-linux.tar.gz'
+          sudo curl -L $wasi_sdk_url|tar zxf - -C /opt
+          sudo mv /opt/wasi-sdk-16.0 /opt/wasi-sdk
+          echo "/opt/wasi-sdk/bin" >> $GITHUB_PATH
 
       - name: Install cargo-wasi
         run: cargo install cargo-wasi
 
       - name: Build WingC
         working-directory: libs/wingc
+        env:
+          WASI_SDK_PATH: /opt/wasi-sdk
         run: |
-          source $HOME/.wasienv/wasienv.sh
-          wasiconfigure cargo wasi build
+          cargo wasi build
           mv ../../target/wasm32-wasi/debug/wingc.wasm ../../apps/wing/bin/wingc.wasm
 
       - name: Publish Wing
