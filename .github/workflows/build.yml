@@ -30,11 +30,8 @@ jobs:
       - name: Rust Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Install wasi-sdk dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y --no-install-recommends curl ca-certificates patch make
-          sudo scripts/setup_wasi.sh
+      - name: Install wasi-sdk
+        run: sudo scripts/setup_wasi.sh
 
       - name: Install cargo-wasi
         run: cargo install cargo-wasi

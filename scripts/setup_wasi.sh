@@ -12,7 +12,6 @@ else
     exit 1
 fi
 
-# sudo mkdir -p /opt/wasi-sdk-$WASI_VERSION
 wasi_sdk_url="https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-$WASI_VERSION/wasi-sdk-$WASI_VERSION.0-$WASI_OS.tar.gz"
-sudo curl -L $wasi_sdk_url | sudo tar zxf - -C /opt
-sudo mv /opt/wasi-sdk-$WASI_VERSION.0 /opt/wasi-sdk
+curl -L $wasi_sdk_url | tar zxf - -C /opt
+mv /opt/wasi-sdk-$WASI_VERSION.0 /opt/wasi-sdk
