@@ -1,33 +1,40 @@
-#!/usr/bin/env node
+#! node --experimental-wasi-unstable-preview1
 
-const path = require("path");
-const child_process = require("child_process");
 
-// "bin" directory
-function bin() {
-  try {
-    // we're being accessed through the wrapper
-    const native = require.resolve(
-      `@monadahq/wing-${process.platform}-${process.arch}`
-    );
-    return path.join(path.dirname(native), "bin");
-  } catch {
-    // we're being accessed directly
-    return path.join(__dirname, "bin");
+
+import * as fs from "fs";
+import { argv, env, exit } from "process";
+import { execSync } from "child_process"
+let WASI
+try {
+  // check if experimental WASI is enabled
+  WASI = (await import("wasi")).WASI;
+} catch (error) {
+  if(error.code === "ERR_MODULE_NOT_FOUND") {
+    // run new node process with flag enabled
+    execSync(`${argv[0]} --experimental-wasi-unstable-preview1 ${argv.slice(1).join(" ")}`, { stdio: "inherit", env });
+    exit(0);
+  } else {
+    throw error;
   }
 }
 
-const binariesPath = bin();
-// Add the "bin" directory to LD_LIBRARY_PATH
-process.env.LD_LIBRARY_PATH = binariesPath;
-process.env.DYLD_LIBRARY_PATH = binariesPath;
-process.env.DYLD_FALLBACK_LIBRARY_PATH = binariesPath;
+const wasi = new WASI({
+  args: argv,
+  env: {
+    ...env,
+    RUST_BACKTRACE: "full",
+  },
+  preopens: {
+    "/": "/",
+  },
+});
 
-// Spawn "wingrt" binary and forward stdio to it
-child_process.spawnSync(
-  path.join(binariesPath, "wingrt"),
-  process.argv.slice(2),
-  {
-    stdio: "inherit",
-  }
+// Some WASI binaries require:
+const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
+
+const wasm = await WebAssembly.compile(
+  await fs.promises.readFile("../../target/wasm32-wasi/debug/wingc.wasm")
 );
+const instance = await WebAssembly.instantiate(wasm, importObject);
+wasi.start(instance);

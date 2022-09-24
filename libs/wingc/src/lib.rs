@@ -27,8 +27,7 @@ pub fn parse(source_file: &str) -> Scope {
 	let source = match fs::read(&source_file) {
 		Ok(source) => source,
 		Err(err) => {
-			println!("Error reading source file: {}: {:?}", &source_file, err);
-			std::process::exit(1);
+			panic!("Error reading source file: {}: {:?}", &source_file, err);
 		}
 	};
 
