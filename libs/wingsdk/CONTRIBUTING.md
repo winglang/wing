@@ -3,6 +3,20 @@
 Thank you for wanting to contribute to Wing SDK! This will guide you through everything you need to know to make changes 
 and submit pull requests to the GitHub repository.
 
+- [Contributing to Wing SDK](#contributing-to-wing-sdk)
+  - [Opening Issues](#opening-issues)
+  - [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Orientation](#orientation)
+    - [`src` folder](#src-folder)
+    - [`test` folder](#test-folder)
+  - [Building the project](#building-the-project)
+  - [Testing](#testing)
+    - [Sandbox](#sandbox)
+  - [Creating a resource](#creating-a-resource)
+  - [Submitting a pull request](#submitting-a-pull-request)
+  - [Getting Help](#getting-help)
+
 ## Opening Issues
 
 One of the easiest ways to contribute to this project is by opening [issues](https://github.com/monadahq/wingsdk/issues/new).
@@ -11,64 +25,78 @@ If you're suggesting a feature or enhancement, please include information about 
 
 ## Getting Started
 
-Start by forking or cloning the repository. [GitHub's Guide](https://docs.github.com/en/get-started/quickstart/contributing-to-projects)
+Start by forking or cloning the repository. [GitHub's guide](https://docs.github.com/en/get-started/quickstart/contributing-to-projects)
 is a great place to get started on this process.
 
 ## Prerequisites
+
+These tools are needed to build the library and run unit tests:
+
+- [Node.js](https://nodejs.org/en/download/) - which includes `npm`
+- Your favorite code editor
+
+These tools are needed to run integration tests that deploy the resources to clouds:
+
 - [AWS CLI](https://aws.amazon.com/cli/) - make sure to do the setup part to create credentials
 - [Terraform CLI](https://learn.hashicorp.com/terraform/getting-started/install.html)
-- [CDK TF CLI](https://learn.hashicorp.com/tutorials/terraform/cdktf-install?in=terraform/cdktf) - not required if you are using just the commands added to npm in the projen def file
+- (optional) [CDK for Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/cdktf-install?in=terraform/cdktf) - not required if you are using just the commands added to npm in the projen def file
 
-
-You also need to `npm login` into `@monadahq`.
+You also need to `npm login` into `@monadahq` in order to install private npm packages.
+Use the instructions [here](https://github.com/monadahq/mona-kb/blob/main/docs/github-private-packages.md#consuming-packages-from-your-development-environment).
 
 ## Orientation
-This is a [CDK for Terraform](https://www.terraform.io/cdktf) [JSII](https://github.com/aws/jsii) [Projen](https://github.com/projen/projen) project. So its package.json and other resources are generated from the `.projenrc.js` file in the root. After modifying it, run `npx projen` to regenerate the resources.
 
-### src folder
+This is a [CDK for Terraform](https://www.terraform.io/cdktf), [JSII](https://github.com/aws/jsii), [Projen](https://github.com/projen/projen) project. In a nutshell:
+
+* CDK for Terraform is a framework for defining Terraform infrastructure in familiar programming languages like TypeScript, Python, Java, C#, and Go.
+* JSII is a tool that wraps over the TypeScript compiler that makes it possible to consume the library in multiple languages. JSII code is TypeScript code, but with extra type checks. [1]
+* Projen is a tool for managing project configuration. There is a `.projenrc.ts` file which generates `package.json` and other files. You can modify it and run `npx projen` to regenerate the resources.
+
+> [1] Currently we only use JSII to compile preflight code. Inflight code and code for the Wing simulator is compiled with plain TypeScript.
+
+### `src` folder
+
 Contains the cloud resources for different targets: local and aws at the moment.
 
 All the resource implementations inherit from the base resources in the `cloud` folder.
 
 The non-base resources there are consumed by the app and their constructors return the injected target implementation (aws or local) using the [Polycons](https://github.com/monadahq/polycons) factory that is configured at synth time.
 
-The actual in-flight (or runtime) code of the resources is taken from the [wingsdk-clients repo](https://github.com/monadahq/wingsdk-clients).
+### `test` folder
 
-### test folder
-Contains tests for the different parts of the SDK and a `sandbox` folder which is a root of a CDK for TF project that you can use to deploy a mock app to the cloud or to our local simulator [Wing Local](https://github.com/monadahq/wing-local).
+Contains tests for the different parts of the SDK.
 
-## License
+It also includes a `sandbox` folder which is a root of a CDK for TF project that you can use to deploy a mock app to the cloud or to our local simulator.
 
-Apache 2.0 (when released)
+## Building the project
 
-## Installing Dependencies
-
-Install the dependencies needed with NPM:
+Install the dependencies using npm:
 
 ```shell
 $ npm i
 ```
 
-## Building
-
-Building this project is accomplished by running the build script:
+Building this project is accomplished by running the build script. This will build the project, generate the docs, lint the code, and run tests.
 
 ```shell
 $ npm run build
 ```
 
-This will build the project, generate the docs, lint the code, and run tests.
+To compile the project's code without linting or running tests, run:
+
+```shell
+$ npm run compile
+```
+
+Dependencies can be added by editing the `.projenrc.ts` file and running `npx projen` after making the edits. If the dependency is a JSII library[2], you should add it to the `peerDeps` section - otherwise, you should add it to the `bundledDeps` section.
+
+> [2] JSII libraries are npm packages that are compiled with JSII. They are usually published to npm with the `cdk` keyword, and they will have a `.jsii` file at their root.
 
 ## Testing
 
-Any changes that you make to this project should be covered with tests. If you are adding new resources to the 
-library, please ... TODO: complete this section when we have a test FW. <!-- TODO complete this section when we have a test FW--> 
+This project uses [jest](https://jestjs.io/) testing framework. Please refer to the documentation on it if you are not familiar with it. 
 
-This project uses [jest](https://jestjs.io/) testing framework. Please refer to the documentation on it if you are not 
-familiar with it. 
-
-All changes need to have tests. Feature changes should have full test coverage and bug fixes should be verified first
-through new tests. 
+All changes need to have tests. Feature changes should have full test coverage and bug fixes should be verified first through new tests. 
 
 All tests can be run using the `test` script:
 
@@ -82,34 +110,52 @@ During a lot of active development you may find it useful to watch for changes a
 $ npm run test:watch
 ```
 
+To run individual tests, you can also directly use the `jest` command -- for example:
+
+```shell
+$ npx jest test/tf-aws/bucket.test.ts
+```
+
 ### Sandbox
 
-```bash
-// This will synth the sandbox to either the cloud or wing local
+```shell
+# This will synth the sandbox to either the cloud or wing local
+# (look for a generated cdktf.out or sim.out folder)
 npm install
 npm run sandbox:synth
 
-// This will deploy the sandbox app to the cloud or to Wing Local
+# This will deploy the sandbox app to the cloud or to Wing Local
 npm run sandbox:deploy 
 
-// follow up with this command to clear the cloud resources
+# follow up with this command to clear the cloud resources
 npm run sandbox:destroy 
 ```
 
-## Updating the README
+## Creating a resource
 
-Changes in core functionality should include changes to the README.md file explaining the functional changes. Please 
-consider this when submitting changes. If you feel there is no need to change the README or documentation,
-state your reason when submitting the pull request. A lack of updates to the README may cause a delay in a pull request 
-being merged.
+A resource in the SDK has several pieces:
+
+* A preflight [polycon](https://github.com/monadahq/polycons) API that is common across all cloud targets. Resource polycons are defined in `src/cloud`. For example, [`src/cloud/bucket.ts`](./src/cloud/bucket.ts).
+* An interface representing the inflight API common across all cloud targets. By convention, if the resource is named like `Gizmo`, the inflight interface should be named `IGizmoClient`. This can be in the same file as the preflight API.
+* A simulator implementation in `src/sim`. This includes:
+  * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema.ts`](./src/sim/schema.ts).
+  * A class that implements the polycon API and can produce the resource's simulation schema. For example, [`src/sim/bucket.ts`](./src/sim/bucket.ts).
+  * An `init` function that creates the resource simulation. For example, [`src/sim/bucket.sim.ts`](./src/sim/bucket.sim.ts).
+  * A class that implements the inflight API that interacts with the simulation. This class may require parameters that are provided from the `init` function. For example, [`src/sim/bucket.inflight.ts`](./src/sim/bucket.inflight.ts).
+* An implementation for each target cloud (currently just AWS). This includes:
+  * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](./src/tf-aws/bucket.ts).
+  * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/tf-aws/bucket.inflight.ts`](./src/tf-aws/bucket.inflight.ts).
+
+If you are implementing a new resource (or implementing an existing resource for a new cloud provider), try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
+
+Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
+You can also join us on our [Discord server](https://discord.gg/5tEWeXkZJg)!
 
 ## Submitting a pull request
 
 To ensure pull requests are reviewed and accepted as quickly as possible, please make sure:
 
 [ ] Tests are written for all changes.
-
-[ ] README.md is updated if new features are being added.
 
 [ ] `npm run build` has been run to lint, build, and update API docs.
 
@@ -121,7 +167,7 @@ Create a new pull request [here](https://github.com/monadahq/wingsdk/compare), s
 and `main` for the 'base'. 
 
 The title of the pull request should adhere to [conventional commits](https://www.conventionalcommits.org). For example, 
-if you're adding new features, the pull request title should start with `feat:`. If you are fixing a bug, then `fix:` 
+if you're adding new features, the pull request title should start with `feat(sdk):`. If you are fixing a bug, then `fix(sdk):` 
 should be the title prefix.
 
 In the description reference any open issues that the changes resolve. Describe the changes you made and include anything
