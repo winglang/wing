@@ -3,12 +3,7 @@ name = "wingc"
 version = "0.1.0"
 edition = "2021"
 
-[build-dependencies]
-cc = "1.0.73"
-cbindgen = "0.24.3"
-
 [dependencies]
-relative-path = "1.7.2"
 tree-sitter = "0.20.9"
 sha2 = "0.10.6"
 base16ct = { version = "0.1.1", features = ["alloc"] }

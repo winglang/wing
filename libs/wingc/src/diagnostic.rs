@@ -1,4 +1,3 @@
-// use relative_path::RelativePathBuf;
 use tree_sitter::Point;
 
 pub type FileId = String;

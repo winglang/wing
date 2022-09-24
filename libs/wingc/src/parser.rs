@@ -1,7 +1,5 @@
-use relative_path::RelativePathBuf;
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::path::Path;
 use std::{str, vec};
 use tree_sitter::Node;
 
