@@ -6,7 +6,6 @@ Wing Programming Language reference implementation.
 
 - [Rust](https://rustup.rs/)
 - [node.js](https://nodejs.org)
-- [CMake](https://cmake.org/) - or on Mac - `arch -arm64 brew install cmake`
 - [Graphviz](https://graphviz.org/download/) - run `arch -arm64 brew install graphviz`
 
 You also need to `npm login` into `@monadahq`.
@@ -19,59 +18,15 @@ The compiler is under `libs/wingc` and you can use standard Rust workflows:
 - `cargo test` - runs tests
 - `cargo test -- --nocapture` - runs tests with output to see compilation results
 
-## `wingrt` Runtime
+If intent is to compile for WebAssembly, following tooling is needed:
 
-The runtime that executes output of the compiler - it is under `apps/wingrt`.
+- `cargo install cargo-wasi` - Adds convenient WASI commands to Cargo
+- `sudo scripts/setup_wasi.sh` - Installs WASI SDK
 
-Currently local compilation is complicated and takes a lot of time, it requires
-building a special variant of Node, blood sacrifice, and dark rituals.
+Then you can build with:
 
-Pre-built binaries are available at:
-[winglang-infra](https://github.com/monadahq/winglang-infra).
-
-Get the binaries for your platform and place them under `apps/wingrt/vendor/node`. For this, you need to unzip the file and put the "include" and "lib" folders directly under `apps/wingrt/vendor/node`.
-If you are on an apple silicone Mac then use `actual-libnode-macos-latest-arm64.zip` and not `libnode-macos-latest-arm64.zip`.
-
-You also need to build the compiler (`wingc`) first: 
-```bash
-cd ../libs/wingc
-cargo build --release
-```
-
-Then you should make sure that you've setup Github private packages on your machine.
-Instructions are in [this KB](https://github.com/monadahq/mona-kb/blob/main/docs/github-private-packages.md).
-
-You should also make sure you have cmake installed, see [here](http://cmake.org), or on Mac just use `arch -arm64 brew install cmake`
-
-After that you should be able to build and run the runtime tests with:
-
-```bash
-cd apps/wingrt
-npm install
-npm test
-# incremental recompiles
-npm run cmake
-```
-
-IF everything is fine, then you should be able to run the CLI with:
-
-```bash
-./build/wingrt 
-```
-## Troubleshooting
-
-**Troubleshoot #1:** if you get this error: "fatal error: 'v8.h' file not found" then you need to make sure you put the pre-built binaries correctly in `apps/wingrt/vendor/node`.
-
-**Troubleshoot #2:** if you get this error: "linker command failed with exit code 1 (use -v to see invocation)" then you need to run `npm run clean` from wingrt folder.
-
-**Troubleshoot #3:** if you get this error: "Undefined symbols for architecture arm64" then do the following:
-1. Run `rustup toolchain list`, to see the supported architecture (you'll most likely see: `stable-x86_64-apple-darwin (default)`).
-1. Install support for arm64 architecture and set it as default:
-```bash
-rustup toolchain install stable-aarch64-apple-darwin
-rustup default stable-aarch64-apple-darwin
-cd libs/wingc
-cargo clean
+```shell
+cargo wasi build
 ```
 
 ## `wing`
