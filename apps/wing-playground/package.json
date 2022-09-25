@@ -8,8 +8,7 @@
     "build": "vite build",
     "preview": "vite preview"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Monada",
   "dependencies": {
     "@wasmer/wasi": "^1.1.2"
   },

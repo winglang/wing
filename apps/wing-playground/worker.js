@@ -42,13 +42,11 @@ self.onmessage = async event => {
       stdout += `\n\n// ${proc}\n// START\n${procFile.readString()}\n// END`
     }
     
-    console.log(exitCode, stdout);
-    
     self.postMessage(stdout);
   } catch (error) {
-    const stderr = wasi.getStderrString()
-    console.error(error, stderr);
-    self.postMessage(stderr);
+    console.error(error);
+    self.postMessage(wasi.getStderrString());
   }
 };
 
+self.postMessage("WORKER_READY");

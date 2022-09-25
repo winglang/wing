@@ -2,6 +2,7 @@
   "name": "@monadahq/winglang",
   "workspaces": [
     "apps/wing",
+    "apps/wing-playground",
 
     "libs/tree-sitter-wing"
   ]
