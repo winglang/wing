@@ -3,10 +3,10 @@ import { Function, FUNCTIONS } from "./function.sim";
 
 export class FunctionClient implements IFunctionClient {
   private readonly fn: Function;
-  constructor(functionId: number) {
-    const fn = FUNCTIONS[functionId];
+  constructor(functionAddr: number) {
+    const fn = FUNCTIONS[functionAddr];
     if (!fn) {
-      throw new Error(`Invalid function id: ${functionId}`);
+      throw new Error(`Invalid function id: ${functionAddr}`);
     }
     this.fn = fn;
   }

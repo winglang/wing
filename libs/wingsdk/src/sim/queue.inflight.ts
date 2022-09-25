@@ -3,10 +3,10 @@ import { Queue, QUEUES } from "./queue.sim";
 
 export class QueueClient implements IQueueClient {
   private readonly queue: Queue;
-  constructor(queueId: number) {
-    const queue = QUEUES[queueId];
+  constructor(queueAddr: number) {
+    const queue = QUEUES[queueAddr];
     if (!queue) {
-      throw new Error(`Invalid function id: ${queueId}`);
+      throw new Error(`Invalid function id: ${queueAddr}`);
     }
     this.queue = queue;
   }

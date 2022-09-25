@@ -10,21 +10,22 @@ export interface FunctionProps {
 
 export async function init(
   props: FunctionProps
-): Promise<{ functionId: number }> {
+): Promise<{ functionAddr: number }> {
   const fn = new Function(props);
-  const id = FUNCTIONS.push(fn) - 1;
+  const addr = FUNCTIONS.push(fn) - 1;
   return {
-    functionId: id,
+    functionAddr: addr,
   };
 }
 
-export async function cleanup(functionId: number) {
-  const fn = FUNCTIONS[functionId];
+export async function cleanup(attributes: { functionAddr: number }) {
+  const functionAddr = attributes.functionAddr;
+  const fn = FUNCTIONS[functionAddr];
   if (!fn) {
-    throw new Error(`Invalid function id: ${functionId}`);
+    throw new Error(`Invalid function id: ${functionAddr}`);
   }
   await fn.cleanup();
-  FUNCTIONS[functionId] = undefined;
+  FUNCTIONS[functionAddr] = undefined;
 }
 
 export class Function {

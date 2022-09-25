@@ -1,9 +1,9 @@
 import { BucketClient } from "../../src/sim/bucket.inflight";
-import * as testing from "../../src/testing";
+import { Simulator } from "../../src/testing/simulator.sim";
 
 test("put and get objects from bucket", async () => {
   // GIVEN
-  const sim = await testing.Simulator.fromResources({
+  const sim = await Simulator.fromResources({
     resources: {
       my_bucket: {
         type: "wingsdk.cloud.Bucket",
@@ -22,11 +22,12 @@ test("put and get objects from bucket", async () => {
 
   // THEN
   expect(response).toEqual(VALUE);
+  await sim.cleanup();
 });
 
 test("get invalid object throws an error", async () => {
   // GIVEN
-  const sim = await testing.Simulator.fromResources({
+  const sim = await Simulator.fromResources({
     resources: {
       my_bucket: {
         type: "wingsdk.cloud.Bucket",
@@ -38,4 +39,5 @@ test("get invalid object throws an error", async () => {
 
   // THEN
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
+  await sim.cleanup();
 });
