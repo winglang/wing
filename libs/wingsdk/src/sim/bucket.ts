@@ -34,6 +34,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
     if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by a sim.Bucket for now");
     }
+    // FIXME
     return InflightClient.for(__filename, "BucketClient", [
       `"${this.node.id}"`,
     ]);

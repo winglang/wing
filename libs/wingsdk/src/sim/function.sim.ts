@@ -2,13 +2,15 @@ import Piscina from "piscina";
 
 export const FUNCTIONS = new Array<Function | undefined>();
 
-export interface QueueProps {
+export interface FunctionProps {
   readonly sourceCodeFile: string;
   readonly sourceCodeLanguage: string;
   readonly environmentVariables: Record<string, string>;
 }
 
-export async function init(props: QueueProps): Promise<{ functionId: number }> {
+export async function init(
+  props: FunctionProps
+): Promise<{ functionId: number }> {
   const fn = new Function(props);
   const id = FUNCTIONS.push(fn) - 1;
   return {
@@ -29,7 +31,7 @@ export class Function {
   private readonly worker: Piscina;
   private _timesCalled: number = 0;
 
-  constructor(props: QueueProps) {
+  constructor(props: FunctionProps) {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
