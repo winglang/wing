@@ -194,7 +194,6 @@ jobs:
       - name: Compute Checksums
         run: |
           mkdir dist
-          mv ./*/*.tgz ./dist
           mv ./*/*.vsix ./dist
           cd dist
           echo '## SHA-1 Checksums' > ../checksums.md
