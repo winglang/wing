@@ -145,8 +145,6 @@ project.eslint!.addRules({
       zones: [
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
         disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
-        disallowImportsRule(Zone.SIMULATOR, Zone.INFLIGHT),
-        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],

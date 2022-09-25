@@ -144,16 +144,6 @@
             "target": "**/!(*.inflight.ts|*.sim.ts|*.test.ts)",
             "from": "**/*.sim.ts",
             "message": "Importing simulator code in a preflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
-          },
-          {
-            "target": "**/*.sim.ts",
-            "from": "**/*.inflight.ts",
-            "message": "Importing inflight code in a simulator module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
-          },
-          {
-            "target": "**/*.inflight.ts",
-            "from": "**/*.sim.ts",
-            "message": "Importing simulator code in a inflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           }
         ]
       }

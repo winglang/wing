@@ -1,8 +1,14 @@
 import * as path from "path";
 import { FunctionClient } from "../../src/sim/function.inflight";
-import { init as initFunction } from "../../src/sim/function.sim";
+import {
+  init as initFunction,
+  cleanup as cleanupFunction,
+} from "../../src/sim/function.sim";
 import { QueueClient } from "../../src/sim/queue.inflight";
-import { init as initQueue } from "../../src/sim/queue.sim";
+import {
+  init as initQueue,
+  cleanup as cleanupQueue,
+} from "../../src/sim/queue.sim";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -15,15 +21,17 @@ const ENVIRONMENT_VARIABLES = {};
 describe("basic", () => {
   test("queue with batch size of 1", async () => {
     // GIVEN
-    await initFunction();
-    const fnClient = new FunctionClient({
+    const { functionId } = await initFunction({
       sourceCodeFile: SOURCE_CODE_FILE,
       sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
       environmentVariables: ENVIRONMENT_VARIABLES,
     });
+    const fnClient = new FunctionClient(functionId);
 
-    await initQueue();
-    const queueClient = new QueueClient([{ client: fnClient, batchSize: 1 }]);
+    const { queueId } = await initQueue({
+      subscribers: [{ client: fnClient, batchSize: 1 }],
+    });
+    const queueClient = new QueueClient(queueId);
 
     // WHEN
     await queueClient.push("A");
@@ -32,60 +40,56 @@ describe("basic", () => {
     await sleep(200);
 
     // THEN
-    try {
-      expect(fnClient.timesCalled).toEqual(2);
-    } finally {
-      queueClient.close();
-    }
+    expect(fnClient.timesCalled).toEqual(2);
+    await cleanupQueue(queueId);
+    await cleanupFunction(functionId);
   });
 
   test("queue with batch size of 5", async () => {
     // GIVEN
-    await initFunction();
-    const fnClient = new FunctionClient({
+    const { functionId } = await initFunction({
       sourceCodeFile: SOURCE_CODE_FILE,
       sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
       environmentVariables: ENVIRONMENT_VARIABLES,
     });
+    const fnClient = new FunctionClient(functionId);
 
-    await initQueue();
-    const queueClient = new QueueClient(
-      [{ client: fnClient, batchSize: 5 }],
-      ["A", "B", "C", "D", "E", "F"]
-    );
+    const { queueId } = await initQueue({
+      subscribers: [{ client: fnClient, batchSize: 5 }],
+      // push messages at initialization so they all get processed in sync
+      initialMessages: ["A", "B", "C", "D", "E", "F"],
+    });
 
     await sleep(200);
 
     // THEN
-    try {
-      expect(fnClient.timesCalled).toEqual(2);
-    } finally {
-      queueClient.close();
-    }
+    expect(fnClient.timesCalled).toEqual(2);
+    await cleanupQueue(queueId);
+    await cleanupFunction(functionId);
   });
 
   test("messages are requeued if the function fails", async () => {
     // GIVEN
-    await initFunction();
-    const fnClient = new FunctionClient({
+    const { functionId } = await initFunction({
       sourceCodeFile: SOURCE_CODE_FILE,
       sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
       environmentVariables: ENVIRONMENT_VARIABLES,
     });
+    const fnClient = new FunctionClient(functionId);
 
-    await initQueue();
-    const queueClient = new QueueClient(
-      [{ client: fnClient, batchSize: 1 }],
-      ["BAD MESSAGE"]
-    );
+    const { queueId } = await initQueue({
+      subscribers: [{ client: fnClient, batchSize: 1 }],
+    });
+    const queueClient = new QueueClient(queueId);
+
+    // WHEN
+    await queueClient.push("BAD MESSAGE");
 
     await sleep(300);
 
     // THEN
-    try {
-      expect(fnClient.timesCalled).toBeGreaterThan(1);
-    } finally {
-      queueClient.close();
-    }
+    expect(fnClient.timesCalled).toBeGreaterThan(1);
+    await cleanupQueue(queueId);
+    await cleanupFunction(functionId);
   });
 });
