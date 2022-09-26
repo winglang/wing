@@ -2875,6 +2875,45 @@ public readonly props: any;
 
 ---
 
+### SimulatorFromResourcesProps <a name="SimulatorFromResourcesProps" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps.Initializer"></a>
+
+```typescript
+import { testing } from '@monadahq/wingsdk'
+
+const simulatorFromResourcesProps: testing.SimulatorFromResourcesProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.resources">resources</a></code> | <code>{[ key: string ]: any}</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorFactory</code> | *No description.* |
+
+---
+
+##### `resources`<sup>Required</sup> <a name="resources" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.resources"></a>
+
+```typescript
+public readonly resources: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+---
+
+##### `factory`<sup>Optional</sup> <a name="factory" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.factory"></a>
+
+```typescript
+public readonly factory: ISimulatorFactory;
+```
+
+- *Type:* @monadahq/wingsdk.testing.ISimulatorFactory
+
+---
+
 ### SynthesizerProps <a name="SynthesizerProps" id="@monadahq/wingsdk.core.SynthesizerProps"></a>
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.SynthesizerProps.Initializer"></a>
@@ -3478,12 +3517,12 @@ new tfaws.PolyconFactory()
 ##### `resolve` <a name="resolve" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve"></a>
 
 ```typescript
-public resolve(polyconId: string, scope: IConstruct, id: string, args: any): IConstruct
+public resolve(type: string, scope: IConstruct, id: string, args: any): IConstruct
 ```
 
 Resolve the parameters needed for creating a specific polycon into a concrete construct.
 
-###### `polyconId`<sup>Required</sup> <a name="polyconId" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.polyconId"></a>
+###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.type"></a>
 
 - *Type:* string
 
@@ -3507,6 +3546,90 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 ---
 
+
+
+
+### Simulator <a name="Simulator" id="@monadahq/wingsdk.testing.Simulator"></a>
+
+A simulator that can be used to test your application locally.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.cleanup">cleanup</a></code> | Clean up all resources in this simulator. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
+
+---
+
+##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.testing.Simulator.cleanup"></a>
+
+```typescript
+public cleanup(): void
+```
+
+Clean up all resources in this simulator.
+
+##### `getAttributes` <a name="getAttributes" id="@monadahq/wingsdk.testing.Simulator.getAttributes"></a>
+
+```typescript
+public getAttributes(resourceId: string): any
+```
+
+Obtain a resource's attributes.
+
+This is data that gets resolved when the
+during the resource's in-simulator creation.
+
+###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@monadahq/wingsdk.testing.Simulator.getAttributes.parameter.resourceId"></a>
+
+- *Type:* string
+
+---
+
+##### `getProps` <a name="getProps" id="@monadahq/wingsdk.testing.Simulator.getProps"></a>
+
+```typescript
+public getProps(resourceId: string): any
+```
+
+Obtain a resource's props.
+
+This is data about the resource's configuration
+that is resolved at synth time.
+
+###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@monadahq/wingsdk.testing.Simulator.getProps.parameter.resourceId"></a>
+
+- *Type:* string
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromResources">fromResources</a></code> | Start the simulator using an inline definition of your application's resources. |
+
+---
+
+##### `fromResources` <a name="fromResources" id="@monadahq/wingsdk.testing.Simulator.fromResources"></a>
+
+```typescript
+import { testing } from '@monadahq/wingsdk'
+
+testing.Simulator.fromResources(props: SimulatorFromResourcesProps)
+```
+
+Start the simulator using an inline definition of your application's resources.
+
+TODO: reference API schema?
+
+###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.Simulator.fromResources.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.testing.SimulatorFromResourcesProps
+
+---
 
 
 
@@ -3924,6 +4047,65 @@ public readonly node: Node;
 The tree node.
 
 ---
+
+### ISimulatorFactory <a name="ISimulatorFactory" id="@monadahq/wingsdk.testing.ISimulatorFactory"></a>
+
+- *Implemented By:* @monadahq/wingsdk.testing.ISimulatorFactory
+
+A factory specifying how to simulate polycons.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorFactory.cleanup">cleanup</a></code> | Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created. |
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorFactory.init">init</a></code> | Given a resource type and a resource's synthesis-time schema props, start simulating a resource. |
+
+---
+
+##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup"></a>
+
+```typescript
+public cleanup(type: string, attributes: any): void
+```
+
+Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created.
+
+###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup.parameter.type"></a>
+
+- *Type:* string
+
+---
+
+###### `attributes`<sup>Required</sup> <a name="attributes" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup.parameter.attributes"></a>
+
+- *Type:* any
+
+---
+
+##### `init` <a name="init" id="@monadahq/wingsdk.testing.ISimulatorFactory.init"></a>
+
+```typescript
+public init(type: string, props: any): any
+```
+
+Given a resource type and a resource's synthesis-time schema props, start simulating a resource.
+
+This function should return an object/map containing
+the resource's attributes.
+
+###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorFactory.init.parameter.type"></a>
+
+- *Type:* string
+
+---
+
+###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ISimulatorFactory.init.parameter.props"></a>
+
+- *Type:* any
+
+---
+
 
 ## Enums <a name="Enums" id="Enums"></a>
 

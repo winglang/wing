@@ -1,4 +1,4 @@
-import { IResourceResolver } from "../testing/simulator.sim";
+import { IResourceResolver } from "../testing/simulator";
 import { FunctionClient } from "./function.inflight";
 import { RandomArrayIterator } from "./util.sim";
 

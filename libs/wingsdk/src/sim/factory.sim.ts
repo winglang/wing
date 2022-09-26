@@ -1,5 +1,5 @@
 import * as cloud from "../cloud";
-import { ISimulatorFactory } from "../testing/simulator.sim";
+import { ISimulatorFactory } from "../testing/simulator";
 import { init as initBucket } from "./bucket.sim";
 import {
   init as initFunction,
@@ -8,8 +8,8 @@ import {
 import { init as initQueue, cleanup as cleanupQueue } from "./queue.sim";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
-  async init(polyconId: string, props: any): Promise<any> {
-    switch (polyconId) {
+  async init(type: string, props: any): Promise<any> {
+    switch (type) {
       case cloud.BUCKET_ID:
         return initBucket(props);
       case cloud.FUNCTION_ID:
@@ -17,12 +17,12 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
       case cloud.QUEUE_ID:
         return initQueue(props);
       default:
-        throw new Error(`Type ${polyconId} not implemented.`);
+        throw new Error(`Type ${type} not implemented.`);
     }
   }
 
-  async cleanup(polyconId: string, attributes: any): Promise<void> {
-    switch (polyconId) {
+  async cleanup(type: string, attributes: any): Promise<void> {
+    switch (type) {
       case cloud.BUCKET_ID:
         return;
       case cloud.FUNCTION_ID:
@@ -32,7 +32,7 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         await cleanupQueue(attributes);
         return;
       default:
-        throw new Error(`Type ${polyconId} not implemented.`);
+        throw new Error(`Type ${type} not implemented.`);
     }
   }
 }

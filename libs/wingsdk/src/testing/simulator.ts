@@ -1,4 +1,5 @@
-import { DefaultSimulatorFactory } from "../sim/factory.sim";
+// eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
+const { DefaultSimulatorFactory } = require("../sim/factory.sim");
 
 export interface SimulatorFromResourcesProps {
   readonly resources: { [key: string]: any };
@@ -9,8 +10,19 @@ export type IResourceResolver = {
   lookup(resourceId: string): any;
 };
 
+/**
+ * A simulator that can be used to test your application locally.
+ */
 export class Simulator {
-  public static async fromResources(props: SimulatorFromResourcesProps) {
+  /**
+   * Start the simulator using an inline definition of your application's
+   * resources.
+   *
+   * TODO: reference API schema?
+   */
+  public static async fromResources(
+    props: SimulatorFromResourcesProps
+  ): Promise<Simulator> {
     const factory = props.factory ?? new DefaultSimulatorFactory();
 
     const resourceData: { [resourceId: string]: ResourceData } = {};
@@ -49,11 +61,26 @@ export class Simulator {
     private readonly resourceData: { [key: string]: ResourceData }
   ) {}
 
-  public getAttributes(resourceId: string) {
+  /**
+   * Obtain a resource's attributes. This is data that gets resolved when the
+   * during the resource's in-simulator creation.
+   */
+  public getAttributes(resourceId: string): any {
     return this.resourceData[resourceId].attributes;
   }
 
-  public async cleanup() {
+  /**
+   * Obtain a resource's props. This is data about the resource's configuration
+   * that is resolved at synth time.
+   */
+  public getProps(resourceId: string): any {
+    return this.resourceData[resourceId].props;
+  }
+
+  /**
+   * Clean up all resources in this simulator.
+   */
+  public async cleanup(): Promise<void> {
     for (const [_resourceId, resource] of Object.entries(this.resourceData)) {
       const { type, attributes } = resource;
       await this.factory.cleanup(type, attributes);
@@ -71,7 +98,20 @@ interface ResourceData {
   attributes: any;
 }
 
+/**
+ * A factory specifying how to simulate polycons.
+ */
 export interface ISimulatorFactory {
-  init(polyconId: string, props: any): Promise<any>;
-  cleanup(polyconId: string, props: any): Promise<void>;
+  /**
+   * Given a resource type and a resource's synthesis-time schema props, start
+   * simulating a resource. This function should return an object/map containing
+   * the resource's attributes.
+   */
+  init(type: string, props: any): Promise<any>;
+
+  /**
+   * Given a resource type and a resource's attributes, stop the resource's
+   * simulation and clean up any file system resources it created.
+   */
+  cleanup(type: string, attributes: any): Promise<void>;
 }

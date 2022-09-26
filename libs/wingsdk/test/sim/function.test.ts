@@ -1,6 +1,6 @@
 import * as path from "path";
 import { FunctionClient } from "../../src/sim/function.inflight";
-import { Simulator } from "../../src/testing/simulator.sim";
+import { Simulator } from "../../src/testing/simulator";
 
 const SOURCE_CODE_FILE = path.join(__dirname, "fixtures", "greeter.js");
 const SOURCE_CODE_LANGUAGE = "javascript";

@@ -1,5 +1,5 @@
 import { BucketClient } from "../../src/sim/bucket.inflight";
-import { Simulator } from "../../src/testing/simulator.sim";
+import { Simulator } from "../../src/testing/simulator";
 
 test("put and get objects from bucket", async () => {
   // GIVEN

@@ -1,7 +1,7 @@
 import * as path from "path";
 import { FunctionClient } from "../../src/sim/function.inflight";
 import { QueueClient } from "../../src/sim/queue.inflight";
-import { Simulator } from "../../src/testing/simulator.sim";
+import { Simulator } from "../../src/testing/simulator";
 
 jest.setTimeout(5_000); // 5 seconds
 
