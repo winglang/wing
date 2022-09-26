@@ -63,7 +63,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: always() && needs.build.outputs.self_mutation_happened && !(github.event.repository != github.repository)
+    if: always() && needs.build.outputs.self_mutation_happened && !(github.event.repository.full_name != github.repository)
     steps:
       - name: Generate token
         id: generate_token
