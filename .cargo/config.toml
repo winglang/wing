@@ -1,0 +1,3 @@
+[env]
+CC_wasm32_wasi = "/opt/wasi-sdk/bin/clang"
+AR_wasm32_wasi = "/opt/wasi-sdk/bin/ar"
