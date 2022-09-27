@@ -57,8 +57,10 @@ class Root extends Construct {
 This construct contains a `Bucket` from the cloud library which represents a polymorphic cloud resources whose actual implementation (local, aws, other clouds) is determined at synth time.
 
 To use it in an application, you need to supply a synthesizer which will synthesize resources for the desired target.
-In the example below, a `local` synthesizer is used to ensure that the `Bucket` synthesizes into a format understood by the Wing simulator.
-If the commented out TF AWS synthesizer was used, then the `Bucket` resource would be one that targets the AWS cloud.
+In the example below, a `local` synthesizer is used which tells the SDK to produce a `.wx` file.
+The `.wx` file can be passed to the Wing console to simulate the bucket using your file system.
+If the commented out TF AWS synthesizer is used instead, then a Terraform application will be synthesized.
+The Terraform application will include an AWS S3 Bucket to represent the `Bucket`.
 
 ```ts
 import * as core from "../../src/core";

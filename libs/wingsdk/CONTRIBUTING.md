@@ -7,6 +7,7 @@ and submit pull requests to the GitHub repository.
   - [Opening Issues](#opening-issues)
   - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
+    - [Setting up GitHub private packages](#setting-up-github-private-packages)
   - [Orientation](#orientation)
     - [`src` folder](#src-folder)
     - [`test` folder](#test-folder)
@@ -19,7 +20,7 @@ and submit pull requests to the GitHub repository.
 
 ## Opening Issues
 
-One of the easiest ways to contribute to this project is by opening [issues](https://github.com/monadahq/wingsdk/issues/new).
+One of the easiest ways to contribute to the Wing SDK is by opening [issues](https://github.com/monadahq/winglang/issues/new).
 If you're reporting a bug, try to include detailed information including steps to reproduce it, and what you expected to happen.
 If you're suggesting a feature or enhancement, please include information about your use case for it.
 
@@ -32,7 +33,7 @@ is a great place to get started on this process.
 
 These tools are needed to build the library and run unit tests:
 
-- [Node.js](https://nodejs.org/en/download/) - which includes `npm`
+- Node.js - we recommend [nvm](https://github.com/nvm-sh/nvm) for managing Node versions
 - Your favorite code editor
 
 These tools are needed to run integration tests that deploy the resources to clouds:
@@ -42,17 +43,36 @@ These tools are needed to run integration tests that deploy the resources to clo
 - (optional) [CDK for Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/cdktf-install?in=terraform/cdktf) - not required if you are using just the commands added to npm in the projen def file
 
 To build the project, you also need to `npm login` into `@monadahq` in order to install private npm packages.
-Use the instructions [here](https://github.com/monadahq/mona-kb/blob/main/docs/github-private-packages.md#consuming-packages-from-your-development-environment).
+
+### Setting up GitHub private packages
+
+First, you need a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to login to the GitHub npm registry. Follow the instructions in the [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token) to create a PAT. Make sure it has the `read:packages` scope.
+
+After, you should configure npm to use the @monadahq package registry by default for the packages under the @monadahq scope by running:
+
+```sh
+npm login --scope=@monadahq --registry=https://npm.pkg.github.com
+
+# > Username: GITHUB USERNAME
+# > Password: YOUR PAT
+# > Email: PUBLIC-EMAIL-ADDRESS
+```
+
+See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) for more information.
 
 ## Orientation
 
-This is a [CDK for Terraform](https://www.terraform.io/cdktf), [JSII](https://github.com/aws/jsii), [Projen](https://github.com/projen/projen) project. In a nutshell:
+This is a [CDK for Terraform], [JSII], [Projen] project. In a nutshell:
 
-* CDK for Terraform is a framework for defining Terraform infrastructure in familiar programming languages like TypeScript, Python, Java, C#, and Go.
-* JSII is a tool that wraps over the TypeScript compiler that makes it possible to consume the library in multiple languages. JSII code is TypeScript code, but with extra type checks. [1]
-* Projen is a tool for managing project configuration. There is a `.projenrc.ts` file which generates `package.json` and other files. You can modify it and run `npx projen` to regenerate the resources.
+* [CDK for Terraform] ("cdktf") is a framework for defining Terraform infrastructure in familiar programming languages like TypeScript, Python, Java, C#, and Go.
+* [JSII] is a tool that wraps over the TypeScript compiler that makes it possible to consume the library in multiple languages. JSII code is TypeScript code, but with extra type checks. [1]
+* [Projen] is a tool for managing project configuration. There is a `.projenrc.ts` file which generates `package.json` and other files. You can modify it and run `npx projen` to regenerate the resources.
 
 > [1] Currently we only use JSII to compile preflight code. Inflight code and code for the Wing simulator is compiled with plain TypeScript.
+
+[CDK for Terraform]: https://github.com/hashicorp/terraform-cdk
+[JSII]: https://github.com/aws/jsii
+[Projen]: https://github.com/projen/projen
 
 ### `src` folder
 
@@ -73,23 +93,30 @@ It also includes a `sandbox` folder which is a root of a CDK for TF project that
 Install the dependencies using npm:
 
 ```shell
-$ npm i
+npm i
 ```
 
 Building this project is accomplished by running the build script. This will build the project, generate the docs, lint the code, and run tests.
 
 ```shell
-$ npm run build
-```
-
-To compile the project's code without linting or running tests, run:
-
-```shell
-$ npm run compile
+npm run build
 ```
 
 Dependencies can be added by editing the `.projenrc.ts` file and running `npx projen` after making the edits.
 If the dependency is a JSII library[2], you should add it to the list named `peerDeps` - otherwise, you should add it to `bundledDeps`.
+
+Here is an example of adding a package named "fast-json-stringify" pinned to major version 5:
+
+```diff
+--- a/libs/wingsdk/.projenrc.ts
++++ b/libs/wingsdk/.projenrc.ts
+@@ -17,6 +17,7 @@ const project = new cdk.JsiiProject({
+   bundledDeps: [
+     "esbuild-wasm",
++    "fast-json-stringify@^5",
+     "@aws-sdk/client-s3",
+     "@aws-sdk/client-lambda",
+```
 
 > [2] JSII libraries are npm packages that are compiled with JSII. They are usually published to npm with the `cdk` keyword, and they will have a `.jsii` file at their root.
 
@@ -102,30 +129,31 @@ All changes need to have tests. Feature changes should have full test coverage a
 All tests can be run using the `test` script:
 
 ```shell
-$ npm run test
+npm run test
 ```
 
 During a lot of active development you may find it useful to watch for changes and automatically re-run the tests:
 
 ```shell
-$ npm run test:watch
+npm run test:watch
 ```
 
 To run individual tests, you can also directly use the `jest` command -- for example:
 
 ```shell
-$ npx jest test/tf-aws/bucket.test.ts
+npx jest test/tf-aws/bucket.test.ts
 ```
 
 ### Sandbox
 
 ```shell
-# This will synth the sandbox to either the cloud or wing local
-# (look for a generated cdktf.out or sim.out folder)
+# This will synth the sandbox to either the cloud or wing local based on which
+# synthesizer is specified inside `sandbox/main.ts`.
+# A sim.out or cdktf.out folder will be generated.
 npm install
 npm run sandbox:synth
 
-# This will deploy the sandbox app to the cloud or to Wing Local
+# This will deploy the sandbox app to the cloud or to the Wing simulator
 npm run sandbox:deploy 
 
 # follow up with this command to clear the cloud resources
