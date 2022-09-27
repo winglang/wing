@@ -9,6 +9,8 @@ concurrency:
 
 env:
   NODEJS_VERSION: "18.x"
+  # TODO Real versioning needed
+  WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 permissions:
   contents: write
@@ -48,7 +50,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
           npm ci
-          node scripts/self-package-json.cjs
+          npm version ${{ env.WING_VERSION }}
           npm publish
 
   build-native:
@@ -121,9 +123,16 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           working-directory: apps/vscode-wing
+      - name: Build
+        working-directory: apps/vscode-wing
+        run: |
+          npm run projen
+          npm run compile
+          npm run test
+          npm version ${{ env.WING_VERSION }}
       - name: Create VSIX
         working-directory: apps/vscode-wing
-        run: npm run build
+        run: npm run package
       - name: Upload extension
         if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
@@ -168,6 +177,9 @@ jobs:
         run: mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
         env:
           PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Set Version
+        working-directory: .repo
+        run: npm version ${{ env.WING_VERSION }}
       - name: Install Dependencies
         run: cd .repo && npm ci
       - name: Create js artifact
