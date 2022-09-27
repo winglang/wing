@@ -8,3 +8,7 @@ export async function init(_props: any): Promise<{ bucketAddr: string }> {
     bucketAddr: tmpdir,
   };
 }
+
+export async function cleanup(_attributes: any): Promise<void> {
+  return;
+}

@@ -1,6 +1,6 @@
 import * as cloud from "../cloud";
 import { ISimulatorFactory } from "../testing/simulator";
-import { init as initBucket } from "./bucket.sim";
+import { init as initBucket, cleanup as cleanupBucket } from "./bucket.sim";
 import {
   init as initFunction,
   cleanup as cleanupFunction,
@@ -24,6 +24,7 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
   async cleanup(type: string, attributes: any): Promise<void> {
     switch (type) {
       case cloud.BUCKET_ID:
+        await cleanupBucket(attributes);
         return;
       case cloud.FUNCTION_ID:
         await cleanupFunction(attributes);
