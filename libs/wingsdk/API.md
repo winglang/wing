@@ -4066,7 +4066,7 @@ A factory specifying how to simulate polycons.
 ##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup"></a>
 
 ```typescript
-public cleanup(type: string, attributes: any): void
+public cleanup(type: string, attrs: any): void
 ```
 
 Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created.
@@ -4077,7 +4077,7 @@ Given a resource type and a resource's attributes, stop the resource's simulatio
 
 ---
 
-###### `attributes`<sup>Required</sup> <a name="attributes" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup.parameter.attributes"></a>
+###### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup.parameter.attrs"></a>
 
 - *Type:* any
 
