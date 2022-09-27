@@ -190,6 +190,8 @@ To ensure pull requests are reviewed and accepted as quickly as possible, please
 
 [ ] Tests are written for all changes.
 
+[ ] Documentation in `wingsdk/docs/` is updated if features are being added or removed.
+
 [ ] `npm run build` has been run to lint, build, and update API docs.
 
 [ ] Commit messages are clear and descriptive and pushed to your fork.
