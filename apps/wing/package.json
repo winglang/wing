@@ -1,14 +1,17 @@
 {
   "name": "@monadahq/wing",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Wing Programming Language",
-  "bin": "index.js",
   "files": [
     "index.js",
-    "bin/"
+    "wasm/"
   ],
+  "module": "index.js",
+  "main": "index.js",
+  "bin": "index.js",
+  "type": "module",
   "engines": {
-    "node": ">=12"
+    "node": ">=18"
   },
   "repository": {
     "type": "git",
@@ -19,11 +22,5 @@
   },
   "bundledDependencies": [
     "@monadahq/wingsdk"
-  ],
-  "optionalDependencies": {
-    "@monadahq/wing-darwin-arm64": "*",
-    "@monadahq/wing-darwin-x64": "*",
-    "@monadahq/wing-linux-ia32": "*",
-    "@monadahq/wing-linux-x64": "*"
-  }
+  ]
 }

@@ -21,25 +21,15 @@ target/
 libs/wingii/src/jsii-spec.json
 libs/wingii/src/jsii.rs
 
-# wingc
-libs/wingc/wingc.h
-
 # tree-sitter-wing
 libs/tree-sitter-wing/src/
 libs/tree-sitter-wing/log.html
 libs/tree-sitter-wing/*.wasm
-
-# wingrt
-apps/wingrt/vendor/node
-apps/wingrt/build
-apps/wingrt/dist
-apps/wingrt/*.exe
-apps/wingrt/*.dll
-apps/wingrt/*.so
-apps/wingrt/*-go.h
-apps/wingrt/*.class
-apps/wingrt/*.zip
+libs/tree-sitter-wing/build/
 
 # wing
-apps/wing/bin/*
-!apps/wing/bin/.gitkeep
+apps/wing/wasm/*
+!apps/wing/wasm/.gitkeep
+
+# wing-playground
+apps/wing-playground/dist
