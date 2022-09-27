@@ -21,13 +21,6 @@ import wingcPath from "../wingc.wasm";
     .option("-o, --out-dir <out-dir>", "Output directory")
     .option("-t, --target <target>", "Target platform")
     .action(async (inputFile, options) => {
-      // const wingFile = cwd() + "/" + inputFile;
-
-      // const args = [wingFile];
-
-      // if (options.outDir) {
-      //   args.push(cwd() + "/" + options.outDir);
-      // }
       const wingFile = inputFile;
       const wingDir = dirname(wingFile);
 
