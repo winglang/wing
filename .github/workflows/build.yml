@@ -44,7 +44,7 @@ jobs:
           mv ../../target/wasm32-wasi/release/wingc.wasm ../../apps/wing/wasm/wingc.wasm
 
       - name: Publish Wing
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         working-directory: apps/wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
@@ -100,7 +100,7 @@ jobs:
           mv ../../target/release/wing-language-server ../../target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
       - name: Upload Wing Language Server
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
@@ -113,10 +113,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download language server binaries
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/download-artifact@v2
       - name: Prepare language server binaries
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         run: |          
           cp -r wing-language-server-* ./apps/vscode-wing/resources
       - name: Install dependencies
@@ -134,7 +134,7 @@ jobs:
         working-directory: apps/vscode-wing
         run: npm run package
       - name: Upload extension
-        if: ${{ github.ref == 'refs/heads/main' }}
+        # if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
@@ -157,7 +157,7 @@ jobs:
         run: echo "Build Successful"
 
   wingsdk-publish:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    # if: ${{ github.ref == 'refs/heads/main' }}
     name: Publish to npm
     needs: build-sdk
     runs-on: ubuntu-latest
@@ -194,7 +194,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
 
   release:
-    if: ${{ github.ref == 'refs/heads/main' }}
+    # if: ${{ github.ref == 'refs/heads/main' }}
     needs:
       - build
       - wingsdk-publish
