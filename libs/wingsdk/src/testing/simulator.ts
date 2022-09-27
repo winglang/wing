@@ -89,12 +89,11 @@ export class Simulator {
 }
 
 interface ResourceData {
-  // TODO: what about non-polycon resources?
-  /** Polycon ID */
+  /** Resource type name. */
   type: string;
   /** Resource data defined at synthesis time, through the construct tree. */
   props: any;
-  /** Resource data created at deployment time by the simulator.  */
+  /** Resource data created at deployment time by the simulator. */
   attrs: any;
 }
 
