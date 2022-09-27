@@ -915,7 +915,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		let jsii_class = jsii_types.find_class(&fqn);
-		if jsii_class.is_none() || jsii_class.as_ref().unwrap().kind != "class" {
+		if jsii_class.is_none() {
 			println!(
 				"Type {} is not a class in the JSII assembly {}",
 				fqn, jsii_assembly.name
@@ -977,15 +977,8 @@ impl<'a> TypeChecker<'a> {
 			// Look for a client interface for this resource
 			let client_interface = jsii_types.find_interface(&format!("{}I{}Client", prefix, type_name));
 			if let Some(client_interface) = client_interface {
-				if client_interface.kind == "interface" {
-					// Add client interface's methods to the class environment
-					self.add_jsii_interface_members_to_class_env(&client_interface, false, Flight::In, &mut class_env);
-				} else {
-					println!(
-						"Hu?? {} is not an interface it's a {}",
-						client_interface.name, client_interface.kind
-					);
-				}
+				// Add client interface's methods to the class environment
+				self.add_jsii_interface_members_to_class_env(&client_interface, false, Flight::In, &mut class_env);
 			} else {
 				println!("Resource {} doesn't not seem to have a client", type_name.bold());
 			}
