@@ -3,7 +3,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
-import { BucketSchema, QueueSubscriber } from "./schema";
+import { QueueSchema, QueueSubscriber } from "./schema";
 
 export class Queue extends cloud.QueueBase implements IResource {
   private readonly timeout: core.Duration;
@@ -27,7 +27,7 @@ export class Queue extends cloud.QueueBase implements IResource {
     );
 
     this.subscribers.push({
-      subscriberFunctionId: fn.node.addr,
+      functionId: fn.node.addr,
       batchSize: props.batchSize ?? 1,
     });
 
@@ -35,15 +35,17 @@ export class Queue extends cloud.QueueBase implements IResource {
   }
 
   /** @internal */
-  public _toResourceSchema(): BucketSchema {
+  public _toResourceSchema(): QueueSchema {
     return {
       id: this.node.id,
-      type: "cloud.Bucket",
+      type: "cloud.Queue",
       path: this.node.path,
       props: {
-        timeout: this.timeout,
+        timeout: this.timeout.seconds,
         subscribers: this.subscribers,
+        initialMessages: [],
       },
+      attrs: {} as any,
       callers: [],
       callees: [],
     };

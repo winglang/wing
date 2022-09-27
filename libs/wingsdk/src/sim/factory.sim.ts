@@ -21,16 +21,16 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
     }
   }
 
-  async cleanup(type: string, attributes: any): Promise<void> {
+  async cleanup(type: string, attrs: any): Promise<void> {
     switch (type) {
       case cloud.BUCKET_ID:
-        await cleanupBucket(attributes);
+        await cleanupBucket(attrs);
         return;
       case cloud.FUNCTION_ID:
-        await cleanupFunction(attributes);
+        await cleanupFunction(attrs);
         return;
       case cloud.QUEUE_ID:
-        await cleanupQueue(attributes);
+        await cleanupQueue(attrs);
         return;
       default:
         throw new Error(`Type ${type} not implemented.`);

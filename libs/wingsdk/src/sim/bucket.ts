@@ -22,6 +22,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
       props: {
         public: this.public,
       },
+      attrs: {} as any,
       callers: [],
       callees: [],
     };

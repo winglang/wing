@@ -29,7 +29,7 @@ describe("basic", () => {
           props: {
             subscribers: [
               {
-                functionId: "my_function", // "${my_function.attributes.functionAddr}" ?
+                functionId: "my_function", // "${my_function.attrs.functionAddr}" ?
                 batchSize: 1,
               },
             ],

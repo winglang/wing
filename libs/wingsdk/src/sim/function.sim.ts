@@ -1,16 +1,15 @@
 import Piscina from "piscina";
+import { FunctionSchema } from "./schema";
 
+// An array that stores all active Function simulations. This array is shared
+// across different simulations -- in other words, you can start multiple
+// simulations in parallel and they will all share the same pool of resources.
+// When a simulation is cleaned up, it will remove its resources from this array.
 export const FUNCTIONS = new Array<Function | undefined>();
 
-export interface FunctionProps {
-  readonly sourceCodeFile: string;
-  readonly sourceCodeLanguage: string;
-  readonly environmentVariables: Record<string, string>;
-}
-
 export async function init(
-  props: FunctionProps
-): Promise<{ functionAddr: number }> {
+  props: FunctionSchema["props"]
+): Promise<FunctionSchema["attrs"]> {
   const fn = new Function(props);
   const addr = FUNCTIONS.push(fn) - 1;
   return {
@@ -18,8 +17,8 @@ export async function init(
   };
 }
 
-export async function cleanup(attributes: { functionAddr: number }) {
-  const functionAddr = attributes.functionAddr;
+export async function cleanup(attrs: FunctionSchema["attrs"]) {
+  const functionAddr = attrs.functionAddr;
   const fn = FUNCTIONS[functionAddr];
   if (!fn) {
     throw new Error(`Invalid function id: ${functionAddr}`);
@@ -32,7 +31,7 @@ export class Function {
   private readonly worker: Piscina;
   private _timesCalled: number = 0;
 
-  constructor(props: FunctionProps) {
+  constructor(props: FunctionSchema["props"]) {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }

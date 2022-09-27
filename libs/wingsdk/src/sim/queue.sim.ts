@@ -1,25 +1,17 @@
 import { IResourceResolver } from "../testing/simulator";
 import { FunctionClient } from "./function.inflight";
+import { QueueSchema, QueueSubscriber } from "./schema";
 import { RandomArrayIterator } from "./util.sim";
 
 export const QUEUES = new Array<Queue | undefined>();
-
-export interface QueueSubscriber {
-  readonly functionId: string;
-  readonly batchSize: number;
-}
 
 interface QueueSubscriberInternal extends QueueSubscriber {
   functionClient?: FunctionClient;
 }
 
-export interface QueueProps {
-  readonly subscribers: QueueSubscriber[];
-  readonly initialMessages?: string[];
-  readonly _resolver: IResourceResolver;
-}
-
-export async function init(props: QueueProps): Promise<{ queueAddr: number }> {
+export async function init(
+  props: QueueSchema["props"] & { _resolver: IResourceResolver }
+): Promise<QueueSchema["attrs"]> {
   const q = new Queue(props);
   const addr = QUEUES.push(q) - 1;
   return {
@@ -27,8 +19,8 @@ export async function init(props: QueueProps): Promise<{ queueAddr: number }> {
   };
 }
 
-export async function cleanup(attributes: { queueAddr: number }) {
-  const queueAddr = attributes.queueAddr;
+export async function cleanup(attrs: QueueSchema["attrs"]) {
+  const queueAddr = attrs.queueAddr;
   const q = QUEUES[queueAddr];
   if (!q) {
     throw new Error(`Invalid queue id: ${queueAddr}`);
@@ -42,7 +34,7 @@ export class Queue {
   private readonly subscribers = new Array<QueueSubscriberInternal>();
   private readonly intervalId: NodeJS.Timeout;
 
-  constructor(props: QueueProps) {
+  constructor(props: QueueSchema["props"] & { _resolver: IResourceResolver }) {
     this.subscribers.push(...props.subscribers);
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;

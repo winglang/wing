@@ -37,19 +37,19 @@ export class Simulator {
         if (!resource) {
           throw new Error(`Resource ${resourceId} not found.`);
         }
-        return resource.attributes;
+        return resource.attrs;
       },
     };
     for (const [resourceId, resource] of Object.entries(props.resources)) {
       const { type, props: resourceProps } = resource;
-      const attributes = await factory.init(type, {
+      const attrs = await factory.init(type, {
         ...resourceProps,
         _resolver,
       });
       resourceData[resourceId] = {
         type,
         props: resourceProps,
-        attributes,
+        attrs,
       };
     }
 
@@ -66,7 +66,7 @@ export class Simulator {
    * during the resource's in-simulator creation.
    */
   public getAttributes(resourceId: string): any {
-    return this.resourceData[resourceId].attributes;
+    return this.resourceData[resourceId].attrs;
   }
 
   /**
@@ -82,8 +82,8 @@ export class Simulator {
    */
   public async cleanup(): Promise<void> {
     for (const [_resourceId, resource] of Object.entries(this.resourceData)) {
-      const { type, attributes } = resource;
-      await this.factory.cleanup(type, attributes);
+      const { type, attrs } = resource;
+      await this.factory.cleanup(type, attrs);
     }
   }
 }
@@ -95,7 +95,7 @@ interface ResourceData {
   /** Resource data defined at synthesis time, through the construct tree. */
   props: any;
   /** Resource data created at deployment time by the simulator.  */
-  attributes: any;
+  attrs: any;
 }
 
 /**
@@ -113,5 +113,5 @@ export interface ISimulatorFactory {
    * Given a resource type and a resource's attributes, stop the resource's
    * simulation and clean up any file system resources it created.
    */
-  cleanup(type: string, attributes: any): Promise<void>;
+  cleanup(type: string, attrs: any): Promise<void>;
 }

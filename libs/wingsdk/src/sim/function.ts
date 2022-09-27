@@ -65,6 +65,7 @@ export class Function extends cloud.FunctionBase implements IResource {
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
       },
+      attrs: {} as any,
       callers: [],
       callees: [],
     };
