@@ -39,7 +39,7 @@ jobs:
         working-directory: libs/wingc
         run: |
           cargo wasi build --bin wingc --release
-          mv ../../target/wasm32-wasi/release/wingc.wasm ../../apps/wing/wasm/wingc.wasm
+          mv ../../target/wasm32-wasi/release/wingc.wasm ../../apps/wing/
 
       - name: Publish Wing
         if: ${{ github.ref == 'refs/heads/main' }}
