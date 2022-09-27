@@ -75,6 +75,15 @@ const contributes: VSCodeExtensionContributions = {
       scopeName: "source.wing",
       path: "syntaxes/wing.tmLanguage.json",
     },
+    {
+      // https://github.com/mjbvz/vscode-fenced-code-block-grammar-injection-example
+      scopeName: "markdown.wing.codeblock",
+      path: "syntaxes/codeblock.json",
+      injectTo: ["text.html.markdown"],
+      embeddedLanguages: {
+        "meta.embedded.block.wing": "wing",
+      },
+    },
   ],
   configuration: {
     title: "Wing",

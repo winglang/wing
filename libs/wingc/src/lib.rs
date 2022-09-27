@@ -3,10 +3,8 @@ use diagnostic::Diagnostics;
 
 use crate::parser::Parser;
 use std::cell::RefCell;
-use std::ffi::{CStr, CString};
-use std::os::raw::c_char;
+use std::fs;
 use std::path::PathBuf;
-use std::{fs, mem};
 
 use crate::ast::Flight;
 use crate::capture::scan_captures;
@@ -28,9 +26,8 @@ pub fn parse(source_file: &str) -> Scope {
 
 	let source = match fs::read(&source_file) {
 		Ok(source) => source,
-		Err(_) => {
-			println!("Error reading source file: {}", &source_file);
-			std::process::exit(1);
+		Err(err) => {
+			panic!("Error reading source file: {}: {:?}", &source_file, err);
 		}
 	};
 
@@ -82,25 +79,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
 	return jsify::jsify(&scope, true);
-}
-
-#[no_mangle]
-pub extern "C" fn wingc_compile(source: *const c_char, outdir: *const c_char) -> *const c_char {
-	let source_file = unsafe { CStr::from_ptr(source).to_str().unwrap() };
-	let out_dir = if outdir != std::ptr::null() {
-		unsafe { Some(CStr::from_ptr(outdir).to_str().unwrap()) }
-	} else {
-		None
-	};
-
-	let output = compile(source_file, out_dir);
-
-	CString::new(output).unwrap().into_raw()
-}
-
-#[no_mangle]
-pub extern "C" fn wingc_release(s: *const c_char) {
-	let _ = unsafe { CString::from_raw(mem::transmute(s)) };
 }
 
 #[cfg(test)]

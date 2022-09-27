@@ -105,24 +105,28 @@ pub mod type_system {
 		pub fn find_assembly(&self, name: &str) -> Option<&Assembly> {
 			self.assemblies.get(name)
 		}
-		pub fn find_type<T: QueryableType + for<'de> serde::Deserialize<'de>>(&self, fqn: &str) -> Option<T> {
+		fn find_type<T: QueryableType + for<'de> serde::Deserialize<'de>>(&self, fqn: &str, kind: &str) -> Option<T> {
 			for (_, assembly) in self.assemblies.iter() {
 				if let Some(types) = &assembly.types {
 					if let Some(class) = types.get(fqn) {
-						return serde_json::from_value(class.clone()).ok();
+						if let Some(class_kind) = class.get("kind") {
+							if class_kind.as_str().unwrap() == kind {
+								return serde_json::from_value(class.clone()).ok();
+							}
+						}
 					}
 				}
 			}
 			None
 		}
 		pub fn find_class(&self, fqn: &str) -> Option<jsii::ClassType> {
-			self.find_type(fqn)
+			self.find_type(fqn, "class")
 		}
 		pub fn find_interface(&self, fqn: &str) -> Option<jsii::InterfaceType> {
-			self.find_type(fqn)
+			self.find_type(fqn, "interface")
 		}
 		pub fn find_enum(&self, fqn: &str) -> Option<jsii::EnumType> {
-			self.find_type(fqn)
+			self.find_type(fqn, "enum")
 		}
 
 		pub fn load(&mut self, file_or_directory: &str) -> WingIIResult<SchemaName> {
