@@ -53,14 +53,6 @@ export interface EndpointSchema extends BaseResourceSchema {
   };
 }
 
-/** Schema for cloud.Queue.props.subscribers */
-export interface QueueSubscriber {
-  /** Function ID that should be called. */
-  readonly subscriberFunctionId: FunctionId;
-  /** Maximum number of messages that will be batched together to the subscriber. */
-  readonly batchSize: number;
-}
-
 /** Schema for cloud.Queue */
 export interface QueueSchema extends BaseResourceSchema {
   readonly type: "cloud.Queue";
@@ -70,6 +62,14 @@ export interface QueueSchema extends BaseResourceSchema {
     /** Function that should process queue messages. */
     readonly subscribers: QueueSubscriber[];
   };
+}
+
+/** Schema for cloud.Queue.props.subscribers */
+export interface QueueSubscriber {
+  /** Function ID that should be called. */
+  readonly subscriberFunctionId: FunctionId;
+  /** Maximum number of messages that will be batched together to the subscriber. */
+  readonly batchSize: number;
 }
 
 /** Schema for cloud.Bucket */
