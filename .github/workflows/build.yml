@@ -49,7 +49,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          npm ci
+          npm install
           npm version ${{ env.WING_VERSION }}
           npm publish
 
