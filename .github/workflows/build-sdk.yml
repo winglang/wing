@@ -31,6 +31,12 @@ jobs:
         with:
           name: api-checker-build-artifact
           path: ../../apps/wing-api-checker/lib
+      - name: Display structure of downloaded files
+          run: ls -R
+          working-directory: ../../apps/wing-api-checker/lib
+      - name: Display structure of downloaded files
+          run: ls -R
+          working-directory: ../../apps/wing-api-checker
       - name: Install dependencies
         run: npm install
       - name: build
