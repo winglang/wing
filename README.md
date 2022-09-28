@@ -50,4 +50,4 @@ electron({
 
 ## Vercel Deployment
 
-Deploying a Vercel static page for Wing Console Storybook
+Deploying a Vercel static page for Wing Console Storybook.
