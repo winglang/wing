@@ -1,15 +1,12 @@
 import { IConstruct } from "constructs";
 import { ResourceSchema } from "./schema";
 
+/**
+ * Fields shared by all resource implementations for the simulator.
+ */
 export interface IResource extends IConstruct {
   /** @internal */
   _toResourceSchema(): ResourceSchema;
-}
-
-export interface ResourceSpec {
-  readonly kind: string;
-  readonly name: string;
-  readonly props: any;
 }
 
 export function isResource(obj: any): obj is IResource {

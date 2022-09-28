@@ -1,21 +1,5 @@
 {
   "tasks": {
-    "api-check": {
-      "name": "api-check",
-      "steps": [
-        {
-          "exec": "wing-api-check"
-        }
-      ]
-    },
-    "api-check:watch": {
-      "name": "api-check:watch",
-      "steps": [
-        {
-          "exec": "wing-api-check --watch"
-        }
-      ]
-    },
     "build": {
       "name": "build",
       "description": "Full release build",
@@ -89,24 +73,12 @@
       ],
       "condition": "git diff --exit-code > /dev/null"
     },
-    "compat": {
-      "name": "compat",
-      "description": "Perform API compatibility check against latest version",
-      "steps": [
-        {
-          "exec": "jsii-diff npm:$(node -p \"require('./package.json').name\") -k --ignore-file .compatignore || (echo \"\nUNEXPECTED BREAKING CHANGES: add keys such as 'removed:constructs.Node.of' to .compatignore to skip.\n\" && exit 1)"
-        }
-      ]
-    },
     "compile": {
       "name": "compile",
       "description": "Only compile",
       "steps": [
         {
-          "exec": "jsii --silence-warnings=reserved-word"
-        },
-        {
-          "exec": "tsc -p tsconfig.nonjsii.json"
+          "exec": "tsc --build"
         }
       ]
     },
@@ -116,15 +88,6 @@
       "steps": [
         {
           "exec": "ts-node --project tsconfig.dev.json .projenrc.ts"
-        }
-      ]
-    },
-    "docgen": {
-      "name": "docgen",
-      "description": "Generate API.md from .jsii manifest",
-      "steps": [
-        {
-          "exec": "jsii-docgen -o API.md"
         }
       ]
     },
@@ -154,39 +117,16 @@
       "description": "Creates the distribution package",
       "steps": [
         {
-          "exec": "if [ ! -z ${CI} ]; then rsync -a . .repo --exclude .git --exclude node_modules && rm -rf dist && mv .repo dist; else npx projen package-all; fi"
-        }
-      ]
-    },
-    "package-all": {
-      "name": "package-all",
-      "description": "Packages artifacts for all target languages",
-      "steps": [
+          "exec": "mkdir -p dist/js"
+        },
         {
-          "spawn": "package:js"
-        }
-      ]
-    },
-    "package:js": {
-      "name": "package:js",
-      "description": "Create js language bindings",
-      "steps": [
-        {
-          "exec": "jsii-pacmak -v --target js"
+          "exec": "mv $(npm pack) dist/js/"
         }
       ]
     },
     "post-compile": {
       "name": "post-compile",
-      "description": "Runs after successful compilation",
-      "steps": [
-        {
-          "spawn": "docgen"
-        },
-        {
-          "spawn": "api-check"
-        }
-      ]
+      "description": "Runs after successful compilation"
     },
     "post-upgrade": {
       "name": "post-upgrade",
@@ -194,12 +134,7 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation",
-      "steps": [
-        {
-          "exec": "replace-in-file \"lib: ['lib.es2020.d.ts']\" \"lib: ['lib.es2020.d.ts','lib.dom.d.ts']\" node_modules/jsii/lib/compiler.js"
-        }
-      ]
+      "description": "Prepare the project for compilation"
     },
     "release": {
       "name": "release",
@@ -225,39 +160,12 @@
         }
       ]
     },
-    "sandbox:deploy": {
-      "name": "sandbox:deploy",
-      "steps": [
-        {
-          "exec": "cdktf deploy"
-        }
-      ],
-      "cwd": "test/sandbox"
-    },
-    "sandbox:destroy": {
-      "name": "sandbox:destroy",
-      "steps": [
-        {
-          "exec": "cdktf destroy"
-        }
-      ],
-      "cwd": "test/sandbox"
-    },
-    "sandbox:synth": {
-      "name": "sandbox:synth",
-      "steps": [
-        {
-          "exec": "tsx main.ts --tsconfig ../../tsconfig.dev.json"
-        }
-      ],
-      "cwd": "test/sandbox"
-    },
     "test": {
       "name": "test",
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8"
+          "exec": "jest --passWithNoTests --all --updateSnapshot"
         },
         {
           "spawn": "eslint"
@@ -309,19 +217,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor"
         },
         {
           "exec": "npm install"
@@ -342,7 +250,7 @@
       "description": "Watch & compile in the background",
       "steps": [
         {
-          "exec": "jsii -w --silence-warnings=reserved-word"
+          "exec": "tsc --build -w"
         }
       ]
     }

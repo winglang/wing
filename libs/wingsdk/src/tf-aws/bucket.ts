@@ -4,6 +4,10 @@ import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
+
+/**
+ * AWS implementation of `cloud.Bucket`.
+ */
 export class Bucket extends cloud.BucketBase {
   private readonly bucket: s3.S3Bucket;
   private readonly public: boolean;

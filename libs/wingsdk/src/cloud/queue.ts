@@ -93,5 +93,6 @@ export interface IQueueClient {
  * List of inflight operations available for `Queue`.
  */
 export enum QueueInflightMethods {
+  /** `Queue.push` */
   PUSH = "push",
 }

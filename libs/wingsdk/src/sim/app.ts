@@ -5,17 +5,33 @@ import { FileBase } from "../fs";
 import { isResource } from "./resource";
 import { ConstructSchema, ResourceSchema, WingSimulatorSchema } from "./schema";
 
+/**
+ * Props for `App`.
+ */
 export interface AppProps {
+  /**
+   * Directory where artifacts are synthesized to.
+   */
   readonly outdir: string;
 }
 
+/**
+ * A construct that knows how to synthesize simulator resources into a
+ * Wing simulator (.wx) file.
+ */
 export class App extends Construct {
+  /**
+   * Directory where artifacts are synthesized to.
+   */
   private readonly outdir: string;
   constructor(props: AppProps) {
     super(undefined as any, "");
     this.outdir = props.outdir;
   }
 
+  /**
+   * Synthesize the app into the output directory.
+   */
   public synth() {
     const isFile = (c: IConstruct): c is FileBase => c instanceof FileBase;
     for (const f of this.node.findAll().filter(isFile)) {

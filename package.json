@@ -3,7 +3,7 @@
   "workspaces": [
     "apps/wing",
     "apps/wing-playground",
-
+    "apps/wing-api-checker",
     "libs/tree-sitter-wing"
   ]
 }

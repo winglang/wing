@@ -5,6 +5,9 @@ import { Function } from "./function";
 import { IResource } from "./resource";
 import { BucketSchema } from "./schema";
 
+/**
+ * Simulator implementation of `cloud.Bucket`.
+ */
 export class Bucket extends cloud.BucketBase implements IResource {
   private readonly public: boolean;
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
