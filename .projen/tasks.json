@@ -165,9 +165,6 @@
         },
         {
           "spawn": "build"
-        },
-        {
-          "exec": "git diff --ignore-space-at-eol --exit-code"
         }
       ]
     },
