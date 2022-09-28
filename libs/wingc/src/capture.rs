@@ -252,6 +252,11 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 			} => {
 				todo!()
 			}
+			Statement::Struct {
+				name: _,
+				extends: _,
+				members: _,
+			} => {}
 		}
 	}
 	res

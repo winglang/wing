@@ -112,6 +112,11 @@ pub enum Statement {
 		parent: Option<Symbol>,
 		is_resource: bool,
 	},
+	Struct {
+		name: Symbol,
+		extends: Vec<Symbol>,
+		members: Vec<ClassMember>,
+	},
 }
 
 #[derive(Debug)]

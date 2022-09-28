@@ -337,6 +337,25 @@ fn jsify_statement(statement: &Statement) -> String {
 					.join("\n")
 			)
 		}
+		Statement::Struct { name, extends, members } => {
+			format!(
+				"interface {}{} {{\n{}\n}}",
+				jsify_symbol(name),
+				if !extends.is_empty() {
+					format!(
+						" extends {}",
+						extends.iter().map(jsify_symbol).collect::<Vec<String>>().join(", ")
+					)
+				} else {
+					"".to_string()
+				},
+				members
+					.iter()
+					.map(|m| jsify_class_member(m))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
+		}
 	}
 }
 

@@ -19,12 +19,16 @@ pub enum Type {
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
+	Struct(Struct),
 	ResourceObject(TypeRef), // Reference to a Resource type
 	ClassInstance(TypeRef),  // Reference to a Class type
+	StructInstance(TypeRef), // Reference to a Struct type
 	Namespace(Namespace),
 }
 
 const RESOURCE_CLASS_FQN: &'static str = "@monadahq/wingsdk.cloud.Resource";
+const WING_CONSTRUCTOR_NAME: &'static str = "constructor";
+
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Namespace {
@@ -55,6 +59,15 @@ impl Class {
 	}
 }
 
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct Struct {
+	pub name: Symbol,
+	extends: Vec<TypeRef>, // Must be a Type::Struct type
+	#[derivative(Debug = "ignore")]
+	pub env: TypeEnv,
+}
+
 impl PartialEq for Type {
 	fn eq(&self, other: &Self) -> bool {
 		// If references are the same this is the same type, if not then compare content
@@ -72,10 +85,20 @@ impl PartialEq for Type {
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
-				// If our parent is equal to `other` then treat both classes as equal (inheritance)
+				// If our parent is equal to `other` then treat both resources as equal (inheritance)
 				if let Some(parent) = l0.parent {
 					let parent_type: &Type = parent.into();
 					return parent_type.eq(other);
+				}
+				false
+			}
+			(Self::Struct(l0), Self::Struct(_)) => {
+				// If we extend from `other` then treat both structs as equal (inheritance)
+				for parent in l0.extends.iter() {
+					let parent_type: &Type = (*parent).into();
+					if parent_type.eq(other) {
+						return true;
+					}
 				}
 				false
 			}
@@ -87,6 +110,12 @@ impl PartialEq for Type {
 			}
 			(Self::ResourceObject(l0), Self::ResourceObject(r0)) => {
 				// Resource objects are of the same type if they are objects of the same Resource
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(Self::StructInstance(l0), Self::StructInstance(r0)) => {
+				// Struct instances are of the same type if they are instances of the same Struct
 				let l: &Type = (*l0).into();
 				let r: &Type = (*r0).into();
 				l == r
@@ -157,6 +186,11 @@ impl Display for Type {
 				write!(f, "instance of {}", class_type_name)
 			}
 			Type::Namespace(namespace) => write!(f, "{}", namespace.name),
+			Type::Struct(s) => write!(f, "{}", s.name),
+			Type::StructInstance(s) => {
+				let struct_type = s.as_struct().expect("Struct instance must reference to a struct");
+				write!(f, "instance of {}", struct_type.name.name)
+			}
 		}
 	}
 }
@@ -209,6 +243,14 @@ impl TypeRef {
 	fn as_class(&self) -> Option<&Type> {
 		if let &Type::Class(_) = (*self).into() {
 			Some((*self).into())
+		} else {
+			None
+		}
+	}
+
+	fn as_struct(&self) -> Option<&Struct> {
+		if let &Type::Struct(ref s) = (*self).into() {
+			Some(s)
 		} else {
 			None
 		}
@@ -405,7 +447,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Type check args against constructor
 				let constructor_type = class_env.lookup(&Symbol {
-					name: "constructor".into(),
+					name: WING_CONSTRUCTOR_NAME.into(),
 					span: class_symbol.span.clone(),
 				});
 
@@ -789,7 +831,7 @@ impl<'a> TypeChecker<'a> {
 				let constructor_type = self.resolve_type(&AstType::FunctionSignature(constructor.signature.clone()), env);
 				class_env.define(
 					&Symbol {
-						name: "constructor".into(),
+						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
 					constructor_type,
@@ -848,6 +890,58 @@ impl<'a> TypeChecker<'a> {
 					self.type_check_scope(&mut method.statements);
 				}
 			}
+			Statement::Struct { name, extends, members } => {
+				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
+				//   If we encounter an existing member with the same name and type we ignore skip it, if the types are different we
+				//   fail type checking.
+
+				// Create an environment for the struct
+				let mut struct_env = TypeEnv::new(None, None, true, env.flight);
+
+				// Add members to the struct env
+				for member in members.iter() {
+					let member_type = self.resolve_type(&member.member_type, env);
+					struct_env.define(&member.name, member_type);
+				}
+
+				// Add members from the structs parents
+				let mut extends_types = vec![];
+				for parent in extends.iter() {
+					let parent_type = env.lookup(parent);
+					let parent_struct = parent_type
+						.as_struct()
+						.expect(format!("Type {} extends {} which should be a struct", name.name, parent.name).as_str());
+					for (parent_member_name, member_type) in parent_struct.env.iter() {
+						if let Some(existing_type) = struct_env.try_lookup(&parent_member_name) {
+							// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
+							if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
+								panic!(
+									"Struct {} extends {} but has a conflicting member {} ({} != {})",
+									name, parent.name, parent_member_name, existing_type, member_type
+								);
+							}
+						} else {
+							struct_env.define(
+								&Symbol {
+									name: parent_member_name,
+									span: name.span.clone(),
+								},
+								member_type,
+							);
+						}
+					}
+					// Store references to all parent types
+					extends_types.push(parent_type);
+				}
+				env.define(
+					name,
+					self.types.add_type(Type::Struct(Struct {
+						name: name.clone(),
+						extends: extends_types,
+						env: struct_env,
+					})),
+				)
+			}
 		}
 	}
 
@@ -904,8 +998,6 @@ impl<'a> TypeChecker<'a> {
 		jsii_types: &wingii::type_system::TypeSystem,
 		env: &mut TypeEnv,
 	) -> Option<TypeRef> {
-		// TODO: avoid infinite recursion by keeping a set of type names we already tried to define
-
 		// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
 		println!("Defining type {}", type_name);
 		let fqn = format!("{}{}", prefix, type_name);
@@ -959,6 +1051,13 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			None
 		};
+
+		// Verify we have a constructor for this calss
+		let jsii_initializer = jsii_class
+			.initializer
+			.as_ref()
+			.expect("JSII classes must have a constructor");
+
 		println!("got here! we can define {}", type_name);
 
 		// If our base class is a resource then we are a resource
@@ -966,42 +1065,81 @@ impl<'a> TypeChecker<'a> {
 			is_resource = base_class.as_resource().is_some();
 		}
 
-		// Create class's environment
-		let mut class_env = TypeEnv::new(Some(env), None, true, env.flight);
+		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
+		let dummy_env = TypeEnv::new(None, None, true, env.flight);
 
-		// Add methods and properties to the class environment
-		self.add_jsii_interface_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 
-		let new_type = if is_resource {
+		// Create the new resource/class type and add it to the current environment.
+		// When adding the class methods below we'll be able to reference this type.
+		println!("Adding type {} to namespace", type_name.green());
+		let class_spec = Class {
+			name: new_type_symbol.clone(),
+			env: dummy_env,
+			parent: base_class,
+		};
+		let new_type = self.types.add_type(if is_resource {
+			Type::Resource(class_spec)
+		} else {
+			Type::Class(class_spec)
+		});
+		env.define(&new_type_symbol, new_type);
+
+		// Create class's actually environment before we add properties and methods to it
+		let mut class_env = TypeEnv::new(Some(env), None, true, env.flight);
+
+		// Add constructor to the class environment
+		let mut arg_types = vec![];
+		if let Some(args) = &jsii_initializer.parameters {
+			for (i, arg) in args.iter().enumerate() {
+				// TODO: handle arg.variadic and arg.optional
+
+				// If this is a resource then skip scope and id arguments
+				if is_resource {
+					if i == 0 {
+						assert!(arg.name == "scope");
+						continue;
+					} else if i == 1 {
+						assert!(arg.name == "id");
+						continue;
+					}
+				}
+				arg_types.push(self.jsii_type_ref_to_wing_type(&arg.type_).unwrap());
+			}
+		}
+		let method_sig = self.types.add_type(Type::Function(FunctionSignature {
+			args: arg_types,
+			return_type: Some(new_type),
+			flight: env.flight,
+		}));
+		class_env.define(
+			&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &jsii_initializer.location_in_module),
+			method_sig,
+		);
+		println!("Created constructor for {}: {:?}", type_name, method_sig);
+
+		// Add methods and properties to the class environment
+		self.add_jsii_interface_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env, new_type);
+
+		if is_resource {
 			// Look for a client interface for this resource
 			let client_interface = jsii_types.find_interface(&format!("{}I{}Client", prefix, type_name));
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
-				self.add_jsii_interface_members_to_class_env(&client_interface, false, Flight::In, &mut class_env);
+				self.add_jsii_interface_members_to_class_env(&client_interface, false, Flight::In, &mut class_env, new_type);
 			} else {
-				println!("Resource {} doesn't not seem to have a client", type_name.bold());
+				println!("Resource {} doesn't not seem to have a client", type_name.green());
 			}
+		}
 
-			println!("{} is a resource", type_name);
-			Type::Resource(Class {
-				name: new_type_symbol.clone(),
-				env: class_env,
-				parent: base_class,
-			})
-		} else {
-			println!("{} is a class", type_name);
-			Type::Class(Class {
-				name: new_type_symbol.clone(),
-				env: class_env,
-				parent: base_class,
-			})
+		// Replace the dummy class environment with the real one before type checking the methods
+		match new_type.into() {
+			&mut Type::Class(ref mut class) | &mut Type::Resource(ref mut class) => {
+				class.env = class_env;
+			}
+			_ => panic!("Expected {} to be a class or resource ", type_name),
 		};
 
-		// Finally create a new type in the wing type system and define it in the module's namespace
-		println!("Finally adding type {}", type_name.bold());
-		let new_type = self.types.add_type(new_type);
-		env.define(&new_type_symbol, new_type);
 		Some(new_type)
 	}
 
@@ -1011,8 +1149,11 @@ impl<'a> TypeChecker<'a> {
 		is_resource: bool,
 		flight: Flight,
 		class_env: &mut TypeEnv,
+		wing_type: TypeRef,
 	) {
 		assert!(!is_resource || flight == Flight::Pre);
+
+		// Add methods to the class environment
 		if let Some(methods) = &jsii_class.methods() {
 			for m in methods {
 				// TODO: skip internal methods (for now we skip `capture` until we mark it as internal)
@@ -1021,7 +1162,7 @@ impl<'a> TypeChecker<'a> {
 					continue;
 				}
 
-				println!("Adding method {} to class", m.name);
+				println!("Adding method {} to class", m.name.green());
 
 				let return_type = if let Some(jsii_return_type) = &m.returns {
 					self.jsii_optional_type_to_wing_type(&jsii_return_type)
@@ -1030,13 +1171,15 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				let mut arg_types = vec![];
+				// Add my type as the first argument to all methods (this)
+				arg_types.push(wing_type);
+				// Define the rest of the arguments and create the method signature
 				if let Some(args) = &m.parameters {
 					for arg in args {
 						// TODO: handle arg.variadic and arg.optional
 						arg_types.push(self.jsii_type_ref_to_wing_type(&arg.type_).unwrap());
 					}
 				}
-
 				let method_sig = self.types.add_type(Type::Function(FunctionSignature {
 					args: arg_types,
 					return_type,
@@ -1048,7 +1191,7 @@ impl<'a> TypeChecker<'a> {
 		// Add properties to the class environment
 		if let Some(properties) = &jsii_class.properties() {
 			for p in properties {
-				println!("Found property {} with type {:?}", p.name.bold(), p.type_);
+				println!("Found property {} with type {:?}", p.name.green(), p.type_);
 				if flight == Flight::In {
 					todo!("No support for inflight properties yet");
 				}
