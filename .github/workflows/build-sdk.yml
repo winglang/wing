@@ -30,18 +30,9 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: api-checker-build-artifact
-          path: ../../apps/wing-api-checker/lib
-      - name: Display structure of repo
-        run: ls -R
-        working-directory: ../../
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: ../../apps/wing-api-checker
+          path: apps/wing-api-checker/lib
       - name: Install dependencies
         run: npm install
-      - name: Display structure of downloaded files
-        run: ls -R
-        working-directory: node_modules/wing-api-checker
       - name: build
         run: npx projen build
       - name: Upload coverage to Codecov
