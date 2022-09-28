@@ -2,12 +2,12 @@ import classNames from "classnames";
 import { createRef, ReactNode, useEffect, useState } from "react";
 import { DraggableCore } from "react-draggable";
 
-export interface RightResizableWidgetProps {
+export interface LeftResizableWidgetProps {
   className?: string;
   children?: ReactNode | undefined;
 }
 
-export function RightResizableWidget(props: RightResizableWidgetProps) {
+export function LeftResizableWidget(props: LeftResizableWidgetProps) {
   const { className, children } = props;
 
   const [offset, setOffset] = useState(0);
@@ -28,7 +28,9 @@ export function RightResizableWidget(props: RightResizableWidgetProps) {
             document.body.style.cursor = "col-resize";
 
             setOffset(
-              (e as MouseEvent).clientX - resizeTarget.current.clientWidth,
+              document.body.clientWidth -
+                (e as MouseEvent).clientX -
+                resizeTarget.current.clientWidth,
             );
 
             setResizing(true);
@@ -37,7 +39,7 @@ export function RightResizableWidget(props: RightResizableWidgetProps) {
         onDrag={(e) => {
           if (resizeTarget.current) {
             resizeTarget.current.style.width = `${
-              offset + (e as MouseEvent).clientX
+              offset + (document.body.clientWidth - (e as MouseEvent).clientX)
             }px`;
           }
         }}
@@ -53,7 +55,7 @@ export function RightResizableWidget(props: RightResizableWidgetProps) {
       >
         <div
           className={classNames(
-            "absolute inset-y-0 -right-0.5 w-1 cursor-col-resize transition-colors ease-in-out hover:bg-sky-500 z-10",
+            "absolute inset-y-0 -left-0.5 w-1 cursor-col-resize transition-colors ease-in-out hover:bg-sky-500 z-10",
             isResizing && "bg-sky-500",
           )}
         />

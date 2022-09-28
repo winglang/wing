@@ -16,16 +16,7 @@ export default {
 const Container = ({ children }: PropsWithChildren) => {
   return <div className="fixed top-0 left-0 h-full w-full">{children}</div>;
 };
-
-export const WithoutSchema = () => {
-  return (
-    <Container>
-      <VscodeLayout schema={undefined} />
-    </Container>
-  );
-};
-
-export const WithSchema = () => {
+export const Default = () => {
   const schema = constructHubTreeToWingSchema();
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
@@ -41,6 +32,14 @@ export const WithSchema = () => {
           <VscodeLayout schema={schema} />
         </QueryClientProvider>
       </trpc.Provider>
+    </Container>
+  );
+};
+
+export const Empty = () => {
+  return (
+    <Container>
+      <VscodeLayout schema={undefined} />
     </Container>
   );
 };

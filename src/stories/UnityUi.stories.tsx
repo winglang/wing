@@ -8,7 +8,10 @@ import {
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import classNames from "classnames";
 
+import { LeftResizableWidget } from "@/components/LeftResizableWidget";
 import { RightResizableWidget } from "@/components/RightResizableWidget";
+import { ScrollableArea } from "@/components/ScrollableArea";
+import { TopResizableWidget } from "@/components/TopResizableWidget";
 import { buildNodeMap, NodeMap } from "@/utils/nodeMap";
 
 import { constructHubTreeToWingSchema, ResourceIcon } from "./utils";
@@ -132,62 +135,100 @@ interface UnityProps {
 
 function Unity({ schema, nodeMap }: UnityProps) {
   return (
-    <div className="h-full text-gray-300 text-xs p-1 pt-8 bg-gray-900">
+    <div className="h-full text-gray-300 text-xs pt-8 bg-gray-900">
       <div className="h-full flex items-stretch gap-px">
-        <RightResizableWidget className="w-60 min-w-[62px] flex flex-col gap-px bg-gray-800 rounded">
-          <div>
-            <div className="inline-flex bg-gray-700 px-2 py-1 rounded-t cursor-default">
-              <div>Hierarchy</div>
-            </div>
-            <div className="bg-gray-700 px-1 py-0.5">
-              <div className="rounded bg-gray-800 border-t border-gray-900">
-                {/* <div className="px-1.5 text-xs italic text-gray-500">
+        <div className="flex-1 flex flex-col gap-px">
+          <div className="flex-1 flex items-stretch gap-px">
+            <RightResizableWidget className="w-[25%] min-w-[62px] flex flex-col gap-px bg-gray-800 rounded">
+              <div>
+                <div className="inline-flex bg-gray-700 px-2 py-1 rounded-t cursor-default">
+                  <div>Hierarchy</div>
+                </div>
+                <div className="bg-gray-700 px-1 py-0.5">
+                  <div className="rounded bg-gray-800 border-t border-gray-900">
+                    {/* <div className="px-1.5 text-xs italic text-gray-500">
                   Filter by text...
                 </div> */}
-                <input
-                  className="px-1.5 text-xs italic text-gray-400 bg-transparent w-full placeholder:text-gray-600"
-                  placeholder="Filter by text..."
-                />
+                    <input
+                      className="px-1.5 text-xs italic text-gray-400 bg-transparent w-full placeholder:text-gray-600"
+                      placeholder="Filter by text..."
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="flex-1 relative">
+                <ScrollableArea className="flex flex-col overflow-y-overlay">
+                  {schema && renderRootNode(schema.root)}
+                </ScrollableArea>
+              </div>
+            </RightResizableWidget>
+
+            <div className="flex-1 flex flex-col bg-gray-800 overflow-hidden min-w-[12rem]">
+              <div className="">
+                <div className="inline-flex bg-gray-700 px-2 py-1 rounded-t">
+                  <div>Explorer</div>
+                </div>
+              </div>
+              <div className="flex-1 relative">
+                <ScrollableArea className="bg-gray-700 overflow-overlay">
+                  <div className="p-2 bg-gray-600">
+                    <svg
+                      className="h-full w-full border-2 border-dashed border-gray-500 text-gray-500"
+                      preserveAspectRatio="none"
+                      stroke="currentColor"
+                      fill="none"
+                      viewBox="0 0 200 200"
+                      aria-hidden="true"
+                    >
+                      <path
+                        vectorEffect="non-scaling-stroke"
+                        strokeWidth="2"
+                        d="M0 0l200 200M0 200L200 0"
+                      ></path>
+                    </svg>
+                  </div>
+                </ScrollableArea>
               </div>
             </div>
           </div>
-          <div className="flex-1 flex flex-col overflow-y-auto">
-            {schema && renderRootNode(schema.root)}
-          </div>
-        </RightResizableWidget>
-        <div className="flex-1 flex flex-col bg-gray-800 rounded overflow-hidden">
-          <div className="">
-            <div className="inline-flex bg-gray-700 px-2 py-1 rounded-t">
-              <div>Explorer</div>
+
+          <TopResizableWidget className="h-[33%] min-h-[13rem] flex flex-col bg-gray-800">
+            <div className="flex gap-px">
+              <div className="inline-flex bg-gray-700 px-2 py-1 rounded-t cursor-default">
+                Schema
+              </div>
+              <div className="inline-flex bg-gray-700/50 px-2 py-1 rounded-t cursor-default">
+                Logs
+              </div>
+              <div className="inline-flex bg-gray-700/50 px-2 py-1 rounded-t cursor-default">
+                Events
+              </div>
             </div>
-          </div>
-          <div className="flex-1 bg-gray-700 p-2">
-            <div className="p-2 bg-gray-600">
-              {nodeMap ? (
-                <pre className="text-xs">
-                  <code>{JSON.stringify(schema, undefined, 2)}</code>
-                  <code>{JSON.stringify(nodeMap, undefined, 2)}</code>
-                </pre>
-              ) : (
-                <svg
-                  className="h-full w-full border-2 border-dashed border-gray-500 text-gray-500"
-                  preserveAspectRatio="none"
-                  stroke="currentColor"
-                  fill="none"
-                  viewBox="0 0 200 200"
-                  aria-hidden="true"
-                >
-                  <path
-                    vector-effect="non-scaling-stroke"
-                    strokeWidth="2"
-                    d="M0 0l200 200M0 200L200 0"
-                  ></path>
-                </svg>
-              )}
+
+            <div className="flex-1 relative">
+              <ScrollableArea className="bg-gray-700 overflow-overlay">
+                <div className="p-2 bg-gray-600">
+                  <svg
+                    className="h-full w-full border-2 border-dashed border-gray-500 text-gray-500"
+                    preserveAspectRatio="none"
+                    stroke="currentColor"
+                    fill="none"
+                    viewBox="0 0 200 200"
+                    aria-hidden="true"
+                  >
+                    <path
+                      vectorEffect="non-scaling-stroke"
+                      strokeWidth="2"
+                      d="M0 0l200 200M0 200L200 0"
+                    ></path>
+                  </svg>
+                </div>
+              </ScrollableArea>
             </div>
-          </div>
+          </TopResizableWidget>
         </div>
-        <div className="flex-1 flex flex-col bg-gray-800 rounded overflow-hidden">
+
+        <LeftResizableWidget className="w-[33%] min-w-[24rem] flex flex-col bg-gray-800 rounded">
           <div>
             <div className="inline-flex bg-gray-700 px-2 py-1 rounded-t">
               <div>Inspector</div>
@@ -261,7 +302,7 @@ function Unity({ schema, nodeMap }: UnityProps) {
               );
             })}
           </div>
-        </div>
+        </LeftResizableWidget>
       </div>
     </div>
   );
