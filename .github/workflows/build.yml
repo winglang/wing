@@ -128,27 +128,8 @@ jobs:
           path: apps/vscode-wing/vscode-wing.vsix
 
   build-sdk:
-    needs: build-api-checker
     uses: ./.github/workflows/build-sdk.yml
     secrets: inherit
-
-  build-api-checker:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-        with:
-          working-directory: apps/wing-api-checker
-      - name: Build package
-        working-directory: apps/wing-api-checker
-        run: npm run build
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: api-checker-build-artifact
-          path: apps/wing-api-checker
 
   # Purposely Empty to be a required check for all matrix entries from build-native
   build:
@@ -157,7 +138,6 @@ jobs:
       - build-native
       - build-vscode
       - build-sdk
-      - build-api-checker
     runs-on: ubuntu-latest
     steps:
       - name: Build Validation
