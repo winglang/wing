@@ -26,6 +26,9 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+      - name: Build transitive dependency (wing-api-checker)
+        run: npm install && npm run build
+        working-directory: apps/wing-api-checker
       - name: Install dependencies
         run: npm install
       - name: build

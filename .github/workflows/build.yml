@@ -100,7 +100,6 @@ jobs:
           mv ../../target/release/wing-language-server ../../target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
       - name: Upload Wing Language Server
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
@@ -113,11 +112,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download language server binaries
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/download-artifact@v2
       - name: Prepare language server binaries
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |          
+        run: |
           cp -r wing-language-server-* ./apps/vscode-wing/resources
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
@@ -134,7 +131,6 @@ jobs:
         working-directory: apps/vscode-wing
         run: npm run package
       - name: Upload extension
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
@@ -220,4 +216,3 @@ jobs:
           body_path: checksums.md
           prerelease: true
           files: dist/*
-
