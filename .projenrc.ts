@@ -80,7 +80,7 @@ project.addTask("dev").exec("vite");
 project.compileTask.exec("vite build");
 // TODO: track https://github.com/electron-userland/electron-builder/issues/6411
 project.compileTask.exec(
-  "npm exec electron-builder --config=electron-builder.json5",
+  "npm exec electron-builder --publish=always --config=electron-builder.json5",
 );
 project.addTask("storybook").exec("start-storybook -p 6006");
 project.addTask("build-storybook").exec("build-storybook");
