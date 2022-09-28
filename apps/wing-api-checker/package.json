@@ -1,5 +1,5 @@
 {
-  "name": "wing-api-checker",
+  "name": "@monadahq/wing-api-checker",
   "repository": {
     "type": "git",
     "url": "https://github.com/monadahq/winglang.git"

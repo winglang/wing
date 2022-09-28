@@ -1,9 +1,8 @@
 {
-  "name": "@monadahq/wingc",
-  "root": "libs/wingc/",
-  "sourceRoot": "libs/wingc/src",
+  "name": "@monadahq/wingii",
+  "root": "libs/wingii/",
+  "sourceRoot": "libs/wingii/src",
   "projectType": "library",
-  "implicitDependencies": ["@monadahq/tree-sitter-wing", "@monadahq/wingii"],
   "targets": {
     "build-native": {
       "executor": "@nxrs/cargo:build",

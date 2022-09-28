@@ -1,22 +1,37 @@
 {
-	"affected": {
-		"defaultBase": "main"
-	},
-	"workspaceLayout": {
-		"appsDir": "apps",
-		"libsDir": "libs"
-	},
+  "affected": {
+    "defaultBase": "main"
+  },
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
+  "namedInputs": {
+    "src": ["{projectRoot}/src/**/*"],
+    "rust-conf": [
+      "{projectRoot}/Cargo.toml",
+      "{workspaceRoot}/Cargo.toml",
+      "{workspaceRoot}/Cargo.lock"
+    ],
+    "rust-wasm": ["{workspaceRoot}/target/wasm32-wasi/**/*.wasm"],
+    "rust-native": ["{workspaceRoot}/target/debug/*", "{workspaceRoot}/target/release/*"],
+    "dist": ["{projectRoot}/dist/**/*"]
+  },
   "plugins": ["@nxrs/cargo"],
   "targetDefaults": {
     "build": {
-      "dependsOn": [
-        "^build"
-      ]
+      "dependsOn": ["^build"]
     },
     "package": {
-      "dependsOn": [
-        "^package"
-      ]
+      "dependsOn": ["build", "^package"]
+    }
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": ["build", "lint", "test"]
+      }
     }
   }
 }
