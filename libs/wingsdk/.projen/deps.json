@@ -142,7 +142,6 @@
     },
     {
       "name": "wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
       "type": "build"
     },
     {

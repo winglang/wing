@@ -146,6 +146,8 @@ The path to a state file which will track all synthesized files.
 
 ### App <a name="App" id="@monadahq/wingsdk.sim.App"></a>
 
+A construct that knows how to synthesize simulator resources into a Wing simulator (.wx) file.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.App.Initializer"></a>
 
 ```typescript
@@ -359,6 +361,8 @@ with a fresh copy without any consequences.
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.sim.Bucket"></a>
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
+
+Simulator implementation of `cloud.Bucket`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Bucket.Initializer"></a>
 
@@ -712,6 +716,8 @@ with a fresh copy without any consequences.
 
 ### FileBase <a name="FileBase" id="@monadahq/wingsdk.fs.FileBase"></a>
 
+Represents a file to be synthesized in the app's output directory.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.FileBase.Initializer"></a>
 
 ```typescript
@@ -757,7 +763,7 @@ relative file path.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.fs.FileBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.save">save</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
 
 ---
 
@@ -774,6 +780,8 @@ Returns a string representation of this construct.
 ```typescript
 public save(outdir: string): void
 ```
+
+Render the contents of the file and save it to the user's file system.
 
 ###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.FileBase.save.parameter.outdir"></a>
 
@@ -812,7 +820,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.fs.FileBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.property.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.FileBase.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
 
 ---
 
@@ -835,6 +843,8 @@ public readonly filePath: string;
 ```
 
 - *Type:* string
+
+The file's relative path to the output directory.
 
 ---
 
@@ -988,6 +998,8 @@ with a fresh copy without any consequences.
 ### Function <a name="Function" id="@monadahq/wingsdk.sim.Function"></a>
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
+
+Simulator implementation of `cloud.Function`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Function.Initializer"></a>
 
@@ -1488,7 +1500,7 @@ new fs.JsonFile(scope: Construct, id: string, filePath: string, props: JsonFileP
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.fs.JsonFile.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.save">save</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
 
 ---
 
@@ -1505,6 +1517,8 @@ Returns a string representation of this construct.
 ```typescript
 public save(outdir: string): void
 ```
+
+Render the contents of the file and save it to the user's file system.
 
 ###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.JsonFile.save.parameter.outdir"></a>
 
@@ -1543,7 +1557,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.fs.JsonFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.property.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.JsonFile.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
 
 ---
 
@@ -1566,6 +1580,8 @@ public readonly filePath: string;
 ```
 
 - *Type:* string
+
+The file's relative path to the output directory.
 
 ---
 
@@ -2299,8 +2315,8 @@ new fs.TextFile(scope: Construct, id: string, filePath: string, props?: TextFile
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.fs.TextFile.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.save">save</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.addLine">addLine</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.addLine">addLine</a></code> | Append a line to the text file's contents. |
 
 ---
 
@@ -2318,6 +2334,8 @@ Returns a string representation of this construct.
 public save(outdir: string): void
 ```
 
+Render the contents of the file and save it to the user's file system.
+
 ###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.TextFile.save.parameter.outdir"></a>
 
 - *Type:* string
@@ -2329,6 +2347,8 @@ public save(outdir: string): void
 ```typescript
 public addLine(line: string): void
 ```
+
+Append a line to the text file's contents.
 
 ###### `line`<sup>Required</sup> <a name="line" id="@monadahq/wingsdk.fs.TextFile.addLine.parameter.line"></a>
 
@@ -2367,7 +2387,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.fs.TextFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.property.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.TextFile.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
 
 ---
 
@@ -2390,6 +2410,8 @@ public readonly filePath: string;
 ```
 
 - *Type:* string
+
+The file's relative path to the output directory.
 
 ---
 
@@ -3089,14 +3111,16 @@ The code contents.
 
 ### Duration <a name="Duration" id="@monadahq/wingsdk.core.Duration"></a>
 
+Represents a length of time.
+
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Duration.fromHours">fromHours</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.Duration.fromMinutes">fromMinutes</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.Duration.fromSeconds">fromSeconds</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
+| <code><a href="#@monadahq/wingsdk.core.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
+| <code><a href="#@monadahq/wingsdk.core.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
 
 ---
 
@@ -3108,9 +3132,13 @@ import { core } from '@monadahq/wingsdk'
 core.Duration.fromHours(amount: number)
 ```
 
+Create a Duration representing an amount of hours.
+
 ###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromHours.parameter.amount"></a>
 
 - *Type:* number
+
+the amount of Hours the `Duration` will represent.
 
 ---
 
@@ -3122,9 +3150,13 @@ import { core } from '@monadahq/wingsdk'
 core.Duration.fromMinutes(amount: number)
 ```
 
+Create a Duration representing an amount of minutes.
+
 ###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromMinutes.parameter.amount"></a>
 
 - *Type:* number
+
+the amount of Minutes the `Duration` will represent.
 
 ---
 
@@ -3136,9 +3168,13 @@ import { core } from '@monadahq/wingsdk'
 core.Duration.fromSeconds(amount: number)
 ```
 
+Create a Duration representing an amount of seconds.
+
 ###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromSeconds.parameter.amount"></a>
 
 - *Type:* number
+
+the amount of Seconds the `Duration` will represent.
 
 ---
 
@@ -3146,9 +3182,9 @@ core.Duration.fromSeconds(amount: number)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Duration.property.hours">hours</a></code> | <code>number</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.Duration.property.minutes">minutes</a></code> | <code>number</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.Duration.property.seconds">seconds</a></code> | <code>number</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Duration.property.hours">hours</a></code> | <code>number</code> | Return the total number of hours in this Duration. |
+| <code><a href="#@monadahq/wingsdk.core.Duration.property.minutes">minutes</a></code> | <code>number</code> | Return the total number of minutes in this Duration. |
+| <code><a href="#@monadahq/wingsdk.core.Duration.property.seconds">seconds</a></code> | <code>number</code> | Return the total number of seconds in this Duration. |
 
 ---
 
@@ -3160,6 +3196,8 @@ public readonly hours: number;
 
 - *Type:* number
 
+Return the total number of hours in this Duration.
+
 ---
 
 ##### `minutes`<sup>Required</sup> <a name="minutes" id="@monadahq/wingsdk.core.Duration.property.minutes"></a>
@@ -3170,6 +3208,8 @@ public readonly minutes: number;
 
 - *Type:* number
 
+Return the total number of minutes in this Duration.
+
 ---
 
 ##### `seconds`<sup>Required</sup> <a name="seconds" id="@monadahq/wingsdk.core.Duration.property.seconds"></a>
@@ -3179,6 +3219,8 @@ public readonly seconds: number;
 ```
 
 - *Type:* number
+
+Return the total number of seconds in this Duration.
 
 ---
 
@@ -3313,12 +3355,14 @@ Name of the exported function which will be run.
 
 ### InflightClient <a name="InflightClient" id="@monadahq/wingsdk.core.InflightClient"></a>
 
+Utility class with functions about inflight clients.
+
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.InflightClient.for">for</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.InflightClient.for">for</a></code> | Creates a `Code` instance with code for creating an inflight client. |
 
 ---
 
@@ -3329,6 +3373,8 @@ import { core } from '@monadahq/wingsdk'
 
 core.InflightClient.for(filename: string, clientClass: string, args: string[])
 ```
+
+Creates a `Code` instance with code for creating an inflight client.
 
 ###### `filename`<sup>Required</sup> <a name="filename" id="@monadahq/wingsdk.core.InflightClient.for.parameter.filename"></a>
 
@@ -3402,7 +3448,7 @@ Reference code directly from a string.
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>string</code> | Generate a hash of the code contents. |
 | <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>@monadahq/wingsdk.core.Language</code> | The language of the code. |
-| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>string</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
 | <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>string</code> | The code contents. |
 
 ---
@@ -3438,6 +3484,8 @@ public readonly path: string;
 ```
 
 - *Type:* string
+
+A path to the code in the user's file system that can be referenced for bundling purposes.
 
 ---
 
