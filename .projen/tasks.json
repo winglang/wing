@@ -92,7 +92,7 @@
           "exec": "vite build"
         },
         {
-          "exec": "npm exec electron-builder --publish=always --config=electron-builder.json5"
+          "exec": "npm exec electron-builder -- --publish=always --config=electron-builder.json5"
         }
       ]
     },
