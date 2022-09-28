@@ -22,7 +22,7 @@ The compiler is under `libs/wingc` and you can use standard Rust workflows withi
 If intent is to compile for WebAssembly, the following tooling is needed:
 
 - `cargo install cargo-wasi` - Adds convenient WASI commands to Cargo
-- `sudo ../scripts/setup_wasi.sh` - Installs WASI SDK
+- `sudo ../../scripts/setup_wasi.sh` - Installs WASI SDK
 
 Then you can build with:
 
