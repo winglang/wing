@@ -7,6 +7,9 @@ import { App } from "./app";
 import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
 
+/**
+ * Simulator synthesizer.
+ */
 export class Synthesizer extends SynthesizerBase {
   public readonly outdir: string;
   public readonly root: Construct;

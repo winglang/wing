@@ -6,6 +6,9 @@ import { Construct, IConstruct } from "constructs";
 import { Synthesizer as SynthesizerBase, SynthesizerProps } from "../core";
 import { PolyconFactory } from "./factory";
 
+/**
+ * CDK for Terraform synthesizer.
+ */
 export class Synthesizer extends SynthesizerBase {
   public readonly outdir: string;
   public readonly root: Construct;

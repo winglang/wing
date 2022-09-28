@@ -14,6 +14,9 @@ import {
   InflightClient,
 } from "../core";
 
+/**
+ * AWS implementation of `cloud.Function`.
+ */
 export class Function extends cloud.FunctionBase {
   private readonly function: aws.lambdafunction.LambdaFunction;
   private readonly env: Record<string, string> = {};
@@ -176,6 +179,9 @@ export class Function extends cloud.FunctionBase {
     this.env[name] = value;
   }
 
+  /**
+   * Add a policy statement to the Lambda role.
+   */
   public addPolicyStatements(...statements: PolicyStatement[]) {
     this.policyStatements.push(
       ...statements.map((s) => ({
@@ -192,8 +198,14 @@ export class Function extends cloud.FunctionBase {
   }
 }
 
+/**
+ * AWS IAM Policy Statement.
+ */
 export interface PolicyStatement {
+  /** Actions */
   readonly action?: string[];
+  /** Resources */
   readonly resource?: string[] | string;
+  /** Effect ("Allow" or "Deny") */
   readonly effect?: string;
 }

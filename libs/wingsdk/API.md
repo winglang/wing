@@ -4,6 +4,8 @@
 
 ### App <a name="App" id="@monadahq/wingsdk.core.App"></a>
 
+The root construct for all Wing applications.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.App.Initializer"></a>
 
 ```typescript
@@ -29,7 +31,7 @@ new core.App(props: AppProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.core.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.core.App.synth">synth</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.App.synth">synth</a></code> | Synthesize the app into the output directory. |
 
 ---
 
@@ -46,6 +48,11 @@ Returns a string representation of this construct.
 ```typescript
 public synth(): void
 ```
+
+Synthesize the app into the output directory.
+
+The artifact produced
+depends on what synthesizer was used.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -78,9 +85,9 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.core.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.core.App.property.outdir">outdir</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.App.property.root">root</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.App.property.stateFile">stateFile</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where all artifacts will be synthesized to. |
+| <code><a href="#@monadahq/wingsdk.core.App.property.root">root</a></code> | <code>constructs.Construct</code> | The root construct which all constructs should be added to. |
+| <code><a href="#@monadahq/wingsdk.core.App.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
@@ -104,6 +111,8 @@ public readonly outdir: string;
 
 - *Type:* string
 
+Directory where all artifacts will be synthesized to.
+
 ---
 
 ##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.core.App.property.root"></a>
@@ -114,6 +123,12 @@ public readonly root: Construct;
 
 - *Type:* constructs.Construct
 
+The root construct which all constructs should be added to.
+
+This is
+exposed for compatibility with different CDK frameworks that require
+creating their own `App` construct with a different root.
+
 ---
 
 ##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.App.property.stateFile"></a>
@@ -123,6 +138,8 @@ public readonly stateFile: string;
 ```
 
 - *Type:* string
+
+The path to a state file which will track all synthesized files.
 
 ---
 
@@ -154,7 +171,7 @@ new sim.App(props: AppProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.App.synth">synth</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into the output directory. |
 
 ---
 
@@ -171,6 +188,8 @@ Returns a string representation of this construct.
 ```typescript
 public synth(): void
 ```
+
+Synthesize the app into the output directory.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -456,6 +475,8 @@ with a fresh copy without any consequences.
 
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.tfaws.Bucket"></a>
+
+AWS implementation of `cloud.Bucket`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Bucket.Initializer"></a>
 
@@ -868,6 +889,7 @@ new cloud.Function(scope: Construct, id: string, inflight: Inflight, props?: Fun
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
 
@@ -878,6 +900,26 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.cloud.Function.addEnvironment"></a>
+
+```typescript
+public addEnvironment(_key: string, _value: string): void
+```
+
+Add an environment variable to the function.
+
+###### `_key`<sup>Required</sup> <a name="_key" id="@monadahq/wingsdk.cloud.Function.addEnvironment.parameter._key"></a>
+
+- *Type:* string
+
+---
+
+###### `_value`<sup>Required</sup> <a name="_value" id="@monadahq/wingsdk.cloud.Function.addEnvironment.parameter._value"></a>
+
+- *Type:* string
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -993,7 +1035,7 @@ new sim.Function(scope: Construct, id: string, inflight: Inflight, props: Functi
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.sim.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
 
@@ -1010,6 +1052,8 @@ Returns a string representation of this construct.
 ```typescript
 public addEnvironment(name: string, value: string): void
 ```
+
+Add an environment variable to the function.
 
 ###### `name`<sup>Required</sup> <a name="name" id="@monadahq/wingsdk.sim.Function.addEnvironment.parameter.name"></a>
 
@@ -1089,6 +1133,8 @@ with a fresh copy without any consequences.
 
 ### Function <a name="Function" id="@monadahq/wingsdk.tfaws.Function"></a>
 
+AWS implementation of `cloud.Function`.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Function.Initializer"></a>
 
 ```typescript
@@ -1135,8 +1181,8 @@ new tfaws.Function(scope: Construct, id: string, inflight: Inflight, props: Func
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.tfaws.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code><a href="#@monadahq/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | Add a policy statement to the Lambda role. |
 
 ---
 
@@ -1153,6 +1199,8 @@ Returns a string representation of this construct.
 ```typescript
 public addEnvironment(name: string, value: string): void
 ```
+
+Add an environment variable to the function.
 
 ###### `name`<sup>Required</sup> <a name="name" id="@monadahq/wingsdk.tfaws.Function.addEnvironment.parameter.name"></a>
 
@@ -1171,6 +1219,8 @@ public addEnvironment(name: string, value: string): void
 ```typescript
 public addPolicyStatements(statements: PolicyStatement): void
 ```
+
+Add a policy statement to the Lambda role.
 
 ###### `statements`<sup>Required</sup> <a name="statements" id="@monadahq/wingsdk.tfaws.Function.addPolicyStatements.parameter.statements"></a>
 
@@ -1292,6 +1342,7 @@ new cloud.FunctionBase(scope: Construct, id: string, inflight: Inflight, props: 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
 
@@ -1302,6 +1353,26 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
+
+##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.cloud.FunctionBase.addEnvironment"></a>
+
+```typescript
+public addEnvironment(key: string, value: string): void
+```
+
+Add an environment variable to the function.
+
+###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.FunctionBase.addEnvironment.parameter.key"></a>
+
+- *Type:* string
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.cloud.FunctionBase.addEnvironment.parameter.value"></a>
+
+- *Type:* string
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -1368,6 +1439,8 @@ with a fresh copy without any consequences.
 
 
 ### JsonFile <a name="JsonFile" id="@monadahq/wingsdk.fs.JsonFile"></a>
+
+Represents a text file that should be synthesized in the app's outdir.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.JsonFile.Initializer"></a>
 
@@ -1640,6 +1713,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
 
+Simulator implementation of `cloud.Queue`.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Queue.Initializer"></a>
 
 ```typescript
@@ -1776,6 +1851,8 @@ with a fresh copy without any consequences.
 
 
 ### Queue <a name="Queue" id="@monadahq/wingsdk.tfaws.Queue"></a>
+
+AWS implementation of `cloud.Queue`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Queue.Initializer"></a>
 
@@ -2055,6 +2132,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.core.ICapturable
 
+Shared behavior between all Wing SDK resources.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Resource.Initializer"></a>
 
 ```typescript
@@ -2171,6 +2250,8 @@ with a fresh copy without any consequences.
 
 
 ### TextFile <a name="TextFile" id="@monadahq/wingsdk.fs.TextFile"></a>
+
+Represents a text file that should be synthesized in the app's outdir.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.TextFile.Initializer"></a>
 
@@ -2317,6 +2398,8 @@ public readonly filePath: string;
 
 ### AppProps <a name="AppProps" id="@monadahq/wingsdk.core.AppProps"></a>
 
+Props for `App`.
+
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.AppProps.Initializer"></a>
 
 ```typescript
@@ -2353,6 +2436,7 @@ public readonly stateFile: string;
 ```
 
 - *Type:* string
+- *Default:* no state file
 
 The path to a state file which will track all synthesized files.
 
@@ -2362,6 +2446,8 @@ statefile is not specified, we won't be able to remove extrenous files.
 ---
 
 ### AppProps <a name="AppProps" id="@monadahq/wingsdk.sim.AppProps"></a>
+
+Props for `App`.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.sim.AppProps.Initializer"></a>
 
@@ -2375,7 +2461,7 @@ const appProps: sim.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
 
@@ -2386,6 +2472,8 @@ public readonly outdir: string;
 ```
 
 - *Type:* string
+
+Directory where artifacts are synthesized to.
 
 ---
 
@@ -2405,7 +2493,7 @@ const bucketProps: cloud.BucketProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketProps.property.public">public</a></code> | <code>boolean</code> | Whether objects in the bucket are publicly accessible. |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketProps.property.public">public</a></code> | <code>boolean</code> | Whether the bucket's objects should be publicly accessible. |
 
 ---
 
@@ -2418,7 +2506,7 @@ public readonly public: boolean;
 - *Type:* boolean
 - *Default:* false
 
-Whether objects in the bucket are publicly accessible.
+Whether the bucket's objects should be publicly accessible.
 
 ---
 
@@ -2655,6 +2743,7 @@ public readonly captures: {[ key: string ]: Capture};
 ```
 
 - *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
+- *Default:* No captures
 
 Capture information.
 
@@ -2666,6 +2755,8 @@ Each key here will be the key for the final value in the map.
 ---
 
 ### JsonFileProps <a name="JsonFileProps" id="@monadahq/wingsdk.fs.JsonFileProps"></a>
+
+Props for `JsonFile`.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.JsonFileProps.Initializer"></a>
 
@@ -2697,6 +2788,8 @@ The object that will be serialized into the file during synthesis.
 
 ### PolicyStatement <a name="PolicyStatement" id="@monadahq/wingsdk.tfaws.PolicyStatement"></a>
 
+AWS IAM Policy Statement.
+
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.tfaws.PolicyStatement.Initializer"></a>
 
 ```typescript
@@ -2709,9 +2802,9 @@ const policyStatement: tfaws.PolicyStatement = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.action">action</a></code> | <code>string[]</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.effect">effect</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.resource">resource</a></code> | <code>string \| string[]</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.action">action</a></code> | <code>string[]</code> | Actions. |
+| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.effect">effect</a></code> | <code>string</code> | Effect ("Allow" or "Deny"). |
+| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.resource">resource</a></code> | <code>string \| string[]</code> | Resources. |
 
 ---
 
@@ -2723,6 +2816,8 @@ public readonly action: string[];
 
 - *Type:* string[]
 
+Actions.
+
 ---
 
 ##### `effect`<sup>Optional</sup> <a name="effect" id="@monadahq/wingsdk.tfaws.PolicyStatement.property.effect"></a>
@@ -2733,6 +2828,8 @@ public readonly effect: string;
 
 - *Type:* string
 
+Effect ("Allow" or "Deny").
+
 ---
 
 ##### `resource`<sup>Optional</sup> <a name="resource" id="@monadahq/wingsdk.tfaws.PolicyStatement.property.resource"></a>
@@ -2742,6 +2839,8 @@ public readonly resource: string | string[];
 ```
 
 - *Type:* string | string[]
+
+Resources.
 
 ---
 
@@ -2825,57 +2924,9 @@ How long a queue's consumers have to process a message.
 
 ---
 
-### ResourceSpec <a name="ResourceSpec" id="@monadahq/wingsdk.sim.ResourceSpec"></a>
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.sim.ResourceSpec.Initializer"></a>
-
-```typescript
-import { sim } from '@monadahq/wingsdk'
-
-const resourceSpec: sim.ResourceSpec = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.ResourceSpec.property.kind">kind</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.ResourceSpec.property.name">name</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.ResourceSpec.property.props">props</a></code> | <code>any</code> | *No description.* |
-
----
-
-##### `kind`<sup>Required</sup> <a name="kind" id="@monadahq/wingsdk.sim.ResourceSpec.property.kind"></a>
-
-```typescript
-public readonly kind: string;
-```
-
-- *Type:* string
-
----
-
-##### `name`<sup>Required</sup> <a name="name" id="@monadahq/wingsdk.sim.ResourceSpec.property.name"></a>
-
-```typescript
-public readonly name: string;
-```
-
-- *Type:* string
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.sim.ResourceSpec.property.props"></a>
-
-```typescript
-public readonly props: any;
-```
-
-- *Type:* any
-
----
-
 ### SynthesizerProps <a name="SynthesizerProps" id="@monadahq/wingsdk.core.SynthesizerProps"></a>
+
+Props for `Synth`.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.SynthesizerProps.Initializer"></a>
 
@@ -2889,8 +2940,8 @@ const synthesizerProps: core.SynthesizerProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.SynthesizerProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.core.SynthesizerProps.property.outdir">outdir</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.SynthesizerProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@monadahq/wingsdk.core.SynthesizerProps.property.outdir">outdir</a></code> | <code>string</code> | The output directory into which to emit synthesized artifacts. |
 
 ---
 
@@ -2901,6 +2952,9 @@ public readonly customFactory: IPolyconFactory;
 ```
 
 - *Type:* @monadahq/polycons.IPolyconFactory
+- *Default:* use the default polycon factory included in the Wing SDK
+
+A custom factory to resolve polycons.
 
 ---
 
@@ -2911,10 +2965,15 @@ public readonly outdir: string;
 ```
 
 - *Type:* string
+- *Default:* "." (the current working directory)
+
+The output directory into which to emit synthesized artifacts.
 
 ---
 
 ### TextFileProps <a name="TextFileProps" id="@monadahq/wingsdk.fs.TextFileProps"></a>
+
+Props for `TextFile`.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.TextFileProps.Initializer"></a>
 
@@ -2928,7 +2987,7 @@ const textFileProps: fs.TextFileProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.TextFileProps.property.lines">lines</a></code> | <code>string[]</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.fs.TextFileProps.property.lines">lines</a></code> | <code>string[]</code> | The lines of text that will be serialized into the file during synthesis. |
 
 ---
 
@@ -2939,6 +2998,11 @@ public readonly lines: string[];
 ```
 
 - *Type:* string[]
+- *Default:* []
+
+The lines of text that will be serialized into the file during synthesis.
+
+They will be joined with newline characters.
 
 ---
 
@@ -3394,6 +3458,8 @@ The code contents.
 
 - *Implements:* @monadahq/polycons.IPolyconFactory
 
+Polycon factory which resolves `cloud` resources into simulated resources.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.PolyconFactory.Initializer"></a>
 
 ```typescript
@@ -3453,6 +3519,8 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 ### PolyconFactory <a name="PolyconFactory" id="@monadahq/wingsdk.tfaws.PolyconFactory"></a>
 
 - *Implements:* @monadahq/polycons.IPolyconFactory
+
+Polycon factory which resolves `cloud` resources into AWS resources.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.PolyconFactory.Initializer"></a>
 
@@ -3590,6 +3658,8 @@ Place in the construct tree where all users constructs will get added.
 
 ### Synthesizer <a name="Synthesizer" id="@monadahq/wingsdk.sim.Synthesizer"></a>
 
+Simulator synthesizer.
+
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Synthesizer.Initializer"></a>
 
 ```typescript
@@ -3665,6 +3735,8 @@ Place in the construct tree where all users constructs will get added.
 
 
 ### Synthesizer <a name="Synthesizer" id="@monadahq/wingsdk.tfaws.Synthesizer"></a>
+
+CDK for Terraform synthesizer.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Synthesizer.Initializer"></a>
 
@@ -3796,8 +3868,8 @@ Inflight interface for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.get">get</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.put">put</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 
 ---
 
@@ -3806,6 +3878,11 @@ Inflight interface for `Bucket`.
 ```typescript
 public get(key: string): string
 ```
+
+Retrieve an object from the bucket.
+
+Throws if no object with the given key
+exists.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
@@ -3818,6 +3895,8 @@ public get(key: string): string
 ```typescript
 public put(key: string, body: string): void
 ```
+
+Put an object in the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.put.parameter.key"></a>
 
@@ -3850,7 +3929,7 @@ Inflight interface for `Function`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IFunctionClient.invoke">invoke</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
 
 ---
 
@@ -3859,6 +3938,8 @@ Inflight interface for `Function`.
 ```typescript
 public invoke(payload: string): string
 ```
+
+Invoke the function asynchronously with a given payload.
 
 ###### `payload`<sup>Required</sup> <a name="payload" id="@monadahq/wingsdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
@@ -3904,6 +3985,8 @@ Payload to send to the queue.
 
 - *Implemented By:* @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.sim.IResource
 
+Fields shared by all resource implementations for the simulator.
+
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -3935,17 +4018,21 @@ List of inflight operations available for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
 
 ---
 
 ##### `PUT` <a name="PUT" id="@monadahq/wingsdk.cloud.BucketInflightMethods.PUT"></a>
 
+`Bucket.put`.
+
 ---
 
 
 ##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
+
+`Bucket.get`.
 
 ---
 
@@ -3958,11 +4045,13 @@ List of inflight operations available for `Function`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE">INVOKE</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE">INVOKE</a></code> | `Function.invoke`. |
 
 ---
 
 ##### `INVOKE` <a name="INVOKE" id="@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE"></a>
+
+`Function.invoke`.
 
 ---
 
@@ -3975,11 +4064,13 @@ The language of a piece of code.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Language.NODE_JS">NODE_JS</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.core.Language.NODE_JS">NODE_JS</a></code> | Node.js. |
 
 ---
 
 ##### `NODE_JS` <a name="NODE_JS" id="@monadahq/wingsdk.core.Language.NODE_JS"></a>
+
+Node.js.
 
 ---
 
@@ -3992,11 +4083,13 @@ List of inflight operations available for `Queue`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH">PUSH</a></code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH">PUSH</a></code> | `Queue.push`. |
 
 ---
 
 ##### `PUSH` <a name="PUSH" id="@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
+
+`Queue.push`.
 
 ---
 
