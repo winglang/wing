@@ -1,0 +1,10 @@
+{
+  "name": "@monadahq/wing-language-server",
+  "root": "apps/wing-language-server/",
+  "sourceRoot": "apps/wing-language-server",
+  "projectType": "application",
+  "implicitDependencies": [
+    "@monadahq/wingc",
+    "@monadahq/tree-sitter-wing"
+  ]
+}

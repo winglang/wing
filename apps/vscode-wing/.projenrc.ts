@@ -7,7 +7,7 @@ const VSCODE_BASE_VERSION = "1.70.0";
 
 const project = new TypeScriptAppProject({
   defaultReleaseBranch: "main",
-  name: "wing",
+  name: "@monadahq/vscode-wing",
   authorName: "Monada",
   authorEmail: "ping@monada.co",
   authorOrganization: true,

@@ -1,9 +1,17 @@
 {
   "name": "@monadahq/winglang",
   "workspaces": [
-    "apps/wing",
-    "apps/wing-playground",
-
-    "libs/tree-sitter-wing"
-  ]
+    "apps/*",
+    "libs/*"
+  ],
+  "devDependencies": {
+    "@nxrs/cargo": "^0.3.3",
+    "nx": "14.8.0"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "test": "turbo run test",
+    "lint": "turbo run lint",
+    "dev": "turbo run dev"
+  }
 }

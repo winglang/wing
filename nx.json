@@ -1,0 +1,22 @@
+{
+	"affected": {
+		"defaultBase": "main"
+	},
+	"workspaceLayout": {
+		"appsDir": "apps",
+		"libsDir": "libs"
+	},
+  "plugins": ["@nxrs/cargo"],
+  "targetDefaults": {
+    "build": {
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "package": {
+      "dependsOn": [
+        "^package"
+      ]
+    }
+  }
+}

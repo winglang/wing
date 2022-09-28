@@ -1,0 +1,9 @@
+{
+  "name": "@monadahq/wing",
+  "root": "apps/wing/",
+  "sourceRoot": "apps/wing",
+  "projectType": "application",
+  "implicitDependencies": [
+    "@monadahq/wingc"
+  ]
+}

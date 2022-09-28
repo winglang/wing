@@ -1,0 +1,7 @@
+{
+  "name": "@monadahq/wingc",
+  "root": "libs/wingc/",
+  "sourceRoot": "libs/wingc/src",
+  "projectType": "library",
+  "implicitDependencies": ["@monadahq/tree-sitter-wing", "@monadahq/wingii"]
+}
