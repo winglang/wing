@@ -9,7 +9,6 @@
     "node": ">=18"
   },
   "bin": "dist/index.js",
-  "main": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/monadahq/winglang.git"
