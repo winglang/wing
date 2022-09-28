@@ -26,6 +26,11 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16.x
+      - name: Download api-checker build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: api-checker-build-artifact
+          path: ../../apps/wing-api-checker/lib
       - name: Install dependencies
         run: npm install
       - name: build

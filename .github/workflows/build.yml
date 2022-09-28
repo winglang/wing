@@ -98,7 +98,6 @@ jobs:
           mv ../../target/release/wing-language-server ../../target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
       - name: Upload Wing Language Server
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
@@ -111,11 +110,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Download language server binaries
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/download-artifact@v2
       - name: Prepare language server binaries
-        if: ${{ github.ref == 'refs/heads/main' }}
-        run: |          
+        run: |
           cp -r wing-language-server-* ./apps/vscode-wing/resources
       - name: Install dependencies
         uses: bahmutov/npm-install@v1
@@ -125,15 +122,33 @@ jobs:
         working-directory: apps/vscode-wing
         run: npm run build
       - name: Upload extension
-        if: ${{ github.ref == 'refs/heads/main' }}
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
           path: apps/vscode-wing/vscode-wing.vsix
 
   build-sdk:
+    needs: build-api-checker
     uses: ./.github/workflows/build-sdk.yml
     secrets: inherit
+
+  build-api-checker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: apps/wing-api-checker
+      - name: Build package
+        working-directory: apps/wing-api-checker
+        run: npm run build
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: api-checker-build-artifact
+          path: apps/wing-api-checker/lib
 
   # Purposely Empty to be a required check for all matrix entries from build-native
   build:
@@ -142,6 +157,7 @@ jobs:
       - build-native
       - build-vscode
       - build-sdk
+      - build-api-checker
     runs-on: ubuntu-latest
     steps:
       - name: Build Validation
@@ -208,4 +224,3 @@ jobs:
           body_path: checksums.md
           prerelease: true
           files: dist/*
-
