@@ -3,22 +3,29 @@
   "version": "0.1.1",
   "description": "Wing Programming Language",
   "files": [
-    "index.js",
-    "wasm/"
+    "dist/"
   ],
-  "module": "index.js",
-  "main": "index.js",
-  "bin": "index.js",
-  "type": "module",
   "engines": {
     "node": ">=18"
   },
+  "bin": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/monadahq/winglang.git"
   },
+  "scripts": {
+    "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --loader:.wasm=file",
+    "dev": "npm run build && node dist/index.js"
+  },
   "dependencies": {
-    "@monadahq/wingsdk": "file:../../libs/wingsdk"
+    "@monadahq/wingsdk": "file:../../libs/wingsdk",
+    "@types/node": "^18.7.22",
+    "commander": "^9.4.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.9",
+    "tsx": "^3.9.0"
   },
   "bundledDependencies": [
     "@monadahq/wingsdk"

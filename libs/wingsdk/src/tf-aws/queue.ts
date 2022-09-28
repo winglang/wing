@@ -5,6 +5,9 @@ import { QueueInflightMethods } from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
 
+/**
+ * AWS implementation of `cloud.Queue`.
+ */
 export class Queue extends cloud.QueueBase {
   private readonly queue: sqs.SqsQueue;
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {

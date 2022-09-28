@@ -13,7 +13,7 @@ export const BUCKET_ID = "wingsdk.cloud.Bucket";
  */
 export interface BucketProps {
   /**
-   * Whether objects in the bucket are publicly accessible.
+   * Whether the bucket's objects should be publicly accessible.
    * @default false
    */
   readonly public?: boolean;
@@ -55,7 +55,15 @@ export class Bucket extends BucketBase {
  * Inflight interface for `Bucket`.
  */
 export interface IBucketClient {
+  /**
+   * Put an object in the bucket.
+   */
   put(key: string, body: string): Promise<void>;
+
+  /**
+   * Retrieve an object from the bucket. Throws if no object with the given key
+   * exists.
+   */
   get(key: string): Promise<string>;
 }
 
@@ -63,6 +71,8 @@ export interface IBucketClient {
  * List of inflight operations available for `Bucket`.
  */
 export enum BucketInflightMethods {
+  /** `Bucket.put` */
   PUT = "put",
+  /** `Bucket.get` */
   GET = "get",
 }

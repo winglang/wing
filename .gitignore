@@ -30,8 +30,8 @@ libs/tree-sitter-wing/*.wasm
 libs/tree-sitter-wing/build/
 
 # wing
-apps/wing/wasm/*
-!apps/wing/wasm/.gitkeep
+apps/wing/dist
+apps/wing/*.wasm
 
 # wing-playground
 apps/wing-playground/dist

@@ -1,8 +1,19 @@
 import { IPolyconFactory } from "@monadahq/polycons";
 import { Construct } from "constructs";
 
+/**
+ * Props for `Synth`.
+ */
 export interface SynthesizerProps {
+  /**
+   * The output directory into which to emit synthesized artifacts.
+   * @default "." (the current working directory)
+   */
   readonly outdir?: string;
+  /**
+   * A custom factory to resolve polycons.
+   * @default - use the default polycon factory included in the Wing SDK
+   */
   readonly customFactory?: IPolyconFactory;
 }
 
