@@ -8,7 +8,7 @@
     "libsDir": "libs"
   },
   "namedInputs": {
-    "src": ["{projectRoot}/src/**/*"],
+    "src": ["{projectRoot}/src/**/*", "{projectRoot}/.projenrc.ts"],
     "rust-conf": [
       "{projectRoot}/Cargo.toml",
       "{workspaceRoot}/Cargo.toml",

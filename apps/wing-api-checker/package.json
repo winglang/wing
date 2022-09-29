@@ -35,7 +35,7 @@
     "organization": true
   },
   "devDependencies": {
-    "@jest/expect-utils": "^29.1.0",
+    "@jest/expect": "^29.1.0",
     "@types/jest": "^29.0.3",
     "@types/node": "^14",
     "@typescript-eslint/eslint-plugin": "^5",

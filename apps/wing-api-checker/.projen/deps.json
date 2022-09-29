@@ -1,7 +1,7 @@
 {
   "dependencies": [
     {
-      "name": "@jest/expect-utils",
+      "name": "@jest/expect",
       "type": "build"
     },
     {

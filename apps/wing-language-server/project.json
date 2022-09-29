@@ -14,10 +14,8 @@
           "cwd": "libs/wingc"
       },
       "configurations": {
-        "production": {
-          "options": {
-            "command": "cargo build --release"
-          }
+        "release": {
+          "command": "cargo build --release"
         }
       }
     },

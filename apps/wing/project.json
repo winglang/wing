@@ -10,13 +10,14 @@
     "get-wingc": {
       "executor": "nx:run-commands",
       "inputs": ["rust-wasm"],
+      "dependsOn": ["^build-wasm"],
       "options": {
         "command": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
         "cwd": "apps/wing"
       },
       "configurations": {
-        "production": {
-          "command": "../../target/wasm32-wasi/release/wingc.wasm"
+        "release": {
+          "command": "cp ../../target/wasm32-wasi/release/wingc.wasm ./"
         }
       }
     },
@@ -24,7 +25,7 @@
       "executor": "nx:run-script",
       "inputs": ["src"],
       "outputs": ["dist"],
-      "dependsOn": ["^build", "^build-wasm", "get-wingc"],
+      "dependsOn": ["^build", "get-wingc"],
       "options": {
         "cwd": "apps/wing",
         "script": "build"

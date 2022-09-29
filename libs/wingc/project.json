@@ -14,10 +14,8 @@
           "cwd": "libs/wingc"
       },
       "configurations": {
-        "production": {
-          "options": {
-            "command": "cargo build --release"
-          }
+        "release": {
+          "command": "cargo build --release"
         }
       }
     },
@@ -36,10 +34,8 @@
           "cwd": "libs/wingc"
       },
       "configurations": {
-        "production": {
-          "options": {
-            "command": "cargo wasi build --release"
-          }
+        "release": {
+          "command": "cargo wasi build --release"
         }
       }
     }

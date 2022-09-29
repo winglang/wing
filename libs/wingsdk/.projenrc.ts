@@ -81,8 +81,7 @@ project.addTask("sandbox:destroy", {
 const pkgJson = project.tryFindObjectFile("package.json");
 pkgJson!.addOverride("jsii.excludeTypescript", [
   "src/**/*.inflight.ts",
-  "src/**/*.sim.ts",
-  "**/@types/vscode/**",
+  "src/**/*.sim.ts"
 ]);
 const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
   obj: {
