@@ -90,9 +90,6 @@
         },
         {
           "exec": "vite build"
-        },
-        {
-          "exec": "npm exec electron-builder -- --publish=always --config=electron-builder.json5"
         }
       ]
     },
@@ -165,6 +162,15 @@
         },
         {
           "spawn": "build"
+        },
+        {
+          "exec": "npm exec electron-builder -- --publish=always --config=electron-builder.json5"
+        },
+        {
+          "spawn": "unbump"
+        },
+        {
+          "exec": "git diff --ignore-space-at-eol --exit-code"
         }
       ]
     },

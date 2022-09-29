@@ -7,7 +7,7 @@
   copyright: 'Copyright © 2022 Monada',
   asar: true,
   directories: {
-    output: 'dist',
+    output: 'release',
     buildResources: 'electron/resources',
   },
   files: ['dist'],
