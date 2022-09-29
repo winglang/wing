@@ -4,7 +4,7 @@
   "sourceRoot": "libs/wingii/src",
   "projectType": "library",
   "targets": {
-    "build-native": {
+    "build": {
       "executor": "nx:run-commands",
       "inputs": ["src", "rust-conf"],
       "outputs": ["rust-native"],

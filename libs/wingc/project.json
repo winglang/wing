@@ -3,9 +3,8 @@
   "root": "libs/wingc/",
   "sourceRoot": "libs/wingc/src",
   "projectType": "library",
-  "implicitDependencies": ["tree-sitter-wing", "wingii"],
   "targets": {
-    "build-native": {
+    "build": {
       "executor": "nx:run-commands",
       "inputs": ["src", "rust-conf"],
       "outputs": ["rust-native"],
