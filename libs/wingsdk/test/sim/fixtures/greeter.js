@@ -1,9 +1,11 @@
 const $cap = {};
 async function $proc($cap, event) {
     event = JSON.parse(event);
-    let msg = "Hello, " + event.name + "!";
-    if (process.env.TEST_VAR_1) {
-        msg += " What's up?";
+    let msg;
+    if (process.env.PIG_LATIN) {
+        msg = "Ellohay, " + event.name + "!";
+    } else {
+        msg = "Hello, " + event.name + "!";
     }
     return { msg };
 }

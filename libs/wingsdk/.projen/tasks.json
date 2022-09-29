@@ -181,10 +181,10 @@
       "description": "Runs after successful compilation",
       "steps": [
         {
-          "spawn": "docgen"
+          "spawn": "api-check"
         },
         {
-          "spawn": "api-check"
+          "spawn": "docgen"
         }
       ]
     },

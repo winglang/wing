@@ -10,12 +10,12 @@ import { Queue } from "./queue";
  */
 export class PolyconFactory implements IPolyconFactory {
   public resolve(
-    polyconId: string,
+    type: string,
     scope: IConstruct,
     id: string,
     ...args: any[]
   ): IConstruct {
-    switch (polyconId) {
+    switch (type) {
       case BUCKET_ID:
         return new Bucket(scope, id, args[0]);
       case FUNCTION_ID:
@@ -23,7 +23,7 @@ export class PolyconFactory implements IPolyconFactory {
       case QUEUE_ID:
         return new Queue(scope, id, args[0]);
       default:
-        throw new Error(`Type ${polyconId} not implemented.`);
+        throw new Error(`Type ${type} not implemented.`);
     }
   }
 }

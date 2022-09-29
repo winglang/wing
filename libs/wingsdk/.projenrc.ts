@@ -149,8 +149,6 @@ project.eslint!.addRules({
       zones: [
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
         disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
-        disallowImportsRule(Zone.SIMULATOR, Zone.INFLIGHT),
-        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],
@@ -168,6 +166,6 @@ const apiCheck = project.addTask("api-check", {
 project.addTask("api-check:watch", {
   exec: "wing-api-check --watch",
 });
-project.postCompileTask.spawn(apiCheck);
+project.postCompileTask.prependSpawn(apiCheck);
 
 project.synth();

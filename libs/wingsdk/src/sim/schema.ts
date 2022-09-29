@@ -17,7 +17,7 @@ export interface BaseResourceSchema {
   /** The resource-specific properties needed to create this resource. */
   readonly props?: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
-  readonly attributes?: { [key: string]: any };
+  readonly attrs?: { [key: string]: any };
   /** IDs of resources that this resource is called, triggered, or captured by. */
   readonly callers?: string[];
   /** IDs of resources that this resource calls, triggers, or captures. */
@@ -37,20 +37,18 @@ export interface FunctionSchema extends BaseResourceSchema {
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
   };
-  readonly attributes?: {};
+  readonly attrs: {
+    /** A unique address of the function in the simulator. */
+    readonly functionAddr: number;
+  };
 }
 
-/** Schema for cloud.Endpoint */
-export interface EndpointSchema extends BaseResourceSchema {
-  readonly type: "cloud.Endpoint";
-  readonly props: {
-    /** The HTTP request method, such as "GET", "POST", etc. */
-    readonly requestMethod: string;
-    /** The HTTP request path, such as "/users". */
-    readonly requestPath: string;
-    /** ID of the resource that should handle any requests sent to the endpoint. */
-    readonly targetId: FunctionId;
-  };
+/** Schema for cloud.Queue.props.subscribers */
+export interface QueueSubscriber {
+  /** Function ID that should be called. */
+  readonly functionId: FunctionId;
+  /** Maximum number of messages that will be batched together to the subscriber. */
+  readonly batchSize: number;
 }
 
 /** Schema for cloud.Queue */
@@ -61,13 +59,19 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly timeout: number;
     /** Function that should process queue messages. */
     readonly subscribers: QueueSubscriber[];
+    /** Initial messages to be pushed to the queue. */
+    readonly initialMessages: string[];
+  };
+  readonly attrs: {
+    /** A unique address of the queue in the simulator. */
+    readonly queueAddr: number;
   };
 }
 
 /** Schema for cloud.Queue.props.subscribers */
 export interface QueueSubscriber {
   /** Function ID that should be called. */
-  readonly subscriberFunctionId: FunctionId;
+  readonly functionId: FunctionId;
   /** Maximum number of messages that will be batched together to the subscriber. */
   readonly batchSize: number;
 }
@@ -76,7 +80,7 @@ export interface QueueSubscriber {
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: "cloud.Bucket";
   readonly props: {};
-  readonly attributes?: {
+  readonly attrs: {
     /** The address of the bucket on the local file system. */
     readonly bucketAddr: string;
   };
@@ -92,7 +96,6 @@ export interface ConstructSchema extends BaseResourceSchema {
 
 export type ResourceSchema =
   | FunctionSchema
-  | EndpointSchema
   | QueueSchema
   | BucketSchema
   | ConstructSchema;
