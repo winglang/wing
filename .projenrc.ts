@@ -68,12 +68,26 @@ project.release?.addJobs({
     steps: [
       {
         uses: "actions/setup-node@v3",
-        with: { "node-version": "14.x" },
+        with: { "node-version": "16.x" },
+      },
+      {
+        name: "Checkout",
+        uses: "actions/checkout@v3",
+        with: { "fetch-depth": 0 },
       },
       {
         name: "Download build artifacts",
         uses: "actions/download-artifact@v3",
         with: { name: "build-artifact", path: "dist" },
+      },
+      {
+        name: "Login to private npm registry",
+        run: "npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
+        env: { PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}" },
+      },
+      {
+        name: "Install dependencies",
+        run: "npm ci",
       },
       {
         name: "Add certificate to the keychain",
@@ -91,14 +105,11 @@ project.release?.addJobs({
       },
       {
         name: "Build Electron Application",
-        run: "npm exec electron-builder --publish=never",
-        // env: {
-        //   GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
-        // },
+        run: "npm exec -- electron-builder --publish=never",
       },
       {
         name: "Release",
-        run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/WingConsole-$(cat dist/releasetag.txt).dmg 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
+        run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/WingConsole-* 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
         env: {
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
           GITHUB_REPOSITORY: "${{ github.repository }}",
