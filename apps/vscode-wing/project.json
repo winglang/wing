@@ -6,8 +6,12 @@
   "targets": {
     "copy": {
       "executor": "nx:run-commands",
-      "inputs": ["rust-native"],
-      "dependsOn": ["^build"],
+      "inputs": [
+        "rust-native"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
       "options": {
         "commands": [
           "mkdir -p ./resources/native",
@@ -17,15 +21,24 @@
       },
       "configurations": {
         "release": {
-          "commands": ["echo 'Skipping wls copy. Get binaries from CI'"]
+          "commands": [
+            "echo 'Skipping wls copy. Get binaries from CI'"
+          ]
         }
       }
     },
     "build": {
       "executor": "nx:run-script",
-      "inputs": ["src"],
-      "outputs": ["dist"],
-      "dependsOn": ["^build", "copy"],
+      "inputs": [
+        "src"
+      ],
+      "outputs": [
+        "dist"
+      ],
+      "dependsOn": [
+        "^build",
+        "copy"
+      ],
       "options": {
         "cwd": "apps/vscode-wing",
         "script": "build"

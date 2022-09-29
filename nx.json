@@ -9,23 +9,45 @@
     "libsDir": "libs"
   },
   "namedInputs": {
-    "src": ["{projectRoot}/src/**/*", "{projectRoot}/.projenrc.ts"],
+    "src": [
+      "{projectRoot}/src/**/*",
+      "{projectRoot}/.projenrc.ts"
+    ],
     "rust-conf": [
       "{projectRoot}/Cargo.toml",
       "{workspaceRoot}/Cargo.toml",
       "{workspaceRoot}/Cargo.lock"
     ],
-    "projen": ["{projectRoot}/.projenrc.ts", "{projectRoot}/.projenrc.js", "{projectRoot}/.projen/*"],
-    "rust-wasm": ["{workspaceRoot}/target/wasm32-wasi/**/*.wasm"],
-    "rust-native": ["{workspaceRoot}/target/debug/*", "{workspaceRoot}/target/release/*"],
-    "dist": ["{projectRoot}/dist/**/*"]
+    "projen": [
+      "{projectRoot}/.projenrc.ts",
+      "{projectRoot}/.projenrc.js",
+      "{projectRoot}/.projen/*"
+    ],
+    "rust-wasm": [
+      "{workspaceRoot}/target/wasm32-wasi/**/*.wasm"
+    ],
+    "rust-native": [
+      "{workspaceRoot}/target/debug/*",
+      "{workspaceRoot}/target/release/*"
+    ],
+    "dist": [
+      "{projectRoot}/dist/**/*"
+    ]
   },
-  "plugins": ["@nxrs/cargo"],
+  "plugins": [
+    "@nxrs/cargo"
+  ],
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "build-wasm", "copy", "lint", "test"]
+        "cacheableOperations": [
+          "build",
+          "build-wasm",
+          "copy",
+          "lint",
+          "test"
+        ]
       }
     }
   }

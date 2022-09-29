@@ -3,12 +3,18 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "inputs": ["{projectRoot}/grammar.js"],
-      "outputs": ["src"],
-      "dependsOn": ["^build"],
+      "inputs": [
+        "{projectRoot}/grammar.js"
+      ],
+      "outputs": [
+        "src"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
       "options": {
-          "command": "cargo build",
-          "cwd": "libs/tree-sitter-wing"
+        "command": "cargo build",
+        "cwd": "libs/tree-sitter-wing"
       },
       "configurations": {
         "release": {
@@ -18,8 +24,13 @@
     },
     "test": {
       "executor": "@nxrs/cargo:test",
-      "inputs": ["src", "rust-conf"],
-      "dependsOn": ["build"]
+      "inputs": [
+        "src",
+        "rust-conf"
+      ],
+      "dependsOn": [
+        "build"
+      ]
     }
   }
 }

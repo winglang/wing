@@ -3,12 +3,19 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "inputs": ["src", "rust-conf"],
-      "outputs": ["rust-native"],
-      "dependsOn": ["^build"],
+      "inputs": [
+        "src",
+        "rust-conf"
+      ],
+      "outputs": [
+        "rust-native"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
       "options": {
-          "command": "cargo build",
-          "cwd": "apps/wing-language-server"
+        "command": "cargo build",
+        "cwd": "apps/wing-language-server"
       },
       "configurations": {
         "release": {
@@ -18,8 +25,13 @@
     },
     "test": {
       "executor": "@nxrs/cargo:test",
-      "inputs": ["src", "rust-conf"],
-      "dependsOn": ["build"]
+      "inputs": [
+        "src",
+        "rust-conf"
+      ],
+      "dependsOn": [
+        "build"
+      ]
     }
   }
 }

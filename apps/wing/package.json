@@ -19,7 +19,7 @@
     "dev": "npm run build && node dist/index.js"
   },
   "dependencies": {
-    "@monadahq/wingsdk": "file:../../libs/wingsdk",
+    "@monadahq/wingsdk": "*",
     "@types/node": "^18.7.22",
     "commander": "^9.4.0"
   },

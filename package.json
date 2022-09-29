@@ -3,7 +3,9 @@
   "workspaces": [
     "apps/*",
     "libs/*",
-    "!libs/wingsdk"
+  
+    "!libs/wingsdk",
+    "!apps/vscode-wing"
   ],
   "devDependencies": {
     "@nxrs/cargo": "^0.3.3",
