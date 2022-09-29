@@ -34,9 +34,6 @@
       "{projectRoot}/dist/**/*"
     ]
   },
-  "plugins": [
-    "@nxrs/cargo"
-  ],
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",
