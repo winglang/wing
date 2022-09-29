@@ -256,6 +256,14 @@ impl TypeRef {
 		}
 	}
 
+	fn as_mut_struct(&self) -> Option<&mut Struct> {
+		if let &mut Type::Struct(ref mut s) = (*self).into() {
+			Some(s)
+		} else {
+			None
+		}
+	}
+
 	pub fn as_function_sig(&self) -> Option<&FunctionSignature> {
 		if let &Type::Function(ref sig) = (*self).into() {
 			Some(sig)
@@ -702,7 +710,7 @@ impl<'a> TypeChecker<'a> {
 					// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
 					if module_name.name == "cloud" {
 						let mut wingii_types = wingii::type_system::TypeSystem::new();
-						let name = wingii_types.load("../../node_modules/@monadahq/wingsdk").unwrap();
+						let name = wingii_types.load("../wingsdk").unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
 						println!("Loaded JSII assembly {}", name);
 						let assembly = wingii_types.find_assembly(&name).unwrap();
@@ -721,7 +729,7 @@ impl<'a> TypeChecker<'a> {
 								println!("Type {} already defined, skipping", type_name);
 								continue;
 							}
-							self.import_jsii_type(type_name, &prefix, assembly, &wingii_types, &mut namespace_env);
+							self.import_jsii_type(type_name, &prefix, &wingii_types, &mut namespace_env);
 						}
 
 						// Create a namespace for the imported module
@@ -892,7 +900,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			Statement::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
-				//   If we encounter an existing member with the same name and type we ignore skip it, if the types are different we
+				//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 				//   fail type checking.
 
 				// Create an environment for the struct
@@ -914,6 +922,8 @@ impl<'a> TypeChecker<'a> {
 					for (parent_member_name, member_type) in parent_struct.env.iter() {
 						if let Some(existing_type) = struct_env.try_lookup(&parent_member_name) {
 							// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
+							// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
+							//   when we want to check for subtypes and use equality for strict comparisons.
 							if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
 								panic!(
 									"Struct {} extends {} but has a conflicting member {} ({} != {})",
@@ -994,11 +1004,10 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		type_name: &str,
 		prefix: &str,
-		jsii_assembly: &jsii::Assembly,
 		jsii_types: &wingii::type_system::TypeSystem,
 		env: &mut TypeEnv,
 	) -> Option<TypeRef> {
-		// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
+		// Hack: if the class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
 		println!("Defining type {}", type_name);
 		let fqn = format!("{}{}", prefix, type_name);
 		if fqn == RESOURCE_CLASS_FQN {
@@ -1006,17 +1015,31 @@ impl<'a> TypeChecker<'a> {
 			return None;
 		}
 
-		let jsii_class = jsii_types.find_class(&fqn);
-		if jsii_class.is_none() {
-			println!(
-				"Type {} is not a class in the JSII assembly {}",
-				fqn, jsii_assembly.name
-			);
-			return None;
+		// Check if this is a JSII interface and import it if it is
+		let jsii_interface = jsii_types.find_interface(&fqn);
+		if let Some(jsii_interface) = jsii_interface {
+			return self.import_jsii_interface(jsii_interface, type_name, env);
+		} else {
+			// Check if this is a JSII class and import it if it is
+			let jsii_class = jsii_types.find_class(&fqn);
+			if let Some(jsii_class) = jsii_class {
+				return self.import_jsii_class(jsii_class, prefix, env, jsii_types, type_name);
+			} else {
+				println!("Type {} is unsupported, skipping", type_name);
+				return None;
+			}
 		}
-		let jsii_class = jsii_class.unwrap();
-		let mut is_resource = false;
+	}
 
+	fn import_jsii_class(
+		&mut self,
+		jsii_class: wingii::jsii::ClassType,
+		prefix: &str,
+		env: &mut TypeEnv,
+		jsii_types: &wingii::type_system::TypeSystem,
+		type_name: &str,
+	) -> Option<TypeRef> {
+		let mut is_resource = false;
 		// Get the base class of the JSII class
 		let base_class = if let Some(base_class_name) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
@@ -1031,7 +1054,7 @@ impl<'a> TypeChecker<'a> {
 					Some(base_class_type)
 				} else {
 					// If the base class isn't defined yet then define it first (recursive call)
-					let base_class_type = self.import_jsii_type(&base_class_name, prefix, jsii_assembly, jsii_types, env);
+					let base_class_type = self.import_jsii_type(&base_class_name, prefix, jsii_types, env);
 					if base_class_type.is_none()
 					/* && base_class_name != RESOURCE_CLASS_FQN*/
 					{
@@ -1051,25 +1074,19 @@ impl<'a> TypeChecker<'a> {
 		} else {
 			None
 		};
-
 		// Verify we have a constructor for this calss
 		let jsii_initializer = jsii_class
 			.initializer
 			.as_ref()
 			.expect("JSII classes must have a constructor");
-
 		println!("got here! we can define {}", type_name);
-
 		// If our base class is a resource then we are a resource
 		if let Some(base_class) = base_class {
 			is_resource = base_class.as_resource().is_some();
 		}
-
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
 		let dummy_env = TypeEnv::new(None, None, true, env.flight);
-
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
-
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
 		println!("Adding type {} to namespace", type_name.green());
@@ -1084,10 +1101,8 @@ impl<'a> TypeChecker<'a> {
 			Type::Class(class_spec)
 		});
 		env.define(&new_type_symbol, new_type);
-
 		// Create class's actually environment before we add properties and methods to it
 		let mut class_env = TypeEnv::new(Some(env), None, true, env.flight);
-
 		// Add constructor to the class environment
 		let mut arg_types = vec![];
 		if let Some(args) = &jsii_initializer.parameters {
@@ -1117,10 +1132,8 @@ impl<'a> TypeChecker<'a> {
 			method_sig,
 		);
 		println!("Created constructor for {}: {:?}", type_name, method_sig);
-
 		// Add methods and properties to the class environment
 		self.add_jsii_interface_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env, new_type);
-
 		if is_resource {
 			// Look for a client interface for this resource
 			let client_interface = jsii_types.find_interface(&format!("{}I{}Client", prefix, type_name));
@@ -1131,7 +1144,6 @@ impl<'a> TypeChecker<'a> {
 				println!("Resource {} doesn't not seem to have a client", type_name.green());
 			}
 		}
-
 		// Replace the dummy class environment with the real one before type checking the methods
 		match new_type.into() {
 			&mut Type::Class(ref mut class) | &mut Type::Resource(ref mut class) => {
@@ -1139,13 +1151,52 @@ impl<'a> TypeChecker<'a> {
 			}
 			_ => panic!("Expected {} to be a class or resource ", type_name),
 		};
-
 		Some(new_type)
+	}
+
+	fn import_jsii_interface(
+		&mut self,
+		jsii_interface: wingii::jsii::InterfaceType,
+		type_name: &str,
+		env: &mut TypeEnv,
+	) -> Option<TypeRef> {
+		match jsii_interface.datatype {
+			Some(true) => {
+				// If this datatype has methods something is unexpected in this JSII type definition, skip it.
+				if jsii_interface.methods.is_some() && !jsii_interface.methods.as_ref().unwrap().is_empty() {
+					println!("JSII datatype interface {} has methods, skipping", type_name);
+					return None;
+				}
+			}
+			_ => {
+				println!("The JSII interface {} is not a \"datatype\", skipping", type_name);
+				return None;
+			}
+		}
+		if jsii_interface.interfaces.is_some() && !jsii_interface.interfaces.as_ref().unwrap().is_empty() {
+			println!(
+				"JSII datatype interface {} extends other interfaces, skipping",
+				type_name
+			);
+			return None;
+		}
+		let struct_env = TypeEnv::new(None, None, true, env.flight);
+		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_interface.location_in_module);
+		let wing_type = self.types.add_type(Type::Struct(Struct {
+			name: new_type_symbol.clone(),
+			extends: vec![],
+			env: struct_env,
+		}));
+		let struct_env = &mut wing_type.as_mut_struct().unwrap().env;
+		self.add_jsii_interface_members_to_class_env(&jsii_interface, false, env.flight, struct_env, wing_type);
+		println!("Adding struct type {}", type_name.green());
+		env.define(&new_type_symbol, wing_type);
+		Some(wing_type)
 	}
 
 	fn add_jsii_interface_members_to_class_env<T: JsiiInterface>(
 		&mut self,
-		jsii_class: &T,
+		jsii_interface: &T,
 		is_resource: bool,
 		flight: Flight,
 		class_env: &mut TypeEnv,
@@ -1154,7 +1205,7 @@ impl<'a> TypeChecker<'a> {
 		assert!(!is_resource || flight == Flight::Pre);
 
 		// Add methods to the class environment
-		if let Some(methods) = &jsii_class.methods() {
+		if let Some(methods) = &jsii_interface.methods() {
 			for m in methods {
 				// TODO: skip internal methods (for now we skip `capture` until we mark it as internal)
 				if is_resource && m.name == "capture" {
@@ -1189,7 +1240,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 		// Add properties to the class environment
-		if let Some(properties) = &jsii_class.properties() {
+		if let Some(properties) = &jsii_interface.properties() {
 			for p in properties {
 				println!("Found property {} with type {:?}", p.name.green(), p.type_);
 				if flight == Flight::In {
