@@ -1,8 +1,5 @@
 {
   "name": "wing-playground",
-  "root": "apps/wing-playground/",
-  "sourceRoot": "apps/wing-playground",
-  "projectType": "application",
   "implicitDependencies": [
     "wingc"
   ]

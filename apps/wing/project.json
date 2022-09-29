@@ -1,13 +1,11 @@
 {
   "name": "wing",
-  "root": "apps/wing/",
-  "sourceRoot": "apps/wing",
-  "projectType": "application",
   "implicitDependencies": [
-    "wingc"
+    "wingc",
+    "wingsdk"
   ],
   "targets": {
-    "get-wingc": {
+    "copy": {
       "executor": "nx:run-commands",
       "inputs": ["rust-wasm"],
       "dependsOn": ["^build-wasm"],
@@ -25,7 +23,7 @@
       "executor": "nx:run-script",
       "inputs": ["src"],
       "outputs": ["dist"],
-      "dependsOn": ["^build", "get-wingc"],
+      "dependsOn": ["^build", "copy"],
       "options": {
         "cwd": "apps/wing",
         "script": "build"

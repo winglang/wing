@@ -1,8 +1,5 @@
 {
   "name": "tree-sitter-wing",
-  "root": "libs/tree-sitter-wing/",
-  "sourceRoot": "libs/tree-sitter-wing",
-  "projectType": "library",
   "targets": {
     "build": {
       "executor": "nx:run-commands",

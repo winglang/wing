@@ -1,8 +1,5 @@
 {
   "name": "wingii",
-  "root": "libs/wingii/",
-  "sourceRoot": "libs/wingii/src",
-  "projectType": "library",
   "targets": {
     "build": {
       "executor": "nx:run-commands",

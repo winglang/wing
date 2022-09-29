@@ -1,9 +1,35 @@
 {
   "name": "vscode-wing",
-  "root": "apps/vscode-wing/",
-  "sourceRoot": "apps/vscode-wing/src",
-  "projectType": "application",
   "implicitDependencies": [
     "wing-language-server"
-  ]
+  ],
+  "targets": {
+    "copy": {
+      "executor": "nx:run-commands",
+      "inputs": ["rust-native"],
+      "dependsOn": ["^build"],
+      "options": {
+        "commands": [
+          "mkdir -p ./resources/native",
+          "cp ../../target/debug/wing-language-server ./resources/native"
+        ],
+        "cwd": "apps/vscode-wing"
+      },
+      "configurations": {
+        "release": {
+          "commands": ["echo 'Skipping wls copy. Get binaries from CI'"]
+        }
+      }
+    },
+    "build": {
+      "executor": "nx:run-script",
+      "inputs": ["src"],
+      "outputs": ["dist"],
+      "dependsOn": ["^build", "copy"],
+      "options": {
+        "cwd": "apps/vscode-wing",
+        "script": "build"
+      }
+    }
+  }
 }

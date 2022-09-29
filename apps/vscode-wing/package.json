@@ -1,5 +1,5 @@
 {
-  "name": "@monadahq/vscode-wing",
+  "name": "vscode-wing",
   "description": "Wing Language Support",
   "repository": {
     "type": "git",

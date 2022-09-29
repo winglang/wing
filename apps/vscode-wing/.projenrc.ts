@@ -7,7 +7,7 @@ const VSCODE_BASE_VERSION = "1.70.0";
 
 const project = new TypeScriptAppProject({
   defaultReleaseBranch: "main",
-  name: "@monadahq/vscode-wing",
+  name: "vscode-wing",
   authorName: "Monada",
   authorEmail: "ping@monada.co",
   authorOrganization: true,
@@ -49,6 +49,11 @@ project.addGitIgnore("*.vsix");
 const vscodeIgnore = new IgnoreFile(project, ".vscodeignore");
 vscodeIgnore.addPatterns(
   "**",
+
+  // It's strange, but if these are not included then the build fails
+  "../**",
+  "../../**",
+
   "!lib/",
   "!resources/",
   "!syntaxes/",
