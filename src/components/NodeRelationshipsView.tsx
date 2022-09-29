@@ -198,8 +198,8 @@ export function NodeRelationshipsView({
                   )
                   .map((resource) => (
                     <ItemButton
-                      key={resource.id}
-                      title={resource.id}
+                      key={resource.path}
+                      title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
                     >
                       <div className="flex-shrink-0 -ml-0.5">
@@ -222,8 +222,8 @@ export function NodeRelationshipsView({
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-0.5 overflow-y-scroll">
                   {relationships.callers.map((resource) => (
                     <ItemButton
-                      key={resource.id}
-                      title={resource.id}
+                      key={resource.path}
+                      title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
                     >
                       <div className="flex-shrink-0 -ml-0.5">
@@ -355,8 +355,8 @@ export function NodeRelationshipsView({
                   )
                   .map((resource, childIndex) => (
                     <ItemButton
-                      key={resource.id}
-                      title={resource.id}
+                      key={resource.path}
+                      title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
                     >
                       <div className="flex-shrink-0 -ml-0.5">
@@ -386,8 +386,8 @@ export function NodeRelationshipsView({
                   )}
                   {relationships.children.map((resource) => (
                     <ItemButton
-                      key={resource.id}
-                      title={resource.id}
+                      key={resource.path}
+                      title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
                     >
                       <div className="flex-shrink-0 -ml-0.5">
@@ -447,8 +447,8 @@ export function NodeRelationshipsView({
                   )
                   .map((resource) => (
                     <ItemButton
-                      key={resource.id}
-                      title={resource.id}
+                      key={resource.path}
+                      title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
                     >
                       <div className="flex-shrink-0 -ml-0.5">
@@ -471,8 +471,8 @@ export function NodeRelationshipsView({
                 <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-0.5 overflow-y-scroll">
                   {relationships.callees.map((resource) => (
                     <ItemButton
-                      key={resource.id}
-                      title={resource.id}
+                      key={resource.path}
+                      title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
                     >
                       <div className="flex-shrink-0 -ml-0.5">

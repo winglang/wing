@@ -69,6 +69,7 @@
     "npm-check-updates": "^15",
     "postcss": "^8.4.16",
     "prettier": "^2.7.1",
+    "pretty-bytes": "*",
     "projen": "^0.62.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

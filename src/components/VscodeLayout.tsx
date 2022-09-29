@@ -1,15 +1,12 @@
-import { ResourceSchema, WingLocalSchema } from "@monadahq/wing-local-schema";
-import classNames from "classnames";
+import { WingLocalSchema } from "@monadahq/wing-local-schema";
 import { useEffect, useMemo, useState } from "react";
 
-import { breadcrumbs } from "@/stories/mockData";
 import { ResourceIcon, WingSchemaToTreeMenuItems } from "@/stories/utils";
 import { Node, useNodeMap } from "@/utils/nodeMap";
 
 import { Breadcrumb, Breadcrumbs } from "./Breadcrumbs";
-import { NodeAttributes } from "./NodeAttributes";
-import { NodeInteractionView } from "./NodeInteractionView";
-import { NodeRelationshipsView, Relationships } from "./NodeRelationshipsView";
+import { Relationships } from "./NodeRelationshipsView";
+import { NodeTabContents } from "./NodeTabContents";
 import { RightResizableWidget } from "./RightResizableWidget";
 import { ScrollableArea } from "./ScrollableArea";
 import { Tabs } from "./Tabs";
@@ -17,12 +14,6 @@ import { TopResizableWidget } from "./TopResizableWidget";
 import { TreeMenu } from "./TreeMenu";
 import { useTabs } from "./useTabs";
 import { useTreeMenuItems } from "./useTreeMenuItems";
-
-const buttons = [
-  { current: false, text: "Problems" },
-  { current: false, text: "Logs" },
-  { current: true, text: "Schema" },
-];
 
 export interface VscodeLayoutProps {
   schema: WingLocalSchema | undefined;
@@ -147,6 +138,20 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
     return relationships;
   }, [currentNode]);
 
+  const [currentPill, setCurrentPill] = useState<
+    "attributes" | "interaction" | "logs"
+  >("attributes");
+  const [pills] = useState<
+    {
+      id: "attributes" | "interaction" | "logs";
+      text: string;
+    }[]
+  >(() => [
+    { id: "attributes", text: "Attributes" },
+    { id: "interaction", text: "Object Explorer" },
+    { id: "logs", text: "Logs" },
+  ]);
+
   return (
     <div className="h-full flex flex-col bg-slate-100 select-none">
       <div className="flex-1 flex">
@@ -189,7 +194,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
             />
           </div>
 
-          <div className=" flex-1 bg-white">
+          <div className="flex-1 bg-white">
             <div className="h-full flex flex-col">
               <div className="flex-0 w-full h-9 relative">
                 {tabs.currentTabId !== undefined && (
@@ -210,43 +215,25 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
                 )}
               </div>
 
-              <div className="flex-1 h-full w-full relative min-w-[32rem]">
-                <ScrollableArea overflowX overflowY>
-                  <div className="p-2 space-y-8 divide-y divide-slate-200">
-                    <div className="flex gap-2">
-                      <div className="flex-grow-0 flex-shrink-0 max-w-lg w-full">
-                        {relationships && (
-                          <NodeRelationshipsView
-                            key={currentNode?.path}
-                            relationships={relationships}
-                            onNodeClick={(path) => {
-                              treeMenu.expand(path);
-                              treeMenu.setCurrent(path);
-                              openTab(path);
-                            }}
-                          />
-                        )}
-                      </div>
-                      <div className="flex-1 flex-shrink-0 min-w-[24rem]">
-                        {currentNode && (
-                          <NodeAttributes node={currentNode?.schema} />
-                        )}
-                      </div>
-                    </div>
-
-                    {currentNode && (
-                      <NodeInteractionView node={currentNode?.schema} />
-                    )}
-                  </div>
-                </ScrollableArea>
-              </div>
+              {currentNode && relationships && (
+                <NodeTabContents
+                  key={currentNode.path}
+                  node={currentNode}
+                  relationships={relationships}
+                  onNodeClick={(path) => {
+                    treeMenu.expand(path);
+                    treeMenu.setCurrent(path);
+                    openTab(path);
+                  }}
+                />
+              )}
             </div>
           </div>
 
-          <TopResizableWidget className="flex flex-col h-60 min-h-[62px]">
+          {/* <TopResizableWidget className="flex flex-col h-60 min-h-[62px]">
             <div className="flex-1 flex flex-col bg-white border-t border-slate-200">
               <div className="px-2 flex items-center text-xs text-slate-600">
-                {buttons.map((button) => {
+                {pills.map((button) => {
                   return (
                     <button className="px-2.5 py-1 uppercase group">
                       <div
@@ -270,7 +257,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
                 </ScrollableArea>
               </div>
             </div>
-          </TopResizableWidget>
+          </TopResizableWidget> */}
         </div>
       </div>
     </div>

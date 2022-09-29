@@ -154,6 +154,10 @@
       "type": "build"
     },
     {
+      "name": "pretty-bytes",
+      "type": "build"
+    },
+    {
       "name": "projen",
       "type": "build"
     },

@@ -1,5 +1,8 @@
-import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import { CubeIcon } from "@heroicons/react/24/solid";
+import {
+  CubeIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+} from "@heroicons/react/20/solid";
 import {
   ConstructSchema,
   ResourceSchema,
@@ -150,7 +153,8 @@ function Unity({ schema, nodeMap }: UnityProps) {
                   Filter by text...
                 </div> */}
                     <input
-                      className="px-1.5 text-xs italic text-gray-400 bg-transparent w-full placeholder:text-gray-600"
+                      type="text"
+                      className="px-1.5 py-0 text-xs italic text-gray-400 bg-transparent w-full placeholder:text-gray-600 rounded-sm border-none"
                       placeholder="Filter by text..."
                     />
                   </div>
@@ -195,9 +199,6 @@ function Unity({ schema, nodeMap }: UnityProps) {
           <TopResizableWidget className="h-[33%] min-h-[13rem] flex flex-col bg-gray-800">
             <div className="flex gap-px">
               <div className="inline-flex bg-gray-700 px-2 py-1 rounded-t cursor-default">
-                Schema
-              </div>
-              <div className="inline-flex bg-gray-700/50 px-2 py-1 rounded-t cursor-default">
                 Logs
               </div>
               <div className="inline-flex bg-gray-700/50 px-2 py-1 rounded-t cursor-default">
@@ -263,7 +264,7 @@ function Unity({ schema, nodeMap }: UnityProps) {
                   </button>
 
                   <div className="border-t border-gray-800">
-                    <div className="px-2 py-1 grid grid-cols-4 gap-y-1 bg-gray-800/40">
+                    <div className="px-2 py-1 grid grid-cols-6 gap-y-1 bg-gray-800/40">
                       {attributeGroup.attributes.map((attribute) => {
                         return (
                           <>
@@ -275,7 +276,7 @@ function Unity({ schema, nodeMap }: UnityProps) {
                             </div>
                             <div
                               key={`type-${attribute.key}`}
-                              className="col-span-3"
+                              className="col-span-5"
                             >
                               {attribute.type === "url" ? (
                                 <a
@@ -301,6 +302,92 @@ function Unity({ schema, nodeMap }: UnityProps) {
                 </>
               );
             })}
+
+            <button className="w-full px-2 py-0.5 flex gap-1 hover:bg-gray-600 group">
+              <ChevronDownIcon
+                className="-ml-1 w-4 h-4 text-gray-400 group-hover:text-gray-300"
+                aria-hidden="true"
+              />
+              <div className="text-gray-300 font-medium group-hover:text-gray-200">
+                Callers
+              </div>
+            </button>
+            <div className="border-t border-gray-800">
+              <div className="flex flex-col bg-gray-800/40">
+                <button className="px-2 py-1 flex items-center gap-1.5 hover:bg-gray-600 hover:text-gray-100 group">
+                  <div className="flex-shrink-0">
+                    <ResourceIcon
+                      resourceType="cloud.Bucket"
+                      className="w-3.5 h-3.5"
+                      darkenOnGroupHover
+                    />
+                  </div>
+                  <div
+                    className="truncate"
+                    title="construct-hub-dev/ConstructHub/Monitoring/Watchful/constructhubdevConstructHubDenyListPrunePruneHandlerF5B01A79/ErrorsAlarm/Resource"
+                  >
+                    {/* construct-hub-dev/ConstructHub/Monitoring/Watchful/constructhubdevConstructHubDenyListPrunePruneHandlerF5B01A79/ErrorsAlarm/Resource */}
+                    Resource
+                  </div>
+                </button>
+                <button className="px-2 py-1 flex items-center gap-1.5 hover:bg-gray-600 hover:text-gray-100 group">
+                  <div className="flex-shrink-0">
+                    <ResourceIcon
+                      resourceType="cloud.Function"
+                      className="w-3.5 h-3.5"
+                      darkenOnGroupHover
+                    />
+                  </div>
+                  <div
+                    className="truncate"
+                    title="construct-hub-dev/ConstructHub/DenyList/Prune/PruneHandler/Resource"
+                  >
+                    {/* construct-hub-dev/ConstructHub/DenyList/Prune/PruneHandler/Resource */}
+                    Resource
+                  </div>
+                </button>
+              </div>
+            </div>
+
+            <button className="w-full px-2 py-0.5 flex gap-1 hover:bg-gray-600 group">
+              <ChevronRightIcon
+                className="-ml-1 w-4 h-4 text-gray-400 group-hover:text-gray-300"
+                aria-hidden="true"
+              />
+              <div className="text-gray-300 font-medium group-hover:text-gray-200">
+                Callees
+              </div>
+            </button>
+
+            <button className="w-full px-2 py-0.5 flex gap-1 hover:bg-gray-600 group">
+              <ChevronRightIcon
+                className="-ml-1 w-4 h-4 text-gray-400 group-hover:text-gray-300"
+                aria-hidden="true"
+              />
+              <div className="text-gray-300 font-medium group-hover:text-gray-200">
+                Test Function
+              </div>
+            </button>
+
+            <button className="w-full px-2 py-0.5 flex gap-1 hover:bg-gray-600 group">
+              <ChevronRightIcon
+                className="-ml-1 w-4 h-4 text-gray-400 group-hover:text-gray-300"
+                aria-hidden="true"
+              />
+              <div className="text-gray-300 font-medium group-hover:text-gray-200">
+                Logs
+              </div>
+            </button>
+
+            <button className="w-full px-2 py-0.5 flex gap-1 hover:bg-gray-600 group">
+              <ChevronRightIcon
+                className="-ml-1 w-4 h-4 text-gray-400 group-hover:text-gray-300"
+                aria-hidden="true"
+              />
+              <div className="text-gray-300 font-medium group-hover:text-gray-200">
+                Events
+              </div>
+            </button>
           </div>
         </LeftResizableWidget>
       </div>

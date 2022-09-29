@@ -43,6 +43,7 @@ const project = new TypeScriptProject({
     "react-query",
     "@trpc/react",
     "react-draggable",
+    "pretty-bytes",
   ],
   // @ts-ignore
   workflowRunsOn: ["macos-latest"],
