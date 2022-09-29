@@ -32,6 +32,13 @@
   },
   dmg: {
     sign: true,
+    icon: "electron/resources/icon.icns",
+    background: "electron/resources/background.png",
+    title: "${productName}",
+    window: {
+      width: 540,
+      height: 410,
+    },
   },
   linux: {
     target: ["AppImage"],

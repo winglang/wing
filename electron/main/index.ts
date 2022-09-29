@@ -49,7 +49,7 @@ async function createWindow() {
 
   win = new BrowserWindow({
     title: "Wing Console",
-    icon: join(ROOT_PATH.public, "favicon.svg"),
+    icon: join(ROOT_PATH.public, "icon.ico"),
     webPreferences: {
       preload,
       nodeIntegration: true,
