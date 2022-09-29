@@ -1968,6 +1968,7 @@ dependencies = [
  "derivative",
  "sha2",
  "tree-sitter",
+ "tree-sitter-traversal",
  "tree-sitter-wing",
 ]
 

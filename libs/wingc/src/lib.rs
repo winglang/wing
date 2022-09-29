@@ -1,6 +1,9 @@
 use ast::Scope;
 use diagnostic::Diagnostics;
 
+use tree_sitter::*;
+use tree_sitter_traversal::*;
+
 use crate::parser::Parser;
 use std::cell::RefCell;
 use std::fs;
@@ -19,17 +22,76 @@ pub mod parser;
 pub mod type_check;
 pub mod type_env;
 
-pub fn parse(source_file: &str) -> Scope {
+fn amalgamate_brings(source_file: &str) -> Vec<u8> {
+	let context = Box::new(PathBuf::from(source_file).parent().unwrap().to_path_buf());
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
 
-	let source = match fs::read(&source_file) {
+	let mut source = match fs::read(&source_file) {
 		Ok(source) => source,
 		Err(err) => {
 			panic!("Error reading source file: {}: {:?}", &source_file, err);
 		}
 	};
+
+	let tree = match parser.parse(&source[..], None) {
+		Some(tree) => tree,
+		None => {
+			println!("Failed parsing source file: {}", source_file);
+			std::process::exit(1);
+		}
+	};
+
+	let nodes: Vec<Node<'_>> = traverse(tree.walk(), Order::Pre).collect::<Vec<_>>();
+	let mut patches: Vec<(usize, usize, Vec<u8>)> = Vec::new();
+
+	// iterate over nodes and check for "bring"	nodes
+	nodes.iter().for_each(|node| {
+		if node.kind() == "short_import_statement" {
+			let child = node.child_by_field_name("module_name").unwrap();
+			if child.kind() == "string" {
+				// get a copy of child node's text value
+				let inner_source = child.utf8_text(&source).unwrap();
+				// remove quotes around local_source_path string
+				let inner_source = &inner_source[1..inner_source.len() - 1];
+				// join context and local_source_path
+				let inner_source = context.join(inner_source);
+				// resolve the address
+				let inner_source = inner_source.canonicalize().unwrap();
+				// get the string value to pass recursively down again
+				let inner_source = inner_source.to_str().unwrap();
+				// parse the inner source
+				let inner_parsed = amalgamate_brings(inner_source);
+				// add this to patches to the original "source"
+				patches.push((node.start_byte(), node.end_byte(), inner_parsed));
+			}
+		}
+	});
+
+	// apply patches one by one, update indices as needed
+	// this is adopted from https://github.com/bendrucker/patch-text/blob/master/index.js
+	if patches.len() > 0 {
+		let mut offset: i32 = 0;
+		for (start, end, patch) in patches {
+			let patch_len = patch.len();
+			let start = (start as i32 + offset) as usize;
+			let end = (end as i32 + offset) as usize;
+			source.splice(start..end, patch);
+			offset += patch_len as i32 - (end - start) as i32;
+		}
+	}
+
+	source
+}
+
+pub fn parse(source_file: &str) -> Scope {
+	let language = tree_sitter_wing::language();
+	let mut parser = tree_sitter::Parser::new();
+	parser.set_language(language).unwrap();
+
+	// recursively "bring" all wing sources and amalgamate them into one source
+	let source = amalgamate_brings(source_file);
 
 	let tree = match parser.parse(&source[..], None) {
 		Some(tree) => tree,
