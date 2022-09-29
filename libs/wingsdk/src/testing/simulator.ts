@@ -1,8 +1,18 @@
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
 const { DefaultSimulatorFactory } = require("../sim/factory.sim");
 
+/**
+ * Props for `Simulator.fromResources`
+ */
 export interface SimulatorFromResourcesProps {
+  /**
+   * A map of resources to load into the simulator, keyed by resource id.
+   */
   readonly resources: { [key: string]: any };
+  /**
+   * The factory that dispatches to simulation implementations.
+   * @default - a factory that simulates built-in Wing SDK resources
+   */
   readonly factory?: ISimulatorFactory;
 }
 

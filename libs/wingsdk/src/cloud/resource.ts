@@ -1,6 +1,9 @@
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code, ICapturable } from "../core";
 
+/**
+ * Shared behavior between all Wing SDK resources.
+ */
 export abstract class Resource extends Construct implements ICapturable {
   /**
    * Whether a resource is stateful, i.e. it stores information that is not

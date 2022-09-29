@@ -5,6 +5,9 @@ import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { Queue } from "./queue";
 
+/**
+ * Polycon factory which resolves `cloud` resources into AWS resources.
+ */
 export class PolyconFactory implements IPolyconFactory {
   public resolve(
     type: string,

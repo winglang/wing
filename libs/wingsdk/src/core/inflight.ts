@@ -74,6 +74,7 @@ export abstract class Code {
  * The language of a piece of code.
  */
 export enum Language {
+  /** Node.js */
   NODE_JS = "nodejs",
 }
 
@@ -99,9 +100,11 @@ export class NodeJsCode extends Code {
   }
 
   public readonly language = Language.NODE_JS;
+  public readonly path: string;
 
-  private constructor(public readonly path: string) {
+  private constructor(path: string) {
     super();
+    this.path = path;
   }
 }
 
@@ -126,6 +129,7 @@ export interface InflightProps {
    * will be passed as the first argument of the entrypoint function.
    *
    * Each key here will be the key for the final value in the map.
+   * @default - No captures
    */
   readonly captures?: { [name: string]: Capture };
 }
@@ -289,7 +293,13 @@ function mkdtemp(prefix: string): string {
   return mkdtempSync(join(tmpdir(), prefix));
 }
 
+/**
+ * Utility class with functions about inflight clients.
+ */
 export class InflightClient {
+  /**
+   * Creates a `Code` instance with code for creating an inflight client.
+   */
   public static for(
     filename: string,
     clientClass: string,

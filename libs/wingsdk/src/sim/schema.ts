@@ -68,6 +68,14 @@ export interface QueueSchema extends BaseResourceSchema {
   };
 }
 
+/** Schema for cloud.Queue.props.subscribers */
+export interface QueueSubscriber {
+  /** Function ID that should be called. */
+  readonly functionId: FunctionId;
+  /** Maximum number of messages that will be batched together to the subscriber. */
+  readonly batchSize: number;
+}
+
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: "cloud.Bucket";

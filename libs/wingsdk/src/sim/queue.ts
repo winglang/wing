@@ -5,6 +5,9 @@ import { Function } from "./function";
 import { IResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema";
 
+/**
+ * Simulator implementation of `cloud.Queue`.
+ */
 export class Queue extends cloud.QueueBase implements IResource {
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];

@@ -26,7 +26,11 @@ const project = new cdk.JsiiProject({
     // simulator implementation dependencies
     "piscina",
   ],
-  devDeps: ["replace-in-file", "@types/aws-lambda"],
+  devDeps: [
+    "replace-in-file",
+    "@types/aws-lambda",
+    "wing-api-checker@file:../../apps/wing-api-checker",
+  ],
   prettier: true,
   jestOptions: {
     jestVersion: "^27.0.0", // 28 requires a later typescript version than the one used by JSII
@@ -155,5 +159,13 @@ project.npmignore?.addPatterns(
   ".prettierignore",
   ".prettierrc.json"
 );
+
+const apiCheck = project.addTask("api-check", {
+  exec: "wing-api-check",
+});
+project.addTask("api-check:watch", {
+  exec: "wing-api-check --watch",
+});
+project.postCompileTask.prependSpawn(apiCheck);
 
 project.synth();

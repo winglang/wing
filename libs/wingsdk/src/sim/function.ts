@@ -13,6 +13,9 @@ import { TextFile } from "../fs";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema";
 
+/**
+ * Simulator implementation of `cloud.Function`.
+ */
 export class Function extends cloud.FunctionBase implements IResource {
   private readonly env: Record<string, string> = {};
   private readonly code: Code;

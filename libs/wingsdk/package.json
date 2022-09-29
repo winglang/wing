@@ -5,6 +5,8 @@
     "url": "https://github.com/monadahq/wingsdk.git"
   },
   "scripts": {
+    "api-check": "npx projen api-check",
+    "api-check:watch": "npx projen api-check:watch",
     "build": "npx projen build",
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
@@ -69,7 +71,8 @@
     "ts-jest": "^27.0.0",
     "ts-node": "^10.9.1",
     "tsx": "^3.9.0",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.3",
+    "wing-api-checker": "file:../../apps/wing-api-checker"
   },
   "peerDependencies": {
     "@cdktf/provider-aws": "^9.0.37",
