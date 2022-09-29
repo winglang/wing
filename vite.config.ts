@@ -8,13 +8,10 @@ import electron from "vite-plugin-electron";
 
 import pkg from "./package.json";
 
-rmSync(path.join(__dirname, "dist"), { recursive: true, force: true }); // v14.14.0
-
 export const alias = {
   "@": path.join(__dirname, "src"),
 };
 
-// https://vitejs.dev/config/
 export default defineConfig({
   resolve: {
     alias,
@@ -26,7 +23,7 @@ export default defineConfig({
         entry: "electron/main/index.ts",
         vite: withDebug({
           build: {
-            outDir: "dist/electron/main",
+            outDir: "dist/vite/electron/main",
           },
         }),
       },
@@ -39,7 +36,7 @@ export default defineConfig({
           build: {
             // For debug
             sourcemap: "inline",
-            outDir: "dist/electron/preload",
+            outDir: "dist/vite/electron/preload",
           },
         },
       },
@@ -53,7 +50,7 @@ export default defineConfig({
     port: pkg.env.VITE_DEV_SERVER_PORT,
   },
   build: {
-    minify: false,
+    outDir: "dist/vite",
   },
 });
 

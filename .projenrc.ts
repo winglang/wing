@@ -1,4 +1,5 @@
 import { TypeScriptProject } from "@monadahq/mona-projen";
+import { JobPermission } from "projen/lib/github/workflows-model";
 
 const project = new TypeScriptProject({
   name: "wing-console",
@@ -45,49 +46,70 @@ const project = new TypeScriptProject({
     "react-draggable",
     "pretty-bytes",
   ],
-  // @ts-ignore
-  workflowRunsOn: ["macos-latest"],
-  // @ts-ignore
-  workflowGitIdentity: {
-    name: "monabot",
-    email: "monabot@monada.co",
-  },
-  workflowBootstrapSteps: [
-    ...TypeScriptProject.setupSteps(),
-    {
-      name: "Codesign executable",
-      run:
-        "echo $CSC_LINK | base64 --decode > $HOME/certificate.p12 \n" +
-        "security create-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
-        "security default-keychain -s build.keychain \n" +
-        "security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
-        "security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign \n" +
-        "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain",
-      env: {
-        CSC_LINK: "${{ secrets.CSC_LINK }}",
-        CSC_KEY_PASSWORD: "${{ secrets.CSC_KEY_PASSWORD }}",
-      },
-    },
-    {
-      name: "set GH_TOKEN",
-      run: "echo 'GH_TOKEN=${{ secrets.PROJEN_GITHUB_TOKEN }}' >> $GITHUB_ENV",
-      env: {
-        GH_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
-      },
-    },
-  ],
 });
 project.addTask("dev").exec("vite");
 project.compileTask.exec("vite build");
-// TODO: track https://github.com/electron-userland/electron-builder/issues/6411
-project.compileTask.exec(
-  "npm exec electron-builder -- --publish=always --config=electron-builder.json5",
-);
 project.addTask("storybook").exec("start-storybook -p 6006");
 project.addTask("build-storybook").exec("build-storybook");
 project.tasks.tryFind("package")?.reset();
 
-project.package.addField("main", "dist/electron/main/index.js");
+project
+  .tryFindObjectFile(".github/workflows/release.yml")
+  ?.addDeletionOverride("jobs.release_github");
+project.release?.addJobs({
+  release_electron_builder: {
+    name: "Publish using electron-builder",
+    needs: ["release"],
+    runsOn: ["macos-latest"],
+    permissions: {
+      contents: JobPermission.WRITE,
+    },
+    if: "needs.release.outputs.latest_commit == github.sha",
+    steps: [
+      {
+        uses: "actions/setup-node@v3",
+        with: { "node-version": "14.x" },
+      },
+      {
+        name: "Download build artifacts",
+        uses: "actions/download-artifact@v3",
+        with: { name: "build-artifact", path: "dist" },
+      },
+      {
+        name: "Add certificate to the keychain",
+        run:
+          "echo $CSC_LINK | base64 --decode > $HOME/certificate.p12 \n" +
+          "security create-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
+          "security default-keychain -s build.keychain \n" +
+          "security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
+          "security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign \n" +
+          "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain",
+        env: {
+          CSC_LINK: "${{ secrets.CSC_LINK }}",
+          CSC_KEY_PASSWORD: "${{ secrets.CSC_KEY_PASSWORD }}",
+        },
+      },
+      {
+        name: "Build Electron Application",
+        run: "npm exec electron-builder --publish=never",
+        // env: {
+        //   GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+        // },
+      },
+      {
+        name: "Release",
+        run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/WingConsole-$(cat dist/releasetag.txt).dmg 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
+        env: {
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+          GITHUB_REPOSITORY: "${{ github.repository }}",
+          GITHUB_REF: "${{ github.ref }}",
+        },
+      },
+    ],
+  },
+});
+
+project.package.addField("main", "dist/vite/electron/main/index.js");
 project.package.addField("env", {
   VITE_DEV_SERVER_HOST: "127.0.0.1",
   VITE_DEV_SERVER_PORT: 7777,

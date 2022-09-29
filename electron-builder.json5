@@ -2,23 +2,23 @@
  * @see https://www.electron.build/configuration/configuration
  */
 {
-  appId: 'co.monada.wingConsole',
-  productName: 'WingConsole',
-  copyright: 'Copyright © 2022 Monada',
+  appId: "co.monada.wingConsole",
+  productName: "WingConsole",
+  copyright: "Copyright © 2022 Monada",
   asar: true,
   directories: {
-    output: 'release',
-    buildResources: 'electron/resources',
+    output: "release",
+    buildResources: "electron/resources",
   },
-  files: ['dist'],
+  files: ["dist/vite"],
   win: {
     target: [
       {
-        target: 'nsis',
-        arch: ['x64'],
+        target: "nsis",
+        arch: ["x64"],
       },
     ],
-    artifactName: '${productName}-${version}-Setup.${ext}',
+    artifactName: "${productName}-v${version}-Setup.${ext}",
   },
   nsis: {
     oneClick: false,
@@ -27,14 +27,14 @@
     deleteAppDataOnUninstall: false,
   },
   mac: {
-    target: ['dmg'],
-    artifactName: '${productName}-${version}.${ext}',
+    target: ["dmg"],
+    artifactName: "${productName}-v${version}.${ext}",
   },
   dmg: {
     sign: true,
   },
   linux: {
-    target: ['AppImage'],
-    artifactName: '${productName}-Linux-${version}.${ext}',
+    target: ["AppImage"],
+    artifactName: "${productName}-Linux-v${version}.${ext}",
   },
 }

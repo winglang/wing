@@ -91,7 +91,7 @@
     "chokidar": "^3.5.3",
     "electron-log": "^4.4.8"
   },
-  "main": "dist/electron/main/index.js",
+  "main": "dist/vite/electron/main/index.js",
   "license": "Apache-2.0",
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
