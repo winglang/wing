@@ -1,10 +1,10 @@
 {
-  "name": "@monadahq/wing",
+  "name": "wing",
   "root": "apps/wing/",
   "sourceRoot": "apps/wing",
   "projectType": "application",
   "implicitDependencies": [
-    "@monadahq/wingc"
+    "wingc"
   ],
   "targets": {
     "build": {

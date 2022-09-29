@@ -1,15 +1,26 @@
 {
-  "name": "@monadahq/wingc",
+  "name": "wingc",
   "root": "libs/wingc/",
   "sourceRoot": "libs/wingc/src",
   "projectType": "library",
-  "implicitDependencies": ["@monadahq/tree-sitter-wing", "@monadahq/wingii"],
+  "implicitDependencies": ["tree-sitter-wing", "wingii"],
   "targets": {
     "build-native": {
-      "executor": "@nxrs/cargo:build",
+      "executor": "nx:run-commands",
       "inputs": ["src", "rust-conf"],
       "outputs": ["rust-native"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "options": {
+          "command": "cargo build",
+          "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "production": {
+          "options": {
+            "command": "cargo build --release"
+          }
+        }
+      }
     },
     "test": {
       "executor": "@nxrs/cargo:test",
@@ -17,10 +28,21 @@
       "dependsOn": ["build"]
     },
     "build-wasm": {
-      "executor": "@nxrs/cargo:build",
+      "executor": "nx:run-commands",
       "inputs": ["src", "rust-conf"],
       "outputs": ["rust-wasm"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["build"],
+      "options": {
+          "command": "cargo wasi build",
+          "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "production": {
+          "options": {
+            "command": "cargo wasi build --release"
+          }
+        }
+      }
     }
   }
 }

@@ -2,7 +2,8 @@
   "name": "@monadahq/winglang",
   "workspaces": [
     "apps/*",
-    "libs/*"
+    "libs/*",
+    "!apps/vscode-wing"
   ],
   "devDependencies": {
     "@nxrs/cargo": "^0.3.3",

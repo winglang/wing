@@ -2,6 +2,7 @@
   "affected": {
     "defaultBase": "main"
   },
+  "npmScope": "monadahq",
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "libs"
@@ -18,14 +19,6 @@
     "dist": ["{projectRoot}/dist/**/*"]
   },
   "plugins": ["@nxrs/cargo"],
-  "targetDefaults": {
-    "build": {
-      "dependsOn": ["^build"]
-    },
-    "package": {
-      "dependsOn": ["build", "^package"]
-    }
-  },
   "tasksRunnerOptions": {
     "default": {
       "runner": "nx/tasks-runners/default",

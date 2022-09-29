@@ -1,14 +1,25 @@
 {
-  "name": "@monadahq/wingii",
+  "name": "wingii",
   "root": "libs/wingii/",
   "sourceRoot": "libs/wingii/src",
   "projectType": "library",
   "targets": {
     "build-native": {
-      "executor": "@nxrs/cargo:build",
+      "executor": "nx:run-commands",
       "inputs": ["src", "rust-conf"],
       "outputs": ["rust-native"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["^build"],
+      "options": {
+          "command": "cargo build",
+          "cwd": "libs/wingii"
+      },
+      "configurations": {
+        "production": {
+          "options": {
+            "command": "cargo build --release"
+          }
+        }
+      }
     },
     "test": {
       "executor": "@nxrs/cargo:test",
@@ -16,10 +27,21 @@
       "dependsOn": ["build"]
     },
     "build-wasm": {
-      "executor": "@nxrs/cargo:build",
+      "executor": "nx:run-commands",
       "inputs": ["src", "rust-conf"],
       "outputs": ["rust-wasm"],
-      "dependsOn": ["^build"]
+      "dependsOn": ["build"],
+      "options": {
+          "command": "cargo wasi build",
+          "cwd": "libs/wingii"
+      },
+      "configurations": {
+        "production": {
+          "options": {
+            "command": "cargo wasi build --release"
+          }
+        }
+      }
     }
   }
 }

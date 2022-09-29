@@ -1,9 +1,9 @@
 {
-  "name": "@monadahq/vscode-wing",
+  "name": "vscode-wing",
   "root": "apps/vscode-wing/",
   "sourceRoot": "apps/vscode-wing/src",
   "projectType": "application",
   "implicitDependencies": [
-    "@monadahq/wing-language-server"
+    "wing-language-server"
   ]
 }

@@ -1,5 +1,5 @@
 {
-  "name": "@monadahq/wing-api-checker",
+  "name": "wing-api-checker",
   "root": "apps/wing-api-checker/",
   "sourceRoot": "apps/wing-api-checker",
   "projectType": "application",
@@ -8,7 +8,10 @@
       "executor": "nx:run-script",
       "inputs": ["src"],
       "outputs": ["dist"],
-      "dependsOn": ["^build", "^build-wasm"]
+      "dependsOn": ["^build", "wingc:build-wasm"],
+      "options": {
+        "script": "build"
+      }
     }
   }
 }
