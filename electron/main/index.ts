@@ -86,7 +86,7 @@ const getCloudFile = (): string => {
   //   throw new Error(`no cloud application file was provided`);
   // }
   // return cloudFileArg.replace('--cloudFile=', '');
-  return join(__dirname, "../../../test/demo.wx");
+  return join(__dirname, "../../../../test/demo.wx");
 };
 
 void app
