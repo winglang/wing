@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 
 import { TreeMenu } from "@/components/TreeMenu";
 import { useTreeMenuItems } from "@/components/useTreeMenuItems";
-import { Button } from "@/design-system/button";
+import { Button } from "@/design-system/Button";
 import { treeMenuItems as treeMenuItemsMock } from "@/stories/mockData";
 import {
   WingSchemaToTreeMenuItems,

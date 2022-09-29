@@ -90,6 +90,9 @@
         },
         {
           "exec": "vite build"
+        },
+        {
+          "exec": "npm exec electron-builder -- --publish=always --config=electron-builder.json5"
         }
       ]
     },
@@ -161,13 +164,7 @@
           "spawn": "bump"
         },
         {
-          "exec": "tsc --build"
-        },
-        {
-          "exec": "vite build"
-        },
-        {
-          "exec": "npm exec electron-builder -- --publish=always --config=electron-builder.json5"
+          "spawn": "build"
         },
         {
           "spawn": "unbump"

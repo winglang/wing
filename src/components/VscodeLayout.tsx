@@ -229,35 +229,6 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
               )}
             </div>
           </div>
-
-          {/* <TopResizableWidget className="flex flex-col h-60 min-h-[62px]">
-            <div className="flex-1 flex flex-col bg-white border-t border-slate-200">
-              <div className="px-2 flex items-center text-xs text-slate-600">
-                {pills.map((button) => {
-                  return (
-                    <button className="px-2.5 py-1 uppercase group">
-                      <div
-                        className={classNames("px-0.5 py-1 border-slate-600", {
-                          "border-b": button.current,
-                          "group-hover:text-slate-800": !button.current,
-                        })}
-                      >
-                        {button.text}
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="flex-1 relative">
-                <ScrollableArea overflowX overflowY>
-                  <pre className="p-4 text-xs">
-                    {JSON.stringify(schema, undefined, 2)}
-                  </pre>
-                </ScrollableArea>
-              </div>
-            </div>
-          </TopResizableWidget> */}
         </div>
       </div>
     </div>

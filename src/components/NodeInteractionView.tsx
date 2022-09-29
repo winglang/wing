@@ -16,7 +16,7 @@ import {
 import prettyBytes from "pretty-bytes";
 import { useRef, useState } from "react";
 
-import { Button } from "@/design-system/button";
+import { Button } from "@/design-system/Button";
 import { Checkbox } from "@/design-system/Checkbox";
 import { Input } from "@/design-system/Input";
 import { trpc } from "@/utils/trpc";

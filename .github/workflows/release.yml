@@ -55,7 +55,7 @@ jobs:
         uses: actions/upload-artifact@v2.1.1
         with:
           name: build-artifact
-          path: release
+          path: dist
   release_github:
     name: Publish to GitHub Releases
     needs: release
@@ -71,7 +71,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-artifact
-          path: release
+          path: dist
       - name: Release
         run: errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi
         env:
