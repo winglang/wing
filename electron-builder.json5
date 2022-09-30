@@ -18,7 +18,7 @@
         arch: ["x64"],
       },
     ],
-    artifactName: "${productName}-v${version}-Setup.${ext}",
+    artifactName: "${productName}-Setup.${ext}",
   },
   nsis: {
     oneClick: false,
@@ -28,7 +28,7 @@
   },
   mac: {
     target: ["dmg"],
-    artifactName: "${productName}-v${version}.${ext}",
+    artifactName: "${productName}.${ext}",
   },
   dmg: {
     sign: true,
@@ -42,6 +42,6 @@
   },
   linux: {
     target: ["AppImage"],
-    artifactName: "${productName}-Linux-v${version}.${ext}",
+    artifactName: "${productName}-Linux.${ext}",
   },
 }
