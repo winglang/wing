@@ -129,6 +129,7 @@ project.compileTask.reset();
 project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);
 
-project.packageTask.reset("vsce package -o vscode-wing.vsix");
+project.packageTask.reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0}");
+project.packageTask.exec("vsce package -o vscode-wing.vsix");
 
 project.synth();

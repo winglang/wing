@@ -1,0 +1,67 @@
+name: "PR Build"
+
+on:
+  push:
+  pull_request:
+
+env:
+  NODEJS_VERSION: "18.x"
+  MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
+  # TODO Real versioning needed
+  WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
+
+jobs:
+  non-native:
+    name: "Non-Native Build"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          depth: 1
+
+      - name: Setup Private NPM with Github
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: ${{ env.MONADAHQ_REGISTRY }}
+
+      # TODO This is probably storing the token unsafely
+      - uses: healthplace/npmrc-registry-login-action@v1.0
+        with:
+          scope: "@monadahq"
+          registry: ${{ env.MONADAHQ_REGISTRY }}
+          auth-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - uses: bahmutov/npm-install@v1
+      - uses: bahmutov/npm-install@v1
+        with:
+          working-directory: |
+            apps/vscode-wing
+            libs/wingsdk
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Lint Nx
+        run: |
+          npx nx workspace-lint
+          npx nx format:check
+
+      # - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      #   uses: nrwl/nx-set-shas@v3
+
+      - name: Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          all: true
+          affected: false # TODO switch "all" and "affected"
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build"
+          all: true
+          affected: false # TODO switch "all" and "affected"
+          args: "--configuration=release"
