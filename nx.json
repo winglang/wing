@@ -10,8 +10,10 @@
   },
   "namedInputs": {
     "src": [
-      "{projectRoot}/src/**/*",
-      "{projectRoot}/.projenrc.ts"
+      "{projectRoot}/src/**/*"
+    ],
+    "test": [
+      "{projectRoot}/test/**/*"
     ],
     "rust-conf": [
       "{projectRoot}/Cargo.toml",
@@ -24,7 +26,8 @@
       "{projectRoot}/.projen/*"
     ],
     "rust-wasm": [
-      "{workspaceRoot}/target/wasm32-wasi/**/*.wasm"
+      "{workspaceRoot}/target/wasm32-wasi/debug/*.wasm",
+      "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
     ],
     "rust-native": [
       "{workspaceRoot}/target/debug/*",
@@ -46,6 +49,42 @@
           "test"
         ]
       }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "inputs": [
+        "{projectRoot}/*",
+        "{workspaceRoot}/*",
+        "src"
+      ],
+      "outputs": [
+        "dist"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "build-wasm": {
+      "inputs": [
+        "{projectRoot}/*",
+        "{workspaceRoot}/*",
+        "src"
+      ],
+      "outputs": [
+        "rust-wasm"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "{projectRoot}/*",
+        "{workspaceRoot}/*",
+        "src",
+        "test"
+      ]
     }
   }
 }

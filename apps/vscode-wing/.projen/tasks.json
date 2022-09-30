@@ -100,7 +100,7 @@
       "description": "Creates the distribution package",
       "steps": [
         {
-          "exec": "npm version ${PROJEN_BUMP_VERSION:-0.0.0}"
+          "exec": "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
         },
         {
           "exec": "vsce package -o vscode-wing.vsix"

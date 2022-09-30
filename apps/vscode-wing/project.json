@@ -29,12 +29,6 @@
     },
     "build": {
       "executor": "nx:run-script",
-      "inputs": [
-        "src"
-      ],
-      "outputs": [
-        "dist"
-      ],
       "dependsOn": [
         "^build",
         "copy"

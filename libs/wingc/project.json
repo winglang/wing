@@ -3,15 +3,8 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "inputs": [
-        "src",
-        "rust-conf"
-      ],
       "outputs": [
         "rust-native"
-      ],
-      "dependsOn": [
-        "^build"
       ],
       "options": {
         "command": "cargo build",
@@ -24,27 +17,10 @@
       }
     },
     "test": {
-      "executor": "@nxrs/cargo:test",
-      "inputs": [
-        "src",
-        "rust-conf"
-      ],
-      "dependsOn": [
-        "build"
-      ]
+      "executor": "@nxrs/cargo:test"
     },
     "build-wasm": {
       "executor": "nx:run-commands",
-      "inputs": [
-        "src",
-        "rust-conf"
-      ],
-      "outputs": [
-        "rust-wasm"
-      ],
-      "dependsOn": [
-        "build"
-      ],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingc"

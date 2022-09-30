@@ -170,6 +170,8 @@ project.addTask("api-check:watch", {
 project.postCompileTask.spawn(apiCheck);
 
 const bumpTask = project.tasks.tryFind("bump")!;
-bumpTask.reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0}");
+bumpTask.reset(
+  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+);
 
 project.synth();

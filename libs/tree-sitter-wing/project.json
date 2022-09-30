@@ -23,14 +23,7 @@
       }
     },
     "test": {
-      "executor": "@nxrs/cargo:test",
-      "inputs": [
-        "src",
-        "rust-conf"
-      ],
-      "dependsOn": [
-        "build"
-      ]
+      "executor": "@nxrs/cargo:test"
     }
   }
 }
