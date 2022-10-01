@@ -6,6 +6,8 @@ use tree_sitter_traversal::*;
 
 use crate::parser::Parser;
 use std::cell::RefCell;
+use std::collections::HashSet;
+use std::error::Error;
 use std::fs;
 use std::path::PathBuf;
 
@@ -22,7 +24,12 @@ pub mod parser;
 pub mod type_check;
 pub mod type_env;
 
-fn amalgamate_brings(source_file: &str) -> Vec<u8> {
+fn amalgamate_recursive(source_file: &str, imports: &mut HashSet<String>) -> Result<Vec<u8>, Box<dyn Error>> {
+	if imports.contains(source_file) {
+		println!("Circular bring detected: {}", source_file);
+		Err("Circular bring detected")?
+	}
+	imports.insert(source_file.to_string());
 	let context = Box::new(PathBuf::from(source_file).parent().unwrap().to_path_buf());
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
@@ -47,8 +54,12 @@ fn amalgamate_brings(source_file: &str) -> Vec<u8> {
 	let mut patches: Vec<(usize, usize, Vec<u8>)> = Vec::new();
 
 	// iterate over nodes and check for "bring"	nodes
+	let mut circular_detected = false;
 	nodes.iter().for_each(|node| {
 		if node.kind() == "short_import_statement" {
+			if circular_detected {
+				return;
+			}
 			let child = node.child_by_field_name("module_name").unwrap();
 			if child.kind() == "string" {
 				// get a copy of child node's text value
@@ -62,12 +73,21 @@ fn amalgamate_brings(source_file: &str) -> Vec<u8> {
 				// get the string value to pass recursively down again
 				let inner_source = inner_source.to_str().unwrap();
 				// parse the inner source
-				let inner_parsed = amalgamate_brings(inner_source);
+				let inner_parsed = amalgamate_recursive(inner_source, imports);
+				// propagate errors back out
+				if inner_parsed.is_err() {
+					circular_detected = true;
+					return;
+				}
 				// add this to patches to the original "source"
-				patches.push((node.start_byte(), node.end_byte(), inner_parsed));
+				patches.push((node.start_byte(), node.end_byte(), inner_parsed.unwrap()));
 			}
 		}
 	});
+
+	if circular_detected {
+		Err("Circular bring detected")?
+	}
 
 	// apply patches one by one, update indices as needed
 	// this is adopted from https://github.com/bendrucker/patch-text/blob/master/index.js
@@ -82,7 +102,14 @@ fn amalgamate_brings(source_file: &str) -> Vec<u8> {
 		}
 	}
 
-	source
+	Ok(source)
+}
+
+pub fn amalgamate_brings(source_file: &str) -> Result<Vec<u8>, Box<dyn Error>> {
+	let mut imports: HashSet<String> = HashSet::new();
+	// get the canonical path of the source file
+	let source_file = PathBuf::from(source_file).canonicalize().unwrap();
+	amalgamate_recursive(source_file.to_str().unwrap(), &mut imports)
 }
 
 pub fn parse(source_file: &str) -> Scope {
@@ -91,7 +118,7 @@ pub fn parse(source_file: &str) -> Scope {
 	parser.set_language(language).unwrap();
 
 	// recursively "bring" all wing sources and amalgamate them into one source
-	let source = amalgamate_brings(source_file);
+	let source = amalgamate_brings(source_file).expect("Failed to amalgamate brings");
 
 	let tree = match parser.parse(&source[..], None) {
 		Some(tree) => tree,
@@ -149,8 +176,15 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 
 #[cfg(test)]
 mod sanity {
-	use crate::compile;
+	use crate::{amalgamate_brings, compile};
 	use std::fs;
+
+	#[test]
+	fn should_throw_on_circular_brings() {
+		let source = "../../examples/invalid/circular-bring.w";
+		let result = amalgamate_brings(source);
+		assert!(result.is_err());
+	}
 
 	#[test]
 	fn can_compile_simple_files() {
