@@ -16,6 +16,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return initFunction(props);
       case cloud.QUEUE_ID:
         return initQueue(props);
+      case "constructs.Construct":
+        return {};
       default:
         throw new Error(`Type ${type} not implemented.`);
     }
@@ -31,6 +33,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return;
       case cloud.QUEUE_ID:
         await cleanupQueue(attrs);
+        return;
+      case "constructs.Construct":
         return;
       default:
         throw new Error(`Type ${type} not implemented.`);

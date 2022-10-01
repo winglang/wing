@@ -7,20 +7,24 @@ const SOURCE_CODE_LANGUAGE = "javascript";
 
 test("invoke function", async () => {
   // GIVEN
-  const sim = await Simulator.fromResources({
-    resources: {
-      my_function: {
-        // TODO: how to avoid hardcoding these IDs?
-        type: "wingsdk.cloud.Function",
-        props: {
-          sourceCodeFile: SOURCE_CODE_FILE,
-          sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-          environmentVariables: {},
+  const sim = await Simulator.fromTree({
+    tree: {
+      root: {
+        type: "constructs.Construct",
+        children: {
+          my_function: {
+            type: "wingsdk.cloud.Function",
+            props: {
+              sourceCodeFile: SOURCE_CODE_FILE,
+              sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
+              environmentVariables: {},
+            },
+          },
         },
       },
     },
   });
-  const attrs = sim.getAttributes("my_function");
+  const attrs = sim.getAttributes("root/my_function");
   const fnClient = new FunctionClient(attrs.functionAddr);
 
   // WHEN
@@ -34,21 +38,26 @@ test("invoke function", async () => {
 
 test("invoke function with environment variables", async () => {
   // GIVEN
-  const sim = await Simulator.fromResources({
-    resources: {
-      my_function: {
-        type: "wingsdk.cloud.Function",
-        props: {
-          sourceCodeFile: SOURCE_CODE_FILE,
-          sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-          environmentVariables: {
-            PIG_LATIN: "true",
+  const sim = await Simulator.fromTree({
+    tree: {
+      root: {
+        type: "constructs.Construct",
+        children: {
+          my_function: {
+            type: "wingsdk.cloud.Function",
+            props: {
+              sourceCodeFile: SOURCE_CODE_FILE,
+              sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
+              environmentVariables: {
+                PIG_LATIN: "true",
+              },
+            },
           },
         },
       },
     },
   });
-  const attrs = sim.getAttributes("my_function");
+  const attrs = sim.getAttributes("root/my_function");
   const fnClient = new FunctionClient(attrs.functionAddr);
 
   // WHEN

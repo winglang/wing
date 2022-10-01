@@ -1,11 +1,15 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
-import { QueueInflightMethods } from "../../src/cloud";
 import * as core from "../../src/core";
-// import * as local from "../../src/local";
-import * as tfaws from "../../src/tf-aws";
+import * as sim from "../../src/sim";
+// eslint-disable-next-line import/no-restricted-paths
+import { FunctionClient } from "../../src/sim/function.inflight";
+// eslint-disable-next-line import/no-restricted-paths
+import { QueueClient } from "../../src/sim/queue.inflight";
+import * as testing from "../../src/testing";
+// import * as tfaws from "../../src/tf-aws";
 
-class Root extends Construct {
+class Main extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -20,7 +24,7 @@ class Root extends Construct {
       captures: {
         queue: {
           obj: queue,
-          methods: [QueueInflightMethods.PUSH],
+          methods: [cloud.QueueInflightMethods.PUSH],
         },
       },
     });
@@ -39,7 +43,27 @@ class Root extends Construct {
 }
 
 const app = new core.App({
-  synthesizer: new tfaws.Synthesizer({ outdir: __dirname }),
+  synthesizer: new sim.Synthesizer({ outdir: __dirname }),
 });
-new Root(app.root, "root");
+new Main(app.root, "Main");
 app.synth();
+
+async function main() {
+  const s = await testing.Simulator.fromWingApp("app.wx");
+
+  console.error(s.tree);
+
+  // const pusherAttrs = s.getAttributes("root/my_function");
+  // const pusherClient = new FunctionClient(pusherAttrs.functionAddr);
+
+  // const queueAttrs = s.getAttributes("root/Queue");
+  // const queueClient = new QueueClient(queueAttrs.queueAddr);
+
+  // const processorAttrs = s.getAttributes("root/my_function");
+  // const processorClient = new FunctionClient(processorAttrs.functionAddr);
+}
+
+main().catch((err) => {
+  console.log(err);
+  process.exit(1);
+});

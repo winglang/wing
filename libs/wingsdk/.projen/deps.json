@@ -14,13 +14,26 @@
       "type": "build"
     },
     {
+      "name": "@types/fs-extra",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "version": "^27.0.0",
       "type": "build"
     },
     {
+      "name": "@types/minipass",
+      "version": "3.1.2",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
+      "type": "build"
+    },
+    {
+      "name": "@types/tar",
       "type": "build"
     },
     {
@@ -102,6 +115,11 @@
       "type": "build"
     },
     {
+      "name": "minipass",
+      "version": "3.1.6",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^15",
       "type": "build"
@@ -166,7 +184,15 @@
       "type": "bundled"
     },
     {
+      "name": "fs-extra",
+      "type": "bundled"
+    },
+    {
       "name": "piscina",
+      "type": "bundled"
+    },
+    {
+      "name": "tar",
       "type": "bundled"
     },
     {

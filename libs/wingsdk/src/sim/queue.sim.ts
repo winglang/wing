@@ -38,8 +38,8 @@ export class Queue {
     this.subscribers.push(...props.subscribers);
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
-      // TODO: how to make this more type safe? ("lookup" returns any)
-      const functionAddr = props._resolver.lookup(functionId).functionAddr;
+      const functionAddr =
+        props._resolver.lookup(functionId).attrs.functionAddr;
       subscriber.functionClient = new FunctionClient(functionAddr);
     }
 

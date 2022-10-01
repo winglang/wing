@@ -1,5 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
+import { QUEUE_ID } from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
@@ -30,7 +31,7 @@ export class Queue extends cloud.QueueBase implements IResource {
     );
 
     this.subscribers.push({
-      functionId: fn.node.addr,
+      functionId: fn.node.path,
       batchSize: props.batchSize ?? 1,
     });
 
@@ -40,9 +41,7 @@ export class Queue extends cloud.QueueBase implements IResource {
   /** @internal */
   public _toResourceSchema(): QueueSchema {
     return {
-      id: this.node.id,
-      type: "cloud.Queue",
-      path: this.node.path,
+      type: QUEUE_ID,
       props: {
         timeout: this.timeout.seconds,
         subscribers: this.subscribers,
