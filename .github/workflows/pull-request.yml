@@ -35,7 +35,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Setup WASI Support
-        run: scripts/setup_wasi.sh
+        run: sudo scripts/setup_wasi.sh
 
       - name: Lint Nx
         run: npx nx workspace-lint
@@ -94,7 +94,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Setup WASI Support
-        run: scripts/setup_wasi.sh
+        run: sudo scripts/setup_wasi.sh
 
       - name: Lint Nx
         run: npx nx workspace-lint
@@ -102,6 +102,6 @@ jobs:
       - name: Build
         uses: MansaGroup/nrwl-nx-action@v2
         with:
-          targets: "build"
+          targets: "build-native"
           projects: "wing-language-server"
           args: "--configuration=release"
