@@ -98,9 +98,6 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Ensure Cargo Cache Owned
-        run: sudo chown -R $(whoami) ~/.cargo
-
       - name: Login to Private NPM registry
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
@@ -109,9 +106,6 @@ jobs:
         with:
           # Don't need to install sub-project dependencies
           install-command: npm install --ignore-scripts
-
-      - name: Setup WASI Support
-        run: sudo scripts/setup_wasi.sh
 
       - name: Lint Nx
         run: npx nx workspace-lint
