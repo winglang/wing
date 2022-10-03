@@ -7,6 +7,7 @@ on:
 env:
   CI: true
   NODEJS_VERSION: "18.x"
+  NODE_OPTIONS: "--max-old-space-size=4096"
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
   # TODO Real versioning needed
   WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
