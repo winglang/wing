@@ -26,16 +26,20 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://npm.pkg.github.com
 
-      - name: Login to Private NPM registry
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
-
-      - uses: bahmutov/npm-install@v1
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Setup WASI Support
-        run: sudo scripts/setup_wasi.sh
+      - name: Login to Private NPM registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
 
       - name: Lint Nx
         run: npx nx workspace-lint
@@ -82,15 +86,7 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://npm.pkg.github.com
 
-      - name: Login to Private NPM registry
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
-
-      - uses: bahmutov/npm-install@v1
-        with:
-          # Don't need to install sub-project dependencies
-          install-command: npm install --ignore-scripts
-
-      - name: Install latest nightly
+      - name: Install Rust
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
@@ -98,6 +94,15 @@ jobs:
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
+
+      - name: Login to Private NPM registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          # Don't need to install sub-project dependencies
+          install-command: npm install --ignore-scripts
 
       - name: Setup WASI Support
         run: sudo scripts/setup_wasi.sh
