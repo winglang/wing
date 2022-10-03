@@ -34,4 +34,5 @@ apps/wing/dist
 apps/wing/*.wasm
 
 # wing-playground
+apps/wing-playground/*.wasm
 apps/wing-playground/dist
