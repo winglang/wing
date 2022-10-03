@@ -120,6 +120,10 @@
       "type": "build"
     },
     {
+      "name": "electron-notarize",
+      "type": "build"
+    },
+    {
       "name": "eslint-config-prettier",
       "type": "build"
     },

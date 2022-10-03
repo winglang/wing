@@ -31,6 +31,7 @@ const project = new TypeScriptProject({
     "electron",
     "electron-builder",
     "electron-devtools-installer",
+    "electron-notarize",
     "postcss",
     "react",
     "react-dom",
@@ -93,7 +94,9 @@ project.release?.addJobs({
       {
         name: "Login to private npm registry",
         run: "npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
-        env: { PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}" },
+        env: {
+          PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
+        },
       },
       {
         name: "Install dependencies",
@@ -115,15 +118,11 @@ project.release?.addJobs({
       },
       {
         name: "Build Electron Application",
-        run: "npm exec -- electron-builder --publish=never",
-      },
-      {
-        name: "Rename DMG file",
-        run: "mv release/WingConsole.dmg release/WingConsole-$(cat dist/releasetag.txt).dmg",
+        run: "npx tsx scripts/builderElectronApp.mts",
       },
       {
         name: "Release",
-        run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/WingConsole-v* 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
+        run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/wing-console-* 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
         env: {
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
           GITHUB_REPOSITORY: "${{ github.repository }}",
@@ -177,6 +176,7 @@ for (const tsconfig of tsconfigFiles) {
     });
     tsconfig.addOverride("include", [
       "src/**/*",
+      "scripts/**/*",
       "electron/**/*",
       "test/**/*",
       ".storybook/**/*",
