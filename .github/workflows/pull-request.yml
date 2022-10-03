@@ -193,6 +193,7 @@ jobs:
 
   publish:
     name: "Publish${{ github.ref == 'refs/heads/main' && '' || ' (Dry Run)' }}"
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
