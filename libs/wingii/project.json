@@ -1,7 +1,7 @@
 {
   "name": "wingii",
   "targets": {
-    "build": {
+    "build-native": {
       "executor": "nx:run-commands",
       "outputs": [
         "rust-native"

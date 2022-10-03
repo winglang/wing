@@ -1,11 +1,8 @@
 {
   "name": "wing-language-server",
   "targets": {
-    "build": {
+    "build-native": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "rust-native"
-      ],
       "options": {
         "command": "cargo build",
         "cwd": "apps/wing-language-server"
@@ -18,6 +15,18 @@
     },
     "test": {
       "executor": "@nxrs/cargo:test"
+    },
+    "build-wasm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo wasi build",
+        "cwd": "apps/wing-language-server"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo wasi build --release"
+        }
+      }
     }
   }
 }

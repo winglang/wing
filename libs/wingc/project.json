@@ -1,11 +1,8 @@
 {
   "name": "wingc",
   "targets": {
-    "build": {
+    "build-native": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "rust-native"
-      ],
       "options": {
         "command": "cargo build",
         "cwd": "libs/wingc"

@@ -53,5 +53,5 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wing,wingsdk,wing-api-checker,wing-playground"
+          projects: "wingsdk,wing-api-checker"
           all: true

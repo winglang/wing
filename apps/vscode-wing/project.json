@@ -10,7 +10,8 @@
         "rust-native"
       ],
       "dependsOn": [
-        "^build"
+        "^build",
+        "^build-native"
       ],
       "options": {
         "commands": [
