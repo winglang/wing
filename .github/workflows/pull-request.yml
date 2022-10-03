@@ -170,12 +170,6 @@ jobs:
           projects: "vscode-wing"
           args: "--configuration=release"
 
-      - name: Package
-        working-directory: apps/vscode-wing
-        run: |
-          npm version ${{ env.PROJEN_BUMP_VERSION }}
-          npm run package
-
       - name: Upload extension
         uses: actions/upload-artifact@v2
         with:
