@@ -13,7 +13,7 @@ env:
   WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
-  wasm:
+  non-native-build:
     name: "Non-Native Build"
     runs-on: ubuntu-latest
     steps:
@@ -56,3 +56,52 @@ jobs:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
           all: true
+  native-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            arch: x64
+          - os: ubuntu-latest
+            arch: x64
+          # TODO libnode build currently invalid for the following configs
+          # - os: macos-latest
+          #   arch: arm64
+          # - os: ubuntu-latest
+          #   arch: x86
+    runs-on: ${{ matrix.os }}
+    name: "Native Build"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Login to Private NPM registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - uses: bahmutov/npm-install@v1
+        with:
+          # Don't need to install sub-project dependencies
+          install-command: npm install --ignore-scripts
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Setup WASI Support
+        run: scripts/setup_wasi.sh
+
+      - name: Lint Nx
+        run: npx nx workspace-lint
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build"
+          projects: "wing-language-server"
+          args: "--configuration=release"
