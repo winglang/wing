@@ -12,7 +12,7 @@ env:
   WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
-  non-native:
+  wasm:
     name: "Non-Native Build"
     runs-on: ubuntu-latest
     steps:
@@ -46,13 +46,12 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build"
-          all: true
-          affected: false # TODO switch "all" and "affected"
+          projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--configuration=release"
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
+          projects: "wing,wingsdk,wing-api-checker,wing-playground"
           all: true
-          affected: false # TODO switch "all" and "affected"
