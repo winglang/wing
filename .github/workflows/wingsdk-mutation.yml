@@ -1,8 +1,19 @@
+name: WingSDK Mutation
+
 on:
-  workflow_call:
+  push:
+    branches-ignore:
+      - "main"
+    paths:
+      - "libs/wingsdk/**"
+
+permissions:
+  contents: write
+
 defaults:
   run:
     working-directory: libs/wingsdk
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -16,8 +27,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.ref }}
+          repository: ${{ github.event.repository.full_name }}
       - name: Login to private npm registry
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
         env:
@@ -66,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-    if: always() && needs.build.outputs.self_mutation_happened && !(github.event.pull_request.head.repo.full_name != github.repository)
+    if: always() && needs.build.outputs.self_mutation_happened && !(github.event.repository.full_name != github.repository)
     steps:
       - name: Generate token
         id: generate_token
@@ -78,8 +89,8 @@ jobs:
         uses: actions/checkout@v3
         with:
           token: ${{ steps.generate_token.outputs.token }}
-          ref: ${{ github.event.pull_request.head.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name }}
+          ref: ${{ github.event.ref }}
+          repository: ${{ github.event.repository.full_name }}
       - name: Download patch
         uses: actions/download-artifact@v3
         with:
@@ -95,7 +106,7 @@ jobs:
         run: |2-
             git add .
             git commit -s -m "chore: self mutation"
-            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+            git push origin HEAD:${{ github.event.ref }}
   package-js:
     needs: build
     runs-on: ubuntu-latest
