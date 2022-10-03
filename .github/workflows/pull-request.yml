@@ -186,6 +186,7 @@ jobs:
           path: apps/vscode-wing/vscode-wing.vsix
 
   build:
+    name: "Build"
     needs:
       - build-native
       - build-wasm
