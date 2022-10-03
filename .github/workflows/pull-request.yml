@@ -90,6 +90,9 @@ jobs:
           # Don't need to install sub-project dependencies
           install-command: npm install --ignore-scripts
 
+      - name: Install latest nightly
+        uses: actions-rs/toolchain@v1
+
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
