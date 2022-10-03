@@ -5,7 +5,6 @@ on:
   pull_request:
 
 env:
-  CI: true
   NODEJS_VERSION: "18.x"
   NODE_OPTIONS: "--max-old-space-size=4096"
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
@@ -201,3 +200,4 @@ jobs:
     steps:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
+      - run: ls
