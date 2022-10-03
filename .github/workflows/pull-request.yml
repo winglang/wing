@@ -204,13 +204,12 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
-      - run: ls
+      - run: ls -al
 
       - name: Publish Wing
-        working-directory: wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm publish *.tgz
+        run: npm publish wing
 
       - name: Release WingSDK Package
         working-directory: wingsdk
