@@ -5,6 +5,7 @@
     "nx": "14.8.0"
   },
   "scripts": {
+    "nx": "nx",
     "build": "nx run-many --target=build --all=true",
     "test": "nx run-many --target=test --all=true",
     "postinstall": "npm run install:vscode-wing && npm run install:wing-api-checker && npm run install:wing-playground && npm run install:wing && npm run install:wingsdk",

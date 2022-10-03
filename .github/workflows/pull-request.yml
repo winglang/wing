@@ -19,13 +19,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Private NPM with Github
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://npm.pkg.github.com
 
-      - name: Login to private npm registry
+      - name: Login to Private NPM registry
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - uses: bahmutov/npm-install@v1
