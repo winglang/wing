@@ -76,7 +76,7 @@ jobs:
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
         with:
-          name: wing.tgz
+          name: wing
           path: apps/wing/*.tgz
 
       - name: Upload WingSDK
@@ -211,9 +211,10 @@ jobs:
           registry-url: https://npm.pkg.github.com
 
       - name: Publish Wing
+        working-directory: wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm publish ./wing.tgz
+        run: npm publish *.tgz
 
       - name: Release WingSDK Package
         working-directory: wingsdk
