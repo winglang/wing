@@ -15,7 +15,7 @@
   },
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --loader:.wasm=file && npm pack",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --loader:.wasm=file",
     "dev": "npm run build && node dist/index.js"
   },
   "dependencies": {
