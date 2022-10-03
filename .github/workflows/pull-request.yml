@@ -11,6 +11,7 @@ env:
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
   # TODO Real versioning needed
   WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
+  PROJEN_BUMP_VERSION: ${{ github.ref == 'refs/heads/main' && env.WING_VERSION || '0.0.0' }}
 
 jobs:
   build-wasm:
@@ -173,7 +174,7 @@ jobs:
       - name: Package
         working-directory: apps/vscode-wing
         run: |
-          npm version ${{ env.WING_VERSION }}
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
           npm run package
 
       - name: Upload extension
