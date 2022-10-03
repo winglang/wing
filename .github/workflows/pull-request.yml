@@ -77,7 +77,11 @@ jobs:
         working-directory: libs/wingsdk
         run: |
           npm version ${{ env.PROJEN_BUMP_VERSION }}
+          rm -rf dist
           npm run package-all
+          ls -al
+          ls -al dist
+          ls -al dist/js
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
