@@ -67,11 +67,15 @@ jobs:
           projects: "wingsdk,wing-api-checker"
           all: true
 
-      - name: Set Wing CLI Version
+      - name: Package Wing CLI
         working-directory: apps/wing
         run: |
           npm version ${{ env.PROJEN_BUMP_VERSION }} --alow-same-version
           npm pack
+
+      - name: Package WingSDK
+        working-directory: libs/wingsdk
+        run: npm run package-all
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -219,7 +223,9 @@ jobs:
 
       - name: Release WingSDK Package
         working-directory: wingsdk
-        run: npx -p publib@latest publib-npm
+        run: |
+          np run publish
+          npx -p publib@latest publib-npm
         env:
           NPM_DIST_TAG: latest
           NPM_REGISTRY: npm.pkg.github.com
