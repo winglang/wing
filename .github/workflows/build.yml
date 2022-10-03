@@ -13,6 +13,7 @@ env:
   NODEJS_VERSION: "18.x"
   # TODO Real versioning needed
   WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
+  PROJEN_BUMP_VERSION: ${{ env.WING_VERSION }}
 
 permissions:
   contents: write

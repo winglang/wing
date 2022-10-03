@@ -24,14 +24,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: ${{ env.MONADAHQ_REGISTRY }}
+          registry-url: https://npm.pkg.github.com
 
-      # TODO This is probably storing the token unsafely
-      - uses: healthplace/npmrc-registry-login-action@v1.0
-        with:
-          scope: "@monadahq"
-          registry: ${{ env.MONADAHQ_REGISTRY }}
-          auth-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Login to private npm registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - uses: bahmutov/npm-install@v1
       - uses: bahmutov/npm-install@v1
