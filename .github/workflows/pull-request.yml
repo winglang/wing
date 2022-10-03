@@ -70,7 +70,7 @@ jobs:
       - name: Set Wing CLI Version
         working-directory: apps/wing
         run: |
-          npm version ${{ env.WING_VERSION }} --alow-same-version
+          npm version ${{ env.PROJEN_BUMP_VERSION }} --alow-same-version
           npm pack
 
       - name: Upload Wing CLI
@@ -204,12 +204,16 @@ jobs:
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
 
-      - run: ls -al
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
 
       - name: Publish Wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm publish wing
+        run: npm publish ./wing.tgz
 
       - name: Release WingSDK Package
         working-directory: wingsdk
