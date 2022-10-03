@@ -35,7 +35,9 @@ export class Queue {
   private readonly intervalId: NodeJS.Timeout;
 
   constructor(props: QueueSchema["props"] & { _resolver: IResourceResolver }) {
-    this.subscribers.push(...props.subscribers);
+    for (const sub of props.subscribers) {
+      this.subscribers.push({ ...sub });
+    }
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
       const functionAddr =

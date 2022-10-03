@@ -2,6 +2,7 @@ import { writeFileSync } from "fs";
 import { join } from "path";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
+import { DependencyGraph } from "../core";
 import { FileBase } from "../fs";
 import { mkdtemp, sanitizeValue } from "../util";
 import { isResource } from "./resource";
@@ -45,7 +46,11 @@ export class App extends Construct {
 
     // write "simulator.json" into the workdir
     const root = toSchema(this);
-    const contents: WingSimulatorSchema = { root: root };
+    const initOrder = new DependencyGraph(this.node)
+      .topology()
+      .filter((x) => isResource(x))
+      .map((x) => x.node.path);
+    const contents: WingSimulatorSchema = { root, initOrder };
     writeFileSync(
       join(workdir, "simulator.json"),
       JSON.stringify(contents, null, 2)
@@ -66,7 +71,8 @@ export class App extends Construct {
 
 function toSchema(c: IConstruct): ResourceSchema {
   const children = c.node.children.reduce((acc, child) => {
-    // don't add constructs that are not resources
+    // don't add constructs that are not resources because they don't
+    // need to be simulated
     if (child instanceof FileBase) {
       return acc;
     }
@@ -78,12 +84,14 @@ function toSchema(c: IConstruct): ResourceSchema {
   }, {});
 
   const resourceFields: any = isResource(c) ? c._toResourceSchema() : {};
+  const dependsOn = c.node.dependencies.map((dep) => dep.node.path);
 
   return sanitizeValue(
     {
       type: resourceFields.type ?? "constructs.Construct",
       ...resourceFields,
       children,
+      dependsOn,
     },
     { filterEmptyArrays: true, filterEmptyObjects: true, sortKeys: false }
   );

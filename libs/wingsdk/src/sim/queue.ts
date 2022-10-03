@@ -29,6 +29,9 @@ export class Queue extends cloud.QueueBase implements IResource {
       inflight,
       props
     );
+    // At the time the queue is initialized, the simulator needs to be
+    // able to call subscribed functions.
+    this.node.addDependency(fn);
 
     this.subscribers.push({
       functionId: fn.node.path,
@@ -53,6 +56,10 @@ export class Queue extends cloud.QueueBase implements IResource {
     };
   }
 
+  private get addr(): string {
+    return `\${${this.node.path}#attrs.queueAddr}`;
+  }
+
   /**
    * @internal
    */
@@ -63,6 +70,10 @@ export class Queue extends cloud.QueueBase implements IResource {
     if (!(captureScope instanceof Function)) {
       throw new Error("queues can only be captured by a sim.Function for now");
     }
+
+    const env = `QUEUE_ADDR__${this.node.id}`;
+    captureScope.addEnvironment(env, this.addr);
+
     // FIXME
     return core.InflightClient.for(__filename, "QueueClient", [
       `"${this.node.id}"`,

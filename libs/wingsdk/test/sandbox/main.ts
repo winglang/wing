@@ -51,7 +51,7 @@ app.synth();
 async function main() {
   const s = await testing.Simulator.fromWingApp("app.wx");
 
-  console.error(s.tree);
+  console.error(JSON.stringify(s.tree, null, 2));
 
   // const pusherAttrs = s.getAttributes("root/my_function");
   // const pusherClient = new FunctionClient(pusherAttrs.functionAddr);

@@ -2,6 +2,11 @@
 export interface WingSimulatorSchema {
   /** The resource at the root of the tree. */
   readonly root: ResourceSchema;
+  /**
+   * The order resources in which resources should be initialized based on
+   * dependency relationships.
+   */
+  readonly initOrder: string[];
 }
 
 /** Schema for individual resources */

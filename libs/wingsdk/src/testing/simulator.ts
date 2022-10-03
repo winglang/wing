@@ -2,7 +2,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 import { readJsonSync } from "fs-extra";
 import * as tar from "tar";
-import { ResourceSchema } from "../sim/schema";
+import { ResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { mkdtemp } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
 const { DefaultSimulatorFactory } = require("../sim/factory.sim");
@@ -64,10 +64,20 @@ export class Simulator {
     const factory: ISimulatorFactory =
       options.factory ?? new DefaultSimulatorFactory();
 
-    const tree = options.tree;
+    const tree = options.tree as WingSimulatorSchema;
     if (!tree.root) {
       throw new Error("Invalid tree: no root resource");
     }
+
+    async function walk(path: string, node: ResourceSchema) {
+      (node as any).path = path;
+      for (const [childId, child] of Object.entries(node.children ?? {})) {
+        await walk(path + "/" + childId, child);
+      }
+    }
+
+    // fill in "path" entries on the tree
+    await walk("root", tree.root);
 
     // This resolver allows resources to resolve deploy-time attributes about
     // other resources they depend on. For example, a queue that has a function
@@ -79,18 +89,11 @@ export class Simulator {
       },
     };
 
-    async function walk(path: string, node: ResourceSchema) {
-      const { type, props } = node;
-      console.error(`(debug) initializing ${path} (${type})`);
-      const attrs = await factory.init(type, { ...props, _resolver });
-      (node as any).attrs = attrs;
-      (node as any).path = path;
-      for (const [childId, child] of Object.entries(node.children ?? {})) {
-        await walk(path + "/" + childId, child);
-      }
+    for (const path of tree.initOrder) {
+      const res = findResource(tree, path);
+      const attrs = await factory.init(res.type, { ...res.props, _resolver });
+      res.attrs = attrs;
     }
-
-    await walk("root", tree.root);
 
     return new Simulator(factory, tree);
   }
