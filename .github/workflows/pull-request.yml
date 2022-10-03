@@ -99,7 +99,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Ensure Cargo Cache Owned
-        run: sudo chown -R $USER:$USER ~/.cargo
+        run: sudo chown -R $(whoami) ~/.cargo
 
       - name: Login to Private NPM registry
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
