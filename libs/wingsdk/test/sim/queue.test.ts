@@ -40,6 +40,7 @@ describe("basic", () => {
             },
           },
         },
+        initOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
@@ -56,7 +57,7 @@ describe("basic", () => {
     await sleep(200);
 
     // THEN
-    expect(fnClient.timesCalled).toEqual(2);
+    expect(await fnClient.timesCalled()).toEqual(2);
     await sim.cleanup();
   });
 
@@ -89,6 +90,7 @@ describe("basic", () => {
             },
           },
         },
+        initOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
@@ -98,7 +100,7 @@ describe("basic", () => {
     await sleep(200);
 
     // THEN
-    expect(fnClient.timesCalled).toEqual(2);
+    expect(await fnClient.timesCalled()).toEqual(2);
     await sim.cleanup();
   });
 
@@ -130,6 +132,7 @@ describe("basic", () => {
             },
           },
         },
+        initOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
@@ -145,7 +148,7 @@ describe("basic", () => {
     await sleep(300);
 
     // THEN
-    expect(fnClient.timesCalled).toBeGreaterThan(1);
+    expect(await fnClient.timesCalled()).toBeGreaterThan(1);
     await sim.cleanup();
   });
 });

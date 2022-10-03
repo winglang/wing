@@ -37,6 +37,10 @@
       "type": "build"
     },
     {
+      "name": "@types/ws",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -193,6 +197,10 @@
     },
     {
       "name": "tar",
+      "type": "bundled"
+    },
+    {
+      "name": "ws",
       "type": "bundled"
     },
     {

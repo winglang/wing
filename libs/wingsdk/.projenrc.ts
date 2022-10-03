@@ -26,12 +26,14 @@ const project = new cdk.JsiiProject({
     // simulator dependencies
     "tar",
     "piscina",
+    "ws",
   ],
   devDeps: [
     "replace-in-file",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",
+    "@types/ws",
     "wing-api-checker@file:../../apps/wing-api-checker",
   ],
   prettier: true,

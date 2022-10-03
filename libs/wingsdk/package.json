@@ -48,6 +48,7 @@
     "@types/minipass": "3.1.2",
     "@types/node": "^16",
     "@types/tar": "^6.1.3",
+    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "cdktf": "0.12.2",
@@ -92,7 +93,8 @@
     "esbuild-wasm": "^0.15.9",
     "fs-extra": "^8.1.0",
     "piscina": "*",
-    "tar": "^6.1.11"
+    "tar": "^6.1.11",
+    "ws": "^7.5.9"
   },
   "bundledDependencies": [
     "@aws-sdk/client-lambda",
@@ -102,7 +104,8 @@
     "esbuild-wasm",
     "fs-extra",
     "piscina",
-    "tar"
+    "tar",
+    "ws"
   ],
   "engines": {
     "node": ">= 16.16.0"
