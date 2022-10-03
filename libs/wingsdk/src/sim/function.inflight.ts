@@ -6,7 +6,7 @@ export class FunctionClient implements IFunctionClient {
   constructor(functionAddr: number) {
     const fn = FUNCTIONS[functionAddr];
     if (!fn) {
-      throw new Error(`Invalid function id: ${functionAddr}`);
+      throw new Error(`Invalid functionAddr: ${functionAddr}`);
     }
     this.fn = fn;
   }

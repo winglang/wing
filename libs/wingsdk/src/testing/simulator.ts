@@ -23,7 +23,7 @@ export interface SimulatorFromTreeOptions {
 }
 
 export type IResourceResolver = {
-  lookup(resourceId: string): any;
+  lookup(resourceId: string): ResourceData;
 };
 
 /**
@@ -40,6 +40,9 @@ export class Simulator {
       sync: true,
       file: filepath,
     });
+
+    console.error("(debug) extracted app to", workdir);
+    process.chdir(workdir);
 
     const simJson = join(workdir, "simulator.json");
     if (!existsSync(simJson)) {
@@ -91,7 +94,11 @@ export class Simulator {
 
     for (const path of tree.initOrder) {
       const res = findResource(tree, path);
-      const attrs = await factory.init(res.type, { ...res.props, _resolver });
+      console.error(`(debug) initializing ${path} (${res.type})`);
+      const attrs = await factory.init(res.type, {
+        ...resolveTokens(res.props, _resolver),
+        _resolver,
+      });
       res.attrs = attrs;
     }
 
@@ -142,6 +149,42 @@ export class Simulator {
 
     await walk("root", this._tree.root);
   }
+}
+
+function isToken(value: string): boolean {
+  return value.startsWith("${") && value.endsWith("}");
+}
+
+function resolveTokens(props: any, resolver: IResourceResolver): any {
+  if (typeof props === "string") {
+    if (isToken(props)) {
+      const ref = props.slice(2, -1);
+      const [path, rest] = ref.split("#");
+      const resource = resolver.lookup(path);
+      if (rest.startsWith("attrs.")) {
+        return resource.attrs[rest.slice(6)];
+      } else if (rest.startsWith("props.")) {
+        return resource.props[rest.slice(6)];
+      } else {
+        throw new Error(`Invalid token reference: ${ref}`);
+      }
+    }
+    return props;
+  }
+
+  if (Array.isArray(props)) {
+    return props.map((x) => resolveTokens(x, resolver));
+  }
+
+  if (typeof props === "object") {
+    const ret: any = {};
+    for (const [key, value] of Object.entries(props)) {
+      ret[key] = resolveTokens(value, resolver);
+    }
+    return ret;
+  }
+
+  return props;
 }
 
 function findResource(tree: any, path: string): ResourceData {

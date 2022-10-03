@@ -42,6 +42,10 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.code = NodeJsCode.fromFile(assetPath);
   }
 
+  private get addr(): string {
+    return `\${${this.node.path}#attrs.functionAddr}`;
+  }
+
   /**
    * @internal
    */
@@ -51,9 +55,12 @@ export class Function extends cloud.FunctionBase implements IResource {
         "functions can only be captured by a sim.Function for now"
       );
     }
-    // FIXME
+
+    const env = `FUNCTION_ADDR__${this.node.id}`;
+    captureScope.addEnvironment(env, this.addr);
+
     return InflightClient.for(__filename, "FunctionClient", [
-      `"${this.node.id}"`,
+      `process.env["${env}"]`,
     ]);
   }
 

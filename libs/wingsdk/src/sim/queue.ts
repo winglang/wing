@@ -74,9 +74,8 @@ export class Queue extends cloud.QueueBase implements IResource {
     const env = `QUEUE_ADDR__${this.node.id}`;
     captureScope.addEnvironment(env, this.addr);
 
-    // FIXME
     return core.InflightClient.for(__filename, "QueueClient", [
-      `"${this.node.id}"`,
+      `process.env["${env}"]`,
     ]);
   }
 }

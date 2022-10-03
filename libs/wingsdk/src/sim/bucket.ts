@@ -30,6 +30,10 @@ export class Bucket extends cloud.BucketBase implements IResource {
     };
   }
 
+  private get addr(): string {
+    return `\${${this.node.path}#attrs.bucketAddr}`;
+  }
+
   /**
    * @internal
    */
@@ -37,9 +41,12 @@ export class Bucket extends cloud.BucketBase implements IResource {
     if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by a sim.Bucket for now");
     }
-    // FIXME
+
+    const env = `BUCKET_ADDR__${this.node.id}`;
+    captureScope.addEnvironment(env, this.addr);
+
     return InflightClient.for(__filename, "BucketClient", [
-      `"${this.node.id}"`,
+      `process.env["${env}"]`,
     ]);
   }
 }

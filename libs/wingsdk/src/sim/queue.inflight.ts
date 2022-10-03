@@ -6,7 +6,7 @@ export class QueueClient implements IQueueClient {
   constructor(queueAddr: number) {
     const queue = QUEUES[queueAddr];
     if (!queue) {
-      throw new Error(`Invalid function id: ${queueAddr}`);
+      throw new Error(`Invalid queueAddr: ${queueAddr}`);
     }
     this.queue = queue;
   }
