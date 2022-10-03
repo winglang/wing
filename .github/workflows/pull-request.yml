@@ -6,6 +6,7 @@ on:
 
 env:
   CI: true
+  DO_PUBLISH: ${{ github.ref == 'refs/heads/main'}}
   NODEJS_VERSION: "18.x"
   NODE_OPTIONS: "--max-old-space-size=4096"
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
@@ -63,6 +64,19 @@ jobs:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
           all: true
+
+      - name: Upload Wing CLI
+        uses: actions/upload-artifact@v2
+        with:
+          name: wing
+          path: apps/wing/*.tgz
+
+      - name: Upload WingSDK
+        uses: actions/upload-artifact@v2
+        with:
+          name: wingsdk
+          path: libs/wingsdk/dist
+
   native-build:
     strategy:
       fail-fast: false
@@ -116,3 +130,71 @@ jobs:
           targets: "build-native"
           projects: "wing-language-server"
           args: "--configuration=release"
+
+      - name: Upload Wing Language Server
+        uses: actions/upload-artifact@v2
+        with:
+          name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+          path: target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+
+  build-vscode:
+    name: "Build VSCode Extension"
+    needs: [native-build]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Prepare language server binaries
+        run: cp -r wing-language-server-* ./apps/vscode-wing/resources
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Login to Private NPM registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build-multi"
+          projects: "vscode-wing"
+          args: "--configuration=release"
+
+      - name: Package
+        working-directory: apps/vscode-wing
+        run: |
+          npm version ${{ env.WING_VERSION }}
+          npm run package
+
+      - name: Upload extension
+        uses: actions/upload-artifact@v2
+        with:
+          name: vscode-wing.vsix
+          path: apps/vscode-wing/vscode-wing.vsix
+
+  build:
+    needs:
+      - build-native
+      - build-non-native
+      - build-vscode
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Validation
+        run: echo "Build Successful"
+
+  publish:
+    name: "Publish${{ env.DO_PUBLISH == 'true' && '' || ' (Dry Run)' }}"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2

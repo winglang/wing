@@ -38,6 +38,13 @@
         "cwd": "apps/vscode-wing",
         "script": "build"
       }
+    },
+    "build-multi": {
+      "executor": "nx:run-script",
+      "options": {
+        "cwd": "apps/vscode-wing",
+        "script": "build"
+      }
     }
   }
 }
