@@ -136,7 +136,7 @@ jobs:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
           path: target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
 
-  build-vscode:
+  vscode-build:
     name: "Build VSCode Extension"
     needs: [native-build]
     runs-on: ubuntu-latest
@@ -183,9 +183,9 @@ jobs:
 
   build:
     needs:
-      - build-native
-      - build-non-native
-      - build-vscode
+      - native-build
+      - non-native-build
+      - vscode-build
     runs-on: ubuntu-latest
     steps:
       - name: Build Validation
