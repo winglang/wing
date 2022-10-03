@@ -39,13 +39,6 @@ jobs:
       # - name: Derive appropriate SHAs for base and head for `nx affected` commands
       #   uses: nrwl/nx-set-shas@v3
 
-      - name: Test
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
-          all: true
-          affected: false # TODO switch "all" and "affected"
-
       - name: Build
         uses: MansaGroup/nrwl-nx-action@v2
         with:
@@ -53,3 +46,10 @@ jobs:
           all: true
           affected: false # TODO switch "all" and "affected"
           args: "--configuration=release"
+
+      - name: Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          all: true
+          affected: false # TODO switch "all" and "affected"
