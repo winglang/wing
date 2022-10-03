@@ -70,12 +70,14 @@ jobs:
       - name: Package Wing CLI
         working-directory: apps/wing
         run: |
-          npm version ${{ env.PROJEN_BUMP_VERSION }} --alow-same-version
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
           npm pack
 
       - name: Package WingSDK
         working-directory: libs/wingsdk
-        run: npm run package-all
+        run: |
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
+          npm run package-all
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -87,7 +89,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: wingsdk
-          path: libs/wingsdk
+          path: libs/wingsdk/dist/js/*.tgz
 
   build-native:
     strategy:
@@ -221,10 +223,8 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: npm publish *.tgz
 
-      - name: Release WingSDK Package
+      - name: Publish Wing
         working-directory: wingsdk
-        run: npx -p publib@latest publib-npm
         env:
-          NPM_DIST_TAG: latest
-          NPM_REGISTRY: npm.pkg.github.com
-          NPM_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: npm publish *.tgz
