@@ -2,8 +2,7 @@
   "name": "@monadahq/winglang",
   "devDependencies": {
     "@nxrs/cargo": "^0.3.3",
-    "nx": "14.8.0",
-    "prettier": "^2.7.1"
+    "nx": "14.8.0"
   },
   "scripts": {
     "build": "nx run-many --target=build --all=true",

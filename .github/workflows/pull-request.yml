@@ -5,6 +5,7 @@ on:
   pull_request:
 
 env:
+  CI: true
   NODEJS_VERSION: "18.x"
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
   # TODO Real versioning needed
@@ -17,8 +18,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          depth: 1
 
       - name: Setup Private NPM with Github
         uses: actions/setup-node@v3
@@ -35,9 +34,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Lint Nx
-        run: |
-          npx nx workspace-lint
-          npx nx format:check
+        run: npx nx workspace-lint
 
       # - name: Derive appropriate SHAs for base and head for `nx affected` commands
       #   uses: nrwl/nx-set-shas@v3
