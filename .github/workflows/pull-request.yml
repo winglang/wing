@@ -13,7 +13,7 @@ env:
   WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
-  non-native-build:
+  build-wasm:
     name: "Non-Native Build"
     runs-on: ubuntu-latest
     steps:
@@ -76,7 +76,7 @@ jobs:
           name: wingsdk
           path: libs/wingsdk/dist
 
-  native-build:
+  build-native:
     strategy:
       fail-fast: false
       matrix:
@@ -134,11 +134,12 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
-          path: target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+          path: target/release/wing-language-server
 
-  vscode-build:
+  build-vscode:
     name: "Build VSCode Extension"
-    needs: [native-build]
+    needs:
+      - build-native
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -183,9 +184,9 @@ jobs:
 
   build:
     needs:
-      - native-build
-      - non-native-build
-      - vscode-build
+      - build-native
+      - build-wasm
+      - build-vscode
     runs-on: ubuntu-latest
     steps:
       - name: Build Validation
@@ -193,7 +194,8 @@ jobs:
 
   publish:
     name: "Publish${{ github.ref == 'refs/heads/main' && '' || ' (Dry Run)' }}"
-    needs: [build]
+    needs:
+      - build
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
