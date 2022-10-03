@@ -92,6 +92,9 @@ jobs:
 
       - name: Install latest nightly
         uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
