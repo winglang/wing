@@ -33,6 +33,9 @@ jobs:
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
+      - name: Setup WASI Support
+        run: scripts/setup_wasi.sh
+
       - name: Lint Nx
         run: npx nx workspace-lint
 
