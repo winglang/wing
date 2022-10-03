@@ -8,16 +8,15 @@ import {
   ResourceSchema,
   WingLocalSchema,
 } from "@monadahq/wing-local-schema";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
 import classNames from "classnames";
 
 import { LeftResizableWidget } from "@/components/LeftResizableWidget";
 import { RightResizableWidget } from "@/components/RightResizableWidget";
 import { ScrollableArea } from "@/components/ScrollableArea";
 import { TopResizableWidget } from "@/components/TopResizableWidget";
-import { buildNodeMap, NodeMap } from "@/utils/nodeMap";
+import { NodeMap } from "@/utils/nodeMap";
 
-import { constructHubTreeToWingSchema, ResourceIcon } from "./utils";
+import { ResourceIcon } from "../stories/utils";
 
 const mock = {
   attributeGroups: [
@@ -53,92 +52,14 @@ const mock = {
   ],
 };
 
-function renderTreeNode(
-  node: ResourceSchema,
-  indentLevel: number,
-): JSX.Element {
-  const hasChildren =
-    node.type === "constructs.Construct" && node.children != undefined;
-  return (
-    <>
-      <div className="hover:bg-gray-600 group">
-        <button
-          className="flex w-full py-px"
-          style={{ paddingLeft: `${indentLevel * 0.5}rem` }}
-        >
-          <div className="flex-0">
-            <ChevronDownIcon
-              className={classNames(
-                "w-4 h-4 text-gray-400 group-hover:text-gray-300",
-                {
-                  invisible: !hasChildren,
-                },
-              )}
-              aria-hidden="true"
-            />
-          </div>
-
-          <div className="flex-0">
-            <ResourceIcon
-              className="w-4 h-4"
-              resourceType={node.type}
-              darkenOnGroupHover
-              aria-hidden="true"
-            />
-          </div>
-
-          <div className="px-1 group-hover:text-gray-100 truncate">
-            {node.id}
-          </div>
-        </button>
-      </div>
-
-      {node.type === "constructs.Construct" &&
-        Object.values(node.children ?? {}).map((child) =>
-          renderTreeNode(child, indentLevel + 1),
-        )}
-    </>
-  );
-}
-
-function renderRootNode(root: ConstructSchema) {
-  return (
-    <>
-      <button className="border-b border-gray-800 bg-gray-600 hover:bg-gray-500 group">
-        <div className="flex font-medium py-0.5">
-          <div className="flex-0">
-            <ChevronDownIcon
-              className="w-4 h-4 text-gray-400 group-hover:text-gray-300"
-              aria-hidden="true"
-            />
-          </div>
-          {/* <CpuChipIcon
-            className="w-4 h-4 text-gray-300 group-hover:text-gray-200"
-            aria-hidden="true"
-          /> */}
-          <div className="px-1 group-hover:text-gray-100 truncate">
-            {root.id}
-          </div>
-        </div>
-      </button>
-
-      <div className="flex-1 bg-gray-700">
-        {Object.values(root.children ?? {}).map((child) =>
-          renderTreeNode(child, 1),
-        )}
-      </div>
-    </>
-  );
-}
-
-interface UnityProps {
+export interface UnityLayoutProps {
   schema?: WingLocalSchema;
   nodeMap?: NodeMap;
 }
 
-function Unity({ schema, nodeMap }: UnityProps) {
+export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
   return (
-    <div className="h-full text-gray-300 text-xs pt-8 bg-gray-900">
+    <div className="dark h-full text-gray-300 text-xs pt-8 bg-gray-900 select-none">
       <div className="h-full flex items-stretch gap-px">
         <div className="flex-1 flex flex-col gap-px">
           <div className="flex-1 flex items-stretch gap-px">
@@ -150,8 +71,8 @@ function Unity({ schema, nodeMap }: UnityProps) {
                 <div className="bg-gray-700 px-1 py-0.5">
                   <div className="rounded bg-gray-800 border-t border-gray-900">
                     {/* <div className="px-1.5 text-xs italic text-gray-500">
-                  Filter by text...
-                </div> */}
+          Filter by text...
+        </div> */}
                     <input
                       type="text"
                       className="px-1.5 py-0 text-xs italic text-gray-400 bg-transparent w-full placeholder:text-gray-600 rounded-sm border-none"
@@ -314,7 +235,14 @@ function Unity({ schema, nodeMap }: UnityProps) {
             </button>
             <div className="border-t border-gray-800">
               <div className="flex flex-col bg-gray-800/40">
-                <button className="px-2 py-1 flex items-center gap-1.5 hover:bg-gray-600 hover:text-gray-100 group">
+                <button className="px-1 py-1 flex items-center hover:text-gray-200 group">
+                  <div className="flex-0 pl-2">
+                    <ChevronRightIcon
+                      className={classNames("w-4 h-4")}
+                      aria-hidden="true"
+                    />
+                  </div>
+
                   <div className="flex-shrink-0">
                     <ResourceIcon
                       resourceType="cloud.Bucket"
@@ -322,15 +250,23 @@ function Unity({ schema, nodeMap }: UnityProps) {
                       darkenOnGroupHover
                     />
                   </div>
+
                   <div
-                    className="truncate"
+                    className="px-1 truncate"
                     title="construct-hub-dev/ConstructHub/Monitoring/Watchful/constructhubdevConstructHubDenyListPrunePruneHandlerF5B01A79/ErrorsAlarm/Resource"
                   >
                     {/* construct-hub-dev/ConstructHub/Monitoring/Watchful/constructhubdevConstructHubDenyListPrunePruneHandlerF5B01A79/ErrorsAlarm/Resource */}
                     Resource
                   </div>
                 </button>
-                <button className="px-2 py-1 flex items-center gap-1.5 hover:bg-gray-600 hover:text-gray-100 group">
+                <button className="px-1 py-1 flex items-center hover:text-gray-200 group">
+                  <div className="flex-0 pl-2">
+                    <ChevronRightIcon
+                      className={classNames("w-4 h-4")}
+                      aria-hidden="true"
+                    />
+                  </div>
+
                   <div className="flex-shrink-0">
                     <ResourceIcon
                       resourceType="cloud.Function"
@@ -338,8 +274,9 @@ function Unity({ schema, nodeMap }: UnityProps) {
                       darkenOnGroupHover
                     />
                   </div>
+
                   <div
-                    className="truncate"
+                    className="px-1 truncate"
                     title="construct-hub-dev/ConstructHub/DenyList/Prune/PruneHandler/Resource"
                   >
                     {/* construct-hub-dev/ConstructHub/DenyList/Prune/PruneHandler/Resource */}
@@ -395,23 +332,80 @@ function Unity({ schema, nodeMap }: UnityProps) {
   );
 }
 
-export default {
-  title: "Playground/UnityUi",
-  component: Unity,
-  args: {},
-} as ComponentMeta<typeof Unity>;
-
-const Template: ComponentStory<typeof Unity> = () => {
-  // const { schema, nodeMap } = useTreeNodeMap();
-  const schema = constructHubTreeToWingSchema();
-  const nodeMap = buildNodeMap(schema.root);
-
+function renderTreeNode(
+  node: ResourceSchema,
+  indentLevel: number,
+): JSX.Element {
+  const hasChildren =
+    node.type === "constructs.Construct" && node.children != undefined;
   return (
-    <div className="select-none dark fixed left-0 top-0 h-full w-full">
-      <Unity schema={schema} nodeMap={nodeMap} />
-    </div>
-  );
-};
+    <>
+      <div className="hover:bg-gray-600 group">
+        <button
+          className="flex w-full py-px"
+          style={{ paddingLeft: `${indentLevel * 0.5}rem` }}
+        >
+          <div className="flex-0">
+            <ChevronDownIcon
+              className={classNames(
+                "w-4 h-4 text-gray-400 group-hover:text-gray-300",
+                {
+                  invisible: !hasChildren,
+                },
+              )}
+              aria-hidden="true"
+            />
+          </div>
 
-export const Default = Template.bind({});
-Default.args = {};
+          <div className="flex-0">
+            <ResourceIcon
+              className="w-4 h-4"
+              resourceType={node.type}
+              darkenOnGroupHover
+              aria-hidden="true"
+            />
+          </div>
+
+          <div className="px-1 group-hover:text-gray-100 truncate">
+            {node.id}
+          </div>
+        </button>
+      </div>
+
+      {node.type === "constructs.Construct" &&
+        Object.values(node.children ?? {}).map((child) =>
+          renderTreeNode(child, indentLevel + 1),
+        )}
+    </>
+  );
+}
+
+function renderRootNode(root: ConstructSchema) {
+  return (
+    <>
+      <button className="border-b border-gray-800 bg-gray-600 hover:bg-gray-500 group">
+        <div className="flex font-medium py-0.5">
+          <div className="flex-0">
+            <ChevronDownIcon
+              className="w-4 h-4 text-gray-400 group-hover:text-gray-300"
+              aria-hidden="true"
+            />
+          </div>
+          {/* <CpuChipIcon
+            className="w-4 h-4 text-gray-300 group-hover:text-gray-200"
+            aria-hidden="true"
+          /> */}
+          <div className="px-1 group-hover:text-gray-100 truncate">
+            {root.id}
+          </div>
+        </div>
+      </button>
+
+      <div className="flex-1 bg-gray-700">
+        {Object.values(root.children ?? {}).map((child) =>
+          renderTreeNode(child, 1),
+        )}
+      </div>
+    </>
+  );
+}

@@ -1,6 +1,6 @@
 import { GlobeAltIcon } from "@heroicons/react/24/outline";
-import { createWingLocalClient } from "@monadahq/wing-local-client";
 import { ComponentMeta } from "@storybook/react";
+import { createTRPCClient } from "@trpc/client";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -38,7 +38,7 @@ export const EndpointInteraction = () => {
 export const FunctionInteraction = () => {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
-    createWingLocalClient({
+    createTRPCClient({
       url: `http://localhost:3000`,
     }),
   );

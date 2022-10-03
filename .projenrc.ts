@@ -8,9 +8,10 @@ const project = new TypeScriptProject({
     "chokidar",
     "electron-log",
     "@monadahq/wing-local-schema",
-    "@monadahq/wing-local-server",
-    "@monadahq/wing-local-client",
-    "@monadahq/wing-local-schema",
+    "express",
+    "@types/express",
+    "cors",
+    "@types/cors",
   ],
   devDeps: [
     "@monadahq/mona-projen",
@@ -45,6 +46,15 @@ const project = new TypeScriptProject({
     "@trpc/react",
     "react-draggable",
     "pretty-bytes",
+    "@trpc/client",
+    "@trpc/server",
+    "@trpc/react",
+    "@tanstack/react-query",
+    "zod",
+    "get-port",
+    // Peer deps:
+    "webpack",
+    "require-from-string",
   ],
 });
 project.addTask("dev").exec("vite");
@@ -184,12 +194,12 @@ project.addGitIgnore("/storybook-static");
 
 if (project.eslint) {
   project.eslint.addOverride({
-    files: ["test/**/*", "src/**/*", ".storybook/**/*"],
+    files: ["**/*.cjs"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
-      "import/no-extraneous-dependencies": "off",
     },
   });
+
   project.addDevDeps("eslint-plugin-unicorn");
   project.eslint.addExtends("plugin:unicorn/recommended");
   project.eslint.addRules({
@@ -235,6 +245,11 @@ if (project.eslint) {
         warnOnUnassignedImports: true,
       },
     ],
+  });
+
+  // Disable extraneous dependencies, since we bundle them.
+  project.eslint.addRules({
+    "import/no-extraneous-dependencies": "off",
   });
 
   // Tell eslint that imports that begin with "@/" are internal to this repository.

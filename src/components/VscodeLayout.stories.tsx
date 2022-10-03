@@ -1,5 +1,5 @@
-import { createWingLocalClient } from "@monadahq/wing-local-client";
 import { ComponentMeta } from "@storybook/react";
+import { createTRPCClient } from "@trpc/client";
 import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
@@ -20,7 +20,7 @@ export const Default = () => {
   const schema = constructHubTreeToWingSchema();
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
-    createWingLocalClient({
+    createTRPCClient({
       url: `http://localhost:3000`,
     }),
   );

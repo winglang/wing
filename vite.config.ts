@@ -27,21 +27,6 @@ export default defineConfig({
           },
         }),
       },
-      preload: {
-        input: {
-          // You can configure multiple preload scripts here
-          index: path.join(__dirname, "electron/preload/index.ts"),
-        },
-        vite: {
-          build: {
-            // For debug
-            sourcemap: "inline",
-            outDir: "dist/vite/electron/preload",
-          },
-        },
-      },
-      // Enables use of Node.js API in the Electron-Renderer
-      renderer: {},
     }),
     renderBuiltUrl(),
   ],
@@ -64,7 +49,6 @@ function withDebug(config: UserConfig): UserConfig {
       ...(config.plugins ?? []),
       {
         name: "electron-vite-debug",
-        // eslint-disable-next-line @typescript-eslint/no-shadow
         configResolved(config) {
           const index = config.plugins.findIndex(
             (p) => p.name === "electron-main-watcher",

@@ -45,7 +45,19 @@
       "type": "build"
     },
     {
+      "name": "@tanstack/react-query",
+      "type": "build"
+    },
+    {
+      "name": "@trpc/client",
+      "type": "build"
+    },
+    {
       "name": "@trpc/react",
+      "type": "build"
+    },
+    {
+      "name": "@trpc/server",
       "type": "build"
     },
     {
@@ -137,6 +149,10 @@
       "type": "build"
     },
     {
+      "name": "get-port",
+      "type": "build"
+    },
+    {
       "name": "json-schema",
       "type": "build"
     },
@@ -178,6 +194,10 @@
       "type": "build"
     },
     {
+      "name": "require-from-string",
+      "type": "build"
+    },
+    {
       "name": "sass",
       "type": "build"
     },
@@ -211,15 +231,23 @@
       "type": "build"
     },
     {
-      "name": "@monadahq/wing-local-client",
-      "type": "runtime"
+      "name": "webpack",
+      "type": "build"
+    },
+    {
+      "name": "zod",
+      "type": "build"
     },
     {
       "name": "@monadahq/wing-local-schema",
       "type": "runtime"
     },
     {
-      "name": "@monadahq/wing-local-server",
+      "name": "@types/cors",
+      "type": "runtime"
+    },
+    {
+      "name": "@types/express",
       "type": "runtime"
     },
     {
@@ -227,7 +255,15 @@
       "type": "runtime"
     },
     {
+      "name": "cors",
+      "type": "runtime"
+    },
+    {
       "name": "electron-log",
+      "type": "runtime"
+    },
+    {
+      "name": "express",
       "type": "runtime"
     }
   ],

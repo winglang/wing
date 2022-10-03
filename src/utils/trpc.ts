@@ -1,4 +1,5 @@
-import type { WingLocalRouter } from "@monadahq/wing-local-client";
 import { createReactQueryHooks } from "@trpc/react";
 
-export const trpc = createReactQueryHooks<WingLocalRouter>();
+import { Router } from "electron/main/router";
+
+export const trpc = createReactQueryHooks<Router>();

@@ -169,17 +169,12 @@ interface FunctionInteractionViewProps {
 }
 
 function FunctionInteractionView({ node }: FunctionInteractionViewProps) {
-  const invoke = trpc.useMutation("function.Invoke");
   const [input, setInput] = useState("");
   return (
     <form
       method="POST"
       onSubmit={(event) => {
         event.preventDefault();
-        invoke.mutate({
-          input,
-          resourceId: node.path,
-        });
         setInput("");
       }}
     >
@@ -233,7 +228,7 @@ function FunctionInteractionView({ node }: FunctionInteractionViewProps) {
 
         <div>
           <pre className="text-sm">
-            <code>{JSON.stringify(invoke.error ?? invoke.data)}</code>
+            {/* <code>{JSON.stringify(invoke.error ?? invoke.data)}</code> */}
           </pre>
         </div>
       </div>

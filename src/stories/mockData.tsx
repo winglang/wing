@@ -325,3 +325,18 @@ export function useTreeNodeMap() {
 
   return nodeMap;
 }
+
+export function useWingSchemaMock() {
+  const [schema, setSchema] = useState<WingLocalSchema | undefined>();
+
+  useEffect(() => {
+    void import("../assets/tree.json").then((schema) => {
+      setSchema(schema as WingLocalSchema);
+    });
+  }, []);
+
+  return {
+    schema,
+    setSchema,
+  };
+}
