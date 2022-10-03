@@ -174,13 +174,13 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 
 > ```TS
 > // Wing Code:
-> let z = {1, 2, 3};          // immutable set
-> let zm = MutSet<num>();     // mutable set
-> let y = {"a": 1, "b": 2};   // immutable map
-> let ym = MutMap<num>();     // mutable map
-> let x = [1, 2, 3];          // immutable array
-> let xm = MutArray<num>();   // mutable array
-> let w = SampleClass();      // class instance (mutability unknown)
+> let z = {1, 2, 3};            // immutable set
+> let zm = new MutSet<num>();   // mutable set
+> let y = {"a": 1, "b": 2};     // immutable map
+> let ym = new MutMap<num>();   // mutable map
+> let x = [1, 2, 3];            // immutable array
+> let xm = new MutArray<num>(); // mutable array
+> let w = new SampleClass();    // class instance (mutability unknown)
 > ```
 >
 > ```TS
@@ -303,8 +303,9 @@ communicating errors to the user.
 >
 > ```TS
 > // Equivalent TypeScript Code:
-> console.log(23, "Hello", true);
+> console.log(23, "Hello", true, Object.freeze(new Map([["a", 1], ["b", 2]])));
 > // throws
+> throw new Error("a recoverable error occurred");
 > // calling panic in wing is fatal
 > (() -> {
 >   console.error("Something went wrong", [1,2]);
@@ -480,7 +481,7 @@ type is inferred iff a default value is provided.
 > // Wing Code:
 > let i = 5;
 > let m = i;
-> let arr_opt? = Array<num>();
+> let arr_opt? = new MutArray<num>();
 > let arr: Array<num> = [];
 > let copy = arr;
 > let i1? = nil;
@@ -704,8 +705,8 @@ includes for and while loops currently.
 > ```TS
 > // Wing Code:
 > class MyClass {
->   myPublicMethod() {}
->   _myPrivateMethod(): void {}
+>   public myPublicMethod() {}
+>   private _myPrivateMethod(): void {}
 >   protected myProtectedMethod(): nil { return nil; }
 >   internal _myInternalMethod(): str { return "hi!"; }
 > }
@@ -938,7 +939,8 @@ Structs can inherit from multiple other structs.
 ### 3.2 Classes
 
 Classes consist of fields and methods in any order.  
-The class system is single-dispatch class based object orientated system.
+The class system is single-dispatch class based object orientated system.  
+Classes are instantiated with the `new` keyword.
 
 A class member function that has the name **init** is considered to be a class
 constructor (or initializer, or allocator).
@@ -959,7 +961,7 @@ class Name extends Base impl IMyInterface1, IMyInterface2 {
   // static method (access with Name.static_method(...))
   public static static_method(arg: type, arg: type, ...) { /* impl */ }
   // private method
-  _private_method(arg: type, arg: type, ...): type { /* impl */ }
+  private _private_method(arg: type, arg: type, ...): type { /* impl */ }
   // visible to outside the instance
   public public_method(arg:type, arg:type, ...) { /* impl */ }
   // visible to children only
@@ -994,14 +996,14 @@ class Bar {
     // this.print() // is compile error here
     this.y = 1;
     // this.print() // is also compile error here
-    this.z = Foo();
+    this.z = new Foo();
     this.print(); // OK to call here
   }
   public print() {
     print(this.y);
   }
 }
-let a = Bar();
+let a = new Bar();
 a.print(); // prints 20.
 ```
 
@@ -1338,6 +1340,11 @@ Partial struct expansion in terms of supplying less number of arguments than the
 number of fields on type of the struct expected is not allowed. Omitting `nil`s
 is allowed with the same rules as explicit initialization in class constructors.
 
+This style of expansion can be thought of as having positional arguments passed
+in before the final positional argument, which if happens to be a struct, it can
+be passed as named arguments. As a result of named arguments being passed in, it
+is safe to omit optional struct fields, or have order of arguments mixed.
+
 ```TS
 struct MyStruct {
   field1: num;
@@ -1550,6 +1557,9 @@ bring cloud; // from cloud bring * as cloud;
 bring "path/to/what.js" as what; // from "path/to/what.js" bring * as what;
 ```
 
+Currently, "bringing" other Wing files is treated as a preprocessor step and it
+acts like C `#include`s. Symbols collision is fatal in this style of imports.
+
 [`▲ top`][top]
 
 ---
@@ -1563,6 +1573,9 @@ Variables are not exportable.
 
 Resources are not usable in inflight functions. There is no synthesizer inside
 and no deployment system in the inflight body to synthesize inflight resources.
+
+"Bringing" other Wing files currently ignores exports, but bringing JSII modules
+respect the visibility of JSII module exports.
 
 [`▲ top`][top]
 
