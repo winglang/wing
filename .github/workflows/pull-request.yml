@@ -13,7 +13,7 @@ env:
   NODE_OPTIONS: "--max-old-space-size=4096"
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
   # TODO Real versioning needed
-  PROJEN_BUMP_VERSION: "${{ github.ref == 'refs/heads/main' && '0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}' || '0.0.0' }}"
+  PROJEN_BUMP_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
   build-wasm:
