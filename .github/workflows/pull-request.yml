@@ -6,7 +6,6 @@ on:
 
 env:
   CI: true
-  DO_PUBLISH: ${{ github.ref == 'refs/heads/main'}}
   NODEJS_VERSION: "18.x"
   NODE_OPTIONS: "--max-old-space-size=4096"
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
@@ -193,7 +192,7 @@ jobs:
         run: echo "Build Successful"
 
   publish:
-    name: "Publish${{ env.DO_PUBLISH == 'true' && '' || ' (Dry Run)' }}"
+    name: "Publish${{ github.ref == 'refs/heads/main' && '' || ' (Dry Run)' }}"
     runs-on: ubuntu-latest
     steps:
       - name: Download Build Artifacts
