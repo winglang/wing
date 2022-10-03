@@ -277,16 +277,16 @@ export function NodeRelationshipsView({
             aria-hidden="true"
           />
         </div>
-        <div className="flex justify-around">
+        <div className="flex justify-around items-center">
+          {!hideUsageRelationship && (
+            <div className="flex-shrink-0">
+              <ArrowRightIcon
+                className="w-4 h-4 text-slate-600"
+                aria-hidden="true"
+              />
+            </div>
+          )}
           <div className="min-w-0 flex items-center gap-2 cursor-default">
-            {!hideUsageRelationship && (
-              <div className="flex-shrink-0">
-                <ArrowRightIcon
-                  className="w-4 h-4 text-slate-600"
-                  aria-hidden="true"
-                />
-              </div>
-            )}
             <ItemButtonContainer>
               {/* <span className="w-full text-center text-xs font-medium text-slate-600">
                 self
@@ -304,15 +304,15 @@ export function NodeRelationshipsView({
                 </div>
               </div>
             </ItemButtonContainer>
-            {!hideUsageRelationship && (
-              <div className="flex-shrink-0">
-                <ArrowRightIcon
-                  className="w-4 h-4 text-slate-600"
-                  aria-hidden="true"
-                />
-              </div>
-            )}
           </div>
+          {!hideUsageRelationship && (
+            <div className="flex-shrink-0">
+              <ArrowRightIcon
+                className="w-4 h-4 text-slate-600"
+                aria-hidden="true"
+              />
+            </div>
+          )}
         </div>
         <div className="flex justify-around">
           <ArrowDownIcon
