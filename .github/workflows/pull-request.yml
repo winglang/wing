@@ -223,9 +223,7 @@ jobs:
 
       - name: Release WingSDK Package
         working-directory: wingsdk
-        run: |
-          np run publish
-          npx -p publib@latest publib-npm
+        run: npx -p publib@latest publib-npm
         env:
           NPM_DIST_TAG: latest
           NPM_REGISTRY: npm.pkg.github.com
