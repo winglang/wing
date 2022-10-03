@@ -1,6 +1,6 @@
 name: SDK Issue
 about: File an SDK issue
-labels: ["sdk"]
+labels: sdk
 body:
 - type: dropdown
   id: area
