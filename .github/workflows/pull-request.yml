@@ -30,11 +30,6 @@ jobs:
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - uses: bahmutov/npm-install@v1
-      - uses: bahmutov/npm-install@v1
-        with:
-          working-directory: |
-            apps/vscode-wing
-            libs/wingsdk
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
