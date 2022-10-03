@@ -1,5 +1,5 @@
 name: SDK Issue
-description: File an SDK issue
+about: File an SDK issue
 labels: ["sdk"]
 body:
 - type: dropdown
