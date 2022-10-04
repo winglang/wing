@@ -17,7 +17,7 @@ const project = new typescript.TypeScriptProject({
   projenrcTs: true,
   prettier: true,
   deps: ["chalk", "chokidar", "glob-promise", "jsii-reflect", "yargs"],
-  devDeps: ["@types/node@^18", "@jest/expect"],
+  devDeps: ["@types/node@^18"],
 });
 
 project.synth();
