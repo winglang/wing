@@ -3919,8 +3919,24 @@ that is resolved at synth time.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromApp">fromApp</a></code> | Start the simulator from a Wing app file (.wx). |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.fromTree">fromTree</a></code> | Start the simulator using an inline definition of your application's resources. |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromWingApp">fromWingApp</a></code> | Start the simulator from a Wing app file (.wx). |
+
+---
+
+##### `fromApp` <a name="fromApp" id="@monadahq/wingsdk.testing.Simulator.fromApp"></a>
+
+```typescript
+import { testing } from '@monadahq/wingsdk'
+
+testing.Simulator.fromApp(filepath: string)
+```
+
+Start the simulator from a Wing app file (.wx).
+
+###### `filepath`<sup>Required</sup> <a name="filepath" id="@monadahq/wingsdk.testing.Simulator.fromApp.parameter.filepath"></a>
+
+- *Type:* string
 
 ---
 
@@ -3937,22 +3953,6 @@ Start the simulator using an inline definition of your application's resources.
 ###### `options`<sup>Required</sup> <a name="options" id="@monadahq/wingsdk.testing.Simulator.fromTree.parameter.options"></a>
 
 - *Type:* @monadahq/wingsdk.testing.SimulatorFromTreeOptions
-
----
-
-##### `fromWingApp` <a name="fromWingApp" id="@monadahq/wingsdk.testing.Simulator.fromWingApp"></a>
-
-```typescript
-import { testing } from '@monadahq/wingsdk'
-
-testing.Simulator.fromWingApp(filepath: string)
-```
-
-Start the simulator from a Wing app file (.wx).
-
-###### `filepath`<sup>Required</sup> <a name="filepath" id="@monadahq/wingsdk.testing.Simulator.fromWingApp.parameter.filepath"></a>
-
-- *Type:* string
 
 ---
 

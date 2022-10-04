@@ -33,7 +33,7 @@ export class Simulator {
   /**
    * Start the simulator from a Wing app file (.wx).
    */
-  public static async fromWingApp(filepath: string): Promise<Simulator> {
+  public static async fromApp(filepath: string): Promise<Simulator> {
     const workdir = mkdtemp();
     tar.extract({
       cwd: workdir,

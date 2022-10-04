@@ -47,7 +47,7 @@ new Main(app.root, "Main");
 app.synth();
 
 async function main() {
-  const s = await testing.Simulator.fromWingApp("app.wx");
+  const s = await testing.Simulator.fromApp("app.wx");
 
   const pusherAttrs = s.getAttributes("root/Main/Function");
   const pusherClient = new FunctionClient(pusherAttrs.functionAddr);
