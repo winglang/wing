@@ -10,6 +10,9 @@ struct CliArgs {
 
 #[derive(Debug, Subcommand)]
 enum Commands {
+	/// Prints the version of the compiler and exits
+	Version,
+
 	/// Compile a Wing source file
 	#[command(arg_required_else_help = true)]
 	Compile {
@@ -36,6 +39,10 @@ pub fn main() {
 	let args = CliArgs::parse();
 
 	match args.command {
+		Commands::Version => {
+			println!("Wing Programming Language CLI");
+			println!("Version: {}", env!("CARGO_PKG_VERSION"));
+		}
 		Commands::Compile { target, source, outdir } => {
 			println!("Compiling for {}", target);
 			compile(source.as_str(), outdir.as_deref());
