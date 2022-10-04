@@ -12,7 +12,7 @@ const { DefaultSimulatorFactory } = require("../sim/factory.sim");
  */
 export interface SimulatorFromTreeOptions {
   /**
-   * A tree of resources information to load into the simulator.
+   * A tree of resources to load into the simulator.
    */
   readonly tree: any;
   /**

@@ -2962,7 +2962,7 @@ const simulatorFromTreeOptions: testing.SimulatorFromTreeOptions = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree">tree</a></code> | <code>any</code> | A tree of resources information to load into the simulator. |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree">tree</a></code> | <code>any</code> | A tree of resources to load into the simulator. |
 | <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorFactory</code> | The factory that dispatches to simulation implementations. |
 
 ---
@@ -2975,7 +2975,7 @@ public readonly tree: any;
 
 - *Type:* any
 
-A tree of resources information to load into the simulator.
+A tree of resources to load into the simulator.
 
 ---
 
