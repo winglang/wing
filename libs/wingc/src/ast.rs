@@ -7,8 +7,8 @@ use derivative::Derivative;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
+use crate::type_check::type_env::TypeEnv;
 use crate::type_check::TypeRef;
-use crate::type_env::TypeEnv;
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {

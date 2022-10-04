@@ -2,8 +2,8 @@ use std::collections::HashMap;
 
 use crate::{
 	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, Statement, Symbol},
+	type_check::type_env::TypeEnv,
 	type_check::Type,
-	type_env::TypeEnv,
 };
 
 /* This is a definition of how a resource is captured. The most basic way to capture a resource

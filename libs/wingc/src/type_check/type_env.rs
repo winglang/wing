@@ -76,6 +76,25 @@ impl TypeEnv {
 			.expect(&format!("Unknown symbol {} at {}", &symbol.name, &symbol.span))
 	}
 
+	pub fn lookup_nested(&self, nested_vec: &[&str]) -> TypeRef {
+		let mut it = nested_vec.iter();
+
+		let mut symb = *it.next().unwrap();
+		let mut t = self.try_lookup(symb).expect(&format!("Unkonwn symbol {}", symb));
+
+		while let Some(next_symb) = it.next() {
+			let ns = t
+				.as_namespace()
+				.expect(&format!("Symbol {} should be a namespace", symb));
+			t = ns
+				.env
+				.try_lookup(*next_symb)
+				.expect(&format!("Unkonwn symbol {}", *next_symb));
+			symb = *next_symb;
+		}
+		t
+	}
+
 	pub fn iter(&self) -> TypeEnvIter {
 		TypeEnvIter::new(self)
 	}
