@@ -17,8 +17,6 @@ defaults:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     outputs:
       self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     env:
@@ -75,8 +73,6 @@ jobs:
   self-mutation:
     needs: build
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     if: always() && needs.build.outputs.self_mutation_happened && !(github.event.repository.full_name != github.repository)
     steps:
       - name: Generate token
