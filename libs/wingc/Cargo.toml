@@ -9,6 +9,7 @@ sha2 = "0.10.6"
 base16ct = { version = "0.1.1", features = ["alloc"] }
 derivative = "2.2.0"
 tree-sitter-wing = { path = "../tree-sitter-wing" }
+clap = { version = "4.0.9", features = ["derive"] }
 
 [lib]
 path = "src/lib.rs"
