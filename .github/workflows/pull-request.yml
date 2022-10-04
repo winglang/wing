@@ -221,10 +221,31 @@ jobs:
         working-directory: wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm publish *.tgz
+        run: npm publish *.tgz --dry-run=${{ github.ref != 'refs/heads/main' }}
 
       - name: Publish Wing
         working-directory: wingsdk
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm publish *.tgz
+        run: npm publish *.tgz --dry-run=${{ github.ref != 'refs/heads/main' }}
+
+      - name: Compute Checksums
+        run: |
+          mkdir dist
+          mv ./*/*.vsix ./dist
+          mv ./*/*.tgz ./dist
+          cd dist
+          echo '## SHA-1 Checksums' > ../checksums.md
+          echo '```' >> ../checksums.md
+          sha1sum --binary * >> ../checksums.md
+          echo '```' >> ../checksums.md
+          cat ../checksums.md
+
+      - name: Cut Development Release
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: development
+          body_path: checksums.md
+          prerelease: true
+          files: dist/*
