@@ -23,10 +23,26 @@ export class Queue extends cloud.QueueBase implements IResource {
     inflight: core.Inflight,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
+    const code: string[] = [];
+    code.push(inflight.code.text);
+    code.push(`async function $queueEventWrapper($cap, event) {`);
+    code.push(`  event = JSON.parse(event);`);
+    code.push(
+      `  if (!event.messages) throw new Error('No "messages" field in event.');`
+    );
+    code.push(`  for (const $message of event.messages) {`);
+    code.push(`    await ${inflight.entrypoint}($cap, JSON.parse($message));`);
+    code.push(`  }`);
+    code.push(`}`);
+    const newInflight = new core.Inflight({
+      entrypoint: `$queueEventWrapper`,
+      code: core.NodeJsCode.fromInline(code.join("\n")),
+    });
+
     const fn = new cloud.Function(
       this,
       `OnMessage-${inflight.code.hash.slice(0, 16)}`,
-      inflight,
+      newInflight,
       props
     );
     // At the time the queue is initialized, the simulator needs to be

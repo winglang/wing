@@ -1,18 +1,8 @@
 import Piscina from "piscina";
 import { Server } from "ws";
+import { log } from "../util";
 import { FunctionSchema } from "./schema";
-
-interface SimulatorRequest {
-  readonly id: string;
-  readonly operation: string;
-  readonly message: string;
-}
-
-interface SimulatorResponse {
-  readonly id: string;
-  readonly error?: string;
-  readonly result?: string;
-}
+import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 
 const FUNCTIONS: Record<number, Function> = {};
 
@@ -30,7 +20,7 @@ export async function cleanup(attrs: FunctionSchema["attrs"]) {
   const functionAddr = attrs.functionAddr;
   const fn = FUNCTIONS[functionAddr];
   if (!fn) {
-    throw new Error(`Invalid function id: ${functionAddr}`);
+    throw new Error(`Invalid functionAddr: ${functionAddr}`);
   }
   await fn.cleanup();
   delete FUNCTIONS[functionAddr];
@@ -59,7 +49,7 @@ export class Function {
 
     this.wss.on("connection", function connection(ws) {
       ws.on("message", function message(data) {
-        console.log("server receiving: %s", data);
+        log("server receiving: %s", data);
         const contents: SimulatorRequest = JSON.parse(data.toString());
         if (contents.operation === "invoke") {
           void fn
@@ -68,24 +58,27 @@ export class Function {
               const resp: SimulatorResponse = {
                 id: contents.id,
                 result,
+                timestamp: Date.now(),
               };
-              console.log("server sending: %s", JSON.stringify(resp));
+              log("server sending: %s", JSON.stringify(resp));
               ws.send(JSON.stringify(resp));
             })
             .catch((err) => {
               const resp: SimulatorResponse = {
                 id: contents.id,
                 error: `${err} ${err.stack}`,
+                timestamp: Date.now(),
               };
-              console.log("server sending: %s", JSON.stringify(resp));
+              log("server sending: %s", JSON.stringify(resp));
               ws.send(JSON.stringify(resp));
             });
         } else if (contents.operation === "timesCalled") {
           const resp: SimulatorResponse = {
             id: contents.id,
             result: fn._timesCalled.toString(),
+            timestamp: Date.now(),
           };
-          console.log("server sending: %s", JSON.stringify(resp));
+          log("server sending: %s", JSON.stringify(resp));
           ws.send(JSON.stringify(resp));
         }
       });

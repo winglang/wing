@@ -4,8 +4,6 @@ import * as core from "../../src/core";
 import * as sim from "../../src/sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { FunctionClient } from "../../src/sim/function.inflight";
-// eslint-disable-next-line import/no-restricted-paths
-import { QueueClient } from "../../src/sim/queue.inflight";
 import * as testing from "../../src/testing";
 // import * as tfaws from "../../src/tf-aws";
 
@@ -17,7 +15,7 @@ class Main extends Construct {
     const pusher = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          await $cap.queue.push(JSON.stringify(event));
+          await $cap.queue.push(event);
         }`
       ),
       entrypoint: "$proc",
@@ -49,18 +47,21 @@ new Main(app.root, "Main");
 app.synth();
 
 async function main() {
-  await testing.Simulator.fromWingApp("app.wx");
+  const s = await testing.Simulator.fromWingApp("app.wx");
 
-  // console.error(JSON.stringify(s.tree, null, 2));
+  const pusherAttrs = s.getAttributes("root/Main/Function");
+  const pusherClient = new FunctionClient(pusherAttrs.functionAddr);
+  await pusherClient.invoke(JSON.stringify({ name: "Yoda" }));
 
-  // const pusherAttrs = s.getAttributes("root/my_function");
-  // const pusherClient = new FunctionClient(pusherAttrs.functionAddr);
+  await new Promise((resolve) => setTimeout(resolve, 500));
 
-  // const queueAttrs = s.getAttributes("root/Queue");
-  // const queueClient = new QueueClient(queueAttrs.queueAddr);
+  const processorAttrs = s.getAttributes(
+    "root/Main/Queue/OnMessage-7b918d65c3e454bc"
+  );
+  const processorClient = new FunctionClient(processorAttrs.functionAddr);
+  await processorClient.timesCalled();
 
-  // const processorAttrs = s.getAttributes("root/my_function");
-  // const processorClient = new FunctionClient(processorAttrs.functionAddr);
+  await s.cleanup();
 }
 
 main().catch((err) => {

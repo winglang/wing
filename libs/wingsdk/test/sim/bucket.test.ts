@@ -26,16 +26,14 @@ test("put and get objects from bucket", async () => {
   const s = await testing.Simulator.fromTree({
     tree: {
       root: {
-        path: "root",
         type: "constructs.Construct",
         children: {
           my_bucket: {
-            id: "my_bucket",
-            path: "my_bucket",
             type: "wingsdk.cloud.Bucket",
           },
         },
       },
+      initOrder: ["root", "root/my_bucket"],
     },
   });
   const attrs = s.getAttributes("root/my_bucket");
@@ -58,16 +56,14 @@ test("get invalid object throws an error", async () => {
   const s = await testing.Simulator.fromTree({
     tree: {
       root: {
-        path: "root",
         type: "constructs.Construct",
         children: {
           my_bucket: {
-            id: "my_bucket",
-            path: "my_bucket",
             type: "wingsdk.cloud.Bucket",
           },
         },
       },
+      initOrder: ["root", "root/my_bucket"],
     },
   });
   const attrs = s.getAttributes("root/my_bucket");

@@ -79,7 +79,7 @@ export class DependencyGraph {
   }
 
   /**
-   * @see Vertex.topology()
+   * Returns a topologically sorted array of the constructs in the sub-graph.
    */
   public topology(): IConstruct[] {
     return this._fosterParent.topology();

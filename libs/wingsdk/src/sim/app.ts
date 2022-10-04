@@ -1,4 +1,4 @@
-import { readdirSync, writeFileSync } from "fs";
+import { writeFileSync } from "fs";
 import { join } from "path";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
@@ -56,10 +56,6 @@ export class App extends Construct {
       JSON.stringify(contents, null, 2)
     );
 
-    console.log(
-      `(debug) contents of workdir: ${readdirSync(workdir).join(", ")}`
-    );
-
     // zip it up, and write it as app.wx to the outdir
     tar.create(
       {
@@ -68,7 +64,7 @@ export class App extends Construct {
         sync: true,
         file: join(this.outdir, "app.wx"),
       },
-      ["simulator.json", "assets"]
+      ["./"]
     );
   }
 }

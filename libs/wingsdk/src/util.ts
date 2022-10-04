@@ -6,6 +6,12 @@ export function mkdtemp() {
   return mkdtempSync(join(tmpdir(), "wingsdk."));
 }
 
+export function log(...args: any[]) {
+  if (process.env.NODE_ENV === "development") {
+    console.error("(debug)", ...args);
+  }
+}
+
 export interface SanitizeOptions {
   /**
    * Do not include empty objects (no keys).

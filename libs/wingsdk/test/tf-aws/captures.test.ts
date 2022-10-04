@@ -63,6 +63,7 @@ test("function captures a bucket", () => {
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
           console.log("Hello, " + event.name);
+          // TODO: fix this
           await $cap.bucket.put("hello.txt", Serializable.fromJSON(event));
         }`
       ),

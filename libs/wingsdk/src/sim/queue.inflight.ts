@@ -1,17 +1,14 @@
+import WebSocket from "ws";
 import { IQueueClient } from "../cloud";
-import { Queue, QUEUES } from "./queue.sim";
+import { sendToWebSocket } from "./util.inflight";
 
 export class QueueClient implements IQueueClient {
-  private readonly queue: Queue;
+  private readonly ws: WebSocket;
   constructor(queueAddr: number) {
-    const queue = QUEUES[queueAddr];
-    if (!queue) {
-      throw new Error(`Invalid queueAddr: ${queueAddr}`);
-    }
-    this.queue = queue;
+    this.ws = new WebSocket(`ws://localhost:${queueAddr}`);
   }
 
   public async push(message: string): Promise<void> {
-    this.queue.push(message);
+    await sendToWebSocket(this.ws, "push", message);
   }
 }

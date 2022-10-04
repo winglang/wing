@@ -3,7 +3,7 @@ import { join } from "path";
 import { readJsonSync } from "fs-extra";
 import * as tar from "tar";
 import { ResourceSchema, WingSimulatorSchema } from "../sim/schema";
-import { mkdtemp } from "../util";
+import { log, mkdtemp } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
 const { DefaultSimulatorFactory } = require("../sim/factory.sim");
 
@@ -41,7 +41,7 @@ export class Simulator {
       file: filepath,
     });
 
-    console.error("(debug) extracted app to", workdir);
+    log("extracted app to", workdir);
     process.chdir(workdir);
 
     const simJson = join(workdir, "simulator.json");
@@ -51,9 +51,6 @@ export class Simulator {
       );
     }
     const data = readJsonSync(simJson);
-    console.error(
-      `(debug) contents of simulator.json:\n${JSON.stringify(data, null, 2)}`
-    );
     return Simulator.fromTree({ tree: data });
   }
 
@@ -94,7 +91,7 @@ export class Simulator {
 
     for (const path of tree.initOrder) {
       const res = findResource(tree, path);
-      console.error(`(debug) initializing ${path} (${res.type})`);
+      log(`simulating ${path} (${res.type})`);
       const attrs = await factory.init(res.type, {
         ...resolveTokens(res.props, _resolver),
         _resolver,

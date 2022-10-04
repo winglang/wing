@@ -156,8 +156,12 @@ project.eslint!.addRules({
     "error",
     {
       zones: [
+        // avoid importing inflight or simulator code into preflight code since
+        // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
         disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
+        // implementation details of simulator should not be leaked to inflight code
+        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],
