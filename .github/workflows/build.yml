@@ -1,4 +1,4 @@
-name: "PR Build"
+name: "Build"
 
 on:
   push:
