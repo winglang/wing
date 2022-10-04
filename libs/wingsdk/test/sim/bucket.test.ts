@@ -14,7 +14,7 @@ test("create a bucket", async () => {
   new cloud.Bucket(app.root, "my_bucket");
   app.synth();
 
-  const s = await testing.Simulator.fromWingApp(join(outdir, "app.wx"));
+  const s = await testing.Simulator.fromApp(join(outdir, "app.wx"));
   expect(s.getAttributes("root/my_bucket")).toBeDefined();
   expect(s.getProps("root/my_bucket")).toEqual({
     public: false,
