@@ -22,7 +22,7 @@ export class Queue extends cloud.QueueBase {
     inflight: core.Inflight,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    const code = [];
+    const code: string[] = [];
     code.push(inflight.code.text);
     code.push(`async function $sqsEventWrapper($cap, event) {`);
     code.push(`  for (const record of event.Records ?? []) {`);

@@ -46,13 +46,17 @@ jobs:
           cargo wasi build --bin wingc --release
           mv ../../target/wasm32-wasi/release/wingc.wasm ../../apps/wing/
 
+      - name: Install Dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: npm install
+
       - name: Publish Wing
         if: ${{ github.ref == 'refs/heads/main' }}
         working-directory: apps/wing
         env:
           NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          npm install
           npm version ${{ env.WING_VERSION }}
           npm publish
 
