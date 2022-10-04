@@ -1,7 +1,7 @@
 use crate::{
 	ast::{Flight, Symbol},
 	diagnostic::{CharacterLocation, WingSpan},
-	type_check::type_env::TypeEnv,
+	type_check::{self, type_env::TypeEnv},
 	type_check::{Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
 };
 use colored::Colorize;
@@ -53,19 +53,20 @@ impl<'a> JsiiImporter<'a> {
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
+				// TODO: we can probably get rid of this special handling for cloud.Void
 				if type_fqn == "@monadahq/wingsdk.cloud.Void" {
 					None
+				} else if type_fqn == "@monadahq/wingsdk.core.Inflight" {
+					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
+						args: vec![self.wing_types.anything()],
+						return_type: Some(self.wing_types.anything()),
+						flight: Flight::In,
+					})))
+				} else if type_fqn == "@monadahq/wingsdk.core.Duration" {
+					Some(self.wing_types.duration())
 				} else {
 					println!("Getting wing type for {}", type_fqn);
-					let type_name = &self.fqn_to_type_name(type_fqn);
-					// Check if this type is already define in this module's namespace
-					if let Some(t) = self.namespace_env.try_lookup(type_name) {
-						println!("Found type {} in wing env", type_name);
-						return Some(t);
-					}
-
-					// Define new type and return it
-					Some(self.import_type(type_fqn).unwrap())
+					Some(self.lookup_or_create_type(type_fqn))
 				}
 			} else if let Some(Value::Object(_)) = obj.get("collection") {
 				// TODO: handle JSII to Wing collection type conversion, for now return any
@@ -79,6 +80,17 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			panic!("Expected JSII type reference {:?} to be an object", jsii_type_ref);
 		}
+	}
+
+	fn lookup_or_create_type(&mut self, type_fqn: &String) -> TypeRef {
+		let type_name = &self.fqn_to_type_name(type_fqn);
+		// Check if this type is already define in this module's namespace
+		if let Some(t) = self.namespace_env.try_lookup(type_name) {
+			println!("Found type {} in wing env", type_name);
+			return t;
+		}
+		// Define new type and return it
+		self.import_type(type_fqn).unwrap()
 	}
 
 	pub fn fqn_to_type_name(&self, fqn: &str) -> String {
@@ -138,22 +150,29 @@ impl<'a> JsiiImporter<'a> {
 				return None;
 			}
 		}
-		if jsii_interface.interfaces.is_some() && !jsii_interface.interfaces.as_ref().unwrap().is_empty() {
-			println!(
-				"JSII datatype interface {} extends other interfaces, skipping",
-				type_name
-			);
-			return None;
-		}
+
+		let extends = if let Some(interfaces) = &jsii_interface.interfaces {
+			interfaces
+				.iter()
+				.map(|fqn| self.lookup_or_create_type(fqn))
+				.collect::<Vec<_>>()
+		} else {
+			vec![]
+		};
+
 		let struct_env = TypeEnv::new(None, None, true, self.namespace_env.flight);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
 		let wing_type = self.wing_types.add_type(Type::Struct(Struct {
 			name: new_type_symbol.clone(),
-			extends: vec![],
+			extends: extends.clone(),
 			env: struct_env,
 		}));
 		let struct_env = &mut wing_type.as_mut_struct().unwrap().env;
 		self.add_members_to_class_env(&jsii_interface, false, self.namespace_env.flight, struct_env, wing_type);
+
+		// Add properties from our parents to the new structs env
+		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, struct_env);
+
 		println!("Adding struct type {}", type_name.green());
 		self.namespace_env.define(&new_type_symbol, wing_type);
 		Some(wing_type)

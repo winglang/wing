@@ -881,6 +881,8 @@ impl<'a> TypeChecker<'a> {
 				// Check function scope
 				self.type_check_scope(&mut constructor.statements);
 
+				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
+
 				// Type check methods
 				for method in methods.iter_mut() {
 					// Lookup the method in the class_env
@@ -923,36 +925,8 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Add members from the structs parents
-				let mut extends_types = vec![];
-				for parent in extends.iter() {
-					let parent_type = env.lookup(parent);
-					let parent_struct = parent_type
-						.as_struct()
-						.expect(format!("Type {} extends {} which should be a struct", name.name, parent.name).as_str());
-					for (parent_member_name, member_type) in parent_struct.env.iter() {
-						if let Some(existing_type) = struct_env.try_lookup(&parent_member_name) {
-							// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
-							// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
-							//   when we want to check for subtypes and use equality for strict comparisons.
-							if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
-								panic!(
-									"Struct {} extends {} but has a conflicting member {} ({} != {})",
-									name, parent.name, parent_member_name, existing_type, member_type
-								);
-							}
-						} else {
-							struct_env.define(
-								&Symbol {
-									name: parent_member_name,
-									span: name.span.clone(),
-								},
-								member_type,
-							);
-						}
-					}
-					// Store references to all parent types
-					extends_types.push(parent_type);
-				}
+				let extends_types = extends.iter().map(|parent| env.lookup(&parent)).collect::<Vec<_>>();
+				add_parent_members_to_struct_env(&extends_types, name, &mut struct_env);
 				env.define(
 					name,
 					self.types.add_type(Type::Struct(Struct {
@@ -1006,6 +980,35 @@ impl<'a> TypeChecker<'a> {
 
 				// Find property in class's environment
 				class.env.lookup(property)
+			}
+		}
+	}
+}
+
+fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol, struct_env: &mut TypeEnv) {
+	for parent_type in extends_types.iter() {
+		let parent_struct = parent_type
+			.as_struct()
+			.expect(format!("Type {} extends {} which should be a struct", name.name, parent_type).as_str());
+		for (parent_member_name, member_type) in parent_struct.env.iter() {
+			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name) {
+				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
+				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
+				//   when we want to check for subtypes and use equality for strict comparisons.
+				if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
+					panic!(
+						"Struct {} extends {} but has a conflicting member {} ({} != {})",
+						name, parent_type, parent_member_name, existing_type, member_type
+					);
+				}
+			} else {
+				struct_env.define(
+					&Symbol {
+						name: parent_member_name,
+						span: name.span.clone(),
+					},
+					member_type,
+				);
 			}
 		}
 	}
