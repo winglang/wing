@@ -2,7 +2,7 @@ bring cloud;
 
 resource CachableFunction {
     _func: cloud.Function;
-    _cache: cloud.KeyValueStore;
+    _cache: cloud.Bucket;
 
     init(func: cloud.Function) {
         this._func = func;
