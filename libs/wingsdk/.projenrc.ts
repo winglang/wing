@@ -9,8 +9,8 @@ const project = new cdk.JsiiProject({
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [
-    "constructs@^10.0.25",
-    "@monadahq/polycons@^0.0.36",
+    "constructs@~10.0.25",
+    "@monadahq/polycons@^0.0.70",
     "cdktf",
     "@cdktf/provider-aws",
   ],
@@ -29,7 +29,7 @@ const project = new cdk.JsiiProject({
   devDeps: [
     "replace-in-file",
     "@types/aws-lambda",
-    "wing-api-checker@file:../../apps/wing-api-checker",
+    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
   ],
   prettier: true,
   jestOptions: {
@@ -38,7 +38,6 @@ const project = new cdk.JsiiProject({
   minNodeVersion: "16.16.0",
   npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
-  gitignore: [".DS_Store"],
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
@@ -167,5 +166,10 @@ project.addTask("api-check:watch", {
   exec: "wing-api-check --watch",
 });
 project.postCompileTask.prependSpawn(apiCheck);
+
+const bumpTask = project.tasks.tryFind("bump")!;
+bumpTask.reset(
+  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+);
 
 project.synth();

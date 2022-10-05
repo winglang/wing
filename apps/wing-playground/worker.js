@@ -1,4 +1,4 @@
-import wingcURL from '../../target/wasm32-wasi/debug/wingc.wasm?url'
+import wingcURL from './wingc.wasm?url'
 import { init, WASI } from '@wasmer/wasi';
 import { env } from 'process';
 

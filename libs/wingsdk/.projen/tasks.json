@@ -52,7 +52,7 @@
       },
       "steps": [
         {
-          "builtin": "release/bump-version"
+          "exec": "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
         }
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
@@ -309,19 +309,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,constructs,wing-api-checker'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,constructs'"
         },
         {
           "exec": "npm install"

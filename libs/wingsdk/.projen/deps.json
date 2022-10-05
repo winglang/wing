@@ -6,7 +6,12 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "0.0.36",
+      "version": "0.0.70",
+      "type": "build"
+    },
+    {
+      "name": "@monadahq/wing-api-checker",
+      "version": "file:../../apps/wing-api-checker",
       "type": "build"
     },
     {
@@ -141,11 +146,6 @@
       "type": "build"
     },
     {
-      "name": "wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
-      "type": "build"
-    },
-    {
       "name": "@aws-sdk/client-lambda",
       "type": "bundled"
     },
@@ -170,12 +170,32 @@
       "type": "bundled"
     },
     {
+      "name": "@types/prettier",
+      "version": "2.6.0",
+      "type": "override"
+    },
+    {
+      "name": "@types/responselike",
+      "version": "1.0.0",
+      "type": "override"
+    },
+    {
+      "name": "got",
+      "version": "12.3.1",
+      "type": "override"
+    },
+    {
+      "name": "jest-resolve",
+      "version": "^28",
+      "type": "override"
+    },
+    {
       "name": "@cdktf/provider-aws",
       "type": "peer"
     },
     {
       "name": "@monadahq/polycons",
-      "version": "^0.0.36",
+      "version": "^0.0.70",
       "type": "peer"
     },
     {
@@ -184,7 +204,7 @@
     },
     {
       "name": "constructs",
-      "version": "^10.0.25",
+      "version": "~10.0.25",
       "type": "peer"
     }
   ],

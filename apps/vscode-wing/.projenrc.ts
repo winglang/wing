@@ -7,7 +7,7 @@ const VSCODE_BASE_VERSION = "1.70.0";
 
 const project = new TypeScriptAppProject({
   defaultReleaseBranch: "main",
-  name: "wing",
+  name: "vscode-wing",
   authorName: "Monada",
   authorEmail: "ping@monada.co",
   authorOrganization: true,
@@ -49,6 +49,11 @@ project.addGitIgnore("*.vsix");
 const vscodeIgnore = new IgnoreFile(project, ".vscodeignore");
 vscodeIgnore.addPatterns(
   "**",
+
+  // It's strange, but if these are not included then the build fails
+  "../**",
+  "../../**",
+
   "!lib/",
   "!resources/",
   "!syntaxes/",
@@ -124,6 +129,9 @@ project.compileTask.reset();
 project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);
 
-project.packageTask.reset("vsce package -o vscode-wing.vsix");
+project.packageTask.reset(
+  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+);
+project.packageTask.exec("vsce package -o vscode-wing.vsix");
 
 project.synth();

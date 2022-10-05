@@ -1,0 +1,32 @@
+{
+  "name": "wingc",
+  "targets": {
+    "build-native": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo build",
+        "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo build --release"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nxrs/cargo:test"
+    },
+    "build-wasm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo wasi build",
+        "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo wasi build --release"
+        }
+      }
+    }
+  }
+}
