@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+cargo install cargo-wasi
+
 WASI_VERSION="16"
 
 # Check if mac or linux

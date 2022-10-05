@@ -1,6 +1,6 @@
 {
-  "name": "tree-sitter-wing",
-  "version": "0.0.1",
+  "name": "@monadahq/tree-sitter-wing",
+  "version": "0.0.0",
   "description": "winglang grammar for tree-sitter",
   "main": "bindings/node",
   "keywords": [

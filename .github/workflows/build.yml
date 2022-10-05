@@ -9,53 +9,93 @@ concurrency:
 
 env:
   NODEJS_VERSION: "18.x"
+  # Testing runs out of memory without this
+  NODE_OPTIONS: "--max-old-space-size=4096"
+  MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
   # TODO Real versioning needed
-  WING_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
-
-permissions:
-  contents: write
+  PROJEN_BUMP_VERSION: "0.1.1-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
-  build-wing-cli:
+  build-wasm:
+    name: "Non-Native Build"
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Private NPM with Github
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: https://npm.pkg.github.com
 
-      - name: Rust Cache
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
       - name: Install wasi-sdk
         run: scripts/setup_wasi.sh
 
-      - name: Install cargo-wasi
-        run: cargo install cargo-wasi
-
-      - name: Build WingC
-        working-directory: libs/wingc
-        run: |
-          cargo wasi build --bin wingc --release
-          mv ../../target/wasm32-wasi/release/wingc.wasm ../../apps/wing/
+      - name: Login to Private NPM registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-        run: npm install
+        uses: bahmutov/npm-install@v1
 
-      - name: Publish Wing
-        if: ${{ github.ref == 'refs/heads/main' }}
+      - name: Lint Nx
+        run: npx nx workspace-lint
+
+      # - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      #   uses: nrwl/nx-set-shas@v3
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build"
+          projects: "wing,wingsdk,wing-api-checker,wing-playground"
+          args: "--configuration=release"
+
+      - name: Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wingsdk,wing-api-checker"
+          all: true
+
+      - name: Package Wing CLI
         working-directory: apps/wing
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
         run: |
-          npm version ${{ env.WING_VERSION }}
-          npm publish
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
+          npm pack
+
+      - name: Package WingSDK
+        working-directory: libs/wingsdk
+        run: |
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
+          npm pack
+
+      - name: Upload Wing CLI
+        uses: actions/upload-artifact@v2
+        with:
+          name: wing
+          path: apps/wing/*.tgz
+
+      - name: Upload WingSDK
+        uses: actions/upload-artifact@v2
+        with:
+          name: wingsdk
+          path: libs/wingsdk/*.tgz
+
+      - name: Upload WingC Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: wingc
+          path: target/wasm32-wasi/release/wingc.wasm
 
   build-native:
     strategy:
@@ -72,148 +112,142 @@ jobs:
           # - os: ubuntu-latest
           #   arch: x86
     runs-on: ${{ matrix.os }}
+    name: "Native Build"
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Private NPM with Github
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: "https://npm.pkg.github.com"
+          registry-url: https://npm.pkg.github.com
 
-      - name: Rust Cache
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
 
-      - name: Build WingII Crate
-        working-directory: libs/wingii
-        run: |
-          cargo test --release -- --nocapture
-          cargo build --release
+      - name: Login to Private NPM registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
-      - name: Build WingC Library
-        working-directory: libs/wingc
-        run: |
-          cargo test --release -- --nocapture
-          cargo build --lib --release
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          # Don't need to install sub-project dependencies
+          install-command: npm install --ignore-scripts
 
-      - name: Build Wing Language Server
-        working-directory: apps/wing-language-server
-        run: |
-          cargo build --release
-          mv ../../target/release/wing-language-server ../../target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+      - name: Lint Nx
+        run: npx nx workspace-lint
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build-native"
+          projects: "wing-language-server"
+          args: "--configuration=release"
 
       - name: Upload Wing Language Server
         uses: actions/upload-artifact@v2
         with:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
-          path: target/release/wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+          path: target/release/wing-language-server
 
   build-vscode:
-    needs: build-native
+    name: "Build VSCode Extension"
+    needs:
+      - build-native
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Download language server binaries
+
+      - name: Download Build Artifacts
         uses: actions/download-artifact@v2
+
       - name: Prepare language server binaries
-        run: |
-          cp -r wing-language-server-* ./apps/vscode-wing/resources
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: cp -r wing-language-server-* ./apps/vscode-wing/resources
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          working-directory: apps/vscode-wing
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Login to Private NPM registry
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+
       - name: Build
-        working-directory: apps/vscode-wing
-        run: |
-          npm run projen
-          npm run compile
-          npm run test
-          npm version ${{ env.WING_VERSION }}
-      - name: Create VSIX
-        working-directory: apps/vscode-wing
-        run: npm run package
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build-multi"
+          projects: "vscode-wing"
+          args: "--configuration=release"
+
       - name: Upload extension
         uses: actions/upload-artifact@v2
         with:
           name: vscode-wing.vsix
           path: apps/vscode-wing/vscode-wing.vsix
 
-  build-sdk:
-    uses: ./.github/workflows/build-sdk.yml
-    secrets: inherit
-
-  # Purposely Empty to be a required check for all matrix entries from build-native
   build:
     needs:
-      - build-wing-cli
       - build-native
+      - build-wasm
       - build-vscode
-      - build-sdk
     runs-on: ubuntu-latest
     steps:
       - name: Build Validation
         run: echo "Build Successful"
 
-  wingsdk-publish:
-    if: ${{ github.ref == 'refs/heads/main' }}
-    name: Publish to npm
-    needs: build-sdk
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 16.x
-      - name: Download build artifacts
-        uses: actions/download-artifact@v3
-        with:
-          name: wingsdk-build-artifact
-          path: dist
-      - name: Prepare Repository
-        run: mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
-        env:
-          PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-      - name: Set Version
-        working-directory: .repo
-        run: npm version ${{ env.WING_VERSION }}
-      - name: Install Dependencies
-        run: cd .repo && npm ci
-      - name: Create js artifact
-        run: cd .repo && npx projen package:js
-      - name: Collect js Artifact
-        run: mv .repo/dist dist
-      - name: Release
-        run: npx -p publib@latest publib-npm
-        env:
-          NPM_DIST_TAG: latest
-          NPM_REGISTRY: npm.pkg.github.com
-          NPM_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-
-  release:
-    if: ${{ github.ref == 'refs/heads/main' }}
+  publish:
+    name: "Publish${{ github.ref == 'refs/heads/main' && '' || ' (Dry Run)' }}"
     needs:
       - build
-      - wingsdk-publish
     runs-on: ubuntu-latest
     steps:
-      - name: Download Artifacts
+      - name: Download Build Artifacts
         uses: actions/download-artifact@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Publish Wing
+        working-directory: wing
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: npm publish *.tgz --dry-run=${{ github.ref != 'refs/heads/main' }}
+
+      - name: Publish Wing
+        working-directory: wingsdk
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: npm publish *.tgz --dry-run=${{ github.ref != 'refs/heads/main' }}
 
       - name: Compute Checksums
         run: |
           mkdir dist
           mv ./*/*.vsix ./dist
+          mv ./*/*.tgz ./dist
           cd dist
           echo '## SHA-1 Checksums' > ../checksums.md
           echo '```' >> ../checksums.md
           sha1sum --binary * >> ../checksums.md
           echo '```' >> ../checksums.md
+          cat ../checksums.md
 
       - name: Cut Development Release
+        if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: development

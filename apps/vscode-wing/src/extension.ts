@@ -55,22 +55,32 @@ async function startLanguageServer(context: ExtensionContext) {
 
   let serverPath = process.env.WING_LSP_SERVER_PATH;
   if (!serverPath) {
-    // TODO The excessive nesting is pretty ugly
-    // TODO workflow should place these in ways that make more sense
-    switch (platform()) {
-      case "darwin":
-        // Currently, we only have darwin x64 builds. Users must have rosetta available to run this on arm64.
-        serverPath = context.asAbsolutePath(
-          "resources/wing-language-server-macos-latest-x64/wing-language-server-macos-latest-x64"
-        );
-        break;
-      case "linux":
-        serverPath = context.asAbsolutePath(
-          "resources/wing-language-server-ubuntu-latest-x64/wing-language-server-ubuntu-latest-x64"
-        );
-        break;
-      default:
-        throw new Error("Unsupported platform");
+    serverPath = context.asAbsolutePath(
+      "resources/native/wing-language-server"
+    );
+    // typically for local debug
+    if (serverPath && existsSync(serverPath)) {
+      void window.showInformationMessage(
+        `[Wing] Using local language server at ${serverPath}`
+      );
+    } else {
+      // TODO The excessive nesting is pretty ugly
+      // TODO workflow should place these in ways that make more sense
+      switch (platform()) {
+        case "darwin":
+          // Currently, we only have darwin x64 builds. Users must have rosetta available to run this on arm64.
+          serverPath = context.asAbsolutePath(
+            "resources/wing-language-server-macos-latest-x64/wing-language-server-macos-latest-x64"
+          );
+          break;
+        case "linux":
+          serverPath = context.asAbsolutePath(
+            "resources/wing-language-server-ubuntu-latest-x64/wing-language-server-ubuntu-latest-x64"
+          );
+          break;
+        default:
+          throw new Error("Unsupported platform");
+      }
     }
   }
 

@@ -28,7 +28,7 @@ import wingcPath from "../wingc.wasm";
 
       if (options.outDir) {
         args.push(options.outDir);
-      }
+      } 
 
       const wasi = new WASI({
         args,
