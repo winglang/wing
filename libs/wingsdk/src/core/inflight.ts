@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { mkdtempSync, readFileSync, unlinkSync, writeFileSync } from "fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join, resolve } from "path";
 import { IConstruct } from "constructs";
@@ -199,7 +199,6 @@ export class Inflight {
 
     const absolutePath = resolve(originalCode.path);
     const workdir = dirname(absolutePath);
-    const filename = basename(absolutePath);
 
     lines.push("const $cap = {};");
     for (const [name, client] of Object.entries(options.captureClients)) {
@@ -212,15 +211,13 @@ export class Inflight {
     lines.push(`  return await ${this.entrypoint}($cap, event);`);
     lines.push("};");
 
-    const content = lines.join("\n");
-    const prebundledFile = join(workdir, filename + ".prebundle.js");
-    writeFileSync(prebundledFile, content);
+    const contents = lines.join("\n");
 
     // expose the inflight code before esbuild inlines dependencies, for unit
     // testing purposes... ugly
     if (options.captureScope) {
       (options.captureScope as any)[PREBUNDLE_SYMBOL] =
-        NodeJsCode.fromInline(content);
+        NodeJsCode.fromInline(contents);
     }
 
     const tempdir = mkdtemp("wingsdk.");
@@ -228,17 +225,18 @@ export class Inflight {
 
     esbuild.buildSync({
       bundle: true,
+      stdin: {
+        contents,
+        resolveDir: workdir,
+        sourcefile: "original.js",
+      },
       target: "node16",
       platform: "node",
       absWorkingDir: workdir,
-      entryPoints: [prebundledFile],
       outfile,
       minify: false,
       external: options.external ?? [],
     });
-
-    // clean up the intermediate file
-    unlinkSync(prebundledFile);
 
     return NodeJsCode.fromFile(outfile);
   }
