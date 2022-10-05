@@ -21,7 +21,7 @@ class Main extends Construct {
       entrypoint: "$proc",
       captures: {
         queue: {
-          obj: queue,
+          resource: queue,
           methods: [cloud.QueueInflightMethods.PUSH],
         },
       },

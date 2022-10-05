@@ -17,6 +17,8 @@ import { FunctionSchema } from "./schema";
  * Simulator implementation of `cloud.Function`.
  */
 export class Function extends cloud.FunctionBase implements IResource {
+  private readonly callers = new Array<string>();
+  private readonly callees = new Array<string>();
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
@@ -30,6 +32,12 @@ export class Function extends cloud.FunctionBase implements IResource {
 
     if (inflight.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is currently supported.");
+    }
+
+    for (const capture of Object.values(inflight.captures)) {
+      if (capture.resource !== undefined) {
+        this.callees.push(capture.resource.node.path);
+      }
     }
 
     const captureClients = inflight.makeClients(this);
@@ -49,12 +57,21 @@ export class Function extends cloud.FunctionBase implements IResource {
   /**
    * @internal
    */
+  public _addCallers(...callers: string[]) {
+    this.callers.push(...callers);
+  }
+
+  /**
+   * @internal
+   */
   public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
       throw new Error(
         "functions can only be captured by a sim.Function for now"
       );
     }
+
+    this.callers.push(captureScope.node.path);
 
     const env = `FUNCTION_ADDR__${this.node.id}`;
     captureScope.addEnvironment(env, this.addr);
@@ -74,8 +91,8 @@ export class Function extends cloud.FunctionBase implements IResource {
         environmentVariables: this.env,
       },
       attrs: {} as any,
-      callers: [],
-      callees: [],
+      callers: this.callers,
+      callees: this.callees,
     };
   }
 

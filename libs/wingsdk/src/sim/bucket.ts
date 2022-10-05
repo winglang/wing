@@ -11,6 +11,7 @@ import { BucketSchema } from "./schema";
  */
 export class Bucket extends cloud.BucketBase implements IResource {
   private readonly public: boolean;
+  private readonly callers = new Array<string>();
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
@@ -25,7 +26,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
         public: this.public,
       },
       attrs: {} as any,
-      callers: [],
+      callers: this.callers,
       callees: [],
     };
   }
@@ -41,6 +42,8 @@ export class Bucket extends cloud.BucketBase implements IResource {
     if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by a sim.Bucket for now");
     }
+
+    this.callers.push(captureScope.node.path);
 
     const env = `BUCKET_ADDR__${this.node.id}`;
     captureScope.addEnvironment(env, this.addr);

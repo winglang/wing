@@ -8,21 +8,27 @@ import { PREBUNDLE_SYMBOL } from "./internal";
 
 /**
  * Capture information. A capture is a reference from an Inflight to a
- * construction-time object or value.
+ * construction-time resource or value. Either the "resource" or "value" field
+ * will be set, but not both.
  */
 export interface Capture extends CaptureMetadata {
   /**
-   * The captured object
+   * A captured resource
    */
-  readonly obj: any;
+  readonly resource?: ICapturableConstruct;
+
+  /**
+   * A captured immutable value (like string, number, boolean, a struct, or null).
+   */
+  readonly value?: any;
 }
 
 /**
- * Extra metadata associated with a capture.
+ * Extra metadata associated with a captured resource.
  */
 export interface CaptureMetadata {
   /**
-   * Which methods are called on the captured object
+   * Which methods are called on the captured resource.
    */
   readonly methods?: string[];
 }
@@ -39,6 +45,11 @@ export interface ICapturable {
    */
   _capture(captureScope: IConstruct, metadata: CaptureMetadata): Code;
 }
+
+/**
+ * Represents a construct that is capturable by an Inflight.
+ */
+export interface ICapturableConstruct extends ICapturable, IConstruct {}
 
 /**
  * Reference to a piece of code.
@@ -268,24 +279,16 @@ function createClient(
   captureName: string,
   capture: Capture
 ): Code {
-  if (isPrimitive(capture.obj)) {
-    return NodeJsCode.fromInline(JSON.stringify(capture.obj));
+  if (capture.value !== undefined) {
+    return NodeJsCode.fromInline(JSON.stringify(capture.value));
   }
 
-  if (
-    typeof capture.obj == "object" &&
-    typeof capture.obj._capture === "function"
-  ) {
-    const c: ICapturable = capture.obj;
-    return c._capture(captureScope, capture);
+  if (capture.resource !== undefined) {
+    return capture.resource._capture(captureScope, capture);
   }
 
-  throw new Error(`unable to capture "${captureName}", no "_capture" method`);
-}
-
-function isPrimitive(value: any) {
-  return (
-    (typeof value !== "object" && typeof value !== "function") || value === null
+  throw new Error(
+    `Unable to capture "${captureName}", no "value" or "resource" specified.`
   );
 }
 

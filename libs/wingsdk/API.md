@@ -2537,7 +2537,8 @@ Whether the bucket's objects should be publicly accessible.
 Capture information.
 
 A capture is a reference from an Inflight to a
-construction-time object or value.
+construction-time resource or value. Either the "resource" or "value" field
+will be set, but not both.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.Capture.Initializer"></a>
 
@@ -2551,8 +2552,9 @@ const capture: core.Capture = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.obj">obj</a></code> | <code>any</code> | The captured object. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.resource">resource</a></code> | <code>@monadahq/wingsdk.core.ICapturableConstruct</code> | A captured resource. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.value">value</a></code> | <code>any</code> | A captured immutable value (like string, number, boolean, a struct, or null). |
 
 ---
 
@@ -2564,25 +2566,37 @@ public readonly methods: string[];
 
 - *Type:* string[]
 
-Which methods are called on the captured object.
+Which methods are called on the captured resource.
 
 ---
 
-##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.core.Capture.property.obj"></a>
+##### `resource`<sup>Optional</sup> <a name="resource" id="@monadahq/wingsdk.core.Capture.property.resource"></a>
 
 ```typescript
-public readonly obj: any;
+public readonly resource: ICapturableConstruct;
+```
+
+- *Type:* @monadahq/wingsdk.core.ICapturableConstruct
+
+A captured resource.
+
+---
+
+##### `value`<sup>Optional</sup> <a name="value" id="@monadahq/wingsdk.core.Capture.property.value"></a>
+
+```typescript
+public readonly value: any;
 ```
 
 - *Type:* any
 
-The captured object.
+A captured immutable value (like string, number, boolean, a struct, or null).
 
 ---
 
 ### CaptureMetadata <a name="CaptureMetadata" id="@monadahq/wingsdk.core.CaptureMetadata"></a>
 
-Extra metadata associated with a capture.
+Extra metadata associated with a captured resource.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.CaptureMetadata.Initializer"></a>
 
@@ -2596,7 +2610,7 @@ const captureMetadata: core.CaptureMetadata = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
+| <code><a href="#@monadahq/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
 
 ---
 
@@ -2608,7 +2622,7 @@ public readonly methods: string[];
 
 - *Type:* string[]
 
-Which methods are called on the captured object.
+Which methods are called on the captured resource.
 
 ---
 
@@ -4312,11 +4326,40 @@ Put an object in the bucket.
 
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
 
+
+### ICapturableConstruct <a name="ICapturableConstruct" id="@monadahq/wingsdk.core.ICapturableConstruct"></a>
+
+- *Extends:* @monadahq/wingsdk.core.ICapturable, constructs.IConstruct
+
+- *Implemented By:* @monadahq/wingsdk.core.ICapturableConstruct
+
+Represents a construct that is capturable by an Inflight.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.ICapturableConstruct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.ICapturableConstruct.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.cloud.IFunctionClient"></a>
 

@@ -1,6 +1,5 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { QUEUE_ID } from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
@@ -10,6 +9,8 @@ import { QueueSchema, QueueSubscriber } from "./schema";
  * Simulator implementation of `cloud.Queue`.
  */
 export class Queue extends cloud.QueueBase implements IResource {
+  private readonly callers = new Array<string>();
+  private readonly callees = new Array<string>();
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -45,8 +46,9 @@ export class Queue extends cloud.QueueBase implements IResource {
       newInflight,
       props
     );
-    // At the time the queue is initialized, the simulator needs to be
-    // able to call subscribed functions.
+
+    // At the time the queue is created in the simulator, it needs to be able to
+    // call subscribed functions.
     this.node.addDependency(fn);
 
     this.subscribers.push({
@@ -54,21 +56,24 @@ export class Queue extends cloud.QueueBase implements IResource {
       batchSize: props.batchSize ?? 1,
     });
 
+    this.callees.push(fn.node.path);
+    (fn as Function)._addCallers(this.node.path);
+
     return fn;
   }
 
   /** @internal */
   public _toResourceSchema(): QueueSchema {
     return {
-      type: QUEUE_ID,
+      type: cloud.QUEUE_ID,
       props: {
         timeout: this.timeout.seconds,
         subscribers: this.subscribers,
         initialMessages: [],
       },
       attrs: {} as any,
-      callers: [],
-      callees: [],
+      callers: this.callers,
+      callees: this.callees,
     };
   }
 
@@ -86,6 +91,8 @@ export class Queue extends cloud.QueueBase implements IResource {
     if (!(captureScope instanceof Function)) {
       throw new Error("queues can only be captured by a sim.Function for now");
     }
+
+    this.callers.push(captureScope.node.path);
 
     const env = `QUEUE_ADDR__${this.node.id}`;
     captureScope.addEnvironment(env, this.addr);
