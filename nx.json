@@ -43,6 +43,7 @@
       "options": {
         "cacheableOperations": [
           "build",
+          "build-native",
           "build-wasm",
           "copy",
           "lint",
