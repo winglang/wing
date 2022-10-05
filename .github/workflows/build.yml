@@ -91,6 +91,12 @@ jobs:
           name: wingsdk
           path: libs/wingsdk/*.tgz
 
+      - name: Upload WingC Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: wingc
+          path: target/wasm32-wasi/release/wingc.wasm
+
   build-native:
     strategy:
       fail-fast: false
