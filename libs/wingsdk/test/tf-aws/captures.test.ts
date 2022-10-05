@@ -10,6 +10,14 @@ import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
 import { tfResourcesOf, tfSanitize } from "../util";
 
+// TODO This is a hack. Our path for inflight requires should be relative
+function removeAbsolutePath(text: string) {
+  const regex = /"\/.+?\/winglang\/libs\/(.+?)"/g;
+
+  // replace first group with static text
+  return text.replace(regex, '"[REDACTED]/$1"');
+}
+
 test("function captures some primitives", () => {
   const output = cdktf.Testing.synthScope((scope) => {
     const factory = new tfaws.PolyconFactory();
@@ -39,7 +47,7 @@ test("function captures some primitives", () => {
     const fn = new cloud.Function(scope, "Function", inflight);
 
     const code = core.Testing.inspectPrebundledCode(fn);
-    expect(code.text).toMatchSnapshot();
+    expect(removeAbsolutePath(code.text)).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -77,7 +85,7 @@ test("function captures a bucket", () => {
     const fn = new cloud.Function(scope, "Function", inflight);
 
     const code = core.Testing.inspectPrebundledCode(fn);
-    expect(code.text).toMatchSnapshot();
+    expect(removeAbsolutePath(code.text)).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -126,8 +134,12 @@ test("function captures a function", () => {
     });
     const fn2 = new cloud.Function(scope, "Function2", inflight2);
 
-    expect(core.Testing.inspectPrebundledCode(fn1).text).toMatchSnapshot();
-    expect(core.Testing.inspectPrebundledCode(fn2).text).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn1).text)
+    ).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn2).text)
+    ).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -165,8 +177,12 @@ test("two functions reusing the same inflight", () => {
     const fn1 = new cloud.Function(scope, "Function1", inflight);
     const fn2 = new cloud.Function(scope, "Function2", inflight);
 
-    expect(core.Testing.inspectPrebundledCode(fn1).text).toMatchSnapshot();
-    expect(core.Testing.inspectPrebundledCode(fn2).text).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn1).text)
+    ).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn2).text)
+    ).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -214,9 +230,11 @@ test("function captures a queue", () => {
     });
     const processorFn = queue.onMessage(processor);
 
-    expect(core.Testing.inspectPrebundledCode(pusherFn).text).toMatchSnapshot();
     expect(
-      core.Testing.inspectPrebundledCode(processorFn).text
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(pusherFn).text)
+    ).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(processorFn).text)
     ).toMatchSnapshot();
   });
 
