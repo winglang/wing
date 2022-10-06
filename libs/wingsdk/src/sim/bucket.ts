@@ -1,6 +1,5 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { BUCKET_TYPE } from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
@@ -22,7 +21,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
   /** @internal */
   public _toResourceSchema(): BucketSchema {
     return {
-      type: BUCKET_TYPE,
+      type: cloud.Bucket.TYPE,
       props: {
         public: this.public,
       },

@@ -4,11 +4,6 @@ import { CaptureMetadata, Code, Inflight } from "../core";
 import { Resource } from "./resource";
 
 /**
- * Global identifier for `Function`.
- */
-export const FUNCTION_TYPE = "wingsdk.cloud.Function";
-
-/**
  * Properties for `Function`.
  *
  * This is the type users see when constructing a cloud.Function instance.
@@ -51,6 +46,11 @@ export abstract class FunctionBase extends Resource {
  * Represents a serverless function.
  */
 export class Function extends FunctionBase {
+  /**
+   * Type identifier for implementing `Function` as a polycon.
+   */
+  public static readonly TYPE = "wingsdk.cloud.Function";
+
   constructor(
     scope: Construct,
     id: string,
@@ -59,7 +59,7 @@ export class Function extends FunctionBase {
   ) {
     super(null as any, id, inflight, props);
     return Polycons.newInstance(
-      FUNCTION_TYPE,
+      Function.TYPE,
       scope,
       id,
       inflight,

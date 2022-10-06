@@ -357,6 +357,25 @@ with a fresh copy without any consequences.
 
 ---
 
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Bucket.property.TYPE">TYPE</a></code> | <code>string</code> | Type identifier for implementing `Bucket` as a polycon. |
+
+---
+
+##### `TYPE`<sup>Required</sup> <a name="TYPE" id="@monadahq/wingsdk.cloud.Bucket.property.TYPE"></a>
+
+```typescript
+public readonly TYPE: string;
+```
+
+- *Type:* string
+
+Type identifier for implementing `Bucket` as a polycon.
+
+---
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.sim.Bucket"></a>
 
@@ -994,6 +1013,25 @@ with a fresh copy without any consequences.
 
 ---
 
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Function.property.TYPE">TYPE</a></code> | <code>string</code> | Type identifier for implementing `Function` as a polycon. |
+
+---
+
+##### `TYPE`<sup>Required</sup> <a name="TYPE" id="@monadahq/wingsdk.cloud.Function.property.TYPE"></a>
+
+```typescript
+public readonly TYPE: string;
+```
+
+- *Type:* string
+
+Type identifier for implementing `Function` as a polycon.
+
+---
 
 ### Function <a name="Function" id="@monadahq/wingsdk.sim.Function"></a>
 
@@ -1724,6 +1762,25 @@ with a fresh copy without any consequences.
 
 ---
 
+#### Constants <a name="Constants" id="Constants"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.TYPE">TYPE</a></code> | <code>string</code> | Type identifier for implementing `Queue` as a polycon. |
+
+---
+
+##### `TYPE`<sup>Required</sup> <a name="TYPE" id="@monadahq/wingsdk.cloud.Queue.property.TYPE"></a>
+
+```typescript
+public readonly TYPE: string;
+```
+
+- *Type:* string
+
+Type identifier for implementing `Queue` as a polycon.
+
+---
 
 ### Queue <a name="Queue" id="@monadahq/wingsdk.sim.Queue"></a>
 
@@ -3753,7 +3810,7 @@ The code contents.
 
 - *Implements:* @monadahq/polycons.IPolyconFactory
 
-Polycon factory which resolves `cloud` resources into simulated resources.
+Polycon factory which resolves cloud resources into simulated resources.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.PolyconFactory.Initializer"></a>
 
@@ -3815,7 +3872,7 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 - *Implements:* @monadahq/polycons.IPolyconFactory
 
-Polycon factory which resolves `cloud` resources into AWS resources.
+Polycon factory which resolves cloud resources into AWS resources.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.PolyconFactory.Initializer"></a>
 

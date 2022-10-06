@@ -65,7 +65,7 @@ export class Queue extends cloud.QueueBase implements IResource {
   /** @internal */
   public _toResourceSchema(): QueueSchema {
     return {
-      type: cloud.QUEUE_TYPE,
+      type: cloud.Queue.TYPE,
       props: {
         timeout: this.timeout.seconds,
         subscribers: this.subscribers,

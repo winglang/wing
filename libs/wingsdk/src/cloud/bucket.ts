@@ -4,11 +4,6 @@ import { CaptureMetadata, Code } from "../core";
 import { Resource } from "./resource";
 
 /**
- * Global identifier for `Bucket`.
- */
-export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
-
-/**
  * Properties for `Bucket`.
  */
 export interface BucketProps {
@@ -38,9 +33,14 @@ export abstract class BucketBase extends Resource {
  * Represents a cloud object store.
  */
 export class Bucket extends BucketBase {
+  /**
+   * Type identifier for implementing `Bucket` as a polycon.
+   */
+  public static readonly TYPE = "wingsdk.cloud.Bucket";
+
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(null as any, id, props);
-    return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;
+    return Polycons.newInstance(Bucket.TYPE, scope, id, props) as Bucket;
   }
 
   /**

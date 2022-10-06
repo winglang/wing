@@ -6,7 +6,7 @@ import { Function } from "./function";
 import { Queue } from "./queue";
 
 /**
- * Polycon factory which resolves `cloud` resources into simulated resources.
+ * Polycon factory which resolves cloud resources into simulated resources.
  */
 export class PolyconFactory implements IPolyconFactory {
   resolve(
@@ -16,11 +16,11 @@ export class PolyconFactory implements IPolyconFactory {
     ...args: any[]
   ): IConstruct {
     switch (polyconId) {
-      case cloud.BUCKET_TYPE:
+      case cloud.Bucket.TYPE:
         return new Bucket(scope, id, args[0]);
-      case cloud.FUNCTION_TYPE:
+      case cloud.Function.TYPE:
         return new Function(scope, id, args[0], args[1]);
-      case cloud.QUEUE_TYPE:
+      case cloud.Queue.TYPE:
         return new Queue(scope, id, args[0]);
       default:
         throw new Error(`Type ${polyconId} not implemented.`);

@@ -5,11 +5,6 @@ import { Function, FunctionProps } from "./function";
 import { Resource } from "./resource";
 
 /**
- * Global identifier for `Queue`.
- */
-export const QUEUE_TYPE = "wingsdk.cloud.Queue";
-
-/**
  * Properties for `Queue`.
  */
 export interface QueueProps {
@@ -58,9 +53,14 @@ export interface QueueOnMessageProps extends FunctionProps {
  * Represents a serverless queue.
  */
 export class Queue extends QueueBase {
+  /**
+   * Type identifier for implementing `Queue` as a polycon.
+   */
+  public static readonly TYPE = "wingsdk.cloud.Queue";
+
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(null as any, id, props);
-    return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
+    return Polycons.newInstance(Queue.TYPE, scope, id, props) as Queue;
   }
 
   /**
