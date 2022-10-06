@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, path::PathBuf};
 
 use sha2::{Digest, Sha256};
 
@@ -27,12 +27,12 @@ fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -
 	return lines.join("\n");
 }
 
-pub fn jsify(scope: &Scope, shim: bool) -> String {
+pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 	let mut js = vec![];
 	let mut imports = vec![];
 
 	for statement in scope.statements.iter() {
-		let line = jsify_statement(statement);
+		let line = jsify_statement(statement, &out_dir);
 		if line.is_empty() {
 			continue;
 		}
@@ -51,8 +51,9 @@ pub fn jsify(scope: &Scope, shim: bool) -> String {
 
 	if shim {
 		output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
+		output.push(format!("const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \".\";"));
 		output.push(format!(
-			"const {} = process.env.WING_LOCAL ? new {}.local.Synthesizer({{}}) : new {}.tfaws.Synthesizer({{}});",
+			"const {} = process.env.WING_SIM ? new {}.sim.Synthesizer({{ outdir: $outdir }}) : new {}.tfaws.Synthesizer({{ outdir: $outdir }});",
 			SYNTHESIZER, STDLIB, STDLIB
 		));
 	}
@@ -73,12 +74,12 @@ pub fn jsify(scope: &Scope, shim: bool) -> String {
 	output.join("\n")
 }
 
-fn jsify_scope(scope: &Scope) -> String {
+fn jsify_scope(scope: &Scope, out_dir: &PathBuf) -> String {
 	let mut lines = vec![];
 	lines.push("{".to_string());
 
 	for statement in scope.statements.iter() {
-		let statement_str = format!("{}", jsify_statement(statement));
+		let statement_str = format!("{}", jsify_statement(statement, &out_dir));
 		let result = statement_str.split("\n");
 		for l in result {
 			lines.push(format!("  {}", l));
@@ -250,7 +251,7 @@ fn jsify_expression(expression: &Expr) -> String {
 	}
 }
 
-fn jsify_statement(statement: &Statement) -> String {
+fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 	match statement {
 		Statement::Use {
 			module_name,
@@ -281,11 +282,12 @@ fn jsify_statement(statement: &Statement) -> String {
 			format!("let {} = {};", jsify_symbol(var_name), initial_value)
 		}
 		Statement::FunctionDefinition(func_def) => match func_def.signature.flight {
-			Flight::In => jsify_inflight_function(func_def),
+			Flight::In => jsify_inflight_function(func_def, &out_dir),
 			Flight::Pre => jsify_function(
 				format!("function {}", jsify_symbol(&func_def.name)).as_str(),
 				&func_def.parameters,
 				&func_def.statements,
+				&out_dir,
 			),
 		},
 		Statement::ForLoop {
@@ -296,7 +298,7 @@ fn jsify_statement(statement: &Statement) -> String {
 			"for(const {} of {}) {}",
 			jsify_symbol(iterator),
 			jsify_expression(iterable),
-			jsify_scope(statements)
+			jsify_scope(statements, &out_dir)
 		),
 		Statement::If {
 			condition,
@@ -307,18 +309,22 @@ fn jsify_statement(statement: &Statement) -> String {
 				format!(
 					"if ({}) {} else {}",
 					jsify_expression(condition),
-					jsify_scope(statements),
-					jsify_scope(else_scope)
+					jsify_scope(statements, &out_dir),
+					jsify_scope(else_scope, &out_dir)
 				)
 			} else {
-				format!("if ({}) {}", jsify_expression(condition), jsify_scope(statements))
+				format!(
+					"if ({}) {}",
+					jsify_expression(condition),
+					jsify_scope(statements, &out_dir)
+				)
 			}
 		}
 		Statement::Expression(e) => jsify_expression(e),
 		Statement::Assignment { variable, value } => {
 			format!("{} = {};", jsify_reference(&variable), jsify_expression(value))
 		}
-		Statement::Scope(scope) => jsify_scope(scope),
+		Statement::Scope(scope) => jsify_scope(scope, &out_dir),
 		Statement::Return(exp) => {
 			if let Some(exp) = exp {
 				format!("return {};", jsify_expression(exp))
@@ -346,7 +352,12 @@ fn jsify_statement(statement: &Statement) -> String {
 				} else {
 					"".to_string()
 				},
-				jsify_function("constructor", &constructor.parameters, &constructor.statements),
+				jsify_function(
+					"constructor",
+					&constructor.parameters,
+					&constructor.statements,
+					&out_dir
+				),
 				members
 					.iter()
 					.map(|m| jsify_class_member(m))
@@ -354,7 +365,7 @@ fn jsify_statement(statement: &Statement) -> String {
 					.join("\n"),
 				methods
 					.iter()
-					.map(|f| jsify_function(jsify_symbol(&f.name).as_str(), &f.parameters, &f.statements))
+					.map(|f| jsify_function(jsify_symbol(&f.name).as_str(), &f.parameters, &f.statements, &out_dir))
 					.collect::<Vec<String>>()
 					.join("\n")
 			)
@@ -362,14 +373,12 @@ fn jsify_statement(statement: &Statement) -> String {
 	}
 }
 
-fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
+fn jsify_inflight_function(func_def: &FunctionDefinition, out_dir: &PathBuf) -> String {
 	let mut parameter_list = vec![];
 	for p in func_def.parameters.iter() {
 		parameter_list.push(p.name.clone());
 	}
-	// TODO Hack: We don't have enough information to get the true out_dir, this is just an assumption for the current impl
-	let out_dir = format!("{}.out", func_def.name.span.file_id.to_string());
-	let block = jsify_scope(&func_def.statements);
+	let block = jsify_scope(&func_def.statements, &out_dir);
 	let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 	let mut bindings = vec![];
 	let mut capture_names = vec![];
@@ -398,7 +407,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 		parameter_list.join(", "),
 		block
 	));
-	let proc_dir = format!("{}/proc.{}", out_dir, procid);
+	let proc_dir = format!("{}/proc.{}", out_dir.to_string_lossy(), procid);
 	fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 	let file_path = format!("{}/index.js", proc_dir);
 	let relative_file_path = format!("proc.{}/index.js", procid);
@@ -421,7 +430,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 	)
 }
 
-fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope) -> String {
+fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope, out_dir: &PathBuf) -> String {
 	let mut parameter_list = vec![];
 	for p in parameters.iter() {
 		parameter_list.push(jsify_symbol(p));
@@ -431,7 +440,7 @@ fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope) -> String 
 		"{}({}) {}",
 		name,
 		parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
-		jsify_scope(body)
+		jsify_scope(body, &out_dir)
 	)
 }
 

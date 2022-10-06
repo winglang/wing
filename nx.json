@@ -30,8 +30,8 @@
       "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
     ],
     "rust-native": [
-      "{workspaceRoot}/target/debug/*",
-      "{workspaceRoot}/target/release/*"
+      "{workspaceRoot}/target/debug/**/*",
+      "{workspaceRoot}/target/release/**/*"
     ],
     "dist": [
       "{projectRoot}/dist/**/*"
@@ -55,8 +55,8 @@
   "targetDefaults": {
     "build": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/**/*",
         "src"
       ],
       "outputs": [
@@ -68,8 +68,8 @@
     },
     "build-native": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/**/*",
         "src"
       ],
       "outputs": [
@@ -81,8 +81,8 @@
     },
     "build-wasm": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/**/*",
         "src"
       ],
       "outputs": [
@@ -94,8 +94,8 @@
     },
     "test": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "{projectRoot}/**/*",
+        "{workspaceRoot}/**/*",
         "src",
         "test"
       ]
