@@ -379,7 +379,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 			"{}: {},",
 			obj.name,
 			render_block([
-				format!("obj: {},", obj.name),
+				format!("resource: {},", obj.name),
 				format!(
 					"methods: [{}]",
 					cap_def
