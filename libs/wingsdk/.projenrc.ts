@@ -15,6 +15,7 @@ const project = new cdk.JsiiProject({
     "@cdktf/provider-aws",
   ],
   bundledDeps: [
+    "fs-extra",
     // preflight dependencies
     "esbuild-wasm",
     // aws client dependencies
@@ -22,13 +23,17 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-sqs",
     "@aws-sdk/util-utf8-node",
-    // simulator client dependencies (none)
-    // simulator implementation dependencies
+    // simulator dependencies
+    "tar",
     "piscina",
+    "ws",
   ],
   devDeps: [
     "replace-in-file",
     "@types/aws-lambda",
+    "@types/fs-extra",
+    "@types/tar",
+    "@types/ws",
     "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
   ],
   prettier: true,
@@ -43,6 +48,10 @@ const project = new cdk.JsiiProject({
   github: false,
   projenrcTs: true,
 });
+
+// fix typing issues with "tar" dependency
+project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
+project.package.addPackageResolutions("minipass@3.1.6");
 
 // use a more recent version of jest-resolve so that tests will not error
 // when using require("@scope/package/path")
@@ -146,8 +155,12 @@ project.eslint!.addRules({
     "error",
     {
       zones: [
+        // avoid importing inflight or simulator code into preflight code since
+        // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
         disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
+        // implementation details of simulator should not be leaked to inflight code
+        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],

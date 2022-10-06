@@ -6,7 +6,7 @@ import { Resource } from "./resource";
 /**
  * Global identifier for `Bucket`.
  */
-export const BUCKET_ID = "wingsdk.cloud.Bucket";
+export const BUCKET_TYPE = "wingsdk.cloud.Bucket";
 
 /**
  * Properties for `Bucket`.
@@ -40,7 +40,7 @@ export abstract class BucketBase extends Resource {
 export class Bucket extends BucketBase {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(null as any, id, props);
-    return Polycons.newInstance(BUCKET_ID, scope, id, props) as Bucket;
+    return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;
   }
 
   /**

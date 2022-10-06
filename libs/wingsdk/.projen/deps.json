@@ -19,13 +19,30 @@
       "type": "build"
     },
     {
+      "name": "@types/fs-extra",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "version": "^27.0.0",
       "type": "build"
     },
     {
+      "name": "@types/minipass",
+      "version": "3.1.2",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
+      "type": "build"
+    },
+    {
+      "name": "@types/tar",
+      "type": "build"
+    },
+    {
+      "name": "@types/ws",
       "type": "build"
     },
     {
@@ -107,6 +124,11 @@
       "type": "build"
     },
     {
+      "name": "minipass",
+      "version": "3.1.6",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^15",
       "type": "build"
@@ -166,28 +188,20 @@
       "type": "bundled"
     },
     {
+      "name": "fs-extra",
+      "type": "bundled"
+    },
+    {
       "name": "piscina",
       "type": "bundled"
     },
     {
-      "name": "@types/prettier",
-      "version": "2.6.0",
-      "type": "override"
+      "name": "tar",
+      "type": "bundled"
     },
     {
-      "name": "@types/responselike",
-      "version": "1.0.0",
-      "type": "override"
-    },
-    {
-      "name": "got",
-      "version": "12.3.1",
-      "type": "override"
-    },
-    {
-      "name": "jest-resolve",
-      "version": "^28",
-      "type": "override"
+      "name": "ws",
+      "type": "bundled"
     },
     {
       "name": "@cdktf/provider-aws",

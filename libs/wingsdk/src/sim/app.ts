@@ -1,9 +1,12 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
 import { Construct, IConstruct } from "constructs";
+import * as tar from "tar";
+import { DependencyGraph } from "../core";
 import { FileBase } from "../fs";
+import { mkdtemp, sanitizeValue } from "../util";
 import { isResource } from "./resource";
-import { ConstructSchema, ResourceSchema, WingSimulatorSchema } from "./schema";
+import { ResourceSchema, WingSimulatorSchema } from "./schema";
 
 /**
  * Props for `App`.
@@ -25,58 +28,86 @@ export class App extends Construct {
    */
   private readonly outdir: string;
   constructor(props: AppProps) {
-    super(undefined as any, "");
+    super(undefined as any, "root");
     this.outdir = props.outdir;
   }
 
   /**
-   * Synthesize the app into the output directory.
+   * Synthesize the app into an `app.wx` file.
    */
   public synth() {
+    const workdir = mkdtemp();
+
+    // write assets and other files into the workdir
     const isFile = (c: IConstruct): c is FileBase => c instanceof FileBase;
     for (const f of this.node.findAll().filter(isFile)) {
-      f.save(this.outdir);
+      f.save(workdir);
     }
 
-    const root: ConstructSchema = constructToSchema(this);
-
-    const contents: WingSimulatorSchema = {
-      version: "wingsimulator-0.1",
-      root,
-    };
+    // write "simulator.json" into the workdir
+    const root = toSchema(this);
+    const initOrder = new DependencyGraph(this.node)
+      .topology()
+      .filter((x) => isResource(x))
+      .map((x) => x.node.path);
+    const contents: WingSimulatorSchema = { root, initOrder };
     writeFileSync(
-      join(this.outdir, "simulator.json"),
+      join(workdir, "simulator.json"),
       JSON.stringify(contents, null, 2)
     );
+
+    // zip it up, and write it as app.wx to the outdir
+    tar.create(
+      {
+        gzip: true,
+        cwd: workdir,
+        sync: true,
+        file: join(this.outdir, "app.wx"),
+      },
+      ["./"]
+    );
   }
+}
+
+/**
+ * Whether to resource should be included in the simulator.json tree.
+ * If a construct is not a resource or does not contain any resources, there is
+ * nothing to simulate, so we can skip it.
+ */
+function shouldIncludeInTree(c: IConstruct): boolean {
+  if (isResource(c)) {
+    return true;
+  }
+
+  if (c.node.children.some((x) => shouldIncludeInTree(x))) {
+    return true;
+  }
+
+  return false;
 }
 
 function toSchema(c: IConstruct): ResourceSchema {
-  if (isResource(c)) {
-    return c._toResourceSchema();
-  } else if (Construct.isConstruct(c)) {
-    return constructToSchema(c);
-  } else {
-    throw new Error(
-      `Cannot construct schema for ${(c as IConstruct).node.path}`
-    );
-  }
-}
+  const children = c.node.children.reduce((acc, child) => {
+    if (!shouldIncludeInTree(child)) {
+      return acc;
+    }
+    const childSchema = toSchema(child);
+    return {
+      ...acc,
+      [child.node.id]: childSchema,
+    };
+  }, {});
 
-function constructToSchema(c: IConstruct): ConstructSchema {
-  return {
-    id: c.node.id,
-    path: c.node.path,
-    type: "constructs.Construct",
-    callees: [],
-    callers: [],
-    props: {},
-    children: c.node.children.reduce((acc, child) => {
-      const childSchema = toSchema(child);
-      return {
-        ...acc,
-        [childSchema.id]: childSchema,
-      };
-    }, {}),
-  };
+  const resourceFields: any = isResource(c) ? c._toResourceSchema() : {};
+  const dependsOn = c.node.dependencies.map((dep) => dep.node.path);
+
+  return sanitizeValue(
+    {
+      type: resourceFields.type ?? "constructs.Construct",
+      ...resourceFields,
+      children,
+      dependsOn,
+    },
+    { filterEmptyArrays: true, filterEmptyObjects: true, sortKeys: false }
+  );
 }

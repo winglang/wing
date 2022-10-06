@@ -173,7 +173,7 @@ new sim.App(props: AppProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into the output directory. |
+| <code><a href="#@monadahq/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into an `app.wx` file. |
 
 ---
 
@@ -191,7 +191,7 @@ Returns a string representation of this construct.
 public synth(): void
 ```
 
-Synthesize the app into the output directory.
+Synthesize the app into an `app.wx` file.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -2537,7 +2537,8 @@ Whether the bucket's objects should be publicly accessible.
 Capture information.
 
 A capture is a reference from an Inflight to a
-construction-time object or value.
+construction-time resource or value. Either the "resource" or "value" field
+will be set, but not both.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.Capture.Initializer"></a>
 
@@ -2551,8 +2552,9 @@ const capture: core.Capture = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.obj">obj</a></code> | <code>any</code> | The captured object. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.resource">resource</a></code> | <code>@monadahq/wingsdk.core.ICapturableConstruct</code> | A captured resource. |
+| <code><a href="#@monadahq/wingsdk.core.Capture.property.value">value</a></code> | <code>any</code> | A captured immutable value (like string, number, boolean, a struct, or null). |
 
 ---
 
@@ -2564,25 +2566,37 @@ public readonly methods: string[];
 
 - *Type:* string[]
 
-Which methods are called on the captured object.
+Which methods are called on the captured resource.
 
 ---
 
-##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.core.Capture.property.obj"></a>
+##### `resource`<sup>Optional</sup> <a name="resource" id="@monadahq/wingsdk.core.Capture.property.resource"></a>
 
 ```typescript
-public readonly obj: any;
+public readonly resource: ICapturableConstruct;
+```
+
+- *Type:* @monadahq/wingsdk.core.ICapturableConstruct
+
+A captured resource.
+
+---
+
+##### `value`<sup>Optional</sup> <a name="value" id="@monadahq/wingsdk.core.Capture.property.value"></a>
+
+```typescript
+public readonly value: any;
 ```
 
 - *Type:* any
 
-The captured object.
+A captured immutable value (like string, number, boolean, a struct, or null).
 
 ---
 
 ### CaptureMetadata <a name="CaptureMetadata" id="@monadahq/wingsdk.core.CaptureMetadata"></a>
 
-Extra metadata associated with a capture.
+Extra metadata associated with a captured resource.
 
 #### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.CaptureMetadata.Initializer"></a>
 
@@ -2596,7 +2610,7 @@ const captureMetadata: core.CaptureMetadata = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured object. |
+| <code><a href="#@monadahq/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
 
 ---
 
@@ -2608,7 +2622,7 @@ public readonly methods: string[];
 
 - *Type:* string[]
 
-Which methods are called on the captured object.
+Which methods are called on the captured resource.
 
 ---
 
@@ -2946,40 +2960,40 @@ How long a queue's consumers have to process a message.
 
 ---
 
-### SimulatorFromResourcesProps <a name="SimulatorFromResourcesProps" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps"></a>
+### SimulatorFromTreeOptions <a name="SimulatorFromTreeOptions" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions"></a>
 
-Props for `Simulator.fromResources`.
+Options for `Simulator.fromResources`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.Initializer"></a>
 
 ```typescript
 import { testing } from '@monadahq/wingsdk'
 
-const simulatorFromResourcesProps: testing.SimulatorFromResourcesProps = { ... }
+const simulatorFromTreeOptions: testing.SimulatorFromTreeOptions = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.resources">resources</a></code> | <code>{[ key: string ]: any}</code> | A map of resources to load into the simulator, keyed by resource id. |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorFactory</code> | The factory that dispatches to simulation implementations. |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree">tree</a></code> | <code>any</code> | A tree of resources to load into the simulator. |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorFactory</code> | The factory that dispatches to simulation implementations. |
 
 ---
 
-##### `resources`<sup>Required</sup> <a name="resources" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.resources"></a>
+##### `tree`<sup>Required</sup> <a name="tree" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree"></a>
 
 ```typescript
-public readonly resources: {[ key: string ]: any};
+public readonly tree: any;
 ```
 
-- *Type:* {[ key: string ]: any}
+- *Type:* any
 
-A map of resources to load into the simulator, keyed by resource id.
+A tree of resources to load into the simulator.
 
 ---
 
-##### `factory`<sup>Optional</sup> <a name="factory" id="@monadahq/wingsdk.testing.SimulatorFromResourcesProps.property.factory"></a>
+##### `factory`<sup>Optional</sup> <a name="factory" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory"></a>
 
 ```typescript
 public readonly factory: ISimulatorFactory;
@@ -3151,6 +3165,193 @@ public readonly text: string;
 - *Type:* string
 
 The code contents.
+
+---
+
+
+### DependencyGraph <a name="DependencyGraph" id="@monadahq/wingsdk.core.DependencyGraph"></a>
+
+Represents the dependency graph for a given Node.
+
+This graph includes the dependency relationships between all nodes in the
+node (construct) sub-tree who's root is this Node.
+
+Note that this means that lonely nodes (no dependencies and no dependants) are also included in this graph as
+childless children of the root node of the graph.
+
+The graph does not include cross-scope dependencies. That is, if a child on the current scope depends on a node
+from a different scope, that relationship is not represented in this graph.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.DependencyGraph.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+new core.DependencyGraph(node: Node)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.DependencyGraph.Initializer.parameter.node">node</a></code> | <code>constructs.Node</code> | *No description.* |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.DependencyGraph.Initializer.parameter.node"></a>
+
+- *Type:* constructs.Node
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.DependencyGraph.topology">topology</a></code> | Returns a topologically sorted array of the constructs in the sub-graph. |
+
+---
+
+##### `topology` <a name="topology" id="@monadahq/wingsdk.core.DependencyGraph.topology"></a>
+
+```typescript
+public topology(): IConstruct[]
+```
+
+Returns a topologically sorted array of the constructs in the sub-graph.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.DependencyGraph.property.root">root</a></code> | <code>@monadahq/wingsdk.core.DependencyVertex</code> | Returns the root of the graph. |
+
+---
+
+##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.core.DependencyGraph.property.root"></a>
+
+```typescript
+public readonly root: DependencyVertex;
+```
+
+- *Type:* @monadahq/wingsdk.core.DependencyVertex
+
+Returns the root of the graph.
+
+Note that this vertex will always have `null` as its `.value` since it is an artifical root
+that binds all the connected spaces of the graph.
+
+---
+
+
+### DependencyVertex <a name="DependencyVertex" id="@monadahq/wingsdk.core.DependencyVertex"></a>
+
+Represents a vertex in the graph.
+
+The value of each vertex is an `IConstruct` that is accessible via the `.value` getter.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.DependencyVertex.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+new core.DependencyVertex(value?: IConstruct)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.Initializer.parameter.value">value</a></code> | <code>constructs.IConstruct</code> | *No description.* |
+
+---
+
+##### `value`<sup>Optional</sup> <a name="value" id="@monadahq/wingsdk.core.DependencyVertex.Initializer.parameter.value"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.addChild">addChild</a></code> | Adds a vertex as a dependency of the current node. |
+| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.topology">topology</a></code> | Returns a topologically sorted array of the constructs in the sub-graph. |
+
+---
+
+##### `addChild` <a name="addChild" id="@monadahq/wingsdk.core.DependencyVertex.addChild"></a>
+
+```typescript
+public addChild(dep: DependencyVertex): void
+```
+
+Adds a vertex as a dependency of the current node.
+
+Also updates the parents of `dep`, so that it contains this node as a parent.
+
+This operation will fail in case it creates a cycle in the graph.
+
+###### `dep`<sup>Required</sup> <a name="dep" id="@monadahq/wingsdk.core.DependencyVertex.addChild.parameter.dep"></a>
+
+- *Type:* @monadahq/wingsdk.core.DependencyVertex
+
+The dependency.
+
+---
+
+##### `topology` <a name="topology" id="@monadahq/wingsdk.core.DependencyVertex.topology"></a>
+
+```typescript
+public topology(): IConstruct[]
+```
+
+Returns a topologically sorted array of the constructs in the sub-graph.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.property.inbound">inbound</a></code> | <code>@monadahq/wingsdk.core.DependencyVertex[]</code> | Returns the parents of the vertex (i.e dependants). |
+| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>@monadahq/wingsdk.core.DependencyVertex[]</code> | Returns the children of the vertex (i.e dependencies). |
+| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.property.value">value</a></code> | <code>constructs.IConstruct</code> | Returns the IConstruct this graph vertex represents. |
+
+---
+
+##### `inbound`<sup>Required</sup> <a name="inbound" id="@monadahq/wingsdk.core.DependencyVertex.property.inbound"></a>
+
+```typescript
+public readonly inbound: DependencyVertex[];
+```
+
+- *Type:* @monadahq/wingsdk.core.DependencyVertex[]
+
+Returns the parents of the vertex (i.e dependants).
+
+---
+
+##### `outbound`<sup>Required</sup> <a name="outbound" id="@monadahq/wingsdk.core.DependencyVertex.property.outbound"></a>
+
+```typescript
+public readonly outbound: DependencyVertex[];
+```
+
+- *Type:* @monadahq/wingsdk.core.DependencyVertex[]
+
+Returns the children of the vertex (i.e dependencies).
+
+---
+
+##### `value`<sup>Optional</sup> <a name="value" id="@monadahq/wingsdk.core.DependencyVertex.property.value"></a>
+
+```typescript
+public readonly value: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+Returns the IConstruct this graph vertex represents.
+
+`null` in case this is the root of the graph.
 
 ---
 
@@ -3682,6 +3883,7 @@ A simulator that can be used to test your application locally.
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.cleanup">cleanup</a></code> | Clean up all resources in this simulator. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
 
 ---
@@ -3697,7 +3899,7 @@ Clean up all resources in this simulator.
 ##### `getAttributes` <a name="getAttributes" id="@monadahq/wingsdk.testing.Simulator.getAttributes"></a>
 
 ```typescript
-public getAttributes(resourceId: string): any
+public getAttributes(path: string): any
 ```
 
 Obtain a resource's attributes.
@@ -3705,7 +3907,21 @@ Obtain a resource's attributes.
 This is data that gets resolved when the
 during the resource's in-simulator creation.
 
-###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@monadahq/wingsdk.testing.Simulator.getAttributes.parameter.resourceId"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getAttributes.parameter.path"></a>
+
+- *Type:* string
+
+---
+
+##### `getData` <a name="getData" id="@monadahq/wingsdk.testing.Simulator.getData"></a>
+
+```typescript
+public getData(path: string): any
+```
+
+Obtain a resource's data, including its path, props, attrs, and children.
+
+###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getData.parameter.path"></a>
 
 - *Type:* string
 
@@ -3714,7 +3930,7 @@ during the resource's in-simulator creation.
 ##### `getProps` <a name="getProps" id="@monadahq/wingsdk.testing.Simulator.getProps"></a>
 
 ```typescript
-public getProps(resourceId: string): any
+public getProps(path: string): any
 ```
 
 Obtain a resource's props.
@@ -3722,7 +3938,7 @@ Obtain a resource's props.
 This is data about the resource's configuration
 that is resolved at synth time.
 
-###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@monadahq/wingsdk.testing.Simulator.getProps.parameter.resourceId"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getProps.parameter.path"></a>
 
 - *Type:* string
 
@@ -3732,28 +3948,62 @@ that is resolved at synth time.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromResources">fromResources</a></code> | Start the simulator using an inline definition of your application's resources. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromApp">fromApp</a></code> | Start the simulator from a Wing app file (.wx). |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromTree">fromTree</a></code> | Start the simulator using an inline definition of your application's resources. |
 
 ---
 
-##### `fromResources` <a name="fromResources" id="@monadahq/wingsdk.testing.Simulator.fromResources"></a>
+##### `fromApp` <a name="fromApp" id="@monadahq/wingsdk.testing.Simulator.fromApp"></a>
 
 ```typescript
 import { testing } from '@monadahq/wingsdk'
 
-testing.Simulator.fromResources(props: SimulatorFromResourcesProps)
+testing.Simulator.fromApp(filepath: string)
+```
+
+Start the simulator from a Wing app file (.wx).
+
+###### `filepath`<sup>Required</sup> <a name="filepath" id="@monadahq/wingsdk.testing.Simulator.fromApp.parameter.filepath"></a>
+
+- *Type:* string
+
+---
+
+##### `fromTree` <a name="fromTree" id="@monadahq/wingsdk.testing.Simulator.fromTree"></a>
+
+```typescript
+import { testing } from '@monadahq/wingsdk'
+
+testing.Simulator.fromTree(options: SimulatorFromTreeOptions)
 ```
 
 Start the simulator using an inline definition of your application's resources.
 
-TODO: reference API schema?
+###### `options`<sup>Required</sup> <a name="options" id="@monadahq/wingsdk.testing.Simulator.fromTree.parameter.options"></a>
 
-###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.Simulator.fromResources.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.testing.SimulatorFromResourcesProps
+- *Type:* @monadahq/wingsdk.testing.SimulatorFromTreeOptions
 
 ---
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.property.tree">tree</a></code> | <code>any</code> | Return a copy of the simulator tree, including all resource attributes. |
+
+---
+
+##### `tree`<sup>Required</sup> <a name="tree" id="@monadahq/wingsdk.testing.Simulator.property.tree"></a>
+
+```typescript
+public readonly tree: any;
+```
+
+- *Type:* any
+
+Return a copy of the simulator tree, including all resource attributes.
+
+---
 
 
 ### Synthesizer <a name="Synthesizer" id="@monadahq/wingsdk.core.Synthesizer"></a>
@@ -4091,11 +4341,40 @@ Put an object in the bucket.
 
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
 
+
+### ICapturableConstruct <a name="ICapturableConstruct" id="@monadahq/wingsdk.core.ICapturableConstruct"></a>
+
+- *Extends:* @monadahq/wingsdk.core.ICapturable, constructs.IConstruct
+
+- *Implemented By:* @monadahq/wingsdk.core.ICapturableConstruct
+
+Represents a construct that is capturable by an Inflight.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.ICapturableConstruct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.ICapturableConstruct.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.cloud.IFunctionClient"></a>
 

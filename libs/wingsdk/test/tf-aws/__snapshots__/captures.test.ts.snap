@@ -5,6 +5,7 @@ exports[`function captures a bucket 1`] = `
 $cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
+          // TODO: fix this
           await $cap.bucket.put(\\"hello.txt\\", Serializable.fromJSON(event));
         }
 exports.handler = async function(event) {
@@ -304,22 +305,24 @@ exports[`function captures a queue 3`] = `
 }"
 `;
 
-exports[`function captures some primitives 1`] = `
+exports[`function captures primitive values 1`] = `
 "const $cap = {};
 $cap[\\"num\\"] = 5;
 $cap[\\"string\\"] = \\"world\\";
-$cap[\\"map\\"] = true;
+$cap[\\"bool\\"] = true;
+$cap[\\"nothing\\"] = null;
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + $cap.string);
           console.log(\\"My favorite number is \\" + $cap.num);
-          console.log(\\"The order is \\" + JSON.stringify($cap.order));
+          console.log(\\"Is it raining? \\" + $cap.bool);
+          console.log($cap.nothing + \\" hypothesis\\");
         }
 exports.handler = async function(event) {
   return await $proc($cap, event);
 };"
 `;
 
-exports[`function captures some primitives 2`] = `
+exports[`function captures primitive values 2`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
@@ -361,8 +364,71 @@ exports[`function captures some primitives 2`] = `
     \\"aws_s3_object\\": {
       \\"Function_S3Object_C62A0C2D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
-        \\"key\\": \\"asset.c83ba82ab737b318be3084bef5b7996129facf99b8.c34535af62443bf5c9e2babce134dde7.zip\\",
-        \\"source\\": \\"assets/Function_Asset_212D1EED/C34535AF62443BF5C9E2BABCE134DDE7/archive.zip\\"
+        \\"key\\": \\"asset.c83ba82ab737b318be3084bef5b7996129facf99b8.b45c751dac14a1af7749eabb2af61016.zip\\",
+        \\"source\\": \\"assets/Function_Asset_212D1EED/B45C751DAC14A1AF7749EABB2AF61016/archive.zip\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`function captures structured values 1`] = `
+"const $cap = {};
+$cap[\\"map\\"] = {\\"hello\\":\\"world\\",\\"boom\\":{\\"bam\\":123}};
+$cap[\\"list\\"] = [1,2,\\"thing\\"];
+async function $proc($cap, event) {
+          console.log(\\"Map: \\" + JSON.stringify($cap.map));
+          console.log(\\"List: \\" + JSON.stringify($cap.list));
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures structured values 2`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"Function_IamRole_678BE84C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"Function\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Function_Bucket_CC3697BD\\": {
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"key\\": \\"asset.c83ba82ab737b318be3084bef5b7996129facf99b8.6bd635828c85e258e0e43f693a92b476.zip\\",
+        \\"source\\": \\"assets/Function_Asset_212D1EED/6BD635828C85E258E0E43F693A92B476/archive.zip\\"
       }
     }
   }

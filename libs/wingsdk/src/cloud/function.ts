@@ -6,7 +6,7 @@ import { Resource } from "./resource";
 /**
  * Global identifier for `Function`.
  */
-export const FUNCTION_ID = "wingsdk.cloud.Function";
+export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 
 /**
  * Properties for `Function`.
@@ -59,7 +59,7 @@ export class Function extends FunctionBase {
   ) {
     super(null as any, id, inflight, props);
     return Polycons.newInstance(
-      FUNCTION_ID,
+      FUNCTION_TYPE,
       scope,
       id,
       inflight,
