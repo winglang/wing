@@ -107,6 +107,7 @@ jobs:
           path: target/wasm32-wasi/release/wingc.wasm
 
       - name: "Publish Wing Playground"
+        if: github.ref == 'refs/heads/main'
         uses: amondnet/vercel-action@v25.1.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -268,6 +269,7 @@ jobs:
           mkdir dist
           mv ./*/*.vsix ./dist
           mv ./*/*.tgz ./dist
+          mv ./*/*.wasm ./dist
           cd dist
           echo '## SHA-1 Checksums' > ../checksums.md
           echo '```' >> ../checksums.md
