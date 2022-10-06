@@ -124,6 +124,13 @@ export class Simulator {
   }
 
   /**
+   * Obtain a resource's data, including its path, props, attrs, and children.
+   */
+  public getData(path: string): any {
+    return findResource(this._tree, path);
+  }
+
+  /**
    * Return a copy of the simulator tree, including all resource attributes.
    */
   public get tree(): any {

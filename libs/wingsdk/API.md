@@ -3883,6 +3883,7 @@ A simulator that can be used to test your application locally.
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.cleanup">cleanup</a></code> | Clean up all resources in this simulator. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
 
 ---
@@ -3907,6 +3908,20 @@ This is data that gets resolved when the
 during the resource's in-simulator creation.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getAttributes.parameter.path"></a>
+
+- *Type:* string
+
+---
+
+##### `getData` <a name="getData" id="@monadahq/wingsdk.testing.Simulator.getData"></a>
+
+```typescript
+public getData(path: string): any
+```
+
+Obtain a resource's data, including its path, props, attrs, and children.
+
+###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getData.parameter.path"></a>
 
 - *Type:* string
 

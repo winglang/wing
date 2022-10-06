@@ -10,11 +10,11 @@ import { init as initQueue, cleanup as cleanupQueue } from "./queue.sim";
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   async init(type: string, props: any): Promise<any> {
     switch (type) {
-      case cloud.BUCKET_ID:
+      case cloud.BUCKET_TYPE:
         return initBucket(props);
-      case cloud.FUNCTION_ID:
+      case cloud.FUNCTION_TYPE:
         return initFunction(props);
-      case cloud.QUEUE_ID:
+      case cloud.QUEUE_TYPE:
         return initQueue(props);
       case "constructs.Construct":
         return {};
@@ -25,13 +25,13 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
 
   async cleanup(type: string, attrs: any): Promise<void> {
     switch (type) {
-      case cloud.BUCKET_ID:
+      case cloud.BUCKET_TYPE:
         await cleanupBucket(attrs);
         return;
-      case cloud.FUNCTION_ID:
+      case cloud.FUNCTION_TYPE:
         await cleanupFunction(attrs);
         return;
-      case cloud.QUEUE_ID:
+      case cloud.QUEUE_TYPE:
         await cleanupQueue(attrs);
         return;
       case "constructs.Construct":
