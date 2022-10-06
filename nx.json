@@ -12,6 +12,12 @@
     "src": [
       "{projectRoot}/src/**/*"
     ],
+    "project-files": [
+      "{projectRoot}/*"
+    ],
+    "workspace-files": [
+      "{workspaceRoot}/*"
+    ],
     "test": [
       "{projectRoot}/test/**/*"
     ],
@@ -55,8 +61,8 @@
   "targetDefaults": {
     "build": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "project-files",
+        "workspace-files",
         "src"
       ],
       "outputs": [
@@ -68,8 +74,8 @@
     },
     "build-native": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "project-files",
+        "workspace-files",
         "src"
       ],
       "outputs": [
@@ -81,8 +87,8 @@
     },
     "build-wasm": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "project-files",
+        "workspace-files",
         "src"
       ],
       "outputs": [
@@ -94,8 +100,8 @@
     },
     "test": {
       "inputs": [
-        "{projectRoot}/*",
-        "{workspaceRoot}/*",
+        "project-files",
+        "workspace-files",
         "src",
         "test"
       ]
