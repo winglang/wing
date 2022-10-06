@@ -179,14 +179,18 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				// }
 			}
 		},
-		ExprType::FunctionCall { function, args } => res.extend(scan_captures_in_call(&function, &args, env)),
-		ExprType::MethodCall(mc) => res.extend(scan_captures_in_call(&mc.method, &mc.args, env)),
+		ExprType::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env)),
 		ExprType::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env)),
 		ExprType::Binary { op: _, lexp, rexp } => {
 			scan_captures_in_expression(lexp, env);
 			scan_captures_in_expression(rexp, env);
 		}
 		ExprType::Literal(_) => {}
+		ExprType::StructLiteral { fields, .. } => {
+			for (_, v) in fields.iter() {
+				res.extend(scan_captures_in_expression(&v, env));
+			}
+		}
 	}
 	res
 }

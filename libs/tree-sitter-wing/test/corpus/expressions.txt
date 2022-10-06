@@ -73,7 +73,7 @@ hello(1,a);
 
 (source
     (expression_statement
-        (function_call
+        (call
             call_name: (reference (identifier))
             args: (argument_list
                 (positional_argument
@@ -97,12 +97,14 @@ obj.method();
 
 (source
     (expression_statement
-        (method_call
-          call_name: (nested_identifier
-            object: (reference (identifier))
-            property: (identifier)
-          )
-          args: (argument_list)
+        (call
+            call_name: (reference
+                (nested_identifier
+                    object: (reference (identifier))
+                    property: (identifier)
+                )
+            )
+            args: (argument_list)
         )
     )
 )
@@ -345,6 +347,33 @@ let a = new Map<num>();
                 (builtin_type)
             )
             (argument_list)
+        )
+    )
+)
+
+================================
+Struct literal
+================================
+
+let a = A { f1: 3, f2: true };
+
+---
+
+(source
+    (variable_definition_statement
+        name: (identifier)
+        value: (struct_literal
+            struct_type: (custom_type
+                object: (identifier)
+            )
+            struct_fields: (struct_literal_member
+                (identifier)
+                (number)
+            )
+            struct_fields: (struct_literal_member
+                (identifier)
+                (bool)
+            )
         )
     )
 )

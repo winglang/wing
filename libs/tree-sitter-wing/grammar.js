@@ -21,11 +21,13 @@ module.exports = grammar({
   word: ($) => $.identifier,
 
   precedences: ($) => [
-    [$.builtin_type, $.identifier],
-    [$.custom_type, $.nested_identifier, $.reference],
+    // Handle ambiguity in case of empty literal: `a = {}`
+    // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.map_literal, $.set_literal],
-    [$.new_expression, $.function_call],
-    [$.nested_identifier, $.method_call, $.reference],
+
+    // A type (`cloud.Bucket`) may look like a reference (`bucket.public`). This is relevant
+    // when we expect an expression and we specify a type for a struct literal.
+    //[$.reference, $.custom_type],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
@@ -41,15 +43,16 @@ module.exports = grammar({
 
     // Identifiers
     reference: ($) =>
+//      prec.right(choice($.identifier, $.nested_identifier)),
       choice($.identifier, $.nested_identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
-    custom_type: ($) =>
-      prec.right(seq(
+    custom_type: ($) => 
+      seq(
         field("object", $.identifier),
         repeat(seq(".", field("fields", $.identifier)))
-      )),
+      ),
     
     nested_identifier: ($) =>
       seq(
@@ -200,16 +203,17 @@ module.exports = grammar({
         $.new_expression,
         $._literal,
         $.reference,
-        $.function_call,
-        $.method_call,
+        $.call,
         $.preflight_closure,
         $.inflight_closure,
         $.pure_closure,
         $.await_expression,
         $._collection_literal,
         $.parenthesized_expression,
-        $.structured_access_expression
+        $.structured_access_expression,
+        $.struct_literal,
       ),
+
 
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
@@ -253,14 +257,8 @@ module.exports = grammar({
         )
       ),
 
-    function_call: ($) =>
+    call: ($) =>
       seq(field("call_name", $.reference), field("args", $.argument_list)),
-
-    method_call: ($) =>
-      seq(
-        field("call_name", $.nested_identifier),
-        field("args", $.argument_list)
-      ),
 
     argument_list: ($) =>
       seq(
@@ -315,7 +313,7 @@ module.exports = grammar({
         seq(
           optional(field("inflight", $._inflight_specifier)),
           field("parameter_types", $.parameter_type_list),
-          optional(seq("->", field("return_type", $._type)))
+          optional(seq(":", field("return_type", $._type)))
         )
       ),
 
@@ -347,6 +345,7 @@ module.exports = grammar({
         optional("async"),
         field("name", $.identifier),
         field("parameter_list", $.parameter_list),
+        optional(field("return_type", $._type_annotation)),
         field("block", $.block)
       ),
 
@@ -441,9 +440,13 @@ module.exports = grammar({
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
     set_literal: ($) => seq("{", commaSep($.expression), "}"),
     map_literal: ($) => seq("{", commaSep($.map_literal_member), "}"),
+    // TODO: remove the "@" hack, this was done just to get the grammar not to conflict with nested references
+    struct_literal: ($) => seq("@", field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
 
     map_literal_member: ($) =>
       seq(choice($.identifier, $.string), ":", $.expression),
+    struct_literal_member: ($) =>
+      seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
   },

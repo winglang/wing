@@ -72,6 +72,10 @@ impl PartialEq for Type {
 			return true;
 		}
 		match (self, other) {
+			(Self::Anything, _) | (_, Self::Anything) => {
+				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
+				true
+			}
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
 				// If our parent is equal to `other` then treat both classes as equal (inheritance)
@@ -148,7 +152,7 @@ impl Display for Type {
 				if let Some(ret_val) = &func_sig.return_type {
 					write!(
 						f,
-						"fn({}) -> {}",
+						"fn({}):{}",
 						func_sig
 							.args
 							.iter()
@@ -514,63 +518,66 @@ impl<'a> TypeChecker<'a> {
 					Some(self.types.add_type(Type::ClassInstance(type_))) // TODO: don't create new type if one already exists.
 				}
 			}
-			ExprType::FunctionCall { function, args } => {
+			ExprType::Call { function, args } => {
+				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.resolve_reference(function, env);
-
-				if let &Type::Function(ref func_type) = func_type.into() {
-					// TODO: named args
-					// Argument arity check
-					if args.pos_args.len() != func_type.args.len() {
-						panic!(
-							"Expected {} arguments for function {:?}, but got {} instead.",
-							func_type.args.len(),
-							function,
-							args.pos_args.len()
-						)
-					}
-					// Argument type check
-					for (passed_arg, expected_arg) in args.pos_args.iter().zip(func_type.args.iter()) {
-						let passed_arg_type = self.type_check_exp(passed_arg, env).unwrap();
-						self.validate_type(passed_arg_type, *expected_arg, passed_arg);
-					}
-
-					func_type.return_type
+				let extra_args = if matches!(function, Reference::NestedIdentifier { .. }) {
+					1
 				} else {
-					panic!("Identifier {:?} is not a function", function)
-				}
-			}
-			ExprType::MethodCall(method_call) => {
-				// Find method in class's environment
-				let method_type = self.resolve_reference(&method_call.method, env);
+					0
+				};
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
-				if matches!(method_type.into(), &Type::Anything) {
+				if matches!(func_type.into(), &Type::Anything) {
 					return Some(self.types.anything());
 				}
 
-				let method_sig = if let &Type::Function(ref sig) = method_type.into() {
-					sig
-				} else {
-					panic!("Identifier {:?} is not a method", method_call.method);
-				};
+				// Make sure this is a function signature type
+				let func_sig = func_type
+					.as_function_sig()
+					.expect(&format!("{:?} should be a function or method", function));
 
-				// Verify arity
-				// TODO named args
-				if method_sig.args.len() != method_call.args.pos_args.len() + 1 {
+				// TODO: named args
+				// Argument arity check
+				if args.pos_args.len() + extra_args != func_sig.args.len() {
 					panic!(
-						"Expected {} arguments when calling {:?} but got {}",
-						method_sig.args.len() - 1,
-						method_call.method,
-						method_call.args.pos_args.len()
-					);
+						"Expected {} arguments for {:?}, but got {} instead.",
+						func_sig.args.len() - extra_args,
+						function,
+						args.pos_args.len()
+					)
 				}
 				// Verify argument types (we run from last to first to skip "this" argument)
-				for (arg_type, param_exp) in method_sig.args.iter().rev().zip(method_call.args.pos_args.iter().rev()) {
+				for (arg_type, param_exp) in func_sig.args.iter().rev().zip(args.pos_args.iter().rev()) {
 					let param_type = self.type_check_exp(param_exp, env).unwrap();
 					self.validate_type(param_type, *arg_type, param_exp);
 				}
 
-				method_sig.return_type
+				func_sig.return_type
+			}
+			ExprType::StructLiteral { type_, fields } => {
+				// Find this struct's type in the environment
+				let struct_type = self.resolve_type(type_, env);
+
+				// Make it really is a a struct type
+				let st = struct_type
+					.as_struct()
+					.expect(&format!("Expected {} to be a struct type", struct_type));
+
+				// Verify that all fields are present and are of the right type
+				if st.env.iter().count() > fields.len() {
+					panic!("Not all fields of {} are initialized.", struct_type);
+				}
+				for (k, v) in fields.iter() {
+					let field_type = st
+						.env
+						.try_lookup(&k.name)
+						.expect(&format!("{} is not a field of {}", k.name, struct_type));
+					let t = self.type_check_exp(v, env).unwrap();
+					self.validate_type(t, field_type, v);
+				}
+
+				Some(struct_type)
 			}
 		};
 		*exp.evaluated_type.borrow_mut() = t;

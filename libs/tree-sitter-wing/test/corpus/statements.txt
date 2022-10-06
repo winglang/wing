@@ -94,7 +94,7 @@ inflight hi(a: num, b: str) {}
 Inflight Function with function parameter
 ==================================
 
-~ f(callback: (num,num)->bool) {}
+~ f(callback: (num,num):bool) {}
 
 ---
 (source

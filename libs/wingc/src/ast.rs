@@ -142,11 +142,10 @@ pub enum ExprType {
 	},
 	Literal(Literal),
 	Reference(Reference),
-	FunctionCall {
+	Call {
 		function: Reference,
 		args: ArgList,
 	},
-	MethodCall(MethodCall),
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
@@ -157,6 +156,10 @@ pub enum ExprType {
 		op: BinaryOperator,
 		lexp: Box<Expr>,
 		rexp: Box<Expr>,
+	},
+	StructLiteral {
+		type_: Type,
+		fields: HashMap<Symbol, Expr>,
 	},
 }
 
@@ -213,11 +216,6 @@ impl Scope {
 	}
 }
 
-#[derive(Debug)]
-pub struct MethodCall {
-	pub method: Reference,
-	pub args: ArgList,
-}
 #[derive(Debug)]
 pub enum UnaryOperator {
 	Plus,

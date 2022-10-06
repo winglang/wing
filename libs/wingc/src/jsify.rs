@@ -189,15 +189,8 @@ fn jsify_expression(expression: &Expr) -> String {
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
-		ExprType::FunctionCall { function, args } => {
+		ExprType::Call { function, args } => {
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
-		}
-		ExprType::MethodCall(method_call) => {
-			format!(
-				"{}({})",
-				jsify_reference(&method_call.method),
-				jsify_arg_list(&method_call.args, None, None)
-			)
 		}
 		ExprType::Unary { op, exp } => {
 			let op = match op {
@@ -224,6 +217,16 @@ fn jsify_expression(expression: &Expr) -> String {
 				BinaryOperator::LogicalOr => "||",
 			};
 			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
+		}
+		ExprType::StructLiteral { fields, .. } => {
+			format!(
+				"{{\n{}}}\n",
+				fields
+					.iter()
+					.map(|(name, expr)| format!("\"{}\": {},", name.name, jsify_expression(expr)))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
 		}
 	}
 }
