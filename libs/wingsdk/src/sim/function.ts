@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { FunctionProps, FUNCTION_ID } from "../cloud";
+import { FunctionProps, FUNCTION_TYPE } from "../cloud";
 import {
   Code,
   Language,
@@ -84,7 +84,7 @@ export class Function extends cloud.FunctionBase implements IResource {
   /** @internal */
   public _toResourceSchema(): FunctionSchema {
     return {
-      type: FUNCTION_ID,
+      type: FUNCTION_TYPE,
       props: {
         sourceCodeFile: this.code.path,
         sourceCodeLanguage: "javascript",

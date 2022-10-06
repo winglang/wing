@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { BUCKET_ID } from "../cloud";
+import { BUCKET_TYPE } from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
@@ -12,6 +12,7 @@ import { BucketSchema } from "./schema";
 export class Bucket extends cloud.BucketBase implements IResource {
   private readonly public: boolean;
   private readonly callers = new Array<string>();
+  private readonly callees = new Array<string>();
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
@@ -21,13 +22,13 @@ export class Bucket extends cloud.BucketBase implements IResource {
   /** @internal */
   public _toResourceSchema(): BucketSchema {
     return {
-      type: BUCKET_ID,
+      type: BUCKET_TYPE,
       props: {
         public: this.public,
       },
       attrs: {} as any,
       callers: this.callers,
-      callees: [],
+      callees: this.callees,
     };
   }
 

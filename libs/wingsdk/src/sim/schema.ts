@@ -1,3 +1,5 @@
+import { BUCKET_TYPE, FUNCTION_TYPE, QUEUE_TYPE } from "../cloud";
+
 /** Schema for simulator.json */
 export interface WingSimulatorSchema {
   /** The resource at the root of the tree. */
@@ -31,7 +33,7 @@ export type FunctionId = string;
 
 /** Schema for cloud.Function */
 export interface FunctionSchema extends BaseResourceSchema {
-  readonly type: "wingsdk.cloud.Function";
+  readonly type: typeof FUNCTION_TYPE;
   readonly props: {
     /** The path to a file containing source code to be run when invoked. */
     readonly sourceCodeFile: string;
@@ -56,7 +58,7 @@ export interface QueueSubscriber {
 
 /** Schema for cloud.Queue */
 export interface QueueSchema extends BaseResourceSchema {
-  readonly type: "wingsdk.cloud.Queue";
+  readonly type: typeof QUEUE_TYPE;
   readonly props: {
     /** How long a queue's consumers have to process a message, in milliseconds */
     readonly timeout: number;
@@ -81,7 +83,7 @@ export interface QueueSubscriber {
 
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
-  readonly type: "wingsdk.cloud.Bucket";
+  readonly type: typeof BUCKET_TYPE;
   readonly props: {};
   readonly attrs: {
     /** The address of the bucket on the local file system. */
