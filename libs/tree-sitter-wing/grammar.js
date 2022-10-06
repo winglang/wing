@@ -24,13 +24,13 @@ module.exports = grammar({
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
     [$.map_literal, $.set_literal],
-
-    // A type (`cloud.Bucket`) may look like a reference (`bucket.public`). This is relevant
-    // when we expect an expression and we specify a type for a struct literal.
-    //[$.reference, $.custom_type],
   ],
 
   supertypes: ($) => [$.expression, $._literal],
+
+  conflicts: $ => [
+     [$.reference, $.custom_type],
+  ],
 
   rules: {
     // Basics
@@ -440,8 +440,7 @@ module.exports = grammar({
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
     set_literal: ($) => seq("{", commaSep($.expression), "}"),
     map_literal: ($) => seq("{", commaSep($.map_literal_member), "}"),
-    // TODO: remove the "@" hack, this was done just to get the grammar not to conflict with nested references
-    struct_literal: ($) => seq("@", field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
+    struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
 
     map_literal_member: ($) =>
       seq(choice($.identifier, $.string), ":", $.expression),
