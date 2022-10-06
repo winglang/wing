@@ -97,6 +97,17 @@ jobs:
           name: wingc
           path: target/wasm32-wasi/release/wingc.wasm
 
+      - name: "Publish Wing Playground"
+        uses: amondnet/vercel-action@v25.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN_WING_PLAYGROUND }}
+          vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WING_PLAYGROUND }}
+          working-directory: apps/wing-playground/dist
+          github-comment: false
+          vercel-args: '--prod '
+
   build-native:
     strategy:
       fail-fast: false
