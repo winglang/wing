@@ -44,15 +44,6 @@ jobs:
       - name: Login to Private NPM registry
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
-      - name: Cache Nx
-        uses: actions/cache@v2
-        with:
-          path: node_modules/.cache/nx
-          key: cache-nx-${{ hashFiles('yarn.lock') }}-wasm-${{ github.sha }}
-          restore-keys: |
-            cache-nx-${{ hashFiles('yarn.lock') }}-wasm-
-            cache-nx-${{ hashFiles('yarn.lock') }}-
-
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
@@ -155,15 +146,6 @@ jobs:
 
       - name: Login to Private NPM registry
         run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
-
-      - name: Cache Nx
-        uses: actions/cache@v2
-        with:
-          path: node_modules/.cache/nx
-          key: cache-nx-${{ hashFiles('yarn.lock') }}-${{ matrix.os }}-${{ matrix.arch }}-${{ github.sha }}
-          restore-keys: |
-            cache-nx-${{ hashFiles('yarn.lock') }}-${{ matrix.os }}-${{ matrix.arch }}-
-            cache-nx-${{ hashFiles('yarn.lock') }}-
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
