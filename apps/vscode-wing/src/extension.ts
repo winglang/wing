@@ -70,12 +70,12 @@ async function startLanguageServer(context: ExtensionContext) {
         case "darwin":
           // Currently, we only have darwin x64 builds. Users must have rosetta available to run this on arm64.
           serverPath = context.asAbsolutePath(
-            "resources/wing-language-server-macos-latest-x64/wing-language-server-macos-latest-x64"
+            "resources/wing-language-server-macos-latest-x64/wing-language-server"
           );
           break;
         case "linux":
           serverPath = context.asAbsolutePath(
-            "resources/wing-language-server-ubuntu-latest-x64/wing-language-server-ubuntu-latest-x64"
+            "resources/wing-language-server-ubuntu-latest-x64/wing-language-server"
           );
           break;
         default:
