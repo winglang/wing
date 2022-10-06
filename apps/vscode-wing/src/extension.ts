@@ -50,9 +50,6 @@ export async function activate(context: ExtensionContext) {
 }
 
 async function startLanguageServer(context: ExtensionContext) {
-  const traceOutputChannel = window.createOutputChannel(LANGUAGE_SERVER_NAME);
-  traceOutputChannel.show();
-
   let serverPath = process.env.WING_LSP_SERVER_PATH;
   if (!serverPath) {
     serverPath = context.asAbsolutePath(
@@ -111,7 +108,6 @@ async function startLanguageServer(context: ExtensionContext) {
   };
   let clientOptions: LanguageClientOptions = {
     documentSelector: [{ scheme: "file", language: "wing", pattern: "**/*.w" }],
-    traceOutputChannel,
   };
 
   // Create the language client and start the client.
