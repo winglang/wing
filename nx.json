@@ -13,10 +13,10 @@
       "{projectRoot}/src/**/*"
     ],
     "project-files": [
-      "{projectRoot}/**/*"
+      "{projectRoot}/*"
     ],
     "workspace-files": [
-      "{workspaceRoot}/**/*"
+      "{workspaceRoot}/*"
     ],
     "test": [
       "{projectRoot}/test/**/*"
@@ -36,8 +36,8 @@
       "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
     ],
     "rust-native": [
-      "{workspaceRoot}/target/debug/**/*",
-      "{workspaceRoot}/target/release/**/*"
+      "{workspaceRoot}/target/debug/*",
+      "{workspaceRoot}/target/release/*"
     ],
     "dist": [
       "{projectRoot}/dist/**/*"
