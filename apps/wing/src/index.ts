@@ -41,7 +41,6 @@ async function main() {
           RUST_BACKTRACE: "full",
         },
         preopens: {
-          // TODO This implies out the output directory is the same as the input directory
           [wingDir]: wingDir,
           [workdir]: workdir,
         },
@@ -72,7 +71,7 @@ async function main() {
 
       // TODO: compiler should return the path to intermediate.js so we can use it here
       const outfile = join(workdir, "intermediate.js");
-      spawnSync("node", [outfile], {
+      spawnSync(process.execPath, [outfile], {
         env: {
           ...process.env,
           WINGSDK_SYNTH_DIR: resolve(outdir),
