@@ -290,7 +290,7 @@ module.exports = grammar({
     new_expression: ($) =>
       seq(
         "new",
-        field("class", choice($.custom_type, $.builtin_container_type)),
+        field("class", choice($.custom_type, $.mutable_container_type)),
         field("args", $.argument_list),
         field("id", optional($.new_object_id)),
         field("scope", optional($.new_object_scope))
@@ -304,7 +304,7 @@ module.exports = grammar({
       choice(
         seq($.custom_type, optional("?")),
         seq($.builtin_type, optional("?")),
-        seq($.builtin_container_type, optional("?")),
+        seq($._builtin_container_type, optional("?")),
         $.function_type
       ),
 
@@ -356,24 +356,38 @@ module.exports = grammar({
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
 
-    builtin_container_type: ($) =>
+    immutable_container_type: ($) =>
       seq(
         field(
           "collection_type",
           choice(
+            "Array",
             "Set",
             "Map",
-            "Array",
-            "MutSet",
-            "MutMap",
-            "MutArray",
-            "Promise"
-          )
+          ),
         ),
-        "<",
-        field("type_parameter", $._type),
-        ">"
+        $._container_value_type
       ),
+
+    mutable_container_type: ($) =>
+      choice(
+        seq(
+          field(
+            "collection_type",
+            choice(
+              "MutSet",
+              "MutMap",
+              "MutArray",
+              "Promise"
+            )
+          ),
+          $._container_value_type
+        ),
+      ),
+
+    _builtin_container_type: ($) => choice($.immutable_container_type, $.mutable_container_type),
+
+    _container_value_type: ($) => seq("<", field("type_parameter", $._type), ">"),
 
     unary_expression: ($) =>
       choice(
@@ -438,11 +452,18 @@ module.exports = grammar({
     _collection_literal: ($) =>
       choice($.array_literal, $.set_literal, $.map_literal),
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
-    set_literal: ($) => seq("{", commaSep($.expression), "}"),
-    map_literal: ($) => seq("{", commaSep($.map_literal_member), "}"),
+    set_literal: ($) => seq(
+      optional(field("type", $.immutable_container_type)),
+      "{", commaSep($.expression), "}"
+    ),
+    map_literal: ($) => seq(
+      optional(field("type", $.immutable_container_type)),
+      "{", commaSep($.map_literal_member), "}"
+    ),
     struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
 
     map_literal_member: ($) =>
+      // TODO: make sure $.string here conforms to valid keys in a map
       seq(choice($.identifier, $.string), ":", $.expression),
     struct_literal_member: ($) =>
       seq($.identifier, ":", $.expression),

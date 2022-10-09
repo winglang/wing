@@ -46,6 +46,7 @@ pub enum Type {
 	String,
 	Bool,
 	Duration,
+	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
@@ -160,6 +161,10 @@ pub enum ExprType {
 	StructLiteral {
 		type_: Type,
 		fields: HashMap<Symbol, Expr>,
+	},
+	MapLiteral {
+		type_: Option<Type>,
+		fields: HashMap<String, Expr>,
 	},
 }
 

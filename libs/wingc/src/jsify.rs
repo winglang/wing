@@ -228,6 +228,16 @@ fn jsify_expression(expression: &Expr) -> String {
 					.join("\n")
 			)
 		}
+		ExprType::MapLiteral { fields, .. } => {
+			format!(
+				"{{\n{}\n}}",
+				fields
+					.iter()
+					.map(|(key, expr)| format!("\"{}\": {},", key, jsify_expression(expr)))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
+		}
 	}
 }
 

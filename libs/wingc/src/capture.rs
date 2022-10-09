@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::{
 	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, Statement, Symbol},
@@ -10,7 +10,7 @@ use crate::{
 is to use a subset of its client's methods. In that case we need to specify the name of the method
 used in the capture. Currently this is the only capture definition supported.
 In the future we might want add more verbose capture definitions like regexes on method parameters etc. */
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub struct CaptureDef {
 	pub method: String,
 }
@@ -20,12 +20,15 @@ struct Capture {
 	pub def: CaptureDef,
 }
 
-pub type Captures = HashMap<Symbol, Vec<CaptureDef>>;
+pub type Captures = HashMap<Symbol, HashSet<CaptureDef>>;
 
 fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 	let mut captures: Captures = HashMap::new();
 	for capture in capture_list {
-		captures.entry(capture.object).or_insert(vec![]).push(capture.def);
+		captures
+			.entry(capture.object)
+			.or_insert(HashSet::new())
+			.insert(capture.def);
 	}
 	captures
 }
@@ -89,20 +92,6 @@ pub fn scan_captures(ast_root: &Scope) {
 fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) -> Vec<Capture> {
 	let mut res = vec![];
 	if let Reference::NestedIdentifier { object, property } = reference {
-		// TODO: hack to check if this is reference to an imported cloud object (since we don't have typing for that yet)
-		if let ExprType::Reference(Reference::Identifier(symbol)) = &object.variant {
-			let (t, f) = env.lookup_ext(symbol);
-			if t.is_anything() && matches!(f, Flight::Pre) {
-				// for now we assume all "anythings" are imported cloud resources, remove this once we have `bring` support and typing
-				res.push(Capture {
-					object: symbol.clone(),
-					def: CaptureDef {
-						method: property.name.clone(),
-					},
-				});
-			}
-		}
-
 		res.extend(scan_captures_in_expression(&object, env));
 
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
@@ -187,6 +176,11 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 		}
 		ExprType::Literal(_) => {}
 		ExprType::StructLiteral { fields, .. } => {
+			for (_, v) in fields.iter() {
+				res.extend(scan_captures_in_expression(&v, env));
+			}
+		}
+		ExprType::MapLiteral { fields, .. } => {
 			for (_, v) in fields.iter() {
 				res.extend(scan_captures_in_expression(&v, env));
 			}

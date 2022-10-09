@@ -65,7 +65,6 @@ impl<'a> JsiiImporter<'a> {
 				} else if type_fqn == "@monadahq/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
 				} else {
-					println!("Getting wing type for {}", type_fqn);
 					Some(self.lookup_or_create_type(type_fqn))
 				}
 			} else if let Some(Value::Object(_)) = obj.get("collection") {
@@ -86,7 +85,6 @@ impl<'a> JsiiImporter<'a> {
 		let type_name = &self.fqn_to_type_name(type_fqn);
 		// Check if this type is already define in this module's namespace
 		if let Some(t) = self.namespace_env.try_lookup(type_name) {
-			println!("Found type {} in wing env", type_name);
 			return t;
 		}
 		// Define new type and return it
@@ -112,10 +110,7 @@ impl<'a> JsiiImporter<'a> {
 
 	pub fn import_type(&mut self, type_fqn: &str) -> Option<TypeRef> {
 		// Hack: if the class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
-		let type_name = self.fqn_to_type_name(type_fqn);
-		println!("Defining type {}", type_name);
 		if type_fqn == RESOURCE_CLASS_FQN {
-			println!("Hack: no need to define {}", type_name);
 			return None;
 		}
 
@@ -276,20 +271,16 @@ impl<'a> JsiiImporter<'a> {
 		let base_class = if let Some(base_class_fqn) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
 			if base_class_fqn == RESOURCE_CLASS_FQN {
-				println!("Hack: no need to define base class {}", base_class_fqn);
 				is_resource = true;
 				None
 			} else {
 				let base_class_name = self.fqn_to_type_name(base_class_fqn);
-				println!("going to lookup base class {}", base_class_name);
 				let base_class_type = if let Some(base_class_type) = self.namespace_env.try_lookup(&base_class_name) {
 					Some(base_class_type)
 				} else {
 					// If the base class isn't defined yet then define it first (recursive call)
 					let base_class_type = self.import_type(base_class_fqn);
-					if base_class_type.is_none()
-					/* && base_class_name != RESOURCE_CLASS_FQN*/
-					{
+					if base_class_type.is_none() {
 						panic!("Failed to define base class {}", base_class_name);
 					}
 					base_class_type
@@ -311,7 +302,6 @@ impl<'a> JsiiImporter<'a> {
 			.initializer
 			.as_ref()
 			.expect("JSII classes must have a constructor");
-		println!("got here! we can define {}", type_name);
 
 		// Get env of base class/resource
 		let base_class_env = if let Some(base_class) = base_class {
@@ -375,7 +365,7 @@ impl<'a> JsiiImporter<'a> {
 			&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &jsii_initializer.location_in_module),
 			method_sig,
 		);
-		println!("Created constructor for {}: {:?}", type_name, method_sig);
+
 		// Add methods and properties to the class environment
 		self.add_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env, new_type);
 		if is_resource {

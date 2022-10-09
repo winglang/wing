@@ -14,6 +14,8 @@ pub enum Type {
 	String,
 	Duration,
 	Boolean,
+	Map(TypeRef),
+	Set(TypeRef),
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
@@ -121,6 +123,18 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
+			(Self::Map(l0), Self::Map(r0)) => {
+				// Maps are of the same type if they have the same value type
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(Self::Set(l0), Self::Set(r0)) => {
+				// Sets are of the same type if they have the same value type
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
 			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
@@ -192,6 +206,8 @@ impl Display for Type {
 				let struct_type = s.as_struct().expect("Struct instance must reference to a struct");
 				write!(f, "instance of {}", struct_type.name.name)
 			}
+			Type::Map(v) => write!(f, "Map<{}>", v),
+			Type::Set(v) => write!(f, "Set<{}>", v),
 		}
 	}
 }
@@ -397,6 +413,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &TypeEnv) -> Option<TypeRef> {
 		let t = match &exp.variant {
 			ExprType::Literal(lit) => match lit {
@@ -579,6 +596,33 @@ impl<'a> TypeChecker<'a> {
 
 				Some(struct_type)
 			}
+			ExprType::MapLiteral { fields, type_ } => {
+				// Infer type based on either the explicit type or the value in one of the fields
+				let container_type = if let Some(type_) = type_ {
+					self.resolve_type(type_, env)
+				} else if !fields.is_empty() {
+					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env).unwrap();
+					self.types.add_type(Type::Map(some_val_type))
+				} else {
+					panic!(
+						"Cannot infer type of empty map literal with no type annotation: {:?}",
+						exp
+					);
+				};
+
+				let value_type = match container_type.into() {
+					&Type::Map(t) => t,
+					_ => panic!("Expected map type, found {}", container_type),
+				};
+
+				// Verify all types are the same as the inferred type
+				for (_, v) in fields.iter() {
+					let t = self.type_check_exp(v, env).unwrap();
+					self.validate_type(t, value_type, v);
+				}
+
+				Some(container_type)
+			}
 		};
 		*exp.evaluated_type.borrow_mut() = t;
 		t
@@ -621,6 +665,11 @@ impl<'a> TypeChecker<'a> {
 				nested_name.extend(fields.iter().map(|f| f.name.as_str()));
 				env.lookup_nested(&nested_name)
 			}
+			AstType::Map(v) => {
+				let value_type = self.resolve_type(v, env);
+				// TODO: avoid creating a new type for each map resolution
+				self.types.add_type(Type::Map(value_type))
+			}
 		}
 	}
 
@@ -631,13 +680,13 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				let exp_type = self.type_check_exp(initial_value, env).unwrap();
-				if let Some(t) = type_ {
-					let explicit_type = self.resolve_type(t, env);
-					self.validate_type(exp_type, explicit_type, initial_value);
+				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env));
+				let inferred_type = self.type_check_exp(initial_value, env).unwrap();
+				if let Some(explicit_type) = explicit_type {
+					self.validate_type(inferred_type, explicit_type, initial_value);
 					env.define(var_name, explicit_type);
 				} else {
-					env.define(var_name, exp_type);
+					env.define(var_name, inferred_type);
 				}
 			}
 			Statement::FunctionDefinition(func_def) => {
@@ -727,7 +776,6 @@ impl<'a> TypeChecker<'a> {
 						for type_fqn in assembly.types.as_ref().unwrap().keys() {
 							// Skip types outside the imported namespace
 							if !type_fqn.starts_with(&prefix) {
-								println!("Skipping {} (outside of module {})", type_fqn, module_name.name);
 								continue;
 							}
 
@@ -735,7 +783,6 @@ impl<'a> TypeChecker<'a> {
 							// and might have already defined the current type internally
 							let type_name = jsii_importer.fqn_to_type_name(type_fqn);
 							if jsii_importer.namespace_env.try_lookup(&type_name).is_some() {
-								println!("Type {} already defined, skipping", type_name);
 								continue;
 							}
 							jsii_importer.import_type(type_fqn);

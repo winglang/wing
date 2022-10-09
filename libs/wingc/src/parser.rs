@@ -320,6 +320,19 @@ impl Parser<'_> {
 					},
 				}))
 			}
+			"mutable_container_type" | "immutable_container_type" => {
+				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
+				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
+				match container_type {
+					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
+					"Set" | "Array" | "MutSet" | "MutMap" | "MutArray" | "Promise" => self.add_error(
+						format!("{} container type currently unsupported", container_type),
+						type_node,
+					)?,
+					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
+					other => panic!("Unexpected container type {} || {:#?}", other, type_node),
+				}
+			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),
 			other => panic!("Unexpected type {} || {:#?}", other, type_node),
 		}
@@ -466,7 +479,39 @@ impl Parser<'_> {
 			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"pure_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
-			"map_literal" => self.add_error(format!("Map literals not implemented yet"), expression_node),
+			"map_literal" => {
+				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut fields = HashMap::new();
+				let mut cursor = expression_node.walk();
+				for field_node in expression_node.children_by_field_name("map_literal_member", &mut cursor) {
+					let key_node = field_node.named_child(0).unwrap();
+					let key = match key_node.kind() {
+						"string" => {
+							let s = self.node_text(&key_node);
+							// Remove quotes, we assume this is a valid key for a map
+							s[1..s.len() - 1].to_string()
+						}
+						"identifier" => self.node_text(&key_node).to_string(),
+						other => panic!("Unexpected map key type {} at {:?}", other, key_node),
+					};
+					let value_node = field_node.named_child(1).unwrap();
+					if fields.contains_key(&key) {
+						_ = self.add_error::<()>(format!("Duplicate key {} in map literal", key), &key_node);
+					} else {
+						fields.insert(key, self.build_expression(&value_node)?);
+					}
+				}
+
+				Ok(Expr::new(ExprType::MapLiteral {
+					fields,
+					type_: map_type,
+				}))
+			}
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
 				let mut fields = HashMap::new();
