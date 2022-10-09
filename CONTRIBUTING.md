@@ -16,13 +16,6 @@ The following section describes how to get started developing changes in this re
 
 If you are unsure where to get started with contributing to Wing, please review the [issues labelled 'good first issue'](https://github.com/monadahq/winglang/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22).
 
-### Setup
-
-Please refer to the individual projects for set up instructions.
-
-[WingSdk](./libs/wingsdk/CONTRIBUTING.md)
-[WingLang](./libs/wingc/CONTRIBUTING.md)
-
 ### Private Repository Access
 
 While Wing is still in preview mode you take an extra step to access the private repositories. Make sure you have `npm`
@@ -68,12 +61,13 @@ This repository is a [monorepo] style repository. Sub-projects, like winglang an
 
 ## WingSDK
 
-The WingSDK is in the `./libs/wingsdk` directory. Please review [that CONTRIBUTING.md](./libs/wingsdk/CONTRIBUTING.md) 
+The WingSDK is in the `./libs/wingsdk` directory. Please review [that contributing guide](./libs/wingsdk/CONTRIBUTING.md) 
 for more information about how to make contributions to that project.
 
 ## WingLang
 
-... Coming soon!
+The WingLang project is in the `./libs/wingc` directory. Please review [that contributing guide](./libs/wingc/CONTRIBUTING.md) for more information about
+how to contribute to that project.
 
 ## Opening a Pull Request
 
@@ -82,7 +76,7 @@ and accepted by maintainers, please ensure:
 
 - [ ] Tests are written for all changes.
 
-- [ ] Hand-written documentation in `wingsdk/docs/` is updated if features are being added or removed.
+- [ ] Handwritten documentation in `wingsdk/docs/` is updated if features are being added or removed.
 
 - [ ] `npm run build` has been run to lint, build, and update API docs.
 
@@ -131,7 +125,7 @@ Then, you can open a pull request and have it reviewed.
 
 ## Review Pull Requests
 
-Pull requests will be opened for many different types of changes. All pull requests must be reviewed for:
+Pull requests will be opened for many types of changes. All pull requests must be reviewed for:
 
 * Formatting - all code should be passed through linters.
 * Documentation - new features should be documented
@@ -143,11 +137,10 @@ Any bugs or unexpected functionality should be recorded as issues. Once there, i
 
 ## Adding New Features
 
-If Wing isn't doing what it needs to do, an issue should be opened. Those issues will be discussed amongst the community
-and then they need to be implemented.
+If Wing isn't doing what it needs to do, an issue should be opened. Those issues will be discussed amongst the community, and then they need to be implemented.
 
 ## Next Steps
 
-Still not sure what to do next? Join us on our [Discord server](./README.md#community) and we'll be glad to help.
+Still not sure what to do next? Join us on our [Discord server](./README.md#community), and we'll be glad to help.
 
 
