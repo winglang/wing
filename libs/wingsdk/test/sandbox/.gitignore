@@ -1,4 +1,6 @@
 cdktf.out/
 local.out/
+sim.out/
 *.tfstate
 *.tfstate.backup
+app.wx

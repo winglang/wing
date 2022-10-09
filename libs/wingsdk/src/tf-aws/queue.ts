@@ -5,6 +5,9 @@ import { QueueInflightMethods } from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
 
+/**
+ * AWS implementation of `cloud.Queue`.
+ */
 export class Queue extends cloud.QueueBase {
   private readonly queue: sqs.SqsQueue;
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -19,7 +22,7 @@ export class Queue extends cloud.QueueBase {
     inflight: core.Inflight,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    const code = [];
+    const code: string[] = [];
     code.push(inflight.code.text);
     code.push(`async function $sqsEventWrapper($cap, event) {`);
     code.push(`  for (const record of event.Records ?? []) {`);

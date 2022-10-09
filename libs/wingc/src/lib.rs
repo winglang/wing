@@ -77,7 +77,11 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
-	return jsify::jsify(&scope, true);
+	let intermediate_js = jsify::jsify(&scope, true);
+	let intermediate_file = out_dir.join("intermediate.js");
+	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
+
+	return intermediate_js;
 }
 
 #[cfg(test)]

@@ -1,5 +1,4 @@
-import { mkdirSync } from "fs";
-import { join } from "path";
+import { existsSync, mkdirSync } from "fs";
 import { Polycons } from "@monadahq/polycons";
 import { Construct } from "constructs";
 import { Synthesizer as SynthesizerBase, SynthesizerProps } from "../core";
@@ -7,6 +6,9 @@ import { App } from "./app";
 import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
 
+/**
+ * Simulator synthesizer.
+ */
 export class Synthesizer extends SynthesizerBase {
   public readonly outdir: string;
   public readonly root: Construct;
@@ -15,10 +17,11 @@ export class Synthesizer extends SynthesizerBase {
   constructor(props: SynthesizerProps = {}) {
     super(props);
     this.outdir = props.outdir ?? ".";
-    const artifactdir = join(this.outdir, "sim.out");
-    this.app = new App({ outdir: artifactdir });
+    this.app = new App({ outdir: this.outdir });
     this.root = this.app;
-    mkdirSync(artifactdir, { recursive: true });
+    if (!existsSync(this.outdir)) {
+      mkdirSync(this.outdir, { recursive: true });
+    }
     Polycons.register(this.root, props.customFactory ?? new PolyconFactory());
   }
 

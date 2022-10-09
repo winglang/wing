@@ -56,7 +56,7 @@ mod tests {
 			super::language(),
 			&std::path::PathBuf::from("test"),
 			true,
-			true,
+			false,
 			None,
 			false,
 		)

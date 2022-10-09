@@ -389,7 +389,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 			"{}: {},",
 			obj.name,
 			render_block([
-				format!("obj: {},", obj.name),
+				format!("resource: {},", obj.name),
 				format!(
 					"methods: [{}]",
 					cap_def
@@ -411,9 +411,13 @@ fn jsify_inflight_function(func_def: &FunctionDefinition) -> String {
 	let proc_dir = format!("{}/proc.{}", out_dir, procid);
 	fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 	let file_path = format!("{}/index.js", proc_dir);
+	let relative_file_path = format!("proc.{}/index.js", procid);
 	fs::write(&file_path, proc_source.join("\n")).expect("Writing inflight proc source");
 	let props_block = render_block([
-		format!("code: {}.core.NodeJsCode.fromFile(\"{}\"),", STDLIB, &file_path),
+		format!(
+			"code: {}.core.NodeJsCode.fromFile(\"{}\"),",
+			STDLIB, &relative_file_path
+		),
 		format!("entrypoint: \"$proc\","),
 		if !bindings.is_empty() {
 			format!("captures: {}", render_block(&bindings))

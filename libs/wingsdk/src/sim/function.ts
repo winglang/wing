@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { FunctionProps } from "../cloud";
+import { FunctionProps, FUNCTION_TYPE } from "../cloud";
 import {
   Code,
   Language,
@@ -13,7 +13,12 @@ import { TextFile } from "../fs";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema";
 
+/**
+ * Simulator implementation of `cloud.Function`.
+ */
 export class Function extends cloud.FunctionBase implements IResource {
+  private readonly callers = new Array<string>();
+  private readonly callees = new Array<string>();
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
@@ -29,6 +34,12 @@ export class Function extends cloud.FunctionBase implements IResource {
       throw new Error("Only Node.js code is currently supported.");
     }
 
+    for (const capture of Object.values(inflight.captures)) {
+      if (capture.resource !== undefined) {
+        this.callees.push(capture.resource.node.path);
+      }
+    }
+
     const captureClients = inflight.makeClients(this);
     const bundledCode = inflight.bundle({ captureScope: this, captureClients });
 
@@ -37,6 +48,17 @@ export class Function extends cloud.FunctionBase implements IResource {
       lines: [bundledCode.text],
     });
     this.code = NodeJsCode.fromFile(assetPath);
+  }
+
+  private get addr(): string {
+    return `\${${this.node.path}#attrs.functionAddr}`;
+  }
+
+  /**
+   * @internal
+   */
+  public _addCallers(...callers: string[]) {
+    this.callers.push(...callers);
   }
 
   /**
@@ -48,25 +70,29 @@ export class Function extends cloud.FunctionBase implements IResource {
         "functions can only be captured by a sim.Function for now"
       );
     }
-    // FIXME
+
+    this.callers.push(captureScope.node.path);
+
+    const env = `FUNCTION_ADDR__${this.node.id}`;
+    captureScope.addEnvironment(env, this.addr);
+
     return InflightClient.for(__filename, "FunctionClient", [
-      `"${this.node.id}"`,
+      `process.env["${env}"]`,
     ]);
   }
 
   /** @internal */
   public _toResourceSchema(): FunctionSchema {
     return {
-      id: this.node.id,
-      path: this.node.path,
-      type: "cloud.Function",
+      type: FUNCTION_TYPE,
       props: {
         sourceCodeFile: this.code.path,
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
       },
-      callers: [],
-      callees: [],
+      attrs: {} as any,
+      callers: this.callers,
+      callees: this.callees,
     };
   }
 

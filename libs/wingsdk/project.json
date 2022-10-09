@@ -1,0 +1,13 @@
+{
+  "name": "wingsdk",
+  "implicitDependencies": ["wing-api-checker"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "cwd": "libs/wingsdk",
+        "script": "build"
+      }
+    }
+  }
+}

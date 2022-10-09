@@ -1,5 +1,5 @@
 import { createHash } from "crypto";
-import { mkdtempSync, readFileSync, unlinkSync, writeFileSync } from "fs";
+import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join, resolve } from "path";
 import { IConstruct } from "constructs";
@@ -8,21 +8,27 @@ import { PREBUNDLE_SYMBOL } from "./internal";
 
 /**
  * Capture information. A capture is a reference from an Inflight to a
- * construction-time object or value.
+ * construction-time resource or value. Either the "resource" or "value" field
+ * will be set, but not both.
  */
 export interface Capture extends CaptureMetadata {
   /**
-   * The captured object
+   * A captured resource
    */
-  readonly obj: any;
+  readonly resource?: ICapturableConstruct;
+
+  /**
+   * A captured immutable value (like string, number, boolean, a struct, or null).
+   */
+  readonly value?: any;
 }
 
 /**
- * Extra metadata associated with a capture.
+ * Extra metadata associated with a captured resource.
  */
 export interface CaptureMetadata {
   /**
-   * Which methods are called on the captured object
+   * Which methods are called on the captured resource.
    */
   readonly methods?: string[];
 }
@@ -39,6 +45,11 @@ export interface ICapturable {
    */
   _capture(captureScope: IConstruct, metadata: CaptureMetadata): Code;
 }
+
+/**
+ * Represents a construct that is capturable by an Inflight.
+ */
+export interface ICapturableConstruct extends ICapturable, IConstruct {}
 
 /**
  * Reference to a piece of code.
@@ -74,6 +85,7 @@ export abstract class Code {
  * The language of a piece of code.
  */
 export enum Language {
+  /** Node.js */
   NODE_JS = "nodejs",
 }
 
@@ -99,9 +111,11 @@ export class NodeJsCode extends Code {
   }
 
   public readonly language = Language.NODE_JS;
+  public readonly path: string;
 
-  private constructor(public readonly path: string) {
+  private constructor(path: string) {
     super();
+    this.path = path;
   }
 }
 
@@ -126,6 +140,7 @@ export interface InflightProps {
    * will be passed as the first argument of the entrypoint function.
    *
    * Each key here will be the key for the final value in the map.
+   * @default - No captures
    */
   readonly captures?: { [name: string]: Capture };
 }
@@ -184,7 +199,6 @@ export class Inflight {
 
     const absolutePath = resolve(originalCode.path);
     const workdir = dirname(absolutePath);
-    const filename = basename(absolutePath);
 
     lines.push("const $cap = {};");
     for (const [name, client] of Object.entries(options.captureClients)) {
@@ -197,15 +211,13 @@ export class Inflight {
     lines.push(`  return await ${this.entrypoint}($cap, event);`);
     lines.push("};");
 
-    const content = lines.join("\n");
-    const prebundledFile = join(workdir, filename + ".prebundle.js");
-    writeFileSync(prebundledFile, content);
+    const contents = lines.join("\n");
 
     // expose the inflight code before esbuild inlines dependencies, for unit
     // testing purposes... ugly
     if (options.captureScope) {
       (options.captureScope as any)[PREBUNDLE_SYMBOL] =
-        NodeJsCode.fromInline(content);
+        NodeJsCode.fromInline(contents);
     }
 
     const tempdir = mkdtemp("wingsdk.");
@@ -213,17 +225,18 @@ export class Inflight {
 
     esbuild.buildSync({
       bundle: true,
+      stdin: {
+        contents,
+        resolveDir: workdir,
+        sourcefile: "original.js",
+      },
       target: "node16",
       platform: "node",
       absWorkingDir: workdir,
-      entryPoints: [prebundledFile],
       outfile,
       minify: false,
       external: options.external ?? [],
     });
-
-    // clean up the intermediate file
-    unlinkSync(prebundledFile);
 
     return NodeJsCode.fromFile(outfile);
   }
@@ -264,24 +277,16 @@ function createClient(
   captureName: string,
   capture: Capture
 ): Code {
-  if (isPrimitive(capture.obj)) {
-    return NodeJsCode.fromInline(JSON.stringify(capture.obj));
+  if (capture.value !== undefined) {
+    return NodeJsCode.fromInline(JSON.stringify(capture.value));
   }
 
-  if (
-    typeof capture.obj == "object" &&
-    typeof capture.obj._capture === "function"
-  ) {
-    const c: ICapturable = capture.obj;
-    return c._capture(captureScope, capture);
+  if (capture.resource !== undefined) {
+    return capture.resource._capture(captureScope, capture);
   }
 
-  throw new Error(`unable to capture "${captureName}", no "_capture" method`);
-}
-
-function isPrimitive(value: any) {
-  return (
-    (typeof value !== "object" && typeof value !== "function") || value === null
+  throw new Error(
+    `Unable to capture "${captureName}", no "value" or "resource" specified.`
   );
 }
 
@@ -289,7 +294,13 @@ function mkdtemp(prefix: string): string {
   return mkdtempSync(join(tmpdir(), prefix));
 }
 
+/**
+ * Utility class with functions about inflight clients.
+ */
 export class InflightClient {
+  /**
+   * Creates a `Code` instance with code for creating an inflight client.
+   */
   public static for(
     filename: string,
     clientClass: string,

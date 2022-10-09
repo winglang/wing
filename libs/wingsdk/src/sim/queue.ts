@@ -3,9 +3,14 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
-import { BucketSchema, QueueSubscriber } from "./schema";
+import { QueueSchema, QueueSubscriber } from "./schema";
 
+/**
+ * Simulator implementation of `cloud.Queue`.
+ */
 export class Queue extends cloud.QueueBase implements IResource {
+  private readonly callers = new Array<string>();
+  private readonly callees = new Array<string>();
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
@@ -19,34 +24,61 @@ export class Queue extends cloud.QueueBase implements IResource {
     inflight: core.Inflight,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
+    const code: string[] = [];
+    code.push(inflight.code.text);
+    code.push(`async function $queueEventWrapper($cap, event) {`);
+    code.push(`  event = JSON.parse(event);`);
+    code.push(
+      `  if (!event.messages) throw new Error('No "messages" field in event.');`
+    );
+    code.push(`  for (const $message of event.messages) {`);
+    code.push(`    await ${inflight.entrypoint}($cap, JSON.parse($message));`);
+    code.push(`  }`);
+    code.push(`}`);
+    const newInflight = new core.Inflight({
+      entrypoint: `$queueEventWrapper`,
+      code: core.NodeJsCode.fromInline(code.join("\n")),
+    });
+
     const fn = new cloud.Function(
       this,
       `OnMessage-${inflight.code.hash.slice(0, 16)}`,
-      inflight,
+      newInflight,
       props
     );
 
+    // At the time the queue is created in the simulator, it needs to be able to
+    // call subscribed functions.
+    this.node.addDependency(fn);
+
     this.subscribers.push({
-      subscriberFunctionId: fn.node.addr,
+      functionId: fn.node.path,
       batchSize: props.batchSize ?? 1,
     });
+
+    this.callees.push(fn.node.path);
+    (fn as Function)._addCallers(this.node.path);
 
     return fn;
   }
 
   /** @internal */
-  public _toResourceSchema(): BucketSchema {
+  public _toResourceSchema(): QueueSchema {
     return {
-      id: this.node.id,
-      type: "cloud.Bucket",
-      path: this.node.path,
+      type: cloud.QUEUE_TYPE,
       props: {
-        timeout: this.timeout,
+        timeout: this.timeout.seconds,
         subscribers: this.subscribers,
+        initialMessages: [],
       },
-      callers: [],
-      callees: [],
+      attrs: {} as any,
+      callers: this.callers,
+      callees: this.callees,
     };
+  }
+
+  private get addr(): string {
+    return `\${${this.node.path}#attrs.queueAddr}`;
   }
 
   /**
@@ -59,9 +91,14 @@ export class Queue extends cloud.QueueBase implements IResource {
     if (!(captureScope instanceof Function)) {
       throw new Error("queues can only be captured by a sim.Function for now");
     }
-    // FIXME
+
+    this.callers.push(captureScope.node.path);
+
+    const env = `QUEUE_ADDR__${this.node.id}`;
+    captureScope.addEnvironment(env, this.addr);
+
     return core.InflightClient.for(__filename, "QueueClient", [
-      `"${this.node.id}"`,
+      `process.env["${env}"]`,
     ]);
   }
 }

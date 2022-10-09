@@ -1,5 +1,21 @@
 {
   "tasks": {
+    "api-check": {
+      "name": "api-check",
+      "steps": [
+        {
+          "exec": "wing-api-check"
+        }
+      ]
+    },
+    "api-check:watch": {
+      "name": "api-check:watch",
+      "steps": [
+        {
+          "exec": "wing-api-check --watch"
+        }
+      ]
+    },
     "build": {
       "name": "build",
       "description": "Full release build",
@@ -36,7 +52,7 @@
       },
       "steps": [
         {
-          "builtin": "release/bump-version"
+          "exec": "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
         }
       ],
       "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
@@ -165,6 +181,9 @@
       "description": "Runs after successful compilation",
       "steps": [
         {
+          "spawn": "api-check"
+        },
+        {
           "spawn": "docgen"
         }
       ]
@@ -290,19 +309,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,constructs'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
           "exec": "npm install"

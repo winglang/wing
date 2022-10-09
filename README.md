@@ -12,16 +12,17 @@ You also need to `npm login` into `@monadahq`.
 
 ## `wingc` Compiler
 
-The compiler is under `libs/wingc` and you can use standard Rust workflows:
+The compiler is under `libs/wingc` and you can use standard Rust workflows within that directory:
 
 - `cargo build` - builds the code
 - `cargo test` - runs tests
 - `cargo test -- --nocapture` - runs tests with output to see compilation results
+- `cargo run <source_file> [output_dir]` - compiles the wing source file to the output directory
 
-If intent is to compile for WebAssembly, following tooling is needed:
+If intent is to compile for WebAssembly, the following tooling is needed:
 
 - `cargo install cargo-wasi` - Adds convenient WASI commands to Cargo
-- `sudo scripts/setup_wasi.sh` - Installs WASI SDK
+- `sudo ../../scripts/setup_wasi.sh` - Installs WASI SDK
 
 Then you can build with:
 
@@ -32,6 +33,24 @@ cargo wasi build
 ## `wing`
 
 The meta wrapper CLI binary, Wing's `cargo`.
+
+`npx @monadahq/wing compile <source_file> [output_dir]`
+
+### Building
+
+wingc must first be built as a wasm binary, see above. Once built (debug) you can run:
+
+```shell
+npm run copy-wingc-debug
+```
+
+to ensure the wasm binary is available. Then
+
+```shell
+npm run dev compile <source_file> [output_dir]
+```
+
+To invoke the compiler.
 
 ## Wing SDK
 

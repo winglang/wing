@@ -6,7 +6,7 @@ import { Resource } from "./resource";
 /**
  * Global identifier for `Function`.
  */
-export const FUNCTION_ID = "wingsdk.cloud.Function";
+export const FUNCTION_TYPE = "wingsdk.cloud.Function";
 
 /**
  * Properties for `Function`.
@@ -40,6 +40,11 @@ export abstract class FunctionBase extends Resource {
     inflight;
     props;
   }
+
+  /**
+   * Add an environment variable to the function.
+   */
+  public abstract addEnvironment(key: string, value: string): void;
 }
 
 /**
@@ -54,7 +59,7 @@ export class Function extends FunctionBase {
   ) {
     super(null as any, id, inflight, props);
     return Polycons.newInstance(
-      FUNCTION_ID,
+      FUNCTION_TYPE,
       scope,
       id,
       inflight,
@@ -68,12 +73,19 @@ export class Function extends FunctionBase {
   public _capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
+
+  public addEnvironment(_key: string, _value: string): void {
+    throw new Error("Method not implemented.");
+  }
 }
 
 /**
  * Inflight interface for `Function`.
  */
 export interface IFunctionClient {
+  /**
+   * Invoke the function asynchronously with a given payload.
+   */
   invoke(payload: string): Promise<string>;
 }
 
@@ -81,5 +93,6 @@ export interface IFunctionClient {
  * List of inflight operations available for `Function`.
  */
 export enum FunctionInflightMethods {
+  /** `Function.invoke` */
   INVOKE = "invoke",
 }

@@ -7,7 +7,7 @@ import { Resource } from "./resource";
 /**
  * Global identifier for `Queue`.
  */
-export const QUEUE_ID = "wingsdk.cloud.Queue";
+export const QUEUE_TYPE = "wingsdk.cloud.Queue";
 
 /**
  * Properties for `Queue`.
@@ -60,7 +60,7 @@ export interface QueueOnMessageProps extends FunctionProps {
 export class Queue extends QueueBase {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(null as any, id, props);
-    return Polycons.newInstance(QUEUE_ID, scope, id, props) as Queue;
+    return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
   }
 
   /**
@@ -93,5 +93,6 @@ export interface IQueueClient {
  * List of inflight operations available for `Queue`.
  */
 export enum QueueInflightMethods {
+  /** `Queue.push` */
   PUSH = "push",
 }

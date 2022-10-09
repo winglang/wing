@@ -1,0 +1,110 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "affected": {
+    "defaultBase": "main"
+  },
+  "npmScope": "monadahq",
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
+  "namedInputs": {
+    "src": [
+      "{projectRoot}/src/**/*"
+    ],
+    "project-files": [
+      "{projectRoot}/*"
+    ],
+    "workspace-files": [
+      "{workspaceRoot}/*"
+    ],
+    "test": [
+      "{projectRoot}/test/**/*"
+    ],
+    "rust-conf": [
+      "{projectRoot}/Cargo.toml",
+      "{workspaceRoot}/Cargo.toml",
+      "{workspaceRoot}/Cargo.lock"
+    ],
+    "projen": [
+      "{projectRoot}/.projenrc.ts",
+      "{projectRoot}/.projenrc.js",
+      "{projectRoot}/.projen/*"
+    ],
+    "rust-wasm": [
+      "{workspaceRoot}/target/wasm32-wasi/debug/*.wasm",
+      "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
+    ],
+    "rust-native": [
+      "{workspaceRoot}/target/debug/*",
+      "{workspaceRoot}/target/release/*"
+    ],
+    "dist": [
+      "{projectRoot}/dist/**/*"
+    ]
+  },
+  "tasksRunnerOptions": {
+    "default": {
+      "runner": "nx/tasks-runners/default",
+      "options": {
+        "cacheableOperations": [
+          "build",
+          "build-native",
+          "build-wasm",
+          "copy",
+          "lint",
+          "test"
+        ]
+      }
+    }
+  },
+  "targetDefaults": {
+    "build": {
+      "inputs": [
+        "project-files",
+        "workspace-files",
+        "src"
+      ],
+      "outputs": [
+        "dist"
+      ],
+      "dependsOn": [
+        "^build"
+      ]
+    },
+    "build-native": {
+      "inputs": [
+        "project-files",
+        "workspace-files",
+        "src"
+      ],
+      "outputs": [
+        "rust-native"
+      ],
+      "dependsOn": [
+        "^build-native"
+      ]
+    },
+    "build-wasm": {
+      "inputs": [
+        "project-files",
+        "workspace-files",
+        "src"
+      ],
+      "outputs": [
+        "rust-wasm"
+      ],
+      "dependsOn": [
+        "^build-wasm"
+      ]
+    },
+    "test": {
+      "inputs": [
+        "project-files",
+        "workspace-files",
+        "src",
+        "test"
+      ]
+    }
+  }
+}
