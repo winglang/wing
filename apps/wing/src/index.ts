@@ -1,13 +1,16 @@
 import { Command } from "commander";
 import { ensureWASISupport } from "./init_node";
-import { argv, cwd } from "process";
+import { argv } from "process";
 import { readFile } from "fs/promises";
-import { dirname } from "path";
+import { dirname, join, resolve } from "path";
+import { mkdirSync, mkdtempSync } from "fs";
+import { tmpdir } from "os";
+import { spawnSync } from "child_process";
 
 // @ts-ignore esbuild handles this
 import wingcPath from "../wingc.wasm";
 
-(async () => {
+async function main() {
   const WASI = await ensureWASISupport();
 
   const program = new Command();
@@ -26,9 +29,10 @@ import wingcPath from "../wingc.wasm";
 
       const args = [argv[0], wingFile];
 
-      if (options.outDir) {
-        args.push(options.outDir);
-      } 
+      // create all intermediate files in a .wing directory
+      const workdir = ".wing/";
+      mkdirSync(workdir, { recursive: true });
+      args.push(workdir);
 
       const wasi = new WASI({
         args,
@@ -37,8 +41,8 @@ import wingcPath from "../wingc.wasm";
           RUST_BACKTRACE: "full",
         },
         preopens: {
-          // TODO This implies out the output directory is the same as the input directory
           [wingDir]: wingDir,
+          [workdir]: workdir,
         },
       });
 
@@ -50,7 +54,32 @@ import wingcPath from "../wingc.wasm";
       );
       const instance = await WebAssembly.instantiate(wasm, importObject);
       wasi.start(instance);
+
+      const outdir = options.outDir ?? ".";
+
+      // Install Wing SDK
+      const wingsdkPath = dirname(
+        require.resolve("@monadahq/wingsdk/package.json")
+      );
+      spawnSync("npm", ["install", `file:${wingsdkPath}`], {
+        cwd: workdir,
+      });
+
+      // TODO: compiler should return the path to intermediate.js so we can use it here
+      const outfile = join(workdir, "intermediate.js");
+      spawnSync(process.execPath, [outfile], {
+        env: {
+          ...process.env,
+          WINGSDK_SYNTH_DIR: resolve(outdir),
+        },
+        stdio: "inherit",
+      });
     });
 
   program.parse();
-})();
+}
+
+main().catch((err) => {
+  console.error(err);
+  process.exit(1);
+});
