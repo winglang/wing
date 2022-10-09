@@ -204,4 +204,4 @@ Come as you are, say hi, ask questions, help friends, geek out!
 
 ## License
 
-TBD
+Wing is licensed under the MIT License.
