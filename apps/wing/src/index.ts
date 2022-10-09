@@ -65,10 +65,6 @@ async function main() {
         cwd: workdir,
       });
 
-      // TODO: install any other npm dependencies needed by source code
-
-      // TODO: do not reinstall npm dependencies if they are already installed?
-
       // TODO: compiler should return the path to intermediate.js so we can use it here
       const outfile = join(workdir, "intermediate.js");
       spawnSync(process.execPath, [outfile], {
