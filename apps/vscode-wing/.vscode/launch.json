@@ -10,9 +10,6 @@
             "type": "extensionHost",
             "request": "launch",
             "outFiles": ["${workspaceFolder}/lib/**/*.js"],
-            "env": {
-              "WING_LSP_SERVER_PATH": "${workspaceFolder}/../wing-language-server/target/debug/wing-language-server"
-            },
             "args": [
                 "--disable-extensions", "--extensionDevelopmentPath=${workspaceFolder}"
             ]

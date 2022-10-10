@@ -1,11 +1,13 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
-import { QueueInflightMethods } from "../../src/cloud";
 import * as core from "../../src/core";
-// import * as local from "../../src/local";
-import * as tfaws from "../../src/tf-aws";
+import * as sim from "../../src/sim";
+// eslint-disable-next-line import/no-restricted-paths
+import { FunctionClient } from "../../src/sim/function.inflight";
+import * as testing from "../../src/testing";
+// import * as tfaws from "../../src/tf-aws";
 
-class Root extends Construct {
+class Main extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -13,14 +15,14 @@ class Root extends Construct {
     const pusher = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          await $cap.queue.push(JSON.stringify(event));
+          await $cap.queue.push(event);
         }`
       ),
       entrypoint: "$proc",
       captures: {
         queue: {
-          obj: queue,
-          methods: [QueueInflightMethods.PUSH],
+          resource: queue,
+          methods: [cloud.QueueInflightMethods.PUSH],
         },
       },
     });
@@ -39,7 +41,30 @@ class Root extends Construct {
 }
 
 const app = new core.App({
-  synthesizer: new tfaws.Synthesizer({ outdir: __dirname }),
+  synthesizer: new sim.Synthesizer({ outdir: __dirname }),
 });
-new Root(app.root, "root");
+new Main(app.root, "Main");
 app.synth();
+
+async function main() {
+  const s = await testing.Simulator.fromApp("app.wx");
+
+  const pusherAttrs = s.getAttributes("root/Main/Function");
+  const pusherClient = new FunctionClient(pusherAttrs.functionAddr);
+  await pusherClient.invoke(JSON.stringify({ name: "Yoda" }));
+
+  await new Promise((resolve) => setTimeout(resolve, 500));
+
+  const processorAttrs = s.getAttributes(
+    "root/Main/Queue/OnMessage-7b918d65c3e454bc"
+  );
+  const processorClient = new FunctionClient(processorAttrs.functionAddr);
+  await processorClient.timesCalled();
+
+  await s.cleanup();
+}
+
+main().catch((err) => {
+  console.log(err);
+  process.exit(1);
+});

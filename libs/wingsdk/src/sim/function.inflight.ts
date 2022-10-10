@@ -1,21 +1,21 @@
+import WebSocket from "ws";
 import { IFunctionClient } from "../cloud";
-import { Function, FUNCTIONS } from "./function.sim";
+import { sendToWebSocket } from "./util.inflight";
 
 export class FunctionClient implements IFunctionClient {
-  private readonly fn: Function;
+  private readonly ws: WebSocket;
+
+  // TODO: make this be an async function, and wait for the server to open
   constructor(functionAddr: number) {
-    const fn = FUNCTIONS[functionAddr];
-    if (!fn) {
-      throw new Error(`Invalid function id: ${functionAddr}`);
-    }
-    this.fn = fn;
+    this.ws = new WebSocket(`ws://localhost:${functionAddr}`);
   }
 
   public async invoke(message: string): Promise<string> {
-    return this.fn.invoke(message);
+    return sendToWebSocket(this.ws, "invoke", message);
   }
 
-  public get timesCalled() {
-    return this.fn.timesCalled;
+  public async timesCalled(): Promise<number> {
+    const response = await sendToWebSocket(this.ws, "timesCalled", "");
+    return parseInt(response, 10);
   }
 }

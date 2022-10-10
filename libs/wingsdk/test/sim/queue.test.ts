@@ -14,34 +14,40 @@ const ENVIRONMENT_VARIABLES = {};
 describe("basic", () => {
   test("queue with batch size of 1", async () => {
     // GIVEN
-    const sim = await Simulator.fromResources({
-      resources: {
-        my_function: {
-          type: "wingsdk.cloud.Function",
-          props: {
-            sourceCodeFile: SOURCE_CODE_FILE,
-            sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-            environmentVariables: ENVIRONMENT_VARIABLES,
-          },
-        },
-        my_queue: {
-          type: "wingsdk.cloud.Queue",
-          props: {
-            subscribers: [
-              {
-                functionId: "my_function", // "${my_function.attrs.functionAddr}" ?
-                batchSize: 1,
+    const sim = await Simulator.fromTree({
+      tree: {
+        root: {
+          type: "constructs.Construct",
+          children: {
+            my_function: {
+              type: "wingsdk.cloud.Function",
+              props: {
+                sourceCodeFile: SOURCE_CODE_FILE,
+                sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
+                environmentVariables: ENVIRONMENT_VARIABLES,
               },
-            ],
+            },
+            my_queue: {
+              type: "wingsdk.cloud.Queue",
+              props: {
+                subscribers: [
+                  {
+                    functionId: "root/my_function",
+                    batchSize: 1,
+                  },
+                ],
+              },
+            },
           },
         },
+        initOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
-    const fnAttrs = sim.getAttributes("my_function");
+    const fnAttrs = sim.getAttributes("root/my_function");
     const fnClient = new FunctionClient(fnAttrs.functionAddr);
 
-    const queueAttrs = sim.getAttributes("my_queue");
+    const queueAttrs = sim.getAttributes("root/my_queue");
     const queueClient = new QueueClient(queueAttrs.queueAddr);
 
     // WHEN
@@ -51,78 +57,90 @@ describe("basic", () => {
     await sleep(200);
 
     // THEN
-    expect(fnClient.timesCalled).toEqual(2);
+    expect(await fnClient.timesCalled()).toEqual(2);
     await sim.cleanup();
   });
 
   test("queue with batch size of 5", async () => {
     // GIVEN
-    const sim = await Simulator.fromResources({
-      resources: {
-        my_function: {
-          type: "wingsdk.cloud.Function",
-          props: {
-            sourceCodeFile: SOURCE_CODE_FILE,
-            sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-            environmentVariables: ENVIRONMENT_VARIABLES,
-          },
-        },
-        my_queue: {
-          type: "wingsdk.cloud.Queue",
-          props: {
-            initialMessages: ["A", "B", "C", "D", "E", "F"],
-            subscribers: [
-              {
-                functionId: "my_function",
-                batchSize: 5,
+    const sim = await Simulator.fromTree({
+      tree: {
+        root: {
+          type: "constructs.Construct",
+          children: {
+            my_function: {
+              type: "wingsdk.cloud.Function",
+              props: {
+                sourceCodeFile: SOURCE_CODE_FILE,
+                sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
+                environmentVariables: ENVIRONMENT_VARIABLES,
               },
-            ],
+            },
+            my_queue: {
+              type: "wingsdk.cloud.Queue",
+              props: {
+                initialMessages: ["A", "B", "C", "D", "E", "F"],
+                subscribers: [
+                  {
+                    functionId: "root/my_function",
+                    batchSize: 5,
+                  },
+                ],
+              },
+            },
           },
         },
+        initOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
-    const fnAttrs = sim.getAttributes("my_function");
+    const fnAttrs = sim.getAttributes("root/my_function");
     const fnClient = new FunctionClient(fnAttrs.functionAddr);
 
     await sleep(200);
 
     // THEN
-    expect(fnClient.timesCalled).toEqual(2);
+    expect(await fnClient.timesCalled()).toEqual(2);
     await sim.cleanup();
   });
 
   test("messages are requeued if the function fails", async () => {
     // GIVEN
-    const sim = await Simulator.fromResources({
-      resources: {
-        my_function: {
-          type: "wingsdk.cloud.Function",
-          props: {
-            sourceCodeFile: SOURCE_CODE_FILE,
-            sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-            environmentVariables: ENVIRONMENT_VARIABLES,
-          },
-        },
-        my_queue: {
-          type: "wingsdk.cloud.Queue",
-          props: {
-            subscribers: [
-              {
-                functionId: "my_function",
-                batchSize: 1,
+    const sim = await Simulator.fromTree({
+      tree: {
+        root: {
+          type: "constructs.Construct",
+          children: {
+            my_function: {
+              type: "wingsdk.cloud.Function",
+              props: {
+                sourceCodeFile: SOURCE_CODE_FILE,
+                sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
+                environmentVariables: ENVIRONMENT_VARIABLES,
               },
-            ],
+            },
+            my_queue: {
+              type: "wingsdk.cloud.Queue",
+              props: {
+                subscribers: [
+                  {
+                    functionId: "root/my_function",
+                    batchSize: 1,
+                  },
+                ],
+              },
+            },
           },
         },
+        initOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
     // WHEN
-    const fnAttrs = sim.getAttributes("my_function");
+    const fnAttrs = sim.getAttributes("root/my_function");
     const fnClient = new FunctionClient(fnAttrs.functionAddr);
 
-    const queueAttrs = sim.getAttributes("my_queue");
+    const queueAttrs = sim.getAttributes("root/my_queue");
     const queueClient = new QueueClient(queueAttrs.queueAddr);
 
     await queueClient.push("BAD MESSAGE");
@@ -130,7 +148,7 @@ describe("basic", () => {
     await sleep(300);
 
     // THEN
-    expect(fnClient.timesCalled).toBeGreaterThan(1);
+    expect(await fnClient.timesCalled()).toBeGreaterThan(1);
     await sim.cleanup();
   });
 });

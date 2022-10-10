@@ -6,11 +6,20 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "0.0.36",
+      "version": "0.0.70",
+      "type": "build"
+    },
+    {
+      "name": "@monadahq/wing-api-checker",
+      "version": "file:../../apps/wing-api-checker",
       "type": "build"
     },
     {
       "name": "@types/aws-lambda",
+      "type": "build"
+    },
+    {
+      "name": "@types/fs-extra",
       "type": "build"
     },
     {
@@ -19,8 +28,21 @@
       "type": "build"
     },
     {
+      "name": "@types/minipass",
+      "version": "3.1.2",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
+      "type": "build"
+    },
+    {
+      "name": "@types/tar",
+      "type": "build"
+    },
+    {
+      "name": "@types/ws",
       "type": "build"
     },
     {
@@ -102,6 +124,11 @@
       "type": "build"
     },
     {
+      "name": "minipass",
+      "version": "3.1.6",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^15",
       "type": "build"
@@ -141,11 +168,6 @@
       "type": "build"
     },
     {
-      "name": "wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
-      "type": "build"
-    },
-    {
       "name": "@aws-sdk/client-lambda",
       "type": "bundled"
     },
@@ -166,7 +188,19 @@
       "type": "bundled"
     },
     {
+      "name": "fs-extra",
+      "type": "bundled"
+    },
+    {
       "name": "piscina",
+      "type": "bundled"
+    },
+    {
+      "name": "tar",
+      "type": "bundled"
+    },
+    {
+      "name": "ws",
       "type": "bundled"
     },
     {
@@ -175,7 +209,7 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "^0.0.36",
+      "version": "^0.0.70",
       "type": "peer"
     },
     {
@@ -184,7 +218,7 @@
     },
     {
       "name": "constructs",
-      "version": "^10.0.25",
+      "version": "~10.0.25",
       "type": "peer"
     }
   ],

@@ -16,11 +16,11 @@ export class PolyconFactory implements IPolyconFactory {
     ...args: any[]
   ): IConstruct {
     switch (polyconId) {
-      case cloud.BUCKET_ID:
+      case cloud.BUCKET_TYPE:
         return new Bucket(scope, id, args[0]);
-      case cloud.FUNCTION_ID:
+      case cloud.FUNCTION_TYPE:
         return new Function(scope, id, args[0], args[1]);
-      case cloud.QUEUE_ID:
+      case cloud.QUEUE_TYPE:
         return new Queue(scope, id, args[0]);
       default:
         throw new Error(`Type ${polyconId} not implemented.`);

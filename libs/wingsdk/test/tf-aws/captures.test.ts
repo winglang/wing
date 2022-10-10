@@ -10,7 +10,15 @@ import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
 import { tfResourcesOf, tfSanitize } from "../util";
 
-test("function captures some primitives", () => {
+// TODO This is a hack. Our path for inflight requires should be relative
+function removeAbsolutePath(text: string) {
+  const regex = /"\/.+?\/winglang\/libs\/(.+?)"/g;
+
+  // replace first group with static text
+  return text.replace(regex, '"[REDACTED]/$1"');
+}
+
+test("function captures primitive values", () => {
   const output = cdktf.Testing.synthScope((scope) => {
     const factory = new tfaws.PolyconFactory();
     Polycons.register(scope, factory);
@@ -20,26 +28,74 @@ test("function captures some primitives", () => {
         `async function $proc($cap, event) {
           console.log("Hello, " + $cap.string);
           console.log("My favorite number is " + $cap.num);
-          console.log("The order is " + JSON.stringify($cap.order));
+          console.log("Is it raining? " + $cap.bool);
+          console.log($cap.nothing + " hypothesis");
         }`
       ),
       entrypoint: "$proc",
       captures: {
         num: {
-          obj: 5,
+          value: 5,
         },
         string: {
-          obj: "world",
+          value: "world",
         },
-        map: {
-          obj: true,
+        bool: {
+          value: true,
+        },
+        nothing: {
+          value: null,
         },
       },
     });
     const fn = new cloud.Function(scope, "Function", inflight);
 
     const code = core.Testing.inspectPrebundledCode(fn);
-    expect(code.text).toMatchSnapshot();
+    expect(removeAbsolutePath(code.text)).toMatchSnapshot();
+  });
+
+  expect(tfResourcesOf(output)).toEqual([
+    "aws_iam_role",
+    "aws_iam_role_policy",
+    "aws_iam_role_policy_attachment",
+    "aws_lambda_function",
+    "aws_s3_bucket",
+    "aws_s3_object",
+  ]);
+  expect(output).toMatchSnapshot();
+});
+
+test("function captures structured values", () => {
+  const output = cdktf.Testing.synthScope((scope) => {
+    const factory = new tfaws.PolyconFactory();
+    Polycons.register(scope, factory);
+
+    const inflight = new core.Inflight({
+      code: core.NodeJsCode.fromInline(
+        `async function $proc($cap, event) {
+          console.log("Map: " + JSON.stringify($cap.map));
+          console.log("List: " + JSON.stringify($cap.list));
+        }`
+      ),
+      entrypoint: "$proc",
+      captures: {
+        map: {
+          value: {
+            hello: "world",
+            boom: {
+              bam: 123,
+            },
+          },
+        },
+        list: {
+          value: [1, 2, "thing"],
+        },
+      },
+    });
+    const fn = new cloud.Function(scope, "Function", inflight);
+
+    const code = core.Testing.inspectPrebundledCode(fn);
+    expect(removeAbsolutePath(code.text)).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -63,13 +119,14 @@ test("function captures a bucket", () => {
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
           console.log("Hello, " + event.name);
+          // TODO: fix this
           await $cap.bucket.put("hello.txt", Serializable.fromJSON(event));
         }`
       ),
       entrypoint: "$proc",
       captures: {
         bucket: {
-          obj: bucket,
+          resource: bucket,
           methods: [BucketInflightMethods.PUT],
         },
       },
@@ -77,7 +134,7 @@ test("function captures a bucket", () => {
     const fn = new cloud.Function(scope, "Function", inflight);
 
     const code = core.Testing.inspectPrebundledCode(fn);
-    expect(code.text).toMatchSnapshot();
+    expect(removeAbsolutePath(code.text)).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -119,15 +176,19 @@ test("function captures a function", () => {
       entrypoint: "$proc",
       captures: {
         function: {
-          obj: fn1,
+          resource: fn1,
           methods: [FunctionInflightMethods.INVOKE],
         },
       },
     });
     const fn2 = new cloud.Function(scope, "Function2", inflight2);
 
-    expect(core.Testing.inspectPrebundledCode(fn1).text).toMatchSnapshot();
-    expect(core.Testing.inspectPrebundledCode(fn2).text).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn1).text)
+    ).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn2).text)
+    ).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -157,7 +218,7 @@ test("two functions reusing the same inflight", () => {
       entrypoint: "$proc",
       captures: {
         bucket: {
-          obj: bucket,
+          resource: bucket,
           methods: [BucketInflightMethods.PUT],
         },
       },
@@ -165,8 +226,12 @@ test("two functions reusing the same inflight", () => {
     const fn1 = new cloud.Function(scope, "Function1", inflight);
     const fn2 = new cloud.Function(scope, "Function2", inflight);
 
-    expect(core.Testing.inspectPrebundledCode(fn1).text).toMatchSnapshot();
-    expect(core.Testing.inspectPrebundledCode(fn2).text).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn1).text)
+    ).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn2).text)
+    ).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
@@ -197,7 +262,7 @@ test("function captures a queue", () => {
       entrypoint: "$proc",
       captures: {
         queue: {
-          obj: queue,
+          resource: queue,
           methods: [QueueInflightMethods.PUSH],
         },
       },
@@ -214,9 +279,11 @@ test("function captures a queue", () => {
     });
     const processorFn = queue.onMessage(processor);
 
-    expect(core.Testing.inspectPrebundledCode(pusherFn).text).toMatchSnapshot();
     expect(
-      core.Testing.inspectPrebundledCode(processorFn).text
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(pusherFn).text)
+    ).toMatchSnapshot();
+    expect(
+      removeAbsolutePath(core.Testing.inspectPrebundledCode(processorFn).text)
     ).toMatchSnapshot();
   });
 

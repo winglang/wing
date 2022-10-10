@@ -1,6 +1,6 @@
 {
-  "name": "wing-playground",
-  "version": "1.0.0",
+  "name": "@monadahq/wing-playground",
+  "version": "0.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {

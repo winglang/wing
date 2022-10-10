@@ -9,12 +9,13 @@ const project = new cdk.JsiiProject({
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [
-    "constructs@^10.0.25",
-    "@monadahq/polycons@^0.0.36",
+    "constructs@~10.0.25",
+    "@monadahq/polycons@^0.0.70",
     "cdktf",
     "@cdktf/provider-aws",
   ],
   bundledDeps: [
+    "fs-extra",
     // preflight dependencies
     "esbuild-wasm",
     // aws client dependencies
@@ -22,14 +23,18 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-sqs",
     "@aws-sdk/util-utf8-node",
-    // simulator client dependencies (none)
-    // simulator implementation dependencies
+    // simulator dependencies
+    "tar",
     "piscina",
+    "ws",
   ],
   devDeps: [
     "replace-in-file",
     "@types/aws-lambda",
-    "wing-api-checker@file:../../apps/wing-api-checker",
+    "@types/fs-extra",
+    "@types/tar",
+    "@types/ws",
+    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
   ],
   prettier: true,
   jestOptions: {
@@ -38,12 +43,15 @@ const project = new cdk.JsiiProject({
   minNodeVersion: "16.16.0",
   npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
-  gitignore: [".DS_Store"],
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
 });
+
+// fix typing issues with "tar" dependency
+project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
+project.package.addPackageResolutions("minipass@3.1.6");
 
 // use a more recent version of jest-resolve so that tests will not error
 // when using require("@scope/package/path")
@@ -147,8 +155,12 @@ project.eslint!.addRules({
     "error",
     {
       zones: [
+        // avoid importing inflight or simulator code into preflight code since
+        // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
         disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
+        // implementation details of simulator should not be leaked to inflight code
+        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],
@@ -167,5 +179,10 @@ project.addTask("api-check:watch", {
   exec: "wing-api-check --watch",
 });
 project.postCompileTask.prependSpawn(apiCheck);
+
+const bumpTask = project.tasks.tryFind("bump")!;
+bumpTask.reset(
+  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+);
 
 project.synth();
