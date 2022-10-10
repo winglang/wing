@@ -1,21 +1,21 @@
 import * as cloud from "../cloud";
 import { ISimulatorFactory } from "../testing/simulator";
-import { init as initBucket, cleanup as cleanupBucket } from "./bucket.sim";
+import { start as startBucket, cleanup as cleanupBucket } from "./bucket.sim";
 import {
-  init as initFunction,
+  start as startFunction,
   cleanup as cleanupFunction,
 } from "./function.sim";
-import { init as initQueue, cleanup as cleanupQueue } from "./queue.sim";
+import { start as startQueue, cleanup as cleanupQueue } from "./queue.sim";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   async init(type: string, props: any): Promise<any> {
     switch (type) {
       case cloud.BUCKET_TYPE:
-        return initBucket(props);
+        return startBucket(props);
       case cloud.FUNCTION_TYPE:
-        return initFunction(props);
+        return startFunction(props);
       case cloud.QUEUE_TYPE:
-        return initQueue(props);
+        return startQueue(props);
       case "constructs.Construct":
         return {};
       default:

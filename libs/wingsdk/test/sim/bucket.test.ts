@@ -33,7 +33,7 @@ test("put and get objects from bucket", async () => {
           },
         },
       },
-      initOrder: ["root", "root/my_bucket"],
+      startOrder: ["root", "root/my_bucket"],
     },
   });
   const attrs = s.getAttributes("root/my_bucket");
@@ -63,7 +63,7 @@ test("get invalid object throws an error", async () => {
           },
         },
       },
-      initOrder: ["root", "root/my_bucket"],
+      startOrder: ["root", "root/my_bucket"],
     },
   });
   const attrs = s.getAttributes("root/my_bucket");

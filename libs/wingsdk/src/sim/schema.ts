@@ -8,7 +8,7 @@ export interface WingSimulatorSchema {
    * The order resources in which resources should be initialized based on
    * dependency relationships.
    */
-  readonly initOrder: string[];
+  readonly startOrder: string[];
 }
 
 /** Schema for individual resources */

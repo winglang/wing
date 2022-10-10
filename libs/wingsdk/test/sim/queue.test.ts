@@ -40,7 +40,7 @@ describe("basic", () => {
             },
           },
         },
-        initOrder: ["root", "root/my_function", "root/my_queue"],
+        startOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
@@ -90,7 +90,7 @@ describe("basic", () => {
             },
           },
         },
-        initOrder: ["root", "root/my_function", "root/my_queue"],
+        startOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 
@@ -132,7 +132,7 @@ describe("basic", () => {
             },
           },
         },
-        initOrder: ["root", "root/my_function", "root/my_queue"],
+        startOrder: ["root", "root/my_function", "root/my_queue"],
       },
     });
 

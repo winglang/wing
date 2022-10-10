@@ -89,7 +89,7 @@ export class Simulator {
       },
     };
 
-    for (const path of tree.initOrder) {
+    for (const path of tree.startOrder) {
       const res = findResource(tree, path);
       log(`simulating ${path} (${res.type})`);
       const attrs = await factory.init(res.type, {

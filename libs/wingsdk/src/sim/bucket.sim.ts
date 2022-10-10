@@ -3,7 +3,7 @@ import * as os from "os";
 import * as path from "path";
 import { BucketSchema } from "./schema";
 
-export async function init(_props: any): Promise<BucketSchema["attrs"]> {
+export async function start(_props: any): Promise<BucketSchema["attrs"]> {
   const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-sim-"));
   return {
     bucketAddr: tmpdir,

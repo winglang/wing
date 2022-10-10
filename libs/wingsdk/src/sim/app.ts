@@ -46,11 +46,11 @@ export class App extends Construct {
 
     // write "simulator.json" into the workdir
     const root = toSchema(this);
-    const initOrder = new DependencyGraph(this.node)
+    const startOrder = new DependencyGraph(this.node)
       .topology()
       .filter((x) => isResource(x))
       .map((x) => x.node.path);
-    const contents: WingSimulatorSchema = { root, initOrder };
+    const contents: WingSimulatorSchema = { root, startOrder };
     writeFileSync(
       join(workdir, "simulator.json"),
       JSON.stringify(contents, null, 2)

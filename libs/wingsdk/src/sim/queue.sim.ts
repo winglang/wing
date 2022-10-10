@@ -12,7 +12,7 @@ interface QueueSubscriberInternal extends QueueSubscriber {
   functionClient?: FunctionClient;
 }
 
-export async function init(
+export async function start(
   props: QueueSchema["props"] & { _resolver: IResourceResolver }
 ): Promise<QueueSchema["attrs"]> {
   const q = new Queue(props);

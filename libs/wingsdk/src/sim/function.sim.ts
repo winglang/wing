@@ -6,7 +6,7 @@ import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 
 const FUNCTIONS: Record<number, Function> = {};
 
-export async function init(
+export async function start(
   props: FunctionSchema["props"]
 ): Promise<FunctionSchema["attrs"]> {
   const fn = new Function(props);

@@ -23,7 +23,7 @@ test("invoke function", async () => {
         },
       },
       // TODO: remove this by doing topological sort at simulation time instead
-      initOrder: ["root", "root/my_function"],
+      startOrder: ["root", "root/my_function"],
     },
   });
   const attrs = sim.getAttributes("root/my_function");
@@ -57,7 +57,7 @@ test("invoke function with environment variables", async () => {
           },
         },
       },
-      initOrder: ["root", "root/my_function"],
+      startOrder: ["root", "root/my_function"],
     },
   });
   const attrs = sim.getAttributes("root/my_function");
