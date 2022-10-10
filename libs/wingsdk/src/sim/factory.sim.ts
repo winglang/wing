@@ -8,7 +8,7 @@ import {
 import { start as startQueue, cleanup as cleanupQueue } from "./queue.sim";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
-  async init(type: string, props: any): Promise<any> {
+  async start(type: string, props: any): Promise<any> {
     switch (type) {
       case cloud.BUCKET_TYPE:
         return startBucket(props);

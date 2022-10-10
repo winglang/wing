@@ -92,7 +92,7 @@ export class Simulator {
     for (const path of tree.startOrder) {
       const res = findResource(tree, path);
       log(`simulating ${path} (${res.type})`);
-      const attrs = await factory.init(res.type, {
+      const attrs = await factory.start(res.type, {
         ...resolveTokens(res.props, _resolver),
         _resolver,
       });
@@ -221,7 +221,7 @@ export interface ISimulatorFactory {
    * simulating a resource. This function should return an object/map containing
    * the resource's attributes.
    */
-  init(type: string, props: any): Promise<any>;
+  start(type: string, props: any): Promise<any>;
 
   /**
    * Given a resource type and a resource's attributes, stop the resource's
