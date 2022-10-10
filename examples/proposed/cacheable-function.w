@@ -1,21 +1,21 @@
 bring cloud;
 
-resource CachableFunction {
+resource CachableFunction extends cloud.Function {
     _func: cloud.Function;
     _cache: cloud.Bucket;
 
-    init(func: cloud.Function) {
-        this._func = func;
+    init(inflight: ~(event: any): any, props: cloud.FunctionProps) {
+        super(inflight, props);
         this._cache = new cloud.Bucket();
     }
 
-    ~invoke(args: any) {
-        let key = JSON.stringify(args);
+    ~invoke(event: any) {
+        let key = hashof(event);
         let cached = this._cache.try_get(key);
         if (cached != nil) {
             return cached;
         }
-        let result = this._func.invoke(args);
+        let result = super.invoke(event);
         this._cache.set(key, result);
         return result;
     }
@@ -27,4 +27,3 @@ let handler = (arg1: num) ~> {
 };
 
 let cachedHandler = new CachableFunction(handler);
-
