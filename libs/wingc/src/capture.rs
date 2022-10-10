@@ -176,12 +176,12 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 		}
 		ExprType::Literal(_) => {}
 		ExprType::StructLiteral { fields, .. } => {
-			for (_, v) in fields.iter() {
+			for v in fields.values() {
 				res.extend(scan_captures_in_expression(&v, env));
 			}
 		}
 		ExprType::MapLiteral { fields, .. } => {
-			for (_, v) in fields.iter() {
+			for v in fields.values() {
 				res.extend(scan_captures_in_expression(&v, env));
 			}
 		}
