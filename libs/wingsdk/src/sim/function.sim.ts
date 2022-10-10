@@ -49,7 +49,7 @@ export class Function {
 
     this.wss.on("connection", function connection(ws) {
       ws.on("message", function message(data) {
-        log("server receiving: %s", data);
+        log("server receiving:", data);
         const contents: SimulatorRequest = JSON.parse(data.toString());
         if (contents.operation === "invoke") {
           void fn
@@ -60,7 +60,7 @@ export class Function {
                 result,
                 timestamp: Date.now(),
               };
-              log("server sending: %s", JSON.stringify(resp));
+              log("server sending:", JSON.stringify(resp));
               ws.send(JSON.stringify(resp));
             })
             .catch((err) => {
@@ -69,7 +69,7 @@ export class Function {
                 error: `${err} ${err.stack}`,
                 timestamp: Date.now(),
               };
-              log("server sending: %s", JSON.stringify(resp));
+              log("server sending:", JSON.stringify(resp));
               ws.send(JSON.stringify(resp));
             });
         } else if (contents.operation === "timesCalled") {
@@ -78,7 +78,7 @@ export class Function {
             result: fn._timesCalled.toString(),
             timestamp: Date.now(),
           };
-          log("server sending: %s", JSON.stringify(resp));
+          log("server sending:", JSON.stringify(resp));
           ws.send(JSON.stringify(resp));
         }
       });

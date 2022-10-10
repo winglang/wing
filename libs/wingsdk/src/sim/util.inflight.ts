@@ -25,11 +25,11 @@ export async function sendToWebSocket(
     message,
     timestamp: Date.now(),
   };
-  log("client sending: %s", JSON.stringify(req));
+  log("client sending:", JSON.stringify(req));
   ws.send(JSON.stringify(req));
   return new Promise((resolve, reject) => {
     ws.on("message", (data) => {
-      log("client receiving: %s", data.toString());
+      log("client receiving:", data.toString());
       const contents: SimulatorResponse = JSON.parse(data.toString());
       if (contents.id === id) {
         if (contents.error) {

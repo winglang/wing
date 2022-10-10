@@ -59,7 +59,7 @@ export class Queue {
     const q = this;
     this.wss.on("connection", function connection(ws) {
       ws.on("message", function message(data) {
-        log("server receiving: %s", data);
+        log("server receiving:", data);
         const contents: SimulatorRequest = JSON.parse(data.toString());
         if (contents.operation === "push") {
           q.messages.push(contents.message);
@@ -68,7 +68,7 @@ export class Queue {
             result: "ok",
             timestamp: Date.now(),
           };
-          log("server sending: %s", JSON.stringify(resp));
+          log("server sending:", JSON.stringify(resp));
           ws.send(JSON.stringify(resp));
         } else {
           throw new Error(`Invalid operation: ${contents.operation}`);
