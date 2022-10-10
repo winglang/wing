@@ -20,6 +20,10 @@
   },
   "dependencies": {
     "@monadahq/wingsdk": "file:../../libs/wingsdk",
+    "@cdktf/provider-aws": "*",
+    "@monadahq/polycons": "*",
+    "cdktf": "*",
+    "constructs": "*",
     "@types/node": "^18.7.22",
     "commander": "^9.4.0"
   },
@@ -29,6 +33,10 @@
     "@types/node": "^18.7.22"
   },
   "bundledDependencies": [
-    "@monadahq/wingsdk"
+    "@monadahq/wingsdk",
+    "@cdktf/provider-aws",
+    "@monadahq/polycons",
+    "cdktf",
+    "constructs"
   ]
 }
