@@ -207,9 +207,9 @@ interface ResourceData {
   /** Resource type name. */
   type: string;
   /** Resource data defined at synthesis time, through the construct tree. */
-  props: any;
+  props: { [key: string]: any };
   /** Resource data created at deployment time by the simulator. */
-  attrs: any;
+  attrs: { [key: string]: any };
 }
 
 /**
