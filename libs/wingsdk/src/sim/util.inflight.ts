@@ -13,6 +13,7 @@ export async function sendToWebSocket(
       resolve(null);
     } else {
       ws.on("open", resolve);
+      ws.on("close", reject);
       ws.on("error", reject);
     }
   });
