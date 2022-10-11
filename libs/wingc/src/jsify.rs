@@ -369,6 +369,15 @@ fn jsify_statement(statement: &Statement) -> String {
 					.join("\n")
 			)
 		}
+		Statement::Bring {
+			module_path,
+			statements,
+		} => format!(
+			"/* start bring module: {module} */\n{}\n/* end bring module: {module} */",
+			jsify_scope(statements),
+			module = module_path
+		)
+		.to_string(),
 	}
 }
 
