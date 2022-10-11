@@ -27,7 +27,6 @@ const WINGLANG_REPO_OWNER = "monadahq";
 const UPDATE_RATE_LIMIT_MS = 1 * 60 * 60 * 1000; // 1 hour
 
 const CFG_UPDATES_GITHUB_TOKEN = "updates.githubToken";
-const CFG_UPDATES_SOURCE_TAG = "updates.sourceTag";
 const STATE_INSTALLED_RELEASE_CHECKSUM = "wing.installedReleaseChecksum";
 const STATE_LAST_UPDATE_CHECK = "wing.lastUpdateCheck";
 
@@ -140,14 +139,12 @@ export async function checkForUpdates(context: ExtensionContext) {
 
   const configuration = workspace.getConfiguration(EXTENSION_NAME);
   const githubToken = configuration.get<string>(CFG_UPDATES_GITHUB_TOKEN);
-  const sourceTag = configuration.get<string>(CFG_UPDATES_SOURCE_TAG);
 
-  if (githubToken && sourceTag) {
+  if (githubToken) {
     const octokit = new Octokit({ auth: githubToken });
-    const latestRelease = await octokit.rest.repos.getReleaseByTag({
+    const latestRelease = await octokit.rest.repos.getLatestRelease({
       owner: WINGLANG_REPO_OWNER,
       repo: WINGLANG_REPO_NAME,
-      tag: sourceTag,
     });
 
     if (latestRelease.status !== 200) {
