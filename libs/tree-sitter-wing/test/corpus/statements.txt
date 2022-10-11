@@ -241,3 +241,18 @@ struct Test {
         )
     )
 )
+
+==================================
+Bring statement
+==================================
+
+bring cloud;
+bring "./mod.w";
+
+---
+(source
+    (short_import_statement
+        module_name: (identifier))
+    (short_import_statement
+        module_name: (string))
+)

@@ -250,6 +250,12 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 			} => {
 				todo!()
 			}
+			Statement::Bring {
+				module_path: _,
+				statements: _,
+			} => {
+				todo!()
+			}
 			Statement::Struct {
 				name: _,
 				extends: _,

@@ -1,8 +1,10 @@
+use crate::parser::bring;
 use ast::Scope;
 use diagnostic::Diagnostics;
 
 use crate::parser::Parser;
 use std::cell::RefCell;
+use std::collections::HashSet;
 use std::fs;
 use std::path::PathBuf;
 
@@ -18,45 +20,6 @@ pub mod jsify;
 pub mod parser;
 pub mod type_check;
 
-pub fn parse(source_file: &str) -> Scope {
-	let language = tree_sitter_wing::language();
-	let mut parser = tree_sitter::Parser::new();
-	parser.set_language(language).unwrap();
-
-	let source = match fs::read(&source_file) {
-		Ok(source) => source,
-		Err(err) => {
-			panic!("Error reading source file: {}: {:?}", &source_file, err);
-		}
-	};
-
-	let tree = match parser.parse(&source[..], None) {
-		Some(tree) => tree,
-		None => {
-			println!("Failed parsing source file: {}", source_file);
-			std::process::exit(1);
-		}
-	};
-
-	let wing_parser = Parser {
-		source: &source[..],
-		source_name: source_file.to_string(),
-		diagnostics: RefCell::new(Diagnostics::new()),
-	};
-
-	let scope = wing_parser.wingit(&tree.root_node());
-
-	for diagnostic in wing_parser.diagnostics.borrow().iter() {
-		println!("{}", diagnostic);
-	}
-
-	if wing_parser.diagnostics.borrow().len() > 0 {
-		std::process::exit(1);
-	}
-
-	scope
-}
-
 pub fn type_check(scope: &mut Scope, types: &mut Types) {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
 	let mut tc = TypeChecker::new(types);
@@ -64,10 +27,12 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) {
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
+	// create a new hashmap to manage imports
+	let mut imports = HashSet::new();
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
-	let mut scope = parse(source_file);
+	let mut scope = bring::bring(source_file, None, &mut imports).unwrap();
 	// Type check everything and build typed symbol environment
 	type_check(&mut scope, &mut types);
 	// Analyze inflight captures
