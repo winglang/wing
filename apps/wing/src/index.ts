@@ -57,26 +57,37 @@ async function main() {
 
       const outdir = options.outDir ?? ".";
 
-      // Install Wing SDK
-      const wingsdkPath = dirname(
-        require.resolve("@monadahq/wingsdk/package.json")
-      );
-      spawnSync("npm", ["install", `file:${wingsdkPath}`], {
-        cwd: workdir,
-      });
+      installSdk(workdir);
 
       // TODO: compiler should return the path to intermediate.js so we can use it here
-      const outfile = join(workdir, "intermediate.js");
-      spawnSync(process.execPath, [outfile], {
+      spawnSync(process.execPath, ["intermediate.js"], {
         env: {
           ...process.env,
           WINGSDK_SYNTH_DIR: resolve(outdir),
         },
         stdio: "inherit",
+        cwd: workdir,
       });
     });
 
   program.parse();
+}
+
+function installSdk(workdir: string) {
+  const toolchainVersion = require("../package.json").version;
+  let wingsdkVersion;
+  if (toolchainVersion === "0.0.0") {
+    const wingsdkPath = dirname(
+      require.resolve("@monadahq/wingsdk/package.json")
+    );
+    wingsdkVersion = `file:${wingsdkPath}`;
+  } else {
+    wingsdkVersion = `@monadahq/wingsdk@${toolchainVersion}`;
+  }
+
+  spawnSync("npm", ["install", wingsdkVersion], {
+    cwd: workdir,
+  });
 }
 
 main().catch((err) => {
