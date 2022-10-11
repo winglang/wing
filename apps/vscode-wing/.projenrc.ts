@@ -99,11 +99,6 @@ const contributes: VSCodeExtensionContributions = {
         description:
           "PAT to check for and download new versions of this extension from the winglang repo. Leave empty to disable automatic updates.\nNOTE: PAT must have private repo permission.",
       },
-      "wing.updates.sourceTag": {
-        type: "string",
-        default: "development",
-        description: "Release tag to retrieve updates from.",
-      },
     },
   },
 };
