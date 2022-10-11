@@ -19,24 +19,13 @@
     "dev": "npm run build && node dist/index.js"
   },
   "dependencies": {
-    "@monadahq/wingsdk": "file:../../libs/wingsdk",
-    "@cdktf/provider-aws": "*",
-    "@monadahq/polycons": "*",
-    "cdktf": "*",
-    "constructs": "*",
     "@types/node": "^18.7.22",
     "commander": "^9.4.0"
   },
   "devDependencies": {
+    "@monadahq/wingsdk": "file:../../libs/wingsdk",
     "esbuild": "^0.15.9",
     "tsx": "^3.9.0",
     "@types/node": "^18.7.22"
-  },
-  "bundledDependencies": [
-    "@monadahq/wingsdk",
-    "@cdktf/provider-aws",
-    "@monadahq/polycons",
-    "cdktf",
-    "constructs"
-  ]
+  }
 }
