@@ -1,18 +1,22 @@
 import * as cloud from "../cloud";
-import { ISimulatorDispatcher } from "../testing/simulator";
+import { ISimulatorDispatcher, SimulatorContext } from "../testing/simulator";
 import { start as startBucket, stop as stopBucket } from "./bucket.sim";
 import { start as startFunction, stop as stopFunction } from "./function.sim";
 import { start as startQueue, stop as stopQueue } from "./queue.sim";
 
-export class DefaultSimulatorFactory implements ISimulatorDispatcher {
-  async start(type: string, props: any): Promise<any> {
+export class DefaultSimulatorDispatcher implements ISimulatorDispatcher {
+  async start(
+    type: string,
+    props: any,
+    context: SimulatorContext
+  ): Promise<any> {
     switch (type) {
       case cloud.BUCKET_TYPE:
-        return startBucket(props);
+        return startBucket(props, context);
       case cloud.FUNCTION_TYPE:
-        return startFunction(props);
+        return startFunction(props, context);
       case cloud.QUEUE_TYPE:
-        return startQueue(props);
+        return startQueue(props, context);
       case "constructs.Construct":
         return {};
       default:

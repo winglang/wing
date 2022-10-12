@@ -1,5 +1,5 @@
 import { Server } from "ws";
-import { IResourceResolver } from "../testing/simulator";
+import { IResourceResolver, SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
 import { FunctionClient } from "./function.inflight";
 import { QueueSchema, QueueSubscriber } from "./schema";
@@ -13,9 +13,10 @@ interface QueueSubscriberInternal extends QueueSubscriber {
 }
 
 export async function start(
-  props: QueueSchema["props"] & { _resolver: IResourceResolver }
+  props: QueueSchema["props"],
+  context: SimulatorContext
 ): Promise<QueueSchema["attrs"]> {
-  const q = new Queue(props);
+  const q = new Queue(props, context.resolver);
   QUEUES[q.addr] = q;
   return {
     queueAddr: q.addr,
@@ -38,14 +39,13 @@ export class Queue {
   private readonly subscribers = new Array<QueueSubscriberInternal>();
   private readonly intervalId: NodeJS.Timeout;
 
-  constructor(props: QueueSchema["props"] & { _resolver: IResourceResolver }) {
+  constructor(props: QueueSchema["props"], resolver: IResourceResolver) {
     for (const sub of props.subscribers) {
       this.subscribers.push({ ...sub });
     }
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
-      const functionAddr =
-        props._resolver.lookup(functionId).attrs.functionAddr;
+      const functionAddr = resolver.lookup(functionId).attrs.functionAddr;
       subscriber.functionClient = new FunctionClient(functionAddr);
     }
 

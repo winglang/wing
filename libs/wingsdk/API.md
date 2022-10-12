@@ -2960,40 +2960,135 @@ How long a queue's consumers have to process a message.
 
 ---
 
-### SimulatorFromTreeOptions <a name="SimulatorFromTreeOptions" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions"></a>
+### ResourceData <a name="ResourceData" id="@monadahq/wingsdk.testing.ResourceData"></a>
 
-Options for `Simulator.fromResources`.
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.Initializer"></a>
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.ResourceData.Initializer"></a>
 
 ```typescript
 import { testing } from '@monadahq/wingsdk'
 
-const simulatorFromTreeOptions: testing.SimulatorFromTreeOptions = { ... }
+const resourceData: testing.ResourceData = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree">tree</a></code> | <code>any</code> | A tree of resources to load into the simulator. |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.dispatcher">dispatcher</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
+| <code><a href="#@monadahq/wingsdk.testing.ResourceData.property.attrs">attrs</a></code> | <code>{[ key: string ]: any}</code> | Resource data created at deployment time by the simulator. |
+| <code><a href="#@monadahq/wingsdk.testing.ResourceData.property.props">props</a></code> | <code>{[ key: string ]: any}</code> | Resource data defined at synthesis time, through the construct tree. |
+| <code><a href="#@monadahq/wingsdk.testing.ResourceData.property.type">type</a></code> | <code>string</code> | Resource type name. |
 
 ---
 
-##### `tree`<sup>Required</sup> <a name="tree" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree"></a>
+##### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ResourceData.property.attrs"></a>
 
 ```typescript
-public readonly tree: any;
+public readonly attrs: {[ key: string ]: any};
 ```
 
-- *Type:* any
+- *Type:* {[ key: string ]: any}
 
-A tree of resources to load into the simulator.
+Resource data created at deployment time by the simulator.
 
 ---
 
-##### `dispatcher`<sup>Optional</sup> <a name="dispatcher" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.dispatcher"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ResourceData.property.props"></a>
+
+```typescript
+public readonly props: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+Resource data defined at synthesis time, through the construct tree.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ResourceData.property.type"></a>
+
+```typescript
+public readonly type: string;
+```
+
+- *Type:* string
+
+Resource type name.
+
+---
+
+### SimulatorContext <a name="SimulatorContext" id="@monadahq/wingsdk.testing.SimulatorContext"></a>
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorContext.Initializer"></a>
+
+```typescript
+import { testing } from '@monadahq/wingsdk'
+
+const simulatorContext: testing.SimulatorContext = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorContext.property.resolver">resolver</a></code> | <code>@monadahq/wingsdk.testing.IResourceResolver</code> | *No description.* |
+
+---
+
+##### `assetsDir`<sup>Required</sup> <a name="assetsDir" id="@monadahq/wingsdk.testing.SimulatorContext.property.assetsDir"></a>
+
+```typescript
+public readonly assetsDir: string;
+```
+
+- *Type:* string
+
+---
+
+##### `resolver`<sup>Required</sup> <a name="resolver" id="@monadahq/wingsdk.testing.SimulatorContext.property.resolver"></a>
+
+```typescript
+public readonly resolver: IResourceResolver;
+```
+
+- *Type:* @monadahq/wingsdk.testing.IResourceResolver
+
+---
+
+### SimulatorProps <a name="SimulatorProps" id="@monadahq/wingsdk.testing.SimulatorProps"></a>
+
+Props for `Simulator`.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorProps.Initializer"></a>
+
+```typescript
+import { testing } from '@monadahq/wingsdk'
+
+const simulatorProps: testing.SimulatorProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.appPath">appPath</a></code> | <code>string</code> | Path to a Wing app file (.wx). |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.dispatcher">dispatcher</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
+
+---
+
+##### `appPath`<sup>Required</sup> <a name="appPath" id="@monadahq/wingsdk.testing.SimulatorProps.property.appPath"></a>
+
+```typescript
+public readonly appPath: string;
+```
+
+- *Type:* string
+
+Path to a Wing app file (.wx).
+
+---
+
+##### `dispatcher`<sup>Optional</sup> <a name="dispatcher" id="@monadahq/wingsdk.testing.SimulatorProps.property.dispatcher"></a>
 
 ```typescript
 public readonly dispatcher: ISimulatorDispatcher;
@@ -3877,6 +3972,26 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 A simulator that can be used to test your application locally.
 
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.testing.Simulator.Initializer"></a>
+
+```typescript
+import { testing } from '@monadahq/wingsdk'
+
+new testing.Simulator(props: SimulatorProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.testing.SimulatorProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.Simulator.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.testing.SimulatorProps
+
+---
+
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -3884,6 +3999,7 @@ A simulator that can be used to test your application locally.
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
 
 ---
@@ -3936,6 +4052,14 @@ that is resolved at synth time.
 
 ---
 
+##### `start` <a name="start" id="@monadahq/wingsdk.testing.Simulator.start"></a>
+
+```typescript
+public start(): void
+```
+
+Start the simulator.
+
 ##### `stop` <a name="stop" id="@monadahq/wingsdk.testing.Simulator.stop"></a>
 
 ```typescript
@@ -3944,46 +4068,6 @@ public stop(): void
 
 Stop the simulation and clean up all resources.
 
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromApp">fromApp</a></code> | Start the simulator from a Wing app file (.wx). |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.fromTree">fromTree</a></code> | Start the simulator using an inline definition of your application's resources. |
-
----
-
-##### `fromApp` <a name="fromApp" id="@monadahq/wingsdk.testing.Simulator.fromApp"></a>
-
-```typescript
-import { testing } from '@monadahq/wingsdk'
-
-testing.Simulator.fromApp(filepath: string)
-```
-
-Start the simulator from a Wing app file (.wx).
-
-###### `filepath`<sup>Required</sup> <a name="filepath" id="@monadahq/wingsdk.testing.Simulator.fromApp.parameter.filepath"></a>
-
-- *Type:* string
-
----
-
-##### `fromTree` <a name="fromTree" id="@monadahq/wingsdk.testing.Simulator.fromTree"></a>
-
-```typescript
-import { testing } from '@monadahq/wingsdk'
-
-testing.Simulator.fromTree(options: SimulatorFromTreeOptions)
-```
-
-Start the simulator using an inline definition of your application's resources.
-
-###### `options`<sup>Required</sup> <a name="options" id="@monadahq/wingsdk.testing.Simulator.fromTree.parameter.options"></a>
-
-- *Type:* @monadahq/wingsdk.testing.SimulatorFromTreeOptions
-
----
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -4465,6 +4549,31 @@ The tree node.
 
 ---
 
+### IResourceResolver <a name="IResourceResolver" id="@monadahq/wingsdk.testing.IResourceResolver"></a>
+
+- *Implemented By:* @monadahq/wingsdk.testing.IResourceResolver
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.testing.IResourceResolver.lookup">lookup</a></code> | *No description.* |
+
+---
+
+##### `lookup` <a name="lookup" id="@monadahq/wingsdk.testing.IResourceResolver.lookup"></a>
+
+```typescript
+public lookup(resourceId: string): ResourceData
+```
+
+###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@monadahq/wingsdk.testing.IResourceResolver.lookup.parameter.resourceId"></a>
+
+- *Type:* string
+
+---
+
+
 ### ISimulatorDispatcher <a name="ISimulatorDispatcher" id="@monadahq/wingsdk.testing.ISimulatorDispatcher"></a>
 
 - *Implemented By:* @monadahq/wingsdk.testing.ISimulatorDispatcher
@@ -4475,21 +4584,21 @@ Represents a class that can start and stop the simulation of an individual resou
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Given a resource type and a resource's synthesis-time schema props, start simulating a resource. |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.stop">stop</a></code> | Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created. |
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Start simulating a resource. |
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.stop">stop</a></code> | Stop the resource's simulation and clean up any file system resources it created. |
 
 ---
 
 ##### `start` <a name="start" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start"></a>
 
 ```typescript
-public start(type: string, props: any): any
+public start(type: string, props: any, context: SimulatorContext): any
 ```
 
-Given a resource type and a resource's synthesis-time schema props, start simulating a resource.
+Start simulating a resource.
 
-This function should return an object/map containing
-the resource's attributes.
+This function should return an object/map
+containing the resource's attributes.
 
 ###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.type"></a>
 
@@ -4503,13 +4612,19 @@ the resource's attributes.
 
 ---
 
+###### `context`<sup>Required</sup> <a name="context" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.context"></a>
+
+- *Type:* @monadahq/wingsdk.testing.SimulatorContext
+
+---
+
 ##### `stop` <a name="stop" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop"></a>
 
 ```typescript
 public stop(type: string, attrs: any): void
 ```
 
-Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created.
+Stop the resource's simulation and clean up any file system resources it created.
 
 ###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop.parameter.type"></a>
 

@@ -5,16 +5,17 @@ import * as tar from "tar";
 import { ResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
-const { DefaultSimulatorFactory } = require("../sim/factory.sim");
+const { DefaultSimulatorDispatcher } = require("../sim/dispatcher.sim");
 
 /**
- * Options for `Simulator.fromResources`
+ * Props for `Simulator`.
  */
-export interface SimulatorFromTreeOptions {
+export interface SimulatorProps {
   /**
-   * A tree of resources to load into the simulator.
+   * Path to a Wing app file (.wx).
    */
-  readonly tree: any;
+  readonly appPath: string;
+
   /**
    * The factory that dispatches to simulation implementations.
    * @default - a factory that simulates built-in Wing SDK resources
@@ -22,90 +23,94 @@ export interface SimulatorFromTreeOptions {
   readonly dispatcher?: ISimulatorDispatcher;
 }
 
-export type IResourceResolver = {
+export interface SimulatorContext {
+  readonly resolver: IResourceResolver;
+  readonly assetsDir: string;
+}
+
+export interface IResourceResolver {
   lookup(resourceId: string): ResourceData;
-};
+}
 
 /**
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
-  /**
-   * Start the simulator from a Wing app file (.wx).
-   */
-  public static async fromApp(filepath: string): Promise<Simulator> {
+  private readonly _dispatcher: ISimulatorDispatcher;
+  private readonly _tree: WingSimulatorSchema;
+  private readonly _assetsDir: string;
+
+  constructor(props: SimulatorProps) {
+    const { assetsDir, tree } = this._loadApp(props.appPath);
+    this._tree = tree;
+    this._assetsDir = assetsDir;
+
+    this._annotateTreeWithPaths();
+
+    this._dispatcher = props.dispatcher ?? new DefaultSimulatorDispatcher();
+  }
+
+  private _loadApp(appPath: string): { assetsDir: string; tree: any } {
+    // create a temporary directory to store extracted files
     const workdir = mkdtemp();
     tar.extract({
       cwd: workdir,
       sync: true,
-      file: filepath,
+      file: appPath,
     });
 
     log("extracted app to", workdir);
-    process.chdir(workdir);
 
     const simJson = join(workdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
-        `Invalid Wing app "${filepath}" - simulator.json not found.`
+        `Invalid Wing app (${appPath}) - simulator.json not found.`
       );
     }
     const data = readJsonSync(simJson);
-    return Simulator.fromTree({ tree: data });
+
+    return { assetsDir: workdir, tree: data };
   }
 
-  /**
-   * Start the simulator using an inline definition of your application's
-   * resources.
-   */
-  public static async fromTree(
-    options: SimulatorFromTreeOptions
-  ): Promise<Simulator> {
-    const factory: ISimulatorDispatcher =
-      options.dispatcher ?? new DefaultSimulatorFactory();
-
-    const tree = options.tree as WingSimulatorSchema;
-    if (!tree.root) {
-      throw new Error("Invalid tree: no root resource");
-    }
-
-    async function walk(path: string, node: ResourceSchema) {
+  private _annotateTreeWithPaths() {
+    function walk(path: string, node: ResourceSchema) {
       (node as any).path = path;
       for (const [childId, child] of Object.entries(node.children ?? {})) {
-        await walk(path + "/" + childId, child);
+        walk(path + "/" + childId, child);
       }
     }
 
-    // fill in "path" entries on the tree
-    await walk("root", tree.root);
-
-    // This resolver allows resources to resolve deploy-time attributes about
-    // other resources they depend on. For example, a queue that has a function
-    // subscribed to it needs to obtain the function's simulator-unique ID in
-    // order to invoke it.
-    const _resolver = {
-      lookup: (path: string) => {
-        return findResource(tree, path);
-      },
-    };
-
-    for (const path of tree.startOrder) {
-      const res = findResource(tree, path);
-      log(`simulating ${path} (${res.type})`);
-      const attrs = await factory.start(res.type, {
-        ...resolveTokens(res.props, _resolver),
-        _resolver,
-      });
-      res.attrs = attrs;
-    }
-
-    return new Simulator(factory, tree);
+    walk("root", this._tree.root);
   }
 
-  private constructor(
-    private readonly _dispatcher: ISimulatorDispatcher,
-    private readonly _tree: any
-  ) {}
+  /**
+   * Start the simulator.
+   */
+  public async start(): Promise<void> {
+    // TODO: what if start() gets called twice in a row?
+
+    const context: SimulatorContext = {
+      // This resolver allows resources to resolve deploy-time attributes about
+      // other resources they depend on. For example, a queue that has a function
+      // subscribed to it needs to obtain the function's simulator-unique ID in
+      // order to invoke it.
+      // TODO: remove this?
+      resolver: {
+        lookup: (path: string) => {
+          return findResource(this._tree, path);
+        },
+      },
+      assetsDir: this._assetsDir,
+    };
+
+    for (const path of this._tree.startOrder) {
+      const res = findResource(this._tree, path);
+      log(`starting resource ${path} (${res.type})`);
+      const props = resolveTokens(res.props, context.resolver);
+      const attrs = await this._dispatcher.start(res.type, props, context);
+      (res as any).attrs = attrs;
+    }
+  }
 
   /**
    * Obtain a resource's attributes. This is data that gets resolved when the
@@ -141,17 +146,12 @@ export class Simulator {
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
-    const dispatcher = this._dispatcher;
-
-    async function walk(_id: string, node: ResourceSchema) {
-      const { type, attrs } = node;
-      await dispatcher.stop(type, attrs);
-      for (const [childId, child] of Object.entries(node.children ?? {})) {
-        await walk(childId, child);
-      }
+    // TODO: what if stop() gets called twice in a row?
+    for (const path of this._tree.startOrder.slice().reverse()) {
+      const res = findResource(this._tree, path);
+      log(`stopping resource ${path} (${res.type})`);
+      await this._dispatcher.stop(res.type, res.attrs);
     }
-
-    await walk("root", this._tree.root);
   }
 }
 
@@ -203,13 +203,13 @@ function findResource(tree: any, path: string): ResourceData {
   return node;
 }
 
-interface ResourceData {
+export interface ResourceData {
   /** Resource type name. */
-  type: string;
+  readonly type: string;
   /** Resource data defined at synthesis time, through the construct tree. */
-  props: { [key: string]: any };
+  readonly props: { [key: string]: any };
   /** Resource data created at deployment time by the simulator. */
-  attrs: { [key: string]: any };
+  readonly attrs: { [key: string]: any };
 }
 
 /**
@@ -218,15 +218,14 @@ interface ResourceData {
  */
 export interface ISimulatorDispatcher {
   /**
-   * Given a resource type and a resource's synthesis-time schema props, start
-   * simulating a resource. This function should return an object/map containing
-   * the resource's attributes.
+   * Start simulating a resource. This function should return an object/map
+   * containing the resource's attributes.
    */
-  start(type: string, props: any): Promise<any>;
+  start(type: string, props: any, context: SimulatorContext): Promise<any>;
 
   /**
-   * Given a resource type and a resource's attributes, stop the resource's
-   * simulation and clean up any file system resources it created.
+   * Stop the resource's simulation and clean up any file system resources it
+   * created.
    */
   stop(type: string, attrs: any): Promise<void>;
 }

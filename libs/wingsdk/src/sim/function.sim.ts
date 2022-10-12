@@ -1,5 +1,6 @@
 import Piscina from "piscina";
 import { Server } from "ws";
+import { SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
 import { FunctionSchema } from "./schema";
 import { SimulatorRequest, SimulatorResponse } from "./sim-types";
@@ -7,7 +8,8 @@ import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 const FUNCTIONS: Record<number, Function> = {};
 
 export async function start(
-  props: FunctionSchema["props"]
+  props: FunctionSchema["props"],
+  _context: SimulatorContext
 ): Promise<FunctionSchema["attrs"]> {
   const fn = new Function(props);
   FUNCTIONS[fn.addr] = fn;
