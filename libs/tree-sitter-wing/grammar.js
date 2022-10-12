@@ -453,11 +453,11 @@ module.exports = grammar({
       choice($.array_literal, $.set_literal, $.map_literal),
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
     set_literal: ($) => seq(
-      optional(field("type", $.immutable_container_type)),
+      optional(field("type", $._builtin_container_type)),
       "{", commaSep($.expression), "}"
     ),
     map_literal: ($) => seq(
-      optional(field("type", $.immutable_container_type)),
+      optional(field("type", $._builtin_container_type)),
       "{", commaSep($.map_literal_member), "}"
     ),
     struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
