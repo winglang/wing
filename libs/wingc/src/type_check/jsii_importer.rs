@@ -264,7 +264,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut is_resource = false;
 		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
 
-		// Get the base class of the JSII class
+		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class = if let Some(base_class_fqn) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
 			if base_class_fqn == RESOURCE_CLASS_FQN {
