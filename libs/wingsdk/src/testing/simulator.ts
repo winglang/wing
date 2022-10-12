@@ -111,6 +111,18 @@ export class Simulator {
   }
 
   /**
+   * Stop the simulation and clean up all resources.
+   */
+  public async stop(): Promise<void> {
+    // TODO: what if stop() gets called twice in a row?
+    for (const path of this._tree.startOrder.slice().reverse()) {
+      const res = findResource(this._tree, path);
+      log(`stopping resource ${path} (${res.type})`);
+      await this._dispatcher.stop(res.type, res.attrs);
+    }
+  }
+
+  /**
    * Obtain a resource's attributes. This is data that gets resolved when the
    * during the resource's in-simulator creation.
    */
@@ -138,18 +150,6 @@ export class Simulator {
    */
   public get tree(): any {
     return JSON.parse(JSON.stringify(this._tree));
-  }
-
-  /**
-   * Stop the simulation and clean up all resources.
-   */
-  public async stop(): Promise<void> {
-    // TODO: what if stop() gets called twice in a row?
-    for (const path of this._tree.startOrder.slice().reverse()) {
-      const res = findResource(this._tree, path);
-      log(`stopping resource ${path} (${res.type})`);
-      await this._dispatcher.stop(res.type, res.attrs);
-    }
   }
 }
 
