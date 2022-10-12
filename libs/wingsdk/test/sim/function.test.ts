@@ -1,32 +1,34 @@
-import * as path from "path";
+import * as cloud from "../../src/cloud";
+import * as core from "../../src/core";
 import { FunctionClient } from "../../src/sim/function.inflight";
-import { Simulator } from "../../src/testing/simulator";
+import * as testing from "../../src/testing";
+import { synthSimulatedApp } from "./util";
 
-const SOURCE_CODE_FILE = path.join(__dirname, "fixtures", "greeter.js");
-const SOURCE_CODE_LANGUAGE = "javascript";
+const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
+async function $proc($cap, event) {
+  event = JSON.parse(event);
+  let msg;
+  if (process.env.PIG_LATIN) {
+    msg = "Ellohay, " + event.name + "!";
+  } else {
+    msg = "Hello, " + event.name + "!";
+  }
+  return { msg };
+}`);
 
 test("invoke function", async () => {
   // GIVEN
-  const sim = await Simulator.fromTree({
-    tree: {
-      root: {
-        type: "constructs.Construct",
-        children: {
-          my_function: {
-            type: "wingsdk.cloud.Function",
-            props: {
-              sourceCodeFile: SOURCE_CODE_FILE,
-              sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-              environmentVariables: {},
-            },
-          },
-        },
-      },
-      // TODO: remove this by doing topological sort at simulation time instead
-      startOrder: ["root", "root/my_function"],
-    },
+  const appPath = synthSimulatedApp((scope) => {
+    const handler = new core.Inflight({
+      code: INFLIGHT_CODE,
+      entrypoint: "$proc",
+    });
+    new cloud.Function(scope, "my_function", handler);
   });
-  const attrs = sim.getAttributes("root/my_function");
+  const s = new testing.Simulator({ appPath });
+  await s.start();
+
+  const attrs = s.getAttributes("root/my_function");
   const fnClient = new FunctionClient(attrs.functionAddr);
 
   // WHEN
@@ -35,32 +37,26 @@ test("invoke function", async () => {
 
   // THEN
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
-  await sim.stop();
+  await s.stop();
 });
 
 test("invoke function with environment variables", async () => {
   // GIVEN
-  const sim = await Simulator.fromTree({
-    tree: {
-      root: {
-        type: "constructs.Construct",
-        children: {
-          my_function: {
-            type: "wingsdk.cloud.Function",
-            props: {
-              sourceCodeFile: SOURCE_CODE_FILE,
-              sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-              environmentVariables: {
-                PIG_LATIN: "true",
-              },
-            },
-          },
-        },
+  const appPath = synthSimulatedApp((scope) => {
+    const handler = new core.Inflight({
+      code: INFLIGHT_CODE,
+      entrypoint: "$proc",
+    });
+    new cloud.Function(scope, "my_function", handler, {
+      env: {
+        PIG_LATIN: "true",
       },
-      startOrder: ["root", "root/my_function"],
-    },
+    });
   });
-  const attrs = sim.getAttributes("root/my_function");
+  const s = new testing.Simulator({ appPath });
+  await s.start();
+
+  const attrs = s.getAttributes("root/my_function");
   const fnClient = new FunctionClient(attrs.functionAddr);
 
   // WHEN
@@ -71,5 +67,5 @@ test("invoke function with environment variables", async () => {
   expect(response).toEqual({
     msg: `Ellohay, ${PAYLOAD.name}!`,
   });
-  await sim.stop();
+  await s.stop();
 });

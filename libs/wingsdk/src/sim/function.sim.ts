@@ -1,3 +1,5 @@
+import { existsSync } from "fs";
+import { join } from "path";
 import Piscina from "piscina";
 import { Server } from "ws";
 import { SimulatorContext } from "../testing/simulator";
@@ -9,9 +11,9 @@ const FUNCTIONS: Record<number, Function> = {};
 
 export async function start(
   props: FunctionSchema["props"],
-  _context: SimulatorContext
+  context: SimulatorContext
 ): Promise<FunctionSchema["attrs"]> {
-  const fn = new Function(props);
+  const fn = new Function(props, context.assetsDir);
   FUNCTIONS[fn.addr] = fn;
   return {
     functionAddr: fn.addr,
@@ -33,12 +35,16 @@ export class Function {
   private readonly worker: Piscina;
   private _timesCalled: number = 0;
 
-  constructor(props: FunctionSchema["props"]) {
+  constructor(props: FunctionSchema["props"], assetsDir: string) {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
+    const filename = join(assetsDir, props.sourceCodeFile);
+    if (!existsSync(filename)) {
+      throw new Error("File not found: " + filename);
+    }
     this.worker = new Piscina({
-      filename: props.sourceCodeFile,
+      filename,
       env: {
         ...props.environmentVariables,
       },
