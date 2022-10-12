@@ -463,7 +463,6 @@ module.exports = grammar({
     struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
 
     map_literal_member: ($) =>
-      // TODO: make sure $.string here conforms to valid keys in a map
       seq(choice($.identifier, $.string), ":", $.expression),
     struct_literal_member: ($) =>
       seq($.identifier, ":", $.expression),
