@@ -34,11 +34,14 @@ guide](./CONTRIBUTING.md).*
 
 ## Getting Started
 
+If you want to try out Wing without having to get anything installed locally, 
+check out the [demo sandbox](https://wing-playground.vercel.app/).
+
 ### Prerequisites
 
 To install Wing, you will need the following installed on your system:
 
-1. [Node.js](https://nodejs.org/en/) (version 16.x or above). We recommend using [NVM](https://github.com/nvm-sh/nvm) to install Node.js.
+1. [Node.js](https://nodejs.org/en/) (version 18.x or above). We recommend using [NVM](https://github.com/nvm-sh/nvm) to install Node.js.
 1. [VSCode](https://code.visualstudio.com/) is our supported IDE. You can use other IDEs, but we have a VSCode extension to make development easier.
 
 In order to deploy the "Hello, World" example below to AWS, you will also need:
@@ -114,7 +117,8 @@ queue.on_message((message) ~> {
 Now, let's test our program:
 
 ```sh
-$ wing run hello.w
+wing run hello.w
+
 Compiling to target "sim"...
 Starting Wing Console...
 ```
@@ -141,7 +145,8 @@ Terraform.
 First, we need to compile our program to AWS:
 
 ```sh
-$ wing build --target tf-aws hello.w
+wing build --target tf-aws hello.w
+
 Build for target "tf-aws"...
 ```
 
@@ -152,10 +157,10 @@ Now, let's deploy our program to AWS:
 > for more information.
 
 ```sh
-$ cd ./target/tf-aws
-$ export AWS_REGION=us-east-1 # or any other region
-$ terraform init
-$ terraform apply
+cd ./target/tf-aws
+export AWS_REGION=us-east-1 # or any other region
+terraform init
+terraform apply
 ```
 
 Now, if you open the [Amazon SQS Console](https://console.aws.amazon.com/sqs),
@@ -185,7 +190,7 @@ versioning](https://semver.org/) and release notes are available in the
 To update the toolchain to the latest, run the following command:
 
 ```sh
-$ npm update -g @monadahq/wing
+npm update -g @monadahq/wing
 ```
 
 Our VSCode extension has automatic updates, as well as the Wing Console.
