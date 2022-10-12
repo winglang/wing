@@ -132,15 +132,6 @@ fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> 
 	}
 }
 
-fn is_resource_type(typ: &Type) -> bool {
-	// TODO: for now anything under "cloud" is a resource
-	if let Type::CustomType { root, fields: _ } = typ {
-		root.name == "cloud"
-	} else {
-		false
-	}
-}
-
 fn jsify_type(typ: &Type) -> String {
 	match typ {
 		Type::CustomType { root, fields } => {
@@ -170,8 +161,15 @@ fn jsify_expression(expression: &Expr) -> String {
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
-			if is_resource_type(class) {
-				// If this is a resource then add the scope and id to the arg list
+			let is_resource = expression
+				.evaluated_type
+				.borrow()
+				.unwrap()
+				.as_resource_object()
+				.is_some();
+
+			// If this is a resource then add the scope and id to the arg list
+			if is_resource {
 				format!(
 					"new {}({})",
 					jsify_type(class),
