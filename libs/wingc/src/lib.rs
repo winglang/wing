@@ -1,5 +1,5 @@
 use ast::Scope;
-use diagnostic::Diagnostics;
+use diagnostic::{print_diagnostics, Diagnostics};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -19,7 +19,9 @@ pub mod parser;
 pub mod type_check;
 pub mod type_env;
 
-pub fn parse(source_file: &str) -> Scope {
+pub type DiagnosticTuple<T> = (T, Diagnostics);
+
+pub fn parse(source_file: &str) -> DiagnosticTuple<Scope> {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -34,8 +36,7 @@ pub fn parse(source_file: &str) -> Scope {
 	let tree = match parser.parse(&source[..], None) {
 		Some(tree) => tree,
 		None => {
-			println!("Failed parsing source file: {}", source_file);
-			std::process::exit(1);
+			panic!("Failed parsing source file: {}", source_file);
 		}
 	};
 
@@ -47,30 +48,28 @@ pub fn parse(source_file: &str) -> Scope {
 
 	let scope = wing_parser.wingit(&tree.root_node());
 
-	for diagnostic in wing_parser.diagnostics.borrow().iter() {
-		println!("{}", diagnostic);
-	}
-
-	if wing_parser.diagnostics.borrow().len() > 0 {
-		std::process::exit(1);
-	}
-
-	scope
+	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types) {
+pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
 	let mut tc = TypeChecker::new(types);
 	tc.type_check_scope(scope);
+
+	tc.diagnostics.into_inner()
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
-	let mut scope = parse(source_file);
+	let scope_result = parse(source_file);
+	let mut scope = scope_result.0;
+	let parse_diagnostics = scope_result.1;
+
 	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types);
+	let type_check_diagnostics = type_check(&mut scope, &mut types);
+
 	// Analyze inflight captures
 	scan_captures(&scope);
 
@@ -81,6 +80,10 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
 	let intermediate_file = out_dir.join("intermediate.js");
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
+
+	// Print diagnostics
+	print_diagnostics(&parse_diagnostics);
+	print_diagnostics(&type_check_diagnostics);
 
 	return intermediate_js;
 }

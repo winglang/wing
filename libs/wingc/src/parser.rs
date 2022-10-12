@@ -384,6 +384,7 @@ impl Parser<'_> {
 
 	fn build_expression(&self, exp_node: &Node) -> DiagnosticResult<Expr> {
 		let expression_node = &self.check_error(*exp_node, "Expression")?;
+		let expression_span = self.node_span(expression_node);
 		match expression_node.kind() {
 			"new_expression" => {
 				let class = self.build_type(&expression_node.child_by_field_name("class").unwrap())?;
@@ -402,70 +403,96 @@ impl Parser<'_> {
 				} else {
 					None
 				};
-				Ok(Expr::new(ExprType::New {
-					class,
-					obj_id,
-					arg_list: arg_list?,
-					obj_scope,
-				}))
+				Ok(Expr::new(
+					ExprType::New {
+						class,
+						obj_id,
+						arg_list: arg_list?,
+						obj_scope,
+					},
+					expression_span,
+				))
 			}
-			"binary_expression" => Ok(Expr::new(ExprType::Binary {
-				lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
-				rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
-				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-					"+" => BinaryOperator::Add,
-					"-" => BinaryOperator::Sub,
-					"==" => BinaryOperator::Equal,
-					"!=" => BinaryOperator::NotEqual,
-					">" => BinaryOperator::Greater,
-					">=" => BinaryOperator::GreaterOrEqual,
-					"<" => BinaryOperator::Less,
-					"<=" => BinaryOperator::LessOrEqual,
-					"&&" => BinaryOperator::LogicalAnd,
-					"||" => BinaryOperator::LogicalOr,
-					"%" => BinaryOperator::Mod,
-					"*" => BinaryOperator::Mul,
-					"/" => BinaryOperator::Div,
-					"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
-					other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
+			"binary_expression" => Ok(Expr::new(
+				ExprType::Binary {
+					lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
+					rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
+					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
+						"+" => BinaryOperator::Add,
+						"-" => BinaryOperator::Sub,
+						"==" => BinaryOperator::Equal,
+						"!=" => BinaryOperator::NotEqual,
+						">" => BinaryOperator::Greater,
+						">=" => BinaryOperator::GreaterOrEqual,
+						"<" => BinaryOperator::Less,
+						"<=" => BinaryOperator::LessOrEqual,
+						"&&" => BinaryOperator::LogicalAnd,
+						"||" => BinaryOperator::LogicalOr,
+						"%" => BinaryOperator::Mod,
+						"*" => BinaryOperator::Mul,
+						"/" => BinaryOperator::Div,
+						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
+						other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
+					},
 				},
-			})),
-			"unary_expression" => Ok(Expr::new(ExprType::Unary {
-				op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-					"+" => UnaryOperator::Plus,
-					"-" => UnaryOperator::Minus,
-					"!" => UnaryOperator::Not,
-					"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
-					other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
+				expression_span,
+			)),
+			"unary_expression" => Ok(Expr::new(
+				ExprType::Unary {
+					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
+						"+" => UnaryOperator::Plus,
+						"-" => UnaryOperator::Minus,
+						"!" => UnaryOperator::Not,
+						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
+						other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
+					},
+					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
 				},
-				exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
-			})),
-			"string" => Ok(Expr::new(ExprType::Literal(Literal::String(
-				self.node_text(&expression_node).into(),
-			)))),
-			"number" => Ok(Expr::new(ExprType::Literal(Literal::Number(
-				self.node_text(&expression_node).parse().expect("Number string"),
-			)))),
-			"bool" => Ok(Expr::new(ExprType::Literal(Literal::Boolean(
-				match self.node_text(&expression_node) {
+				expression_span,
+			)),
+			"string" => Ok(Expr::new(
+				ExprType::Literal(Literal::String(self.node_text(&expression_node).into())),
+				expression_span,
+			)),
+			"number" => Ok(Expr::new(
+				ExprType::Literal(Literal::Number(
+					self.node_text(&expression_node).parse().expect("Number string"),
+				)),
+				expression_span,
+			)),
+			"bool" => Ok(Expr::new(
+				ExprType::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
 					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
-				},
-			)))),
-			"duration" => Ok(Expr::new(ExprType::Literal(self.build_duration(&expression_node)?))),
-			"reference" => Ok(Expr::new(ExprType::Reference(self.build_reference(&expression_node)?))),
+				})),
+				expression_span,
+			)),
+			"duration" => Ok(Expr::new(
+				ExprType::Literal(self.build_duration(&expression_node)?),
+				expression_span,
+			)),
+			"reference" => Ok(Expr::new(
+				ExprType::Reference(self.build_reference(&expression_node)?),
+				expression_span,
+			)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"function_call" => Ok(Expr::new(ExprType::FunctionCall {
-				function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
-				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-			})),
-			"method_call" => Ok(Expr::new(ExprType::MethodCall(MethodCall {
-				method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap())?,
-				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-			}))),
+			"function_call" => Ok(Expr::new(
+				ExprType::FunctionCall {
+					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
+					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
+				},
+				expression_span,
+			)),
+			"method_call" => Ok(Expr::new(
+				ExprType::MethodCall(MethodCall {
+					method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap())?,
+					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
+				}),
+				expression_span,
+			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),

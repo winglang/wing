@@ -15,8 +15,30 @@ pub struct WingSpan {
 	pub file_id: FileId,
 }
 
+impl Default for WingSpan {
+	fn default() -> Self {
+		Self {
+			start: Point::new(0, 0),
+			end: Point::new(0, 0),
+			start_byte: 0,
+			end_byte: 0,
+			file_id: "".to_string(),
+		}
+	}
+}
+
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		// check if default
+		if self.file_id.is_empty()
+			&& self.start.row == 0
+			&& self.start.column == 0
+			&& self.end.row == 0
+			&& self.end.column == 0
+		{
+			return write!(f, "");
+		}
+
 		write!(f, "{}:{}:{}", self.file_id, self.start.row + 1, self.start.column + 1)
 	}
 }
@@ -38,6 +60,13 @@ pub struct Diagnostic {
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
-		write!(f, "{:?} at {}\n{}", self.level, self.span, self.message)
+		write!(f, "{:?} {} | {}", self.level, self.span, self.message)
+	}
+}
+
+// print list of diagnostics
+pub fn print_diagnostics(diagnostics: &Diagnostics) {
+	for diagnostic in diagnostics {
+		println!("{}", diagnostic);
 	}
 }

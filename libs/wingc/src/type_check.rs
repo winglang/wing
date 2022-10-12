@@ -1,8 +1,10 @@
-use std::fmt::{Debug, Display};
+use std::cell::RefCell;
+use std::fmt::{format, Debug, Display};
 
 use derivative::Derivative;
 
 use crate::ast::{Type as AstType, *};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
 use crate::type_env::TypeEnv;
 
 #[derive(Debug)]
@@ -89,12 +91,6 @@ pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: Option<TypeRef>,
 	pub flight: Flight,
-}
-
-#[deprecated = "Remember to implement this!"]
-pub fn unimplemented_type() -> Option<Type> {
-	println!("Skipping unimplemented type check");
-	return Some(Type::Anything);
 }
 
 impl Display for Type {
@@ -308,11 +304,46 @@ impl Types {
 
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
+	pub diagnostics: RefCell<Diagnostics>,
 }
 
 impl<'a> TypeChecker<'a> {
 	pub fn new(types: &'a mut Types) -> Self {
-		Self { types: types }
+		Self {
+			types: types,
+			diagnostics: RefCell::new(Diagnostics::new()),
+		}
+	}
+
+	#[deprecated = "Remember to implement this!"]
+	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Warning,
+			message: format!("Unimplemented type: {}", type_name),
+			span: WingSpan::default(),
+		});
+
+		return Some(Type::Anything);
+	}
+
+	fn general_type_error(&self, message: String) -> TypeRef {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message,
+			span: WingSpan::default(),
+		});
+
+		self.types.anything()
+	}
+
+	fn expr_error(&self, expr: &Expr, message: String) -> TypeRef {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message,
+			span: expr.span.clone(),
+		});
+
+		self.types.anything()
 	}
 
 	pub fn get_primitive_type_by_name(&self, name: &str) -> TypeRef {
@@ -321,7 +352,7 @@ impl<'a> TypeChecker<'a> {
 			"string" => self.types.string(),
 			"bool" => self.types.bool(),
 			"duration" => self.types.duration(),
-			other => panic!("Type {} is not a primitive type", other),
+			other => self.general_type_error(format!("Type {} is not a primitive type", other)),
 		}
 	}
 
@@ -369,7 +400,7 @@ impl<'a> TypeChecker<'a> {
 				let type_ = self.resolve_type(class, env);
 				// TODO: hack to support custom types (basically stdlib cloud.Bucket), we skip type-checking and resolve them to Anything
 				if matches!(type_.into(), &Type::Anything) {
-					_ = unimplemented_type();
+					_ = self.unimplemented_type("Custom Type");
 					return Some(type_);
 				}
 
@@ -402,11 +433,14 @@ impl<'a> TypeChecker<'a> {
 				// TODO: named args
 				// Verify arity
 				if arg_list.pos_args.len() != constructor_sig.args.len() {
-					panic!(
-						"Expected {} args but got {} when instantiating {}",
-						constructor_sig.args.len(),
-						arg_list.pos_args.len(),
-						type_
+					self.expr_error(
+						exp,
+						format!(
+							"Expected {} args but got {} when instantiating {}",
+							constructor_sig.args.len(),
+							arg_list.pos_args.len(),
+							type_
+						),
 					);
 				}
 				// Verify passed arguments match the constructor
@@ -432,10 +466,13 @@ impl<'a> TypeChecker<'a> {
 					// Verify the object scope is an actually ResourceObject
 					if let Some(obj_scope_type) = obj_scope_type {
 						if obj_scope_type.as_resource_object().is_none() {
-							panic!(
-								"Expected scope {:?} to be a resource object, instead found {}",
-								obj_scope, obj_scope_type
-							)
+							self.expr_error(
+								exp,
+								format!(
+									"Expected scope {:?} to be a resource object, instead found {}",
+									obj_scope, obj_scope_type
+								),
+							);
 						}
 					}
 
@@ -453,12 +490,15 @@ impl<'a> TypeChecker<'a> {
 					// TODO: named args
 					// Argument arity check
 					if args.pos_args.len() != func_type.args.len() {
-						panic!(
-							"Expected {} arguments for function {:?}, but got {} instead.",
-							func_type.args.len(),
-							function,
-							args.pos_args.len()
-						)
+						self.expr_error(
+							exp,
+							format!(
+								"Expected {} arguments for function {:?}, but got {} instead.",
+								func_type.args.len(),
+								function,
+								args.pos_args.len()
+							),
+						);
 					}
 					// Argument type check
 					for (passed_arg, expected_arg) in args.pos_args.iter().zip(func_type.args.iter()) {
@@ -468,7 +508,7 @@ impl<'a> TypeChecker<'a> {
 
 					func_type.return_type
 				} else {
-					panic!("Identifier {:?} is not a function", function)
+					Some(self.expr_error(exp, format!("Identifier {:?} is not a function", function)))
 				}
 			}
 			ExprType::MethodCall(method_call) => {
@@ -489,11 +529,14 @@ impl<'a> TypeChecker<'a> {
 				// Verify arity
 				// TODO named args
 				if method_sig.args.len() != method_call.args.pos_args.len() + 1 {
-					panic!(
-						"Expected {} arguments when calling {:?} but got {}",
-						method_sig.args.len() - 1,
-						method_call.method,
-						method_call.args.pos_args.len()
+					self.expr_error(
+						exp,
+						format!(
+							"Expected {} arguments when calling {:?} but got {}",
+							method_sig.args.len() - 1,
+							method_call.method,
+							method_call.args.pos_args.len()
+						),
 					);
 				}
 				// Verify argument types (we run from last to first to skip "this" argument)
@@ -511,7 +554,14 @@ impl<'a> TypeChecker<'a> {
 
 	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) {
 		if actual_type != expected_type && actual_type.0 != &Type::Anything {
-			panic!("Expected type {} of {:?} to be {}", actual_type, value, expected_type);
+			self.diagnostics.borrow_mut().push(Diagnostic {
+				message: format!(
+					"Expected type `{}` of `{:?}` to be `{}`",
+					actual_type, value.variant, expected_type
+				),
+				span: value.span.clone(),
+				level: DiagnosticLevel::Error,
+			});
 		}
 	}
 
@@ -572,7 +622,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
 				if matches!(func_def.signature.flight, Flight::In) {
-					unimplemented_type(); // TODO: what typechecking do we need here???
+					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
 				}
 
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
@@ -631,7 +681,7 @@ impl<'a> TypeChecker<'a> {
 			Statement::Use {
 				module_name: _,
 				identifier: _,
-			} => _ = unimplemented_type(),
+			} => _ = self.unimplemented_type("Use statement"),
 			Statement::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				for statement in scope.statements.iter_mut() {
@@ -644,11 +694,14 @@ impl<'a> TypeChecker<'a> {
 					if let Some(expected_return_type) = env.return_type {
 						self.validate_type(return_type, expected_return_type, return_expression);
 					} else {
-						panic!("Return statement outside of function cannot return a value.");
+						self.general_type_error(format!("Return statement outside of function cannot return a value."));
 					}
 				} else {
 					if let Some(expected_return_type) = env.return_type {
-						panic!("Expected return statement to return type {}", expected_return_type);
+						self.general_type_error(format!(
+							"Expected return statement to return type {}",
+							expected_return_type
+						));
 					}
 				}
 			}
@@ -662,7 +715,7 @@ impl<'a> TypeChecker<'a> {
 			} => {
 				// TODO: if is_resource then....
 				if *is_resource {
-					unimplemented_type();
+					self.unimplemented_type("Resource class");
 				}
 
 				let env_flight = if *is_resource { Flight::Pre } else { Flight::In };
@@ -673,7 +726,8 @@ impl<'a> TypeChecker<'a> {
 					if let &Type::Class(ref class) = t.into() {
 						(Some(t), Some(&class.env as *const TypeEnv))
 					} else {
-						panic!("Class {}'s parent {} is not a class", name, parent_symbol);
+						self.general_type_error(format!("Class {}'s parent {} is not a class", name, parent_symbol));
+						(None, None)
 					}
 				} else {
 					(None, None)
@@ -742,7 +796,9 @@ impl<'a> TypeChecker<'a> {
 						class.env = class_env;
 						&class.env
 					}
-					_ => panic!("Expected {} to be a class or resource ", name),
+					_ => {
+						panic!("Expected {} to be a class or resource ", name);
+					}
 				};
 
 				// Type check constructor
@@ -752,7 +808,7 @@ impl<'a> TypeChecker<'a> {
 					panic!(
 						"Constructor of {} isn't defined as a function in the class environment",
 						name
-					)
+					);
 				};
 
 				// Create constructor environment and prime it with args
@@ -819,10 +875,10 @@ impl<'a> TypeChecker<'a> {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
 						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
 						&Type::Anything => return instance,
-						_ => panic!(
+						_ => self.general_type_error(format!(
 							"{} in {:?} does not resolve to a class instance or resource object",
 							instance, reference
-						),
+						)),
 					};
 
 					match instance_type.into() {
