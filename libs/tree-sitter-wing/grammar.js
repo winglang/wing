@@ -364,7 +364,8 @@ module.exports = grammar({
             "Array",
             "Set",
             "Map",
-          ),
+            "Promise",
+            ),
         ),
         $._container_value_type
       ),
@@ -378,7 +379,6 @@ module.exports = grammar({
               "MutSet",
               "MutMap",
               "MutArray",
-              "Promise"
             )
           ),
           $._container_value_type
