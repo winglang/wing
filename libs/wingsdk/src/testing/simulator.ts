@@ -19,7 +19,7 @@ export interface SimulatorFromTreeOptions {
    * The factory that dispatches to simulation implementations.
    * @default - a factory that simulates built-in Wing SDK resources
    */
-  readonly factory?: ISimulatorFactory;
+  readonly factory?: ISimulatorDispatcher;
 }
 
 export type IResourceResolver = {
@@ -61,7 +61,7 @@ export class Simulator {
   public static async fromTree(
     options: SimulatorFromTreeOptions
   ): Promise<Simulator> {
-    const factory: ISimulatorFactory =
+    const factory: ISimulatorDispatcher =
       options.factory ?? new DefaultSimulatorFactory();
 
     const tree = options.tree as WingSimulatorSchema;
@@ -103,7 +103,7 @@ export class Simulator {
   }
 
   private constructor(
-    private readonly _factory: ISimulatorFactory,
+    private readonly _factory: ISimulatorDispatcher,
     private readonly _tree: any
   ) {}
 
@@ -213,9 +213,10 @@ interface ResourceData {
 }
 
 /**
- * A factory specifying how to simulate polycons.
+ * Represents a class that can start and stop the simulation of an individual
+ * resource.
  */
-export interface ISimulatorFactory {
+export interface ISimulatorDispatcher {
   /**
    * Given a resource type and a resource's synthesis-time schema props, start
    * simulating a resource. This function should return an object/map containing

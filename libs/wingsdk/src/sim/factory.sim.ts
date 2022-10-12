@@ -1,5 +1,5 @@
 import * as cloud from "../cloud";
-import { ISimulatorFactory } from "../testing/simulator";
+import { ISimulatorDispatcher } from "../testing/simulator";
 import { start as startBucket, cleanup as cleanupBucket } from "./bucket.sim";
 import {
   start as startFunction,
@@ -7,7 +7,7 @@ import {
 } from "./function.sim";
 import { start as startQueue, cleanup as cleanupQueue } from "./queue.sim";
 
-export class DefaultSimulatorFactory implements ISimulatorFactory {
+export class DefaultSimulatorFactory implements ISimulatorDispatcher {
   async start(type: string, props: any): Promise<any> {
     switch (type) {
       case cloud.BUCKET_TYPE:

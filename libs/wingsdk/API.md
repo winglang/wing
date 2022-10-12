@@ -2977,7 +2977,7 @@ const simulatorFromTreeOptions: testing.SimulatorFromTreeOptions = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree">tree</a></code> | <code>any</code> | A tree of resources to load into the simulator. |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorFactory</code> | The factory that dispatches to simulation implementations. |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
 
 ---
 
@@ -2996,10 +2996,10 @@ A tree of resources to load into the simulator.
 ##### `factory`<sup>Optional</sup> <a name="factory" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory"></a>
 
 ```typescript
-public readonly factory: ISimulatorFactory;
+public readonly factory: ISimulatorDispatcher;
 ```
 
-- *Type:* @monadahq/wingsdk.testing.ISimulatorFactory
+- *Type:* @monadahq/wingsdk.testing.ISimulatorDispatcher
 - *Default:* a factory that simulates built-in Wing SDK resources
 
 The factory that dispatches to simulation implementations.
@@ -4465,22 +4465,22 @@ The tree node.
 
 ---
 
-### ISimulatorFactory <a name="ISimulatorFactory" id="@monadahq/wingsdk.testing.ISimulatorFactory"></a>
+### ISimulatorDispatcher <a name="ISimulatorDispatcher" id="@monadahq/wingsdk.testing.ISimulatorDispatcher"></a>
 
-- *Implemented By:* @monadahq/wingsdk.testing.ISimulatorFactory
+- *Implemented By:* @monadahq/wingsdk.testing.ISimulatorDispatcher
 
-A factory specifying how to simulate polycons.
+Represents a class that can start and stop the simulation of an individual resource.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorFactory.cleanup">cleanup</a></code> | Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created. |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorFactory.init">init</a></code> | Given a resource type and a resource's synthesis-time schema props, start simulating a resource. |
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup">cleanup</a></code> | Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created. |
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Given a resource type and a resource's synthesis-time schema props, start simulating a resource. |
 
 ---
 
-##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup"></a>
+##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup"></a>
 
 ```typescript
 public cleanup(type: string, attrs: any): void
@@ -4488,22 +4488,22 @@ public cleanup(type: string, attrs: any): void
 
 Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created.
 
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup.parameter.type"></a>
+###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup.parameter.type"></a>
 
 - *Type:* string
 
 ---
 
-###### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ISimulatorFactory.cleanup.parameter.attrs"></a>
+###### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup.parameter.attrs"></a>
 
 - *Type:* any
 
 ---
 
-##### `init` <a name="init" id="@monadahq/wingsdk.testing.ISimulatorFactory.init"></a>
+##### `start` <a name="start" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start"></a>
 
 ```typescript
-public init(type: string, props: any): any
+public start(type: string, props: any): any
 ```
 
 Given a resource type and a resource's synthesis-time schema props, start simulating a resource.
@@ -4511,13 +4511,13 @@ Given a resource type and a resource's synthesis-time schema props, start simula
 This function should return an object/map containing
 the resource's attributes.
 
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorFactory.init.parameter.type"></a>
+###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.type"></a>
 
 - *Type:* string
 
 ---
 
-###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ISimulatorFactory.init.parameter.props"></a>
+###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.props"></a>
 
 - *Type:* any
 
