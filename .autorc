@@ -1,0 +1,10 @@
+{
+  "plugins": [
+    ["conventional-commits", { "preset": "angular" }],
+    "git-tag"
+  ],
+  "owner": "monadahq",
+  "repo": "winglang",
+  "name": "MonadaBot",
+  "email": "monadabot@monada.co"
+}
