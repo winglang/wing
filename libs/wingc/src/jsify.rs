@@ -337,7 +337,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 				"class {}{}\n{{\n{}\n{}\n{}\n}}",
 				jsify_symbol(name),
 				if let Some(parent) = parent {
-					format!(" extends {}", jsify_symbol(parent))
+					format!(" extends {}", jsify_type(parent))
 				} else {
 					"".to_string()
 				},

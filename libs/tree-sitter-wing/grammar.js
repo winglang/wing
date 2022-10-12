@@ -124,7 +124,7 @@ module.exports = grammar({
       seq(
         "class",
         field("name", $.identifier),
-        optional(seq("extends", field("parent", $.identifier))),
+        optional(seq("extends", field("parent", $.custom_type))),
         field("implementation", $.class_implementation)
       ),
     class_implementation: ($) =>
@@ -161,7 +161,7 @@ module.exports = grammar({
       seq(
         "resource",
         field("name", $.identifier),
-        optional(seq("extends", field("parent", $.identifier))),
+        optional(seq("extends", field("parent", $.custom_type))),
         field("implementation", $.resource_implementation)
       ),
     resource_implementation: ($) =>

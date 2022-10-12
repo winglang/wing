@@ -830,19 +830,19 @@ impl<'a> TypeChecker<'a> {
 				let env_flight = if *is_resource { Flight::Pre } else { Flight::In };
 
 				// Verify parent is actually a known Class/Resource and get their env
-				let (parent_class, parent_class_env) = if let Some(parent_symbol) = parent {
-					let t = env.lookup(parent_symbol);
+				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
+					let t = self.resolve_type(parent_type, env);
 					if *is_resource {
 						if let &Type::Resource(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
-							panic!("Resource {}'s parent {} is not a resource", name, parent_symbol);
+							panic!("Resource {}'s parent {} is not a resource", name, t);
 						}
 					} else {
 						if let &Type::Class(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
-							panic!("Class {}'s parent {} is not a class", name, parent_symbol);
+							panic!("Class {}'s parent {} is not a class", name, t);
 						}
 					}
 				} else {
