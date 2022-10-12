@@ -85,13 +85,9 @@ function installSdk(workdir: string) {
     wingsdkVersion = `@monadahq/wingsdk@${toolchainVersion}`;
   }
 
-  spawnSync(
-    "npm",
-    ["install", wingsdkVersion, "--no-audit", "--prefer-offline"],
-    {
-      cwd: workdir,
-    }
-  );
+  spawnSync("npm", ["install", wingsdkVersion, "--no-audit"], {
+    cwd: workdir,
+  });
 }
 
 main().catch((err) => {
