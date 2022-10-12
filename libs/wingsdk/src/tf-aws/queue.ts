@@ -16,6 +16,10 @@ export class Queue extends cloud.QueueBase {
     this.queue = new sqs.SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
     });
+
+    if (props.initialMessages) {
+      throw new Error("initialMessages not supported yet for AWS target");
+    }
   }
 
   public onMessage(

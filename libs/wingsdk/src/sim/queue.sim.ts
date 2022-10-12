@@ -108,9 +108,14 @@ export class Queue {
         if (!fnClient) {
           throw new Error("No function client found");
         }
-        void fnClient.invoke(JSON.stringify({ messages })).catch(() => {
+        const event = JSON.stringify({ messages });
+        void fnClient.invoke(event).catch((err) => {
           // If the function returns an error, put the message back on the queue
           this.messages.push(...messages);
+          console.error(
+            `Error invoking queue subscriber ${subscriber.functionId} with event "${event}":`,
+            err
+          );
         });
         processedMessages = true;
       }

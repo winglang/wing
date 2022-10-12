@@ -13,11 +13,13 @@ export class Queue extends cloud.QueueBase implements IResource {
   private readonly callees = new Array<string>();
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
+  private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
     this.timeout = props.timeout ?? core.Duration.fromSeconds(30);
     this.subscribers = [];
+    this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
   public onMessage(
@@ -32,7 +34,7 @@ export class Queue extends cloud.QueueBase implements IResource {
       `  if (!event.messages) throw new Error('No "messages" field in event.');`
     );
     code.push(`  for (const $message of event.messages) {`);
-    code.push(`    await ${inflight.entrypoint}($cap, JSON.parse($message));`);
+    code.push(`    await ${inflight.entrypoint}($cap, $message);`);
     code.push(`  }`);
     code.push(`}`);
     const newInflight = new core.Inflight({
@@ -69,7 +71,7 @@ export class Queue extends cloud.QueueBase implements IResource {
       props: {
         timeout: this.timeout.seconds,
         subscribers: this.subscribers,
-        initialMessages: [],
+        initialMessages: this.initialMessages,
       },
       attrs: {} as any,
       callers: this.callers,

@@ -94,7 +94,6 @@ export class Simulator {
       // other resources they depend on. For example, a queue that has a function
       // subscribed to it needs to obtain the function's simulator-unique ID in
       // order to invoke it.
-      // TODO: remove this?
       resolver: {
         lookup: (path: string) => {
           return findResource(this._tree, path);
@@ -197,6 +196,7 @@ function findResource(tree: any, path: string): ResourceData {
   for (const part of parts) {
     node = node.children[part];
     if (!node) {
+      // TODO: better error message - "Try calling listResources() on your simulator to see what resources are available."
       throw new Error(`Resource not found: ${path}`);
     }
   }
