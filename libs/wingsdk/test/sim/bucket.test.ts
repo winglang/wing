@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import { BucketClient } from "../../src/sim/bucket.inflight";
 import * as testing from "../../src/testing";
-import { synthSimulatedApp } from "./util";
+import { simulatorJsonOf, synthSimulatedApp } from "./util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -18,6 +18,8 @@ test("create a bucket", async () => {
     public: false,
   });
   await s.stop();
+
+  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {
@@ -41,6 +43,8 @@ test("put and get objects from bucket", async () => {
   // THEN
   expect(response).toEqual(VALUE);
   await s.stop();
+
+  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
@@ -57,4 +61,6 @@ test("get invalid object throws an error", async () => {
   // THEN
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
+
+  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
 });

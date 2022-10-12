@@ -4,7 +4,7 @@ import { FunctionClient } from "../../src/sim/function.inflight";
 import { QueueClient } from "../../src/sim/queue.inflight";
 import { QueueSchema } from "../../src/sim/schema";
 import * as testing from "../../src/testing";
-import { synthSimulatedApp } from "./util";
+import { simulatorJsonOf, synthSimulatedApp } from "./util";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -51,6 +51,8 @@ describe("basic", () => {
     // THEN
     expect(await fnClient.timesCalled()).toEqual(2);
     await s.stop();
+
+    expect(simulatorJsonOf(appPath)).toMatchSnapshot();
   });
 
   test("queue with batch size of 5", async () => {
@@ -79,6 +81,8 @@ describe("basic", () => {
     // THEN
     expect(await fnClient.timesCalled()).toEqual(2);
     await s.stop();
+
+    expect(simulatorJsonOf(appPath)).toMatchSnapshot();
   });
 
   test("messages are requeued if the function fails", async () => {
@@ -114,6 +118,8 @@ describe("basic", () => {
     // THEN
     expect(await fnClient.timesCalled()).toBeGreaterThan(1);
     await s.stop();
+
+    expect(simulatorJsonOf(appPath)).toMatchSnapshot();
 
     // restore console.error
     console.error = originalError;

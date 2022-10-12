@@ -1,9 +1,8 @@
 import { existsSync } from "fs";
 import { join } from "path";
-import { readJsonSync } from "fs-extra";
 import * as tar from "tar";
 import { ResourceSchema, WingSimulatorSchema } from "../sim/schema";
-import { log, mkdtemp } from "../util";
+import { log, mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
 const { DefaultSimulatorDispatcher } = require("../sim/dispatcher.sim");
 

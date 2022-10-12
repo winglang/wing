@@ -2,7 +2,7 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import { FunctionClient } from "../../src/sim/function.inflight";
 import * as testing from "../../src/testing";
-import { synthSimulatedApp } from "./util";
+import { simulatorJsonOf, synthSimulatedApp } from "./util";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
@@ -38,6 +38,8 @@ test("invoke function", async () => {
   // THEN
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
   await s.stop();
+
+  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
@@ -68,4 +70,6 @@ test("invoke function with environment variables", async () => {
     msg: `Ellohay, ${PAYLOAD.name}!`,
   });
   await s.stop();
+
+  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
 });

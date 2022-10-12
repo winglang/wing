@@ -364,8 +364,8 @@ exports[`function captures primitive values 2`] = `
     \\"aws_s3_object\\": {
       \\"Function_S3Object_C62A0C2D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
-        \\"key\\": \\"asset.c83ba82ab737b318be3084bef5b7996129facf99b8.b45c751dac14a1af7749eabb2af61016.zip\\",
-        \\"source\\": \\"assets/Function_Asset_212D1EED/B45C751DAC14A1AF7749EABB2AF61016/archive.zip\\"
+        \\"key\\": \\"asset.c83ba82ab737b318be3084bef5b7996129facf99b8.fbc56373af5e52795ecfefe5e273da61.zip\\",
+        \\"source\\": \\"assets/Function_Asset_212D1EED/FBC56373AF5E52795ECFEFE5E273DA61/archive.zip\\"
       }
     }
   }
@@ -427,8 +427,8 @@ exports[`function captures structured values 2`] = `
     \\"aws_s3_object\\": {
       \\"Function_S3Object_C62A0C2D\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
-        \\"key\\": \\"asset.c83ba82ab737b318be3084bef5b7996129facf99b8.6bd635828c85e258e0e43f693a92b476.zip\\",
-        \\"source\\": \\"assets/Function_Asset_212D1EED/6BD635828C85E258E0E43F693A92B476/archive.zip\\"
+        \\"key\\": \\"asset.c83ba82ab737b318be3084bef5b7996129facf99b8.a7e617d570737a383c6afc0815579fe1.zip\\",
+        \\"source\\": \\"assets/Function_Asset_212D1EED/A7E617D570737A383C6AFC0815579FE1/archive.zip\\"
       }
     }
   }
