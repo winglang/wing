@@ -26,7 +26,7 @@ pub enum Type {
 	Namespace(Namespace),
 }
 
-const WING_CONSTRUCTOR_NAME: &'static str = "constructor";
+const WING_CONSTRUCTOR_NAME: &'static str = "init";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
