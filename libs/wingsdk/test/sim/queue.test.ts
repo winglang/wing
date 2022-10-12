@@ -58,7 +58,7 @@ describe("basic", () => {
 
     // THEN
     expect(await fnClient.timesCalled()).toEqual(2);
-    await sim.cleanup();
+    await sim.stop();
   });
 
   test("queue with batch size of 5", async () => {
@@ -101,7 +101,7 @@ describe("basic", () => {
 
     // THEN
     expect(await fnClient.timesCalled()).toEqual(2);
-    await sim.cleanup();
+    await sim.stop();
   });
 
   test("messages are requeued if the function fails", async () => {
@@ -149,6 +149,6 @@ describe("basic", () => {
 
     // THEN
     expect(await fnClient.timesCalled()).toBeGreaterThan(1);
-    await sim.cleanup();
+    await sim.stop();
   });
 });

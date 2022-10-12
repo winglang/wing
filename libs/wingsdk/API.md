@@ -2977,7 +2977,7 @@ const simulatorFromTreeOptions: testing.SimulatorFromTreeOptions = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.tree">tree</a></code> | <code>any</code> | A tree of resources to load into the simulator. |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.dispatcher">dispatcher</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
 
 ---
 
@@ -2993,10 +2993,10 @@ A tree of resources to load into the simulator.
 
 ---
 
-##### `factory`<sup>Optional</sup> <a name="factory" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.factory"></a>
+##### `dispatcher`<sup>Optional</sup> <a name="dispatcher" id="@monadahq/wingsdk.testing.SimulatorFromTreeOptions.property.dispatcher"></a>
 
 ```typescript
-public readonly factory: ISimulatorDispatcher;
+public readonly dispatcher: ISimulatorDispatcher;
 ```
 
 - *Type:* @monadahq/wingsdk.testing.ISimulatorDispatcher
@@ -3881,20 +3881,12 @@ A simulator that can be used to test your application locally.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.cleanup">cleanup</a></code> | Clean up all resources in this simulator. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
 
 ---
-
-##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.testing.Simulator.cleanup"></a>
-
-```typescript
-public cleanup(): void
-```
-
-Clean up all resources in this simulator.
 
 ##### `getAttributes` <a name="getAttributes" id="@monadahq/wingsdk.testing.Simulator.getAttributes"></a>
 
@@ -3943,6 +3935,14 @@ that is resolved at synth time.
 - *Type:* string
 
 ---
+
+##### `stop` <a name="stop" id="@monadahq/wingsdk.testing.Simulator.stop"></a>
+
+```typescript
+public stop(): void
+```
+
+Stop the simulation and clean up all resources.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -4475,28 +4475,8 @@ Represents a class that can start and stop the simulation of an individual resou
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup">cleanup</a></code> | Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created. |
 | <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Given a resource type and a resource's synthesis-time schema props, start simulating a resource. |
-
----
-
-##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup"></a>
-
-```typescript
-public cleanup(type: string, attrs: any): void
-```
-
-Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created.
-
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup.parameter.type"></a>
-
-- *Type:* string
-
----
-
-###### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.cleanup.parameter.attrs"></a>
-
-- *Type:* any
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.stop">stop</a></code> | Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created. |
 
 ---
 
@@ -4518,6 +4498,26 @@ the resource's attributes.
 ---
 
 ###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.props"></a>
+
+- *Type:* any
+
+---
+
+##### `stop` <a name="stop" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop"></a>
+
+```typescript
+public stop(type: string, attrs: any): void
+```
+
+Given a resource type and a resource's attributes, stop the resource's simulation and clean up any file system resources it created.
+
+###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop.parameter.type"></a>
+
+- *Type:* string
+
+---
+
+###### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop.parameter.attrs"></a>
 
 - *Type:* any
 

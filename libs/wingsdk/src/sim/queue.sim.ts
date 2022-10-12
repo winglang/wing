@@ -22,13 +22,13 @@ export async function start(
   };
 }
 
-export async function cleanup(attrs: QueueSchema["attrs"]) {
+export async function stop(attrs: QueueSchema["attrs"]) {
   const queueAddr = attrs.queueAddr;
   const q = QUEUES[queueAddr];
   if (!q) {
     throw new Error(`Invalid queueAddr: ${queueAddr}`);
   }
-  await q.cleanup();
+  await q.stop();
   delete QUEUES[queueAddr];
 }
 
@@ -117,7 +117,7 @@ export class Queue {
     } while (processedMessages);
   }
 
-  public async cleanup() {
+  public async stop() {
     await new Promise((resolve, reject) => {
       this.wss.close((err) => {
         if (err) {

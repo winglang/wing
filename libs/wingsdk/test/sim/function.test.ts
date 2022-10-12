@@ -35,7 +35,7 @@ test("invoke function", async () => {
 
   // THEN
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
-  await sim.cleanup();
+  await sim.stop();
 });
 
 test("invoke function with environment variables", async () => {
@@ -71,5 +71,5 @@ test("invoke function with environment variables", async () => {
   expect(response).toEqual({
     msg: `Ellohay, ${PAYLOAD.name}!`,
   });
-  await sim.cleanup();
+  await sim.stop();
 });

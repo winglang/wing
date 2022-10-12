@@ -19,7 +19,7 @@ export interface SimulatorFromTreeOptions {
    * The factory that dispatches to simulation implementations.
    * @default - a factory that simulates built-in Wing SDK resources
    */
-  readonly factory?: ISimulatorDispatcher;
+  readonly dispatcher?: ISimulatorDispatcher;
 }
 
 export type IResourceResolver = {
@@ -62,7 +62,7 @@ export class Simulator {
     options: SimulatorFromTreeOptions
   ): Promise<Simulator> {
     const factory: ISimulatorDispatcher =
-      options.factory ?? new DefaultSimulatorFactory();
+      options.dispatcher ?? new DefaultSimulatorFactory();
 
     const tree = options.tree as WingSimulatorSchema;
     if (!tree.root) {
@@ -103,7 +103,7 @@ export class Simulator {
   }
 
   private constructor(
-    private readonly _factory: ISimulatorDispatcher,
+    private readonly _dispatcher: ISimulatorDispatcher,
     private readonly _tree: any
   ) {}
 
@@ -138,14 +138,14 @@ export class Simulator {
   }
 
   /**
-   * Clean up all resources in this simulator.
+   * Stop the simulation and clean up all resources.
    */
-  public async cleanup(): Promise<void> {
-    const factory = this._factory;
+  public async stop(): Promise<void> {
+    const dispatcher = this._dispatcher;
 
     async function walk(_id: string, node: ResourceSchema) {
       const { type, attrs } = node;
-      await factory.cleanup(type, attrs);
+      await dispatcher.stop(type, attrs);
       for (const [childId, child] of Object.entries(node.children ?? {})) {
         await walk(childId, child);
       }
@@ -228,5 +228,5 @@ export interface ISimulatorDispatcher {
    * Given a resource type and a resource's attributes, stop the resource's
    * simulation and clean up any file system resources it created.
    */
-  cleanup(type: string, attrs: any): Promise<void>;
+  stop(type: string, attrs: any): Promise<void>;
 }

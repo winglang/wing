@@ -10,6 +10,6 @@ export async function start(_props: any): Promise<BucketSchema["attrs"]> {
   };
 }
 
-export async function cleanup(_attrs: BucketSchema["attrs"]): Promise<void> {
+export async function stop(_attrs: BucketSchema["attrs"]): Promise<void> {
   return;
 }

@@ -1,11 +1,8 @@
 import * as cloud from "../cloud";
 import { ISimulatorDispatcher } from "../testing/simulator";
-import { start as startBucket, cleanup as cleanupBucket } from "./bucket.sim";
-import {
-  start as startFunction,
-  cleanup as cleanupFunction,
-} from "./function.sim";
-import { start as startQueue, cleanup as cleanupQueue } from "./queue.sim";
+import { start as startBucket, stop as stopBucket } from "./bucket.sim";
+import { start as startFunction, stop as stopFunction } from "./function.sim";
+import { start as startQueue, stop as stopQueue } from "./queue.sim";
 
 export class DefaultSimulatorFactory implements ISimulatorDispatcher {
   async start(type: string, props: any): Promise<any> {
@@ -23,16 +20,16 @@ export class DefaultSimulatorFactory implements ISimulatorDispatcher {
     }
   }
 
-  async cleanup(type: string, attrs: any): Promise<void> {
+  async stop(type: string, attrs: any): Promise<void> {
     switch (type) {
       case cloud.BUCKET_TYPE:
-        await cleanupBucket(attrs);
+        await stopBucket(attrs);
         return;
       case cloud.FUNCTION_TYPE:
-        await cleanupFunction(attrs);
+        await stopFunction(attrs);
         return;
       case cloud.QUEUE_TYPE:
-        await cleanupQueue(attrs);
+        await stopQueue(attrs);
         return;
       case "constructs.Construct":
         return;

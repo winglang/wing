@@ -16,13 +16,13 @@ export async function start(
   };
 }
 
-export async function cleanup(attrs: FunctionSchema["attrs"]) {
+export async function stop(attrs: FunctionSchema["attrs"]) {
   const functionAddr = attrs.functionAddr;
   const fn = FUNCTIONS[functionAddr];
   if (!fn) {
     throw new Error(`Invalid functionAddr: ${functionAddr}`);
   }
-  await fn.cleanup();
+  await fn.stop();
   delete FUNCTIONS[functionAddr];
 }
 
@@ -107,7 +107,7 @@ export class Function {
     return address.port;
   }
 
-  public async cleanup(): Promise<void> {
+  public async stop(): Promise<void> {
     await new Promise((resolve, reject) => {
       this.wss.close((err) => {
         if (err) {

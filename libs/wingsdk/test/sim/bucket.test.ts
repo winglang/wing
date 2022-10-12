@@ -48,7 +48,7 @@ test("put and get objects from bucket", async () => {
 
   // THEN
   expect(response).toEqual(VALUE);
-  await s.cleanup();
+  await s.stop();
 });
 
 test("get invalid object throws an error", async () => {
@@ -71,5 +71,5 @@ test("get invalid object throws an error", async () => {
 
   // THEN
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
-  await s.cleanup();
+  await s.stop();
 });
