@@ -332,7 +332,7 @@ impl<'a> JsiiImporter<'a> {
 			Type::Class(class_spec)
 		});
 		self.namespace_env.define(&new_type_symbol, new_type);
-		// Create class's actually environment before we add properties and methods to it
+		// Create class's actual environment before we add properties and methods to it
 		let mut class_env = TypeEnv::new(base_class_env, None, true, self.namespace_env.flight);
 		// Add constructor to the class environment
 		let mut arg_types = vec![];
