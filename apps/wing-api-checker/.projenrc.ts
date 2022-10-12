@@ -20,4 +20,9 @@ const project = new typescript.TypeScriptProject({
   devDeps: ["@types/node@^18"],
 });
 
+const bumpTask = project.tasks.tryFind("bump")!;
+bumpTask.reset(
+  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
+);
+
 project.synth();
