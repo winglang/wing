@@ -6,8 +6,15 @@ import * as core from "../../src/core";
 import * as sim from "../../src/sim";
 import { mkdtemp, readJsonSync } from "../../src/util";
 
-export function synthSimulatedApp(fn: IScopeCallback) {
-  const outdir = mkdtemp();
+interface SynthOptions {
+  readonly workdir?: string;
+}
+
+export function synthSimulatedApp(
+  fn: IScopeCallback,
+  options: SynthOptions = {}
+): string {
+  const outdir = options.workdir ?? mkdtemp();
   const app = new core.App({
     synthesizer: new sim.Synthesizer({ outdir }),
   });

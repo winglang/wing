@@ -36,15 +36,15 @@ export interface IResourceResolver {
  */
 export class Simulator {
   private readonly _dispatcher: ISimulatorDispatcher;
-  private readonly _tree: WingSimulatorSchema;
-  private readonly _assetsDir: string;
+  private _tree: WingSimulatorSchema;
+  private _appPath: string;
+  private _assetsDir: string;
 
   constructor(props: SimulatorProps) {
+    this._appPath = props.appPath;
     const { assetsDir, tree } = this._loadApp(props.appPath);
     this._tree = tree;
     this._assetsDir = assetsDir;
-
-    this._annotateTreeWithPaths();
 
     this._dispatcher = props.dispatcher ?? new DefaultSimulatorDispatcher();
   }
@@ -68,10 +68,12 @@ export class Simulator {
     }
     const data = readJsonSync(simJson);
 
+    this._annotateTreeWithPaths(data);
+
     return { assetsDir: workdir, tree: data };
   }
 
-  private _annotateTreeWithPaths() {
+  private _annotateTreeWithPaths(tree: any) {
     function walk(path: string, node: ResourceSchema) {
       (node as any).path = path;
       for (const [childId, child] of Object.entries(node.children ?? {})) {
@@ -79,7 +81,7 @@ export class Simulator {
       }
     }
 
-    walk("root", this._tree.root);
+    walk("root", tree.root);
   }
 
   /**
@@ -120,6 +122,20 @@ export class Simulator {
       log(`stopping resource ${path} (${res.type})`);
       await this._dispatcher.stop(res.type, res.attrs);
     }
+  }
+
+  /**
+   * Stop the simulation, reload the simulation tree from the latest version of
+   * the app file, and restart the simulation.
+   */
+  public async reload(): Promise<void> {
+    await this.stop();
+
+    const { assetsDir, tree } = this._loadApp(this._appPath);
+    this._tree = tree;
+    this._assetsDir = assetsDir;
+
+    await this.start();
   }
 
   /**
