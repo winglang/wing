@@ -13,6 +13,9 @@
       "dependsOn": [
         "^build-wasm"
       ],
+      "outputs": [
+        "wingc.wasm"
+      ],
       "options": {
         "command": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
         "cwd": "apps/wing"
