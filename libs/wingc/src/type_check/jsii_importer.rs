@@ -53,10 +53,7 @@ impl<'a> JsiiImporter<'a> {
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
-				// TODO: we can probably get rid of this special handling for cloud.Void
-				if type_fqn == "@monadahq/wingsdk.cloud.Void" {
-					None
-				} else if type_fqn == "@monadahq/wingsdk.core.Inflight" {
+				if type_fqn == "@monadahq/wingsdk.core.Inflight" {
 					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
