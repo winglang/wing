@@ -1,11 +1,11 @@
 mod jsii_importer;
 pub mod type_env;
 use crate::ast::{Type as AstType, *};
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
-use std::fmt::{format, Debug, Display};
+use std::fmt::{Debug, Display};
 use type_env::TypeEnv;
 
 #[derive(Debug)]
