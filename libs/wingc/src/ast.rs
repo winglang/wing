@@ -115,7 +115,7 @@ pub enum Statement {
 		members: Vec<ClassMember>,
 		methods: Vec<FunctionDefinition>,
 		constructor: Constructor,
-		parent: Option<Symbol>,
+		parent: Option<Type>,
 		is_resource: bool,
 	},
 	Struct {

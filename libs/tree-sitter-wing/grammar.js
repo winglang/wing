@@ -124,7 +124,7 @@ module.exports = grammar({
       seq(
         "class",
         field("name", $.identifier),
-        optional(seq("extends", field("parent", $.identifier))),
+        optional(seq("extends", field("parent", $.custom_type))),
         field("implementation", $.class_implementation)
       ),
     class_implementation: ($) =>
@@ -161,7 +161,7 @@ module.exports = grammar({
       seq(
         "resource",
         field("name", $.identifier),
-        optional(seq("extends", field("parent", $.identifier))),
+        optional(seq("extends", field("parent", $.custom_type))),
         field("implementation", $.resource_implementation)
       ),
     resource_implementation: ($) =>
@@ -364,7 +364,8 @@ module.exports = grammar({
             "Array",
             "Set",
             "Map",
-          ),
+            "Promise",
+            ),
         ),
         $._container_value_type
       ),
@@ -378,7 +379,6 @@ module.exports = grammar({
               "MutSet",
               "MutMap",
               "MutArray",
-              "Promise"
             )
           ),
           $._container_value_type
@@ -453,17 +453,16 @@ module.exports = grammar({
       choice($.array_literal, $.set_literal, $.map_literal),
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
     set_literal: ($) => seq(
-      optional(field("type", $.immutable_container_type)),
+      optional(field("type", $._builtin_container_type)),
       "{", commaSep($.expression), "}"
     ),
     map_literal: ($) => seq(
-      optional(field("type", $.immutable_container_type)),
+      optional(field("type", $._builtin_container_type)),
       "{", commaSep($.map_literal_member), "}"
     ),
     struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
 
     map_literal_member: ($) =>
-      // TODO: make sure $.string here conforms to valid keys in a map
       seq(choice($.identifier, $.string), ":", $.expression),
     struct_literal_member: ($) =>
       seq($.identifier, ":", $.expression),

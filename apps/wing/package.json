@@ -15,19 +15,17 @@
   },
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --loader:.wasm=file",
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --loader:.wasm=file --external:@monadahq/wingsdk --external:'../package.json'",
     "dev": "npm run build && node dist/index.js"
   },
   "dependencies": {
-    "@monadahq/wingsdk": "*",
     "@types/node": "^18.7.22",
     "commander": "^9.4.0"
   },
   "devDependencies": {
+    "@monadahq/wingsdk": "file:../../libs/wingsdk",
     "esbuild": "^0.15.9",
-    "tsx": "^3.9.0"
-  },
-  "bundledDependencies": [
-    "@monadahq/wingsdk"
-  ]
+    "tsx": "^3.9.0",
+    "@types/node": "^18.7.22"
+  }
 }

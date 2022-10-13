@@ -53,10 +53,7 @@ impl<'a> JsiiImporter<'a> {
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
-				// TODO: we can probably get rid of this special handling for cloud.Void
-				if type_fqn == "@monadahq/wingsdk.cloud.Void" {
-					None
-				} else if type_fqn == "@monadahq/wingsdk.core.Inflight" {
+				if type_fqn == "@monadahq/wingsdk.core.Inflight" {
 					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
@@ -267,7 +264,7 @@ impl<'a> JsiiImporter<'a> {
 		let mut is_resource = false;
 		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
 
-		// Get the base class of the JSII class
+		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class = if let Some(base_class_fqn) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
 			if base_class_fqn == RESOURCE_CLASS_FQN {
@@ -297,7 +294,9 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			None
 		};
+
 		// Verify we have a constructor for this calss
+		// TODO: Do we really require a constructor? Wing does but maybe we need some default behavior here if there isn't one.
 		let jsii_initializer = jsii_class
 			.initializer
 			.as_ref()
@@ -335,7 +334,7 @@ impl<'a> JsiiImporter<'a> {
 			Type::Class(class_spec)
 		});
 		self.namespace_env.define(&new_type_symbol, new_type);
-		// Create class's actually environment before we add properties and methods to it
+		// Create class's actual environment before we add properties and methods to it
 		let mut class_env = TypeEnv::new(base_class_env, None, true, self.namespace_env.flight);
 		// Add constructor to the class environment
 		let mut arg_types = vec![];

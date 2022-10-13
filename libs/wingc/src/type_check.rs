@@ -26,7 +26,7 @@ pub enum Type {
 	Namespace(Namespace),
 }
 
-const WING_CONSTRUCTOR_NAME: &'static str = "constructor";
+const WING_CONSTRUCTOR_NAME: &'static str = "init";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -456,12 +456,6 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the type in the env
 				let type_ = self.resolve_type(class, env);
-				// TODO: hack to support custom types (basically stdlib cloud.Bucket), we skip type-checking and resolve them to Anything
-				if matches!(type_.into(), &Type::Anything) {
-					_ = unimplemented_type();
-					return Some(type_);
-				}
-
 				let (class_env, class_symbol) = match type_.into() {
 					&Type::Class(ref class) => (&class.env, &class.name),
 					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
@@ -754,7 +748,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			Statement::Use {
 				module_name,
-				identifier: _,
+				identifier,
 			} => {
 				_ = {
 					// Create a new env for the imported module's namespace
@@ -791,12 +785,15 @@ impl<'a> TypeChecker<'a> {
 							jsii_importer.import_type(type_fqn);
 						}
 
+						// If provided use alias identifier as the namespace name
+						let namespace_name = identifier.as_ref().unwrap_or(module_name);
+
 						// Create a namespace for the imported module
 						let namespace = self.types.add_type(Type::Namespace(Namespace {
-							name: module_name.name.clone(),
+							name: namespace_name.name.clone(),
 							env: namespace_env,
 						}));
-						env.define(module_name, namespace);
+						env.define(namespace_name, namespace);
 					}
 				}
 			}
@@ -836,19 +833,19 @@ impl<'a> TypeChecker<'a> {
 				let env_flight = if *is_resource { Flight::Pre } else { Flight::In };
 
 				// Verify parent is actually a known Class/Resource and get their env
-				let (parent_class, parent_class_env) = if let Some(parent_symbol) = parent {
-					let t = env.lookup(parent_symbol);
+				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
+					let t = self.resolve_type(parent_type, env);
 					if *is_resource {
 						if let &Type::Resource(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
-							panic!("Resource {}'s parent {} is not a resource", name, parent_symbol);
+							panic!("Resource {}'s parent {} is not a resource", name, t);
 						}
 					} else {
 						if let &Type::Class(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
-							panic!("Class {}'s parent {} is not a class", name, parent_symbol);
+							panic!("Class {}'s parent {} is not a class", name, t);
 						}
 					}
 				} else {

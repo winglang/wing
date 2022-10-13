@@ -271,9 +271,11 @@ impl Parser<'_> {
 			)?;
 		}
 
-		let parent = statement_node
-			.child_by_field_name("parent")
-			.map(|n| self.node_symbol(&n).unwrap());
+		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
+			Some(self.build_type(&parent_node)?)
+		} else {
+			None
+		};
 		Ok(Statement::Class {
 			name,
 			members,
