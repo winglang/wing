@@ -15,18 +15,6 @@ pub struct WingSpan {
 	pub file_id: FileId,
 }
 
-impl Default for WingSpan {
-	fn default() -> Self {
-		Self {
-			start: Point::new(0, 0),
-			end: Point::new(0, 0),
-			start_byte: 0,
-			end_byte: 0,
-			file_id: "".to_string(),
-		}
-	}
-}
-
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		// check if default
@@ -53,14 +41,18 @@ pub enum DiagnosticLevel {
 #[derive(Debug, Clone)]
 pub struct Diagnostic {
 	pub message: String,
-	pub span: WingSpan,
+	pub span: Option<WingSpan>,
 	pub level: DiagnosticLevel,
 }
 
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
-		write!(f, "{:?} {} | {}", self.level, self.span, self.message)
+		if let Some(span) = &self.span {
+			write!(f, "{:?} at {} | {}", self.level, span, self.message)
+		} else {
+			write!(f, "{:?} | {}", self.level, self.message)
+		}
 	}
 }
 

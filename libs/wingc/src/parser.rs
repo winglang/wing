@@ -28,7 +28,7 @@ impl Parser<'_> {
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
 		let diag = Diagnostic {
 			message,
-			span: self.node_span(node),
+			span: Some(self.node_span(node)),
 			level: DiagnosticLevel::Error,
 		};
 		// TODO terrible to clone here to avoid move

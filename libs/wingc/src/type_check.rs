@@ -407,7 +407,7 @@ impl<'a> TypeChecker<'a> {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Warning,
 			message: format!("Unimplemented type: {}", type_name),
-			span: WingSpan::default(),
+			span: None,
 		});
 
 		return Some(Type::Anything);
@@ -417,7 +417,7 @@ impl<'a> TypeChecker<'a> {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
-			span: WingSpan::default(),
+			span: None,
 		});
 
 		self.types.anything()
@@ -427,7 +427,7 @@ impl<'a> TypeChecker<'a> {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
 			message,
-			span: expr.span.clone(),
+			span: Some(expr.span.clone()),
 		});
 
 		self.types.anything()
@@ -668,7 +668,7 @@ impl<'a> TypeChecker<'a> {
 					"Expected type `{}` of `{:?}` to be `{}`",
 					actual_type, value.variant, expected_type
 				),
-				span: value.span.clone(),
+				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
 			});
 		}
