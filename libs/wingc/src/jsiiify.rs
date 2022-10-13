@@ -26,7 +26,7 @@ pub fn jsiiify(scope: &Scope, types: &Types) -> String {
 					abstract_: Some(false),
 					assembly: "wingc".to_string(),
 					base: if parent.is_some() {
-						Some(parent.as_ref().unwrap().name.to_string())
+						None
 					} else {
 						None
 					},
