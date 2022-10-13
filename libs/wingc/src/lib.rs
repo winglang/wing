@@ -1,5 +1,5 @@
 use ast::Scope;
-use diagnostic::{print_diagnostics, Diagnostics};
+use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -83,6 +83,16 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
 	print_diagnostics(&type_check_diagnostics);
+
+	if parse_diagnostics
+		.iter()
+		.any(|x| !matches!(x.level, DiagnosticLevel::Error))
+		|| type_check_diagnostics
+			.iter()
+			.any(|x| !matches!(x.level, DiagnosticLevel::Error))
+	{
+		std::process::exit(1);
+	}
 
 	return intermediate_js;
 }
