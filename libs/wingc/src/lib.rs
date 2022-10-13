@@ -17,6 +17,7 @@ pub mod ast;
 pub mod capture;
 pub mod diagnostic;
 pub mod jsify;
+pub mod jsiiify;
 pub mod parser;
 pub mod type_check;
 
@@ -45,6 +46,10 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let intermediate_js = jsify::jsify(&scope, true);
 	let intermediate_file = out_dir.join("intermediate.js");
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
+
+	let jsii_manifest = jsiiify::jsiiify(&scope, &types);
+	let jsii_manifest_file = out_dir.join(".jsii");
+	fs::write(&jsii_manifest_file, &jsii_manifest).expect("Write JSII manifest to disk");
 
 	return intermediate_js;
 }
