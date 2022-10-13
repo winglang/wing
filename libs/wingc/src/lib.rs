@@ -76,10 +76,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
-	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
-	let intermediate_file = out_dir.join("intermediate.js");
-	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
-
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
 	print_diagnostics(&type_check_diagnostics);
@@ -93,6 +89,10 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	{
 		std::process::exit(1);
 	}
+
+	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
+	let intermediate_file = out_dir.join("intermediate.js");
+	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
 
 	return intermediate_js;
 }
