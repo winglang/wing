@@ -11,5 +11,5 @@ pub fn main() {
 	let source = &args[1];
 	let outdir = args.get(2).map(|s| s.as_str());
 
-	println!("{}", compile(source, outdir));
+	compile(source, outdir);
 }
