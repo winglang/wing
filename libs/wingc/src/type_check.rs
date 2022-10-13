@@ -1,25 +1,40 @@
-use std::cell::RefCell;
-use std::fmt::{format, Debug, Display};
-
-use derivative::Derivative;
-
+mod jsii_importer;
+pub mod type_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
-use crate::type_env::TypeEnv;
+use derivative::Derivative;
+use jsii_importer::JsiiImporter;
+use std::cell::RefCell;
+use std::fmt::{format, Debug, Display};
+use type_env::TypeEnv;
 
 #[derive(Debug)]
 pub enum Type {
 	Anything,
-	Nothing,
 	Number,
 	String,
 	Duration,
 	Boolean,
-	Function(Box<FunctionSignature>),
+	Map(TypeRef),
+	Set(TypeRef),
+	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
+	Struct(Struct),
 	ResourceObject(TypeRef), // Reference to a Resource type
 	ClassInstance(TypeRef),  // Reference to a Class type
+	StructInstance(TypeRef), // Reference to a Struct type
+	Namespace(Namespace),
+}
+
+const WING_CONSTRUCTOR_NAME: &'static str = "init";
+
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct Namespace {
+	pub name: String,
+	#[derivative(Debug = "ignore")]
+	pub env: TypeEnv,
 }
 
 // TODO See TypeRef for why this is necessary
@@ -44,6 +59,15 @@ impl Class {
 	}
 }
 
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct Struct {
+	pub name: Symbol,
+	extends: Vec<TypeRef>, // Must be a Type::Struct type
+	#[derivative(Debug = "ignore")]
+	pub env: TypeEnv,
+}
+
 impl PartialEq for Type {
 	fn eq(&self, other: &Self) -> bool {
 		// If references are the same this is the same type, if not then compare content
@@ -51,6 +75,10 @@ impl PartialEq for Type {
 			return true;
 		}
 		match (self, other) {
+			(Self::Anything, _) | (_, Self::Anything) => {
+				// TODO: Hack to make anything's compatible with all other types, specifically useful for handling core.Inflight handlers
+				true
+			}
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
 				// If our parent is equal to `other` then treat both classes as equal (inheritance)
@@ -61,10 +89,20 @@ impl PartialEq for Type {
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
-				// If our parent is equal to `other` then treat both classes as equal (inheritance)
+				// If our parent is equal to `other` then treat both resources as equal (inheritance)
 				if let Some(parent) = l0.parent {
 					let parent_type: &Type = parent.into();
 					return parent_type.eq(other);
+				}
+				false
+			}
+			(Self::Struct(l0), Self::Struct(_)) => {
+				// If we extend from `other` then treat both structs as equal (inheritance)
+				for parent in l0.extends.iter() {
+					let parent_type: &Type = (*parent).into();
+					if parent_type.eq(other) {
+						return true;
+					}
 				}
 				false
 			}
@@ -76,6 +114,24 @@ impl PartialEq for Type {
 			}
 			(Self::ResourceObject(l0), Self::ResourceObject(r0)) => {
 				// Resource objects are of the same type if they are objects of the same Resource
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(Self::StructInstance(l0), Self::StructInstance(r0)) => {
+				// Struct instances are of the same type if they are instances of the same Struct
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(Self::Map(l0), Self::Map(r0)) => {
+				// Maps are of the same type if they have the same value type
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(Self::Set(l0), Self::Set(r0)) => {
+				// Sets are of the same type if they have the same value type
 				let l: &Type = (*l0).into();
 				let r: &Type = (*r0).into();
 				l == r
@@ -97,7 +153,6 @@ impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			Type::Anything => write!(f, "anything"),
-			Type::Nothing => write!(f, "nothing"),
 			Type::Number => write!(f, "number"),
 			Type::String => write!(f, "string"),
 			Type::Duration => write!(f, "duration"),
@@ -106,7 +161,7 @@ impl Display for Type {
 				if let Some(ret_val) = &func_sig.return_type {
 					write!(
 						f,
-						"fn({}) -> {}",
+						"fn({}):{}",
 						func_sig
 							.args
 							.iter()
@@ -140,6 +195,14 @@ impl Display for Type {
 				let class_type_name = class.as_class().expect("Class instance must reference to a class");
 				write!(f, "instance of {}", class_type_name)
 			}
+			Type::Namespace(namespace) => write!(f, "{}", namespace.name),
+			Type::Struct(s) => write!(f, "{}", s.name),
+			Type::StructInstance(s) => {
+				let struct_type = s.as_struct().expect("Struct instance must reference to a struct");
+				write!(f, "instance of {}", struct_type.name.name)
+			}
+			Type::Map(v) => write!(f, "Map<{}>", v),
+			Type::Set(v) => write!(f, "Set<{}>", v),
 		}
 	}
 }
@@ -197,6 +260,22 @@ impl TypeRef {
 		}
 	}
 
+	fn as_struct(&self) -> Option<&Struct> {
+		if let &Type::Struct(ref s) = (*self).into() {
+			Some(s)
+		} else {
+			None
+		}
+	}
+
+	fn as_mut_struct(&self) -> Option<&mut Struct> {
+		if let &mut Type::Struct(ref mut s) = (*self).into() {
+			Some(s)
+		} else {
+			None
+		}
+	}
+
 	pub fn as_function_sig(&self) -> Option<&FunctionSignature> {
 		if let &Type::Function(ref sig) = (*self).into() {
 			Some(sig)
@@ -210,6 +289,14 @@ impl TypeRef {
 			true
 		} else {
 			false
+		}
+	}
+
+	pub fn as_namespace(&self) -> Option<&Namespace> {
+		if let &Type::Namespace(ref ns) = (*self).into() {
+			Some(ns)
+		} else {
+			None
 		}
 	}
 }
@@ -356,6 +443,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &TypeEnv) -> Option<TypeRef> {
 		let t = match &exp.variant {
 			ExprType::Literal(lit) => match lit {
@@ -398,12 +486,6 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the type in the env
 				let type_ = self.resolve_type(class, env);
-				// TODO: hack to support custom types (basically stdlib cloud.Bucket), we skip type-checking and resolve them to Anything
-				if matches!(type_.into(), &Type::Anything) {
-					_ = self.unimplemented_type("Custom Type");
-					return Some(type_);
-				}
-
 				let (class_env, class_symbol) = match type_.into() {
 					&Type::Class(ref class) => (&class.env, &class.name),
 					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
@@ -415,7 +497,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Type check args against constructor
 				let constructor_type = class_env.lookup(&Symbol {
-					name: "constructor".into(),
+					name: WING_CONSTRUCTOR_NAME.into(),
 					span: class_symbol.span.clone(),
 				});
 
@@ -483,69 +565,96 @@ impl<'a> TypeChecker<'a> {
 					Some(self.types.add_type(Type::ClassInstance(type_))) // TODO: don't create new type if one already exists.
 				}
 			}
-			ExprType::FunctionCall { function, args } => {
+			ExprType::Call { function, args } => {
+				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.resolve_reference(function, env);
-
-				if let &Type::Function(ref func_type) = func_type.into() {
-					// TODO: named args
-					// Argument arity check
-					if args.pos_args.len() != func_type.args.len() {
-						self.expr_error(
-							exp,
-							format!(
-								"Expected {} arguments for function {:?}, but got {} instead.",
-								func_type.args.len(),
-								function,
-								args.pos_args.len()
-							),
-						);
-					}
-					// Argument type check
-					for (passed_arg, expected_arg) in args.pos_args.iter().zip(func_type.args.iter()) {
-						let passed_arg_type = self.type_check_exp(passed_arg, env).unwrap();
-						self.validate_type(passed_arg_type, *expected_arg, passed_arg);
-					}
-
-					func_type.return_type
+				let extra_args = if matches!(function, Reference::NestedIdentifier { .. }) {
+					1
 				} else {
-					Some(self.expr_error(exp, format!("Identifier {:?} is not a function", function)))
-				}
-			}
-			ExprType::MethodCall(method_call) => {
-				// Find method in class's environment
-				let method_type = self.resolve_reference(&method_call.method, env);
+					0
+				};
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
-				if matches!(method_type.into(), &Type::Anything) {
+				if matches!(func_type.into(), &Type::Anything) {
 					return Some(self.types.anything());
 				}
 
-				let method_sig = if let &Type::Function(ref sig) = method_type.into() {
-					sig
-				} else {
-					panic!("Identifier {:?} is not a method", method_call.method);
-				};
+				// Make sure this is a function signature type
+				let func_sig = func_type
+					.as_function_sig()
+					.expect(&format!("{:?} should be a function or method", function));
 
-				// Verify arity
-				// TODO named args
-				if method_sig.args.len() != method_call.args.pos_args.len() + 1 {
+				// TODO: named args
+				// Argument arity check
+				if args.pos_args.len() + extra_args != func_sig.args.len() {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected {} arguments when calling {:?} but got {}",
-							method_sig.args.len() - 1,
-							method_call.method,
-							method_call.args.pos_args.len()
+							"Expected {} arguments for {:?}, but got {} instead.",
+							func_sig.args.len() - extra_args,
+							function,
+							args.pos_args.len()
 						),
 					);
 				}
 				// Verify argument types (we run from last to first to skip "this" argument)
-				for (arg_type, param_exp) in method_sig.args.iter().rev().zip(method_call.args.pos_args.iter().rev()) {
+				for (arg_type, param_exp) in func_sig.args.iter().rev().zip(args.pos_args.iter().rev()) {
 					let param_type = self.type_check_exp(param_exp, env).unwrap();
 					self.validate_type(param_type, *arg_type, param_exp);
 				}
 
-				method_sig.return_type
+				func_sig.return_type
+			}
+			ExprType::StructLiteral { type_, fields } => {
+				// Find this struct's type in the environment
+				let struct_type = self.resolve_type(type_, env);
+
+				// Make it really is a a struct type
+				let st = struct_type
+					.as_struct()
+					.expect(&format!("Expected {} to be a struct type", struct_type));
+
+				// Verify that all fields are present and are of the right type
+				if st.env.iter().count() > fields.len() {
+					panic!("Not all fields of {} are initialized.", struct_type);
+				}
+				for (k, v) in fields.iter() {
+					let field_type = st
+						.env
+						.try_lookup(&k.name)
+						.expect(&format!("{} is not a field of {}", k.name, struct_type));
+					let t = self.type_check_exp(v, env).unwrap();
+					self.validate_type(t, field_type, v);
+				}
+
+				Some(struct_type)
+			}
+			ExprType::MapLiteral { fields, type_ } => {
+				// Infer type based on either the explicit type or the value in one of the fields
+				let container_type = if let Some(type_) = type_ {
+					self.resolve_type(type_, env)
+				} else if !fields.is_empty() {
+					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env).unwrap();
+					self.types.add_type(Type::Map(some_val_type))
+				} else {
+					panic!(
+						"Cannot infer type of empty map literal with no type annotation: {:?}",
+						exp
+					);
+				};
+
+				let value_type = match container_type.into() {
+					&Type::Map(t) => t,
+					_ => panic!("Expected map type, found {}", container_type),
+				};
+
+				// Verify all types are the same as the inferred type
+				for (_, v) in fields.iter() {
+					let t = self.type_check_exp(v, env).unwrap();
+					self.validate_type(t, value_type, v);
+				}
+
+				Some(container_type)
 			}
 		};
 		*exp.evaluated_type.borrow_mut() = t;
@@ -588,16 +697,18 @@ impl<'a> TypeChecker<'a> {
 					flight: ast_sig.flight,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
-				self.types.add_type(Type::Function(Box::new(sig)))
+				self.types.add_type(Type::Function(sig))
 			}
 			AstType::CustomType { root, fields } => {
-				if fields.is_empty() {
-					// TODO Hack For classes in the current env
-					env.lookup(root)
-				} else {
-					// TODO This should be updated to support "bring"
-					self.types.anything()
-				}
+				// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
+				let mut nested_name = vec![root.name.as_str()];
+				nested_name.extend(fields.iter().map(|f| f.name.as_str()));
+				env.lookup_nested(&nested_name)
+			}
+			AstType::Map(v) => {
+				let value_type = self.resolve_type(v, env);
+				// TODO: avoid creating a new type for each map resolution
+				self.types.add_type(Type::Map(value_type))
 			}
 		}
 	}
@@ -609,13 +720,13 @@ impl<'a> TypeChecker<'a> {
 				initial_value,
 				type_,
 			} => {
-				let exp_type = self.type_check_exp(initial_value, env).unwrap();
-				if let Some(t) = type_ {
-					let explicit_type = self.resolve_type(t, env);
-					self.validate_type(exp_type, explicit_type, initial_value);
+				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env));
+				let inferred_type = self.type_check_exp(initial_value, env).unwrap();
+				if let Some(explicit_type) = explicit_type {
+					self.validate_type(inferred_type, explicit_type, initial_value);
 					env.define(var_name, explicit_type);
 				} else {
-					env.define(var_name, exp_type);
+					env.define(var_name, inferred_type);
 				}
 			}
 			Statement::FunctionDefinition(func_def) => {
@@ -679,9 +790,56 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(exp_type, var_type, value);
 			}
 			Statement::Use {
-				module_name: _,
-				identifier: _,
-			} => _ = self.unimplemented_type("Use statement"),
+				module_name,
+				identifier,
+			} => {
+				_ = {
+					// Create a new env for the imported module's namespace
+					let mut namespace_env = TypeEnv::new(None, None, false, env.flight);
+
+					// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
+					if module_name.name == "cloud" {
+						let mut wingii_types = wingii::type_system::TypeSystem::new();
+						let name = wingii_types.load("../wingsdk").unwrap();
+						let prefix = format!("{}.{}.", name, module_name.name);
+						println!("Loaded JSII assembly {}", name);
+						let assembly = wingii_types.find_assembly(&name).unwrap();
+
+						let mut jsii_importer = JsiiImporter {
+							jsii_types: &wingii_types,
+							assembly_name: name,
+							namespace_env: &mut namespace_env,
+							namespace_name: module_name.name.clone(),
+							wing_types: self.types,
+						};
+
+						for type_fqn in assembly.types.as_ref().unwrap().keys() {
+							// Skip types outside the imported namespace
+							if !type_fqn.starts_with(&prefix) {
+								continue;
+							}
+
+							// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
+							// and might have already defined the current type internally
+							let type_name = jsii_importer.fqn_to_type_name(type_fqn);
+							if jsii_importer.namespace_env.try_lookup(&type_name).is_some() {
+								continue;
+							}
+							jsii_importer.import_type(type_fqn);
+						}
+
+						// If provided use alias identifier as the namespace name
+						let namespace_name = identifier.as_ref().unwrap_or(module_name);
+
+						// Create a namespace for the imported module
+						let namespace = self.types.add_type(Type::Namespace(Namespace {
+							name: namespace_name.name.clone(),
+							env: namespace_env,
+						}));
+						env.define(namespace_name, namespace);
+					}
+				}
+			}
 			Statement::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				for statement in scope.statements.iter_mut() {
@@ -720,14 +878,22 @@ impl<'a> TypeChecker<'a> {
 
 				let env_flight = if *is_resource { Flight::Pre } else { Flight::In };
 
-				// Verify parent is actually a known Class
-				let (parent_class, parent_class_env) = if let Some(parent_symbol) = parent {
-					let t = env.lookup(parent_symbol);
-					if let &Type::Class(ref class) = t.into() {
-						(Some(t), Some(&class.env as *const TypeEnv))
+				// Verify parent is actually a known Class/Resource and get their env
+				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
+					let t = self.resolve_type(parent_type, env);
+					if *is_resource {
+						if let &Type::Resource(ref class) = t.into() {
+							(Some(t), Some(&class.env as *const TypeEnv))
+						} else {
+							panic!("Resource {}'s parent {} is not a resource", name, t);
+						}
 					} else {
-						self.general_type_error(format!("Class {}'s parent {} is not a class", name, parent_symbol));
-						(None, None)
+						if let &Type::Class(ref class) = t.into() {
+							(Some(t), Some(&class.env as *const TypeEnv))
+						} else {
+							self.general_type_error(format!("Class {}'s parent {} is not a class", name, t));
+							(None, None)
+						}
 					}
 				} else {
 					(None, None)
@@ -784,7 +950,7 @@ impl<'a> TypeChecker<'a> {
 				let constructor_type = self.resolve_type(&AstType::FunctionSignature(constructor.signature.clone()), env);
 				class_env.define(
 					&Symbol {
-						name: "constructor".into(),
+						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
 					constructor_type,
@@ -818,6 +984,8 @@ impl<'a> TypeChecker<'a> {
 				// Check function scope
 				self.type_check_scope(&mut constructor.statements);
 
+				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
+
 				// Type check methods
 				for method in methods.iter_mut() {
 					// Lookup the method in the class_env
@@ -844,6 +1012,32 @@ impl<'a> TypeChecker<'a> {
 					// Check function scope
 					self.type_check_scope(&mut method.statements);
 				}
+			}
+			Statement::Struct { name, extends, members } => {
+				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
+				//   If we encounter an existing member with the same name and type we skip it, if the types are different we
+				//   fail type checking.
+
+				// Create an environment for the struct
+				let mut struct_env = TypeEnv::new(None, None, true, env.flight);
+
+				// Add members to the struct env
+				for member in members.iter() {
+					let member_type = self.resolve_type(&member.member_type, env);
+					struct_env.define(&member.name, member_type);
+				}
+
+				// Add members from the structs parents
+				let extends_types = extends.iter().map(|parent| env.lookup(&parent)).collect::<Vec<_>>();
+				add_parent_members_to_struct_env(&extends_types, name, &mut struct_env);
+				env.define(
+					name,
+					self.types.add_type(Type::Struct(Struct {
+						name: name.clone(),
+						extends: extends_types,
+						env: struct_env,
+					})),
+				)
 			}
 		}
 	}
@@ -889,6 +1083,35 @@ impl<'a> TypeChecker<'a> {
 
 				// Find property in class's environment
 				class.env.lookup(property)
+			}
+		}
+	}
+}
+
+fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol, struct_env: &mut TypeEnv) {
+	for parent_type in extends_types.iter() {
+		let parent_struct = parent_type
+			.as_struct()
+			.expect(format!("Type {} extends {} which should be a struct", name.name, parent_type).as_str());
+		for (parent_member_name, member_type) in parent_struct.env.iter() {
+			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name) {
+				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
+				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
+				//   when we want to check for subtypes and use equality for strict comparisons.
+				if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
+					panic!(
+						"Struct {} extends {} but has a conflicting member {} ({} != {})",
+						name, parent_type, parent_member_name, existing_type, member_type
+					);
+				}
+			} else {
+				struct_env.define(
+					&Symbol {
+						name: parent_member_name,
+						span: name.span.clone(),
+					},
+					member_type,
+				);
 			}
 		}
 	}
