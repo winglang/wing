@@ -1,6 +1,6 @@
 ---
-name: SDK issue template
-about: Issue template for SDK issues
+name: SDK issue
+about: Issue in the Wing SDK
 title: ''
 labels: sdk
 assignees: ''
