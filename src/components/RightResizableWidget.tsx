@@ -53,7 +53,7 @@ export function RightResizableWidget(props: RightResizableWidgetProps) {
       >
         <div
           className={classNames(
-            "absolute inset-y-0 -right-0.5 w-1 cursor-col-resize transition-colors ease-in-out hover:bg-sky-500 z-10",
+            "absolute inset-y-0 -right-0.5 w-1 cursor-col-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
             isResizing && "bg-sky-500",
           )}
         />

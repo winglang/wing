@@ -1,8 +1,11 @@
 import classNames from "classnames";
+import { PropsWithChildren } from "react";
 
 interface ButtonProps {
   primary?: boolean;
-  label: string;
+  label?: string;
+  title?: string;
+  type?: "button" | "submit" | "reset";
   disabled?: boolean;
   icon?: (props: React.ComponentProps<"svg">) => JSX.Element;
   onClick?: () => void;
@@ -11,15 +14,18 @@ interface ButtonProps {
 export const Button = ({
   primary = false,
   disabled = false,
+  title,
   label,
+  type = "button",
   onClick,
   icon: Icon,
-}: ButtonProps) => {
+  children,
+}: PropsWithChildren<ButtonProps>) => {
   return (
     <button
-      type="button"
+      type={type}
       className={classNames(
-        "inline-flex items-center px-2.5 py-1.5 border text-xs font-medium rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all ease-in-out",
+        "inline-flex gap-2 items-center px-2.5 py-1.5 border text-xs font-medium rounded shadow-sm focus:outline-none focus:ring-2 focus:ring-sky-500/50 transition-all ease-in-out",
         {
           "cursor-not-allowed opacity-50": disabled,
           "border-transparent text-white bg-sky-600 hover:bg-sky-700 focus:ring-offset-2":
@@ -28,11 +34,13 @@ export const Button = ({
             !primary,
         },
       )}
+      title={title}
       disabled={disabled}
       onClick={onClick}
     >
-      {Icon && <Icon className="-ml-0.5 mr-2 h-4 w-4" />}
+      {Icon && <Icon className="-ml-0.5 h-4 w-4" />}
       {label}
+      {children}
     </button>
   );
 };

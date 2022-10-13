@@ -6,7 +6,7 @@ import { Node } from "@/utils/nodeMap";
 import { NodeAttributes } from "./NodeAttributes";
 import { NodeInteractionView } from "./NodeInteractionView";
 import { NodeRelationshipsView, Relationships } from "./NodeRelationshipsView";
-import { ScrollableArea } from "./ScrollableArea";
+import { NodeLogs } from "./NogeLogs";
 
 export interface NodeTabContents {
   node: Node;
@@ -67,17 +67,19 @@ export const NodeTabContents = ({
 
   return (
     <>
-      <div className="flex-grow-0 flex-shrink-0 w-full px-2 pb-2">
-        {relationships && (
-          <NodeRelationshipsView
-            key={node.path}
-            relationships={relationships}
-            onNodeClick={onNodeClick}
-          />
-        )}
+      <div className="flex-grow-0 flex-shrink-0 w-full p-2 flex justify-around bg-slate-50">
+        <div className="max-w-xl">
+          {relationships && (
+            <NodeRelationshipsView
+              key={node.path}
+              relationships={relationships}
+              onNodeClick={onNodeClick}
+            />
+          )}
+        </div>
       </div>
 
-      <div className="flex bg-white space-x-4 px-2">
+      <div className="flex bg-white space-x-4 p-2">
         {pills.map((pill) => {
           return (
             <button
@@ -97,30 +99,25 @@ export const NodeTabContents = ({
       </div>
 
       <div className="flex-1 h-full w-full relative min-w-[32rem]">
-        <ScrollableArea overflowX overflowY className="flex flex-col">
-          {currentPill === "attributes" && (
-            <div className="p-2 space-y-8 divide-y divide-slate-200">
-              <div className="flex flex-col gap-2">
-                {/* <div className="flex-grow-0 flex-shrink-0 w-full">
-                  {relationships && (
-                    <NodeRelationshipsView
-                      key={node.path}
-                      relationships={relationships}
-                      onNodeClick={onNodeClick}
-                    />
-                  )}
-                </div> */}
-                <div className="flex-1 flex-shrink-0 min-w-[24rem]">
-                  <NodeAttributes node={node.schema} />
-                </div>
+        {currentPill === "attributes" && (
+          <div className="p-2 space-y-8 divide-y divide-slate-200">
+            <div className="flex flex-col gap-2">
+              <div className="flex-1 flex-shrink-0 min-w-[24rem]">
+                <NodeAttributes node={node.schema} />
               </div>
             </div>
-          )}
+          </div>
+        )}
 
-          {currentPill === "interaction" && (
-            <NodeInteractionView node={node.schema} />
-          )}
-        </ScrollableArea>
+        {currentPill === "interaction" && (
+          <NodeInteractionView node={node.schema} />
+        )}
+
+        {currentPill === "logs" && (
+          <NodeLogs
+            logs={[{ timestamp: Date.now(), message: "Resource initialized" }]}
+          />
+        )}
       </div>
     </>
   );

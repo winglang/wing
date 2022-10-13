@@ -4,6 +4,7 @@ import { BucketInteractionView } from "@/components/BucketInteractionView";
 import { EndpointInteractionView } from "@/components/EndpointInteractionView";
 import { FunctionInteractionView } from "@/components/FunctionInteractionView";
 import { QueueInteractionView } from "@/components/QueueInteractionView";
+
 export interface NodeInteractionViewProps {
   node: ResourceSchema;
 }

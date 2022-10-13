@@ -5,6 +5,8 @@ import {
 import classNames from "classnames";
 import { useState } from "react";
 
+import { ScrollableArea } from "./ScrollableArea";
+
 export interface Relationships {
   self: {
     icon: React.ReactNode;
@@ -147,9 +149,9 @@ export function NodeRelationshipsView({
   hideUsageRelationship,
   onNodeClick,
 }: NodeRelationshipsViewProps) {
-  const [viewAllCallers, setViewAllCallers] = useState(false);
-  const [viewAllCallees, setViewAllCallees] = useState(false);
-  const [viewAllChildren, setViewAllChildren] = useState(false);
+  const [viewAllCallers, setViewAllCallers] = useState(true);
+  const [viewAllCallees, setViewAllCallees] = useState(true);
+  const [viewAllChildren, setViewAllChildren] = useState(true);
 
   return (
     <div className="flex-1 text-slate-700 bg-slate-100 flex p-2">
@@ -178,7 +180,7 @@ export function NodeRelationshipsView({
             <div className="relative">
               <div
                 className={classNames("flex flex-col gap-0.5", {
-                  invisible: viewAllCallers,
+                  invisible: viewAllCallers && relationships.callers.length > 0,
                 })}
               >
                 {relationships.callers.length === 0 && (
@@ -218,8 +220,8 @@ export function NodeRelationshipsView({
                   />
                 )}
               </div>
-              {viewAllCallers && (
-                <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-0.5 overflow-y-scroll">
+              {viewAllCallers && relationships.callers.length > 0 && (
+                <ScrollableArea overflowY className="flex flex-col gap-0.5">
                   {relationships.callers.map((resource) => (
                     <ItemButton
                       key={resource.path}
@@ -232,7 +234,7 @@ export function NodeRelationshipsView({
                       <div className="truncate">{resource.id}</div>
                     </ItemButton>
                   ))}
-                </div>
+                </ScrollableArea>
               )}
             </div>
           </ItemButtonContainer>
@@ -376,7 +378,7 @@ export function NodeRelationshipsView({
                 )}
               </div>
               {viewAllChildren && (
-                <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-0.5 overflow-y-scroll">
+                <ScrollableArea overflowY className="flex flex-col gap-0.5">
                   {relationships.children.length === 0 && (
                     <ItemButton title={NO_CHILDREN_TEXT} disabled>
                       <span className="px-2 italic text-slate-500">
@@ -396,7 +398,7 @@ export function NodeRelationshipsView({
                       <div className="truncate">{resource.id}</div>
                     </ItemButton>
                   ))}
-                </div>
+                </ScrollableArea>
               )}
             </div>
           </ItemButtonContainer>
@@ -415,9 +417,12 @@ export function NodeRelationshipsView({
             spacerItems={
               centerSidesVertically
                 ? 0
-                : MAX_ITEM_COUNT -
-                  (relationships.callees.length === 0 ? 1 : 0) -
-                  relationships.callees.length
+                : Math.max(
+                    0,
+                    MAX_ITEM_COUNT -
+                      (relationships.callees.length === 0 ? 1 : 0) -
+                      relationships.callees.length,
+                  )
             }
           >
             <span className="w-full text-center text-xs font-medium text-slate-600">
@@ -427,7 +432,7 @@ export function NodeRelationshipsView({
             <div className="relative">
               <div
                 className={classNames("flex flex-col gap-0.5", {
-                  invisible: viewAllCallees,
+                  invisible: viewAllCallees && relationships.callees.length > 0,
                 })}
               >
                 {relationships.callees.length === 0 && (
@@ -441,7 +446,7 @@ export function NodeRelationshipsView({
                 {relationships.callees
                   .slice(
                     0,
-                    relationships.callers.length > MAX_ITEM_COUNT
+                    relationships.callees.length > MAX_ITEM_COUNT
                       ? MAX_ITEM_COUNT - 1
                       : relationships.callees.length,
                   )
@@ -467,8 +472,8 @@ export function NodeRelationshipsView({
                   />
                 )}
               </div>
-              {viewAllCallees && (
-                <div className="absolute top-0 left-0 w-full h-full flex flex-col gap-0.5 overflow-y-scroll">
+              {viewAllCallees && relationships.callees.length > 0 && (
+                <ScrollableArea overflowY className="flex flex-col gap-0.5">
                   {relationships.callees.map((resource) => (
                     <ItemButton
                       key={resource.path}
@@ -481,7 +486,7 @@ export function NodeRelationshipsView({
                       <div className="truncate">{resource.id}</div>
                     </ItemButton>
                   ))}
-                </div>
+                </ScrollableArea>
               )}
             </div>
           </ItemButtonContainer>

@@ -53,7 +53,7 @@ export function TopResizableWidget(props: TopResizableWidgetProps) {
       >
         <div
           className={classNames(
-            "absolute inset-x-0 -top-0.5 h-1 cursor-row-resize transition-colors ease-in-out hover:bg-sky-500 z-10",
+            "absolute inset-x-0 -top-0.5 h-1 cursor-row-resize transition-colors ease-in-out hover:bg-sky-500 z-20",
             isResizing && "bg-sky-500",
           )}
         />

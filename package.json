@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.1",
+    "@headlessui/react": "*",
     "@heroicons/react": "^2.0.11",
     "@monadahq/mona-projen": "^0.0.20",
     "@storybook/addon-actions": "^6.5.12",

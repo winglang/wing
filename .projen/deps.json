@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@headlessui/react",
+      "type": "build"
+    },
+    {
       "name": "@heroicons/react",
       "type": "build"
     },

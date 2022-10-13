@@ -1,10 +1,16 @@
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
+import { EyeIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { QueueSchema } from "@monadahq/wing-local-schema";
 import classNames from "classnames";
 import prettyBytes from "pretty-bytes";
-import { useState } from "react";
+import { useId, useState } from "react";
+import { createPortal } from "react-dom";
 
 import { Button } from "@/design-system/Button";
+import { SlideOver } from "@/design-system/SlideOver";
+import { TextArea } from "@/design-system/TextArea";
+
+import { ScrollableArea } from "./ScrollableArea";
 
 const dateFormatter = new Intl.DateTimeFormat(undefined, {
   day: "numeric",
@@ -53,153 +59,193 @@ const MockQueueMessages: QueueMessage[] = [
 
 // TODO: add message body as a popover / tooltip / collapsible row in a table
 
+const formatDate = new Intl.DateTimeFormat(undefined, {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  fractionalSecondDigits: 3,
+});
+
 export const QueueInteractionView = ({ node }: QueueInteractionViewProps) => {
   const [messages, setMessages] = useState<QueueMessage[]>(() => {
     return MockQueueMessages;
   });
+  const [open, setOpen] = useState(false);
+
+  const sendMessage = () => {
+    setOpen(false);
+    setMessages((prev: QueueMessage[]) => {
+      messagesCount++;
+      return [
+        ...prev,
+        {
+          id: `${messagesCount}`,
+          body: `Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World Hello World ${messagesCount}`,
+          sentAt: Date.now(),
+          size: 300,
+          receiveCount: 0,
+        },
+      ];
+    });
+  };
+
+  const id = useId();
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-xl font-semibold text-gray-900">Messages</h1>
-          <p className="mt-2 text-sm text-gray-700">
-            A list of all Queue messages.
-          </p>
-        </div>
-        <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
-          <Button
-            primary
-            onClick={() => {
-              setMessages((prev: QueueMessage[]) => {
-                messagesCount++;
-                return [
-                  ...prev,
-                  {
-                    id: `${messagesCount}`,
-                    body: `Hello World${messagesCount}`,
-                    sentAt: Date.now(),
-                    size: 300,
-                    receiveCount: 0,
-                  },
-                ];
-              });
-            }}
-            label={"Add Message"}
-          />
-        </div>
+    <div className="h-full flex flex-col gap-2">
+      <div className="px-2 flex gap-4 justify-end">
+        <Button
+          icon={PaperAirplaneIcon}
+          label="Send Message"
+          primary
+          onClick={() => setOpen(true)}
+        />
       </div>
-      <div className="mt-8 flex flex-col">
-        <div className="-my-2 -mx-4 sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle">
-            <div className="shadow-sm ring-1 ring-black ring-opacity-5">
-              <table
-                className="min-w-full border-separate"
-                style={{ borderSpacing: 0 }}
-              >
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th
-                      scope="col"
-                      className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:pl-6 lg:pl-8"
+
+      <div className="h-full relative">
+        <ScrollableArea overflowY>
+          <div className="inline-block min-w-full align-middle">
+            <table
+              className="min-w-full border-separate"
+              style={{ borderSpacing: 0 }}
+            >
+              <thead className="bg-slate-50">
+                <tr>
+                  <th
+                    scope="col"
+                    className="sticky top-0 z-[1] border-b border-slate-300 bg-slate-50 bg-opacity-75 py-1.5 pl-5 pr-2 text-left text-sm font-semibold text-slate-900 backdrop-blur backdrop-filter"
+                  >
+                    ID
+                  </th>
+                  <th
+                    scope="col"
+                    className="sticky top-0 z-[1] border-b border-slate-300 bg-slate-50 bg-opacity-75 px-2 py-1.5 text-left text-sm font-semibold text-slate-900 backdrop-blur backdrop-filter w-full"
+                  >
+                    Message
+                  </th>
+                  <th
+                    scope="col"
+                    className="sticky top-0 z-[1] hidden border-b border-slate-300 bg-slate-50 bg-opacity-75 px-2 py-1.5 text-left text-sm font-semibold text-slate-900 backdrop-blur backdrop-filter lg:table-cell"
+                  >
+                    Size
+                  </th>
+                  <th
+                    scope="col"
+                    className="sticky top-0 z-[1] hidden border-b border-slate-300 bg-slate-50 bg-opacity-75 px-2 py-1.5 text-left text-sm font-semibold text-slate-900 backdrop-blur backdrop-filter sm:table-cell"
+                  >
+                    Sent At
+                  </th>
+                  <th
+                    scope="col"
+                    className="sticky top-0 z-[1] border-b border-slate-300 bg-slate-50 bg-opacity-75 py-1.5 pr-4 pl-2 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8"
+                  >
+                    <span className="sr-only">Actions</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {messages.map((message, messageIdx) => (
+                  <tr key={message.id}>
+                    <td
+                      className={classNames(
+                        messageIdx !== messages.length - 1
+                          ? "border-b border-slate-200"
+                          : "",
+                        "whitespace-nowrap p-2 text-sm font-medium text-slate-900 sm:pl-6 lg:pl-8",
+                      )}
                     >
-                      Id
-                    </th>
-                    <th
-                      scope="col"
-                      className="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter sm:table-cell"
+                      <div className="truncate">
+                        <span>{message.id}</span>
+                      </div>
+                    </td>
+                    <td
+                      className={classNames(
+                        messageIdx !== messages.length - 1
+                          ? "border-b border-slate-200"
+                          : "",
+                        "whitespace-nowrap p-2 text-sm text-slate-500",
+                      )}
                     >
-                      Sent At
-                    </th>
-                    <th
-                      scope="col"
-                      className="sticky top-0 z-10 hidden border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter lg:table-cell"
+                      <div className="max-w-xs truncate">{message.body}</div>
+                    </td>
+                    <td
+                      className={classNames(
+                        messageIdx !== messages.length - 1
+                          ? "border-b border-slate-200"
+                          : "",
+                        "whitespace-nowrap p-2 text-sm text-slate-500 hidden lg:table-cell",
+                      )}
                     >
-                      Size
-                    </th>
-                    <th
-                      scope="col"
-                      className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 px-3 py-3.5 text-left text-sm font-semibold text-gray-900 backdrop-blur backdrop-filter"
-                    >
-                      Receive Count
-                    </th>
-                    <th
-                      scope="col"
-                      className="sticky top-0 z-10 border-b border-gray-300 bg-gray-50 bg-opacity-75 py-3.5 pr-4 pl-3 backdrop-blur backdrop-filter sm:pr-6 lg:pr-8"
-                    >
-                      <span className="sr-only">Delete</span>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  {messages.map((message, messageIdx) => (
-                    <tr key={message.id}>
-                      <td
-                        className={classNames(
-                          messageIdx !== messages.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
-                          "whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8",
-                        )}
-                      >
-                        <span title={message.body}>{message.id}</span>
-                      </td>
-                      <td
-                        className={classNames(
-                          messageIdx !== messages.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
-                          "whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden sm:table-cell",
-                        )}
-                      >
-                        {message.sentAt}
-                      </td>
-                      <td
-                        className={classNames(
-                          messageIdx !== messages.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
-                          "whitespace-nowrap px-3 py-4 text-sm text-gray-500 hidden lg:table-cell",
-                        )}
-                      >
+                      <div className="truncate">
                         {prettyBytes(message.size)}
-                      </td>
-                      <td
-                        className={classNames(
-                          messageIdx !== messages.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
-                          "whitespace-nowrap px-3 py-4 text-sm text-gray-500",
-                        )}
-                      >
-                        {message.receiveCount}
-                      </td>
-                      <td
-                        className={classNames(
-                          messageIdx !== messages.length - 1
-                            ? "border-b border-gray-200"
-                            : "",
-                          "relative whitespace-nowrap py-4 pr-4 pl-3 text-right text-sm font-medium sm:pr-6 lg:pr-8",
-                        )}
-                      >
+                      </div>
+                    </td>
+                    <td
+                      className={classNames(
+                        messageIdx !== messages.length - 1
+                          ? "border-b border-slate-200"
+                          : "",
+                        "whitespace-nowrap p-2 text-sm text-slate-500 hidden sm:table-cell",
+                      )}
+                    >
+                      <div className="truncate">
+                        {formatDate.format(message.sentAt)}
+                      </div>
+                    </td>
+                    <td
+                      className={classNames(
+                        messageIdx !== messages.length - 1
+                          ? "border-b border-slate-200"
+                          : "",
+                        "relative whitespace-nowrap p-2 text-right text-sm font-medium",
+                      )}
+                    >
+                      <div className="flex gap-1">
+                        <Button icon={EyeIcon} title="View Message" />
                         <Button
                           icon={TrashIcon}
-                          label="Delete"
+                          title="Delete Message"
                           onClick={() => {
                             setMessages((prev: QueueMessage[]) => {
                               return prev.filter((m) => m.id !== message.id);
                             });
                           }}
                         />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </ScrollableArea>
+      </div>
+
+      {createPortal(
+        <SlideOver title="Send Message" open={open} onOpenChange={setOpen}>
+          <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1">
+              <label
+                htmlFor={id}
+                className="block text-sm font-medium text-slate-700"
+              >
+                Payload (JSON)
+              </label>
+              <TextArea id={id} />
+            </div>
+
+            <div className="flex justify-end">
+              <Button primary onClick={() => sendMessage()}>
+                Send
+              </Button>
             </div>
           </div>
-        </div>
-      </div>
+        </SlideOver>,
+        document.body,
+      )}
     </div>
   );
 };

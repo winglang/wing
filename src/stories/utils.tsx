@@ -205,6 +205,7 @@ const getResourceIconComponent = (resourceType: ResourceSchema["type"]) => {
 const getResourceIconColors = (options: {
   resourceType: ResourceSchema["type"];
   darkenOnGroupHover?: boolean;
+  forceDarken?: boolean;
 }) => {
   switch (options.resourceType) {
     case "cloud.Bucket":
@@ -212,30 +213,35 @@ const getResourceIconColors = (options: {
         "text-orange-500 dark:text-orange-400",
         options.darkenOnGroupHover &&
           "group-hover:text-orange-600 dark:group-hover:text-orange-300",
+        options.forceDarken && "text-orange-600 dark:text-orange-300",
       ];
     case "cloud.Function":
       return [
         "text-sky-500 dark:text-sky-400",
         options.darkenOnGroupHover &&
           "group-hover:text-sky-600 dark:group-hover:text-sky-300",
+        options.forceDarken && "text-sky-600 dark:text-sky-300",
       ];
     case "cloud.Queue":
       return [
         "text-emerald-500 dark:text-emerald-400",
         options.darkenOnGroupHover &&
           "group-hover:text-emerald-600 dark:group-hover:text-emerald-300",
+        options.forceDarken && "text-emerald-600 dark:text-emerald-300",
       ];
     case "cloud.Endpoint":
       return [
         "text-sky-500 dark:text-sky-400",
         options.darkenOnGroupHover &&
           "group-hover:text-sky-600 dark:group-hover:text-sky-300",
+        options.forceDarken && "text-sky-600 dark:text-sky-300",
       ];
     default:
       return [
         "text-slate-500 dark:text-slate-400",
         options.darkenOnGroupHover &&
           "group-hover:text-slate-600 dark:group-hover:text-slate-300",
+        options.forceDarken && "text-slate-600 dark:text-slate-300",
       ];
   }
 };
@@ -243,15 +249,21 @@ const getResourceIconColors = (options: {
 export interface ResourceIconProps extends React.SVGProps<SVGSVGElement> {
   resourceType: ResourceSchema["type"];
   darkenOnGroupHover?: boolean;
+  forceDarken?: boolean;
 }
 
 export const ResourceIcon = ({
   resourceType,
   darkenOnGroupHover,
+  forceDarken,
   className,
   ...props
 }: ResourceIconProps) => {
   const Component = getResourceIconComponent(resourceType);
-  const colors = getResourceIconColors({ resourceType, darkenOnGroupHover });
+  const colors = getResourceIconColors({
+    resourceType,
+    darkenOnGroupHover,
+    forceDarken,
+  });
   return <Component className={classNames(className, colors)} {...props} />;
 };

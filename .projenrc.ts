@@ -38,6 +38,7 @@ const project = new TypeScriptProject({
     "sass",
     "tailwindcss",
     "@tailwindcss/forms",
+    "@headlessui/react",
     "typescript",
     "vite",
     "vite-plugin-electron",

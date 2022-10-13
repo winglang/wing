@@ -17,18 +17,18 @@ export interface BaseNodeAttributesProps {
 export function BaseNodeAttributes({ attributes }: BaseNodeAttributesProps) {
   return (
     <div className="">
-      <dl className="sm:divide-y sm:divide-gray-200">
+      <dl className="sm:divide-y sm:divide-slate-200">
         {attributes.map((attribute) => {
           return (
             <div
               key={attribute.key}
               className="px-3 py-2.5 sm:grid sm:grid-cols-4 sm:gap-2 group"
             >
-              <dt className="text-sm font-medium text-gray-500">
+              <dt className="text-sm font-medium text-slate-500">
                 {attribute.key}
               </dt>
               <dd
-                className="mt-1 text-sm text-gray-900 sm:col-span-3 sm:mt-0 flex items-center gap-2 min-w-0"
+                className="mt-1 text-sm text-slate-900 sm:col-span-3 sm:mt-0 flex items-center gap-2 min-w-0"
                 title={attribute.value}
               >
                 <span className="truncate">

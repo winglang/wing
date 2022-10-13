@@ -64,3 +64,28 @@ export const FunctionInteraction = () => {
     </div>
   );
 };
+
+export const BucketInteraction = () => {
+  const [queryClient] = useState(() => new QueryClient());
+  const [trpcClient] = useState(() =>
+    createTRPCClient({
+      url: `http://localhost:3000`,
+    }),
+  );
+
+  return (
+    <div className="max-w-lg">
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <NodeInteractionView
+            node={{
+              id: "id",
+              path: "path",
+              type: "cloud.Bucket",
+            }}
+          />
+        </QueryClientProvider>
+      </trpc.Provider>
+    </div>
+  );
+};

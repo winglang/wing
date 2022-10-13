@@ -7,7 +7,7 @@ import {
 import { FolderIcon } from "@heroicons/react/24/solid";
 import { BucketSchema } from "@monadahq/wing-local-schema";
 import prettyBytes from "pretty-bytes";
-import { useRef, useState } from "react";
+import { FormEventHandler, useCallback, useRef, useState } from "react";
 
 import { Button } from "@/design-system/Button";
 import { Checkbox } from "@/design-system/Checkbox";
@@ -25,8 +25,8 @@ export interface FileExplorerEntry {
 }
 
 export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
-  const [path] = useState("/example/path");
-  const [entries] = useState<FileExplorerEntry[]>(() => {
+  const [path] = useState("/");
+  const [entries, setEntries] = useState<FileExplorerEntry[]>(() => {
     return [
       { type: "directory", name: ".vscode", updatedAt: Date.now() },
       { type: "directory", name: "src", updatedAt: Date.now() },
@@ -44,7 +44,7 @@ export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
       },
     ];
   });
-  const [checkedEntries, setCheckedEntries] = useState<string[]>([]);
+  const [selectedEntries, setSelectedEntries] = useState<string[]>([]);
   const [dateFormatter] = useState(
     () =>
       new Intl.DateTimeFormat(undefined, {
@@ -57,23 +57,66 @@ export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
       }),
   );
   const inputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const addNewEntries: FormEventHandler<HTMLInputElement> = useCallback(
+    (event) => {
+      const newEntries = new Array<FileExplorerEntry>();
+      for (const file of event.currentTarget.files ?? []) {
+        console.log({ file });
+        newEntries.push({
+          type: "file",
+          name: file.name,
+          fileSize: file.size,
+          updatedAt: file.lastModified,
+        });
+      }
+      setEntries([...entries, ...newEntries]);
+    },
+    [setEntries, entries],
+  );
+
+  const deleteSelectedEntries = useCallback(() => {
+    setEntries((entries) => {
+      setSelectedEntries([]);
+      return entries.filter(
+        (entry) => selectedEntries.includes(entry.name) === false,
+      );
+    });
+  }, [selectedEntries]);
+
   return (
-    <div className="flex-1 space-y-2 p-2 flex flex-col text-sm">
+    <div className="h-full flex-1 space-y-2 p-2 flex flex-col text-sm">
       <div className="flex justify-between items-center gap-1">
         <div className="flex items-center gap-1">
           <Button
             icon={ArrowDownTrayIcon}
             label="Download"
-            disabled={checkedEntries.length === 0}
+            disabled={selectedEntries.length === 0}
           />
           <Button
             icon={TrashIcon}
             label="Delete"
-            disabled={checkedEntries.length === 0}
+            disabled={selectedEntries.length === 0}
+            onClick={deleteSelectedEntries}
           />
         </div>
 
-        <Button icon={ArrowUpTrayIcon} label="Upload" primary />
+        <div>
+          <input
+            ref={fileInputRef}
+            type="file"
+            className="hidden"
+            onInput={addNewEntries}
+          />
+          <Button
+            icon={ArrowUpTrayIcon}
+            label="Upload"
+            primary
+            onClick={() => {
+              fileInputRef.current?.click();
+            }}
+          />
+        </div>
       </div>
 
       <Input
@@ -116,10 +159,10 @@ export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
                   <td className="px-2">
                     <div className="flex items-center gap-1.5">
                       <Checkbox
-                        checked={checkedEntries.includes(entry.name)}
+                        checked={selectedEntries.includes(entry.name)}
                         onChange={(event) => {
                           const { checked } = event.currentTarget;
-                          setCheckedEntries(([...checkedEntries]) => {
+                          setSelectedEntries(([...checkedEntries]) => {
                             if (checked) {
                               return [...checkedEntries, entry.name];
                             } else {
