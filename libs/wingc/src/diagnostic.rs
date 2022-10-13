@@ -31,13 +31,23 @@ pub enum DiagnosticLevel {
 #[derive(Debug, Clone)]
 pub struct Diagnostic {
 	pub message: String,
-	pub span: WingSpan,
+	pub span: Option<WingSpan>,
 	pub level: DiagnosticLevel,
 }
 
 impl std::fmt::Display for Diagnostic {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		// TODO: implement a Display for DiagnosticLevel (instead of Debug formatting)
-		write!(f, "{:?} at {}\n{}", self.level, self.span, self.message)
+		if let Some(span) = &self.span {
+			write!(f, "{:?} at {} | {}", self.level, span, self.message)
+		} else {
+			write!(f, "{:?} | {}", self.level, self.message)
+		}
+	}
+}
+
+pub fn print_diagnostics(diagnostics: &Diagnostics) {
+	for diagnostic in diagnostics {
+		println!("{}", diagnostic);
 	}
 }

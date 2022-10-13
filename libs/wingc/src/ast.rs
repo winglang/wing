@@ -7,8 +7,8 @@ use derivative::Derivative;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
+use crate::type_check::type_env::TypeEnv;
 use crate::type_check::TypeRef;
-use crate::type_env::TypeEnv;
 
 #[derive(Debug, Eq, Clone)]
 pub struct Symbol {
@@ -46,6 +46,7 @@ pub enum Type {
 	String,
 	Bool,
 	Duration,
+	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
@@ -109,8 +110,13 @@ pub enum Statement {
 		members: Vec<ClassMember>,
 		methods: Vec<FunctionDefinition>,
 		constructor: Constructor,
-		parent: Option<Symbol>,
+		parent: Option<Type>,
 		is_resource: bool,
+	},
+	Struct {
+		name: Symbol,
+		extends: Vec<Symbol>,
+		members: Vec<ClassMember>,
 	},
 }
 
@@ -137,11 +143,10 @@ pub enum ExprType {
 	},
 	Literal(Literal),
 	Reference(Reference),
-	FunctionCall {
+	Call {
 		function: Reference,
 		args: ArgList,
 	},
-	MethodCall(MethodCall),
 	Unary {
 		// TODO: Split to LogicalUnary, NumericUnary
 		op: UnaryOperator,
@@ -153,19 +158,29 @@ pub enum ExprType {
 		lexp: Box<Expr>,
 		rexp: Box<Expr>,
 	},
+	StructLiteral {
+		type_: Type,
+		fields: HashMap<Symbol, Expr>,
+	},
+	MapLiteral {
+		type_: Option<Type>,
+		fields: HashMap<String, Expr>,
+	},
 }
 
 #[derive(Debug)]
 pub struct Expr {
 	pub variant: ExprType,
 	pub evaluated_type: RefCell<Option<TypeRef>>,
+	pub span: WingSpan,
 }
 
 impl Expr {
-	pub fn new(expression_variant: ExprType) -> Self {
+	pub fn new(expression_variant: ExprType, span: WingSpan) -> Self {
 		Self {
 			variant: expression_variant,
 			evaluated_type: RefCell::new(None),
+			span,
 		}
 	}
 }
@@ -208,11 +223,6 @@ impl Scope {
 	}
 }
 
-#[derive(Debug)]
-pub struct MethodCall {
-	pub method: Reference,
-	pub args: ArgList,
-}
 #[derive(Debug)]
 pub enum UnaryOperator {
 	Plus,

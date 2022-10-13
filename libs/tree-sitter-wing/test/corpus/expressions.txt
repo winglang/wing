@@ -73,7 +73,7 @@ hello(1,a);
 
 (source
     (expression_statement
-        (function_call
+        (call
             call_name: (reference (identifier))
             args: (argument_list
                 (positional_argument
@@ -97,12 +97,14 @@ obj.method();
 
 (source
     (expression_statement
-        (method_call
-          call_name: (nested_identifier
-            object: (reference (identifier))
-            property: (identifier)
-          )
-          args: (argument_list)
+        (call
+            call_name: (reference
+                (nested_identifier
+                    object: (reference (identifier))
+                    property: (identifier)
+                )
+            )
+            args: (argument_list)
         )
     )
 )
@@ -253,6 +255,27 @@ Set Literal
 )
 
 ================================
+Typed Set Literal
+================================
+
+Set<num> { 1, 2, 3 };
+
+---
+
+(source
+    (expression_statement
+        (set_literal
+            (immutable_container_type
+                (builtin_type)
+            )
+            (number)
+            (number)
+            (number)
+        )
+    )
+)
+
+================================
 Empty Map Literal
 ================================
 
@@ -322,7 +345,7 @@ let a: Array<num> = [];
 (source
     (variable_definition_statement
         (identifier)
-        (builtin_container_type
+        (immutable_container_type
             (builtin_type)
         )
         (array_literal)
@@ -333,7 +356,7 @@ let a: Array<num> = [];
 Container Type Constructor Invocation
 ================================
 
-let a = new Map<num>();
+let a = new MutMap<num>();
 
 ---
 
@@ -341,10 +364,37 @@ let a = new Map<num>();
     (variable_definition_statement
         (identifier)
         (new_expression
-            (builtin_container_type
+            (mutable_container_type
                 (builtin_type)
             )
             (argument_list)
+        )
+    )
+)
+
+================================
+Struct literal
+================================
+
+let a = A { f1: 3, f2: true };
+
+---
+
+(source
+    (variable_definition_statement
+        name: (identifier)
+        value: (struct_literal
+            type: (custom_type
+                object: (identifier)
+            )
+            fields: (struct_literal_member
+                (identifier)
+                (number)
+            )
+            fields: (struct_literal_member
+                (identifier)
+                (bool)
+            )
         )
     )
 )
