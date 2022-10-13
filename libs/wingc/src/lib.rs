@@ -18,9 +18,7 @@ pub mod jsify;
 pub mod parser;
 pub mod type_check;
 
-pub type DiagnosticTuple<T> = (T, Diagnostics);
-
-pub fn parse(source_file: &str) -> DiagnosticTuple<Scope> {
+pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
