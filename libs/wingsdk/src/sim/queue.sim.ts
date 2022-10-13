@@ -33,7 +33,7 @@ export async function stop(attrs: QueueSchema["attrs"]) {
   delete QUEUES[queueAddr];
 }
 
-export class Queue {
+class Queue {
   private readonly wss: Server;
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriberInternal>();

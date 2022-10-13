@@ -30,7 +30,7 @@ export async function stop(attrs: FunctionSchema["attrs"]) {
   delete FUNCTIONS[functionAddr];
 }
 
-export class Function {
+class Function {
   private readonly wss: Server;
   private readonly worker: Piscina;
   private _timesCalled: number = 0;
