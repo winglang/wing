@@ -294,7 +294,9 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			None
 		};
+
 		// Verify we have a constructor for this calss
+		// TODO: Do we really require a constructor? Wing does but maybe we need some default behavior here if there isn't one.
 		let jsii_initializer = jsii_class
 			.initializer
 			.as_ref()
