@@ -14,7 +14,7 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message((message) ~> {
+queue.on_message((message: str) ~> {
   print("Hello, ${message}!");
 });
 ```
