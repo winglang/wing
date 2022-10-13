@@ -1,6 +1,6 @@
 ---
-name: Compiler issue template
-about: Issue template for compiler issues
+name: Compiler issue
+about: Issue in the compiler
 title: ''
 labels: compiler
 assignees: ''
