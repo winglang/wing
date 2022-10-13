@@ -5,7 +5,7 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
-	Literal, MethodCall, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
+	Literal, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -246,9 +246,11 @@ impl Parser<'_> {
 			)?;
 		}
 
-		let parent = statement_node
-			.child_by_field_name("parent")
-			.map(|n| self.node_symbol(&n).unwrap());
+		let parent = if let Some(parent_node) = statement_node.child_by_field_name("parent") {
+			Some(self.build_type(&parent_node)?)
+		} else {
+			None
+		};
 		Ok(Statement::Class {
 			name,
 			members,
@@ -268,7 +270,7 @@ impl Parser<'_> {
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
 				return_type: func_def_node
-					.child_by_field_name("return_type")
+					.child_by_field_name("type")
 					.map(|rt| Box::new(self.build_type(&rt).unwrap())),
 				flight,
 			},
@@ -319,6 +321,19 @@ impl Parser<'_> {
 						Flight::Pre
 					},
 				}))
+			}
+			"mutable_container_type" | "immutable_container_type" => {
+				let container_type = self.node_text(&type_node.child_by_field_name("collection_type").unwrap());
+				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
+				match container_type {
+					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
+					"Set" | "Array" | "MutSet" | "MutMap" | "MutArray" | "Promise" => self.add_error(
+						format!("{} container type currently unsupported", container_type),
+						type_node,
+					)?,
+					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
+					other => panic!("Unexpected container type {} || {:#?}", other, type_node),
+				}
 			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),
 			other => panic!("Unexpected type {} || {:#?}", other, type_node),
@@ -458,18 +473,66 @@ impl Parser<'_> {
 			"reference" => Ok(Expr::new(ExprType::Reference(self.build_reference(&expression_node)?))),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"function_call" => Ok(Expr::new(ExprType::FunctionCall {
+			"call" => Ok(Expr::new(ExprType::Call {
 				function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
 				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 			})),
-			"method_call" => Ok(Expr::new(ExprType::MethodCall(MethodCall {
-				method: self.build_nested_identifier(&expression_node.child_by_field_name("call_name").unwrap())?,
-				args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-			}))),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"pure_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"map_literal" => {
+				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut fields = HashMap::new();
+				let mut cursor = expression_node.walk();
+				for field_node in expression_node.children_by_field_name("map_literal_member", &mut cursor) {
+					let key_node = field_node.named_child(0).unwrap();
+					let key = match key_node.kind() {
+						"string" => {
+							let s = self.node_text(&key_node);
+							// Remove quotes, we assume this is a valid key for a map
+							s[1..s.len() - 1].to_string()
+						}
+						"identifier" => self.node_text(&key_node).to_string(),
+						other => panic!("Unexpected map key type {} at {:?}", other, key_node),
+					};
+					let value_node = field_node.named_child(1).unwrap();
+					if fields.contains_key(&key) {
+						_ = self.add_error::<()>(format!("Duplicate key {} in map literal", key), &key_node);
+					} else {
+						fields.insert(key, self.build_expression(&value_node)?);
+					}
+				}
+
+				Ok(Expr::new(ExprType::MapLiteral {
+					fields,
+					type_: map_type,
+				}))
+			}
+			"struct_literal" => {
+				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
+				let mut fields = HashMap::new();
+				let mut cursor = expression_node.walk();
+				for field in expression_node.children_by_field_name("fields", &mut cursor) {
+					let field_name = self.node_symbol(&field.named_child(0).unwrap());
+					let field_value = self.build_expression(&field.named_child(1).unwrap());
+					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
+					if let (Ok(k), Ok(v)) = (field_name, field_value) {
+						if fields.contains_key(&k) {
+							// TODO: ugly, we need to change add_error to not return anything and have a wrapper `raise_error` that returns a Result
+							_ = self.add_error::<()>(format!("Duplicate field {} in struct literal", k), expression_node);
+						} else {
+							fields.insert(k, v);
+						}
+					}
+				}
+				Ok(Expr::new(ExprType::StructLiteral { type_: type_?, fields }))
+			}
 			other => {
 				if expression_node.has_error() {
 					self.add_error(format!("Expected expression"), expression_node)

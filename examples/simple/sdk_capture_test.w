@@ -1,10 +1,19 @@
 bring cloud;
 
-let bucket = new cloud.Bucket();
+let p = cloud.BucketProps {
+    public: false
+};
 
-inflight handler() {
-  bucket.upload("file.txt", "data");
-  bucket.delete("file.txt");
+let bucket = new cloud.Bucket(p);
+
+inflight handler(event: str):str {
+  bucket.put("file.txt", "data");
+  bucket.get("file.txt");
 }
 
-new cloud.Function(handler);
+new cloud.Function(
+  handler, 
+  cloud.FunctionProps {
+    env: Map<str> {}
+  }
+);

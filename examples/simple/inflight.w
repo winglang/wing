@@ -1,11 +1,13 @@
 bring cloud as c;
 
-// type checking for captures not currently supported
-// TODO Update once supported
-let bucket = new c.Bucket();
+let p = c.BucketProps {
+    public: false
+};
+
+let bucket = new c.Bucket(p);
 
 inflight test() {
   let x = -1;
   let z = 11 + x;
-  bucket.upload();
+  bucket.put("foo", "bar");
 }

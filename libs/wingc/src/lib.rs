@@ -8,8 +8,8 @@ use std::path::PathBuf;
 
 use crate::ast::Flight;
 use crate::capture::scan_captures;
+use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
-use crate::type_env::TypeEnv;
 
 pub mod ast;
 pub mod capture;
@@ -17,7 +17,6 @@ pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
 pub mod type_check;
-pub mod type_env;
 
 pub fn parse(source_file: &str) -> Scope {
 	let language = tree_sitter_wing::language();
