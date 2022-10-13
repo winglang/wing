@@ -46,7 +46,6 @@ impl std::fmt::Display for Diagnostic {
 	}
 }
 
-// print list of diagnostics
 pub fn print_diagnostics(diagnostics: &Diagnostics) {
 	for diagnostic in diagnostics {
 		println!("{}", diagnostic);
