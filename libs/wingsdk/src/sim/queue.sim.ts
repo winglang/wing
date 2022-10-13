@@ -2,7 +2,7 @@ import { Server } from "ws";
 import { IResourceResolver, SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
 import { FunctionClient } from "./function.inflight";
-import { QueueSchema, QueueSubscriber } from "./schema";
+import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 import { RandomArrayIterator } from "./util.sim";
 

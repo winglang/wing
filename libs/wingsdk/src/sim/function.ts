@@ -11,7 +11,7 @@ import {
 } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
-import { FunctionSchema } from "./schema";
+import { FunctionSchema } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Function`.

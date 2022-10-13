@@ -4,7 +4,7 @@ import Piscina from "piscina";
 import { Server } from "ws";
 import { SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
-import { FunctionSchema } from "./schema";
+import { FunctionSchema } from "./schema-resources";
 import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 
 const FUNCTIONS: Record<number, Function> = {};

@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
-import { ResourceSchema, WingSimulatorSchema } from "../sim/schema";
+import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
 const { DefaultSimulatorDispatcher } = require("../sim/dispatcher.sim");
@@ -22,13 +22,29 @@ export interface SimulatorProps {
   readonly dispatcher?: ISimulatorDispatcher;
 }
 
+/**
+ * Context that is passed to individual resource simulations.
+ */
 export interface SimulatorContext {
+  /**
+   * A resolver that can be used to look up other resources in the tree.
+   */
   readonly resolver: IResourceResolver;
+
+  /**
+   * The absolute path to where all assets in `app.wx` are stored.
+   */
   readonly assetsDir: string;
 }
 
+/**
+ * A resolver that can be used to look up other resources in the tree.
+ */
 export interface IResourceResolver {
-  lookup(resourceId: string): ResourceData;
+  /**
+   * Lookup a resource by its path.
+   */
+  lookup(resourceId: string): BaseResourceSchema;
 }
 
 /**
@@ -74,7 +90,7 @@ export class Simulator {
   }
 
   private _annotateTreeWithPaths(tree: any) {
-    function walk(path: string, node: ResourceSchema) {
+    function walk(path: string, node: BaseResourceSchema) {
       (node as any).path = path;
       for (const [childId, child] of Object.entries(node.children ?? {})) {
         walk(path + "/" + childId, child);
@@ -142,7 +158,7 @@ export class Simulator {
    * Obtain a resource's attributes. This is data that gets resolved when the
    * during the resource's in-simulator creation.
    */
-  public getAttributes(path: string): any {
+  public getAttributes(path: string): { [key: string]: any } {
     return findResource(this._tree, path).attrs;
   }
 
@@ -150,14 +166,14 @@ export class Simulator {
    * Obtain a resource's props. This is data about the resource's configuration
    * that is resolved at synth time.
    */
-  public getProps(path: string): any {
+  public getProps(path: string): { [key: string]: any } {
     return findResource(this._tree, path).props;
   }
 
   /**
    * Obtain a resource's data, including its path, props, attrs, and children.
    */
-  public getData(path: string): any {
+  public getData(path: string): BaseResourceSchema {
     return findResource(this._tree, path);
   }
 
@@ -205,7 +221,7 @@ function resolveTokens(props: any, resolver: IResourceResolver): any {
   return props;
 }
 
-function findResource(tree: any, path: string): ResourceData {
+function findResource(tree: any, path: string): BaseResourceSchema {
   const parts = path.split("/");
   let node: any = { children: tree };
   for (const part of parts) {
@@ -216,15 +232,6 @@ function findResource(tree: any, path: string): ResourceData {
     }
   }
   return node;
-}
-
-export interface ResourceData {
-  /** Resource type name. */
-  readonly type: string;
-  /** Resource data defined at synthesis time, through the construct tree. */
-  readonly props: { [key: string]: any };
-  /** Resource data created at deployment time by the simulator. */
-  readonly attrs: { [key: string]: any };
 }
 
 /**

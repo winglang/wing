@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
 import { SimulatorContext } from "../testing/simulator";
-import { BucketSchema } from "./schema";
+import { BucketSchema } from "./schema-resources";
 
 export async function start(
   _props: any,

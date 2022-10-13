@@ -6,7 +6,7 @@ import { DependencyGraph } from "../core";
 import { FileBase } from "../fs";
 import { mkdtemp, sanitizeValue } from "../util";
 import { isResource } from "./resource";
-import { ResourceSchema, WingSimulatorSchema } from "./schema";
+import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
 
 /**
  * Props for `App`.
@@ -86,7 +86,7 @@ function shouldIncludeInTree(c: IConstruct): boolean {
   return false;
 }
 
-function toSchema(c: IConstruct): ResourceSchema {
+function toSchema(c: IConstruct): BaseResourceSchema {
   const children = c.node.children.reduce((acc, child) => {
     if (!shouldIncludeInTree(child)) {
       return acc;

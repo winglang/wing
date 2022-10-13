@@ -3,7 +3,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
-import { QueueSchema, QueueSubscriber } from "./schema";
+import { QueueSchema, QueueSubscriber } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Queue`.
