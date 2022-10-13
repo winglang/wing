@@ -17,16 +17,6 @@ pub struct WingSpan {
 
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		// check if default
-		if self.file_id.is_empty()
-			&& self.start.row == 0
-			&& self.start.column == 0
-			&& self.end.row == 0
-			&& self.end.column == 0
-		{
-			return write!(f, "");
-		}
-
 		write!(f, "{}:{}:{}", self.file_id, self.start.row + 1, self.start.column + 1)
 	}
 }
