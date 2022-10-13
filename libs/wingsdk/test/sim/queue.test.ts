@@ -2,7 +2,7 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import { FunctionClient } from "../../src/sim/function.inflight";
 import { QueueClient } from "../../src/sim/queue.inflight";
-import { QueueSchema } from "../../src/sim/schema";
+import { QueueSchema } from "../../src/sim/schema-resources";
 import * as testing from "../../src/testing";
 import { simulatorJsonOf, synthSimulatedApp } from "./util";
 
