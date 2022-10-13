@@ -19,7 +19,6 @@ pub fn bring(source_file: &str, context: Option<&str>, imports: &mut HashSet<Str
 	let source_file = context_dir.join(source_file).canonicalize().unwrap();
 	let source_file = source_file.to_str().unwrap();
 
-	// check if "imports" already contains "source_file", panic if it does
 	if imports.contains(source_file) {
 		return None;
 	}

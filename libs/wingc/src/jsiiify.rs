@@ -4,8 +4,6 @@ use std::{collections::BTreeMap, fs};
 use wingii::jsii;
 
 /// generates a JSII manifest for the given scope
-/// todo: JSII does not support functions and free variables, but...
-/// we can support it by assigning them to a global "exports" class as statics
 pub fn jsiiify(scope: &Scope, types: &Types) -> String {
 	let mut jsii_types: BTreeMap<String, serde_json::Value> = BTreeMap::new();
 	for statement in scope.statements.iter() {
