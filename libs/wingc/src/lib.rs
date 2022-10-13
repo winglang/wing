@@ -60,9 +60,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
-	let scope_result = parse(source_file);
-	let mut scope = scope_result.0;
-	let parse_diagnostics = scope_result.1;
+	let (mut scope, parse_diagnostics) = parse(source_file);
 
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = type_check(&mut scope, &mut types);
