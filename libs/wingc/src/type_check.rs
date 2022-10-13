@@ -455,11 +455,15 @@ impl<'a> TypeChecker<'a> {
 			ExprType::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
 				let rtype = self.type_check_exp(rexp, env).unwrap();
-				self.validate_type(ltype, rtype, rexp);
+
 				if op.boolean_args() {
 					self.validate_type(ltype, self.types.bool(), rexp);
+					self.validate_type(rtype, self.types.bool(), rexp);
 				} else if op.numerical_args() {
 					self.validate_type(ltype, self.types.number(), rexp);
+					self.validate_type(rtype, self.types.number(), rexp);
+				} else {
+					self.validate_type(ltype, rtype, rexp);
 				}
 
 				if op.boolean_result() {
@@ -665,8 +669,8 @@ impl<'a> TypeChecker<'a> {
 		if actual_type != expected_type && actual_type.0 != &Type::Anything {
 			self.diagnostics.borrow_mut().push(Diagnostic {
 				message: format!(
-					"Expected type `{}` of `{:?}` to be `{}`",
-					actual_type, value.variant, expected_type
+					"Expected type \"{}\", but got \"{}\" instead: {:?}",
+					expected_type, actual_type, value.variant
 				),
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,

@@ -80,10 +80,10 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 
 	if parse_diagnostics
 		.iter()
-		.any(|x| !matches!(x.level, DiagnosticLevel::Error))
+		.any(|x| matches!(x.level, DiagnosticLevel::Error))
 		|| type_check_diagnostics
 			.iter()
-			.any(|x| !matches!(x.level, DiagnosticLevel::Error))
+			.any(|x| matches!(x.level, DiagnosticLevel::Error))
 	{
 		std::process::exit(1);
 	}
