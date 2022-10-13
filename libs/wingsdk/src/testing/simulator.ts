@@ -133,11 +133,14 @@ export class Simulator {
    */
   public async stop(): Promise<void> {
     // TODO: what if stop() gets called twice in a row?
+
     for (const path of this._tree.startOrder.slice().reverse()) {
       const res = findResource(this._tree, path);
       log(`stopping resource ${path} (${res.type})`);
       await this._dispatcher.stop(res.type, res.attrs);
     }
+
+    // TODO: remove "attrs" data from tree
   }
 
   /**
@@ -159,6 +162,7 @@ export class Simulator {
    * during the resource's in-simulator creation.
    */
   public getAttributes(path: string): { [key: string]: any } {
+    // TODO: this should throw if called while the simulator is not running
     return findResource(this._tree, path).attrs;
   }
 
