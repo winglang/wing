@@ -1,9 +1,10 @@
 mod jsii_importer;
 pub mod type_env;
-
 use crate::ast::{Type as AstType, *};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
+use std::cell::RefCell;
 use std::fmt::{Debug, Display};
 use type_env::TypeEnv;
 
@@ -146,12 +147,6 @@ pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: Option<TypeRef>,
 	pub flight: Flight,
-}
-
-#[deprecated = "Remember to implement this!"]
-pub fn unimplemented_type() -> Option<Type> {
-	println!("Skipping unimplemented type check");
-	return Some(Type::Anything);
 }
 
 impl Display for Type {
@@ -396,11 +391,46 @@ impl Types {
 
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
+	pub diagnostics: RefCell<Diagnostics>,
 }
 
 impl<'a> TypeChecker<'a> {
 	pub fn new(types: &'a mut Types) -> Self {
-		Self { types: types }
+		Self {
+			types: types,
+			diagnostics: RefCell::new(Diagnostics::new()),
+		}
+	}
+
+	#[deprecated = "Remember to implement this!"]
+	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Warning,
+			message: format!("Unimplemented type: {}", type_name),
+			span: None,
+		});
+
+		return Some(Type::Anything);
+	}
+
+	fn general_type_error(&self, message: String) -> TypeRef {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message,
+			span: None,
+		});
+
+		self.types.anything()
+	}
+
+	fn expr_error(&self, expr: &Expr, message: String) -> TypeRef {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message,
+			span: Some(expr.span.clone()),
+		});
+
+		self.types.anything()
 	}
 
 	pub fn get_primitive_type_by_name(&self, name: &str) -> TypeRef {
@@ -409,7 +439,7 @@ impl<'a> TypeChecker<'a> {
 			"string" => self.types.string(),
 			"bool" => self.types.bool(),
 			"duration" => self.types.duration(),
-			other => panic!("Type {} is not a primitive type", other),
+			other => self.general_type_error(format!("Type {} is not a primitive type", other)),
 		}
 	}
 
@@ -425,11 +455,15 @@ impl<'a> TypeChecker<'a> {
 			ExprType::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
 				let rtype = self.type_check_exp(rexp, env).unwrap();
-				self.validate_type(ltype, rtype, rexp);
+
 				if op.boolean_args() {
 					self.validate_type(ltype, self.types.bool(), rexp);
+					self.validate_type(rtype, self.types.bool(), rexp);
 				} else if op.numerical_args() {
 					self.validate_type(ltype, self.types.number(), rexp);
+					self.validate_type(rtype, self.types.number(), rexp);
+				} else {
+					self.validate_type(ltype, rtype, rexp);
 				}
 
 				if op.boolean_result() {
@@ -485,11 +519,14 @@ impl<'a> TypeChecker<'a> {
 				// TODO: named args
 				// Verify arity
 				if arg_list.pos_args.len() != constructor_sig.args.len() {
-					panic!(
-						"Expected {} args but got {} when instantiating {}",
-						constructor_sig.args.len(),
-						arg_list.pos_args.len(),
-						type_
+					self.expr_error(
+						exp,
+						format!(
+							"Expected {} args but got {} when instantiating {}",
+							constructor_sig.args.len(),
+							arg_list.pos_args.len(),
+							type_
+						),
 					);
 				}
 				// Verify passed arguments match the constructor
@@ -515,10 +552,13 @@ impl<'a> TypeChecker<'a> {
 					// Verify the object scope is an actually ResourceObject
 					if let Some(obj_scope_type) = obj_scope_type {
 						if obj_scope_type.as_resource_object().is_none() {
-							panic!(
-								"Expected scope {:?} to be a resource object, instead found {}",
-								obj_scope, obj_scope_type
-							)
+							self.expr_error(
+								exp,
+								format!(
+									"Expected scope {:?} to be a resource object, instead found {}",
+									obj_scope, obj_scope_type
+								),
+							);
 						}
 					}
 
@@ -551,12 +591,15 @@ impl<'a> TypeChecker<'a> {
 				// TODO: named args
 				// Argument arity check
 				if args.pos_args.len() + extra_args != func_sig.args.len() {
-					panic!(
-						"Expected {} arguments for {:?}, but got {} instead.",
-						func_sig.args.len() - extra_args,
-						function,
-						args.pos_args.len()
-					)
+					self.expr_error(
+						exp,
+						format!(
+							"Expected {} arguments for {:?}, but got {} instead.",
+							func_sig.args.len() - extra_args,
+							function,
+							args.pos_args.len()
+						),
+					);
 				}
 				// Verify argument types (we run from last to first to skip "this" argument)
 				for (arg_type, param_exp) in func_sig.args.iter().rev().zip(args.pos_args.iter().rev()) {
@@ -624,7 +667,14 @@ impl<'a> TypeChecker<'a> {
 
 	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) {
 		if actual_type != expected_type && actual_type.0 != &Type::Anything {
-			panic!("Expected type {} of {:?} to be {}", actual_type, value, expected_type);
+			self.diagnostics.borrow_mut().push(Diagnostic {
+				message: format!(
+					"Expected type \"{}\", but got \"{}\" instead: {:?}",
+					expected_type, actual_type, value.variant
+				),
+				span: Some(value.span.clone()),
+				level: DiagnosticLevel::Error,
+			});
 		}
 	}
 
@@ -687,7 +737,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
 				if matches!(func_def.signature.flight, Flight::In) {
-					unimplemented_type(); // TODO: what typechecking do we need here???
+					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
 				}
 
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
@@ -806,11 +856,14 @@ impl<'a> TypeChecker<'a> {
 					if let Some(expected_return_type) = env.return_type {
 						self.validate_type(return_type, expected_return_type, return_expression);
 					} else {
-						panic!("Return statement outside of function cannot return a value.");
+						self.general_type_error(format!("Return statement outside of function cannot return a value."));
 					}
 				} else {
 					if let Some(expected_return_type) = env.return_type {
-						panic!("Expected return statement to return type {}", expected_return_type);
+						self.general_type_error(format!(
+							"Expected return statement to return type {}",
+							expected_return_type
+						));
 					}
 				}
 			}
@@ -824,7 +877,7 @@ impl<'a> TypeChecker<'a> {
 			} => {
 				// TODO: if is_resource then....
 				if *is_resource {
-					unimplemented_type();
+					self.unimplemented_type("Resource class");
 				}
 
 				let env_flight = if *is_resource { Flight::Pre } else { Flight::In };
@@ -842,7 +895,8 @@ impl<'a> TypeChecker<'a> {
 						if let &Type::Class(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
-							panic!("Class {}'s parent {} is not a class", name, t);
+							self.general_type_error(format!("Class {}'s parent {} is not a class", name, t));
+							(None, None)
 						}
 					}
 				} else {
@@ -912,7 +966,9 @@ impl<'a> TypeChecker<'a> {
 						class.env = class_env;
 						&class.env
 					}
-					_ => panic!("Expected {} to be a class or resource ", name),
+					_ => {
+						panic!("Expected {} to be a class or resource ", name);
+					}
 				};
 
 				// Type check constructor
@@ -922,7 +978,7 @@ impl<'a> TypeChecker<'a> {
 					panic!(
 						"Constructor of {} isn't defined as a function in the class environment",
 						name
-					)
+					);
 				};
 
 				// Create constructor environment and prime it with args
@@ -1017,10 +1073,10 @@ impl<'a> TypeChecker<'a> {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
 						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
 						&Type::Anything => return instance,
-						_ => panic!(
+						_ => self.general_type_error(format!(
 							"{} in {:?} does not resolve to a class instance or resource object",
 							instance, reference
-						),
+						)),
 					};
 
 					match instance_type.into() {
