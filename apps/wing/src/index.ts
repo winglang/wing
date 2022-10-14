@@ -29,6 +29,8 @@ async function main() {
 
       const args = [argv[0], wingFile];
 
+      installSdk(wingDir);
+
       // create all intermediate files in a .wing directory
       const workdir = ".wing/";
       mkdirSync(workdir, { recursive: true });
@@ -56,8 +58,6 @@ async function main() {
       wasi.start(instance);
 
       const outdir = options.outDir ?? ".";
-
-      installSdk(workdir);
 
       // TODO: compiler should return the path to intermediate.js so we can use it here
       spawnSync(process.execPath, ["intermediate.js"], {

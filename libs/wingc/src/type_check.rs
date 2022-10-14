@@ -6,6 +6,7 @@ use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::fmt::{Debug, Display};
+use std::path::PathBuf;
 use type_env::TypeEnv;
 
 #[derive(Debug)]
@@ -391,13 +392,15 @@ impl Types {
 
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
+	wingii_dirs: Vec<PathBuf>,
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types) -> Self {
+	pub fn new(types: &'a mut Types, wingii_dirs: Vec<PathBuf>) -> Self {
 		Self {
-			types: types,
+			types,
+			wingii_dirs,
 			diagnostics: RefCell::new(Diagnostics::new()),
 		}
 	}
@@ -803,12 +806,20 @@ impl<'a> TypeChecker<'a> {
 
 					// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
 					if module_name.name == "cloud" {
+						// read files in wingii_dirs
+						let wingsdk_path: Option<PathBuf> = node_require("@monadahq/wingsdk", &self.wingii_dirs);
+
 						let mut wingii_types = wingii::type_system::TypeSystem::new();
 						let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 							root: true,
 							deps: false,
 						};
-						let name = wingii_types.load("../wingsdk", Some(wingii_loader_options)).unwrap();
+						let name = wingii_types
+							.load(
+								&wingsdk_path.expect("@monadahq/wingsdk not found").to_string_lossy(),
+								Some(wingii_loader_options),
+							)
+							.unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
 						println!("Loaded JSII assembly {}", name);
 						let assembly = wingii_types.find_assembly(&name).unwrap();
@@ -1094,6 +1105,22 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 	}
+}
+
+fn node_require(package_name: &str, wingii_dirs: &Vec<PathBuf>) -> Option<PathBuf> {
+	// TODO: reuse dependency finding logic from `wingii` crate
+
+	for dir in wingii_dirs {
+		println!("Looking for package {} in {}", package_name, dir.display());
+		let path = dir.join("node_modules").join(package_name);
+		println!("Checking {}...", path.display());
+		if path.exists() {
+			println!("Found {}!", package_name);
+			return Some(path);
+		}
+	}
+	println!("Package {} not found.", package_name);
+	None
 }
 
 fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol, struct_env: &mut TypeEnv) {

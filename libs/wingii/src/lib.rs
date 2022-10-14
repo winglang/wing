@@ -205,8 +205,15 @@ pub mod type_system {
 			if opts.deps {
 				for dep in deps {
 					if !bundled.contains(&dep) {
-						let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).unwrap();
-						self.load_module(&dep_dir, opts)?;
+						let dep_dir = package_json::find_dependency_directory(&dep, &module_directory);
+						match dep_dir {
+							Some(dep_dir) => {
+								self.load_module(&dep_dir, &opts)?;
+							}
+							None => {
+								return Err(format!("Could not find dependency {} in {}", dep, module_directory).into());
+							}
+						}
 					}
 				}
 			}

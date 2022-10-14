@@ -3,8 +3,8 @@ use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
-use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
+use std::{env, fs};
 
 use crate::ast::Flight;
 use crate::capture::scan_captures;
@@ -48,9 +48,9 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
+pub fn type_check(scope: &mut Scope, types: &mut Types, wingii_dirs: Vec<PathBuf>) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
-	let mut tc = TypeChecker::new(types);
+	let mut tc = TypeChecker::new(types, wingii_dirs);
 	tc.type_check_scope(scope);
 
 	tc.diagnostics.into_inner()
@@ -62,8 +62,14 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Build our AST
 	let (mut scope, parse_diagnostics) = parse(source_file);
 
+	let source_dir = match Path::new(source_file).is_absolute() {
+		true => Path::new(source_file).parent().unwrap().to_path_buf(),
+		false => env::current_dir().unwrap(),
+	};
+	println!("source_dir: {}", source_dir.display());
+
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types);
+	let type_check_diagnostics = type_check(&mut scope, &mut types, vec![source_dir]);
 
 	// Analyze inflight captures
 	scan_captures(&scope);
@@ -103,8 +109,8 @@ mod sanity {
 		let paths = fs::read_dir("../../examples/simple").unwrap();
 
 		for entry in paths {
-			if let Ok(entry) = entry {
-				if let Some(source) = entry.path().to_str() {
+			if let Ok(entry) = dbg!(entry) {
+				if let Some(source) = entry.path().canonicalize().unwrap().to_str() {
 					if source.ends_with(".w") {
 						println!("\n=== {} ===\n", source);
 						println!("{}\n---", compile(source, None));
