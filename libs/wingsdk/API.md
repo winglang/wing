@@ -2515,37 +2515,13 @@ const baseResourceSchema: sim.BaseResourceSchema = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific attributes that are set after the resource is created. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.props">props</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific properties needed to create this resource. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.type">type</a></code> | <code>string</code> | The type of the resource. |
+| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific attributes that are set after the resource is created. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.callees">callees</a></code> | <code>string[]</code> | IDs of resources that this resource calls, triggers, or captures. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.callers">callers</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or captured by. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.children">children</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.sim.BaseResourceSchema}</code> | The resource's children indexed by their IDs. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.path">path</a></code> | <code>string</code> | The full path of the resource in the construct tree. |
-
----
-
-##### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs"></a>
-
-```typescript
-public readonly attrs: {[ key: string ]: any};
-```
-
-- *Type:* {[ key: string ]: any}
-
-The resource-specific attributes that are set after the resource is created.
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.props"></a>
-
-```typescript
-public readonly props: {[ key: string ]: any};
-```
-
-- *Type:* {[ key: string ]: any}
-
-The resource-specific properties needed to create this resource.
+| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.props">props</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific properties needed to create this resource. |
 
 ---
 
@@ -2558,6 +2534,18 @@ public readonly type: string;
 - *Type:* string
 
 The type of the resource.
+
+---
+
+##### `attrs`<sup>Optional</sup> <a name="attrs" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs"></a>
+
+```typescript
+public readonly attrs: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+The resource-specific attributes that are set after the resource is created.
 
 ---
 
@@ -2606,6 +2594,18 @@ public readonly path: string;
 - *Type:* string
 
 The full path of the resource in the construct tree.
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.props"></a>
+
+```typescript
+public readonly props: {[ key: string ]: any};
+```
+
+- *Type:* {[ key: string ]: any}
+
+The resource-specific properties needed to create this resource.
 
 ---
 

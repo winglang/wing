@@ -16,9 +16,9 @@ export interface BaseResourceSchema {
   /** The type of the resource. */
   readonly type: string;
   /** The resource-specific properties needed to create this resource. */
-  readonly props: { [key: string]: any };
+  readonly props?: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
-  readonly attrs: { [key: string]: any };
+  readonly attrs?: { [key: string]: any };
   /** IDs of resources that this resource is called, triggered, or captured by. */
   readonly callers?: string[];
   /** IDs of resources that this resource calls, triggers, or captures. */

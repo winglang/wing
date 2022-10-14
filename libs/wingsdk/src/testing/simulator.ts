@@ -163,7 +163,7 @@ export class Simulator {
    */
   public getAttributes(path: string): { [key: string]: any } {
     // TODO: this should throw if called while the simulator is not running
-    return findResource(this._tree, path).attrs;
+    return findResource(this._tree, path).attrs ?? {};
   }
 
   /**
@@ -171,7 +171,7 @@ export class Simulator {
    * that is resolved at synth time.
    */
   public getProps(path: string): { [key: string]: any } {
-    return findResource(this._tree, path).props;
+    return findResource(this._tree, path).props ?? {};
   }
 
   /**
@@ -199,9 +199,9 @@ function resolveTokens(props: any, resolver: IResourceResolver): any {
       const ref = props.slice(2, -1);
       const [path, rest] = ref.split("#");
       const resource = resolver.lookup(path);
-      if (rest.startsWith("attrs.")) {
+      if (rest.startsWith("attrs.") && resource.attrs) {
         return resource.attrs[rest.slice(6)];
-      } else if (rest.startsWith("props.")) {
+      } else if (rest.startsWith("props.") && resource.props) {
         return resource.props[rest.slice(6)];
       } else {
         throw new Error(`Invalid token reference: ${ref}`);

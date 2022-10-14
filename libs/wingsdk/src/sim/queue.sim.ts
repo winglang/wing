@@ -45,7 +45,7 @@ class Queue {
     }
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
-      const functionAddr = resolver.lookup(functionId).attrs.functionAddr;
+      const functionAddr = resolver.lookup(functionId).attrs?.functionAddr;
       subscriber.functionClient = new FunctionClient(functionAddr);
     }
 
