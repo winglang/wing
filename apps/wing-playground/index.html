@@ -19,6 +19,7 @@
     window.onload = async function () {
       const code = document.getElementById("code");
       const result = document.getElementById("result");
+      const stdout = document.getElementById("stdout");
 
       code.addEventListener("input", () => sendCodeToWorker(code.value));
 
@@ -27,7 +28,8 @@
           // worker is ready (takes a while), send whatever initial data is currently in the textarea
           sendCodeToWorker(code.value);
         } else {
-          result.textContent = e.data;
+          stdout.textContent = e.data.stdout;
+          result.textContent = e.data.result;
           hljs.highlightAll();
         }
       });
@@ -53,6 +55,9 @@ new cloud.Function(handler);</textarea
       <section id="js-side">
         <pre>
           <code class="language-javascript" id="result"></code>
+        </pre>
+        <pre>
+          <code id="stdout"></code>
         </pre>
       </section>
     </main>

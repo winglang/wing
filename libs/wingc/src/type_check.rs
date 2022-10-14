@@ -493,6 +493,7 @@ impl<'a> TypeChecker<'a> {
 				let (class_env, class_symbol) = match type_.into() {
 					&Type::Class(ref class) => (&class.env, &class.name),
 					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
+					&Type::Anything => return Some(self.types.anything()),
 					_ => panic!(
 						"Expected {:?} to be a resource or class type but it's a {}",
 						class, type_
@@ -612,6 +613,10 @@ impl<'a> TypeChecker<'a> {
 			ExprType::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type(type_, env);
+
+				if struct_type.is_anything() {
+					return Some(struct_type);
+				}
 
 				// Make it really is a a struct type
 				let st = struct_type
@@ -798,6 +803,16 @@ impl<'a> TypeChecker<'a> {
 				identifier,
 			} => {
 				_ = {
+					// If provided use alias identifier as the namespace name
+					let namespace_name = identifier.as_ref().unwrap_or(module_name);
+
+					if let Some(skip_flag) = std::env::var_os("WINGC_SKIP_JSII") {
+						if skip_flag != "false" {
+							env.define(namespace_name, self.types.anything())
+						}
+						return;
+					};
+
 					// Create a new env for the imported module's namespace
 					let mut namespace_env = TypeEnv::new(None, None, false, env.flight);
 
@@ -831,9 +846,6 @@ impl<'a> TypeChecker<'a> {
 							}
 							jsii_importer.import_type(type_fqn);
 						}
-
-						// If provided use alias identifier as the namespace name
-						let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
 						// Create a namespace for the imported module
 						let namespace = self.types.add_type(Type::Namespace(Namespace {
