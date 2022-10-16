@@ -83,6 +83,14 @@ pub mod type_system {
 		roots: Vec<String>,
 	}
 
+	/// Options to pass to the assembly loader
+	pub struct AssemblyLoadOptions {
+		/// Is this a root assembly? If unsure, pass `true`.
+		pub root: bool,
+		/// Should we load dependencies recursively? If unsure, pass `true`.
+		pub deps: bool,
+	}
+
 	pub trait QueryableType {}
 	impl QueryableType for jsii::InterfaceType {}
 	impl QueryableType for jsii::ClassType {}
@@ -129,10 +137,12 @@ pub mod type_system {
 			self.find_type(fqn, "enum")
 		}
 
-		pub fn load(&mut self, file_or_directory: &str) -> WingIIResult<SchemaName> {
+		pub fn load(&mut self, file_or_directory: &str, opts: Option<AssemblyLoadOptions>) -> WingIIResult<SchemaName> {
+			let opts = opts.unwrap_or(AssemblyLoadOptions { deps: true, root: true });
 			if Path::new(file_or_directory).is_dir() {
-				self.load_module(file_or_directory, Some(true))
+				self.load_module(file_or_directory, &opts)
 			} else {
+				// load_file always loads a single manifest and never recurses into dependencies
 				self.load_file(file_or_directory, Some(true))
 			}
 		}
@@ -163,7 +173,8 @@ pub mod type_system {
 			self.add_assembly(assembly, is_root.unwrap_or(false))
 		}
 
-		fn load_module(&mut self, module_directory: &str, is_root: Option<bool>) -> WingIIResult<SchemaName> {
+		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> WingIIResult<SchemaName> {
+			let is_root = opts.root;
 			let file_path = std::path::Path::new(module_directory).join("package.json");
 			let package_json = std::fs::read_to_string(file_path)?;
 			let package: serde_json::Value = serde_json::from_str(&package_json)?;
@@ -183,18 +194,20 @@ pub mod type_system {
 						.into(),
 					);
 				}
-				if is_root.unwrap_or(false) {
+				if is_root {
 					self.add_root(&asm)?;
 				}
 				return Ok(asm.name);
 			}
-			let root = self.add_assembly(asm, is_root.unwrap_or(false))?;
+			let root = self.add_assembly(asm, is_root)?;
 			let bundled = package_json::bundled_dependencies_of(&package);
 			let deps = package_json::dependencies_of(&package);
-			for dep in deps {
-				if !bundled.contains(&dep) {
-					let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).unwrap();
-					self.load_module(&dep_dir, None)?;
+			if opts.deps {
+				for dep in deps {
+					if !bundled.contains(&dep) {
+						let dep_dir = package_json::find_dependency_directory(&dep, &module_directory).unwrap();
+						self.load_module(&dep_dir, opts)?;
+					}
 				}
 			}
 			Ok(root)
