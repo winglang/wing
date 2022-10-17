@@ -51,7 +51,7 @@ mod tests {
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load(fixture_path.to_str().unwrap()).unwrap();
+		let name = type_system.load(fixture_path.to_str().unwrap(), None).unwrap();
 		assert_eq!(name, "constructs");
 		let assembly = type_system.find_assembly(&name).unwrap();
 		assert_eq!(assembly.name, "constructs");
@@ -64,7 +64,7 @@ mod tests {
 			.join("src")
 			.join("fixtures")
 			.join("constructs");
-		let name = type_system.load(fixture_path.to_str().unwrap()).unwrap();
+		let name = type_system.load(fixture_path.to_str().unwrap(), None).unwrap();
 		assert_eq!(name, "constructs");
 		// find class with fqn "constructs.Construct"
 		let construct = type_system.find_class("constructs.Construct").unwrap();

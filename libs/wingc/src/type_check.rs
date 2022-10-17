@@ -804,7 +804,11 @@ impl<'a> TypeChecker<'a> {
 					// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
 					if module_name.name == "cloud" {
 						let mut wingii_types = wingii::type_system::TypeSystem::new();
-						let name = wingii_types.load("../wingsdk").unwrap();
+						let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
+							root: true,
+							deps: false,
+						};
+						let name = wingii_types.load("../wingsdk", Some(wingii_loader_options)).unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
 						println!("Loaded JSII assembly {}", name);
 						let assembly = wingii_types.find_assembly(&name).unwrap();
