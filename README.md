@@ -32,6 +32,31 @@ to install the toolchain, and how to build Wing applications. If you wish to
 *contribute* to the project, please jump over to our [contribution
 guide](./CONTRIBUTING.md).*
 
+## Concepts and Glossary
+
+Before the cloud, things were simple. There was a clear separation of concerns between developers and operations. Developers were focusing on business problems and didn't have to worry or think about operational concerns. The application could be entirely developed and tested locally.
+
+Operations then took care of the security, networking, availability, deployment, and scaling concerns. Developers would send their code "over the fence" and let operations take it from there.
+
+As the cloud evolved the complexity of reliable applications increased and code was moved to the operations side of the world. Operations and development lines blurred and DevOps was created. While this increased reliability and performance in large-scale cloud applications, it also hurt the local development experience. Developers started fighting slow "inner loop" iteration cycles as things were moved out code and into managed services. Developers now have to care about non-functional concerns while operations is more intertwined with the development cycle. 
+
+Wing addresses the problems by providing a language and toolchain that allows the developer to define intent and the compiler handles the complexity of interweaving the infrastructure with the functional code.
+
+```wing
+bring cloud
+
+let bucket = cloud.Bucket()
+cloud.Function() {[
+  bucket.upload("hello.txt", "world") 
+]}
+```
+
+
+Wing introduces a few new terms into the developer lexicon that you'll see used throughout the documentation.
+
+* Preflight code - code that represents infrastructure components key to your cloud applications. For example, a queue or REST endpoint resource is created using preflight code.
+* Inflight code - code that represents runtime business logic. For example, a function that processes messages from a queue and writes records to a database.
+
 ## Getting Started
 
 If you want to try out Wing without having to get anything installed locally, 
