@@ -106,7 +106,13 @@ mod sanity {
 
 	#[test]
 	fn can_compile_simple_files() {
+		if !cfg!(unix) {
+			assert!(true, "Skipping test on non-unix platform");
+		}
+
 		let paths = fs::read_dir("../../examples/simple").unwrap();
+
+		std::os::unix::fs::symlink("../../wingsdk", "../../../wingsdk/node_modules/@monadahq/wingsdk").unwrap();
 
 		for entry in paths {
 			if let Ok(entry) = entry {
