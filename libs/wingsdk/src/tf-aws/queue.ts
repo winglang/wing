@@ -18,7 +18,9 @@ export class Queue extends cloud.QueueBase {
     });
 
     if ((props.initialMessages ?? []).length) {
-      throw new Error("initialMessages not supported yet for AWS target");
+      throw new Error(
+        "initialMessages not supported yet for AWS target - https://github.com/monadahq/winglang/issues/281"
+      );
     }
   }
 
