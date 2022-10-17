@@ -3,8 +3,8 @@ use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
-use std::path::{Path, PathBuf};
-use std::{env, fs};
+use std::fs;
+use std::path::PathBuf;
 
 use crate::ast::Flight;
 use crate::capture::scan_captures;
@@ -48,28 +48,22 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types, wingii_dirs: Vec<PathBuf>) -> Diagnostics {
+pub fn type_check(scope: &mut Scope, types: &mut Types, wing_paths: &Vec<PathBuf>) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
-	let mut tc = TypeChecker::new(types, wingii_dirs);
+	let mut tc = TypeChecker::new(types, &wing_paths);
 	tc.type_check_scope(scope);
 
 	tc.diagnostics.into_inner()
 }
 
-pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
+pub fn compile(source_file: &str, out_dir: Option<&str>, wing_paths: &Vec<PathBuf>) -> String {
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
 	let (mut scope, parse_diagnostics) = parse(source_file);
 
-	let source_dir = match Path::new(source_file).is_absolute() {
-		true => Path::new(source_file).parent().unwrap().to_path_buf(),
-		false => env::current_dir().unwrap(),
-	};
-	println!("source_dir: {}", source_dir.display());
-
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types, vec![source_dir]);
+	let type_check_diagnostics = type_check(&mut scope, &mut types, wing_paths);
 
 	// Analyze inflight captures
 	scan_captures(&scope);
@@ -102,30 +96,21 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 #[cfg(test)]
 mod sanity {
 	use crate::compile;
-	use std::fs;
+	use std::{fs, path};
 
 	#[test]
 	fn can_compile_simple_files() {
-		if !cfg!(unix) {
-			assert!(true, "Skipping test on non-unix platform");
-		}
+		let example_paths = fs::read_dir("../../examples/simple").unwrap();
 
-		let paths = fs::read_dir("../../examples/simple").unwrap();
+		let wingsdk_path = path::Path::new("../../libs/wingsdk").canonicalize().unwrap();
+		let wing_paths = vec![wingsdk_path];
 
-		// symlink Wing SDK to examples/simple
-		fs::create_dir_all("../../examples/simple/node_modules/@monadahq").unwrap();
-		std::os::unix::fs::symlink(
-			"../../../../libs/wingsdk",
-			"../../examples/simple/node_modules/@monadahq/wingsdk",
-		)
-		.unwrap();
-
-		for entry in paths {
+		for entry in example_paths {
 			if let Ok(entry) = entry {
 				if let Some(source) = entry.path().canonicalize().unwrap().to_str() {
 					if source.ends_with(".w") {
 						println!("\n=== {} ===\n", source);
-						println!("{}\n---", compile(source, None));
+						println!("{}\n---", compile(source, None, &wing_paths));
 					}
 				}
 			}

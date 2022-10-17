@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, path::Path};
 use wingc::compile;
 
 pub fn main() {
@@ -11,5 +11,17 @@ pub fn main() {
 	let source = &args[1];
 	let outdir = args.get(2).map(|s| s.as_str());
 
-	compile(source, outdir);
+	// for now, assume that dependencies are in the directory of the source file
+	// TODO: make this configurable via CLI argument
+	let wing_path = match Path::new(source).is_absolute() {
+		true => Path::new(source).parent().unwrap().to_path_buf(),
+		false => env::current_dir()
+			.unwrap()
+			.join(Path::new(source))
+			.parent()
+			.unwrap()
+			.to_path_buf(),
+	};
+
+	compile(source, outdir, &vec![wing_path]);
 }

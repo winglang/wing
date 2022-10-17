@@ -392,15 +392,15 @@ impl Types {
 
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
-	wingii_dirs: Vec<PathBuf>,
+	wing_paths: &'a Vec<PathBuf>,
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types, wingii_dirs: Vec<PathBuf>) -> Self {
+	pub fn new(types: &'a mut Types, wing_paths: &'a Vec<PathBuf>) -> Self {
 		Self {
 			types,
-			wingii_dirs,
+			wing_paths,
 			diagnostics: RefCell::new(Diagnostics::new()),
 		}
 	}
@@ -804,10 +804,9 @@ impl<'a> TypeChecker<'a> {
 					// Create a new env for the imported module's namespace
 					let mut namespace_env = TypeEnv::new(None, None, false, env.flight);
 
-					// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
 					if module_name.name == "cloud" {
-						// read files in wingii_dirs
-						let wingsdk_path: Option<PathBuf> = node_require("@monadahq/wingsdk", &self.wingii_dirs);
+						// read files in wing_paths
+						let wingsdk_path: Option<PathBuf> = node_require("@monadahq/wingsdk", &self.wing_paths);
 
 						let mut wingii_types = wingii::type_system::TypeSystem::new();
 						let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
@@ -1107,16 +1106,22 @@ impl<'a> TypeChecker<'a> {
 	}
 }
 
-fn node_require(package_name: &str, wingii_dirs: &Vec<PathBuf>) -> Option<PathBuf> {
+fn node_require(package_name: &str, wing_paths: &Vec<PathBuf>) -> Option<PathBuf> {
 	// TODO: reuse dependency finding logic from `wingii` crate
 
-	for dir in wingii_dirs {
+	for dir in wing_paths {
+		let candidates = vec![
+			dir.join("node_modules").join(package_name),
+			dir.join(package_name),
+			dir.clone(),
+		];
 		println!("Looking for package {} in {}", package_name, dir.display());
-		let path = dir.join("node_modules").join(package_name);
-		println!("Checking {}...", path.display());
-		if path.exists() {
-			println!("Found {}!", package_name);
-			return Some(path);
+		for candidate in candidates {
+			println!("Checking {}...", candidate.display());
+			if candidate.exists() && candidate.join("package.json").exists() {
+				println!("Found {}!", package_name);
+				return Some(candidate);
+			}
 		}
 	}
 	println!("Package {} not found.", package_name);
