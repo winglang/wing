@@ -1,0 +1,98 @@
+// Vitest Snapshot v1
+
+exports[`compiles wing files in examples/simple > simple/inflight.w 1`] = `
+"const $stdlib = require('@monadahq/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $synthesizer = process.env.WING_SIM ? new $stdlib.sim.Synthesizer({ outdir: $outdir }) : new $stdlib.tfaws.Synthesizer({ outdir: $outdir });
+const c = require('@monadahq/wingsdk').cloud;
+class MyApp extends $stdlib.core.App {
+constructor() {
+  super({ synthesizer: $synthesizer });
+  
+  let p = {
+  \\"public\\": false,}
+  ;
+  let bucket = new c.Bucket(this.root,\\"c.Bucket\\",p);
+  const test = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(\\"proc.ea489b4b077439b7955e4253ec8490969e1cce9df38a411e5442007739721218/index.js\\"),
+    entrypoint: \\"$proc\\",
+    captures: {
+      bucket: {
+        resource: bucket,
+        methods: [\\"get\\",\\"put\\"]
+      },
+    }
+  });
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`compiles wing files in examples/simple > simple/math.w 1`] = `
+"const $stdlib = require('@monadahq/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $synthesizer = process.env.WING_SIM ? new $stdlib.sim.Synthesizer({ outdir: $outdir }) : new $stdlib.tfaws.Synthesizer({ outdir: $outdir });
+class MyApp extends $stdlib.core.App {
+constructor() {
+  super({ synthesizer: $synthesizer });
+  
+  let x = 1;
+  let y = (2 * x);
+  let z = (x + y);
+  z = (((y * y) / (x * x)) * z);
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`compiles wing files in examples/simple > simple/sdk_capture_test.w 1`] = `
+"const $stdlib = require('@monadahq/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $synthesizer = process.env.WING_SIM ? new $stdlib.sim.Synthesizer({ outdir: $outdir }) : new $stdlib.tfaws.Synthesizer({ outdir: $outdir });
+const cloud = require('@monadahq/wingsdk').cloud;
+class MyApp extends $stdlib.core.App {
+constructor() {
+  super({ synthesizer: $synthesizer });
+  
+  let p = {
+  \\"public\\": false,}
+  ;
+  let bucket = new cloud.Bucket(this.root,\\"cloud.Bucket\\",p);
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(\\"proc.8c960a9a8f34074c215dad8da3cb6ff4ba7ff7e8afebab5ba74a8a4faa1d3055/index.js\\"),
+    entrypoint: \\"$proc\\",
+    captures: {
+      bucket: {
+        resource: bucket,
+        methods: [\\"get\\",\\"put\\"]
+      },
+    }
+  });
+  new cloud.Function(this.root,\\"cloud.Function\\",handler,{
+  \\"env\\": {
+  
+  },}
+  )
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`compiles wing files in examples/simple > simple/variables.w 1`] = `
+"const $stdlib = require('@monadahq/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+const $synthesizer = process.env.WING_SIM ? new $stdlib.sim.Synthesizer({ outdir: $outdir }) : new $stdlib.tfaws.Synthesizer({ outdir: $outdir });
+class MyApp extends $stdlib.core.App {
+constructor() {
+  super({ synthesizer: $synthesizer });
+  
+  let x = 2;
+  let y = 2;
+  if ((x === 2)) {
+    let z = x;
+    y = 4;
+  }
+}
+}
+new MyApp().synth();"
+`;

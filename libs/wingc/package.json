@@ -1,0 +1,11 @@
+{
+    "name": "@monadahq/wingc",
+    "version": "0.0.0",
+    "devDependencies": {
+        "fast-glob": "^3.2.12",
+        "vitest": "^0.24.3"
+    },
+    "scripts": {
+        "test": "vitest --run"
+    }
+}
