@@ -20,7 +20,7 @@ queue.on_message((message: str) ~> {
 ```
 
 Wing allows developers to leverage the cloud naturally within their code. 
-Wing is designed to be a general-purpose language that can be used to build any type of cloud application.
+It is designed to be a general-purpose language that can be used to build any type of cloud application.
 
 The Wing compiler can target multiple cloud platforms, including AWS, Azure,
 Google Cloud, and Kubernetes. It can also target a local cloud simulator,
