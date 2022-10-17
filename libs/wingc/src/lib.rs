@@ -107,7 +107,7 @@ mod sanity {
 
 		for entry in example_paths {
 			if let Ok(entry) = entry {
-				if let Some(source) = entry.path().canonicalize().unwrap().to_str() {
+				if let Some(source) = entry.path().to_str() {
 					if source.ends_with(".w") {
 						println!("\n=== {} ===\n", source);
 						println!("{}\n---", compile(source, None, &wing_paths));
