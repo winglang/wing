@@ -1,17 +1,13 @@
 import { Command } from "commander";
-import { ensureWASISupport } from "./init_node";
 import { argv } from "process";
+import { dirname } from "path";
+import { mkdirSync } from "fs";
 import { readFile } from "fs/promises";
-import { dirname, join, resolve } from "path";
-import { mkdirSync, mkdtempSync } from "fs";
-import { tmpdir } from "os";
-import { spawnSync } from "child_process";
-
 // @ts-ignore esbuild handles this
 import wingcPath from "../wingc.wasm";
 
 async function main() {
-  const WASI = await ensureWASISupport();
+  const { WASI } = await import("wasi");
 
   const program = new Command();
 
@@ -54,40 +50,9 @@ async function main() {
       );
       const instance = await WebAssembly.instantiate(wasm, importObject);
       wasi.start(instance);
-
-      const outdir = options.outDir ?? ".";
-
-      installSdk(workdir);
-
-      // TODO: compiler should return the path to intermediate.js so we can use it here
-      spawnSync(process.execPath, ["intermediate.js"], {
-        env: {
-          ...process.env,
-          WINGSDK_SYNTH_DIR: resolve(outdir),
-        },
-        stdio: "inherit",
-        cwd: workdir,
-      });
     });
 
   program.parse();
-}
-
-function installSdk(workdir: string) {
-  const toolchainVersion = require("../package.json").version;
-  let wingsdkVersion;
-  if (toolchainVersion === "0.0.0") {
-    const wingsdkPath = dirname(
-      require.resolve("@monadahq/wingsdk/package.json")
-    );
-    wingsdkVersion = `file:${wingsdkPath}`;
-  } else {
-    wingsdkVersion = `@monadahq/wingsdk@${toolchainVersion}`;
-  }
-
-  spawnSync("npm", ["install", wingsdkVersion, "--no-audit"], {
-    cwd: workdir,
-  });
 }
 
 main().catch((err) => {
