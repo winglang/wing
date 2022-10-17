@@ -112,7 +112,13 @@ mod sanity {
 
 		let paths = fs::read_dir("../../examples/simple").unwrap();
 
-		std::os::unix::fs::symlink("../../wingsdk", "../../../wingsdk/node_modules/@monadahq/wingsdk").unwrap();
+		// symlink Wing SDK to examples/simple
+		fs::create_dir_all("../../examples/simple/node_modules/@monadahq").unwrap();
+		std::os::unix::fs::symlink(
+			"../../../../libs/wingsdk",
+			"../../examples/simple/node_modules/@monadahq/wingsdk",
+		)
+		.unwrap();
 
 		for entry in paths {
 			if let Ok(entry) = entry {
