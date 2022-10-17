@@ -2,9 +2,8 @@ import { Command } from "commander";
 import { ensureWASISupport } from "./init_node";
 import { argv } from "process";
 import { readFile } from "fs/promises";
-import { dirname, join, resolve } from "path";
-import { mkdirSync, mkdtempSync } from "fs";
-import { tmpdir } from "os";
+import { dirname, resolve } from "path";
+import { mkdirSync } from "fs";
 import { spawnSync } from "child_process";
 
 // @ts-ignore esbuild handles this

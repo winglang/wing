@@ -109,7 +109,7 @@ mod sanity {
 		let paths = fs::read_dir("../../examples/simple").unwrap();
 
 		for entry in paths {
-			if let Ok(entry) = dbg!(entry) {
+			if let Ok(entry) = entry {
 				if let Some(source) = entry.path().canonicalize().unwrap().to_str() {
 					if source.ends_with(".w") {
 						println!("\n=== {} ===\n", source);
