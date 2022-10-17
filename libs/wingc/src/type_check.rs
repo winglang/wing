@@ -806,7 +806,8 @@ impl<'a> TypeChecker<'a> {
 
 					if module_name.name == "cloud" {
 						// read files in wing_paths
-						let wingsdk_path: Option<PathBuf> = node_require("@monadahq/wingsdk", &self.wing_paths);
+						let wingsdk_path =
+							node_require("@monadahq/wingsdk", &self.wing_paths).expect("@monadahq/wingsdk not found");
 
 						let mut wingii_types = wingii::type_system::TypeSystem::new();
 						let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
@@ -814,10 +815,7 @@ impl<'a> TypeChecker<'a> {
 							deps: false,
 						};
 						let name = wingii_types
-							.load(
-								&wingsdk_path.expect("@monadahq/wingsdk not found").to_string_lossy(),
-								Some(wingii_loader_options),
-							)
+							.load(&wingsdk_path.to_string_lossy(), Some(wingii_loader_options))
 							.unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
 						println!("Loaded JSII assembly {}", name);
