@@ -17,7 +17,7 @@ export class Queue extends cloud.QueueBase {
       visibilityTimeoutSeconds: props.timeout?.seconds,
     });
 
-    if (props.initialMessages) {
+    if ((props.initialMessages ?? []).length) {
       throw new Error("initialMessages not supported yet for AWS target");
     }
   }
