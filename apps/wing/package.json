@@ -2,20 +2,20 @@
   "name": "@monadahq/wing",
   "version": "0.0.0",
   "description": "Wing Programming Language",
-  "files": [
-    "dist/"
-  ],
   "engines": {
     "node": ">=18"
   },
-  "bin": "bin/wing",
+  "main": "dist/index.js",
+  "bin": "dist/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/monadahq/winglang.git"
   },
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
-    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js --loader:.wasm=file --external:@monadahq/wingsdk --external:'../package.json'",
+    "build": "npm-run-all build:*",
+    "build:bundle": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=dist/index.js",
+    "build:pkg": "pkg --compress GZip --targets node18-linux-x64 --options experimental-wasi-unstable-preview1,no-warnings --output bin/wing .",
     "dev": "npm run build && node dist/index.js"
   },
   "dependencies": {
@@ -24,8 +24,10 @@
   },
   "devDependencies": {
     "@monadahq/wingsdk": "file:../../libs/wingsdk",
+    "@types/node": "^18.7.22",
     "esbuild": "^0.15.9",
-    "tsx": "^3.9.0",
-    "@types/node": "^18.7.22"
+    "npm-run-all": "^4.1.5",
+    "pkg": "^5.8.0",
+    "tsx": "^3.9.0"
   }
 }

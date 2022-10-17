@@ -1,2 +1,0 @@
-#!/usr/bin/env -S node --experimental-wasi-unstable-preview1 --no-warnings
-require('../dist/index.js');

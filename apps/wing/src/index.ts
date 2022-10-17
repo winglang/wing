@@ -1,13 +1,14 @@
+import { dirname, resolve } from "path";
+
 import { Command } from "commander";
 import { argv } from "process";
-import { dirname } from "path";
 import { mkdirSync } from "fs";
 import { readFile } from "fs/promises";
-// @ts-ignore esbuild handles this
-import wingcPath from "../wingc.wasm";
+
+const wingcPath = resolve(__dirname, "../wingc.wasm");
 
 async function main() {
-  const { WASI } = await import("wasi");
+  const { WASI } = require("wasi");
 
   const program = new Command();
 
@@ -45,9 +46,7 @@ async function main() {
       // Some WASI binaries require:
       const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
 
-      const wasm = await WebAssembly.compile(
-        await readFile(require.resolve(wingcPath))
-      );
+      const wasm = await WebAssembly.compile(await readFile(wingcPath));
       const instance = await WebAssembly.instantiate(wasm, importObject);
       wasi.start(instance);
     });
