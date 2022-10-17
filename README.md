@@ -35,7 +35,7 @@ guide](./CONTRIBUTING.md).*
 ## Getting Started
 
 If you want to try out Wing without having to get anything installed locally, 
-check out the [demo sandbox](https://wing-playground.vercel.app/).
+check out the [wing playground](https://wing-playground.vercel.app/).
 
 ### Prerequisites
 
