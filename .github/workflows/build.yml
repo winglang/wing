@@ -207,7 +207,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           # Don't need to install sub-project dependencies
-          install-command: npm install --ignore-scripts
+          install-command: npm ci --ignore-scripts
 
       - name: Lint Nx
         run: npx nx workspace-lint
