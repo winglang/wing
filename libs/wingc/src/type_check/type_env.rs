@@ -83,6 +83,9 @@ impl TypeEnv {
 		let mut t = self.try_lookup(symb).expect(&format!("Unknown symbol {}", symb));
 
 		while let Some(next_symb) = it.next() {
+			if t.is_anything() {
+				break;
+			}
 			let ns = t
 				.as_namespace()
 				.expect(&format!("Symbol {} should be a namespace", symb));

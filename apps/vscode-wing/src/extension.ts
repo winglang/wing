@@ -97,6 +97,7 @@ async function startLanguageServer(context: ExtensionContext) {
     options: {
       env: {
         ...process.env,
+        WINGC_SKIP_JSII: "1",
         RUST_LOG: "debug",
       },
     },
