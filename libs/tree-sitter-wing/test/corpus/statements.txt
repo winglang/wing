@@ -94,7 +94,7 @@ inflight hi(a: num, b: str) {}
 Inflight Function with function parameter
 ==================================
 
-~ f(callback: (num,num)->bool) {}
+~ f(callback: (num,num):bool) {}
 
 ---
 (source
@@ -157,7 +157,9 @@ class A extends B {}
 (source
     (class_definition
         name: (identifier)
-        parent: (identifier)
+        parent: (custom_type 
+            object: (identifier)
+        )
         implementation: (class_implementation)
     )
 )
@@ -214,7 +216,9 @@ resource A extends B {}
 (source
     (resource_definition
         name: (identifier)
-        parent: (identifier)
+        parent: (custom_type 
+            object: (identifier)
+        )
         implementation: (resource_implementation)
     )
 )
