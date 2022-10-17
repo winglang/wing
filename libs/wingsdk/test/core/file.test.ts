@@ -2,7 +2,8 @@ import { readdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { App } from "../../src/core";
 import { JsonFile, TextFile } from "../../src/fs";
-import { appSnapshot, mkdtemp } from "../util";
+import { mkdtemp } from "../../src/util";
+import { appSnapshot } from "../util";
 import { NoopSynthesizer } from "./fixtures";
 
 test("nothing in output directory if there are no files", () => {

@@ -16,6 +16,12 @@ export class Queue extends cloud.QueueBase {
     this.queue = new sqs.SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
     });
+
+    if ((props.initialMessages ?? []).length) {
+      throw new Error(
+        "initialMessages not supported yet for AWS target - https://github.com/monadahq/winglang/issues/281"
+      );
+    }
   }
 
   public onMessage(
