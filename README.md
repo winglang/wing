@@ -56,7 +56,7 @@ Since Wing is currently in private beta and distributed through a Monada's
 private npm registry, you will need to login to the registry before installing:
 
 ```sh
-npm login --scope=@monadahq --registry=https://npm.pkg.github.com
+$ npm login --scope=@monadahq --registry=https://npm.pkg.github.com
 Username: YOUR GITHUB USERNAME
 Password: YOUR PERSONAL ACCESS TOKEN
 Email: PUBLIC-EMAIL-ADDRESS
@@ -75,7 +75,7 @@ credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-file
 configured on your system. You'll know you have it set up correctly when you can run this command and get back a successful result:
 
 ```shell
-aws sts get-caller-identity
+$ aws sts get-caller-identity
 ```
 
 ### Installation
@@ -83,7 +83,7 @@ aws sts get-caller-identity
 Now you should be able to install the **Wing CLI**:
 
 ```sh
-npm install -g @monadahq/wing
+$ npm install -g @monadahq/wing
 ```
 
 Next, install the **Wing Extension for VSCode**:
@@ -93,7 +93,7 @@ Download the extension [here](https://github.com/monadahq/winglang/releases/down
 You can install it using the command line:
 
 ```shell 
-code --install-extension ~/Downloads/vscode-wing.vsix
+$ code --install-extension ~/Downloads/vscode-wing.vsix
 ```
 
 *Change the location in the command to where ever you saved the extension at.*
@@ -117,8 +117,7 @@ queue.on_message((message) ~> {
 Now, let's test our program:
 
 ```sh
-wing run hello.w
-
+$ wing run hello.w
 Compiling to target "sim"...
 Starting Wing Console...
 ```
@@ -145,7 +144,7 @@ Terraform.
 First, we need to compile our program to AWS:
 
 ```sh
-wing build --target tf-aws hello.w
+$ wing build --target tf-aws hello.w
 
 Build for target "tf-aws"...
 ```
@@ -157,10 +156,10 @@ Now, let's deploy our program to AWS:
 > for more information.
 
 ```sh
-cd ./target/tf-aws
-export AWS_REGION=us-east-1 # or any other region
-terraform init
-terraform apply
+$ cd ./target/tf-aws
+$ export AWS_REGION=us-east-1 # or any other region
+$ terraform init
+$ terraform apply
 ```
 
 Now, if you open the [Amazon SQS Console](https://console.aws.amazon.com/sqs),
@@ -190,7 +189,7 @@ versioning](https://semver.org/) and release notes are available in the
 To update the toolchain to the latest, run the following command:
 
 ```sh
-npm update -g @monadahq/wing
+$ npm update -g @monadahq/wing
 ```
 
 Our VSCode extension has automatic updates, as well as the Wing Console.
