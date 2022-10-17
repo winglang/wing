@@ -166,7 +166,7 @@ fn jsify_expression(expression: &Expr) -> String {
 				evaluated_type.as_resource_object().is_some()
 			} else {
 				// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
-				// Currently, this only happens with ignored JSII imports, so let's just assume it's a resource for now.
+				// Currently, this occurs when a JSII import is untyped, such as when `WINGC_SKIP_JSII` is enabled and `bring cloud` is used.
 				true
 			};
 

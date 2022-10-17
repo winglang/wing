@@ -29,24 +29,24 @@ self.onmessage = async event => {
     file.seek(0);
 
     wasi.start(instance);
-    let result = "";
     const stdout = wasi.getStdoutString() + wasi.getStderrString();
+    let intermediateJS = "";
 
     const intermediateFile = wasi.fs.open("/code.w.out/intermediate.js", {read: true});
-    result += intermediateFile.readString();
+    intermediateJS += intermediateFile.readString();
 
     let procRegex = /fromFile\("(.+index\.js)"/g;
     let procMatch;
-    while (procMatch = procRegex.exec(result)) {
+    while (procMatch = procRegex.exec(intermediateJS)) {
       const proc = procMatch[1];
       const procPath = `/code.w.out/${proc}`;
       let procFile = wasi.fs.open(procPath, {read: true});
-      result += `\n\n// ${proc}\n// START\n${procFile.readString()}\n// END`
+      intermediateJS += `\n\n// ${proc}\n// START\n${procFile.readString()}\n// END`
     }
     
     self.postMessage({
       stdout,
-      result
+      intermediateJS
     });
   } catch (error) {
     console.error(error);
