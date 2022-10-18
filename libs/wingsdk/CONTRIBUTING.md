@@ -15,6 +15,7 @@ and submit pull requests to the GitHub repository.
   - [Testing](#testing)
     - [Sandbox](#sandbox)
   - [Creating a resource](#creating-a-resource)
+  - [Writing code that is JSII-compatible](#writing-code-that-is-jsii-compatible)
   - [Submitting a pull request](#submitting-a-pull-request)
   - [Getting Help](#getting-help)
 
@@ -183,6 +184,10 @@ For more information about designing resources, check out the Wing SDK design gu
 
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
 You can also join us on our [Discord server](https://discord.gg/7wrggS3dZU) to ask questions (or just say hi)!
+
+## Writing code that is JSII-compatible
+
+TODO
 
 ## Submitting a pull request
 

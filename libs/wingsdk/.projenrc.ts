@@ -91,6 +91,7 @@ const pkgJson = project.tryFindObjectFile("package.json");
 pkgJson!.addOverride("jsii.excludeTypescript", [
   "src/**/*.inflight.ts",
   "src/**/*.sim.ts",
+  "src/**/exports.ts",
 ]);
 const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
   obj: {
@@ -98,7 +99,7 @@ const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
     compilerOptions: {
       esModuleInterop: true,
     },
-    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts"],
+    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts", "src/**/exports.ts"],
     exclude: ["node_modules"],
   },
 });
@@ -114,7 +115,12 @@ enum Zone {
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return pathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
+      return pathsNotEndingIn([
+        "*.inflight.ts",
+        "*.sim.ts",
+        "*.test.ts",
+        "exports.ts",
+      ]);
     case Zone.TEST:
       return "**/*.test.ts";
     case Zone.INFLIGHT:
@@ -184,5 +190,17 @@ const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
+
+// Add custom export declarations that supersede the default export structure of
+// `index.ts` files. This allows us to export APIs that aren't compiled
+// with JSII without the JSII compiler noticing.
+project.package.addField("exports", {
+  ".": "./lib/exports.js",
+  "./cloud": "./lib/cloud/exports.js",
+  "./fs": "./lib/fs/exports.js",
+  "./sim": "./lib/sim/exports.js",
+  "./testing": "./lib/testing/exports.js",
+  "./tfaws": "./lib/tf-aws/exports.js",
+});
 
 project.synth();
