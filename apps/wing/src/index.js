@@ -1,9 +1,8 @@
-import { dirname, resolve } from "path";
+const { dirname, resolve } = require("path");
 
-import { Command } from "commander";
-import { argv } from "process";
-import { mkdirSync } from "fs";
-import { readFile } from "fs/promises";
+const { Command } = require("commander");
+const { argv } = require("process");
+const { readFile, mkdir } = require("fs/promises");
 
 const wingcPath = resolve(__dirname, "../wingc.wasm");
 
@@ -28,7 +27,7 @@ async function main() {
 
       // create all intermediate files in a .wing directory
       const workdir = ".wing/";
-      mkdirSync(workdir, { recursive: true });
+      await mkdir(workdir, { recursive: true });
       args.push(workdir);
 
       const wasi = new WASI({
