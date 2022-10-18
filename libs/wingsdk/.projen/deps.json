@@ -164,6 +164,14 @@
       "type": "build"
     },
     {
+      "name": "typedoc",
+      "type": "build"
+    },
+    {
+      "name": "typedoc-plugin-markdown",
+      "type": "build"
+    },
+    {
       "name": "typescript",
       "type": "build"
     },

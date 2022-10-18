@@ -29,12 +29,14 @@ const project = new cdk.JsiiProject({
     "ws",
   ],
   devDeps: [
-    "replace-in-file",
+    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",
     "@types/ws",
-    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
+    "replace-in-file",
+    "typedoc",
+    "typedoc-plugin-markdown",
   ],
   prettier: true,
   jestOptions: {
@@ -202,5 +204,11 @@ project.package.addField("exports", {
   "./testing": "./lib/testing/exports.js",
   "./tfaws": "./lib/tf-aws/exports.js",
 });
+
+// Use typedoc instead of jsii-docgen
+const docgen = project.tasks.tryFind("docgen")!;
+docgen.reset(
+  "typedoc --plugin typedoc-plugin-markdown --out docs/api --tsconfig tsconfig.nonjsii.json --githubPages false src/exports.ts"
+);
 
 project.synth();
