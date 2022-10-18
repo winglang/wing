@@ -6,6 +6,7 @@ use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::fmt::{Debug, Display};
+use std::path::PathBuf;
 use type_env::TypeEnv;
 
 #[derive(Debug)]
@@ -392,13 +393,15 @@ impl Types {
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 	pub diagnostics: RefCell<Diagnostics>,
+	pub out_dir: Option<PathBuf>,
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types) -> Self {
+	pub fn new(types: &'a mut Types, out_dir: Option<PathBuf>) -> Self {
 		Self {
 			types: types,
 			diagnostics: RefCell::new(Diagnostics::new()),
+			out_dir,
 		}
 	}
 
@@ -823,7 +826,19 @@ impl<'a> TypeChecker<'a> {
 							root: true,
 							deps: false,
 						};
-						let name = wingii_types.load("../wingsdk", Some(wingii_loader_options)).unwrap();
+						// if out_dir is set, wingsdk is installed in out_dir/node_modules/@monadahq/wingsdk
+						// otherwise, it is in ../wingsdk (dev mode)
+						let wingsdk_path = if self.out_dir.is_some() {
+							format!(
+								"{}/node_modules/@monadahq/wingsdk",
+								self.out_dir.as_ref().unwrap().to_str().unwrap()
+							)
+						} else {
+							"../wingsdk".to_string()
+						};
+						let name = wingii_types
+							.load(wingsdk_path.as_str(), Some(wingii_loader_options))
+							.unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
 						println!("Loaded JSII assembly {}", name);
 						let assembly = wingii_types.find_assembly(&name).unwrap();

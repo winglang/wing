@@ -48,9 +48,9 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
+pub fn type_check(scope: &mut Scope, types: &mut Types, out_dir: Option<PathBuf>) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
-	let mut tc = TypeChecker::new(types);
+	let mut tc = TypeChecker::new(types, out_dir);
 	tc.type_check_scope(scope);
 
 	tc.diagnostics.into_inner()
@@ -63,7 +63,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let (mut scope, parse_diagnostics) = parse(source_file);
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types);
+	let type_check_diagnostics = type_check(&mut scope, &mut types, out_dir.map(PathBuf::from));
 
 	// Analyze inflight captures
 	scan_captures(&scope);
