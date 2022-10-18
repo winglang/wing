@@ -59,7 +59,7 @@ async function main() {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   const processorAttrs = s.getAttributes(
-    "root/Main/Queue/OnMessage-7b918d65c3e454bc"
+    "root/Main/Queue/OnMessage-d022ec4ba5b8429e"
   );
   const processorClient = new FunctionClient(processorAttrs.functionAddr);
   await processorClient.timesCalled();

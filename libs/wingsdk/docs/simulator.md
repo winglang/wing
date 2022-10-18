@@ -44,7 +44,9 @@ void main();
 
 Here, we create a new `Simulator` object, passing in the path to our simulator
 file, and then start the simulator. Inside (1) we can invoke methods on the
-simulator to get more information about the resources in our application.
+simulator to get more information about the resources in our application. When
+we are done, we call `sim.stop()` to stop the simulator and clean up all
+resources (files, ports, etc.) that were created on your machine.
 
 To print out a JSON tree view of the application, add the following line:
 
