@@ -16,7 +16,7 @@
     "build": "npm-run-all build:*",
     "build:clean": "rm -rf wingsdk.tgz bin .wing",
     "build:pack": "cd ../../libs/wingsdk && npm pack && mv monadahq-wingsdk-*.tgz ../../apps/wing/wingsdk.tgz",
-    "build:pkg": "pkg --compress GZip --targets node18-linux-x64 --options experimental-wasi-unstable-preview1,no-warnings --output bin/wing .",
+    "build:pkg": "pkg --compress GZip --options experimental-wasi-unstable-preview1,no-warnings --output bin/wing .",
     "dev": "npm run build && node dist/index.js"
   },
   "dependencies": {
@@ -29,6 +29,11 @@
     "pkg": "^5.8.0"
   },
   "pkg": {
+    "targets": [
+      "node18-linux-x64",
+      "node18-darwin-x64",
+      "node18-win32-x64"
+    ],
     "assets": [
       "wingc.wasm",
       "wingsdk.tgz"
