@@ -22,4 +22,4 @@ List of inflight operations available for `Queue`.
 
 #### Defined in
 
-[src/cloud/queue.ts:105](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L105)
+[src/cloud/queue.ts:105](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L105)

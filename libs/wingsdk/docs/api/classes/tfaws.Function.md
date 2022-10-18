@@ -60,7 +60,7 @@ AWS implementation of `cloud.Function`.
 
 #### Defined in
 
-[src/tf-aws/function.ts:26](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L26)
+[src/tf-aws/function.ts:26](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L26)
 
 ## Properties
 
@@ -70,7 +70,7 @@ AWS implementation of `cloud.Function`.
 
 #### Defined in
 
-[src/tf-aws/function.ts:22](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L22)
+[src/tf-aws/function.ts:22](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L22)
 
 ___
 
@@ -80,7 +80,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/function.ts:21](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L21)
+[src/tf-aws/function.ts:21](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L21)
 
 ___
 
@@ -110,7 +110,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/function.ts:24](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L24)
+[src/tf-aws/function.ts:24](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L24)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/function.ts:23](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L23)
+[src/tf-aws/function.ts:23](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L23)
 
 ___
 
@@ -141,7 +141,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L28)
+[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L28)
 
 ## Accessors
 
@@ -155,7 +155,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/tf-aws/function.ts:196](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L196)
+[src/tf-aws/function.ts:196](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L196)
 
 ## Methods
 
@@ -180,7 +180,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/tf-aws/function.ts:151](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L151)
+[src/tf-aws/function.ts:151](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L151)
 
 ___
 
@@ -207,7 +207,7 @@ Add an environment variable to the function.
 
 #### Defined in
 
-[src/tf-aws/function.ts:178](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L178)
+[src/tf-aws/function.ts:178](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L178)
 
 ___
 
@@ -229,7 +229,7 @@ Add a policy statement to the Lambda role.
 
 #### Defined in
 
-[src/tf-aws/function.ts:185](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L185)
+[src/tf-aws/function.ts:185](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L185)
 
 ___
 

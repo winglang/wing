@@ -53,7 +53,7 @@ Represents a text file that should be synthesized in the app's outdir.
 
 #### Defined in
 
-[src/fs/text-file.ts:23](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/text-file.ts#L23)
+[src/fs/text-file.ts:23](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/text-file.ts#L23)
 
 ## Properties
 
@@ -69,7 +69,7 @@ The file's relative path to the output directory.
 
 #### Defined in
 
-[src/fs/file-base.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/file-base.ts#L12)
+[src/fs/file-base.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/file-base.ts#L12)
 
 ___
 
@@ -79,7 +79,7 @@ ___
 
 #### Defined in
 
-[src/fs/text-file.ts:21](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/text-file.ts#L21)
+[src/fs/text-file.ts:21](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/text-file.ts#L21)
 
 ___
 
@@ -121,7 +121,7 @@ Append a line to the text file's contents.
 
 #### Defined in
 
-[src/fs/text-file.ts:37](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/text-file.ts#L37)
+[src/fs/text-file.ts:37](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/text-file.ts#L37)
 
 ___
 
@@ -141,7 +141,7 @@ Returns the contents of the file to save.
 
 #### Defined in
 
-[src/fs/text-file.ts:41](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/text-file.ts#L41)
+[src/fs/text-file.ts:41](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/text-file.ts#L41)
 
 ___
 
@@ -167,7 +167,7 @@ Render the contents of the file and save it to the user's file system.
 
 #### Defined in
 
-[src/fs/file-base.ts:29](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/file-base.ts#L29)
+[src/fs/file-base.ts:29](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/file-base.ts#L29)
 
 ___
 

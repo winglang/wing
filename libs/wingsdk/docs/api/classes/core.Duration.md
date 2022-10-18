@@ -41,7 +41,7 @@ Represents a length of time.
 
 #### Defined in
 
-[src/core/duration.ts:42](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/duration.ts#L42)
+[src/core/duration.ts:42](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/duration.ts#L42)
 
 ## Properties
 
@@ -53,7 +53,7 @@ Return the total number of seconds in this Duration
 
 #### Defined in
 
-[src/core/duration.ts:40](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/duration.ts#L40)
+[src/core/duration.ts:40](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/duration.ts#L40)
 
 ## Accessors
 
@@ -71,7 +71,7 @@ the value of this `Duration` expressed in Hours.
 
 #### Defined in
 
-[src/core/duration.ts:60](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/duration.ts#L60)
+[src/core/duration.ts:60](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/duration.ts#L60)
 
 ___
 
@@ -89,7 +89,7 @@ the value of this `Duration` expressed in Minutes.
 
 #### Defined in
 
-[src/core/duration.ts:51](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/duration.ts#L51)
+[src/core/duration.ts:51](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/duration.ts#L51)
 
 ## Methods
 
@@ -113,7 +113,7 @@ a new `Duration` representing `amount` Hours.
 
 #### Defined in
 
-[src/core/duration.ts:21](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/duration.ts#L21)
+[src/core/duration.ts:21](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/duration.ts#L21)
 
 ___
 
@@ -137,7 +137,7 @@ a new `Duration` representing `amount` Minutes.
 
 #### Defined in
 
-[src/core/duration.ts:11](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/duration.ts#L11)
+[src/core/duration.ts:11](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/duration.ts#L11)
 
 ___
 
@@ -161,4 +161,4 @@ a new `Duration` representing `amount` Seconds.
 
 #### Defined in
 
-[src/core/duration.ts:31](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/duration.ts#L31)
+[src/core/duration.ts:31](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/duration.ts#L31)

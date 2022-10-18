@@ -60,4 +60,4 @@ node_modules/constructs/lib/construct.d.ts:14
 
 #### Defined in
 
-[src/sim/resource.ts:9](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/resource.ts#L9)
+[src/sim/resource.ts:9](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/resource.ts#L9)

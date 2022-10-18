@@ -22,4 +22,4 @@ The object that will be serialized into the file during synthesis.
 
 #### Defined in
 
-[src/fs/json-file.ts:11](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/json-file.ts#L11)
+[src/fs/json-file.ts:11](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/json-file.ts#L11)

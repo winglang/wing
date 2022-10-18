@@ -39,7 +39,7 @@ Inflight interface for `Bucket`.
 
 #### Defined in
 
-[src/sim/bucket.inflight.ts:6](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.inflight.ts#L6)
+[src/sim/bucket.inflight.ts:6](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.inflight.ts#L6)
 
 ## Properties
 
@@ -49,7 +49,7 @@ Inflight interface for `Bucket`.
 
 #### Defined in
 
-[src/sim/bucket.inflight.ts:6](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.inflight.ts#L6)
+[src/sim/bucket.inflight.ts:6](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.inflight.ts#L6)
 
 ## Methods
 
@@ -76,7 +76,7 @@ exists.
 
 #### Defined in
 
-[src/sim/bucket.inflight.ts:13](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.inflight.ts#L13)
+[src/sim/bucket.inflight.ts:13](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.inflight.ts#L13)
 
 ___
 
@@ -103,4 +103,4 @@ Put an object in the bucket.
 
 #### Defined in
 
-[src/sim/bucket.inflight.ts:8](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.inflight.ts#L8)
+[src/sim/bucket.inflight.ts:8](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.inflight.ts#L8)

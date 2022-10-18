@@ -64,7 +64,7 @@ Simulator implementation of `cloud.Queue`.
 
 #### Defined in
 
-[src/sim/queue.ts:17](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L17)
+[src/sim/queue.ts:17](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L17)
 
 ## Properties
 
@@ -74,7 +74,7 @@ Simulator implementation of `cloud.Queue`.
 
 #### Defined in
 
-[src/sim/queue.ts:13](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L13)
+[src/sim/queue.ts:13](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L13)
 
 ___
 
@@ -84,7 +84,7 @@ ___
 
 #### Defined in
 
-[src/sim/queue.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L12)
+[src/sim/queue.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L12)
 
 ___
 
@@ -94,7 +94,7 @@ ___
 
 #### Defined in
 
-[src/sim/queue.ts:16](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L16)
+[src/sim/queue.ts:16](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L16)
 
 ___
 
@@ -139,7 +139,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L33)
+[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L33)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/sim/queue.ts:15](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L15)
+[src/sim/queue.ts:15](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L15)
 
 ___
 
@@ -159,7 +159,7 @@ ___
 
 #### Defined in
 
-[src/sim/queue.ts:14](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L14)
+[src/sim/queue.ts:14](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L14)
 
 ## Accessors
 
@@ -173,7 +173,7 @@ ___
 
 #### Defined in
 
-[src/sim/queue.ts:82](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L82)
+[src/sim/queue.ts:82](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L82)
 
 ## Methods
 
@@ -198,7 +198,7 @@ ___
 
 #### Defined in
 
-[src/sim/queue.ts:89](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L89)
+[src/sim/queue.ts:89](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L89)
 
 ___
 
@@ -216,7 +216,7 @@ ___
 
 #### Defined in
 
-[src/sim/queue.ts:68](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L68)
+[src/sim/queue.ts:68](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L68)
 
 ___
 
@@ -243,7 +243,7 @@ Create a function to consume messages from this queue.
 
 #### Defined in
 
-[src/sim/queue.ts:25](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.ts#L25)
+[src/sim/queue.ts:25](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.ts#L25)
 
 ___
 

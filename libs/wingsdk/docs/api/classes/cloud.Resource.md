@@ -101,7 +101,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/resource.ts:16](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/resource.ts#L16)
+[src/cloud/resource.ts:16](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/resource.ts#L16)
 
 ## Methods
 
@@ -126,7 +126,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/resource.ts#L20)
+[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/resource.ts#L20)
 
 ___
 

@@ -22,4 +22,4 @@ Directory where artifacts are synthesized to.
 
 #### Defined in
 
-[src/sim/app.ts:18](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/app.ts#L18)
+[src/sim/app.ts:18](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/app.ts#L18)

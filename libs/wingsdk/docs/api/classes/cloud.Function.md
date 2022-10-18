@@ -51,7 +51,7 @@ Represents a serverless function.
 
 #### Defined in
 
-[src/cloud/function.ts:54](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L54)
+[src/cloud/function.ts:54](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L54)
 
 ## Properties
 
@@ -92,7 +92,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L28)
+[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L28)
 
 ## Methods
 
@@ -117,7 +117,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/function.ts:73](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L73)
+[src/cloud/function.ts:73](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L73)
 
 ___
 
@@ -144,7 +144,7 @@ Add an environment variable to the function.
 
 #### Defined in
 
-[src/cloud/function.ts:77](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L77)
+[src/cloud/function.ts:77](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L77)
 
 ___
 

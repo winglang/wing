@@ -65,7 +65,7 @@ Simulator implementation of `cloud.Function`.
 
 #### Defined in
 
-[src/sim/function.ts:25](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L25)
+[src/sim/function.ts:25](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L25)
 
 ## Properties
 
@@ -75,7 +75,7 @@ Simulator implementation of `cloud.Function`.
 
 #### Defined in
 
-[src/sim/function.ts:21](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L21)
+[src/sim/function.ts:21](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L21)
 
 ___
 
@@ -85,7 +85,7 @@ ___
 
 #### Defined in
 
-[src/sim/function.ts:20](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L20)
+[src/sim/function.ts:20](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L20)
 
 ___
 
@@ -95,7 +95,7 @@ ___
 
 #### Defined in
 
-[src/sim/function.ts:23](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L23)
+[src/sim/function.ts:23](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L23)
 
 ___
 
@@ -105,7 +105,7 @@ ___
 
 #### Defined in
 
-[src/sim/function.ts:22](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L22)
+[src/sim/function.ts:22](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L22)
 
 ___
 
@@ -150,7 +150,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L28)
+[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L28)
 
 ## Accessors
 
@@ -164,7 +164,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/sim/function.ts:57](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L57)
+[src/sim/function.ts:57](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L57)
 
 ## Methods
 
@@ -184,7 +184,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/sim/function.ts:64](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L64)
+[src/sim/function.ts:64](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L64)
 
 ___
 
@@ -209,7 +209,7 @@ ___
 
 #### Defined in
 
-[src/sim/function.ts:71](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L71)
+[src/sim/function.ts:71](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L71)
 
 ___
 
@@ -227,7 +227,7 @@ ___
 
 #### Defined in
 
-[src/sim/function.ts:89](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L89)
+[src/sim/function.ts:89](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L89)
 
 ___
 
@@ -254,7 +254,7 @@ Add an environment variable to the function.
 
 #### Defined in
 
-[src/sim/function.ts:103](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.ts#L103)
+[src/sim/function.ts:103](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.ts#L103)
 
 ___
 

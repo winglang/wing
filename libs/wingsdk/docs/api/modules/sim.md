@@ -44,7 +44,7 @@
 
 #### Defined in
 
-[src/sim/schema-resources.ts:4](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema-resources.ts#L4)
+[src/sim/schema-resources.ts:4](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema-resources.ts#L4)
 
 ## Functions
 
@@ -64,4 +64,4 @@ obj is IResource
 
 #### Defined in
 
-[src/sim/resource.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/resource.ts#L12)
+[src/sim/resource.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/resource.ts#L12)

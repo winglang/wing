@@ -46,7 +46,7 @@ Global identifier for `Bucket`.
 
 #### Defined in
 
-[src/cloud/bucket.ts:9](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L9)
+[src/cloud/bucket.ts:9](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L9)
 
 ___
 
@@ -58,7 +58,7 @@ Global identifier for `Function`.
 
 #### Defined in
 
-[src/cloud/function.ts:9](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L9)
+[src/cloud/function.ts:9](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L9)
 
 ___
 
@@ -70,4 +70,4 @@ Global identifier for `Queue`.
 
 #### Defined in
 
-[src/cloud/queue.ts:10](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L10)
+[src/cloud/queue.ts:10](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L10)

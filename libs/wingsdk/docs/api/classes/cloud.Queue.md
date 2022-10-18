@@ -50,7 +50,7 @@ Represents a serverless queue.
 
 #### Defined in
 
-[src/cloud/queue.ts:67](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L67)
+[src/cloud/queue.ts:67](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L67)
 
 ## Properties
 
@@ -91,7 +91,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L33)
+[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L33)
 
 ## Methods
 
@@ -116,7 +116,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/queue.ts:75](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L75)
+[src/cloud/queue.ts:75](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L75)
 
 ___
 
@@ -143,7 +143,7 @@ Create a function to consume messages from this queue.
 
 #### Defined in
 
-[src/cloud/queue.ts:79](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L79)
+[src/cloud/queue.ts:79](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L79)
 
 ___
 

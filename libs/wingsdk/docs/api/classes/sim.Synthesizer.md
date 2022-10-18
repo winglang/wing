@@ -46,7 +46,7 @@ Simulator synthesizer.
 
 #### Defined in
 
-[src/sim/synth.ts:17](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/synth.ts#L17)
+[src/sim/synth.ts:17](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/synth.ts#L17)
 
 ## Properties
 
@@ -56,7 +56,7 @@ Simulator synthesizer.
 
 #### Defined in
 
-[src/sim/synth.ts:15](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/synth.ts#L15)
+[src/sim/synth.ts:15](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/synth.ts#L15)
 
 ___
 
@@ -73,7 +73,7 @@ Path to the output directory. For example, if synthesizing to terraform,
 
 #### Defined in
 
-[src/sim/synth.ts:13](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/synth.ts#L13)
+[src/sim/synth.ts:13](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/synth.ts#L13)
 
 ___
 
@@ -89,7 +89,7 @@ Place in the construct tree where all users constructs will get added.
 
 #### Defined in
 
-[src/sim/synth.ts:14](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/synth.ts#L14)
+[src/sim/synth.ts:14](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/synth.ts#L14)
 
 ## Methods
 
@@ -109,4 +109,4 @@ Synthesize the app.
 
 #### Defined in
 
-[src/sim/synth.ts:28](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/synth.ts#L28)
+[src/sim/synth.ts:28](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/synth.ts#L28)

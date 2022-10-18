@@ -23,7 +23,7 @@ The absolute path to where all assets in `app.wx` are stored.
 
 #### Defined in
 
-[src/testing/simulator.ts:37](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L37)
+[src/testing/simulator.ts:37](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L37)
 
 ___
 
@@ -35,4 +35,4 @@ A resolver that can be used to look up other resources in the tree.
 
 #### Defined in
 
-[src/testing/simulator.ts:32](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L32)
+[src/testing/simulator.ts:32](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L32)

@@ -47,7 +47,7 @@ The value of each vertex is an `IConstruct` that is accessible via the `.value` 
 
 #### Defined in
 
-[src/core/dependency.ts:101](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L101)
+[src/core/dependency.ts:101](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L101)
 
 ## Properties
 
@@ -57,7 +57,7 @@ The value of each vertex is an `IConstruct` that is accessible via the `.value` 
 
 #### Defined in
 
-[src/core/dependency.ts:96](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L96)
+[src/core/dependency.ts:96](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L96)
 
 ___
 
@@ -67,7 +67,7 @@ ___
 
 #### Defined in
 
-[src/core/dependency.ts:98](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L98)
+[src/core/dependency.ts:98](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L98)
 
 ___
 
@@ -77,7 +77,7 @@ ___
 
 #### Defined in
 
-[src/core/dependency.ts:95](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L95)
+[src/core/dependency.ts:95](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L95)
 
 ## Accessors
 
@@ -93,7 +93,7 @@ Returns the parents of the vertex (i.e dependants)
 
 #### Defined in
 
-[src/core/dependency.ts:124](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L124)
+[src/core/dependency.ts:124](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L124)
 
 ___
 
@@ -109,7 +109,7 @@ Returns the children of the vertex (i.e dependencies)
 
 #### Defined in
 
-[src/core/dependency.ts:117](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L117)
+[src/core/dependency.ts:117](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L117)
 
 ___
 
@@ -127,7 +127,7 @@ Returns the IConstruct this graph vertex represents.
 
 #### Defined in
 
-[src/core/dependency.ts:110](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L110)
+[src/core/dependency.ts:110](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L110)
 
 ## Methods
 
@@ -152,7 +152,7 @@ This operation will fail in case it creates a cycle in the graph.
 
 #### Defined in
 
-[src/core/dependency.ts:158](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L158)
+[src/core/dependency.ts:158](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L158)
 
 ___
 
@@ -172,7 +172,7 @@ ___
 
 #### Defined in
 
-[src/core/dependency.ts:174](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L174)
+[src/core/dependency.ts:174](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L174)
 
 ___
 
@@ -192,7 +192,7 @@ ___
 
 #### Defined in
 
-[src/core/dependency.ts:178](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L178)
+[src/core/dependency.ts:178](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L178)
 
 ___
 
@@ -208,4 +208,4 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 
 #### Defined in
 
-[src/core/dependency.ts:131](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L131)
+[src/core/dependency.ts:131](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L131)

@@ -51,7 +51,7 @@ Reference to a piece of Node.js code.
 
 #### Defined in
 
-[src/core/inflight.ts:116](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L116)
+[src/core/inflight.ts:116](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L116)
 
 ## Properties
 
@@ -67,7 +67,7 @@ The language of the code.
 
 #### Defined in
 
-[src/core/inflight.ts:113](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L113)
+[src/core/inflight.ts:113](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L113)
 
 ___
 
@@ -84,7 +84,7 @@ for bundling purposes.
 
 #### Defined in
 
-[src/core/inflight.ts:114](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L114)
+[src/core/inflight.ts:114](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L114)
 
 ## Accessors
 
@@ -104,7 +104,7 @@ Code.hash
 
 #### Defined in
 
-[src/core/inflight.ts:79](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L79)
+[src/core/inflight.ts:79](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L79)
 
 ___
 
@@ -124,7 +124,7 @@ Code.text
 
 #### Defined in
 
-[src/core/inflight.ts:72](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L72)
+[src/core/inflight.ts:72](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L72)
 
 ## Methods
 
@@ -146,7 +146,7 @@ Reference code from a file path.
 
 #### Defined in
 
-[src/core/inflight.ts:99](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L99)
+[src/core/inflight.ts:99](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L99)
 
 ___
 
@@ -168,4 +168,4 @@ Reference code directly from a string.
 
 #### Defined in
 
-[src/core/inflight.ts:106](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L106)
+[src/core/inflight.ts:106](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L106)

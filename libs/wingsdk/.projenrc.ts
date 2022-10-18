@@ -208,7 +208,7 @@ project.package.addField("exports", {
 // Use typedoc instead of jsii-docgen
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.reset(
-  "typedoc --plugin typedoc-plugin-markdown --out docs/api --tsconfig tsconfig.nonjsii.json --githubPages false src/exports.ts"
+  "typedoc --plugin typedoc-plugin-markdown --out docs/api --tsconfig tsconfig.nonjsii.json --githubPages false --gitRevision main src/exports.ts"
 );
 
 project.synth();

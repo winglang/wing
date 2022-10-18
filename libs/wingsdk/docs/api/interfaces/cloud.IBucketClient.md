@@ -39,7 +39,7 @@ exists.
 
 #### Defined in
 
-[src/cloud/bucket.ts:67](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L67)
+[src/cloud/bucket.ts:67](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L67)
 
 ___
 
@@ -62,4 +62,4 @@ Put an object in the bucket.
 
 #### Defined in
 
-[src/cloud/bucket.ts:61](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L61)
+[src/cloud/bucket.ts:61](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L61)

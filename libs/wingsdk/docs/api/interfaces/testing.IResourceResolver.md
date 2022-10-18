@@ -32,4 +32,4 @@ Lookup a resource by its path.
 
 #### Defined in
 
-[src/testing/simulator.ts:47](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L47)
+[src/testing/simulator.ts:47](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L47)

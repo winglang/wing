@@ -51,7 +51,7 @@ AWS implementation of `cloud.Queue`.
 
 #### Defined in
 
-[src/tf-aws/queue.ts:13](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.ts#L13)
+[src/tf-aws/queue.ts:13](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.ts#L13)
 
 ## Properties
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/queue.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.ts#L12)
+[src/tf-aws/queue.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.ts#L12)
 
 ___
 
@@ -102,7 +102,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L33)
+[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L33)
 
 ## Methods
 
@@ -127,7 +127,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/tf-aws/queue.ts:81](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.ts#L81)
+[src/tf-aws/queue.ts:81](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.ts#L81)
 
 ___
 
@@ -154,7 +154,7 @@ Create a function to consume messages from this queue.
 
 #### Defined in
 
-[src/tf-aws/queue.ts:27](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.ts#L27)
+[src/tf-aws/queue.ts:27](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.ts#L27)
 
 ___
 

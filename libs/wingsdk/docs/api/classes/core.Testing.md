@@ -42,4 +42,4 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 #### Defined in
 
-[src/core/testing.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/testing.ts#L12)
+[src/core/testing.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/testing.ts#L12)

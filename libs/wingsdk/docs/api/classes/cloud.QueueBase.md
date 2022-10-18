@@ -56,7 +56,7 @@ Functionality shared between all `Queue` implementations.
 
 #### Defined in
 
-[src/cloud/queue.ts:34](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L34)
+[src/cloud/queue.ts:34](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L34)
 
 ## Properties
 
@@ -97,7 +97,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L33)
+[src/cloud/queue.ts:33](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L33)
 
 ## Methods
 
@@ -122,7 +122,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/resource.ts#L20)
+[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/resource.ts#L20)
 
 ___
 
@@ -145,7 +145,7 @@ Create a function to consume messages from this queue.
 
 #### Defined in
 
-[src/cloud/queue.ts:46](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L46)
+[src/cloud/queue.ts:46](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L46)
 
 ___
 

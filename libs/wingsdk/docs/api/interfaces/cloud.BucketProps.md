@@ -26,4 +26,4 @@ false
 
 #### Defined in
 
-[src/cloud/bucket.ts:19](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L19)
+[src/cloud/bucket.ts:19](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L19)

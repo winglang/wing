@@ -51,4 +51,4 @@ IPolyconFactory.resolve
 
 #### Defined in
 
-[src/sim/factory.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/factory.ts#L12)
+[src/sim/factory.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/factory.ts#L12)

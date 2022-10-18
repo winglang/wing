@@ -39,7 +39,7 @@ Inflight interface for `Function`.
 
 #### Defined in
 
-[src/sim/function.inflight.ts:8](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.inflight.ts#L8)
+[src/sim/function.inflight.ts:8](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.inflight.ts#L8)
 
 ## Properties
 
@@ -49,7 +49,7 @@ Inflight interface for `Function`.
 
 #### Defined in
 
-[src/sim/function.inflight.ts:6](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.inflight.ts#L6)
+[src/sim/function.inflight.ts:6](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.inflight.ts#L6)
 
 ## Methods
 
@@ -75,7 +75,7 @@ Invoke the function asynchronously with a given payload.
 
 #### Defined in
 
-[src/sim/function.inflight.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.inflight.ts#L12)
+[src/sim/function.inflight.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.inflight.ts#L12)
 
 ___
 
@@ -89,4 +89,4 @@ ___
 
 #### Defined in
 
-[src/sim/function.inflight.ts:16](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/function.inflight.ts#L16)
+[src/sim/function.inflight.ts:16](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/function.inflight.ts#L16)

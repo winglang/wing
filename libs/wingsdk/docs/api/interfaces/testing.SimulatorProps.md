@@ -23,7 +23,7 @@ Path to a Wing app file (.wx).
 
 #### Defined in
 
-[src/testing/simulator.ts:16](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L16)
+[src/testing/simulator.ts:16](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L16)
 
 ___
 
@@ -39,4 +39,4 @@ The factory that dispatches to simulation implementations.
 
 #### Defined in
 
-[src/testing/simulator.ts:22](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L22)
+[src/testing/simulator.ts:22](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L22)

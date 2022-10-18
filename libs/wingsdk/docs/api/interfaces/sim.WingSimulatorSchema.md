@@ -23,7 +23,7 @@ The resource at the root of the tree.
 
 #### Defined in
 
-[src/sim/schema.ts:4](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema.ts#L4)
+[src/sim/schema.ts:4](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema.ts#L4)
 
 ___
 
@@ -36,4 +36,4 @@ dependency relationships.
 
 #### Defined in
 
-[src/sim/schema.ts:9](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema.ts#L9)
+[src/sim/schema.ts:9](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema.ts#L9)

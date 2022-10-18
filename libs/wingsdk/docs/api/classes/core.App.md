@@ -52,7 +52,7 @@ Construct.constructor
 
 #### Defined in
 
-[src/core/app.ts:54](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L54)
+[src/core/app.ts:54](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L54)
 
 ## Properties
 
@@ -84,7 +84,7 @@ Directory where all artifacts will be synthesized to.
 
 #### Defined in
 
-[src/core/app.ts:43](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L43)
+[src/core/app.ts:43](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L43)
 
 ___
 
@@ -98,7 +98,7 @@ creating their own `App` construct with a different root.
 
 #### Defined in
 
-[src/core/app.ts:50](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L50)
+[src/core/app.ts:50](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L50)
 
 ___
 
@@ -110,7 +110,7 @@ The path to a state file which will track all synthesized files.
 
 #### Defined in
 
-[src/core/app.ts:38](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L38)
+[src/core/app.ts:38](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L38)
 
 ___
 
@@ -120,7 +120,7 @@ ___
 
 #### Defined in
 
-[src/core/app.ts:52](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L52)
+[src/core/app.ts:52](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L52)
 
 ## Methods
 
@@ -137,7 +137,7 @@ this app manages.
 
 #### Defined in
 
-[src/core/app.ts:98](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L98)
+[src/core/app.ts:98](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L98)
 
 ___
 
@@ -159,7 +159,7 @@ If a state file is defined, stores the list of files under management in that fi
 
 #### Defined in
 
-[src/core/app.ts:114](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L114)
+[src/core/app.ts:114](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L114)
 
 ___
 
@@ -176,7 +176,7 @@ depends on what synthesizer was used.
 
 #### Defined in
 
-[src/core/app.ts:72](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L72)
+[src/core/app.ts:72](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L72)
 
 ___
 

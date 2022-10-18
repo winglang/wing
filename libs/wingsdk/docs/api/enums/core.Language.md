@@ -22,4 +22,4 @@ Node.js
 
 #### Defined in
 
-[src/core/inflight.ts:89](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L89)
+[src/core/inflight.ts:89](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L89)

@@ -57,7 +57,7 @@ Functionality shared between all `Function` implementations.
 
 #### Defined in
 
-[src/cloud/function.ts:29](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L29)
+[src/cloud/function.ts:29](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L29)
 
 ## Properties
 
@@ -98,7 +98,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L28)
+[src/cloud/function.ts:28](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L28)
 
 ## Methods
 
@@ -123,7 +123,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/resource.ts#L20)
+[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/resource.ts#L20)
 
 ___
 
@@ -146,7 +146,7 @@ Add an environment variable to the function.
 
 #### Defined in
 
-[src/cloud/function.ts:47](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L47)
+[src/cloud/function.ts:47](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L47)
 
 ___
 

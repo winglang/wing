@@ -48,7 +48,7 @@ Construct.constructor
 
 #### Defined in
 
-[src/sim/app.ts:30](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/app.ts#L30)
+[src/sim/app.ts:30](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/app.ts#L30)
 
 ## Properties
 
@@ -80,7 +80,7 @@ Directory where artifacts are synthesized to.
 
 #### Defined in
 
-[src/sim/app.ts:29](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/app.ts#L29)
+[src/sim/app.ts:29](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/app.ts#L29)
 
 ## Methods
 
@@ -96,7 +96,7 @@ Synthesize the app into an `app.wx` file.
 
 #### Defined in
 
-[src/sim/app.ts:38](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/app.ts#L38)
+[src/sim/app.ts:38](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/app.ts#L38)
 
 ___
 

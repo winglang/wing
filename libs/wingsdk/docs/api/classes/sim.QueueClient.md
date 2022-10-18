@@ -38,7 +38,7 @@ Inflight interface for `Queue`.
 
 #### Defined in
 
-[src/sim/queue.inflight.ts:7](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.inflight.ts#L7)
+[src/sim/queue.inflight.ts:7](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.inflight.ts#L7)
 
 ## Properties
 
@@ -48,7 +48,7 @@ Inflight interface for `Queue`.
 
 #### Defined in
 
-[src/sim/queue.inflight.ts:6](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.inflight.ts#L6)
+[src/sim/queue.inflight.ts:6](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.inflight.ts#L6)
 
 ## Methods
 
@@ -74,4 +74,4 @@ Push a message to the queue.
 
 #### Defined in
 
-[src/sim/queue.inflight.ts:11](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/queue.inflight.ts#L11)
+[src/sim/queue.inflight.ts:11](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/queue.inflight.ts#L11)

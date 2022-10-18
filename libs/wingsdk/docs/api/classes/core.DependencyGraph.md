@@ -47,7 +47,7 @@ from a different scope, that relationship is not represented in this graph.
 
 #### Defined in
 
-[src/core/dependency.ts:21](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L21)
+[src/core/dependency.ts:21](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L21)
 
 ## Properties
 
@@ -57,7 +57,7 @@ from a different scope, that relationship is not represented in this graph.
 
 #### Defined in
 
-[src/core/dependency.ts:19](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L19)
+[src/core/dependency.ts:19](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L19)
 
 ## Accessors
 
@@ -76,7 +76,7 @@ that binds all the connected spaces of the graph.
 
 #### Defined in
 
-[src/core/dependency.ts:77](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L77)
+[src/core/dependency.ts:77](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L77)
 
 ## Methods
 
@@ -92,4 +92,4 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 
 #### Defined in
 
-[src/core/dependency.ts:84](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/dependency.ts#L84)
+[src/core/dependency.ts:84](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/dependency.ts#L84)

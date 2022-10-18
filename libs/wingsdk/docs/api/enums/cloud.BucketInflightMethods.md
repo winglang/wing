@@ -23,7 +23,7 @@ List of inflight operations available for `Bucket`.
 
 #### Defined in
 
-[src/cloud/bucket.ts:77](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L77)
+[src/cloud/bucket.ts:77](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L77)
 
 ___
 
@@ -35,4 +35,4 @@ ___
 
 #### Defined in
 
-[src/cloud/bucket.ts:75](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L75)
+[src/cloud/bucket.ts:75](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L75)

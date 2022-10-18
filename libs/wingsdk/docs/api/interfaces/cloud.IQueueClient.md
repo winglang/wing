@@ -37,4 +37,4 @@ Push a message to the queue.
 
 #### Defined in
 
-[src/cloud/queue.ts:97](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L97)
+[src/cloud/queue.ts:97](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L97)

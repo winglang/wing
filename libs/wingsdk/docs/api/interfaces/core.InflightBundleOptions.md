@@ -24,7 +24,7 @@ A map of capture clients that can be bundled with the Inflight's code.
 
 #### Defined in
 
-[src/core/inflight.ts:268](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L268)
+[src/core/inflight.ts:268](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L268)
 
 ___
 
@@ -36,7 +36,7 @@ Associate the inflight bundle with a given capture scope.
 
 #### Defined in
 
-[src/core/inflight.ts:264](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L264)
+[src/core/inflight.ts:264](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L264)
 
 ___
 
@@ -48,4 +48,4 @@ List of dependencies to exclude from the bundle.
 
 #### Defined in
 
-[src/core/inflight.ts:272](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L272)
+[src/core/inflight.ts:272](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L272)

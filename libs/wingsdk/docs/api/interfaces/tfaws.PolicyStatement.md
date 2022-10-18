@@ -24,7 +24,7 @@ Actions
 
 #### Defined in
 
-[src/tf-aws/function.ts:206](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L206)
+[src/tf-aws/function.ts:206](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L206)
 
 ___
 
@@ -36,7 +36,7 @@ Effect ("Allow" or "Deny")
 
 #### Defined in
 
-[src/tf-aws/function.ts:210](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L210)
+[src/tf-aws/function.ts:210](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L210)
 
 ___
 
@@ -48,4 +48,4 @@ Resources
 
 #### Defined in
 
-[src/tf-aws/function.ts:208](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.ts#L208)
+[src/tf-aws/function.ts:208](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.ts#L208)

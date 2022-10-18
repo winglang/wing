@@ -46,7 +46,7 @@ CDK for Terraform synthesizer.
 
 #### Defined in
 
-[src/tf-aws/synth.ts:17](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/synth.ts#L17)
+[src/tf-aws/synth.ts:17](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/synth.ts#L17)
 
 ## Properties
 
@@ -56,7 +56,7 @@ CDK for Terraform synthesizer.
 
 #### Defined in
 
-[src/tf-aws/synth.ts:15](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/synth.ts#L15)
+[src/tf-aws/synth.ts:15](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/synth.ts#L15)
 
 ___
 
@@ -73,7 +73,7 @@ Path to the output directory. For example, if synthesizing to terraform,
 
 #### Defined in
 
-[src/tf-aws/synth.ts:13](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/synth.ts#L13)
+[src/tf-aws/synth.ts:13](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/synth.ts#L13)
 
 ___
 
@@ -89,7 +89,7 @@ Place in the construct tree where all users constructs will get added.
 
 #### Defined in
 
-[src/tf-aws/synth.ts:14](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/synth.ts#L14)
+[src/tf-aws/synth.ts:14](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/synth.ts#L14)
 
 ## Methods
 
@@ -109,4 +109,4 @@ Synthesize the app.
 
 #### Defined in
 
-[src/tf-aws/synth.ts:26](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/synth.ts#L26)
+[src/tf-aws/synth.ts:26](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/synth.ts#L26)

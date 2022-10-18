@@ -22,4 +22,4 @@ List of inflight operations available for `Function`.
 
 #### Defined in
 
-[src/cloud/function.ts:97](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L97)
+[src/cloud/function.ts:97](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L97)

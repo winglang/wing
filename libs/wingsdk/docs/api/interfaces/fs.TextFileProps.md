@@ -27,4 +27,4 @@ They will be joined with newline characters.
 
 #### Defined in
 
-[src/fs/text-file.ts:14](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/text-file.ts#L14)
+[src/fs/text-file.ts:14](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/text-file.ts#L14)

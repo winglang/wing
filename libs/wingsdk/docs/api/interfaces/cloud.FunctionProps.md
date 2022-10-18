@@ -38,4 +38,4 @@ Environment variables to pass to the function.
 
 #### Defined in
 
-[src/cloud/function.ts:21](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L21)
+[src/cloud/function.ts:21](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L21)

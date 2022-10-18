@@ -36,7 +36,7 @@ Which methods are called on the captured resource.
 
 #### Defined in
 
-[src/core/inflight.ts:33](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L33)
+[src/core/inflight.ts:33](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L33)
 
 ___
 
@@ -48,7 +48,7 @@ A captured resource
 
 #### Defined in
 
-[src/core/inflight.ts:18](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L18)
+[src/core/inflight.ts:18](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L18)
 
 ___
 
@@ -60,4 +60,4 @@ A captured immutable value (like string, number, boolean, a struct, or null).
 
 #### Defined in
 
-[src/core/inflight.ts:23](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L23)
+[src/core/inflight.ts:23](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L23)

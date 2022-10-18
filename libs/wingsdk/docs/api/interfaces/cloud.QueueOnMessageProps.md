@@ -33,7 +33,7 @@ The maximum number of messages to send to subscribers at once.
 
 #### Defined in
 
-[src/cloud/queue.ts:60](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/queue.ts#L60)
+[src/cloud/queue.ts:60](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/queue.ts#L60)
 
 ___
 
@@ -57,4 +57,4 @@ Environment variables to pass to the function.
 
 #### Defined in
 
-[src/cloud/function.ts:21](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L21)
+[src/cloud/function.ts:21](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L21)

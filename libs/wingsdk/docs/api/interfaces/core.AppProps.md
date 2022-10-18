@@ -28,7 +28,7 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 #### Defined in
 
-[src/core/app.ts:22](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L22)
+[src/core/app.ts:22](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L22)
 
 ___
 
@@ -41,4 +41,4 @@ polycon factory.
 
 #### Defined in
 
-[src/core/app.ts:28](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/app.ts#L28)
+[src/core/app.ts:28](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/app.ts#L28)

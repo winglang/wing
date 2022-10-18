@@ -37,7 +37,7 @@ containing the resource's attributes.
 
 #### Defined in
 
-[src/testing/simulator.ts:250](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L250)
+[src/testing/simulator.ts:250](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L250)
 
 ___
 
@@ -61,4 +61,4 @@ created.
 
 #### Defined in
 
-[src/testing/simulator.ts:256](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L256)
+[src/testing/simulator.ts:256](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L256)

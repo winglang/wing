@@ -52,7 +52,7 @@ Represents a text file that should be synthesized in the app's outdir.
 
 #### Defined in
 
-[src/fs/json-file.ts:20](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/json-file.ts#L20)
+[src/fs/json-file.ts:20](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/json-file.ts#L20)
 
 ## Properties
 
@@ -68,7 +68,7 @@ The file's relative path to the output directory.
 
 #### Defined in
 
-[src/fs/file-base.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/file-base.ts#L12)
+[src/fs/file-base.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/file-base.ts#L12)
 
 ___
 
@@ -98,7 +98,7 @@ ___
 
 #### Defined in
 
-[src/fs/json-file.ts:18](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/json-file.ts#L18)
+[src/fs/json-file.ts:18](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/json-file.ts#L18)
 
 ## Methods
 
@@ -118,7 +118,7 @@ Returns the contents of the file to save.
 
 #### Defined in
 
-[src/fs/json-file.ts:31](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/json-file.ts#L31)
+[src/fs/json-file.ts:31](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/json-file.ts#L31)
 
 ___
 
@@ -144,7 +144,7 @@ Render the contents of the file and save it to the user's file system.
 
 #### Defined in
 
-[src/fs/file-base.ts:29](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/fs/file-base.ts#L29)
+[src/fs/file-base.ts:29](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/fs/file-base.ts#L29)
 
 ___
 

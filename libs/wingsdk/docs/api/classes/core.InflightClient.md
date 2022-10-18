@@ -24,7 +24,7 @@ Utility class with functions about inflight clients.
 
 #### Defined in
 
-[src/core/inflight.ts:317](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L317)
+[src/core/inflight.ts:317](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L317)
 
 ## Methods
 
@@ -48,4 +48,4 @@ Creates a `Code` instance with code for creating an inflight client.
 
 #### Defined in
 
-[src/core/inflight.ts:304](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L304)
+[src/core/inflight.ts:304](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L304)

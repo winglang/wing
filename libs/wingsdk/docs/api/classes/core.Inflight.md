@@ -38,7 +38,7 @@ resource.
 
 #### Defined in
 
-[src/core/inflight.ts:171](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L171)
+[src/core/inflight.ts:171](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L171)
 
 ## Properties
 
@@ -57,7 +57,7 @@ Each key here will be the key for the final value in the map.
 
 #### Defined in
 
-[src/core/inflight.ts:169](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L169)
+[src/core/inflight.ts:169](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L169)
 
 ___
 
@@ -69,7 +69,7 @@ Reference to code containing the entrypoint function.
 
 #### Defined in
 
-[src/core/inflight.ts:156](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L156)
+[src/core/inflight.ts:156](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L156)
 
 ___
 
@@ -81,7 +81,7 @@ Name of the exported function which will be run.
 
 #### Defined in
 
-[src/core/inflight.ts:161](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L161)
+[src/core/inflight.ts:161](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L161)
 
 ## Methods
 
@@ -118,7 +118,7 @@ High level implementation:
 
 #### Defined in
 
-[src/core/inflight.ts:195](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L195)
+[src/core/inflight.ts:195](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L195)
 
 ___
 
@@ -141,4 +141,4 @@ safely referenced at runtime.
 
 #### Defined in
 
-[src/core/inflight.ts:248](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L248)
+[src/core/inflight.ts:248](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L248)

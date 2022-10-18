@@ -35,7 +35,7 @@ Each key here will be the key for the final value in the map.
 
 #### Defined in
 
-[src/core/inflight.ts:145](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L145)
+[src/core/inflight.ts:145](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L145)
 
 ___
 
@@ -47,7 +47,7 @@ Reference to code containing the entrypoint function.
 
 #### Defined in
 
-[src/core/inflight.ts:129](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L129)
+[src/core/inflight.ts:129](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L129)
 
 ___
 
@@ -65,4 +65,4 @@ Name of the exported function to run.
 
 #### Defined in
 
-[src/core/inflight.ts:136](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L136)
+[src/core/inflight.ts:136](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L136)

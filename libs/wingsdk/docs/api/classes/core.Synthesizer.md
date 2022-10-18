@@ -44,7 +44,7 @@ CDK framework.
 
 #### Defined in
 
-[src/core/synth.ts:34](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/synth.ts#L34)
+[src/core/synth.ts:34](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/synth.ts#L34)
 
 ## Properties
 
@@ -57,7 +57,7 @@ Path to the output directory. For example, if synthesizing to terraform,
 
 #### Defined in
 
-[src/core/synth.ts:33](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/synth.ts#L33)
+[src/core/synth.ts:33](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/synth.ts#L33)
 
 ___
 
@@ -69,7 +69,7 @@ Place in the construct tree where all users constructs will get added.
 
 #### Defined in
 
-[src/core/synth.ts:28](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/synth.ts#L28)
+[src/core/synth.ts:28](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/synth.ts#L28)
 
 ## Methods
 
@@ -85,4 +85,4 @@ Synthesize the app.
 
 #### Defined in
 
-[src/core/synth.ts:40](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/synth.ts#L40)
+[src/core/synth.ts:40](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/synth.ts#L40)

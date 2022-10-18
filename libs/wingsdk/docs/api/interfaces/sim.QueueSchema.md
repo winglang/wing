@@ -44,7 +44,7 @@ The resource-specific attributes that are set after the resource is created.
 
 #### Defined in
 
-[src/sim/schema-resources.ts:34](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema-resources.ts#L34)
+[src/sim/schema-resources.ts:34](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema-resources.ts#L34)
 
 ___
 
@@ -60,7 +60,7 @@ IDs of resources that this resource calls, triggers, or captures.
 
 #### Defined in
 
-[src/sim/schema.ts:25](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema.ts#L25)
+[src/sim/schema.ts:25](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema.ts#L25)
 
 ___
 
@@ -76,7 +76,7 @@ IDs of resources that this resource is called, triggered, or captured by.
 
 #### Defined in
 
-[src/sim/schema.ts:23](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema.ts#L23)
+[src/sim/schema.ts:23](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema.ts#L23)
 
 ___
 
@@ -96,7 +96,7 @@ The resource's children indexed by their IDs.
 
 #### Defined in
 
-[src/sim/schema.ts:27](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema.ts#L27)
+[src/sim/schema.ts:27](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema.ts#L27)
 
 ___
 
@@ -112,7 +112,7 @@ The full path of the resource in the construct tree.
 
 #### Defined in
 
-[src/sim/schema.ts:15](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema.ts#L15)
+[src/sim/schema.ts:15](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema.ts#L15)
 
 ___
 
@@ -136,7 +136,7 @@ The resource-specific properties needed to create this resource.
 
 #### Defined in
 
-[src/sim/schema-resources.ts:26](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema-resources.ts#L26)
+[src/sim/schema-resources.ts:26](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema-resources.ts#L26)
 
 ___
 
@@ -152,4 +152,4 @@ The type of the resource.
 
 #### Defined in
 
-[src/sim/schema-resources.ts:25](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema-resources.ts#L25)
+[src/sim/schema-resources.ts:25](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema-resources.ts#L25)

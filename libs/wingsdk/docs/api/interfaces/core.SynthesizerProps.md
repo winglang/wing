@@ -27,7 +27,7 @@ A custom factory to resolve polycons.
 
 #### Defined in
 
-[src/core/synth.ts:17](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/synth.ts#L17)
+[src/core/synth.ts:17](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/synth.ts#L17)
 
 ___
 
@@ -43,4 +43,4 @@ The output directory into which to emit synthesized artifacts.
 
 #### Defined in
 
-[src/core/synth.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/synth.ts#L12)
+[src/core/synth.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/synth.ts#L12)

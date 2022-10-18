@@ -37,4 +37,4 @@ Invoke the function asynchronously with a given payload.
 
 #### Defined in
 
-[src/cloud/function.ts:89](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/function.ts#L89)
+[src/cloud/function.ts:89](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/function.ts#L89)

@@ -61,7 +61,7 @@ Simulator implementation of `cloud.Bucket`.
 
 #### Defined in
 
-[src/sim/bucket.ts:16](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.ts#L16)
+[src/sim/bucket.ts:16](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.ts#L16)
 
 ## Properties
 
@@ -71,7 +71,7 @@ Simulator implementation of `cloud.Bucket`.
 
 #### Defined in
 
-[src/sim/bucket.ts:15](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.ts#L15)
+[src/sim/bucket.ts:15](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.ts#L15)
 
 ___
 
@@ -81,7 +81,7 @@ ___
 
 #### Defined in
 
-[src/sim/bucket.ts:14](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.ts#L14)
+[src/sim/bucket.ts:14](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.ts#L14)
 
 ___
 
@@ -115,7 +115,7 @@ ___
 
 #### Defined in
 
-[src/sim/bucket.ts:13](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.ts#L13)
+[src/sim/bucket.ts:13](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.ts#L13)
 
 ___
 
@@ -136,7 +136,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L26)
+[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L26)
 
 ## Accessors
 
@@ -150,7 +150,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/sim/bucket.ts:35](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.ts#L35)
+[src/sim/bucket.ts:35](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.ts#L35)
 
 ## Methods
 
@@ -175,7 +175,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/sim/bucket.ts:42](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.ts#L42)
+[src/sim/bucket.ts:42](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.ts#L42)
 
 ___
 
@@ -193,7 +193,7 @@ ___
 
 #### Defined in
 
-[src/sim/bucket.ts:23](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/bucket.ts#L23)
+[src/sim/bucket.ts:23](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/bucket.ts#L23)
 
 ___
 

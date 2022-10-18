@@ -44,7 +44,7 @@ The language of the code.
 
 #### Defined in
 
-[src/core/inflight.ts:61](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L61)
+[src/core/inflight.ts:61](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L61)
 
 ___
 
@@ -57,7 +57,7 @@ for bundling purposes.
 
 #### Defined in
 
-[src/core/inflight.ts:67](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L67)
+[src/core/inflight.ts:67](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L67)
 
 ## Accessors
 
@@ -73,7 +73,7 @@ Generate a hash of the code contents.
 
 #### Defined in
 
-[src/core/inflight.ts:79](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L79)
+[src/core/inflight.ts:79](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L79)
 
 ___
 
@@ -89,4 +89,4 @@ The code contents.
 
 #### Defined in
 
-[src/core/inflight.ts:72](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L72)
+[src/core/inflight.ts:72](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L72)

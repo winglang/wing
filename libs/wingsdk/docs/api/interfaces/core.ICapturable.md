@@ -44,4 +44,4 @@ executed in the given scope.
 
 #### Defined in
 
-[src/core/inflight.ts:46](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/core/inflight.ts#L46)
+[src/core/inflight.ts:46](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/core/inflight.ts#L46)

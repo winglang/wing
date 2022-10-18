@@ -51,4 +51,4 @@ IPolyconFactory.resolve
 
 #### Defined in
 
-[src/tf-aws/factory.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/factory.ts#L12)
+[src/tf-aws/factory.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/factory.ts#L12)

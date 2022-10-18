@@ -41,7 +41,7 @@ Inflight interface for `Bucket`.
 
 #### Defined in
 
-[src/tf-aws/bucket.inflight.ts:10](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L10)
+[src/tf-aws/bucket.inflight.ts:10](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L10)
 
 ## Properties
 
@@ -51,7 +51,7 @@ Inflight interface for `Bucket`.
 
 #### Defined in
 
-[src/tf-aws/bucket.inflight.ts:11](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L11)
+[src/tf-aws/bucket.inflight.ts:11](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L11)
 
 ___
 
@@ -61,7 +61,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/bucket.inflight.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L12)
+[src/tf-aws/bucket.inflight.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L12)
 
 ## Methods
 
@@ -88,7 +88,7 @@ exists.
 
 #### Defined in
 
-[src/tf-aws/bucket.inflight.ts:24](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L24)
+[src/tf-aws/bucket.inflight.ts:24](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L24)
 
 ___
 
@@ -115,4 +115,4 @@ Put an object in the bucket.
 
 #### Defined in
 
-[src/tf-aws/bucket.inflight.ts:15](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L15)
+[src/tf-aws/bucket.inflight.ts:15](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts#L15)

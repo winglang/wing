@@ -49,7 +49,7 @@ Represents a cloud object store.
 
 #### Defined in
 
-[src/cloud/bucket.ts:41](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L41)
+[src/cloud/bucket.ts:41](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L41)
 
 ## Properties
 
@@ -90,7 +90,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L26)
+[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L26)
 
 ## Methods
 
@@ -115,7 +115,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/bucket.ts:49](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L49)
+[src/cloud/bucket.ts:49](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L49)
 
 ___
 

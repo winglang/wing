@@ -40,7 +40,7 @@ Inflight interface for `Function`.
 
 #### Defined in
 
-[src/tf-aws/function.inflight.ts:6](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.inflight.ts#L6)
+[src/tf-aws/function.inflight.ts:6](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.inflight.ts#L6)
 
 ## Properties
 
@@ -50,7 +50,7 @@ Inflight interface for `Function`.
 
 #### Defined in
 
-[src/tf-aws/function.inflight.ts:7](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.inflight.ts#L7)
+[src/tf-aws/function.inflight.ts:7](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.inflight.ts#L7)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/function.inflight.ts:8](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.inflight.ts#L8)
+[src/tf-aws/function.inflight.ts:8](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.inflight.ts#L8)
 
 ## Methods
 
@@ -86,4 +86,4 @@ Invoke the function, passing the given payload as an argument.
 
 #### Defined in
 
-[src/tf-aws/function.inflight.ts:14](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/function.inflight.ts#L14)
+[src/tf-aws/function.inflight.ts:14](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/function.inflight.ts#L14)

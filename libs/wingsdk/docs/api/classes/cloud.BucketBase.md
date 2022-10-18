@@ -55,7 +55,7 @@ Functionality shared between all `Bucket` implementations.
 
 #### Defined in
 
-[src/cloud/bucket.ts:27](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L27)
+[src/cloud/bucket.ts:27](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L27)
 
 ## Properties
 
@@ -96,7 +96,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L26)
+[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L26)
 
 ## Methods
 
@@ -121,7 +121,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/resource.ts#L20)
+[src/cloud/resource.ts:20](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/resource.ts#L20)
 
 ___
 

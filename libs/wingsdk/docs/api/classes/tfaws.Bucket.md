@@ -51,7 +51,7 @@ AWS implementation of `cloud.Bucket`.
 
 #### Defined in
 
-[src/tf-aws/bucket.ts:15](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.ts#L15)
+[src/tf-aws/bucket.ts:15](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.ts#L15)
 
 ## Properties
 
@@ -61,7 +61,7 @@ AWS implementation of `cloud.Bucket`.
 
 #### Defined in
 
-[src/tf-aws/bucket.ts:12](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.ts#L12)
+[src/tf-aws/bucket.ts:12](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.ts#L12)
 
 ___
 
@@ -91,7 +91,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/bucket.ts:13](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.ts#L13)
+[src/tf-aws/bucket.ts:13](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.ts#L13)
 
 ___
 
@@ -112,7 +112,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/cloud/bucket.ts#L26)
+[src/cloud/bucket.ts:26](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/cloud/bucket.ts#L26)
 
 ## Methods
 
@@ -137,7 +137,7 @@ with a fresh copy without any consequences.
 
 #### Defined in
 
-[src/tf-aws/bucket.ts:64](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/bucket.ts#L64)
+[src/tf-aws/bucket.ts:64](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/bucket.ts#L64)
 
 ___
 

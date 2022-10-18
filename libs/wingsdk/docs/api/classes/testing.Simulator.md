@@ -48,7 +48,7 @@ A simulator that can be used to test your application locally.
 
 #### Defined in
 
-[src/testing/simulator.ts:59](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L59)
+[src/testing/simulator.ts:59](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L59)
 
 ## Properties
 
@@ -58,7 +58,7 @@ A simulator that can be used to test your application locally.
 
 #### Defined in
 
-[src/testing/simulator.ts:56](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L56)
+[src/testing/simulator.ts:56](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L56)
 
 ___
 
@@ -68,7 +68,7 @@ ___
 
 #### Defined in
 
-[src/testing/simulator.ts:57](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L57)
+[src/testing/simulator.ts:57](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L57)
 
 ___
 
@@ -78,7 +78,7 @@ ___
 
 #### Defined in
 
-[src/testing/simulator.ts:54](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L54)
+[src/testing/simulator.ts:54](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L54)
 
 ___
 
@@ -88,7 +88,7 @@ ___
 
 #### Defined in
 
-[src/testing/simulator.ts:55](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L55)
+[src/testing/simulator.ts:55](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L55)
 
 ## Accessors
 
@@ -104,7 +104,7 @@ Return a copy of the simulator tree, including all resource attributes.
 
 #### Defined in
 
-[src/testing/simulator.ts:187](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L187)
+[src/testing/simulator.ts:187](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L187)
 
 ## Methods
 
@@ -124,7 +124,7 @@ Return a copy of the simulator tree, including all resource attributes.
 
 #### Defined in
 
-[src/testing/simulator.ts:92](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L92)
+[src/testing/simulator.ts:92](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L92)
 
 ___
 
@@ -149,7 +149,7 @@ ___
 
 #### Defined in
 
-[src/testing/simulator.ts:68](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L68)
+[src/testing/simulator.ts:68](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L68)
 
 ___
 
@@ -172,7 +172,7 @@ during the resource's in-simulator creation.
 
 #### Defined in
 
-[src/testing/simulator.ts:164](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L164)
+[src/testing/simulator.ts:164](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L164)
 
 ___
 
@@ -194,7 +194,7 @@ Obtain a resource's data, including its path, props, attrs, and children.
 
 #### Defined in
 
-[src/testing/simulator.ts:180](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L180)
+[src/testing/simulator.ts:180](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L180)
 
 ___
 
@@ -217,7 +217,7 @@ that is resolved at synth time.
 
 #### Defined in
 
-[src/testing/simulator.ts:173](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L173)
+[src/testing/simulator.ts:173](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L173)
 
 ___
 
@@ -234,7 +234,7 @@ the app file, and restart the simulation.
 
 #### Defined in
 
-[src/testing/simulator.ts:150](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L150)
+[src/testing/simulator.ts:150](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L150)
 
 ___
 
@@ -250,7 +250,7 @@ Start the simulator.
 
 #### Defined in
 
-[src/testing/simulator.ts:106](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L106)
+[src/testing/simulator.ts:106](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L106)
 
 ___
 
@@ -266,4 +266,4 @@ Stop the simulation and clean up all resources.
 
 #### Defined in
 
-[src/testing/simulator.ts:134](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/testing/simulator.ts#L134)
+[src/testing/simulator.ts:134](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/testing/simulator.ts#L134)

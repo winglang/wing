@@ -40,7 +40,7 @@ Inflight interface for `Queue`.
 
 #### Defined in
 
-[src/tf-aws/queue.inflight.ts:5](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.inflight.ts#L5)
+[src/tf-aws/queue.inflight.ts:5](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.inflight.ts#L5)
 
 ## Properties
 
@@ -50,7 +50,7 @@ Inflight interface for `Queue`.
 
 #### Defined in
 
-[src/tf-aws/queue.inflight.ts:7](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.inflight.ts#L7)
+[src/tf-aws/queue.inflight.ts:7](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.inflight.ts#L7)
 
 ___
 
@@ -60,7 +60,7 @@ ___
 
 #### Defined in
 
-[src/tf-aws/queue.inflight.ts:6](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.inflight.ts#L6)
+[src/tf-aws/queue.inflight.ts:6](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.inflight.ts#L6)
 
 ## Methods
 
@@ -86,4 +86,4 @@ Push a message to the queue.
 
 #### Defined in
 
-[src/tf-aws/queue.inflight.ts:10](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/tf-aws/queue.inflight.ts#L10)
+[src/tf-aws/queue.inflight.ts:10](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/tf-aws/queue.inflight.ts#L10)

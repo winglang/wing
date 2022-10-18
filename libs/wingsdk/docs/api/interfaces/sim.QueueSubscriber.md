@@ -23,7 +23,7 @@ Maximum number of messages that will be batched together to the subscriber.
 
 #### Defined in
 
-[src/sim/schema-resources.ts:45](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema-resources.ts#L45)
+[src/sim/schema-resources.ts:45](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema-resources.ts#L45)
 
 ___
 
@@ -35,4 +35,4 @@ Function ID that should be called.
 
 #### Defined in
 
-[src/sim/schema-resources.ts:43](https://github.com/monadahq/winglang/blob/438eedb/libs/wingsdk/src/sim/schema-resources.ts#L43)
+[src/sim/schema-resources.ts:43](https://github.com/monadahq/winglang/blob/main/libs/wingsdk/src/sim/schema-resources.ts#L43)
