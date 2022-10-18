@@ -1,9 +1,11 @@
+const path = require("path");
 const fs = require("fs/promises");
 const NPM = require("../node_modules/npm/lib/npm.js");
 const debug = require("debug")("wing:bootstrap");
 
-// Note: this is hint for "pkg" to include the file in the binary
+// Note: these are hints for "pkg" to include the files in the binary
 require("../node_modules/npm/lib/commands/install.js");
+const WINGSDK_TGZ_PATH = path.resolve(__dirname, "../wingsdk.tgz");
 
 /**
  * Bootstraps the current directory for wingc
@@ -19,7 +21,14 @@ async function bootstrap(directory) {
     await fs.mkdir(directory, { recursive: true });
   }
 
-  const deps = ["cdktf-cli", "cdktf", "constructs"];
+  debug("Copying wingsdk.tgz to '%s'", directory);
+  await fs.copyFile(WINGSDK_TGZ_PATH, path.join(directory, "wingsdk.tgz"));
+
+  // NOTE: constructs and cdktf should be here as well, but we have some sort of
+  // a conundrum here. wingsdk needs to have these as bundled deps so JSII works
+  // in other languages, but also installing them here causes NPM warnings about
+  // conflicting peer dependencies. This works for now though, so whatever.
+  const deps = [".wing/wingsdk.tgz", "cdktf-cli"];
   const cmd = `install --prefix ${directory} ${deps.join(" ")}`;
   debug("NPM command '%s'", cmd);
 
@@ -33,6 +42,8 @@ async function bootstrap(directory) {
   npm.prefix = directory;
   await npm.exec("i", deps);
   debug("NPM command '%s' completed", cmd);
+
+  debug("Bootstrapping complete");
 }
 
 module.exports = { bootstrap };
