@@ -1,30 +1,25 @@
 import * as cloud from "../../src/cloud";
+import * as sim from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { synthSimulatedApp } from "./util";
 
 test("reloading the simulator updates the state of the tree", async () => {
+  let workdir = mkdtemp();
+
   // Create an app.wx file
-  const workdir = mkdtemp();
-  const appPath = synthSimulatedApp(
-    (scope) => {
-      new cloud.Bucket(scope, "my_bucket");
-    },
-    { workdir }
-  );
+  const app = new sim.App({ outdir: workdir });
+  new cloud.Bucket(app, "my_bucket", { public: false });
+  const simfile = app.synth();
 
   // Start the simulator
-  const s = new testing.Simulator({ appPath });
+  const s = new testing.Simulator({ simfile });
   await s.start();
   expect(s.getProps("root/my_bucket").public).toEqual(false);
 
   // Update the app.wx file in-place
-  synthSimulatedApp(
-    (scope) => {
-      new cloud.Bucket(scope, "my_bucket", { public: true });
-    },
-    { workdir }
-  );
+  const app2 = new sim.App({ outdir: workdir });
+  new cloud.Bucket(app2, "my_bucket", { public: true });
+  app2.synth();
 
   // Reload the simulator
   await s.reload();

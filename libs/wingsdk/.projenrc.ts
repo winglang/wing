@@ -15,6 +15,7 @@ const project = new cdk.JsiiProject({
     "@cdktf/provider-aws",
   ],
   bundledDeps: [
+    "safe-stable-stringify",
     // preflight dependencies
     "esbuild-wasm",
     // aws client dependencies

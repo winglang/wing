@@ -104,6 +104,9 @@ export class NodeJsCode extends Code {
    * Reference code directly from a string.
    */
   public static fromInline(text: string) {
+    // TODO: can we use a relative path here?
+    // TODO: can we avoid writing to file until actually necessary?
+    // TODO: can we share the temp dir between Code objects?
     const tempdir = mkdtempSync(join(tmpdir(), "wingsdk."));
     const file = join(tempdir, "index.js");
     writeFileSync(file, text);

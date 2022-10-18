@@ -1,15 +1,18 @@
 import * as cloud from "../../src/cloud";
+import * as sim from "../../src/sim";
 import { BucketClient } from "../../src/sim/bucket.inflight";
 import * as testing from "../../src/testing";
-import { simulatorJsonOf, synthSimulatedApp } from "./util";
+import { mkdtemp } from "../../src/util";
+import { simulatorJsonOf } from "./util";
 
 test("create a bucket", async () => {
   // GIVEN
-  const appPath = synthSimulatedApp((scope) => {
-    new cloud.Bucket(scope, "my_bucket");
-  });
+  const app = new sim.App({ outdir: mkdtemp() });
+  new cloud.Bucket(app, "my_bucket");
+  const simfile = app.synth();
 
-  const s = new testing.Simulator({ appPath });
+  // THEN
+  const s = new testing.Simulator({ simfile });
   await s.start();
   expect(s.getAttributes("root/my_bucket")).toEqual({
     bucketAddr: expect.any(String),
@@ -19,15 +22,16 @@ test("create a bucket", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {
   // GIVEN
-  const appPath = synthSimulatedApp((scope) => {
-    new cloud.Bucket(scope, "my_bucket");
-  });
-  const s = new testing.Simulator({ appPath });
+  const app = new sim.App({ outdir: mkdtemp() });
+  new cloud.Bucket(app, "my_bucket");
+  const simfile = app.synth();
+
+  const s = new testing.Simulator({ simfile });
   await s.start();
 
   const attrs = s.getAttributes("root/my_bucket");
@@ -44,15 +48,16 @@ test("put and get objects from bucket", async () => {
   expect(response).toEqual(VALUE);
   await s.stop();
 
-  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
   // GIVEN
-  const appPath = synthSimulatedApp((scope) => {
-    new cloud.Bucket(scope, "my_bucket");
-  });
-  const s = new testing.Simulator({ appPath });
+  const app = new sim.App({ outdir: mkdtemp() });
+  new cloud.Bucket(app, "my_bucket");
+  const simfile = app.synth();
+
+  const s = new testing.Simulator({ simfile });
   await s.start();
 
   const attrs = s.getAttributes("root/my_bucket");
@@ -62,5 +67,5 @@ test("get invalid object throws an error", async () => {
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
 
-  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
