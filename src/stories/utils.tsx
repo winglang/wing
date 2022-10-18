@@ -6,9 +6,10 @@ import {
   CubeIcon,
   GlobeAltIcon,
 } from "@heroicons/react/24/outline";
+import { CubeIcon as SolidCubeIcon } from "@heroicons/react/24/solid";
 import { ResourceSchema, WingLocalSchema } from "@monadahq/wing-local-schema";
 import classNames from "classnames";
-import React from "react";
+import React, { SVGProps } from "react";
 
 import { TreeMenuItem } from "@/components/TreeMenu";
 
@@ -185,6 +186,21 @@ export const constructHubTreeToWingSchema = (): WingLocalSchema => {
   return tree;
 };
 
+const CubeTransparentExIcon = (props: React.SVGProps<SVGSVGElement>) => {
+  return (
+    <div className="relative">
+      <div className="opacity-40">
+        <CubeIcon {...props} />
+      </div>
+
+      <CubeTransparentIcon
+        {...props}
+        className={classNames(props.className, "absolute inset-0")}
+      />
+    </div>
+  );
+};
+
 const getResourceIconComponent = (resourceType: ResourceSchema["type"]) => {
   switch (resourceType) {
     case "cloud.Bucket":
@@ -196,7 +212,7 @@ const getResourceIconComponent = (resourceType: ResourceSchema["type"]) => {
     case "cloud.Endpoint":
       return GlobeAltIcon;
     case "constructs.Construct":
-      return CubeTransparentIcon;
+      return CubeTransparentExIcon;
     default:
       return CubeIcon;
   }

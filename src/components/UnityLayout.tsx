@@ -86,18 +86,21 @@ const Button = ({ className, ...props }: ButtonProps) => {
 interface InspectorSectionHeadingProps {
   open?: boolean;
   text: string;
+  onClick?: () => void;
 }
 const InspectorSectionHeading = ({
   open,
   text,
+  onClick,
 }: InspectorSectionHeadingProps) => {
   const Icon = open ? ChevronDownIcon : ChevronRightIcon;
   return (
     <button
       className={classNames(
         "w-full px-1 py-0.5 flex gap-1 hover:bg-slate-600 group",
-        "outline-none focus:ring ring-sky-700",
+        "outline-none focus:ring ring-sky-700 relative",
       )}
+      onClick={onClick}
     >
       <Icon
         className="w-4 h-4 text-slate-400 group-hover:text-slate-300"
@@ -107,6 +110,25 @@ const InspectorSectionHeading = ({
         {text}
       </div>
     </button>
+  );
+};
+
+interface InspectorSectionProps {
+  open?: boolean;
+  text: string;
+  onClick?: () => void;
+}
+const InspectorSection = ({
+  open,
+  text,
+  onClick,
+  children,
+}: PropsWithChildren<InspectorSectionProps>) => {
+  return (
+    <>
+      <InspectorSectionHeading text={text} open={open} onClick={onClick} />
+      {open && children}
+    </>
   );
 };
 
@@ -219,8 +241,22 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
     treeMenu.toggle(path);
   };
 
+  const [openInspectorSections, setOpenInspectorSections] = useState(["Node"]);
+  const toggleInspectorSection = (section: string) => {
+    setOpenInspectorSections(([...sections]) => {
+      const index = sections.indexOf(section);
+      if (index !== -1) {
+        sections.splice(index, 1);
+        return sections;
+      } else {
+        sections.push(section);
+        return sections;
+      }
+    });
+  };
+
   return (
-    <div className="dark h-full text-slate-300 text-xs pt-8 bg-slate-900 select-none">
+    <div className="dark h-full text-slate-300 text-xs pt-px bg-slate-900 select-none">
       <div className="h-full flex items-stretch gap-px">
         <div className="flex-1 flex flex-col gap-px">
           <div className="flex-1 flex items-stretch gap-px">
@@ -333,7 +369,7 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
               <div>Inspector</div>
             </div>
           </div>
-          <div className="flex-1 bg-slate-700">
+          <div className="flex-1 bg-slate-700 z-10">
             {currentNode && (
               <>
                 <div className="flex items-center gap-2 px-2 py-1.5">
@@ -357,77 +393,89 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
                 {attributeGroups?.map((attributeGroup) => {
                   return (
                     <div key={attributeGroup.groupName}>
-                      <InspectorSectionHeading
-                        open
+                      <InspectorSection
                         text={attributeGroup.groupName}
-                      />
-
-                      <div className="border-t border-slate-800">
-                        <div className="px-2 py-1 grid grid-cols-6 gap-y-1 bg-slate-800/40">
-                          {attributeGroup.attributes.map((attribute) => {
-                            return (
-                              <AttributeView
-                                key={attribute.key}
-                                attribute={attribute}
-                              />
-                            );
-                          })}
+                        open={openInspectorSections.includes(
+                          attributeGroup.groupName,
+                        )}
+                        onClick={() =>
+                          toggleInspectorSection(attributeGroup.groupName)
+                        }
+                      >
+                        <div className="border-t border-slate-800">
+                          <div className="px-2 py-1 grid grid-cols-6 gap-y-1 bg-slate-800/40">
+                            {attributeGroup.attributes.map((attribute) => {
+                              return (
+                                <AttributeView
+                                  key={attribute.key}
+                                  attribute={attribute}
+                                />
+                              );
+                            })}
+                          </div>
                         </div>
-                      </div>
+                      </InspectorSection>
                     </div>
                   );
                 })}
 
-                <InspectorSectionHeading open text="Relationships" />
-                <div className="border-t border-slate-800">
-                  <div className="flex flex-col bg-slate-800/40">
-                    {currentNode.callers.length === 0 &&
-                      currentNode.callees.length === 0 && (
-                        <div className="px-2 py-1 text-slate-400 italic">
-                          This resource has no relationships.
-                        </div>
-                      )}
-                    {currentNode.callers.map((path) => {
-                      const node = nodeMap?.find(path);
-                      if (node) {
-                        return (
-                          <RelationshipItem
-                            node={node}
-                            relationshipType="inbound"
-                            onClick={() => {
-                              treeMenu.setCurrent(path);
-                              treeMenu.expand(path);
-                            }}
-                          />
-                        );
-                      }
-                    })}
-                    {currentNode.callees.map((path) => {
-                      const node = nodeMap?.find(path);
-                      if (node) {
-                        return (
-                          <RelationshipItem
-                            node={node}
-                            relationshipType="outbound"
-                            onClick={() => {
-                              treeMenu.setCurrent(path);
-                              treeMenu.expand(path);
-                            }}
-                          />
-                        );
-                      }
-                    })}
+                <InspectorSection
+                  text="Relationships"
+                  open={openInspectorSections.includes("relationships")}
+                  onClick={() => toggleInspectorSection("relationships")}
+                >
+                  <div className="border-t border-slate-800">
+                    <div className="flex flex-col bg-slate-800/40">
+                      {currentNode.callers.length === 0 &&
+                        currentNode.callees.length === 0 && (
+                          <div className="px-2 py-1 text-slate-400 italic">
+                            This resource has no relationships.
+                          </div>
+                        )}
+                      {currentNode.callers.map((path) => {
+                        const node = nodeMap?.find(path);
+                        if (node) {
+                          return (
+                            <RelationshipItem
+                              node={node}
+                              relationshipType="inbound"
+                              onClick={() => {
+                                treeMenu.setCurrent(path);
+                                treeMenu.expand(path);
+                              }}
+                            />
+                          );
+                        }
+                      })}
+                      {currentNode.callees.map((path) => {
+                        const node = nodeMap?.find(path);
+                        if (node) {
+                          return (
+                            <RelationshipItem
+                              node={node}
+                              relationshipType="outbound"
+                              onClick={() => {
+                                treeMenu.setCurrent(path);
+                                treeMenu.expand(path);
+                              }}
+                            />
+                          );
+                        }
+                      })}
+                    </div>
                   </div>
-                </div>
+                </InspectorSection>
 
                 {currentNode.type === "cloud.Function" && (
-                  <>
-                    <InspectorSectionHeading open text="Invoke Function" />
-
+                  <InspectorSection
+                    text="Invoke Function"
+                    open={openInspectorSections.includes("function")}
+                    onClick={() => toggleInspectorSection("function")}
+                  >
                     <div className="border-t border-slate-800">
                       <div className="flex flex-col bg-slate-800/40">
-                        <div className="px-2 py-1 flex flex-col gap-1.5">
-                          <div className="flex flex-col gap-0.5">
+                        <div className="px-2 py-1 flex flex-col gap-2">
+                          <div className="flex flex-col gap-1">
                             <div className="flex items-center justify-between">
                               <label
                                 htmlFor={invokeFunctionId}
@@ -454,7 +502,7 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
                             />
                           </div>
 
-                          <div className="flex flex-col gap-0.5">
+                          <div className="flex flex-col gap-1">
                             <div className="flex items-center justify-between">
                               <span className="text-slate-400">Response</span>
                               <Button>Clear</Button>
@@ -475,12 +523,36 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
                         </div>
                       </div>
                     </div>
-                  </>
+                  </InspectorSection>
                 )}
 
-                <InspectorSectionHeading text="Logs" />
+                <InspectorSection
+                  text="Logs"
+                  open={openInspectorSections.includes("logs")}
+                  onClick={() => toggleInspectorSection("logs")}
+                >
+                  <div className="border-t border-slate-800">
+                    <div className="flex flex-col bg-slate-800/40">
+                      <div className="px-2 py-1 text-slate-400 italic">
+                        This resource has no logs.
+                      </div>
+                    </div>
+                  </div>
+                </InspectorSection>
 
-                <InspectorSectionHeading text="Events" />
+                <InspectorSection
+                  text="Events"
+                  open={openInspectorSections.includes("events")}
+                  onClick={() => toggleInspectorSection("events")}
+                >
+                  <div className="border-t border-slate-800">
+                    <div className="flex flex-col bg-slate-800/40">
+                      <div className="px-2 py-1 text-slate-400 italic">
+                        This resource has no events.
+                      </div>
+                    </div>
+                  </div>
+                </InspectorSection>
               </>
             )}
           </div>
@@ -536,14 +608,24 @@ function TreeNode({
             />
           </div>
 
-          <div className="flex-0">
+          <div className="flex-0 relative">
             <ResourceIcon
+              // className="w-4 h-4 animate-pulse"
               className="w-4 h-4"
               resourceType={node.type}
               forceDarken={isSelected}
               darkenOnGroupHover
               aria-hidden="true"
             />
+            <div className="absolute inset-0 invisible group-hover:visible">
+              <ResourceIcon
+                className="w-4 h-4 animate-ping"
+                resourceType={node.type}
+                forceDarken={isSelected}
+                darkenOnGroupHover
+                aria-hidden="true"
+              />
+            </div>
           </div>
 
           <div
@@ -629,7 +711,7 @@ function RelationshipItem({
       className="flex items-center gap-1 hover:text-slate-200 group"
       onClick={onClick}
     >
-      <div className="flex-0 flex-shrink-0 w-1/6 flex items-center gap-1.5 text-slate-400 bg-slate-800/40 px-1 pl-2 py-1">
+      <div className="flex-0 flex-shrink-0 w-1/6 flex items-center gap-1.5 text-slate-400 px-1 pl-2 py-1">
         <div className="flex-0 flex-shrink-0">
           {relationshipType === "inbound" ? (
             <ArrowLeftOnRectangleIcon
