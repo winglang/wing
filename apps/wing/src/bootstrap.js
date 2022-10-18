@@ -53,6 +53,9 @@ async function bootstrap(directory) {
     // taken from npm tests: https://github.com/npm/cli/blob/latest/lib/commands/install.js
     npm.prefix = directory;
     npm.silent = true;
+    npm.config.set("loglevel", "silent");
+    npm.config.set("fund", false);
+    npm.config.set("audit", false);
     await npm.exec("i", deps);
     debug("NPM command '%s' completed", cmd);
   }
