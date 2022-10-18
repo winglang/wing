@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "commander": "^9.4.0",
+    "debug": "^4.3.4",
     "npm": "^8.19.2"
   },
   "devDependencies": {
