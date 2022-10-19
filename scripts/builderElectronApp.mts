@@ -38,7 +38,7 @@ await build({
       buildResources: "electron/resources",
     },
     files: ["dist/vite"],
-    publish: [],
+    publish: "never",
 
     mac: {
       target: "dmg",
