@@ -449,7 +449,7 @@ impl<'a> TypeChecker<'a> {
 			"string" => self.types.string(),
 			"bool" => self.types.bool(),
 			"duration" => self.types.duration(),
-			other => self.general_type_error(format!("Type {} is not a primitive type", other)),
+			other => self.general_type_error(format!("Type \"{}\" is not a primitive type", other)),
 		}
 	}
 
@@ -539,7 +539,7 @@ impl<'a> TypeChecker<'a> {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected {} args but got {} when instantiating {}",
+							"Expected {} args but got {} when instantiating \"{}\"",
 							constructor_sig.args.len(),
 							arg_list.pos_args.len(),
 							type_
@@ -572,7 +572,7 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope {:?} to be a resource object, instead found {}",
+									"Expected scope {:?} to be a resource object, instead found \"{}\"",
 									obj_scope, obj_scope_type
 								),
 							);
@@ -637,7 +637,7 @@ impl<'a> TypeChecker<'a> {
 				// Make it really is a a struct type
 				let st = struct_type
 					.as_struct()
-					.expect(&format!("Expected {} to be a struct type", struct_type));
+					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all fields are present and are of the right type
 				if st.env.iter().count() > fields.len() {
@@ -647,7 +647,7 @@ impl<'a> TypeChecker<'a> {
 					let field_type = st
 						.env
 						.try_lookup(&k.name)
-						.expect(&format!("{} is not a field of {}", k.name, struct_type));
+						.expect(&format!("\"{}\" is not a field of \"{}\"", k.name, struct_type));
 					let t = self.type_check_exp(v, env).unwrap();
 					self.validate_type(t, field_type, v);
 				}
@@ -964,7 +964,7 @@ impl<'a> TypeChecker<'a> {
 						if let &Type::Class(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
-							self.general_type_error(format!("Class {}'s parent {} is not a class", name, t));
+							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
 						}
 					}
@@ -1200,14 +1200,14 @@ impl<'a> TypeChecker<'a> {
 						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
 						&Type::Anything => return instance,
 						_ => self.general_type_error(format!(
-							"{} in {:?} does not resolve to a class instance or resource object",
+							"\"{}\" in {:?} does not resolve to a class instance or resource object",
 							instance, reference
 						)),
 					};
 
 					match instance_type.into() {
 						&Type::Class(ref class) | &Type::Resource(ref class) => class,
-						_ => panic!("Expected {} to be a class or resource type", instance_type),
+						_ => panic!("Expected \"{}\" to be a class or resource type", instance_type),
 					}
 				};
 
@@ -1226,9 +1226,13 @@ impl<'a> TypeChecker<'a> {
 
 fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol, struct_env: &mut TypeEnv) {
 	for parent_type in extends_types.iter() {
-		let parent_struct = parent_type
-			.as_struct()
-			.expect(format!("Type {} extends {} which should be a struct", name.name, parent_type).as_str());
+		let parent_struct = parent_type.as_struct().expect(
+			format!(
+				"Type \"{}\" extends \"{}\" which should be a struct",
+				name.name, parent_type
+			)
+			.as_str(),
+		);
 		for (parent_member_name, member_type) in parent_struct.env.iter() {
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name) {
 				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
@@ -1236,7 +1240,7 @@ fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol,
 				//   when we want to check for subtypes and use equality for strict comparisons.
 				if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
 					panic!(
-						"Struct {} extends {} but has a conflicting member {} ({} != {})",
+						"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
 						name, parent_type, parent_member_name, existing_type, member_type
 					);
 				}

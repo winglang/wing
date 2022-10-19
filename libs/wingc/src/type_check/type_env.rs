@@ -37,7 +37,7 @@ impl TypeEnv {
 		if self.type_map.contains_key(&symbol.name) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
-				message: format!("Symbol {} already defined in this scope", symbol.name),
+				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
 			});
 		}
 
@@ -51,7 +51,7 @@ impl TypeEnv {
 				{
 					return Err(TypeError {
 						span: symbol.span.clone(),
-						message: format!("Symbol {} already defined in parent scope.", symbol.name),
+						message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
 					});
 				}
 			}
@@ -100,7 +100,7 @@ impl TypeEnv {
 			type_ref
 		} else {
 			return Err(TypeError {
-				message: format!("Unknown symbol {}", symb),
+				message: format!("Unknown symbol \"{}\"", symb),
 				span: symb.span.clone(),
 			});
 		};
@@ -111,7 +111,7 @@ impl TypeEnv {
 			}
 			let ns = t
 				.as_namespace()
-				.expect(&format!("Symbol {} should be a namespace", symb));
+				.expect(&format!("Symbol \"{}\" should be a namespace", symb));
 
 			let lookup_result = ns.env.try_lookup(&(*next_symb).name);
 
