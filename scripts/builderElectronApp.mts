@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 
 import { build, Platform } from "electron-builder";
 import { notarize } from "electron-notarize";
@@ -28,51 +28,66 @@ function getEnvironmentValues<T extends string>(...keys: T[]) {
   };
 }
 
-await build({
-  targets: Platform.MAC.createTarget(),
-  config: {
-    appId: "co.monada.WingConsole",
-    buildVersion: await readFile("dist/releasetag.txt", "utf8"),
-    directories: {
-      output: "release",
-      buildResources: "electron/resources",
-    },
-    files: ["dist/vite"],
-    publish: "never",
+const buildVersion = await readFile("dist/version.txt", "utf8");
+const packageJson = await readFile("package.json", "utf8");
+await writeFile(
+  "package.json",
+  `${JSON.stringify(
+    { ...JSON.parse(packageJson), version: buildVersion },
+    undefined,
+    2,
+  )}\n`,
+);
 
-    mac: {
-      target: "dmg",
-      publish: [],
-    },
-    dmg: {
-      sign: true,
-      icon: "electron/resources/icon.icns",
-      background: "electron/resources/background.png",
-    },
+try {
+  await build({
+    targets: Platform.MAC.createTarget(),
+    config: {
+      appId: "co.monada.WingConsole",
+      directories: {
+        output: "release",
+        buildResources: "electron/resources",
+      },
+      files: ["dist/vite"],
 
-    afterSign: async (context) => {
-      if (context.electronPlatformName === "darwin") {
-        try {
-          const values = getEnvironmentValues("APPLE_ID", "APPLE_ID_PASSWORD");
-          const appPath = `${context.appOutDir}/${context.packager.appInfo.sanitizedName}.app`;
-          console.log(`  • notarizing app=${appPath}`);
-          await notarize({
-            appBundleId: context.packager.appInfo.macBundleIdentifier,
-            appleId: values.APPLE_ID,
-            appleIdPassword: values.APPLE_ID_PASSWORD,
-            appPath,
-          });
-          console.log(`  • notarization successful`);
-        } catch (error) {
-          if (error instanceof MissingEnvironmentVariable) {
-            console.log(
-              `  • skipped macOS application notarization  reason=${error.message}`,
+      mac: {
+        target: "dmg",
+      },
+      dmg: {
+        sign: true,
+        icon: "electron/resources/icon.icns",
+        background: "electron/resources/background.png",
+      },
+
+      afterSign: async (context) => {
+        if (context.electronPlatformName === "darwin") {
+          try {
+            const values = getEnvironmentValues(
+              "APPLE_ID",
+              "APPLE_ID_PASSWORD",
             );
-          } else {
-            throw error;
+            const appPath = `${context.appOutDir}/${context.packager.appInfo.sanitizedName}.app`;
+            console.log(`  • notarizing app=${appPath}`);
+            await notarize({
+              appBundleId: context.packager.appInfo.macBundleIdentifier,
+              appleId: values.APPLE_ID,
+              appleIdPassword: values.APPLE_ID_PASSWORD,
+              appPath,
+            });
+            console.log(`  • notarization successful`);
+          } catch (error) {
+            if (error instanceof MissingEnvironmentVariable) {
+              console.log(
+                `  • skipped macOS application notarization  reason=${error.message}`,
+              );
+            } else {
+              throw error;
+            }
           }
         }
-      }
+      },
     },
-  },
-});
+  });
+} finally {
+  await writeFile("package.json", packageJson);
+}
