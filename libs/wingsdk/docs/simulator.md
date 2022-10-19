@@ -86,10 +86,8 @@ const client = sim.createClient("cloud.Function", "root/my_function") as Functio
 // throws if resource named "root/my_function" is not a "cloud.Funciton"
 -->
 
-Check the documentation for the relevant client you want to use for more
-information on how to use it: (TODO).
-
-Congratulations, you've invoke a function using the simulator!
+Congratulations, you've invoked a function using the simulator!
 
 Using the `QueueClient` and `BucketClient` classes you can also interact with
-queues and buckets as well.
+queues and buckets as well. Check the API reference for more details about what
+methods are available on different resource clients.
