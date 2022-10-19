@@ -120,6 +120,10 @@ project.release?.addJobs({
       {
         name: "Build Electron Application",
         run: "npx tsx scripts/builderElectronApp.mts",
+        env: {
+          APPLE_ID: "${{ secrets.APPLE_ID }}",
+          APPLE_ID_PASSWORD: "${{ secrets.APPLE_ID_PASSWORD }}",
+        },
       },
       {
         name: "Release",
