@@ -191,7 +191,7 @@ The Wing SDK is written in TypeScript and compiled with JSII, which means that t
 
 > Python, Java, C#, and Go versions of the SDK are coming soon!
 
-In order to group APIs together in TypeScript, we prefer to put all classes, interfaces, etc. inside modules, and then re-export it at the root of a directory. For example:
+In order to group APIs together, we prefer to put all public APIs like classes and interfaces inside modules, and then re-export it at the root of a directory. For example:
 
 ```ts
 // src/azure/bucket.ts
@@ -210,7 +210,7 @@ export * from "./bucket";
 export * from "./azure";
 ```
 
-However, some of the code in the SDK is either:
+However, some of the code in the Wing SDK is either:
 
 1. Not compatible with JSII, OR
 2. Does not need to be made available to other languages because the code is not needed for writing preflight code. For example, inflight clients used to interact with resources at runtime need to be written on a per-language basis in order to avoid performance overheads. Likewise, simulator implementations do not need to be exported.
@@ -254,15 +254,15 @@ Under the hood, we will exclude any files named `exports.ts` from being compiled
 
 To ensure pull requests are reviewed and accepted as quickly as possible, please make sure:
 
-[ ] Tests are written for all changes.
+- [ ] Tests are written for all changes.
 
-[ ] Hand-written documentation in `wingsdk/docs/` is updated if features are being added or removed.
+- [ ] Hand-written documentation in `wingsdk/docs/` is updated if features are being added or removed.
 
-[ ] `npm run build` has been run to lint, build, and update API docs.
+- [ ] `npm run build` has been run to lint, build, and update API docs.
 
-[ ] Commit messages are clear and descriptive and pushed to your fork.
+- [ ] Commit messages are clear and descriptive and pushed to your fork.
 
-[ ] Your fork is in sync with the upstream repository.
+- [ ] Your fork is in sync with the upstream repository.
 
 Create a new pull request [here](https://github.com/monadahq/wingsdk/compare), selecting your fork for the 'compare' 
 and `main` for the 'base'. 
