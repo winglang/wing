@@ -54,12 +54,14 @@ await build({
         try {
           const values = getEnvironmentValues("APPLE_ID", "APPLE_ID_PASSWORD");
           const appPath = `${context.appOutDir}/${context.packager.appInfo.sanitizedName}.app`;
+          console.log(`  • notarizing app=${appPath}`);
           await notarize({
             appBundleId: context.packager.appInfo.macBundleIdentifier,
             appleId: values.APPLE_ID,
             appleIdPassword: values.APPLE_ID_PASSWORD,
             appPath,
           });
+          console.log(`  • notarization successful`);
         } catch (error) {
           if (error instanceof MissingEnvironmentVariable) {
             console.log(
