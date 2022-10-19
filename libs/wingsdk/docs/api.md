@@ -3583,7 +3583,7 @@ public readonly value: IConstruct;
 
 Returns the IConstruct this graph vertex represents.
 
-null` in case this is the root of the graph
+`null` in case this is the root of the graph.
 
 ---
 
@@ -4881,14 +4881,14 @@ List of inflight operations available for `Bucket`.
 
 ##### `PUT` <a name="PUT" id="@monadahq/wingsdk.cloud.BucketInflightMethods.PUT"></a>
 
-Bucket.put`
+`Bucket.put`.
 
 ---
 
 
 ##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
 
-Bucket.get`
+`Bucket.get`.
 
 ---
 
@@ -4907,7 +4907,7 @@ List of inflight operations available for `Function`.
 
 ##### `INVOKE` <a name="INVOKE" id="@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE"></a>
 
-Function.invoke`
+`Function.invoke`.
 
 ---
 
@@ -4945,7 +4945,7 @@ List of inflight operations available for `Queue`.
 
 ##### `PUSH` <a name="PUSH" id="@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
 
-Queue.push`
+`Queue.push`.
 
 ---
 
