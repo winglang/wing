@@ -15,7 +15,7 @@ and submit pull requests to the GitHub repository.
   - [Testing](#testing)
     - [Sandbox](#sandbox)
   - [Creating a resource](#creating-a-resource)
-  - [Writing code that is JSII-compatible](#writing-code-that-is-jsii-compatible)
+  - [Exporting code and compiling with JSII](#exporting-code-and-compiling-with-jsii)
   - [Submitting a pull request](#submitting-a-pull-request)
   - [Getting Help](#getting-help)
 
@@ -185,9 +185,70 @@ For more information about designing resources, check out the Wing SDK design gu
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
 You can also join us on our [Discord server](https://discord.gg/7wrggS3dZU) to ask questions (or just say hi)!
 
-## Writing code that is JSII-compatible
+## Exporting code and compiling with JSII
 
-TODO
+The Wing SDK is written in TypeScript and compiled with JSII, which means that the library can be used in any language that JSII supports, including Python, Java, C#, and Go.
+
+> Python, Java, C#, and Go versions of the SDK are coming soon!
+
+In order to group APIs together in TypeScript, we prefer to put all classes, interfaces, etc. inside modules, and then re-export it at the root of a directory. For example:
+
+```ts
+// src/azure/bucket.ts
+export interface BucketProps {
+  // ...
+}
+
+export class Bucket {
+  // ...
+}
+
+// src/azure/index.ts
+export * from "./bucket";
+
+// src/index.ts
+export * from "./azure";
+```
+
+However, some of the code in the SDK is either:
+
+1. Not compatible with JSII, OR
+2. Does not need to be made available to other languages because the code is not needed for writing preflight code. For example, inflight clients used to interact with resources at runtime need to be written on a per-language basis in order to avoid performance overheads. Likewise, simulator implementations do not need to be exported.
+
+So by convention, any TypeScript files that should not be compiled by JSII should be re-exported to parent directories by files named `exports.ts`, while all other TypeScript files should be re-exported by files named `index.ts`. For example:
+
+```ts
+// src/azure/bucket.ts
+export interface BucketProps {
+  // ...
+}
+
+export class Bucket {
+  // ...
+}
+
+// src/azure/bucket.inflight.ts
+import { BlobServiceClient } from "@azure/storage-blob";
+
+export class BucketClient {
+  // ...
+}
+
+// src/azure/index.ts
+export * from "./bucket";
+
+// src/azure/exports.ts
+export * from "./index";
+export * from "./bucket.inflight";
+
+// src/index.ts
+export * from "./azure";
+
+// src/exports.ts
+export * from "./azure/exports";
+```
+
+Under the hood, we will exclude any files named `exports.ts` from being compiled by JSII, and just compile them with ordinary TypeScript so they are still available to TypeScript/JavaScript consumers.
 
 ## Submitting a pull request
 
