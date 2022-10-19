@@ -86,7 +86,7 @@ impl TypeEnv {
 			Ok((type_ref, flight))
 		} else {
 			Err(TypeError {
-				message: format!("Unknown symbol {} at {}", &symbol.name, &symbol.span),
+				message: format!("Unknown symbol \"{}\"", &symbol.name),
 				span: symbol.span.clone(),
 			})
 		}
