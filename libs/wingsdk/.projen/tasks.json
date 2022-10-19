@@ -124,7 +124,10 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
-          "exec": "typedoc --plugin typedoc-plugin-markdown --out docs/api --tsconfig tsconfig.nonjsii.json --githubPages false --gitRevision main src/exports.ts"
+          "exec": "jsii-docgen -o API.md"
+        },
+        {
+          "exec": "mv API.md docs/api.md"
         }
       ]
     },

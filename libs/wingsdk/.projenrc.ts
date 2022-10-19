@@ -35,8 +35,6 @@ const project = new cdk.JsiiProject({
     "@types/tar",
     "@types/ws",
     "replace-in-file",
-    "typedoc",
-    "typedoc-plugin-markdown",
   ],
   prettier: true,
   jestOptions: {
@@ -207,8 +205,6 @@ project.package.addField("exports", {
 
 // Use typedoc instead of jsii-docgen
 const docgen = project.tasks.tryFind("docgen")!;
-docgen.reset(
-  "typedoc --plugin typedoc-plugin-markdown --out docs/api --tsconfig tsconfig.nonjsii.json --githubPages false --gitRevision main src/exports.ts"
-);
+docgen.exec("mv API.md docs/api.md");
 
 project.synth();
