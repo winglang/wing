@@ -2,7 +2,8 @@ const { dirname, resolve } = require("path");
 const { bootstrap } = require("./bootstrap");
 const { Command } = require("commander");
 const { argv } = require("process");
-const { readFile, mkdir } = require("fs/promises");
+const { createSpinner } = require("nanospinner");
+const { readFile } = require("fs/promises");
 const { version } = require("../package.json");
 const debug = require("debug")("wing:index");
 
@@ -14,23 +15,33 @@ const WINGC_CWD = resolve(process.cwd(), ".wing");
 
 async function main() {
   const program = new Command();
+  const spinner = createSpinner();
 
   program.name("wing");
   program.version(version);
+
+  async function bootstrapWithSpinner(directory) {
+    spinner.start({ text: `Bootstrapping directory '${directory}'` });
+    await bootstrap(directory).catch((err) => {
+      debug("Error bootstrapping directory: %O", err);
+      spinner.error({
+        text: `Bootstrap failed. Turn on verbose logging for details`,
+      });
+    });
+    spinner.success({ text: `Bootstrapped successfully` });
+  }
 
   program
     .command("bootstrap")
     .description("Bootstraps the given directory for Wing")
     .argument("<context>", "The context directory to bootstrap (e.g. .wing)")
-    .action(async (directory) => {
-      await bootstrap(directory);
-    });
+    .action(bootstrapWithSpinner);
 
   program
     .command("compile")
     .description("Compile a wing file")
     .argument("<input-file>", "input file")
-    .option("-c, --context <context>", "Context directory", WINGC_CURR_WDIR)
+    .option("-c, --context <context>", "Context directory", WINGC_CWD)
     .option("-s, --skip-bootstrap", "Skip automatic bootstrapping")
     .action(async (inputFile, options) => {
       const wingFile = inputFile;
@@ -43,7 +54,7 @@ async function main() {
       debug("Arguments: %s", args);
 
       if (!options.skipBootstrap) {
-        await bootstrap(workDir);
+        await bootstrapWithSpinner(workDir);
       }
 
       debug("Loading wingc.wasm");
