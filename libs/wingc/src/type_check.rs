@@ -1,7 +1,7 @@
 mod jsii_importer;
 pub mod type_env;
 use crate::ast::{Type as AstType, *};
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -433,6 +433,16 @@ impl<'a> TypeChecker<'a> {
 		self.types.anything()
 	}
 
+	fn type_error(&self, type_error: &TypeError) -> TypeRef {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message: type_error.message.clone(),
+			span: Some(type_error.span.clone()),
+		});
+
+		self.types.anything()
+	}
+
 	pub fn get_primitive_type_by_name(&self, name: &str) -> TypeRef {
 		match name {
 			"number" => self.types.number(),
@@ -501,10 +511,16 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let constructor_type = class_env.lookup(&Symbol {
+				let constructor_type = match class_env.lookup(&Symbol {
 					name: WING_CONSTRUCTOR_NAME.into(),
 					span: class_symbol.span.clone(),
-				});
+				}) {
+					Ok(_type) => _type,
+					Err(type_error) => {
+						self.type_error(&type_error);
+						return Some(self.types.anything());
+					}
+				};
 
 				let constructor_sig = if let &Type::Function(ref sig) = constructor_type.into() {
 					sig
@@ -710,9 +726,16 @@ impl<'a> TypeChecker<'a> {
 			}
 			AstType::CustomType { root, fields } => {
 				// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
-				let mut nested_name = vec![root.name.as_str()];
-				nested_name.extend(fields.iter().map(|f| f.name.as_str()));
-				env.lookup_nested(&nested_name)
+				let mut nested_name = vec![root];
+				nested_name.extend(fields);
+
+				match env.lookup_nested(&nested_name) {
+					Ok(_type) => _type,
+					Err(type_error) => {
+						self.type_error(&type_error);
+						self.types.anything()
+					}
+				}
 			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env);
@@ -1009,7 +1032,13 @@ impl<'a> TypeChecker<'a> {
 				// Type check methods
 				for method in methods.iter_mut() {
 					// Lookup the method in the class_env
-					let method_type = class_env.lookup(&method.name);
+					let method_type = match class_env.lookup(&method.name) {
+						Ok(_type) => _type,
+						Err(type_error) => {
+							self.type_error(&type_error);
+							self.types.anything()
+						}
+					};
 					let method_sig = if let &Type::Function(ref s) = method_type.into() {
 						s
 					} else {
@@ -1048,7 +1077,17 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Add members from the structs parents
-				let extends_types = extends.iter().map(|parent| env.lookup(&parent)).collect::<Vec<_>>();
+				let extends_types = extends
+					.iter()
+					.map(|parent| match env.lookup(&parent) {
+						Ok(_type) => _type,
+						Err(type_error) => {
+							self.type_error(&type_error);
+							self.types.anything()
+						}
+					})
+					.collect::<Vec<_>>();
+
 				add_parent_members_to_struct_env(&extends_types, name, &mut struct_env);
 				env.define(
 					name,
@@ -1080,7 +1119,13 @@ impl<'a> TypeChecker<'a> {
 
 	fn resolve_reference(&mut self, reference: &Reference, env: &TypeEnv) -> TypeRef {
 		match reference {
-			Reference::Identifier(symbol) => env.lookup(symbol),
+			Reference::Identifier(symbol) => match env.lookup(symbol) {
+				Ok(_type) => _type,
+				Err(type_error) => {
+					self.type_error(&type_error);
+					self.types.anything()
+				}
+			},
 			Reference::NestedIdentifier { object, property } => {
 				// Get class
 				let class = {
@@ -1102,7 +1147,13 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Find property in class's environment
-				class.env.lookup(property)
+				match class.env.lookup(property) {
+					Ok(_type) => _type,
+					Err(type_error) => {
+						self.type_error(&type_error);
+						self.types.anything()
+					}
+				}
 			}
 		}
 	}
