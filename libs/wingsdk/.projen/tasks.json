@@ -197,12 +197,7 @@
     },
     "pre-compile": {
       "name": "pre-compile",
-      "description": "Prepare the project for compilation",
-      "steps": [
-        {
-          "exec": "replace-in-file \"lib: ['lib.es2020.d.ts']\" \"lib: ['lib.es2020.d.ts','lib.dom.d.ts']\" node_modules/jsii/lib/compiler.js"
-        }
-      ]
+      "description": "Prepare the project for compilation"
     },
     "release": {
       "name": "release",

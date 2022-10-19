@@ -242,6 +242,8 @@ The tree node.
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.cloud.Bucket"></a>
 
+**Inflight client:** [@monadahq/wingsdk.cloud.IBucketClient](#@monadahq/wingsdk.cloud.IBucketClient)
+
 Represents a cloud object store.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Bucket.Initializer"></a>
@@ -362,6 +364,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
 
+**Inflight client:** [@monadahq/wingsdk.sim.IBucketClient](#@monadahq/wingsdk.sim.IBucketClient)
+
 Simulator implementation of `cloud.Bucket`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Bucket.Initializer"></a>
@@ -479,6 +483,8 @@ with a fresh copy without any consequences.
 
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.tfaws.Bucket"></a>
+
+**Inflight client:** [@monadahq/wingsdk.tfaws.IBucketClient](#@monadahq/wingsdk.tfaws.IBucketClient)
 
 AWS implementation of `cloud.Bucket`.
 
@@ -851,6 +857,8 @@ The file's relative path to the output directory.
 
 ### Function <a name="Function" id="@monadahq/wingsdk.cloud.Function"></a>
 
+**Inflight client:** [@monadahq/wingsdk.cloud.IFunctionClient](#@monadahq/wingsdk.cloud.IFunctionClient)
+
 Represents a serverless function.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Function.Initializer"></a>
@@ -999,6 +1007,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
 
+**Inflight client:** [@monadahq/wingsdk.sim.IFunctionClient](#@monadahq/wingsdk.sim.IFunctionClient)
+
 Simulator implementation of `cloud.Function`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Function.Initializer"></a>
@@ -1144,6 +1154,8 @@ with a fresh copy without any consequences.
 
 
 ### Function <a name="Function" id="@monadahq/wingsdk.tfaws.Function"></a>
+
+**Inflight client:** [@monadahq/wingsdk.tfaws.IFunctionClient](#@monadahq/wingsdk.tfaws.IFunctionClient)
 
 AWS implementation of `cloud.Function`.
 
@@ -1588,6 +1600,8 @@ The file's relative path to the output directory.
 
 ### Queue <a name="Queue" id="@monadahq/wingsdk.cloud.Queue"></a>
 
+**Inflight client:** [@monadahq/wingsdk.cloud.IQueueClient](#@monadahq/wingsdk.cloud.IQueueClient)
+
 Represents a serverless queue.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Queue.Initializer"></a>
@@ -1729,6 +1743,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
 
+**Inflight client:** [@monadahq/wingsdk.sim.IQueueClient](#@monadahq/wingsdk.sim.IQueueClient)
+
 Simulator implementation of `cloud.Queue`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Queue.Initializer"></a>
@@ -1867,6 +1883,8 @@ with a fresh copy without any consequences.
 
 
 ### Queue <a name="Queue" id="@monadahq/wingsdk.tfaws.Queue"></a>
+
+**Inflight client:** [@monadahq/wingsdk.tfaws.IQueueClient](#@monadahq/wingsdk.tfaws.IQueueClient)
 
 AWS implementation of `cloud.Queue`.
 
@@ -3565,7 +3583,7 @@ public readonly value: IConstruct;
 
 Returns the IConstruct this graph vertex represents.
 
-`null` in case this is the root of the graph.
+null` in case this is the root of the graph
 
 ---
 
@@ -4500,7 +4518,7 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IBucketClient
+- *Implemented By:* @monadahq/wingsdk.cloud.IBucketClient, @monadahq/wingsdk.sim.IBucketClient, @monadahq/wingsdk.tfaws.IBucketClient
 
 Inflight interface for `Bucket`.
 
@@ -4551,6 +4569,26 @@ Put an object in the bucket.
 ---
 
 
+### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.sim.IBucketClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
+
+- *Implemented By:* @monadahq/wingsdk.sim.IBucketClient
+
+Simulator implementation of inflight client for `cloud.Bucket`.
+
+
+
+### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.tfaws.IBucketClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
+
+- *Implemented By:* @monadahq/wingsdk.tfaws.IBucketClient
+
+AWS implementation of inflight client for `cloud.Bucket`.
+
+
+
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
 - *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
@@ -4590,7 +4628,7 @@ The tree node.
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IFunctionClient
+- *Implemented By:* @monadahq/wingsdk.cloud.IFunctionClient, @monadahq/wingsdk.sim.IFunctionClient, @monadahq/wingsdk.tfaws.IFunctionClient
 
 Inflight interface for `Function`.
 
@@ -4617,9 +4655,44 @@ Invoke the function asynchronously with a given payload.
 ---
 
 
+### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.sim.IFunctionClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
+
+- *Implemented By:* @monadahq/wingsdk.sim.IFunctionClient
+
+Simulator implementation of inflight client for `cloud.Function`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.IFunctionClient.timesCalled">timesCalled</a></code> | Returns the number of times the function was invoked since its creation. |
+
+---
+
+##### `timesCalled` <a name="timesCalled" id="@monadahq/wingsdk.sim.IFunctionClient.timesCalled"></a>
+
+```typescript
+public timesCalled(): number
+```
+
+Returns the number of times the function was invoked since its creation.
+
+
+### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.tfaws.IFunctionClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
+
+- *Implemented By:* @monadahq/wingsdk.tfaws.IFunctionClient
+
+AWS implementation of inflight client for `cloud.Function`.
+
+
+
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.cloud.IQueueClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IQueueClient
+- *Implemented By:* @monadahq/wingsdk.cloud.IQueueClient, @monadahq/wingsdk.sim.IQueueClient, @monadahq/wingsdk.tfaws.IQueueClient
 
 Inflight interface for `Queue`.
 
@@ -4646,6 +4719,26 @@ Push a message to the queue.
 Payload to send to the queue.
 
 ---
+
+
+### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.sim.IQueueClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
+
+- *Implemented By:* @monadahq/wingsdk.sim.IQueueClient
+
+Simulator implementation of inflight client for `cloud.Queue`.
+
+
+
+### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.tfaws.IQueueClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
+
+- *Implemented By:* @monadahq/wingsdk.tfaws.IQueueClient
+
+AWS implementation of inflight client for `cloud.Queue`.
+
 
 
 ### IResource <a name="IResource" id="@monadahq/wingsdk.sim.IResource"></a>
@@ -4788,14 +4881,14 @@ List of inflight operations available for `Bucket`.
 
 ##### `PUT` <a name="PUT" id="@monadahq/wingsdk.cloud.BucketInflightMethods.PUT"></a>
 
-`Bucket.put`.
+Bucket.put`
 
 ---
 
 
 ##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
 
-`Bucket.get`.
+Bucket.get`
 
 ---
 
@@ -4814,7 +4907,7 @@ List of inflight operations available for `Function`.
 
 ##### `INVOKE` <a name="INVOKE" id="@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE"></a>
 
-`Function.invoke`.
+Function.invoke`
 
 ---
 
@@ -4852,7 +4945,7 @@ List of inflight operations available for `Queue`.
 
 ##### `PUSH` <a name="PUSH" id="@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
 
-`Queue.push`.
+Queue.push`
 
 ---
 

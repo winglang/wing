@@ -16,6 +16,8 @@ import {
 
 /**
  * AWS implementation of `cloud.Function`.
+ *
+ * @inflight `@monadahq/wingsdk.tfaws.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
   private readonly function: aws.lambdafunction.LambdaFunction;
@@ -209,3 +211,8 @@ export interface PolicyStatement {
   /** Effect ("Allow" or "Deny") */
   readonly effect?: string;
 }
+
+/**
+ * AWS implementation of inflight client for `cloud.Function`.
+ */
+export interface IFunctionClient extends cloud.IFunctionClient {}

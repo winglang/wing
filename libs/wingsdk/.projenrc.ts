@@ -34,7 +34,7 @@ const project = new cdk.JsiiProject({
     "@types/fs-extra",
     "@types/tar",
     "@types/ws",
-    "replace-in-file",
+    "patch-package",
   ],
   prettier: true,
   jestOptions: {
@@ -57,11 +57,6 @@ project.package.addPackageResolutions("minipass@3.1.6");
 // when using require("@scope/package/path")
 // https://github.com/facebook/jest/pull/11961
 project.package.addPackageResolutions("jest-resolve@^28");
-
-// allow referencing DOM types (used by esbuild)
-project.preCompileTask.exec(
-  `replace-in-file "lib: ['lib.es2020.d.ts']" "lib: ['lib.es2020.d.ts','lib.dom.d.ts']" node_modules/jsii/lib/compiler.js`
-);
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");
@@ -203,8 +198,8 @@ project.package.addField("exports", {
   "./tfaws": "./lib/tf-aws/exports.js",
 });
 
-// Use typedoc instead of jsii-docgen
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.exec("mv API.md docs/api.md");
+pkgJson?.addOverride("scripts.postinstall", "patch-package");
 
 project.synth();

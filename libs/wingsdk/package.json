@@ -32,7 +32,8 @@
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
-    "projen": "npx projen"
+    "projen": "npx projen",
+    "postinstall": "patch-package"
   },
   "author": {
     "name": "Monada, Inc.",
@@ -70,9 +71,9 @@
     "json-schema": "^0.4.0",
     "minipass": "3.1.6",
     "npm-check-updates": "^15",
+    "patch-package": "^6.4.7",
     "prettier": "^2.7.1",
     "projen": "^0.62.16",
-    "replace-in-file": "^6.3.5",
     "standard-version": "^9",
     "ts-jest": "^27.0.0",
     "ts-node": "^10.9.1",
