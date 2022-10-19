@@ -29,8 +29,9 @@ libs/tree-sitter-wing/*.wasm
 libs/tree-sitter-wing/build/
 
 # wing
-apps/wing/bin/wing
-apps/wing/bin/wing-*
+apps/wing/bin
+!apps/wing/bin/index.js
+!apps/wing/bin/bootstrap.js
 apps/wing/dist
 apps/wing/.wing
 apps/wing/*.wasm
