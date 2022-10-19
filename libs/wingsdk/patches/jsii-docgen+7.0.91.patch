@@ -9,7 +9,7 @@ index e9d8a46..9769217 100644
 +        // JSDoc tags that use "@" must be escaped with backticks to
 +        // avoid getting parsed as another JSDoc tag. Sanitize away
 +        // these backticks to avoid double escaping.
-+        if (line.startsWith('`') && line.startsWith('`')) {
++        if (line.startsWith('`') && line.endsWith('`')) {
 +            sanitized = sanitized.substring(1, line.length - 1).trim();
 +        }
          return sanitized;
