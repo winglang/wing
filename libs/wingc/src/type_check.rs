@@ -756,9 +756,19 @@ impl<'a> TypeChecker<'a> {
 				let inferred_type = self.type_check_exp(initial_value, env).unwrap();
 				if let Some(explicit_type) = explicit_type {
 					self.validate_type(inferred_type, explicit_type, initial_value);
-					env.define(var_name, explicit_type);
+					match env.define(var_name, explicit_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				} else {
-					env.define(var_name, inferred_type);
+					match env.define(var_name, inferred_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 			}
 			Statement::FunctionDefinition(func_def) => {
@@ -773,7 +783,12 @@ impl<'a> TypeChecker<'a> {
 				let sig = function_type.as_function_sig().unwrap();
 
 				// Add this function to the env
-				env.define(&func_def.name, function_type);
+				match env.define(&func_def.name, function_type) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 
 				// Create an environment for the function
 				let mut function_env = TypeEnv::new(Some(env), sig.return_type, false, func_def.signature.flight);
@@ -792,7 +807,12 @@ impl<'a> TypeChecker<'a> {
 				let exp_type = self.type_check_exp(iterable, env).unwrap();
 
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
-				scope_env.define(&iterator, exp_type);
+				match scope_env.define(&iterator, exp_type) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 				statements.set_env(scope_env);
 
 				self.type_check_scope(statements);
@@ -831,7 +851,12 @@ impl<'a> TypeChecker<'a> {
 
 					if let Some(skip_flag) = std::env::var_os("WINGC_SKIP_JSII") {
 						if skip_flag != "false" {
-							env.define(namespace_name, self.types.anything())
+							match env.define(namespace_name, self.types.anything()) {
+								Err(type_error) => {
+									self.type_error(&type_error);
+								}
+								_ => {}
+							};
 						}
 						return;
 					};
@@ -879,7 +904,12 @@ impl<'a> TypeChecker<'a> {
 							name: namespace_name.name.clone(),
 							env: namespace_env,
 						}));
-						env.define(namespace_name, namespace);
+						match env.define(namespace_name, namespace) {
+							Err(type_error) => {
+								self.type_error(&type_error);
+							}
+							_ => {}
+						};
 					}
 				}
 			}
@@ -956,7 +986,12 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					Type::Class(class_spec)
 				});
-				env.define(name, class_type);
+				match env.define(name, class_type) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 
 				// Create a the real class environment to be filled with the class AST types
 				let mut class_env = TypeEnv::new(parent_class_env, None, true, env_flight);
@@ -970,7 +1005,12 @@ impl<'a> TypeChecker<'a> {
 					} else if member_type.as_resource().is_some() {
 						member_type = self.types.add_type(Type::ResourceObject(member_type));
 					}
-					class_env.define(&member.name, member_type);
+					match class_env.define(&member.name, member_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 				// Add methods to the class env
 				for method in methods.iter() {
@@ -986,18 +1026,28 @@ impl<'a> TypeChecker<'a> {
 					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env);
-					class_env.define(&method.name, method_type);
+					match class_env.define(&method.name, method_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 
 				// Add the constructor to the class env
 				let constructor_type = self.resolve_type(&AstType::FunctionSignature(constructor.signature.clone()), env);
-				class_env.define(
+				match class_env.define(
 					&Symbol {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
 					constructor_type,
-				);
+				) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				let class_env = match class_type.into() {
@@ -1073,7 +1123,12 @@ impl<'a> TypeChecker<'a> {
 				// Add members to the struct env
 				for member in members.iter() {
 					let member_type = self.resolve_type(&member.member_type, env);
-					struct_env.define(&member.name, member_type);
+					match struct_env.define(&member.name, member_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 
 				// Add members from the structs parents
@@ -1089,14 +1144,19 @@ impl<'a> TypeChecker<'a> {
 					.collect::<Vec<_>>();
 
 				add_parent_members_to_struct_env(&extends_types, name, &mut struct_env);
-				env.define(
+				match env.define(
 					name,
 					self.types.add_type(Type::Struct(Struct {
 						name: name.clone(),
 						extends: extends_types,
 						env: struct_env,
 					})),
-				)
+				) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 			}
 		}
 	}
@@ -1113,7 +1173,12 @@ impl<'a> TypeChecker<'a> {
 				*arg_type
 			};
 
-			env.define(&arg, actual_arg_type);
+			match env.define(&arg, actual_arg_type) {
+				Err(type_error) => {
+					self.type_error(&type_error);
+				}
+				_ => {}
+			};
 		}
 	}
 

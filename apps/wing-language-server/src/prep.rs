@@ -17,8 +17,7 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
 	let tree = match parser.parse(&text[..], None) {
 		Some(tree) => tree,
 		None => {
-			println!("Failed parsing source file: {}", source_file);
-			std::process::exit(1);
+			panic!("Failed parsing source file: {}", source_file);
 		}
 	};
 
@@ -31,6 +30,11 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
 	};
 
 	let mut scope = wing_parser.wingit(&tree.root_node());
+
+	// return ParseResult {
+	// 	tree,
+	// 	diagnostics: Diagnostics::new(),
+	// };
 
 	let mut types = type_check::Types::new();
 	let type_diag = type_check(&mut scope, &mut types);
