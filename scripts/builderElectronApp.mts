@@ -41,7 +41,6 @@ await build({
 
     mac: {
       target: "dmg",
-      gatekeeperAssess: true,
     },
     dmg: {
       sign: true,
