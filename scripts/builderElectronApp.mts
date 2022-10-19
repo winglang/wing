@@ -42,6 +42,7 @@ await build({
 
     mac: {
       target: "dmg",
+      publish: [],
     },
     dmg: {
       sign: true,
