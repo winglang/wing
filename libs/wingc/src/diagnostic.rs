@@ -52,7 +52,6 @@ pub fn print_diagnostics(diagnostics: &Diagnostics) {
 	}
 }
 
-// type error
 pub struct TypeError {
 	pub message: String,
 	pub span: WingSpan,
