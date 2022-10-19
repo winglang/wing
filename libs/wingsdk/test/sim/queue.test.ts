@@ -1,147 +1,115 @@
-import * as path from "path";
+import * as cloud from "../../src/cloud";
+import * as core from "../../src/core";
 import { FunctionClient } from "../../src/sim/function.inflight";
 import { QueueClient } from "../../src/sim/queue.inflight";
-import { Simulator } from "../../src/testing/simulator";
+import { QueueSchema } from "../../src/sim/schema-resources";
+import * as testing from "../../src/testing";
+import { simulatorJsonOf, synthSimulatedApp } from "./util";
 
 jest.setTimeout(5_000); // 5 seconds
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const SOURCE_CODE_FILE = path.join(__dirname, "fixtures", "process.js");
-const SOURCE_CODE_LANGUAGE = "javascript";
-const ENVIRONMENT_VARIABLES = {};
+const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
+async function $proc($cap, message) {
+    if (message === "BAD MESSAGE") {
+        throw new Error("ERROR");
+    }
+}`);
 
 describe("basic", () => {
-  test("queue with batch size of 1", async () => {
+  test("queue with default batch size of 1", async () => {
     // GIVEN
-    const sim = await Simulator.fromTree({
-      tree: {
-        root: {
-          type: "constructs.Construct",
-          children: {
-            my_function: {
-              type: "wingsdk.cloud.Function",
-              props: {
-                sourceCodeFile: SOURCE_CODE_FILE,
-                sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-                environmentVariables: ENVIRONMENT_VARIABLES,
-              },
-            },
-            my_queue: {
-              type: "wingsdk.cloud.Queue",
-              props: {
-                subscribers: [
-                  {
-                    functionId: "root/my_function",
-                    batchSize: 1,
-                  },
-                ],
-              },
-            },
-          },
-        },
-        initOrder: ["root", "root/my_function", "root/my_queue"],
-      },
+    const appPath = synthSimulatedApp((scope) => {
+      const handler = new core.Inflight({
+        code: INFLIGHT_CODE,
+        entrypoint: "$proc",
+      });
+      const queue = new cloud.Queue(scope, "my_queue");
+      queue.onMessage(handler);
     });
+    const s = new testing.Simulator({ appPath });
+    await s.start();
 
-    const fnAttrs = sim.getAttributes("root/my_function");
-    const fnClient = new FunctionClient(fnAttrs.functionAddr);
-
-    const queueAttrs = sim.getAttributes("root/my_queue");
+    const queueAttrs = s.getAttributes("root/my_queue") as QueueSchema["attrs"];
+    const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
     const queueClient = new QueueClient(queueAttrs.queueAddr);
+
+    expect(queueProps.subscribers[0].batchSize).toEqual(1);
+
+    const fnId = queueProps.subscribers[0].functionId;
+    const fnAttrs = s.getAttributes(fnId);
+    const fnClient = new FunctionClient(fnAttrs.functionAddr);
 
     // WHEN
     await queueClient.push("A");
     await queueClient.push("B");
 
+    // TODO: queueClient.awaitMessages(2) or queueClient.untilEmpty() or something
     await sleep(200);
 
     // THEN
     expect(await fnClient.timesCalled()).toEqual(2);
-    await sim.cleanup();
+    await s.stop();
+
+    expect(simulatorJsonOf(appPath)).toMatchSnapshot();
   });
 
   test("queue with batch size of 5", async () => {
     // GIVEN
-    const sim = await Simulator.fromTree({
-      tree: {
-        root: {
-          type: "constructs.Construct",
-          children: {
-            my_function: {
-              type: "wingsdk.cloud.Function",
-              props: {
-                sourceCodeFile: SOURCE_CODE_FILE,
-                sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-                environmentVariables: ENVIRONMENT_VARIABLES,
-              },
-            },
-            my_queue: {
-              type: "wingsdk.cloud.Queue",
-              props: {
-                initialMessages: ["A", "B", "C", "D", "E", "F"],
-                subscribers: [
-                  {
-                    functionId: "root/my_function",
-                    batchSize: 5,
-                  },
-                ],
-              },
-            },
-          },
-        },
-        initOrder: ["root", "root/my_function", "root/my_queue"],
-      },
+    const appPath = synthSimulatedApp((scope) => {
+      const handler = new core.Inflight({
+        code: INFLIGHT_CODE,
+        entrypoint: "$proc",
+      });
+      const queue = new cloud.Queue(scope, "my_queue", {
+        initialMessages: ["A", "B", "C", "D", "E", "F"],
+      });
+      queue.onMessage(handler, { batchSize: 5 });
     });
+    const s = new testing.Simulator({ appPath });
+    await s.start();
 
-    const fnAttrs = sim.getAttributes("root/my_function");
+    const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
+
+    const fnId = queueProps.subscribers[0].functionId;
+    const fnAttrs = s.getAttributes(fnId);
     const fnClient = new FunctionClient(fnAttrs.functionAddr);
 
     await sleep(200);
 
     // THEN
     expect(await fnClient.timesCalled()).toEqual(2);
-    await sim.cleanup();
+    await s.stop();
+
+    expect(simulatorJsonOf(appPath)).toMatchSnapshot();
   });
 
   test("messages are requeued if the function fails", async () => {
+    // silence console.error
+    const originalError = console.error;
+    console.error = jest.fn();
+
     // GIVEN
-    const sim = await Simulator.fromTree({
-      tree: {
-        root: {
-          type: "constructs.Construct",
-          children: {
-            my_function: {
-              type: "wingsdk.cloud.Function",
-              props: {
-                sourceCodeFile: SOURCE_CODE_FILE,
-                sourceCodeLanguage: SOURCE_CODE_LANGUAGE,
-                environmentVariables: ENVIRONMENT_VARIABLES,
-              },
-            },
-            my_queue: {
-              type: "wingsdk.cloud.Queue",
-              props: {
-                subscribers: [
-                  {
-                    functionId: "root/my_function",
-                    batchSize: 1,
-                  },
-                ],
-              },
-            },
-          },
-        },
-        initOrder: ["root", "root/my_function", "root/my_queue"],
-      },
+    const appPath = synthSimulatedApp((scope) => {
+      const handler = new core.Inflight({
+        code: INFLIGHT_CODE,
+        entrypoint: "$proc",
+      });
+      const queue = new cloud.Queue(scope, "my_queue");
+      queue.onMessage(handler);
     });
+    const s = new testing.Simulator({ appPath });
+    await s.start();
 
     // WHEN
-    const fnAttrs = sim.getAttributes("root/my_function");
-    const fnClient = new FunctionClient(fnAttrs.functionAddr);
-
-    const queueAttrs = sim.getAttributes("root/my_queue");
+    const queueAttrs = s.getAttributes("root/my_queue") as QueueSchema["attrs"];
+    const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
     const queueClient = new QueueClient(queueAttrs.queueAddr);
+
+    const fnId = queueProps.subscribers[0].functionId;
+    const fnAttrs = s.getAttributes(fnId);
+    const fnClient = new FunctionClient(fnAttrs.functionAddr);
 
     await queueClient.push("BAD MESSAGE");
 
@@ -149,6 +117,11 @@ describe("basic", () => {
 
     // THEN
     expect(await fnClient.timesCalled()).toBeGreaterThan(1);
-    await sim.cleanup();
+    await s.stop();
+
+    expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+
+    // restore console.error
+    console.error = originalError;
   });
 });

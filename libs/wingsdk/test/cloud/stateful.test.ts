@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import { App, NodeJsCode, Inflight } from "../../src/core";
 import * as sim from "../../src/sim";
-import { mkdtemp } from "../util";
+import { mkdtemp } from "../../src/util";
 
 test("each cloud resource can be identified as stateful or not", () => {
   const app = new App({

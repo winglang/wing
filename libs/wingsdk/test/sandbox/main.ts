@@ -61,7 +61,7 @@ async function main() {
   const processorClient = new FunctionClient(processorAttrs.functionAddr);
   await processorClient.timesCalled();
 
-  await s.cleanup();
+  await s.stop();
 }
 
 main().catch((err) => {

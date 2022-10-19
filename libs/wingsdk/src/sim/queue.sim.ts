@@ -1,8 +1,8 @@
 import { Server } from "ws";
-import { IResourceResolver } from "../testing/simulator";
+import { IResourceResolver, SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
 import { FunctionClient } from "./function.inflight";
-import { QueueSchema, QueueSubscriber } from "./schema";
+import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 import { RandomArrayIterator } from "./util.sim";
 
@@ -12,40 +12,40 @@ interface QueueSubscriberInternal extends QueueSubscriber {
   functionClient?: FunctionClient;
 }
 
-export async function init(
-  props: QueueSchema["props"] & { _resolver: IResourceResolver }
+export async function start(
+  props: QueueSchema["props"],
+  context: SimulatorContext
 ): Promise<QueueSchema["attrs"]> {
-  const q = new Queue(props);
+  const q = new Queue(props, context.resolver);
   QUEUES[q.addr] = q;
   return {
     queueAddr: q.addr,
   };
 }
 
-export async function cleanup(attrs: QueueSchema["attrs"]) {
+export async function stop(attrs: QueueSchema["attrs"]) {
   const queueAddr = attrs.queueAddr;
   const q = QUEUES[queueAddr];
   if (!q) {
     throw new Error(`Invalid queueAddr: ${queueAddr}`);
   }
-  await q.cleanup();
+  await q.stop();
   delete QUEUES[queueAddr];
 }
 
-export class Queue {
+class Queue {
   private readonly wss: Server;
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriberInternal>();
   private readonly intervalId: NodeJS.Timeout;
 
-  constructor(props: QueueSchema["props"] & { _resolver: IResourceResolver }) {
+  constructor(props: QueueSchema["props"], resolver: IResourceResolver) {
     for (const sub of props.subscribers) {
       this.subscribers.push({ ...sub });
     }
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
-      const functionAddr =
-        props._resolver.lookup(functionId).attrs.functionAddr;
+      const functionAddr = resolver.lookup(functionId).attrs?.functionAddr;
       subscriber.functionClient = new FunctionClient(functionAddr);
     }
 
@@ -59,7 +59,7 @@ export class Queue {
     const q = this;
     this.wss.on("connection", function connection(ws) {
       ws.on("message", function message(data) {
-        log("server receiving: %s", data);
+        log("server receiving:", data);
         const contents: SimulatorRequest = JSON.parse(data.toString());
         if (contents.operation === "push") {
           q.messages.push(contents.message);
@@ -68,7 +68,7 @@ export class Queue {
             result: "ok",
             timestamp: Date.now(),
           };
-          log("server sending: %s", JSON.stringify(resp));
+          log("server sending:", JSON.stringify(resp));
           ws.send(JSON.stringify(resp));
         } else {
           throw new Error(`Invalid operation: ${contents.operation}`);
@@ -108,16 +108,21 @@ export class Queue {
         if (!fnClient) {
           throw new Error("No function client found");
         }
-        void fnClient.invoke(JSON.stringify({ messages })).catch(() => {
+        const event = JSON.stringify({ messages });
+        void fnClient.invoke(event).catch((err) => {
           // If the function returns an error, put the message back on the queue
           this.messages.push(...messages);
+          console.error(
+            `Error invoking queue subscriber ${subscriber.functionId} with event "${event}":`,
+            err
+          );
         });
         processedMessages = true;
       }
     } while (processedMessages);
   }
 
-  public async cleanup() {
+  public async stop() {
     await new Promise((resolve, reject) => {
       this.wss.close((err) => {
         if (err) {

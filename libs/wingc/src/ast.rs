@@ -172,13 +172,15 @@ pub enum ExprType {
 pub struct Expr {
 	pub variant: ExprType,
 	pub evaluated_type: RefCell<Option<TypeRef>>,
+	pub span: WingSpan,
 }
 
 impl Expr {
-	pub fn new(expression_variant: ExprType) -> Self {
+	pub fn new(expression_variant: ExprType, span: WingSpan) -> Self {
 		Self {
 			variant: expression_variant,
 			evaluated_type: RefCell::new(None),
+			span,
 		}
 	}
 }

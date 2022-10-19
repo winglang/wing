@@ -11,7 +11,7 @@ import {
 } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
-import { FunctionSchema } from "./schema";
+import { FunctionSchema } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Function`.
@@ -48,6 +48,10 @@ export class Function extends cloud.FunctionBase implements IResource {
       lines: [bundledCode.text],
     });
     this.code = NodeJsCode.fromFile(assetPath);
+
+    for (const [name, value] of Object.entries(props.env ?? {})) {
+      this.addEnvironment(name, value);
+    }
   }
 
   private get addr(): string {

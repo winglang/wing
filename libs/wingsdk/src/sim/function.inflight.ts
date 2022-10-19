@@ -5,7 +5,6 @@ import { sendToWebSocket } from "./util.inflight";
 export class FunctionClient implements IFunctionClient {
   private readonly ws: WebSocket;
 
-  // TODO: make this be an async function, and wait for the server to open
   constructor(functionAddr: number) {
     this.ws = new WebSocket(`ws://localhost:${functionAddr}`);
   }
