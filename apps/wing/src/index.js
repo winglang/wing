@@ -10,7 +10,7 @@ const debug = require("debug")("wing:index");
 // they are defined here. These are in the form of "hints" for "pkg"
 // see: https://github.com/vercel/pkg#snapshot-filesystem
 const WINGC_WASM_PATH = resolve(__dirname, "../wingc.wasm");
-const WINGC_CURR_WDIR = resolve(process.cwd(), ".wing");
+const WINGC_CWD = resolve(process.cwd(), ".wing");
 
 async function main() {
   const program = new Command();
