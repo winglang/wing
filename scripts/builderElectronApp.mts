@@ -31,7 +31,7 @@ function getEnvironmentValues<T extends string>(...keys: T[]) {
 await build({
   targets: Platform.MAC.createTarget(),
   config: {
-    appId: "co.monada.wing-console",
+    appId: "co.monada.WingConsole",
     buildVersion: await readFile("dist/releasetag.txt", "utf8"),
     directories: {
       output: "release",
