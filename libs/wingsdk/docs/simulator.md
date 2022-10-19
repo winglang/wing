@@ -72,8 +72,8 @@ for it:
 ```typescript
 import { FunctionClient } from "@monadahq/wingsdk/sim";
 
-const addr = sim.getAttributes("root/my_function").fnAddr;
-const client = new FunctionClient(fnAddr);
+const addr = sim.getAttributes("root/my_function").functionAddr;
+const client = new FunctionClient(addr);
 
 const response = await client.invoke("hello!");
 console.log(response);
