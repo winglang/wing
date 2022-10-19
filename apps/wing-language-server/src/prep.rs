@@ -21,8 +21,6 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
 		}
 	};
 
-	// TODO: Currently not including the actual wingc code because it's not async-friendly
-
 	let wing_parser = Parser {
 		source: &text[..],
 		source_name: source_file.to_string(),
@@ -30,11 +28,6 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
 	};
 
 	let mut scope = wing_parser.wingit(&tree.root_node());
-
-	// return ParseResult {
-	// 	tree,
-	// 	diagnostics: Diagnostics::new(),
-	// };
 
 	let mut types = type_check::Types::new();
 	let type_diag = type_check(&mut scope, &mut types);
