@@ -18,6 +18,12 @@ export interface QueueProps {
    * @default Duration.fromSeconds(10)
    */
   readonly timeout?: Duration;
+
+  /**
+   * Initialize the queue with a set of messages.
+   * @default []
+   */
+  readonly initialMessages?: string[];
 }
 
 /**
@@ -71,9 +77,11 @@ export class Queue extends QueueBase {
   }
 
   public onMessage(
-    _inflight: Inflight,
-    _props: QueueOnMessageProps = {}
+    inflight: Inflight,
+    props: QueueOnMessageProps = {}
   ): Function {
+    inflight;
+    props;
     throw new Error("Method not implemented.");
   }
 }

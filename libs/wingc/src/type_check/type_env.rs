@@ -1,5 +1,6 @@
 use crate::{
 	ast::{Flight, Symbol},
+	diagnostic::TypeError,
 	type_check::Type,
 	type_check::TypeRef,
 };
@@ -32,9 +33,12 @@ impl TypeEnv {
 		self.parent.is_none()
 	}
 
-	pub fn define(&mut self, symbol: &Symbol, _type: TypeRef) {
+	pub fn define(&mut self, symbol: &Symbol, _type: TypeRef) -> Result<(), TypeError> {
 		if self.type_map.contains_key(&symbol.name) {
-			panic!("Symbol {} already defined.", symbol);
+			return Err(TypeError {
+				span: symbol.span.clone(),
+				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
+			});
 		}
 
 		// Avoid variable shadowing
@@ -45,11 +49,16 @@ impl TypeEnv {
 					&& matches!(parent_type.into(), &Type::Function(_))
 					&& matches!(_type.into(), &Type::Function(_)))
 				{
-					panic!("Symbol {} already defined in parent scope.", symbol);
+					return Err(TypeError {
+						span: symbol.span.clone(),
+						message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
+					});
 				}
 			}
 		}
 		self.type_map.insert(symbol.name.clone(), _type);
+
+		Ok(())
 	}
 
 	pub fn try_lookup(&self, symbol_name: &str) -> Option<TypeRef> {
@@ -66,33 +75,58 @@ impl TypeEnv {
 		}
 	}
 
-	pub fn lookup(&self, symbol: &Symbol) -> TypeRef {
-		self.lookup_ext(symbol).0
+	pub fn lookup(&self, symbol: &Symbol) -> Result<TypeRef, TypeError> {
+		Ok(self.lookup_ext(symbol)?.0)
 	}
 
-	pub fn lookup_ext(&self, symbol: &Symbol) -> (TypeRef, Flight) {
-		self
-			.try_lookup_ext(&symbol.name)
-			.expect(&format!("Unknown symbol {} at {}", &symbol.name, &symbol.span))
+	pub fn lookup_ext(&self, symbol: &Symbol) -> Result<(TypeRef, Flight), TypeError> {
+		let lookup_result = self.try_lookup_ext(&symbol.name);
+
+		if let Some((type_ref, flight)) = lookup_result {
+			Ok((type_ref, flight))
+		} else {
+			Err(TypeError {
+				message: format!("Unknown symbol \"{}\"", &symbol.name),
+				span: symbol.span.clone(),
+			})
+		}
 	}
 
-	pub fn lookup_nested(&self, nested_vec: &[&str]) -> TypeRef {
+	pub fn lookup_nested(&self, nested_vec: &[&Symbol]) -> Result<TypeRef, TypeError> {
 		let mut it = nested_vec.iter();
 
 		let mut symb = *it.next().unwrap();
-		let mut t = self.try_lookup(symb).expect(&format!("Unknown symbol {}", symb));
+		let mut t = if let Some(type_ref) = self.try_lookup(&symb.name) {
+			type_ref
+		} else {
+			return Err(TypeError {
+				message: format!("Unknown symbol \"{}\"", symb),
+				span: symb.span.clone(),
+			});
+		};
 
 		while let Some(next_symb) = it.next() {
+			if t.is_anything() {
+				break;
+			}
 			let ns = t
 				.as_namespace()
-				.expect(&format!("Symbol {} should be a namespace", symb));
-			t = ns
-				.env
-				.try_lookup(*next_symb)
-				.expect(&format!("Unknown symbol {}", *next_symb));
+				.expect(&format!("Symbol \"{}\" should be a namespace", symb));
+
+			let lookup_result = ns.env.try_lookup(&(*next_symb).name);
+
+			if let Some(type_ref) = lookup_result {
+				t = type_ref;
+			} else {
+				return Err(TypeError {
+					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb, ns.name),
+					span: next_symb.span.clone(),
+				});
+			}
+
 			symb = *next_symb;
 		}
-		t
+		Ok(t)
 	}
 
 	pub fn iter(&self) -> TypeEnvIter {

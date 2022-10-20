@@ -97,7 +97,13 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) -
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
 		if let &Type::ResourceObject(resource) = object.evaluated_type.borrow().unwrap().into() {
 			let resource = resource.as_resource().unwrap();
-			let (prop_type, _flight) = resource.env.lookup_ext(property);
+			let (prop_type, _flight) = match resource.env.lookup_ext(property) {
+				Ok(_type) => _type,
+				Err(type_error) => {
+					panic!("Type error: {}", type_error);
+				}
+			};
+
 			let func = prop_type.as_function_sig().unwrap();
 			if matches!(func.flight, Flight::Pre) {
 				panic!("Can't access preflight method {} inflight", property);
@@ -133,7 +139,13 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 		ExprType::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
-				let (t, f) = env.lookup_ext(&symbol);
+				let (t, f) = match env.lookup_ext(&symbol) {
+					Ok(_type) => _type,
+					Err(type_error) => {
+						panic!("Type error: {}", type_error);
+					}
+				};
+
 				if let (Some(resource), Flight::Pre) = (t.as_resource_object(), f) {
 					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
 					//   1. explicit capture definitions

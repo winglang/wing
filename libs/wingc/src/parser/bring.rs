@@ -7,12 +7,7 @@ use std::collections::HashSet;
 use std::fs;
 use std::path::PathBuf;
 
-use crate::ast::Flight;
-use crate::capture::scan_captures;
-use crate::type_check::type_env::TypeEnv;
-use crate::type_check::{TypeChecker, Types};
-
-pub fn bring(source_file: &str, context: Option<&str>, imports: &mut HashSet<String>) -> Option<Scope> {
+pub fn bring(source_file: &str, context: Option<&str>, imports: &mut HashSet<String>) -> Option<(Scope, Diagnostics)> {
 	// default context directory to the current directory
 	let context_dir = PathBuf::from(&context.unwrap_or("."));
 	// turn "source_file" into a canonical path relative to context_dir
@@ -62,5 +57,5 @@ pub fn bring(source_file: &str, context: Option<&str>, imports: &mut HashSet<Str
 		std::process::exit(1);
 	}
 
-	Some(scope)
+	Some((scope, wing_parser.diagnostics.into_inner()))
 }

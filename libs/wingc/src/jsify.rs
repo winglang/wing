@@ -162,12 +162,13 @@ fn jsify_expression(expression: &Expr) -> String {
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
-			let is_resource = expression
-				.evaluated_type
-				.borrow()
-				.unwrap()
-				.as_resource_object()
-				.is_some();
+			let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+				evaluated_type.as_resource_object().is_some()
+			} else {
+				// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
+				// Currently, this occurs when a JSII import is untyped, such as when `WINGC_SKIP_JSII` is enabled and `bring cloud` is used.
+				true
+			};
 
 			// If this is a resource then add the scope and id to the arg list
 			if is_resource {

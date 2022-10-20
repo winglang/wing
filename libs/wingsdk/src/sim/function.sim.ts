@@ -1,42 +1,50 @@
+import { existsSync } from "fs";
+import { join } from "path";
 import Piscina from "piscina";
 import { Server } from "ws";
+import { SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
-import { FunctionSchema } from "./schema";
+import { FunctionSchema } from "./schema-resources";
 import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 
 const FUNCTIONS: Record<number, Function> = {};
 
-export async function init(
-  props: FunctionSchema["props"]
+export async function start(
+  props: FunctionSchema["props"],
+  context: SimulatorContext
 ): Promise<FunctionSchema["attrs"]> {
-  const fn = new Function(props);
+  const fn = new Function(props, context.assetsDir);
   FUNCTIONS[fn.addr] = fn;
   return {
     functionAddr: fn.addr,
   };
 }
 
-export async function cleanup(attrs: FunctionSchema["attrs"]) {
+export async function stop(attrs: FunctionSchema["attrs"]) {
   const functionAddr = attrs.functionAddr;
   const fn = FUNCTIONS[functionAddr];
   if (!fn) {
     throw new Error(`Invalid functionAddr: ${functionAddr}`);
   }
-  await fn.cleanup();
+  await fn.stop();
   delete FUNCTIONS[functionAddr];
 }
 
-export class Function {
+class Function {
   private readonly wss: Server;
   private readonly worker: Piscina;
   private _timesCalled: number = 0;
 
-  constructor(props: FunctionSchema["props"]) {
+  constructor(props: FunctionSchema["props"], assetsDir: string) {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
+    const filename = join(assetsDir, props.sourceCodeFile);
+    if (!existsSync(filename)) {
+      throw new Error("File not found: " + filename);
+    }
     this.worker = new Piscina({
-      filename: props.sourceCodeFile,
+      filename,
       env: {
         ...props.environmentVariables,
       },
@@ -49,7 +57,7 @@ export class Function {
 
     this.wss.on("connection", function connection(ws) {
       ws.on("message", function message(data) {
-        log("server receiving: %s", data);
+        log("server receiving:", data);
         const contents: SimulatorRequest = JSON.parse(data.toString());
         if (contents.operation === "invoke") {
           void fn
@@ -60,7 +68,7 @@ export class Function {
                 result,
                 timestamp: Date.now(),
               };
-              log("server sending: %s", JSON.stringify(resp));
+              log("server sending:", JSON.stringify(resp));
               ws.send(JSON.stringify(resp));
             })
             .catch((err) => {
@@ -69,7 +77,7 @@ export class Function {
                 error: `${err} ${err.stack}`,
                 timestamp: Date.now(),
               };
-              log("server sending: %s", JSON.stringify(resp));
+              log("server sending:", JSON.stringify(resp));
               ws.send(JSON.stringify(resp));
             });
         } else if (contents.operation === "timesCalled") {
@@ -78,7 +86,7 @@ export class Function {
             result: fn._timesCalled.toString(),
             timestamp: Date.now(),
           };
-          log("server sending: %s", JSON.stringify(resp));
+          log("server sending:", JSON.stringify(resp));
           ws.send(JSON.stringify(resp));
         }
       });
@@ -107,7 +115,7 @@ export class Function {
     return address.port;
   }
 
-  public async cleanup(): Promise<void> {
+  public async stop(): Promise<void> {
     await new Promise((resolve, reject) => {
       this.wss.close((err) => {
         if (err) {

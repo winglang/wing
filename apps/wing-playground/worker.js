@@ -16,6 +16,7 @@ self.onmessage = async event => {
     args: ['wingc', 'code.w'],
     env: {
       ...env,
+      WINGC_SKIP_JSII: "1",
       RUST_BACKTRACE: "full",
     },
   });
@@ -28,20 +29,31 @@ self.onmessage = async event => {
     file.seek(0);
 
     wasi.start(instance);
-    let stdout = wasi.getStdoutString();
+    const stdout = wasi.getStdoutString();
+    let intermediateJS = "";
+
+    const intermediateFile = wasi.fs.open("/code.w.out/intermediate.js", {read: true});
+    intermediateJS += intermediateFile.readString();
 
     let procRegex = /fromFile\("(.+index\.js)"/g;
     let procMatch;
-    while (procMatch = procRegex.exec(stdout)) {
+    while (procMatch = procRegex.exec(intermediateJS)) {
       const proc = procMatch[1];
-      let procFile = wasi.fs.open("/code.w.out/" + proc, {read: true, write: false, create: false});
-      stdout += `\n\n// ${proc}\n// START\n${procFile.readString()}\n// END`
+      const procPath = `/code.w.out/${proc}`;
+      let procFile = wasi.fs.open(procPath, {read: true});
+      intermediateJS += `\n\n// ${proc}\n// START\n${procFile.readString()}\n// END`
     }
     
-    self.postMessage(stdout);
+    self.postMessage({
+      stdout,
+      intermediateJS
+    });
   } catch (error) {
     console.error(error);
-    self.postMessage(wasi.getStderrString());
+    self.postMessage({
+      stdout: wasi.getStdoutString(),
+      intermediateJS: wasi.getStderrString(),
+    });
   }
 };
 
