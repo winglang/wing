@@ -1,12 +1,13 @@
 use std::cell::RefCell;
 
 use tree_sitter::Tree;
-use wingc::{diagnostic::Diagnostics, parser::Parser, type_check};
+use wingc::{ast::Scope, diagnostic::Diagnostics, parser::Parser, type_check};
 
 #[derive(Debug)]
 pub struct ParseResult {
 	pub tree: Tree,
 	pub diagnostics: Diagnostics,
+	pub scope: Scope,
 }
 
 pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
@@ -35,5 +36,9 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
 
 	let diagnostics = vec![parse_diag, type_diag].concat();
 
-	return ParseResult { tree, diagnostics };
+	return ParseResult {
+		tree,
+		diagnostics,
+		scope,
+	};
 }

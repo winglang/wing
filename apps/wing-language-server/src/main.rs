@@ -144,6 +144,25 @@ impl LanguageServer for Backend {
 				return Ok(None);
 			}
 
+			if node.unwrap().kind() == "identifier" {
+				if let Some(scope_env) = &ast.scope.env {
+					let rope = self.document_map.get(&uri.to_string());
+
+					if let Some(r) = rope {
+						let text = r.byte_slice(node.unwrap().byte_range().start..node.unwrap().byte_range().end);
+						if let Some(symb) = scope_env.try_lookup(&text.as_str().unwrap()) {
+							return Ok(Some(Hover {
+								contents: HoverContents::Markup(MarkupContent {
+									kind: MarkupKind::Markdown,
+									value: format!("{}: {}", text, symb),
+								}),
+								range: None,
+							}));
+						}
+					}
+				}
+			}
+
 			let mut nodes = vec![];
 			let mut iter_node = node;
 			while let Some(iter_node_good) = iter_node {

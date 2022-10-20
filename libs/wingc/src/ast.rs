@@ -69,6 +69,8 @@ pub struct FunctionDefinition {
 	pub captures: RefCell<Option<Captures>>,
 }
 
+unsafe impl Sync for FunctionDefinition {}
+
 #[derive(Debug)]
 pub struct Constructor {
 	pub parameters: Vec<Symbol>,
@@ -174,6 +176,7 @@ pub struct Expr {
 	pub evaluated_type: RefCell<Option<TypeRef>>,
 	pub span: WingSpan,
 }
+unsafe impl Sync for Expr {}
 
 impl Expr {
 	pub fn new(expression_variant: ExprType, span: WingSpan) -> Self {

@@ -16,6 +16,7 @@ pub struct TypeEnv {
 
 // TODO See TypeRef for why this is necessary
 unsafe impl Send for TypeEnv {}
+unsafe impl Sync for TypeEnv {}
 
 impl TypeEnv {
 	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool, flight: Flight) -> Self {
