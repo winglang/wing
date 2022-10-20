@@ -118,7 +118,7 @@ jobs:
         with:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
-          all: true
+          args: "--configuration=release"
 
       - name: Package Wing CLI
         working-directory: apps/wing
@@ -254,11 +254,18 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Build
+      - name: Build Native
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build-multi"
           projects: "vscode-wing"
+          args: "--configuration=release"
+
+      - name: Test Native
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wingc,vscode-wing"
           args: "--configuration=release"
 
       - name: Upload extension
