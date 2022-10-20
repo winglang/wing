@@ -86,12 +86,11 @@ pkgJson!.addOverride("jsii.excludeTypescript", [
 ]);
 
 // By default, the TypeScript compiler will include all types from @types, even
-// if the package is not used anywhere (directly or transitively) in the source
-// code (`/src`). This is problematic because JSII is stuck on an older
-// TypeScript version, and we only want it to compile the types exported by
-// index.ts.
+// if the package is not used anywhere in our source code (`/src`). This is
+// problematic because JSII is stuck on an older TypeScript version, and we only
+// want it to compile the types exported by index.ts.
 //
-// Let's ignore them all by default, and then explicitly include the ones we
+// Let's ignore these types by default, and then explicitly include the ones we
 // need for JSII compilation to work. This is OK since we are compiling things
 // twice (once with JSII, and once with the latest version of TypeScript), and
 // any other type errors can be caught by the second compilation.
