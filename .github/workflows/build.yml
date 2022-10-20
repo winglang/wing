@@ -112,12 +112,15 @@ jobs:
           targets: "build"
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--configuration=release"
+          parallel: false
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
+          args: "--configuration=release"
+          parallel: false
           all: true
 
       - name: Package Wing CLI
@@ -214,7 +217,7 @@ jobs:
       - name: Lint Nx
         run: npx nx workspace-lint
 
-      - name: Build
+      - name: Build Native
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build-native"
@@ -256,7 +259,7 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Build
+      - name: Build Native
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build-multi"
