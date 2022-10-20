@@ -1,5 +1,5 @@
 use ast::Scope;
-use diagnostic::Diagnostics;
+use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -8,8 +8,8 @@ use std::path::PathBuf;
 
 use crate::ast::Flight;
 use crate::capture::scan_captures;
+use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
-use crate::type_env::TypeEnv;
 
 pub mod ast;
 pub mod capture;
@@ -17,9 +17,8 @@ pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
 pub mod type_check;
-pub mod type_env;
 
-pub fn parse(source_file: &str) -> Scope {
+pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
@@ -34,8 +33,7 @@ pub fn parse(source_file: &str) -> Scope {
 	let tree = match parser.parse(&source[..], None) {
 		Some(tree) => tree,
 		None => {
-			println!("Failed parsing source file: {}", source_file);
-			std::process::exit(1);
+			panic!("Failed parsing source file: {}", source_file);
 		}
 	};
 
@@ -47,36 +45,46 @@ pub fn parse(source_file: &str) -> Scope {
 
 	let scope = wing_parser.wingit(&tree.root_node());
 
-	for diagnostic in wing_parser.diagnostics.borrow().iter() {
-		println!("{}", diagnostic);
-	}
-
-	if wing_parser.diagnostics.borrow().len() > 0 {
-		std::process::exit(1);
-	}
-
-	scope
+	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types) {
+pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
 	let mut tc = TypeChecker::new(types);
 	tc.type_check_scope(scope);
+
+	tc.diagnostics.into_inner()
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
-	let mut scope = parse(source_file);
+	let (mut scope, parse_diagnostics) = parse(source_file);
+
 	// Type check everything and build typed symbol environment
-	type_check(&mut scope, &mut types);
+	let type_check_diagnostics = type_check(&mut scope, &mut types);
+
 	// Analyze inflight captures
 	scan_captures(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
 	fs::create_dir_all(&out_dir).expect("create output dir");
+
+	// Print diagnostics
+	print_diagnostics(&parse_diagnostics);
+	print_diagnostics(&type_check_diagnostics);
+
+	if parse_diagnostics
+		.iter()
+		.any(|x| matches!(x.level, DiagnosticLevel::Error))
+		|| type_check_diagnostics
+			.iter()
+			.any(|x| matches!(x.level, DiagnosticLevel::Error))
+	{
+		std::process::exit(1);
+	}
 
 	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
 	let intermediate_file = out_dir.join("intermediate.js");

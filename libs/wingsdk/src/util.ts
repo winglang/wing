@@ -1,9 +1,13 @@
-import { mkdtempSync } from "fs";
+import { mkdtempSync, readFileSync } from "fs";
 import { tmpdir } from "os";
 import { join } from "path";
 
 export function mkdtemp() {
   return mkdtempSync(join(tmpdir(), "wingsdk."));
+}
+
+export function readJsonSync(file: string) {
+  return JSON.parse(readFileSync(file, "utf-8"));
 }
 
 export function log(...args: any[]) {

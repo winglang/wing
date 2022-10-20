@@ -4,7 +4,7 @@ import { BUCKET_TYPE } from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
-import { BucketSchema } from "./schema";
+import { BucketSchema } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Bucket`.

@@ -133,37 +133,6 @@ fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> 
 	}
 }
 
-// TODO: move this into Reference (but note this will only work after type checking is done on Reference)
-fn is_resource(reference: &Reference) -> bool {
-	match reference {
-		Reference::Identifier(_) => {
-			// For now return false, but we need to lookup the identifier in our env
-			false
-		}
-		Reference::NestedIdentifier { object, property: _ } => {
-			// TODO: for now anything under "cloud" is a resource
-			if let ExprType::Reference(identifier) = &object.variant {
-				if let Reference::Identifier(identifier) = identifier {
-					identifier.name == "cloud"
-				} else {
-					false
-				}
-			} else {
-				false
-			}
-		}
-	}
-}
-
-fn is_resource_type(typ: &Type) -> bool {
-	// TODO: for now anything under "cloud" is a resource
-	if let Type::CustomType { root, fields } = typ {
-		root.name == "cloud"
-	} else {
-		false
-	}
-}
-
 fn jsify_type(typ: &Type) -> String {
 	match typ {
 		Type::CustomType { root, fields } => {
@@ -193,8 +162,16 @@ fn jsify_expression(expression: &Expr) -> String {
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
-			if is_resource_type(class) {
-				// If this is a resource then add the scope and id to the arg list
+			let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+				evaluated_type.as_resource_object().is_some()
+			} else {
+				// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
+				// Currently, this occurs when a JSII import is untyped, such as when `WINGC_SKIP_JSII` is enabled and `bring cloud` is used.
+				true
+			};
+
+			// If this is a resource then add the scope and id to the arg list
+			if is_resource {
 				format!(
 					"new {}({})",
 					jsify_type(class),
@@ -212,15 +189,8 @@ fn jsify_expression(expression: &Expr) -> String {
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
-		ExprType::FunctionCall { function, args } => {
+		ExprType::Call { function, args } => {
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
-		}
-		ExprType::MethodCall(method_call) => {
-			format!(
-				"{}({})",
-				jsify_reference(&method_call.method),
-				jsify_arg_list(&method_call.args, None, None)
-			)
 		}
 		ExprType::Unary { op, exp } => {
 			let op = match op {
@@ -247,6 +217,26 @@ fn jsify_expression(expression: &Expr) -> String {
 				BinaryOperator::LogicalOr => "||",
 			};
 			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
+		}
+		ExprType::StructLiteral { fields, .. } => {
+			format!(
+				"{{\n{}}}\n",
+				fields
+					.iter()
+					.map(|(name, expr)| format!("\"{}\": {},", name.name, jsify_expression(expr)))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
+		}
+		ExprType::MapLiteral { fields, .. } => {
+			format!(
+				"{{\n{}\n}}",
+				fields
+					.iter()
+					.map(|(key, expr)| format!("\"{}\": {},", key, jsify_expression(expr)))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
 		}
 	}
 }
@@ -348,7 +338,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 				"class {}{}\n{{\n{}\n{}\n{}\n}}",
 				jsify_symbol(name),
 				if let Some(parent) = parent {
-					format!(" extends {}", jsify_symbol(parent))
+					format!(" extends {}", jsify_type(parent))
 				} else {
 					"".to_string()
 				},
@@ -366,6 +356,25 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 				methods
 					.iter()
 					.map(|f| jsify_function(jsify_symbol(&f.name).as_str(), &f.parameters, &f.statements, &out_dir))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
+		}
+		Statement::Struct { name, extends, members } => {
+			format!(
+				"interface {}{} {{\n{}\n}}",
+				jsify_symbol(name),
+				if !extends.is_empty() {
+					format!(
+						" extends {}",
+						extends.iter().map(jsify_symbol).collect::<Vec<String>>().join(", ")
+					)
+				} else {
+					"".to_string()
+				},
+				members
+					.iter()
+					.map(|m| jsify_class_member(m))
 					.collect::<Vec<String>>()
 					.join("\n")
 			)
