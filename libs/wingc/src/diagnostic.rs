@@ -51,14 +51,3 @@ pub fn print_diagnostics(diagnostics: &Diagnostics) {
 		println!("{}", diagnostic);
 	}
 }
-
-pub struct TypeError {
-	pub message: String,
-	pub span: WingSpan,
-}
-
-impl std::fmt::Display for TypeError {
-	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{} at {}", self.message, self.span)
-	}
-}

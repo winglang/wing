@@ -29,7 +29,7 @@ self.onmessage = async event => {
     file.seek(0);
 
     wasi.start(instance);
-    const stdout = wasi.getStdoutString();
+    const stdout = wasi.getStdoutString() + wasi.getStderrString();
     let intermediateJS = "";
 
     const intermediateFile = wasi.fs.open("/code.w.out/intermediate.js", {read: true});
@@ -50,10 +50,7 @@ self.onmessage = async event => {
     });
   } catch (error) {
     console.error(error);
-    self.postMessage({
-      stdout: wasi.getStdoutString(),
-      intermediateJS: wasi.getStderrString(),
-    });
+    self.postMessage(wasi.getStderrString());
   }
 };
 
