@@ -32,8 +32,7 @@
     "unbump": "npx projen unbump",
     "upgrade": "npx projen upgrade",
     "watch": "npx projen watch",
-    "projen": "npx projen",
-    "postinstall": "patch-package"
+    "projen": "npx projen"
   },
   "author": {
     "name": "Monada, Inc.",

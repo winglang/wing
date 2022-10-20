@@ -200,6 +200,6 @@ project.package.addField("exports", {
 
 const docgen = project.tasks.tryFind("docgen")!;
 docgen.exec("mv API.md docs/api.md");
-pkgJson?.addOverride("scripts.postinstall", "patch-package");
+project.preCompileTask.exec("patch-package");
 
 project.synth();
