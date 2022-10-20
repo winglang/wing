@@ -203,7 +203,7 @@ project.package.addField("exports", {
   "./fs": "./lib/fs/exports.js",
   "./sim": "./lib/sim/exports.js",
   "./testing": "./lib/testing/exports.js",
-  "./tfaws": "./lib/tf-aws/exports.js",
+  "./tf-aws": "./lib/tf-aws/exports.js",
 });
 
 const docgen = project.tasks.tryFind("docgen")!;
