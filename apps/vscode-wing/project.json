@@ -9,14 +9,17 @@
       "inputs": [
         "rust-native"
       ],
+      "outputs": [
+        "{projectRoot}/resources/native/wing-language-server"
+      ],
       "dependsOn": [
-        "^build",
         "^build-native"
       ],
       "options": {
         "commands": [
-          "mkdir -p ./resources/native",
-          "cp ../../target/debug/wing-language-server ./resources/native"
+          "mkdir -p resources/native",
+          "rm -f resources/native/*",
+          "cp ../../target/debug/wing-language-server resources/native"
         ],
         "cwd": "apps/vscode-wing"
       },

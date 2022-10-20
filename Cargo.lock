@@ -1968,6 +1968,7 @@ dependencies = [
  "tree-sitter",
  "tree-sitter-traversal",
  "tree-sitter-wing",
+ "wingc",
 ]
 
 [[package]]

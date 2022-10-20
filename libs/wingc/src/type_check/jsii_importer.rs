@@ -212,7 +212,7 @@ impl<'a> JsiiImporter<'a> {
 					return_type,
 					flight,
 				}));
-				class_env.define(&Self::jsii_name_to_symbol(&m.name, &m.location_in_module), method_sig)
+				class_env.define(&Self::jsii_name_to_symbol(&m.name, &m.location_in_module), method_sig);
 			}
 		}
 		// Add properties to the class environment
