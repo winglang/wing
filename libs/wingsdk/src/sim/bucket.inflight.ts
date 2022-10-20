@@ -15,4 +15,13 @@ export class BucketClient implements IBucketClient {
     const value = await fs.promises.readFile(filename, "utf8");
     return value;
   }
+
+  public async list(): Promise<string[]> {
+    const keys = await fs.promises.readdir(this.bucketAddr);
+    const values = keys.map(async (key) => {
+      const filename = path.join(this.bucketAddr, key);
+      return fs.promises.readFile(filename, "utf8");
+    });
+    return Promise.all(values);
+  }
 }
