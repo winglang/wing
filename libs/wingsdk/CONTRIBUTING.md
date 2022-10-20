@@ -213,7 +213,7 @@ export * from "./azure";
 However, some of the code in the Wing SDK is either:
 
 1. Not compatible with JSII, OR
-2. Does not need to be made available to other languages because the code is not needed for writing preflight code. For example, inflight clients used to interact with resources at runtime need to be written on a per-language basis in order to avoid performance overheads. Likewise, simulator implementations do not need to be exported.
+2. Does not need to be made available to other languages because it is an implementation detail. For example, code for simulating resources.
 
 So by convention, any TypeScript files that should not be compiled by JSII should be re-exported to parent directories by files named `exports.ts`, while all other TypeScript files should be re-exported by files named `index.ts`. For example:
 
