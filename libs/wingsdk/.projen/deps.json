@@ -24,7 +24,7 @@
     },
     {
       "name": "@types/jest",
-      "version": "^27.0.0",
+      "version": "^27",
       "type": "build"
     },
     {
@@ -53,6 +53,10 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^5",
+      "type": "build"
+    },
+    {
+      "name": "aws-sdk-client-mock",
       "type": "build"
     },
     {
@@ -100,7 +104,7 @@
     },
     {
       "name": "jest",
-      "version": "^27.0.0",
+      "version": "^27",
       "type": "build"
     },
     {
@@ -152,7 +156,7 @@
     },
     {
       "name": "ts-jest",
-      "version": "^27.0.0",
+      "version": "^27",
       "type": "build"
     },
     {
@@ -185,10 +189,6 @@
     },
     {
       "name": "esbuild-wasm",
-      "type": "bundled"
-    },
-    {
-      "name": "fs-extra",
       "type": "bundled"
     },
     {
