@@ -65,6 +65,13 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = type_check(&mut scope, &mut types);
 
+	// Analyze inflight captures
+	scan_captures(&scope);
+
+	// prepare output directory for support inflight code
+	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
+	fs::create_dir_all(&out_dir).expect("create output dir");
+
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
 	print_diagnostics(&type_check_diagnostics);
@@ -78,13 +85,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	{
 		std::process::exit(1);
 	}
-
-	// Analyze inflight captures
-	scan_captures(&scope);
-
-	// prepare output directory for support inflight code
-	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
-	fs::create_dir_all(&out_dir).expect("create output dir");
 
 	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
 	let intermediate_file = out_dir.join("intermediate.js");
