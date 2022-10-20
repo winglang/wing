@@ -28,7 +28,7 @@
     "build:pkg": "pkg --compress GZip --options experimental-wasi-unstable-preview1,no-warnings -c package.json dist/index-pkg.js"
   },
   "dependencies": {
-    "commander": "^9.4.0",
+    "commander": "^9.4.1",
     "debug": "^4.3.4",
     "decompress": "^4.2.1",
     "nanospinner": "^1.1.0"
