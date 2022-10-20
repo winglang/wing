@@ -187,7 +187,9 @@ You can also join us on our [Discord server](https://discord.gg/7wrggS3dZU) to a
 
 ## Exporting code and compiling with JSII
 
-The Wing SDK is written in TypeScript and compiled with JSII, which means that the library can be used in any language that JSII supports, including Python, Java, C#, and Go.
+The Wing SDK is written in TypeScript and compiled with [JSII], which means that the library can be used in any language that JSII supports, including Python, Java, C#, and Go.
+
+[JSII]: https://github.com/aws/jsii
 
 > Python, Java, C#, and Go versions of the SDK are coming soon!
 
