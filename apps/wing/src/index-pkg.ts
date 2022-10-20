@@ -57,7 +57,8 @@ async function main() {
     .description("Compile a wing file")
     .argument("<input-file>", "input file")
     .option("-c, --context <context>", "Context directory", WINGC_CWD)
-    .option("-s, --skip-bootstrap", "Skip automatic bootstrapping")
+    .option("-b, --skip-bootstrap", "Skip automatic bootstrapping")
+    .option("-s, --skip-synthesis", "Skip automatic synthesis")
     .action(async (inputFile, options) => {
       const wingFile = inputFile;
       log("Wing file: %s", wingFile);
@@ -95,8 +96,10 @@ async function main() {
       log("wingc.wasm instantiated, starting");
       wasi.start(instance);
 
-      log("Executing intermediate.js");
-      await intermediateWithSpinner(workDir);
+      if (!options.skipSynthesis) {
+        log("Executing intermediate.js");
+        await intermediateWithSpinner(workDir);
+      }
     });
 
   program.parse();

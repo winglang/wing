@@ -4,7 +4,8 @@
   "description": "Wing Programming Language",
   "files": [
     "dist/",
-    "wingc.wasm"
+    "wingc.wasm",
+    "wingsdk.tgz"
   ],
   "engines": {
     "node": ">=18"
