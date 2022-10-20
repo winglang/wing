@@ -14,7 +14,7 @@ export class FunctionClient implements IFunctionClient {
   public async invoke(payload: string): Promise<string> {
     const command = new InvokeCommand({
       FunctionName: this.functionArn,
-      Payload: fromUtf8(JSON.stringify(payload)),
+      Payload: fromUtf8(payload),
     });
     const response = await this.lambdaClient.send(command);
     if (response.FunctionError) {
