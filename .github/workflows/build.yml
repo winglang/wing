@@ -119,6 +119,7 @@ jobs:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
           args: "--configuration=release"
+          all: true
 
       - name: Package Wing CLI
         working-directory: apps/wing
@@ -212,7 +213,7 @@ jobs:
       - name: Lint Nx
         run: npx nx workspace-lint
 
-      - name: Build
+      - name: Build Native
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build-native"
@@ -259,13 +260,6 @@ jobs:
         with:
           targets: "build-multi"
           projects: "vscode-wing"
-          args: "--configuration=release"
-
-      - name: Test Native
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
-          projects: "wingc,vscode-wing"
           args: "--configuration=release"
 
       - name: Upload extension
