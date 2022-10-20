@@ -1,24 +1,28 @@
-const vm = require("vm");
-const assert = require("assert");
-const fs = require("fs/promises");
-const path = require("path");
-const { Module } = require("module");
-const debug = require("debug")("wing:execute");
+import { Module } from "module";
+import assert from "assert";
+import debug from "debug";
+import fs from "fs/promises";
+import path from "path";
+import vm from "vm";
 
-async function intermediate(directory) {
+const log = debug("wing:execute");
+
+export async function intermediate(directory: string) {
   directory = path.resolve(directory);
-  debug("Executing in directory '%s'", directory);
+  log("Executing in directory '%s'", directory);
 
   const WINGC_INTERMEDIATE = path.join(directory, "intermediate.js");
-  debug("WINGC_INTERMEDIATE: %s", WINGC_INTERMEDIATE);
+  log("WINGC_INTERMEDIATE: %s", WINGC_INTERMEDIATE);
 
   const intermediate = await fs.readFile(WINGC_INTERMEDIATE, "utf8");
+  // @ts-ignore
   assert(typeof Module._initPaths === "function", "invalid Module object.");
   const oldPath = process.env.NODE_PATH;
-  debug("process.env.NODE_PATH: %s", oldPath);
+  log("process.env.NODE_PATH: %s", oldPath);
 
   try {
     process.env.NODE_PATH = `${directory}/node_modules`;
+    // @ts-ignore
     Module._initPaths();
     const context = vm.createContext({
       require,
@@ -32,5 +36,3 @@ async function intermediate(directory) {
     process.env.NODE_PATH = oldPath;
   }
 }
-
-module.exports = { intermediate };

@@ -1,4 +1,4 @@
-const { spawnSync } = require("child_process");
+import { spawnSync } from "child_process";
 try {
   require.resolve("wasi");
   require("./index-pkg");

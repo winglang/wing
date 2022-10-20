@@ -4,10 +4,17 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
+      "name": "Launch Wing CLI",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/src/index.js",
-      "runtimeArgs": ["--experimental-wasi-unstable-preview1", "--no-warnings"]
+      "program": "${workspaceFolder}/src/index-pkg.ts",
+      "runtimeArgs": [
+        "--loader",
+        "tsx",
+        "--require",
+        "tsx/suppress-warnings",
+        "--experimental-wasi-unstable-preview1",
+        "--no-warnings"
+      ]
     }
   ]
 }

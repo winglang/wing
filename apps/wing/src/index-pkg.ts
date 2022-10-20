@@ -1,12 +1,14 @@
-const { dirname, resolve } = require("path");
-const { bootstrap } = require("./bootstrap");
-const { intermediate } = require("./intermediate");
-const { Command } = require("commander");
-const { argv } = require("process");
-const { createSpinner } = require("nanospinner");
-const { readFile } = require("fs/promises");
-const { version } = require("../package.json");
-const debug = require("debug")("wing:index:pkg");
+import { dirname, resolve } from "path";
+
+import { Command } from "commander";
+import { argv } from "process";
+import { bootstrap } from "./bootstrap";
+import { createSpinner } from "nanospinner";
+import debug from "debug";
+import { intermediate } from "./intermediate";
+import { readFile } from "fs/promises";
+
+const log = debug("wing:index:pkg");
 
 // Note: it is important that these variables are defined as exactly
 // they are defined here. These are in the form of "hints" for "pkg"
@@ -18,13 +20,13 @@ async function main() {
   const program = new Command();
 
   program.name("wing");
-  program.version(version);
+  program.version("0.0.0"); // TODO
 
   async function bootstrapWithSpinner(directory) {
     const spinner = createSpinner();
     spinner.start({ text: `Bootstrapping directory '${directory}'` });
     await bootstrap(directory).catch((err) => {
-      debug("Error bootstrapping directory: %O", err);
+      log("Error bootstrapping directory: %O", err);
       spinner.error({
         text: `Bootstrap failed. Turn on verbose logging for details`,
       });
@@ -36,7 +38,7 @@ async function main() {
     const spinner = createSpinner();
     spinner.start({ text: `Executing in directory '${directory}'` });
     await intermediate(directory).catch((err) => {
-      debug("Error executing intermediate: %O", err);
+      log("Error executing intermediate: %O", err);
       spinner.error({
         text: `Execution failed. Turn on verbose logging for details`,
       });
@@ -58,19 +60,19 @@ async function main() {
     .option("-s, --skip-bootstrap", "Skip automatic bootstrapping")
     .action(async (inputFile, options) => {
       const wingFile = inputFile;
-      debug("Wing file: %s", wingFile);
+      log("Wing file: %s", wingFile);
       const wingDir = dirname(wingFile);
-      debug("Wing directory: %s", wingDir);
+      log("Wing directory: %s", wingDir);
       const workDir = options.context;
-      debug("Work directory: %s", workDir);
+      log("Work directory: %s", workDir);
       const args = [argv[0], wingFile, workDir];
-      debug("Arguments: %s", args);
+      log("Arguments: %s", args);
 
       if (!options.skipBootstrap) {
         await bootstrapWithSpinner(workDir);
       }
 
-      debug("Loading wingc.wasm");
+      log("Loading wingc.wasm");
       const { WASI } = require("wasi");
       const wasi = new WASI({
         args,
@@ -84,16 +86,16 @@ async function main() {
         },
       });
 
-      debug("wingc.wasm loaded, preparing the WASI importObject");
+      log("wingc.wasm loaded, preparing the WASI importObject");
       const importObject = { wasi_snapshot_preview1: wasi.wasiImport };
-      debug("Compiling wingc.wasm");
+      log("Compiling wingc.wasm");
       const wasm = await WebAssembly.compile(await readFile(WINGC_WASM_PATH));
-      debug("wingc.wasm compiled, instantiating");
+      log("wingc.wasm compiled, instantiating");
       const instance = await WebAssembly.instantiate(wasm, importObject);
-      debug("wingc.wasm instantiated, starting");
+      log("wingc.wasm instantiated, starting");
       wasi.start(instance);
 
-      debug("Executing intermediate.js");
+      log("Executing intermediate.js");
       await intermediateWithSpinner(workDir);
     });
 
