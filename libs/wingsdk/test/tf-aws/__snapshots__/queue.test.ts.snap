@@ -75,8 +75,8 @@ exports[`queue with a consumer function 2`] = `
     \\"aws_s3_object\\": {
       \\"Queue_OnMessage-03929de99b90eb35_S3Object_3C4534CC\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.Queue_OnMessage-03929de99b90eb35_Bucket_9A1D57A7.bucket}\\",
-        \\"key\\": \\"asset.c89d6457819e68ac65c1a63faccb1bece3caa7f692.96bea4bb637e1c8009a0af54523e9451.zip\\",
-        \\"source\\": \\"assets/Queue_OnMessage-03929de99b90eb35_Asset_B9A60CF7/96BEA4BB637E1C8009A0AF54523E9451/archive.zip\\"
+        \\"key\\": \\"asset.c89d6457819e68ac65c1a63faccb1bece3caa7f692.f6a4309b1ce02e90a2847a50abb5337f.zip\\",
+        \\"source\\": \\"assets/Queue_OnMessage-03929de99b90eb35_Asset_B9A60CF7/F6A4309B1CE02E90A2847A50ABB5337F/archive.zip\\"
       }
     },
     \\"aws_sqs_queue\\": {
