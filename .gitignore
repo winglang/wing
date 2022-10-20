@@ -29,6 +29,7 @@ libs/tree-sitter-wing/*.wasm
 libs/tree-sitter-wing/build/
 
 # wing
+apps/wing/cdktf.out
 apps/wing/bin
 !apps/wing/bin/index.js
 !apps/wing/bin/bootstrap.js
