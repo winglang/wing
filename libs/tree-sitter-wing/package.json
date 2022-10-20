@@ -19,6 +19,7 @@
     "nan": "^2.12.1"
   },
   "devDependencies": {
+    "@types/node": "^18.11.3",
     "tree-sitter-cli": "^0.20.6"
   },
   "scripts": {

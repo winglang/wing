@@ -27,6 +27,7 @@ libs/tree-sitter-wing/src/
 libs/tree-sitter-wing/log.html
 libs/tree-sitter-wing/*.wasm
 libs/tree-sitter-wing/build/
+libs/tree-sitter-wing/grammar.js
 
 # wing
 apps/wing/dist

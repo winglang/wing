@@ -20,6 +20,7 @@ module.exports = grammar({
 
   word: ($) => $.identifier,
 
+  // @ts-ignore
   precedences: ($) => [
     // Handle ambiguity in case of empty literal: `a = {}`
     // In this case tree-sitter doesn't know if it's a set or a map literal so just assume its a map
@@ -28,9 +29,7 @@ module.exports = grammar({
 
   supertypes: ($) => [$.expression, $._literal],
 
-  conflicts: $ => [
-     [$.reference, $.custom_type],
-  ],
+  conflicts: ($) => [[$.reference, $.custom_type]],
 
   rules: {
     // Basics
@@ -43,17 +42,17 @@ module.exports = grammar({
 
     // Identifiers
     reference: ($) =>
-//      prec.right(choice($.identifier, $.nested_identifier)),
+      //      prec.right(choice($.identifier, $.nested_identifier)),
       choice($.identifier, $.nested_identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
-    custom_type: ($) => 
+    custom_type: ($) =>
       seq(
         field("object", $.identifier),
         repeat(seq(".", field("fields", $.identifier)))
       ),
-    
+
     nested_identifier: ($) =>
       seq(
         field("object", $.expression),
@@ -211,9 +210,8 @@ module.exports = grammar({
         $._collection_literal,
         $.parenthesized_expression,
         $.structured_access_expression,
-        $.struct_literal,
+        $.struct_literal
       ),
-
 
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
@@ -358,45 +356,34 @@ module.exports = grammar({
 
     immutable_container_type: ($) =>
       seq(
-        field(
-          "collection_type",
-          choice(
-            "Array",
-            "Set",
-            "Map",
-            "Promise",
-            ),
-        ),
+        field("collection_type", choice("Array", "Set", "Map", "Promise")),
         $._container_value_type
       ),
 
     mutable_container_type: ($) =>
       choice(
         seq(
-          field(
-            "collection_type",
-            choice(
-              "MutSet",
-              "MutMap",
-              "MutArray",
-            )
-          ),
+          field("collection_type", choice("MutSet", "MutMap", "MutArray")),
           $._container_value_type
-        ),
+        )
       ),
 
-    _builtin_container_type: ($) => choice($.immutable_container_type, $.mutable_container_type),
+    _builtin_container_type: ($) =>
+      choice($.immutable_container_type, $.mutable_container_type),
 
-    _container_value_type: ($) => seq("<", field("type_parameter", $._type), ">"),
+    _container_value_type: ($) =>
+      seq("<", field("type_parameter", $._type), ">"),
 
     unary_expression: ($) =>
       choice(
-        ...[
-          ["+", PREC.UNARY],
-          ["-", PREC.UNARY],
-          ["!", PREC.UNARY],
-          //['~', PREC.UNARY],
-        ].map(([operator, precedence]) =>
+        ...(
+          [
+            ["+", PREC.UNARY],
+            ["-", PREC.UNARY],
+            ["!", PREC.UNARY],
+            //['~', PREC.UNARY],
+          ] as const
+        ).map(([operator, precedence]) =>
           prec.left(
             precedence,
             seq(field("op", operator), field("arg", $.expression))
@@ -426,7 +413,7 @@ module.exports = grammar({
         //['>>', PREC.SHIFT],
         //['>>>', PREC.SHIFT],
         ["??", PREC.NIL_COALESCING],
-      ];
+      ] as const;
 
       return choice(
         ...table.map(([operator, precedence]) => {
@@ -452,26 +439,40 @@ module.exports = grammar({
     _collection_literal: ($) =>
       choice($.array_literal, $.set_literal, $.map_literal),
     array_literal: ($) => seq("[", commaSep($.expression), "]"),
-    set_literal: ($) => seq(
-      optional(field("type", $._builtin_container_type)),
-      "{", commaSep($.expression), "}"
-    ),
-    map_literal: ($) => seq(
-      optional(field("type", $._builtin_container_type)),
-      "{", commaSep($.map_literal_member), "}"
-    ),
-    struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
+    set_literal: ($) =>
+      seq(
+        optional(field("type", $._builtin_container_type)),
+        "{",
+        commaSep($.expression),
+        "}"
+      ),
+    map_literal: ($) =>
+      seq(
+        optional(field("type", $._builtin_container_type)),
+        "{",
+        commaSep($.map_literal_member),
+        "}"
+      ),
+    struct_literal: ($) =>
+      seq(
+        field("type", $.custom_type),
+        "{",
+        field("fields", commaSep($.struct_literal_member)),
+        "}"
+      ),
 
     map_literal_member: ($) =>
       seq(choice($.identifier, $.string), ":", $.expression),
-    struct_literal_member: ($) =>
-      seq($.identifier, ":", $.expression),
+    struct_literal_member: ($) => seq($.identifier, ":", $.expression),
     structured_access_expression: ($) =>
       prec.right(seq($.expression, "[", $.expression, "]")),
   },
 });
 
-function anonymousClosure($, arrow) {
+function anonymousClosure(
+  $: GrammarSymbols<"parameter_list" | "_type_annotation" | "block">,
+  arrow: string
+) {
   return seq(
     optional("async"),
     field("parameter_list", $.parameter_list),
@@ -481,10 +482,10 @@ function anonymousClosure($, arrow) {
   );
 }
 
-function commaSep1(rule) {
+function commaSep1(rule: Rule) {
   return seq(rule, repeat(seq(",", rule)), optional(","));
 }
 
-function commaSep(rule) {
+function commaSep(rule: Rule) {
   return optional(commaSep1(rule));
 }
