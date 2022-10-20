@@ -11,6 +11,7 @@
   "scripts": {
     "nx": "nx",
     "build": "nx run-many --target=build --all=true",
+    "docs": "cp libs/wingsdk/API.md docs/wingsdk-api.md",
     "test": "nx run-many --target=test --all=true",
     "postinstall": "run-p install:*",
     "install:vscode-wing": "npm --prefix apps/vscode-wing install",
