@@ -71,7 +71,7 @@ test("put multiple objects and list all from bucket", async () => {
   const response = await client.list();
 
   // THEN
-  expect(response).toEqual([VALUE1, VALUE2, VALUE3]);
+  expect(response).toEqual([KEY1, KEY2, KEY3]);
   await s.stop();
 
   expect(simulatorJsonOf(appPath)).toMatchSnapshot();
