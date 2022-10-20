@@ -21,7 +21,7 @@ export async function intermediate(directory: string) {
   log("process.env.NODE_PATH: %s", oldPath);
 
   try {
-    process.env.NODE_PATH = `${directory}/node_modules`;
+    process.env.NODE_PATH = path.join(directory, "node_modules");
     // @ts-ignore
     Module._initPaths();
     const context = vm.createContext({
