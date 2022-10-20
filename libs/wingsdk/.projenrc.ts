@@ -35,6 +35,7 @@ const project = new cdk.JsiiProject({
     "@types/tar",
     "@types/ws",
     "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
+    "aws-sdk-client-mock"
   ],
   prettier: true,
   jestOptions: {

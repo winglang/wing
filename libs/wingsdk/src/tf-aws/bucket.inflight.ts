@@ -2,6 +2,7 @@ import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
   GetObjectCommand,
+  ListObjectsCommand, ListObjectsCommandOutput,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -29,5 +30,13 @@ export class BucketClient implements IBucketClient {
     });
     const resp = await this.s3Client.send(command);
     return consumers.text(resp.Body as Readable);
+  }
+
+  public async list(): Promise<string[]> {
+    const command = new ListObjectsCommand({
+      Bucket: this.bucketName,
+    });
+    const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
+    return resp.Contents?.map((content) => content.Key as string) ?? [];
   }
 }

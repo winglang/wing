@@ -65,6 +65,11 @@ export interface IBucketClient {
    * exists.
    */
   get(key: string): Promise<string>;
+
+  /**
+   * Retrieve all existing objects keys from the bucket. Returns and empty array if no objects exist.
+   */
+  list(): Promise<string[]>;
 }
 
 /**
@@ -75,4 +80,6 @@ export enum BucketInflightMethods {
   PUT = "put",
   /** `Bucket.get` */
   GET = "get",
+  /** `Bucket.list` */
+  LIST = "list",
 }
