@@ -6,7 +6,7 @@ const { argv } = require("process");
 const { createSpinner } = require("nanospinner");
 const { readFile } = require("fs/promises");
 const { version } = require("../package.json");
-const debug = require("debug")("wing:index");
+const debug = require("debug")("wing:index:pkg");
 
 // Note: it is important that these variables are defined as exactly
 // they are defined here. These are in the form of "hints" for "pkg"

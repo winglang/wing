@@ -5,8 +5,8 @@
   "engines": {
     "node": ">=18"
   },
-  "main": "src/index.js",
-  "bin": "src/index.js",
+  "main": "src/index-node.js",
+  "bin": "src/index-node.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/monadahq/winglang.git"
@@ -20,7 +20,7 @@
     "build:pack:install": "rimraf temp && mkdir temp && npm install --prefix=temp wingsdk.tgz",
     "build:pack:cleanup": "rimraf 'temp/*/*cdktf*/**/*/.jsii' rimraf 'temp/**/*/*.md' 'temp/**/*/*.d.ts' 'temp/package*.json' wingsdk.tgz",
     "build:pack:tarball": "tar -czf wingsdk.tgz -C temp node_modules && rimraf temp",
-    "build:pkg": "pkg --compress GZip --options experimental-wasi-unstable-preview1,no-warnings --output bin/wing ."
+    "build:pkg": "pkg --compress GZip --options experimental-wasi-unstable-preview1,no-warnings -c package.json src/index-pkg.js"
   },
   "dependencies": {
     "commander": "^9.4.0",
@@ -42,6 +42,7 @@
     "assets": [
       "wingc.wasm",
       "wingsdk.tgz"
-    ]
+    ],
+    "outputPath": "bin"
   }
 }

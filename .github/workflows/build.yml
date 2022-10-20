@@ -136,7 +136,9 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: wing
-          path: apps/wing/bin/*
+          path: |
+            apps/wing/*.tgz
+            apps/wing/bin/@monadahq/*
 
       - name: Upload WingSDK
         uses: actions/upload-artifact@v2
@@ -294,11 +296,11 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://npm.pkg.github.com
 
-      # - name: Publish Wing
-      #   working-directory: wing
-      #   env:
-      #     NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
-      #   run: npm publish *.tgz
+      - name: Publish Wing
+        working-directory: wing
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+        run: npm publish *.tgz
 
       - name: Publish WingSDK
         working-directory: wingsdk
