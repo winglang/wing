@@ -125,9 +125,6 @@
       "steps": [
         {
           "exec": "jsii-docgen -o API.md"
-        },
-        {
-          "exec": "mv API.md docs/api.md"
         }
       ]
     },
