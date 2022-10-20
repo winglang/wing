@@ -7,6 +7,8 @@ import { QueueSchema, QueueSubscriber } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Queue`.
+ *
+ * @inflight `@monadahq/wingsdk.sim.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements IResource {
   private readonly callers = new Array<string>();
@@ -104,3 +106,8 @@ export class Queue extends cloud.QueueBase implements IResource {
     ]);
   }
 }
+
+/**
+ * Simulator implementation of inflight client for `cloud.Queue`
+ */
+export interface IQueueClient extends cloud.IQueueClient {}

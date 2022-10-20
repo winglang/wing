@@ -8,6 +8,8 @@ import { BucketSchema } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
+ *
+ * @inflight `@monadahq/wingsdk.sim.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase implements IResource {
   private readonly public: boolean;
@@ -54,3 +56,8 @@ export class Bucket extends cloud.BucketBase implements IResource {
     ]);
   }
 }
+
+/**
+ * Simulator implementation of inflight client for `cloud.Bucket`.
+ */
+export interface IBucketClient extends cloud.IBucketClient {}

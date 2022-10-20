@@ -28,13 +28,13 @@ const project = new cdk.JsiiProject({
     "ws",
   ],
   devDeps: [
-    "aws-sdk-client-mock",
-    "replace-in-file",
+    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",
     "@types/ws",
-    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
+    "aws-sdk-client-mock",
+    "patch-package",
   ],
   prettier: true,
   minNodeVersion: "16.16.0",
@@ -49,11 +49,6 @@ const project = new cdk.JsiiProject({
 // fix typing issues with "tar" dependency
 project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
 project.package.addPackageResolutions("minipass@3.1.6");
-
-// allow referencing DOM types (used by esbuild)
-project.preCompileTask.exec(
-  `replace-in-file "lib: ['lib.es2020.d.ts']" "lib: ['lib.es2020.d.ts','lib.dom.d.ts']" node_modules/jsii/lib/compiler.js`
-);
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");
@@ -83,6 +78,7 @@ const pkgJson = project.tryFindObjectFile("package.json");
 pkgJson!.addOverride("jsii.excludeTypescript", [
   "src/**/*.inflight.ts",
   "src/**/*.sim.ts",
+  "src/**/exports.ts",
 ]);
 
 // By default, the TypeScript compiler will include all types from @types, even
@@ -106,7 +102,7 @@ const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
     compilerOptions: {
       esModuleInterop: true,
     },
-    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts"],
+    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts", "src/**/exports.ts"],
     exclude: ["node_modules"],
   },
 });
@@ -122,7 +118,12 @@ enum Zone {
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return pathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
+      return pathsNotEndingIn([
+        "*.inflight.ts",
+        "*.sim.ts",
+        "*.test.ts",
+        "exports.ts",
+      ]);
     case Zone.TEST:
       return "**/*.test.ts";
     case Zone.INFLIGHT:
@@ -192,5 +193,19 @@ const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
+
+// Add custom export declarations that supersede the default export structure of
+// `index.ts` files. This allows us to export APIs that aren't compiled
+// with JSII without the JSII compiler noticing.
+project.package.addField("exports", {
+  ".": "./lib/exports.js",
+  "./cloud": "./lib/cloud/exports.js",
+  "./fs": "./lib/fs/exports.js",
+  "./sim": "./lib/sim/exports.js",
+  "./testing": "./lib/testing/exports.js",
+  "./tf-aws": "./lib/tf-aws/exports.js",
+});
+
+project.preCompileTask.exec("patch-package");
 
 project.synth();
