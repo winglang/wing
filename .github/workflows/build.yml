@@ -112,6 +112,7 @@ jobs:
           targets: "build"
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--configuration=release"
+          parallel: false
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
@@ -119,6 +120,7 @@ jobs:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
           args: "--configuration=release"
+          parallel: false
           all: true
 
       - name: Package Wing CLI
