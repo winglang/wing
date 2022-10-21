@@ -4527,6 +4527,7 @@ Inflight interface for `Bucket`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve all existing objects keys from the bucket. |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 
 ---
@@ -4547,6 +4548,16 @@ exists.
 - *Type:* string
 
 ---
+
+##### `list` <a name="list" id="@monadahq/wingsdk.cloud.IBucketClient.list"></a>
+
+```typescript
+public list(): string[]
+```
+
+Retrieve all existing objects keys from the bucket.
+
+Returns and empty array if no objects exist.
 
 ##### `put` <a name="put" id="@monadahq/wingsdk.cloud.IBucketClient.put"></a>
 
@@ -4876,6 +4887,7 @@ List of inflight operations available for `Bucket`.
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
 
 ---
 
@@ -4889,6 +4901,13 @@ List of inflight operations available for `Bucket`.
 ##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
 
 `Bucket.get`.
+
+---
+
+
+##### `LIST` <a name="LIST" id="@monadahq/wingsdk.cloud.BucketInflightMethods.LIST"></a>
+
+`Bucket.list`.
 
 ---
 
