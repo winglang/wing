@@ -62,7 +62,7 @@ test("function captures primitive values", () => {
     "aws_s3_bucket",
     "aws_s3_object",
   ]);
-  expect(output).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("function captures structured values", () => {
@@ -106,7 +106,7 @@ test("function captures structured values", () => {
     "aws_s3_bucket",
     "aws_s3_object",
   ]);
-  expect(output).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("function captures a bucket", () => {

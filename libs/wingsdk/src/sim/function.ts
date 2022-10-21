@@ -15,6 +15,8 @@ import { FunctionSchema } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Function`.
+ *
+ * @inflight `@monadahq/wingsdk.sim.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements IResource {
   private readonly callers = new Array<string>();
@@ -103,4 +105,16 @@ export class Function extends cloud.FunctionBase implements IResource {
   public addEnvironment(name: string, value: string) {
     this.env[name] = value;
   }
+}
+
+/**
+ * Simulator implementation of inflight client for `cloud.Function`.
+ */
+export interface IFunctionClient extends cloud.IFunctionClient {
+  /**
+   * Returns the number of times the function was invoked since its creation.
+   *
+   * @experimental
+   */
+  timesCalled(): Promise<number>;
 }

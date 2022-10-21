@@ -15,7 +15,6 @@ const project = new cdk.JsiiProject({
     "@cdktf/provider-aws",
   ],
   bundledDeps: [
-    "fs-extra",
     // preflight dependencies
     "esbuild-wasm",
     // aws client dependencies
@@ -29,18 +28,15 @@ const project = new cdk.JsiiProject({
     "ws",
   ],
   devDeps: [
-    "replace-in-file",
+    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",
     "@types/ws",
-    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
-    "aws-sdk-client-mock"
+    "aws-sdk-client-mock",
+    "patch-package",
   ],
   prettier: true,
-  jestOptions: {
-    jestVersion: "^27.0.0", // 28 requires a later typescript version than the one used by JSII
-  },
   minNodeVersion: "16.16.0",
   npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
@@ -53,16 +49,6 @@ const project = new cdk.JsiiProject({
 // fix typing issues with "tar" dependency
 project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
 project.package.addPackageResolutions("minipass@3.1.6");
-
-// use a more recent version of jest-resolve so that tests will not error
-// when using require("@scope/package/path")
-// https://github.com/facebook/jest/pull/11961
-project.package.addPackageResolutions("jest-resolve@^28");
-
-// allow referencing DOM types (used by esbuild)
-project.preCompileTask.exec(
-  `replace-in-file "lib: ['lib.es2020.d.ts']" "lib: ['lib.es2020.d.ts','lib.dom.d.ts']" node_modules/jsii/lib/compiler.js`
-);
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");
@@ -92,14 +78,31 @@ const pkgJson = project.tryFindObjectFile("package.json");
 pkgJson!.addOverride("jsii.excludeTypescript", [
   "src/**/*.inflight.ts",
   "src/**/*.sim.ts",
+  "src/**/exports.ts",
 ]);
+
+// By default, the TypeScript compiler will include all types from @types, even
+// if the package is not used anywhere in our source code (`/src`). This is
+// problematic because JSII is stuck on an older TypeScript version, and we only
+// want it to compile the types exported by index.ts.
+//
+// Let's ignore these types by default, and then explicitly include the ones we
+// need for JSII compilation to work. This is OK since we are compiling things
+// twice (once with JSII, and once with the latest version of TypeScript), and
+// any other type errors can be caught by the second compilation.
+//
+// See https://github.com/aws/jsii/issues/3741
+//
+// @example ["./node_modules/@types/some-dep"]
+pkgJson!.addOverride("jsii.tsc.types", []);
+
 const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
   obj: {
     extends: "./tsconfig.json",
     compilerOptions: {
       esModuleInterop: true,
     },
-    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts"],
+    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts", "src/**/exports.ts"],
     exclude: ["node_modules"],
   },
 });
@@ -115,7 +118,12 @@ enum Zone {
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return pathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
+      return pathsNotEndingIn([
+        "*.inflight.ts",
+        "*.sim.ts",
+        "*.test.ts",
+        "exports.ts",
+      ]);
     case Zone.TEST:
       return "**/*.test.ts";
     case Zone.INFLIGHT:
@@ -185,5 +193,19 @@ const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
+
+// Add custom export declarations that supersede the default export structure of
+// `index.ts` files. This allows us to export APIs that aren't compiled
+// with JSII without the JSII compiler noticing.
+project.package.addField("exports", {
+  ".": "./lib/exports.js",
+  "./cloud": "./lib/cloud/exports.js",
+  "./fs": "./lib/fs/exports.js",
+  "./sim": "./lib/sim/exports.js",
+  "./testing": "./lib/testing/exports.js",
+  "./tf-aws": "./lib/tf-aws/exports.js",
+});
+
+project.preCompileTask.exec("patch-package");
 
 project.synth();

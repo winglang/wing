@@ -49,6 +49,8 @@ export abstract class FunctionBase extends Resource {
 
 /**
  * Represents a serverless function.
+ *
+ * @inflight `@monadahq/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends FunctionBase {
   constructor(

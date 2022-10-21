@@ -197,7 +197,7 @@
       "description": "Prepare the project for compilation",
       "steps": [
         {
-          "exec": "replace-in-file \"lib: ['lib.es2020.d.ts']\" \"lib: ['lib.es2020.d.ts','lib.dom.d.ts']\" node_modules/jsii/lib/compiler.js"
+          "exec": "patch-package"
         }
       ]
     },
