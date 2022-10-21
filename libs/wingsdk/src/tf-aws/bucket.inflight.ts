@@ -2,7 +2,8 @@ import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
   GetObjectCommand,
-  ListObjectsCommand, ListObjectsCommandOutput,
+  ListObjectsCommand,
+  ListObjectsCommandOutput,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";

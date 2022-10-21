@@ -1,12 +1,17 @@
+import { Readable } from "stream";
+import {
+  GetObjectCommand,
+  ListObjectsCommand,
+  PutObjectCommand,
+  S3Client,
+} from "@aws-sdk/client-s3";
 import { Polycons } from "@monadahq/polycons";
+import { mockClient } from "aws-sdk-client-mock";
 import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/tf-aws";
+import { BucketClient } from "../../src/tf-aws/bucket.inflight";
 import { tfResourcesOf } from "../util";
-import {BucketClient} from "../../src/tf-aws/bucket.inflight";
-import {GetObjectCommand, ListObjectsCommand, PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
-import {mockClient} from "aws-sdk-client-mock";
-import {Readable} from "stream";
 
 test("default bucket behavior", () => {
   const output = cdktf.Testing.synthScope((scope) => {
@@ -79,8 +84,8 @@ test("put an object into a bucket", async () => {
   const KEY = "KEY";
   const VALUE = "VALUE";
   s3Mock
-      .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
-      .resolves({});
+    .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
+    .resolves({});
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -97,8 +102,8 @@ test("list bucket objects", async () => {
   const KEY2 = "KEY2";
   const client = new BucketClient(BUCKET_NAME);
   s3Mock
-      .on(ListObjectsCommand, { Bucket: BUCKET_NAME })
-      .resolves({Contents: [{Key: KEY1}, {Key: KEY2}]});
+    .on(ListObjectsCommand, { Bucket: BUCKET_NAME })
+    .resolves({ Contents: [{ Key: KEY1 }, { Key: KEY2 }] });
   const response = await client.list();
   // THEN
   expect(response).toEqual([KEY1, KEY2]);
