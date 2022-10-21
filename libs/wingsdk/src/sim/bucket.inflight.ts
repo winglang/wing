@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { IBucketClient } from "../cloud";
+import { IBucketClient } from "./bucket";
 
 export class BucketClient implements IBucketClient {
   constructor(private readonly bucketAddr: string) {}

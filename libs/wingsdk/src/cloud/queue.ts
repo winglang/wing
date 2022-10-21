@@ -62,6 +62,8 @@ export interface QueueOnMessageProps extends FunctionProps {
 
 /**
  * Represents a serverless queue.
+ *
+ * @inflight `@monadahq/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends QueueBase {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {

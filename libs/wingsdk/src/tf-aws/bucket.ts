@@ -7,6 +7,8 @@ import { Function } from "./function";
 
 /**
  * AWS implementation of `cloud.Bucket`.
+ *
+ * @inflight `@monadahq/wingsdk.tfaws.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
   private readonly bucket: s3.S3Bucket;
@@ -93,3 +95,8 @@ export class Bucket extends cloud.BucketBase {
     ]);
   }
 }
+
+/**
+ * AWS implementation of inflight client for `cloud.Bucket`.
+ */
+export interface IBucketClient extends cloud.IBucketClient {}

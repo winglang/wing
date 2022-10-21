@@ -31,7 +31,7 @@ class Main extends Construct {
     const processor = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          console.log("Received " + event.name);
+          console.log("Received " + JSON.parse(event).name);
         }`
       ),
       entrypoint: "$proc",
@@ -47,7 +47,10 @@ new Main(app.root, "Main");
 app.synth();
 
 async function main() {
-  const s = await testing.Simulator.fromApp("app.wx");
+  const s = new testing.Simulator({ appPath: "app.wx" });
+  await s.start();
+
+  console.log(JSON.stringify(s.tree, null, 2));
 
   const pusherAttrs = s.getAttributes("root/Main/Function");
   const pusherClient = new FunctionClient(pusherAttrs.functionAddr);
@@ -56,7 +59,7 @@ async function main() {
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   const processorAttrs = s.getAttributes(
-    "root/Main/Queue/OnMessage-7b918d65c3e454bc"
+    "root/Main/Queue/OnMessage-d022ec4ba5b8429e"
   );
   const processorClient = new FunctionClient(processorAttrs.functionAddr);
   await processorClient.timesCalled();
