@@ -212,6 +212,10 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				res.extend(scan_captures_in_expression(iterable, env));
 				res.extend(scan_captures_in_scope(statements));
 			}
+			Statement::While { condition, statements } => {
+				res.extend(scan_captures_in_expression(condition, env));
+				res.extend(scan_captures_in_scope(statements));
+			}
 			Statement::If {
 				condition,
 				statements,

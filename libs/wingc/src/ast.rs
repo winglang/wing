@@ -93,6 +93,10 @@ pub enum Statement {
 		iterable: Expr,
 		statements: Scope,
 	},
+	While {
+		condition: Expr,
+		statements: Scope,
+	},
 	If {
 		condition: Expr,
 		statements: Scope,

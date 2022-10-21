@@ -72,6 +72,7 @@ module.exports = grammar({
         $.class_definition,
         $.resource_definition,
         $.for_in_loop,
+        $.while_statement,
         $.if_statement,
         $.struct_definition,
         // TODO Remove free functions whenever possible
@@ -186,6 +187,9 @@ module.exports = grammar({
         field("iterable", $.expression),
         field("block", $.block)
       ),
+
+    while_statement: ($) =>
+      seq("while", field("condition", $.expression), field("block", $.block)),
 
     if_statement: ($) =>
       seq(

@@ -154,6 +154,10 @@ impl Parser<'_> {
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			}),
+			"while_statement" => Ok(Statement::While {
+				condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			}),
 			"inflight_function_definition" => Ok(Statement::FunctionDefinition(
 				self.build_function_definition(statement_node, Flight::In)?,
 			)),

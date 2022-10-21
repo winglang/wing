@@ -290,6 +290,13 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 			jsify_expression(iterable),
 			jsify_scope(statements, &out_dir)
 		),
+		Statement::While { condition, statements } => {
+			format!(
+				"while ({}) {}",
+				jsify_expression(condition),
+				jsify_scope(statements, &out_dir),
+			)
+		}
 		Statement::If {
 			condition,
 			statements,

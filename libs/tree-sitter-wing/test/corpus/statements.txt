@@ -241,3 +241,17 @@ struct Test {
         )
     )
 )
+
+==================================
+While statement
+==================================
+
+while false {}
+
+---
+(source
+    (while_statement
+        (bool)
+        (block)
+    )
+)

@@ -774,6 +774,13 @@ impl<'a> TypeChecker<'a> {
 
 				self.type_check_scope(statements);
 			}
+			Statement::While { condition, statements } => {
+				let cond_type = self.type_check_exp(condition, env).unwrap();
+				self.validate_type(cond_type, self.types.bool(), condition);
+
+				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight));
+				self.type_check_scope(statements);
+			}
 			Statement::If {
 				condition,
 				statements,
