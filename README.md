@@ -1,79 +1,83 @@
 # The Wing Programming Language
 
-> Wing is currently in private beta and can only be used by invited users. Please
-> avoid sharing any information about Wing with anyone outside the beta
-> program.
+> **DISCLAIMER**: This is a work in progress! The language is not yet ready for
+> production use. 
+
+We welcome and encourage your direct and honest feedback. Come say hi and tell
+us what you are working on at the [Wing Discord](https://discord.gg/HEKYFXm6U6).
 
 ## Welcome!
 
-Wing is the first cloud oriented programming language. It is a statically typed,
-compiled language that allows developers to write their application and the infrastructure flows from code.
+Wing is a new general-purpose programming language designed for the cloud.
 
-```wing
-bring cloud;
+The cloud has evolved to become a ubiquitous platform for running almost every
+type of application. It allows teams to deliver value by leveraging services and
+infrastructure, which take care of many of the challenges of building and
+running software.
 
-let queue = new cloud.Queue();
+However, the cloud has also introduced a new set of challenges for developers.
+Before the cloud, things were simple. There was a clear separation of concerns
+between developers and operations. Developers were focusing on functional
+business problems, and didn't have to worry or think about non-functional
+operational concerns such as security, networking, scale and deployment. The
+application could be entirely developed and tested by the developer, and then
+deployed to production by the operations team.
 
-queue.on_message((message: str) ~> {
-  print("Hello, ${message}!");
-});
-```
+As the cloud evolved and applications leveraged more and more of its
+capabilities, the lines between development and operations blurred, and "DevOps"
+was created. 
 
-Wing allows developers to leverage the cloud naturally within their code. 
-It is designed to be a general-purpose language that can be used to build any type of cloud application.
+While this increased reliability and performance in large-scale
+cloud applications, it also hurt the local development experience. Developers
+started fighting slow "inner loop" iteration cycles as things were moved out
+code and into managed services. Developers now have to care about non-functional
+concerns while operations is more intertwined with the development cycle. 
 
-The Wing compiler can target multiple cloud platforms, including AWS, Azure,
-Google Cloud, and Kubernetes. It can also target a local cloud simulator,
-allowing developers to run their applications locally for testing and debugging
-using the Wing Console.
+Wing addresses these problems through a programming language toolchain which
+allows developers to build cloud applications with the same simplicity and
+productivity as they did before the cloud. Wing is designed to be a general
+purpose language, and can be used to build any type of application.
+
+### What makes Wing special?
+
+Wing includes the following key concepts that make it particularly well-suited
+for unlocking the cloud for developers. These include:
+
+* **Resources** - Resources are a special type of objects which represent cloud
+  services used in the application such as buckets, queues, functions,
+  endpoints, services, etc. Resources are compiled into Terraform and deployed
+  to the cloud using standard tooling.
+* **Inflight functions** (or in short, **inflights**) - Inflights are code
+  blocks that are executed in the cloud and can naturally interact with
+  resources through the resource's "inflight API".
+* **Polymorphic programming** - Polymorphic types allow applications to use
+  resources without having to know the specific deployment target during
+  development. This allows developers to write code that is portable across
+  cloud providers, as well as run locally for testing and development.
 
 *This README is for *users* of the language. It contains information about how
-to install the toolchain, and how to build Wing applications. If you wish to
-*contribute* to the project, please jump over to our [contribution
-guide](./CONTRIBUTING.md).*
-
-## Concepts and Glossary
-
-Before the cloud, things were simple. There was a clear separation of concerns between developers and operations. Developers were focusing on business problems and didn't have to worry or think about operational concerns. The application could be entirely developed and tested locally.
-
-Operations then took care of the security, networking, availability, deployment, and scaling concerns. Developers would send their code "over the fence" and let operations take it from there.
-
-As the cloud evolved the complexity of reliable applications increased and code was moved to the operations side of the world. Operations and development lines blurred and DevOps was created. While this increased reliability and performance in large-scale cloud applications, it also hurt the local development experience. Developers started fighting slow "inner loop" iteration cycles as things were moved out code and into managed services. Developers now have to care about non-functional concerns while operations is more intertwined with the development cycle. 
-
-Wing addresses the problems by providing a language and toolchain that allows the developer to define intent and the compiler handles the complexity of interweaving the infrastructure with the functional code.
-
-```wing
-bring cloud
-
-let bucket = cloud.Bucket()
-cloud.Function() {[
-  bucket.upload("hello.txt", "world") 
-]}
-```
-
-
-Wing introduces a few new terms into the developer lexicon that you'll see used throughout the documentation.
-
-* Preflight code - code that represents infrastructure components key to your cloud applications. For example, a queue or REST endpoint resource is created using preflight code.
-* Inflight code - code that represents runtime business logic. For example, a function that processes messages from a queue and writes records to a database.
+to install the toolchain and how to build Wing applications. If you wish to
+contribute to the project, please jump over to our 
+[contribution guide](./CONTRIBUTING.md).*
 
 ## Getting Started
 
-If you want to try out Wing without having to get anything installed locally, 
-check out the [wing playground](https://wing-playground.vercel.app/).
+If you want to try out Wing without having to get anything installed locally,
+check out the [Wing playground](https://wing-playground.vercel.app/).
 
 ### Prerequisites
 
 To install Wing, you will need the following installed on your system:
 
-1. [Node.js](https://nodejs.org/en/) (version 18.x or above). We recommend using [NVM](https://github.com/nvm-sh/nvm) to install Node.js.
-1. [VSCode](https://code.visualstudio.com/) is our supported IDE. You can use other IDEs, but we have a VSCode extension to make development easier.
+1. [Node.js](https://nodejs.org/en/) (version 18.x or above). We recommend
+   [nvm](https://github.com/nvm-sh/nvm).
+1. [VSCode](https://code.visualstudio.com/) (recommended).
 
-In order to deploy the "Hello, World" example below to AWS, you will also need:
+In order to deploy to AWS, you will also need:
 
 1. [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html)
-   is only needed to configure local credentials.
-1. [Terraform](https://terraform.io/downloads) is needed to deploy to the cloud.
+   (only needed to configure credentials).
+1. [Terraform](https://terraform.io/downloads).
 
 #### Authenticate to GitHub Packages
 
@@ -97,10 +101,11 @@ include permissions for the **read:packages** scope (see
 To deploy Wing applications to the AWS Cloud, you'll need an [AWS
 account](portal.aws.amazon.com/billing/signup) and [AWS
 credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
-configured on your system. You'll know you have it set up correctly when you can run this command and get back a successful result:
+configured on your system. You'll know you have it set up correctly when you can
+run this command and get back a successful result:
 
-```shell
-$ aws sts get-caller-identity
+```sh
+aws sts get-caller-identity
 ```
 
 ### Installation
@@ -108,7 +113,7 @@ $ aws sts get-caller-identity
 Now you should be able to install the **Wing CLI**:
 
 ```sh
-$ npm install -g @monadahq/wing
+npm install -g @monadahq/wing
 ```
 
 Next, install the **Wing Extension for VSCode**:
@@ -117,8 +122,8 @@ Download the extension [here](https://github.com/monadahq/winglang/releases/down
 
 You can install it using the command line:
 
-```shell 
-$ code --install-extension ~/Downloads/vscode-wing.vsix
+```sh 
+code --install-extension ~/Downloads/vscode-wing.vsix
 ```
 
 *Change the location in the command to where ever you saved the extension at.*
@@ -134,7 +139,7 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message((message) ~> {
+queue.on_message((message: str) ~> {
   print("Hello, ${message}!");
 });
 ```
@@ -170,7 +175,6 @@ First, we need to compile our program to AWS:
 
 ```sh
 $ wing build --target tf-aws hello.w
-
 Build for target "tf-aws"...
 ```
 
