@@ -4527,7 +4527,7 @@ Inflight interface for `Bucket`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
-| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve all existing objects keys from the bucket. |
+| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 
 ---
@@ -4539,9 +4539,6 @@ public get(key: string): string
 ```
 
 Retrieve an object from the bucket.
-
-Throws if no object with the given key
-exists.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
@@ -4555,9 +4552,7 @@ exists.
 public list(): string[]
 ```
 
-Retrieve all existing objects keys from the bucket.
-
-Returns and empty array if no objects exist.
+Retrieve existing objects keys from the bucket.
 
 ##### `put` <a name="put" id="@monadahq/wingsdk.cloud.IBucketClient.put"></a>
 

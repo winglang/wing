@@ -10,8 +10,8 @@ import {
 import { IBucketClient } from "./bucket";
 export class BucketClient implements IBucketClient {
   constructor(
-      private readonly bucketName: string,
-      private readonly s3Client = new S3Client({})
+    private readonly bucketName: string,
+    private readonly s3Client = new S3Client({})
   ) {}
 
   public async put(key: string, body: string): Promise<void> {
