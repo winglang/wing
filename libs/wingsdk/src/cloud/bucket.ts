@@ -63,13 +63,15 @@ export interface IBucketClient {
   put(key: string, body: string): Promise<void>;
 
   /**
-   * Retrieve an object from the bucket. Throws if no object with the given key
-   * exists.
+   * Retrieve an object from the bucket.
+   * @Throws if no object with the given key exists.
+   * @Returns the object's body.
    */
   get(key: string): Promise<string>;
 
   /**
-   * Retrieve all existing objects keys from the bucket. Returns and empty array if no objects exist.
+   * Retrieve existing objects keys from the bucket.
+   * @returns a list of keys or an empty array if the bucket is empty.
    */
   list(): Promise<string[]>;
 }

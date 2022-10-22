@@ -1,6 +1,6 @@
 import { Readable } from "stream";
 import {
-  GetObjectCommand,
+  GetObjectCommand, ListObjectsCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
@@ -13,7 +13,15 @@ beforeEach(() => {
   s3Mock.reset();
 });
 
-test("get - happy path", async () => {
+function createMockStream(text: string): Readable {
+  const s = new Readable();
+  s._read = () => {};
+  s.push(text);
+  s.push(null); // indicate end of file
+  return s;
+}
+
+test("get object from a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -30,14 +38,14 @@ test("get - happy path", async () => {
   expect(response).toEqual(VALUE);
 });
 
-test("put - happy path", async () => {
+test("put an object into a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
   const VALUE = "VALUE";
   s3Mock
-    .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
-    .resolves({});
+      .on(PutObjectCommand, { Bucket: BUCKET_NAME, Key: KEY, Body: VALUE })
+      .resolves({});
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
@@ -47,10 +55,16 @@ test("put - happy path", async () => {
   expect(response).toEqual(undefined);
 });
 
-function createMockStream(text: string): Readable {
-  const s = new Readable();
-  s._read = () => {};
-  s.push(text);
-  s.push(null); // indicate end of file
-  return s;
-}
+test("list bucket objects", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY1 = "KEY1";
+  const KEY2 = "KEY2";
+  const client = new BucketClient(BUCKET_NAME);
+  s3Mock
+      .on(ListObjectsCommand, { Bucket: BUCKET_NAME })
+      .resolves({ Contents: [{ Key: KEY1 }, { Key: KEY2 }] });
+  const response = await client.list();
+  // THEN
+  expect(response).toEqual([KEY1, KEY2]);
+});

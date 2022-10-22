@@ -10,8 +10,8 @@ import {
 import { IBucketClient } from "./bucket";
 export class BucketClient implements IBucketClient {
   constructor(
-    private readonly bucketName: string,
-    private readonly s3Client = new S3Client({})
+      private readonly bucketName: string,
+      private readonly s3Client = new S3Client({})
   ) {}
 
   public async put(key: string, body: string): Promise<void> {
@@ -33,11 +33,26 @@ export class BucketClient implements IBucketClient {
     return consumers.text(resp.Body as Readable);
   }
 
-  public async list(): Promise<string[]> {
-    const command = new ListObjectsCommand({
-      Bucket: this.bucketName,
-    });
-    const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
-    return resp.Contents?.map((content) => content.Key as string) ?? [];
+  /**
+   * List all keys in the bucket.
+   * @param prefix Limits the response to keys that begin with the specified prefix
+   * TODO - add pagination support, currently returns all existing keys in the bucket
+   */
+  public async list(prefix?: string): Promise<string[]> {
+    const list: string[] = [];
+    let fetchMore = true;
+    let marker: string | undefined = undefined;
+    while (fetchMore) {
+      const command = new ListObjectsCommand({
+        Bucket: this.bucketName,
+        Prefix: prefix,
+        Marker: marker,
+      });
+      const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
+      list.push(...(resp?.Contents?.map((c) => c.Key as string) ?? []));
+      fetchMore = resp?.IsTruncated ?? false;
+      marker = list.length > 0 ? list.at(-1) : undefined;
+    }
+    return list;
   }
 }
