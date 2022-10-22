@@ -3,7 +3,7 @@ import { join } from "path";
 import { IPolyconFactory, Polycons } from "@monadahq/polycons";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
-import { DependencyGraph, FileState, IApp } from "../core";
+import { DependencyGraph, Files, IApp } from "../core";
 import { mkdtemp, sanitizeValue } from "../util";
 import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
@@ -29,12 +29,12 @@ export class App extends Construct implements IApp {
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
-  private readonly fileState: FileState;
+  private readonly files: Files;
 
   constructor(props: AppProps) {
     super(undefined as any, "root");
     this.outdir = props.outdir;
-    this.fileState = new FileState({ app: this });
+    this.files = new Files({ app: this });
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }
 
@@ -44,7 +44,7 @@ export class App extends Construct implements IApp {
   public synth(): string {
     const workdir = mkdtemp();
 
-    this.fileState.synth(workdir);
+    this.files.synth(workdir);
 
     // write "simulator.json" into the workdir
     const root = toSchema(this);

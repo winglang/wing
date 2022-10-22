@@ -10,18 +10,33 @@ import { IConstruct } from "constructs";
 import { FileBase } from "../fs";
 import { IApp } from "./app";
 
-export interface FileStateProps {
+/**
+ * Props for `Files`.
+ */
+export interface FilesProps {
+  /**
+   * The app with files to synthesize.
+   */
   readonly app: IApp;
+
+  /**
+   * The path to a state file which will track all synthesized files. If a
+   * statefile is not specified, we won't be able to remove extrenous files.
+   * @default - no state file
+   */
   readonly stateFile?: string;
 }
 
-export class FileState {
+/**
+ * Handles the synthesis of files.
+ */
+export class Files {
   /**
    * The path to a state file which will track all synthesized files.
    */
   public readonly stateFile?: string;
   private readonly app: IApp;
-  constructor(props: FileStateProps) {
+  constructor(props: FilesProps) {
     this.app = props.app;
     if (props.stateFile) {
       this.stateFile = isAbsolute(props.stateFile)

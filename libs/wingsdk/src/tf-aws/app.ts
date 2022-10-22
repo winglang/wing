@@ -4,7 +4,7 @@ import { IPolyconFactory, Polycons } from "@monadahq/polycons";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import { stringify } from "safe-stable-stringify";
-import { FileState, IApp } from "../core";
+import { Files, IApp } from "../core";
 import { PolyconFactory } from "./factory";
 
 export interface AppProps {
@@ -24,7 +24,7 @@ export class App extends Construct implements IApp {
     class TfApp extends cdktf.TerraformStack {
       public readonly outdir: string;
       private readonly cdktfApp: cdktf.App;
-      private readonly fileState: FileState;
+      private readonly files: Files;
 
       constructor() {
         const outdir = props.outdir ?? ".";
@@ -34,7 +34,7 @@ export class App extends Construct implements IApp {
 
         this.outdir = outdir;
         this.cdktfApp = root;
-        this.fileState = new FileState({
+        this.files = new Files({
           app: this,
           stateFile: props.stateFile,
         });
@@ -45,7 +45,7 @@ export class App extends Construct implements IApp {
 
       public synth(): string {
         this.cdktfApp.synth();
-        this.fileState.synth();
+        this.files.synth();
 
         // return a cleaned Terraform template for unit testing
         // https://github.com/hashicorp/terraform-cdk/blob/55009f99f7503e5de2bacb1766ab51547821e6be/packages/cdktf/lib/testing/index.ts#L109

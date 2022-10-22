@@ -1,7 +1,7 @@
 import { readdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
-import { FileState } from "../../src/core";
+import { Files } from "../../src/core";
 import { JsonFile, TextFile } from "../../src/fs";
 import { mkdtemp } from "../../src/util";
 import { appSnapshot } from "../util";
@@ -112,16 +112,16 @@ export interface AppProps {
 
 export class App extends Construct {
   public readonly outdir: string;
-  private readonly fileState: FileState;
+  private readonly files: Files;
 
   constructor(props: AppProps) {
     super(undefined as any, "root");
     this.outdir = props.outdir;
-    this.fileState = new FileState({ app: this, stateFile: props.stateFile });
+    this.files = new Files({ app: this, stateFile: props.stateFile });
   }
 
   public synth(): string {
-    this.fileState.synth();
+    this.files.synth();
     return this.outdir;
   }
 }
