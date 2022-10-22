@@ -17,6 +17,11 @@ export interface AppProps {
    * Directory where artifacts are synthesized to.
    */
   readonly outdir: string;
+
+  /**
+   * A custom factory to resolve polycons.
+   * @default - use the default polycon factory included in the Wing SDK
+   */
   readonly customFactory?: IPolyconFactory;
 }
 

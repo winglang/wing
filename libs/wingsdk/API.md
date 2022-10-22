@@ -2,149 +2,9 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
-### App <a name="App" id="@monadahq/wingsdk.core.App"></a>
-
-The root construct for all Wing applications.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.App.Initializer"></a>
-
-```typescript
-import { core } from '@monadahq/wingsdk'
-
-new core.App(props: AppProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.App.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.AppProps</code> | *No description.* |
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.App.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.core.AppProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.core.App.synth">synth</a></code> | Synthesize the app into the output directory. |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.core.App.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `synth` <a name="synth" id="@monadahq/wingsdk.core.App.synth"></a>
-
-```typescript
-public synth(): void
-```
-
-Synthesize the app into the output directory.
-
-The artifact produced
-depends on what synthesizer was used.
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.core.App.isConstruct"></a>
-
-```typescript
-import { core } from '@monadahq/wingsdk'
-
-core.App.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.core.App.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.core.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where all artifacts will be synthesized to. |
-| <code><a href="#@monadahq/wingsdk.core.App.property.root">root</a></code> | <code>constructs.Construct</code> | The root construct which all constructs should be added to. |
-| <code><a href="#@monadahq/wingsdk.core.App.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.App.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.core.App.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-
-Directory where all artifacts will be synthesized to.
-
----
-
-##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.core.App.property.root"></a>
-
-```typescript
-public readonly root: Construct;
-```
-
-- *Type:* constructs.Construct
-
-The root construct which all constructs should be added to.
-
-This is
-exposed for compatibility with different CDK frameworks that require
-creating their own `App` construct with a different root.
-
----
-
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.App.property.stateFile"></a>
-
-```typescript
-public readonly stateFile: string;
-```
-
-- *Type:* string
-
-The path to a state file which will track all synthesized files.
-
----
-
-
 ### App <a name="App" id="@monadahq/wingsdk.sim.App"></a>
+
+- *Implements:* @monadahq/wingsdk.core.IApp
 
 A construct that knows how to synthesize simulator resources into a Wing simulator (.wx) file.
 
@@ -173,7 +33,7 @@ new sim.App(props: AppProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into an `app.wx` file. |
+| <code><a href="#@monadahq/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into an `app.wx` file. Return the path to the file. |
 
 ---
 
@@ -188,10 +48,10 @@ Returns a string representation of this construct.
 ##### `synth` <a name="synth" id="@monadahq/wingsdk.sim.App.synth"></a>
 
 ```typescript
-public synth(): void
+public synth(): string
 ```
 
-Synthesize the app into an `app.wx` file.
+Synthesize the app into an `app.wx` file. Return the path to the file.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -224,6 +84,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.sim.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
 
@@ -236,6 +97,132 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.sim.App.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+
+Directory where artifacts are synthesized to.
+
+---
+
+
+### App <a name="App" id="@monadahq/wingsdk.tfaws.App"></a>
+
+- *Implements:* @monadahq/wingsdk.core.IApp
+
+An app that knows how to synthesize constructs into a Terraform configuration for AWS resources.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.App.Initializer"></a>
+
+```typescript
+import { tfaws } from '@monadahq/wingsdk'
+
+new tfaws.App(props?: AppProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.App.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.tfaws.AppProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.App.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.tfaws.AppProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.App.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.tfaws.App.synth">synth</a></code> | Synthesize the app into Terraform configuration in a `cdktf.out` directory. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.tfaws.App.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `synth` <a name="synth" id="@monadahq/wingsdk.tfaws.App.synth"></a>
+
+```typescript
+public synth(): string
+```
+
+Synthesize the app into Terraform configuration in a `cdktf.out` directory.
+
+This method eturn a cleaned snapshot of the resulting Terraform manifest
+for unit testing.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.tfaws.App.isConstruct"></a>
+
+```typescript
+import { tfaws } from '@monadahq/wingsdk'
+
+tfaws.App.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.tfaws.App.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.tfaws.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.tfaws.App.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.tfaws.App.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+
+Directory where artifacts are synthesized to.
 
 ---
 
@@ -2436,55 +2423,6 @@ The file's relative path to the output directory.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### AppProps <a name="AppProps" id="@monadahq/wingsdk.core.AppProps"></a>
-
-Props for `App`.
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.AppProps.Initializer"></a>
-
-```typescript
-import { core } from '@monadahq/wingsdk'
-
-const appProps: core.AppProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.AppProps.property.synthesizer">synthesizer</a></code> | <code>@monadahq/wingsdk.core.Synthesizer</code> | A synthesizer that handles setting up a CDK framework and registering a polycon factory. |
-| <code><a href="#@monadahq/wingsdk.core.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
-
----
-
-##### `synthesizer`<sup>Required</sup> <a name="synthesizer" id="@monadahq/wingsdk.core.AppProps.property.synthesizer"></a>
-
-```typescript
-public readonly synthesizer: Synthesizer;
-```
-
-- *Type:* @monadahq/wingsdk.core.Synthesizer
-
-A synthesizer that handles setting up a CDK framework and registering a polycon factory.
-
----
-
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.AppProps.property.stateFile"></a>
-
-```typescript
-public readonly stateFile: string;
-```
-
-- *Type:* string
-- *Default:* no state file
-
-The path to a state file which will track all synthesized files.
-
-If a
-statefile is not specified, we won't be able to remove extrenous files.
-
----
-
 ### AppProps <a name="AppProps" id="@monadahq/wingsdk.sim.AppProps"></a>
 
 Props for `App`.
@@ -2502,6 +2440,7 @@ const appProps: sim.AppProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@monadahq/wingsdk.sim.AppProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 
 ---
 
@@ -2514,6 +2453,83 @@ public readonly outdir: string;
 - *Type:* string
 
 Directory where artifacts are synthesized to.
+
+---
+
+##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@monadahq/wingsdk.sim.AppProps.property.customFactory"></a>
+
+```typescript
+public readonly customFactory: IPolyconFactory;
+```
+
+- *Type:* @monadahq/polycons.IPolyconFactory
+- *Default:* use the default polycon factory included in the Wing SDK
+
+A custom factory to resolve polycons.
+
+---
+
+### AppProps <a name="AppProps" id="@monadahq/wingsdk.tfaws.AppProps"></a>
+
+Props for `App`.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.tfaws.AppProps.Initializer"></a>
+
+```typescript
+import { tfaws } from '@monadahq/wingsdk'
+
+const appProps: tfaws.AppProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@monadahq/wingsdk.tfaws.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@monadahq/wingsdk.tfaws.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@monadahq/wingsdk.tfaws.AppProps.property.customFactory"></a>
+
+```typescript
+public readonly customFactory: IPolyconFactory;
+```
+
+- *Type:* @monadahq/polycons.IPolyconFactory
+- *Default:* use the default polycon factory included in the Wing SDK
+
+A custom factory to resolve polycons.
+
+---
+
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.tfaws.AppProps.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+- *Default:* the current directory
+
+Directory where artifacts are synthesized to.
+
+---
+
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.tfaws.AppProps.property.stateFile"></a>
+
+```typescript
+public readonly stateFile: string;
+```
+
+- *Type:* string
+- *Default:* no state file
+
+The path to a state file which will track all synthesized files.
+
+If a
+statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
@@ -2751,6 +2767,55 @@ public readonly methods: string[];
 - *Type:* string[]
 
 Which methods are called on the captured resource.
+
+---
+
+### FilesProps <a name="FilesProps" id="@monadahq/wingsdk.core.FilesProps"></a>
+
+Props for `Files`.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.FilesProps.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+const filesProps: core.FilesProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.FilesProps.property.app">app</a></code> | <code>@monadahq/wingsdk.core.IApp</code> | The app with files to synthesize. |
+| <code><a href="#@monadahq/wingsdk.core.FilesProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `app`<sup>Required</sup> <a name="app" id="@monadahq/wingsdk.core.FilesProps.property.app"></a>
+
+```typescript
+public readonly app: IApp;
+```
+
+- *Type:* @monadahq/wingsdk.core.IApp
+
+The app with files to synthesize.
+
+---
+
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.FilesProps.property.stateFile"></a>
+
+```typescript
+public readonly stateFile: string;
+```
+
+- *Type:* string
+- *Default:* no state file
+
+The path to a state file which will track all synthesized files.
+
+If a
+statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
@@ -3163,20 +3228,20 @@ const simulatorProps: testing.SimulatorProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.appPath">appPath</a></code> | <code>string</code> | Path to a Wing app file (.wx). |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
 | <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.dispatcher">dispatcher</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
 
 ---
 
-##### `appPath`<sup>Required</sup> <a name="appPath" id="@monadahq/wingsdk.testing.SimulatorProps.property.appPath"></a>
+##### `simfile`<sup>Required</sup> <a name="simfile" id="@monadahq/wingsdk.testing.SimulatorProps.property.simfile"></a>
 
 ```typescript
-public readonly appPath: string;
+public readonly simfile: string;
 ```
 
 - *Type:* string
 
-Path to a Wing app file (.wx).
+Path to a Wing simulator file (.wx).
 
 ---
 
@@ -3190,53 +3255,6 @@ public readonly dispatcher: ISimulatorDispatcher;
 - *Default:* a factory that simulates built-in Wing SDK resources
 
 The factory that dispatches to simulation implementations.
-
----
-
-### SynthesizerProps <a name="SynthesizerProps" id="@monadahq/wingsdk.core.SynthesizerProps"></a>
-
-Props for `Synth`.
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.SynthesizerProps.Initializer"></a>
-
-```typescript
-import { core } from '@monadahq/wingsdk'
-
-const synthesizerProps: core.SynthesizerProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.SynthesizerProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
-| <code><a href="#@monadahq/wingsdk.core.SynthesizerProps.property.outdir">outdir</a></code> | <code>string</code> | The output directory into which to emit synthesized artifacts. |
-
----
-
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@monadahq/wingsdk.core.SynthesizerProps.property.customFactory"></a>
-
-```typescript
-public readonly customFactory: IPolyconFactory;
-```
-
-- *Type:* @monadahq/polycons.IPolyconFactory
-- *Default:* use the default polycon factory included in the Wing SDK
-
-A custom factory to resolve polycons.
-
----
-
-##### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.core.SynthesizerProps.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-- *Default:* "." (the current working directory)
-
-The output directory into which to emit synthesized artifacts.
 
 ---
 
@@ -3700,6 +3718,79 @@ public readonly seconds: number;
 - *Type:* number
 
 Return the total number of seconds in this Duration.
+
+---
+
+
+### Files <a name="Files" id="@monadahq/wingsdk.core.Files"></a>
+
+Handles the synthesis of files.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Files.Initializer"></a>
+
+```typescript
+import { core } from '@monadahq/wingsdk'
+
+new core.Files(props: FilesProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Files.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.FilesProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.Files.Initializer.parameter.props"></a>
+
+- *Type:* @monadahq/wingsdk.core.FilesProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Files.synth">synth</a></code> | Synthesize the app into the output directory. |
+
+---
+
+##### `synth` <a name="synth" id="@monadahq/wingsdk.core.Files.synth"></a>
+
+```typescript
+public synth(outdir?: string): void
+```
+
+Synthesize the app into the output directory.
+
+The artifact produced
+depends on what synthesizer was used.
+
+###### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.core.Files.synth.parameter.outdir"></a>
+
+- *Type:* string
+
+The output directory, if not specified, the app's outdir will be used.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.Files.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.Files.property.stateFile"></a>
+
+```typescript
+public readonly stateFile: string;
+```
+
+- *Type:* string
+
+The path to a state file which will track all synthesized files.
 
 ---
 
@@ -4236,240 +4327,6 @@ Return a copy of the simulator tree, including all resource attributes.
 ---
 
 
-### Synthesizer <a name="Synthesizer" id="@monadahq/wingsdk.core.Synthesizer"></a>
-
-Handles the initialization and synthesis of constructs for a given CDK framework.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Synthesizer.Initializer"></a>
-
-```typescript
-import { core } from '@monadahq/wingsdk'
-
-new core.Synthesizer(props: SynthesizerProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Synthesizer.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.SynthesizerProps</code> | *No description.* |
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.Synthesizer.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.core.SynthesizerProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Synthesizer.synth">synth</a></code> | Synthesize the app. |
-
----
-
-##### `synth` <a name="synth" id="@monadahq/wingsdk.core.Synthesizer.synth"></a>
-
-```typescript
-public synth(): void
-```
-
-Synthesize the app.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Synthesizer.property.outdir">outdir</a></code> | <code>string</code> | Path to the output directory. |
-| <code><a href="#@monadahq/wingsdk.core.Synthesizer.property.root">root</a></code> | <code>constructs.Construct</code> | Place in the construct tree where all users constructs will get added. |
-
----
-
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.core.Synthesizer.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-
-Path to the output directory.
-
-For example, if synthesizing to terraform,
-`cdktf.out` will be created in here.
-
----
-
-##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.core.Synthesizer.property.root"></a>
-
-```typescript
-public readonly root: Construct;
-```
-
-- *Type:* constructs.Construct
-
-Place in the construct tree where all users constructs will get added.
-
----
-
-
-### Synthesizer <a name="Synthesizer" id="@monadahq/wingsdk.sim.Synthesizer"></a>
-
-Simulator synthesizer.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Synthesizer.Initializer"></a>
-
-```typescript
-import { sim } from '@monadahq/wingsdk'
-
-new sim.Synthesizer(props?: SynthesizerProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Synthesizer.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.SynthesizerProps</code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.sim.Synthesizer.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.core.SynthesizerProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Synthesizer.synth">synth</a></code> | Synthesize the app. |
-
----
-
-##### `synth` <a name="synth" id="@monadahq/wingsdk.sim.Synthesizer.synth"></a>
-
-```typescript
-public synth(): void
-```
-
-Synthesize the app.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Synthesizer.property.outdir">outdir</a></code> | <code>string</code> | Path to the output directory. |
-| <code><a href="#@monadahq/wingsdk.sim.Synthesizer.property.root">root</a></code> | <code>constructs.Construct</code> | Place in the construct tree where all users constructs will get added. |
-
----
-
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.sim.Synthesizer.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-
-Path to the output directory.
-
-For example, if synthesizing to terraform,
-`cdktf.out` will be created in here.
-
----
-
-##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.sim.Synthesizer.property.root"></a>
-
-```typescript
-public readonly root: Construct;
-```
-
-- *Type:* constructs.Construct
-
-Place in the construct tree where all users constructs will get added.
-
----
-
-
-### Synthesizer <a name="Synthesizer" id="@monadahq/wingsdk.tfaws.Synthesizer"></a>
-
-CDK for Terraform synthesizer.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Synthesizer.Initializer"></a>
-
-```typescript
-import { tfaws } from '@monadahq/wingsdk'
-
-new tfaws.Synthesizer(props?: SynthesizerProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Synthesizer.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.SynthesizerProps</code> | *No description.* |
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Synthesizer.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.core.SynthesizerProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Synthesizer.synth">synth</a></code> | Synthesize the app. |
-
----
-
-##### `synth` <a name="synth" id="@monadahq/wingsdk.tfaws.Synthesizer.synth"></a>
-
-```typescript
-public synth(): void
-```
-
-Synthesize the app.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Synthesizer.property.outdir">outdir</a></code> | <code>string</code> | Path to the output directory. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Synthesizer.property.root">root</a></code> | <code>constructs.Construct</code> | Place in the construct tree where all users constructs will get added. |
-
----
-
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.tfaws.Synthesizer.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-
-Path to the output directory.
-
-For example, if synthesizing to terraform,
-`cdktf.out` will be created in here.
-
----
-
-##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.tfaws.Synthesizer.property.root"></a>
-
-```typescript
-public readonly root: Construct;
-```
-
-- *Type:* constructs.Construct
-
-Place in the construct tree where all users constructs will get added.
-
----
-
-
 ### Testing <a name="Testing" id="@monadahq/wingsdk.core.Testing"></a>
 
 Testing utilities.
@@ -4515,6 +4372,63 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
+
+### IApp <a name="IApp" id="@monadahq/wingsdk.core.IApp"></a>
+
+- *Extends:* constructs.IConstruct
+
+- *Implemented By:* @monadahq/wingsdk.sim.App, @monadahq/wingsdk.tfaws.App, @monadahq/wingsdk.core.IApp
+
+A Wing application.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.IApp.synth">synth</a></code> | Synthesize the app into an artifact. |
+
+---
+
+##### `synth` <a name="synth" id="@monadahq/wingsdk.core.IApp.synth"></a>
+
+```typescript
+public synth(): string
+```
+
+Synthesize the app into an artifact.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.core.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.core.IApp.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.IApp.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.core.IApp.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+
+Directory where artifacts are synthesized to.
+
+---
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.cloud.IBucketClient"></a>
 
