@@ -119,23 +119,23 @@ enum Zone {
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return pathsNotEndingIn([
+      return srcPathsNotEndingIn([
         "*.inflight.ts",
         "*.sim.ts",
         "*.test.ts",
         "exports.ts",
       ]);
     case Zone.TEST:
-      return "**/*.test.ts";
+      return "src/**/*.test.ts";
     case Zone.INFLIGHT:
-      return "**/*.inflight.ts";
+      return "src/**/*.inflight.ts";
     case Zone.SIMULATOR:
-      return "**/*.sim.ts";
+      return "src/**/*.sim.ts";
   }
 }
 
-function pathsNotEndingIn(patterns: string[]) {
-  return `**/!(${patterns.join("|")})`;
+function srcPathsNotEndingIn(patterns: string[]) {
+  return `src/**/!(${patterns.join("|")})`;
 }
 
 interface DisallowImportsRule {
