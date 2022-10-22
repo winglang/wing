@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync, statSync } from "fs";
 import { extname, join } from "path";
-import { App } from "../src/core";
+import { IApp } from "../src/core";
 
 export function tfResourcesOf(templateStr: string): string[] {
   return Object.keys(JSON.parse(templateStr).resource).sort();
@@ -60,7 +60,7 @@ export function directorySnapshot(root: string) {
   return snapshot;
 }
 
-export function appSnapshot(app: App): Record<string, any> {
+export function appSnapshot(app: IApp): Record<string, any> {
   app.synth();
   return directorySnapshot(app.outdir);
 }

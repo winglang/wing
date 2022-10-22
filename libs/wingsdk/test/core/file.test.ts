@@ -1,22 +1,18 @@
 import { readdirSync, writeFileSync } from "fs";
 import { join } from "path";
-import { App } from "../../src/core";
+import { Construct } from "constructs";
+import { FileState } from "../../src/core";
 import { JsonFile, TextFile } from "../../src/fs";
 import { mkdtemp } from "../../src/util";
 import { appSnapshot } from "../util";
-import { NoopSynthesizer } from "./fixtures";
 
 test("nothing in output directory if there are no files", () => {
-  const app = new App({
-    synthesizer: new NoopSynthesizer({ outdir: mkdtemp() }),
-  });
+  const app = new App({ outdir: mkdtemp() });
   expect(appSnapshot(app)).toStrictEqual({});
 });
 
 test("files are saved in the output directory", () => {
-  const app = new App({
-    synthesizer: new NoopSynthesizer({ outdir: mkdtemp() }),
-  });
+  const app = new App({ outdir: mkdtemp() });
   const obj: any = { hello: "world" };
   new JsonFile(app, "JsonFile", "my-file.json", { obj });
   obj.mutate = 123;
@@ -37,10 +33,7 @@ test("files are saved in the output directory", () => {
 
 describe("state file", () => {
   test("no state file by default", () => {
-    const workdir = mkdtemp();
-    const app = new App({
-      synthesizer: new NoopSynthesizer({ outdir: workdir }),
-    });
+    const app = new App({ outdir: mkdtemp() });
     new TextFile(app, "TextFile", "myfile.txt", {
       lines: ["boom"],
     });
@@ -50,9 +43,8 @@ describe("state file", () => {
   });
 
   test("no state file if there are no files", () => {
-    const workdir = mkdtemp();
     const app = new App({
-      synthesizer: new NoopSynthesizer({ outdir: workdir }),
+      outdir: mkdtemp(),
       stateFile: "state.file",
     });
 
@@ -60,9 +52,8 @@ describe("state file", () => {
   });
 
   test("state file includes list of generated files", () => {
-    const workdir = mkdtemp();
     const app = new App({
-      synthesizer: new NoopSynthesizer({ outdir: workdir }),
+      outdir: mkdtemp(),
       stateFile: "state.file",
     });
 
@@ -87,7 +78,7 @@ describe("state file", () => {
     );
 
     const app = new App({
-      synthesizer: new NoopSynthesizer({ outdir: workdir }),
+      outdir: workdir,
       stateFile: stateFileName,
     });
 
@@ -101,8 +92,8 @@ describe("state file", () => {
     const workdir1 = mkdtemp();
     const workdir2 = mkdtemp();
     const app = new App({
+      outdir: workdir1,
       stateFile: join(workdir2, "another.file"),
-      synthesizer: new NoopSynthesizer({ outdir: workdir1 }),
     });
     new JsonFile(app, "JsonFile", "my.json", {
       obj: { fo: 123 },
@@ -113,3 +104,24 @@ describe("state file", () => {
     expect(readdirSync(workdir2)).toEqual(["another.file"]);
   });
 });
+
+export interface AppProps {
+  readonly outdir: string;
+  readonly stateFile?: string;
+}
+
+export class App extends Construct {
+  public readonly outdir: string;
+  private readonly fileState: FileState;
+
+  constructor(props: AppProps) {
+    super(undefined as any, "root");
+    this.outdir = props.outdir;
+    this.fileState = new FileState({ app: this, stateFile: props.stateFile });
+  }
+
+  public synth(): string {
+    this.fileState.synth();
+    return this.outdir;
+  }
+}

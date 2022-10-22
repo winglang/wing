@@ -1,28 +1,43 @@
+import { join } from "path";
 import * as aws from "@cdktf/provider-aws";
 import { IPolyconFactory, Polycons } from "@monadahq/polycons";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import { stringify } from "safe-stable-stringify";
+import { FileState, IApp } from "../core";
 import { PolyconFactory } from "./factory";
 
 export interface AppProps {
   readonly outdir?: string;
+  readonly stateFile?: string;
   readonly customFactory?: IPolyconFactory;
 }
 
-export class App extends Construct {
+export class App extends Construct implements IApp {
+  public readonly outdir: string;
   constructor(props: AppProps = {}) {
     super(null as any, "");
 
+    // this value doesn't matter since we are returning a different object
+    this.outdir = "";
+
     class TfApp extends cdktf.TerraformStack {
+      public readonly outdir: string;
       private readonly cdktfApp: cdktf.App;
+      private readonly fileState: FileState;
 
       constructor() {
         const outdir = props.outdir ?? ".";
-        const root = new cdktf.App({ outdir });
+        const root = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
 
         super(root, "root");
+
+        this.outdir = outdir;
         this.cdktfApp = root;
+        this.fileState = new FileState({
+          app: this,
+          stateFile: props.stateFile,
+        });
 
         new aws.AwsProvider(this, "AwsProvider", {});
         Polycons.register(this, props.customFactory ?? new PolyconFactory());
@@ -30,6 +45,7 @@ export class App extends Construct {
 
       public synth(): string {
         this.cdktfApp.synth();
+        this.fileState.synth();
 
         // return a cleaned Terraform template for unit testing
         // https://github.com/hashicorp/terraform-cdk/blob/55009f99f7503e5de2bacb1766ab51547821e6be/packages/cdktf/lib/testing/index.ts#L109
