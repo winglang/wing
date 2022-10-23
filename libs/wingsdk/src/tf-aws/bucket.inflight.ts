@@ -49,7 +49,10 @@ export class BucketClient implements IBucketClient {
         Marker: marker,
       });
       const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
-      list.push(...(resp?.Contents?.map((c) => c.Key as string) ?? []));
+      for (const content of resp.Contents ?? []) {
+        if (content.Key === undefined) { continue; }
+        list.push(content.Key);
+      }
       fetchMore = resp?.IsTruncated ?? false;
       marker = list.length > 0 ? list.at(-1) : undefined;
     }
