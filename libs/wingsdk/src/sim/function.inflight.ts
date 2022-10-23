@@ -1,4 +1,4 @@
-import WebSocket from "ws";
+import WebSocket from "isomorphic-ws";
 import { IFunctionClient } from "./function";
 import { sendToWebSocket } from "./util.inflight";
 

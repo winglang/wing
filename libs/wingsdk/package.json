@@ -92,6 +92,7 @@
     "@aws-sdk/client-sqs": "^3.171.0",
     "@aws-sdk/util-utf8-node": "^3.170.0",
     "esbuild-wasm": "^0.15.9",
+    "isomorphic-ws": "^5.0.0",
     "piscina": "*",
     "tar": "^6.1.11",
     "ws": "^7.5.9"
@@ -102,6 +103,7 @@
     "@aws-sdk/client-sqs",
     "@aws-sdk/util-utf8-node",
     "esbuild-wasm",
+    "isomorphic-ws",
     "piscina",
     "tar",
     "ws"
