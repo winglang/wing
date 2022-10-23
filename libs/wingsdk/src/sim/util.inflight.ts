@@ -1,5 +1,5 @@
 import { randomUUID } from "crypto";
-import WebSocket from "ws";
+import WebSocket from "isomorphic-ws";
 import { log } from "../util";
 import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 
