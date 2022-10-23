@@ -192,6 +192,10 @@
       "type": "bundled"
     },
     {
+      "name": "isomorphic-ws",
+      "type": "bundled"
+    },
+    {
       "name": "piscina",
       "type": "bundled"
     },

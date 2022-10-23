@@ -26,6 +26,7 @@ const project = new cdk.JsiiProject({
     "tar",
     "piscina",
     "ws",
+    "isomorphic-ws",
   ],
   devDeps: [
     "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
