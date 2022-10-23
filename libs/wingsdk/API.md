@@ -4549,10 +4549,18 @@ Retrieve an object from the bucket.
 ##### `list` <a name="list" id="@monadahq/wingsdk.cloud.IBucketClient.list"></a>
 
 ```typescript
-public list(): string[]
+public list(prefix?: string): string[]
 ```
 
 Retrieve existing objects keys from the bucket.
+
+###### `prefix`<sup>Optional</sup> <a name="prefix" id="@monadahq/wingsdk.cloud.IBucketClient.list.parameter.prefix"></a>
+
+- *Type:* string
+
+Limits the response to keys that begin with the specified prefix.
+
+---
 
 ##### `put` <a name="put" id="@monadahq/wingsdk.cloud.IBucketClient.put"></a>
 
