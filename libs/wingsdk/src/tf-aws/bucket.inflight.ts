@@ -50,7 +50,9 @@ export class BucketClient implements IBucketClient {
       });
       const resp: ListObjectsCommandOutput = await this.s3Client.send(command);
       for (const content of resp.Contents ?? []) {
-        if (content.Key === undefined) { continue; }
+        if (content.Key === undefined) {
+          continue;
+        }
         list.push(content.Key);
       }
       fetchMore = resp?.IsTruncated ?? false;
