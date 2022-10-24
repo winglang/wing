@@ -113,6 +113,14 @@ jobs:
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--configuration=release"
 
+      # wingc require wingsdk to be built first in order to run
+      - name: wingc Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wingc"
+          args: "--configuration=release"
+
       - name: Package Wing CLI
         working-directory: apps/wing
         run: |
@@ -214,11 +222,9 @@ jobs:
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
-        env:
-          WINGC_SKIP_JSII: "1"
         with:
           targets: "test"
-          projects: "wingii,wingc"
+          projects: "wingii"
           args: "--configuration=release"
 
       - name: Upload Wing Language Server
