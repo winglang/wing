@@ -113,13 +113,6 @@ jobs:
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--configuration=release"
 
-      - name: Test
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
-          projects: "wingsdk,wing-api-checker"
-          args: "--configuration=release"
-
       - name: Package Wing CLI
         working-directory: apps/wing
         run: |
