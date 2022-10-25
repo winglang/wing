@@ -24,8 +24,8 @@ export class Logger extends cloud.LoggerBase implements IResource {
     };
   }
 
-  private get addr(): string {
-    return `\${${this.node.path}#attrs.loggerAddr}`;
+  private get ref(): string {
+    return `\${${this.node.path}#attrs.logsDir}`;
   }
 
   /** @internal */
@@ -36,8 +36,8 @@ export class Logger extends cloud.LoggerBase implements IResource {
 
     this.callers.push(captureScope.node.path);
 
-    const env = `LOGGER_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.addr);
+    const env = `LOGGER_ADDR__${this.node.addr}`;
+    captureScope.addEnvironment(env, this.ref);
 
     captureScope.node.addDependency(this);
 

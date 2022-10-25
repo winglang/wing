@@ -10,7 +10,7 @@ export async function start(
 ): Promise<LoggerSchema["attrs"]> {
   const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-sim-"));
   return {
-    loggerAddr: tmpdir,
+    logsDir: tmpdir,
   };
 }
 

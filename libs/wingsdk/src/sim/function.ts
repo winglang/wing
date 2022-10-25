@@ -59,7 +59,7 @@ export class Function extends cloud.FunctionBase implements IResource {
   /**
    * @internal
    */
-  public get _addr(): string {
+  public get _ref(): string {
     return `\${${this.node.path}#attrs.functionAddr}`;
   }
 
@@ -83,7 +83,7 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.callers.push(captureScope.node.path);
 
     const env = `FUNCTION_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this._addr);
+    captureScope.addEnvironment(env, this._ref);
 
     return InflightClient.for(__filename, "FunctionClient", [
       `process.env["${env}"]`,

@@ -4,14 +4,14 @@ import { ILoggerClient } from "./logger";
 
 export class LoggerClient implements ILoggerClient {
   public constructor(
-    private readonly loggerAddr: string,
+    private readonly logsDir: string,
     private readonly functionId: string
   ) {}
   public async print(message: string): Promise<void> {
-    if (!fs.existsSync(this.loggerAddr)) {
-      throw new Error(`Logger address ${this.loggerAddr} does not exist.`);
+    if (!fs.existsSync(this.logsDir)) {
+      throw new Error(`Logs directory ${this.logsDir} does not exist.`);
     }
-    const logFile = `${this.loggerAddr}/${this.functionId}.log.txt`;
+    const logFile = `${this.logsDir}/${this.functionId}.log`;
     const event = {
       message,
       timestamp: Date.now(),
@@ -24,7 +24,7 @@ export class LoggerClient implements ILoggerClient {
   }
 
   public async fetchLatestLogs(): Promise<LogEvent[]> {
-    const logFile = `${this.loggerAddr}/${this.functionId}.log.txt`;
+    const logFile = `${this.logsDir}/${this.functionId}.log`;
     if (fs.existsSync(logFile)) {
       const contents = fs.readFileSync(logFile, "utf-8");
       return contents

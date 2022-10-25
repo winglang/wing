@@ -16,7 +16,7 @@ Object {
         ],
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_ADDR__WingLogger": "\${root/WingLogger#attrs.loggerAddr}",
+            "LOGGER_ADDR__c80f4a947b44da0af65a2258bcf6ee0bfb76f7e65b": "\${root/WingLogger#attrs.logsDir}",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",

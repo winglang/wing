@@ -33,7 +33,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
     };
   }
 
-  private get addr(): string {
+  private get ref(): string {
     return `\${${this.node.path}#attrs.bucketAddr}`;
   }
 
@@ -48,7 +48,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
     this.callers.push(captureScope.node.path);
 
     const env = `BUCKET_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.addr);
+    captureScope.addEnvironment(env, this.ref);
 
     return InflightClient.for(__filename, "BucketClient", [
       `process.env["${env}"]`,

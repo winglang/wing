@@ -36,7 +36,7 @@ test("inflight uses a logger", async () => {
   const fnClient = new FunctionClient(fnAttrs.functionAddr);
 
   const loggerAttrs = s.getAttributes("root/WingLogger");
-  const loggerClient = new LoggerClient(loggerAttrs.loggerAddr, "my_function");
+  const loggerClient = new LoggerClient(loggerAttrs.logsDir, "my_function");
 
   // WHEN
   const PAYLOAD = "Alice";

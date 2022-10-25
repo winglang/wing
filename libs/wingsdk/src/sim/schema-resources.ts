@@ -61,7 +61,7 @@ export interface LoggerSchema extends BaseResourceSchema {
   readonly props: {};
   readonly attrs: {
     /** The address of the directory for logs on the local file system. */
-    readonly loggerAddr: string;
+    readonly logsDir: string;
   };
 }
 

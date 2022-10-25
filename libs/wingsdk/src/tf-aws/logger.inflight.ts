@@ -15,7 +15,7 @@ export class LoggerClient implements ILoggerClient {
 
   public async print(message: string): Promise<void> {
     console.log(message);
-    return new Promise((resolve) => resolve());
+    return;
   }
 
   public async fetchLatestLogs(): Promise<LogEvent[]> {
