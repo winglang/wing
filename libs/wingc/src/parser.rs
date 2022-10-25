@@ -5,7 +5,8 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
-	Literal, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
+	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Reference, Scope, Statement, Symbol, Type,
+	UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -465,10 +466,49 @@ impl Parser<'_> {
 				},
 				expression_span,
 			)),
-			"string" => Ok(Expr::new(
-				ExprType::Literal(Literal::String(self.node_text(&expression_node).into())),
-				expression_span,
-			)),
+			"string" => {
+				if expression_node.named_child_count() == 0 {
+					Ok(Expr::new(
+						ExprType::Literal(Literal::String(self.node_text(&expression_node).into())),
+						expression_span,
+					))
+				} else {
+					let mut parts = Vec::new();
+					let mut cursor = expression_node.walk();
+					let end = expression_node.end_byte() - 1;
+					let mut last_start = expression_node.start_byte() + 1;
+					let mut last_end = end;
+					for child in expression_node.named_children(&mut cursor) {
+						let child_start = child.start_byte();
+						let child_end = child.end_byte();
+
+						if child_start != last_start {
+							parts.push(InterpolatedStringPart::Static(
+								str::from_utf8(&self.source[last_start..child_start]).unwrap().into(),
+							));
+						}
+
+						parts.push(InterpolatedStringPart::Expr(
+							self.build_expression(&child.named_child(0).unwrap())?,
+						));
+
+						last_start = child_start;
+						last_end = child_end;
+					}
+
+					if last_end != end {
+						parts.push(InterpolatedStringPart::Static(
+							str::from_utf8(&self.source[last_end..end]).unwrap().into(),
+						));
+					}
+
+					Ok(Expr::new(
+						ExprType::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
+						expression_span,
+					))
+				}
+			}
+
 			"number" => Ok(Expr::new(
 				ExprType::Literal(Literal::Number(
 					self.node_text(&expression_node).parse().expect("Number string"),
