@@ -47,6 +47,36 @@ test("put and get objects from bucket", async () => {
   expect(simulatorJsonOf(appPath)).toMatchSnapshot();
 });
 
+test("put multiple objects and list all from bucket", async () => {
+  // GIVEN
+  const appPath = synthSimulatedApp((scope) => {
+    new cloud.Bucket(scope, "my_bucket");
+  });
+  const s = new testing.Simulator({ appPath });
+  await s.start();
+
+  const attrs = s.getAttributes("root/my_bucket");
+  const client = new BucketClient(attrs.bucketAddr);
+  const KEY1 = "greeting1.txt";
+  const KEY2 = "greeting2.txt";
+  const KEY3 = "greeting3.txt";
+  const VALUE1 = JSON.stringify({ msg: "Hello world!" });
+  const VALUE2 = JSON.stringify({ msg: "Hello world again!" });
+  const VALUE3 = JSON.stringify({ msg: "Hello world again!" });
+
+  // WHEN
+  await client.put(KEY1, VALUE1);
+  await client.put(KEY2, VALUE2);
+  await client.put(KEY3, VALUE3);
+  const response = await client.list();
+
+  // THEN
+  expect(response).toEqual([KEY1, KEY2, KEY3]);
+  await s.stop();
+
+  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+});
+
 test("get invalid object throws an error", async () => {
   // GIVEN
   const appPath = synthSimulatedApp((scope) => {

@@ -4527,6 +4527,7 @@ Inflight interface for `Bucket`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 
 ---
@@ -4539,12 +4540,25 @@ public get(key: string): string
 
 Retrieve an object from the bucket.
 
-Throws if no object with the given key
-exists.
-
 ###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
 - *Type:* string
+
+---
+
+##### `list` <a name="list" id="@monadahq/wingsdk.cloud.IBucketClient.list"></a>
+
+```typescript
+public list(prefix?: string): string[]
+```
+
+Retrieve existing objects keys from the bucket.
+
+###### `prefix`<sup>Optional</sup> <a name="prefix" id="@monadahq/wingsdk.cloud.IBucketClient.list.parameter.prefix"></a>
+
+- *Type:* string
+
+Limits the response to keys that begin with the specified prefix.
 
 ---
 
@@ -4876,6 +4890,7 @@ List of inflight operations available for `Bucket`.
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
 
 ---
 
@@ -4889,6 +4904,13 @@ List of inflight operations available for `Bucket`.
 ##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
 
 `Bucket.get`.
+
+---
+
+
+##### `LIST` <a name="LIST" id="@monadahq/wingsdk.cloud.BucketInflightMethods.LIST"></a>
+
+`Bucket.list`.
 
 ---
 
