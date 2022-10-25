@@ -1,6 +1,7 @@
 import { Polycons } from "@monadahq/polycons";
 import { Construct, IConstruct } from "constructs";
-import { CaptureMetadata, Code, ICapturable } from "../core";
+import { CaptureMetadata, Code } from "../core";
+import { Resource } from "./resource";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
@@ -8,7 +9,8 @@ export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
 /**
  * Functionality shared between all `Logger` implementations.
  */
-export abstract class LoggerBase extends Construct implements ICapturable {
+export abstract class LoggerBase extends Resource {
+  public readonly stateful = true;
   /**
    * Logs a message.
    * @param message The message to log.
