@@ -110,7 +110,7 @@ mod sanity {
 		for entry in fs::read_dir(dir).unwrap() {
 			let entry = entry.unwrap();
 			let path = entry.path();
-			if path.extension().unwrap() == "wing" {
+			if path.extension().unwrap() == "w" {
 				files.push(path);
 			}
 		}
