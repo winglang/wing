@@ -85,7 +85,13 @@ export class Bucket extends cloud.BucketBase {
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-
+    if (methods.has(BucketInflightMethods.LIST)) {
+      captureScope.addPolicyStatements({
+        effect: "Allow",
+        action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
+        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+      });
+    }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     captureScope.addEnvironment(env, this.bucket.bucket);

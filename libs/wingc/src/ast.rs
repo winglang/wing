@@ -203,9 +203,21 @@ impl ArgList {
 #[derive(Debug)]
 pub enum Literal {
 	String(String),
+	InterpolatedString(InterpolatedString),
 	Number(f64),
 	Duration(f64),
 	Boolean(bool),
+}
+
+#[derive(Debug)]
+pub struct InterpolatedString {
+	pub parts: Vec<InterpolatedStringPart>,
+}
+
+#[derive(Debug)]
+pub enum InterpolatedStringPart {
+	Static(String),
+	Expr(Expr),
 }
 
 #[derive(Derivative)]

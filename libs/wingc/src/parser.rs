@@ -5,7 +5,8 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
-	Literal, ParameterDefinition, Reference, Scope, Statement, Symbol, Type, UnaryOperator,
+	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Reference, Scope, Statement, Symbol, Type,
+	UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -465,10 +466,55 @@ impl Parser<'_> {
 				},
 				expression_span,
 			)),
-			"string" => Ok(Expr::new(
-				ExprType::Literal(Literal::String(self.node_text(&expression_node).into())),
-				expression_span,
-			)),
+			"string" => {
+				if expression_node.named_child_count() == 0 {
+					Ok(Expr::new(
+						ExprType::Literal(Literal::String(self.node_text(&expression_node).into())),
+						expression_span,
+					))
+				} else {
+					// We must go over the string and separate it into parts (static and expr)
+					let mut cursor = expression_node.walk();
+					let mut parts = Vec::new();
+
+					// Skip first and last quote
+					let end = expression_node.end_byte() - 1;
+					let mut last_start = expression_node.start_byte() + 1;
+					let mut last_end = end;
+
+					for interpolation_node in expression_node.named_children(&mut cursor) {
+						let interpolation_start = interpolation_node.start_byte();
+						let interpolation_end = interpolation_node.end_byte();
+
+						if interpolation_start != last_start {
+							parts.push(InterpolatedStringPart::Static(
+								str::from_utf8(&self.source[last_start..interpolation_start])
+									.unwrap()
+									.into(),
+							));
+						}
+
+						parts.push(InterpolatedStringPart::Expr(
+							self.build_expression(&interpolation_node.named_child(0).unwrap())?,
+						));
+
+						last_start = interpolation_start;
+						last_end = interpolation_end;
+					}
+
+					if last_end != end {
+						parts.push(InterpolatedStringPart::Static(
+							str::from_utf8(&self.source[last_end..end]).unwrap().into(),
+						));
+					}
+
+					Ok(Expr::new(
+						ExprType::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
+						expression_span,
+					))
+				}
+			}
+
 			"number" => Ok(Expr::new(
 				ExprType::Literal(Literal::Number(
 					self.node_text(&expression_node).parse().expect("Number string"),

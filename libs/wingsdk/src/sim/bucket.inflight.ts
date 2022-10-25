@@ -15,4 +15,9 @@ export class BucketClient implements IBucketClient {
     const value = await fs.promises.readFile(filename, "utf8");
     return value;
   }
+
+  public async list(prefix?: string): Promise<string[]> {
+    const fileNames = await fs.promises.readdir(this.bucketAddr);
+    return fileNames.filter((fileName) => fileName.startsWith(prefix ?? ""));
+  }
 }
