@@ -36,6 +36,8 @@ She comes back to the office and tells the people what she's done last week, som
 
 ## Notes
 
+The primary goal of this sprint is to create a self service journey from someone who doesn't have access to wing repo into someone that has all that she needs in order to contribute or use wing 
+
 ### As such the focus of the sprint is:
 
 - Having Elad’s blog post somewhere in the public 
