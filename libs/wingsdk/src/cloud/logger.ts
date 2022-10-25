@@ -83,7 +83,9 @@ export class Logger extends LoggerBase {
  */
 export interface ILoggerClient {
   /**
-   * Logs a message.
+   * Logs a message. The log will be associated with whichever resource is
+   * running the inflight code.
+   *
    * @param message The message to print
    */
   print(message: string): Promise<void>;
