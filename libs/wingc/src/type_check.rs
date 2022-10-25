@@ -1,7 +1,7 @@
 mod jsii_importer;
 pub mod type_env;
 use crate::ast::{Type as AstType, *};
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -433,13 +433,23 @@ impl<'a> TypeChecker<'a> {
 		self.types.anything()
 	}
 
+	fn type_error(&self, type_error: &TypeError) -> TypeRef {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message: type_error.message.clone(),
+			span: Some(type_error.span.clone()),
+		});
+
+		self.types.anything()
+	}
+
 	pub fn get_primitive_type_by_name(&self, name: &str) -> TypeRef {
 		match name {
 			"number" => self.types.number(),
 			"string" => self.types.string(),
 			"bool" => self.types.bool(),
 			"duration" => self.types.duration(),
-			other => self.general_type_error(format!("Type {} is not a primitive type", other)),
+			other => self.general_type_error(format!("Type \"{}\" is not a primitive type", other)),
 		}
 	}
 
@@ -501,10 +511,16 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let constructor_type = class_env.lookup(&Symbol {
+				let constructor_type = match class_env.lookup(&Symbol {
 					name: WING_CONSTRUCTOR_NAME.into(),
 					span: class_symbol.span.clone(),
-				});
+				}) {
+					Ok(_type) => _type,
+					Err(type_error) => {
+						self.type_error(&type_error);
+						return Some(self.types.anything());
+					}
+				};
 
 				let constructor_sig = if let &Type::Function(ref sig) = constructor_type.into() {
 					sig
@@ -523,7 +539,7 @@ impl<'a> TypeChecker<'a> {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected {} args but got {} when instantiating {}",
+							"Expected {} args but got {} when instantiating \"{}\"",
 							constructor_sig.args.len(),
 							arg_list.pos_args.len(),
 							type_
@@ -556,7 +572,7 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope {:?} to be a resource object, instead found {}",
+									"Expected scope {:?} to be a resource object, instead found \"{}\"",
 									obj_scope, obj_scope_type
 								),
 							);
@@ -621,7 +637,7 @@ impl<'a> TypeChecker<'a> {
 				// Make it really is a a struct type
 				let st = struct_type
 					.as_struct()
-					.expect(&format!("Expected {} to be a struct type", struct_type));
+					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
 
 				// Verify that all fields are present and are of the right type
 				if st.env.iter().count() > fields.len() {
@@ -631,7 +647,7 @@ impl<'a> TypeChecker<'a> {
 					let field_type = st
 						.env
 						.try_lookup(&k.name)
-						.expect(&format!("{} is not a field of {}", k.name, struct_type));
+						.expect(&format!("\"{}\" is not a field of \"{}\"", k.name, struct_type));
 					let t = self.type_check_exp(v, env).unwrap();
 					self.validate_type(t, field_type, v);
 				}
@@ -710,9 +726,16 @@ impl<'a> TypeChecker<'a> {
 			}
 			AstType::CustomType { root, fields } => {
 				// Resolve all types down the fields list and return the last one (which is likely to be a real type and not a namespace)
-				let mut nested_name = vec![root.name.as_str()];
-				nested_name.extend(fields.iter().map(|f| f.name.as_str()));
-				env.lookup_nested(&nested_name)
+				let mut nested_name = vec![root];
+				nested_name.extend(fields);
+
+				match env.lookup_nested(&nested_name) {
+					Ok(_type) => _type,
+					Err(type_error) => {
+						self.type_error(&type_error);
+						self.types.anything()
+					}
+				}
 			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env);
@@ -733,9 +756,19 @@ impl<'a> TypeChecker<'a> {
 				let inferred_type = self.type_check_exp(initial_value, env).unwrap();
 				if let Some(explicit_type) = explicit_type {
 					self.validate_type(inferred_type, explicit_type, initial_value);
-					env.define(var_name, explicit_type);
+					match env.define(var_name, explicit_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				} else {
-					env.define(var_name, inferred_type);
+					match env.define(var_name, inferred_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 			}
 			Statement::FunctionDefinition(func_def) => {
@@ -750,7 +783,12 @@ impl<'a> TypeChecker<'a> {
 				let sig = function_type.as_function_sig().unwrap();
 
 				// Add this function to the env
-				env.define(&func_def.name, function_type);
+				match env.define(&func_def.name, function_type) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 
 				// Create an environment for the function
 				let mut function_env = TypeEnv::new(Some(env), sig.return_type, false, func_def.signature.flight);
@@ -769,7 +807,12 @@ impl<'a> TypeChecker<'a> {
 				let exp_type = self.type_check_exp(iterable, env).unwrap();
 
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
-				scope_env.define(&iterator, exp_type);
+				match scope_env.define(&iterator, exp_type) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 				statements.set_env(scope_env);
 
 				self.type_check_scope(statements);
@@ -808,7 +851,12 @@ impl<'a> TypeChecker<'a> {
 
 					if let Some(skip_flag) = std::env::var_os("WINGC_SKIP_JSII") {
 						if skip_flag != "false" {
-							env.define(namespace_name, self.types.anything())
+							match env.define(namespace_name, self.types.anything()) {
+								Err(type_error) => {
+									self.type_error(&type_error);
+								}
+								_ => {}
+							};
 						}
 						return;
 					};
@@ -856,7 +904,12 @@ impl<'a> TypeChecker<'a> {
 							name: namespace_name.name.clone(),
 							env: namespace_env,
 						}));
-						env.define(namespace_name, namespace);
+						match env.define(namespace_name, namespace) {
+							Err(type_error) => {
+								self.type_error(&type_error);
+							}
+							_ => {}
+						};
 					}
 				}
 			}
@@ -911,7 +964,7 @@ impl<'a> TypeChecker<'a> {
 						if let &Type::Class(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
-							self.general_type_error(format!("Class {}'s parent {} is not a class", name, t));
+							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
 						}
 					}
@@ -933,7 +986,12 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					Type::Class(class_spec)
 				});
-				env.define(name, class_type);
+				match env.define(name, class_type) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 
 				// Create a the real class environment to be filled with the class AST types
 				let mut class_env = TypeEnv::new(parent_class_env, None, true, env_flight);
@@ -947,7 +1005,12 @@ impl<'a> TypeChecker<'a> {
 					} else if member_type.as_resource().is_some() {
 						member_type = self.types.add_type(Type::ResourceObject(member_type));
 					}
-					class_env.define(&member.name, member_type);
+					match class_env.define(&member.name, member_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 				// Add methods to the class env
 				for method in methods.iter() {
@@ -963,18 +1026,28 @@ impl<'a> TypeChecker<'a> {
 					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env);
-					class_env.define(&method.name, method_type);
+					match class_env.define(&method.name, method_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 
 				// Add the constructor to the class env
 				let constructor_type = self.resolve_type(&AstType::FunctionSignature(constructor.signature.clone()), env);
-				class_env.define(
+				match class_env.define(
 					&Symbol {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
 					constructor_type,
-				);
+				) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
 				let class_env = match class_type.into() {
@@ -1009,7 +1082,13 @@ impl<'a> TypeChecker<'a> {
 				// Type check methods
 				for method in methods.iter_mut() {
 					// Lookup the method in the class_env
-					let method_type = class_env.lookup(&method.name);
+					let method_type = match class_env.lookup(&method.name) {
+						Ok(_type) => _type,
+						Err(type_error) => {
+							self.type_error(&type_error);
+							self.types.anything()
+						}
+					};
 					let method_sig = if let &Type::Function(ref s) = method_type.into() {
 						s
 					} else {
@@ -1044,20 +1123,40 @@ impl<'a> TypeChecker<'a> {
 				// Add members to the struct env
 				for member in members.iter() {
 					let member_type = self.resolve_type(&member.member_type, env);
-					struct_env.define(&member.name, member_type);
+					match struct_env.define(&member.name, member_type) {
+						Err(type_error) => {
+							self.type_error(&type_error);
+						}
+						_ => {}
+					};
 				}
 
 				// Add members from the structs parents
-				let extends_types = extends.iter().map(|parent| env.lookup(&parent)).collect::<Vec<_>>();
+				let extends_types = extends
+					.iter()
+					.map(|parent| match env.lookup(&parent) {
+						Ok(_type) => _type,
+						Err(type_error) => {
+							self.type_error(&type_error);
+							self.types.anything()
+						}
+					})
+					.collect::<Vec<_>>();
+
 				add_parent_members_to_struct_env(&extends_types, name, &mut struct_env);
-				env.define(
+				match env.define(
 					name,
 					self.types.add_type(Type::Struct(Struct {
 						name: name.clone(),
 						extends: extends_types,
 						env: struct_env,
 					})),
-				)
+				) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
 			}
 		}
 	}
@@ -1074,13 +1173,24 @@ impl<'a> TypeChecker<'a> {
 				*arg_type
 			};
 
-			env.define(&arg, actual_arg_type);
+			match env.define(&arg, actual_arg_type) {
+				Err(type_error) => {
+					self.type_error(&type_error);
+				}
+				_ => {}
+			};
 		}
 	}
 
 	fn resolve_reference(&mut self, reference: &Reference, env: &TypeEnv) -> TypeRef {
 		match reference {
-			Reference::Identifier(symbol) => env.lookup(symbol),
+			Reference::Identifier(symbol) => match env.lookup(symbol) {
+				Ok(_type) => _type,
+				Err(type_error) => {
+					self.type_error(&type_error);
+					self.types.anything()
+				}
+			},
 			Reference::NestedIdentifier { object, property } => {
 				// Get class
 				let class = {
@@ -1090,19 +1200,25 @@ impl<'a> TypeChecker<'a> {
 						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
 						&Type::Anything => return instance,
 						_ => self.general_type_error(format!(
-							"{} in {:?} does not resolve to a class instance or resource object",
+							"\"{}\" in {:?} does not resolve to a class instance or resource object",
 							instance, reference
 						)),
 					};
 
 					match instance_type.into() {
 						&Type::Class(ref class) | &Type::Resource(ref class) => class,
-						_ => panic!("Expected {} to be a class or resource type", instance_type),
+						_ => panic!("Expected \"{}\" to be a class or resource type", instance_type),
 					}
 				};
 
 				// Find property in class's environment
-				class.env.lookup(property)
+				match class.env.lookup(property) {
+					Ok(_type) => _type,
+					Err(type_error) => {
+						self.type_error(&type_error);
+						self.types.anything()
+					}
+				}
 			}
 		}
 	}
@@ -1110,9 +1226,13 @@ impl<'a> TypeChecker<'a> {
 
 fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol, struct_env: &mut TypeEnv) {
 	for parent_type in extends_types.iter() {
-		let parent_struct = parent_type
-			.as_struct()
-			.expect(format!("Type {} extends {} which should be a struct", name.name, parent_type).as_str());
+		let parent_struct = parent_type.as_struct().expect(
+			format!(
+				"Type \"{}\" extends \"{}\" which should be a struct",
+				name.name, parent_type
+			)
+			.as_str(),
+		);
 		for (parent_member_name, member_type) in parent_struct.env.iter() {
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name) {
 				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
@@ -1120,7 +1240,7 @@ fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol,
 				//   when we want to check for subtypes and use equality for strict comparisons.
 				if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
 					panic!(
-						"Struct {} extends {} but has a conflicting member {} ({} != {})",
+						"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
 						name, parent_type, parent_member_name, existing_type, member_type
 					);
 				}

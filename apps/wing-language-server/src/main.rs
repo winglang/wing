@@ -8,6 +8,7 @@ use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
 use tree_sitter::Point;
+use wingc::diagnostic::DiagnosticLevel;
 
 pub mod completions;
 pub mod errors;
@@ -248,7 +249,7 @@ impl Backend {
 		let semantic_tokens = semantic_token_from_ast(&parse_result.tree);
 		let errors = errors_from_ast(&parse_result.tree);
 
-		let diagnostics = errors
+		let mut diagnostics = errors
 			.into_iter()
 			.filter_map(|item| {
 				let diagnostic = || -> Option<Diagnostic> {
@@ -268,6 +269,25 @@ impl Backend {
 				diagnostic
 			})
 			.collect::<Vec<_>>();
+
+		diagnostics.extend(
+			parse_result
+				.diagnostics
+				.iter()
+				.filter(|item| matches!(item.level, DiagnosticLevel::Error) && item.span.is_some())
+				.map(|item| {
+					let span = item.span.as_ref().unwrap();
+					let start_position = Position {
+						line: span.start.row as u32,
+						character: span.start.column as u32,
+					};
+					let end_position = Position {
+						line: span.end.row as u32,
+						character: span.end.column as u32,
+					};
+					Diagnostic::new_simple(Range::new(start_position, end_position), item.message.clone())
+				}),
+		);
 
 		self
 			.client
