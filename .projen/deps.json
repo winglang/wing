@@ -5,10 +5,6 @@
       "type": "build"
     },
     {
-      "name": "@cdktf/provider-aws",
-      "type": "build"
-    },
-    {
       "name": "@headlessui/react",
       "type": "build"
     },
@@ -18,10 +14,6 @@
     },
     {
       "name": "@monadahq/mona-projen",
-      "type": "build"
-    },
-    {
-      "name": "@monadahq/polycons",
       "type": "build"
     },
     {
@@ -116,15 +108,7 @@
       "type": "build"
     },
     {
-      "name": "cdktf",
-      "type": "build"
-    },
-    {
       "name": "classnames",
-      "type": "build"
-    },
-    {
-      "name": "constructs",
       "type": "build"
     },
     {
@@ -277,11 +261,27 @@
       "type": "override"
     },
     {
+      "name": "@cdktf/provider-aws",
+      "type": "runtime"
+    },
+    {
+      "name": "@monadahq/polycons",
+      "type": "runtime"
+    },
+    {
       "name": "@monadahq/wingsdk",
       "type": "runtime"
     },
     {
+      "name": "cdktf",
+      "type": "runtime"
+    },
+    {
       "name": "chokidar",
+      "type": "runtime"
+    },
+    {
+      "name": "constructs",
       "type": "runtime"
     },
     {
@@ -290,6 +290,10 @@
     },
     {
       "name": "isomorphic-ws",
+      "type": "runtime"
+    },
+    {
+      "name": "ws",
       "type": "runtime"
     }
   ],

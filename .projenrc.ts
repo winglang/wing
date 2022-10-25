@@ -4,7 +4,17 @@ import { JobPermission } from "projen/lib/github/workflows-model.js";
 const project = new TypeScriptProject({
   name: "wing-console",
   description: "The Wing Console",
-  deps: ["chokidar", "electron-log", "@monadahq/wingsdk", "isomorphic-ws"],
+  deps: [
+    "chokidar",
+    "electron-log",
+    "@monadahq/wingsdk",
+    "isomorphic-ws",
+    "ws",
+    "@cdktf/provider-aws",
+    "@monadahq/polycons",
+    "cdktf",
+    "constructs",
+  ],
   devDeps: [
     "@monadahq/mona-projen",
     "@babel/core",
@@ -50,10 +60,6 @@ const project = new TypeScriptProject({
     // Peer deps:
     "webpack",
     "require-from-string",
-    "@cdktf/provider-aws",
-    "@monadahq/polycons",
-    "cdktf",
-    "constructs",
   ],
 });
 project.addTask("dev").exec("vite");

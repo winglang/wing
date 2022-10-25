@@ -8,6 +8,7 @@ import { createIPCHandler } from "electron-trpc";
 
 import { mergeRouters } from "./router/index.js";
 import { createSimulator } from "./simulator/simulator.js";
+import {log} from "electron-log";
 
 // TODO [sa] add auto-updater
 
@@ -22,7 +23,7 @@ if (!app.requestSingleInstanceLock()) {
 
 export const ROOT_PATH = {
   dist: join(__dirname, "../.."),
-  public: join(__dirname, app.isPackaged ? "../.." : "../../../public"),
+  public: join(__dirname, app.isPackaged ? "../.." : "../.."),
 };
 
 let win: BrowserWindow | undefined;
@@ -103,13 +104,13 @@ ipcMain.handle("open-win", (event, arg) => {
 });
 
 const getWXFilePath = (): string => {
-  // TODO [sa] remove comment
-  // const cloudFileArg = process.argv.slice(2).find(arg => arg.startsWith('--cloudFile='));
-  // if(!cloudFileArg) {
-  //   throw new Error(`no cloud application file was provided`);
-  // }
-  // return cloudFileArg.replace('--cloudFile=', '');
-  return join(__dirname, "../../../../test/demo.wx");
+  log(process.argv);
+  const cloudFileArg = process.argv.slice(1).find(arg => arg.startsWith('--cloudFile='));
+  if(!cloudFileArg) {
+    log('loading application in demo mode');
+    return join(ROOT_PATH.public, "demo.wx");
+  }
+  return cloudFileArg.replace('--cloudFile=', '');
 };
 
 void app.whenReady().then(async () => {

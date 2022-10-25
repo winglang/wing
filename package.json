@@ -33,11 +33,9 @@
   },
   "devDependencies": {
     "@babel/core": "^7.19.6",
-    "@cdktf/provider-aws": "^10.0.10",
     "@headlessui/react": "*",
     "@heroicons/react": "^2.0.12",
     "@monadahq/mona-projen": "^0.0.36",
-    "@monadahq/polycons": "^0.0.96",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-interactions": "^6.5.13",
@@ -60,9 +58,7 @@
     "autoprefixer": "^10.4.12",
     "babel-loader": "^8.2.5",
     "c8": "^7.12.0",
-    "cdktf": "^0.13.1",
     "classnames": "^2.3.2",
-    "constructs": "^10.1.138",
     "electron": "^20.1.4",
     "electron-builder": "^23.6.0",
     "electron-devtools-installer": "^3.2.0",
@@ -99,10 +95,15 @@
     "zod": "^3.19.1"
   },
   "dependencies": {
+    "@cdktf/provider-aws": "^10.0.10",
+    "@monadahq/polycons": "^0.0.96",
     "@monadahq/wingsdk": "^0.2.65",
+    "cdktf": "^0.13.1",
     "chokidar": "^3.5.3",
+    "constructs": "^10.1.138",
     "electron-log": "^4.4.8",
-    "isomorphic-ws": "^5.0.0"
+    "isomorphic-ws": "^5.0.0",
+    "ws": "*"
   },
   "main": "dist/vite/electron/main/index.js",
   "license": "Apache-2.0",

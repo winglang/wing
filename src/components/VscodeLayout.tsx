@@ -146,7 +146,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
       <div className="flex-1 flex">
         <RightResizableWidget className="h-full flex flex-col w-60 min-w-[15rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu
-            title="Wing Demo App"
+            title="Wing App"
             items={treeMenu.items}
             selectedItemId={treeMenu.currentItemId}
             openMenuItemIds={treeMenu.openItemIds}
