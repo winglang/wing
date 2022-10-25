@@ -42,8 +42,8 @@ The primary goal of this sprint is to create a self service journey from someone
 
 - Having Elad’s blog post somewhere in the public 
 - [guts-web-dev] Having a winglang.io website working
-- We need a title currently “wing”
-- We need a tagline currently 
+  - We need a title currently “wing”
+  - We need a tagline currently 
 - [design] having wing log
 - [content] Having a demo video inside our README
 - [dev] Having a github.com/winglang/wing repo (instead of monadahq/winglang)
