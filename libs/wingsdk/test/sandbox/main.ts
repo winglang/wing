@@ -2,9 +2,6 @@ import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 // import * as sim from "../../src/sim";
-// eslint-disable-next-line import/no-restricted-paths
-// import { FunctionClient } from "../../src/sim/function.inflight";
-// import * as testing from "../../src/testing";
 import * as tfaws from "../../src/tf-aws";
 
 class Main extends Construct {
@@ -47,6 +44,7 @@ class Main extends Construct {
 
 const app = new core.App({
   synthesizer: new tfaws.Synthesizer({ outdir: __dirname }),
+  // synthesizer: new sim.Synthesizer({ outdir: __dirname }),
 });
 cloud.Logger.register(app.root);
 new Main(app.root, "Main");
