@@ -194,7 +194,7 @@ function isToken(value: string): boolean {
 }
 
 function resolveTokens(
-  tokenHost: string,
+  tokenOrigin: string,
   props: any,
   resolver: IResourceResolver
 ): any {
@@ -206,7 +206,7 @@ function resolveTokens(
       if (rest.startsWith("attrs.")) {
         if (!resource.attrs) {
           throw new Error(
-            `Tried to resolve token ${props} but resource ${path} has no attributes defined yet. Is it possible ${tokenHost} needs to take a dependency on ${path}?`
+            `Tried to resolve token ${props} but resource ${path} has no attributes defined yet. Is it possible ${tokenOrigin} needs to take a dependency on ${path}?`
           );
         }
         return resource.attrs[rest.slice(6)];
@@ -225,13 +225,13 @@ function resolveTokens(
   }
 
   if (Array.isArray(props)) {
-    return props.map((x) => resolveTokens(tokenHost, x, resolver));
+    return props.map((x) => resolveTokens(tokenOrigin, x, resolver));
   }
 
   if (typeof props === "object") {
     const ret: any = {};
     for (const [key, value] of Object.entries(props)) {
-      ret[key] = resolveTokens(tokenHost, value, resolver);
+      ret[key] = resolveTokens(tokenOrigin, value, resolver);
     }
     return ret;
   }
