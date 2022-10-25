@@ -61,6 +61,9 @@ impl<'a> JsiiImporter<'a> {
 					})))
 				} else if type_fqn == "@monadahq/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
+				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
+					// TODO: this should be a special type that represents "any resource"
+					Some(self.wing_types.anything())
 				} else {
 					Some(self.lookup_or_create_type(type_fqn))
 				}
