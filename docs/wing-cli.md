@@ -81,6 +81,25 @@ users can inspect the generated code and debug it if needed.
   the generated code instead.
 </details>
 
+## Logging
+
+The CLI uses [debug](https://www.npmjs.com/package/debug) module to communicate
+to the user about what's happening in detail. In addition to debug logging, The
+simple spinner design can be used to communicate to the user that the CLI is in
+the middle of a long running operation.
+
+For debug logs, environment variable `DEBUG` can be used to control the level of
+logging. For example, to enable all debug logs, set `DEBUG=wing:*`. To configure
+only the CLI, set `DEBUG=wing:cli`. For more information, see the "debug" module
+documentation on NPM.
+
+<details>
+  <summary>Design Justification</summary>
+  The "debug" package is used extensively in the NPM ecosystem and it is a light
+  weight logger with no impact on performance. Other tools such as Express also
+  use this NPM module for logging.
+</details>
+
 ## Commands
 
 ### `wing compile <file>.w`
