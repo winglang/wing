@@ -3,8 +3,8 @@ use std::{fs, path::PathBuf};
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expr, ExprType, Flight, FunctionDefinition, Literal, Reference, Scope,
-	Statement, Symbol, Type, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Expr, ExprType, Flight, FunctionDefinition, InterpolatedStringPart, Literal,
+	Reference, Scope, Statement, Symbol, Type, UnaryOperator,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -184,6 +184,17 @@ fn jsify_expression(expression: &Expr) -> String {
 		}
 		ExprType::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
+			Literal::InterpolatedString(s) => format!(
+				"`{}`",
+				s.parts
+					.iter()
+					.map(|p| match p {
+						InterpolatedStringPart::Static(l) => format!("{}", l),
+						InterpolatedStringPart::Expr(e) => format!("${{{}}}", jsify_expression(e)),
+					})
+					.collect::<Vec<String>>()
+					.join("")
+			),
 			Literal::Number(n) => format!("{}", n),
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
