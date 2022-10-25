@@ -1,20 +1,20 @@
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
-import { SimulatorContext } from "../testing/simulator";
-import { BucketSchema } from "./schema-resources";
+import { SimulatorContext } from "../testing";
+import { LoggerSchema } from "./schema-resources";
 
 export async function start(
   _props: any,
   _context: SimulatorContext
-): Promise<BucketSchema["attrs"]> {
+): Promise<LoggerSchema["attrs"]> {
   const tmpdir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-sim-"));
   return {
-    bucketAddr: tmpdir,
+    logsDir: tmpdir,
   };
 }
 
-export async function stop(_attrs: BucketSchema["attrs"]): Promise<void> {
+export async function stop(_attrs: LoggerSchema["attrs"]): Promise<void> {
   // TODO: cleanup
   return;
 }

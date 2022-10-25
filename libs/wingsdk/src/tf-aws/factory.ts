@@ -1,8 +1,9 @@
 import { IPolyconFactory } from "@monadahq/polycons";
 import { IConstruct } from "constructs";
-import { BUCKET_TYPE, FUNCTION_TYPE, QUEUE_TYPE } from "../cloud";
+import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE, QUEUE_TYPE } from "../cloud";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
+import { Logger } from "./logger";
 import { Queue } from "./queue";
 
 /**
@@ -22,6 +23,8 @@ export class PolyconFactory implements IPolyconFactory {
         return new Function(scope, id, args[0], args[1]);
       case QUEUE_TYPE:
         return new Queue(scope, id, args[0]);
+      case LOGGER_TYPE:
+        return new Logger(scope, id);
       default:
         throw new Error(`Type ${type} not implemented.`);
     }

@@ -81,7 +81,7 @@ export class Queue extends cloud.QueueBase implements IResource {
     };
   }
 
-  private get addr(): string {
+  private get ref(): string {
     return `\${${this.node.path}#attrs.queueAddr}`;
   }
 
@@ -99,7 +99,7 @@ export class Queue extends cloud.QueueBase implements IResource {
     this.callers.push(captureScope.node.path);
 
     const env = `QUEUE_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.addr);
+    captureScope.addEnvironment(env, this.ref);
 
     return core.InflightClient.for(__filename, "QueueClient", [
       `process.env["${env}"]`,
