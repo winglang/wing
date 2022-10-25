@@ -6,12 +6,14 @@ import {
   CubeIcon,
   GlobeAltIcon,
 } from "@heroicons/react/24/outline";
-import { CubeIcon as SolidCubeIcon } from "@heroicons/react/24/solid";
-import { ResourceSchema, WingLocalSchema } from "@monadahq/wing-local-schema";
+import type {
+  BaseResourceSchema,
+  WingSimulatorSchema,
+} from "@monadahq/wingsdk/lib/sim";
 import classNames from "classnames";
-import React, { SVGProps } from "react";
+import React from "react";
 
-import { TreeMenuItem } from "@/components/TreeMenu";
+import { TreeMenuItem } from "@/design-system/TreeMenu";
 
 import constructHubTree from "../assets/construct-hub-tree.json";
 
@@ -24,14 +26,17 @@ export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
   });
 };
 
-export const WingSchemaToTreeMenuItems = (
-  schema: WingLocalSchema,
+export const SchemaToTreeMenuItems = (
+  schema: WingSimulatorSchema,
 ): TreeMenuItem[] => {
   const tree: TreeMenuItem[] = [];
-  const buildTree = (node: any, parent: TreeMenuItem | undefined) => {
+  const buildTree = (
+    node: BaseResourceSchema,
+    parent: TreeMenuItem | undefined,
+  ) => {
     const item: TreeMenuItem = {
-      id: node.path,
-      label: node.id,
+      id: node.path ?? "",
+      label: node.path ?? "",
       children: [],
       parentId: parent?.id,
       icon: (
@@ -47,11 +52,10 @@ export const WingSchemaToTreeMenuItems = (
     } else {
       tree.push(item);
     }
-    if (node.children && Object.keys(node.children).length > 0) {
-      // eslint-disable-next-line unicorn/no-array-for-each
-      Object.keys(node.children).forEach((child: any) => {
-        buildTree(node.children[child], item);
-      });
+    if (node.children) {
+      for (const child of Object.values(node.children)) {
+        buildTree(child, item);
+      }
     }
   };
   buildTree(schema.root, undefined);
@@ -105,14 +109,15 @@ const hubNodeTypeAndProps = (
 } => {
   if (isContHubResource(node)) {
     switch (node.attributes["aws:cdk:cloudformation:type"]) {
-      case "AWS::S3::Bucket":
+      case "AWS::S3::Bucket": {
         return {
-          type: "cloud.Bucket",
+          type: "wingsdk.cloud.Bucket",
           props: {},
         };
-      case "AWS::Lambda::Function":
+      }
+      case "AWS::Lambda::Function": {
         return {
-          type: "cloud.Function",
+          type: "wingsdk.cloud.Function",
           props: {
             sourceCodeFile: "func.js",
             sourceCodeLanguage: "javascript",
@@ -121,26 +126,28 @@ const hubNodeTypeAndProps = (
             },
           },
         };
-      case "AWS::SQS::Queue":
-        return { type: "cloud.Queue", props: { timeout: "3000" } };
-      default:
+      }
+      case "AWS::SQS::Queue": {
+        return { type: "wingsdk.cloud.Queue", props: { timeout: "3000" } };
+      }
+      default: {
         // TODO: update schema to support custom resources
-        return { type: "cloud.Custom", props: {} };
+        return { type: "wingsdk.cloud.Custom", props: {} };
+      }
     }
   } else {
-    return { type: "constructs.Construct", props: {} };
+    return { type: "wingsdk.constructs.Construct", props: {} };
   }
 };
 
-export const constructHubTreeToWingSchema = (): WingLocalSchema => {
-  const tree: WingLocalSchema = {
-    version: "1.0.0",
+export const constructHubTreeToWingSchema = (): WingSimulatorSchema => {
+  const tree: WingSimulatorSchema = {
     root: {
-      id: "App",
       path: "",
       type: "constructs.Construct",
       children: {},
     },
+    startOrder: [],
   };
 
   const resourcePathsArray = getConstructHubResourcePaths();
@@ -201,69 +208,80 @@ const CubeTransparentExIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-const getResourceIconComponent = (resourceType: ResourceSchema["type"]) => {
+const getResourceIconComponent = (resourceType: BaseResourceSchema["type"]) => {
   switch (resourceType) {
-    case "cloud.Bucket":
+    case "wingsdk.cloud.Bucket": {
       return ArchiveBoxIcon;
-    case "cloud.Function":
+    }
+    case "wingsdk.cloud.Function": {
       return BoltIcon;
-    case "cloud.Queue":
+    }
+    case "wingsdk.cloud.Queue": {
       return QueueListIcon;
-    case "cloud.Endpoint":
+    }
+    case "wingsdk.cloud.Endpoint": {
       return GlobeAltIcon;
-    case "constructs.Construct":
+    }
+    case "wingsdk.constructs.Construct": {
       return CubeTransparentExIcon;
-    default:
+    }
+    default: {
       return CubeIcon;
+    }
   }
 };
 
 const getResourceIconColors = (options: {
-  resourceType: ResourceSchema["type"];
+  resourceType: BaseResourceSchema["type"];
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
 }) => {
   switch (options.resourceType) {
-    case "cloud.Bucket":
+    case "wingsdk.cloud.Bucket": {
       return [
         "text-orange-500 dark:text-orange-400",
         options.darkenOnGroupHover &&
           "group-hover:text-orange-600 dark:group-hover:text-orange-300",
         options.forceDarken && "text-orange-600 dark:text-orange-300",
       ];
-    case "cloud.Function":
+    }
+    case "wingsdk.cloud.Function": {
       return [
         "text-sky-500 dark:text-sky-400",
         options.darkenOnGroupHover &&
           "group-hover:text-sky-600 dark:group-hover:text-sky-300",
         options.forceDarken && "text-sky-600 dark:text-sky-300",
       ];
-    case "cloud.Queue":
+    }
+    case "wingsdk.cloud.Queue": {
       return [
         "text-emerald-500 dark:text-emerald-400",
         options.darkenOnGroupHover &&
           "group-hover:text-emerald-600 dark:group-hover:text-emerald-300",
         options.forceDarken && "text-emerald-600 dark:text-emerald-300",
       ];
-    case "cloud.Endpoint":
+    }
+    case "wingsdk.cloud.Endpoint": {
       return [
         "text-sky-500 dark:text-sky-400",
         options.darkenOnGroupHover &&
           "group-hover:text-sky-600 dark:group-hover:text-sky-300",
         options.forceDarken && "text-sky-600 dark:text-sky-300",
       ];
-    default:
+    }
+    default: {
       return [
         "text-slate-500 dark:text-slate-400",
         options.darkenOnGroupHover &&
           "group-hover:text-slate-600 dark:group-hover:text-slate-300",
         options.forceDarken && "text-slate-600 dark:text-slate-300",
       ];
+    }
   }
 };
 
 export interface ResourceIconProps extends React.SVGProps<SVGSVGElement> {
-  resourceType: ResourceSchema["type"];
+  resourceType: BaseResourceSchema["type"];
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
 }

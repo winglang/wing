@@ -1,12 +1,9 @@
-import { GlobeAltIcon } from "@heroicons/react/24/outline";
 import { ComponentMeta } from "@storybook/react";
 import { createTRPCClient } from "@trpc/client";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import { trpc } from "@/utils/trpc.js";
-
-import { meta } from "../stories/mockData.js";
 
 import { NodeInteractionView } from "./NodeInteractionView";
 
@@ -21,9 +18,8 @@ export const EndpointInteraction = () => {
     <div className="max-w-lg">
       <NodeInteractionView
         node={{
-          id: "id",
           path: "path",
-          type: "cloud.Endpoint",
+          type: "wingsdk.cloud.Endpoint",
           props: {
             targetId: "targetId",
             requestPath: "/",
@@ -49,9 +45,8 @@ export const FunctionInteraction = () => {
         <QueryClientProvider client={queryClient}>
           <NodeInteractionView
             node={{
-              id: "id",
               path: "path",
-              type: "cloud.Function",
+              type: "wingsdk.cloud.Function",
               props: {
                 sourceCodeFile: "file.js",
                 sourceCodeLanguage: "javascript",
@@ -79,9 +74,8 @@ export const BucketInteraction = () => {
         <QueryClientProvider client={queryClient}>
           <NodeInteractionView
             node={{
-              id: "id",
               path: "path",
-              type: "cloud.Bucket",
+              type: "wingsdk.cloud.Bucket",
             }}
           />
         </QueryClientProvider>

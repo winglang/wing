@@ -19,20 +19,24 @@ jobs:
         with:
           ref: main
       - name: Login to private npm registry
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
         env:
           PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
       - name: Install dependencies
         run: npm ci
       - name: Upgrade dependencies
         run: npx projen upgrade
-      - id: create_patch
-        name: Find mutations
+      - name: Find mutations
+        id: create_patch
         run: |-
           git add .
           git diff --staged --patch --exit-code > .repo.patch || echo "::set-output name=patch_created::true"
-      - if: steps.create_patch.outputs.patch_created
-        name: Upload patch
+      - name: Upload patch
+        if: steps.create_patch.outputs.patch_created
         uses: actions/upload-artifact@v2
         with:
           name: .repo.patch

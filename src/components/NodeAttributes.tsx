@@ -1,6 +1,5 @@
-import { CubeIcon, GlobeAltIcon } from "@heroicons/react/20/solid";
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
-import { ConstructSchema, ResourceSchema } from "@monadahq/wing-local-schema";
+import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 
 import { ResourceIcon } from "@/stories/utils";
 
@@ -51,14 +50,15 @@ export function BaseNodeAttributes({ attributes }: BaseNodeAttributesProps) {
   );
 }
 
-function getBaseAttributes(node: ResourceSchema): NodeAttribute[] {
+function getBaseAttributes(node: BaseResourceSchema): NodeAttribute[] {
   return [
     {
       key: "ID",
-      value: node.id,
+      value: node.path,
     },
     {
       key: "Path",
+      // TODO: Ask if we can get `node.id` to Chris.
       value: node.path,
     },
     {
@@ -89,32 +89,32 @@ function getBaseAttributes(node: ResourceSchema): NodeAttribute[] {
   ];
 }
 
-function getNodeAttributes(node: ResourceSchema) {
+function getNodeAttributes(node: BaseResourceSchema) {
   let attributes = getBaseAttributes(node);
 
-  // if (node.type === "cloud.Endpoint") {
+  // if (node.type === "wingsdk.cloud.Endpoint") {
   //   attributes = [...attributes, {key: "URL", value: node.props.}]
   // }
 
-  if (node.type === "cloud.Function") {
+  if (node.type === "wingsdk.cloud.Function") {
     attributes = [
       ...attributes,
-      { key: "Filename", value: node.props.sourceCodeFile },
-      { key: "Language", value: node.props.sourceCodeLanguage },
+      { key: "Filename", value: node?.props?.sourceCodeFile },
+      { key: "Language", value: node?.props?.sourceCodeLanguage },
       {
         key: "Environment",
-        value: JSON.stringify(node.props.environmentVariables),
+        value: JSON.stringify(node?.props?.environmentVariables),
         render: () => (
           <pre className="bg-slate-100 px-1 rounded border text-slate-700">
-            {JSON.stringify(node.props.environmentVariables)}
+            {JSON.stringify(node?.props?.environmentVariables)}
           </pre>
         ),
       },
     ];
-  } else if (node.type === "cloud.Queue") {
+  } else if (node.type === "wingsdk.cloud.Queue") {
     attributes = [
       ...attributes,
-      { key: "Timeout", value: `${node.props.timeout}ms` },
+      { key: "Timeout", value: `${node?.props?.timeout}ms` },
     ];
   }
 
@@ -122,7 +122,7 @@ function getNodeAttributes(node: ResourceSchema) {
 }
 
 export interface NodeAttributesProps {
-  node: ResourceSchema;
+  node: BaseResourceSchema;
 }
 
 export function NodeAttributes({ node }: NodeAttributesProps) {

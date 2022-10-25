@@ -1,6 +1,6 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { Breadcrumbs } from "@/design-system/Breadcrumbs";
 import { breadcrumbs } from "@/stories/mockData";
 
 const BreadcrumbsStory: ComponentStory<typeof Breadcrumbs> = (args) => {

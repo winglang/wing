@@ -16,6 +16,7 @@ export default {
 const Container = ({ children }: PropsWithChildren) => {
   return <div className="fixed top-0 left-0 h-full w-full">{children}</div>;
 };
+
 export const Default = () => {
   const schema = constructHubTreeToWingSchema();
   const [queryClient] = useState(() => new QueryClient());

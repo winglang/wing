@@ -1,17 +1,17 @@
-import { ResourceSchema } from "@monadahq/wing-local-schema";
+import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useEffect, useState } from "react";
 
 export interface Node {
   id: string;
   path: string;
-  type: ResourceSchema["type"];
+  type: BaseResourceSchema["type"];
   parent: string | undefined;
   constructInfo?: Record<string, string>;
   attributes?: Record<string, any>;
   children: string[];
   callers: string[];
   callees: string[];
-  schema: ResourceSchema;
+  schema: BaseResourceSchema;
 }
 
 export interface NodeRecord {
@@ -24,17 +24,18 @@ export interface NodeMap {
   visitParents(path: string | undefined, callback: (node: Node) => void): void;
 }
 
-function visitResourceSchemaChildren(
-  parent: ResourceSchema | undefined,
-  node: ResourceSchema,
-  callback: (parent: ResourceSchema | undefined, child: ResourceSchema) => void,
+function visitBaseResourceSchemaChildren(
+  parent: BaseResourceSchema | undefined,
+  node: BaseResourceSchema,
+  callback: (
+    parent: BaseResourceSchema | undefined,
+    child: BaseResourceSchema,
+  ) => void,
 ) {
   callback(parent, node);
 
-  if (node.type === "constructs.Construct") {
-    for (const child of Object.values(node.children ?? {})) {
-      visitResourceSchemaChildren(node, child, callback);
-    }
+  for (const child of Object.values(node.children ?? {})) {
+    visitBaseResourceSchemaChildren(node, child, callback);
   }
 }
 
@@ -54,19 +55,18 @@ export function buildNodeMapFromRecord(nodeRecord: NodeRecord): NodeMap {
   };
 }
 
-export function buildNodeMap(schema: ResourceSchema) {
+export function buildNodeMap(schema: BaseResourceSchema) {
   let nodeRecord: NodeRecord = {};
 
-  visitResourceSchemaChildren(undefined, schema, (parent, node) => {
+  visitBaseResourceSchemaChildren(undefined, schema, (parent, node) => {
     const newNode: Node = {
-      id: node.id,
-      path: node.path,
+      id: node.path || "",
+      path: node.path || "",
       type: node.type,
       parent: parent?.path,
-      children:
-        node.type === "constructs.Construct"
-          ? Object.values(node.children ?? {}).map((child) => child.path)
-          : [],
+      children: Object.values(node.children ?? {}).map(
+        (child) => child.path ?? "",
+      ),
       attributes: node.props ?? {},
       callees: node.callees ?? [],
       callers: node.callers ?? [],
@@ -82,14 +82,14 @@ export function buildNodeMap(schema: ResourceSchema) {
 
     nodeRecord = {
       ...nodeRecord,
-      [node.path]: newNode,
+      [node.path || ""]: newNode,
     };
   });
 
   return buildNodeMapFromRecord(nodeRecord);
 }
 
-export function useNodeMap(node: ResourceSchema | undefined) {
+export function useNodeMap(node: BaseResourceSchema | undefined) {
   const [nodeMap, setNodeMap] = useState<NodeMap>();
 
   useEffect(() => {

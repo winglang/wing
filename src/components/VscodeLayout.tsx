@@ -1,27 +1,28 @@
-import { WingLocalSchema } from "@monadahq/wing-local-schema";
+import type { WingSimulatorSchema } from "@monadahq/wingsdk/lib/sim";
 import { useEffect, useMemo, useState } from "react";
 
-import { ResourceIcon, WingSchemaToTreeMenuItems } from "@/stories/utils";
+import { ResourceIcon, SchemaToTreeMenuItems } from "@/stories/utils";
 import { Node, useNodeMap } from "@/utils/nodeMap";
+import { trpc } from "@/utils/trpc";
 
-import { Breadcrumb, Breadcrumbs } from "./Breadcrumbs";
+import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs";
+import { RightResizableWidget } from "../design-system/RightResizableWidget";
+import { ScrollableArea } from "../design-system/ScrollableArea";
+import { Tabs } from "../design-system/Tabs";
+import { TreeMenu } from "../design-system/TreeMenu";
+import { useTabs } from "../utils/useTabs";
+import { useTreeMenuItems } from "../utils/useTreeMenuItems";
+
 import { Relationships } from "./NodeRelationshipsView";
 import { NodeTabContents } from "./NodeTabContents";
-import { RightResizableWidget } from "./RightResizableWidget";
-import { ScrollableArea } from "./ScrollableArea";
-import { Tabs } from "./Tabs";
-import { TopResizableWidget } from "./TopResizableWidget";
-import { TreeMenu } from "./TreeMenu";
-import { useTabs } from "./useTabs";
-import { useTreeMenuItems } from "./useTreeMenuItems";
-
 export interface VscodeLayoutProps {
-  schema: WingLocalSchema | undefined;
+  schema: WingSimulatorSchema | undefined;
 }
 
 export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
   const treeMenu = useTreeMenuItems();
   const tabs = useTabs();
+  // const schema = trpc.useQuery(["app.tree"]);
   const nodeMap = useNodeMap(schema?.root);
 
   function openTab(path: string) {
@@ -36,7 +37,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
   }
 
   useEffect(() => {
-    treeMenu.setItems(schema ? WingSchemaToTreeMenuItems(schema) : []);
+    treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
     tabs.closeAll();
   }, [schema]);
 
@@ -103,6 +104,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
       },
       children: currentNode.children.map((path) => {
         const node = nodeMap?.find(path);
+        // todo [sa] handle gracefully
         if (!node) {
           throw new Error(`Node [${path}] doesn't exist`);
         }
@@ -115,6 +117,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
       callees: currentNode.callees.map((path) => {
         const node = nodeMap?.find(path);
         if (!node) {
+          // todo [sa] need to handle gracefully
           throw new Error(`Node [${path}] doesn't exist`);
         }
         return {
@@ -137,20 +140,6 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
     };
     return relationships;
   }, [currentNode]);
-
-  const [currentPill, setCurrentPill] = useState<
-    "attributes" | "interaction" | "logs"
-  >("attributes");
-  const [pills] = useState<
-    {
-      id: "attributes" | "interaction" | "logs";
-      text: string;
-    }[]
-  >(() => [
-    { id: "attributes", text: "Attributes" },
-    { id: "interaction", text: "Object Explorer" },
-    { id: "logs", text: "Logs" },
-  ]);
 
   return (
     <div className="h-full flex flex-col bg-slate-100 select-none">

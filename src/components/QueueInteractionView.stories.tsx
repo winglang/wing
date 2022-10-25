@@ -18,9 +18,8 @@ export const QueueInteraction = () => {
       <div className="relative h-full">
         <QueueInteractionView
           node={{
-            id: "id",
             path: "path",
-            type: "cloud.Queue",
+            type: "wingsdk.cloud.Queue",
             props: {
               timeout: "3000",
             },

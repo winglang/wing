@@ -1,18 +1,10 @@
 import { TypeScriptProject } from "@monadahq/mona-projen";
-import { JobPermission } from "projen/lib/github/workflows-model";
+import { JobPermission } from "projen/lib/github/workflows-model.js";
 
 const project = new TypeScriptProject({
   name: "wing-console",
   description: "The Wing Console",
-  deps: [
-    "chokidar",
-    "electron-log",
-    "@monadahq/wing-local-schema",
-    "express",
-    "@types/express",
-    "cors",
-    "@types/cors",
-  ],
+  deps: ["chokidar", "electron-log", "@monadahq/wingsdk", "isomorphic-ws"],
   devDeps: [
     "@monadahq/mona-projen",
     "@babel/core",
@@ -51,12 +43,17 @@ const project = new TypeScriptProject({
     "@trpc/client",
     "@trpc/server",
     "@trpc/react",
+    "electron-trpc",
     "@tanstack/react-query",
     "zod",
     "get-port",
     // Peer deps:
     "webpack",
     "require-from-string",
+    "@cdktf/provider-aws",
+    "@monadahq/polycons",
+    "cdktf",
+    "constructs",
   ],
 });
 project.addTask("dev").exec("vite");
@@ -139,6 +136,7 @@ project.release?.addJobs({
   },
 });
 
+// project.package.addField("type", "module");
 project.package.addField("main", "dist/vite/electron/main/index.js");
 project.package.addField("env", {
   VITE_DEV_SERVER_HOST: "127.0.0.1",
@@ -169,6 +167,8 @@ for (const tsconfig of tsconfigFiles) {
       forceConsistentCasingInFileNames: true,
       module: "ESNext",
       moduleResolution: "Node",
+      // moduleResolution: "Node16",
+      // moduleResolution: "NodeNext",
       resolveJsonModule: true,
       isolatedModules: true,
       noEmit: true,

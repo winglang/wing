@@ -31,7 +31,7 @@ export const NodeTabContents = ({
     const pills: Pill[] = [{ id: "attributes", text: "Attributes" }];
 
     switch (node.type) {
-      case "cloud.Bucket": {
+      case "wingsdk.cloud.Bucket": {
         pills.push({
           id: "interaction",
           text: "Bucket Explorer",
@@ -39,7 +39,7 @@ export const NodeTabContents = ({
 
         break;
       }
-      case "cloud.Function": {
+      case "wingsdk.cloud.Function": {
         pills.push({
           id: "interaction",
           text: "Test Function",
@@ -47,7 +47,7 @@ export const NodeTabContents = ({
 
         break;
       }
-      case "cloud.Queue": {
+      case "wingsdk.cloud.Queue": {
         pills.push({
           id: "interaction",
           text: "Queue Contents",

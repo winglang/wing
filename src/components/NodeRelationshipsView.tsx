@@ -5,7 +5,7 @@ import {
 import classNames from "classnames";
 import { useState } from "react";
 
-import { ScrollableArea } from "./ScrollableArea";
+import { ScrollableArea } from "../design-system/ScrollableArea";
 
 export interface Relationships {
   self: {

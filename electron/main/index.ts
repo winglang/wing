@@ -1,11 +1,13 @@
-import { join } from "node:path";
+import path, { join } from "node:path";
 
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
+import { createIPCHandler } from "electron-trpc";
 
-import { createServer } from "./server";
+import { mergeRouters } from "./router/index.js";
+import { createSimulator } from "./simulator/simulator.js";
 
 // TODO [sa] add auto-updater
 
@@ -18,19 +20,16 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
-// process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
-
 export const ROOT_PATH = {
   dist: join(__dirname, "../.."),
   public: join(__dirname, app.isPackaged ? "../.." : "../../../public"),
 };
 
 let win: BrowserWindow | undefined;
-// 🚧 Use ['ENV_NAME'] avoid vite:define plugin
 const url = `http://${process.env.VITE_DEV_SERVER_HOSTNAME}:${process.env.VITE_DEV_SERVER_PORT}`;
 const indexHtml = join(ROOT_PATH.dist, "index.html");
 
-async function createWindow(port: number) {
+async function createWindow() {
   await installExtension(REACT_DEVELOPER_TOOLS.id);
 
   win = new BrowserWindow({
@@ -38,14 +37,17 @@ async function createWindow(port: number) {
     icon: join(ROOT_PATH.public, "icon.ico"),
     webPreferences: {
       nodeIntegration: true,
-      contextIsolation: false,
+      preload: app.isPackaged
+        ? path.join(__dirname, "../preload/preload.js")
+        : path.join(__dirname, "../../../../electron/main/preload/preload.js"),
+      contextIsolation: true,
     },
   });
 
   if (app.isPackaged) {
-    void win.loadFile(indexHtml, { search: `port=${port}` });
+    void win.loadFile(indexHtml);
   } else {
-    void win.loadURL(`${url}?port=${port}`);
+    void win.loadURL(`${url}`);
     win.webContents.openDevTools();
   }
 
@@ -80,15 +82,12 @@ app.on("second-instance", () => {
   }
 });
 
-const server = createServer();
-
 app.on("activate", async () => {
   const allWindows = BrowserWindow.getAllWindows();
   if (allWindows.length > 0) {
     allWindows[0]?.focus();
   } else {
-    const { port } = await server;
-    await createWindow(port);
+    await createWindow();
   }
 });
 
@@ -100,11 +99,23 @@ ipcMain.handle("open-win", (event, arg) => {
     void childWindow.loadFile(indexHtml, { hash: arg });
   } else {
     void childWindow.loadURL(`${url}/#${arg}`);
-    // childWindow.webContents.openDevTools({ mode: "undocked", activate: true })
   }
 });
 
+const getWXFilePath = (): string => {
+  // TODO [sa] remove comment
+  // const cloudFileArg = process.argv.slice(2).find(arg => arg.startsWith('--cloudFile='));
+  // if(!cloudFileArg) {
+  //   throw new Error(`no cloud application file was provided`);
+  // }
+  // return cloudFileArg.replace('--cloudFile=', '');
+  return join(__dirname, "../../../../test/demo.wx");
+};
+
 void app.whenReady().then(async () => {
-  const { port } = await server;
-  await createWindow(port);
+  const wxFilePath = getWXFilePath();
+  const sim = await createSimulator(wxFilePath);
+  const router = mergeRouters(sim);
+  createIPCHandler({ ipcMain, router });
+  await createWindow();
 });

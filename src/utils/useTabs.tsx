@@ -1,6 +1,6 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 
-import { Tab } from "@/components/Tabs";
+import { Tab } from "@/design-system/Tabs";
 
 export function useTabs(options?: { tabs?: Tab[]; currentTabId?: string }) {
   const [tabs, setTabs] = useState(options?.tabs ?? []);

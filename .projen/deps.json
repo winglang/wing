@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@cdktf/provider-aws",
+      "type": "build"
+    },
+    {
       "name": "@headlessui/react",
       "type": "build"
     },
@@ -14,6 +18,10 @@
     },
     {
       "name": "@monadahq/mona-projen",
+      "type": "build"
+    },
+    {
+      "name": "@monadahq/polycons",
       "type": "build"
     },
     {
@@ -108,7 +116,15 @@
       "type": "build"
     },
     {
+      "name": "cdktf",
+      "type": "build"
+    },
+    {
       "name": "classnames",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
       "type": "build"
     },
     {
@@ -125,6 +141,10 @@
     },
     {
       "name": "electron-notarize",
+      "type": "build"
+    },
+    {
+      "name": "electron-trpc",
       "type": "build"
     },
     {
@@ -166,7 +186,7 @@
     },
     {
       "name": "npm-check-updates",
-      "version": "^15",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -247,15 +267,17 @@
       "type": "build"
     },
     {
-      "name": "@monadahq/wing-local-schema",
-      "type": "runtime"
+      "name": "@types/responselike",
+      "version": "1.0.0",
+      "type": "override"
     },
     {
-      "name": "@types/cors",
-      "type": "runtime"
+      "name": "got",
+      "version": "12.3.1",
+      "type": "override"
     },
     {
-      "name": "@types/express",
+      "name": "@monadahq/wingsdk",
       "type": "runtime"
     },
     {
@@ -263,15 +285,11 @@
       "type": "runtime"
     },
     {
-      "name": "cors",
-      "type": "runtime"
-    },
-    {
       "name": "electron-log",
       "type": "runtime"
     },
     {
-      "name": "express",
+      "name": "isomorphic-ws",
       "type": "runtime"
     }
   ],

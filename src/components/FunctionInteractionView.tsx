@@ -1,16 +1,22 @@
-import { FunctionSchema } from "@monadahq/wing-local-schema";
+import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useId, useState } from "react";
 
 import { Button } from "@/design-system/Button";
 import { TextArea } from "@/design-system/TextArea";
+import { trpc } from "@/utils/trpc";
 
 export interface FunctionInteractionViewProps {
-  node: FunctionSchema;
+  node: BaseResourceSchema;
 }
 
 export const FunctionInteractionView = ({
   node,
 }: FunctionInteractionViewProps) => {
+  const getTimesCalled = trpc.useQuery([
+    "function.timesCalled",
+    { resourcePath: node.path ?? "" },
+  ]);
+  const invoke = trpc.useMutation(["function.invoke"]);
   const [input, setInput] = useState("");
   const id = useId();
   return (
@@ -19,16 +25,29 @@ export const FunctionInteractionView = ({
       method="POST"
       onSubmit={(event) => {
         event.preventDefault();
+        if (!input || input === "") {
+          return;
+        }
+        invoke.mutate({
+          resourcePath: node.path ?? "",
+          message: input,
+        });
         setInput("");
       }}
     >
+      <div className="space-y-6 bg-slate-100 p-2 pb-4 rounded">
+        {getTimesCalled.data !== undefined && (
+          <div className="block text-sm font-medium text-slate-500">
+            {`this function was called ${getTimesCalled.data} ${
+              getTimesCalled.data === 1 ? "time" : "times"
+            }`}
+          </div>
+        )}
+      </div>
       <div className="space-y-2 bg-white p-2 py-2">
         <div>
-          {/* <h3 className="text-lg font-medium leading-6 text-slate-900">
-            Test Function
-          </h3> */}
           <p className="mt-1 text-sm text-slate-500">
-            You can test the function by sending a JSON event.
+            You can test the function by sending a JSON message.
           </p>
         </div>
 
@@ -67,9 +86,9 @@ export const FunctionInteractionView = ({
         </div>
 
         <div>
-          <pre className="text-sm">
-            {/* <code>{JSON.stringify(invoke.error ?? invoke.data)}</code> */}
-          </pre>
+          <div className="text-sm">
+            {invoke.data && <code>{JSON.stringify(invoke.data)}</code>}
+          </div>
         </div>
       </div>
     </form>

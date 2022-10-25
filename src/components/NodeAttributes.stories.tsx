@@ -27,7 +27,7 @@ export const Base = () => {
           },
           {
             key: "Type",
-            value: "cloud.Endpoint",
+            value: "wingsdk.cloud.Endpoint",
             render: () => (
               <div className="truncate cursor-auto select-none">
                 <div className="inline-flex items-center gap-1 px-1 bg-slate-100 border border-slate-200 rounded max-w-full truncate">
@@ -69,7 +69,6 @@ export const ConstructAttributes = () => {
     <div className="max-w-lg">
       <NodeAttributes
         node={{
-          id: "Custom::S3AutoDeleteObjectsCustomResourceProvider",
           path: "App/construct-hub-dev/Custom::S3AutoDeleteObjectsCustomResourceProvider",
           type: "constructs.Construct",
         }}
@@ -83,9 +82,8 @@ export const BucketAttributes = () => {
     <div className="max-w-lg">
       <NodeAttributes
         node={{
-          id: "Images",
           path: "App/construct-hub-dev/Images",
-          type: "cloud.Bucket",
+          type: "wingsdk.cloud.Bucket",
         }}
       />
     </div>
@@ -97,9 +95,8 @@ export const EndpointAttributes = () => {
     <div className="max-w-lg">
       <NodeAttributes
         node={{
-          id: "ScrapeImagesEndpoint",
           path: "App/construct-hub-dev/ScrapeImagesEndpoint",
-          type: "cloud.Endpoint",
+          type: "wingsdk.cloud.Endpoint",
           props: {
             requestMethod: "POST",
             requestPath: "/",

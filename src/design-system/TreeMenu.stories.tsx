@@ -1,15 +1,15 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import React, { useEffect, useState } from "react";
 
-import { TreeMenu } from "@/components/TreeMenu";
-import { useTreeMenuItems } from "@/components/useTreeMenuItems";
 import { Button } from "@/design-system/Button";
+import { TreeMenu } from "@/design-system/TreeMenu";
 import { treeMenuItems as treeMenuItemsMock } from "@/stories/mockData";
 import {
-  WingSchemaToTreeMenuItems,
+  SchemaToTreeMenuItems,
   flattenTreeMenuItems,
   constructHubTreeToWingSchema,
 } from "@/stories/utils";
+import { useTreeMenuItems } from "@/utils/useTreeMenuItems";
 
 const TreeMenuStory: ComponentStory<typeof TreeMenu> = (args) => {
   const treeMenu = useTreeMenuItems({
@@ -106,5 +106,5 @@ ConstructHubStory.parameters = {
 };
 ConstructHubStory.args = {
   title: "Construct-Hub",
-  items: WingSchemaToTreeMenuItems(constructHubTreeToWingSchema()),
+  items: SchemaToTreeMenuItems(constructHubTreeToWingSchema()),
 };

@@ -5,83 +5,80 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { FolderIcon } from "@heroicons/react/24/solid";
-import { BucketSchema } from "@monadahq/wing-local-schema";
+import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import prettyBytes from "pretty-bytes";
 import { FormEventHandler, useCallback, useRef, useState } from "react";
 
 import { Button } from "@/design-system/Button";
 import { Checkbox } from "@/design-system/Checkbox";
 import { Input } from "@/design-system/Input";
+import { dateFormatter } from "@/utils/dateUtils";
+import { trpc } from "@/utils/trpc";
+import { useDownloadFile } from "@/utils/useDownloadFile";
 
 export interface BucketInteractionViewProps {
-  node: BucketSchema;
+  node: BaseResourceSchema;
 }
 
 export interface FileExplorerEntry {
   type: "directory" | "file";
   name: string;
-  updatedAt: number;
+  updatedAt?: number;
   fileSize?: number;
 }
 
 export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
   const [path] = useState("/");
-  const [entries, setEntries] = useState<FileExplorerEntry[]>(() => {
-    return [
-      { type: "directory", name: ".vscode", updatedAt: Date.now() },
-      { type: "directory", name: "src", updatedAt: Date.now() },
-      {
-        type: "file",
-        name: "package.json",
-        updatedAt: Date.now(),
-        fileSize: 12,
-      },
-      {
-        type: "file",
-        name: "README.md",
-        updatedAt: Date.now(),
-        fileSize: 1500,
-      },
-    ];
-  });
+  const putFile = trpc.useMutation(["bucket.put"]);
+  putFile.mutateAsync;
+  const getFile = trpc.useMutation(["bucket.get"]);
+  // const { promisifiedMutate: getFilePromise } = usePromisifyMutation<{
+  //   resourcePath: string | undefined;
+  //   fileName: string;
+  // }>(getFile);
+  // todo [sa] list bucket files on load
+  const [entries, setEntries] = useState<FileExplorerEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<string[]>([]);
-  const [dateFormatter] = useState(
-    () =>
-      new Intl.DateTimeFormat(undefined, {
-        // dateStyle: "long",
-        day: "numeric",
-        month: "long",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      }),
-  );
   const inputRef = useRef<HTMLInputElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const addNewEntries: FormEventHandler<HTMLInputElement> = useCallback(
-    (event) => {
-      const newEntries = new Array<FileExplorerEntry>();
-      for (const file of event.currentTarget.files ?? []) {
-        console.log({ file });
-        newEntries.push({
-          type: "file",
-          name: file.name,
-          fileSize: file.size,
-          updatedAt: file.lastModified,
-        });
-      }
-      setEntries([...entries, ...newEntries]);
-    },
-    [setEntries, entries],
-  );
+  const { download } = useDownloadFile();
 
-  const deleteSelectedEntries = useCallback(() => {
-    setEntries((entries) => {
-      setSelectedEntries([]);
-      return entries.filter(
-        (entry) => selectedEntries.includes(entry.name) === false,
-      );
-    });
+  const addNewEntries: FormEventHandler<HTMLInputElement> = async (event) => {
+    const newEntries = new Array<FileExplorerEntry>();
+    for (const file of event.currentTarget.files ?? []) {
+      await putFile.mutateAsync({
+        resourcePath: node.path ?? "",
+        fileName: file.name,
+        filePath: file.path,
+      });
+      newEntries.push({
+        type: "file",
+        name: file.name,
+        fileSize: file.size,
+        updatedAt: file.lastModified,
+      });
+    }
+    setEntries((prev) => [...prev, ...newEntries]);
+  };
+
+  // todo [sa] delete file from bucket
+  // const deleteSelectedEntries = useCallback(() => {
+  //   setEntries((entries) => {
+  //     setSelectedEntries([]);
+  //     return entries.filter(
+  //       (entry) => selectedEntries.includes(entry.name) === false,
+  //     );
+  //   });
+  // }, [selectedEntries]);
+
+  const downloadSelectedEntries = useCallback(async () => {
+    for (const entry of selectedEntries) {
+      const file = await getFile.mutateAsync({
+        resourcePath: node.path ?? "",
+        fileName: entry,
+      });
+      download(entry, file);
+    }
   }, [selectedEntries]);
 
   return (
@@ -92,12 +89,13 @@ export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
             icon={ArrowDownTrayIcon}
             label="Download"
             disabled={selectedEntries.length === 0}
+            onClick={downloadSelectedEntries}
           />
           <Button
             icon={TrashIcon}
             label="Delete"
             disabled={selectedEntries.length === 0}
-            onClick={deleteSelectedEntries}
+            // onClick={deleteSelectedEntries}
           />
         </div>
 

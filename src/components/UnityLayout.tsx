@@ -1,37 +1,30 @@
 import {
-  CubeIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-  ArrowDownOnSquareIcon,
-  ArrowLongRightIcon,
-  ArrowLongLeftIcon,
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/20/solid";
-import {
-  ConstructSchema,
-  ResourceSchema,
-  WingLocalSchema,
-} from "@monadahq/wing-local-schema";
+import type {
+  BaseResourceSchema,
+  WingSimulatorSchema,
+} from "@monadahq/wingsdk/lib/sim";
 import classNames from "classnames";
 import {
   PropsWithChildren,
   useCallback,
   useEffect,
   useId,
-  useMemo,
   useState,
 } from "react";
 
-import { LeftResizableWidget } from "@/components/LeftResizableWidget";
-import { RightResizableWidget } from "@/components/RightResizableWidget";
-import { ScrollableArea } from "@/components/ScrollableArea";
-import { TopResizableWidget } from "@/components/TopResizableWidget";
-import { Node, NodeMap, useNodeMap } from "@/utils/nodeMap";
+import { LeftResizableWidget } from "@/design-system/LeftResizableWidget";
+import { RightResizableWidget } from "@/design-system/RightResizableWidget";
+import { ScrollableArea } from "@/design-system/ScrollableArea";
+import { TopResizableWidget } from "@/design-system/TopResizableWidget";
+import { Node, useNodeMap } from "@/utils/nodeMap";
 
-import { ResourceIcon, WingSchemaToTreeMenuItems } from "../stories/utils";
-
-import { useTreeMenuItems } from "./useTreeMenuItems";
+import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils";
+import { useTreeMenuItems } from "../utils/useTreeMenuItems";
 
 interface Attribute {
   key: string;
@@ -135,15 +128,15 @@ const InspectorSection = ({
 const SELECTED_TREE_ITEM_CSS_ID = "current-tree-item";
 
 export interface UnityLayoutProps {
-  schema?: WingLocalSchema;
-  nodeMap?: NodeMap;
+  schema?: WingSimulatorSchema;
 }
 
-export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
+export function UnityLayout({ schema }: UnityLayoutProps) {
+  const nodeMap = useNodeMap(schema?.root);
   const invokeFunctionId = useId();
   const treeMenu = useTreeMenuItems();
   useEffect(() => {
-    treeMenu.setItems(schema ? WingSchemaToTreeMenuItems(schema) : []);
+    treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
   }, [schema]);
   useEffect(() => {
     treeMenu.expand("");
@@ -178,7 +171,7 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
         },
       ];
 
-      if (node.type === "cloud.Bucket") {
+      if (node.type === "wingsdk.cloud.Bucket") {
         attributeGroups = [
           ...attributeGroups,
           {
@@ -196,7 +189,7 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
         ];
       }
 
-      if (node.type === "cloud.Endpoint") {
+      if (node.type === "wingsdk.cloud.Endpoint") {
         attributeGroups = [
           ...attributeGroups,
           {
@@ -466,7 +459,7 @@ export function UnityLayout({ schema, nodeMap }: UnityLayoutProps) {
                   </div>
                 </InspectorSection>
 
-                {currentNode.type === "cloud.Function" && (
+                {currentNode.type === "wingsdk.cloud.Function" && (
                   <InspectorSection
                     text="Invoke Function"
                     open={openInspectorSections.includes("function")}
@@ -570,16 +563,15 @@ function TreeNode({
   onItemClick,
   onItemDoubleClick,
 }: {
-  node: ResourceSchema;
+  node: BaseResourceSchema;
   indentLevel: number;
   selectedItemId?: string;
   openItemIds: string[];
   onItemClick?: (path: string) => void;
   onItemDoubleClick?: (path: string) => void;
 }): JSX.Element {
-  const hasChildren =
-    node.type === "constructs.Construct" && node.children != undefined;
-  const isOpen = openItemIds.includes(node.path);
+  const hasChildren = node.children != undefined;
+  const isOpen = openItemIds.includes(node.path ?? "");
   const isSelected = selectedItemId === node.path;
   const ChevronIcon = isOpen ? ChevronDownIcon : ChevronRightIcon;
   return (
@@ -594,8 +586,8 @@ function TreeNode({
         <button
           className="flex w-full py-px"
           style={{ paddingLeft: `${indentLevel * 0.5}rem` }}
-          onClick={() => onItemClick?.(node.path)}
-          onDoubleClick={() => onItemDoubleClick?.(node.path)}
+          onClick={() => onItemClick?.(node.path ?? "")}
+          onDoubleClick={() => onItemDoubleClick?.(node.path ?? "")}
         >
           <div className="flex-0">
             <ChevronIcon
@@ -633,13 +625,12 @@ function TreeNode({
               "text-slate-100": isSelected,
             })}
           >
-            {node.id}
+            {node.path?.split("/").pop()}
           </div>
         </button>
       </div>
 
-      {node.type === "constructs.Construct" &&
-        isOpen &&
+      {isOpen &&
         Object.values(node.children ?? {}).map((child) => (
           <TreeNode
             key={child.path}
@@ -662,7 +653,7 @@ function RootNode({
   onItemClick,
   onItemDoubleClick,
 }: {
-  root: ConstructSchema;
+  root: BaseResourceSchema;
   selectedItemId?: string;
   openItemIds: string[];
   onItemClick?: (path: string) => void;

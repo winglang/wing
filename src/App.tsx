@@ -1,52 +1,38 @@
+import type { WingSimulatorSchema } from "@monadahq/wingsdk/lib/sim";
 import { createTRPCClient } from "@trpc/client";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { UnityLayout as UnityLayout } from "./components/UnityLayout";
+import { NotificationsProvider } from "@/design-system/Notification";
+import { ipcLink } from "@/utils/ipcLink";
+
 import { VscodeLayout } from "./components/VscodeLayout";
-import { constructHubTreeToWingSchema } from "./stories/utils";
 import { trpc } from "./utils/trpc";
 
 export interface AppProps {}
 
 export const App = ({}: AppProps) => {
-  const [port] = useState(() => {
-    const search = new URLSearchParams(location.search);
-    const port = search.get("port");
-    if (!port) {
-      throw new Error("Port query parameter is empty or undefined");
-    }
-    return Number.parseInt(port);
-  });
-
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     createTRPCClient({
-      url: `http://localhost:${port}`,
+      links: [ipcLink()],
     }),
   );
 
-  const [schema] = useState(() => constructHubTreeToWingSchema());
-
-  const [Layout, setLayout] = useState(() => VscodeLayout);
+  const [schema, setSchema] = useState<WingSimulatorSchema>();
   useEffect(() => {
-    const listener = (event: KeyboardEvent) => {
-      if (event.key === "x") {
-        setLayout(() => {
-          return Layout === VscodeLayout ? UnityLayout : VscodeLayout;
-        });
-      }
-    };
-    document.body.addEventListener("keypress", listener);
-    return () => {
-      document.body.removeEventListener("keypress", listener);
-    };
-  }, [Layout]);
+    void trpcClient.query("app.tree").then((schema) => setSchema(schema));
+  }, []);
 
+  // todo [SA] construct hub story
+  // const [schema] = useState(() => constructHubTreeToWingSchema());
+  // todo [SA] add vanitiUi
   return (
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
-        <Layout schema={schema} />
+        <NotificationsProvider>
+          <VscodeLayout schema={schema} />
+        </NotificationsProvider>
       </QueryClientProvider>
     </trpc.Provider>
   );

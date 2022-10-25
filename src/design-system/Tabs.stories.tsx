@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Tabs } from "@/components/Tabs";
+import { Tabs } from "@/design-system/Tabs";
 import { ResourceIcon } from "@/stories/utils";
 
-import { useTabs } from "./useTabs";
+import { useTabs } from "../utils/useTabs";
 
 const TabsStory: ComponentStory<typeof Tabs> = (args) => {
   const tabs = useTabs({
@@ -37,24 +37,39 @@ Primary.args = {
     {
       id: "1",
       name: "Bucket",
-      icon: <ResourceIcon resourceType="cloud.Bucket" className="w-4 h-4" />,
+      icon: (
+        <ResourceIcon resourceType="wingsdk.cloud.Bucket" className="w-4 h-4" />
+      ),
     },
     {
       id: "2",
       name: "Function",
-      icon: <ResourceIcon resourceType="cloud.Function" className="w-4 h-4" />,
+      icon: (
+        <ResourceIcon
+          resourceType="wingsdk.cloud.Function"
+          className="w-4 h-4"
+        />
+      ),
     },
     {
       id: "3",
       name: "Construct",
       icon: (
-        <ResourceIcon resourceType="constructs.Construct" className="w-4 h-4" />
+        <ResourceIcon
+          resourceType="wingsdk.constructs.Construct"
+          className="w-4 h-4"
+        />
       ),
     },
     {
       id: "4",
       name: "endpoint",
-      icon: <ResourceIcon resourceType="cloud.Endpoint" className="w-4 h-4" />,
+      icon: (
+        <ResourceIcon
+          resourceType="wingsdk.cloud.Endpoint"
+          className="w-4 h-4"
+        />
+      ),
     },
   ],
   currentTabId: "2",

@@ -11,12 +11,10 @@ import {
   CogIcon,
   MapIcon,
 } from "@heroicons/react/24/solid";
-import { WingLocalSchema, ResourceSchema } from "@monadahq/wing-local-schema";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
-import { Breadcrumb } from "@/components/Breadcrumbs";
-import { TreeMenuItem } from "@/components/TreeMenu";
-import { buildNodeMap, Node, NodeMap, NodeRecord } from "@/utils/nodeMap";
+import { Breadcrumb } from "@/design-system/Breadcrumbs";
+import { TreeMenuItem } from "@/design-system/TreeMenu";
 
 export const treeMenuItems: TreeMenuItem[] = [
   {
@@ -306,37 +304,3 @@ function visitConstructHub(
 
 //   return nodeMap;
 // }
-
-export function useTreeNodeMap() {
-  const [nodeMap, setNodeMap] = useState<{
-    schema?: WingLocalSchema;
-    nodeMap?: NodeMap;
-  }>({});
-
-  useEffect(() => {
-    void import("../assets/tree.json").then((schema) => {
-      const nodeMap = buildNodeMap((schema as WingLocalSchema).root);
-      setNodeMap({
-        schema: schema as WingLocalSchema,
-        nodeMap,
-      });
-    });
-  }, []);
-
-  return nodeMap;
-}
-
-export function useWingSchemaMock() {
-  const [schema, setSchema] = useState<WingLocalSchema | undefined>();
-
-  useEffect(() => {
-    void import("../assets/tree.json").then((schema) => {
-      setSchema(schema as WingLocalSchema);
-    });
-  }, []);
-
-  return {
-    schema,
-    setSchema,
-  };
-}

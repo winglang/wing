@@ -1,10 +1,10 @@
-import { EndpointSchema } from "@monadahq/wing-local-schema";
+import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 
 import { Button } from "@/design-system/Button";
 import { TextArea } from "@/design-system/TextArea";
 
 export interface EndpointInteractionViewProps {
-  node: EndpointSchema;
+  node: BaseResourceSchema;
 }
 
 export const EndpointInteractionView = ({

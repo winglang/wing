@@ -1,4 +1,4 @@
-import { ResourceSchema } from "@monadahq/wing-local-schema";
+import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 
 import { BucketInteractionView } from "@/components/BucketInteractionView";
 import { EndpointInteractionView } from "@/components/EndpointInteractionView";
@@ -6,20 +6,25 @@ import { FunctionInteractionView } from "@/components/FunctionInteractionView";
 import { QueueInteractionView } from "@/components/QueueInteractionView";
 
 export interface NodeInteractionViewProps {
-  node: ResourceSchema;
+  node: BaseResourceSchema;
 }
 
 export function NodeInteractionView({ node }: NodeInteractionViewProps) {
   switch (node.type) {
-    case "cloud.Endpoint":
+    case "wingsdk.cloud.Endpoint": {
       return <EndpointInteractionView node={node} />;
-    case "cloud.Function":
+    }
+    case "wingsdk.cloud.Function": {
       return <FunctionInteractionView node={node} />;
-    case "cloud.Bucket":
+    }
+    case "wingsdk.cloud.Bucket": {
       return <BucketInteractionView node={node} />;
-    case "cloud.Queue":
+    }
+    case "wingsdk.cloud.Queue": {
       return <QueueInteractionView node={node} />;
-    default:
+    }
+    default: {
       return <></>;
+    }
   }
 }

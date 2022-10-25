@@ -13,7 +13,7 @@
           "ImageStore.cloud.Function": {
             "id": "ImageStore.cloud.Function",
             "path": "image-extractor-app/ImageStore/ImageStore.cloud.Function",
-            "type": "cloud.Function",
+            "type": "wingsdk.cloud.Function",
             "props": {
               "sourceCodeFile": "image-store.js",
               "sourceCodeLanguage": "javascript",
@@ -25,7 +25,7 @@
           "ImageStore.cloud.Bucket": {
             "id": "ImageStore.cloud.Bucket",
             "path": "image-extractor-app/ImageStore/ImageStore.cloud.Bucket",
-            "type": "cloud.Bucket",
+            "type": "wingsdk.cloud.Bucket",
             "props": {},
             "callers": ["ImageStore.cloud.Function"],
             "callees": []
