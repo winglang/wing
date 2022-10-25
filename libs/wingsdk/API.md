@@ -3191,6 +3191,51 @@ The object that will be serialized into the file during synthesis.
 
 ---
 
+### LogEvent <a name="LogEvent" id="@monadahq/wingsdk.cloud.LogEvent"></a>
+
+Represents a log event.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.LogEvent.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const logEvent: cloud.LogEvent = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.LogEvent.property.message">message</a></code> | <code>string</code> | The log message. |
+| <code><a href="#@monadahq/wingsdk.cloud.LogEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The log timestamp, in milliseconds since the epoch. |
+
+---
+
+##### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.LogEvent.property.message"></a>
+
+```typescript
+public readonly message: string;
+```
+
+- *Type:* string
+
+The log message.
+
+---
+
+##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@monadahq/wingsdk.cloud.LogEvent.property.timestamp"></a>
+
+```typescript
+public readonly timestamp: number;
+```
+
+- *Type:* number
+
+The log timestamp, in milliseconds since the epoch.
+
+---
+
 ### PolicyStatement <a name="PolicyStatement" id="@monadahq/wingsdk.tfaws.PolicyStatement"></a>
 
 AWS IAM Policy Statement.
@@ -4941,9 +4986,21 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with whichever resource is running the inflight code. |
 | <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
 
 ---
+
+##### `fetchLatestLogs` <a name="fetchLatestLogs" id="@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs"></a>
+
+```typescript
+public fetchLatestLogs(): LogEvent[]
+```
+
+Fetch the latest logs associated with whichever resource is running the inflight code.
+
+The logs may include cloud-provider specific messages or
+metadata.
 
 ##### `print` <a name="print" id="@monadahq/wingsdk.cloud.ILoggerClient.print"></a>
 
@@ -4952,6 +5009,9 @@ public print(message: string): void
 ```
 
 Logs a message.
+
+The log will be associated with whichever resource is
+running the inflight code.
 
 ###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
 

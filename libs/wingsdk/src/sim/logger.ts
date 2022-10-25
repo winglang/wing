@@ -1,20 +1,54 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
+import { Function } from "./function";
+import { IResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
 
 /**
  * Simulator implementation of `cloud.Logger`.
  *
  * @inflight `@monadahq/wingsdk.sim.ILoggerClient`
  */
-export class Logger extends cloud.LoggerBase {
+export class Logger extends cloud.LoggerBase implements IResource {
+  private readonly callers = new Array<string>();
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
 
+  public _toResourceSchema(): BaseResourceSchema {
+    return {
+      type: cloud.LOGGER_TYPE,
+      props: {},
+      attrs: {},
+    };
+  }
+
+  private get addr(): string {
+    return `\${${this.node.path}#attrs.loggerAddr}`;
+  }
+
   /** @internal */
-  public _capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    return InflightClient.for(__filename, "LoggerClient", []);
+  public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+    if (!(captureScope instanceof Function)) {
+      throw new Error("loggers can only be captured by a sim.Function for now");
+    }
+
+    this.callers.push(captureScope.node.path);
+
+    const env = `LOGGER_ADDR__${this.node.id}`;
+    captureScope.addEnvironment(env, this.addr);
+
+    captureScope.node.addDependency(this);
+
+    // The inflight client is passed the compute resource ID as a second
+    // argument so that all of the logs from the same resource are grouped
+    // together. Perhaps this should be some kind of $context passed to every
+    // inflight function automatically?
+    return InflightClient.for(__filename, "LoggerClient", [
+      `process.env["${env}"]`,
+      `"${captureScope.node.id}"`,
+    ]);
   }
 }
 

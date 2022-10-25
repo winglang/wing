@@ -58,7 +58,7 @@ export class Logger extends LoggerBase {
       throw new Error("There is already a logger registered to this scope.");
     }
 
-    const logger = new Logger(scope, "Logger");
+    const logger = new Logger(scope, "WingLogger");
 
     Object.defineProperty(scope, LOGGER_SYMBOL, {
       value: logger,
@@ -89,6 +89,13 @@ export interface ILoggerClient {
    * @param message The message to print
    */
   print(message: string): Promise<void>;
+
+  /**
+   * Fetch the latest logs associated with whichever resource is running the
+   * inflight code. The logs may include cloud-provider specific messages or
+   * metadata.
+   */
+  fetchLatestLogs(): Promise<LogEvent[]>;
 }
 
 /**
@@ -97,4 +104,14 @@ export interface ILoggerClient {
 export enum LoggerInflightMethods {
   /** `Logger.print` */
   PRINT = "print",
+}
+
+/**
+ * Represents a log event.
+ */
+export interface LogEvent {
+  /** The log message. */
+  readonly message: string;
+  /** The log timestamp, in milliseconds since the epoch */
+  readonly timestamp: number;
 }

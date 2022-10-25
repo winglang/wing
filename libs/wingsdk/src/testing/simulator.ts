@@ -122,7 +122,7 @@ export class Simulator {
     for (const path of this._tree.startOrder) {
       const res = findResource(this._tree, path);
       log(`starting resource ${path} (${res.type})`);
-      const props = resolveTokens(res.props, context.resolver);
+      const props = resolveTokens(path, res.props, context.resolver);
       const attrs = await this._dispatcher.start(res.type, props, context);
       (res as any).attrs = attrs;
     }
@@ -193,16 +193,30 @@ function isToken(value: string): boolean {
   return value.startsWith("${") && value.endsWith("}");
 }
 
-function resolveTokens(props: any, resolver: IResourceResolver): any {
+function resolveTokens(
+  tokenHost: string,
+  props: any,
+  resolver: IResourceResolver
+): any {
   if (typeof props === "string") {
     if (isToken(props)) {
       const ref = props.slice(2, -1);
       const [path, rest] = ref.split("#");
       const resource = resolver.lookup(path);
-      if (rest.startsWith("attrs.") && resource.attrs) {
+      if (rest.startsWith("attrs.")) {
+        if (!resource.attrs) {
+          throw new Error(
+            `Tried to resolve token ${props} but resource ${path} has no attributes defined yet. Is it possible ${tokenHost} needs to take a dependency on ${path}?`
+          );
+        }
         return resource.attrs[rest.slice(6)];
-      } else if (rest.startsWith("props.") && resource.props) {
-        return resource.props[rest.slice(6)];
+      } else if (rest.startsWith("props.")) {
+        if (!resource.props) {
+          throw new Error(
+            `Tried to resolve token ${props} but resource ${path} has no props defined.`
+          );
+        }
+        return resource.props;
       } else {
         throw new Error(`Invalid token reference: ${ref}`);
       }
@@ -211,13 +225,13 @@ function resolveTokens(props: any, resolver: IResourceResolver): any {
   }
 
   if (Array.isArray(props)) {
-    return props.map((x) => resolveTokens(x, resolver));
+    return props.map((x) => resolveTokens(tokenHost, x, resolver));
   }
 
   if (typeof props === "object") {
     const ret: any = {};
     for (const [key, value] of Object.entries(props)) {
-      ret[key] = resolveTokens(value, resolver);
+      ret[key] = resolveTokens(tokenHost, value, resolver);
     }
     return ret;
   }

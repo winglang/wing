@@ -1,14 +1,16 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import { FunctionClient } from "../../src/sim/function.inflight";
+import { LoggerClient } from "../../src/sim/logger.inflight";
 import * as testing from "../../src/testing";
 import { simulatorJsonOf, synthSimulatedApp } from "./util";
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
-  const msg = "Hello, " + event;
-  $cap.logger.print(msg);
-  return { msg };
+  $cap.logger.print("Hello, " + event);
+  $cap.logger.print("Wahoo!");
 }`);
 
 test("inflight uses a logger", async () => {
@@ -30,17 +32,31 @@ test("inflight uses a logger", async () => {
   const s = new testing.Simulator({ appPath });
   await s.start();
 
-  const attrs = s.getAttributes("root/my_function");
-  const fnClient = new FunctionClient(attrs.functionAddr);
+  const fnAttrs = s.getAttributes("root/my_function");
+  const fnClient = new FunctionClient(fnAttrs.functionAddr);
+
+  const loggerAttrs = s.getAttributes("root/WingLogger");
+  const loggerClient = new LoggerClient(loggerAttrs.loggerAddr, "my_function");
 
   // WHEN
   const PAYLOAD = "Alice";
-  const response = await fnClient.invoke(PAYLOAD);
+  await fnClient.invoke(PAYLOAD);
+
+  await sleep(200);
 
   // THEN
-  // TODO: assert that the logger was invoked?
-  expect(response).toEqual({ msg: `Hello, ${PAYLOAD}` });
-  await s.stop();
-
+  const logs = await loggerClient.fetchLatestLogs();
+  expect(logs).toEqual([
+    {
+      message: `Hello, ${PAYLOAD}`,
+      timestamp: expect.any(Number),
+    },
+    {
+      message: `Wahoo!`,
+      timestamp: expect.any(Number),
+    },
+  ]);
   expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+
+  await s.stop();
 });
