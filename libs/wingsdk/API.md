@@ -1702,6 +1702,7 @@ Create a logger and register it to the given scope.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -1717,10 +1718,24 @@ The tree node.
 
 ---
 
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Logger.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
 
 ### LoggerBase <a name="LoggerBase" id="@monadahq/wingsdk.cloud.LoggerBase"></a>
-
-- *Implements:* @monadahq/wingsdk.core.ICapturable
 
 Functionality shared between all `Logger` implementations.
 
@@ -1823,6 +1838,7 @@ Any object.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
@@ -1835,6 +1851,22 @@ public readonly node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.LoggerBase.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
 
 ---
 
