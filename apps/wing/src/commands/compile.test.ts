@@ -1,6 +1,6 @@
+import { Target, compile } from "./compile";
 import { readdir, rmdir, stat } from "fs/promises";
 
-import { compile } from "./compile";
 import { resolve } from "path";
 
 describe("compile command tests", () => {
@@ -15,7 +15,7 @@ describe("compile command tests", () => {
     );
     await compile(sdkCaptureExample, {
       outDir: process.cwd(),
-      target: "tf-aws",
+      target: Target.TF_AWS,
     });
     // ensure cdktfOutDir exists and has files
     const stats = await stat(cdktfOutDir);

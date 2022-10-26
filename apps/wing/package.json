@@ -22,7 +22,7 @@
     "dev": "npm run build && ./bin/wing"
   },
   "dependencies": {
-    "@monadahq/wingsdk": "*",
+    "@monadahq/wingsdk": "file:../../wingsdk",
     "commander": "^9.4.1",
     "debug": "^4.3.4",
     "open": "^8.4.0"

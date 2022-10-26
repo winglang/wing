@@ -30,6 +30,7 @@ libs/tree-sitter-wing/build/
 
 # wing
 apps/wing/dist
+apps/wing/*.wx
 apps/wing/.wing
 apps/wing/*.wasm
 apps/wing/cdktf.out

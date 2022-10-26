@@ -18,15 +18,33 @@ const WINGSDK_RESOLVED_PATH = require.resolve("@monadahq/wingsdk");
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
-const WINGC_ARTIFACT_NAME = "intermediate.js";
+const WINGC_PREFLIGHT = "intermediate.js";
 
-interface ICompileOptions {
-  outDir: string;
-  target: string;
+/**
+ * Available targets for compilation.
+ * This is passed from Commander to the `compile` function.
+ */
+export enum Target {
+  TF_AWS = "tf-aws",
+  SIM = "sim",
 }
 
+/**
+ * Compile options for the `compile` command.
+ * This is passed from Commander to the `compile` function.
+ */
+export interface ICompileOptions {
+  readonly outDir: string;
+  readonly target: Target;
+}
+
+/**
+ * Compiles a Wing program.
+ * @param entrypoint The program .w entrypoint.
+ * @param options Compile options.
+ */
 export async function compile(entrypoint: string, options: ICompileOptions) {
-  const wingFile = inputFile;
+  const wingFile = entrypoint;
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
   log("wing dir: %s", wingDir);
@@ -45,7 +63,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       ...process.env,
       RUST_BACKTRACE: "full",
       WINGSDK_MANIFEST_ROOT,
-      WINGC_ARTIFACT_NAME,
+      WINGC_PREFLIGHT,
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
@@ -62,7 +80,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log("invoking wingc with importObject: %o", importObject);
   wasi.start(instance);
 
-  const artifactPath = resolve(workDir, WINGC_ARTIFACT_NAME);
+  const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
   const artifact = await readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
@@ -77,6 +95,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     process: {
       env: {
         WINGSDK_SYNTH_DIR: outDir,
+        ...(options.target === Target.SIM ? { WING_SIM: "1" } : {}),
       },
     },
     __dirname: workDir,
