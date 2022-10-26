@@ -158,7 +158,7 @@ fn jsify_expression(expression: &Expr) -> String {
 	match &expression.variant {
 		ExprType::New {
 			class,
-			obj_id: _, // TODO
+			obj_id,
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
@@ -175,8 +175,11 @@ fn jsify_expression(expression: &Expr) -> String {
 				format!(
 					"new {}({})",
 					jsify_type(class),
-					// TODO: get actual scope and id
-					jsify_arg_list(&arg_list, Some("this.root"), Some(&format!("{}", jsify_type(class))))
+					jsify_arg_list(
+						&arg_list,
+						Some("this.root"), // TODO: get actual scope
+						Some(&format!("{}", obj_id.as_ref().unwrap_or(&jsify_type(class))))
+					)
 				)
 			} else {
 				format!("new {}({})", jsify_type(&class), jsify_arg_list(&arg_list, None, None))
