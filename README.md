@@ -13,9 +13,9 @@
 
 ## Welcome! :wave:
 
-Wing is the world's first [cloud-oriented](#what-is-cloud-oriented-programming)
-programming language. It allows developers to fully leverage the power of the
-cloud, without having to worry about the underlying infrastructure.
+Wing is the world's first [cloud-oriented programming language](#what-is-cloud-oriented-programming). 
+It allows developers to fully leverage the power of the cloud, without having to worry about the 
+underlying infrastructure.
 
 ```js
 bring cloud;
