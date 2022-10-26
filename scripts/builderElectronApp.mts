@@ -42,12 +42,13 @@ await writeFile(
 try {
   await build({
     targets: Platform.MAC.createTarget(),
+    publish: "always",
     config: {
       appId: "co.monada.WingConsole",
       publish:  [
         {
           "provider": "s3",
-          "bucket": "a1bnbufeqmg-km85vfnen3"
+          "bucket": "a1bnbufeqmg-km85vfnen3",
         }
       ],
       directories: {
