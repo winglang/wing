@@ -45,44 +45,43 @@ The primary goal of this sprint is to create a self service journey from someone
 
 ### As such the focus of the sprint is:
 
-- Having Elad’s blog post somewhere out in public 
-- [guts-web-dev] Having a winglang.io website working
+- p0 Having Elad’s blog post somewhere out in public 
+- p0 [guts-web-dev] Having a winglang.io website working
   - We need a title currently “wing”
   - We need a tagline currently 
-- [design] having wing log
-- [content] Having a demo video inside our README
-- [dev] Having a github.com/winglang/wing repo (instead of monadahq/winglang)
-- [integration] Having a signup process for getting winglang repo permission 
-- [integration] Having a form that is part of the onboarding process
-- [elad] Having a winglang slack workspace (not monada) for people to join
-- [elad] Having a docs.winglang.io documentation site working with full content
+- p0 [design] having wing logo
+- p2 [content] Having a demo video inside our README
+- p0 [dev] Having a github.com/winglang/wing repo (instead of monadahq/winglang)
+- p0 [integration] Having a signup process for getting winglang repo permission 
+- p1 [integration] Having a form that is part of the onboarding process
+- p0 [elad] Having a winglang slack workspace (not monada) for people to join
+- p1 [elad] Having a docs.winglang.io documentation site working with full content
   - Why did we create wing
   - What features are supported and not supported  (roadmap) 
   - Main concepts of Wing (Resources, In/Pre flight, Plycons)
   - Language reference (Spec)
   - See the SDK API docs
-- [dev] Wing compiler errors are friendly in a way that they notify you when you are using a feature that is part of the language roadmap but not implemented yet
-- [dev] Having analytics inside the wing tool that you can opt-out 
+- p2 [dev] Wing compiler errors are friendly in a way that they notify you when you are using a feature that is part of the language roadmap but not implemented yet
 - [content] Contributing.md 
-  - Guide with instructions on how to build
-  - Guide with instructions on what the different options for you to contribute
-  - Guide with how to add a sample project
-  - Guide that explains the RFC process and how you can comment on it
-  - Guide that explains the process of pull request creation and approval
-- A slack channel to celebrates first time project builders
-- [dev] Good-first-issue to pick from and start working on them, and eliminate any bad ones
+  - p0 Guide with instructions on how to build
+  - p0 Guide with instructions on what the different options for you to contribute
+  - p2 Guide with how to add a sample project
+  - p0 Guide that explains the RFC process and how you can comment on it
+  - p0 Guide that explains the process of pull request creation and approval
+- p1 A slack channel to celebrates first time project builders
+- p2 [dev] compile the examples as part of the build process 
+- p0 [dev] Good-first-issue to pick from and start working on them, and remove any bad ones
   - Example of good first issue
    - Add a feature to a resource (to localhost and to aws)
    - Add another target to an existing resource 
   - Bad example for a good first issue (stuff that requires a lot of hand holding)
    - Contribute a for in loop feature to the compiler
-- [soft-dev] Issue template for a simple guided way to open issues 
-- [dev] Monitoring if it takes us too long to first respond to an issue 
-- [dev] Monitoring if it takes us too long to respond to a pull request
-- [dev] Monitoring if we don’t have enough good-first-issue issues
-- [dev] Monitor if we have less then 15 good-first-issue issues
-- [content] remove the playground from the existing readme.md
-- [integration] A form to collect information about the onboarding process
+- p0 [soft-dev] Issue template for a simple guided way to open issues 
+- p2 [dev] Monitoring if it takes us too long to first respond to an issue 
+- p2 [dev] Monitoring if it takes us too long to respond to a pull request
+- p2 [dev] Monitor if we have less then 15 good-first-issue issues
+- p0 [content] remove the playground from the existing readme.md
+- p2 [integration] A form to collect information about the onboarding process
   - Questions examples:
     - Do you understand wing
     - Do you intend to be involved with wing? How? 
