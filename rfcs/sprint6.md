@@ -13,7 +13,7 @@ Maria has a complete two free weeks ahead of her to prevent burnout, she plans t
 
 She quickly skims through the blog post, enjoys the authentic tone but even more, feels like someone is describing exactly the difficulties she has been having lately, and that, in a roundabout way, contributed to her burnout. She clicks on the "learn more" button that takes her to https://winglang.io. Mmm... Sounds like a programming language...
 
-The winglang.io webpage is simple & clean. She understands from the get go that this is for developers, and her eyes come across the main title "wing" and a tagline "XXX". She looks at the hero area (AKA the area above the fold) and it is crystal clear to her where she's landed, they are trying to solve the problem she has been having by introducing a new language called wing, which is the first cloud-oriented programming language. She wonders about this, “what is cloud oriented programming”. She scrolls...
+The winglang.io webpage is simple & clean. She understands from the get go that this is for developers, and her eyes come across the main title "wing" and a tagline "The Cloud is The Computer - Wing is the programming language". She looks at the hero area (AKA the area above the fold) and it is crystal clear to her where she's landed, they are trying to solve the problem she has been having by introducing a new language called wing, which is the first cloud-oriented programming language. She wonders about this, “what is cloud oriented programming”. She scrolls...
 
 While scrolling through the page, she sees the same pains that are associated with cloud development, ~and some examples of why cloud oriented programming is the right solution. More scrolling explains to her, in simple terms, why this paradigm shift is needed~. In the bottom of the page she sees a call to action to provide an email address and signup for an **early preview of WingLang**. Hell yeah, I’ll give it a try...
 
@@ -45,14 +45,15 @@ The primary goal of this sprint is to create a self service journey from someone
 
 ### As such the focus of the sprint is:
 
-- p0 Having Elad’s blog post somewhere out in public 
+- p0 Having Elad’s blog post somewhere out in public with a cta 
 - p0 [guts-web-dev] Having a winglang.io website working
   - We need a title currently “wing”
-  - We need a tagline currently 
+  - We need a tagline 
 - p0 [design] having wing logo
 - p2 [content] Having a demo video inside our README
 - p0 [dev] Having a github.com/winglang/wing repo (instead of monadahq/winglang)
 - p0 [integration] Having a signup process for getting winglang repo permission 
+  - signuup on page -> (fill in form -> )? get an invite to github repo
 - p1 [integration] Having a form that is part of the onboarding process
 - p0 [elad] Having a winglang slack workspace (not monada) for people to join
 - p1 [elad] Having a docs.winglang.io documentation site working with full content
