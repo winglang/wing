@@ -24,7 +24,7 @@ She lands in https://githug.com/winglang/wing and starts skimming through the RE
 Maria starts playing with the language, she wants to take this to the next level, and see how it is to build something with this, F$#!#! the disclaimer... She compiles a very simple program and gets a compiler error with the following message “'for' loops are not yet supported, please +1 https://winglang/wing/issues/119". She goes to GitHub and clicks the 👍 to indicate this is a feature she is after. A couple of minutes later she gets a notification from github with a reply from a guy named Mark. He comments on the issue:
 
 ```
-@maria, it's awesome to have you here with us. You can check out our [Roadmap Project Board] to track our progress. We will comment on this issue when the feature is released.
+@maria, it's awesome to have you here with us. You can check out our [Roadmap Project Board] to track our progress.
 ```
 
 But then, a guy named Chris replies a couple of minutes later, saying he has already talked to Yoav on how we can implement this in the compiler and would love to work on it. He mentions Maria and asks her if she can provide the exact example of the code she was trying to run, she replies with the code example and feels a warm fuzzy feeling of belonging. She turns the computer off and continues her day.
