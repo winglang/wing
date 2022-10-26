@@ -91,7 +91,7 @@ jobs:
           APPLE_ID: ${{ secrets.APPLE_ID }}
           APPLE_ID_PASSWORD: ${{ secrets.APPLE_ID_PASSWORD }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx tsx scripts/builderElectronApp.mts
+        run: npm exec vite-node scripts/builderElectronApp.mts
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
