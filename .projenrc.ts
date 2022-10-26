@@ -158,8 +158,8 @@ const tsconfigFiles = [
 for (const tsconfig of tsconfigFiles) {
   if (tsconfig) {
     tsconfig.addOverride("compilerOptions", {
-      baseUrl: ".",
-      rootDir: ".",
+      rootDir: undefined,
+      outDir: undefined,
       target: "ESNext",
       useDefineForClassFields: true,
       lib: ["DOM", "DOM.Iterable", "ESNext"],
@@ -186,16 +186,16 @@ for (const tsconfig of tsconfigFiles) {
       declaration: false,
     });
 
-    const include = ["src/**/*", "electron/**/*"];
+    const include = ["./src/**/*", "./electron/**/*"];
     if (tsconfig.path.endsWith("tsconfig.dev.json")) {
       include.push(
-        "scripts/**/*",
-        "test/**/*",
-        ".storybook/**/*",
-        "vite.config.ts",
-        ".projenrc.ts",
-        "tailwind.config.cjs",
-        "postcss.config.cjs",
+        "./scripts/**/*",
+        "./test/**/*",
+        "./.storybook/**/*",
+        "./vite.config.ts",
+        "./.projenrc.ts",
+        "./tailwind.config.cjs",
+        "./postcss.config.cjs",
       );
     }
     tsconfig.addOverride("include", include);

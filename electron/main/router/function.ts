@@ -3,6 +3,16 @@ import { z } from "zod";
 
 import { createFunctionClient, Simulator } from "../wingsdk.js";
 
+type ResponseEnvelope =
+  | {
+      success: true;
+      response: string;
+    }
+  | {
+      success: false;
+      error: unknown;
+    };
+
 export const createFunctionRouter = (simulator: Simulator) => {
   return trpc
     .router()
@@ -25,11 +35,19 @@ export const createFunctionRouter = (simulator: Simulator) => {
       async resolve({ input }) {
         const addr = simulator.getAttributes(input.resourcePath).functionAddr;
         const client = createFunctionClient(addr);
-        const response = await client.invoke(input.message);
-        return {
-          success: true,
-          response,
-        };
+        try {
+          const response: ResponseEnvelope = {
+            success: true,
+            response: await client.invoke(input.message),
+          };
+          return response;
+        } catch (error) {
+          const response: ResponseEnvelope = {
+            success: false,
+            error: error instanceof Error ? error.message : error,
+          };
+          return response;
+        }
       },
     });
 };

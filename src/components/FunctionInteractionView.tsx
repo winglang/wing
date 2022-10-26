@@ -2,6 +2,7 @@ import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useId, useState } from "react";
 
 import { Button } from "../design-system/Button.js";
+import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TextArea } from "../design-system/TextArea.js";
 import { trpc } from "../utils/trpc.js";
 
@@ -12,39 +13,40 @@ export interface FunctionInteractionViewProps {
 export const FunctionInteractionView = ({
   node,
 }: FunctionInteractionViewProps) => {
-  const getTimesCalled = trpc.useQuery([
-    "function.timesCalled",
-    { resourcePath: node.path ?? "" },
-  ]);
-  const invoke = trpc.useMutation(["function.invoke"]);
+  const resourcePath = node.path ?? "";
+  const timesCalled = trpc.useQuery(["function.timesCalled", { resourcePath }]);
+  const utils = trpc.useContext();
+  const invoke = trpc.useMutation("function.invoke", {
+    onSuccess() {
+      void utils.invalidateQueries(["function.timesCalled", { resourcePath }]);
+    },
+  });
   const [input, setInput] = useState("");
   const id = useId();
   return (
     <form
-      className="px-2"
+      className="h-full px-2 flex flex-col"
       method="POST"
       onSubmit={(event) => {
         event.preventDefault();
-        if (!input || input === "") {
-          return;
-        }
         invoke.mutate({
-          resourcePath: node.path ?? "",
+          resourcePath,
           message: input,
         });
         setInput("");
       }}
     >
-      <div className="space-y-6 bg-slate-100 p-2 pb-4 rounded">
-        {getTimesCalled.data !== undefined && (
-          <div className="block text-sm font-medium text-slate-500">
-            {`this function was called ${getTimesCalled.data} ${
-              getTimesCalled.data === 1 ? "time" : "times"
+      <div className="space-y-6 bg-slate-100 p-2 rounded">
+        {timesCalled.data !== undefined && (
+          <div className="block text-sm text-slate-500">
+            {`This function was called ${timesCalled.data} ${
+              timesCalled.data === 1 ? "time" : "times"
             }`}
           </div>
         )}
       </div>
-      <div className="space-y-2 bg-white p-2 py-2">
+
+      <div className="space-y-2 bg-white p-2">
         <div>
           <p className="mt-1 text-sm text-slate-500">
             You can test the function by sending a JSON message.
@@ -78,17 +80,21 @@ export const FunctionInteractionView = ({
         </div>
       </div>
 
-      <div className="space-y-6 bg-slate-100 p-2 pb-4 rounded">
+      <div className="flex-1 flex flex-col space-y-2 p-2 pb-4">
         <div>
           <span className="block text-sm font-medium text-slate-500">
             Response
           </span>
         </div>
 
-        <div>
-          <div className="text-sm">
-            {invoke.data && <code>{JSON.stringify(invoke.data)}</code>}
-          </div>
+        <div className="flex-1 min-h-[8rem] relative bg-slate-100 rounded overflow-hidden">
+          <ScrollableArea overflowX overflowY className="text-xs p-2">
+            {invoke.data && (
+              <pre className="select-text">
+                <code>{JSON.stringify(invoke.data, undefined, 2)}</code>
+              </pre>
+            )}
+          </ScrollableArea>
         </div>
       </div>
     </form>
