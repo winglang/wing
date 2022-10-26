@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { IBucketClient } from "../cloud";
+import { IBucketClient } from "./bucket";
 
 export class BucketClient implements IBucketClient {
   constructor(private readonly bucketAddr: string) {}
@@ -14,5 +14,10 @@ export class BucketClient implements IBucketClient {
     const filename = path.join(this.bucketAddr, key);
     const value = await fs.promises.readFile(filename, "utf8");
     return value;
+  }
+
+  public async list(prefix?: string): Promise<string[]> {
+    const fileNames = await fs.promises.readdir(this.bucketAddr);
+    return fileNames.filter((fileName) => fileName.startsWith(prefix ?? ""));
   }
 }

@@ -15,6 +15,7 @@ and submit pull requests to the GitHub repository.
   - [Testing](#testing)
     - [Sandbox](#sandbox)
   - [Creating a resource](#creating-a-resource)
+  - [Exporting code and compiling with JSII](#exporting-code-and-compiling-with-jsii)
   - [Submitting a pull request](#submitting-a-pull-request)
   - [Getting Help](#getting-help)
 
@@ -184,19 +185,86 @@ For more information about designing resources, check out the Wing SDK design gu
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
 You can also join us on our [Discord server](https://discord.gg/7wrggS3dZU) to ask questions (or just say hi)!
 
+## Exporting code and compiling with JSII
+
+The Wing SDK is written in TypeScript and compiled with [JSII], which means that the library can be used in any language that JSII supports, including Python, Java, C#, and Go.
+
+[JSII]: https://github.com/aws/jsii
+
+> Python, Java, C#, and Go versions of the SDK are coming soon!
+
+In order to group APIs together, we prefer to put all public APIs like classes and interfaces inside modules, and then re-export it at the root of a directory. For example:
+
+```ts
+// src/azure/bucket.ts
+export interface BucketProps {
+  // ...
+}
+
+export class Bucket {
+  // ...
+}
+
+// src/azure/index.ts
+export * from "./bucket";
+
+// src/index.ts
+export * from "./azure";
+```
+
+However, some of the code in the Wing SDK is either:
+
+1. Not compatible with JSII, OR
+2. Does not need to be made available to other languages because it is an implementation detail. For example, code for simulating resources.
+
+So by convention, any TypeScript files that should not be compiled by JSII should be re-exported to parent directories by files named `exports.ts`, while all other TypeScript files should be re-exported by files named `index.ts`. For example:
+
+```ts
+// src/azure/bucket.ts
+export interface BucketProps {
+  // ...
+}
+
+export class Bucket {
+  // ...
+}
+
+// src/azure/bucket.inflight.ts
+import { BlobServiceClient } from "@azure/storage-blob";
+
+export class BucketClient {
+  // ...
+}
+
+// src/azure/index.ts
+export * from "./bucket";
+
+// src/azure/exports.ts
+export * from "./index";
+export * from "./bucket.inflight";
+
+// src/index.ts
+export * from "./azure";
+
+// src/exports.ts
+export * from "./azure/exports";
+```
+
+Under the hood, we will exclude any files named `exports.ts` from being compiled by JSII, and just compile them with ordinary TypeScript so they are still available to TypeScript/JavaScript consumers.
+
 ## Submitting a pull request
 
 To ensure pull requests are reviewed and accepted as quickly as possible, please make sure:
 
-[ ] Tests are written for all changes.
+- [ ] Tests are written for all changes.
 
-[ ] Hand-written documentation in `wingsdk/docs/` is updated if features are being added or removed.
+- [ ] Hand-written documentation in `wingsdk/docs/` is updated if features are being added or removed.
 
-[ ] `npm run build` has been run to lint, build, and update API docs.
+- [ ] `npm run build` has been run to lint, build, and update API docs.
 
-[ ] Commit messages are clear and descriptive and pushed to your fork.
+- [ ] Commit messages are clear and descriptive and pushed to your fork.
 
-[ ] Your fork is in sync with the upstream repository.
+- [ ] Your fork is in sync with the upstream repository.
 
 Create a new pull request [here](https://github.com/monadahq/wingsdk/compare), selecting your fork for the 'compare' 
 and `main` for the 'base'. 

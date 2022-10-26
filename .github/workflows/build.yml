@@ -12,7 +12,6 @@ env:
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
   MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
-  # TODO Real versioning needed
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
@@ -20,7 +19,7 @@ jobs:
     name: "Prepare"
     runs-on: ubuntu-latest
     outputs:
-      version: ${{ steps.info.outputs.version }}
+      version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
         if: github.ref == 'refs/heads/main'
@@ -56,7 +55,8 @@ jobs:
       - run: "echo '\n' >> CHANGELOG.md"
         if: github.ref == 'refs/heads/main'
 
-      - name: PR Changelog
+      - name: PR Version Info
+        id: pr_info
         if: github.ref != 'refs/heads/main'
         run: |
           echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
@@ -113,17 +113,19 @@ jobs:
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--configuration=release"
 
-      - name: Test
+      # wingc require wingsdk to be built first in order to run
+      - name: wingc Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wingsdk,wing-api-checker"
-          all: true
+          projects: "wingc"
+          args: "--configuration=release"
 
       - name: Package Wing CLI
         working-directory: apps/wing
         run: |
           npm version ${{ env.PROJEN_BUMP_VERSION }}
+          node version.js
           npm pack
 
       - name: Package WingSDK
@@ -217,6 +219,13 @@ jobs:
         with:
           targets: "build-native"
           projects: "wing-language-server"
+          args: "--configuration=release"
+
+      - name: Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wingii"
           args: "--configuration=release"
 
       - name: Upload Wing Language Server
