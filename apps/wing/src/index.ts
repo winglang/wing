@@ -16,7 +16,7 @@ async function main() {
 
   program
     .command("run")
-    .description("Runs a Wing intermediate file in Wing Simulator")
+    .description("Runs a Wing program in the Wing Console")
     .argument("<input-file>", "input file")
     .action(async (inputFile) => {
       open("wing://run?path=" + inputFile, { wait: true });
@@ -24,10 +24,10 @@ async function main() {
 
   program
     .command("compile")
-    .description("Compiles a wing file")
-    .argument("<input-file>", "input file")
+    .description("Compiles a Wing program")
+    .argument("<entrypoint>", "program .w entrypoint")
     .option("-o, --out-dir <out-dir>", "Output directory", process.cwd())
-    .option("-t, --target <target>", "Target platform", "tf-aws")
+    .option("-t, --target <target>", "Target platform (options: 'tf-aws', 'sim')", "tf-aws")
     .action(compile);
 
   program.parse();

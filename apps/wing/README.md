@@ -17,7 +17,7 @@ To see scoped debug logs, use specific namespaces, e.g. `wing:commands:compile`.
 
 > ```sh
 > $ wing compile --help
-> Usage: wing compile [options] <input-file>
+> Usage: wing compile [options] <entrypoint>.w
 > 
 > Compiles a wing file
 > 
@@ -33,9 +33,9 @@ To see scoped debug logs, use specific namespaces, e.g. `wing:commands:compile`.
 
 > ```sh
 > $ wing run --help
-> Usage: wing run [options] <input-file>
+> Usage: wing run [options] <entrypoint>.w
 > 
-> Runs a Wing intermediate file in Wing Simulator
+> Runs a Wing app in the Wing Console
 > 
 > Arguments:
 >   input-file  input file

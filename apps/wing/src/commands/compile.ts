@@ -10,7 +10,7 @@ import { WASI } from "wasi";
 import { argv } from "process";
 import debug from "debug";
 
-const log = debug("wing:commands:compile");
+const log = debug("wing:compile");
 
 const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
 log("wasm path: %s", WINGC_WASM_PATH);
@@ -25,7 +25,7 @@ interface ICompileOptions {
   target: string;
 }
 
-export async function compile(inputFile: string, options: ICompileOptions) {
+export async function compile(entrypoint: string, options: ICompileOptions) {
   const wingFile = inputFile;
   log("wing file: %s", wingFile);
   const wingDir = dirname(wingFile);
