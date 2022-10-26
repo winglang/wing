@@ -13,9 +13,8 @@ import type {
 import classNames from "classnames";
 import React from "react";
 
-import { TreeMenuItem } from "@/design-system/TreeMenu";
-
 import constructHubTree from "../assets/construct-hub-tree.json";
+import { TreeMenuItem } from "../design-system/TreeMenu.js";
 
 export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
   return items.flatMap((item) => {

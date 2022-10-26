@@ -1,13 +1,6 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
-import {
-  Fragment,
-  PropsWithChildren,
-  useState,
-  Dispatch,
-  SetStateAction,
-} from "react";
-import { boolean } from "zod";
+import { Fragment, PropsWithChildren } from "react";
 
 export interface SlideOverProps {
   title: string;

@@ -3,11 +3,10 @@ import { createTRPCClient } from "@trpc/client";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { NotificationsProvider } from "@/design-system/Notification";
-import { ipcLink } from "@/utils/ipcLink";
-
-import { VscodeLayout } from "./components/VscodeLayout";
-import { trpc } from "./utils/trpc";
+import { VscodeLayout } from "./components/VscodeLayout.js";
+import { NotificationsProvider } from "./design-system/Notification.js";
+import { ipcLink } from "./utils/ipcLink.js";
+import { trpc } from "./utils/trpc.js";
 
 export interface AppProps {}
 

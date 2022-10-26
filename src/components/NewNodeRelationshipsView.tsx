@@ -1,6 +1,6 @@
-import { ScrollableArea } from "../design-system/ScrollableArea";
+import { ScrollableArea } from "../design-system/ScrollableArea.js";
 
-import { Relationships } from "./NodeRelationshipsView";
+import { Relationships } from "./NodeRelationshipsView.js";
 
 export interface NewRelationship {
   icon: React.ReactNode;

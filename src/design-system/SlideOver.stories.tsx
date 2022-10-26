@@ -1,6 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { SlideOver } from "./SlideOver";
+import { SlideOver } from "./SlideOver.js";
 
 export default {
   title: "DesignSystem/SlideOver",

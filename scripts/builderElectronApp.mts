@@ -51,12 +51,13 @@ try {
       files: ["dist/vite"],
 
       mac: {
-        target: "default",
+        target: "dmg",
       },
       dmg: {
         sign: true,
         icon: "electron/resources/icon.icns",
         background: "electron/resources/background.png",
+        // writeUpdateInfo: false,
       },
       afterSign: async (context) => {
         if (context.electronPlatformName === "darwin") {

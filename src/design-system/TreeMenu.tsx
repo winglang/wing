@@ -2,8 +2,8 @@ import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import React from "react";
 
-import { Square2StackMinusIcon, Square2StackPlusIcon } from "./icons";
-import { ScrollableArea } from "./ScrollableArea";
+import { Square2StackMinusIcon, Square2StackPlusIcon } from "./icons/index.js";
+import { ScrollableArea } from "./ScrollableArea.js";
 
 export interface TreeMenuItem {
   id: string;

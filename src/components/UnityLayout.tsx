@@ -17,14 +17,13 @@ import {
   useState,
 } from "react";
 
-import { LeftResizableWidget } from "@/design-system/LeftResizableWidget";
-import { RightResizableWidget } from "@/design-system/RightResizableWidget";
-import { ScrollableArea } from "@/design-system/ScrollableArea";
-import { TopResizableWidget } from "@/design-system/TopResizableWidget";
-import { Node, useNodeMap } from "@/utils/nodeMap";
-
-import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils";
-import { useTreeMenuItems } from "../utils/useTreeMenuItems";
+import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
+import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
+import { ScrollableArea } from "../design-system/ScrollableArea.js";
+import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
+import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
+import { Node, useNodeMap } from "../utils/nodeMap.js";
+import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
 interface Attribute {
   key: string;

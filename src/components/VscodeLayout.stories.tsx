@@ -3,9 +3,8 @@ import { createTRPCClient } from "@trpc/client";
 import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { trpc } from "@/utils/trpc.js";
-
 import { constructHubTreeToWingSchema } from "../stories/utils.js";
+import { trpc } from "../utils/trpc.js";
 
 import { VscodeLayout } from "./VscodeLayout.js";
 

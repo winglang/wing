@@ -47,12 +47,11 @@ const project = new TypeScriptProject({
     "@heroicons/react",
     "classnames",
     "react-query",
-    "@trpc/react",
     "react-draggable",
     "pretty-bytes",
-    "@trpc/client",
-    "@trpc/server",
-    "@trpc/react",
+    "@trpc/client@^9",
+    "@trpc/server@^9",
+    "@trpc/react@^9",
     "electron-trpc",
     "@tanstack/react-query",
     "zod",
@@ -161,9 +160,6 @@ for (const tsconfig of tsconfigFiles) {
       target: "ESNext",
       useDefineForClassFields: true,
       lib: ["DOM", "DOM.Iterable", "ESNext"],
-      paths: {
-        "@/*": ["src/*"],
-      },
       allowJs: false,
       skipLibCheck: true,
       esModuleInterop: false,
@@ -186,17 +182,20 @@ for (const tsconfig of tsconfigFiles) {
 
       declaration: false,
     });
-    tsconfig.addOverride("include", [
-      "src/**/*",
-      "scripts/**/*",
-      "electron/**/*",
-      "test/**/*",
-      ".storybook/**/*",
-      ".projenrc.ts",
-      "vite.config.ts",
-      "tailwind.config.cjs",
-      "postcss.config.cjs",
-    ]);
+
+    const include = ["src/**/*", "electron/**/*"];
+    if (tsconfig.path.endsWith("tsconfig.dev.json")) {
+      include.push(
+        "scripts/**/*",
+        "test/**/*",
+        ".storybook/**/*",
+        "vite.config.ts",
+        ".projenrc.ts",
+        "tailwind.config.cjs",
+        "postcss.config.cjs",
+      );
+    }
+    tsconfig.addOverride("include", include);
   }
 }
 
@@ -264,11 +263,8 @@ if (project.eslint) {
     "import/no-extraneous-dependencies": "off",
   });
 
-  // Tell eslint that imports that begin with "@/" are internal to this repository.
-  project.eslint.config.settings = {
-    ...project.eslint.config.settings,
-    "import/internal-regex": "^@/",
-  };
+  project.addDevDeps("@cloudy-ts/eslint-plugin");
+  project.eslint.addExtends("plugin:@cloudy-ts/recommended");
 }
 
 // Fix installation problems due to Projen adding some package overrides.

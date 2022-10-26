@@ -9,12 +9,12 @@ import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import prettyBytes from "pretty-bytes";
 import { FormEventHandler, useCallback, useRef, useState } from "react";
 
-import { Button } from "@/design-system/Button";
-import { Checkbox } from "@/design-system/Checkbox";
-import { Input } from "@/design-system/Input";
-import { dateFormatter } from "@/utils/dateUtils";
-import { trpc } from "@/utils/trpc";
-import { useDownloadFile } from "@/utils/useDownloadFile";
+import { Button } from "../design-system/Button.js";
+import { Checkbox } from "../design-system/Checkbox.js";
+import { Input } from "../design-system/Input.js";
+import { dateFormatter } from "../utils/dateUtils.js";
+import { trpc } from "../utils/trpc.js";
+import { useDownloadFile } from "../utils/useDownloadFile.js";
 
 export interface BucketInteractionViewProps {
   node: BaseResourceSchema;

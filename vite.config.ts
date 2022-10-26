@@ -1,29 +1,19 @@
-import path from "node:path";
+import { copyFile, mkdir } from "node:fs/promises";
 
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import electron from "vite-plugin-electron";
 
 import pkg from "./package.json";
-import { copyFile, mkdir } from "node:fs/promises";
-
-export const alias = {
-  "@": path.join(__dirname, "src"),
-};
 
 export default defineConfig({
-  resolve: {
-    alias,
-  },
   plugins: [
     react(),
     electron({
-      main: {
-        entry: "electron/main/index.ts",
-        vite: {
-          build: {
-            outDir: "dist/vite/electron/main",
-          },
+      entry: "electron/main/index.ts",
+      vite: {
+        build: {
+          outDir: "dist/vite/electron/main",
         },
       },
     }),
@@ -32,8 +22,8 @@ export default defineConfig({
       async buildStart(options) {
         await mkdir("dist/vite/electron/preload", { recursive: true });
         await copyFile(
-          "electron/main/preload/preload.js",
-          "dist/vite/electron/preload/preload.js",
+          "electron/preload/index.js",
+          "dist/vite/electron/preload/index.js",
         );
       },
     },

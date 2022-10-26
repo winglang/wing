@@ -3,9 +3,9 @@ import { createTRPCClient } from "@trpc/client";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
-import { trpc } from "@/utils/trpc.js";
+import { trpc } from "../utils/trpc.js";
 
-import { NodeInteractionView } from "./NodeInteractionView";
+import { NodeInteractionView } from "./NodeInteractionView.js";
 
 export default {
   title: "Components/NodeInteractionView",

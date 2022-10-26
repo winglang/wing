@@ -1,7 +1,7 @@
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { createFunctionClient, Simulator } from "../wingsdk";
+import { createFunctionClient, Simulator } from "../wingsdk.js";
 
 export const createFunctionRouter = (simulator: Simulator) => {
   return trpc

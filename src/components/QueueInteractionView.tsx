@@ -2,10 +2,10 @@ import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
 import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useCallback, useId, useState } from "react";
 
-import { Button } from "@/design-system/Button";
-import { useNotifications } from "@/design-system/Notification";
-import { TextArea } from "@/design-system/TextArea";
-import { trpc } from "@/utils/trpc";
+import { Button } from "../design-system/Button.js";
+import { useNotifications } from "../design-system/Notification.js";
+import { TextArea } from "../design-system/TextArea.js";
+import { trpc } from "../utils/trpc.js";
 
 export interface QueueInteractionViewProps {
   node: BaseResourceSchema;

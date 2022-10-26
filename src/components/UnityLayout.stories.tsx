@@ -1,8 +1,8 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { constructHubTreeToWingSchema } from "../stories/utils";
+import { constructHubTreeToWingSchema } from "../stories/utils.js";
 
-import { UnityLayout } from "./UnityLayout";
+import { UnityLayout } from "./UnityLayout.js";
 
 export default {
   title: "Layouts/Unity",

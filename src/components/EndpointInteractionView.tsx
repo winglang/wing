@@ -1,7 +1,7 @@
 import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 
-import { Button } from "@/design-system/Button";
-import { TextArea } from "@/design-system/TextArea";
+import { Button } from "../design-system/Button.js";
+import { TextArea } from "../design-system/TextArea.js";
 
 export interface EndpointInteractionViewProps {
   node: BaseResourceSchema;

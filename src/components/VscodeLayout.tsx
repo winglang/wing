@@ -1,20 +1,19 @@
 import type { WingSimulatorSchema } from "@monadahq/wingsdk/lib/sim";
 import { useEffect, useMemo, useState } from "react";
 
-import { ResourceIcon, SchemaToTreeMenuItems } from "@/stories/utils";
-import { Node, useNodeMap } from "@/utils/nodeMap";
-import { trpc } from "@/utils/trpc";
+import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs.js";
+import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
+import { ScrollableArea } from "../design-system/ScrollableArea.js";
+import { Tabs } from "../design-system/Tabs.js";
+import { TreeMenu } from "../design-system/TreeMenu.js";
+import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
+import { Node, useNodeMap } from "../utils/nodeMap.js";
+import { trpc } from "../utils/trpc.js";
+import { useTabs } from "../utils/useTabs.js";
+import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
-import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs";
-import { RightResizableWidget } from "../design-system/RightResizableWidget";
-import { ScrollableArea } from "../design-system/ScrollableArea";
-import { Tabs } from "../design-system/Tabs";
-import { TreeMenu } from "../design-system/TreeMenu";
-import { useTabs } from "../utils/useTabs";
-import { useTreeMenuItems } from "../utils/useTreeMenuItems";
-
-import { Relationships } from "./NodeRelationshipsView";
-import { NodeTabContents } from "./NodeTabContents";
+import { Relationships } from "./NodeRelationshipsView.js";
+import { NodeTabContents } from "./NodeTabContents.js";
 export interface VscodeLayoutProps {
   schema: WingSimulatorSchema | undefined;
 }

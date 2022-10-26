@@ -1,9 +1,9 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { Tabs } from "@/design-system/Tabs";
-import { ResourceIcon } from "@/stories/utils";
+import { ResourceIcon } from "../stories/utils.js";
+import { useTabs } from "../utils/useTabs.js";
 
-import { useTabs } from "../utils/useTabs";
+import { Tabs } from "./Tabs.js";
 
 const TabsStory: ComponentStory<typeof Tabs> = (args) => {
   const tabs = useTabs({

@@ -1,7 +1,7 @@
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { createQueueClient, Simulator } from "../wingsdk";
+import { createQueueClient, Simulator } from "../wingsdk.js";
 
 export const createQueueRouter = (simulator: Simulator) => {
   return trpc.router().mutation("queue.push", {

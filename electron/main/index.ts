@@ -4,11 +4,11 @@ import { app, BrowserWindow, shell, ipcMain } from "electron";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
+import { log } from "electron-log";
 import { createIPCHandler } from "electron-trpc";
 
 import { mergeRouters } from "./router/index.js";
 import { createSimulator } from "./simulator/simulator.js";
-import {log} from "electron-log";
 
 // TODO [sa] add auto-updater
 
@@ -27,7 +27,7 @@ export const ROOT_PATH = {
 };
 
 let win: BrowserWindow | undefined;
-const url = `http://${process.env.VITE_DEV_SERVER_HOSTNAME}:${process.env.VITE_DEV_SERVER_PORT}`;
+const url = process.env.VITE_DEV_SERVER_URL;
 const indexHtml = join(ROOT_PATH.dist, "index.html");
 
 async function createWindow() {
@@ -38,18 +38,16 @@ async function createWindow() {
     icon: join(ROOT_PATH.public, "icon.ico"),
     webPreferences: {
       nodeIntegration: true,
-      preload: app.isPackaged
-        ? path.join(__dirname, "../preload/preload.js")
-        : path.join(__dirname, "../../../../electron/main/preload/preload.js"),
+      preload: path.join(__dirname, "../preload/index.js"),
       contextIsolation: true,
     },
   });
 
-  if (app.isPackaged) {
-    void win.loadFile(indexHtml);
-  } else {
-    void win.loadURL(`${url}`);
+  if (url) {
+    void win.loadURL(url);
     win.webContents.openDevTools();
+  } else {
+    void win.loadFile(indexHtml);
   }
 
   // Test actively push message to the Electron-Renderer
@@ -105,12 +103,14 @@ ipcMain.handle("open-win", (event, arg) => {
 
 const getWXFilePath = (): string => {
   log(process.argv);
-  const cloudFileArg = process.argv.slice(1).find(arg => arg.startsWith('--cloudFile='));
-  if(!cloudFileArg) {
-    log('loading application in demo mode');
+  const cloudFileArg = process.argv
+    .slice(1)
+    .find((arg) => arg.startsWith("--cloudFile="));
+  if (!cloudFileArg) {
+    log("loading application in demo mode");
     return join(ROOT_PATH.public, "demo.wx");
   }
-  return cloudFileArg.replace('--cloudFile=', '');
+  return cloudFileArg.replace("--cloudFile=", "");
 };
 
 void app.whenReady().then(async () => {

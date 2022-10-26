@@ -1,15 +1,15 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { Button } from "@/design-system/Button";
-import { TreeMenu } from "@/design-system/TreeMenu";
-import { treeMenuItems as treeMenuItemsMock } from "@/stories/mockData";
+import { Button } from "../design-system/Button.js";
+import { TreeMenu } from "../design-system/TreeMenu.js";
+import { treeMenuItems as treeMenuItemsMock } from "../stories/mockData.js";
 import {
   SchemaToTreeMenuItems,
   flattenTreeMenuItems,
   constructHubTreeToWingSchema,
-} from "@/stories/utils";
-import { useTreeMenuItems } from "@/utils/useTreeMenuItems";
+} from "../stories/utils.js";
+import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
 const TreeMenuStory: ComponentStory<typeof TreeMenu> = (args) => {
   const treeMenu = useTreeMenuItems({

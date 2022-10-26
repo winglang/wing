@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@cloudy-ts/eslint-plugin",
+      "type": "build"
+    },
+    {
       "name": "@headlessui/react",
       "type": "build"
     },
@@ -54,14 +58,17 @@
     },
     {
       "name": "@trpc/client",
+      "version": "^9",
       "type": "build"
     },
     {
       "name": "@trpc/react",
+      "version": "^9",
       "type": "build"
     },
     {
       "name": "@trpc/server",
+      "version": "^9",
       "type": "build"
     },
     {

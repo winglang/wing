@@ -1,6 +1,6 @@
 import * as trpc from "@trpc/server";
 
-import { Simulator, WingSimulatorSchema } from "../wingsdk";
+import { Simulator, WingSimulatorSchema } from "../wingsdk.js";
 
 export const createAppRouter = (simulator: Simulator) => {
   return trpc.router().query("app.tree", {

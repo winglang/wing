@@ -1,7 +1,7 @@
 import { DocumentDuplicateIcon } from "@heroicons/react/24/outline";
 import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 
-import { ResourceIcon } from "@/stories/utils";
+import { ResourceIcon } from "../stories/utils.js";
 
 export interface NodeAttribute {
   key: string;

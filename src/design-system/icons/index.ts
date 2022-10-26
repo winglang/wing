@@ -1,2 +1,2 @@
-export * from "./Square2StackMinus";
-export * from "./Square2StackPlus";
+export * from "./Square2StackMinus.js";
+export * from "./Square2StackPlus.js";

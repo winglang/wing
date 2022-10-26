@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 
-import { TreeMenuItem } from "../design-system/TreeMenu";
+import { TreeMenuItem } from "../design-system/TreeMenu.js";
 
 export function useTreeMenuItems(options?: {
   treeMenuItems?: TreeMenuItem[];

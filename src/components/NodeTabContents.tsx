@@ -1,12 +1,15 @@
 import classNames from "classnames";
 import { useState } from "react";
 
-import { Node } from "@/utils/nodeMap";
+import { Node } from "../utils/nodeMap.js";
 
-import { NodeAttributes } from "./NodeAttributes";
-import { NodeInteractionView } from "./NodeInteractionView";
-import { NodeRelationshipsView, Relationships } from "./NodeRelationshipsView";
-import { NodeLogs } from "./NogeLogs";
+import { NodeAttributes } from "./NodeAttributes.js";
+import { NodeInteractionView } from "./NodeInteractionView.js";
+import {
+  NodeRelationshipsView,
+  Relationships,
+} from "./NodeRelationshipsView.js";
+import { NodeLogs } from "./NogeLogs.js";
 
 export interface NodeTabContents {
   node: Node;

@@ -1,7 +1,7 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 
-import { ScrollableArea } from "./ScrollableArea";
+import { ScrollableArea } from "./ScrollableArea.js";
 
 export interface Tab {
   id: string;

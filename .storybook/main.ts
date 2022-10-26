@@ -1,6 +1,4 @@
-import { mergeConfig } from "vite";
 import type { StorybookViteConfig } from "@storybook/builder-vite";
-import { alias } from "../vite.config";
 
 /** @type {import('@storybook/builder-vite').StorybookViteConfig} */
 const config: StorybookViteConfig = {
@@ -18,12 +16,7 @@ const config: StorybookViteConfig = {
     storyStoreV7: true,
   },
   async viteFinal(config) {
-    // Merge custom configuration into the default config
-    return mergeConfig(config, {
-      resolve: {
-        alias,
-      },
-    });
+    return config;
   },
 };
 

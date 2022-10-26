@@ -1,9 +1,9 @@
 import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useId, useState } from "react";
 
-import { Button } from "@/design-system/Button";
-import { TextArea } from "@/design-system/TextArea";
-import { trpc } from "@/utils/trpc";
+import { Button } from "../design-system/Button.js";
+import { TextArea } from "../design-system/TextArea.js";
+import { trpc } from "../utils/trpc.js";
 
 export interface FunctionInteractionViewProps {
   node: BaseResourceSchema;

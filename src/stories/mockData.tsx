@@ -13,8 +13,8 @@ import {
 } from "@heroicons/react/24/solid";
 import React from "react";
 
-import { Breadcrumb } from "@/design-system/Breadcrumbs";
-import { TreeMenuItem } from "@/design-system/TreeMenu";
+import { Breadcrumb } from "../design-system/Breadcrumbs.js";
+import { TreeMenuItem } from "../design-system/TreeMenu.js";
 
 export const treeMenuItems: TreeMenuItem[] = [
   {

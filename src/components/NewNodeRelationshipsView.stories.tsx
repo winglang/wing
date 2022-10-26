@@ -1,7 +1,7 @@
 import { CubeIcon } from "@heroicons/react/24/outline";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
-import { NewNodeRelationshipsView } from "./NewNodeRelationshipsView";
+import { NewNodeRelationshipsView } from "./NewNodeRelationshipsView.js";
 
 export default {
   title: "Components/NewNodeRelationshipsView",

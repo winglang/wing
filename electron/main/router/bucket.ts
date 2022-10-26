@@ -3,7 +3,7 @@ import fs from "node:fs";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { createBucketClient, Simulator } from "../wingsdk";
+import { createBucketClient, Simulator } from "../wingsdk.js";
 
 export const createBucketRouter = (simulator: Simulator) => {
   return trpc

@@ -1,9 +1,9 @@
 import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 
-import { BucketInteractionView } from "@/components/BucketInteractionView";
-import { EndpointInteractionView } from "@/components/EndpointInteractionView";
-import { FunctionInteractionView } from "@/components/FunctionInteractionView";
-import { QueueInteractionView } from "@/components/QueueInteractionView";
+import { BucketInteractionView } from "../components/BucketInteractionView.js";
+import { EndpointInteractionView } from "../components/EndpointInteractionView.js";
+import { FunctionInteractionView } from "../components/FunctionInteractionView.js";
+import { QueueInteractionView } from "../components/QueueInteractionView.js";
 
 export interface NodeInteractionViewProps {
   node: BaseResourceSchema;
