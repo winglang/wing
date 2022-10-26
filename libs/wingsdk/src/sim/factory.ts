@@ -3,6 +3,7 @@ import { IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
+import { Logger } from "./logger";
 import { Queue } from "./queue";
 
 /**
@@ -22,6 +23,8 @@ export class PolyconFactory implements IPolyconFactory {
         return new Function(scope, id, args[0], args[1]);
       case cloud.QUEUE_TYPE:
         return new Queue(scope, id, args[0]);
+      case cloud.LOGGER_TYPE:
+        return new Logger(scope, id);
       default:
         throw new Error(`Type ${polyconId} not implemented.`);
     }

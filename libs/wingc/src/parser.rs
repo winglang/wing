@@ -411,9 +411,10 @@ impl Parser<'_> {
 					Ok(ArgList::new())
 				};
 
-				let obj_id = expression_node
-					.child_by_field_name("id")
-					.map(|n| self.node_symbol(&n).unwrap());
+				let obj_id = expression_node.child_by_field_name("id").map(|n| {
+					let id_str = self.node_text(&n.named_child(0).unwrap());
+					id_str[1..id_str.len() - 1].to_string()
+				});
 				let obj_scope = if let Some(scope_expr_node) = expression_node.child_by_field_name("scope") {
 					Some(Box::new(self.build_expression(&scope_expr_node)?))
 				} else {
