@@ -8,7 +8,6 @@ import { Tabs } from "../design-system/Tabs.js";
 import { TreeMenu } from "../design-system/TreeMenu.js";
 import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
 import { Node, useNodeMap } from "../utils/nodeMap.js";
-import { trpc } from "../utils/trpc.js";
 import { useTabs } from "../utils/useTabs.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
@@ -150,13 +149,15 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
             selectedItemId={treeMenu.currentItemId}
             openMenuItemIds={treeMenu.openItemIds}
             onItemClick={(item) => {
-              treeMenu.toggle(item.id);
               treeMenu.setCurrent(item.id);
               tabs.openTab({
                 id: item.id,
                 name: item.label,
                 icon: item.icon,
               });
+            }}
+            onItemToggle={(item) => {
+              treeMenu.toggle(item.id);
             }}
             onExpandAll={() => treeMenu.expandAll()}
             onCollapseAll={() => treeMenu.collapseAll()}

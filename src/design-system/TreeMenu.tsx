@@ -19,6 +19,7 @@ export interface TreeMenuProps {
   openMenuItemIds?: string[];
   items: TreeMenuItem[];
   onItemClick?: (item: TreeMenuItem) => void;
+  onItemToggle?: (item: TreeMenuItem) => void;
   onExpandAll?: () => void;
   onCollapseAll?: () => void;
 }
@@ -29,6 +30,7 @@ export const TreeMenu = ({
   openMenuItemIds = [],
   items,
   onItemClick,
+  onItemToggle,
   onExpandAll,
   onCollapseAll,
 }: TreeMenuProps) => {
@@ -75,6 +77,7 @@ export const TreeMenu = ({
                 selectedItem={selectedItemId}
                 openedMenuItems={openMenuItemIds}
                 onItemClick={onItemClick}
+                onItemToggle={onItemToggle}
               />
             </div>
           </ScrollableArea>
@@ -90,6 +93,7 @@ interface MenuItemsProps {
   openedMenuItems?: string[];
   indentationLevel?: number;
   onItemClick?: (item: TreeMenuItem) => void;
+  onItemToggle?: (item: TreeMenuItem) => void;
 }
 
 function MenuItems({
@@ -98,6 +102,7 @@ function MenuItems({
   openedMenuItems = [],
   indentationLevel = 0,
   onItemClick,
+  onItemToggle,
 }: MenuItemsProps) {
   return (
     <>
@@ -109,6 +114,7 @@ function MenuItems({
           openedMenuItems={openedMenuItems}
           indentationLevel={indentationLevel}
           onItemClick={onItemClick}
+          onItemToggle={onItemToggle}
         />
       ))}
     </>
@@ -121,6 +127,7 @@ interface MenuItemProps {
   openedMenuItems?: string[];
   indentationLevel?: number;
   onItemClick?: (item: TreeMenuItem) => void;
+  onItemToggle?: (item: TreeMenuItem) => void;
 }
 
 function MenuItem({
@@ -129,6 +136,7 @@ function MenuItem({
   openedMenuItems = [],
   indentationLevel = 0,
   onItemClick,
+  onItemToggle,
 }: MenuItemProps) {
   const open = openedMenuItems.includes(item.id);
   const hasChildren = !item.children || item.children.length === 0;
@@ -144,6 +152,9 @@ function MenuItem({
         tabIndex={-1}
         onClick={() => {
           onItemClick?.(item);
+        }}
+        onDoubleClick={() => {
+          onItemToggle?.(item);
         }}
       >
         <div
@@ -194,6 +205,7 @@ function MenuItem({
           openedMenuItems={openedMenuItems}
           indentationLevel={indentationLevel + 1}
           onItemClick={onItemClick}
+          onItemToggle={onItemToggle}
         />
       )}
     </>
