@@ -85,7 +85,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const artifact = await readFile(artifactPath, "utf-8");
   log("artifact: %s", artifact);
 
-  // If you're wondering how the execution of the artifact works, despite it
+  // If you're wondering how the execution of the preflight works, despite it
   // being in a different directory: it works because at the top of the file
   // require.resolve is called to cache wingsdk in-memory. So by the time VM
   // is starting up, the passed context already has wingsdk in it.
