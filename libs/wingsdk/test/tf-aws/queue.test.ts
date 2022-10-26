@@ -3,7 +3,7 @@ import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
-import { tfResourcesOf } from "../util";
+import { tfResourcesOf, tfSanitize } from "../util";
 
 test("default queue behavior", () => {
   const output = cdktf.Testing.synthScope((scope) => {
@@ -14,7 +14,7 @@ test("default queue behavior", () => {
   });
 
   expect(tfResourcesOf(output)).toEqual(["aws_sqs_queue"]);
-  expect(output).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("queue with custom timeout", () => {
@@ -28,7 +28,7 @@ test("queue with custom timeout", () => {
   });
 
   expect(tfResourcesOf(output)).toEqual(["aws_sqs_queue"]);
-  expect(output).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("queue with a consumer function", () => {
@@ -64,5 +64,5 @@ test("queue with a consumer function", () => {
     "aws_s3_object", // S3 object for code
     "aws_sqs_queue", // main queue
   ]);
-  expect(output).toMatchSnapshot();
+  expect(tfSanitize(output)).toMatchSnapshot();
 });

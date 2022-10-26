@@ -15,5 +15,6 @@ export async function start(
 }
 
 export async function stop(_attrs: BucketSchema["attrs"]): Promise<void> {
+  // TODO: cleanup
   return;
 }

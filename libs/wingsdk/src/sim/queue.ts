@@ -7,6 +7,8 @@ import { QueueSchema, QueueSubscriber } from "./schema-resources";
 
 /**
  * Simulator implementation of `cloud.Queue`.
+ *
+ * @inflight `@monadahq/wingsdk.sim.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements IResource {
   private readonly callers = new Array<string>();
@@ -79,7 +81,7 @@ export class Queue extends cloud.QueueBase implements IResource {
     };
   }
 
-  private get addr(): string {
+  private get ref(): string {
     return `\${${this.node.path}#attrs.queueAddr}`;
   }
 
@@ -97,10 +99,15 @@ export class Queue extends cloud.QueueBase implements IResource {
     this.callers.push(captureScope.node.path);
 
     const env = `QUEUE_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.addr);
+    captureScope.addEnvironment(env, this.ref);
 
     return core.InflightClient.for(__filename, "QueueClient", [
       `process.env["${env}"]`,
     ]);
   }
 }
+
+/**
+ * Simulator implementation of inflight client for `cloud.Queue`
+ */
+export interface IQueueClient extends cloud.IQueueClient {}

@@ -233,15 +233,15 @@ module.exports = grammar({
         '"',
         repeat(
           choice(
-            $._template_string_fragment,
+            $._string_fragment,
             $._escape_sequence,
-            $.template_substitution
+            $.template_substitution,
           )
         ),
         '"'
       ),
-    _template_string_fragment: ($) => token.immediate(prec(1, /[^$"\\]+/)),
     template_substitution: ($) => seq("${", $.expression, "}"),
+    _string_fragment: ($) => token.immediate(prec(1, /[^$"\\]+/)),
     _escape_sequence: ($) =>
       token.immediate(
         seq(

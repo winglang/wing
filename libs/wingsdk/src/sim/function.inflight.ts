@@ -1,5 +1,5 @@
-import WebSocket from "ws";
-import { IFunctionClient } from "../cloud";
+import WebSocket from "isomorphic-ws";
+import { IFunctionClient } from "./function";
 import { sendToWebSocket } from "./util.inflight";
 
 export class FunctionClient implements IFunctionClient {

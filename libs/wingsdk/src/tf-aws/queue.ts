@@ -7,6 +7,8 @@ import { Function } from "./function";
 
 /**
  * AWS implementation of `cloud.Queue`.
+ *
+ * @inflight `@monadahq/wingsdk.tfaws.IQueueClient`
  */
 export class Queue extends cloud.QueueBase {
   private readonly queue: sqs.SqsQueue;
@@ -110,3 +112,8 @@ export class Queue extends cloud.QueueBase {
     ]);
   }
 }
+
+/**
+ * AWS implementation of inflight client for `cloud.Queue`.
+ */
+export interface IQueueClient extends cloud.IQueueClient {}

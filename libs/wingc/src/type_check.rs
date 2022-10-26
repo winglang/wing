@@ -458,6 +458,15 @@ impl<'a> TypeChecker<'a> {
 		let t = match &exp.variant {
 			ExprType::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
+				Literal::InterpolatedString(s) => {
+					s.parts.iter().for_each(|part| {
+						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
+							let exp_type = self.type_check_exp(interpolated_expr, env).unwrap();
+							self.validate_type(exp_type, self.types.string(), interpolated_expr);
+						}
+					});
+					Some(self.types.string())
+				}
 				Literal::Number(_) => Some(self.types.number()),
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
