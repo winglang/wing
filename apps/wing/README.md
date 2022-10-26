@@ -19,24 +19,24 @@ To see scoped debug logs, use specific namespaces, e.g. `wing:commands:compile`.
 > $ wing compile --help
 > Usage: wing compile [options] <entrypoint>.w
 > 
-> Compiles a wing file
+> Compiles a Wing program
 > 
 > Arguments:
->   input-file               input file
+>   entrypoint               program .w entrypoint
 > 
 > Options:
 >   -o, --out-dir <out-dir>  Output directory (default: "/home/sep/winglang/apps/wing")
->   -t, --target <target>    Target platform (default: "tf-aws")
+>   -t, --target <target>    Target platform (options: 'tf-aws', 'sim') (default: "tf-aws")
 > ```
 
 ## `wing run`
 
 > ```sh
 > $ wing run --help
-> Usage: wing run [options] <entrypoint>.w
+> Usage: wing run [options] <entrypoint>.wx
 > 
-> Runs a Wing app in the Wing Console
+> Runs a Wing executable in the Wing Console
 > 
 > Arguments:
->   input-file  input file
+>   executable  executable .wx file
 > ```
