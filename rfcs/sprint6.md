@@ -69,6 +69,7 @@ The primary goal of this sprint is to create a self service journey from someone
   - p2 Guide with how to add a sample project
   - p0 Guide that explains the RFC process and how you can comment on it
   - p0 Guide that explains the process of pull request creation and approval
+- p0 [dev] make sure that the contributing guide (especially npm login) works for someone with only winglang/wing repo access
 - p1 A slack channel to celebrates first time project builders
 - p2 [dev] compile the examples as part of the build process 
 - p0 [dev] Good-first-issue to pick from and start working on them, and remove any bad ones
