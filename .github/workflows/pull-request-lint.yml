@@ -19,8 +19,20 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          scopes: |-
+            compiler
+            sdk
+            docs
+            cli
+            examples
+            build
+            repo
           types: |-
             feat
             fix
             chore
+            rfc
+          subjectPattern: ^[^A-Z]+[^.]$
+          subjectPatternError: Subject must be all lowercase and should not end with a period
+          wip: true
           requireScope: false

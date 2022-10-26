@@ -8,15 +8,7 @@ import {
 } from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
-import { tfResourcesOf, tfSanitize } from "../util";
-
-// TODO This is a hack. Our path for inflight requires should be relative
-function removeAbsolutePath(text: string) {
-  const regex = /"\/.+?\/winglang\/libs\/(.+?)"/g;
-
-  // replace first group with static text
-  return text.replace(regex, '"[REDACTED]/$1"');
-}
+import { removeAbsolutePath, tfResourcesOf, tfSanitize } from "../util";
 
 test("function captures primitive values", () => {
   const output = cdktf.Testing.synthScope((scope) => {

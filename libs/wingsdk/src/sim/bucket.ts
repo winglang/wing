@@ -1,6 +1,5 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { BUCKET_TYPE } from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
@@ -24,7 +23,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
   /** @internal */
   public _toResourceSchema(): BucketSchema {
     return {
-      type: BUCKET_TYPE,
+      type: cloud.BUCKET_TYPE,
       props: {
         public: this.public,
       },
@@ -34,7 +33,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
     };
   }
 
-  private get addr(): string {
+  private get ref(): string {
     return `\${${this.node.path}#attrs.bucketAddr}`;
   }
 
@@ -43,13 +42,13 @@ export class Bucket extends cloud.BucketBase implements IResource {
    */
   public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
-      throw new Error("buckets can only be captured by a sim.Bucket for now");
+      throw new Error("buckets can only be captured by a sim.Function for now");
     }
 
     this.callers.push(captureScope.node.path);
 
     const env = `BUCKET_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.addr);
+    captureScope.addEnvironment(env, this.ref);
 
     return InflightClient.for(__filename, "BucketClient", [
       `process.env["${env}"]`,
