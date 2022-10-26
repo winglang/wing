@@ -32,6 +32,7 @@ const project = new TypeScriptProject({
     "babel-loader",
     "electron",
     "electron-builder",
+    "electron-updater",
     "electron-devtools-installer",
     "electron-notarize",
     "postcss",
@@ -126,6 +127,8 @@ project.release?.addJobs({
           APPLE_ID: "${{ secrets.APPLE_ID }}",
           APPLE_ID_PASSWORD: "${{ secrets.APPLE_ID_PASSWORD }}",
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
+          AWS_ACCESS_KEY_ID: "${{ secrets.AWS_ACCESS_KEY_ID }}",
+          AWS_SECRET_ACCESS_KEY: "${{ secrets.AWS_SECRET_ACCESS_KEY }}",
         },
       },
       {

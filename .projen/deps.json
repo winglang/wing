@@ -139,6 +139,10 @@
       "type": "build"
     },
     {
+      "name": "electron-updater",
+      "type": "build"
+    },
+    {
       "name": "eslint-config-prettier",
       "type": "build"
     },

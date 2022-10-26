@@ -1,17 +1,21 @@
 import path, { join } from "node:path";
-
 import { app, BrowserWindow, shell, ipcMain } from "electron";
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
 } from "electron-devtools-installer";
-import { log } from "electron-log";
 import { createIPCHandler } from "electron-trpc";
-
+import { autoUpdater} from "electron-updater";
+import log from "electron-log";
 import { mergeRouters } from "./router/index.js";
 import { createSimulator } from "./simulator/simulator.js";
 
-// TODO [sa] add auto-updater
-
+export default class AppUpdater {
+  constructor() {
+    log.transports.file.level = 'info';
+    autoUpdater.logger = log;
+    autoUpdater.checkForUpdatesAndNotify();
+  }
+}
 // Set application name for Windows 10+ notifications
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
 
@@ -102,18 +106,18 @@ ipcMain.handle("open-win", (event, arg) => {
 });
 
 const getWXFilePath = (): string => {
-  log(process.argv);
   const cloudFileArg = process.argv
     .slice(1)
     .find((arg) => arg.startsWith("--cloudFile="));
   if (!cloudFileArg) {
-    log("loading application in demo mode");
+    log.info("loading application in demo mode");
     return join(ROOT_PATH.public, "demo.wx");
   }
   return cloudFileArg.replace("--cloudFile=", "");
 };
 
 void app.whenReady().then(async () => {
+  new AppUpdater();
   const wxFilePath = getWXFilePath();
   const sim = await createSimulator(wxFilePath);
   const router = mergeRouters(sim);

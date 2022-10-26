@@ -44,6 +44,12 @@ try {
     targets: Platform.MAC.createTarget(),
     config: {
       appId: "co.monada.WingConsole",
+      publish:  [
+        {
+          "provider": "s3",
+          "bucket": "a1bnbufeqmg-km85vfnen3"
+        }
+      ],
       directories: {
         output: "release",
         buildResources: "electron/resources",
