@@ -59,7 +59,7 @@ The primary goal of this sprint is to create a self service journey from someone
 - p1 [elad] Having a docs.winglang.io documentation site working with full content
   - Why did we create wing
   - What features are supported and not supported  (roadmap) 
-  - Main concepts of Wing (Resources, In/Pre flight, Plycons)
+  - Main concepts of Wing (Resources, In/Pre flight, Polycons)
   - Language reference (Spec)
   - See the SDK API docs
 - p2 [dev] Wing compiler errors are friendly in a way that they notify you when you are using a feature that is part of the language roadmap but not implemented yet
