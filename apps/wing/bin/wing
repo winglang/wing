@@ -11,6 +11,7 @@ try {
   require("../dist/index.js");
 } catch (err) {
   if (err.code === "MODULE_NOT_FOUND") {
+    const { spawnSync } = require("child_process");
     const { env, execPath, execArgv, argv } = process;
     env.NODE_OPTIONS = `${
       env.NODE_OPTIONS || ""

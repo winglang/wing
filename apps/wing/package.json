@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "description": "Wing Programming Language",
   "files": [
+    "wingc.wasm",
     "bin/wing",
     "dist/"
   ],
@@ -17,14 +18,21 @@
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
     "build": "tsc",
+    "test": "node --experimental-wasi-unstable-preview1 --no-warnings node_modules/.bin/jest --no-cache",
     "dev": "npm run build && ./bin/wing"
   },
   "dependencies": {
-    "@monadahq/wingsdk": "file:../../libs/wingsdk",
-    "commander": "^9.4.1"
+    "@monadahq/wingsdk": "*",
+    "commander": "^9.4.1",
+    "debug": "^4.3.4",
+    "open": "^8.4.0"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
+    "@types/jest": "^29.2.0",
     "@types/node": "^18.11.5",
+    "jest": "^29.2.2",
+    "ts-jest": "^29.0.3",
     "typescript": "^4.8.4"
   }
 }

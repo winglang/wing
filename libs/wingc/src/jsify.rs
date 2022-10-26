@@ -434,7 +434,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition, out_dir: &PathBuf) -> 
 	fs::write(&file_path, proc_source.join("\n")).expect("Writing inflight proc source");
 	let props_block = render_block([
 		format!(
-			"code: {}.core.NodeJsCode.fromFile(\"{}\"),",
+			"code: {}.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \"{}\")),",
 			STDLIB, &relative_file_path
 		),
 		format!("entrypoint: \"$proc\","),
