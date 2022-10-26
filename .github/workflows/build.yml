@@ -125,6 +125,7 @@ jobs:
         working-directory: apps/wing
         run: |
           npm version ${{ env.PROJEN_BUMP_VERSION }}
+          node version.js
           npm pack
 
       - name: Package WingSDK
