@@ -8,6 +8,7 @@ let bucket2 = new cloud.Bucket(cloud.BucketProps {
 inflight handler(event: str): str {
   bucket1.put("file.txt", "data");
   bucket2.get("file.txt");
+}
 
 new cloud.Function(
   handler, 
