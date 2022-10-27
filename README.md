@@ -9,7 +9,6 @@
 >
 > Check out our [roadmap] for more information.
 
-
 ## Welcome! :wave:
 
 Wing is the world's first [cloud-oriented programming
@@ -40,6 +39,16 @@ install the toolchain, and how to build Wing applications. If you wish to
 guide](./CONTRIBUTING.md).
 
 ## Getting Started
+
+<detail>
+<summary>Known issues</summary>
+
+Here are a list of known issues in the getting started experience:
+
+* `print()` is not yet implemented ([#50](https://github.com/monadahq/winglang/issues/50)).
+* 
+
+</detail>
 
 ### Prerequisites
 
@@ -96,11 +105,20 @@ queue.on_message((message: str) ~> {
 });
 ```
 
-Now, let's test our program:
+Now, let's test our program using the Wing Console:
+
+First, compile to the `sim` target:
 
 ```sh
-$ wing compile --target sim hello.w
-$ wing run app.wx
+wing compile --target sim hello.w
+```
+
+You will notice that `app.wx` was created.
+
+Now, run the Wing Console:
+
+```sh
+wing run app.wx
 ```
 
 The **Wing Console** will start and in the main view you'll see two resources: a
