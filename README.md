@@ -162,7 +162,7 @@ versioning](https://semver.org/) and release notes are available in the
 To update the toolchain to the latest, run the following command:
 
 ```sh
-$ npm update -g @monadahq/wing
+npm update -g @monadahq/wing
 ```
 
 Our VSCode Extension and Wing Console have automatic updates.
