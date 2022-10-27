@@ -125,6 +125,9 @@
       "steps": [
         {
           "exec": "jsii-docgen -o API.md"
+        },
+        {
+          "exec": "cp API.md ../../docs/wingsdk-api.md"
         }
       ]
     },
