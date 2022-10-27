@@ -70,12 +70,16 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 	let node_kind = node.kind();
 
 	match parent_kind {
-		"reference" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::VARIABLE));
-			}
-			_ => None,
-		},
+		// "reference" => {
+		// 	if parent.parent().unwrap().kind() != "call" {
+		// 		match node_kind {
+		// 			"identifier" => return Some(new_absolute_token(node, &SemanticTokenType::VARIABLE)),
+		// 			_ => return None,
+		// 		}
+		// 	}
+
+		// 	return None;
+		// }
 		"variable_definition_statement" => match node_kind {
 			"identifier" => {
 				return Some(new_absolute_token(node, &SemanticTokenType::VARIABLE));
@@ -95,7 +99,7 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 					return Some(new_absolute_token(node, &SemanticTokenType::TYPE));
 				}
 			}
-			None
+			return None;
 		}
 		"inflight_function_definition" => match node_kind {
 			"identifier" => {
@@ -109,6 +113,20 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 			}
 			_ => None,
 		},
+		"call" => {
+			if node_kind == "reference" {
+				let ref_child = node.named_child(0).unwrap();
+				match ref_child.kind() {
+					"identifier" => return Some(new_absolute_token(&ref_child, &SemanticTokenType::FUNCTION)),
+					"nested_identifier" => {
+						let prop = ref_child.child_by_field_name("property").unwrap();
+						return Some(new_absolute_token(&prop, &SemanticTokenType::METHOD));
+					}
+					_ => return None,
+				}
+			}
+			None
+		}
 		_ => None,
 	}
 }
