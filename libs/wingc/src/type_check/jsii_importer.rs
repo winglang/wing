@@ -62,7 +62,7 @@ impl<'a> JsiiImporter<'a> {
 				} else if type_fqn == "@monadahq/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
-					// TODO: this should be a special type that represents "any resource"
+					// TODO: this should be a special type that represents "any resource" https://github.com/monadahq/winglang/issues/261
 					Some(self.wing_types.anything())
 				} else {
 					Some(self.lookup_or_create_type(type_fqn))
@@ -337,10 +337,10 @@ impl<'a> JsiiImporter<'a> {
 		let jsii_initializer = jsii_class.initializer.as_ref();
 
 		if let Some(initializer) = jsii_initializer {
-			let mut arg_types = vec![];
+			let mut arg_types: Vec<TypeRef> = vec![];
 			if let Some(args) = &initializer.parameters {
 				for (i, arg) in args.iter().enumerate() {
-					// TODO: handle arg.variadic and arg.optional
+					// TODO: handle arg.variadic
 
 					// If this is a resource then skip scope and id arguments
 					if is_resource {
@@ -352,7 +352,12 @@ impl<'a> JsiiImporter<'a> {
 							continue;
 						}
 					}
-					arg_types.push(self.type_ref_to_wing_type(&arg.type_).unwrap());
+					let arg_type = self.type_ref_to_wing_type(&arg.type_).unwrap();
+					if arg.optional.unwrap_or(false) {
+						arg_types.push(self.wing_types.add_type(Type::Option(arg_type)));
+					} else {
+						arg_types.push(arg_type);
+					}
 				}
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {

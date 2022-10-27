@@ -14,6 +14,7 @@ export class Logger extends cloud.LoggerBase {
 
   /** @internal */
   public _capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+    // TODO: fixme
     return InflightClient.for(__filename, "LoggerClient", []);
   }
 }

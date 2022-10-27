@@ -1,10 +1,6 @@
 bring cloud;
 
-let p = cloud.BucketProps {
-    public: false
-};
-
-let bucket = new cloud.Bucket(p);
+let bucket = new cloud.Bucket();
 
 inflight handler(event: str):str {
   bucket.put("file.txt", "data");

@@ -299,6 +299,7 @@ impl Parser<'_> {
 				"str" => Ok(Type::String),
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
+				"nil" => Ok(Type::Nil),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
@@ -535,6 +536,7 @@ impl Parser<'_> {
 				ExprType::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
+			"nil" => Ok(Expr::new(ExprType::Literal(Literal::Nil), expression_span)),
 			"reference" => Ok(Expr::new(
 				ExprType::Reference(self.build_reference(&expression_node)?),
 				expression_span,

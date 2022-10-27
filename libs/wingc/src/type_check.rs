@@ -11,10 +11,12 @@ use type_env::TypeEnv;
 #[derive(Debug)]
 pub enum Type {
 	Anything,
+	Nil,
 	Number,
 	String,
 	Duration,
 	Boolean,
+	Option(TypeRef), // Assumes that the inner type is not an option
 	Map(TypeRef),
 	Set(TypeRef),
 	Function(FunctionSignature),
@@ -136,6 +138,21 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
+			(Self::Option(l0), Self::Option(r0)) => {
+				// Options are of the same type if they have the same value type
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(Self::Nil, Self::Option(r0)) => {
+				// Nil value can be assigned to any optional type
+				true
+			}
+			(_, Self::Option(r0)) => {
+				// If we are not nil or option, then we must be the same type as the option's value type
+				let r: &Type = (*r0).into();
+				self == r
+			}
 			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
@@ -153,10 +170,12 @@ impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			Type::Anything => write!(f, "anything"),
+			Type::Nil => write!(f, "nil"),
 			Type::Number => write!(f, "number"),
 			Type::String => write!(f, "string"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
+			Type::Option(v) => write!(f, "option<{}>", v),
 			Type::Function(func_sig) => {
 				if let Some(ret_val) = &func_sig.return_type {
 					write!(
@@ -292,6 +311,14 @@ impl TypeRef {
 		}
 	}
 
+	pub fn is_option(&self) -> bool {
+		if let &Type::Option(_) = (*self).into() {
+			true
+		} else {
+			false
+		}
+	}
+
 	pub fn as_namespace(&self) -> Option<&Namespace> {
 		if let &Type::Namespace(ref ns) = (*self).into() {
 			Some(ns)
@@ -337,6 +364,7 @@ pub struct Types {
 	bool_idx: usize,
 	duration_idx: usize,
 	anything_idx: usize,
+	nil_idx: usize,
 }
 
 impl Types {
@@ -352,6 +380,8 @@ impl Types {
 		let duration_idx = types.len() - 1;
 		types.push(Box::new(Type::Anything));
 		let anything_idx = types.len() - 1;
+		types.push(Box::new(Type::Nil));
+		let nil_idx = types.len() - 1;
 
 		Self {
 			types,
@@ -360,6 +390,7 @@ impl Types {
 			bool_idx,
 			duration_idx,
 			anything_idx,
+			nil_idx,
 		}
 	}
 
@@ -381,6 +412,10 @@ impl Types {
 
 	pub fn anything(&self) -> TypeRef {
 		(&self.types[self.anything_idx]).into()
+	}
+
+	pub fn nil(&self) -> TypeRef {
+		(&self.types[self.nil_idx]).into()
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
@@ -470,6 +505,7 @@ impl<'a> TypeChecker<'a> {
 				Literal::Number(_) => Some(self.types.number()),
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
+				Literal::Nil => Some(self.types.nil()),
 			},
 			ExprType::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
@@ -543,13 +579,23 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type.unwrap(), type_, exp);
 				// TODO: named args
+
+				// Count number of optional parameters from the end of the constructor's params
+				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+				let num_optionals = constructor_sig
+					.args
+					.iter()
+					.rev()
+					.take_while(|arg| arg.is_option())
+					.count();
+
 				// Verify arity
-				if arg_list.pos_args.len() != constructor_sig.args.len() {
+				if arg_list.pos_args.len() < constructor_sig.args.len() - num_optionals {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected {} args but got {} when instantiating \"{}\"",
-							constructor_sig.args.len(),
+							"Expected at least {} args but got {} when instantiating \"{}\"",
+							constructor_sig.args.len() - num_optionals,
 							arg_list.pos_args.len(),
 							type_
 						),
@@ -719,6 +765,7 @@ impl<'a> TypeChecker<'a> {
 			AstType::Number => self.types.number(),
 			AstType::String => self.types.string(),
 			AstType::Bool => self.types.bool(),
+			AstType::Nil => self.types.nil(),
 			AstType::Duration => self.types.duration(),
 			AstType::FunctionSignature(ast_sig) => {
 				let mut args = vec![];

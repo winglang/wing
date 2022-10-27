@@ -46,6 +46,7 @@ pub enum Type {
 	String,
 	Bool,
 	Duration,
+	Nil,
 	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
@@ -207,6 +208,7 @@ pub enum Literal {
 	Number(f64),
 	Duration(f64),
 	Boolean(bool),
+	Nil,
 }
 
 #[derive(Debug)]
