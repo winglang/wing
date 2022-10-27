@@ -79,7 +79,7 @@ Install the Wing CLI through npm:
 npm install -g @monadahq/wing
 ```
 
-Install the Wing VSCode extension (optional) by [downloading](https://github.com/monadahq/winglang/releases/download/development/vscode-wing.vsix)
+Install the Wing VSCode extension (optional) by [downloading](https://github.com/monadahq/winglang/releases/latest/download/vscode-wing.vsix)
 the extension package and running:
 
 ```sh 
