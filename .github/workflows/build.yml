@@ -113,11 +113,18 @@ jobs:
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--verbose --configuration=release"
 
-      - name: Test
+      - name: Test wingc
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
+          args: "--verbose --configuration=release"
+
+      - name: Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wingc,wingsdk,wing-api-checker"
           args: "--verbose --configuration=release"
 
       - name: Package WingSDK
@@ -227,19 +234,11 @@ jobs:
           projects: "wing-language-server"
           args: "--verbose --configuration=release"
 
-      # wingsdk is required for wingc tests
-      - name: Build wingsdk for wingc
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "build"
-          projects: "wingsdk"
-          args: "--verbose --configuration=release"
-
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wingc,wingii"
+          projects: "wingii"
           args: "--verbose --configuration=release"
 
       - name: Upload Wing Language Server
