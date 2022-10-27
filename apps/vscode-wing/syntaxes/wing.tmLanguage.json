@@ -86,7 +86,7 @@
       "patterns": [
         {
           "name": "keyword.control.wing",
-          "match": "\\b(?:as|class|else|for|from|if|in|new|return|inflight|use|fn|resource|be|let|break|continue|protected|internal|rw|try|throw|catch|finally|bring|struct|def|shape)\\b"
+          "match": "\\b(?:extends|as|class|else|for|from|if|in|new|return|inflight|use|fn|resource|be|let|break|continue|protected|internal|rw|try|throw|catch|finally|bring|struct|def|shape)\\b"
         }
       ]
     },

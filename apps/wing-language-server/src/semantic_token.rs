@@ -70,26 +70,12 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 	let node_kind = node.kind();
 
 	match parent_kind {
-		// "reference" => {
-		// 	if parent.parent().unwrap().kind() != "call" {
-		// 		match node_kind {
-		// 			"identifier" => return Some(new_absolute_token(node, &SemanticTokenType::VARIABLE)),
-		// 			_ => return None,
-		// 		}
-		// 	}
-
-		// 	return None;
-		// }
 		"variable_definition_statement" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::VARIABLE));
-			}
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::VARIABLE)),
 			_ => None,
 		},
 		"parameter_definition" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::PARAMETER));
-			}
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PARAMETER)),
 			_ => None,
 		},
 		"custom_type" => {
@@ -99,31 +85,39 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 					return Some(new_absolute_token(node, &SemanticTokenType::TYPE));
 				}
 			}
-			return None;
+			None
 		}
 		"inflight_function_definition" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::FUNCTION));
-			}
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::FUNCTION)),
 			_ => None,
 		},
 		"struct_literal_member" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::PROPERTY));
-			}
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PROPERTY)),
+			_ => None,
+		},
+		"class_member" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PROPERTY)),
+			_ => None,
+		},
+		"resource_definition" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::CLASS)),
+			_ => None,
+		},
+		"class_definition" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::CLASS)),
 			_ => None,
 		},
 		"call" => {
 			if node_kind == "reference" {
 				let ref_child = node.named_child(0).unwrap();
-				match ref_child.kind() {
-					"identifier" => return Some(new_absolute_token(&ref_child, &SemanticTokenType::FUNCTION)),
+				return match ref_child.kind() {
+					"identifier" => Some(new_absolute_token(&ref_child, &SemanticTokenType::FUNCTION)),
 					"nested_identifier" => {
 						let prop = ref_child.child_by_field_name("property").unwrap();
 						return Some(new_absolute_token(&prop, &SemanticTokenType::METHOD));
 					}
-					_ => return None,
-				}
+					_ => None,
+				};
 			}
 			None
 		}
