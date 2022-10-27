@@ -28,7 +28,7 @@ new cloud.Function(() ~> {
 ```
 
 Wing applications are compiled to [Terraform] and JavaScript, and can be
-deployed to AWS, GCP or Azure or visualized and debugged locally using the Wing
+deployed to AWS, GCP or Azure. They can also be visualized and debugged locally using the Wing
 Console.
 
 Read below about [what makes Wing special](#what-makes-wing-special) and [why
@@ -109,6 +109,8 @@ The **Wing Console** will start and in the main view you'll see two resources: a
 **Queue** and a **Function**. You'll also notice that the function is connected
 to the queue through the `message` event.
 
+//TODO: Add console screenshot here
+
 Now, right-click on the queue and choose **Push Message**. Type `world` and hit
 **Send**.
 
@@ -122,7 +124,7 @@ Terraform.
 
 > Currently, our SDKs only support AWS, but the Wing compiler can target
 > multiple cloud platforms, including AWS, Azure, Google Cloud, and Kubernetes.
-> We are working on adding support for other cloud providers.
+> We are working on adding support for other cloud providers, and welcome contributions in those areas.
 
 First, we need to compile our program to AWS:
 
