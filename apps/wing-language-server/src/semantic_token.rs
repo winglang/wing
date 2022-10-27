@@ -82,6 +82,33 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 			}
 			_ => None,
 		},
+		"parameter_definition" => match node_kind {
+			"identifier" => {
+				return Some(new_absolute_token(node, &SemanticTokenType::PARAMETER));
+			}
+			_ => None,
+		},
+		"custom_type" => {
+			if node_kind == "identifier" {
+				// if this is the last child, it is a type
+				if parent.named_child(parent.named_child_count() - 1).unwrap().id() == node.id() {
+					return Some(new_absolute_token(node, &SemanticTokenType::TYPE));
+				}
+			}
+			None
+		}
+		"inflight_function_definition" => match node_kind {
+			"identifier" => {
+				return Some(new_absolute_token(node, &SemanticTokenType::FUNCTION));
+			}
+			_ => None,
+		},
+		"struct_literal_member" => match node_kind {
+			"identifier" => {
+				return Some(new_absolute_token(node, &SemanticTokenType::PROPERTY));
+			}
+			_ => None,
+		},
 		_ => None,
 	}
 }
