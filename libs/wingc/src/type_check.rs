@@ -880,7 +880,12 @@ impl<'a> TypeChecker<'a> {
 							root: true,
 							deps: false,
 						};
-						let name = wingii_types.load("../wingsdk", Some(wingii_loader_options)).unwrap();
+						// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+						let wingsdk_manifest_root =
+							std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
+						let name = wingii_types
+							.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
+							.unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
 						println!("Loaded JSII assembly {}", name);
 						let assembly = wingii_types.find_assembly(&name).unwrap();

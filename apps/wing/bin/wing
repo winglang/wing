@@ -1,2 +1,28 @@
 #!/usr/bin/env -S node --experimental-wasi-unstable-preview1 --no-warnings
-require('../dist/index.js');
+
+// Only certain builds and versions of Node support WASI.
+// We first assume this script is loaded in the correct runtime environment, and
+// if not, we try to load it in a WASI-compatible runtime environment by running
+// the same script (self) over a new Node process with the correct flags passed.
+// package.json warns if user npm installs this for a non-compatible runtime.
+
+try {
+  require.resolve("wasi");
+  require("../dist/index.js");
+} catch (err) {
+  if (err.code === "MODULE_NOT_FOUND") {
+    const { spawnSync } = require("child_process");
+    const { env, execPath, execArgv, argv } = process;
+    env.NODE_OPTIONS = `${
+      env.NODE_OPTIONS || ""
+    } --experimental-wasi-unstable-preview1 --no-warnings`;
+    const { status } = spawnSync(execPath, execArgv.concat(argv.slice(1)), {
+      env,
+      stdio: "inherit",
+    });
+    process.exit(status ?? 1);
+  } else {
+    console.error('Unable to load "wasi" module', err);
+    process.exit(1);
+  }
+}

@@ -137,7 +137,7 @@ pub struct ClassMember {
 pub enum ExprType {
 	New {
 		class: Type,
-		obj_id: Option<Symbol>,
+		obj_id: Option<String>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
 	},
