@@ -595,6 +595,9 @@ impl Parser<'_> {
 				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
+					if !field.is_named() {
+						continue;
+					}
 					let field_name = self.node_symbol(&field.named_child(0).unwrap());
 					let field_value = self.build_expression(&field.named_child(1).unwrap());
 					// Add fields to our struct literal, if some are missing or aren't part of the type we'll fail on type checking
