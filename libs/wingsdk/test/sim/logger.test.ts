@@ -1,9 +1,11 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
+import * as sim from "../../src/sim";
 import { FunctionClient } from "../../src/sim/function.inflight";
 import { LoggerClient } from "../../src/sim/logger.inflight";
 import * as testing from "../../src/testing";
-import { simulatorJsonOf, synthSimulatedApp } from "./util";
+import { mkdtemp } from "../../src/util";
+import { simulatorJsonOf } from "./util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -15,21 +17,22 @@ async function $proc($cap, event) {
 
 test("inflight uses a logger", async () => {
   // GIVEN
-  const appPath = synthSimulatedApp((scope) => {
-    cloud.Logger.register(scope);
-    const handler = new core.Inflight({
-      code: INFLIGHT_CODE,
-      entrypoint: "$proc",
-      captures: {
-        logger: {
-          resource: cloud.Logger.of(scope),
-          methods: [cloud.LoggerInflightMethods.PRINT],
-        },
+  const app = new sim.App({ outdir: mkdtemp() });
+  cloud.Logger.register(app);
+  const handler = new core.Inflight({
+    code: INFLIGHT_CODE,
+    entrypoint: "$proc",
+    captures: {
+      logger: {
+        resource: cloud.Logger.of(app),
+        methods: [cloud.LoggerInflightMethods.PRINT],
       },
-    });
-    new cloud.Function(scope, "my_function", handler);
+    },
   });
-  const s = new testing.Simulator({ appPath });
+  new cloud.Function(app, "my_function", handler);
+  const simfile = app.synth();
+
+  const s = new testing.Simulator({ simfile });
   await s.start();
 
   const fnAttrs = s.getAttributes("root/my_function");
@@ -56,7 +59,7 @@ test("inflight uses a logger", async () => {
       timestamp: expect.any(Number),
     },
   ]);
-  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 
   await s.stop();
 });

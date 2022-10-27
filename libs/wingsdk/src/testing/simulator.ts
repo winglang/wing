@@ -11,9 +11,9 @@ const { DefaultSimulatorDispatcher } = require("../sim/dispatcher.sim");
  */
 export interface SimulatorProps {
   /**
-   * Path to a Wing app file (.wx).
+   * Path to a Wing simulator file (.wx).
    */
-  readonly appPath: string;
+  readonly simfile: string;
 
   /**
    * The factory that dispatches to simulation implementations.
@@ -53,25 +53,25 @@ export interface IResourceResolver {
 export class Simulator {
   private readonly _dispatcher: ISimulatorDispatcher;
   private _tree: WingSimulatorSchema;
-  private _appPath: string;
+  private _simfile: string;
   private _assetsDir: string;
 
   constructor(props: SimulatorProps) {
-    this._appPath = props.appPath;
-    const { assetsDir, tree } = this._loadApp(props.appPath);
+    this._simfile = props.simfile;
+    const { assetsDir, tree } = this._loadApp(props.simfile);
     this._tree = tree;
     this._assetsDir = assetsDir;
 
     this._dispatcher = props.dispatcher ?? new DefaultSimulatorDispatcher();
   }
 
-  private _loadApp(appPath: string): { assetsDir: string; tree: any } {
+  private _loadApp(simfile: string): { assetsDir: string; tree: any } {
     // create a temporary directory to store extracted files
     const workdir = mkdtemp();
     tar.extract({
       cwd: workdir,
       sync: true,
-      file: appPath,
+      file: simfile,
     });
 
     log("extracted app to", workdir);
@@ -79,7 +79,7 @@ export class Simulator {
     const simJson = join(workdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
-        `Invalid Wing app (${appPath}) - simulator.json not found.`
+        `Invalid Wing app (${simfile}) - simulator.json not found.`
       );
     }
     const data = readJsonSync(simJson);
@@ -150,7 +150,7 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { assetsDir, tree } = this._loadApp(this._appPath);
+    const { assetsDir, tree } = this._loadApp(this._simfile);
     this._tree = tree;
     this._assetsDir = assetsDir;
 

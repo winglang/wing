@@ -32,7 +32,7 @@ self.onmessage = async event => {
     const stdout = wasi.getStdoutString();
     let intermediateJS = "";
 
-    const intermediateFile = wasi.fs.open("/code.w.out/intermediate.js", {read: true});
+    const intermediateFile = wasi.fs.open("/code.w.out/preflight.js", {read: true});
     intermediateJS += intermediateFile.readString();
 
     let procRegex = /fromFile\("(.+index\.js)"/g;
