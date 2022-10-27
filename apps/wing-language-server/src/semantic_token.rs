@@ -70,18 +70,57 @@ fn semantic_token_from_node(node: &Node) -> Option<AbsoluteSemanticToken> {
 	let node_kind = node.kind();
 
 	match parent_kind {
-		"reference" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::VARIABLE));
-			}
-			_ => None,
-		},
 		"variable_definition_statement" => match node_kind {
-			"identifier" => {
-				return Some(new_absolute_token(node, &SemanticTokenType::VARIABLE));
-			}
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::VARIABLE)),
 			_ => None,
 		},
+		"parameter_definition" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PARAMETER)),
+			_ => None,
+		},
+		"custom_type" => {
+			if node_kind == "identifier" {
+				// if this is the last child, it is a type
+				if parent.named_child(parent.named_child_count() - 1).unwrap().id() == node.id() {
+					return Some(new_absolute_token(node, &SemanticTokenType::TYPE));
+				}
+			}
+			None
+		}
+		"inflight_function_definition" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::FUNCTION)),
+			_ => None,
+		},
+		"struct_literal_member" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PROPERTY)),
+			_ => None,
+		},
+		"class_member" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::PROPERTY)),
+			_ => None,
+		},
+		"resource_definition" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::CLASS)),
+			_ => None,
+		},
+		"class_definition" => match node_kind {
+			"identifier" => Some(new_absolute_token(node, &SemanticTokenType::CLASS)),
+			_ => None,
+		},
+		"call" => {
+			if node_kind == "reference" {
+				let ref_child = node.named_child(0).unwrap();
+				return match ref_child.kind() {
+					"identifier" => Some(new_absolute_token(&ref_child, &SemanticTokenType::FUNCTION)),
+					"nested_identifier" => {
+						let prop = ref_child.child_by_field_name("property").unwrap();
+						return Some(new_absolute_token(&prop, &SemanticTokenType::METHOD));
+					}
+					_ => None,
+				};
+			}
+			None
+		}
 		_ => None,
 	}
 }
