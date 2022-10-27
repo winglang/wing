@@ -120,12 +120,11 @@ jobs:
           projects: "wingsdk,wing-api-checker"
           args: "--verbose --configuration=release"
 
-      # Testing wingc separately because when run together with wingsdk it tends to thrash
-      - name: Test wingc
+      - name: Native Unit Tests
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wingc"
+          projects: "wingc,wingii"
           args: "--verbose --configuration=release"
 
       - name: Package WingSDK
@@ -233,13 +232,6 @@ jobs:
         with:
           targets: "build-native"
           projects: "wing-language-server"
-          args: "--verbose --configuration=release"
-
-      - name: Test
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
-          projects: "wingii"
           args: "--verbose --configuration=release"
 
       - name: Upload Wing Language Server
