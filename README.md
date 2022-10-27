@@ -109,7 +109,7 @@ The **Wing Console** will start and in the main view you'll see two resources: a
 **Queue** and a **Function**. You'll also notice that the function is connected
 to the queue through the `message` event.
 
-//TODO: Add console screenshot here
+> TODO: Add console screenshot here
 
 Now, right-click on the queue and choose **Push Message**. Type `world` and hit
 **Send**.
