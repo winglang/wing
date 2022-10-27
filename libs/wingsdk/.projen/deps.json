@@ -6,7 +6,6 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "0.0.70",
       "type": "build"
     },
     {
@@ -221,7 +220,6 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "^0.0.70",
       "type": "peer"
     },
     {

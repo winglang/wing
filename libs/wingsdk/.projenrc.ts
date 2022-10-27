@@ -10,7 +10,7 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: [
     "constructs@~10.0.25",
-    "@monadahq/polycons@^0.0.70",
+    "@monadahq/polycons",
     "cdktf",
     "@cdktf/provider-aws",
   ],
