@@ -117,14 +117,7 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wing,wingsdk,wing-api-checker"
-          args: "--verbose --configuration=release"
-
-      - name: Test
-        uses: MansaGroup/nrwl-nx-action@v2
-        with:
-          targets: "test"
-          projects: "wing,wingsdk,wing-api-checker"
+          projects: "wingsdk,wing-api-checker"
           args: "--verbose --configuration=release"
 
       - name: Package WingSDK
@@ -141,17 +134,17 @@ jobs:
           node version.js
           npm pack
 
-      - name: Pack WingSDK
-        working-directory: libs/wingsdk
-        run: |
-          npm version ${{ env.PROJEN_BUMP_VERSION }}
-          npm pack
-
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
         with:
           name: wing
           path: apps/wing/*.tgz
+
+      - name: Pack WingSDK
+        working-directory: libs/wingsdk
+        run: |
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
+          npm pack
 
       - name: Upload WingSDK
         uses: actions/upload-artifact@v2
