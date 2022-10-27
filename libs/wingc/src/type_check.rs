@@ -16,7 +16,6 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Optional(TypeRef),
-	UnknownOptional,
 	Map(TypeRef),
 	Set(TypeRef),
 	Function(FunctionSignature),
@@ -144,16 +143,11 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
-			(Self::UnknownOptional, Self::Optional(_)) => {
-				// Nil value can be assigned to any optional type
-				true
-			}
 			(_, Self::Optional(r0)) => {
-				// If we are not nil or optional, then we must be the same type as the optional's inner type
+				// If we are not an optional, then we must be the same type as the optional's inner type
 				let r: &Type = (*r0).into();
 				self == r
 			}
-			(_, Self::UnknownOptional) => false,
 			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
@@ -176,7 +170,6 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Optional(v) => write!(f, "{}?", v),
-			Type::UnknownOptional => write!(f, "<unknown>?"),
 			Type::Function(func_sig) => {
 				if let Some(ret_val) = &func_sig.return_type {
 					write!(
@@ -365,7 +358,6 @@ pub struct Types {
 	bool_idx: usize,
 	duration_idx: usize,
 	anything_idx: usize,
-	unknown_opt_idx: usize,
 }
 
 impl Types {
@@ -381,8 +373,6 @@ impl Types {
 		let duration_idx = types.len() - 1;
 		types.push(Box::new(Type::Anything));
 		let anything_idx = types.len() - 1;
-		types.push(Box::new(Type::UnknownOptional));
-		let unknown_opt_idx = types.len() - 1;
 
 		Self {
 			types,
@@ -391,7 +381,6 @@ impl Types {
 			bool_idx,
 			duration_idx,
 			anything_idx,
-			unknown_opt_idx,
 		}
 	}
 
@@ -413,10 +402,6 @@ impl Types {
 
 	pub fn anything(&self) -> TypeRef {
 		(&self.types[self.anything_idx]).into()
-	}
-
-	pub fn unknown_opt(&self) -> TypeRef {
-		(&self.types[self.unknown_opt_idx]).into()
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
@@ -506,7 +491,6 @@ impl<'a> TypeChecker<'a> {
 				Literal::Number(_) => Some(self.types.number()),
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
-				Literal::Nil => Some(self.types.unknown_opt()),
 			},
 			ExprType::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
@@ -591,17 +575,19 @@ impl<'a> TypeChecker<'a> {
 					.count();
 
 				// Verify arity
-				if arg_list.pos_args.len() < constructor_sig.args.len() - num_optionals {
+				let arg_count = arg_list.pos_args.len();
+				let min_args = constructor_sig.args.len() - num_optionals;
+				let max_args = constructor_sig.args.len();
+				if arg_count < min_args || arg_count > max_args {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected at least {} args but got {} when instantiating \"{}\"",
-							constructor_sig.args.len() - num_optionals,
-							arg_list.pos_args.len(),
-							type_
+							"Expected between {} and {} args but got {} when instantiating \"{}\"",
+							min_args, max_args, arg_count, type_
 						),
 					);
 				}
+
 				// Verify passed arguments match the constructor
 				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
 					let arg_expr_type = self.type_check_exp(arg_expr, env).unwrap();
@@ -666,22 +652,16 @@ impl<'a> TypeChecker<'a> {
 				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
 
 				// TODO: named args
-				// Argument arity check
-				println!(
-					"{} {} {} {}",
-					func_sig.args.len(),
-					args.pos_args.len(),
-					this_args,
-					num_optionals
-				);
-				if args.pos_args.len() + this_args + num_optionals < func_sig.args.len() {
+				// Verity arity
+				let arg_count = args.pos_args.len();
+				let min_args = func_sig.args.len() - num_optionals - this_args;
+				let max_args = func_sig.args.len() - this_args;
+				if arg_count < min_args || arg_count > max_args {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected at least {} arguments for {:?}, but got {} instead.",
-							func_sig.args.len() - this_args - num_optionals,
-							function,
-							args.pos_args.len()
+							"Expected between {} and {} arguments for {:?} but got {}.",
+							min_args, max_args, function, arg_count
 						),
 					);
 				}

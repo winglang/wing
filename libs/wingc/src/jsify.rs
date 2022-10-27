@@ -201,7 +201,6 @@ fn jsify_expression(expression: &Expr) -> String {
 			Literal::Number(n) => format!("{}", n),
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
-			Literal::Nil => "undefined".to_string(),
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
 		ExprType::Call { function, args } => {

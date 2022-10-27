@@ -398,22 +398,3 @@ let a = A { f1: 3, f2: true };
         )
     )
 )
-
-================================
-Nil expression
-================================
-
-let a: num? = 5;
-let b: num? = nil;
-
----
-
-(source
-    (variable_definition_statement
-        (identifier)
-        (builtin_type)
-        (number))
-    (variable_definition_statement
-        (identifier)
-        (builtin_type)
-        (nil)))

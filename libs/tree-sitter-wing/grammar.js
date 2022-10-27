@@ -216,7 +216,7 @@ module.exports = grammar({
 
 
     // Primitives
-    _literal: ($) => choice($.string, $.number, $.bool, $.duration, $.nil),
+    _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
     // TODO: Handle leading zeros
     number: ($) => /\d+/,
@@ -227,8 +227,6 @@ module.exports = grammar({
     seconds: ($) => seq(field("value", $.number), "s"),
     minutes: ($) => seq(field("value", $.number), "m"),
     hours: ($) => seq(field("value", $.number), "h"),
-
-    nil: ($) => "nil",
 
     string: ($) =>
       seq(
