@@ -1,7 +1,7 @@
 use std::cell::RefCell;
 
 use tree_sitter::Tree;
-use wingc::{ast::Scope, diagnostic::Diagnostics, parser::Parser, type_check};
+use wingc::{diagnostic::Diagnostics, parser::Parser, type_check};
 
 #[derive(Debug)]
 pub struct ParseResult {
