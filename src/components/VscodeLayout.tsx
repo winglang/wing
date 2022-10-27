@@ -1,6 +1,6 @@
-import type { WingSimulatorSchema } from "@monadahq/wingsdk/lib/sim";
 import { useEffect, useMemo, useState } from "react";
 
+import { WingSimulatorSchema } from "../../electron/main/wingsdk.js";
 import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";

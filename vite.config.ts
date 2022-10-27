@@ -9,24 +9,38 @@ import pkg from "./package.json";
 export default defineConfig({
   plugins: [
     react(),
-    electron({
-      entry: "electron/main/index.ts",
-      vite: {
-        build: {
-          outDir: "dist/vite/electron/main",
+    electron([
+      {
+        entry: "electron/main/index.ts",
+        vite: {
+          build: {
+            outDir: "dist/vite/electron/main",
+          },
+          resolve: {
+            // Since we're building for electron (which uses nodejs), we don't want to use the "browser" field in the packages.
+            // It makes our build fail for the `ws` and `isomorphic-ws` packages, for example.
+            // @ts-ignore-error
+            browserField: false,
+            mainFields: ["module", "jsnext:main", "jsnext"],
+          },
         },
       },
-    }),
-    {
-      name: "copy-preload-js",
-      async buildStart(options) {
-        await mkdir("dist/vite/electron/preload", { recursive: true });
-        await copyFile(
-          "electron/preload/index.js",
-          "dist/vite/electron/preload/index.js",
-        );
+      {
+        entry: "electron/preload/index.ts",
+        vite: {
+          build: {
+            outDir: "dist/vite/electron/preload",
+          },
+          resolve: {
+            // Since we're building for electron (which uses nodejs), we don't want to use the "browser" field in the packages.
+            // It makes our build fail for the `ws` and `isomorphic-ws` packages, for example.
+            // @ts-ignore-error
+            browserField: false,
+            mainFields: ["module", "jsnext:main", "jsnext"],
+          },
+        },
       },
-    },
+    ]),
   ],
   server: {
     host: pkg.env.VITE_DEV_SERVER_HOST,

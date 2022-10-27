@@ -55,6 +55,8 @@ jobs:
     runs-on: macos-latest
     permissions:
       contents: write
+    env:
+      CI: "true"
     if: needs.release.outputs.latest_commit == github.sha
     steps:
       - uses: actions/setup-node@v3

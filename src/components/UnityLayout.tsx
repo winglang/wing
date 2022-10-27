@@ -4,10 +4,6 @@ import {
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/20/solid";
-import type {
-  BaseResourceSchema,
-  WingSimulatorSchema,
-} from "@monadahq/wingsdk/lib/sim";
 import classNames from "classnames";
 import {
   PropsWithChildren,
@@ -17,6 +13,10 @@ import {
   useState,
 } from "react";
 
+import {
+  BaseResourceSchema,
+  WingSimulatorSchema,
+} from "../../electron/main/wingsdk.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";

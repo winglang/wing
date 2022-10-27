@@ -5,10 +5,10 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { FolderIcon } from "@heroicons/react/24/solid";
-import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import prettyBytes from "pretty-bytes";
 import { FormEventHandler, useCallback, useRef, useState } from "react";
 
+import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { Button } from "../design-system/Button.js";
 import { Checkbox } from "../design-system/Checkbox.js";
 import { Input } from "../design-system/Input.js";

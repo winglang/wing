@@ -1,7 +1,7 @@
 import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
-import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useCallback, useId, useState } from "react";
 
+import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { Button } from "../design-system/Button.js";
 import { useNotifications } from "../design-system/Notification.js";
 import { TextArea } from "../design-system/TextArea.js";

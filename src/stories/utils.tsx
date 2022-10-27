@@ -6,13 +6,13 @@ import {
   CubeIcon,
   GlobeAltIcon,
 } from "@heroicons/react/24/outline";
-import type {
-  BaseResourceSchema,
-  WingSimulatorSchema,
-} from "@monadahq/wingsdk/lib/sim";
 import classNames from "classnames";
 import React from "react";
 
+import {
+  BaseResourceSchema,
+  WingSimulatorSchema,
+} from "../../electron/main/wingsdk.js";
 import constructHubTree from "../assets/construct-hub-tree.json";
 import { TreeMenuItem } from "../design-system/TreeMenu.js";
 

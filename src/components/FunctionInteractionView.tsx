@@ -1,6 +1,6 @@
-import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useId, useState } from "react";
 
+import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { Button } from "../design-system/Button.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TextArea } from "../design-system/TextArea.js";

@@ -1,5 +1,6 @@
-import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
 import { useEffect, useState } from "react";
+
+import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 
 export interface Node {
   id: string;

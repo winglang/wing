@@ -1,7 +1,8 @@
-import type { WingSimulatorSchema } from "@monadahq/wingsdk/lib/sim";
 import { createTRPCClient } from "@trpc/client";
 import { useEffect, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
+
+import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";

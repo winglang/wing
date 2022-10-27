@@ -21,6 +21,14 @@
       "type": "build"
     },
     {
+      "name": "@monadahq/polycons",
+      "type": "build"
+    },
+    {
+      "name": "@monadahq/wingsdk",
+      "type": "build"
+    },
+    {
       "name": "@storybook/addon-actions",
       "type": "build"
     },
@@ -115,7 +123,15 @@
       "type": "build"
     },
     {
+      "name": "chokidar",
+      "type": "build"
+    },
+    {
       "name": "classnames",
+      "type": "build"
+    },
+    {
+      "name": "constructs",
       "type": "build"
     },
     {
@@ -128,6 +144,10 @@
     },
     {
       "name": "electron-devtools-installer",
+      "type": "build"
+    },
+    {
+      "name": "electron-log",
       "type": "build"
     },
     {
@@ -246,6 +266,10 @@
       "type": "build"
     },
     {
+      "name": "vite-node",
+      "type": "build"
+    },
+    {
       "name": "vite-plugin-electron",
       "type": "build"
     },
@@ -272,35 +296,7 @@
       "type": "override"
     },
     {
-      "name": "@cdktf/provider-aws",
-      "type": "runtime"
-    },
-    {
-      "name": "@monadahq/polycons",
-      "type": "runtime"
-    },
-    {
-      "name": "@monadahq/wingsdk",
-      "type": "runtime"
-    },
-    {
-      "name": "cdktf",
-      "type": "runtime"
-    },
-    {
-      "name": "chokidar",
-      "type": "runtime"
-    },
-    {
-      "name": "constructs",
-      "type": "runtime"
-    },
-    {
-      "name": "electron-log",
-      "type": "runtime"
-    },
-    {
-      "name": "isomorphic-ws",
+      "name": "piscina",
       "type": "runtime"
     },
     {

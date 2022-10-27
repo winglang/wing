@@ -1,5 +1,4 @@
-import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
-
+import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { BucketInteractionView } from "../components/BucketInteractionView.js";
 import { EndpointInteractionView } from "../components/EndpointInteractionView.js";
 import { FunctionInteractionView } from "../components/FunctionInteractionView.js";

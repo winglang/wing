@@ -1,21 +1,21 @@
-import path, { join } from "node:path";
+import { join } from "node:path";
+
 import { app, BrowserWindow, shell, ipcMain } from "electron";
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from "electron-devtools-installer";
-import { createIPCHandler } from "electron-trpc";
-import { autoUpdater} from "electron-updater";
 import log from "electron-log";
+import { createIPCHandler } from "electron-trpc";
+import { autoUpdater } from "electron-updater";
+
 import { mergeRouters } from "./router/index.js";
-import { createSimulator } from "./simulator/simulator.js";
+import { createSimulator } from "./wingsdk.js";
 
 export default class AppUpdater {
   constructor() {
-    log.transports.file.level = 'info';
+    log.transports.file.level = "info";
     autoUpdater.logger = log;
-    autoUpdater.checkForUpdatesAndNotify();
+    void autoUpdater.checkForUpdatesAndNotify();
   }
 }
+
 // Set application name for Windows 10+ notifications
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
 
@@ -34,15 +34,13 @@ let win: BrowserWindow | undefined;
 const url = process.env.VITE_DEV_SERVER_URL;
 const indexHtml = join(ROOT_PATH.dist, "index.html");
 
-async function createWindow() {
-  await installExtension(REACT_DEVELOPER_TOOLS.id);
-
+function createWindow() {
   win = new BrowserWindow({
     title: "Wing Console",
     icon: join(ROOT_PATH.public, "icon.ico"),
     webPreferences: {
       nodeIntegration: true,
-      preload: path.join(__dirname, "../preload/index.js"),
+      preload: join(__dirname, "../preload/index.js"),
       contextIsolation: true,
     },
   });
@@ -66,6 +64,8 @@ async function createWindow() {
     }
     return { action: "deny" };
   });
+
+  return win;
 }
 
 app.on("window-all-closed", () => {
@@ -90,7 +90,7 @@ app.on("activate", async () => {
   if (allWindows.length > 0) {
     allWindows[0]?.focus();
   } else {
-    await createWindow();
+    createWindow();
   }
 });
 
@@ -106,21 +106,37 @@ ipcMain.handle("open-win", (event, arg) => {
 });
 
 const getWXFilePath = (): string => {
-  const cloudFileArg = process.argv
-    .slice(1)
-    .find((arg) => arg.startsWith("--cloudFile="));
-  if (!cloudFileArg) {
-    log.info("loading application in demo mode");
-    return join(ROOT_PATH.public, "demo.wx");
+  // Use the demo.wx file in dev.
+  if (import.meta.env.DEV) {
+    return `${process.cwd()}/electron/main/demo.wx`;
   }
-  return cloudFileArg.replace("--cloudFile=", "");
+
+  const path = process.argv
+    .slice(1)
+    .find((arg) => arg.startsWith("--cloudFile="))
+    ?.replace("--cloudFile=", "");
+
+  if (!path) {
+    throw new Error("Usage: wing-console --cloudFile=file.wx");
+  }
+
+  return path;
 };
 
 void app.whenReady().then(async () => {
-  new AppUpdater();
+  if (import.meta.env.PROD) {
+    new AppUpdater();
+  }
+
+  if (import.meta.env.DEV) {
+    const installExtension = await import("electron-devtools-installer");
+    await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
+  }
+
   const wxFilePath = getWXFilePath();
-  const sim = await createSimulator(wxFilePath);
+  const sim = createSimulator({ appPath: wxFilePath });
+  await sim.start();
   const router = mergeRouters(sim);
   createIPCHandler({ ipcMain, router });
-  await createWindow();
+  const window = createWindow();
 });

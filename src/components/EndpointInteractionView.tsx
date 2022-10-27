@@ -1,5 +1,4 @@
-import type { BaseResourceSchema } from "@monadahq/wingsdk/lib/sim";
-
+import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { Button } from "../design-system/Button.js";
 import { TextArea } from "../design-system/TextArea.js";
 

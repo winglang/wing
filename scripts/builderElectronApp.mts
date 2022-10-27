@@ -42,15 +42,17 @@ await writeFile(
 try {
   await build({
     targets: Platform.MAC.createTarget(),
-    publish: "always",
+    // eslint-disable-next-line unicorn/no-null
+    publish: process.env.CI ? "always" : null,
     config: {
       appId: "co.monada.WingConsole",
-      publish:  [
+      publish: [
         {
-          "provider": "s3",
-          "bucket": "a1bnbufeqmg-km85vfnen3",
-        }
+          provider: "s3",
+          bucket: "a1bnbufeqmg-km85vfnen3",
+        },
       ],
+      protocols: [{ name: "Wing Console", schemes: ["wing"] }],
       directories: {
         output: "release",
         buildResources: "electron/resources",

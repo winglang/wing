@@ -5,17 +5,18 @@ const project = new TypeScriptProject({
   name: "wing-console",
   description: "The Wing Console",
   deps: [
+    // This dependency has an special `worker.js` that won't be bundled if it's a devDep.
+    "piscina",
+    // The bundling fails in dev (not sure why).
+    "ws",
+  ],
+  devDeps: [
     "chokidar",
     "electron-log",
     "@monadahq/wingsdk",
-    "isomorphic-ws",
-    "ws",
-    "@cdktf/provider-aws",
     "@monadahq/polycons",
-    "cdktf",
     "constructs",
-  ],
-  devDeps: [
+    //
     "@monadahq/mona-projen",
     "@babel/core",
     "@storybook/addon-actions",
@@ -45,6 +46,7 @@ const project = new TypeScriptProject({
     "typescript",
     "vite",
     "vite-plugin-electron",
+    "vite-node",
     "@heroicons/react",
     "classnames",
     "react-query",
@@ -80,6 +82,9 @@ project.release?.addJobs({
       contents: JobPermission.WRITE,
     },
     if: "needs.release.outputs.latest_commit == github.sha",
+    env: {
+      CI: "true",
+    },
     steps: [
       {
         uses: "actions/setup-node@v3",
@@ -207,6 +212,14 @@ project.addGitIgnore("/release");
 project.addGitIgnore("/storybook-static");
 
 if (project.eslint) {
+  project.tasks
+    .tryFind("eslint")
+    ?.reset(
+      "eslint --ext .ts,.mts,.cts,.tsx --fix --no-error-on-unmatched-pattern . .storybook",
+    );
+  project.eslint.addIgnorePattern("dist/");
+  project.eslint.addIgnorePattern("release/");
+
   project.eslint.addOverride({
     files: ["**/*.cjs"],
     rules: {
