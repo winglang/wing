@@ -1,0 +1,7 @@
+{
+  "compilerOptions": {
+    "checkJs": true,
+    "module": "CommonJS"
+  },
+  "include": ["**/*.js", "node_modules/tree-sitter-cli/dsl.d.ts"]
+}
