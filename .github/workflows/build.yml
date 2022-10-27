@@ -113,18 +113,19 @@ jobs:
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
           args: "--verbose --configuration=release"
 
-      - name: Test wingc
+      - name: Test Node Projects
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           projects: "wingsdk,wing-api-checker"
           args: "--verbose --configuration=release"
 
-      - name: Test
+      # Testing wingc separately because when run together with wingsdk it tends to thrash
+      - name: Test wingc
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wingc,wingsdk,wing-api-checker"
+          projects: "wingc"
           args: "--verbose --configuration=release"
 
       - name: Package WingSDK
