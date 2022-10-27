@@ -9,7 +9,6 @@
 >
 > Check out our [roadmap] for more information.
 
-
 ## Welcome! :wave:
 
 Wing is the world's first [cloud-oriented programming
@@ -41,6 +40,13 @@ guide](./CONTRIBUTING.md).
 
 ## Getting Started
 
+### Known issues
+
+Here is a list of known issues in "getting started":
+
+* [#50](https://github.com/monadahq/winglang/issues/50) `print()` is not yet implemented.
+* [#359](https://github.com/monadahq/winglang/pull/359) The compiler doesn't support default values for function parameters and structs.
+
 ### Prerequisites
 
 To install Wing, you will need the following setup:
@@ -64,7 +70,6 @@ npm login --scope=@monadahq --registry=https://npm.pkg.github.com
 > scope.
 
 [personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-
 
 ### Installation
 
@@ -92,17 +97,27 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message((message: str) ~> {
+inflight handler(message: str) {
   print("Hello, ${message}!");
-});
+}
+
+queue.on_message(handler);
 ```
 
-Now, let's test our program:
+Now, let's test our program using the Wing Console:
+
+First, compile to the `sim` target:
 
 ```sh
-$ wing run hello.w
-Compiling to target "sim"...
-Starting Wing Console...
+wing compile --target sim hello.w
+```
+
+You will notice that `app.wx` was created.
+
+Now, run the Wing Console:
+
+```sh
+wing run app.wx
 ```
 
 The **Wing Console** will start and in the main view you'll see two resources: a
@@ -129,8 +144,7 @@ Terraform.
 First, we need to compile our program to AWS:
 
 ```sh
-$ wing build --target tf-aws hello.w
-Build for target "tf-aws"...
+$ wing compile --target tf-aws hello.w
 ```
 
 Now, let's deploy our program to AWS:
