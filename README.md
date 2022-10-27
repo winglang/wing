@@ -1,12 +1,11 @@
-<p align="center">
-  <h1 align="center">The Wing Programming Language</h1>
-</p>
+# The Wing Programming Language
 
-> **:construction: Under heavy construction :construction:**
 > 
-> Wing is in active development. Many basic features as still missing. You are
-> more than welcome to join the ride, but don't expect to be able to do much
-> with it at the moment.
+> Under (heavy) construction :construction: :construction:
+> 
+> Wing is in early stages of development. Many basic features as still missing.
+> You are more than welcome to join the ride, but don't expect to be able to do
+> much with it at the moment.
 >
 > Check out our [roadmap] for more information.
 
