@@ -13,7 +13,7 @@ import { PolyconFactory } from "./factory";
 export interface AppProps {
   /**
    * Directory where artifacts are synthesized to.
-   * @default - the current directory
+   * @default - current working directory
    */
   readonly outdir?: string;
 

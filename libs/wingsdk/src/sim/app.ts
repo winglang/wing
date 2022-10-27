@@ -15,8 +15,9 @@ import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
 export interface AppProps {
   /**
    * Directory where artifacts are synthesized to.
+   * @default - current working directory
    */
-  readonly outdir: string;
+  readonly outdir?: string;
 
   /**
    * A custom factory to resolve polycons.
@@ -38,7 +39,7 @@ export class App extends Construct implements IApp {
 
   constructor(props: AppProps) {
     super(undefined as any, "root");
-    this.outdir = props.outdir;
+    this.outdir = props.outdir ?? ".";
     this.files = new Files({ app: this });
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }

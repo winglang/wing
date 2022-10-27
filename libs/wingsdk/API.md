@@ -2712,20 +2712,8 @@ const appProps: sim.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 | <code><a href="#@monadahq/wingsdk.sim.AppProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
-
----
-
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.sim.AppProps.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-
-Directory where artifacts are synthesized to.
+| <code><a href="#@monadahq/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
 
@@ -2739,6 +2727,19 @@ public readonly customFactory: IPolyconFactory;
 - *Default:* use the default polycon factory included in the Wing SDK
 
 A custom factory to resolve polycons.
+
+---
+
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.sim.AppProps.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+- *Default:* current working directory
+
+Directory where artifacts are synthesized to.
 
 ---
 
@@ -2784,7 +2785,7 @@ public readonly outdir: string;
 ```
 
 - *Type:* string
-- *Default:* the current directory
+- *Default:* current working directory
 
 Directory where artifacts are synthesized to.
 
