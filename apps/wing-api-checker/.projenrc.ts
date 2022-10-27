@@ -25,4 +25,10 @@ bumpTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
 
+const fullCompileTask = project.addTask("compile:full");
+fullCompileTask.spawn(project.defaultTask!);
+fullCompileTask.spawn(project.preCompileTask);
+fullCompileTask.spawn(project.compileTask);
+fullCompileTask.spawn(project.postCompileTask);
+
 project.synth();

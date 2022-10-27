@@ -8,7 +8,7 @@
     "copy": {
       "executor": "nx:run-commands",
       "inputs": [
-        "rust-wasm"
+        "wingc-wasm"
       ],
       "dependsOn": [
         "^build-wasm"

@@ -210,4 +210,10 @@ project.package.addField("exports", {
 
 project.preCompileTask.exec("patch-package");
 
+const fullCompileTask = project.addTask("compile:full");
+fullCompileTask.spawn(project.defaultTask!);
+fullCompileTask.spawn(project.preCompileTask);
+fullCompileTask.spawn(project.compileTask);
+fullCompileTask.spawn(project.postCompileTask);
+
 project.synth();

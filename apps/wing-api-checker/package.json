@@ -12,6 +12,7 @@
     "bump": "npx projen bump",
     "clobber": "npx projen clobber",
     "compile": "npx projen compile",
+    "compile:full": "npx projen compile:full",
     "default": "npx projen default",
     "eject": "npx projen eject",
     "eslint": "npx projen eslint",

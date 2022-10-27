@@ -7,7 +7,7 @@
     "copy": {
       "executor": "nx:run-commands",
       "inputs": [
-        "rust-native"
+        "{workspaceRoot}/target/*/wing-language-server"
       ],
       "outputs": [
         "{projectRoot}/resources/native/wing-language-server"
@@ -26,7 +26,7 @@
       "configurations": {
         "release": {
           "commands": [
-            "echo 'Skipping wls copy. Get binaries from CI'"
+            "echo 'Skipping wls copy. Get platform-specific binaries from CI'"
           ]
         }
       }

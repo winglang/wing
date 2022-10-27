@@ -82,6 +82,23 @@
         }
       ]
     },
+    "compile:full": {
+      "name": "compile:full",
+      "steps": [
+        {
+          "spawn": "default"
+        },
+        {
+          "spawn": "pre-compile"
+        },
+        {
+          "spawn": "compile"
+        },
+        {
+          "spawn": "post-compile"
+        }
+      ]
+    },
     "default": {
       "name": "default",
       "description": "Synthesize project files",

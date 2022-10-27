@@ -3,9 +3,11 @@
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
+      "outputs": ["wingc-native"],
       "options": {
         "command": "cargo build",
-        "cwd": "libs/wingc"
+        "cwd": "libs/wingc",
+        "color": true
       },
       "configurations": {
         "release": {
@@ -18,9 +20,11 @@
     },
     "build-wasm": {
       "executor": "nx:run-commands",
+      "outputs": ["wingc-wasm"],
       "options": {
         "command": "cargo wasi build",
-        "cwd": "libs/wingc"
+        "cwd": "libs/wingc",
+        "color": true
       },
       "configurations": {
         "release": {

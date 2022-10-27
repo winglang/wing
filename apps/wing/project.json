@@ -8,17 +8,18 @@
     "copy": {
       "executor": "nx:run-commands",
       "inputs": [
-        "rust-wasm"
+        "wingc-wasm"
       ],
       "dependsOn": [
         "^build-wasm"
       ],
       "outputs": [
-        "wingc.wasm"
+        "{projectRoot}/wingc.wasm"
       ],
       "options": {
         "command": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
-        "cwd": "apps/wing"
+        "cwd": "apps/wing",
+        "color": true
       },
       "configurations": {
         "release": {
@@ -33,8 +34,8 @@
         "copy"
       ],
       "options": {
-        "cwd": "apps/wing",
-        "script": "build"
+        "script": "build",
+        "color": true
       }
     }
   }

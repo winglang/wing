@@ -3,9 +3,6 @@
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "rust-native"
-      ],
       "options": {
         "command": "cargo build",
         "cwd": "libs/wingii"
@@ -21,9 +18,6 @@
     },
     "build-wasm": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "rust-wasm"
-      ],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingii"

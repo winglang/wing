@@ -8,6 +8,9 @@
     "appsDir": "apps",
     "libsDir": "libs"
   },
+  "plugins": [
+    "@nxrs/cargo"
+  ],
   "namedInputs": {
     "src": [
       "{projectRoot}/src/**/*"
@@ -31,13 +34,21 @@
       "{projectRoot}/.projenrc.js",
       "{projectRoot}/.projen/*"
     ],
-    "rust-wasm": [
-      "{workspaceRoot}/target/wasm32-wasi/debug/*.wasm",
-      "{workspaceRoot}/target/wasm32-wasi/release/*.wasm"
+    "wingc-wasm": [
+      "{workspaceRoot}/target/wasm32-wasi/debug/wingc.wasm",
+      "{workspaceRoot}/target/wasm32-wasi/release/wingc.wasm"
     ],
-    "rust-native": [
-      "{workspaceRoot}/target/debug/*",
-      "{workspaceRoot}/target/release/*"
+    "wingc-native": [
+      "{workspaceRoot}/target/debug/wingc",
+      "{workspaceRoot}/target/release/wingc"
+    ],
+    "wing-language-server-wasm": [
+      "{workspaceRoot}/target/wasm32-wasi/debug/wing-language-server.wasm",
+      "{workspaceRoot}/target/wasm32-wasi/release/wing-language-server.wasm"
+    ],
+    "wing-language-server-native": [
+      "{workspaceRoot}/target/debug/wing-language-server",
+      "{workspaceRoot}/target/release/wing-language-server"
     ],
     "dist": [
       "{projectRoot}/dist/**/*"
@@ -47,6 +58,7 @@
     "default": {
       "runner": "nx/tasks-runners/default",
       "options": {
+        "captureStderr": true,
         "cacheableOperations": [
           "build",
           "build-native",
@@ -78,9 +90,6 @@
         "workspace-files",
         "src"
       ],
-      "outputs": [
-        "rust-native"
-      ],
       "dependsOn": [
         "^build-native"
       ]
@@ -90,9 +99,6 @@
         "project-files",
         "workspace-files",
         "src"
-      ],
-      "outputs": [
-        "rust-wasm"
       ],
       "dependsOn": [
         "^build-wasm"

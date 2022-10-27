@@ -12,6 +12,7 @@
     "clobber": "npx projen clobber",
     "compat": "npx projen compat",
     "compile": "npx projen compile",
+    "compile:full": "npx projen compile:full",
     "default": "npx projen default",
     "docgen": "npx projen docgen",
     "eject": "npx projen eject",
