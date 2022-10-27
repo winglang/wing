@@ -22,16 +22,9 @@ bring cloud;
 
 let bucket = new cloud.Bucket();
 
-inflight handler(event: str):str {
+new cloud.Function(() ~> {
   bucket.put("greeting.txt", "hello, world!");
-}
-
-new cloud.Function(
-  handler, 
-  cloud.FunctionProps {
-    env: Map<str> {}
-  }
-);
+});
 ```
 
 Wing applications are compiled to [Terraform] and JavaScript, and can be
@@ -61,6 +54,16 @@ In order to deploy to AWS, you will also need:
 * [Terraform](https://terraform.io/downloads)
 * [AWS account] and the [AWS CLI] with [AWS credentials]
 
+To access npm private packages (pre-release):
+
+```sh
+npm login --scope=@monadahq --registry=https://npm.pkg.github.com
+```
+
+> As a password, use a GitHub [personal access token] with **packages:read**
+> scope.
+
+[personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
 
 ### Installation
 
