@@ -40,15 +40,12 @@ guide](./CONTRIBUTING.md).
 
 ## Getting Started
 
-<detail>
-<summary>Known issues</summary>
+### Known issues
 
-Here are a list of known issues in the getting started experience:
+Here is a list of known issues in "getting started":
 
-* `print()` is not yet implemented ([#50](https://github.com/monadahq/winglang/issues/50)).
-* 
-
-</detail>
+* [#50](https://github.com/monadahq/winglang/issues/50) `print()` is not yet implemented.
+* [#359](https://github.com/monadahq/winglang/pull/359) The compiler doesn't support default values for function parameters and structs.
 
 ### Prerequisites
 
@@ -100,9 +97,11 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message((message: str) ~> {
+inflight handler(message: str) {
   print("Hello, ${message}!");
-});
+}
+
+queue.on_message(handler);
 ```
 
 Now, let's test our program using the Wing Console:
