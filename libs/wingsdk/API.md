@@ -242,6 +242,8 @@ The tree node.
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.cloud.Bucket"></a>
 
+**Inflight client:** [@monadahq/wingsdk.cloud.IBucketClient](#@monadahq/wingsdk.cloud.IBucketClient)
+
 Represents a cloud object store.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Bucket.Initializer"></a>
@@ -362,6 +364,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
 
+**Inflight client:** [@monadahq/wingsdk.sim.IBucketClient](#@monadahq/wingsdk.sim.IBucketClient)
+
 Simulator implementation of `cloud.Bucket`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Bucket.Initializer"></a>
@@ -479,6 +483,8 @@ with a fresh copy without any consequences.
 
 
 ### Bucket <a name="Bucket" id="@monadahq/wingsdk.tfaws.Bucket"></a>
+
+**Inflight client:** [@monadahq/wingsdk.tfaws.IBucketClient](#@monadahq/wingsdk.tfaws.IBucketClient)
 
 AWS implementation of `cloud.Bucket`.
 
@@ -851,6 +857,8 @@ The file's relative path to the output directory.
 
 ### Function <a name="Function" id="@monadahq/wingsdk.cloud.Function"></a>
 
+**Inflight client:** [@monadahq/wingsdk.cloud.IFunctionClient](#@monadahq/wingsdk.cloud.IFunctionClient)
+
 Represents a serverless function.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Function.Initializer"></a>
@@ -999,6 +1007,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
 
+**Inflight client:** [@monadahq/wingsdk.sim.IFunctionClient](#@monadahq/wingsdk.sim.IFunctionClient)
+
 Simulator implementation of `cloud.Function`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Function.Initializer"></a>
@@ -1144,6 +1154,8 @@ with a fresh copy without any consequences.
 
 
 ### Function <a name="Function" id="@monadahq/wingsdk.tfaws.Function"></a>
+
+**Inflight client:** [@monadahq/wingsdk.tfaws.IFunctionClient](#@monadahq/wingsdk.tfaws.IFunctionClient)
 
 AWS implementation of `cloud.Function`.
 
@@ -1586,7 +1598,282 @@ The file's relative path to the output directory.
 ---
 
 
+### Logger <a name="Logger" id="@monadahq/wingsdk.cloud.Logger"></a>
+
+**Inflight client:** [@monadahq/wingsdk.cloud.ILoggerClient](#@monadahq/wingsdk.cloud.ILoggerClient)
+
+A cloud logging facility.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Logger.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `print` <a name="print" id="@monadahq/wingsdk.cloud.Logger.print"></a>
+
+```typescript
+public print(message: string): void
+```
+
+Logs a message.
+
+###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.Logger.print.parameter.message"></a>
+
+- *Type:* string
+
+The message to log.
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.of">of</a></code> | Returns the logger registered to the given scope, throwing an error if there is none. |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.register">register</a></code> | Create a logger and register it to the given scope. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Logger.isConstruct"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+cloud.Logger.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Logger.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+##### `of` <a name="of" id="@monadahq/wingsdk.cloud.Logger.of"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+cloud.Logger.of(scope: IConstruct)
+```
+
+Returns the logger registered to the given scope, throwing an error if there is none.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Logger.of.parameter.scope"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+##### `register` <a name="register" id="@monadahq/wingsdk.cloud.Logger.register"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+cloud.Logger.register(scope: IConstruct)
+```
+
+Create a logger and register it to the given scope.
+
+###### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Logger.register.parameter.scope"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.Logger.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Logger.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Logger.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### LoggerBase <a name="LoggerBase" id="@monadahq/wingsdk.cloud.LoggerBase"></a>
+
+Functionality shared between all `Logger` implementations.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.LoggerBase.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+new cloud.LoggerBase(scope: Construct, id: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | The scope in which to define this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.id">id</a></code> | <code>string</code> | The scoped construct ID. |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The scope in which to define this construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The scoped construct ID.
+
+Must be unique amongst siblings. If
+the ID includes a path separator (`/`), then it will be replaced by double
+dash `--`.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.print">print</a></code> | Logs a message. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.LoggerBase.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `print` <a name="print" id="@monadahq/wingsdk.cloud.LoggerBase.print"></a>
+
+```typescript
+public print(message: string): void
+```
+
+Logs a message.
+
+###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.LoggerBase.print.parameter.message"></a>
+
+- *Type:* string
+
+The message to log.
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.LoggerBase.isConstruct"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+cloud.LoggerBase.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.LoggerBase.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.LoggerBase.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.LoggerBase.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ### Queue <a name="Queue" id="@monadahq/wingsdk.cloud.Queue"></a>
+
+**Inflight client:** [@monadahq/wingsdk.cloud.IQueueClient](#@monadahq/wingsdk.cloud.IQueueClient)
 
 Represents a serverless queue.
 
@@ -1729,6 +2016,8 @@ with a fresh copy without any consequences.
 
 - *Implements:* @monadahq/wingsdk.sim.IResource
 
+**Inflight client:** [@monadahq/wingsdk.sim.IQueueClient](#@monadahq/wingsdk.sim.IQueueClient)
+
 Simulator implementation of `cloud.Queue`.
 
 #### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Queue.Initializer"></a>
@@ -1867,6 +2156,8 @@ with a fresh copy without any consequences.
 
 
 ### Queue <a name="Queue" id="@monadahq/wingsdk.tfaws.Queue"></a>
+
+**Inflight client:** [@monadahq/wingsdk.tfaws.IQueueClient](#@monadahq/wingsdk.tfaws.IQueueClient)
 
 AWS implementation of `cloud.Queue`.
 
@@ -2929,6 +3220,51 @@ public readonly obj: any;
 - *Type:* any
 
 The object that will be serialized into the file during synthesis.
+
+---
+
+### LogEvent <a name="LogEvent" id="@monadahq/wingsdk.cloud.LogEvent"></a>
+
+Represents a log event.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.LogEvent.Initializer"></a>
+
+```typescript
+import { cloud } from '@monadahq/wingsdk'
+
+const logEvent: cloud.LogEvent = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.LogEvent.property.message">message</a></code> | <code>string</code> | The log message. |
+| <code><a href="#@monadahq/wingsdk.cloud.LogEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The log timestamp, in milliseconds since the epoch. |
+
+---
+
+##### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.LogEvent.property.message"></a>
+
+```typescript
+public readonly message: string;
+```
+
+- *Type:* string
+
+The log message.
+
+---
+
+##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@monadahq/wingsdk.cloud.LogEvent.property.timestamp"></a>
+
+```typescript
+public readonly timestamp: number;
+```
+
+- *Type:* number
+
+The log timestamp, in milliseconds since the epoch.
 
 ---
 
@@ -4500,7 +4836,7 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IBucketClient
+- *Implemented By:* @monadahq/wingsdk.cloud.IBucketClient, @monadahq/wingsdk.sim.IBucketClient, @monadahq/wingsdk.tfaws.IBucketClient
 
 Inflight interface for `Bucket`.
 
@@ -4509,6 +4845,7 @@ Inflight interface for `Bucket`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 
 ---
@@ -4521,12 +4858,25 @@ public get(key: string): string
 
 Retrieve an object from the bucket.
 
-Throws if no object with the given key
-exists.
-
 ###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
 - *Type:* string
+
+---
+
+##### `list` <a name="list" id="@monadahq/wingsdk.cloud.IBucketClient.list"></a>
+
+```typescript
+public list(prefix?: string): string[]
+```
+
+Retrieve existing objects keys from the bucket.
+
+###### `prefix`<sup>Optional</sup> <a name="prefix" id="@monadahq/wingsdk.cloud.IBucketClient.list.parameter.prefix"></a>
+
+- *Type:* string
+
+Limits the response to keys that begin with the specified prefix.
 
 ---
 
@@ -4551,9 +4901,29 @@ Put an object in the bucket.
 ---
 
 
+### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.sim.IBucketClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
+
+- *Implemented By:* @monadahq/wingsdk.sim.IBucketClient
+
+Simulator implementation of inflight client for `cloud.Bucket`.
+
+
+
+### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.tfaws.IBucketClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
+
+- *Implemented By:* @monadahq/wingsdk.tfaws.IBucketClient
+
+AWS implementation of inflight client for `cloud.Bucket`.
+
+
+
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Logger, @monadahq/wingsdk.cloud.LoggerBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
@@ -4590,7 +4960,7 @@ The tree node.
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IFunctionClient
+- *Implemented By:* @monadahq/wingsdk.cloud.IFunctionClient, @monadahq/wingsdk.sim.IFunctionClient, @monadahq/wingsdk.tfaws.IFunctionClient
 
 Inflight interface for `Function`.
 
@@ -4617,9 +4987,90 @@ Invoke the function asynchronously with a given payload.
 ---
 
 
+### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.sim.IFunctionClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
+
+- *Implemented By:* @monadahq/wingsdk.sim.IFunctionClient
+
+Simulator implementation of inflight client for `cloud.Function`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.IFunctionClient.timesCalled">timesCalled</a></code> | Returns the number of times the function was invoked since its creation. |
+
+---
+
+##### `timesCalled` <a name="timesCalled" id="@monadahq/wingsdk.sim.IFunctionClient.timesCalled"></a>
+
+```typescript
+public timesCalled(): number
+```
+
+Returns the number of times the function was invoked since its creation.
+
+
+### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.tfaws.IFunctionClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
+
+- *Implemented By:* @monadahq/wingsdk.tfaws.IFunctionClient
+
+AWS implementation of inflight client for `cloud.Function`.
+
+
+
+### ILoggerClient <a name="ILoggerClient" id="@monadahq/wingsdk.cloud.ILoggerClient"></a>
+
+- *Implemented By:* @monadahq/wingsdk.cloud.ILoggerClient
+
+Inflight interface for `Logger`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with whichever resource is running the inflight code. |
+| <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
+
+---
+
+##### `fetchLatestLogs` <a name="fetchLatestLogs" id="@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs"></a>
+
+```typescript
+public fetchLatestLogs(): LogEvent[]
+```
+
+Fetch the latest logs associated with whichever resource is running the inflight code.
+
+The logs may include cloud-provider specific messages or
+metadata.
+
+##### `print` <a name="print" id="@monadahq/wingsdk.cloud.ILoggerClient.print"></a>
+
+```typescript
+public print(message: string): void
+```
+
+Logs a message.
+
+The log will be associated with whichever resource is
+running the inflight code.
+
+###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
+
+- *Type:* string
+
+The message to print.
+
+---
+
+
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.cloud.IQueueClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IQueueClient
+- *Implemented By:* @monadahq/wingsdk.cloud.IQueueClient, @monadahq/wingsdk.sim.IQueueClient, @monadahq/wingsdk.tfaws.IQueueClient
 
 Inflight interface for `Queue`.
 
@@ -4646,6 +5097,26 @@ Push a message to the queue.
 Payload to send to the queue.
 
 ---
+
+
+### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.sim.IQueueClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
+
+- *Implemented By:* @monadahq/wingsdk.sim.IQueueClient
+
+Simulator implementation of inflight client for `cloud.Queue`.
+
+
+
+### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.tfaws.IQueueClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
+
+- *Implemented By:* @monadahq/wingsdk.tfaws.IQueueClient
+
+AWS implementation of inflight client for `cloud.Queue`.
+
 
 
 ### IResource <a name="IResource" id="@monadahq/wingsdk.sim.IResource"></a>
@@ -4783,6 +5254,7 @@ List of inflight operations available for `Bucket`.
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
 | <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
+| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
 
 ---
 
@@ -4796,6 +5268,13 @@ List of inflight operations available for `Bucket`.
 ##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
 
 `Bucket.get`.
+
+---
+
+
+##### `LIST` <a name="LIST" id="@monadahq/wingsdk.cloud.BucketInflightMethods.LIST"></a>
+
+`Bucket.list`.
 
 ---
 
@@ -4834,6 +5313,25 @@ The language of a piece of code.
 ##### `NODE_JS` <a name="NODE_JS" id="@monadahq/wingsdk.core.Language.NODE_JS"></a>
 
 Node.js.
+
+---
+
+
+### LoggerInflightMethods <a name="LoggerInflightMethods" id="@monadahq/wingsdk.cloud.LoggerInflightMethods"></a>
+
+List of inflight operations available for `Logger`.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT">PRINT</a></code> | `Logger.print`. |
+
+---
+
+##### `PRINT` <a name="PRINT" id="@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT"></a>
+
+`Logger.print`.
 
 ---
 

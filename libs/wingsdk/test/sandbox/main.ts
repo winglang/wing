@@ -1,11 +1,8 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/sim";
-// eslint-disable-next-line import/no-restricted-paths
-import { FunctionClient } from "../../src/sim/function.inflight";
-import * as testing from "../../src/testing";
-// import * as tfaws from "../../src/tf-aws";
+// import * as sim from "../../src/sim";
+import * as tfaws from "../../src/tf-aws";
 
 class Main extends Construct {
   constructor(scope: Construct, id: string) {
@@ -15,11 +12,16 @@ class Main extends Construct {
     const pusher = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
+          await $cap.logger.print("Hello, world!");
           await $cap.queue.push(event);
         }`
       ),
       entrypoint: "$proc",
       captures: {
+        logger: {
+          resource: cloud.Logger.of(this),
+          methods: [cloud.LoggerInflightMethods.PRINT],
+        },
         queue: {
           resource: queue,
           methods: [cloud.QueueInflightMethods.PUSH],
@@ -31,7 +33,7 @@ class Main extends Construct {
     const processor = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          console.log("Received " + event.name);
+          console.log("Received " + JSON.parse(event).name);
         }`
       ),
       entrypoint: "$proc",
@@ -41,30 +43,9 @@ class Main extends Construct {
 }
 
 const app = new core.App({
-  synthesizer: new sim.Synthesizer({ outdir: __dirname }),
+  synthesizer: new tfaws.Synthesizer({ outdir: __dirname }),
+  // synthesizer: new sim.Synthesizer({ outdir: __dirname }),
 });
+cloud.Logger.register(app.root);
 new Main(app.root, "Main");
 app.synth();
-
-async function main() {
-  const s = await testing.Simulator.fromApp("app.wx");
-
-  const pusherAttrs = s.getAttributes("root/Main/Function");
-  const pusherClient = new FunctionClient(pusherAttrs.functionAddr);
-  await pusherClient.invoke(JSON.stringify({ name: "Yoda" }));
-
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
-  const processorAttrs = s.getAttributes(
-    "root/Main/Queue/OnMessage-7b918d65c3e454bc"
-  );
-  const processorClient = new FunctionClient(processorAttrs.functionAddr);
-  await processorClient.timesCalled();
-
-  await s.stop();
-}
-
-main().catch((err) => {
-  console.log(err);
-  process.exit(1);
-});

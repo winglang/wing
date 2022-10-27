@@ -1,5 +1,5 @@
-import WebSocket from "ws";
-import { IQueueClient } from "../cloud";
+import WebSocket from "isomorphic-ws";
+import { IQueueClient } from "./queue";
 import { sendToWebSocket } from "./util.inflight";
 
 export class QueueClient implements IQueueClient {

@@ -1,6 +1,6 @@
 import { InvokeCommand, LambdaClient } from "@aws-sdk/client-lambda";
 import { fromUtf8, toUtf8 } from "@aws-sdk/util-utf8-node";
-import { IFunctionClient } from "../cloud";
+import { IFunctionClient } from "./function";
 
 export class FunctionClient implements IFunctionClient {
   constructor(

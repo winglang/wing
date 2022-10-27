@@ -36,6 +36,8 @@ export abstract class BucketBase extends Resource {
 
 /**
  * Represents a cloud object store.
+ *
+ * @inflight `@monadahq/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends BucketBase {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
@@ -61,10 +63,18 @@ export interface IBucketClient {
   put(key: string, body: string): Promise<void>;
 
   /**
-   * Retrieve an object from the bucket. Throws if no object with the given key
-   * exists.
+   * Retrieve an object from the bucket.
+   * @Throws if no object with the given key exists.
+   * @Returns the object's body.
    */
   get(key: string): Promise<string>;
+
+  /**
+   * Retrieve existing objects keys from the bucket.
+   * @param prefix Limits the response to keys that begin with the specified prefix
+   * @returns a list of keys or an empty array if the bucket is empty.
+   */
+  list(prefix?: string): Promise<string[]>;
 }
 
 /**
@@ -75,4 +85,6 @@ export enum BucketInflightMethods {
   PUT = "put",
   /** `Bucket.get` */
   GET = "get",
+  /** `Bucket.list` */
+  LIST = "list",
 }

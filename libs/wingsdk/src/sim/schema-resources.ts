@@ -1,4 +1,4 @@
-import { BUCKET_TYPE, FUNCTION_TYPE, QUEUE_TYPE } from "../cloud";
+import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE, QUEUE_TYPE } from "../cloud";
 import { BaseResourceSchema } from "./schema";
 
 export type FunctionId = string;
@@ -18,14 +18,6 @@ export interface FunctionSchema extends BaseResourceSchema {
     /** A unique address of the function in the simulator. */
     readonly functionAddr: number;
   };
-}
-
-/** Schema for cloud.Queue.props.subscribers */
-export interface QueueSubscriber {
-  /** Function ID that should be called. */
-  readonly functionId: FunctionId;
-  /** Maximum number of messages that will be batched together to the subscriber. */
-  readonly batchSize: number;
 }
 
 /** Schema for cloud.Queue */
@@ -60,6 +52,16 @@ export interface BucketSchema extends BaseResourceSchema {
   readonly attrs: {
     /** The address of the bucket on the local file system. */
     readonly bucketAddr: string;
+  };
+}
+
+/** Schema for cloud.Logger */
+export interface LoggerSchema extends BaseResourceSchema {
+  readonly type: typeof LOGGER_TYPE;
+  readonly props: {};
+  readonly attrs: {
+    /** The address of the directory for logs on the local file system. */
+    readonly logsDir: string;
   };
 }
 

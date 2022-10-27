@@ -137,7 +137,7 @@ pub struct ClassMember {
 pub enum ExprType {
 	New {
 		class: Type,
-		obj_id: Option<Symbol>,
+		obj_id: Option<String>,
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
 	},
@@ -203,9 +203,21 @@ impl ArgList {
 #[derive(Debug)]
 pub enum Literal {
 	String(String),
+	InterpolatedString(InterpolatedString),
 	Number(f64),
 	Duration(f64),
 	Boolean(bool),
+}
+
+#[derive(Debug)]
+pub struct InterpolatedString {
+	pub parts: Vec<InterpolatedStringPart>,
+}
+
+#[derive(Debug)]
+pub enum InterpolatedStringPart {
+	Static(String),
+	Expr(Expr),
 }
 
 #[derive(Derivative)]
