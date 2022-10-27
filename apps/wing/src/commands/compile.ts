@@ -95,7 +95,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     process: {
       env: {
         WINGSDK_SYNTH_DIR: outDir,
-        ...(options.target === Target.SIM ? { WING_SIM: "1" } : {}),
+        WING_TARGET: options.target,
       },
     },
     __dirname: workDir,
