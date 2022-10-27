@@ -8,9 +8,6 @@
     "appsDir": "apps",
     "libsDir": "libs"
   },
-  "plugins": [
-    "@nxrs/cargo"
-  ],
   "namedInputs": {
     "src": [
       "{projectRoot}/src/**/*"

@@ -1,5 +1,8 @@
 {
   "name": "wing-language-server",
+  "implicitDependencies": [
+    "wingc"
+  ],
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",

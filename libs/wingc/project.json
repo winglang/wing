@@ -1,7 +1,9 @@
 {
   "name": "wingc",
   "implicitDependencies": [
-    "wingsdk"
+    "wingsdk",
+    "tree-sitter-wing",
+    "wingii"
   ],
   "targets": {
     "build-native": {
