@@ -4,44 +4,41 @@
 
 > **:construction: Under heavy construction :construction:**
 > 
-> The Wing language is under active development. Many basic features as still
-> missing. You are more than welcome to join the ride but don't expect to be
-> able to do much with it at the moment.
+> Wing is in active development. Many basic features as still missing. You are
+> more than welcome to join the ride, but don't expect to be able to do much
+> with it at the moment.
 >
 > Check out our [roadmap] for more information.
 
 
 ## Welcome! :wave:
 
-Wing is the world's first [cloud-oriented programming language](#what-is-cloud-oriented-programming). 
-It allows developers to fully leverage the power of the cloud, without having to worry about the 
-underlying infrastructure.
+Wing is the world's first [cloud-oriented programming
+language](#what-is-cloud-oriented-programming). It allows developers to build
+distributed systems that fully leverage the power of the cloud, without having
+to worry about the underlying infrastructure.
 
 ```js
 bring cloud;
 
 let bucket = new cloud.Bucket();
-let counter = new cloud.Counter(initial_value: 100);
-let queue = new cloud.Queue(timeout: 10s);
 
-queue.on_message((body: str) ~> {
-  let key = "myfile-${counter.value}.txt";
-  bucket.put(key, body);
-  counter.increment();
+new cloud.Function(() ~> {
+  bucket.put("greeting.txt", "hello, world!");
 });
 ```
 
 Wing applications are compiled to [Terraform] and JavaScript, and can be
-deployed to AWS, Google Cloud Platform or Azure or run locally using the Wing
+deployed to AWS, GCP or Azure or visualize and debug locally using the Wing
 Console.
 
-This README is for **users** of the language. It contains information about how
-to install the toolchain, and how to build Wing applications. If you wish to
-**contribute** to the project, please jump over to our [contribution
-guide](./CONTRIBUTING.md).
+Read below about [what makes Wing special](#what-makes-wing-special) and [why
+you should consider Wing](#why-wing).
 
-Read more about [what makes Wing special](#what-makes-wing-special) and [why you
-should consider Wing](#why-wing) below.
+This README is for *users* of the language. It contains information about how to
+install the toolchain, and how to build Wing applications. If you wish to
+*contribute* :pray: to the project, head over to our [contribution
+guide](./CONTRIBUTING.md).
 
 ## Getting Started
 
@@ -58,7 +55,7 @@ In order to deploy to AWS, you will also need:
 * [Terraform](https://terraform.io/downloads)
 * [AWS account] and the [AWS CLI] with [AWS credentials]
 
-To accessing npm private packages (pre-release):
+To access npm private packages (pre-release):
 
 ```sh
 npm login --scope=@monadahq --registry=https://npm.pkg.github.com
@@ -175,7 +172,7 @@ Our VSCode Extension and Wing Console have automatic updates.
 
 ### What is cloud-oriented programming?
 
-Let's consider the example from the top of this readme:
+Let's consider this example:
 
 ```js
 bring cloud;
@@ -185,15 +182,15 @@ let counter = new cloud.Counter(initial_value: 100);
 let queue = new cloud.Queue(timeout: 10s);
 
 queue.on_message((body: str) ~> {
-  let key = "myfile-${counter.value}.txt";
+  let next = counter.increment();
+  let key = "myfile-${next}.txt";
   bucket.put(key, body);
-  counter.increment();
 });
 ```
 
 In this simple application, every message that goes into the queue is written to
-a new object inside a cloud bucket. A counter is used to generate a incrementing
-and unique key for each object.
+a new object inside a cloud bucket. A counter is used to generate an
+incrementing and unique key for each object.
 
 **But don't let the simplicity of this example fool you!**
 
@@ -210,9 +207,10 @@ on your code without having to deploy it to the cloud, write **unit tests** that
 cover your complete cloud architecture and **debug** your code in a local
 environment.
 
-This is what we call cloud-oriented programming. It's a new way of thinking
-about software development, where you can fully leverage the power of the cloud
-without having to worry about the underlying infrastructure.
+This is what we call **cloud-oriented programming**. It's a programming paradigm
+which treats the cloud as a computer, and heavily relies on managed services and
+distributed programming to build and deliver systems that are intrinsically
+scalable, highly-available and robust.
 
 ### Why Wing?
 
