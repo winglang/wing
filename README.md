@@ -189,17 +189,18 @@ queue.on_message((body: str) ~> {
 ```
 
 In this simple application, every message that goes into the queue is written to
-a new object inside a cloud bucket. A counter is used to generate an
+a new object inside a cloud bucket. An atomic counter is used to generate an
 incrementing and unique key for each object.
 
 **But don't let the simplicity of this example fool you!**
 
-When deployed to a cloud provider such as AWS, GCP or Azure, this application
-can handle an infinite amount of traffic, with no need for you to worry about
-scaling, load balancing, or any other infrastructure-related concerns. For
-example, when compiled for AWS, Wing will use Amazon S3 to implement the bucket,
-Amazon SQS to implement the queue, Amazon DynamoDB to implement the atomic
-counter, and AWS Lambda for the message handler.
+When deployed to a cloud provider, this application can handle an infinite
+amount of traffic, with no need for you to explicitly take care of scaling, load
+balancing, security policies or any other infrastructure-related concerns. For
+example, when targeting AWS, Wing will use Amazon S3 for the bucket, Amazon SQS
+for the queue, Amazon DynamoDB for the atomic counter, and AWS Lambda for the
+handler. It will also render least privilege IAM security policies, wire up
+environment variables and produce the code bundles needed for this to work.
 
 In addition to targeting cloud providers, Wing applications can also be compiled
 to run inside a local **Cloud Simulator**. This means that you can now iterate
