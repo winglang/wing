@@ -1,13 +1,15 @@
 {
   "name": "wingc",
+  "implicitDependencies": [
+    "wingsdk"
+  ],
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
       "outputs": ["wingc-native"],
       "options": {
         "command": "cargo build",
-        "cwd": "libs/wingc",
-        "color": true
+        "cwd": "libs/wingc"
       },
       "configurations": {
         "release": {
@@ -23,8 +25,7 @@
       "outputs": ["wingc-wasm"],
       "options": {
         "command": "cargo wasi build",
-        "cwd": "libs/wingc",
-        "color": true
+        "cwd": "libs/wingc"
       },
       "configurations": {
         "release": {

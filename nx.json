@@ -78,7 +78,7 @@
         "src"
       ],
       "outputs": [
-        "dist"
+        "{workspaceRoot}/dist"
       ],
       "dependsOn": [
         "^build"

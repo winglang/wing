@@ -16,7 +16,7 @@
     "url": "git+https://github.com/monadahq/winglang.git"
   },
   "scripts": {
-    "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
+    "copy-wingc-debug": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
     "build": "tsc",
     "test": "node --experimental-wasi-unstable-preview1 --no-warnings node_modules/.bin/jest --no-cache",
     "dev": "npm run build && ./bin/wing"

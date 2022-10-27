@@ -111,24 +111,37 @@ jobs:
         with:
           targets: "build"
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
-          args: "--configuration=release"
+          args: "--verbose --configuration=release"
 
-      # wingc require wingsdk to be built first in order to run
-      - name: wingc Test
+      - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wingc"
-          args: "--configuration=release"
+          projects: "wing,wingsdk,wing-api-checker"
+          args: "--verbose --configuration=release"
 
-      - name: Package Wing CLI
+      - name: Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wing,wingsdk,wing-api-checker"
+          args: "--verbose --configuration=release"
+
+      - name: Package WingSDK
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "package"
+          projects: "wingsdk"
+          args: "--verbose --configuration=release"
+
+      - name: Pack Wing CLI
         working-directory: apps/wing
         run: |
           npm version ${{ env.PROJEN_BUMP_VERSION }}
           node version.js
           npm pack
 
-      - name: Package WingSDK
+      - name: Pack WingSDK
         working-directory: libs/wingsdk
         run: |
           npm version ${{ env.PROJEN_BUMP_VERSION }}
@@ -219,14 +232,22 @@ jobs:
         with:
           targets: "build-native"
           projects: "wing-language-server"
-          args: "--configuration=release"
+          args: "--verbose --configuration=release"
+
+      # wingsdk is required for wingc tests
+      - name: Build wingsdk for wingc
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build"
+          projects: "wingsdk"
+          args: "--verbose --configuration=release"
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wingii"
-          args: "--configuration=release"
+          projects: "wingc,wingii"
+          args: "--verbose --configuration=release"
 
       - name: Upload Wing Language Server
         uses: actions/upload-artifact@v2
@@ -268,7 +289,7 @@ jobs:
         with:
           targets: "build-multi"
           projects: "vscode-wing"
-          args: "--configuration=release"
+          args: "--verbose --configuration=release"
 
       - name: Upload extension
         uses: actions/upload-artifact@v2

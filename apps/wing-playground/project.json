@@ -14,12 +14,12 @@
         "^build-wasm"
       ],
       "options": {
-        "command": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
+        "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
         "cwd": "apps/wing-playground"
       },
       "configurations": {
         "release": {
-          "command": "cp ../../target/wasm32-wasi/release/wingc.wasm ./"
+          "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./"
         }
       }
     },
