@@ -61,6 +61,9 @@ impl<'a> JsiiImporter<'a> {
 					})))
 				} else if type_fqn == "@monadahq/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
+				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
+					// TODO: this should be a special type that represents "any resource"
+					Some(self.wing_types.anything())
 				} else {
 					Some(self.lookup_or_create_type(type_fqn))
 				}
@@ -212,7 +215,7 @@ impl<'a> JsiiImporter<'a> {
 					return_type,
 					flight,
 				}));
-				class_env.define(&Self::jsii_name_to_symbol(&m.name, &m.location_in_module), method_sig)
+				class_env.define(&Self::jsii_name_to_symbol(&m.name, &m.location_in_module), method_sig);
 			}
 		}
 		// Add properties to the class environment
@@ -295,13 +298,6 @@ impl<'a> JsiiImporter<'a> {
 			None
 		};
 
-		// Verify we have a constructor for this calss
-		// TODO: Do we really require a constructor? Wing does but maybe we need some default behavior here if there isn't one.
-		let jsii_initializer = jsii_class
-			.initializer
-			.as_ref()
-			.expect("JSII classes must have a constructor");
-
 		// Get env of base class/resource
 		let base_class_env = if let Some(base_class) = base_class {
 			match base_class.into() {
@@ -336,34 +332,39 @@ impl<'a> JsiiImporter<'a> {
 		self.namespace_env.define(&new_type_symbol, new_type);
 		// Create class's actual environment before we add properties and methods to it
 		let mut class_env = TypeEnv::new(base_class_env, None, true, self.namespace_env.flight);
-		// Add constructor to the class environment
-		let mut arg_types = vec![];
-		if let Some(args) = &jsii_initializer.parameters {
-			for (i, arg) in args.iter().enumerate() {
-				// TODO: handle arg.variadic and arg.optional
 
-				// If this is a resource then skip scope and id arguments
-				if is_resource {
-					if i == 0 {
-						assert!(arg.name == "scope");
-						continue;
-					} else if i == 1 {
-						assert!(arg.name == "id");
-						continue;
+		// Add constructor to the class environment
+		let jsii_initializer = jsii_class.initializer.as_ref();
+
+		if let Some(initializer) = jsii_initializer {
+			let mut arg_types = vec![];
+			if let Some(args) = &initializer.parameters {
+				for (i, arg) in args.iter().enumerate() {
+					// TODO: handle arg.variadic and arg.optional
+
+					// If this is a resource then skip scope and id arguments
+					if is_resource {
+						if i == 0 {
+							assert!(arg.name == "scope");
+							continue;
+						} else if i == 1 {
+							assert!(arg.name == "id");
+							continue;
+						}
 					}
+					arg_types.push(self.type_ref_to_wing_type(&arg.type_).unwrap());
 				}
-				arg_types.push(self.type_ref_to_wing_type(&arg.type_).unwrap());
 			}
+			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
+				args: arg_types,
+				return_type: Some(new_type),
+				flight: class_env.flight,
+			}));
+			class_env.define(
+				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
+				method_sig,
+			);
 		}
-		let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
-			args: arg_types,
-			return_type: Some(new_type),
-			flight: class_env.flight,
-		}));
-		class_env.define(
-			&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &jsii_initializer.location_in_module),
-			method_sig,
-		);
 
 		// Add methods and properties to the class environment
 		self.add_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env, new_type);

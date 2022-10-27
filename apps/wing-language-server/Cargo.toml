@@ -11,3 +11,4 @@ tower-lsp = { version = "0.17.0"}
 dashmap = "5.4.0"
 tree-sitter-traversal = "0.1.2"
 tree-sitter-wing = { path = "../../libs/tree-sitter-wing" }
+wingc = { path = "../../libs/wingc" }

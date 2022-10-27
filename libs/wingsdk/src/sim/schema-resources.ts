@@ -1,4 +1,4 @@
-import { BUCKET_TYPE, FUNCTION_TYPE, QUEUE_TYPE } from "../cloud";
+import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE, QUEUE_TYPE } from "../cloud";
 import { BaseResourceSchema } from "./schema";
 
 export type FunctionId = string;
@@ -52,6 +52,16 @@ export interface BucketSchema extends BaseResourceSchema {
   readonly attrs: {
     /** The address of the bucket on the local file system. */
     readonly bucketAddr: string;
+  };
+}
+
+/** Schema for cloud.Logger */
+export interface LoggerSchema extends BaseResourceSchema {
+  readonly type: typeof LOGGER_TYPE;
+  readonly props: {};
+  readonly attrs: {
+    /** The address of the directory for logs on the local file system. */
+    readonly logsDir: string;
   };
 }
 

@@ -6,7 +6,7 @@ let p = cloud.BucketProps {
 
 let bucket = new cloud.Bucket(p);
 
-inflight handler(event: str):str {
+inflight handler(event: str): str {
   bucket.put("file.txt", "data");
   bucket.get("file.txt");
 }

@@ -65,6 +65,27 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = type_check(&mut scope, &mut types);
 
+	// Print diagnostics
+	print_diagnostics(&parse_diagnostics);
+	print_diagnostics(&type_check_diagnostics);
+
+	// collect all diagnostics
+	let mut diagnostics = parse_diagnostics;
+	diagnostics.extend(type_check_diagnostics);
+
+	let errors = diagnostics
+		.iter()
+		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
+		.collect::<Vec<_>>();
+
+	if errors.len() > 0 {
+		panic!(
+			"Compilation failed with {} errors\n{}",
+			errors.len(),
+			errors.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
+		);
+	}
+
 	// Analyze inflight captures
 	scan_captures(&scope);
 
@@ -72,22 +93,10 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
-	// Print diagnostics
-	print_diagnostics(&parse_diagnostics);
-	print_diagnostics(&type_check_diagnostics);
-
-	if parse_diagnostics
-		.iter()
-		.any(|x| matches!(x.level, DiagnosticLevel::Error))
-		|| type_check_diagnostics
-			.iter()
-			.any(|x| matches!(x.level, DiagnosticLevel::Error))
-	{
-		std::process::exit(1);
-	}
-
 	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
-	let intermediate_file = out_dir.join("intermediate.js");
+	// this is read from "WINGC_ARTIFACT_NAME" env var or defaults to "intermediate.js" in runtime
+	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
+	let intermediate_file = out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
 
 	return intermediate_js;
@@ -96,21 +105,36 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 #[cfg(test)]
 mod sanity {
 	use crate::compile;
-	use std::fs;
+	use std::{fs, path::PathBuf};
+
+	fn get_wing_files(dir: &str) -> Vec<PathBuf> {
+		let mut files = Vec::new();
+		for entry in fs::read_dir(dir).unwrap() {
+			let entry = entry.unwrap();
+			let path = entry.path();
+			if path.extension().unwrap() == "w" {
+				files.push(path);
+			}
+		}
+		files
+	}
 
 	#[test]
-	fn can_compile_simple_files() {
-		let paths = fs::read_dir("../../examples/simple").unwrap();
+	fn can_compile_valid_files() {
+		for test_file in get_wing_files("../../examples/tests/valid") {
+			let test_file = test_file.to_str().unwrap();
+			println!("\n=== {} ===\n", test_file);
+			println!("{}\n---", compile(test_file, None));
+		}
+	}
 
-		for entry in paths {
-			if let Ok(entry) = entry {
-				if let Some(source) = entry.path().to_str() {
-					if source.ends_with(".w") {
-						println!("\n=== {} ===\n", source);
-						println!("{}\n---", compile(source, None));
-					}
-				}
-			}
+	#[test]
+	fn cannot_compile_invalid_files() {
+		for test_file in get_wing_files("../../examples/tests/invalid") {
+			let test_file = test_file.to_str().unwrap();
+			println!("\n=== {} ===\n", test_file);
+			let result = std::panic::catch_unwind(|| compile(test_file, None));
+			assert!(result.is_err());
 		}
 	}
 }

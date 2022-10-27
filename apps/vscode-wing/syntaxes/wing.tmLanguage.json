@@ -18,10 +18,12 @@
 		{
 			"include": "#statement"
 		},
-		{
-			"name": "support.type.builtin.js",
-			"match": "(?<!\\.|\\$)\\b(this|true|false|nil)\\b(?!\\$)"
-		}
+    {
+      "include": "#constants"
+    },
+    {
+      "include": "#identifiers"
+    }
   ],
   "repository": {
 		"template-string": {
@@ -84,19 +86,43 @@
       "patterns": [
         {
           "name": "keyword.control.wing",
-          "match": "\\b(?:as|class|else|for|from|function|if|in|new|return|inflight|proc|use|fn|resource|be|let|break|continue|protected|internal|rw|try|throw|catch|finally|bring|struct|def|shape)\\b"
+          "match": "\\b(?:extends|as|class|else|for|from|if|in|new|return|inflight|use|fn|resource|be|let|break|continue|protected|internal|rw|try|throw|catch|finally|bring|struct|def|shape)\\b"
         }
       ]
     },
     "type-primitive": {
       "name": "support.type.wing",
-      "match": "\\b(?:str|num|string|number|bool|nil|any|list|set|mut_map|mut_set|future)\\b"
+      "match": "\\b(?:str|num|bool|any|Map|Set|MutMap|MutSet|Array|MutArray|Promise)\\b"
     },
     "numbers": {
       "patterns": [
         {
           "name": "constant.numeric.wing",
-          "match": "\\b(?:[1-9][0-9]+[smh]?)\\b"
+          "match": "\\b(?:[1-9][0-9]*[smh]?)\\b"
+        }
+      ]
+    },
+    "constants": {
+      "patterns": [
+        {
+          "name": "constant.language.this",
+          "match": "(?<!\\.|\\$)\\b(this)\\b(?!\\$)"
+        },
+        {
+          "name": "constant.language.boolean",
+          "match": "(?<!\\.|\\$)\\b(true|false)\\b(?!\\$)"
+        },
+        {
+          "name": "constant.language.null",
+          "match": "(?<!\\.|\\$)\\b(nil)\\b(?!\\$)"
+        }
+      ]
+    },
+    "identifiers": {
+      "patterns": [
+        {
+          "name": "variable",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
         }
       ]
     }

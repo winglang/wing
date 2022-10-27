@@ -87,22 +87,26 @@
     "constructs": "~10.0.25"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.171.0",
     "@aws-sdk/client-lambda": "^3.171.0",
     "@aws-sdk/client-s3": "^3.171.0",
     "@aws-sdk/client-sqs": "^3.171.0",
     "@aws-sdk/util-utf8-node": "^3.170.0",
     "esbuild-wasm": "^0.15.9",
+    "isomorphic-ws": "^5.0.0",
     "piscina": "*",
     "safe-stable-stringify": "*",
     "tar": "^6.1.11",
     "ws": "^7.5.9"
   },
   "bundledDependencies": [
+    "@aws-sdk/client-cloudwatch-logs",
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-s3",
     "@aws-sdk/client-sqs",
     "@aws-sdk/util-utf8-node",
     "esbuild-wasm",
+    "isomorphic-ws",
     "piscina",
     "safe-stable-stringify",
     "tar",

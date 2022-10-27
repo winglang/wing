@@ -22,11 +22,13 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-s3",
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-sqs",
+    "@aws-sdk/client-cloudwatch-logs",
     "@aws-sdk/util-utf8-node",
     // simulator dependencies
     "tar",
     "piscina",
     "ws",
+    "isomorphic-ws",
   ],
   devDeps: [
     "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",

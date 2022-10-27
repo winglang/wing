@@ -172,6 +172,10 @@
       "type": "build"
     },
     {
+      "name": "@aws-sdk/client-cloudwatch-logs",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-lambda",
       "type": "bundled"
     },
@@ -189,6 +193,10 @@
     },
     {
       "name": "esbuild-wasm",
+      "type": "bundled"
+    },
+    {
+      "name": "isomorphic-ws",
       "type": "bundled"
     },
     {
