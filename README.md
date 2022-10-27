@@ -124,7 +124,7 @@ Terraform.
 
 > Currently, our SDKs only support AWS, but the Wing compiler can target
 > multiple cloud platforms, including AWS, Azure, Google Cloud, and Kubernetes.
-> We are working on adding support for other cloud providers, and welcome contributions in those areas.
+> We are working on adding support for other cloud providers and welcome contributions in those areas.
 
 First, we need to compile our program to AWS:
 
