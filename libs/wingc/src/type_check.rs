@@ -11,12 +11,12 @@ use type_env::TypeEnv;
 #[derive(Debug)]
 pub enum Type {
 	Anything,
-	Nil,
 	Number,
 	String,
 	Duration,
 	Boolean,
-	Option(TypeRef), // Assumes that the inner type is not an option
+	Optional(TypeRef),
+	UnknownOptional,
 	Map(TypeRef),
 	Set(TypeRef),
 	Function(FunctionSignature),
@@ -138,21 +138,22 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
-			(Self::Option(l0), Self::Option(r0)) => {
-				// Options are of the same type if they have the same value type
+			(Self::Optional(l0), Self::Optional(r0)) => {
+				// Optionals are of the same type if they have the same value type
 				let l: &Type = (*l0).into();
 				let r: &Type = (*r0).into();
 				l == r
 			}
-			(Self::Nil, Self::Option(r0)) => {
+			(Self::UnknownOptional, Self::Optional(_)) => {
 				// Nil value can be assigned to any optional type
 				true
 			}
-			(_, Self::Option(r0)) => {
-				// If we are not nil or option, then we must be the same type as the option's value type
+			(_, Self::Optional(r0)) => {
+				// If we are not nil or optional, then we must be the same type as the optional's inner type
 				let r: &Type = (*r0).into();
 				self == r
 			}
+			(_, Self::UnknownOptional) => false,
 			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
@@ -170,12 +171,12 @@ impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			Type::Anything => write!(f, "anything"),
-			Type::Nil => write!(f, "nil"),
 			Type::Number => write!(f, "number"),
 			Type::String => write!(f, "string"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
-			Type::Option(v) => write!(f, "option<{}>", v),
+			Type::Optional(v) => write!(f, "{}?", v),
+			Type::UnknownOptional => write!(f, "<unknown>?"),
 			Type::Function(func_sig) => {
 				if let Some(ret_val) = &func_sig.return_type {
 					write!(
@@ -312,7 +313,7 @@ impl TypeRef {
 	}
 
 	pub fn is_option(&self) -> bool {
-		if let &Type::Option(_) = (*self).into() {
+		if let &Type::Optional(_) = (*self).into() {
 			true
 		} else {
 			false
@@ -364,7 +365,7 @@ pub struct Types {
 	bool_idx: usize,
 	duration_idx: usize,
 	anything_idx: usize,
-	nil_idx: usize,
+	unknown_opt_idx: usize,
 }
 
 impl Types {
@@ -380,8 +381,8 @@ impl Types {
 		let duration_idx = types.len() - 1;
 		types.push(Box::new(Type::Anything));
 		let anything_idx = types.len() - 1;
-		types.push(Box::new(Type::Nil));
-		let nil_idx = types.len() - 1;
+		types.push(Box::new(Type::UnknownOptional));
+		let unknown_opt_idx = types.len() - 1;
 
 		Self {
 			types,
@@ -390,7 +391,7 @@ impl Types {
 			bool_idx,
 			duration_idx,
 			anything_idx,
-			nil_idx,
+			unknown_opt_idx,
 		}
 	}
 
@@ -414,8 +415,8 @@ impl Types {
 		(&self.types[self.anything_idx]).into()
 	}
 
-	pub fn nil(&self) -> TypeRef {
-		(&self.types[self.nil_idx]).into()
+	pub fn unknown_opt(&self) -> TypeRef {
+		(&self.types[self.unknown_opt_idx]).into()
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
@@ -505,7 +506,7 @@ impl<'a> TypeChecker<'a> {
 				Literal::Number(_) => Some(self.types.number()),
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
-				Literal::Nil => Some(self.types.nil()),
+				Literal::Nil => Some(self.types.unknown_opt()),
 			},
 			ExprType::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
@@ -644,7 +645,7 @@ impl<'a> TypeChecker<'a> {
 			ExprType::Call { function, args } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.resolve_reference(function, env);
-				let extra_args = if matches!(function, Reference::NestedIdentifier { .. }) {
+				let this_args = if matches!(function, Reference::NestedIdentifier { .. }) {
 					1
 				} else {
 					0
@@ -660,21 +661,39 @@ impl<'a> TypeChecker<'a> {
 					.as_function_sig()
 					.expect(&format!("{:?} should be a function or method", function));
 
+				// Count number of optional parameters from the end of the function's params
+				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
+
 				// TODO: named args
 				// Argument arity check
-				if args.pos_args.len() + extra_args != func_sig.args.len() {
+				println!(
+					"{} {} {} {}",
+					func_sig.args.len(),
+					args.pos_args.len(),
+					this_args,
+					num_optionals
+				);
+				if args.pos_args.len() + this_args + num_optionals < func_sig.args.len() {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected {} arguments for {:?}, but got {} instead.",
-							func_sig.args.len() - extra_args,
+							"Expected at least {} arguments for {:?}, but got {} instead.",
+							func_sig.args.len() - this_args - num_optionals,
 							function,
 							args.pos_args.len()
 						),
 					);
 				}
-				// Verify argument types (we run from last to first to skip "this" argument)
-				for (arg_type, param_exp) in func_sig.args.iter().rev().zip(args.pos_args.iter().rev()) {
+
+				let params = func_sig
+					.args
+					.iter()
+					.skip(this_args)
+					.take(func_sig.args.len() - num_optionals);
+				let args = args.pos_args.iter();
+
+				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env).unwrap();
 					self.validate_type(param_type, *arg_type, param_exp);
 				}
@@ -765,8 +784,11 @@ impl<'a> TypeChecker<'a> {
 			AstType::Number => self.types.number(),
 			AstType::String => self.types.string(),
 			AstType::Bool => self.types.bool(),
-			AstType::Nil => self.types.nil(),
 			AstType::Duration => self.types.duration(),
+			AstType::Optional(v) => {
+				let value_type = self.resolve_type(v, env);
+				self.types.add_type(Type::Optional(value_type))
+			}
 			AstType::FunctionSignature(ast_sig) => {
 				let mut args = vec![];
 				for arg in ast_sig.parameters.iter() {

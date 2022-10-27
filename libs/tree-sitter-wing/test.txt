@@ -1,0 +1,4 @@
+let a: num = 5;
+let a: num? = 5;
+let b: num? = nil;
+let c = new cloud.Bucket() as "hi";

@@ -354,7 +354,7 @@ impl<'a> JsiiImporter<'a> {
 					}
 					let arg_type = self.type_ref_to_wing_type(&arg.type_).unwrap();
 					if arg.optional.unwrap_or(false) {
-						arg_types.push(self.wing_types.add_type(Type::Option(arg_type)));
+						arg_types.push(self.wing_types.add_type(Type::Optional(arg_type)));
 					} else {
 						arg_types.push(arg_type);
 					}
