@@ -211,4 +211,6 @@ project.package.addField("exports", {
 
 project.preCompileTask.exec("patch-package");
 
+project.tasks.tryFind("docgen")!.exec("cp API.md ../../docs/wingsdk-api.md");
+
 project.synth();
