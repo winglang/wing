@@ -64,7 +64,7 @@ export class App extends Construct implements IApp {
           stateFile: props.stateFile,
         });
 
-        new aws.AwsProvider(this, "AwsProvider", {});
+        new aws.provider.AwsProvider(this, "AwsProvider", {});
         Polycons.register(this, props.customFactory ?? new PolyconFactory());
       }
 

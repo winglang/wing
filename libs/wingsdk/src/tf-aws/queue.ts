@@ -1,4 +1,4 @@
-import { lambdafunction, sqs } from "@cdktf/provider-aws";
+import * as aws from "@cdktf/provider-aws";
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { QueueInflightMethods } from "../cloud";
@@ -11,11 +11,11 @@ import { Function } from "./function";
  * @inflight `@monadahq/wingsdk.tfaws.IQueueClient`
  */
 export class Queue extends cloud.QueueBase {
-  private readonly queue: sqs.SqsQueue;
+  private readonly queue: aws.sqsQueue.SqsQueue;
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.queue = new sqs.SqsQueue(this, "Default", {
+    this.queue = new aws.sqsQueue.SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
     });
 
@@ -68,11 +68,15 @@ export class Queue extends cloud.QueueBase {
       resource: this.queue.arn,
     });
 
-    new lambdafunction.LambdaEventSourceMapping(this, "EventSourceMapping", {
-      functionName: fn._functionName,
-      eventSourceArn: this.queue.arn,
-      batchSize: props.batchSize ?? 1,
-    });
+    new aws.lambdaEventSourceMapping.LambdaEventSourceMapping(
+      this,
+      "EventSourceMapping",
+      {
+        functionName: fn._functionName,
+        eventSourceArn: this.queue.arn,
+        batchSize: props.batchSize ?? 1,
+      }
+    );
 
     return fn;
   }

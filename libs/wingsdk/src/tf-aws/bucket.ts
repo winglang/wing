@@ -1,4 +1,4 @@
-import { s3 } from "@cdktf/provider-aws";
+import * as aws from "@cdktf/provider-aws";
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
@@ -11,7 +11,7 @@ import { Function } from "./function";
  * @inflight `@monadahq/wingsdk.tfaws.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
-  private readonly bucket: s3.S3Bucket;
+  private readonly bucket: aws.s3Bucket.S3Bucket;
   private readonly public: boolean;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
@@ -19,19 +19,23 @@ export class Bucket extends cloud.BucketBase {
 
     this.public = props.public ?? false;
 
-    this.bucket = new s3.S3Bucket(this, "Default");
+    this.bucket = new aws.s3Bucket.S3Bucket(this, "Default");
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
-    new s3.S3BucketServerSideEncryptionConfigurationA(this, "Encryption", {
-      bucket: this.bucket.bucket,
-      rule: [
-        {
-          applyServerSideEncryptionByDefault: {
-            sseAlgorithm: "AES256",
+    new aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA(
+      this,
+      "Encryption",
+      {
+        bucket: this.bucket.bucket,
+        rule: [
+          {
+            applyServerSideEncryptionByDefault: {
+              sseAlgorithm: "AES256",
+            },
           },
-        },
-      ],
-    });
+        ],
+      }
+    );
 
     if (this.public) {
       const policy = {
@@ -45,18 +49,22 @@ export class Bucket extends cloud.BucketBase {
           },
         ],
       };
-      new s3.S3BucketPolicy(this, "PublicPolicy", {
+      new aws.s3BucketPolicy.S3BucketPolicy(this, "PublicPolicy", {
         bucket: this.bucket.bucket,
         policy: JSON.stringify(policy),
       });
     } else {
-      new s3.S3BucketPublicAccessBlock(this, "PublicAccessBlock", {
-        bucket: this.bucket.bucket,
-        blockPublicAcls: true,
-        blockPublicPolicy: true,
-        ignorePublicAcls: true,
-        restrictPublicBuckets: true,
-      });
+      new aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock(
+        this,
+        "PublicAccessBlock",
+        {
+          bucket: this.bucket.bucket,
+          blockPublicAcls: true,
+          blockPublicPolicy: true,
+          ignorePublicAcls: true,
+          restrictPublicBuckets: true,
+        }
+      );
     }
   }
 
