@@ -1,4 +1,7 @@
-import { s3 } from "@cdktf/provider-aws";
+import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
+import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
+import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
+import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
@@ -11,7 +14,7 @@ import { Function } from "./function";
  * @inflight `@monadahq/wingsdk.tfaws.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
-  private readonly bucket: s3.S3Bucket;
+  private readonly bucket: S3Bucket;
   private readonly public: boolean;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
@@ -19,10 +22,10 @@ export class Bucket extends cloud.BucketBase {
 
     this.public = props.public ?? false;
 
-    this.bucket = new s3.S3Bucket(this, "Default");
+    this.bucket = new S3Bucket(this, "Default");
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
-    new s3.S3BucketServerSideEncryptionConfigurationA(this, "Encryption", {
+    new S3BucketServerSideEncryptionConfigurationA(this, "Encryption", {
       bucket: this.bucket.bucket,
       rule: [
         {
@@ -45,12 +48,12 @@ export class Bucket extends cloud.BucketBase {
           },
         ],
       };
-      new s3.S3BucketPolicy(this, "PublicPolicy", {
+      new S3BucketPolicy(this, "PublicPolicy", {
         bucket: this.bucket.bucket,
         policy: JSON.stringify(policy),
       });
     } else {
-      new s3.S3BucketPublicAccessBlock(this, "PublicAccessBlock", {
+      new S3BucketPublicAccessBlock(this, "PublicAccessBlock", {
         bucket: this.bucket.bucket,
         blockPublicAcls: true,
         blockPublicPolicy: true,

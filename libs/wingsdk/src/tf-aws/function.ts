@@ -1,7 +1,12 @@
 import * as crypto from "crypto";
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import * as aws from "@cdktf/provider-aws";
+import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
+import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
+import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
+import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
+import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
+import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
@@ -20,9 +25,9 @@ import {
  * @inflight `@monadahq/wingsdk.tfaws.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
-  private readonly function: aws.lambdafunction.LambdaFunction;
+  private readonly function: LambdaFunction;
   private readonly env: Record<string, string> = {};
-  private readonly role: aws.iam.IamRole;
+  private readonly role: IamRole;
   private readonly policyStatements: any[] = [];
 
   constructor(
@@ -64,7 +69,7 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Create unique S3 bucket for hosting Lambda code
-    const bucket = new aws.s3.S3Bucket(this, "Bucket");
+    const bucket = new S3Bucket(this, "Bucket");
 
     // Choose an object name so that:
     // - whenever code changes, the object name changes
@@ -73,14 +78,14 @@ export class Function extends cloud.FunctionBase {
     const objectKey = `asset.${this.node.addr}.${codeHash}.zip`;
 
     // Upload Lambda zip file to newly created S3 bucket
-    const lambdaArchive = new aws.s3.S3Object(this, "S3Object", {
+    const lambdaArchive = new S3Object(this, "S3Object", {
       bucket: bucket.bucket,
       key: objectKey,
       source: asset.path, // returns a posix path
     });
 
     // Create Lambda role
-    this.role = new aws.iam.IamRole(this, "IamRole", {
+    this.role = new IamRole(this, "IamRole", {
       assumeRolePolicy: JSON.stringify({
         Version: "2012-10-17",
         Statement: [
@@ -97,7 +102,7 @@ export class Function extends cloud.FunctionBase {
 
     // Add policy to Lambda role for any custom policy statements, such as
     // those needed by captures
-    new aws.iam.IamRolePolicy(this, "IamRolePolicy", {
+    new IamRolePolicy(this, "IamRolePolicy", {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
@@ -124,14 +129,14 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Add execution role for lambda to write to CloudWatch logs
-    new aws.iam.IamRolePolicyAttachment(this, "IamRolePolicyAttachment", {
+    new IamRolePolicyAttachment(this, "IamRolePolicyAttachment", {
       policyArn:
         "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
       role: this.role.name,
     });
 
     // Create Lambda function
-    this.function = new aws.lambdafunction.LambdaFunction(this, "Default", {
+    this.function = new LambdaFunction(this, "Default", {
       functionName: this.node.id,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
