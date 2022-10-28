@@ -5241,12 +5241,20 @@ List of inflight operations available for `Logger`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT">PRINT</a></code> | `Logger.print`. |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS">FETCH_LATEST_LOGS</a></code> | `Logger.fetchLatestLogs`. |
 
 ---
 
 ##### `PRINT` <a name="PRINT" id="@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT"></a>
 
 `Logger.print`.
+
+---
+
+
+##### `FETCH_LATEST_LOGS` <a name="FETCH_LATEST_LOGS" id="@monadahq/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS"></a>
+
+`Logger.fetchLatestLogs`.
 
 ---
 
