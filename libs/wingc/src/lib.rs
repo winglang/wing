@@ -65,7 +65,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
 	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
-	// this is read from "WINGC_ARTIFACT_NAME" env var or defaults to "intermediate.js" in runtime
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
 	let intermediate_file = out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");

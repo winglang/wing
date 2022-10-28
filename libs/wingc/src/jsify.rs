@@ -9,7 +9,22 @@ use crate::ast::{
 
 const STDLIB: &str = "$stdlib";
 const STDLIB_MODULE: &str = "@monadahq/wingsdk";
-const SYNTHESIZER: &str = "$synthesizer";
+
+const TARGET_CODE: &str = r#"
+function __app(target) {
+	switch (target) {
+		case "sim":
+			return $stdlib.sim.App;
+		case "tfaws":
+		case "tf-aws":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+"#;
+const TARGET_APP: &str = "$App";
 
 fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
 	let mut lines = vec![];
@@ -52,19 +67,16 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 	if shim {
 		output.push(format!("const {} = require('{}');", STDLIB, STDLIB_MODULE));
 		output.push(format!("const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \".\";"));
-		output.push(format!(
-			"const {} = process.env.WING_SIM ? new {}.sim.Synthesizer({{ outdir: $outdir }}) : new {}.tfaws.Synthesizer({{ outdir: $outdir }});",
-			SYNTHESIZER, STDLIB, STDLIB
-		));
+		output.push(TARGET_CODE.to_owned());
 	}
 
 	output.append(&mut imports);
 
 	if shim {
-		js.insert(0, format!("super({{ synthesizer: {} }});\n", SYNTHESIZER));
+		js.insert(0, format!("super({{ outdir: $outdir }});\n"));
 		output.push(format!(
-			"class MyApp extends {}.core.App {{\nconstructor() {}\n}}",
-			STDLIB,
+			"class MyApp extends {} {{\nconstructor() {}\n}}",
+			TARGET_APP,
 			render_block(js)
 		));
 		output.push("new MyApp().synth();".to_string());
@@ -177,7 +189,7 @@ fn jsify_expression(expression: &Expr) -> String {
 					jsify_type(class),
 					jsify_arg_list(
 						&arg_list,
-						Some("this.root"), // TODO: get actual scope
+						Some("this"),
 						Some(&format!("{}", obj_id.as_ref().unwrap_or(&jsify_type(class))))
 					)
 				)

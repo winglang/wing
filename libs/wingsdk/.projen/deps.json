@@ -6,7 +6,6 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "0.0.70",
       "type": "build"
     },
     {
@@ -204,6 +203,10 @@
       "type": "bundled"
     },
     {
+      "name": "safe-stable-stringify",
+      "type": "bundled"
+    },
+    {
       "name": "tar",
       "type": "bundled"
     },
@@ -217,7 +220,6 @@
     },
     {
       "name": "@monadahq/polycons",
-      "version": "^0.0.70",
       "type": "peer"
     },
     {
