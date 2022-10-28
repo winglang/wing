@@ -33,5 +33,16 @@ export const createBucketRouter = (simulator: Simulator) => {
         const response = await client.get(input.fileName);
         return response;
       },
+    })
+    .query("bucket.list", {
+      input: z.object({
+        resourcePath: z.string(),
+      }),
+      async resolve({ input }) {
+        const addr = simulator.getAttributes(input.resourcePath).bucketAddr;
+        const client = createBucketClient(addr);
+        const response = await client.list();
+        return response;
+      },
     });
 };

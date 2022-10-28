@@ -6,7 +6,13 @@ import {
 } from "@heroicons/react/24/outline";
 import { FolderIcon } from "@heroicons/react/24/solid";
 import prettyBytes from "pretty-bytes";
-import { FormEventHandler, useCallback, useRef, useState } from "react";
+import {
+  FormEventHandler,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { Button } from "../design-system/Button.js";
@@ -29,6 +35,8 @@ export interface FileExplorerEntry {
 
 export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
   const [path] = useState("/");
+  const resourcePath = node.path ?? "";
+  const bucketList = trpc.useQuery(["bucket.list", { resourcePath }]);
   const putFile = trpc.useMutation(["bucket.put"]);
   putFile.mutateAsync;
   const getFile = trpc.useMutation(["bucket.get"]);
@@ -60,6 +68,18 @@ export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
     }
     setEntries((prev) => [...prev, ...newEntries]);
   };
+
+  // todo [sa] make it work better with actual file objects and not only keys
+  useEffect(() => {
+    setEntries(
+      bucketList.data?.map((file) => ({
+        type: "file",
+        name: file,
+        fileSize: 0,
+        updatedAt: 0,
+      })) ?? [],
+    );
+  }, [bucketList.data]);
 
   // todo [sa] delete file from bucket
   // const deleteSelectedEntries = useCallback(() => {
