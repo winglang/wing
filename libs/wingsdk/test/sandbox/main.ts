@@ -33,7 +33,7 @@ class HelloWorld extends Construct {
     const processor = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          console.log("Received " + JSON.parse(event).name);
+          console.log("Received " + event);
         }`
       ),
       entrypoint: "$proc",
@@ -43,5 +43,6 @@ class HelloWorld extends Construct {
 }
 
 const app = new tfaws.App({ outdir: __dirname });
+cloud.Logger.register(app);
 new HelloWorld(app, "HelloWorld");
 app.synth();

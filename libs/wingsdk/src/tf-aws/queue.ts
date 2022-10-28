@@ -35,9 +35,7 @@ export class Queue extends cloud.QueueBase {
     code.push(inflight.code.text);
     code.push(`async function $sqsEventWrapper($cap, event) {`);
     code.push(`  for (const record of event.Records ?? []) {`);
-    code.push(
-      `    await ${inflight.entrypoint}($cap, JSON.parse(record.body));`
-    );
+    code.push(`    await ${inflight.entrypoint}($cap, record.body);`);
     code.push(`  }`);
     code.push(`}`);
     const newInflight = new core.Inflight({
