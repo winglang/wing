@@ -15,7 +15,7 @@
   </a>
 </p>
 
-**:construction: Under (heavy) construction!** Wing is in early stages of development. 
+> **:construction: Under (heavy) construction!** Wing is in early stages of development. 
 Many basic features as still missing. You are more than welcome to join the ride, but don't 
 expect to be able to do much with it at the moment. Check out our [roadmap] for more information.
 
