@@ -15,7 +15,7 @@ She quickly skims through the blog post, enjoys the authentic tone but even more
 
 ![Landing Page](https://user-images.githubusercontent.com/598796/198871156-12aa4d71-678e-4b72-bc9e-d6bf4a9f0d1c.png)
 
-(See [Figma](https://www.figma.com/file/coK9c9XmIgPJ4tlj3dHf0q/winglang.io?node-id=0%3A1))
+([Figma](https://www.figma.com/file/coK9c9XmIgPJ4tlj3dHf0q/winglang.io?node-id=9%3A273))
 
 The winglang.io webpage is simple & clean. It shows an animation of some code being written line by-line in IDE (with code completion, syntax highlighting, etc). And then, on the right-hand side, a cloud architecture diagram starts to pop up. For example, when `new cloud.Bucket()` is written, suddently an AWS S3 bucket pops in, when `new cloud.Queue()` is written, a queue is added, etc. Connections form between the cloud resources on the diagram as the relevant code is added.... Suddently, the diagram starts change and switches to a Google Cloud architecture, then to an Azure architecture and then it shows the UI of something called "Wing Console" which seems like it is a UI tool for interacting with the app. Wow this is very intrguiging. She understands from this that this simple code can turn into compelte and complex cloud infra.
 
