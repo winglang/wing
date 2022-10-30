@@ -56,13 +56,12 @@ class Queue {
     // let the OS choose a free port
     this.wss = new Server({ port: 0 });
 
-    const q = this;
-    this.wss.on("connection", function connection(ws) {
-      ws.on("message", function message(data) {
+    this.wss.on("connection", (ws) => {
+      ws.on("message", (data) => {
         log("server receiving:", data);
         const contents: SimulatorRequest = JSON.parse(data.toString());
         if (contents.operation === "push") {
-          q.messages.push(contents.message);
+          this.messages.push(contents.message);
           const resp: SimulatorResponse = {
             id: contents.id,
             result: "ok",

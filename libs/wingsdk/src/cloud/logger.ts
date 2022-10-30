@@ -108,6 +108,8 @@ export interface ILoggerClient {
 export enum LoggerInflightMethods {
   /** `Logger.print` */
   PRINT = "print",
+  /** `Logger.fetchLatestLogs` */
+  FETCH_LATEST_LOGS = "fetchLatestLogs",
 }
 
 /**
