@@ -1,13 +1,23 @@
-# The Wing Programming Language
+<p align="center">
+  <a href="https://winglang.io">
+    <img src="https://github.com/monadahq/winglang/raw/main/logo/1x/Symbol-Black-Light.png" height="110pt">
+  </a>
+  <h1 align="center">The Wing Programming Language</h1>
+</p>
 
-> 
-> Under (heavy) construction :construction: :construction:
-> 
-> Wing is in early stages of development. Many basic features as still missing.
-> You are more than welcome to join the ride, but don't expect to be able to do
-> much with it at the moment.
->
-> Check out our [roadmap] for more information.
+<p align="center">
+  <a aria-label="Build status" href="https://github.com/monadahq/winglang/actions/workflows/build.yml">
+    <img alt="" src="https://github.com/monadahq/winglang/actions/workflows/build.yml/badge.svg">
+  </a>
+
+  <a aria-label="Join the community" href="https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA">
+    <img alt="" src="https://img.shields.io/badge/Join%20the%20community-blue.svg?style=flat&logo=slack&labelColor=000000">
+  </a>
+</p>
+
+> **:construction: Under (heavy) construction!** Wing is in early stages of development. 
+Many basic features as still missing. You are more than welcome to join the ride, but don't 
+expect to be able to do much with it at the moment. Check out our [roadmap] for more information.
 
 ## Welcome! :wave:
 
