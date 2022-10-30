@@ -690,6 +690,10 @@ impl<'a> TypeChecker<'a> {
 
 				Some(container_type)
 			}
+			ExprType::Print(e) => {
+				self.type_check_exp(e, env).unwrap();
+				Some(self.types.anything()) // TODO: return type of print should be void
+			}
 		};
 		*exp.evaluated_type.borrow_mut() = t;
 		t

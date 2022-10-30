@@ -197,6 +197,14 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				res.extend(scan_captures_in_expression(&v, env));
 			}
 		}
+		ExprType::Print(e) => {
+			res.extend(scan_captures_in_expression(e, env));
+			res.push(Capture {
+				// TODO: this is a hack, we should have a special capture for print
+				object: Symbol::new("$logger".into(), exp.span.clone()),
+				def: CaptureDef { method: "print".into() },
+			});
+		}
 	}
 	res
 }

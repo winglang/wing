@@ -541,13 +541,24 @@ impl Parser<'_> {
 			)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"call" => Ok(Expr::new(
-				ExprType::Call {
-					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
-					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
-				},
-				expression_span,
-			)),
+			"call" => {
+				let call_name = &expression_node.child_by_field_name("call_name").unwrap();
+				let args = &expression_node.child_by_field_name("args").unwrap();
+				if self.node_text(&call_name) == "print" {
+					Ok(Expr::new(
+						ExprType::Print(Box::new(self.build_expression(&args.named_child(0).unwrap())?)),
+						expression_span,
+					))
+				} else {
+					Ok(Expr::new(
+						ExprType::Call {
+							function: self.build_reference(&call_name)?,
+							args: self.build_arg_list(&args)?,
+						},
+						expression_span,
+					))
+				}
+			}
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),

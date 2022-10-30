@@ -34,6 +34,12 @@ impl std::fmt::Display for Symbol {
 	}
 }
 
+impl Symbol {
+	pub fn new(name: String, span: WingSpan) -> Self {
+		Self { name, span }
+	}
+}
+
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Flight {
 	In,
@@ -141,6 +147,7 @@ pub enum ExprType {
 		obj_scope: Option<Box<Expr>>,
 		arg_list: ArgList,
 	},
+	Print(Box<Expr>),
 	Literal(Literal),
 	Reference(Reference),
 	Call {

@@ -47,7 +47,7 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 	let mut imports = vec![];
 
 	for statement in scope.statements.iter() {
-		let line = jsify_statement(statement, &out_dir);
+		let line = jsify_statement(statement, &out_dir, Flight::Pre);
 		if line.is_empty() {
 			continue;
 		}
@@ -86,12 +86,12 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 	output.join("\n")
 }
 
-fn jsify_scope(scope: &Scope, out_dir: &PathBuf) -> String {
+fn jsify_scope(scope: &Scope, out_dir: &PathBuf, flight: Flight) -> String {
 	let mut lines = vec![];
 	lines.push("{".to_string());
 
 	for statement in scope.statements.iter() {
-		let statement_str = format!("{}", jsify_statement(statement, &out_dir));
+		let statement_str = format!("{}", jsify_statement(statement, &out_dir, flight));
 		let result = statement_str.split("\n");
 		for l in result {
 			lines.push(format!("  {}", l));
@@ -102,10 +102,12 @@ fn jsify_scope(scope: &Scope, out_dir: &PathBuf) -> String {
 	return lines.join("\n");
 }
 
-fn jsify_reference(reference: &Reference) -> String {
+fn jsify_reference(reference: &Reference, flight: Flight) -> String {
 	match reference {
 		Reference::Identifier(identifier) => jsify_symbol(identifier),
-		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol(property),
+		Reference::NestedIdentifier { object, property } => {
+			jsify_expression(object, flight) + "." + &jsify_symbol(property)
+		}
 	}
 }
 
@@ -113,7 +115,7 @@ fn jsify_symbol(symbol: &Symbol) -> String {
 	return format!("{}", symbol.name);
 }
 
-fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> String {
+fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>, flight: Flight) -> String {
 	if !arg_list.pos_args.is_empty() && !arg_list.named_args.is_empty() {
 		// TODO?
 		// JS doesn't support named args, this is probably to pass props to a construct. Can't mix that with positional args.
@@ -132,12 +134,12 @@ fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> 
 
 	if !arg_list.pos_args.is_empty() || !args.is_empty() {
 		for arg in arg_list.pos_args.iter() {
-			args.push(jsify_expression(arg));
+			args.push(jsify_expression(arg, flight));
 		}
 		return args.join(",");
 	} else if !arg_list.named_args.is_empty() {
 		for arg in arg_list.named_args.iter() {
-			args.push(format!("{}: {}", arg.0.name, jsify_expression(arg.1)));
+			args.push(format!("{}: {}", arg.0.name, jsify_expression(arg.1, flight)));
 		}
 		return format!("{{{}}}", args.join(","));
 	} else {
@@ -166,7 +168,7 @@ fn jsify_type(typ: &Type) -> String {
 	}
 }
 
-fn jsify_expression(expression: &Expr) -> String {
+fn jsify_expression(expression: &Expr, flight: Flight) -> String {
 	match &expression.variant {
 		ExprType::New {
 			class,
@@ -190,11 +192,16 @@ fn jsify_expression(expression: &Expr) -> String {
 					jsify_arg_list(
 						&arg_list,
 						Some("this"),
-						Some(&format!("{}", obj_id.as_ref().unwrap_or(&jsify_type(class))))
+						Some(&format!("{}", obj_id.as_ref().unwrap_or(&jsify_type(class)))),
+						flight
 					)
 				)
 			} else {
-				format!("new {}({})", jsify_type(&class), jsify_arg_list(&arg_list, None, None))
+				format!(
+					"new {}({})",
+					jsify_type(&class),
+					jsify_arg_list(&arg_list, None, None, flight)
+				)
 			}
 		}
 		ExprType::Literal(lit) => match lit {
@@ -205,7 +212,7 @@ fn jsify_expression(expression: &Expr) -> String {
 					.iter()
 					.map(|p| match p {
 						InterpolatedStringPart::Static(l) => format!("{}", l),
-						InterpolatedStringPart::Expr(e) => format!("${{{}}}", jsify_expression(e)),
+						InterpolatedStringPart::Expr(e) => format!("${{{}}}", jsify_expression(e, flight)),
 					})
 					.collect::<Vec<String>>()
 					.join("")
@@ -214,9 +221,13 @@ fn jsify_expression(expression: &Expr) -> String {
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
-		ExprType::Reference(_ref) => jsify_reference(&_ref),
+		ExprType::Reference(_ref) => jsify_reference(&_ref, flight),
 		ExprType::Call { function, args } => {
-			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
+			format!(
+				"{}({})",
+				jsify_reference(&function, flight),
+				jsify_arg_list(&args, None, None, flight)
+			)
 		}
 		ExprType::Unary { op, exp } => {
 			let op = match op {
@@ -224,7 +235,7 @@ fn jsify_expression(expression: &Expr) -> String {
 				UnaryOperator::Minus => "-",
 				UnaryOperator::Not => "!",
 			};
-			format!("({}{})", op, jsify_expression(exp))
+			format!("({}{})", op, jsify_expression(exp, flight))
 		}
 		ExprType::Binary { op, lexp, rexp } => {
 			let op = match op {
@@ -242,14 +253,19 @@ fn jsify_expression(expression: &Expr) -> String {
 				BinaryOperator::LogicalAnd => "&&",
 				BinaryOperator::LogicalOr => "||",
 			};
-			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
+			format!(
+				"({} {} {})",
+				jsify_expression(lexp, flight),
+				op,
+				jsify_expression(rexp, flight)
+			)
 		}
 		ExprType::StructLiteral { fields, .. } => {
 			format!(
 				"{{\n{}}}\n",
 				fields
 					.iter()
-					.map(|(name, expr)| format!("\"{}\": {},", name.name, jsify_expression(expr)))
+					.map(|(name, expr)| format!("\"{}\": {},", name.name, jsify_expression(expr, flight)))
 					.collect::<Vec<String>>()
 					.join("\n")
 			)
@@ -259,15 +275,26 @@ fn jsify_expression(expression: &Expr) -> String {
 				"{{\n{}\n}}",
 				fields
 					.iter()
-					.map(|(key, expr)| format!("\"{}\": {},", key, jsify_expression(expr)))
+					.map(|(key, expr)| format!("\"{}\": {},", key, jsify_expression(expr, flight)))
 					.collect::<Vec<String>>()
 					.join("\n")
 			)
 		}
+		ExprType::Print(e) => {
+			if flight == Flight::Pre {
+				format!(
+					"{}.cloud.Logger.of(this).print({});",
+					STDLIB,
+					jsify_expression(e, flight)
+				)
+			} else {
+				format!("$logger.print({});", jsify_expression(e, flight))
+			}
+		}
 	}
 }
 
-fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
+fn jsify_statement(statement: &Statement, out_dir: &PathBuf, flight: Flight) -> String {
 	match statement {
 		Statement::Use {
 			module_name,
@@ -294,12 +321,12 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 			initial_value,
 			type_: _,
 		} => {
-			let initial_value = jsify_expression(initial_value);
+			let initial_value = jsify_expression(initial_value, flight);
 			format!("let {} = {};", jsify_symbol(var_name), initial_value)
 		}
 		Statement::FunctionDefinition(func_def) => match func_def.signature.flight {
 			Flight::In => jsify_inflight_function(func_def, &out_dir),
-			Flight::Pre => jsify_function(
+			Flight::Pre => jsify_preflight_function(
 				format!("function {}", jsify_symbol(&func_def.name)).as_str(),
 				&func_def.parameters,
 				&func_def.statements,
@@ -313,8 +340,8 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 		} => format!(
 			"for(const {} of {}) {}",
 			jsify_symbol(iterator),
-			jsify_expression(iterable),
-			jsify_scope(statements, &out_dir)
+			jsify_expression(iterable, flight),
+			jsify_scope(statements, &out_dir, flight)
 		),
 		Statement::If {
 			condition,
@@ -324,26 +351,30 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 			if let Some(else_scope) = else_statements {
 				format!(
 					"if ({}) {} else {}",
-					jsify_expression(condition),
-					jsify_scope(statements, &out_dir),
-					jsify_scope(else_scope, &out_dir)
+					jsify_expression(condition, flight),
+					jsify_scope(statements, &out_dir, flight),
+					jsify_scope(else_scope, &out_dir, flight)
 				)
 			} else {
 				format!(
 					"if ({}) {}",
-					jsify_expression(condition),
-					jsify_scope(statements, &out_dir)
+					jsify_expression(condition, flight),
+					jsify_scope(statements, &out_dir, flight)
 				)
 			}
 		}
-		Statement::Expression(e) => jsify_expression(e),
+		Statement::Expression(e) => jsify_expression(e, flight),
 		Statement::Assignment { variable, value } => {
-			format!("{} = {};", jsify_reference(&variable), jsify_expression(value))
+			format!(
+				"{} = {};",
+				jsify_reference(&variable, flight),
+				jsify_expression(value, flight)
+			)
 		}
-		Statement::Scope(scope) => jsify_scope(scope, &out_dir),
+		Statement::Scope(scope) => jsify_scope(scope, &out_dir, flight),
 		Statement::Return(exp) => {
 			if let Some(exp) = exp {
-				format!("return {};", jsify_expression(exp))
+				format!("return {};", jsify_expression(exp, flight))
 			} else {
 				"return;".into()
 			}
@@ -368,11 +399,11 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 				} else {
 					"".to_string()
 				},
-				jsify_function(
+				jsify_preflight_function(
 					"constructor",
 					&constructor.parameters,
 					&constructor.statements,
-					&out_dir
+					&out_dir,
 				),
 				members
 					.iter()
@@ -381,7 +412,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 					.join("\n"),
 				methods
 					.iter()
-					.map(|f| jsify_function(jsify_symbol(&f.name).as_str(), &f.parameters, &f.statements, &out_dir))
+					.map(|f| jsify_preflight_function(jsify_symbol(&f.name).as_str(), &f.parameters, &f.statements, &out_dir,))
 					.collect::<Vec<String>>()
 					.join("\n")
 			)
@@ -413,17 +444,22 @@ fn jsify_inflight_function(func_def: &FunctionDefinition, out_dir: &PathBuf) -> 
 	for p in func_def.parameters.iter() {
 		parameter_list.push(p.name.clone());
 	}
-	let block = jsify_scope(&func_def.statements, &out_dir);
+	let block = jsify_scope(&func_def.statements, &out_dir, Flight::In);
 	let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 	let mut bindings = vec![];
 	let mut capture_names = vec![];
 	for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
 		capture_names.push(obj.name.clone());
+		let resource = if obj.name == "$logger" {
+			format!("{}.cloud.Logger.of(this)", STDLIB)
+		} else {
+			obj.name.to_owned()
+		};
 		bindings.push(format!(
 			"{}: {},",
 			obj.name,
 			render_block([
-				format!("resource: {},", obj.name),
+				format!("resource: {},", resource),
 				format!(
 					"methods: [{}]",
 					cap_def
@@ -465,7 +501,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition, out_dir: &PathBuf) -> 
 	)
 }
 
-fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope, out_dir: &PathBuf) -> String {
+fn jsify_preflight_function(name: &str, parameters: &Vec<Symbol>, body: &Scope, out_dir: &PathBuf) -> String {
 	let mut parameter_list = vec![];
 	for p in parameters.iter() {
 		parameter_list.push(jsify_symbol(p));
@@ -475,7 +511,7 @@ fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope, out_dir: &
 		"{}({}) {}",
 		name,
 		parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
-		jsify_scope(body, &out_dir)
+		jsify_scope(body, &out_dir, Flight::Pre)
 	)
 }
 

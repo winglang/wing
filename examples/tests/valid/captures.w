@@ -5,8 +5,10 @@ let p = cloud.BucketProps {
 };
 
 let bucket = new cloud.Bucket(p);
+print("one bucket");
 
 inflight handler(event: str): str {
+  print(event);
   bucket.put("file.txt", "data");
   bucket.get("file.txt");
 }
