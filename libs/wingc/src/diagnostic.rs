@@ -1,5 +1,7 @@
 use tree_sitter::Point;
 
+use crate::debug;
+
 pub type FileId = String;
 pub type CharacterLocation = Point;
 pub type ByteIndex = usize;
@@ -48,7 +50,7 @@ impl std::fmt::Display for Diagnostic {
 
 pub fn print_diagnostics(diagnostics: &Diagnostics) {
 	for diagnostic in diagnostics {
-		println!("{}", diagnostic);
+		debug!("{}", diagnostic);
 	}
 }
 

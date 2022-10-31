@@ -3,7 +3,7 @@ use std::collections::{HashMap, HashSet};
 use crate::{
 	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, Statement, Symbol},
 	type_check::type_env::TypeEnv,
-	type_check::Type,
+	type_check::Type, debug,
 };
 
 /* This is a definition of how a resource is captured. The most basic way to capture a resource
@@ -108,7 +108,7 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) -
 			if matches!(func.flight, Flight::Pre) {
 				panic!("Can't access preflight method {} inflight", property);
 			}
-			println!(
+			debug!(
 				"We seem to be accessing the preflight method {}.{} {} inflight!",
 				resource.name.name, property.name, property.span
 			);
@@ -171,7 +171,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				// 	let resource = resource.as_resource().unwrap();
 				// 	let (prop_type, flight) = resource.env.lookup_ext(property);
 				// 	if prop_type.as_resource_object().is_some() && matches!(flight, Flight::Pre) {
-				// 		println!(
+				// 		debug!(
 				// 			"We seem to be accessing the preflight resource {} {} inflight!",
 				// 			r, property.span
 				// 		);

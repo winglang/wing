@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate lazy_static;
+
 use ast::Scope;
 use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
@@ -12,6 +15,7 @@ use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
+pub mod debug;
 pub mod capture;
 pub mod diagnostic;
 pub mod jsify;
