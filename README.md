@@ -96,6 +96,9 @@ the extension package and running:
 code --install-extension ~/Downloads/vscode-wing.vsix
 ```
 
+Install Wing Console by [downloading](https://github.com/monadahq/wing-console/releases) the latest release for your platform.
+(currently supporting only macOS)
+
 ### Hello, Wing!
 
 We are ready to write our first Wing program!
