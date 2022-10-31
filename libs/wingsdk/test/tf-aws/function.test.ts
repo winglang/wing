@@ -1,23 +1,20 @@
-import { Polycons } from "@monadahq/polycons";
 import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
+import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("basic function", () => {
-  const output = cdktf.Testing.synthScope((scope) => {
-    const factory = new tfaws.PolyconFactory();
-    Polycons.register(scope, factory);
-
-    const inflight = new core.Inflight({
-      code: core.NodeJsCode.fromInline(
-        `exports.greeter = async (name) => { console.log("Hello, " + name); } `
-      ),
-      entrypoint: "exports.greeter",
-    });
-    new cloud.Function(scope, "Function", inflight);
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = new core.Inflight({
+    code: core.NodeJsCode.fromInline(
+      `exports.greeter = async (name) => { console.log("Hello, " + name); } `
+    ),
+    entrypoint: "exports.greeter",
   });
+  new cloud.Function(app, "Function", inflight);
+  const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for Lambda
@@ -31,23 +28,20 @@ test("basic function", () => {
 });
 
 test("basic function with environment variables", () => {
-  const output = cdktf.Testing.synthScope((scope) => {
-    const factory = new tfaws.PolyconFactory();
-    Polycons.register(scope, factory);
-
-    const inflight = new core.Inflight({
-      code: core.NodeJsCode.fromInline(
-        `exports.greeter = async (name) => { console.log("Hello, " + name); } `
-      ),
-      entrypoint: "exports.greeter",
-    });
-    new cloud.Function(scope, "Function", inflight, {
-      env: {
-        FOO: "BAR",
-        BOOM: "BAM",
-      },
-    });
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = new core.Inflight({
+    code: core.NodeJsCode.fromInline(
+      `exports.greeter = async (name) => { console.log("Hello, " + name); } `
+    ),
+    entrypoint: "exports.greeter",
   });
+  new cloud.Function(app, "Function", inflight, {
+    env: {
+      FOO: "BAR",
+      BOOM: "BAM",
+    },
+  });
+  const output = app.synth();
 
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {

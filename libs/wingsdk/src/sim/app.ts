@@ -1,10 +1,11 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
+import { IPolyconFactory, Polycons } from "@monadahq/polycons";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
-import { DependencyGraph } from "../core";
-import { FileBase } from "../fs";
+import { DependencyGraph, Files, IApp } from "../core";
 import { mkdtemp, sanitizeValue } from "../util";
+import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
 import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
 
@@ -14,35 +15,42 @@ import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
 export interface AppProps {
   /**
    * Directory where artifacts are synthesized to.
+   * @default - current working directory
    */
-  readonly outdir: string;
+  readonly outdir?: string;
+
+  /**
+   * A custom factory to resolve polycons.
+   * @default - use the default polycon factory included in the Wing SDK
+   */
+  readonly customFactory?: IPolyconFactory;
 }
 
 /**
  * A construct that knows how to synthesize simulator resources into a
  * Wing simulator (.wx) file.
  */
-export class App extends Construct {
+export class App extends Construct implements IApp {
   /**
    * Directory where artifacts are synthesized to.
    */
-  private readonly outdir: string;
+  public readonly outdir: string;
+  private readonly files: Files;
+
   constructor(props: AppProps) {
     super(undefined as any, "root");
-    this.outdir = props.outdir;
+    this.outdir = props.outdir ?? ".";
+    this.files = new Files({ app: this });
+    Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }
 
   /**
-   * Synthesize the app into an `app.wx` file.
+   * Synthesize the app into an `app.wx` file. Return the path to the file.
    */
-  public synth() {
+  public synth(): string {
     const workdir = mkdtemp();
 
-    // write assets and other files into the workdir
-    const isFile = (c: IConstruct): c is FileBase => c instanceof FileBase;
-    for (const f of this.node.findAll().filter(isFile)) {
-      f.save(workdir);
-    }
+    this.files.synth(workdir);
 
     // write "simulator.json" into the workdir
     const root = toSchema(this);
@@ -57,15 +65,17 @@ export class App extends Construct {
     );
 
     // zip it up, and write it as app.wx to the outdir
+    const simfile = join(this.outdir, "app.wx");
     tar.create(
       {
         gzip: true,
         cwd: workdir,
         sync: true,
-        file: join(this.outdir, "app.wx"),
+        file: simfile,
       },
       ["./"]
     );
+    return simfile;
   }
 }
 

@@ -1,58 +1,54 @@
-import { Polycons } from "@monadahq/polycons";
-import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
+import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("default queue behavior", () => {
-  const output = cdktf.Testing.synthScope((scope) => {
-    const factory = new tfaws.PolyconFactory();
-    Polycons.register(scope, factory);
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  new cloud.Queue(app, "Queue");
+  const output = app.synth();
 
-    new cloud.Queue(scope, "Queue");
-  });
-
+  // THEN
   expect(tfResourcesOf(output)).toEqual(["aws_sqs_queue"]);
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("queue with custom timeout", () => {
-  const output = cdktf.Testing.synthScope((scope) => {
-    const factory = new tfaws.PolyconFactory();
-    Polycons.register(scope, factory);
-
-    new cloud.Queue(scope, "Queue", {
-      timeout: core.Duration.fromSeconds(30),
-    });
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  new cloud.Queue(app, "Queue", {
+    timeout: core.Duration.fromSeconds(30),
   });
+  const output = app.synth();
 
+  // THEN
   expect(tfResourcesOf(output)).toEqual(["aws_sqs_queue"]);
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
 test("queue with a consumer function", () => {
-  const output = cdktf.Testing.synthScope((scope) => {
-    const factory = new tfaws.PolyconFactory();
-    Polycons.register(scope, factory);
-
-    const queue = new cloud.Queue(scope, "Queue", {
-      timeout: core.Duration.fromSeconds(30),
-    });
-    const processor = new core.Inflight({
-      code: core.NodeJsCode.fromInline(
-        `async function $proc($cap, event) {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const queue = new cloud.Queue(app, "Queue", {
+    timeout: core.Duration.fromSeconds(30),
+  });
+  const processor = new core.Inflight({
+    code: core.NodeJsCode.fromInline(
+      `async function $proc($cap, event) {
           console.log("Received " + event.name);
         }`
-      ),
-      entrypoint: "$proc",
-    });
-    const processorFn = queue.onMessage(processor);
-
-    expect(
-      core.Testing.inspectPrebundledCode(processorFn).text
-    ).toMatchSnapshot();
+    ),
+    entrypoint: "$proc",
   });
+  const processorFn = queue.onMessage(processor);
+  const output = app.synth();
+
+  // THEN
+  expect(
+    core.Testing.inspectPrebundledCode(processorFn).text
+  ).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for function

@@ -4,7 +4,7 @@ import * as core from "../../src/core";
 // import * as sim from "../../src/sim";
 import * as tfaws from "../../src/tf-aws";
 
-class Main extends Construct {
+class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
@@ -33,7 +33,7 @@ class Main extends Construct {
     const processor = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          console.log("Received " + JSON.parse(event).name);
+          console.log("Received " + event);
         }`
       ),
       entrypoint: "$proc",
@@ -42,10 +42,7 @@ class Main extends Construct {
   }
 }
 
-const app = new core.App({
-  synthesizer: new tfaws.Synthesizer({ outdir: __dirname }),
-  // synthesizer: new sim.Synthesizer({ outdir: __dirname }),
-});
-cloud.Logger.register(app.root);
-new Main(app.root, "Main");
+const app = new tfaws.App({ outdir: __dirname });
+cloud.Logger.register(app);
+new HelloWorld(app, "HelloWorld");
 app.synth();

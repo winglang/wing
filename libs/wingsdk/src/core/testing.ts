@@ -1,5 +1,5 @@
 import { IConstruct } from "constructs";
-import { Code } from "./inflight";
+import { Code, NodeJsCode } from "./inflight";
 import { PREBUNDLE_SYMBOL } from "./internal";
 
 /**
@@ -15,6 +15,14 @@ export class Testing {
       throw new Error("No prebundled code found on this resource.");
     }
 
-    return prebundle;
+    // TODO This is a hack. Our path for inflight requires should be relative
+    return NodeJsCode.fromInline(removeAbsolutePath(prebundle.text));
   }
+}
+
+function removeAbsolutePath(text: string) {
+  const regex = /"\/.+?\/winglang\/libs\/(.+?)"/g;
+
+  // replace first group with static text
+  return text.replace(regex, '"[REDACTED]/$1"');
 }

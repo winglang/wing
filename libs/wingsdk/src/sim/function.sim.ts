@@ -53,15 +53,12 @@ class Function {
     // let the OS choose a free port
     this.wss = new Server({ port: 0 });
 
-    const fn = this;
-
-    this.wss.on("connection", function connection(ws) {
-      ws.on("message", function message(data) {
+    this.wss.on("connection", (ws) => {
+      ws.on("message", (data) => {
         log("server receiving:", data);
         const contents: SimulatorRequest = JSON.parse(data.toString());
         if (contents.operation === "invoke") {
-          void fn
-            .invoke(contents.message)
+          this.invoke(contents.message)
             .then((result) => {
               const resp: SimulatorResponse = {
                 id: contents.id,
@@ -83,7 +80,7 @@ class Function {
         } else if (contents.operation === "timesCalled") {
           const resp: SimulatorResponse = {
             id: contents.id,
-            result: fn._timesCalled.toString(),
+            result: this._timesCalled.toString(),
             timestamp: Date.now(),
           };
           log("server sending:", JSON.stringify(resp));
@@ -110,7 +107,7 @@ class Function {
 
     // expect a WebSocket.AddressInfo
     if (typeof address === "string") {
-      throw new Error("Invalid address");
+      throw new Error(`Invalid address: ${address}`);
     }
     return address.port;
   }

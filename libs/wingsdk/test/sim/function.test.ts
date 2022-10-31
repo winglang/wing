@@ -1,8 +1,10 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
+import * as sim from "../../src/sim";
 import { FunctionClient } from "../../src/sim/function.inflight";
 import * as testing from "../../src/testing";
-import { simulatorJsonOf, synthSimulatedApp } from "./util";
+import { mkdtemp } from "../../src/util";
+import { simulatorJsonOf } from "./util";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
@@ -18,14 +20,15 @@ async function $proc($cap, event) {
 
 test("invoke function", async () => {
   // GIVEN
-  const appPath = synthSimulatedApp((scope) => {
-    const handler = new core.Inflight({
-      code: INFLIGHT_CODE,
-      entrypoint: "$proc",
-    });
-    new cloud.Function(scope, "my_function", handler);
+  const app = new sim.App({ outdir: mkdtemp() });
+  const handler = new core.Inflight({
+    code: INFLIGHT_CODE,
+    entrypoint: "$proc",
   });
-  const s = new testing.Simulator({ appPath });
+  new cloud.Function(app, "my_function", handler);
+  const simfile = app.synth();
+
+  const s = new testing.Simulator({ simfile });
   await s.start();
 
   const attrs = s.getAttributes("root/my_function");
@@ -39,23 +42,24 @@ test("invoke function", async () => {
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
   await s.stop();
 
-  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
   // GIVEN
-  const appPath = synthSimulatedApp((scope) => {
-    const handler = new core.Inflight({
-      code: INFLIGHT_CODE,
-      entrypoint: "$proc",
-    });
-    new cloud.Function(scope, "my_function", handler, {
-      env: {
-        PIG_LATIN: "true",
-      },
-    });
+  const app = new sim.App({ outdir: mkdtemp() });
+  const handler = new core.Inflight({
+    code: INFLIGHT_CODE,
+    entrypoint: "$proc",
   });
-  const s = new testing.Simulator({ appPath });
+  new cloud.Function(app, "my_function", handler, {
+    env: {
+      PIG_LATIN: "true",
+    },
+  });
+  const simfile = app.synth();
+
+  const s = new testing.Simulator({ simfile });
   await s.start();
 
   const attrs = s.getAttributes("root/my_function");
@@ -71,5 +75,5 @@ test("invoke function with environment variables", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(appPath)).toMatchSnapshot();
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });

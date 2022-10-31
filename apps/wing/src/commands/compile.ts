@@ -18,7 +18,7 @@ const WINGSDK_RESOLVED_PATH = require.resolve("@monadahq/wingsdk");
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
-const WINGC_PREFLIGHT = "intermediate.js";
+const WINGC_PREFLIGHT = "preflight.js";
 
 /**
  * Available targets for compilation.
@@ -95,7 +95,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     process: {
       env: {
         WINGSDK_SYNTH_DIR: outDir,
-        ...(options.target === Target.SIM ? { WING_SIM: "1" } : {}),
+        WING_TARGET: options.target,
       },
     },
     __dirname: workDir,
