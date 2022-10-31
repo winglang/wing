@@ -1,5 +1,5 @@
 import { join } from "path";
-import * as aws from "@cdktf/provider-aws";
+import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
 import { IPolyconFactory, Polycons } from "@monadahq/polycons";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
@@ -64,7 +64,7 @@ export class App extends Construct implements IApp {
           stateFile: props.stateFile,
         });
 
-        new aws.AwsProvider(this, "AwsProvider", {});
+        new AwsProvider(this, "AwsProvider", {});
         Polycons.register(this, props.customFactory ?? new PolyconFactory());
       }
 

@@ -237,6 +237,7 @@ jobs:
   build-vscode:
     name: "Build VSCode Extension"
     needs:
+      - prepare
       - build-native
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
