@@ -302,6 +302,10 @@ impl Parser<'_> {
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
+			"optional" => {
+				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
+				Ok(Type::Optional(Box::new(inner_type)))
+			}
 			"custom_type" => Ok(self.build_custom_type(&type_node)?),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();
