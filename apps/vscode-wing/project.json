@@ -7,7 +7,7 @@
     "copy": {
       "executor": "nx:run-commands",
       "inputs": [
-        "rust-native"
+        "{workspaceRoot}/target/*/wing-language-server"
       ],
       "outputs": [
         "{projectRoot}/resources/native/wing-language-server"
@@ -19,14 +19,14 @@
         "commands": [
           "mkdir -p resources/native",
           "rm -f resources/native/*",
-          "cp ../../target/debug/wing-language-server resources/native"
+          "cp -v ../../target/debug/wing-language-server resources/native"
         ],
         "cwd": "apps/vscode-wing"
       },
       "configurations": {
         "release": {
           "commands": [
-            "echo 'Skipping wls copy. Get binaries from CI'"
+            "echo 'Skipping wls copy. Get platform-specific binaries from CI'"
           ]
         }
       }
