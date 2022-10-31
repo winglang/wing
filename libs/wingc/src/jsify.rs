@@ -336,7 +336,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 				)
 			}
 		}
-		Statement::Expression(e) => jsify_expression(e),
+		Statement::Expression(e) => format!("{};", jsify_expression(e)),
 		Statement::Assignment { variable, value } => {
 			format!("{} = {};", jsify_reference(&variable), jsify_expression(value))
 		}
