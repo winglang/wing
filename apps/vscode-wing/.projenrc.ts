@@ -69,8 +69,8 @@ const contributes: VSCodeExtensionContributions = {
       extensions: [".w"],
       configuration: "./language-configuration.json",
       icon: {
-        light: "resources/logo.png",
-        dark: "resources/logo.png",
+        light: "resources/icon-light.png",
+        dark: "resources/icon-dark.png",
       },
     },
   ],
