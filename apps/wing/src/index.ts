@@ -6,6 +6,7 @@ import * as open from "open";
 import { Command } from "commander";
 import { compile } from "./commands/compile";
 import debug from "debug";
+import { resolve } from "path";
 import { stat } from "fs/promises";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
@@ -21,7 +22,8 @@ async function main() {
     .command("run")
     .description("Runs a Wing executable in the Wing Console")
     .argument("<executable>", "executable .wx file")
-    .action(async (executable) => {
+    .action(async (executable: string) => {
+      executable = resolve(executable);
       if (process.platform === "darwin") {
         debug("looking for wing console");
         const wingConsoleApp = "/Applications/wing-console.app";
