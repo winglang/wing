@@ -69,7 +69,7 @@ return 1;
 Inflight Function definition
 ====================
 
-inflight hi(a: num, b: str) {}
+inflight hi(a: num, b: str?, c: bool) {}
 
 ---
 
@@ -80,6 +80,12 @@ inflight hi(a: num, b: str) {}
             (parameter_definition
                 name: (identifier)
                 type: (builtin_type)
+            )
+            (parameter_definition
+                name: (identifier)
+                type: (optional
+                    (builtin_type)
+                )
             )
             (parameter_definition
                 name: (identifier)
@@ -229,6 +235,7 @@ Struct definition
 
 struct Test {
     cool: num;
+    hip: str?;
 }
 
 ---
@@ -238,6 +245,12 @@ struct Test {
         (struct_field
             (identifier)
             (builtin_type)
+        )
+        (struct_field
+            (identifier)
+            (optional
+                (builtin_type)
+            )
         )
     )
 )

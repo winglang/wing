@@ -46,6 +46,7 @@ pub enum Type {
 	String,
 	Bool,
 	Duration,
+	Optional(Box<Type>),
 	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
