@@ -76,3 +76,7 @@ test("reloading the simulator after working with ws", async () => {
 
   expect(s.getProps("root/my_bucket").public).toEqual(true);
 });
+
+afterAll((done) => {
+  done();
+});

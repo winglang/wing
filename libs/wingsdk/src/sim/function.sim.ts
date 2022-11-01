@@ -118,6 +118,7 @@ class Function {
         this.wss.clients.forEach((socket) => {
           socket.close();
         });
+        this.wss.close();
         resolve(null);
       } catch (err) {
         reject(err);
