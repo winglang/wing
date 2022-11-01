@@ -3,7 +3,7 @@ import * as cloud from "../cloud";
 import * as core from "../core";
 import { NodeJsCode } from "../core";
 import { Function } from "./function";
-import { IResourceSim } from "./handle-manager";
+import { ISimulatorResource } from "./handle-manager";
 import { IResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 
@@ -117,4 +117,4 @@ export class Queue extends cloud.QueueBase implements IResource {
 /**
  * Simulator implementation of inflight client for `cloud.Queue`
  */
-export interface IQueueClient extends cloud.IQueueClient, IResourceSim {}
+export interface IQueueClient extends cloud.IQueueClient, ISimulatorResource {}

@@ -1,7 +1,7 @@
-import { IQueueClient } from "../cloud";
 import { SimulatorContext } from "../testing/simulator";
 import { IFunctionClient } from "./function";
 import { HandleManager, makeResourceHandle } from "./handle-manager";
+import { IQueueClient } from "./queue";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";
 
@@ -9,22 +9,7 @@ interface QueueSubscriberInternal extends QueueSubscriber {
   functionClient?: IFunctionClient;
 }
 
-export async function start(
-  path: string,
-  props: QueueSchema["props"],
-  context: SimulatorContext
-): Promise<QueueSchema["attrs"]> {
-  const queue = new Queue(path, props, context);
-  const handle = HandleManager.addInstance(queue);
-  return { handle };
-}
-
-export async function stop(attrs: QueueSchema["attrs"]) {
-  const queue = HandleManager.removeInstance(attrs!.handle) as Queue;
-  await queue.stop();
-}
-
-class Queue implements IQueueClient {
+export class Queue implements IQueueClient {
   public readonly handle: string;
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriberInternal>();
@@ -52,6 +37,14 @@ class Queue implements IQueueClient {
     }
 
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
+  }
+
+  public async init(): Promise<void> {
+    return;
+  }
+
+  public async cleanup(): Promise<void> {
+    clearInterval(this.intervalId);
   }
 
   public async push(message: string): Promise<void> {
@@ -86,9 +79,5 @@ class Queue implements IQueueClient {
         processedMessages = true;
       }
     } while (processedMessages);
-  }
-
-  public async stop(): Promise<void> {
-    clearInterval(this.intervalId);
   }
 }

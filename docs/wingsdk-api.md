@@ -4785,7 +4785,7 @@ that is resolved at synth time.
 ##### `getResourceByPath` <a name="getResourceByPath" id="@monadahq/wingsdk.testing.Simulator.getResourceByPath"></a>
 
 ```typescript
-public getResourceByPath(path: string): IResourceSim
+public getResourceByPath(path: string): ISimulatorResource
 ```
 
 Get the resource instance for a given path.
@@ -5022,7 +5022,7 @@ Put an object in the bucket.
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.sim.IBucketClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IBucketClient, @monadahq/wingsdk.sim.IResourceSim
+- *Extends:* @monadahq/wingsdk.cloud.IBucketClient, @monadahq/wingsdk.sim.ISimulatorResource
 
 - *Implemented By:* @monadahq/wingsdk.sim.IBucketClient
 
@@ -5127,7 +5127,7 @@ Invoke the function asynchronously with a given payload.
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.sim.IFunctionClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient, @monadahq/wingsdk.sim.IResourceSim
+- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient, @monadahq/wingsdk.sim.ISimulatorResource
 
 - *Implemented By:* @monadahq/wingsdk.sim.IFunctionClient
 
@@ -5226,7 +5226,7 @@ The message to print.
 
 ### ILoggerClient <a name="ILoggerClient" id="@monadahq/wingsdk.sim.ILoggerClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.ILoggerClient, @monadahq/wingsdk.sim.IResourceSim
+- *Extends:* @monadahq/wingsdk.cloud.ILoggerClient, @monadahq/wingsdk.sim.ISimulatorResource
 
 - *Implemented By:* @monadahq/wingsdk.sim.ILoggerClient
 
@@ -5286,7 +5286,7 @@ Payload to send to the queue.
 
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.sim.IQueueClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IQueueClient, @monadahq/wingsdk.sim.IResourceSim
+- *Extends:* @monadahq/wingsdk.cloud.IQueueClient, @monadahq/wingsdk.sim.ISimulatorResource
 
 - *Implemented By:* @monadahq/wingsdk.sim.IQueueClient
 
@@ -5381,33 +5381,6 @@ Lookup a resource by its path.
 ---
 
 
-### IResourceSim <a name="IResourceSim" id="@monadahq/wingsdk.sim.IResourceSim"></a>
-
-- *Implemented By:* @monadahq/wingsdk.sim.IBucketClient, @monadahq/wingsdk.sim.IFunctionClient, @monadahq/wingsdk.sim.ILoggerClient, @monadahq/wingsdk.sim.IQueueClient, @monadahq/wingsdk.sim.IResourceSim
-
-A simulated resource.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.IResourceSim.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
-
----
-
-##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IResourceSim.property.handle"></a>
-
-```typescript
-public readonly handle: string;
-```
-
-- *Type:* string
-
-The resource's handle - a name that uniquely identifies the resource across simulation runs.
-
----
-
 ### ISimulatorDispatcher <a name="ISimulatorDispatcher" id="@monadahq/wingsdk.testing.ISimulatorDispatcher"></a>
 
 - *Implemented By:* @monadahq/wingsdk.testing.ISimulatorDispatcher
@@ -5478,6 +5451,57 @@ Stop the resource's simulation and clean up any file system resources it created
 
 ---
 
+
+### ISimulatorResource <a name="ISimulatorResource" id="@monadahq/wingsdk.sim.ISimulatorResource"></a>
+
+- *Implemented By:* @monadahq/wingsdk.sim.IBucketClient, @monadahq/wingsdk.sim.IFunctionClient, @monadahq/wingsdk.sim.ILoggerClient, @monadahq/wingsdk.sim.IQueueClient, @monadahq/wingsdk.sim.ISimulatorResource
+
+A simulated resource.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.ISimulatorResource.cleanup">cleanup</a></code> | Stop the resource and clean up any physical resources it may have created (files, ports, etc). |
+| <code><a href="#@monadahq/wingsdk.sim.ISimulatorResource.init">init</a></code> | Perform any async initialization required by the resource. |
+
+---
+
+##### `cleanup` <a name="cleanup" id="@monadahq/wingsdk.sim.ISimulatorResource.cleanup"></a>
+
+```typescript
+public cleanup(): void
+```
+
+Stop the resource and clean up any physical resources it may have created (files, ports, etc).
+
+##### `init` <a name="init" id="@monadahq/wingsdk.sim.ISimulatorResource.init"></a>
+
+```typescript
+public init(): void
+```
+
+Perform any async initialization required by the resource.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.ISimulatorResource.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.ISimulatorResource.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's handle - a name that uniquely identifies the resource across simulation runs.
+
+---
 
 ## Enums <a name="Enums" id="Enums"></a>
 

@@ -4,25 +4,11 @@ import { join } from "path";
 import { LogEvent } from "../cloud";
 import { SimulatorContext } from "../testing";
 import { ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE } from "./function.sim";
-import { HandleManager, makeResourceHandle } from "./handle-manager";
+import { makeResourceHandle } from "./handle-manager";
 import { ILoggerClient } from "./logger";
 import { LoggerSchema } from "./schema-resources";
 
-export async function start(
-  path: string,
-  props: any,
-  context: SimulatorContext
-): Promise<LoggerSchema["attrs"]> {
-  const logger = new Logger(path, props, context);
-  const handle = HandleManager.addInstance(logger);
-  return { handle };
-}
-
-export async function stop(attrs: LoggerSchema["attrs"]): Promise<void> {
-  HandleManager.removeInstance(attrs!.handle);
-}
-
-class Logger implements ILoggerClient {
+export class Logger implements ILoggerClient {
   public readonly handle: string;
   private readonly logsDir: string;
   public constructor(
@@ -32,6 +18,15 @@ class Logger implements ILoggerClient {
   ) {
     this.handle = makeResourceHandle(context.simulationId, "logger", path);
     this.logsDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
+  }
+
+  public async init(): Promise<void> {
+    return;
+  }
+
+  public async cleanup(): Promise<void> {
+    // TODO: clean up logs dir?
+    return;
   }
 
   public async print(message: string): Promise<void> {

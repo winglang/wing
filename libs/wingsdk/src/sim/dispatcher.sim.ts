@@ -1,9 +1,10 @@
 import * as cloud from "../cloud";
 import { ISimulatorDispatcher, SimulatorContext } from "../testing/simulator";
-import { start as startBucket, stop as stopBucket } from "./bucket.sim";
-import { start as startFunction, stop as stopFunction } from "./function.sim";
-import { start as startLogger, stop as stopLogger } from "./logger.sim";
-import { start as startQueue, stop as stopQueue } from "./queue.sim";
+import { Bucket } from "./bucket.sim";
+import { Function } from "./function.sim";
+import { HandleManager, ISimulatorResource } from "./handle-manager";
+import { Logger } from "./logger.sim";
+import { Queue } from "./queue.sim";
 
 export class DefaultSimulatorDispatcher implements ISimulatorDispatcher {
   async start(
@@ -12,39 +13,30 @@ export class DefaultSimulatorDispatcher implements ISimulatorDispatcher {
     props: any,
     context: SimulatorContext
   ): Promise<any> {
+    let resource: ISimulatorResource;
     switch (type) {
       case cloud.BUCKET_TYPE:
-        return startBucket(path, props, context);
+        resource = new Bucket(path, props, context);
+        break;
       case cloud.FUNCTION_TYPE:
-        return startFunction(path, props, context);
+        resource = new Function(path, props, context);
+        break;
       case cloud.QUEUE_TYPE:
-        return startQueue(path, props, context);
+        resource = new Queue(path, props, context);
+        break;
       case cloud.LOGGER_TYPE:
-        return startLogger(path, props, context);
-      case "constructs.Construct":
-        return {};
+        resource = new Logger(path, props, context);
+        break;
       default:
         throw new Error(`Type ${type} not implemented.`);
     }
+    await resource.init();
+    const handle = HandleManager.addInstance(resource);
+    return { handle };
   }
 
-  async stop(type: string, attrs: any): Promise<void> {
-    switch (type) {
-      case cloud.BUCKET_TYPE:
-        await stopBucket(attrs);
-        return;
-      case cloud.FUNCTION_TYPE:
-        await stopFunction(attrs);
-        return;
-      case cloud.QUEUE_TYPE:
-        await stopQueue(attrs);
-        return;
-      case cloud.LOGGER_TYPE:
-        return stopLogger(attrs);
-      case "constructs.Construct":
-        return;
-      default:
-        throw new Error(`Type ${type} not implemented.`);
-    }
+  async stop(_type: string, attrs: any): Promise<void> {
+    const resource = HandleManager.removeInstance(attrs!.handle);
+    await resource.cleanup();
   }
 }

@@ -1,7 +1,7 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
-import { HandleManager, IResourceSim } from "../sim";
+import { HandleManager, ISimulatorResource } from "../sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
@@ -181,7 +181,7 @@ export class Simulator {
   /**
    * Get the resource instance for a given path.
    */
-  public getResourceByPath(path: string): IResourceSim {
+  public getResourceByPath(path: string): ISimulatorResource {
     const handle = this.getAttributes(path).handle;
     if (!handle) {
       throw new Error(`Resource ${path} does not have a handle`);

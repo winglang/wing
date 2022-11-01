@@ -1,4 +1,4 @@
-const HANDLES: Record<string, IResourceSim> = {};
+const HANDLES: Record<string, ISimulatorResource> = {};
 
 /**
  * Maintain a mapping from handles to resource instances. This is used by the
@@ -8,7 +8,7 @@ const HANDLES: Record<string, IResourceSim> = {};
  * @internal
  */
 export class HandleManager {
-  public static addInstance(instance: IResourceSim): string {
+  public static addInstance(instance: ISimulatorResource): string {
     const handle = instance.handle;
     if (HANDLES[handle]) {
       throw new Error(`Handler instance already exists at ${handle}`);
@@ -17,14 +17,14 @@ export class HandleManager {
     return handle;
   }
 
-  public static findInstance(handle: string): IResourceSim {
+  public static findInstance(handle: string): ISimulatorResource {
     if (!HANDLES[handle]) {
       throw new Error(`No handler instance at ${handle}`);
     }
     return HANDLES[handle];
   }
 
-  public static removeInstance(handle: string): IResourceSim {
+  public static removeInstance(handle: string): ISimulatorResource {
     if (!HANDLES[handle]) {
       throw new Error(`No handler instance at ${handle}`);
     }
@@ -37,12 +37,23 @@ export class HandleManager {
 /**
  * A simulated resource.
  */
-export interface IResourceSim {
+export interface ISimulatorResource {
   /**
    * The resource's handle - a name that uniquely identifies the resource across
    * simulation runs.
    */
   readonly handle: string;
+
+  /**
+   * Perform any async initialization required by the resource.
+   */
+  init(): Promise<void>;
+
+  /**
+   * Stop the resource and clean up any physical resources it may have created
+   * (files, ports, etc).
+   */
+  cleanup(): Promise<void>;
 }
 
 export function makeResourceHandle(

@@ -11,21 +11,7 @@ import { FunctionSchema } from "./schema-resources";
 export const ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE =
   "WING_SIM_RUNTIME_FUNCTION_HANDLE";
 
-export async function start(
-  path: string,
-  props: FunctionSchema["props"],
-  context: SimulatorContext
-): Promise<FunctionSchema["attrs"]> {
-  const fn = new Function(path, props, context);
-  const handle = HandleManager.addInstance(fn);
-  return { handle };
-}
-
-export async function stop(attrs: FunctionSchema["attrs"]): Promise<void> {
-  HandleManager.removeInstance(attrs!.handle);
-}
-
-class Function implements IFunctionClient {
+export class Function implements IFunctionClient {
   public readonly handle: string;
   private readonly filename: string;
   private readonly env: Record<string, string>;
@@ -43,6 +29,14 @@ class Function implements IFunctionClient {
     }
     this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
     this.env = props.environmentVariables;
+  }
+
+  public async init(): Promise<void> {
+    return;
+  }
+
+  public async cleanup(): Promise<void> {
+    return;
   }
 
   public async invoke(payload: string): Promise<string> {

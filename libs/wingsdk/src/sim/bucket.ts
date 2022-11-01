@@ -2,7 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { CaptureMetadata, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
-import { IResourceSim } from "./handle-manager";
+import { ISimulatorResource } from "./handle-manager";
 import { IResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
 
@@ -63,4 +63,6 @@ export class Bucket extends cloud.BucketBase implements IResource {
 /**
  * Simulator implementation of inflight client for `cloud.Bucket`.
  */
-export interface IBucketClient extends cloud.IBucketClient, IResourceSim {}
+export interface IBucketClient
+  extends cloud.IBucketClient,
+    ISimulatorResource {}
