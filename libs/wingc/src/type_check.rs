@@ -900,6 +900,12 @@ impl<'a> TypeChecker<'a> {
 				let var_type = self.resolve_reference(variable, env);
 				self.validate_type(exp_type, var_type, value);
 			}
+			Statement::Bring {
+				module_path: _,
+				statements: _,
+			} => {
+				// no-op
+			}
 			Statement::Use {
 				module_name,
 				identifier,

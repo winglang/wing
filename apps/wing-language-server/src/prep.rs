@@ -1,4 +1,4 @@
-use std::cell::RefCell;
+use std::{cell::RefCell, collections::HashSet};
 
 use tree_sitter::Tree;
 use wingc::{diagnostic::Diagnostics, parser::Parser, type_check};
@@ -21,7 +21,9 @@ pub fn parse_text(source_file: &str, text: &[u8]) -> ParseResult {
 		}
 	};
 
+	let mut imports = HashSet::new();
 	let wing_parser = Parser {
+		imports: RefCell::new(&mut imports),
 		source: &text[..],
 		source_name: source_file.to_string(),
 		diagnostics: RefCell::new(Diagnostics::new()),

@@ -71,6 +71,7 @@ jobs:
 
   build-wasm:
     name: "Non-Native Build"
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     needs: prepare
     env:

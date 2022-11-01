@@ -204,10 +204,9 @@ impl<'a> JsiiImporter<'a> {
 				// Add my type as the first argument to all methods (this)
 				arg_types.push(wing_type);
 				// Define the rest of the arguments and create the method signature
-				if let Some(args) = &m.parameters {
-					for arg in args {
-						// TODO: handle arg.variadic and arg.optional
-						arg_types.push(self.type_ref_to_wing_type(&arg.type_).unwrap());
+				if let Some(params) = &m.parameters {
+					for param in params {
+						arg_types.push(self.parameter_to_wing_type(&param));
 					}
 				}
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
@@ -338,26 +337,19 @@ impl<'a> JsiiImporter<'a> {
 
 		if let Some(initializer) = jsii_initializer {
 			let mut arg_types: Vec<TypeRef> = vec![];
-			if let Some(args) = &initializer.parameters {
-				for (i, arg) in args.iter().enumerate() {
-					// TODO: handle arg.variadic
-
+			if let Some(params) = &initializer.parameters {
+				for (i, param) in params.iter().enumerate() {
 					// If this is a resource then skip scope and id arguments
 					if is_resource {
 						if i == 0 {
-							assert!(arg.name == "scope");
+							assert!(param.name == "scope");
 							continue;
 						} else if i == 1 {
-							assert!(arg.name == "id");
+							assert!(param.name == "id");
 							continue;
 						}
 					}
-					let arg_type = self.type_ref_to_wing_type(&arg.type_).unwrap();
-					if arg.optional.unwrap_or(false) {
-						arg_types.push(self.wing_types.add_type(Type::Optional(arg_type)));
-					} else {
-						arg_types.push(arg_type);
-					}
+					arg_types.push(self.parameter_to_wing_type(&param));
 				}
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
@@ -402,5 +394,18 @@ impl<'a> JsiiImporter<'a> {
 			panic!("TODO: handle optional types");
 		}
 		self.type_ref_to_wing_type(&jsii_optional_type.type_)
+	}
+
+	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
+		if parameter.variadic.unwrap_or(false) {
+			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/monadahq/winglang/issues/397");
+		}
+
+		let param_type = self.type_ref_to_wing_type(&parameter.type_).unwrap();
+		if parameter.optional.unwrap_or(false) {
+			self.wing_types.add_type(Type::Optional(param_type))
+		} else {
+			param_type
+		}
 	}
 }
