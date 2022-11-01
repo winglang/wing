@@ -114,13 +114,15 @@ class Function {
 
   public async stop(): Promise<void> {
     await new Promise((resolve, reject) => {
-      this.wss.close((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(null);
-        }
-      });
+      try {
+        this.wss.clients.forEach((socket) => {
+          socket.close();
+        });
+        this.wss.close();
+        resolve(null);
+      } catch (err) {
+        reject(err);
+      }
     });
     await this.worker.destroy();
   }
