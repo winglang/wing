@@ -6,7 +6,7 @@ import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";
 
 interface QueueSubscriberInternal extends QueueSubscriber {
-  functionClient?: IFunctionClient;
+  functionHandle?: string;
 }
 
 export class Queue implements IQueueClient {
@@ -21,15 +21,15 @@ export class Queue implements IQueueClient {
     context: SimulatorContext
   ) {
     this.handle = makeResourceHandle(context.simulationId, "queue", path);
+
     for (const sub of props.subscribers) {
       this.subscribers.push({ ...sub });
     }
+
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
-      const functionHandle = context.resolver.lookup(functionId).attrs!.handle;
-      subscriber.functionClient = HandleManager.findInstance(
-        functionHandle
-      ) as IFunctionClient;
+      subscriber.functionHandle =
+        context.resolver.lookup(functionId).attrs!.handle;
     }
 
     if (props.initialMessages) {
@@ -63,7 +63,9 @@ export class Queue implements IQueueClient {
         if (messages.length === 0) {
           continue;
         }
-        const fnClient = subscriber.functionClient;
+        const fnClient = HandleManager.findInstance(
+          subscriber.functionHandle!
+        ) as IFunctionClient;
         if (!fnClient) {
           throw new Error("No function client found");
         }
