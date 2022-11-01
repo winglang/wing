@@ -1,12 +1,13 @@
-import { join } from "node:path";
+import path from "node:path";
 
-import { app, BrowserWindow, shell, ipcMain } from "electron";
+import { app, BrowserWindow, shell, ipcMain, dialog } from "electron";
 import log from "electron-log";
 import { createIPCHandler } from "electron-trpc";
 import { autoUpdater } from "electron-updater";
 
+import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeRouters } from "./router/index.js";
-import { createSimulator } from "./wingsdk.js";
+import { createSimulator, Simulator } from "./wingsdk.js";
 
 export default class AppUpdater {
   constructor() {
@@ -25,22 +26,42 @@ if (!app.requestSingleInstanceLock()) {
   process.exit(0);
 }
 
+if (process.defaultApp) {
+  const filename = process.argv[1];
+  if (filename) {
+    app.setAsDefaultProtocolClient(WING_PROTOCOL_SCHEME, process.execPath, [
+      path.resolve(filename),
+    ]);
+  }
+} else {
+  app.setAsDefaultProtocolClient(WING_PROTOCOL_SCHEME);
+}
+
 export const ROOT_PATH = {
-  dist: join(__dirname, "../.."),
-  public: join(__dirname, app.isPackaged ? "../.." : "../.."),
+  dist: path.join(__dirname, "../.."),
+  public: path.join(__dirname, "../.."),
 };
 
 let win: BrowserWindow | undefined;
 const url = process.env.VITE_DEV_SERVER_URL;
-const indexHtml = join(ROOT_PATH.dist, "index.html");
+const indexHtml = path.join(ROOT_PATH.dist, "index.html");
 
-function createWindow() {
+async function createWindow(wxFilePath: string) {
+  if (win) {
+    return;
+  }
+
+  const sim = createSimulator({ appPath: wxFilePath });
+  await sim.start();
+  const router = mergeRouters(sim);
+  createIPCHandler({ ipcMain, router });
+
   win = new BrowserWindow({
     title: "Wing Console",
-    icon: join(ROOT_PATH.public, "icon.ico"),
+    icon: path.join(ROOT_PATH.public, "icon.ico"),
     webPreferences: {
       nodeIntegration: true,
-      preload: join(__dirname, "../preload/index.js"),
+      preload: path.join(__dirname, "../preload/index.js"),
       contextIsolation: true,
     },
   });
@@ -69,7 +90,6 @@ function createWindow() {
 }
 
 app.on("window-all-closed", () => {
-  win = undefined;
   if (process.platform !== "darwin") {
     app.quit();
   }
@@ -82,46 +102,21 @@ app.on("second-instance", () => {
       win.restore();
     }
     win.focus();
+
+    dialog.showErrorBox(
+      "Can't open multiple windows",
+      "Wing Console doesn't support multiple windows yet",
+    );
   }
 });
 
-app.on("activate", async () => {
-  const allWindows = BrowserWindow.getAllWindows();
-  if (allWindows.length > 0) {
-    allWindows[0]?.focus();
-  } else {
-    createWindow();
-  }
+let wxPathFromDeeplinkProtocol: string | undefined;
+app.on("open-url", (event, url) => {
+  wxPathFromDeeplinkProtocol = url.slice(`${WING_PROTOCOL_SCHEME}://`.length);
 });
-
-// new window example arg: new windows url
-ipcMain.handle("open-win", (event, arg) => {
-  const childWindow = new BrowserWindow();
-
-  if (app.isPackaged) {
-    void childWindow.loadFile(indexHtml, { hash: arg });
-  } else {
-    void childWindow.loadURL(`${url}/#${arg}`);
-  }
+app.on("open-file", (event, path) => {
+  wxPathFromDeeplinkProtocol = path;
 });
-
-const getWXFilePath = (): string => {
-  // Use the demo.wx file in dev.
-  if (import.meta.env.DEV) {
-    return `${process.cwd()}/electron/main/demo.wx`;
-  }
-
-  const path = process.argv
-    .slice(1)
-    .find((arg) => arg.startsWith("--cloudFile="))
-    ?.replace("--cloudFile=", "");
-
-  if (!path) {
-    throw new Error("Usage: wing-console --cloudFile=file.wx");
-  }
-
-  return path;
-};
 
 void app.whenReady().then(async () => {
   if (import.meta.env.PROD) {
@@ -133,10 +128,19 @@ void app.whenReady().then(async () => {
     await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
   }
 
-  const wxFilePath = getWXFilePath();
-  const sim = createSimulator({ appPath: wxFilePath });
-  await sim.start();
-  const router = mergeRouters(sim);
-  createIPCHandler({ ipcMain, router });
-  const window = createWindow();
+  // Use the demo.wx file in dev.
+  if (import.meta.env.DEV) {
+    await createWindow(`${process.cwd()}/electron/main/demo.wx`);
+  } else {
+    const path = wxPathFromDeeplinkProtocol ?? process.argv[1];
+    if (!path) {
+      dialog.showErrorBox(
+        "Expected a .wx file as an argument",
+        "Usage: wing-console file.wx",
+      );
+      app.quit();
+      return;
+    }
+    await createWindow(path);
+  }
 });

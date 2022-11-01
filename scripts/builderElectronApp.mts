@@ -3,6 +3,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { build, Platform } from "electron-builder";
 import { notarize } from "electron-notarize";
 
+import { WING_PROTOCOL_SCHEME } from "../electron/main/protocol.js";
+
 class MissingEnvironmentVariable extends Error {
   constructor(public readonly key: string) {
     super(`The environment variable [process.env.${key}] must have a value`);
@@ -46,13 +48,15 @@ try {
     publish: process.env.CI ? "always" : null,
     config: {
       appId: "co.monada.WingConsole",
+      productName: "Wing Console",
       publish: [
         {
           provider: "s3",
           bucket: "a1bnbufeqmg-km85vfnen3",
         },
       ],
-      protocols: [{ name: "Wing Console", schemes: ["wing"] }],
+      protocols: [{ name: "Wing Console", schemes: [WING_PROTOCOL_SCHEME] }],
+      fileAssociations: [{ ext: "wx", name: "Wing Local File" }],
       directories: {
         output: "release",
         buildResources: "electron/resources",
@@ -65,7 +69,6 @@ try {
       dmg: {
         sign: true,
         icon: "electron/resources/icon.icns",
-        background: "electron/resources/background.png",
       },
       afterSign: async (context) => {
         if (context.electronPlatformName === "darwin") {
