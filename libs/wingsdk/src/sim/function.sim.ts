@@ -47,8 +47,6 @@ class Function implements IFunctionClient {
   public async invoke(payload: string): Promise<string> {
     this._timesCalled += 1;
 
-    // The simulator is target for local development and debugging so we are not
-    // trying to overly secure or sandbox the execution environment.
     const userCode = readFileSync(this.filename, "utf8");
     const envSetup = Object.entries(this.env).map(
       ([key, value]) =>
