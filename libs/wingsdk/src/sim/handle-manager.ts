@@ -1,9 +1,9 @@
 const HANDLES: Record<string, IResourceSim> = {};
 
 /**
- * Maintain a mapping from resource handles to resource instances. This is
- * used by the simulator to find resources, both for the public API and
- * for when user code needs to call other resource clients.
+ * Maintain a mapping from handles to resource instances. This is used by the
+ * simulator to find resources, both for the public API and for when user code
+ * needs to call other resource clients.
  *
  * @internal
  */
