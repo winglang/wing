@@ -1,6 +1,7 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
+import { HandleManager, IResourceSim } from "../sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
@@ -26,6 +27,12 @@ export interface SimulatorProps {
  * Context that is passed to individual resource simulations.
  */
 export interface SimulatorContext {
+  /**
+   * A unique id for this particular simulation run. This can be used to
+   * distinguish between multiple runs of the same simulation.
+   */
+  readonly simulationId: string;
+
   /**
    * A resolver that can be used to look up other resources in the tree.
    */
@@ -107,6 +114,8 @@ export class Simulator {
     // TODO: what if start() gets called twice in a row?
 
     const context: SimulatorContext = {
+      // generate a random id for this simulation run
+      simulationId: `${Date.now().toString(36)}`,
       // This resolver allows resources to resolve deploy-time attributes about
       // other resources they depend on. For example, a queue that has a function
       // subscribed to it needs to obtain the function's simulator-unique ID in
@@ -123,7 +132,12 @@ export class Simulator {
       const res = findResource(this._tree, path);
       log(`starting resource ${path} (${res.type})`);
       const props = resolveTokens(path, res.props, context.resolver);
-      const attrs = await this._dispatcher.start(res.type, props, context);
+      const attrs = await this._dispatcher.start(
+        res.type,
+        path,
+        props,
+        context
+      );
       (res as any).attrs = attrs;
     }
   }
@@ -155,6 +169,24 @@ export class Simulator {
     this._assetsDir = assetsDir;
 
     await this.start();
+  }
+
+  /**
+   * Get a list of all resource paths.
+   */
+  public listResources(): string[] {
+    return this._tree.startOrder.slice().sort();
+  }
+
+  /**
+   * Get the resource instance for a given path.
+   */
+  public getResourceByPath(path: string): IResourceSim {
+    const handle = this.getAttributes(path).handle;
+    if (!handle) {
+      throw new Error(`Resource ${path} does not have a handle`);
+    }
+    return HandleManager.getInstance(handle);
   }
 
   /**
@@ -261,7 +293,12 @@ export interface ISimulatorDispatcher {
    * Start simulating a resource. This function should return an object/map
    * containing the resource's attributes.
    */
-  start(type: string, props: any, context: SimulatorContext): Promise<any>;
+  start(
+    type: string,
+    path: string,
+    props: any,
+    context: SimulatorContext
+  ): Promise<any>;
 
   /**
    * Stop the resource's simulation and clean up any file system resources it

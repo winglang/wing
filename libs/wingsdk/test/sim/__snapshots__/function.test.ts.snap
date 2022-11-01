@@ -1,17 +1,51 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`invoke function 1`] = `
+exports[`create a function 1`] = `
 Object {
   "root": Object {
     "children": Object {
       "my_function": Object {
+        "attrs": Object {},
+        "callees": Array [],
+        "callers": Array [],
+        "children": Object {},
+        "dependsOn": Array [],
         "props": Object {
+          "environmentVariables": Object {},
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
       },
     },
+    "dependsOn": Array [],
+    "type": "constructs.Construct",
+  },
+  "startOrder": Array [
+    "root/my_function",
+  ],
+}
+`;
+
+exports[`invoke function 1`] = `
+Object {
+  "root": Object {
+    "children": Object {
+      "my_function": Object {
+        "attrs": Object {},
+        "callees": Array [],
+        "callers": Array [],
+        "children": Object {},
+        "dependsOn": Array [],
+        "props": Object {
+          "environmentVariables": Object {},
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    },
+    "dependsOn": Array [],
     "type": "constructs.Construct",
   },
   "startOrder": Array [
@@ -25,6 +59,11 @@ Object {
   "root": Object {
     "children": Object {
       "my_function": Object {
+        "attrs": Object {},
+        "callees": Array [],
+        "callers": Array [],
+        "children": Object {},
+        "dependsOn": Array [],
         "props": Object {
           "environmentVariables": Object {
             "PIG_LATIN": "true",
@@ -35,6 +74,7 @@ Object {
         "type": "wingsdk.cloud.Function",
       },
     },
+    "dependsOn": Array [],
     "type": "constructs.Construct",
   },
   "startOrder": Array [

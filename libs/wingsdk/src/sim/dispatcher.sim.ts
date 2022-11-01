@@ -8,18 +8,19 @@ import { start as startQueue, stop as stopQueue } from "./queue.sim";
 export class DefaultSimulatorDispatcher implements ISimulatorDispatcher {
   async start(
     type: string,
+    path: string,
     props: any,
     context: SimulatorContext
   ): Promise<any> {
     switch (type) {
       case cloud.BUCKET_TYPE:
-        return startBucket(props, context);
+        return startBucket(path, props, context);
       case cloud.FUNCTION_TYPE:
-        return startFunction(props, context);
+        return startFunction(path, props, context);
       case cloud.QUEUE_TYPE:
-        return startQueue(props, context);
+        return startQueue(path, props, context);
       case cloud.LOGGER_TYPE:
-        return startLogger(props, context);
+        return startLogger(path, props, context);
       case "constructs.Construct":
         return {};
       default:

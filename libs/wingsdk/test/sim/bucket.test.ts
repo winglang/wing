@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as sim from "../../src/sim";
-import { BucketClient } from "../../src/sim/bucket.inflight";
+import { IBucketClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -15,7 +15,7 @@ test("create a bucket", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
   expect(s.getAttributes("root/my_bucket")).toEqual({
-    bucketAddr: expect.any(String),
+    handle: expect.any(String),
   });
   expect(s.getProps("root/my_bucket")).toEqual({
     public: false,
@@ -34,8 +34,7 @@ test("put and get objects from bucket", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const attrs = s.getAttributes("root/my_bucket");
-  const client = new BucketClient(attrs.bucketAddr);
+  const client = s.getResourceByPath("root/my_bucket") as IBucketClient;
 
   const KEY = "greeting.txt";
   const VALUE = JSON.stringify({ msg: "Hello world!" });
@@ -60,8 +59,7 @@ test("put multiple objects and list all from bucket", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const attrs = s.getAttributes("root/my_bucket");
-  const client = new BucketClient(attrs.bucketAddr);
+  const client = s.getResourceByPath("root/my_bucket") as IBucketClient;
   const KEY1 = "greeting1.txt";
   const KEY2 = "greeting2.txt";
   const KEY3 = "greeting3.txt";
@@ -91,8 +89,7 @@ test("get invalid object throws an error", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const attrs = s.getAttributes("root/my_bucket");
-  const client = new BucketClient(attrs.bucketAddr);
+  const client = s.getResourceByPath("root/my_bucket") as IBucketClient;
 
   // THEN
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();

@@ -1,129 +1,73 @@
-import { existsSync } from "fs";
-import { join } from "path";
-import Piscina from "piscina";
-import { Server } from "ws";
+import { readFileSync } from "fs";
+import { resolve } from "path";
+import * as vm from "vm";
 import { SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
+import { IFunctionClient } from "./function";
+import { HandleManager, makeResourceHandle } from "./handle-manager";
 import { FunctionSchema } from "./schema-resources";
-import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 
-const FUNCTIONS: Record<number, Function> = {};
+export const ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE =
+  "WING_SIM_RUNTIME_FUNCTION_HANDLE";
 
 export async function start(
+  path: string,
   props: FunctionSchema["props"],
   context: SimulatorContext
 ): Promise<FunctionSchema["attrs"]> {
-  const fn = new Function(props, context.assetsDir);
-  FUNCTIONS[fn.addr] = fn;
-  return {
-    functionAddr: fn.addr,
-  };
+  const fn = new Function(path, props, context);
+  const handle = HandleManager.addInstance(fn);
+  return { handle };
 }
 
-export async function stop(attrs: FunctionSchema["attrs"]) {
-  const functionAddr = attrs.functionAddr;
-  const fn = FUNCTIONS[functionAddr];
-  if (!fn) {
-    throw new Error(`Invalid functionAddr: ${functionAddr}`);
-  }
-  await fn.stop();
-  delete FUNCTIONS[functionAddr];
+export async function stop(attrs: FunctionSchema["attrs"]): Promise<void> {
+  HandleManager.removeInstance(attrs!.handle);
 }
 
-class Function {
-  private readonly wss: Server;
-  private readonly worker: Piscina;
+class Function implements IFunctionClient {
+  public readonly handle: string;
+  private readonly filename: string;
+  private readonly env: Record<string, string>;
   private _timesCalled: number = 0;
 
-  constructor(props: FunctionSchema["props"], assetsDir: string) {
+  constructor(
+    path: string,
+    props: FunctionSchema["props"],
+    context: SimulatorContext
+  ) {
+    this.handle = makeResourceHandle(context.simulationId, "function", path);
+
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
-    const filename = join(assetsDir, props.sourceCodeFile);
-    if (!existsSync(filename)) {
-      throw new Error("File not found: " + filename);
-    }
-    this.worker = new Piscina({
-      filename,
-      env: {
-        ...props.environmentVariables,
-      },
-    });
-
-    // let the OS choose a free port
-    this.wss = new Server({ port: 0 });
-
-    this.wss.on("connection", (ws) => {
-      ws.on("message", (data) => {
-        log("server receiving:", data);
-        const contents: SimulatorRequest = JSON.parse(data.toString());
-        if (contents.operation === "invoke") {
-          this.invoke(contents.message)
-            .then((result) => {
-              const resp: SimulatorResponse = {
-                id: contents.id,
-                result,
-                timestamp: Date.now(),
-              };
-              log("server sending:", JSON.stringify(resp));
-              ws.send(JSON.stringify(resp));
-            })
-            .catch((err) => {
-              const resp: SimulatorResponse = {
-                id: contents.id,
-                error: `${err} ${err.stack}`,
-                timestamp: Date.now(),
-              };
-              log("server sending:", JSON.stringify(resp));
-              ws.send(JSON.stringify(resp));
-            });
-        } else if (contents.operation === "timesCalled") {
-          const resp: SimulatorResponse = {
-            id: contents.id,
-            result: this._timesCalled.toString(),
-            timestamp: Date.now(),
-          };
-          log("server sending:", JSON.stringify(resp));
-          ws.send(JSON.stringify(resp));
-        }
-      });
-    });
+    this.filename = resolve(context.assetsDir, props.sourceCodeFile);
+    this.env = props.environmentVariables;
   }
 
   public async invoke(payload: string): Promise<string> {
     this._timesCalled += 1;
-    let result = await this.worker.run(payload, {
-      name: "handler",
-    });
+
+    // The simulator is target for local development and debugging so we are not
+    // trying to overly secure or sandbox the execution environment.
+    const userCode = readFileSync(this.filename, "utf8");
+    const envStmts = Object.entries(this.env).map(
+      ([key, value]) =>
+        `process.env[${JSON.stringify(key)}] = ${JSON.stringify(value)};\n`
+    );
+    const wrapper = [
+      "var exports = {};",
+      envStmts,
+      userCode,
+      `process.env.${ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE} = "${this.handle}"`,
+      `exports.handler(${JSON.stringify(payload)});`,
+    ].join("\n");
+    log("running wrapped code: %s", wrapper);
+    const result = await vm.runInThisContext(wrapper);
+
     return result;
   }
 
-  public get timesCalled() {
-    return this._timesCalled;
-  }
-
-  public get addr(): number {
-    const address = this.wss.address();
-
-    // expect a WebSocket.AddressInfo
-    if (typeof address === "string") {
-      throw new Error(`Invalid address: ${address}`);
-    }
-    return address.port;
-  }
-
-  public async stop(): Promise<void> {
-    await new Promise((resolve, reject) => {
-      try {
-        this.wss.clients.forEach((socket) => {
-          socket.close();
-        });
-        this.wss.close();
-        resolve(null);
-      } catch (err) {
-        reject(err);
-      }
-    });
-    await this.worker.destroy();
+  public async timesCalled(): Promise<number> {
+    return Promise.resolve(this._timesCalled);
   }
 }

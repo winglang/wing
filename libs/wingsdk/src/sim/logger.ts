@@ -2,6 +2,7 @@ import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { CaptureMetadata, Code, InflightClient } from "../core";
 import { Function } from "./function";
+import { IResourceSim } from "./handle-manager";
 import { IResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 
@@ -16,11 +17,12 @@ export class Logger extends cloud.LoggerBase implements IResource {
     super(scope, id);
   }
 
+  /** @internal */
   public _toResourceSchema(): BaseResourceSchema {
     return {
       type: cloud.LOGGER_TYPE,
       props: {},
-      attrs: {},
+      attrs: {} as any,
     };
   }
 
@@ -55,4 +57,4 @@ export class Logger extends cloud.LoggerBase implements IResource {
 /**
  * Simulator implementation of inflight client for `cloud.Logger`.
  */
-export interface ILoggerClient extends cloud.ILoggerClient {}
+export interface ILoggerClient extends cloud.ILoggerClient, IResourceSim {}

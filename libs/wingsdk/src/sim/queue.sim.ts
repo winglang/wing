@@ -1,95 +1,62 @@
-import { Server } from "ws";
-import { IResourceResolver, SimulatorContext } from "../testing/simulator";
-import { log } from "../util";
-import { FunctionClient } from "./function.inflight";
+import { IQueueClient } from "../cloud";
+import { SimulatorContext } from "../testing/simulator";
+import { IFunctionClient } from "./function";
+import { HandleManager, makeResourceHandle } from "./handle-manager";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 import { RandomArrayIterator } from "./util.sim";
 
-const QUEUES: Record<number, Queue> = {};
-
 interface QueueSubscriberInternal extends QueueSubscriber {
-  functionClient?: FunctionClient;
+  functionClient?: IFunctionClient;
 }
 
 export async function start(
+  path: string,
   props: QueueSchema["props"],
   context: SimulatorContext
 ): Promise<QueueSchema["attrs"]> {
-  const q = new Queue(props, context.resolver);
-  QUEUES[q.addr] = q;
-  return {
-    queueAddr: q.addr,
-  };
+  const queue = new Queue(path, props, context);
+  const handle = HandleManager.addInstance(queue);
+  return { handle };
 }
 
 export async function stop(attrs: QueueSchema["attrs"]) {
-  const queueAddr = attrs.queueAddr;
-  const q = QUEUES[queueAddr];
-  if (!q) {
-    throw new Error(`Invalid queueAddr: ${queueAddr}`);
-  }
-  await q.stop();
-  delete QUEUES[queueAddr];
+  const queue = HandleManager.removeInstance(attrs!.handle) as Queue;
+  await queue.stop();
 }
 
-class Queue {
-  private readonly wss: Server;
+class Queue implements IQueueClient {
+  public readonly handle: string;
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriberInternal>();
   private readonly intervalId: NodeJS.Timeout;
 
-  constructor(props: QueueSchema["props"], resolver: IResourceResolver) {
+  constructor(
+    path: string,
+    props: QueueSchema["props"],
+    context: SimulatorContext
+  ) {
+    this.handle = makeResourceHandle(context.simulationId, "queue", path);
     for (const sub of props.subscribers) {
       this.subscribers.push({ ...sub });
     }
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
-      const functionAddr = resolver.lookup(functionId).attrs?.functionAddr;
-      subscriber.functionClient = new FunctionClient(functionAddr);
+      const functionHandle = context.resolver.lookup(functionId).attrs!.handle;
+      subscriber.functionClient = HandleManager.getInstance(
+        functionHandle
+      ) as IFunctionClient;
     }
 
     if (props.initialMessages) {
       this.messages.push(...props.initialMessages);
     }
 
-    // let the OS choose a free port
-    this.wss = new Server({ port: 0 });
-
-    this.wss.on("connection", (ws) => {
-      ws.on("message", (data) => {
-        log("server receiving:", data);
-        const contents: SimulatorRequest = JSON.parse(data.toString());
-        if (contents.operation === "push") {
-          this.messages.push(contents.message);
-          const resp: SimulatorResponse = {
-            id: contents.id,
-            result: "ok",
-            timestamp: Date.now(),
-          };
-          log("server sending:", JSON.stringify(resp));
-          ws.send(JSON.stringify(resp));
-        } else {
-          throw new Error(`Invalid operation: ${contents.operation}`);
-        }
-      });
-    });
-
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
   }
 
-  public get addr(): number {
-    const address = this.wss.address();
-
-    // expect a WebSocket.AddressInfo
-    if (typeof address === "string") {
-      throw new Error("Invalid address");
-    }
-    return address.port;
-  }
-
-  public push(message: string) {
+  public async push(message: string): Promise<void> {
     this.messages.push(message);
+    return;
   }
 
   private processMessages() {
@@ -121,16 +88,7 @@ class Queue {
     } while (processedMessages);
   }
 
-  public async stop() {
-    await new Promise((resolve, reject) => {
-      this.wss.close((err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(null);
-        }
-      });
-    });
+  public async stop(): Promise<void> {
     clearInterval(this.intervalId);
   }
 }

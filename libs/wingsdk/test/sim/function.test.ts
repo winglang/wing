@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/sim";
-import { FunctionClient } from "../../src/sim/function.inflight";
+import { IFunctionClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -18,6 +18,32 @@ async function $proc($cap, event) {
   return { msg };
 }`);
 
+test("create a function", async () => {
+  // GIVEN
+  const app = new sim.App({ outdir: mkdtemp() });
+  const handler = new core.Inflight({
+    code: INFLIGHT_CODE,
+    entrypoint: "$proc",
+  });
+  new cloud.Function(app, "my_function", handler);
+  const simfile = app.synth();
+
+  // THEN
+  const s = new testing.Simulator({ simfile });
+  await s.start();
+  expect(s.getAttributes("root/my_function")).toEqual({
+    handle: expect.any(String),
+  });
+  expect(s.getProps("root/my_function")).toEqual({
+    sourceCodeFile: expect.any(String),
+    sourceCodeLanguage: "javascript",
+    environmentVariables: {},
+  });
+  await s.stop();
+
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+});
+
 test("invoke function", async () => {
   // GIVEN
   const app = new sim.App({ outdir: mkdtemp() });
@@ -31,12 +57,11 @@ test("invoke function", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const attrs = s.getAttributes("root/my_function");
-  const fnClient = new FunctionClient(attrs.functionAddr);
+  const client = s.getResourceByPath("root/my_function") as IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await fnClient.invoke(JSON.stringify(PAYLOAD));
+  const response = await client.invoke(JSON.stringify(PAYLOAD));
 
   // THEN
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
@@ -62,12 +87,11 @@ test("invoke function with environment variables", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const attrs = s.getAttributes("root/my_function");
-  const fnClient = new FunctionClient(attrs.functionAddr);
+  const client = s.getResourceByPath("root/my_function") as IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
-  const response = await fnClient.invoke(JSON.stringify(PAYLOAD));
+  const response = await client.invoke(JSON.stringify(PAYLOAD));
 
   // THEN
   expect(response).toEqual({

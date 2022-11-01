@@ -10,6 +10,7 @@ import {
   InflightClient,
 } from "../core";
 import { TextFile } from "../fs";
+import { IResourceSim } from "./handle-manager";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
@@ -113,7 +114,7 @@ export class Function extends cloud.FunctionBase implements IResource {
 /**
  * Simulator implementation of inflight client for `cloud.Function`.
  */
-export interface IFunctionClient extends cloud.IFunctionClient {
+export interface IFunctionClient extends cloud.IFunctionClient, IResourceSim {
   /**
    * Returns the number of times the function was invoked since its creation.
    *

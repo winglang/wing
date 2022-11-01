@@ -14,10 +14,6 @@ export interface FunctionSchema extends BaseResourceSchema {
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
   };
-  readonly attrs: {
-    /** A unique address of the function in the simulator. */
-    readonly functionAddr: number;
-  };
 }
 
 /** Schema for cloud.Queue */
@@ -30,10 +26,6 @@ export interface QueueSchema extends BaseResourceSchema {
     readonly subscribers: QueueSubscriber[];
     /** Initial messages to be pushed to the queue. */
     readonly initialMessages: string[];
-  };
-  readonly attrs: {
-    /** A unique address of the queue in the simulator. */
-    readonly queueAddr: number;
   };
 }
 
@@ -49,20 +41,12 @@ export interface QueueSubscriber {
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: typeof BUCKET_TYPE;
   readonly props: {};
-  readonly attrs: {
-    /** The address of the bucket on the local file system. */
-    readonly bucketAddr: string;
-  };
 }
 
 /** Schema for cloud.Logger */
 export interface LoggerSchema extends BaseResourceSchema {
   readonly type: typeof LOGGER_TYPE;
   readonly props: {};
-  readonly attrs: {
-    /** The address of the directory for logs on the local file system. */
-    readonly logsDir: string;
-  };
 }
 
 /** Schema for ordinary constructs */

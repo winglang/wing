@@ -18,11 +18,20 @@ export interface BaseResourceSchema {
   /** The resource-specific properties needed to create this resource. */
   readonly props?: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
-  readonly attrs?: { [key: string]: any };
+  readonly attrs?: BaseResourceAttributes;
   /** IDs of resources that this resource is called, triggered, or captured by. */
   readonly callers?: string[];
   /** IDs of resources that this resource calls, triggers, or captures. */
   readonly callees?: string[];
   /** The resource's children indexed by their IDs. */
   readonly children?: { [key: string]: BaseResourceSchema };
+}
+
+/** Schema for resource attributes */
+export interface BaseResourceAttributes {
+  /** The resource's simulator-unique id. */
+  readonly handle: string;
+
+  /** Any other attributes. */
+  [key: string]: unknown;
 }
