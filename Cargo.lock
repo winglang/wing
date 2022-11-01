@@ -2006,6 +2006,7 @@ dependencies = [
  "sha2",
  "tree-sitter",
  "tree-sitter-wing",
+ "wasm-bindgen",
  "wingii",
 ]
 

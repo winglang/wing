@@ -7,5 +7,12 @@ pub trait PlatformBase {
 	fn ensure_directory(path: &str) -> Result<()>;
 }
 
+#[cfg(not(target_family="wasm"))]
 mod native;
+#[cfg(not(target_family="wasm"))]
 pub use native::Platform;
+
+#[cfg(target_family="wasm")]
+mod node;
+#[cfg(target_family="wasm")]
+pub use node::Platform;
