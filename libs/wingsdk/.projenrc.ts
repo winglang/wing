@@ -26,16 +26,12 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-utf8-node",
     // simulator dependencies
     "tar",
-    "piscina",
-    "ws",
-    "isomorphic-ws",
   ],
   devDeps: [
     "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",
-    "@types/ws",
     "aws-sdk-client-mock",
     "patch-package",
   ],
