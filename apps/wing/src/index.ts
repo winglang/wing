@@ -6,8 +6,7 @@ import * as open from "open";
 import { Command } from "commander";
 import { compile } from "./commands/compile";
 import debug from "debug";
-import { resolve } from "path";
-import { stat } from "fs/promises";
+import {resolve} from "path";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const log = debug("wing:cli");
@@ -24,20 +23,7 @@ async function main() {
     .argument("<executable>", "executable .wx file")
     .action(async (executable: string) => {
       executable = resolve(executable);
-      if (process.platform === "darwin") {
-        debug("looking for wing console");
-        const wingConsoleApp = "/Applications/Wing\ Console.app";
-        try {
-          await stat(wingConsoleApp);
-          debug("found wing console");
-          await open.openApp(wingConsoleApp, {
-            arguments: [`${executable}`],
-          });
-          return;
-        } catch (e) {
-          // ignore
-        }
-      }
+      debug("calling wing console protocol with:" + executable);
       open("wing-console://" + executable).catch(log);
     });
 
