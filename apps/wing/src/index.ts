@@ -26,19 +26,19 @@ async function main() {
       executable = resolve(executable);
       if (process.platform === "darwin") {
         debug("looking for wing console");
-        const wingConsoleApp = "/Applications/wing-console.app";
+        const wingConsoleApp = "/Applications/Wing\ Console.app";
         try {
           await stat(wingConsoleApp);
           debug("found wing console");
           await open.openApp(wingConsoleApp, {
-            arguments: [`--cloudFile=${executable}`],
+            arguments: [`${executable}`],
           });
           return;
         } catch (e) {
           // ignore
         }
       }
-      open("wing://run?path=" + executable).catch(log);
+      open("wing-console://" + executable).catch(log);
     });
 
   program
