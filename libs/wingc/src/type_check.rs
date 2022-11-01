@@ -1,6 +1,7 @@
 mod jsii_importer;
 pub mod type_env;
 use crate::ast::{Type as AstType, *};
+use crate::debug;
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
@@ -942,7 +943,7 @@ impl<'a> TypeChecker<'a> {
 							.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
 							.unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
-						println!("Loaded JSII assembly {}", name);
+						debug!("Loaded JSII assembly {}", name);
 						let assembly = wingii_types.find_assembly(&name).unwrap();
 
 						let mut jsii_importer = JsiiImporter {
