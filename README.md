@@ -1,13 +1,27 @@
-# The Wing Programming Language
+<p align="center">
+  <a href="https://winglang.io">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/monadahq/winglang/raw/main/logo/1x/Symbol-Turq-Dark.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/monadahq/winglang/raw/main/logo/1x/Symbol-Black-Light.png">
+      <img alt="" src="https://github.com/monadahq/winglang/raw/main/logo/1x/Symbol-Black-Light.png" height="110pt">
+    </picture>
+  </a>
+  <h1 align="center">The Wing Programming Language</h1>
+</p>
 
-> 
-> Under (heavy) construction :construction: :construction:
-> 
-> Wing is in early stages of development. Many basic features as still missing.
-> You are more than welcome to join the ride, but don't expect to be able to do
-> much with it at the moment.
->
-> Check out our [roadmap] for more information.
+<p align="center">
+  <a aria-label="Build status" href="https://github.com/monadahq/winglang/actions/workflows/build.yml">
+    <img alt="" src="https://github.com/monadahq/winglang/actions/workflows/build.yml/badge.svg">
+  </a>
+
+  <a aria-label="Join the community" href="https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA">
+    <img alt="" src="https://img.shields.io/badge/Join%20the%20community-blue.svg?style=flat&logo=slack&labelColor=000000">
+  </a>
+</p>
+
+> **:construction: Under (heavy) construction!** Wing is in early stages of development. 
+Many basic features as still missing. You are more than welcome to join the ride, but don't 
+expect to be able to do much with it at the moment. Check out our [roadmap] for more information.
 
 ## Welcome! :wave:
 
@@ -27,7 +41,7 @@ new cloud.Function(() ~> {
 ```
 
 Wing applications are compiled to [Terraform] and JavaScript, and can be
-deployed to AWS, GCP or Azure or visualized and debugged locally using the Wing
+deployed to AWS, GCP Azure, or visualized and debugged locally using the Wing Console.
 Console.
 
 Read below about [what makes Wing special](#what-makes-wing-special) and [why
@@ -79,7 +93,7 @@ Install the Wing CLI through npm:
 npm install -g @monadahq/wing
 ```
 
-Install the Wing VSCode extension (optional) by [downloading](https://github.com/monadahq/winglang/releases/download/development/vscode-wing.vsix)
+Install the Wing VSCode extension (optional) by [downloading](https://github.com/monadahq/winglang/releases/latest/download/vscode-wing.vsix)
 the extension package and running:
 
 ```sh 
@@ -124,6 +138,8 @@ The **Wing Console** will start and in the main view you'll see two resources: a
 **Queue** and a **Function**. You'll also notice that the function is connected
 to the queue through the `message` event.
 
+> TODO: Add console screenshot here
+
 Now, right-click on the queue and choose **Push Message**. Type `world` and hit
 **Send**.
 
@@ -137,7 +153,7 @@ Terraform.
 
 > Currently, our SDKs only support AWS, but the Wing compiler can target
 > multiple cloud platforms, including AWS, Azure, Google Cloud, and Kubernetes.
-> We are working on adding support for other cloud providers.
+> We are working on adding support for other cloud providers and welcome contributions in those areas.
 
 First, we need to compile our program to AWS:
 

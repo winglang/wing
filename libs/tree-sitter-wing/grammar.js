@@ -302,11 +302,14 @@ module.exports = grammar({
 
     _type: ($) =>
       choice(
-        seq($.custom_type, optional("?")),
-        seq($.builtin_type, optional("?")),
-        seq($._builtin_container_type, optional("?")),
-        $.function_type
+        $.custom_type,
+        $.builtin_type,
+        $._builtin_container_type,
+        $.function_type,
+        $.optional
       ),
+
+    optional: ($) => seq($._type, "?"),
 
     function_type: ($) =>
       prec.right(
@@ -319,7 +322,7 @@ module.exports = grammar({
 
     parameter_type_list: ($) => seq("(", commaSep($._type), ")"),
 
-    builtin_type: ($) => choice("num", "nil", "bool", "any", "str", "void"),
+    builtin_type: ($) => choice("num", "bool", "any", "str", "void"),
 
     constructor: ($) =>
       seq(

@@ -1,6 +1,7 @@
 mod jsii_importer;
 pub mod type_env;
 use crate::ast::{Type as AstType, *};
+use crate::debug;
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
@@ -15,6 +16,7 @@ pub enum Type {
 	String,
 	Duration,
 	Boolean,
+	Optional(TypeRef),
 	Map(TypeRef),
 	Set(TypeRef),
 	Function(FunctionSignature),
@@ -136,6 +138,17 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
+			(Self::Optional(l0), Self::Optional(r0)) => {
+				// Optionals are of the same type if they have the same value type
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
+			(_, Self::Optional(r0)) => {
+				// If we are not an optional, then we must be the same type as the optional's inner type
+				let r: &Type = (*r0).into();
+				self == r
+			}
 			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
 		}
@@ -157,6 +170,7 @@ impl Display for Type {
 			Type::String => write!(f, "string"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
+			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(func_sig) => {
 				if let Some(ret_val) = &func_sig.return_type {
 					write!(
@@ -286,6 +300,14 @@ impl TypeRef {
 
 	pub fn is_anything(&self) -> bool {
 		if let &Type::Anything = (*self).into() {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_option(&self) -> bool {
+		if let &Type::Optional(_) = (*self).into() {
 			true
 		} else {
 			false
@@ -543,18 +565,30 @@ impl<'a> TypeChecker<'a> {
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type.unwrap(), type_, exp);
 				// TODO: named args
+
+				// Count number of optional parameters from the end of the constructor's params
+				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+				let num_optionals = constructor_sig
+					.args
+					.iter()
+					.rev()
+					.take_while(|arg| arg.is_option())
+					.count();
+
 				// Verify arity
-				if arg_list.pos_args.len() != constructor_sig.args.len() {
+				let arg_count = arg_list.pos_args.len();
+				let min_args = constructor_sig.args.len() - num_optionals;
+				let max_args = constructor_sig.args.len();
+				if arg_count < min_args || arg_count > max_args {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected {} args but got {} when instantiating \"{}\"",
-							constructor_sig.args.len(),
-							arg_list.pos_args.len(),
-							type_
+							"Expected between {} and {} args but got {} when instantiating \"{}\"",
+							min_args, max_args, arg_count, type_
 						),
 					);
 				}
+
 				// Verify passed arguments match the constructor
 				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
 					let arg_expr_type = self.type_check_exp(arg_expr, env).unwrap();
@@ -598,7 +632,7 @@ impl<'a> TypeChecker<'a> {
 			ExprType::Call { function, args } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.resolve_reference(function, env);
-				let extra_args = if matches!(function, Reference::NestedIdentifier { .. }) {
+				let this_args = if matches!(function, Reference::NestedIdentifier { .. }) {
 					1
 				} else {
 					0
@@ -614,21 +648,33 @@ impl<'a> TypeChecker<'a> {
 					.as_function_sig()
 					.expect(&format!("{:?} should be a function or method", function));
 
+				// Count number of optional parameters from the end of the function's params
+				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
+				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
+
 				// TODO: named args
-				// Argument arity check
-				if args.pos_args.len() + extra_args != func_sig.args.len() {
+				// Verity arity
+				let arg_count = args.pos_args.len();
+				let min_args = func_sig.args.len() - num_optionals - this_args;
+				let max_args = func_sig.args.len() - this_args;
+				if arg_count < min_args || arg_count > max_args {
 					self.expr_error(
 						exp,
 						format!(
-							"Expected {} arguments for {:?}, but got {} instead.",
-							func_sig.args.len() - extra_args,
-							function,
-							args.pos_args.len()
+							"Expected between {} and {} arguments for {:?} but got {}.",
+							min_args, max_args, function, arg_count
 						),
 					);
 				}
-				// Verify argument types (we run from last to first to skip "this" argument)
-				for (arg_type, param_exp) in func_sig.args.iter().rev().zip(args.pos_args.iter().rev()) {
+
+				let params = func_sig
+					.args
+					.iter()
+					.skip(this_args)
+					.take(func_sig.args.len() - num_optionals);
+				let args = args.pos_args.iter();
+
+				for (arg_type, param_exp) in params.zip(args) {
 					let param_type = self.type_check_exp(param_exp, env).unwrap();
 					self.validate_type(param_type, *arg_type, param_exp);
 				}
@@ -720,6 +766,10 @@ impl<'a> TypeChecker<'a> {
 			AstType::String => self.types.string(),
 			AstType::Bool => self.types.bool(),
 			AstType::Duration => self.types.duration(),
+			AstType::Optional(v) => {
+				let value_type = self.resolve_type(v, env);
+				self.types.add_type(Type::Optional(value_type))
+			}
 			AstType::FunctionSignature(ast_sig) => {
 				let mut args = vec![];
 				for arg in ast_sig.parameters.iter() {
@@ -850,6 +900,12 @@ impl<'a> TypeChecker<'a> {
 				let var_type = self.resolve_reference(variable, env);
 				self.validate_type(exp_type, var_type, value);
 			}
+			Statement::Bring {
+				module_path: _,
+				statements: _,
+			} => {
+				// no-op
+			}
 			Statement::Use {
 				module_name,
 				identifier,
@@ -887,7 +943,7 @@ impl<'a> TypeChecker<'a> {
 							.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
 							.unwrap();
 						let prefix = format!("{}.{}.", name, module_name.name);
-						println!("Loaded JSII assembly {}", name);
+						debug!("Loaded JSII assembly {}", name);
 						let assembly = wingii_types.find_assembly(&name).unwrap();
 
 						let mut jsii_importer = JsiiImporter {

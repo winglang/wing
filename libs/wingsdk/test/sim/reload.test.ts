@@ -1,32 +1,82 @@
 import * as cloud from "../../src/cloud";
+import * as core from "../../src/core";
+import * as sim from "../../src/sim";
+import { FunctionClient } from "../../src/sim/function.inflight";
+import { QueueSchema } from "../../src/sim/schema-resources";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { synthSimulatedApp } from "./util";
 
 test("reloading the simulator updates the state of the tree", async () => {
+  let workdir = mkdtemp();
+
   // Create an app.wx file
-  const workdir = mkdtemp();
-  const appPath = synthSimulatedApp(
-    (scope) => {
-      new cloud.Bucket(scope, "my_bucket");
-    },
-    { workdir }
-  );
+  const app = new sim.App({ outdir: workdir });
+  new cloud.Bucket(app, "my_bucket", { public: false });
+  const simfile = app.synth();
 
   // Start the simulator
-  const s = new testing.Simulator({ appPath });
+  const s = new testing.Simulator({ simfile });
   await s.start();
   expect(s.getProps("root/my_bucket").public).toEqual(false);
 
   // Update the app.wx file in-place
-  synthSimulatedApp(
-    (scope) => {
-      new cloud.Bucket(scope, "my_bucket", { public: true });
-    },
-    { workdir }
-  );
+  const app2 = new sim.App({ outdir: workdir });
+  new cloud.Bucket(app2, "my_bucket", { public: true });
+  app2.synth();
 
   // Reload the simulator
   await s.reload();
   expect(s.getProps("root/my_bucket").public).toEqual(true);
+});
+
+const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
+async function $proc($cap, message) {
+    if (message === "BAD MESSAGE") {
+        throw new Error("ERROR");
+    }
+}`);
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+test("reloading the simulator after working with ws", async () => {
+  let workdir = mkdtemp();
+
+  // GIVEN
+  const app = new sim.App({ outdir: workdir });
+  const handler = new core.Inflight({
+    code: INFLIGHT_CODE,
+    entrypoint: "$proc",
+  });
+  const queue = new cloud.Queue(app, "my_queue", {
+    initialMessages: ["A", "B", "C", "D", "E", "F"],
+  });
+  queue.onMessage(handler, { batchSize: 5 });
+  const simfile = app.synth();
+
+  const s = new testing.Simulator({ simfile });
+  await s.start();
+
+  const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
+
+  const fnId = queueProps.subscribers[0].functionId;
+  const fnAttrs = s.getAttributes(fnId);
+  const fnClient = new FunctionClient(fnAttrs.functionAddr);
+
+  await sleep(200);
+
+  // Update the app.wx file in-place
+  const app2 = new sim.App({ outdir: workdir });
+  new cloud.Bucket(app2, "my_bucket", { public: true });
+  app2.synth();
+
+  // THEN
+  expect(await fnClient.timesCalled()).toEqual(2);
+
+  await s.reload();
+
+  expect(s.getProps("root/my_bucket").public).toEqual(true);
+});
+
+afterAll((done) => {
+  done();
 });

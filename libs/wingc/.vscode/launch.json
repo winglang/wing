@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "lldb",
+      "request": "launch",
+      "name": "library 'wingc' debugger target",
+      "cargo": {
+        "args": ["test", "--no-run", "--lib", "--package=wingc"],
+        "filter": {
+          "name": "wingc",
+          "kind": "lib"
+        }
+      },
+      "args": [],
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

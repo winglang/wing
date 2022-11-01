@@ -46,6 +46,7 @@ pub enum Type {
 	String,
 	Bool,
 	Duration,
+	Optional(Box<Type>),
 	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
@@ -78,9 +79,14 @@ pub struct Constructor {
 
 #[derive(Debug)]
 pub enum Statement {
+	// TODO: merge these statements into a single one
 	Use {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
+	},
+	Bring {
+		module_path: String,
+		statements: Scope,
 	},
 	VariableDef {
 		var_name: Symbol,

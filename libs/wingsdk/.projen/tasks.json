@@ -125,6 +125,9 @@
       "steps": [
         {
           "exec": "jsii-docgen -o API.md"
+        },
+        {
+          "exec": "cp API.md ../../docs/wingsdk-api.md"
         }
       ]
     },
@@ -309,19 +312,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/polycons,@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@monadahq/wing-api-checker,@types/minipass,constructs,minipass'"
         },
         {
           "exec": "npm install"

@@ -1,14 +1,13 @@
 bring cloud;
 
-let p = cloud.BucketProps {
-    public: false
-};
+let bucket1 = new cloud.Bucket();
+let bucket2 = new cloud.Bucket(cloud.BucketProps {
+  public: true
+}) as "PublicBucket";
 
-let bucket = new cloud.Bucket(p);
-
-inflight handler(event: str):str {
-  bucket.put("file.txt", "data");
-  bucket.get("file.txt");
+inflight handler(event: str): str {
+  bucket1.put("file.txt", "data");
+  bucket2.get("file.txt");
 }
 
 new cloud.Function(

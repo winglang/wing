@@ -2,7 +2,7 @@ use crate::{
 	ast::{Flight, Symbol},
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
-	type_check::{Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
+	type_check::{Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME}, debug,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -62,7 +62,7 @@ impl<'a> JsiiImporter<'a> {
 				} else if type_fqn == "@monadahq/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
-					// TODO: this should be a special type that represents "any resource"
+					// TODO: this should be a special type that represents "any resource" https://github.com/monadahq/winglang/issues/261
 					Some(self.wing_types.anything())
 				} else {
 					Some(self.lookup_or_create_type(type_fqn))
@@ -124,7 +124,7 @@ impl<'a> JsiiImporter<'a> {
 			if let Some(jsii_class) = jsii_class {
 				return self.import_class(jsii_class);
 			} else {
-				println!("Type {} is unsupported, skipping", type_fqn);
+				debug!("Type {} is unsupported, skipping", type_fqn);
 				return None;
 			}
 		}
@@ -136,12 +136,12 @@ impl<'a> JsiiImporter<'a> {
 			Some(true) => {
 				// If this datatype has methods something is unexpected in this JSII type definition, skip it.
 				if jsii_interface.methods.is_some() && !jsii_interface.methods.as_ref().unwrap().is_empty() {
-					println!("JSII datatype interface {} has methods, skipping", type_name);
+					debug!("JSII datatype interface {} has methods, skipping", type_name);
 					return None;
 				}
 			}
 			_ => {
-				println!("The JSII interface {} is not a \"datatype\", skipping", type_name);
+				debug!("The JSII interface {} is not a \"datatype\", skipping", type_name);
 				return None;
 			}
 		}
@@ -168,7 +168,7 @@ impl<'a> JsiiImporter<'a> {
 		// Add properties from our parents to the new structs env
 		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, struct_env);
 
-		println!("Adding struct type {}", type_name.green());
+		debug!("Adding struct type {}", type_name.green());
 		self.namespace_env.define(&new_type_symbol, wing_type);
 		Some(wing_type)
 	}
@@ -188,11 +188,11 @@ impl<'a> JsiiImporter<'a> {
 			for m in methods {
 				// TODO: skip internal methods (for now we skip `capture` until we mark it as internal)
 				if is_resource && m.name == "capture" {
-					println!("Skipping capture method on resource");
+					debug!("Skipping capture method on resource");
 					continue;
 				}
 
-				println!("Adding method {} to class", m.name.green());
+				debug!("Adding method {} to class", m.name.green());
 
 				let return_type = if let Some(jsii_return_type) = &m.returns {
 					self.optional_type_to_wing_type(&jsii_return_type)
@@ -204,10 +204,9 @@ impl<'a> JsiiImporter<'a> {
 				// Add my type as the first argument to all methods (this)
 				arg_types.push(wing_type);
 				// Define the rest of the arguments and create the method signature
-				if let Some(args) = &m.parameters {
-					for arg in args {
-						// TODO: handle arg.variadic and arg.optional
-						arg_types.push(self.type_ref_to_wing_type(&arg.type_).unwrap());
+				if let Some(params) = &m.parameters {
+					for param in params {
+						arg_types.push(self.parameter_to_wing_type(&param));
 					}
 				}
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
@@ -221,7 +220,7 @@ impl<'a> JsiiImporter<'a> {
 		// Add properties to the class environment
 		if let Some(properties) = &jsii_interface.properties() {
 			for p in properties {
-				println!("Found property {} with type {:?}", p.name.green(), p.type_);
+				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
 				if flight == Flight::In {
 					todo!("No support for inflight properties yet");
 				}
@@ -318,7 +317,7 @@ impl<'a> JsiiImporter<'a> {
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
-		println!("Adding type {} to namespace", type_name.green());
+		debug!("Adding type {} to namespace", type_name.green());
 		let class_spec = Class {
 			name: new_type_symbol.clone(),
 			env: dummy_env,
@@ -337,22 +336,20 @@ impl<'a> JsiiImporter<'a> {
 		let jsii_initializer = jsii_class.initializer.as_ref();
 
 		if let Some(initializer) = jsii_initializer {
-			let mut arg_types = vec![];
-			if let Some(args) = &initializer.parameters {
-				for (i, arg) in args.iter().enumerate() {
-					// TODO: handle arg.variadic and arg.optional
-
+			let mut arg_types: Vec<TypeRef> = vec![];
+			if let Some(params) = &initializer.parameters {
+				for (i, param) in params.iter().enumerate() {
 					// If this is a resource then skip scope and id arguments
 					if is_resource {
 						if i == 0 {
-							assert!(arg.name == "scope");
+							assert!(param.name == "scope");
 							continue;
 						} else if i == 1 {
-							assert!(arg.name == "id");
+							assert!(param.name == "id");
 							continue;
 						}
 					}
-					arg_types.push(self.type_ref_to_wing_type(&arg.type_).unwrap());
+					arg_types.push(self.parameter_to_wing_type(&param));
 				}
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
@@ -378,7 +375,7 @@ impl<'a> JsiiImporter<'a> {
 				// Add client interface's methods to the class environment
 				self.add_members_to_class_env(&client_interface, false, Flight::In, &mut class_env, new_type);
 			} else {
-				println!("Resource {} doesn't not seem to have a client", type_name.green());
+				debug!("Resource {} doesn't not seem to have a client", type_name.green());
 			}
 		}
 		// Replace the dummy class environment with the real one before type checking the methods
@@ -397,5 +394,18 @@ impl<'a> JsiiImporter<'a> {
 			panic!("TODO: handle optional types");
 		}
 		self.type_ref_to_wing_type(&jsii_optional_type.type_)
+	}
+
+	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
+		if parameter.variadic.unwrap_or(false) {
+			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/monadahq/winglang/issues/397");
+		}
+
+		let param_type = self.type_ref_to_wing_type(&parameter.type_).unwrap();
+		if parameter.optional.unwrap_or(false) {
+			self.wing_types.add_type(Type::Optional(param_type))
+		} else {
+			param_type
+		}
 	}
 }
