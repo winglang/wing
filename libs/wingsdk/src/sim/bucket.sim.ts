@@ -20,7 +20,7 @@ export async function stop(attrs: BucketSchema["attrs"]): Promise<void> {
   HandleManager.removeInstance(attrs!.handle);
 }
 
-export class Bucket implements IBucketClient {
+class Bucket implements IBucketClient {
   public readonly handle: string;
   private readonly fileDir: string;
   public constructor(
