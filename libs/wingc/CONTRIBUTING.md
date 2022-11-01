@@ -3,20 +3,20 @@
 Thank you for wanting to contribute to Wing Language! This will guide you through everything you need to know to make changes 
 and submit pull requests to the GitHub repository.
 
-- [Contributing to Wing SDK](#contributing-to-wing-sdk)
-  - [Opening Issues](#opening-issues)
-  - [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-    - [Setting up GitHub private packages](#setting-up-github-private-packages)
-  - [Orientation](#orientation)
-    - [`src` folder](#src-folder)
-    - [`test` folder](#test-folder)
-  - [Setting up and building the project](#setting-up-and-building-the-project)
-  - [Testing](#testing)
-    - [Sandbox](#sandbox)
-  - [Creating a resource](#creating-a-resource)
-  - [Submitting a pull request](#submitting-a-pull-request)
-  - [Getting Help](#getting-help)
+- [Opening Issues](#opening-issues)
+- [Getting Started](#getting-started)
+- [Prerequisites](#prerequisites)
+  - [Setting up GitHub private packages](#setting-up-github-private-packages)
+- [Orientation](#orientation)
+  - [`src` folder](#src-folder)
+  - [`test` folder](#test-folder)
+- [Setting up and building the project](#setting-up-and-building-the-project)
+- [Logs](#logs)
+- [Testing](#testing)
+  - [Sandbox](#sandbox)
+- [Creating a resource](#creating-a-resource)
+- [Submitting a pull request](#submitting-a-pull-request)
+- [Getting Help](#getting-help)
 
 ## Opening Issues
 
@@ -71,6 +71,17 @@ Install the dependencies using npm:
 
 ```shell
 cargo something
+```
+
+## Logs
+
+You can enable debug output by setting the environment variable "DEBUG".  
+It supports namespaces, so you can do:
+
+```sh
+export DEBUG="foo,bar" # to enable both "foo" and "bar"
+export DEBUG="foo:*" # to enable all namespaces starting with "foo"
+export DEBUG="*,-bar" # to enable all namespaces except "bar"
 ```
 
 ## Testing

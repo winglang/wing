@@ -12,6 +12,8 @@ tree-sitter-wing = { path = "../tree-sitter-wing" }
 wingii = { path = "../wingii" }
 serde_json = "1.0"
 colored = "2.0"
+lazy_static = "1.4.0"
+globset = "0.4.9"
 
 [lib]
 path = "src/lib.rs"
