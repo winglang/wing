@@ -5,8 +5,8 @@ use crate::parser::bring;
 use ast::Scope;
 use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
+use platform::*;
 use std::collections::HashSet;
-use std::fs;
 use std::path::PathBuf;
 
 use crate::ast::Flight;
@@ -15,11 +15,12 @@ use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
-pub mod debug;
 pub mod capture;
+pub mod debug;
 pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
+pub mod platform;
 pub mod type_check;
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
@@ -66,12 +67,12 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
-	fs::create_dir_all(&out_dir).expect("create output dir");
+	Platform::ensure_directory(&out_dir.to_str().unwrap()).expect("create output dir");
 
 	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
 	let intermediate_file = out_dir.join(intermediate_name);
-	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
+	Platform::write_file(&intermediate_file.to_str().unwrap(), &intermediate_js).expect("Write intermediate JS to disk");
 
 	return intermediate_js;
 }

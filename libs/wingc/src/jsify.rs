@@ -1,4 +1,5 @@
-use std::{fs, path::PathBuf};
+use crate::platform::*;
+use std::path::PathBuf;
 
 use sha2::{Digest, Sha256};
 
@@ -452,10 +453,10 @@ fn jsify_inflight_function(func_def: &FunctionDefinition, out_dir: &PathBuf) -> 
 		block
 	));
 	let proc_dir = format!("{}/proc.{}", out_dir.to_string_lossy(), procid);
-	fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
+	Platform::ensure_directory(&proc_dir).expect("Creating inflight proc dir");
 	let file_path = format!("{}/index.js", proc_dir);
 	let relative_file_path = format!("proc.{}/index.js", procid);
-	fs::write(&file_path, proc_source.join("\n")).expect("Writing inflight proc source");
+	Platform::write_file(&file_path, proc_source.join("\n").as_str()).expect("Writing inflight proc source");
 	let props_block = render_block([
 		format!(
 			"code: {}.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \"{}\")),",

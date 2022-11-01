@@ -1,18 +1,18 @@
+use crate::platform::*;
 use crate::Diagnostics;
 use crate::Scope;
 
 use crate::parser::Parser;
 use std::cell::RefCell;
 use std::collections::HashSet;
-use std::fs;
 use std::path::PathBuf;
 
 pub fn bring(source_file: &str, context: Option<&str>, imports: &mut HashSet<String>) -> Option<(Scope, Diagnostics)> {
 	// default context directory to the current directory
 	let context_dir = PathBuf::from(&context.unwrap_or("."));
 	// turn "source_file" into a canonical path relative to context_dir
-	let source_file = context_dir.join(source_file).canonicalize().unwrap();
-	let source_file = source_file.to_str().unwrap();
+	let source_file = Platform::canonicalize_path(&context_dir.join(source_file).to_str().unwrap());
+	let source_file = source_file.as_str();
 
 	if imports.contains(source_file) {
 		return None;
@@ -22,12 +22,8 @@ pub fn bring(source_file: &str, context: Option<&str>, imports: &mut HashSet<Str
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
 
-	let source = match fs::read(&source_file) {
-		Ok(source) => source,
-		Err(err) => {
-			panic!("Error reading source file: {}: {:?}", &source_file, err);
-		}
-	};
+	let source = Platform::read_file(source_file).expect("Unable to read file");
+	let source = source.as_bytes();
 
 	let tree = match parser.parse(&source[..], None) {
 		Some(tree) => tree,
