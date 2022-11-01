@@ -50,19 +50,33 @@ class Function implements IFunctionClient {
     // The simulator is target for local development and debugging so we are not
     // trying to overly secure or sandbox the execution environment.
     const userCode = readFileSync(this.filename, "utf8");
-    const envStmts = Object.entries(this.env).map(
+    const envSetup = Object.entries(this.env).map(
       ([key, value]) =>
         `process.env[${JSON.stringify(key)}] = ${JSON.stringify(value)};\n`
     );
+
     const wrapper = [
       "var exports = {};",
-      envStmts,
-      userCode,
+      envSetup,
       `process.env.${ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE} = "${this.handle}"`,
+      userCode,
       `exports.handler(${JSON.stringify(payload)});`,
     ].join("\n");
     log("running wrapped code: %s", wrapper);
-    const result = await vm.runInThisContext(wrapper);
+
+    const cloneGlobal = () =>
+      Object.defineProperties(
+        { ...global },
+        Object.getOwnPropertyDescriptors(global)
+      );
+
+    // Make the global HandleManager available to user code so that they can access
+    // other resource clients
+    const context = vm.createContext({
+      ...cloneGlobal(),
+      HandleManager: HandleManager,
+    });
+    const result = await vm.runInNewContext(wrapper, context);
 
     return result;
   }

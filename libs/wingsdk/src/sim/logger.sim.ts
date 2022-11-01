@@ -40,9 +40,10 @@ class Logger implements ILoggerClient {
     }
 
     // TODO: add some other compute context mechanism?
-    const functionId = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE];
-    const logFile = `${this.logsDir}/${functionId}.log`;
+    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE];
+    const logFile = `${this.logsDir}/events.log`;
     const event = {
+      functionHandle,
       message,
       timestamp: Date.now(),
     };
@@ -54,8 +55,8 @@ class Logger implements ILoggerClient {
   }
 
   public async fetchLatestLogs(): Promise<LogEvent[]> {
-    const functionId = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE];
-    const logFile = `${this.logsDir}/${functionId}.log`;
+    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE];
+    const logFile = `${this.logsDir}/events.log`;
     if (fs.existsSync(logFile)) {
       const contents = fs.readFileSync(logFile, "utf-8");
       return contents
@@ -65,6 +66,9 @@ class Logger implements ILoggerClient {
             return undefined;
           }
           const event = JSON.parse(line);
+          if (event.functionHandle !== functionHandle) {
+            return undefined;
+          }
           return {
             message: event.message,
             timestamp: event.timestamp,

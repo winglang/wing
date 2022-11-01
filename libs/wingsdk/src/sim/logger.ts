@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, InflightClient } from "../core";
+import { CaptureMetadata, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResourceSim } from "./handle-manager";
 import { IResource } from "./resource";
@@ -26,8 +26,9 @@ export class Logger extends cloud.LoggerBase implements IResource {
     };
   }
 
-  private get ref(): string {
-    return `\${${this.node.path}#attrs.logsDir}`;
+  /** @internal */
+  public get _handle(): string {
+    return `\${${this.node.path}#attrs.handle}`;
   }
 
   /** @internal */
@@ -38,19 +39,14 @@ export class Logger extends cloud.LoggerBase implements IResource {
 
     this.callers.push(captureScope.node.path);
 
-    const env = `LOGGER_ADDR__${this.node.addr}`;
-    captureScope.addEnvironment(env, this.ref);
+    const env = `LOGGER_HANDLE__${this.node.addr}`;
+    captureScope.addEnvironment(env, this._handle);
 
     captureScope.node.addDependency(this);
 
-    // The inflight client is passed the compute resource ID as a second
-    // argument so that all of the logs from the same resource are grouped
-    // together. Perhaps this should be some kind of $context passed to every
-    // inflight function automatically?
-    return InflightClient.for(__filename, "LoggerClient", [
-      `process.env["${env}"]`,
-      `"${captureScope.node.id}"`,
-    ]);
+    return NodeJsCode.fromInline(
+      `HandleManager.findInstance(process.env["${env}"])`
+    );
   }
 }
 

@@ -1,5 +1,12 @@
-export const HANDLES: Record<string, IResourceSim> = {};
+const HANDLES: Record<string, IResourceSim> = {};
 
+/**
+ * Maintain a mapping from resource handles to resource instances. This is
+ * used by the simulator to find resources, both for the public API and
+ * for when user code needs to call other resource clients.
+ *
+ * @internal
+ */
 export class HandleManager {
   public static addInstance(instance: IResourceSim): string {
     const handle = instance.handle;
@@ -10,7 +17,7 @@ export class HandleManager {
     return handle;
   }
 
-  public static getInstance(handle: string): IResourceSim {
+  public static findInstance(handle: string): IResourceSim {
     if (!HANDLES[handle]) {
       throw new Error(`No handler instance at ${handle}`);
     }
@@ -27,8 +34,14 @@ export class HandleManager {
   }
 }
 
-// TODO
+/**
+ * A simulated resource.
+ */
 export interface IResourceSim {
+  /**
+   * The resource's handle - a name that uniquely identifies the resource across
+   * simulation runs.
+   */
   readonly handle: string;
 }
 

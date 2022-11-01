@@ -186,7 +186,7 @@ export class Simulator {
     if (!handle) {
       throw new Error(`Resource ${path} does not have a handle`);
     }
-    return HandleManager.getInstance(handle);
+    return HandleManager.findInstance(handle);
   }
 
   /**

@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, InflightClient } from "../core";
+import { CaptureMetadata, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResourceSim } from "./handle-manager";
 import { IResource } from "./resource";
@@ -34,8 +34,9 @@ export class Bucket extends cloud.BucketBase implements IResource {
     };
   }
 
-  private get ref(): string {
-    return `\${${this.node.path}#attrs.bucketAddr}`;
+  /** @internal */
+  public get _handle(): string {
+    return `\${${this.node.path}#attrs.handle}`;
   }
 
   /**
@@ -49,11 +50,13 @@ export class Bucket extends cloud.BucketBase implements IResource {
     this.callers.push(captureScope.node.path);
 
     const env = `BUCKET_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.ref);
+    captureScope.addEnvironment(env, this._handle);
 
-    return InflightClient.for(__filename, "BucketClient", [
-      `process.env["${env}"]`,
-    ]);
+    captureScope.node.addDependency(this);
+
+    return NodeJsCode.fromInline(
+      `HandleManager.findInstance(process.env["${env}"])`
+    );
   }
 }
 

@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResourceSim } from "./handle-manager";
 import { IResource } from "./resource";
@@ -82,8 +83,9 @@ export class Queue extends cloud.QueueBase implements IResource {
     };
   }
 
-  private get ref(): string {
-    return `\${${this.node.path}#attrs.queueAddr}`;
+  /** @internal */
+  public get _handle(): string {
+    return `\${${this.node.path}#attrs.handle}`;
   }
 
   /**
@@ -99,12 +101,14 @@ export class Queue extends cloud.QueueBase implements IResource {
 
     this.callers.push(captureScope.node.path);
 
-    const env = `QUEUE_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.ref);
+    const env = `QUEUE_HANDLE__${this.node.addr}`;
+    captureScope.addEnvironment(env, this._handle);
 
-    return core.InflightClient.for(__filename, "QueueClient", [
-      `process.env["${env}"]`,
-    ]);
+    captureScope.node.addDependency(this);
+
+    return NodeJsCode.fromInline(
+      `HandleManager.findInstance(process.env["${env}"])`
+    );
   }
 }
 

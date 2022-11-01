@@ -42,7 +42,7 @@ class Queue implements IQueueClient {
     for (const subscriber of this.subscribers) {
       const functionId = subscriber.functionId;
       const functionHandle = context.resolver.lookup(functionId).attrs!.handle;
-      subscriber.functionClient = HandleManager.getInstance(
+      subscriber.functionClient = HandleManager.findInstance(
         functionHandle
       ) as IFunctionClient;
     }

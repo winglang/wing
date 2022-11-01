@@ -1722,6 +1722,138 @@ with a fresh copy without any consequences.
 ---
 
 
+### Logger <a name="Logger" id="@monadahq/wingsdk.sim.Logger"></a>
+
+- *Implements:* @monadahq/wingsdk.sim.IResource
+
+**Inflight client:** [@monadahq/wingsdk.sim.ILoggerClient](#@monadahq/wingsdk.sim.ILoggerClient)
+
+Simulator implementation of `cloud.Logger`.
+
+#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Logger.Initializer"></a>
+
+```typescript
+import { sim } from '@monadahq/wingsdk'
+
+new sim.Logger(scope: Construct, id: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Logger.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@monadahq/wingsdk.sim.Logger.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.sim.Logger.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.sim.Logger.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@monadahq/wingsdk.sim.Logger.print">print</a></code> | Logs a message. |
+
+---
+
+##### `toString` <a name="toString" id="@monadahq/wingsdk.sim.Logger.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `print` <a name="print" id="@monadahq/wingsdk.sim.Logger.print"></a>
+
+```typescript
+public print(message: string): void
+```
+
+Logs a message.
+
+###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.sim.Logger.print.parameter.message"></a>
+
+- *Type:* string
+
+The message to log.
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Logger.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.sim.Logger.isConstruct"></a>
+
+```typescript
+import { sim } from '@monadahq/wingsdk'
+
+sim.Logger.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.sim.Logger.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@monadahq/wingsdk.sim.Logger.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.sim.Logger.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.sim.Logger.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ### LoggerBase <a name="LoggerBase" id="@monadahq/wingsdk.cloud.LoggerBase"></a>
 
 Functionality shared between all `Logger` implementations.
@@ -2807,6 +2939,38 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
+### BaseResourceAttributes <a name="BaseResourceAttributes" id="@monadahq/wingsdk.sim.BaseResourceAttributes"></a>
+
+Schema for resource attributes.
+
+#### Initializer <a name="Initializer" id="@monadahq/wingsdk.sim.BaseResourceAttributes.Initializer"></a>
+
+```typescript
+import { sim } from '@monadahq/wingsdk'
+
+const baseResourceAttributes: sim.BaseResourceAttributes = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.BaseResourceAttributes.property.handle">handle</a></code> | <code>string</code> | The resource's simulator-unique id. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.BaseResourceAttributes.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's simulator-unique id.
+
+---
+
 ### BaseResourceSchema <a name="BaseResourceSchema" id="@monadahq/wingsdk.sim.BaseResourceSchema"></a>
 
 Schema for individual resources.
@@ -2824,7 +2988,7 @@ const baseResourceSchema: sim.BaseResourceSchema = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.type">type</a></code> | <code>string</code> | The type of the resource. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific attributes that are set after the resource is created. |
+| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>@monadahq/wingsdk.sim.BaseResourceAttributes</code> | The resource-specific attributes that are set after the resource is created. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.callees">callees</a></code> | <code>string[]</code> | IDs of resources that this resource calls, triggers, or captures. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.callers">callers</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or captured by. |
 | <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.children">children</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.sim.BaseResourceSchema}</code> | The resource's children indexed by their IDs. |
@@ -2848,10 +3012,10 @@ The type of the resource.
 ##### `attrs`<sup>Optional</sup> <a name="attrs" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs"></a>
 
 ```typescript
-public readonly attrs: {[ key: string ]: any};
+public readonly attrs: BaseResourceAttributes;
 ```
 
-- *Type:* {[ key: string ]: any}
+- *Type:* @monadahq/wingsdk.sim.BaseResourceAttributes
 
 The resource-specific attributes that are set after the resource is created.
 
@@ -3504,6 +3668,7 @@ const simulatorContext: testing.SimulatorContext = { ... }
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.testing.SimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
 | <code><a href="#@monadahq/wingsdk.testing.SimulatorContext.property.resolver">resolver</a></code> | <code>@monadahq/wingsdk.testing.IResourceResolver</code> | A resolver that can be used to look up other resources in the tree. |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorContext.property.simulationId">simulationId</a></code> | <code>string</code> | A unique id for this particular simulation run. |
 
 ---
 
@@ -3528,6 +3693,21 @@ public readonly resolver: IResourceResolver;
 - *Type:* @monadahq/wingsdk.testing.IResourceResolver
 
 A resolver that can be used to look up other resources in the tree.
+
+---
+
+##### `simulationId`<sup>Required</sup> <a name="simulationId" id="@monadahq/wingsdk.testing.SimulatorContext.property.simulationId"></a>
+
+```typescript
+public readonly simulationId: string;
+```
+
+- *Type:* string
+
+A unique id for this particular simulation run.
+
+This can be used to
+distinguish between multiple runs of the same simulation.
 
 ---
 
@@ -4546,6 +4726,8 @@ new testing.Simulator(props: SimulatorProps)
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.getResourceByPath">getResourceByPath</a></code> | Get the resource instance for a given path. |
+| <code><a href="#@monadahq/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
 | <code><a href="#@monadahq/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
@@ -4599,6 +4781,28 @@ that is resolved at synth time.
 - *Type:* string
 
 ---
+
+##### `getResourceByPath` <a name="getResourceByPath" id="@monadahq/wingsdk.testing.Simulator.getResourceByPath"></a>
+
+```typescript
+public getResourceByPath(path: string): IResourceSim
+```
+
+Get the resource instance for a given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getResourceByPath.parameter.path"></a>
+
+- *Type:* string
+
+---
+
+##### `listResources` <a name="listResources" id="@monadahq/wingsdk.testing.Simulator.listResources"></a>
+
+```typescript
+public listResources(): string[]
+```
+
+Get a list of all resource paths.
 
 ##### `reload` <a name="reload" id="@monadahq/wingsdk.testing.Simulator.reload"></a>
 
@@ -4818,13 +5022,32 @@ Put an object in the bucket.
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.sim.IBucketClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
+- *Extends:* @monadahq/wingsdk.cloud.IBucketClient, @monadahq/wingsdk.sim.IResourceSim
 
 - *Implemented By:* @monadahq/wingsdk.sim.IBucketClient
 
 Simulator implementation of inflight client for `cloud.Bucket`.
 
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.IBucketClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IBucketClient.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's handle - a name that uniquely identifies the resource across simulation runs.
+
+---
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.tfaws.IBucketClient"></a>
 
@@ -4838,7 +5061,7 @@ AWS implementation of inflight client for `cloud.Bucket`.
 
 ### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Logger, @monadahq/wingsdk.cloud.LoggerBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
+- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Logger, @monadahq/wingsdk.cloud.LoggerBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Logger, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
@@ -4904,7 +5127,7 @@ Invoke the function asynchronously with a given payload.
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.sim.IFunctionClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
+- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient, @monadahq/wingsdk.sim.IResourceSim
 
 - *Implemented By:* @monadahq/wingsdk.sim.IFunctionClient
 
@@ -4926,6 +5149,25 @@ public timesCalled(): number
 
 Returns the number of times the function was invoked since its creation.
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.IFunctionClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IFunctionClient.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's handle - a name that uniquely identifies the resource across simulation runs.
+
+---
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.tfaws.IFunctionClient"></a>
 
@@ -4939,7 +5181,7 @@ AWS implementation of inflight client for `cloud.Function`.
 
 ### ILoggerClient <a name="ILoggerClient" id="@monadahq/wingsdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.ILoggerClient
+- *Implemented By:* @monadahq/wingsdk.cloud.ILoggerClient, @monadahq/wingsdk.sim.ILoggerClient
 
 Inflight interface for `Logger`.
 
@@ -4947,7 +5189,7 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with whichever resource is running the inflight code. |
+| <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with the resource running the inflight code. |
 | <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
 
 ---
@@ -4958,10 +5200,9 @@ Inflight interface for `Logger`.
 public fetchLatestLogs(): LogEvent[]
 ```
 
-Fetch the latest logs associated with whichever resource is running the inflight code.
+Fetch the latest logs associated with the resource running the inflight code.
 
-The logs may include cloud-provider specific messages or
-metadata.
+The logs may include cloud-provider specific messages or metadata.
 
 ##### `print` <a name="print" id="@monadahq/wingsdk.cloud.ILoggerClient.print"></a>
 
@@ -4982,6 +5223,35 @@ The message to print.
 
 ---
 
+
+### ILoggerClient <a name="ILoggerClient" id="@monadahq/wingsdk.sim.ILoggerClient"></a>
+
+- *Extends:* @monadahq/wingsdk.cloud.ILoggerClient, @monadahq/wingsdk.sim.IResourceSim
+
+- *Implemented By:* @monadahq/wingsdk.sim.ILoggerClient
+
+Simulator implementation of inflight client for `cloud.Logger`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.ILoggerClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.ILoggerClient.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's handle - a name that uniquely identifies the resource across simulation runs.
+
+---
 
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.cloud.IQueueClient"></a>
 
@@ -5016,13 +5286,32 @@ Payload to send to the queue.
 
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.sim.IQueueClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
+- *Extends:* @monadahq/wingsdk.cloud.IQueueClient, @monadahq/wingsdk.sim.IResourceSim
 
 - *Implemented By:* @monadahq/wingsdk.sim.IQueueClient
 
 Simulator implementation of inflight client for `cloud.Queue`.
 
 
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.IQueueClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IQueueClient.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's handle - a name that uniquely identifies the resource across simulation runs.
+
+---
 
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.tfaws.IQueueClient"></a>
 
@@ -5038,7 +5327,7 @@ AWS implementation of inflight client for `cloud.Queue`.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.sim.IResource
+- *Implemented By:* @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Logger, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.sim.IResource
 
 Fields shared by all resource implementations for the simulator.
 
@@ -5092,6 +5381,33 @@ Lookup a resource by its path.
 ---
 
 
+### IResourceSim <a name="IResourceSim" id="@monadahq/wingsdk.sim.IResourceSim"></a>
+
+- *Implemented By:* @monadahq/wingsdk.sim.IBucketClient, @monadahq/wingsdk.sim.IFunctionClient, @monadahq/wingsdk.sim.ILoggerClient, @monadahq/wingsdk.sim.IQueueClient, @monadahq/wingsdk.sim.IResourceSim
+
+A simulated resource.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@monadahq/wingsdk.sim.IResourceSim.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IResourceSim.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's handle - a name that uniquely identifies the resource across simulation runs.
+
+---
+
 ### ISimulatorDispatcher <a name="ISimulatorDispatcher" id="@monadahq/wingsdk.testing.ISimulatorDispatcher"></a>
 
 - *Implemented By:* @monadahq/wingsdk.testing.ISimulatorDispatcher
@@ -5110,7 +5426,7 @@ Represents a class that can start and stop the simulation of an individual resou
 ##### `start` <a name="start" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start"></a>
 
 ```typescript
-public start(type: string, props: any, context: SimulatorContext): any
+public start(type: string, path: string, props: any, context: SimulatorContext): any
 ```
 
 Start simulating a resource.
@@ -5119,6 +5435,12 @@ This function should return an object/map
 containing the resource's attributes.
 
 ###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.type"></a>
+
+- *Type:* string
+
+---
+
+###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.path"></a>
 
 - *Type:* string
 
@@ -5241,12 +5563,20 @@ List of inflight operations available for `Logger`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT">PRINT</a></code> | `Logger.print`. |
+| <code><a href="#@monadahq/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS">FETCH_LATEST_LOGS</a></code> | `Logger.fetchLatestLogs`. |
 
 ---
 
 ##### `PRINT` <a name="PRINT" id="@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT"></a>
 
 `Logger.print`.
+
+---
+
+
+##### `FETCH_LATEST_LOGS` <a name="FETCH_LATEST_LOGS" id="@monadahq/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS"></a>
+
+`Logger.fetchLatestLogs`.
 
 ---
 

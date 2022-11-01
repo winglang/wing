@@ -93,9 +93,8 @@ export interface ILoggerClient {
   print(message: string): Promise<void>;
 
   /**
-   * Fetch the latest logs associated with whichever resource is running the
-   * inflight code. The logs may include cloud-provider specific messages or
-   * metadata.
+   * Fetch the latest logs associated with the resource running the inflight
+   * code. The logs may include cloud-provider specific messages or metadata.
    *
    * @experimental
    */

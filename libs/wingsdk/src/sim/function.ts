@@ -1,14 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { FunctionProps, FUNCTION_TYPE } from "../cloud";
-import {
-  Code,
-  Language,
-  NodeJsCode,
-  Inflight,
-  CaptureMetadata,
-  InflightClient,
-} from "../core";
+import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
 import { TextFile } from "../fs";
 import { IResourceSim } from "./handle-manager";
 import { IResource } from "./resource";
@@ -57,11 +50,9 @@ export class Function extends cloud.FunctionBase implements IResource {
     }
   }
 
-  /**
-   * @internal
-   */
-  public get _ref(): string {
-    return `\${${this.node.path}#attrs.functionAddr}`;
+  /** @internal */
+  public get _handle(): string {
+    return `\${${this.node.path}#attrs.handle}`;
   }
 
   /**
@@ -84,11 +75,13 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.callers.push(captureScope.node.path);
 
     const env = `FUNCTION_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this._ref);
+    captureScope.addEnvironment(env, this._handle);
 
-    return InflightClient.for(__filename, "FunctionClient", [
-      `process.env["${env}"]`,
-    ]);
+    captureScope.node.addDependency(this);
+
+    return NodeJsCode.fromInline(
+      `HandleManager.findInstance(process.env["${env}"])`
+    );
   }
 
   /** @internal */
