@@ -57,7 +57,7 @@ class Function implements IFunctionClient {
     const wrapper = [
       "var exports = {};",
       ...envSetup,
-      `process.env.${ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE} = "${this.handle}";`,
+      `process.env["${ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE}"] = "${this.handle}";`,
       userCode,
       // The last statement is the value that will be returned by vm.runInThisContext
       `exports.handler(${JSON.stringify(payload)});`,
