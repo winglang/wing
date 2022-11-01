@@ -66,9 +66,12 @@ class Logger implements ILoggerClient {
             return undefined;
           }
           const event = JSON.parse(line);
+
+          // only return logs for the current function
           if (event.functionHandle !== functionHandle) {
             return undefined;
           }
+
           return {
             message: event.message,
             timestamp: event.timestamp,
