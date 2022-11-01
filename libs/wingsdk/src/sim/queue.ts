@@ -41,9 +41,11 @@ export class Queue extends cloud.QueueBase implements IResource {
     code.push(`    await ${inflight.entrypoint}($cap, $message);`);
     code.push(`  }`);
     code.push(`}`);
+
     const newInflight = new core.Inflight({
       entrypoint: `$queueEventWrapper`,
       code: core.NodeJsCode.fromInline(code.join("\n")),
+      captures: inflight.captures,
     });
 
     const fn = new cloud.Function(

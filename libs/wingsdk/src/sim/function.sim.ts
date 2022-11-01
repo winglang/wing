@@ -1,5 +1,6 @@
-import { readFileSync } from "fs";
-import { resolve } from "path";
+import * as fs from "fs";
+import * as path_ from "path";
+import * as process from "process";
 import * as vm from "vm";
 import { SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
@@ -40,38 +41,41 @@ class Function implements IFunctionClient {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
-    this.filename = resolve(context.assetsDir, props.sourceCodeFile);
+    this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
     this.env = props.environmentVariables;
   }
 
   public async invoke(payload: string): Promise<string> {
     this._timesCalled += 1;
 
-    const userCode = readFileSync(this.filename, "utf8");
+    const userCode = fs.readFileSync(this.filename, "utf8");
     const envSetup = Object.entries(this.env).map(
       ([key, value]) =>
-        `process.env[${JSON.stringify(key)}] = ${JSON.stringify(value)};\n`
+        `process.env[${JSON.stringify(key)}] = ${JSON.stringify(value)};`
     );
 
     const wrapper = [
       "var exports = {};",
-      envSetup,
-      `process.env.${ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE} = "${this.handle}"`,
+      ...envSetup,
+      `process.env.${ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE} = "${this.handle}";`,
       userCode,
+      // The last statement is the value that will be returned by vm.runInThisContext
       `exports.handler(${JSON.stringify(payload)});`,
     ].join("\n");
     log("running wrapped code: %s", wrapper);
 
-    const cloneGlobal = () =>
-      Object.defineProperties(
-        { ...global },
-        Object.getOwnPropertyDescriptors(global)
-      );
-
-    // Make the global HandleManager available to user code so that they can access
-    // other resource clients
     const context = vm.createContext({
-      ...cloneGlobal(),
+      // TODO: include all NodeJS globals?
+      // https://nodejs.org/api/globals.html#global-objects
+      // https://stackoverflow.com/questions/59049140/is-it-possible-to-make-all-of-node-js-globals-available-in-nodes-vm-context
+      console: console,
+      fs: fs,
+      vm: vm,
+      path: path_,
+      process: process,
+
+      // Make the global HandleManager available to user code so that they can access
+      // other resource clients
       HandleManager: HandleManager,
     });
     const result = await vm.runInNewContext(wrapper, context);
