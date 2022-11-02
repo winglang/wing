@@ -62,7 +62,7 @@ impl<'a> JsiiImporter<'a> {
 				} else if type_fqn == "@winglang/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
-					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/winglang/issues/261
+					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
 					Some(self.wing_types.anything())
 				} else {
 					Some(self.lookup_or_create_type(type_fqn))
@@ -398,7 +398,7 @@ impl<'a> JsiiImporter<'a> {
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
 		if parameter.variadic.unwrap_or(false) {
-			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/winglang/winglang/issues/397");
+			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/winglang/wing/issues/397");
 		}
 
 		let param_type = self.type_ref_to_wing_type(&parameter.type_).unwrap();

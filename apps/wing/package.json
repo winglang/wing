@@ -13,7 +13,7 @@
   "bin": "bin/wing",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/winglang/winglang.git"
+    "url": "git+https://github.com/winglang/wing.git"
   },
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",

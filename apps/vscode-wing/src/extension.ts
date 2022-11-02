@@ -21,7 +21,7 @@ import {
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
-const WINGLANG_REPO_NAME = "winglang";
+const WINGLANG_REPO_NAME = "wing";
 const WINGLANG_REPO_OWNER = "winglang";
 const UPDATE_RATE_LIMIT_MS = 1 * 60 * 60 * 1000; // 1 hour
 
