@@ -68,7 +68,6 @@ export class Function implements IFunctionClient, ISimulatorResource {
       // https://stackoverflow.com/questions/59049140/is-it-possible-to-make-all-of-node-js-globals-available-in-nodes-vm-context
       console: console,
       fs: fs,
-      vm: vm,
       path: path_,
       process: process,
 
