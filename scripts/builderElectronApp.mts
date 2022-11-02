@@ -77,7 +77,7 @@ try {
               "APPLE_ID",
               "APPLE_ID_PASSWORD",
             );
-            const appPath = `${context.appOutDir}/${context.packager.appInfo.sanitizedName}.app`;
+            const appPath = `${context.appOutDir}/${context.packager.appInfo.productFilename}.app`;
             console.log(`  • notarizing app=${appPath}`);
             await notarize({
               appBundleId: context.packager.appInfo.macBundleIdentifier,
