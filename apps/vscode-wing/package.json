@@ -3,7 +3,7 @@
   "description": "Wing Language Support",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monadahq/winglang.git"
+    "url": "https://github.com/winglang/winglang.git"
   },
   "scripts": {
     "build": "npx projen build",

@@ -2,7 +2,7 @@
   "name": "@winglang/wingsdk",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monadahq/wingsdk.git"
+    "url": "https://github.com/winglang/wingsdk.git"
   },
   "scripts": {
     "api-check": "npx projen api-check",

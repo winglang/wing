@@ -1,11 +1,11 @@
-import { cdk, javascript, JsonFile } from "projen";
+import { JsonFile, cdk, javascript } from "projen";
 
 const project = new cdk.JsiiProject({
   name: "@winglang/wingsdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
-  repositoryUrl: "https://github.com/monadahq/wingsdk.git",
+  repositoryUrl: "https://github.com/winglang/wingsdk.git",
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [

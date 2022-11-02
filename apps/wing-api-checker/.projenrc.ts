@@ -11,7 +11,7 @@ const project = new typescript.TypeScriptProject({
   authorEmail: "ping@monada.co",
   authorOrganization: true,
   authorUrl: "https://monada.co",
-  repository: "https://github.com/monadahq/winglang.git",
+  repository: "https://github.com/winglang/winglang.git",
   packageManager: javascript.NodePackageManager.NPM,
   github: false,
   projenrcTs: true,

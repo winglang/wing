@@ -3,7 +3,7 @@
   "affected": {
     "defaultBase": "main"
   },
-  "npmScope": "monadahq",
+  "npmScope": "winglang",
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "libs"

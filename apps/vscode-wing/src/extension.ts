@@ -1,29 +1,29 @@
-import { execSync } from "child_process";
-import { existsSync } from "fs";
-import { writeFile } from "fs/promises";
-import { platform, tmpdir } from "os";
-import fetch, { HeadersInit } from "node-fetch";
-import { Octokit } from "octokit";
-import {
-  window,
-  workspace,
-  ExtensionContext,
-  ExtensionMode,
-  commands,
-  Uri,
-} from "vscode";
-
 import {
   Executable,
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
 } from "vscode-languageclient/node";
+import {
+  ExtensionContext,
+  ExtensionMode,
+  Uri,
+  commands,
+  window,
+  workspace,
+} from "vscode";
+import fetch, { HeadersInit } from "node-fetch";
+import { platform, tmpdir } from "os";
+
+import { Octokit } from "octokit";
+import { execSync } from "child_process";
+import { existsSync } from "fs";
+import { writeFile } from "fs/promises";
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
 const WINGLANG_REPO_NAME = "winglang";
-const WINGLANG_REPO_OWNER = "monadahq";
+const WINGLANG_REPO_OWNER = "winglang";
 const UPDATE_RATE_LIMIT_MS = 1 * 60 * 60 * 1000; // 1 hour
 
 const CFG_UPDATES_GITHUB_TOKEN = "updates.githubToken";

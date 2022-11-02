@@ -3,7 +3,7 @@
     ["conventional-commits", { "preset": "angular" }],
     "git-tag"
   ],
-  "owner": "monadahq",
+  "owner": "winglang",
   "repo": "winglang",
   "name": "MonadaBot",
   "email": "monadabot@monada.co"

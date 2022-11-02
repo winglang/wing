@@ -2,7 +2,7 @@
   "name": "wing-api-checker",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monadahq/winglang.git"
+    "url": "https://github.com/winglang/winglang.git"
   },
   "bin": {
     "wing-api-check": "bin/wing-api-check"
