@@ -5,19 +5,12 @@ Object {
   "root": Object {
     "children": Object {
       "WingLogger": Object {
-        "attrs": Object {},
-        "children": Object {},
-        "dependsOn": Array [],
-        "props": Object {},
         "type": "wingsdk.cloud.Logger",
       },
       "my_function": Object {
-        "attrs": Object {},
         "callees": Array [
           "root/WingLogger",
         ],
-        "callers": Array [],
-        "children": Object {},
         "dependsOn": Array [
           "root/WingLogger",
         ],
@@ -31,7 +24,6 @@ Object {
         "type": "wingsdk.cloud.Function",
       },
     },
-    "dependsOn": Array [],
     "type": "constructs.Construct",
   },
   "startOrder": Array [

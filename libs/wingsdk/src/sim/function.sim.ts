@@ -32,7 +32,7 @@ export class Function implements IFunctionClient, ISimulatorResource {
       throw new Error("Only JavaScript is supported");
     }
     this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
-    this.env = props.environmentVariables;
+    this.env = props.environmentVariables ?? {};
   }
 
   public async init(): Promise<void> {

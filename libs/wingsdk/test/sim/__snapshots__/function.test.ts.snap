@@ -5,20 +5,16 @@ Object {
   "root": Object {
     "children": Object {
       "my_function": Object {
-        "attrs": Object {},
-        "callees": Array [],
-        "callers": Array [],
-        "children": Object {},
-        "dependsOn": Array [],
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "ENV_VAR1": "true",
+          },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
       },
     },
-    "dependsOn": Array [],
     "type": "constructs.Construct",
   },
   "startOrder": Array [
@@ -32,20 +28,13 @@ Object {
   "root": Object {
     "children": Object {
       "my_function": Object {
-        "attrs": Object {},
-        "callees": Array [],
-        "callers": Array [],
-        "children": Object {},
-        "dependsOn": Array [],
         "props": Object {
-          "environmentVariables": Object {},
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
       },
     },
-    "dependsOn": Array [],
     "type": "constructs.Construct",
   },
   "startOrder": Array [
@@ -59,11 +48,6 @@ Object {
   "root": Object {
     "children": Object {
       "my_function": Object {
-        "attrs": Object {},
-        "callees": Array [],
-        "callers": Array [],
-        "children": Object {},
-        "dependsOn": Array [],
         "props": Object {
           "environmentVariables": Object {
             "PIG_LATIN": "true",
@@ -74,7 +58,6 @@ Object {
         "type": "wingsdk.cloud.Function",
       },
     },
-    "dependsOn": Array [],
     "type": "constructs.Construct",
   },
   "startOrder": Array [

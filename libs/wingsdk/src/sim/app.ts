@@ -118,6 +118,6 @@ function toSchema(c: IConstruct): BaseResourceSchema {
       children,
       dependsOn,
     },
-    { filterEmptyArrays: false, filterEmptyObjects: false, sortKeys: false }
+    { filterEmptyArrays: true, filterEmptyObjects: true, sortKeys: false }
   );
 }

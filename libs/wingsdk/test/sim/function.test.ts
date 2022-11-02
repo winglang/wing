@@ -25,7 +25,11 @@ test("create a function", async () => {
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
   });
-  new cloud.Function(app, "my_function", handler);
+  new cloud.Function(app, "my_function", handler, {
+    env: {
+      ENV_VAR1: "true",
+    },
+  });
   const simfile = app.synth();
 
   // THEN
@@ -37,7 +41,9 @@ test("create a function", async () => {
   expect(s.getProps("root/my_function")).toEqual({
     sourceCodeFile: expect.any(String),
     sourceCodeLanguage: "javascript",
-    environmentVariables: {},
+    environmentVariables: {
+      ENV_VAR1: "true",
+    },
   });
   await s.stop();
 
