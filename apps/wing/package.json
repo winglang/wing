@@ -1,5 +1,5 @@
 {
-  "name": "@monadahq/wing",
+  "name": "@winglang/wing",
   "version": "0.0.0",
   "description": "Wing Programming Language",
   "files": [
@@ -22,7 +22,7 @@
     "dev": "npm run build && ./bin/wing"
   },
   "dependencies": {
-    "@monadahq/wingsdk": "file:../../libs/wingsdk",
+    "@winglang/wingsdk": "file:../../libs/wingsdk",
     "commander": "^9.4.1",
     "debug": "^4.3.4",
     "open": "^8.4.0"

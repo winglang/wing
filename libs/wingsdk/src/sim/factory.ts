@@ -1,4 +1,4 @@
-import { IPolyconFactory } from "@monadahq/polycons";
+import { IPolyconFactory } from "@winglang/polycons";
 import { IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { Bucket } from "./bucket";

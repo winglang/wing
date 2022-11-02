@@ -1,7 +1,7 @@
 import { cdk, javascript, JsonFile } from "projen";
 
 const project = new cdk.JsiiProject({
-  name: "@monadahq/wingsdk",
+  name: "@winglang/wingsdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
@@ -10,7 +10,7 @@ const project = new cdk.JsiiProject({
   defaultReleaseBranch: "main",
   peerDeps: [
     "constructs@~10.0.25",
-    "@monadahq/polycons",
+    "@winglang/polycons",
     "cdktf",
     "@cdktf/provider-aws",
   ],
@@ -31,7 +31,7 @@ const project = new cdk.JsiiProject({
     "isomorphic-ws",
   ],
   devDeps: [
-    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
+    "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",

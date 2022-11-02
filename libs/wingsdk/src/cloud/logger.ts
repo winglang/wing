@@ -1,4 +1,4 @@
-import { Polycons } from "@monadahq/polycons";
+import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code } from "../core";
 import { Resource } from "./resource";
@@ -30,7 +30,7 @@ export abstract class LoggerBase extends Resource {
 /**
  * A cloud logging facility.
  *
- * @inflight `@monadahq/wingsdk.cloud.ILoggerClient`
+ * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
  */
 export class Logger extends LoggerBase {
   /**
