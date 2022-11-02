@@ -9,14 +9,10 @@ import { IQueueClient } from "./queue";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";
 
-interface QueueSubscriberInternal extends QueueSubscriber {
-  functionHandle?: string;
-}
-
 export class Queue implements IQueueClient, ISimulatorResource {
   public readonly handle: string;
   private readonly messages = new Array<string>();
-  private readonly subscribers = new Array<QueueSubscriberInternal>();
+  private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
 
   constructor(
@@ -28,12 +24,6 @@ export class Queue implements IQueueClient, ISimulatorResource {
 
     for (const sub of props.subscribers) {
       this.subscribers.push({ ...sub });
-    }
-
-    for (const subscriber of this.subscribers) {
-      const functionId = subscriber.functionId;
-      subscriber.functionHandle =
-        context.resolver.lookup(functionId).attrs!.handle;
     }
 
     if (props.initialMessages) {
@@ -78,7 +68,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
           // If the function returns an error, put the message back on the queue
           this.messages.push(...messages);
           console.error(
-            `Error invoking queue subscriber ${subscriber.functionId} with event "${event}":`,
+            `Error invoking queue subscriber "${subscriber.functionHandle}" with event "${event}":`,
             err
           );
         });

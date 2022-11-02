@@ -1,7 +1,7 @@
 import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE, QUEUE_TYPE } from "../cloud";
 import { BaseResourceSchema } from "./schema";
 
-export type FunctionId = string;
+export type FunctionHandle = string;
 
 /** Schema for cloud.Function */
 export interface FunctionSchema extends BaseResourceSchema {
@@ -31,8 +31,8 @@ export interface QueueSchema extends BaseResourceSchema {
 
 /** Schema for cloud.Queue.props.subscribers */
 export interface QueueSubscriber {
-  /** Function ID that should be called. */
-  readonly functionId: FunctionId;
+  /** Function that should be called. */
+  readonly functionHandle: FunctionHandle;
   /** Maximum number of messages that will be batched together to the subscriber. */
   readonly batchSize: number;
 }

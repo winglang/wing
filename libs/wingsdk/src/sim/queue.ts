@@ -58,8 +58,9 @@ export class Queue extends cloud.QueueBase implements IResource {
     // call subscribed functions.
     this.node.addDependency(fn);
 
+    const functionHandle = `\${${fn.node.path}#attrs.handle}`; // TODO: proper token mechanism
     this.subscribers.push({
-      functionId: fn.node.path,
+      functionHandle,
       batchSize: props.batchSize ?? 1,
     });
 

@@ -17,7 +17,7 @@ export function captureSimulatorResource(
   const env = `${type
     .toUpperCase()
     .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
-  const handle = `\${${resource.node.path}#attrs.handle}`;
+  const handle = `\${${resource.node.path}#attrs.handle}`; // TODO: proper token mechanism
   captureScope.addEnvironment(env, handle);
   captureScope.node.addDependency(resource);
   resource._addCallers(captureScope.node.path);

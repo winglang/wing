@@ -36,11 +36,6 @@ export interface SimulatorContext {
   readonly simulationId: string;
 
   /**
-   * A resolver that can be used to look up other resources in the tree.
-   */
-  readonly resolver: IResourceResolver;
-
-  /**
    * The absolute path to where all assets in `app.wx` are stored.
    */
   readonly assetsDir: string;
@@ -118,23 +113,14 @@ export class Simulator {
     const context: SimulatorContext = {
       // generate a random id for this simulation run
       simulationId: `${Date.now().toString(36)}`,
-      // This resolver allows resources to resolve deploy-time attributes about
-      // other resources they depend on. For example, a queue that has a function
-      // subscribed to it needs to obtain the function's simulator-unique ID in
-      // order to invoke it.
-      resolver: {
-        lookup: (path: string) => {
-          return findResource(this._tree, path);
-        },
-      },
       assetsDir: this._assetsDir,
     };
 
     for (const path of this._tree.startOrder) {
       const resourceData = findResource(this._tree, path);
       log(`starting resource ${path} (${resourceData.type})`);
-      const props = resolveTokens(path, resourceData.props, context.resolver);
-      const resource = await this._factory.resolve(
+      const props = this.resolveTokens(path, resourceData.props);
+      const resource = this._factory.resolve(
         resourceData.type,
         path,
         props,
@@ -224,56 +210,52 @@ export class Simulator {
   public get tree(): any {
     return JSON.parse(JSON.stringify(this._tree));
   }
+
+  private resolveTokens(tokenOrigin: string, props: any): any {
+    if (typeof props === "string") {
+      if (isToken(props)) {
+        const ref = props.slice(2, -1);
+        const [path, rest] = ref.split("#");
+        const resource = findResource(this._tree, path);
+        if (rest.startsWith("attrs.")) {
+          if (!resource.attrs) {
+            throw new Error(
+              `Tried to resolve token ${props} but resource ${path} has no attributes defined yet. Is it possible ${tokenOrigin} needs to take a dependency on ${path}?`
+            );
+          }
+          return resource.attrs[rest.slice(6)];
+        } else if (rest.startsWith("props.")) {
+          if (!resource.props) {
+            throw new Error(
+              `Tried to resolve token ${props} but resource ${path} has no props defined.`
+            );
+          }
+          return resource.props;
+        } else {
+          throw new Error(`Invalid token reference: ${ref}`);
+        }
+      }
+      return props;
+    }
+
+    if (Array.isArray(props)) {
+      return props.map((x) => this.resolveTokens(tokenOrigin, x));
+    }
+
+    if (typeof props === "object") {
+      const ret: any = {};
+      for (const [key, value] of Object.entries(props)) {
+        ret[key] = this.resolveTokens(tokenOrigin, value);
+      }
+      return ret;
+    }
+
+    return props;
+  }
 }
 
 function isToken(value: string): boolean {
   return value.startsWith("${") && value.endsWith("}");
-}
-
-function resolveTokens(
-  tokenOrigin: string,
-  props: any,
-  resolver: IResourceResolver
-): any {
-  if (typeof props === "string") {
-    if (isToken(props)) {
-      const ref = props.slice(2, -1);
-      const [path, rest] = ref.split("#");
-      const resource = resolver.lookup(path);
-      if (rest.startsWith("attrs.")) {
-        if (!resource.attrs) {
-          throw new Error(
-            `Tried to resolve token ${props} but resource ${path} has no attributes defined yet. Is it possible ${tokenOrigin} needs to take a dependency on ${path}?`
-          );
-        }
-        return resource.attrs[rest.slice(6)];
-      } else if (rest.startsWith("props.")) {
-        if (!resource.props) {
-          throw new Error(
-            `Tried to resolve token ${props} but resource ${path} has no props defined.`
-          );
-        }
-        return resource.props;
-      } else {
-        throw new Error(`Invalid token reference: ${ref}`);
-      }
-    }
-    return props;
-  }
-
-  if (Array.isArray(props)) {
-    return props.map((x) => resolveTokens(tokenOrigin, x, resolver));
-  }
-
-  if (typeof props === "object") {
-    const ret: any = {};
-    for (const [key, value] of Object.entries(props)) {
-      ret[key] = resolveTokens(tokenOrigin, value, resolver);
-    }
-    return ret;
-  }
-
-  return props;
 }
 
 function findResource(tree: any, path: string): BaseResourceSchema {

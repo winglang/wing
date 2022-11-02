@@ -27,7 +27,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -79,7 +79,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 5,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -123,7 +123,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
