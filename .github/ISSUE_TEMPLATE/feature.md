@@ -24,3 +24,4 @@ Select one or more:
 - [ ] IDE Extension
 - [ ] Documentation
 - [ ] Development Environment
+- [ ] Contributor Experience
