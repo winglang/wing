@@ -1,5 +1,5 @@
 ---
-name: Bug Report
+name: Bug Report 🐞
 about: Create a bug report
 labels: bug,untriaged
 ---
@@ -8,15 +8,15 @@ labels: bug,untriaged
 
 **I tried this:**
 
-*{code/explanation to reproduce bug}*
+<!-- code/explanation to reproduce bug -->
 
 **I expected to see this happen:**
 
-*{explanation}*
+<!-- explanation -->
 
 **Instead, this happened:**
 
-*{explanation}*
+<!-- explanation -->
 
 ## Component
 
@@ -37,4 +37,4 @@ Select one or more:
 
 ## Technical Notes
 
-*{pointers, stack traces or any other technical notes}*
+<!-- pointers, stack traces or any other technical notes -->
