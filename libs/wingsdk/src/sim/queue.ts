@@ -1,10 +1,10 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
+import { captureSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -85,31 +85,16 @@ export class Queue extends cloud.QueueBase implements IResource {
   }
 
   /** @internal */
-  public get _handle(): string {
-    return `\${${this.node.path}#attrs.handle}`;
+  public _addCallers(...callers: string[]) {
+    this.callers.push(...callers);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _capture(
     captureScope: IConstruct,
     _metadata: core.CaptureMetadata
   ): core.Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("queues can only be captured by a sim.Function for now");
-    }
-
-    this.callers.push(captureScope.node.path);
-
-    const env = `QUEUE_HANDLE__${this.node.addr}`;
-    captureScope.addEnvironment(env, this._handle);
-
-    captureScope.node.addDependency(this);
-
-    return NodeJsCode.fromInline(
-      `HandleManager.findInstance(process.env["${env}"])`
-    );
+    return captureSimulatorResource("queue", this, captureScope);
   }
 }
 

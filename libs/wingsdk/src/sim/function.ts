@@ -5,6 +5,7 @@ import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
+import { captureSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Function`.
@@ -49,38 +50,18 @@ export class Function extends cloud.FunctionBase implements IResource {
     }
   }
 
-  /** @internal */
-  public get _handle(): string {
-    return `\${${this.node.path}#attrs.handle}`;
+  public addEnvironment(name: string, value: string) {
+    this.env[name] = value;
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _addCallers(...callers: string[]) {
     this.callers.push(...callers);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error(
-        "functions can only be captured by a sim.Function for now"
-      );
-    }
-
-    this.callers.push(captureScope.node.path);
-
-    const env = `FUNCTION_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this._handle);
-
-    captureScope.node.addDependency(this);
-
-    return NodeJsCode.fromInline(
-      `HandleManager.findInstance(process.env["${env}"])`
-    );
+    return captureSimulatorResource("function", this, captureScope);
   }
 
   /** @internal */
@@ -96,10 +77,6 @@ export class Function extends cloud.FunctionBase implements IResource {
       callers: this.callers,
       callees: this.callees,
     };
-  }
-
-  public addEnvironment(name: string, value: string) {
-    this.env[name] = value;
   }
 }
 

@@ -1,9 +1,9 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, NodeJsCode } from "../core";
-import { Function } from "./function";
+import { CaptureMetadata, Code } from "../core";
 import { IResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
+import { captureSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
@@ -34,28 +34,13 @@ export class Bucket extends cloud.BucketBase implements IResource {
   }
 
   /** @internal */
-  public get _handle(): string {
-    return `\${${this.node.path}#attrs.handle}`;
+  public _addCallers(...callers: string[]) {
+    this.callers.push(...callers);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("buckets can only be captured by a sim.Function for now");
-    }
-
-    this.callers.push(captureScope.node.path);
-
-    const env = `BUCKET_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this._handle);
-
-    captureScope.node.addDependency(this);
-
-    return NodeJsCode.fromInline(
-      `HandleManager.findInstance(process.env["${env}"])`
-    );
+    return captureSimulatorResource("bucket", this, captureScope);
   }
 }
 

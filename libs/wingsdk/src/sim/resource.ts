@@ -6,6 +6,8 @@ import { BaseResourceSchema } from "./schema";
  */
 export interface IResource extends IConstruct {
   /** @internal */
+  _addCallers(...callers: string[]): void;
+  /** @internal */
   _toResourceSchema(): BaseResourceSchema;
 }
 

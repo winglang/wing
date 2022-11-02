@@ -23,7 +23,7 @@ Object {
         ],
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_HANDLE__c80f4a947b44da0af65a2258bcf6ee0bfb76f7e65b": "\${root/WingLogger#attrs.handle}",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
