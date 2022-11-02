@@ -8,13 +8,17 @@ labels: enhancement,untriaged
 
 ## Feature Spec
 
-*{hypothetical readme section for this new feature, code snippets and all}*
+*{hypothetical readme/changelog/contributing guide section for this new feature, code snippets and all}*
 
 ## Use Cases
 
 *{list of use cases for this feature - what problem does it solve?}*
 
-### Component
+## Implementation Notes
+
+*{ideas, references, pointers, thoughts}
+
+## Component
 
 Select one or more:
 
