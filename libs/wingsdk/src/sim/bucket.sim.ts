@@ -39,6 +39,8 @@ export class Bucket implements IBucketClient, ISimulatorResource {
 
   public async list(prefix?: string): Promise<string[]> {
     const fileNames = await fs.promises.readdir(this.fileDir);
-    return fileNames.filter((fileName) => fileName.startsWith(prefix ?? ""));
+    return prefix
+      ? fileNames.filter((fileName) => fileName.startsWith(prefix))
+      : fileNames;
   }
 }
