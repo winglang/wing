@@ -4785,7 +4785,7 @@ that is resolved at synth time.
 ##### `getResourceByPath` <a name="getResourceByPath" id="@monadahq/wingsdk.testing.Simulator.getResourceByPath"></a>
 
 ```typescript
-public getResourceByPath(path: string): ISimulatorResource
+public getResourceByPath(path: string): any
 ```
 
 Get the resource instance for a given path.
@@ -5022,32 +5022,13 @@ Put an object in the bucket.
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.sim.IBucketClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IBucketClient, @monadahq/wingsdk.sim.ISimulatorResource
+- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
 
 - *Implemented By:* @monadahq/wingsdk.sim.IBucketClient
 
 Simulator implementation of inflight client for `cloud.Bucket`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.IBucketClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
-
----
-
-##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IBucketClient.property.handle"></a>
-
-```typescript
-public readonly handle: string;
-```
-
-- *Type:* string
-
-The resource's handle - a name that uniquely identifies the resource across simulation runs.
-
----
 
 ### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.tfaws.IBucketClient"></a>
 
@@ -5127,7 +5108,7 @@ Invoke the function asynchronously with a given payload.
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.sim.IFunctionClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient, @monadahq/wingsdk.sim.ISimulatorResource
+- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
 
 - *Implemented By:* @monadahq/wingsdk.sim.IFunctionClient
 
@@ -5149,25 +5130,6 @@ public timesCalled(): number
 
 Returns the number of times the function was invoked since its creation.
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.IFunctionClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
-
----
-
-##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IFunctionClient.property.handle"></a>
-
-```typescript
-public readonly handle: string;
-```
-
-- *Type:* string
-
-The resource's handle - a name that uniquely identifies the resource across simulation runs.
-
----
 
 ### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.tfaws.IFunctionClient"></a>
 
@@ -5226,32 +5188,13 @@ The message to print.
 
 ### ILoggerClient <a name="ILoggerClient" id="@monadahq/wingsdk.sim.ILoggerClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.ILoggerClient, @monadahq/wingsdk.sim.ISimulatorResource
+- *Extends:* @monadahq/wingsdk.cloud.ILoggerClient
 
 - *Implemented By:* @monadahq/wingsdk.sim.ILoggerClient
 
 Simulator implementation of inflight client for `cloud.Logger`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.ILoggerClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
-
----
-
-##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.ILoggerClient.property.handle"></a>
-
-```typescript
-public readonly handle: string;
-```
-
-- *Type:* string
-
-The resource's handle - a name that uniquely identifies the resource across simulation runs.
-
----
 
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.cloud.IQueueClient"></a>
 
@@ -5286,32 +5229,13 @@ Payload to send to the queue.
 
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.sim.IQueueClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IQueueClient, @monadahq/wingsdk.sim.ISimulatorResource
+- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
 
 - *Implemented By:* @monadahq/wingsdk.sim.IQueueClient
 
 Simulator implementation of inflight client for `cloud.Queue`.
 
 
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.IQueueClient.property.handle">handle</a></code> | <code>string</code> | The resource's handle - a name that uniquely identifies the resource across simulation runs. |
-
----
-
-##### `handle`<sup>Required</sup> <a name="handle" id="@monadahq/wingsdk.sim.IQueueClient.property.handle"></a>
-
-```typescript
-public readonly handle: string;
-```
-
-- *Type:* string
-
-The resource's handle - a name that uniquely identifies the resource across simulation runs.
-
----
 
 ### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.tfaws.IQueueClient"></a>
 
@@ -5454,7 +5378,7 @@ Stop the resource's simulation and clean up any file system resources it created
 
 ### ISimulatorResource <a name="ISimulatorResource" id="@monadahq/wingsdk.sim.ISimulatorResource"></a>
 
-- *Implemented By:* @monadahq/wingsdk.sim.IBucketClient, @monadahq/wingsdk.sim.IFunctionClient, @monadahq/wingsdk.sim.ILoggerClient, @monadahq/wingsdk.sim.IQueueClient, @monadahq/wingsdk.sim.ISimulatorResource
+- *Implemented By:* @monadahq/wingsdk.sim.ISimulatorResource
 
 A simulated resource.
 

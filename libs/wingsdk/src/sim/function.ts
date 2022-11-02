@@ -3,7 +3,6 @@ import * as cloud from "../cloud";
 import { FunctionProps, FUNCTION_TYPE } from "../cloud";
 import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
 import { TextFile } from "../fs";
-import { ISimulatorResource } from "./handle-manager";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
@@ -107,9 +106,7 @@ export class Function extends cloud.FunctionBase implements IResource {
 /**
  * Simulator implementation of inflight client for `cloud.Function`.
  */
-export interface IFunctionClient
-  extends cloud.IFunctionClient,
-    ISimulatorResource {
+export interface IFunctionClient extends cloud.IFunctionClient {
   /**
    * Returns the number of times the function was invoked since its creation.
    *

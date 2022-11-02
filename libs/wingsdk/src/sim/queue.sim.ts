@@ -1,6 +1,10 @@
 import { SimulatorContext } from "../testing/simulator";
 import { IFunctionClient } from "./function";
-import { HandleManager, makeResourceHandle } from "./handle-manager";
+import {
+  HandleManager,
+  ISimulatorResource,
+  makeResourceHandle,
+} from "./handle-manager";
 import { IQueueClient } from "./queue";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";
@@ -9,7 +13,7 @@ interface QueueSubscriberInternal extends QueueSubscriber {
   functionHandle?: string;
 }
 
-export class Queue implements IQueueClient {
+export class Queue implements IQueueClient, ISimulatorResource {
   public readonly handle: string;
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriberInternal>();
@@ -65,7 +69,7 @@ export class Queue implements IQueueClient {
         }
         const fnClient = HandleManager.findInstance(
           subscriber.functionHandle!
-        ) as IFunctionClient;
+        ) as IFunctionClient & ISimulatorResource;
         if (!fnClient) {
           throw new Error("No function client found");
         }

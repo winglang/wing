@@ -4,11 +4,11 @@ import { join } from "path";
 import { LogEvent } from "../cloud";
 import { SimulatorContext } from "../testing";
 import { ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE } from "./function.sim";
-import { makeResourceHandle } from "./handle-manager";
+import { ISimulatorResource, makeResourceHandle } from "./handle-manager";
 import { ILoggerClient } from "./logger";
 import { LoggerSchema } from "./schema-resources";
 
-export class Logger implements ILoggerClient {
+export class Logger implements ILoggerClient, ISimulatorResource {
   public readonly handle: string;
   private readonly logsDir: string;
   public constructor(

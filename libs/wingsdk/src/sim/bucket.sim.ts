@@ -3,10 +3,10 @@ import * as os from "os";
 import { join } from "path";
 import { SimulatorContext } from "../testing/simulator";
 import { IBucketClient } from "./bucket";
-import { makeResourceHandle } from "./handle-manager";
+import { ISimulatorResource, makeResourceHandle } from "./handle-manager";
 import { BucketSchema } from "./schema-resources";
 
-export class Bucket implements IBucketClient {
+export class Bucket implements IBucketClient, ISimulatorResource {
   public readonly handle: string;
   private readonly fileDir: string;
   public constructor(

@@ -5,13 +5,17 @@ import * as vm from "vm";
 import { SimulatorContext } from "../testing/simulator";
 import { log } from "../util";
 import { IFunctionClient } from "./function";
-import { HandleManager, makeResourceHandle } from "./handle-manager";
+import {
+  HandleManager,
+  ISimulatorResource,
+  makeResourceHandle,
+} from "./handle-manager";
 import { FunctionSchema } from "./schema-resources";
 
 export const ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE =
   "WING_SIM_RUNTIME_FUNCTION_HANDLE";
 
-export class Function implements IFunctionClient {
+export class Function implements IFunctionClient, ISimulatorResource {
   public readonly handle: string;
   private readonly filename: string;
   private readonly env: Record<string, string>;

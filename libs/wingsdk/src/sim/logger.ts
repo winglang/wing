@@ -2,7 +2,6 @@ import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { CaptureMetadata, Code, NodeJsCode } from "../core";
 import { Function } from "./function";
-import { ISimulatorResource } from "./handle-manager";
 import { IResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 
@@ -53,6 +52,4 @@ export class Logger extends cloud.LoggerBase implements IResource {
 /**
  * Simulator implementation of inflight client for `cloud.Logger`.
  */
-export interface ILoggerClient
-  extends cloud.ILoggerClient,
-    ISimulatorResource {}
+export interface ILoggerClient extends cloud.ILoggerClient {}
