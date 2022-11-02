@@ -1,9 +1,9 @@
-import {
-  Executable,
-  LanguageClient,
-  LanguageClientOptions,
-  ServerOptions,
-} from "vscode-languageclient/node";
+import { execSync } from "child_process";
+import { existsSync } from "fs";
+import { writeFile } from "fs/promises";
+import { platform, tmpdir } from "os";
+import fetch, { HeadersInit } from "node-fetch";
+import { Octokit } from "octokit";
 import {
   ExtensionContext,
   ExtensionMode,
@@ -12,13 +12,12 @@ import {
   window,
   workspace,
 } from "vscode";
-import fetch, { HeadersInit } from "node-fetch";
-import { platform, tmpdir } from "os";
-
-import { Octokit } from "octokit";
-import { execSync } from "child_process";
-import { existsSync } from "fs";
-import { writeFile } from "fs/promises";
+import {
+  Executable,
+  LanguageClient,
+  LanguageClientOptions,
+  ServerOptions,
+} from "vscode-languageclient/node";
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";

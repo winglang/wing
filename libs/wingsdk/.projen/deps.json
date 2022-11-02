@@ -5,15 +5,6 @@
       "type": "build"
     },
     {
-      "name": "@monadahq/polycons",
-      "type": "build"
-    },
-    {
-      "name": "@monadahq/wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
-      "type": "build"
-    },
-    {
       "name": "@types/aws-lambda",
       "type": "build"
     },
@@ -52,6 +43,15 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^5",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/polycons",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/wing-api-checker",
+      "version": "file:../../apps/wing-api-checker",
       "type": "build"
     },
     {
@@ -219,7 +219,7 @@
       "type": "peer"
     },
     {
-      "name": "@monadahq/polycons",
+      "name": "@winglang/polycons",
       "type": "peer"
     },
     {
