@@ -59,7 +59,6 @@ guide](./CONTRIBUTING.md).
 Here is a list of known issues in "getting started":
 
 * [#50](https://github.com/monadahq/winglang/issues/50) `print()` is not yet implemented.
-* [#359](https://github.com/monadahq/winglang/pull/359) The compiler doesn't support default values for function parameters and structs.
 
 ### Prerequisites
 
