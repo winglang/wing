@@ -123,10 +123,6 @@
       "type": "build"
     },
     {
-      "name": "chokidar",
-      "type": "build"
-    },
-    {
       "name": "classnames",
       "type": "build"
     },
@@ -284,6 +280,10 @@
     {
       "name": "zod",
       "type": "build"
+    },
+    {
+      "name": "chokidar",
+      "type": "runtime"
     },
     {
       "name": "piscina",

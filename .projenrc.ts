@@ -5,13 +5,13 @@ const project = new TypeScriptProject({
   name: "wing-console",
   description: "The Wing Console",
   deps: [
+    "chokidar",
     // This dependency has an special `worker.js` that won't be bundled if it's a devDep.
     "piscina",
     // The bundling fails in dev (not sure why).
     "ws",
   ],
   devDeps: [
-    "chokidar",
     "electron-log",
     "@monadahq/wingsdk",
     "@monadahq/polycons",
