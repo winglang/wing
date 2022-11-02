@@ -1,11 +1,11 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
-import { HandleManager } from "../sim";
+import { HandleManager, ISimulatorResource } from "../sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
-const { DefaultSimulatorDispatcher } = require("../sim/dispatcher.sim");
+const { DefaultSimulatorFactory } = require("../sim/factory.sim");
 
 /**
  * Props for `Simulator`.
@@ -17,10 +17,12 @@ export interface SimulatorProps {
   readonly simfile: string;
 
   /**
-   * The factory that dispatches to simulation implementations.
-   * @default - a factory that simulates built-in Wing SDK resources
+   * The factory that produces resource simulations.
+   *
+   * @default - a factory that produces simulations for built-in Wing SDK
+   * resources
    */
-  readonly dispatcher?: ISimulatorDispatcher;
+  readonly factory?: ISimulatorFactory;
 }
 
 /**
@@ -58,7 +60,7 @@ export interface IResourceResolver {
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
-  private readonly _dispatcher: ISimulatorDispatcher;
+  private readonly _factory: ISimulatorFactory;
   private _tree: WingSimulatorSchema;
   private _simfile: string;
   private _assetsDir: string;
@@ -69,7 +71,7 @@ export class Simulator {
     this._tree = tree;
     this._assetsDir = assetsDir;
 
-    this._dispatcher = props.dispatcher ?? new DefaultSimulatorDispatcher();
+    this._factory = props.factory ?? new DefaultSimulatorFactory();
   }
 
   private _loadApp(simfile: string): { assetsDir: string; tree: any } {
@@ -129,16 +131,18 @@ export class Simulator {
     };
 
     for (const path of this._tree.startOrder) {
-      const res = findResource(this._tree, path);
-      log(`starting resource ${path} (${res.type})`);
-      const props = resolveTokens(path, res.props, context.resolver);
-      const attrs = await this._dispatcher.start(
-        res.type,
+      const resourceData = findResource(this._tree, path);
+      log(`starting resource ${path} (${resourceData.type})`);
+      const props = resolveTokens(path, resourceData.props, context.resolver);
+      const resource = await this._factory.resolve(
+        resourceData.type,
         path,
         props,
         context
       );
-      (res as any).attrs = attrs;
+      await resource.init();
+      const handle = HandleManager.addInstance(resource);
+      (resourceData as any).attrs = { handle };
     }
   }
 
@@ -286,18 +290,16 @@ function findResource(tree: any, path: string): BaseResourceSchema {
 }
 
 /**
- * Represents a class that can start and stop the simulation of an individual
- * resource.
+ * A factory that can turn resource descriptions into resource simulations.
  */
-export interface ISimulatorDispatcher {
+export interface ISimulatorFactory {
   /**
-   * Start simulating a resource. This function should return an object/map
-   * containing the resource's attributes.
+   * Resolve the parameters needed for creating a specific resource simulation.
    */
-  start(
+  resolve(
     type: string,
     path: string,
     props: any,
     context: SimulatorContext
-  ): Promise<any>;
+  ): ISimulatorResource;
 }

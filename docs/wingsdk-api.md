@@ -3728,7 +3728,7 @@ const simulatorProps: testing.SimulatorProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.dispatcher">dispatcher</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
+| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.factory">factory</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorFactory</code> | The factory that produces resource simulations. |
 
 ---
 
@@ -3744,16 +3744,16 @@ Path to a Wing simulator file (.wx).
 
 ---
 
-##### `dispatcher`<sup>Optional</sup> <a name="dispatcher" id="@monadahq/wingsdk.testing.SimulatorProps.property.dispatcher"></a>
+##### `factory`<sup>Optional</sup> <a name="factory" id="@monadahq/wingsdk.testing.SimulatorProps.property.factory"></a>
 
 ```typescript
-public readonly dispatcher: ISimulatorDispatcher;
+public readonly factory: ISimulatorFactory;
 ```
 
-- *Type:* @monadahq/wingsdk.testing.ISimulatorDispatcher
-- *Default:* a factory that simulates built-in Wing SDK resources
+- *Type:* @monadahq/wingsdk.testing.ISimulatorFactory
+- *Default:* a factory that produces simulations for built-in Wing SDK resources
 
-The factory that dispatches to simulation implementations.
+The factory that produces resource simulations.
 
 ---
 
@@ -5305,50 +5305,47 @@ Lookup a resource by its path.
 ---
 
 
-### ISimulatorDispatcher <a name="ISimulatorDispatcher" id="@monadahq/wingsdk.testing.ISimulatorDispatcher"></a>
+### ISimulatorFactory <a name="ISimulatorFactory" id="@monadahq/wingsdk.testing.ISimulatorFactory"></a>
 
-- *Implemented By:* @monadahq/wingsdk.testing.ISimulatorDispatcher
+- *Implemented By:* @monadahq/wingsdk.testing.ISimulatorFactory
 
-Represents a class that can start and stop the simulation of an individual resource.
+A factory that can turn resource descriptions into resource simulations.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Start simulating a resource. |
+| <code><a href="#@monadahq/wingsdk.testing.ISimulatorFactory.resolve">resolve</a></code> | Resolve the parameters needed for creating a specific resource simulation. |
 
 ---
 
-##### `start` <a name="start" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start"></a>
+##### `resolve` <a name="resolve" id="@monadahq/wingsdk.testing.ISimulatorFactory.resolve"></a>
 
 ```typescript
-public start(type: string, path: string, props: any, context: SimulatorContext): any
+public resolve(type: string, path: string, props: any, context: SimulatorContext): ISimulatorResource
 ```
 
-Start simulating a resource.
+Resolve the parameters needed for creating a specific resource simulation.
 
-This function should return an object/map
-containing the resource's attributes.
-
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.type"></a>
+###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorFactory.resolve.parameter.type"></a>
 
 - *Type:* string
 
 ---
 
-###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.path"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.ISimulatorFactory.resolve.parameter.path"></a>
 
 - *Type:* string
 
 ---
 
-###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.props"></a>
+###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ISimulatorFactory.resolve.parameter.props"></a>
 
 - *Type:* any
 
 ---
 
-###### `context`<sup>Required</sup> <a name="context" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.context"></a>
+###### `context`<sup>Required</sup> <a name="context" id="@monadahq/wingsdk.testing.ISimulatorFactory.resolve.parameter.context"></a>
 
 - *Type:* @monadahq/wingsdk.testing.SimulatorContext
 
