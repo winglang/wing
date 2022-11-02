@@ -59,7 +59,6 @@ guide](./CONTRIBUTING.md).
 Here is a list of known issues in "getting started":
 
 * [#50](https://github.com/monadahq/winglang/issues/50) `print()` is not yet implemented.
-* [#359](https://github.com/monadahq/winglang/pull/359) The compiler doesn't support default values for function parameters and structs.
 
 ### Prerequisites
 
@@ -100,6 +99,9 @@ the extension package and running:
 code --install-extension ~/Downloads/vscode-wing.vsix
 ```
 
+Install Wing Console by [downloading](https://github.com/monadahq/wing-console/releases) the latest release for your platform.
+(currently supporting only macOS)
+
 ### Hello, Wing!
 
 We are ready to write our first Wing program!
@@ -138,13 +140,17 @@ The **Wing Console** will start and in the main view you'll see two resources: a
 **Queue** and a **Function**. You'll also notice that the function is connected
 to the queue through the `message` event.
 
-> TODO: Add console screenshot here
+<img src="./docs/assets/wing-console-view.png">
 
-Now, right-click on the queue and choose **Push Message**. Type `world` and hit
-**Send**.
+Now, click on the queue resource, goto **queue contents** tab. Type `world` and hit
+**Send Message**.
 
-You'll notice that the log window shows a few events and then prints your
-`Hello, world!` log. ***Congratulations! You have just written and tested your
+Now, click on the function resource, goto **Test Function** tab and notice the indication that your function
+was called once.
+
+You can repeat the above testing flow and track the amount of times your function was called.
+
+***Congratulations! You have just written and tested your
 first Wing program!***
 
 As you can see, so far we've tested our program locally using the simulator and
