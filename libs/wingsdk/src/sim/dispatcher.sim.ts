@@ -7,7 +7,7 @@ import { Logger } from "./logger.sim";
 import { Queue } from "./queue.sim";
 
 export class DefaultSimulatorDispatcher implements ISimulatorDispatcher {
-  async start(
+  public async start(
     type: string,
     path: string,
     props: any,
@@ -33,10 +33,5 @@ export class DefaultSimulatorDispatcher implements ISimulatorDispatcher {
     await resource.init();
     const handle = HandleManager.addInstance(resource);
     return { handle };
-  }
-
-  async stop(_type: string, attrs: any): Promise<void> {
-    const resource = HandleManager.removeInstance(attrs!.handle);
-    await resource.cleanup();
   }
 }

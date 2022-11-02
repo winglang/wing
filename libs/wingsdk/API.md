@@ -5316,7 +5316,6 @@ Represents a class that can start and stop the simulation of an individual resou
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Start simulating a resource. |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.stop">stop</a></code> | Stop the resource's simulation and clean up any file system resources it created. |
 
 ---
 
@@ -5352,26 +5351,6 @@ containing the resource's attributes.
 ###### `context`<sup>Required</sup> <a name="context" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.context"></a>
 
 - *Type:* @monadahq/wingsdk.testing.SimulatorContext
-
----
-
-##### `stop` <a name="stop" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop"></a>
-
-```typescript
-public stop(type: string, attrs: any): void
-```
-
-Stop the resource's simulation and clean up any file system resources it created.
-
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop.parameter.type"></a>
-
-- *Type:* string
-
----
-
-###### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop.parameter.attrs"></a>
-
-- *Type:* any
 
 ---
 

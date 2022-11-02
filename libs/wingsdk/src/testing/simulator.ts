@@ -151,7 +151,8 @@ export class Simulator {
     for (const path of this._tree.startOrder.slice().reverse()) {
       const res = findResource(this._tree, path);
       log(`stopping resource ${path} (${res.type})`);
-      await this._dispatcher.stop(res.type, res.attrs);
+      const resource = HandleManager.removeInstance(res.attrs!.handle);
+      await resource.cleanup();
     }
 
     // TODO: remove "attrs" data from tree
@@ -299,10 +300,4 @@ export interface ISimulatorDispatcher {
     props: any,
     context: SimulatorContext
   ): Promise<any>;
-
-  /**
-   * Stop the resource's simulation and clean up any file system resources it
-   * created.
-   */
-  stop(type: string, attrs: any): Promise<void>;
 }
