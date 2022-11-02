@@ -1,8 +1,11 @@
+#[macro_use]
+extern crate lazy_static;
+
+use crate::parser::bring;
 use ast::Scope;
 use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
-use crate::parser::Parser;
-use std::cell::RefCell;
+use std::collections::HashSet;
 use std::fs;
 use std::path::PathBuf;
 
@@ -12,41 +15,12 @@ use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
+pub mod debug;
 pub mod capture;
 pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
 pub mod type_check;
-
-pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
-	let language = tree_sitter_wing::language();
-	let mut parser = tree_sitter::Parser::new();
-	parser.set_language(language).unwrap();
-
-	let source = match fs::read(&source_file) {
-		Ok(source) => source,
-		Err(err) => {
-			panic!("Error reading source file: {}: {:?}", &source_file, err);
-		}
-	};
-
-	let tree = match parser.parse(&source[..], None) {
-		Some(tree) => tree,
-		None => {
-			panic!("Failed parsing source file: {}", source_file);
-		}
-	};
-
-	let wing_parser = Parser {
-		source: &source[..],
-		source_name: source_file.to_string(),
-		diagnostics: RefCell::new(Diagnostics::new()),
-	};
-
-	let scope = wing_parser.wingit(&tree.root_node());
-
-	(scope, wing_parser.diagnostics.into_inner())
-}
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
@@ -57,11 +31,12 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
+	// create a new hashmap to manage imports
+	let mut imports = HashSet::new();
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
-	let (mut scope, parse_diagnostics) = parse(source_file);
-
+	let (mut scope, parse_diagnostics) = bring::bring(source_file, None, &mut imports).unwrap();
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = type_check(&mut scope, &mut types);
 

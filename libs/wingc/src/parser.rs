@@ -1,5 +1,9 @@
+pub mod bring;
+
+use bring::bring;
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
+use std::path::PathBuf;
 use std::{str, vec};
 use tree_sitter::Node;
 
@@ -14,6 +18,7 @@ pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
 	pub diagnostics: RefCell<Diagnostics>,
+	pub imports: RefCell<&'a mut HashSet<String>>,
 }
 
 impl Parser<'_> {
@@ -109,14 +114,39 @@ impl Parser<'_> {
 
 	fn build_statement(&self, statement_node: &Node) -> DiagnosticResult<Statement> {
 		match statement_node.kind() {
-			"short_import_statement" => Ok(Statement::Use {
-				module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-				identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
-					Some(self.node_symbol(&identifier)?)
+			"short_import_statement" => {
+				let module_name_node = statement_node.child_by_field_name("module_name").unwrap();
+				if module_name_node.kind() == "identifier" {
+					Ok(Statement::Use {
+						module_name: self.node_symbol(&module_name_node)?,
+						identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
+							Some(self.node_symbol(&identifier)?)
+						} else {
+							None
+						},
+					})
+				} else if module_name_node.kind() == "string" {
+					let bring_target = self.node_text(&module_name_node);
+					let bring_target = &bring_target[1..bring_target.len() - 1];
+					let context_dir = PathBuf::from(&self.source_name);
+					let context_dir = context_dir.parent().unwrap().to_str().unwrap();
+					let brought = bring(bring_target, Some(context_dir), *self.imports.borrow_mut());
+					Ok(Statement::Bring {
+						module_path: bring_target.to_string(),
+						statements: brought
+							.unwrap_or((
+								Scope {
+									statements: vec![],
+									env: None,
+								},
+								Diagnostics::new(),
+							))
+							.0,
+					})
 				} else {
-					None
-				},
-			}),
+					panic!("Unexpected bring type {}", module_name_node.kind())
+				}
+			}
 			"variable_definition_statement" => {
 				let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)
@@ -302,6 +332,10 @@ impl Parser<'_> {
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
 			},
+			"optional" => {
+				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
+				Ok(Type::Optional(Box::new(inner_type)))
+			}
 			"custom_type" => Ok(self.build_custom_type(&type_node)?),
 			"function_type" => {
 				let param_type_list_node = type_node.child_by_field_name("parameter_types").unwrap();

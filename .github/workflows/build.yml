@@ -71,6 +71,7 @@ jobs:
 
   build-wasm:
     name: "Non-Native Build"
+    timeout-minutes: 15
     runs-on: ubuntu-latest
     needs: prepare
     env:
@@ -237,6 +238,7 @@ jobs:
   build-vscode:
     name: "Build VSCode Extension"
     needs:
+      - prepare
       - build-native
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
