@@ -47,15 +47,14 @@ export class Function implements IFunctionClient, ISimulatorResource {
     this._timesCalled += 1;
 
     const userCode = fs.readFileSync(this.filename, "utf8");
-    const envSetup = Object.entries(this.env).map(
-      ([key, value]) =>
-        `process.env[${JSON.stringify(key)}] = ${JSON.stringify(value)};`
-    );
+    const $env = {
+      ...this.env,
+      [ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE]: this.handle,
+    };
 
     const wrapper = [
       "var exports = {};",
-      ...envSetup,
-      `process.env["${ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE}"] = "${this.handle}";`,
+      "Object.assign(process.env, $env);",
       userCode,
       // The last statement is the value that will be returned by vm.runInThisContext
       `exports.handler(${JSON.stringify(payload)});`,
@@ -71,11 +70,13 @@ export class Function implements IFunctionClient, ISimulatorResource {
       path: path_,
       process: process,
 
+      $env: $env,
+
       // Make the global HandleManager available to user code so that they can access
       // other resource clients
       HandleManager: HandleManager,
     });
-    const result = await vm.runInNewContext(wrapper, context);
+    const result = await vm.runInContext(wrapper, context);
 
     return result;
   }
