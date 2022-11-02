@@ -42,6 +42,8 @@ export class Logger implements ILoggerClient, ISimulatorResource {
       message,
       timestamp: Date.now(),
     };
+
+    // operations need to be sync to avoid only partial writes to files
     if (!fs.existsSync(logFile)) {
       fs.writeFileSync(logFile, JSON.stringify(event) + "\n");
     } else {
@@ -53,7 +55,7 @@ export class Logger implements ILoggerClient, ISimulatorResource {
     const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE];
     const logFile = `${this.logsDir}/events.log`;
     if (fs.existsSync(logFile)) {
-      const contents = fs.readFileSync(logFile, "utf-8");
+      const contents = await fs.promises.readFile(logFile, "utf-8");
       return contents
         .split("\n")
         .map((line) => {
