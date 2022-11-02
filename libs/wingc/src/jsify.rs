@@ -405,15 +405,6 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 					.join("\n")
 			)
 		}
-		Statement::Bring {
-			module_path,
-			statements,
-		} => format!(
-			"/* start bring module: {module} */\n{}\n/* end bring module: {module} */",
-			jsify_scope(statements, &out_dir),
-			module = module_path
-		)
-		.to_string(),
 	}
 }
 
