@@ -5,6 +5,7 @@ import log from "electron-log";
 import { createIPCHandler } from "electron-trpc";
 import { autoUpdater } from "electron-updater";
 
+import { initWXFileWatcher } from "./appWatcher.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeRouters } from "./router/index.js";
 import { createSimulator, Simulator } from "./wingsdk.js";
@@ -51,8 +52,18 @@ async function createWindow(wxFilePath: string) {
     return;
   }
 
-  const sim = createSimulator({ appPath: wxFilePath });
-  await sim.start();
+  const sim = initWXFileWatcher({
+    appPath: wxFilePath,
+    onAppChange: () => {
+      if (!win) {
+        log.warn("No window to reload");
+        return;
+      }
+      log.info("sending a message to reload after file change");
+      win.webContents.send("cloud-app-changed");
+    },
+  });
+
   const router = mergeRouters(sim);
   createIPCHandler({ ipcMain, router });
 
@@ -122,12 +133,10 @@ void app.whenReady().then(async () => {
   if (import.meta.env.PROD) {
     new AppUpdater();
   }
-
   if (import.meta.env.DEV) {
     const installExtension = await import("electron-devtools-installer");
     await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
   }
-
   // Use the demo.wx file in dev.
   if (import.meta.env.DEV) {
     await createWindow(`${process.cwd()}/electron/main/demo.wx`);

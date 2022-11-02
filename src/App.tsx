@@ -20,9 +20,27 @@ export const App = ({}: AppProps) => {
   );
 
   const [schema, setSchema] = useState<WingSimulatorSchema>();
+
   useEffect(() => {
-    void trpcClient.query("app.tree").then((schema) => setSchema(schema));
-  }, []);
+    const loadSchema = async () => {
+      await queryClient.invalidateQueries("app.tree");
+      trpcClient
+        .query("app.tree")
+        .then((schema) => {
+          setSchema(schema);
+        })
+        .catch(console.error);
+    };
+    const removeCloudChangeListener = window.electronTRPC.ipcRenderer.on(
+      "cloud-app-changed",
+      loadSchema,
+    );
+    // initial schema loading
+    loadSchema().catch(console.error);
+    return () => {
+      removeCloudChangeListener();
+    };
+  }, [queryClient]);
 
   // todo [SA] construct hub story
   // const [schema] = useState(() => constructHubTreeToWingSchema());

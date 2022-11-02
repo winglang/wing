@@ -38,7 +38,7 @@
     "@heroicons/react": "^2.0.12",
     "@monadahq/mona-projen": "^0.0.36",
     "@monadahq/polycons": "^0.0.98",
-    "@monadahq/wingsdk": "*",
+    "@monadahq/wingsdk": "0.2.95",
     "@storybook/addon-actions": "^6.5.13",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-interactions": "^6.5.13",
