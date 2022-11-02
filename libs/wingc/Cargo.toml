@@ -25,6 +25,3 @@ path = "src/bin.rs"
 [package.metadata]
 # Currently wasm-opt is not changing the size of the wasm file, so it's just adding unnecessary time to the build.
 wasm-opt = false
-
-[profile.bench]
-debug = true
