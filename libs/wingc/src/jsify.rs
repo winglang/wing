@@ -8,7 +8,7 @@ use crate::ast::{
 };
 
 const STDLIB: &str = "$stdlib";
-const STDLIB_MODULE: &str = "@monadahq/wingsdk";
+const STDLIB_MODULE: &str = "@winglang/wingsdk";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {

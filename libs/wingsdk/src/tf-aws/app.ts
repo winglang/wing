@@ -1,6 +1,6 @@
 import { join } from "path";
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
-import { IPolyconFactory, Polycons } from "@monadahq/polycons";
+import { IPolyconFactory, Polycons } from "@winglang/polycons";
 import * as cdktf from "cdktf";
 import { Construct } from "constructs";
 import { stringify } from "safe-stable-stringify";

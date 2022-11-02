@@ -1,16 +1,16 @@
-import { cdk, javascript, JsonFile } from "projen";
+import { JsonFile, cdk, javascript } from "projen";
 
 const project = new cdk.JsiiProject({
-  name: "@monadahq/wingsdk",
+  name: "@winglang/wingsdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
-  repositoryUrl: "https://github.com/monadahq/wingsdk.git",
+  repositoryUrl: "https://github.com/winglang/wingsdk.git",
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [
     "constructs@~10.0.25",
-    "@monadahq/polycons",
+    "@winglang/polycons",
     "cdktf",
     "@cdktf/provider-aws",
   ],
@@ -31,7 +31,7 @@ const project = new cdk.JsiiProject({
     "isomorphic-ws",
   ],
   devDeps: [
-    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
+    "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",
