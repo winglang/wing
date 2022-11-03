@@ -40,9 +40,10 @@ export interface ISimulatorContext {
    */
   readonly assetsDir: string;
 
-  addInstance(type: string, path: string, resource: ISimulatorResource): string;
+  /**
+   * Find a resource simulation by its handle. Throws if the handle isn't valid.
+   */
   findInstance(handle: string): ISimulatorResource;
-  removeInstance(handle: string): ISimulatorResource;
 }
 
 /**
@@ -128,18 +129,8 @@ export class Simulator {
     const context: ISimulatorContext = {
       simulationId,
       assetsDir: this._assetsDir,
-      addInstance: (
-        type: string,
-        path: string,
-        resource: ISimulatorResource
-      ) => {
-        return this.addInstance(type, path, resource);
-      },
       findInstance: (handle: string) => {
         return this.findInstance(handle);
-      },
-      removeInstance: (handle: string) => {
-        return this.removeInstance(handle);
       },
     };
 

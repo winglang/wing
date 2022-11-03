@@ -9,7 +9,7 @@ import { captureSimulatorResource } from "./util";
 /**
  * Simulator implementation of `cloud.Queue`.
  *
- * @inflight `@monadahq/wingsdk.sim.IQueueClient`
+ * @inflight `@winglang/wingsdk.sim.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements IResource {
   private readonly callers = new Array<string>();

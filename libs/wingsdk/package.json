@@ -1,8 +1,8 @@
 {
-  "name": "@monadahq/wingsdk",
+  "name": "@winglang/wingsdk",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monadahq/wingsdk.git"
+    "url": "https://github.com/winglang/wingsdk.git"
   },
   "scripts": {
     "api-check": "npx projen api-check",
@@ -41,8 +41,6 @@
   },
   "devDependencies": {
     "@cdktf/provider-aws": "10.0.11",
-    "@monadahq/polycons": "0.0.98",
-    "@monadahq/wing-api-checker": "file:../../apps/wing-api-checker",
     "@types/aws-lambda": "^8.10.104",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27",
@@ -51,6 +49,8 @@
     "@types/tar": "^6.1.3",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
+    "@winglang/polycons": "0.0.105",
+    "@winglang/wing-api-checker": "file:../../apps/wing-api-checker",
     "aws-sdk-client-mock": "^2.0.0",
     "cdktf": "0.13.2",
     "cdktf-cli": "^0.12.2",
@@ -81,7 +81,7 @@
   },
   "peerDependencies": {
     "@cdktf/provider-aws": "^10.0.11",
-    "@monadahq/polycons": "^0.0.98",
+    "@winglang/polycons": "^0.0.105",
     "cdktf": "^0.13.2",
     "constructs": "~10.0.25"
   },

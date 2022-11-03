@@ -22,7 +22,7 @@ import {
 /**
  * AWS implementation of `cloud.Function`.
  *
- * @inflight `@monadahq/wingsdk.tfaws.IFunctionClient`
+ * @inflight `@winglang/wingsdk.tfaws.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;

@@ -13,7 +13,7 @@ export const ENV_WING_SIM_RUNTIME_FUNCTION_ADDR =
 /**
  * Simulator implementation of `cloud.Function`.
  *
- * @inflight `@monadahq/wingsdk.sim.IFunctionClient`
+ * @inflight `@winglang/wingsdk.sim.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements IResource {
   private readonly callers = new Array<string>();

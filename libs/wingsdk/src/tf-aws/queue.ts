@@ -4,12 +4,13 @@ import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { QueueInflightMethods } from "../cloud";
 import * as core from "../core";
+
 import { Function } from "./function";
 
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@monadahq/wingsdk.tfaws.IQueueClient`
+ * @inflight `@winglang/wingsdk.tfaws.IQueueClient`
  */
 export class Queue extends cloud.QueueBase {
   private readonly queue: SqsQueue;
@@ -22,7 +23,7 @@ export class Queue extends cloud.QueueBase {
 
     if ((props.initialMessages ?? []).length) {
       throw new Error(
-        "initialMessages not supported yet for AWS target - https://github.com/monadahq/winglang/issues/281"
+        "initialMessages not supported yet for AWS target - https://github.com/winglang/wing/issues/281"
       );
     }
   }

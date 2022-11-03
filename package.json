@@ -1,5 +1,5 @@
 {
-  "name": "@monadahq/winglang",
+  "name": "@winglang/wing",
   "devDependencies": {
     "@auto-it/conventional-commits": "^10.37.6",
     "@auto-it/git-tag": "^10.37.6",
