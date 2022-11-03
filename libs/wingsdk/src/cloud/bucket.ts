@@ -1,4 +1,4 @@
-import { Polycons } from "@monadahq/polycons";
+import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code } from "../core";
 import { Resource } from "./resource";
@@ -37,7 +37,7 @@ export abstract class BucketBase extends Resource {
 /**
  * Represents a cloud object store.
  *
- * @inflight `@monadahq/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends BucketBase {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {

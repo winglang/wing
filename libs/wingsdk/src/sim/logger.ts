@@ -8,7 +8,7 @@ import { BaseResourceSchema } from "./schema";
 /**
  * Simulator implementation of `cloud.Logger`.
  *
- * @inflight `@monadahq/wingsdk.sim.ILoggerClient`
+ * @inflight `@winglang/wingsdk.sim.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase implements IResource {
   private readonly callers = new Array<string>();

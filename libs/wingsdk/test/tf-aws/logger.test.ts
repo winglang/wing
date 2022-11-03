@@ -1,4 +1,4 @@
-import { Polycons } from "@monadahq/polycons";
+import { Polycons } from "@winglang/polycons";
 import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";

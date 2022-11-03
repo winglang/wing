@@ -9,7 +9,7 @@ import { Function } from "./function";
 /**
  * AWS implementation of `cloud.Logger`.
  *
- * @inflight `@monadahq/wingsdk.tfaws.ILoggerClient`
+ * @inflight `@winglang/wingsdk.tfaws.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase {
   constructor(scope: Construct, id: string) {

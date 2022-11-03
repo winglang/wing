@@ -1,4 +1,4 @@
-import { Polycons } from "@monadahq/polycons";
+import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code, Inflight } from "../core";
 import { Resource } from "./resource";
@@ -50,7 +50,7 @@ export abstract class FunctionBase extends Resource {
 /**
  * Represents a serverless function.
  *
- * @inflight `@monadahq/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends FunctionBase {
   constructor(
