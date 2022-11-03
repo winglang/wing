@@ -1,27 +1,17 @@
-import { SimulatorContext } from "../testing/simulator";
+import { ISimulatorContext } from "../testing/simulator";
 import { IFunctionClient } from "./function";
-import {
-  HandleManager,
-  ISimulatorResource,
-  makeResourceHandle,
-} from "./handle-manager";
 import { IQueueClient } from "./queue";
+import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";
 
 export class Queue implements IQueueClient, ISimulatorResource {
-  public readonly handle: string;
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
+  private readonly context: ISimulatorContext;
 
-  constructor(
-    path: string,
-    props: QueueSchema["props"],
-    context: SimulatorContext
-  ) {
-    this.handle = makeResourceHandle(context.simulationId, "queue", path);
-
+  constructor(props: QueueSchema["props"], context: ISimulatorContext) {
     for (const sub of props.subscribers) {
       this.subscribers.push({ ...sub });
     }
@@ -31,6 +21,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
     }
 
     this.intervalId = setInterval(() => this.processMessages(), 100); // every 0.1 seconds
+    this.context = context;
   }
 
   public async init(): Promise<void> {
@@ -57,7 +48,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
         if (messages.length === 0) {
           continue;
         }
-        const fnClient = HandleManager.findInstance(
+        const fnClient = this.context.findInstance(
           subscriber.functionHandle!
         ) as IFunctionClient & ISimulatorResource;
         if (!fnClient) {

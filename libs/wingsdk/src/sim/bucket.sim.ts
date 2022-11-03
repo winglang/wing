@@ -1,20 +1,17 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { SimulatorContext } from "../testing/simulator";
+import { ISimulatorContext } from "../testing/simulator";
 import { IBucketClient } from "./bucket";
-import { ISimulatorResource, makeResourceHandle } from "./handle-manager";
+import { ISimulatorResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
 
 export class Bucket implements IBucketClient, ISimulatorResource {
-  public readonly handle: string;
   private readonly fileDir: string;
   public constructor(
-    path: string,
     _props: BucketSchema["props"],
-    context: SimulatorContext
+    _context: ISimulatorContext
   ) {
-    this.handle = makeResourceHandle(context.simulationId, "bucket", path);
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
   }
 

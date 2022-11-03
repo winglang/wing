@@ -2,21 +2,18 @@ import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
 import { LogEvent } from "../cloud";
-import { SimulatorContext } from "../testing";
-import { ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE } from "./function.sim";
-import { ISimulatorResource, makeResourceHandle } from "./handle-manager";
+import { ISimulatorContext } from "../testing";
+import { ENV_WING_SIM_RUNTIME_FUNCTION_ADDR } from "./function";
 import { ILoggerClient } from "./logger";
+import { ISimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
 
 export class Logger implements ILoggerClient, ISimulatorResource {
-  public readonly handle: string;
   private readonly logsDir: string;
   public constructor(
-    path: string,
     _props: LoggerSchema["props"],
-    context: SimulatorContext
+    _context: ISimulatorContext
   ) {
-    this.handle = makeResourceHandle(context.simulationId, "logger", path);
     this.logsDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
   }
 
@@ -35,7 +32,7 @@ export class Logger implements ILoggerClient, ISimulatorResource {
     }
 
     // TODO: add some other compute context mechanism?
-    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE];
+    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_ADDR];
     const logFile = `${this.logsDir}/events.log`;
     const event = {
       functionHandle,
@@ -52,7 +49,7 @@ export class Logger implements ILoggerClient, ISimulatorResource {
   }
 
   public async fetchLatestLogs(): Promise<LogEvent[]> {
-    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE];
+    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_ADDR];
     const logFile = `${this.logsDir}/events.log`;
     if (fs.existsSync(logFile)) {
       const contents = await fs.promises.readFile(logFile, "utf-8");

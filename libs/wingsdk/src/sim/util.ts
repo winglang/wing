@@ -22,6 +22,6 @@ export function captureSimulatorResource(
   captureScope.node.addDependency(resource);
   resource._addCallers(captureScope.node.path);
   return NodeJsCode.fromInline(
-    `HandleManager.findInstance(process.env["${env}"])`
+    `$simulator.findInstance(process.env["${env}"])`
   );
 }

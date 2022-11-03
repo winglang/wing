@@ -2,37 +2,25 @@ import * as fs from "fs";
 import * as path_ from "path";
 import * as process from "process";
 import * as vm from "vm";
-import { SimulatorContext } from "../testing/simulator";
+import { ISimulatorContext } from "../testing/simulator";
 import { log } from "../util";
 import { IFunctionClient } from "./function";
-import {
-  HandleManager,
-  ISimulatorResource,
-  makeResourceHandle,
-} from "./handle-manager";
+import { ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
-export const ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE =
-  "WING_SIM_RUNTIME_FUNCTION_HANDLE";
-
 export class Function implements IFunctionClient, ISimulatorResource {
-  public readonly handle: string;
   private readonly filename: string;
   private readonly env: Record<string, string>;
   private _timesCalled: number = 0;
+  private readonly context: ISimulatorContext;
 
-  constructor(
-    path: string,
-    props: FunctionSchema["props"],
-    context: SimulatorContext
-  ) {
-    this.handle = makeResourceHandle(context.simulationId, "function", path);
-
+  constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
     this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
     this.env = props.environmentVariables ?? {};
+    this.context = context;
   }
 
   public async init(): Promise<void> {
@@ -47,11 +35,6 @@ export class Function implements IFunctionClient, ISimulatorResource {
     this._timesCalled += 1;
 
     const userCode = fs.readFileSync(this.filename, "utf8");
-    const $env = {
-      ...this.env,
-      [ENV_WING_SIM_RUNTIME_FUNCTION_HANDLE]: this.handle,
-    };
-
     const wrapper = [
       "var exports = {};",
       "Object.assign(process.env, $env);",
@@ -70,11 +53,12 @@ export class Function implements IFunctionClient, ISimulatorResource {
       path: path_,
       process: process,
 
-      $env: $env,
+      $env: { ...this.env },
 
-      // Make the global HandleManager available to user code so that they can access
-      // other resource clients
-      HandleManager: HandleManager,
+      // Make the global simulator available to user code so that they can find
+      // and use other resource clients
+      // TODO: Object.freeze this?
+      $simulator: this.context,
     });
     const result = await vm.runInContext(wrapper, context);
 
