@@ -368,7 +368,7 @@ guidelines for contributing to the project.
 
 This project is licensed under the [MIT License](./LICENSE.md).
 
-[roadmap]: https://github.com/monadahq/winglang/issues/194
+[roadmap]: https://github.com/orgs/winglang/projects/1/views/1
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 [Terraform]: https://www.terraform.io/
 [AWS account]: portal.aws.amazon.com/billing/signup
