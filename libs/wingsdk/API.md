@@ -5279,7 +5279,6 @@ Throws if the handle isn't valid.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.simulationId">simulationId</a></code> | <code>string</code> | A unique id for this particular simulation run. |
 
 ---
 
@@ -5292,21 +5291,6 @@ public readonly assetsDir: string;
 - *Type:* string
 
 The absolute path to where all assets in `app.wx` are stored.
-
----
-
-##### `simulationId`<sup>Required</sup> <a name="simulationId" id="@winglang/wingsdk.testing.ISimulatorContext.property.simulationId"></a>
-
-```typescript
-public readonly simulationId: string;
-```
-
-- *Type:* string
-
-A unique id for this particular simulation run.
-
-This can be used to
-distinguish between multiple runs of the same simulation.
 
 ---
 

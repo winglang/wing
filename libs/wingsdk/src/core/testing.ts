@@ -21,7 +21,7 @@ export class Testing {
 }
 
 function removeAbsolutePath(text: string) {
-  const regex = /"\/.+?\/wing\/libs\/(.+?)"/g;
+  const regex = /"\/.+?\/(?:wing|winglang)\/libs\/(.+?)"/g;
 
   // replace first group with static text
   return text.replace(regex, '"[REDACTED]/$1"');

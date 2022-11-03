@@ -30,12 +30,6 @@ export interface SimulatorProps {
  */
 export interface ISimulatorContext {
   /**
-   * A unique id for this particular simulation run. This can be used to
-   * distinguish between multiple runs of the same simulation.
-   */
-  readonly simulationId: string;
-
-  /**
    * The absolute path to where all assets in `app.wx` are stored.
    */
   readonly assetsDir: string;
@@ -67,7 +61,7 @@ export class Simulator {
   private _assetsDir: string;
 
   // fields that change between simulation runs / reloads
-  private _simulationId: string | undefined; // defined when start() is called
+  private _running: boolean;
   private readonly handles = new Map<string, ISimulatorResource>();
 
   constructor(props: SimulatorProps) {
@@ -76,6 +70,7 @@ export class Simulator {
     this._tree = tree;
     this._assetsDir = assetsDir;
 
+    this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
   }
 
@@ -118,16 +113,13 @@ export class Simulator {
    * Start the simulator.
    */
   public async start(): Promise<void> {
-    if (this._simulationId) {
+    if (this._running) {
       throw new Error(
         "A simulation is already running. Did you mean to call `await simulator.stop()` first?"
       );
     }
 
-    const simulationId = `${Date.now().toString(36)}`;
-
     const context: ISimulatorContext = {
-      simulationId,
       assetsDir: this._assetsDir,
       findInstance: (handle: string) => {
         return this.findInstance(handle);
@@ -144,7 +136,7 @@ export class Simulator {
       (resourceData as any).attrs = { handle };
     }
 
-    this._simulationId = simulationId;
+    this._running = true;
   }
 
   private addInstance(
@@ -152,7 +144,7 @@ export class Simulator {
     path: string,
     resource: ISimulatorResource
   ): string {
-    const handle = `sim://${this._simulationId}/${type.toUpperCase()}/${path}`;
+    const handle = `sim://${type.toUpperCase()}/${path}`;
     this.handles.set(handle, resource);
     return handle;
   }
@@ -178,7 +170,7 @@ export class Simulator {
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
-    if (!this._simulationId) {
+    if (!this._running) {
       throw new Error(
         "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?"
       );
@@ -192,7 +184,7 @@ export class Simulator {
     }
 
     this.handles.clear();
-    this._simulationId = undefined;
+    this._running = false;
 
     // TODO: remove "attrs" data from tree
   }
