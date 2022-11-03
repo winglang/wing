@@ -1970,4 +1970,4 @@ queue.add_consumer(filter);
 - <https://github.com/vlang/v>
 
 [top]: #wing-language-specification
-[rfc]: https://github.com/monadahq/rfcs/blob/main/0044-winglang-requirements.md
+[rfc]: https://github.com/winglang/rfcs/blob/main/0044-winglang-requirements.md
