@@ -11,7 +11,7 @@ simulator works with any Wing application made with the SDK's `cloud` APIs.
 To use the simulator, you will need to provide a Wing simulator file -- this is
 a file with a `.wx` extension that is output when you compile your Wing program
 with the `--target sim` option. Check out the [Wing Getting Started
-Guide](../../../README.md) for more information on how to write your first Wing
+Guide](/README.md#getting-started) for more information on how to write your first Wing
 program.
 
 ## Using the simulator API (in Wing)
