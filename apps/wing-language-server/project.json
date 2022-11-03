@@ -1,5 +1,6 @@
 {
   "name": "wing-language-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
