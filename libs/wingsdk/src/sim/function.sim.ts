@@ -36,7 +36,7 @@ export class Function implements IFunctionClient, ISimulatorResource {
 
     const userCode = fs.readFileSync(this.filename, "utf8");
     const wrapper = [
-      "var exports = {};",
+      "const exports = {};",
       "Object.assign(process.env, $env);",
       userCode,
       // The last statement is the value that will be returned by vm.runInThisContext

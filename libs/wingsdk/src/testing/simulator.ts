@@ -62,7 +62,7 @@ export class Simulator {
 
   // fields that change between simulation runs / reloads
   private _running: boolean;
-  private readonly handles = new Map<string, ISimulatorResource>();
+  private readonly handles: HandleManager;
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
@@ -72,6 +72,7 @@ export class Simulator {
 
     this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
+    this.handles = new HandleManager();
   }
 
   private _loadApp(simfile: string): { assetsDir: string; tree: any } {
@@ -122,7 +123,7 @@ export class Simulator {
     const context: ISimulatorContext = {
       assetsDir: this._assetsDir,
       findInstance: (handle: string) => {
-        return this.findInstance(handle);
+        return this.handles.find(handle);
       },
     };
 
@@ -132,38 +133,11 @@ export class Simulator {
       const props = this.resolveTokens(path, resourceData.props);
       const resource = this._factory.resolve(resourceData.type, props, context);
       await resource.init();
-      const handle = this.addInstance(resourceData.type, path, resource);
+      const handle = this.handles.allocate(resource);
       (resourceData as any).attrs = { handle };
     }
 
     this._running = true;
-  }
-
-  private addInstance(
-    type: string,
-    path: string,
-    resource: ISimulatorResource
-  ): string {
-    const handle = `sim://${type.toUpperCase()}/${path}`;
-    this.handles.set(handle, resource);
-    return handle;
-  }
-
-  private findInstance(handle: string): ISimulatorResource {
-    const instance = this.handles.get(handle);
-    if (!instance) {
-      throw new Error(`No resource found with handle "${handle}".`);
-    }
-    return instance;
-  }
-
-  private removeInstance(handle: string): ISimulatorResource {
-    const instance = this.handles.get(handle);
-    if (!instance) {
-      throw new Error(`No resource found with handle "${handle}".`);
-    }
-    this.handles.delete(handle);
-    return instance;
   }
 
   /**
@@ -179,11 +153,11 @@ export class Simulator {
     for (const path of this._tree.startOrder.slice().reverse()) {
       const res = findResource(this._tree, path);
       log(`stopping resource ${path} (${res.type})`);
-      const resource = this.removeInstance(res.attrs!.handle);
+      const resource = this.handles.deallocate(res.attrs!.handle);
       await resource.cleanup();
     }
 
-    this.handles.clear();
+    this.handles.reset();
     this._running = false;
 
     // TODO: remove "attrs" data from tree
@@ -218,7 +192,7 @@ export class Simulator {
     if (!handle) {
       throw new Error(`Resource ${path} does not have a handle.`);
     }
-    return this.findInstance(handle);
+    return this.handles.find(handle);
   }
 
   /**
@@ -324,4 +298,42 @@ export interface ISimulatorFactory {
     props: any,
     context: ISimulatorContext
   ): ISimulatorResource;
+}
+
+class HandleManager {
+  private readonly handles: Map<string, ISimulatorResource>;
+  private nextHandle: number;
+
+  public constructor() {
+    this.handles = new Map();
+    this.nextHandle = 0;
+  }
+
+  public allocate(resource: ISimulatorResource): string {
+    const handle = `sim-${this.nextHandle++}`;
+    this.handles.set(handle, resource);
+    return handle;
+  }
+
+  public find(handle: string): ISimulatorResource {
+    const instance = this.handles.get(handle);
+    if (!instance) {
+      throw new Error(`No resource found with handle "${handle}".`);
+    }
+    return instance;
+  }
+
+  public deallocate(handle: string): ISimulatorResource {
+    const instance = this.handles.get(handle);
+    if (!instance) {
+      throw new Error(`No resource found with handle "${handle}".`);
+    }
+    this.handles.delete(handle);
+    return instance;
+  }
+
+  public reset(): void {
+    this.handles.clear();
+    this.nextHandle = 0;
+  }
 }
