@@ -8,7 +8,6 @@ import { autoUpdater } from "electron-updater";
 import { initWXFileWatcher } from "./appWatcher.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeRouters } from "./router/index.js";
-import { createSimulator, Simulator } from "./wingsdk.js";
 
 export default class AppUpdater {
   constructor() {
@@ -101,9 +100,7 @@ async function createWindow(wxFilePath: string) {
 }
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
-    app.quit();
-  }
+  app.quit();
 });
 
 app.on("second-instance", () => {
