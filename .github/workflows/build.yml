@@ -37,7 +37,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: bahmutov/npm-install@v1
         with:
-          install-command: npm ci --ignore-scripts
+          install-command: npm install --ignore-scripts
 
       - name: Get Version Info
         if: github.ref == 'refs/heads/main'
@@ -104,7 +104,7 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
         with:
-          install-command: npm ci --ignore-scripts
+          install-command: npm install --ignore-scripts
           working-directory: |
             apps/wing
             apps/vscode-wing
@@ -219,7 +219,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           # Don't need to install sub-project dependencies
-          install-command: npm ci --ignore-scripts
+          install-command: npm install --ignore-scripts
 
       - name: Lint Nx
         run: npx nx workspace-lint
@@ -274,7 +274,7 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
         with:
-          install-command: npm ci --ignore-scripts
+          install-command: npm install --ignore-scripts
           working-directory: |
             apps/vscode-wing
             ./
