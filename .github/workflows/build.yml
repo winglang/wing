@@ -112,7 +112,7 @@ jobs:
         with:
           targets: "build"
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
-          args: "--configuration=release --output-style=stream"
+          args: "--configuration=release --output-style=stream --verbose"
 
       # wingc require wingsdk to be built first in order to run
       - name: wingc Test
@@ -120,7 +120,7 @@ jobs:
         with:
           targets: "test"
           projects: "wingc"
-          args: "--configuration=release --output-style=stream"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Package Wing CLI
         working-directory: apps/wing
@@ -220,14 +220,14 @@ jobs:
         with:
           targets: "build-native"
           projects: "wing-language-server"
-          args: "--configuration=release --output-style=stream"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           projects: "wingii"
-          args: "--configuration=release --output-style=stream"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing Language Server
         uses: actions/upload-artifact@v2
@@ -270,7 +270,7 @@ jobs:
         with:
           targets: "build-multi"
           projects: "vscode-wing"
-          args: "--configuration=release --output-style=stream"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload extension
         uses: actions/upload-artifact@v2
