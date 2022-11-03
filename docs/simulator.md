@@ -57,11 +57,6 @@ console.log(JSON.stringify(sim.tree, null, 2));
 The tree contains the IDs of all the resources in the application, as well as
 details about dependencies between resources.
 
-<!--
-TODO: In the future we might design a more full simulator address scheme like:
-sim://SIM-ID/RESOURCE-TYPE/RESOURCE-ID
--->
-
 To perform operations on a resource, we need to create a resource client.
 
 To create a resource client, we will need to obtain the resource's address, and
@@ -70,24 +65,14 @@ has a function at the path `root/my_function`. Let's create a function client
 for it:
 
 ```typescript
-import { FunctionClient } from "@winglang/wingsdk/sim";
+import { sim } from '@winglang/wingsdk';
 
-const addr = sim.getAttributes("root/my_function").functionAddr;
-const client = new FunctionClient(addr);
-
-const response = await client.invoke("hello!");
+const fn = sim.getResourceByPath("root/my_function") as sim.IFunctionClient;
+const response = await fn.invoke("hello!");
 console.log(response);
 ```
 
-<!--
-NOTE: maybe we can simplify the API to something like
-
-const client = sim.createClient("cloud.Function", "root/my_function") as FunctionClient;
-// throws if resource named "root/my_function" is not a "cloud.Funciton"
--->
-
 Congratulations, you've invoked a function using the simulator!
 
-Using the `QueueClient` and `BucketClient` classes you can also interact with
-queues and buckets as well. Check the API reference for more details about what
-methods are available on different resource clients.
+Check the API reference for more details about what methods are available on
+different resources and their inflight clients.

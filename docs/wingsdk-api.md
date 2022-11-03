@@ -1722,6 +1722,138 @@ with a fresh copy without any consequences.
 ---
 
 
+### Logger <a name="Logger" id="@winglang/wingsdk.sim.Logger"></a>
+
+- *Implements:* @winglang/wingsdk.sim.IResource
+
+**Inflight client:** [@winglang/wingsdk.sim.ILoggerClient](#@winglang/wingsdk.sim.ILoggerClient)
+
+Simulator implementation of `cloud.Logger`.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.Logger.Initializer"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+new sim.Logger(scope: Construct, id: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Logger.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Logger.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.sim.Logger.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.Logger.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.print">print</a></code> | Logs a message. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.sim.Logger.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `print` <a name="print" id="@winglang/wingsdk.sim.Logger.print"></a>
+
+```typescript
+public print(message: string): void
+```
+
+Logs a message.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.sim.Logger.print.parameter.message"></a>
+
+- *Type:* string
+
+The message to log.
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Logger.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.sim.Logger.isConstruct"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+sim.Logger.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.sim.Logger.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.Logger.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.sim.Logger.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ### LoggerBase <a name="LoggerBase" id="@winglang/wingsdk.cloud.LoggerBase"></a>
 
 Functionality shared between all `Logger` implementations.
@@ -2807,6 +2939,38 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
+### BaseResourceAttributes <a name="BaseResourceAttributes" id="@winglang/wingsdk.sim.BaseResourceAttributes"></a>
+
+Schema for resource attributes.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.sim.BaseResourceAttributes.Initializer"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+const baseResourceAttributes: sim.BaseResourceAttributes = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceAttributes.property.handle">handle</a></code> | <code>string</code> | The resource's simulator-unique id. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@winglang/wingsdk.sim.BaseResourceAttributes.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's simulator-unique id.
+
+---
+
 ### BaseResourceSchema <a name="BaseResourceSchema" id="@winglang/wingsdk.sim.BaseResourceSchema"></a>
 
 Schema for individual resources.
@@ -2824,7 +2988,7 @@ const baseResourceSchema: sim.BaseResourceSchema = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.type">type</a></code> | <code>string</code> | The type of the resource. |
-| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific attributes that are set after the resource is created. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>@winglang/wingsdk.sim.BaseResourceAttributes</code> | The resource-specific attributes that are set after the resource is created. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.callees">callees</a></code> | <code>string[]</code> | IDs of resources that this resource calls, triggers, or captures. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.callers">callers</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or captured by. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.children">children</a></code> | <code>{[ key: string ]: @winglang/wingsdk.sim.BaseResourceSchema}</code> | The resource's children indexed by their IDs. |
@@ -2848,10 +3012,10 @@ The type of the resource.
 ##### `attrs`<sup>Optional</sup> <a name="attrs" id="@winglang/wingsdk.sim.BaseResourceSchema.property.attrs"></a>
 
 ```typescript
-public readonly attrs: {[ key: string ]: any};
+public readonly attrs: BaseResourceAttributes;
 ```
 
-- *Type:* {[ key: string ]: any}
+- *Type:* @winglang/wingsdk.sim.BaseResourceAttributes
 
 The resource-specific attributes that are set after the resource is created.
 
@@ -3486,51 +3650,6 @@ How long a queue's consumers have to process a message.
 
 ---
 
-### SimulatorContext <a name="SimulatorContext" id="@winglang/wingsdk.testing.SimulatorContext"></a>
-
-Context that is passed to individual resource simulations.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.testing.SimulatorContext.Initializer"></a>
-
-```typescript
-import { testing } from '@winglang/wingsdk'
-
-const simulatorContext: testing.SimulatorContext = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorContext.property.resolver">resolver</a></code> | <code>@winglang/wingsdk.testing.IResourceResolver</code> | A resolver that can be used to look up other resources in the tree. |
-
----
-
-##### `assetsDir`<sup>Required</sup> <a name="assetsDir" id="@winglang/wingsdk.testing.SimulatorContext.property.assetsDir"></a>
-
-```typescript
-public readonly assetsDir: string;
-```
-
-- *Type:* string
-
-The absolute path to where all assets in `app.wx` are stored.
-
----
-
-##### `resolver`<sup>Required</sup> <a name="resolver" id="@winglang/wingsdk.testing.SimulatorContext.property.resolver"></a>
-
-```typescript
-public readonly resolver: IResourceResolver;
-```
-
-- *Type:* @winglang/wingsdk.testing.IResourceResolver
-
-A resolver that can be used to look up other resources in the tree.
-
----
-
 ### SimulatorProps <a name="SimulatorProps" id="@winglang/wingsdk.testing.SimulatorProps"></a>
 
 Props for `Simulator`.
@@ -3548,7 +3667,7 @@ const simulatorProps: testing.SimulatorProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.dispatcher">dispatcher</a></code> | <code>@winglang/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
+| <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.factory">factory</a></code> | <code>@winglang/wingsdk.testing.ISimulatorFactory</code> | The factory that produces resource simulations. |
 
 ---
 
@@ -3564,16 +3683,16 @@ Path to a Wing simulator file (.wx).
 
 ---
 
-##### `dispatcher`<sup>Optional</sup> <a name="dispatcher" id="@winglang/wingsdk.testing.SimulatorProps.property.dispatcher"></a>
+##### `factory`<sup>Optional</sup> <a name="factory" id="@winglang/wingsdk.testing.SimulatorProps.property.factory"></a>
 
 ```typescript
-public readonly dispatcher: ISimulatorDispatcher;
+public readonly factory: ISimulatorFactory;
 ```
 
-- *Type:* @winglang/wingsdk.testing.ISimulatorDispatcher
-- *Default:* a factory that simulates built-in Wing SDK resources
+- *Type:* @winglang/wingsdk.testing.ISimulatorFactory
+- *Default:* a factory that produces simulations for built-in Wing SDK resources
 
-The factory that dispatches to simulation implementations.
+The factory that produces resource simulations.
 
 ---
 
@@ -4546,6 +4665,8 @@ new testing.Simulator(props: SimulatorProps)
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getResourceByPath">getResourceByPath</a></code> | Get the resource instance for a given path. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
@@ -4599,6 +4720,28 @@ that is resolved at synth time.
 - *Type:* string
 
 ---
+
+##### `getResourceByPath` <a name="getResourceByPath" id="@winglang/wingsdk.testing.Simulator.getResourceByPath"></a>
+
+```typescript
+public getResourceByPath(path: string): any
+```
+
+Get the resource instance for a given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getResourceByPath.parameter.path"></a>
+
+- *Type:* string
+
+---
+
+##### `listResources` <a name="listResources" id="@winglang/wingsdk.testing.Simulator.listResources"></a>
+
+```typescript
+public listResources(): string[]
+```
+
+Get a list of all resource paths.
 
 ##### `reload` <a name="reload" id="@winglang/wingsdk.testing.Simulator.reload"></a>
 
@@ -4838,7 +4981,7 @@ AWS implementation of inflight client for `cloud.Bucket`.
 
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.Bucket, @winglang/wingsdk.cloud.BucketBase, @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.cloud.Logger, @winglang/wingsdk.cloud.LoggerBase, @winglang/wingsdk.cloud.Queue, @winglang/wingsdk.cloud.QueueBase, @winglang/wingsdk.cloud.Resource, @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.tfaws.Bucket, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.tfaws.Queue, @winglang/wingsdk.core.ICapturable, @winglang/wingsdk.core.ICapturableConstruct
+- *Implemented By:* @winglang/wingsdk.cloud.Bucket, @winglang/wingsdk.cloud.BucketBase, @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.cloud.Logger, @winglang/wingsdk.cloud.LoggerBase, @winglang/wingsdk.cloud.Queue, @winglang/wingsdk.cloud.QueueBase, @winglang/wingsdk.cloud.Resource, @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.tfaws.Bucket, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.tfaws.Queue, @winglang/wingsdk.core.ICapturable, @winglang/wingsdk.core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
@@ -4939,7 +5082,7 @@ AWS implementation of inflight client for `cloud.Function`.
 
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient
+- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient, @winglang/wingsdk.sim.ILoggerClient
 
 Inflight interface for `Logger`.
 
@@ -4947,7 +5090,7 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with whichever resource is running the inflight code. |
+| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with the resource running the inflight code. |
 | <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
 
 ---
@@ -4958,10 +5101,9 @@ Inflight interface for `Logger`.
 public fetchLatestLogs(): LogEvent[]
 ```
 
-Fetch the latest logs associated with whichever resource is running the inflight code.
+Fetch the latest logs associated with the resource running the inflight code.
 
-The logs may include cloud-provider specific messages or
-metadata.
+The logs may include cloud-provider specific messages or metadata.
 
 ##### `print` <a name="print" id="@winglang/wingsdk.cloud.ILoggerClient.print"></a>
 
@@ -4981,6 +5123,16 @@ running the inflight code.
 The message to print.
 
 ---
+
+
+### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.sim.ILoggerClient"></a>
+
+- *Extends:* @winglang/wingsdk.cloud.ILoggerClient
+
+- *Implemented By:* @winglang/wingsdk.sim.ILoggerClient
+
+Simulator implementation of inflight client for `cloud.Logger`.
+
 
 
 ### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.cloud.IQueueClient"></a>
@@ -5038,9 +5190,9 @@ AWS implementation of inflight client for `cloud.Queue`.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.sim.IResource
+- *Implemented By:* @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.sim.IResource
 
-Fields shared by all resource implementations for the simulator.
+Interfaces shared by all polycon implementations (preflight classes) targeting the simulator.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -5092,69 +5244,127 @@ Lookup a resource by its path.
 ---
 
 
-### ISimulatorDispatcher <a name="ISimulatorDispatcher" id="@winglang/wingsdk.testing.ISimulatorDispatcher"></a>
+### ISimulatorContext <a name="ISimulatorContext" id="@winglang/wingsdk.testing.ISimulatorContext"></a>
 
-- *Implemented By:* @winglang/wingsdk.testing.ISimulatorDispatcher
+- *Implemented By:* @winglang/wingsdk.testing.ISimulatorContext
 
-Represents a class that can start and stop the simulation of an individual resource.
+Context that is passed to individual resource simulations.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Start simulating a resource. |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorDispatcher.stop">stop</a></code> | Stop the resource's simulation and clean up any file system resources it created. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.findInstance">findInstance</a></code> | Find a resource simulation by its handle. |
 
 ---
 
-##### `start` <a name="start" id="@winglang/wingsdk.testing.ISimulatorDispatcher.start"></a>
+##### `findInstance` <a name="findInstance" id="@winglang/wingsdk.testing.ISimulatorContext.findInstance"></a>
 
 ```typescript
-public start(type: string, props: any, context: SimulatorContext): any
+public findInstance(handle: string): ISimulatorResource
 ```
 
-Start simulating a resource.
+Find a resource simulation by its handle.
 
-This function should return an object/map
-containing the resource's attributes.
+Throws if the handle isn't valid.
 
-###### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.ISimulatorDispatcher.start.parameter.type"></a>
+###### `handle`<sup>Required</sup> <a name="handle" id="@winglang/wingsdk.testing.ISimulatorContext.findInstance.parameter.handle"></a>
 
 - *Type:* string
 
 ---
 
-###### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.testing.ISimulatorDispatcher.start.parameter.props"></a>
+#### Properties <a name="Properties" id="Properties"></a>
 
-- *Type:* any
-
----
-
-###### `context`<sup>Required</sup> <a name="context" id="@winglang/wingsdk.testing.ISimulatorDispatcher.start.parameter.context"></a>
-
-- *Type:* @winglang/wingsdk.testing.SimulatorContext
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
 
 ---
 
-##### `stop` <a name="stop" id="@winglang/wingsdk.testing.ISimulatorDispatcher.stop"></a>
+##### `assetsDir`<sup>Required</sup> <a name="assetsDir" id="@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir"></a>
 
 ```typescript
-public stop(type: string, attrs: any): void
+public readonly assetsDir: string;
 ```
 
-Stop the resource's simulation and clean up any file system resources it created.
+- *Type:* string
 
-###### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.ISimulatorDispatcher.stop.parameter.type"></a>
+The absolute path to where all assets in `app.wx` are stored.
+
+---
+
+### ISimulatorFactory <a name="ISimulatorFactory" id="@winglang/wingsdk.testing.ISimulatorFactory"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.ISimulatorFactory
+
+A factory that can turn resource descriptions into resource simulations.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorFactory.resolve">resolve</a></code> | Resolve the parameters needed for creating a specific resource simulation. |
+
+---
+
+##### `resolve` <a name="resolve" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve"></a>
+
+```typescript
+public resolve(type: string, props: any, context: ISimulatorContext): ISimulatorResource
+```
+
+Resolve the parameters needed for creating a specific resource simulation.
+
+###### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.type"></a>
 
 - *Type:* string
 
 ---
 
-###### `attrs`<sup>Required</sup> <a name="attrs" id="@winglang/wingsdk.testing.ISimulatorDispatcher.stop.parameter.attrs"></a>
+###### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.props"></a>
 
 - *Type:* any
 
 ---
+
+###### `context`<sup>Required</sup> <a name="context" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.context"></a>
+
+- *Type:* @winglang/wingsdk.testing.ISimulatorContext
+
+---
+
+
+### ISimulatorResource <a name="ISimulatorResource" id="@winglang/wingsdk.sim.ISimulatorResource"></a>
+
+- *Implemented By:* @winglang/wingsdk.sim.ISimulatorResource
+
+Shared interface for resource simulations.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.ISimulatorResource.cleanup">cleanup</a></code> | Stop the resource and clean up any physical resources it may have created (files, ports, etc). |
+| <code><a href="#@winglang/wingsdk.sim.ISimulatorResource.init">init</a></code> | Perform any async initialization required by the resource. |
+
+---
+
+##### `cleanup` <a name="cleanup" id="@winglang/wingsdk.sim.ISimulatorResource.cleanup"></a>
+
+```typescript
+public cleanup(): void
+```
+
+Stop the resource and clean up any physical resources it may have created (files, ports, etc).
+
+##### `init` <a name="init" id="@winglang/wingsdk.sim.ISimulatorResource.init"></a>
+
+```typescript
+public init(): void
+```
+
+Perform any async initialization required by the resource.
 
 
 ## Enums <a name="Enums" id="Enums"></a>

@@ -64,11 +64,3 @@ export function appSnapshot(app: IApp): Record<string, any> {
   app.synth();
   return directorySnapshot(app.outdir);
 }
-
-// TODO This is a hack. Our path for inflight requires should be relative
-export function removeAbsolutePath(text: string) {
-  const regex = /"\/.+?\/winglang\/libs\/(.+?)"/g;
-
-  // replace first group with static text
-  return text.replace(regex, '"[REDACTED]/$1"');
-}

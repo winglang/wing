@@ -4,6 +4,7 @@ import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
+import { captureSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -39,9 +40,11 @@ export class Queue extends cloud.QueueBase implements IResource {
     code.push(`    await ${inflight.entrypoint}($cap, $message);`);
     code.push(`  }`);
     code.push(`}`);
+
     const newInflight = new core.Inflight({
       entrypoint: `$queueEventWrapper`,
       code: core.NodeJsCode.fromInline(code.join("\n")),
+      captures: inflight.captures,
     });
 
     const fn = new cloud.Function(
@@ -55,8 +58,9 @@ export class Queue extends cloud.QueueBase implements IResource {
     // call subscribed functions.
     this.node.addDependency(fn);
 
+    const functionHandle = `\${${fn.node.path}#attrs.handle}`; // TODO: proper token mechanism
     this.subscribers.push({
-      functionId: fn.node.path,
+      functionHandle,
       batchSize: props.batchSize ?? 1,
     });
 
@@ -81,29 +85,17 @@ export class Queue extends cloud.QueueBase implements IResource {
     };
   }
 
-  private get ref(): string {
-    return `\${${this.node.path}#attrs.queueAddr}`;
+  /** @internal */
+  public _addCallers(...callers: string[]) {
+    this.callers.push(...callers);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _capture(
     captureScope: IConstruct,
     _metadata: core.CaptureMetadata
   ): core.Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("queues can only be captured by a sim.Function for now");
-    }
-
-    this.callers.push(captureScope.node.path);
-
-    const env = `QUEUE_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.ref);
-
-    return core.InflightClient.for(__filename, "QueueClient", [
-      `process.env["${env}"]`,
-    ]);
+    return captureSimulatorResource("queue", this, captureScope);
   }
 }
 

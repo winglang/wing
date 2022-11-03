@@ -47,7 +47,6 @@
     "@types/minipass": "3.1.2",
     "@types/node": "^16",
     "@types/tar": "^6.1.3",
-    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@winglang/polycons": "0.0.105",
@@ -93,11 +92,8 @@
     "@aws-sdk/client-sqs": "^3.171.0",
     "@aws-sdk/util-utf8-node": "^3.170.0",
     "esbuild-wasm": "^0.15.9",
-    "isomorphic-ws": "^5.0.0",
-    "piscina": "*",
     "safe-stable-stringify": "*",
-    "tar": "^6.1.11",
-    "ws": "^7.5.9"
+    "tar": "^6.1.11"
   },
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
@@ -106,11 +102,8 @@
     "@aws-sdk/client-sqs",
     "@aws-sdk/util-utf8-node",
     "esbuild-wasm",
-    "isomorphic-ws",
-    "piscina",
     "safe-stable-stringify",
-    "tar",
-    "ws"
+    "tar"
   ],
   "engines": {
     "node": ">= 16.16.0"

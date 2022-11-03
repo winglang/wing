@@ -3,7 +3,7 @@ import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/tf-aws";
-import { removeAbsolutePath, tfResourcesOf, tfSanitize } from "../util";
+import { tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
   const output = cdktf.Testing.synthScope((scope) => {
@@ -27,9 +27,7 @@ test("inflight function uses a logger", () => {
     });
     const fn = new cloud.Function(scope, "Function", inflight);
 
-    expect(
-      removeAbsolutePath(core.Testing.inspectPrebundledCode(fn).text)
-    ).toMatchSnapshot();
+    expect(core.Testing.inspectPrebundledCode(fn).text).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([

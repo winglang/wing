@@ -12,7 +12,7 @@ export function readJsonSync(file: string) {
 
 export function log(...args: any[]) {
   if (process.env.NODE_ENV === "development") {
-    console.error("(debug)", ...args);
+    console.log("(debug)", ...args);
   }
 }
 

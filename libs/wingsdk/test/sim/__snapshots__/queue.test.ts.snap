@@ -14,6 +14,9 @@ Object {
               "root/my_queue",
             ],
             "props": Object {
+              "environmentVariables": Object {
+                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
             },
@@ -27,7 +30,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -58,6 +61,9 @@ Object {
               "root/my_queue",
             ],
             "props": Object {
+              "environmentVariables": Object {
+                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
             },
@@ -79,7 +85,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 5,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -110,6 +116,9 @@ Object {
               "root/my_queue",
             ],
             "props": Object {
+              "environmentVariables": Object {
+                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
             },
@@ -123,7 +132,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,

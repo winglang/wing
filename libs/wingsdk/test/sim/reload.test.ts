@@ -1,8 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/sim";
-import { FunctionClient } from "../../src/sim/function.inflight";
-import { QueueSchema } from "../../src/sim/schema-resources";
+import { IFunctionClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 
@@ -56,11 +55,9 @@ test("reloading the simulator after working with ws", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
-
-  const fnId = queueProps.subscribers[0].functionId;
-  const fnAttrs = s.getAttributes(fnId);
-  const fnClient = new FunctionClient(fnAttrs.functionAddr);
+  const fnClient = s.getResourceByPath(
+    "root/my_queue/OnMessage-236ff3d72ad0ae46"
+  ) as IFunctionClient;
 
   await sleep(200);
 

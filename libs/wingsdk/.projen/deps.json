@@ -32,10 +32,6 @@
       "type": "build"
     },
     {
-      "name": "@types/ws",
-      "type": "build"
-    },
-    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -195,23 +191,11 @@
       "type": "bundled"
     },
     {
-      "name": "isomorphic-ws",
-      "type": "bundled"
-    },
-    {
-      "name": "piscina",
-      "type": "bundled"
-    },
-    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },
     {
       "name": "tar",
-      "type": "bundled"
-    },
-    {
-      "name": "ws",
       "type": "bundled"
     },
     {
