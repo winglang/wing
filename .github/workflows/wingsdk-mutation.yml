@@ -28,7 +28,7 @@ jobs:
           ref: ${{ github.event.ref }}
           repository: ${{ github.event.repository.full_name }}
       - name: Login to private npm registry
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
         env:
           PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
       - name: Setup Node.js
@@ -75,16 +75,10 @@ jobs:
     runs-on: ubuntu-latest
     if: always() && needs.build.outputs.self_mutation_happened && github.event.repository.full_name == github.repository && github.ref != 'refs/heads/main'
     steps:
-      - name: Generate token
-        id: generate_token
-        uses: tibdex/github-app-token@7ce9ffdcdeb2ba82b01b51d6584a6a85872336d4
-        with:
-          app_id: ${{ secrets.PROJEN_APP_ID }}
-          private_key: ${{ secrets.PROJEN_APP_PRIVATE_KEY }}
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: ${{ steps.generate_token.outputs.token }}
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           ref: ${{ github.event.ref }}
           repository: ${{ github.event.repository.full_name }}
       - name: Download patch
@@ -118,7 +112,7 @@ jobs:
           name: wingsdk-build-artifact
           path: libs/wingsdk/dist
       - name: Prepare Repository
-        run: mv dist .repo && npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
+        run: mv dist .repo && npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
         env:
           PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
       - name: Install Dependencies

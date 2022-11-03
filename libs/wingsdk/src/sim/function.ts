@@ -1,26 +1,23 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { FunctionProps, FUNCTION_TYPE } from "../cloud";
-import {
-  Code,
-  Language,
-  NodeJsCode,
-  Inflight,
-  CaptureMetadata,
-  InflightClient,
-} from "../core";
+import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
+import { captureSimulatorResource } from "./util";
+
+export const ENV_WING_SIM_RUNTIME_FUNCTION_PATH =
+  "WING_SIM_RUNTIME_FUNCTION_PATH";
 
 /**
  * Simulator implementation of `cloud.Function`.
  *
- * @inflight `@monadahq/wingsdk.sim.IFunctionClient`
+ * @inflight `@winglang/wingsdk.sim.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements IResource {
-  private readonly callers = new Array<string>();
-  private readonly callees = new Array<string>();
+  private readonly inbound = new Array<string>();
+  private readonly outbound = new Array<string>();
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
@@ -38,7 +35,7 @@ export class Function extends cloud.FunctionBase implements IResource {
 
     for (const capture of Object.values(inflight.captures)) {
       if (capture.resource !== undefined) {
-        this.callees.push(capture.resource.node.path);
+        this.outbound.push(capture.resource.node.path);
       }
     }
 
@@ -54,40 +51,22 @@ export class Function extends cloud.FunctionBase implements IResource {
     for (const [name, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(name, value);
     }
+
+    this.addEnvironment(ENV_WING_SIM_RUNTIME_FUNCTION_PATH, this.node.path);
   }
 
-  /**
-   * @internal
-   */
-  public get _ref(): string {
-    return `\${${this.node.path}#attrs.functionAddr}`;
+  public addEnvironment(name: string, value: string) {
+    this.env[name] = value;
   }
 
-  /**
-   * @internal
-   */
-  public _addCallers(...callers: string[]) {
-    this.callers.push(...callers);
+  /** @internal */
+  public _addInbound(...resources: string[]) {
+    this.inbound.push(...resources);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error(
-        "functions can only be captured by a sim.Function for now"
-      );
-    }
-
-    this.callers.push(captureScope.node.path);
-
-    const env = `FUNCTION_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this._ref);
-
-    return InflightClient.for(__filename, "FunctionClient", [
-      `process.env["${env}"]`,
-    ]);
+    return captureSimulatorResource("function", this, captureScope);
   }
 
   /** @internal */
@@ -100,13 +79,9 @@ export class Function extends cloud.FunctionBase implements IResource {
         environmentVariables: this.env,
       },
       attrs: {} as any,
-      callers: this.callers,
-      callees: this.callees,
+      inbound: this.inbound,
+      outbound: this.outbound,
     };
-  }
-
-  public addEnvironment(name: string, value: string) {
-    this.env[name] = value;
   }
 }
 

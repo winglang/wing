@@ -5,15 +5,6 @@
       "type": "build"
     },
     {
-      "name": "@monadahq/polycons",
-      "type": "build"
-    },
-    {
-      "name": "@monadahq/wing-api-checker",
-      "version": "file:../../apps/wing-api-checker",
-      "type": "build"
-    },
-    {
       "name": "@types/aws-lambda",
       "type": "build"
     },
@@ -41,10 +32,6 @@
       "type": "build"
     },
     {
-      "name": "@types/ws",
-      "type": "build"
-    },
-    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -52,6 +39,15 @@
     {
       "name": "@typescript-eslint/parser",
       "version": "^5",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/polycons",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/wing-api-checker",
+      "version": "file:../../apps/wing-api-checker",
       "type": "build"
     },
     {
@@ -195,14 +191,6 @@
       "type": "bundled"
     },
     {
-      "name": "isomorphic-ws",
-      "type": "bundled"
-    },
-    {
-      "name": "piscina",
-      "type": "bundled"
-    },
-    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },
@@ -211,15 +199,11 @@
       "type": "bundled"
     },
     {
-      "name": "ws",
-      "type": "bundled"
-    },
-    {
       "name": "@cdktf/provider-aws",
       "type": "peer"
     },
     {
-      "name": "@monadahq/polycons",
+      "name": "@winglang/polycons",
       "type": "peer"
     },
     {

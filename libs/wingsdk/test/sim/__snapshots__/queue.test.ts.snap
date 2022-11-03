@@ -5,15 +5,15 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
-        "callees": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
-            "callers": Array [
+            "inbound": Array [
               "root/my_queue",
             ],
             "props": Object {
+              "environmentVariables": Object {
+                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
             },
@@ -23,11 +23,14 @@ Object {
         "dependsOn": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
+        "outbound": Array [
+          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
         "props": Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -49,15 +52,15 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
-        "callees": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
-            "callers": Array [
+            "inbound": Array [
               "root/my_queue",
             ],
             "props": Object {
+              "environmentVariables": Object {
+                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
             },
@@ -65,6 +68,9 @@ Object {
           },
         },
         "dependsOn": Array [
+          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
+        "outbound": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
         "props": Object {
@@ -79,7 +85,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 5,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -101,15 +107,15 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
-        "callees": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
-            "callers": Array [
+            "inbound": Array [
               "root/my_queue",
             ],
             "props": Object {
+              "environmentVariables": Object {
+                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
             },
@@ -119,11 +125,14 @@ Object {
         "dependsOn": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
+        "outbound": Array [
+          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
         "props": Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionId": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,

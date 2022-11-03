@@ -3,7 +3,7 @@
   "affected": {
     "defaultBase": "main"
   },
-  "npmScope": "monadahq",
+  "npmScope": "winglang",
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "libs"
@@ -66,7 +66,7 @@
         "src"
       ],
       "outputs": [
-        "dist"
+        "{workspaceRoot}/dist"
       ],
       "dependsOn": [
         "^build"
@@ -79,7 +79,7 @@
         "src"
       ],
       "outputs": [
-        "rust-native"
+        "{workspaceRoot}/rust-native"
       ],
       "dependsOn": [
         "^build-native"
@@ -92,7 +92,7 @@
         "src"
       ],
       "outputs": [
-        "rust-wasm"
+        "{workspaceRoot}/rust-wasm"
       ],
       "dependsOn": [
         "^build-wasm"

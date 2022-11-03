@@ -1,16 +1,16 @@
-import { cdk, javascript, JsonFile } from "projen";
+import { JsonFile, cdk, javascript } from "projen";
 
 const project = new cdk.JsiiProject({
-  name: "@monadahq/wingsdk",
+  name: "@winglang/wingsdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
-  repositoryUrl: "https://github.com/monadahq/wingsdk.git",
+  repositoryUrl: "https://github.com/winglang/wingsdk.git",
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [
     "constructs@~10.0.25",
-    "@monadahq/polycons",
+    "@winglang/polycons",
     "cdktf",
     "@cdktf/provider-aws",
   ],
@@ -26,16 +26,12 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-utf8-node",
     // simulator dependencies
     "tar",
-    "piscina",
-    "ws",
-    "isomorphic-ws",
   ],
   devDeps: [
-    "@monadahq/wing-api-checker@file:../../apps/wing-api-checker",
+    "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/fs-extra",
     "@types/tar",
-    "@types/ws",
     "aws-sdk-client-mock",
     "patch-package",
   ],
@@ -105,7 +101,7 @@ const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
     compilerOptions: {
       esModuleInterop: true,
     },
-    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts", "src/**/exports.ts"],
+    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts"],
     exclude: ["node_modules"],
   },
 });
@@ -196,18 +192,6 @@ const bumpTask = project.tasks.tryFind("bump")!;
 bumpTask.reset(
   "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
 );
-
-// Add custom export declarations that supersede the default export structure of
-// `index.ts` files. This allows us to export APIs that aren't compiled
-// with JSII without the JSII compiler noticing.
-project.package.addField("exports", {
-  ".": "./lib/exports.js",
-  "./cloud": "./lib/cloud/exports.js",
-  "./fs": "./lib/fs/exports.js",
-  "./sim": "./lib/sim/exports.js",
-  "./testing": "./lib/testing/exports.js",
-  "./tf-aws": "./lib/tf-aws/exports.js",
-});
 
 project.preCompileTask.exec("patch-package");
 

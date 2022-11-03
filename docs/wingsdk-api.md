@@ -2,29 +2,29 @@
 
 ## Constructs <a name="Constructs" id="Constructs"></a>
 
-### App <a name="App" id="@monadahq/wingsdk.sim.App"></a>
+### App <a name="App" id="@winglang/wingsdk.sim.App"></a>
 
-- *Implements:* @monadahq/wingsdk.core.IApp
+- *Implements:* @winglang/wingsdk.core.IApp
 
 A construct that knows how to synthesize simulator resources into a Wing simulator (.wx) file.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.App.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.App.Initializer"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 new sim.App(props: AppProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.App.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.sim.AppProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.App.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.sim.AppProps</code> | *No description.* |
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.sim.App.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.sim.App.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.sim.AppProps
+- *Type:* @winglang/wingsdk.sim.AppProps
 
 ---
 
@@ -32,12 +32,12 @@ new sim.App(props: AppProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into an `app.wx` file. Return the path to the file. |
+| <code><a href="#@winglang/wingsdk.sim.App.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into an `app.wx` file. Return the path to the file. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.sim.App.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.sim.App.toString"></a>
 
 ```typescript
 public toString(): string
@@ -45,7 +45,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `synth` <a name="synth" id="@monadahq/wingsdk.sim.App.synth"></a>
+##### `synth` <a name="synth" id="@winglang/wingsdk.sim.App.synth"></a>
 
 ```typescript
 public synth(): string
@@ -57,21 +57,21 @@ Synthesize the app into an `app.wx` file. Return the path to the file.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.sim.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.sim.App.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.sim.App.isConstruct"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 sim.App.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.sim.App.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.sim.App.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -83,12 +83,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.sim.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.sim.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.sim.App.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.App.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -100,7 +100,7 @@ The tree node.
 
 ---
 
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.sim.App.property.outdir"></a>
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.sim.App.property.outdir"></a>
 
 ```typescript
 public readonly outdir: string;
@@ -113,29 +113,29 @@ Directory where artifacts are synthesized to.
 ---
 
 
-### App <a name="App" id="@monadahq/wingsdk.tfaws.App"></a>
+### App <a name="App" id="@winglang/wingsdk.tfaws.App"></a>
 
-- *Implements:* @monadahq/wingsdk.core.IApp
+- *Implements:* @winglang/wingsdk.core.IApp
 
 An app that knows how to synthesize constructs into a Terraform configuration for AWS resources.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.App.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.App.Initializer"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 new tfaws.App(props?: AppProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.App.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.tfaws.AppProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.App.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.tfaws.AppProps</code> | *No description.* |
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.App.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.tfaws.App.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.tfaws.AppProps
+- *Type:* @winglang/wingsdk.tfaws.AppProps
 
 ---
 
@@ -143,12 +143,12 @@ new tfaws.App(props?: AppProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.App.synth">synth</a></code> | Synthesize the app into Terraform configuration in a `cdktf.out` directory. |
+| <code><a href="#@winglang/wingsdk.tfaws.App.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.App.synth">synth</a></code> | Synthesize the app into Terraform configuration in a `cdktf.out` directory. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.tfaws.App.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.tfaws.App.toString"></a>
 
 ```typescript
 public toString(): string
@@ -156,7 +156,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `synth` <a name="synth" id="@monadahq/wingsdk.tfaws.App.synth"></a>
+##### `synth` <a name="synth" id="@winglang/wingsdk.tfaws.App.synth"></a>
 
 ```typescript
 public synth(): string
@@ -171,21 +171,21 @@ for unit testing.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.App.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.tfaws.App.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.tfaws.App.isConstruct"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 tfaws.App.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.tfaws.App.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.tfaws.App.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -197,12 +197,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.tfaws.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.tfaws.App.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.tfaws.App.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.tfaws.App.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.tfaws.App.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -214,7 +214,7 @@ The tree node.
 
 ---
 
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.tfaws.App.property.outdir"></a>
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.tfaws.App.property.outdir"></a>
 
 ```typescript
 public readonly outdir: string;
@@ -227,43 +227,43 @@ Directory where artifacts are synthesized to.
 ---
 
 
-### Bucket <a name="Bucket" id="@monadahq/wingsdk.cloud.Bucket"></a>
+### Bucket <a name="Bucket" id="@winglang/wingsdk.cloud.Bucket"></a>
 
-**Inflight client:** [@monadahq/wingsdk.cloud.IBucketClient](#@monadahq/wingsdk.cloud.IBucketClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IBucketClient](#@winglang/wingsdk.cloud.IBucketClient)
 
 Represents a cloud object store.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Bucket.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Bucket.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 new cloud.Bucket(scope: Construct, id: string, props?: BucketProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.BucketProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.BucketProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.Bucket.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.Bucket.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.Bucket.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.Bucket.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.BucketProps
+- *Type:* @winglang/wingsdk.cloud.BucketProps
 
 ---
 
@@ -271,11 +271,11 @@ new cloud.Bucket(scope: Construct, id: string, props?: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Bucket.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.Bucket.toString"></a>
 
 ```typescript
 public toString(): string
@@ -287,21 +287,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Bucket.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.Bucket.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 cloud.Bucket.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Bucket.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Bucket.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -313,12 +313,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Bucket.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.Bucket.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -330,7 +330,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Bucket.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.Bucket.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -347,45 +347,45 @@ with a fresh copy without any consequences.
 ---
 
 
-### Bucket <a name="Bucket" id="@monadahq/wingsdk.sim.Bucket"></a>
+### Bucket <a name="Bucket" id="@winglang/wingsdk.sim.Bucket"></a>
 
-- *Implements:* @monadahq/wingsdk.sim.IResource
+- *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@monadahq/wingsdk.sim.IBucketClient](#@monadahq/wingsdk.sim.IBucketClient)
+**Inflight client:** [@winglang/wingsdk.sim.IBucketClient](#@winglang/wingsdk.sim.IBucketClient)
 
 Simulator implementation of `cloud.Bucket`.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Bucket.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.Bucket.Initializer"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 new sim.Bucket(scope: Construct, id: string, props: BucketProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.BucketProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Bucket.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.BucketProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.sim.Bucket.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.sim.Bucket.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.sim.Bucket.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.Bucket.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.sim.Bucket.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.sim.Bucket.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.BucketProps
+- *Type:* @winglang/wingsdk.cloud.BucketProps
 
 ---
 
@@ -393,11 +393,11 @@ new sim.Bucket(scope: Construct, id: string, props: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.sim.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.sim.Bucket.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.sim.Bucket.toString"></a>
 
 ```typescript
 public toString(): string
@@ -409,21 +409,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.sim.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.sim.Bucket.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.sim.Bucket.isConstruct"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 sim.Bucket.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.sim.Bucket.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.sim.Bucket.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -435,12 +435,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.sim.Bucket.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.sim.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.Bucket.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.sim.Bucket.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.Bucket.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -452,7 +452,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.sim.Bucket.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.sim.Bucket.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -469,43 +469,43 @@ with a fresh copy without any consequences.
 ---
 
 
-### Bucket <a name="Bucket" id="@monadahq/wingsdk.tfaws.Bucket"></a>
+### Bucket <a name="Bucket" id="@winglang/wingsdk.tfaws.Bucket"></a>
 
-**Inflight client:** [@monadahq/wingsdk.tfaws.IBucketClient](#@monadahq/wingsdk.tfaws.IBucketClient)
+**Inflight client:** [@winglang/wingsdk.tfaws.IBucketClient](#@winglang/wingsdk.tfaws.IBucketClient)
 
 AWS implementation of `cloud.Bucket`.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Bucket.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.Bucket.Initializer"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 new tfaws.Bucket(scope: Construct, id: string, props: BucketProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.BucketProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Bucket.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Bucket.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Bucket.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.BucketProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.tfaws.Bucket.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.tfaws.Bucket.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.tfaws.Bucket.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.tfaws.Bucket.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Bucket.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.tfaws.Bucket.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.BucketProps
+- *Type:* @winglang/wingsdk.cloud.BucketProps
 
 ---
 
@@ -513,11 +513,11 @@ new tfaws.Bucket(scope: Construct, id: string, props: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.tfaws.Bucket.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.tfaws.Bucket.toString"></a>
 
 ```typescript
 public toString(): string
@@ -529,21 +529,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.Bucket.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.tfaws.Bucket.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.tfaws.Bucket.isConstruct"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 tfaws.Bucket.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.tfaws.Bucket.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.tfaws.Bucket.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -555,12 +555,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Bucket.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.tfaws.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.tfaws.Bucket.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.tfaws.Bucket.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.tfaws.Bucket.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -572,7 +572,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.tfaws.Bucket.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.tfaws.Bucket.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -589,41 +589,41 @@ with a fresh copy without any consequences.
 ---
 
 
-### BucketBase <a name="BucketBase" id="@monadahq/wingsdk.cloud.BucketBase"></a>
+### BucketBase <a name="BucketBase" id="@winglang/wingsdk.cloud.BucketBase"></a>
 
 Functionality shared between all `Bucket` implementations.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.BucketBase.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.BucketBase.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 new cloud.BucketBase(scope: Construct, id: string, props: BucketProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.BucketProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.BucketBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.BucketBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.BucketBase.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.BucketProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.BucketBase.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.BucketBase.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.BucketBase.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.BucketBase.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.BucketBase.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.cloud.BucketBase.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.BucketProps
+- *Type:* @winglang/wingsdk.cloud.BucketProps
 
 ---
 
@@ -631,11 +631,11 @@ new cloud.BucketBase(scope: Construct, id: string, props: BucketProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketBase.toString">toString</a></code> | Returns a string representation of this construct. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.BucketBase.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.BucketBase.toString"></a>
 
 ```typescript
 public toString(): string
@@ -647,21 +647,21 @@ Returns a string representation of this construct.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.BucketBase.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.BucketBase.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 cloud.BucketBase.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.BucketBase.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.BucketBase.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -673,12 +673,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.BucketBase.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.BucketBase.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -690,7 +690,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.BucketBase.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.BucketBase.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -707,27 +707,27 @@ with a fresh copy without any consequences.
 ---
 
 
-### FileBase <a name="FileBase" id="@monadahq/wingsdk.fs.FileBase"></a>
+### FileBase <a name="FileBase" id="@winglang/wingsdk.fs.FileBase"></a>
 
 Represents a file to be synthesized in the app's output directory.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.FileBase.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.fs.FileBase.Initializer"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { fs } from '@winglang/wingsdk'
 
 new fs.FileBase(scope: Construct, id: string, filePath: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | construct scope. |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.Initializer.parameter.id">id</a></code> | <code>string</code> | construct id. |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | relative file path. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | construct scope. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.Initializer.parameter.id">id</a></code> | <code>string</code> | construct id. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | relative file path. |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.FileBase.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.fs.FileBase.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
@@ -735,7 +735,7 @@ construct scope.
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.FileBase.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.fs.FileBase.Initializer.parameter.id"></a>
 
 - *Type:* string
 
@@ -743,7 +743,7 @@ construct id.
 
 ---
 
-##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.FileBase.Initializer.parameter.filePath"></a>
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@winglang/wingsdk.fs.FileBase.Initializer.parameter.filePath"></a>
 
 - *Type:* string
 
@@ -755,12 +755,12 @@ relative file path.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.FileBase.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.fs.FileBase.toString"></a>
 
 ```typescript
 public toString(): string
@@ -768,7 +768,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `save` <a name="save" id="@monadahq/wingsdk.fs.FileBase.save"></a>
+##### `save` <a name="save" id="@winglang/wingsdk.fs.FileBase.save"></a>
 
 ```typescript
 public save(outdir: string): void
@@ -776,7 +776,7 @@ public save(outdir: string): void
 
 Render the contents of the file and save it to the user's file system.
 
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.FileBase.save.parameter.outdir"></a>
+###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.fs.FileBase.save.parameter.outdir"></a>
 
 - *Type:* string
 
@@ -786,21 +786,21 @@ Render the contents of the file and save it to the user's file system.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.FileBase.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.fs.FileBase.isConstruct"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { fs } from '@winglang/wingsdk'
 
 fs.FileBase.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.FileBase.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.fs.FileBase.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -812,12 +812,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.fs.FileBase.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.fs.FileBase.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.FileBase.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.fs.FileBase.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -829,7 +829,7 @@ The tree node.
 
 ---
 
-##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.FileBase.property.filePath"></a>
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@winglang/wingsdk.fs.FileBase.property.filePath"></a>
 
 ```typescript
 public readonly filePath: string;
@@ -842,50 +842,50 @@ The file's relative path to the output directory.
 ---
 
 
-### Function <a name="Function" id="@monadahq/wingsdk.cloud.Function"></a>
+### Function <a name="Function" id="@winglang/wingsdk.cloud.Function"></a>
 
-**Inflight client:** [@monadahq/wingsdk.cloud.IFunctionClient](#@monadahq/wingsdk.cloud.IFunctionClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
 
 Represents a serverless function.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Function.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Function.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 new cloud.Function(scope: Construct, id: string, inflight: Inflight, props?: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@winglang/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.Function.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.Function.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.inflight"></a>
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* @monadahq/wingsdk.core.Inflight
+- *Type:* @winglang/wingsdk.core.Inflight
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.Function.Initializer.parameter.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.Function.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionProps
+- *Type:* @winglang/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -893,12 +893,12 @@ new cloud.Function(scope: Construct, id: string, inflight: Inflight, props?: Fun
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Function.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.Function.toString"></a>
 
 ```typescript
 public toString(): string
@@ -906,7 +906,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.cloud.Function.addEnvironment"></a>
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.cloud.Function.addEnvironment"></a>
 
 ```typescript
 public addEnvironment(_key: string, _value: string): void
@@ -914,13 +914,13 @@ public addEnvironment(_key: string, _value: string): void
 
 Add an environment variable to the function.
 
-###### `_key`<sup>Required</sup> <a name="_key" id="@monadahq/wingsdk.cloud.Function.addEnvironment.parameter._key"></a>
+###### `_key`<sup>Required</sup> <a name="_key" id="@winglang/wingsdk.cloud.Function.addEnvironment.parameter._key"></a>
 
 - *Type:* string
 
 ---
 
-###### `_value`<sup>Required</sup> <a name="_value" id="@monadahq/wingsdk.cloud.Function.addEnvironment.parameter._value"></a>
+###### `_value`<sup>Required</sup> <a name="_value" id="@winglang/wingsdk.cloud.Function.addEnvironment.parameter._value"></a>
 
 - *Type:* string
 
@@ -930,21 +930,21 @@ Add an environment variable to the function.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Function.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.Function.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 cloud.Function.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Function.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Function.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -956,12 +956,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.Function.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Function.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.Function.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -973,7 +973,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Function.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.Function.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -990,52 +990,52 @@ with a fresh copy without any consequences.
 ---
 
 
-### Function <a name="Function" id="@monadahq/wingsdk.sim.Function"></a>
+### Function <a name="Function" id="@winglang/wingsdk.sim.Function"></a>
 
-- *Implements:* @monadahq/wingsdk.sim.IResource
+- *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@monadahq/wingsdk.sim.IFunctionClient](#@monadahq/wingsdk.sim.IFunctionClient)
+**Inflight client:** [@winglang/wingsdk.sim.IFunctionClient](#@winglang/wingsdk.sim.IFunctionClient)
 
 Simulator implementation of `cloud.Function`.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Function.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.Function.Initializer"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 new sim.Function(scope: Construct, id: string, inflight: Inflight, props: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@winglang/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Function.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.sim.Function.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.sim.Function.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.sim.Function.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.Function.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.sim.Function.Initializer.parameter.inflight"></a>
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.sim.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* @monadahq/wingsdk.core.Inflight
+- *Type:* @winglang/wingsdk.core.Inflight
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.sim.Function.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.sim.Function.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionProps
+- *Type:* @winglang/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -1043,12 +1043,12 @@ new sim.Function(scope: Construct, id: string, inflight: Inflight, props: Functi
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code><a href="#@winglang/wingsdk.sim.Function.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.sim.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.sim.Function.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.sim.Function.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1056,7 +1056,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.sim.Function.addEnvironment"></a>
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.sim.Function.addEnvironment"></a>
 
 ```typescript
 public addEnvironment(name: string, value: string): void
@@ -1064,13 +1064,13 @@ public addEnvironment(name: string, value: string): void
 
 Add an environment variable to the function.
 
-###### `name`<sup>Required</sup> <a name="name" id="@monadahq/wingsdk.sim.Function.addEnvironment.parameter.name"></a>
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/wingsdk.sim.Function.addEnvironment.parameter.name"></a>
 
 - *Type:* string
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.sim.Function.addEnvironment.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/wingsdk.sim.Function.addEnvironment.parameter.value"></a>
 
 - *Type:* string
 
@@ -1080,21 +1080,21 @@ Add an environment variable to the function.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.sim.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.sim.Function.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.sim.Function.isConstruct"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 sim.Function.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.sim.Function.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.sim.Function.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1106,12 +1106,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.sim.Function.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.sim.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.Function.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.sim.Function.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.Function.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1123,7 +1123,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.sim.Function.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.sim.Function.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -1140,50 +1140,50 @@ with a fresh copy without any consequences.
 ---
 
 
-### Function <a name="Function" id="@monadahq/wingsdk.tfaws.Function"></a>
+### Function <a name="Function" id="@winglang/wingsdk.tfaws.Function"></a>
 
-**Inflight client:** [@monadahq/wingsdk.tfaws.IFunctionClient](#@monadahq/wingsdk.tfaws.IFunctionClient)
+**Inflight client:** [@winglang/wingsdk.tfaws.IFunctionClient](#@winglang/wingsdk.tfaws.IFunctionClient)
 
 AWS implementation of `cloud.Function`.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Function.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.Function.Initializer"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 new tfaws.Function(scope: Construct, id: string, inflight: Inflight, props: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.Initializer.parameter.inflight">inflight</a></code> | <code>@winglang/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.tfaws.Function.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.tfaws.Function.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.inflight"></a>
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.tfaws.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* @monadahq/wingsdk.core.Inflight
+- *Type:* @winglang/wingsdk.core.Inflight
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Function.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.tfaws.Function.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionProps
+- *Type:* @winglang/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -1191,13 +1191,13 @@ new tfaws.Function(scope: Construct, id: string, inflight: Inflight, props: Func
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | Add a policy statement to the Lambda role. |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | Add a policy statement to the Lambda role. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.tfaws.Function.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.tfaws.Function.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1205,7 +1205,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.tfaws.Function.addEnvironment"></a>
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.tfaws.Function.addEnvironment"></a>
 
 ```typescript
 public addEnvironment(name: string, value: string): void
@@ -1213,19 +1213,19 @@ public addEnvironment(name: string, value: string): void
 
 Add an environment variable to the function.
 
-###### `name`<sup>Required</sup> <a name="name" id="@monadahq/wingsdk.tfaws.Function.addEnvironment.parameter.name"></a>
+###### `name`<sup>Required</sup> <a name="name" id="@winglang/wingsdk.tfaws.Function.addEnvironment.parameter.name"></a>
 
 - *Type:* string
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.tfaws.Function.addEnvironment.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/wingsdk.tfaws.Function.addEnvironment.parameter.value"></a>
 
 - *Type:* string
 
 ---
 
-##### `addPolicyStatements` <a name="addPolicyStatements" id="@monadahq/wingsdk.tfaws.Function.addPolicyStatements"></a>
+##### `addPolicyStatements` <a name="addPolicyStatements" id="@winglang/wingsdk.tfaws.Function.addPolicyStatements"></a>
 
 ```typescript
 public addPolicyStatements(statements: PolicyStatement): void
@@ -1233,9 +1233,9 @@ public addPolicyStatements(statements: PolicyStatement): void
 
 Add a policy statement to the Lambda role.
 
-###### `statements`<sup>Required</sup> <a name="statements" id="@monadahq/wingsdk.tfaws.Function.addPolicyStatements.parameter.statements"></a>
+###### `statements`<sup>Required</sup> <a name="statements" id="@winglang/wingsdk.tfaws.Function.addPolicyStatements.parameter.statements"></a>
 
-- *Type:* @monadahq/wingsdk.tfaws.PolicyStatement
+- *Type:* @winglang/wingsdk.tfaws.PolicyStatement
 
 ---
 
@@ -1243,21 +1243,21 @@ Add a policy statement to the Lambda role.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.tfaws.Function.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.tfaws.Function.isConstruct"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 tfaws.Function.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.tfaws.Function.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.tfaws.Function.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1269,12 +1269,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Function.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.tfaws.Function.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.tfaws.Function.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.tfaws.Function.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1286,7 +1286,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.tfaws.Function.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.tfaws.Function.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -1303,48 +1303,48 @@ with a fresh copy without any consequences.
 ---
 
 
-### FunctionBase <a name="FunctionBase" id="@monadahq/wingsdk.cloud.FunctionBase"></a>
+### FunctionBase <a name="FunctionBase" id="@winglang/wingsdk.cloud.FunctionBase"></a>
 
 Functionality shared between all `Function` implementations.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.FunctionBase.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 new cloud.FunctionBase(scope: Construct, id: string, inflight: Inflight, props: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.inflight">inflight</a></code> | <code>@monadahq/wingsdk.core.Inflight</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.FunctionProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.inflight">inflight</a></code> | <code>@winglang/wingsdk.core.Inflight</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.FunctionProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.inflight"></a>
+##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.inflight"></a>
 
-- *Type:* @monadahq/wingsdk.core.Inflight
+- *Type:* @winglang/wingsdk.core.Inflight
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.cloud.FunctionBase.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.cloud.FunctionBase.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.cloud.FunctionProps
+- *Type:* @winglang/wingsdk.cloud.FunctionProps
 
 ---
 
@@ -1352,12 +1352,12 @@ new cloud.FunctionBase(scope: Construct, id: string, inflight: Inflight, props: 
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.FunctionBase.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.FunctionBase.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1365,7 +1365,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `addEnvironment` <a name="addEnvironment" id="@monadahq/wingsdk.cloud.FunctionBase.addEnvironment"></a>
+##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.cloud.FunctionBase.addEnvironment"></a>
 
 ```typescript
 public addEnvironment(key: string, value: string): void
@@ -1373,13 +1373,13 @@ public addEnvironment(key: string, value: string): void
 
 Add an environment variable to the function.
 
-###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.FunctionBase.addEnvironment.parameter.key"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.FunctionBase.addEnvironment.parameter.key"></a>
 
 - *Type:* string
 
 ---
 
-###### `value`<sup>Required</sup> <a name="value" id="@monadahq/wingsdk.cloud.FunctionBase.addEnvironment.parameter.value"></a>
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/wingsdk.cloud.FunctionBase.addEnvironment.parameter.value"></a>
 
 - *Type:* string
 
@@ -1389,21 +1389,21 @@ Add an environment variable to the function.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.FunctionBase.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.FunctionBase.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 cloud.FunctionBase.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.FunctionBase.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.FunctionBase.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1415,12 +1415,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.FunctionBase.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.FunctionBase.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1432,7 +1432,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.FunctionBase.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.FunctionBase.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -1449,48 +1449,48 @@ with a fresh copy without any consequences.
 ---
 
 
-### JsonFile <a name="JsonFile" id="@monadahq/wingsdk.fs.JsonFile"></a>
+### JsonFile <a name="JsonFile" id="@winglang/wingsdk.fs.JsonFile"></a>
 
 Represents a text file that should be synthesized in the app's outdir.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.JsonFile.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.fs.JsonFile.Initializer"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { fs } from '@winglang/wingsdk'
 
 new fs.JsonFile(scope: Construct, id: string, filePath: string, props: JsonFileProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.fs.JsonFileProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.fs.JsonFileProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.fs.JsonFile.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.fs.JsonFile.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.filePath"></a>
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@winglang/wingsdk.fs.JsonFile.Initializer.parameter.filePath"></a>
 
 - *Type:* string
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.fs.JsonFile.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.fs.JsonFile.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.fs.JsonFileProps
+- *Type:* @winglang/wingsdk.fs.JsonFileProps
 
 ---
 
@@ -1498,12 +1498,12 @@ new fs.JsonFile(scope: Construct, id: string, filePath: string, props: JsonFileP
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.JsonFile.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.fs.JsonFile.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1511,7 +1511,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `save` <a name="save" id="@monadahq/wingsdk.fs.JsonFile.save"></a>
+##### `save` <a name="save" id="@winglang/wingsdk.fs.JsonFile.save"></a>
 
 ```typescript
 public save(outdir: string): void
@@ -1519,7 +1519,7 @@ public save(outdir: string): void
 
 Render the contents of the file and save it to the user's file system.
 
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.JsonFile.save.parameter.outdir"></a>
+###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.fs.JsonFile.save.parameter.outdir"></a>
 
 - *Type:* string
 
@@ -1529,21 +1529,21 @@ Render the contents of the file and save it to the user's file system.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.JsonFile.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.fs.JsonFile.isConstruct"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { fs } from '@winglang/wingsdk'
 
 fs.JsonFile.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.JsonFile.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.fs.JsonFile.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1555,12 +1555,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFile.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.fs.JsonFile.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.JsonFile.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.fs.JsonFile.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1572,7 +1572,7 @@ The tree node.
 
 ---
 
-##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.JsonFile.property.filePath"></a>
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@winglang/wingsdk.fs.JsonFile.property.filePath"></a>
 
 ```typescript
 public readonly filePath: string;
@@ -1585,9 +1585,9 @@ The file's relative path to the output directory.
 ---
 
 
-### Logger <a name="Logger" id="@monadahq/wingsdk.cloud.Logger"></a>
+### Logger <a name="Logger" id="@winglang/wingsdk.cloud.Logger"></a>
 
-**Inflight client:** [@monadahq/wingsdk.cloud.ILoggerClient](#@monadahq/wingsdk.cloud.ILoggerClient)
+**Inflight client:** [@winglang/wingsdk.cloud.ILoggerClient](#@winglang/wingsdk.cloud.ILoggerClient)
 
 A cloud logging facility.
 
@@ -1595,12 +1595,12 @@ A cloud logging facility.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Logger.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.Logger.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1608,7 +1608,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `print` <a name="print" id="@monadahq/wingsdk.cloud.Logger.print"></a>
+##### `print` <a name="print" id="@winglang/wingsdk.cloud.Logger.print"></a>
 
 ```typescript
 public print(message: string): void
@@ -1616,7 +1616,7 @@ public print(message: string): void
 
 Logs a message.
 
-###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.Logger.print.parameter.message"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.Logger.print.parameter.message"></a>
 
 - *Type:* string
 
@@ -1628,23 +1628,23 @@ The message to log.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Logger.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Logger.of">of</a></code> | Returns the logger registered to the given scope, throwing an error if there is none. |
-| <code><a href="#@monadahq/wingsdk.cloud.Logger.register">register</a></code> | Create a logger and register it to the given scope. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.of">of</a></code> | Returns the logger registered to the given scope, throwing an error if there is none. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.register">register</a></code> | Create a logger and register it to the given scope. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Logger.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.Logger.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 cloud.Logger.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Logger.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Logger.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1652,33 +1652,33 @@ Any object.
 
 ---
 
-##### `of` <a name="of" id="@monadahq/wingsdk.cloud.Logger.of"></a>
+##### `of` <a name="of" id="@winglang/wingsdk.cloud.Logger.of"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 cloud.Logger.of(scope: IConstruct)
 ```
 
 Returns the logger registered to the given scope, throwing an error if there is none.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Logger.of.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.Logger.of.parameter.scope"></a>
 
 - *Type:* constructs.IConstruct
 
 ---
 
-##### `register` <a name="register" id="@monadahq/wingsdk.cloud.Logger.register"></a>
+##### `register` <a name="register" id="@winglang/wingsdk.cloud.Logger.register"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 cloud.Logger.register(scope: IConstruct)
 ```
 
 Create a logger and register it to the given scope.
 
-###### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Logger.register.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.Logger.register.parameter.scope"></a>
 
 - *Type:* constructs.IConstruct
 
@@ -1688,12 +1688,12 @@ Create a logger and register it to the given scope.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.Logger.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Logger.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.Logger.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1705,7 +1705,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Logger.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.Logger.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -1722,42 +1722,38 @@ with a fresh copy without any consequences.
 ---
 
 
-### LoggerBase <a name="LoggerBase" id="@monadahq/wingsdk.cloud.LoggerBase"></a>
+### Logger <a name="Logger" id="@winglang/wingsdk.sim.Logger"></a>
 
-Functionality shared between all `Logger` implementations.
+- *Implements:* @winglang/wingsdk.sim.IResource
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.LoggerBase.Initializer"></a>
+**Inflight client:** [@winglang/wingsdk.sim.ILoggerClient](#@winglang/wingsdk.sim.ILoggerClient)
+
+Simulator implementation of `cloud.Logger`.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.Logger.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
-new cloud.LoggerBase(scope: Construct, id: string)
+new sim.Logger(scope: Construct, id: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | The scope in which to define this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.id">id</a></code> | <code>string</code> | The scoped construct ID. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Logger.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.sim.Logger.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
-The scope in which to define this construct.
-
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.LoggerBase.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.Logger.Initializer.parameter.id"></a>
 
 - *Type:* string
-
-The scoped construct ID.
-
-Must be unique amongst siblings. If
-the ID includes a path separator (`/`), then it will be replaced by double
-dash `--`.
 
 ---
 
@@ -1765,12 +1761,12 @@ dash `--`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.print">print</a></code> | Logs a message. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.print">print</a></code> | Logs a message. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.LoggerBase.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.sim.Logger.toString"></a>
 
 ```typescript
 public toString(): string
@@ -1778,7 +1774,7 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `print` <a name="print" id="@monadahq/wingsdk.cloud.LoggerBase.print"></a>
+##### `print` <a name="print" id="@winglang/wingsdk.sim.Logger.print"></a>
 
 ```typescript
 public print(message: string): void
@@ -1786,7 +1782,7 @@ public print(message: string): void
 
 Logs a message.
 
-###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.LoggerBase.print.parameter.message"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.sim.Logger.print.parameter.message"></a>
 
 - *Type:* string
 
@@ -1798,21 +1794,21 @@ The message to log.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.LoggerBase.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.sim.Logger.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
-cloud.LoggerBase.isConstruct(x: any)
+sim.Logger.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.LoggerBase.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.sim.Logger.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -1824,12 +1820,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.Logger.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.LoggerBase.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.Logger.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -1841,7 +1837,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.LoggerBase.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.sim.Logger.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -1858,592 +1854,26 @@ with a fresh copy without any consequences.
 ---
 
 
-### Queue <a name="Queue" id="@monadahq/wingsdk.cloud.Queue"></a>
+### LoggerBase <a name="LoggerBase" id="@winglang/wingsdk.cloud.LoggerBase"></a>
 
-**Inflight client:** [@monadahq/wingsdk.cloud.IQueueClient](#@monadahq/wingsdk.cloud.IQueueClient)
+Functionality shared between all `Logger` implementations.
 
-Represents a serverless queue.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Queue.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.LoggerBase.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
-new cloud.Queue(scope: Construct, id: string, props?: QueueProps)
+new cloud.LoggerBase(scope: Construct, id: string)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | The scope in which to define this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.Initializer.parameter.id">id</a></code> | <code>string</code> | The scoped construct ID. |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.Queue.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Queue.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.cloud.Queue.onMessage"></a>
-
-```typescript
-public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
-```
-
-Create a function to consume messages from this queue.
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.Queue.onMessage.parameter.inflight"></a>
-
-- *Type:* @monadahq/wingsdk.core.Inflight
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.Queue.onMessage.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Queue.isConstruct"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-cloud.Queue.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Queue.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Queue.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Queue.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-
-### Queue <a name="Queue" id="@monadahq/wingsdk.sim.Queue"></a>
-
-- *Implements:* @monadahq/wingsdk.sim.IResource
-
-**Inflight client:** [@monadahq/wingsdk.sim.IQueueClient](#@monadahq/wingsdk.sim.IQueueClient)
-
-Simulator implementation of `cloud.Queue`.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.Queue.Initializer"></a>
-
-```typescript
-import { sim } from '@monadahq/wingsdk'
-
-new sim.Queue(scope: Construct, id: string, props?: QueueProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.sim.Queue.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.sim.Queue.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.sim.Queue.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.sim.Queue.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.sim.Queue.onMessage"></a>
-
-```typescript
-public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
-```
-
-Create a function to consume messages from this queue.
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.sim.Queue.onMessage.parameter.inflight"></a>
-
-- *Type:* @monadahq/wingsdk.core.Inflight
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.sim.Queue.onMessage.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.sim.Queue.isConstruct"></a>
-
-```typescript
-import { sim } from '@monadahq/wingsdk'
-
-sim.Queue.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.sim.Queue.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.sim.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.sim.Queue.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.sim.Queue.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-
-### Queue <a name="Queue" id="@monadahq/wingsdk.tfaws.Queue"></a>
-
-**Inflight client:** [@monadahq/wingsdk.tfaws.IQueueClient](#@monadahq/wingsdk.tfaws.IQueueClient)
-
-AWS implementation of `cloud.Queue`.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.Queue.Initializer"></a>
-
-```typescript
-import { tfaws } from '@monadahq/wingsdk'
-
-new tfaws.Queue(scope: Construct, id: string, props?: QueueProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Queue.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.tfaws.Queue.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.tfaws.Queue.onMessage"></a>
-
-```typescript
-public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
-```
-
-Create a function to consume messages from this queue.
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.tfaws.Queue.onMessage.parameter.inflight"></a>
-
-- *Type:* @monadahq/wingsdk.core.Inflight
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.tfaws.Queue.onMessage.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.tfaws.Queue.isConstruct"></a>
-
-```typescript
-import { tfaws } from '@monadahq/wingsdk'
-
-tfaws.Queue.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.tfaws.Queue.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.tfaws.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.tfaws.Queue.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.tfaws.Queue.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-
-### QueueBase <a name="QueueBase" id="@monadahq/wingsdk.cloud.QueueBase"></a>
-
-Functionality shared between all `Queue` implementations.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.QueueBase.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-new cloud.QueueBase(scope: Construct, id: string, props?: QueueProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.cloud.QueueProps</code> | *No description.* |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.scope"></a>
-
-- *Type:* constructs.Construct
-
----
-
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.id"></a>
-
-- *Type:* string
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.QueueBase.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
-
----
-
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.QueueBase.toString"></a>
-
-```typescript
-public toString(): string
-```
-
-Returns a string representation of this construct.
-
-##### `onMessage` <a name="onMessage" id="@monadahq/wingsdk.cloud.QueueBase.onMessage"></a>
-
-```typescript
-public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
-```
-
-Create a function to consume messages from this queue.
-
-###### `inflight`<sup>Required</sup> <a name="inflight" id="@monadahq/wingsdk.cloud.QueueBase.onMessage.parameter.inflight"></a>
-
-- *Type:* @monadahq/wingsdk.core.Inflight
-
----
-
-###### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.cloud.QueueBase.onMessage.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.cloud.QueueOnMessageProps
-
----
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
-
----
-
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.QueueBase.isConstruct"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-cloud.QueueBase.isConstruct(x: any)
-```
-
-Checks if `x` is a construct.
-
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.QueueBase.isConstruct.parameter.x"></a>
-
-- *Type:* any
-
-Any object.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.QueueBase.property.node"></a>
-
-```typescript
-public readonly node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
-
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.QueueBase.property.stateful"></a>
-
-```typescript
-public readonly stateful: boolean;
-```
-
-- *Type:* boolean
-
-Whether a resource is stateful, i.e. it stores information that is not defined by your application.
-
-A non-stateful resource does not remember information about past
-transactions or events, and can typically be replaced by a cloud provider
-with a fresh copy without any consequences.
-
----
-
-
-### Resource <a name="Resource" id="@monadahq/wingsdk.cloud.Resource"></a>
-
-- *Implements:* @monadahq/wingsdk.core.ICapturable
-
-Shared behavior between all Wing SDK resources.
-
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.cloud.Resource.Initializer"></a>
-
-```typescript
-import { cloud } from '@monadahq/wingsdk'
-
-new cloud.Resource(scope: Construct, id: string)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | The scope in which to define this construct. |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.Initializer.parameter.id">id</a></code> | <code>string</code> | The scoped construct ID. |
-
----
-
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.cloud.Resource.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.LoggerBase.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
@@ -2451,7 +1881,7 @@ The scope in which to define this construct.
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.cloud.Resource.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.LoggerBase.Initializer.parameter.id"></a>
 
 - *Type:* string
 
@@ -2467,11 +1897,12 @@ dash `--`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.print">print</a></code> | Logs a message. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.cloud.Resource.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.LoggerBase.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2479,25 +1910,41 @@ public toString(): string
 
 Returns a string representation of this construct.
 
+##### `print` <a name="print" id="@winglang/wingsdk.cloud.LoggerBase.print"></a>
+
+```typescript
+public print(message: string): void
+```
+
+Logs a message.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.LoggerBase.print.parameter.message"></a>
+
+- *Type:* string
+
+The message to log.
+
+---
+
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.cloud.Resource.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.LoggerBase.isConstruct"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
-cloud.Resource.isConstruct(x: any)
+cloud.LoggerBase.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.cloud.Resource.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.LoggerBase.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2509,12 +1956,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.cloud.Resource.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.cloud.Resource.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.LoggerBase.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2526,7 +1973,7 @@ The tree node.
 
 ---
 
-##### `stateful`<sup>Required</sup> <a name="stateful" id="@monadahq/wingsdk.cloud.Resource.property.stateful"></a>
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.LoggerBase.property.stateful"></a>
 
 ```typescript
 public readonly stateful: boolean;
@@ -2543,48 +1990,43 @@ with a fresh copy without any consequences.
 ---
 
 
-### TextFile <a name="TextFile" id="@monadahq/wingsdk.fs.TextFile"></a>
+### Queue <a name="Queue" id="@winglang/wingsdk.cloud.Queue"></a>
 
-Represents a text file that should be synthesized in the app's outdir.
+**Inflight client:** [@winglang/wingsdk.cloud.IQueueClient](#@winglang/wingsdk.cloud.IQueueClient)
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.fs.TextFile.Initializer"></a>
+Represents a serverless queue.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Queue.Initializer"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
-new fs.TextFile(scope: Construct, id: string, filePath: string, props?: TextFileProps)
+new cloud.Queue(scope: Construct, id: string, props?: QueueProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | *No description.* |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.fs.TextFileProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.QueueProps</code> | *No description.* |
 
 ---
 
-##### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.scope"></a>
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.Queue.Initializer.parameter.scope"></a>
 
 - *Type:* constructs.Construct
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.id"></a>
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.Queue.Initializer.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.filePath"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.Queue.Initializer.parameter.props"></a>
 
-- *Type:* string
-
----
-
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.fs.TextFile.Initializer.parameter.props"></a>
-
-- *Type:* @monadahq/wingsdk.fs.TextFileProps
+- *Type:* @winglang/wingsdk.cloud.QueueProps
 
 ---
 
@@ -2592,13 +2034,12 @@ new fs.TextFile(scope: Construct, id: string, filePath: string, props?: TextFile
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.addLine">addLine</a></code> | Append a line to the text file's contents. |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
 
 ---
 
-##### `toString` <a name="toString" id="@monadahq/wingsdk.fs.TextFile.toString"></a>
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.Queue.toString"></a>
 
 ```typescript
 public toString(): string
@@ -2606,7 +2047,698 @@ public toString(): string
 
 Returns a string representation of this construct.
 
-##### `save` <a name="save" id="@monadahq/wingsdk.fs.TextFile.save"></a>
+##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.cloud.Queue.onMessage"></a>
+
+```typescript
+public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Queue.onMessage.parameter.inflight"></a>
+
+- *Type:* @winglang/wingsdk.core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.Queue.onMessage.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.Queue.isConstruct"></a>
+
+```typescript
+import { cloud } from '@winglang/wingsdk'
+
+cloud.Queue.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Queue.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.Queue.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.Queue.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### Queue <a name="Queue" id="@winglang/wingsdk.sim.Queue"></a>
+
+- *Implements:* @winglang/wingsdk.sim.IResource
+
+**Inflight client:** [@winglang/wingsdk.sim.IQueueClient](#@winglang/wingsdk.sim.IQueueClient)
+
+Simulator implementation of `cloud.Queue`.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.Queue.Initializer"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+new sim.Queue(scope: Construct, id: string, props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Queue.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.QueueProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.sim.Queue.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.Queue.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.sim.Queue.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.QueueProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.sim.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.sim.Queue.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.sim.Queue.onMessage"></a>
+
+```typescript
+public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.sim.Queue.onMessage.parameter.inflight"></a>
+
+- *Type:* @winglang/wingsdk.core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.sim.Queue.onMessage.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.sim.Queue.isConstruct"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+sim.Queue.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.sim.Queue.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.Queue.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.sim.Queue.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### Queue <a name="Queue" id="@winglang/wingsdk.tfaws.Queue"></a>
+
+**Inflight client:** [@winglang/wingsdk.tfaws.IQueueClient](#@winglang/wingsdk.tfaws.IQueueClient)
+
+AWS implementation of `cloud.Queue`.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.Queue.Initializer"></a>
+
+```typescript
+import { tfaws } from '@winglang/wingsdk'
+
+new tfaws.Queue(scope: Construct, id: string, props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.QueueProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.tfaws.Queue.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.tfaws.Queue.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.tfaws.Queue.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.QueueProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.tfaws.Queue.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.tfaws.Queue.onMessage"></a>
+
+```typescript
+public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.tfaws.Queue.onMessage.parameter.inflight"></a>
+
+- *Type:* @winglang/wingsdk.core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.tfaws.Queue.onMessage.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.tfaws.Queue.isConstruct"></a>
+
+```typescript
+import { tfaws } from '@winglang/wingsdk'
+
+tfaws.Queue.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.tfaws.Queue.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.tfaws.Queue.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.tfaws.Queue.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.tfaws.Queue.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### QueueBase <a name="QueueBase" id="@winglang/wingsdk.cloud.QueueBase"></a>
+
+Functionality shared between all `Queue` implementations.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.QueueBase.Initializer"></a>
+
+```typescript
+import { cloud } from '@winglang/wingsdk'
+
+new cloud.QueueBase(scope: Construct, id: string, props?: QueueProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.QueueProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.QueueBase.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.QueueBase.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.QueueBase.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.QueueProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.QueueBase.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.cloud.QueueBase.onMessage"></a>
+
+```typescript
+public onMessage(inflight: Inflight, props?: QueueOnMessageProps): Function
+```
+
+Create a function to consume messages from this queue.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.QueueBase.onMessage.parameter.inflight"></a>
+
+- *Type:* @winglang/wingsdk.core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.QueueBase.onMessage.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.QueueOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.QueueBase.isConstruct"></a>
+
+```typescript
+import { cloud } from '@winglang/wingsdk'
+
+cloud.QueueBase.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.QueueBase.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueBase.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.QueueBase.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.QueueBase.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### Resource <a name="Resource" id="@winglang/wingsdk.cloud.Resource"></a>
+
+- *Implements:* @winglang/wingsdk.core.ICapturable
+
+Shared behavior between all Wing SDK resources.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Resource.Initializer"></a>
+
+```typescript
+import { cloud } from '@winglang/wingsdk'
+
+new cloud.Resource(scope: Construct, id: string)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Resource.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | The scope in which to define this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Resource.Initializer.parameter.id">id</a></code> | <code>string</code> | The scoped construct ID. |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.cloud.Resource.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+The scope in which to define this construct.
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.cloud.Resource.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+The scoped construct ID.
+
+Must be unique amongst siblings. If
+the ID includes a path separator (`/`), then it will be replaced by double
+dash `--`.
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Resource.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.cloud.Resource.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Resource.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.cloud.Resource.isConstruct"></a>
+
+```typescript
+import { cloud } from '@winglang/wingsdk'
+
+cloud.Resource.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Resource.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Resource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Resource.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.Resource.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.Resource.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
+### TextFile <a name="TextFile" id="@winglang/wingsdk.fs.TextFile"></a>
+
+Represents a text file that should be synthesized in the app's outdir.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.fs.TextFile.Initializer"></a>
+
+```typescript
+import { fs } from '@winglang/wingsdk'
+
+new fs.TextFile(scope: Construct, id: string, filePath: string, props?: TextFileProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.Initializer.parameter.filePath">filePath</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.fs.TextFileProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.fs.TextFile.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.fs.TextFile.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@winglang/wingsdk.fs.TextFile.Initializer.parameter.filePath"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.fs.TextFile.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.fs.TextFileProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.save">save</a></code> | Render the contents of the file and save it to the user's file system. |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.addLine">addLine</a></code> | Append a line to the text file's contents. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.fs.TextFile.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `save` <a name="save" id="@winglang/wingsdk.fs.TextFile.save"></a>
 
 ```typescript
 public save(outdir: string): void
@@ -2614,13 +2746,13 @@ public save(outdir: string): void
 
 Render the contents of the file and save it to the user's file system.
 
-###### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.fs.TextFile.save.parameter.outdir"></a>
+###### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.fs.TextFile.save.parameter.outdir"></a>
 
 - *Type:* string
 
 ---
 
-##### `addLine` <a name="addLine" id="@monadahq/wingsdk.fs.TextFile.addLine"></a>
+##### `addLine` <a name="addLine" id="@winglang/wingsdk.fs.TextFile.addLine"></a>
 
 ```typescript
 public addLine(line: string): void
@@ -2628,7 +2760,7 @@ public addLine(line: string): void
 
 Append a line to the text file's contents.
 
-###### `line`<sup>Required</sup> <a name="line" id="@monadahq/wingsdk.fs.TextFile.addLine.parameter.line"></a>
+###### `line`<sup>Required</sup> <a name="line" id="@winglang/wingsdk.fs.TextFile.addLine.parameter.line"></a>
 
 - *Type:* string
 
@@ -2638,21 +2770,21 @@ Append a line to the text file's contents.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
 
 ---
 
-##### ~~`isConstruct`~~ <a name="isConstruct" id="@monadahq/wingsdk.fs.TextFile.isConstruct"></a>
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.fs.TextFile.isConstruct"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { fs } from '@winglang/wingsdk'
 
 fs.TextFile.isConstruct(x: any)
 ```
 
 Checks if `x` is a construct.
 
-###### `x`<sup>Required</sup> <a name="x" id="@monadahq/wingsdk.fs.TextFile.isConstruct.parameter.x"></a>
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.fs.TextFile.isConstruct.parameter.x"></a>
 
 - *Type:* any
 
@@ -2664,12 +2796,12 @@ Any object.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.fs.TextFile.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.fs.TextFile.property.filePath">filePath</a></code> | <code>string</code> | The file's relative path to the output directory. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.fs.TextFile.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.fs.TextFile.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -2681,7 +2813,7 @@ The tree node.
 
 ---
 
-##### `filePath`<sup>Required</sup> <a name="filePath" id="@monadahq/wingsdk.fs.TextFile.property.filePath"></a>
+##### `filePath`<sup>Required</sup> <a name="filePath" id="@winglang/wingsdk.fs.TextFile.property.filePath"></a>
 
 ```typescript
 public readonly filePath: string;
@@ -2696,14 +2828,14 @@ The file's relative path to the output directory.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### AppProps <a name="AppProps" id="@monadahq/wingsdk.sim.AppProps"></a>
+### AppProps <a name="AppProps" id="@winglang/wingsdk.sim.AppProps"></a>
 
 Props for `App`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.sim.AppProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.sim.AppProps.Initializer"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 const appProps: sim.AppProps = { ... }
 ```
@@ -2712,25 +2844,25 @@ const appProps: sim.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.AppProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
-| <code><a href="#@monadahq/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.sim.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@winglang/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
 
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@monadahq/wingsdk.sim.AppProps.property.customFactory"></a>
+##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.sim.AppProps.property.customFactory"></a>
 
 ```typescript
 public readonly customFactory: IPolyconFactory;
 ```
 
-- *Type:* @monadahq/polycons.IPolyconFactory
+- *Type:* @winglang/polycons.IPolyconFactory
 - *Default:* use the default polycon factory included in the Wing SDK
 
 A custom factory to resolve polycons.
 
 ---
 
-##### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.sim.AppProps.property.outdir"></a>
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.sim.AppProps.property.outdir"></a>
 
 ```typescript
 public readonly outdir: string;
@@ -2743,14 +2875,14 @@ Directory where artifacts are synthesized to.
 
 ---
 
-### AppProps <a name="AppProps" id="@monadahq/wingsdk.tfaws.AppProps"></a>
+### AppProps <a name="AppProps" id="@winglang/wingsdk.tfaws.AppProps"></a>
 
 Props for `App`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.tfaws.AppProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.tfaws.AppProps.Initializer"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 const appProps: tfaws.AppProps = { ... }
 ```
@@ -2759,26 +2891,26 @@ const appProps: tfaws.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@monadahq/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
-| <code><a href="#@monadahq/wingsdk.tfaws.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
-| <code><a href="#@monadahq/wingsdk.tfaws.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@monadahq/wingsdk.tfaws.AppProps.property.customFactory"></a>
+##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.tfaws.AppProps.property.customFactory"></a>
 
 ```typescript
 public readonly customFactory: IPolyconFactory;
 ```
 
-- *Type:* @monadahq/polycons.IPolyconFactory
+- *Type:* @winglang/polycons.IPolyconFactory
 - *Default:* use the default polycon factory included in the Wing SDK
 
 A custom factory to resolve polycons.
 
 ---
 
-##### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.tfaws.AppProps.property.outdir"></a>
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.tfaws.AppProps.property.outdir"></a>
 
 ```typescript
 public readonly outdir: string;
@@ -2791,7 +2923,7 @@ Directory where artifacts are synthesized to.
 
 ---
 
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.tfaws.AppProps.property.stateFile"></a>
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.tfaws.AppProps.property.stateFile"></a>
 
 ```typescript
 public readonly stateFile: string;
@@ -2807,14 +2939,46 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
-### BaseResourceSchema <a name="BaseResourceSchema" id="@monadahq/wingsdk.sim.BaseResourceSchema"></a>
+### BaseResourceAttributes <a name="BaseResourceAttributes" id="@winglang/wingsdk.sim.BaseResourceAttributes"></a>
+
+Schema for resource attributes.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.sim.BaseResourceAttributes.Initializer"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+const baseResourceAttributes: sim.BaseResourceAttributes = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceAttributes.property.handle">handle</a></code> | <code>string</code> | The resource's simulator-unique id. |
+
+---
+
+##### `handle`<sup>Required</sup> <a name="handle" id="@winglang/wingsdk.sim.BaseResourceAttributes.property.handle"></a>
+
+```typescript
+public readonly handle: string;
+```
+
+- *Type:* string
+
+The resource's simulator-unique id.
+
+---
+
+### BaseResourceSchema <a name="BaseResourceSchema" id="@winglang/wingsdk.sim.BaseResourceSchema"></a>
 
 Schema for individual resources.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.sim.BaseResourceSchema.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.sim.BaseResourceSchema.Initializer"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 const baseResourceSchema: sim.BaseResourceSchema = { ... }
 ```
@@ -2823,17 +2987,17 @@ const baseResourceSchema: sim.BaseResourceSchema = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.type">type</a></code> | <code>string</code> | The type of the resource. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific attributes that are set after the resource is created. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.callees">callees</a></code> | <code>string[]</code> | IDs of resources that this resource calls, triggers, or captures. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.callers">callers</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or captured by. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.children">children</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.sim.BaseResourceSchema}</code> | The resource's children indexed by their IDs. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.path">path</a></code> | <code>string</code> | The full path of the resource in the construct tree. |
-| <code><a href="#@monadahq/wingsdk.sim.BaseResourceSchema.property.props">props</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific properties needed to create this resource. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.type">type</a></code> | <code>string</code> | The type of the resource. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>@winglang/wingsdk.sim.BaseResourceAttributes</code> | The resource-specific attributes that are set after the resource is created. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.children">children</a></code> | <code>{[ key: string ]: @winglang/wingsdk.sim.BaseResourceSchema}</code> | The resource's children indexed by their IDs. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.inbound">inbound</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or referenced by. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.outbound">outbound</a></code> | <code>string[]</code> | IDs of resources that this resource calls, triggers, or references. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.path">path</a></code> | <code>string</code> | The full path of the resource in the construct tree. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.props">props</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific properties needed to create this resource. |
 
 ---
 
-##### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.type"></a>
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.sim.BaseResourceSchema.property.type"></a>
 
 ```typescript
 public readonly type: string;
@@ -2845,55 +3009,55 @@ The type of the resource.
 
 ---
 
-##### `attrs`<sup>Optional</sup> <a name="attrs" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.attrs"></a>
+##### `attrs`<sup>Optional</sup> <a name="attrs" id="@winglang/wingsdk.sim.BaseResourceSchema.property.attrs"></a>
 
 ```typescript
-public readonly attrs: {[ key: string ]: any};
+public readonly attrs: BaseResourceAttributes;
 ```
 
-- *Type:* {[ key: string ]: any}
+- *Type:* @winglang/wingsdk.sim.BaseResourceAttributes
 
 The resource-specific attributes that are set after the resource is created.
 
 ---
 
-##### `callees`<sup>Optional</sup> <a name="callees" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.callees"></a>
-
-```typescript
-public readonly callees: string[];
-```
-
-- *Type:* string[]
-
-IDs of resources that this resource calls, triggers, or captures.
-
----
-
-##### `callers`<sup>Optional</sup> <a name="callers" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.callers"></a>
-
-```typescript
-public readonly callers: string[];
-```
-
-- *Type:* string[]
-
-IDs of resources that this resource is called, triggered, or captured by.
-
----
-
-##### `children`<sup>Optional</sup> <a name="children" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.children"></a>
+##### `children`<sup>Optional</sup> <a name="children" id="@winglang/wingsdk.sim.BaseResourceSchema.property.children"></a>
 
 ```typescript
 public readonly children: {[ key: string ]: BaseResourceSchema};
 ```
 
-- *Type:* {[ key: string ]: @monadahq/wingsdk.sim.BaseResourceSchema}
+- *Type:* {[ key: string ]: @winglang/wingsdk.sim.BaseResourceSchema}
 
 The resource's children indexed by their IDs.
 
 ---
 
-##### `path`<sup>Optional</sup> <a name="path" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.path"></a>
+##### `inbound`<sup>Optional</sup> <a name="inbound" id="@winglang/wingsdk.sim.BaseResourceSchema.property.inbound"></a>
+
+```typescript
+public readonly inbound: string[];
+```
+
+- *Type:* string[]
+
+IDs of resources that this resource is called, triggered, or referenced by.
+
+---
+
+##### `outbound`<sup>Optional</sup> <a name="outbound" id="@winglang/wingsdk.sim.BaseResourceSchema.property.outbound"></a>
+
+```typescript
+public readonly outbound: string[];
+```
+
+- *Type:* string[]
+
+IDs of resources that this resource calls, triggers, or references.
+
+---
+
+##### `path`<sup>Optional</sup> <a name="path" id="@winglang/wingsdk.sim.BaseResourceSchema.property.path"></a>
 
 ```typescript
 public readonly path: string;
@@ -2905,7 +3069,7 @@ The full path of the resource in the construct tree.
 
 ---
 
-##### `props`<sup>Optional</sup> <a name="props" id="@monadahq/wingsdk.sim.BaseResourceSchema.property.props"></a>
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.sim.BaseResourceSchema.property.props"></a>
 
 ```typescript
 public readonly props: {[ key: string ]: any};
@@ -2917,14 +3081,14 @@ The resource-specific properties needed to create this resource.
 
 ---
 
-### BucketProps <a name="BucketProps" id="@monadahq/wingsdk.cloud.BucketProps"></a>
+### BucketProps <a name="BucketProps" id="@winglang/wingsdk.cloud.BucketProps"></a>
 
 Properties for `Bucket`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.BucketProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.BucketProps.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 const bucketProps: cloud.BucketProps = { ... }
 ```
@@ -2933,11 +3097,11 @@ const bucketProps: cloud.BucketProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketProps.property.public">public</a></code> | <code>boolean</code> | Whether the bucket's objects should be publicly accessible. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketProps.property.public">public</a></code> | <code>boolean</code> | Whether the bucket's objects should be publicly accessible. |
 
 ---
 
-##### `public`<sup>Optional</sup> <a name="public" id="@monadahq/wingsdk.cloud.BucketProps.property.public"></a>
+##### `public`<sup>Optional</sup> <a name="public" id="@winglang/wingsdk.cloud.BucketProps.property.public"></a>
 
 ```typescript
 public readonly public: boolean;
@@ -2950,7 +3114,7 @@ Whether the bucket's objects should be publicly accessible.
 
 ---
 
-### Capture <a name="Capture" id="@monadahq/wingsdk.core.Capture"></a>
+### Capture <a name="Capture" id="@winglang/wingsdk.core.Capture"></a>
 
 Capture information.
 
@@ -2958,10 +3122,10 @@ A capture is a reference from an Inflight to a
 construction-time resource or value. Either the "resource" or "value" field
 will be set, but not both.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.Capture.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.Capture.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 const capture: core.Capture = { ... }
 ```
@@ -2970,13 +3134,13 @@ const capture: core.Capture = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.resource">resource</a></code> | <code>@monadahq/wingsdk.core.ICapturableConstruct</code> | A captured resource. |
-| <code><a href="#@monadahq/wingsdk.core.Capture.property.value">value</a></code> | <code>any</code> | A captured immutable value (like string, number, boolean, a struct, or null). |
+| <code><a href="#@winglang/wingsdk.core.Capture.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
+| <code><a href="#@winglang/wingsdk.core.Capture.property.resource">resource</a></code> | <code>@winglang/wingsdk.core.ICapturableConstruct</code> | A captured resource. |
+| <code><a href="#@winglang/wingsdk.core.Capture.property.value">value</a></code> | <code>any</code> | A captured immutable value (like string, number, boolean, a struct, or null). |
 
 ---
 
-##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.Capture.property.methods"></a>
+##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/wingsdk.core.Capture.property.methods"></a>
 
 ```typescript
 public readonly methods: string[];
@@ -2988,19 +3152,19 @@ Which methods are called on the captured resource.
 
 ---
 
-##### `resource`<sup>Optional</sup> <a name="resource" id="@monadahq/wingsdk.core.Capture.property.resource"></a>
+##### `resource`<sup>Optional</sup> <a name="resource" id="@winglang/wingsdk.core.Capture.property.resource"></a>
 
 ```typescript
 public readonly resource: ICapturableConstruct;
 ```
 
-- *Type:* @monadahq/wingsdk.core.ICapturableConstruct
+- *Type:* @winglang/wingsdk.core.ICapturableConstruct
 
 A captured resource.
 
 ---
 
-##### `value`<sup>Optional</sup> <a name="value" id="@monadahq/wingsdk.core.Capture.property.value"></a>
+##### `value`<sup>Optional</sup> <a name="value" id="@winglang/wingsdk.core.Capture.property.value"></a>
 
 ```typescript
 public readonly value: any;
@@ -3012,14 +3176,14 @@ A captured immutable value (like string, number, boolean, a struct, or null).
 
 ---
 
-### CaptureMetadata <a name="CaptureMetadata" id="@monadahq/wingsdk.core.CaptureMetadata"></a>
+### CaptureMetadata <a name="CaptureMetadata" id="@winglang/wingsdk.core.CaptureMetadata"></a>
 
 Extra metadata associated with a captured resource.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.CaptureMetadata.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.CaptureMetadata.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 const captureMetadata: core.CaptureMetadata = { ... }
 ```
@@ -3028,11 +3192,11 @@ const captureMetadata: core.CaptureMetadata = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
+| <code><a href="#@winglang/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>string[]</code> | Which methods are called on the captured resource. |
 
 ---
 
-##### `methods`<sup>Optional</sup> <a name="methods" id="@monadahq/wingsdk.core.CaptureMetadata.property.methods"></a>
+##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/wingsdk.core.CaptureMetadata.property.methods"></a>
 
 ```typescript
 public readonly methods: string[];
@@ -3044,14 +3208,14 @@ Which methods are called on the captured resource.
 
 ---
 
-### FilesProps <a name="FilesProps" id="@monadahq/wingsdk.core.FilesProps"></a>
+### FilesProps <a name="FilesProps" id="@winglang/wingsdk.core.FilesProps"></a>
 
 Props for `Files`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.FilesProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.FilesProps.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 const filesProps: core.FilesProps = { ... }
 ```
@@ -3060,24 +3224,24 @@ const filesProps: core.FilesProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.FilesProps.property.app">app</a></code> | <code>@monadahq/wingsdk.core.IApp</code> | The app with files to synthesize. |
-| <code><a href="#@monadahq/wingsdk.core.FilesProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+| <code><a href="#@winglang/wingsdk.core.FilesProps.property.app">app</a></code> | <code>@winglang/wingsdk.core.IApp</code> | The app with files to synthesize. |
+| <code><a href="#@winglang/wingsdk.core.FilesProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
-##### `app`<sup>Required</sup> <a name="app" id="@monadahq/wingsdk.core.FilesProps.property.app"></a>
+##### `app`<sup>Required</sup> <a name="app" id="@winglang/wingsdk.core.FilesProps.property.app"></a>
 
 ```typescript
 public readonly app: IApp;
 ```
 
-- *Type:* @monadahq/wingsdk.core.IApp
+- *Type:* @winglang/wingsdk.core.IApp
 
 The app with files to synthesize.
 
 ---
 
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.FilesProps.property.stateFile"></a>
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.FilesProps.property.stateFile"></a>
 
 ```typescript
 public readonly stateFile: string;
@@ -3093,16 +3257,16 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
-### FunctionProps <a name="FunctionProps" id="@monadahq/wingsdk.cloud.FunctionProps"></a>
+### FunctionProps <a name="FunctionProps" id="@winglang/wingsdk.cloud.FunctionProps"></a>
 
 Properties for `Function`.
 
 This is the type users see when constructing a cloud.Function instance.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.FunctionProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.FunctionProps.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 const functionProps: cloud.FunctionProps = { ... }
 ```
@@ -3111,11 +3275,11 @@ const functionProps: cloud.FunctionProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@monadahq/wingsdk.cloud.FunctionProps.property.env"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/wingsdk.cloud.FunctionProps.property.env"></a>
 
 ```typescript
 public readonly env: {[ key: string ]: string};
@@ -3128,14 +3292,14 @@ Environment variables to pass to the function.
 
 ---
 
-### InflightBundleOptions <a name="InflightBundleOptions" id="@monadahq/wingsdk.core.InflightBundleOptions"></a>
+### InflightBundleOptions <a name="InflightBundleOptions" id="@winglang/wingsdk.core.InflightBundleOptions"></a>
 
 Options for `Inflight.bundle`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.InflightBundleOptions.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBundleOptions.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 const inflightBundleOptions: core.InflightBundleOptions = { ... }
 ```
@@ -3144,25 +3308,25 @@ const inflightBundleOptions: core.InflightBundleOptions = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.InflightBundleOptions.property.captureClients">captureClients</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Code}</code> | A map of capture clients that can be bundled with the Inflight's code. |
-| <code><a href="#@monadahq/wingsdk.core.InflightBundleOptions.property.captureScope">captureScope</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given capture scope. |
-| <code><a href="#@monadahq/wingsdk.core.InflightBundleOptions.property.external">external</a></code> | <code>string[]</code> | List of dependencies to exclude from the bundle. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureClients">captureClients</a></code> | <code>{[ key: string ]: @winglang/wingsdk.core.Code}</code> | A map of capture clients that can be bundled with the Inflight's code. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureScope">captureScope</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given capture scope. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.external">external</a></code> | <code>string[]</code> | List of dependencies to exclude from the bundle. |
 
 ---
 
-##### `captureClients`<sup>Required</sup> <a name="captureClients" id="@monadahq/wingsdk.core.InflightBundleOptions.property.captureClients"></a>
+##### `captureClients`<sup>Required</sup> <a name="captureClients" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureClients"></a>
 
 ```typescript
 public readonly captureClients: {[ key: string ]: Code};
 ```
 
-- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Code}
+- *Type:* {[ key: string ]: @winglang/wingsdk.core.Code}
 
 A map of capture clients that can be bundled with the Inflight's code.
 
 ---
 
-##### `captureScope`<sup>Optional</sup> <a name="captureScope" id="@monadahq/wingsdk.core.InflightBundleOptions.property.captureScope"></a>
+##### `captureScope`<sup>Optional</sup> <a name="captureScope" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureScope"></a>
 
 ```typescript
 public readonly captureScope: IConstruct;
@@ -3174,7 +3338,7 @@ Associate the inflight bundle with a given capture scope.
 
 ---
 
-##### `external`<sup>Optional</sup> <a name="external" id="@monadahq/wingsdk.core.InflightBundleOptions.property.external"></a>
+##### `external`<sup>Optional</sup> <a name="external" id="@winglang/wingsdk.core.InflightBundleOptions.property.external"></a>
 
 ```typescript
 public readonly external: string[];
@@ -3186,14 +3350,14 @@ List of dependencies to exclude from the bundle.
 
 ---
 
-### InflightProps <a name="InflightProps" id="@monadahq/wingsdk.core.InflightProps"></a>
+### InflightProps <a name="InflightProps" id="@winglang/wingsdk.core.InflightProps"></a>
 
 Options for `Inflight`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.core.InflightProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightProps.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 const inflightProps: core.InflightProps = { ... }
 ```
@@ -3202,25 +3366,25 @@ const inflightProps: core.InflightProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.InflightProps.property.code">code</a></code> | <code>@monadahq/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
-| <code><a href="#@monadahq/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function to run. |
-| <code><a href="#@monadahq/wingsdk.core.InflightProps.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | Capture information. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>@winglang/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function to run. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.captures">captures</a></code> | <code>{[ key: string ]: @winglang/wingsdk.core.Capture}</code> | Capture information. |
 
 ---
 
-##### `code`<sup>Required</sup> <a name="code" id="@monadahq/wingsdk.core.InflightProps.property.code"></a>
+##### `code`<sup>Required</sup> <a name="code" id="@winglang/wingsdk.core.InflightProps.property.code"></a>
 
 ```typescript
 public readonly code: Code;
 ```
 
-- *Type:* @monadahq/wingsdk.core.Code
+- *Type:* @winglang/wingsdk.core.Code
 
 Reference to code containing the entrypoint function.
 
 ---
 
-##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@monadahq/wingsdk.core.InflightProps.property.entrypoint"></a>
+##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@winglang/wingsdk.core.InflightProps.property.entrypoint"></a>
 
 ```typescript
 public readonly entrypoint: string;
@@ -3239,13 +3403,13 @@ Name of the exported function to run.
 ```
 
 
-##### `captures`<sup>Optional</sup> <a name="captures" id="@monadahq/wingsdk.core.InflightProps.property.captures"></a>
+##### `captures`<sup>Optional</sup> <a name="captures" id="@winglang/wingsdk.core.InflightProps.property.captures"></a>
 
 ```typescript
 public readonly captures: {[ key: string ]: Capture};
 ```
 
-- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
+- *Type:* {[ key: string ]: @winglang/wingsdk.core.Capture}
 - *Default:* No captures
 
 Capture information.
@@ -3257,14 +3421,14 @@ Each key here will be the key for the final value in the map.
 
 ---
 
-### JsonFileProps <a name="JsonFileProps" id="@monadahq/wingsdk.fs.JsonFileProps"></a>
+### JsonFileProps <a name="JsonFileProps" id="@winglang/wingsdk.fs.JsonFileProps"></a>
 
 Props for `JsonFile`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.JsonFileProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.fs.JsonFileProps.Initializer"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { fs } from '@winglang/wingsdk'
 
 const jsonFileProps: fs.JsonFileProps = { ... }
 ```
@@ -3273,11 +3437,11 @@ const jsonFileProps: fs.JsonFileProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.JsonFileProps.property.obj">obj</a></code> | <code>any</code> | The object that will be serialized into the file during synthesis. |
+| <code><a href="#@winglang/wingsdk.fs.JsonFileProps.property.obj">obj</a></code> | <code>any</code> | The object that will be serialized into the file during synthesis. |
 
 ---
 
-##### `obj`<sup>Required</sup> <a name="obj" id="@monadahq/wingsdk.fs.JsonFileProps.property.obj"></a>
+##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/wingsdk.fs.JsonFileProps.property.obj"></a>
 
 ```typescript
 public readonly obj: any;
@@ -3289,14 +3453,14 @@ The object that will be serialized into the file during synthesis.
 
 ---
 
-### LogEvent <a name="LogEvent" id="@monadahq/wingsdk.cloud.LogEvent"></a>
+### LogEvent <a name="LogEvent" id="@winglang/wingsdk.cloud.LogEvent"></a>
 
 Represents a log event.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.LogEvent.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.LogEvent.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 const logEvent: cloud.LogEvent = { ... }
 ```
@@ -3305,12 +3469,12 @@ const logEvent: cloud.LogEvent = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.LogEvent.property.message">message</a></code> | <code>string</code> | The log message. |
-| <code><a href="#@monadahq/wingsdk.cloud.LogEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The log timestamp, in milliseconds since the epoch. |
+| <code><a href="#@winglang/wingsdk.cloud.LogEvent.property.message">message</a></code> | <code>string</code> | The log message. |
+| <code><a href="#@winglang/wingsdk.cloud.LogEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The log timestamp, in milliseconds since the epoch. |
 
 ---
 
-##### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.LogEvent.property.message"></a>
+##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.LogEvent.property.message"></a>
 
 ```typescript
 public readonly message: string;
@@ -3322,7 +3486,7 @@ The log message.
 
 ---
 
-##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@monadahq/wingsdk.cloud.LogEvent.property.timestamp"></a>
+##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/wingsdk.cloud.LogEvent.property.timestamp"></a>
 
 ```typescript
 public readonly timestamp: number;
@@ -3334,14 +3498,14 @@ The log timestamp, in milliseconds since the epoch.
 
 ---
 
-### PolicyStatement <a name="PolicyStatement" id="@monadahq/wingsdk.tfaws.PolicyStatement"></a>
+### PolicyStatement <a name="PolicyStatement" id="@winglang/wingsdk.tfaws.PolicyStatement"></a>
 
 AWS IAM Policy Statement.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.tfaws.PolicyStatement.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.tfaws.PolicyStatement.Initializer"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 const policyStatement: tfaws.PolicyStatement = { ... }
 ```
@@ -3350,13 +3514,13 @@ const policyStatement: tfaws.PolicyStatement = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.action">action</a></code> | <code>string[]</code> | Actions. |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.effect">effect</a></code> | <code>string</code> | Effect ("Allow" or "Deny"). |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolicyStatement.property.resource">resource</a></code> | <code>string \| string[]</code> | Resources. |
+| <code><a href="#@winglang/wingsdk.tfaws.PolicyStatement.property.action">action</a></code> | <code>string[]</code> | Actions. |
+| <code><a href="#@winglang/wingsdk.tfaws.PolicyStatement.property.effect">effect</a></code> | <code>string</code> | Effect ("Allow" or "Deny"). |
+| <code><a href="#@winglang/wingsdk.tfaws.PolicyStatement.property.resource">resource</a></code> | <code>string \| string[]</code> | Resources. |
 
 ---
 
-##### `action`<sup>Optional</sup> <a name="action" id="@monadahq/wingsdk.tfaws.PolicyStatement.property.action"></a>
+##### `action`<sup>Optional</sup> <a name="action" id="@winglang/wingsdk.tfaws.PolicyStatement.property.action"></a>
 
 ```typescript
 public readonly action: string[];
@@ -3368,7 +3532,7 @@ Actions.
 
 ---
 
-##### `effect`<sup>Optional</sup> <a name="effect" id="@monadahq/wingsdk.tfaws.PolicyStatement.property.effect"></a>
+##### `effect`<sup>Optional</sup> <a name="effect" id="@winglang/wingsdk.tfaws.PolicyStatement.property.effect"></a>
 
 ```typescript
 public readonly effect: string;
@@ -3380,7 +3544,7 @@ Effect ("Allow" or "Deny").
 
 ---
 
-##### `resource`<sup>Optional</sup> <a name="resource" id="@monadahq/wingsdk.tfaws.PolicyStatement.property.resource"></a>
+##### `resource`<sup>Optional</sup> <a name="resource" id="@winglang/wingsdk.tfaws.PolicyStatement.property.resource"></a>
 
 ```typescript
 public readonly resource: string | string[];
@@ -3392,14 +3556,14 @@ Resources.
 
 ---
 
-### QueueOnMessageProps <a name="QueueOnMessageProps" id="@monadahq/wingsdk.cloud.QueueOnMessageProps"></a>
+### QueueOnMessageProps <a name="QueueOnMessageProps" id="@winglang/wingsdk.cloud.QueueOnMessageProps"></a>
 
 Options for Queue.onMessage.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.QueueOnMessageProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.QueueOnMessageProps.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 const queueOnMessageProps: cloud.QueueOnMessageProps = { ... }
 ```
@@ -3408,12 +3572,12 @@ const queueOnMessageProps: cloud.QueueOnMessageProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueOnMessageProps.property.batchSize">batchSize</a></code> | <code>number</code> | The maximum number of messages to send to subscribers at once. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>{[ key: string ]: string}</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueOnMessageProps.property.batchSize">batchSize</a></code> | <code>number</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
 
-##### `env`<sup>Optional</sup> <a name="env" id="@monadahq/wingsdk.cloud.QueueOnMessageProps.property.env"></a>
+##### `env`<sup>Optional</sup> <a name="env" id="@winglang/wingsdk.cloud.QueueOnMessageProps.property.env"></a>
 
 ```typescript
 public readonly env: {[ key: string ]: string};
@@ -3426,7 +3590,7 @@ Environment variables to pass to the function.
 
 ---
 
-##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@monadahq/wingsdk.cloud.QueueOnMessageProps.property.batchSize"></a>
+##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/wingsdk.cloud.QueueOnMessageProps.property.batchSize"></a>
 
 ```typescript
 public readonly batchSize: number;
@@ -3439,14 +3603,14 @@ The maximum number of messages to send to subscribers at once.
 
 ---
 
-### QueueProps <a name="QueueProps" id="@monadahq/wingsdk.cloud.QueueProps"></a>
+### QueueProps <a name="QueueProps" id="@winglang/wingsdk.cloud.QueueProps"></a>
 
 Properties for `Queue`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.cloud.QueueProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.QueueProps.Initializer"></a>
 
 ```typescript
-import { cloud } from '@monadahq/wingsdk'
+import { cloud } from '@winglang/wingsdk'
 
 const queueProps: cloud.QueueProps = { ... }
 ```
@@ -3455,12 +3619,12 @@ const queueProps: cloud.QueueProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>string[]</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>@monadahq/wingsdk.core.Duration</code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>string[]</code> | Initialize the queue with a set of messages. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>@winglang/wingsdk.core.Duration</code> | How long a queue's consumers have to process a message. |
 
 ---
 
-##### `initialMessages`<sup>Optional</sup> <a name="initialMessages" id="@monadahq/wingsdk.cloud.QueueProps.property.initialMessages"></a>
+##### `initialMessages`<sup>Optional</sup> <a name="initialMessages" id="@winglang/wingsdk.cloud.QueueProps.property.initialMessages"></a>
 
 ```typescript
 public readonly initialMessages: string[];
@@ -3473,72 +3637,27 @@ Initialize the queue with a set of messages.
 
 ---
 
-##### `timeout`<sup>Optional</sup> <a name="timeout" id="@monadahq/wingsdk.cloud.QueueProps.property.timeout"></a>
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/wingsdk.cloud.QueueProps.property.timeout"></a>
 
 ```typescript
 public readonly timeout: Duration;
 ```
 
-- *Type:* @monadahq/wingsdk.core.Duration
+- *Type:* @winglang/wingsdk.core.Duration
 - *Default:* Duration.fromSeconds(10)
 
 How long a queue's consumers have to process a message.
 
 ---
 
-### SimulatorContext <a name="SimulatorContext" id="@monadahq/wingsdk.testing.SimulatorContext"></a>
-
-Context that is passed to individual resource simulations.
-
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorContext.Initializer"></a>
-
-```typescript
-import { testing } from '@monadahq/wingsdk'
-
-const simulatorContext: testing.SimulatorContext = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorContext.property.resolver">resolver</a></code> | <code>@monadahq/wingsdk.testing.IResourceResolver</code> | A resolver that can be used to look up other resources in the tree. |
-
----
-
-##### `assetsDir`<sup>Required</sup> <a name="assetsDir" id="@monadahq/wingsdk.testing.SimulatorContext.property.assetsDir"></a>
-
-```typescript
-public readonly assetsDir: string;
-```
-
-- *Type:* string
-
-The absolute path to where all assets in `app.wx` are stored.
-
----
-
-##### `resolver`<sup>Required</sup> <a name="resolver" id="@monadahq/wingsdk.testing.SimulatorContext.property.resolver"></a>
-
-```typescript
-public readonly resolver: IResourceResolver;
-```
-
-- *Type:* @monadahq/wingsdk.testing.IResourceResolver
-
-A resolver that can be used to look up other resources in the tree.
-
----
-
-### SimulatorProps <a name="SimulatorProps" id="@monadahq/wingsdk.testing.SimulatorProps"></a>
+### SimulatorProps <a name="SimulatorProps" id="@winglang/wingsdk.testing.SimulatorProps"></a>
 
 Props for `Simulator`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.testing.SimulatorProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.testing.SimulatorProps.Initializer"></a>
 
 ```typescript
-import { testing } from '@monadahq/wingsdk'
+import { testing } from '@winglang/wingsdk'
 
 const simulatorProps: testing.SimulatorProps = { ... }
 ```
@@ -3547,12 +3666,12 @@ const simulatorProps: testing.SimulatorProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
-| <code><a href="#@monadahq/wingsdk.testing.SimulatorProps.property.dispatcher">dispatcher</a></code> | <code>@monadahq/wingsdk.testing.ISimulatorDispatcher</code> | The factory that dispatches to simulation implementations. |
+| <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
+| <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.factory">factory</a></code> | <code>@winglang/wingsdk.testing.ISimulatorFactory</code> | The factory that produces resource simulations. |
 
 ---
 
-##### `simfile`<sup>Required</sup> <a name="simfile" id="@monadahq/wingsdk.testing.SimulatorProps.property.simfile"></a>
+##### `simfile`<sup>Required</sup> <a name="simfile" id="@winglang/wingsdk.testing.SimulatorProps.property.simfile"></a>
 
 ```typescript
 public readonly simfile: string;
@@ -3564,27 +3683,27 @@ Path to a Wing simulator file (.wx).
 
 ---
 
-##### `dispatcher`<sup>Optional</sup> <a name="dispatcher" id="@monadahq/wingsdk.testing.SimulatorProps.property.dispatcher"></a>
+##### `factory`<sup>Optional</sup> <a name="factory" id="@winglang/wingsdk.testing.SimulatorProps.property.factory"></a>
 
 ```typescript
-public readonly dispatcher: ISimulatorDispatcher;
+public readonly factory: ISimulatorFactory;
 ```
 
-- *Type:* @monadahq/wingsdk.testing.ISimulatorDispatcher
-- *Default:* a factory that simulates built-in Wing SDK resources
+- *Type:* @winglang/wingsdk.testing.ISimulatorFactory
+- *Default:* a factory that produces simulations for built-in Wing SDK resources
 
-The factory that dispatches to simulation implementations.
+The factory that produces resource simulations.
 
 ---
 
-### TextFileProps <a name="TextFileProps" id="@monadahq/wingsdk.fs.TextFileProps"></a>
+### TextFileProps <a name="TextFileProps" id="@winglang/wingsdk.fs.TextFileProps"></a>
 
 Props for `TextFile`.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.fs.TextFileProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.fs.TextFileProps.Initializer"></a>
 
 ```typescript
-import { fs } from '@monadahq/wingsdk'
+import { fs } from '@winglang/wingsdk'
 
 const textFileProps: fs.TextFileProps = { ... }
 ```
@@ -3593,11 +3712,11 @@ const textFileProps: fs.TextFileProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.fs.TextFileProps.property.lines">lines</a></code> | <code>string[]</code> | The lines of text that will be serialized into the file during synthesis. |
+| <code><a href="#@winglang/wingsdk.fs.TextFileProps.property.lines">lines</a></code> | <code>string[]</code> | The lines of text that will be serialized into the file during synthesis. |
 
 ---
 
-##### `lines`<sup>Optional</sup> <a name="lines" id="@monadahq/wingsdk.fs.TextFileProps.property.lines"></a>
+##### `lines`<sup>Optional</sup> <a name="lines" id="@winglang/wingsdk.fs.TextFileProps.property.lines"></a>
 
 ```typescript
 public readonly lines: string[];
@@ -3612,14 +3731,14 @@ They will be joined with newline characters.
 
 ---
 
-### WingSimulatorSchema <a name="WingSimulatorSchema" id="@monadahq/wingsdk.sim.WingSimulatorSchema"></a>
+### WingSimulatorSchema <a name="WingSimulatorSchema" id="@winglang/wingsdk.sim.WingSimulatorSchema"></a>
 
 Schema for simulator.json.
 
-#### Initializer <a name="Initializer" id="@monadahq/wingsdk.sim.WingSimulatorSchema.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.sim.WingSimulatorSchema.Initializer"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 const wingSimulatorSchema: sim.WingSimulatorSchema = { ... }
 ```
@@ -3628,24 +3747,24 @@ const wingSimulatorSchema: sim.WingSimulatorSchema = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.WingSimulatorSchema.property.root">root</a></code> | <code>@monadahq/wingsdk.sim.BaseResourceSchema</code> | The resource at the root of the tree. |
-| <code><a href="#@monadahq/wingsdk.sim.WingSimulatorSchema.property.startOrder">startOrder</a></code> | <code>string[]</code> | The order resources in which resources should be initialized based on dependency relationships. |
+| <code><a href="#@winglang/wingsdk.sim.WingSimulatorSchema.property.root">root</a></code> | <code>@winglang/wingsdk.sim.BaseResourceSchema</code> | The resource at the root of the tree. |
+| <code><a href="#@winglang/wingsdk.sim.WingSimulatorSchema.property.startOrder">startOrder</a></code> | <code>string[]</code> | The order resources in which resources should be initialized based on dependency relationships. |
 
 ---
 
-##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.sim.WingSimulatorSchema.property.root"></a>
+##### `root`<sup>Required</sup> <a name="root" id="@winglang/wingsdk.sim.WingSimulatorSchema.property.root"></a>
 
 ```typescript
 public readonly root: BaseResourceSchema;
 ```
 
-- *Type:* @monadahq/wingsdk.sim.BaseResourceSchema
+- *Type:* @winglang/wingsdk.sim.BaseResourceSchema
 
 The resource at the root of the tree.
 
 ---
 
-##### `startOrder`<sup>Required</sup> <a name="startOrder" id="@monadahq/wingsdk.sim.WingSimulatorSchema.property.startOrder"></a>
+##### `startOrder`<sup>Required</sup> <a name="startOrder" id="@winglang/wingsdk.sim.WingSimulatorSchema.property.startOrder"></a>
 
 ```typescript
 public readonly startOrder: string[];
@@ -3659,14 +3778,14 @@ The order resources in which resources should be initialized based on dependency
 
 ## Classes <a name="Classes" id="Classes"></a>
 
-### Code <a name="Code" id="@monadahq/wingsdk.core.Code"></a>
+### Code <a name="Code" id="@winglang/wingsdk.core.Code"></a>
 
 Reference to a piece of code.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Code.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Code.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 new core.Code()
 ```
@@ -3682,14 +3801,14 @@ new core.Code()
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Code.property.hash">hash</a></code> | <code>string</code> | Generate a hash of the code contents. |
-| <code><a href="#@monadahq/wingsdk.core.Code.property.language">language</a></code> | <code>@monadahq/wingsdk.core.Language</code> | The language of the code. |
-| <code><a href="#@monadahq/wingsdk.core.Code.property.path">path</a></code> | <code>string</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
-| <code><a href="#@monadahq/wingsdk.core.Code.property.text">text</a></code> | <code>string</code> | The code contents. |
+| <code><a href="#@winglang/wingsdk.core.Code.property.hash">hash</a></code> | <code>string</code> | Generate a hash of the code contents. |
+| <code><a href="#@winglang/wingsdk.core.Code.property.language">language</a></code> | <code>@winglang/wingsdk.core.Language</code> | The language of the code. |
+| <code><a href="#@winglang/wingsdk.core.Code.property.path">path</a></code> | <code>string</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
+| <code><a href="#@winglang/wingsdk.core.Code.property.text">text</a></code> | <code>string</code> | The code contents. |
 
 ---
 
-##### `hash`<sup>Required</sup> <a name="hash" id="@monadahq/wingsdk.core.Code.property.hash"></a>
+##### `hash`<sup>Required</sup> <a name="hash" id="@winglang/wingsdk.core.Code.property.hash"></a>
 
 ```typescript
 public readonly hash: string;
@@ -3701,19 +3820,19 @@ Generate a hash of the code contents.
 
 ---
 
-##### `language`<sup>Required</sup> <a name="language" id="@monadahq/wingsdk.core.Code.property.language"></a>
+##### `language`<sup>Required</sup> <a name="language" id="@winglang/wingsdk.core.Code.property.language"></a>
 
 ```typescript
 public readonly language: Language;
 ```
 
-- *Type:* @monadahq/wingsdk.core.Language
+- *Type:* @winglang/wingsdk.core.Language
 
 The language of the code.
 
 ---
 
-##### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.core.Code.property.path"></a>
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.core.Code.property.path"></a>
 
 ```typescript
 public readonly path: string;
@@ -3725,7 +3844,7 @@ A path to the code in the user's file system that can be referenced for bundling
 
 ---
 
-##### `text`<sup>Required</sup> <a name="text" id="@monadahq/wingsdk.core.Code.property.text"></a>
+##### `text`<sup>Required</sup> <a name="text" id="@winglang/wingsdk.core.Code.property.text"></a>
 
 ```typescript
 public readonly text: string;
@@ -3738,7 +3857,7 @@ The code contents.
 ---
 
 
-### DependencyGraph <a name="DependencyGraph" id="@monadahq/wingsdk.core.DependencyGraph"></a>
+### DependencyGraph <a name="DependencyGraph" id="@winglang/wingsdk.core.DependencyGraph"></a>
 
 Represents the dependency graph for a given Node.
 
@@ -3751,21 +3870,21 @@ childless children of the root node of the graph.
 The graph does not include cross-scope dependencies. That is, if a child on the current scope depends on a node
 from a different scope, that relationship is not represented in this graph.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.DependencyGraph.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.DependencyGraph.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 new core.DependencyGraph(node: Node)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.DependencyGraph.Initializer.parameter.node">node</a></code> | <code>constructs.Node</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.core.DependencyGraph.Initializer.parameter.node">node</a></code> | <code>constructs.Node</code> | *No description.* |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.DependencyGraph.Initializer.parameter.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.core.DependencyGraph.Initializer.parameter.node"></a>
 
 - *Type:* constructs.Node
 
@@ -3775,11 +3894,11 @@ new core.DependencyGraph(node: Node)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.DependencyGraph.topology">topology</a></code> | Returns a topologically sorted array of the constructs in the sub-graph. |
+| <code><a href="#@winglang/wingsdk.core.DependencyGraph.topology">topology</a></code> | Returns a topologically sorted array of the constructs in the sub-graph. |
 
 ---
 
-##### `topology` <a name="topology" id="@monadahq/wingsdk.core.DependencyGraph.topology"></a>
+##### `topology` <a name="topology" id="@winglang/wingsdk.core.DependencyGraph.topology"></a>
 
 ```typescript
 public topology(): IConstruct[]
@@ -3792,17 +3911,17 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.DependencyGraph.property.root">root</a></code> | <code>@monadahq/wingsdk.core.DependencyVertex</code> | Returns the root of the graph. |
+| <code><a href="#@winglang/wingsdk.core.DependencyGraph.property.root">root</a></code> | <code>@winglang/wingsdk.core.DependencyVertex</code> | Returns the root of the graph. |
 
 ---
 
-##### `root`<sup>Required</sup> <a name="root" id="@monadahq/wingsdk.core.DependencyGraph.property.root"></a>
+##### `root`<sup>Required</sup> <a name="root" id="@winglang/wingsdk.core.DependencyGraph.property.root"></a>
 
 ```typescript
 public readonly root: DependencyVertex;
 ```
 
-- *Type:* @monadahq/wingsdk.core.DependencyVertex
+- *Type:* @winglang/wingsdk.core.DependencyVertex
 
 Returns the root of the graph.
 
@@ -3812,27 +3931,27 @@ that binds all the connected spaces of the graph.
 ---
 
 
-### DependencyVertex <a name="DependencyVertex" id="@monadahq/wingsdk.core.DependencyVertex"></a>
+### DependencyVertex <a name="DependencyVertex" id="@winglang/wingsdk.core.DependencyVertex"></a>
 
 Represents a vertex in the graph.
 
 The value of each vertex is an `IConstruct` that is accessible via the `.value` getter.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.DependencyVertex.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.DependencyVertex.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 new core.DependencyVertex(value?: IConstruct)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.Initializer.parameter.value">value</a></code> | <code>constructs.IConstruct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.Initializer.parameter.value">value</a></code> | <code>constructs.IConstruct</code> | *No description.* |
 
 ---
 
-##### `value`<sup>Optional</sup> <a name="value" id="@monadahq/wingsdk.core.DependencyVertex.Initializer.parameter.value"></a>
+##### `value`<sup>Optional</sup> <a name="value" id="@winglang/wingsdk.core.DependencyVertex.Initializer.parameter.value"></a>
 
 - *Type:* constructs.IConstruct
 
@@ -3842,12 +3961,12 @@ new core.DependencyVertex(value?: IConstruct)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.addChild">addChild</a></code> | Adds a vertex as a dependency of the current node. |
-| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.topology">topology</a></code> | Returns a topologically sorted array of the constructs in the sub-graph. |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.addChild">addChild</a></code> | Adds a vertex as a dependency of the current node. |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.topology">topology</a></code> | Returns a topologically sorted array of the constructs in the sub-graph. |
 
 ---
 
-##### `addChild` <a name="addChild" id="@monadahq/wingsdk.core.DependencyVertex.addChild"></a>
+##### `addChild` <a name="addChild" id="@winglang/wingsdk.core.DependencyVertex.addChild"></a>
 
 ```typescript
 public addChild(dep: DependencyVertex): void
@@ -3859,15 +3978,15 @@ Also updates the parents of `dep`, so that it contains this node as a parent.
 
 This operation will fail in case it creates a cycle in the graph.
 
-###### `dep`<sup>Required</sup> <a name="dep" id="@monadahq/wingsdk.core.DependencyVertex.addChild.parameter.dep"></a>
+###### `dep`<sup>Required</sup> <a name="dep" id="@winglang/wingsdk.core.DependencyVertex.addChild.parameter.dep"></a>
 
-- *Type:* @monadahq/wingsdk.core.DependencyVertex
+- *Type:* @winglang/wingsdk.core.DependencyVertex
 
 The dependency.
 
 ---
 
-##### `topology` <a name="topology" id="@monadahq/wingsdk.core.DependencyVertex.topology"></a>
+##### `topology` <a name="topology" id="@winglang/wingsdk.core.DependencyVertex.topology"></a>
 
 ```typescript
 public topology(): IConstruct[]
@@ -3880,37 +3999,37 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.property.inbound">inbound</a></code> | <code>@monadahq/wingsdk.core.DependencyVertex[]</code> | Returns the parents of the vertex (i.e dependants). |
-| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>@monadahq/wingsdk.core.DependencyVertex[]</code> | Returns the children of the vertex (i.e dependencies). |
-| <code><a href="#@monadahq/wingsdk.core.DependencyVertex.property.value">value</a></code> | <code>constructs.IConstruct</code> | Returns the IConstruct this graph vertex represents. |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.inbound">inbound</a></code> | <code>@winglang/wingsdk.core.DependencyVertex[]</code> | Returns the parents of the vertex (i.e dependants). |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>@winglang/wingsdk.core.DependencyVertex[]</code> | Returns the children of the vertex (i.e dependencies). |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.value">value</a></code> | <code>constructs.IConstruct</code> | Returns the IConstruct this graph vertex represents. |
 
 ---
 
-##### `inbound`<sup>Required</sup> <a name="inbound" id="@monadahq/wingsdk.core.DependencyVertex.property.inbound"></a>
+##### `inbound`<sup>Required</sup> <a name="inbound" id="@winglang/wingsdk.core.DependencyVertex.property.inbound"></a>
 
 ```typescript
 public readonly inbound: DependencyVertex[];
 ```
 
-- *Type:* @monadahq/wingsdk.core.DependencyVertex[]
+- *Type:* @winglang/wingsdk.core.DependencyVertex[]
 
 Returns the parents of the vertex (i.e dependants).
 
 ---
 
-##### `outbound`<sup>Required</sup> <a name="outbound" id="@monadahq/wingsdk.core.DependencyVertex.property.outbound"></a>
+##### `outbound`<sup>Required</sup> <a name="outbound" id="@winglang/wingsdk.core.DependencyVertex.property.outbound"></a>
 
 ```typescript
 public readonly outbound: DependencyVertex[];
 ```
 
-- *Type:* @monadahq/wingsdk.core.DependencyVertex[]
+- *Type:* @winglang/wingsdk.core.DependencyVertex[]
 
 Returns the children of the vertex (i.e dependencies).
 
 ---
 
-##### `value`<sup>Optional</sup> <a name="value" id="@monadahq/wingsdk.core.DependencyVertex.property.value"></a>
+##### `value`<sup>Optional</sup> <a name="value" id="@winglang/wingsdk.core.DependencyVertex.property.value"></a>
 
 ```typescript
 public readonly value: IConstruct;
@@ -3925,7 +4044,7 @@ Returns the IConstruct this graph vertex represents.
 ---
 
 
-### Duration <a name="Duration" id="@monadahq/wingsdk.core.Duration"></a>
+### Duration <a name="Duration" id="@winglang/wingsdk.core.Duration"></a>
 
 Represents a length of time.
 
@@ -3934,23 +4053,23 @@ Represents a length of time.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
-| <code><a href="#@monadahq/wingsdk.core.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
-| <code><a href="#@monadahq/wingsdk.core.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
+| <code><a href="#@winglang/wingsdk.core.Duration.fromHours">fromHours</a></code> | Create a Duration representing an amount of hours. |
+| <code><a href="#@winglang/wingsdk.core.Duration.fromMinutes">fromMinutes</a></code> | Create a Duration representing an amount of minutes. |
+| <code><a href="#@winglang/wingsdk.core.Duration.fromSeconds">fromSeconds</a></code> | Create a Duration representing an amount of seconds. |
 
 ---
 
-##### `fromHours` <a name="fromHours" id="@monadahq/wingsdk.core.Duration.fromHours"></a>
+##### `fromHours` <a name="fromHours" id="@winglang/wingsdk.core.Duration.fromHours"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 core.Duration.fromHours(amount: number)
 ```
 
 Create a Duration representing an amount of hours.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromHours.parameter.amount"></a>
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromHours.parameter.amount"></a>
 
 - *Type:* number
 
@@ -3958,17 +4077,17 @@ the amount of Hours the `Duration` will represent.
 
 ---
 
-##### `fromMinutes` <a name="fromMinutes" id="@monadahq/wingsdk.core.Duration.fromMinutes"></a>
+##### `fromMinutes` <a name="fromMinutes" id="@winglang/wingsdk.core.Duration.fromMinutes"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 core.Duration.fromMinutes(amount: number)
 ```
 
 Create a Duration representing an amount of minutes.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromMinutes.parameter.amount"></a>
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromMinutes.parameter.amount"></a>
 
 - *Type:* number
 
@@ -3976,17 +4095,17 @@ the amount of Minutes the `Duration` will represent.
 
 ---
 
-##### `fromSeconds` <a name="fromSeconds" id="@monadahq/wingsdk.core.Duration.fromSeconds"></a>
+##### `fromSeconds` <a name="fromSeconds" id="@winglang/wingsdk.core.Duration.fromSeconds"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 core.Duration.fromSeconds(amount: number)
 ```
 
 Create a Duration representing an amount of seconds.
 
-###### `amount`<sup>Required</sup> <a name="amount" id="@monadahq/wingsdk.core.Duration.fromSeconds.parameter.amount"></a>
+###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromSeconds.parameter.amount"></a>
 
 - *Type:* number
 
@@ -3998,13 +4117,13 @@ the amount of Seconds the `Duration` will represent.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Duration.property.hours">hours</a></code> | <code>number</code> | Return the total number of hours in this Duration. |
-| <code><a href="#@monadahq/wingsdk.core.Duration.property.minutes">minutes</a></code> | <code>number</code> | Return the total number of minutes in this Duration. |
-| <code><a href="#@monadahq/wingsdk.core.Duration.property.seconds">seconds</a></code> | <code>number</code> | Return the total number of seconds in this Duration. |
+| <code><a href="#@winglang/wingsdk.core.Duration.property.hours">hours</a></code> | <code>number</code> | Return the total number of hours in this Duration. |
+| <code><a href="#@winglang/wingsdk.core.Duration.property.minutes">minutes</a></code> | <code>number</code> | Return the total number of minutes in this Duration. |
+| <code><a href="#@winglang/wingsdk.core.Duration.property.seconds">seconds</a></code> | <code>number</code> | Return the total number of seconds in this Duration. |
 
 ---
 
-##### `hours`<sup>Required</sup> <a name="hours" id="@monadahq/wingsdk.core.Duration.property.hours"></a>
+##### `hours`<sup>Required</sup> <a name="hours" id="@winglang/wingsdk.core.Duration.property.hours"></a>
 
 ```typescript
 public readonly hours: number;
@@ -4016,7 +4135,7 @@ Return the total number of hours in this Duration.
 
 ---
 
-##### `minutes`<sup>Required</sup> <a name="minutes" id="@monadahq/wingsdk.core.Duration.property.minutes"></a>
+##### `minutes`<sup>Required</sup> <a name="minutes" id="@winglang/wingsdk.core.Duration.property.minutes"></a>
 
 ```typescript
 public readonly minutes: number;
@@ -4028,7 +4147,7 @@ Return the total number of minutes in this Duration.
 
 ---
 
-##### `seconds`<sup>Required</sup> <a name="seconds" id="@monadahq/wingsdk.core.Duration.property.seconds"></a>
+##### `seconds`<sup>Required</sup> <a name="seconds" id="@winglang/wingsdk.core.Duration.property.seconds"></a>
 
 ```typescript
 public readonly seconds: number;
@@ -4041,27 +4160,27 @@ Return the total number of seconds in this Duration.
 ---
 
 
-### Files <a name="Files" id="@monadahq/wingsdk.core.Files"></a>
+### Files <a name="Files" id="@winglang/wingsdk.core.Files"></a>
 
 Handles the synthesis of files.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Files.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Files.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 new core.Files(props: FilesProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Files.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.FilesProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.core.Files.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.FilesProps</code> | *No description.* |
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.Files.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.core.Files.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.core.FilesProps
+- *Type:* @winglang/wingsdk.core.FilesProps
 
 ---
 
@@ -4069,11 +4188,11 @@ new core.Files(props: FilesProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Files.synth">synth</a></code> | Synthesize the app into the output directory. |
+| <code><a href="#@winglang/wingsdk.core.Files.synth">synth</a></code> | Synthesize the app into the output directory. |
 
 ---
 
-##### `synth` <a name="synth" id="@monadahq/wingsdk.core.Files.synth"></a>
+##### `synth` <a name="synth" id="@winglang/wingsdk.core.Files.synth"></a>
 
 ```typescript
 public synth(outdir?: string): void
@@ -4084,7 +4203,7 @@ Synthesize the app into the output directory.
 The artifact produced
 depends on what synthesizer was used.
 
-###### `outdir`<sup>Optional</sup> <a name="outdir" id="@monadahq/wingsdk.core.Files.synth.parameter.outdir"></a>
+###### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.core.Files.synth.parameter.outdir"></a>
 
 - *Type:* string
 
@@ -4097,11 +4216,11 @@ The output directory, if not specified, the app's outdir will be used.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Files.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+| <code><a href="#@winglang/wingsdk.core.Files.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@monadahq/wingsdk.core.Files.property.stateFile"></a>
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.Files.property.stateFile"></a>
 
 ```typescript
 public readonly stateFile: string;
@@ -4114,27 +4233,27 @@ The path to a state file which will track all synthesized files.
 ---
 
 
-### Inflight <a name="Inflight" id="@monadahq/wingsdk.core.Inflight"></a>
+### Inflight <a name="Inflight" id="@winglang/wingsdk.core.Inflight"></a>
 
 Represents a unit of application code that can be executed by a cloud resource.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Inflight.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Inflight.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 new core.Inflight(props: InflightProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Inflight.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.core.InflightProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.core.Inflight.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.InflightProps</code> | *No description.* |
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.core.Inflight.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.core.Inflight.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.core.InflightProps
+- *Type:* @winglang/wingsdk.core.InflightProps
 
 ---
 
@@ -4142,12 +4261,12 @@ new core.Inflight(props: InflightProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Inflight.bundle">bundle</a></code> | Bundle this inflight process so that it can be used in the given capture scope. |
-| <code><a href="#@monadahq/wingsdk.core.Inflight.makeClients">makeClients</a></code> | Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.bundle">bundle</a></code> | Bundle this inflight process so that it can be used in the given capture scope. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.makeClients">makeClients</a></code> | Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime. |
 
 ---
 
-##### `bundle` <a name="bundle" id="@monadahq/wingsdk.core.Inflight.bundle"></a>
+##### `bundle` <a name="bundle" id="@winglang/wingsdk.core.Inflight.bundle"></a>
 
 ```typescript
 public bundle(options: InflightBundleOptions): Code
@@ -4169,13 +4288,13 @@ High level implementation:
 3. Use esbuild to bundle all dependencies, outputting the result to
     path/to/foo.js.bundle/index.js.
 
-###### `options`<sup>Required</sup> <a name="options" id="@monadahq/wingsdk.core.Inflight.bundle.parameter.options"></a>
+###### `options`<sup>Required</sup> <a name="options" id="@winglang/wingsdk.core.Inflight.bundle.parameter.options"></a>
 
-- *Type:* @monadahq/wingsdk.core.InflightBundleOptions
+- *Type:* @winglang/wingsdk.core.InflightBundleOptions
 
 ---
 
-##### `makeClients` <a name="makeClients" id="@monadahq/wingsdk.core.Inflight.makeClients"></a>
+##### `makeClients` <a name="makeClients" id="@winglang/wingsdk.core.Inflight.makeClients"></a>
 
 ```typescript
 public makeClients(captureScope: IConstruct): {[ key: string ]: Code}
@@ -4183,7 +4302,7 @@ public makeClients(captureScope: IConstruct): {[ key: string ]: Code}
 
 Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime.
 
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.core.Inflight.makeClients.parameter.captureScope"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@winglang/wingsdk.core.Inflight.makeClients.parameter.captureScope"></a>
 
 - *Type:* constructs.IConstruct
 
@@ -4194,19 +4313,19 @@ Resolve this inflight's captured objects into a map of clients that be safely re
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Inflight.property.captures">captures</a></code> | <code>{[ key: string ]: @monadahq/wingsdk.core.Capture}</code> | Capture information. |
-| <code><a href="#@monadahq/wingsdk.core.Inflight.property.code">code</a></code> | <code>@monadahq/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
-| <code><a href="#@monadahq/wingsdk.core.Inflight.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function which will be run. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.property.captures">captures</a></code> | <code>{[ key: string ]: @winglang/wingsdk.core.Capture}</code> | Capture information. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.property.code">code</a></code> | <code>@winglang/wingsdk.core.Code</code> | Reference to code containing the entrypoint function. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.property.entrypoint">entrypoint</a></code> | <code>string</code> | Name of the exported function which will be run. |
 
 ---
 
-##### `captures`<sup>Required</sup> <a name="captures" id="@monadahq/wingsdk.core.Inflight.property.captures"></a>
+##### `captures`<sup>Required</sup> <a name="captures" id="@winglang/wingsdk.core.Inflight.property.captures"></a>
 
 ```typescript
 public readonly captures: {[ key: string ]: Capture};
 ```
 
-- *Type:* {[ key: string ]: @monadahq/wingsdk.core.Capture}
+- *Type:* {[ key: string ]: @winglang/wingsdk.core.Capture}
 
 Capture information.
 
@@ -4217,19 +4336,19 @@ Each key here will be the key for the final value in the map.
 
 ---
 
-##### `code`<sup>Required</sup> <a name="code" id="@monadahq/wingsdk.core.Inflight.property.code"></a>
+##### `code`<sup>Required</sup> <a name="code" id="@winglang/wingsdk.core.Inflight.property.code"></a>
 
 ```typescript
 public readonly code: Code;
 ```
 
-- *Type:* @monadahq/wingsdk.core.Code
+- *Type:* @winglang/wingsdk.core.Code
 
 Reference to code containing the entrypoint function.
 
 ---
 
-##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@monadahq/wingsdk.core.Inflight.property.entrypoint"></a>
+##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@winglang/wingsdk.core.Inflight.property.entrypoint"></a>
 
 ```typescript
 public readonly entrypoint: string;
@@ -4242,7 +4361,7 @@ Name of the exported function which will be run.
 ---
 
 
-### InflightClient <a name="InflightClient" id="@monadahq/wingsdk.core.InflightClient"></a>
+### InflightClient <a name="InflightClient" id="@winglang/wingsdk.core.InflightClient"></a>
 
 Utility class with functions about inflight clients.
 
@@ -4251,33 +4370,33 @@ Utility class with functions about inflight clients.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.InflightClient.for">for</a></code> | Creates a `Code` instance with code for creating an inflight client. |
+| <code><a href="#@winglang/wingsdk.core.InflightClient.for">for</a></code> | Creates a `Code` instance with code for creating an inflight client. |
 
 ---
 
-##### `for` <a name="for" id="@monadahq/wingsdk.core.InflightClient.for"></a>
+##### `for` <a name="for" id="@winglang/wingsdk.core.InflightClient.for"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 core.InflightClient.for(filename: string, clientClass: string, args: string[])
 ```
 
 Creates a `Code` instance with code for creating an inflight client.
 
-###### `filename`<sup>Required</sup> <a name="filename" id="@monadahq/wingsdk.core.InflightClient.for.parameter.filename"></a>
+###### `filename`<sup>Required</sup> <a name="filename" id="@winglang/wingsdk.core.InflightClient.for.parameter.filename"></a>
 
 - *Type:* string
 
 ---
 
-###### `clientClass`<sup>Required</sup> <a name="clientClass" id="@monadahq/wingsdk.core.InflightClient.for.parameter.clientClass"></a>
+###### `clientClass`<sup>Required</sup> <a name="clientClass" id="@winglang/wingsdk.core.InflightClient.for.parameter.clientClass"></a>
 
 - *Type:* string
 
 ---
 
-###### `args`<sup>Required</sup> <a name="args" id="@monadahq/wingsdk.core.InflightClient.for.parameter.args"></a>
+###### `args`<sup>Required</sup> <a name="args" id="@winglang/wingsdk.core.InflightClient.for.parameter.args"></a>
 
 - *Type:* string[]
 
@@ -4285,7 +4404,7 @@ Creates a `Code` instance with code for creating an inflight client.
 
 
 
-### NodeJsCode <a name="NodeJsCode" id="@monadahq/wingsdk.core.NodeJsCode"></a>
+### NodeJsCode <a name="NodeJsCode" id="@winglang/wingsdk.core.NodeJsCode"></a>
 
 Reference to a piece of Node.js code.
 
@@ -4294,38 +4413,38 @@ Reference to a piece of Node.js code.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.fromFile">fromFile</a></code> | Reference code from a file path. |
-| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.fromInline">fromInline</a></code> | Reference code directly from a string. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.fromFile">fromFile</a></code> | Reference code from a file path. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.fromInline">fromInline</a></code> | Reference code directly from a string. |
 
 ---
 
-##### `fromFile` <a name="fromFile" id="@monadahq/wingsdk.core.NodeJsCode.fromFile"></a>
+##### `fromFile` <a name="fromFile" id="@winglang/wingsdk.core.NodeJsCode.fromFile"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 core.NodeJsCode.fromFile(path: string)
 ```
 
 Reference code from a file path.
 
-###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.core.NodeJsCode.fromFile.parameter.path"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.core.NodeJsCode.fromFile.parameter.path"></a>
 
 - *Type:* string
 
 ---
 
-##### `fromInline` <a name="fromInline" id="@monadahq/wingsdk.core.NodeJsCode.fromInline"></a>
+##### `fromInline` <a name="fromInline" id="@winglang/wingsdk.core.NodeJsCode.fromInline"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 core.NodeJsCode.fromInline(text: string)
 ```
 
 Reference code directly from a string.
 
-###### `text`<sup>Required</sup> <a name="text" id="@monadahq/wingsdk.core.NodeJsCode.fromInline.parameter.text"></a>
+###### `text`<sup>Required</sup> <a name="text" id="@winglang/wingsdk.core.NodeJsCode.fromInline.parameter.text"></a>
 
 - *Type:* string
 
@@ -4335,14 +4454,14 @@ Reference code directly from a string.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>string</code> | Generate a hash of the code contents. |
-| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>@monadahq/wingsdk.core.Language</code> | The language of the code. |
-| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>string</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
-| <code><a href="#@monadahq/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>string</code> | The code contents. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>string</code> | Generate a hash of the code contents. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>@winglang/wingsdk.core.Language</code> | The language of the code. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>string</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>string</code> | The code contents. |
 
 ---
 
-##### `hash`<sup>Required</sup> <a name="hash" id="@monadahq/wingsdk.core.NodeJsCode.property.hash"></a>
+##### `hash`<sup>Required</sup> <a name="hash" id="@winglang/wingsdk.core.NodeJsCode.property.hash"></a>
 
 ```typescript
 public readonly hash: string;
@@ -4354,19 +4473,19 @@ Generate a hash of the code contents.
 
 ---
 
-##### `language`<sup>Required</sup> <a name="language" id="@monadahq/wingsdk.core.NodeJsCode.property.language"></a>
+##### `language`<sup>Required</sup> <a name="language" id="@winglang/wingsdk.core.NodeJsCode.property.language"></a>
 
 ```typescript
 public readonly language: Language;
 ```
 
-- *Type:* @monadahq/wingsdk.core.Language
+- *Type:* @winglang/wingsdk.core.Language
 
 The language of the code.
 
 ---
 
-##### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.core.NodeJsCode.property.path"></a>
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.core.NodeJsCode.property.path"></a>
 
 ```typescript
 public readonly path: string;
@@ -4378,7 +4497,7 @@ A path to the code in the user's file system that can be referenced for bundling
 
 ---
 
-##### `text`<sup>Required</sup> <a name="text" id="@monadahq/wingsdk.core.NodeJsCode.property.text"></a>
+##### `text`<sup>Required</sup> <a name="text" id="@winglang/wingsdk.core.NodeJsCode.property.text"></a>
 
 ```typescript
 public readonly text: string;
@@ -4391,16 +4510,16 @@ The code contents.
 ---
 
 
-### PolyconFactory <a name="PolyconFactory" id="@monadahq/wingsdk.sim.PolyconFactory"></a>
+### PolyconFactory <a name="PolyconFactory" id="@winglang/wingsdk.sim.PolyconFactory"></a>
 
-- *Implements:* @monadahq/polycons.IPolyconFactory
+- *Implements:* @winglang/polycons.IPolyconFactory
 
 Polycon factory which resolves `cloud` resources into simulated resources.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.sim.PolyconFactory.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.PolyconFactory.Initializer"></a>
 
 ```typescript
-import { sim } from '@monadahq/wingsdk'
+import { sim } from '@winglang/wingsdk'
 
 new sim.PolyconFactory()
 ```
@@ -4414,11 +4533,11 @@ new sim.PolyconFactory()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.PolyconFactory.resolve">resolve</a></code> | Resolve the parameters needed for creating a specific polycon into a concrete construct. |
+| <code><a href="#@winglang/wingsdk.sim.PolyconFactory.resolve">resolve</a></code> | Resolve the parameters needed for creating a specific polycon into a concrete construct. |
 
 ---
 
-##### `resolve` <a name="resolve" id="@monadahq/wingsdk.sim.PolyconFactory.resolve"></a>
+##### `resolve` <a name="resolve" id="@winglang/wingsdk.sim.PolyconFactory.resolve"></a>
 
 ```typescript
 public resolve(polyconId: string, scope: IConstruct, id: string, args: any): IConstruct
@@ -4426,25 +4545,25 @@ public resolve(polyconId: string, scope: IConstruct, id: string, args: any): ICo
 
 Resolve the parameters needed for creating a specific polycon into a concrete construct.
 
-###### `polyconId`<sup>Required</sup> <a name="polyconId" id="@monadahq/wingsdk.sim.PolyconFactory.resolve.parameter.polyconId"></a>
+###### `polyconId`<sup>Required</sup> <a name="polyconId" id="@winglang/wingsdk.sim.PolyconFactory.resolve.parameter.polyconId"></a>
 
 - *Type:* string
 
 ---
 
-###### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.sim.PolyconFactory.resolve.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.sim.PolyconFactory.resolve.parameter.scope"></a>
 
 - *Type:* constructs.IConstruct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.sim.PolyconFactory.resolve.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.PolyconFactory.resolve.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `args`<sup>Required</sup> <a name="args" id="@monadahq/wingsdk.sim.PolyconFactory.resolve.parameter.args"></a>
+###### `args`<sup>Required</sup> <a name="args" id="@winglang/wingsdk.sim.PolyconFactory.resolve.parameter.args"></a>
 
 - *Type:* any
 
@@ -4453,16 +4572,16 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 
 
-### PolyconFactory <a name="PolyconFactory" id="@monadahq/wingsdk.tfaws.PolyconFactory"></a>
+### PolyconFactory <a name="PolyconFactory" id="@winglang/wingsdk.tfaws.PolyconFactory"></a>
 
-- *Implements:* @monadahq/polycons.IPolyconFactory
+- *Implements:* @winglang/polycons.IPolyconFactory
 
 Polycon factory which resolves `cloud` resources into AWS resources.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.tfaws.PolyconFactory.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.PolyconFactory.Initializer"></a>
 
 ```typescript
-import { tfaws } from '@monadahq/wingsdk'
+import { tfaws } from '@winglang/wingsdk'
 
 new tfaws.PolyconFactory()
 ```
@@ -4476,11 +4595,11 @@ new tfaws.PolyconFactory()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.tfaws.PolyconFactory.resolve">resolve</a></code> | Resolve the parameters needed for creating a specific polycon into a concrete construct. |
+| <code><a href="#@winglang/wingsdk.tfaws.PolyconFactory.resolve">resolve</a></code> | Resolve the parameters needed for creating a specific polycon into a concrete construct. |
 
 ---
 
-##### `resolve` <a name="resolve" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve"></a>
+##### `resolve` <a name="resolve" id="@winglang/wingsdk.tfaws.PolyconFactory.resolve"></a>
 
 ```typescript
 public resolve(type: string, scope: IConstruct, id: string, args: any): IConstruct
@@ -4488,25 +4607,25 @@ public resolve(type: string, scope: IConstruct, id: string, args: any): IConstru
 
 Resolve the parameters needed for creating a specific polycon into a concrete construct.
 
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.type"></a>
+###### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.tfaws.PolyconFactory.resolve.parameter.type"></a>
 
 - *Type:* string
 
 ---
 
-###### `scope`<sup>Required</sup> <a name="scope" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.scope"></a>
+###### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.tfaws.PolyconFactory.resolve.parameter.scope"></a>
 
 - *Type:* constructs.IConstruct
 
 ---
 
-###### `id`<sup>Required</sup> <a name="id" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.id"></a>
+###### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.tfaws.PolyconFactory.resolve.parameter.id"></a>
 
 - *Type:* string
 
 ---
 
-###### `args`<sup>Required</sup> <a name="args" id="@monadahq/wingsdk.tfaws.PolyconFactory.resolve.parameter.args"></a>
+###### `args`<sup>Required</sup> <a name="args" id="@winglang/wingsdk.tfaws.PolyconFactory.resolve.parameter.args"></a>
 
 - *Type:* any
 
@@ -4515,27 +4634,27 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 
 
-### Simulator <a name="Simulator" id="@monadahq/wingsdk.testing.Simulator"></a>
+### Simulator <a name="Simulator" id="@winglang/wingsdk.testing.Simulator"></a>
 
 A simulator that can be used to test your application locally.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.testing.Simulator.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.testing.Simulator.Initializer"></a>
 
 ```typescript
-import { testing } from '@monadahq/wingsdk'
+import { testing } from '@winglang/wingsdk'
 
 new testing.Simulator(props: SimulatorProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.Initializer.parameter.props">props</a></code> | <code>@monadahq/wingsdk.testing.SimulatorProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.testing.SimulatorProps</code> | *No description.* |
 
 ---
 
-##### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.Simulator.Initializer.parameter.props"></a>
+##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.testing.Simulator.Initializer.parameter.props"></a>
 
-- *Type:* @monadahq/wingsdk.testing.SimulatorProps
+- *Type:* @winglang/wingsdk.testing.SimulatorProps
 
 ---
 
@@ -4543,16 +4662,18 @@ new testing.Simulator(props: SimulatorProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getResourceByPath">getResourceByPath</a></code> | Get the resource instance for a given path. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
 
 ---
 
-##### `getAttributes` <a name="getAttributes" id="@monadahq/wingsdk.testing.Simulator.getAttributes"></a>
+##### `getAttributes` <a name="getAttributes" id="@winglang/wingsdk.testing.Simulator.getAttributes"></a>
 
 ```typescript
 public getAttributes(path: string): {[ key: string ]: any}
@@ -4563,13 +4684,13 @@ Obtain a resource's attributes.
 This is data that gets resolved when the
 during the resource's in-simulator creation.
 
-###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getAttributes.parameter.path"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getAttributes.parameter.path"></a>
 
 - *Type:* string
 
 ---
 
-##### `getData` <a name="getData" id="@monadahq/wingsdk.testing.Simulator.getData"></a>
+##### `getData` <a name="getData" id="@winglang/wingsdk.testing.Simulator.getData"></a>
 
 ```typescript
 public getData(path: string): BaseResourceSchema
@@ -4577,13 +4698,13 @@ public getData(path: string): BaseResourceSchema
 
 Obtain a resource's data, including its path, props, attrs, and children.
 
-###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getData.parameter.path"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getData.parameter.path"></a>
 
 - *Type:* string
 
 ---
 
-##### `getProps` <a name="getProps" id="@monadahq/wingsdk.testing.Simulator.getProps"></a>
+##### `getProps` <a name="getProps" id="@winglang/wingsdk.testing.Simulator.getProps"></a>
 
 ```typescript
 public getProps(path: string): {[ key: string ]: any}
@@ -4594,13 +4715,35 @@ Obtain a resource's props.
 This is data about the resource's configuration
 that is resolved at synth time.
 
-###### `path`<sup>Required</sup> <a name="path" id="@monadahq/wingsdk.testing.Simulator.getProps.parameter.path"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getProps.parameter.path"></a>
 
 - *Type:* string
 
 ---
 
-##### `reload` <a name="reload" id="@monadahq/wingsdk.testing.Simulator.reload"></a>
+##### `getResourceByPath` <a name="getResourceByPath" id="@winglang/wingsdk.testing.Simulator.getResourceByPath"></a>
+
+```typescript
+public getResourceByPath(path: string): any
+```
+
+Get the resource instance for a given path.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getResourceByPath.parameter.path"></a>
+
+- *Type:* string
+
+---
+
+##### `listResources` <a name="listResources" id="@winglang/wingsdk.testing.Simulator.listResources"></a>
+
+```typescript
+public listResources(): string[]
+```
+
+Get a list of all resource paths.
+
+##### `reload` <a name="reload" id="@winglang/wingsdk.testing.Simulator.reload"></a>
 
 ```typescript
 public reload(): void
@@ -4608,7 +4751,7 @@ public reload(): void
 
 Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation.
 
-##### `start` <a name="start" id="@monadahq/wingsdk.testing.Simulator.start"></a>
+##### `start` <a name="start" id="@winglang/wingsdk.testing.Simulator.start"></a>
 
 ```typescript
 public start(): void
@@ -4616,7 +4759,7 @@ public start(): void
 
 Start the simulator.
 
-##### `stop` <a name="stop" id="@monadahq/wingsdk.testing.Simulator.stop"></a>
+##### `stop` <a name="stop" id="@winglang/wingsdk.testing.Simulator.stop"></a>
 
 ```typescript
 public stop(): void
@@ -4629,11 +4772,11 @@ Stop the simulation and clean up all resources.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.Simulator.property.tree">tree</a></code> | <code>any</code> | Return a copy of the simulator tree, including all resource attributes. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.property.tree">tree</a></code> | <code>any</code> | Return a copy of the simulator tree, including all resource attributes. |
 
 ---
 
-##### `tree`<sup>Required</sup> <a name="tree" id="@monadahq/wingsdk.testing.Simulator.property.tree"></a>
+##### `tree`<sup>Required</sup> <a name="tree" id="@winglang/wingsdk.testing.Simulator.property.tree"></a>
 
 ```typescript
 public readonly tree: any;
@@ -4646,14 +4789,14 @@ Return a copy of the simulator tree, including all resource attributes.
 ---
 
 
-### Testing <a name="Testing" id="@monadahq/wingsdk.core.Testing"></a>
+### Testing <a name="Testing" id="@winglang/wingsdk.core.Testing"></a>
 
 Testing utilities.
 
-#### Initializers <a name="Initializers" id="@monadahq/wingsdk.core.Testing.Initializer"></a>
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Testing.Initializer"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 new core.Testing()
 ```
@@ -4668,21 +4811,21 @@ new core.Testing()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Testing.inspectPrebundledCode">inspectPrebundledCode</a></code> | Obtain a reference to the prebundled Code for a given capture scope. |
+| <code><a href="#@winglang/wingsdk.core.Testing.inspectPrebundledCode">inspectPrebundledCode</a></code> | Obtain a reference to the prebundled Code for a given capture scope. |
 
 ---
 
-##### `inspectPrebundledCode` <a name="inspectPrebundledCode" id="@monadahq/wingsdk.core.Testing.inspectPrebundledCode"></a>
+##### `inspectPrebundledCode` <a name="inspectPrebundledCode" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode"></a>
 
 ```typescript
-import { core } from '@monadahq/wingsdk'
+import { core } from '@winglang/wingsdk'
 
 core.Testing.inspectPrebundledCode(captureScope: IConstruct)
 ```
 
 Obtain a reference to the prebundled Code for a given capture scope.
 
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@monadahq/wingsdk.core.Testing.inspectPrebundledCode.parameter.captureScope"></a>
+###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode.parameter.captureScope"></a>
 
 - *Type:* constructs.IConstruct
 
@@ -4692,11 +4835,11 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
-### IApp <a name="IApp" id="@monadahq/wingsdk.core.IApp"></a>
+### IApp <a name="IApp" id="@winglang/wingsdk.core.IApp"></a>
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @monadahq/wingsdk.sim.App, @monadahq/wingsdk.tfaws.App, @monadahq/wingsdk.core.IApp
+- *Implemented By:* @winglang/wingsdk.sim.App, @winglang/wingsdk.tfaws.App, @winglang/wingsdk.core.IApp
 
 A Wing application.
 
@@ -4704,11 +4847,11 @@ A Wing application.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.IApp.synth">synth</a></code> | Synthesize the app into an artifact. |
+| <code><a href="#@winglang/wingsdk.core.IApp.synth">synth</a></code> | Synthesize the app into an artifact. |
 
 ---
 
-##### `synth` <a name="synth" id="@monadahq/wingsdk.core.IApp.synth"></a>
+##### `synth` <a name="synth" id="@winglang/wingsdk.core.IApp.synth"></a>
 
 ```typescript
 public synth(): string
@@ -4720,12 +4863,12 @@ Synthesize the app into an artifact.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@monadahq/wingsdk.core.IApp.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.core.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.core.IApp.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.IApp.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.core.IApp.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -4737,7 +4880,7 @@ The tree node.
 
 ---
 
-##### `outdir`<sup>Required</sup> <a name="outdir" id="@monadahq/wingsdk.core.IApp.property.outdir"></a>
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.core.IApp.property.outdir"></a>
 
 ```typescript
 public readonly outdir: string;
@@ -4749,9 +4892,9 @@ Directory where artifacts are synthesized to.
 
 ---
 
-### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.cloud.IBucketClient"></a>
+### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IBucketClient, @monadahq/wingsdk.sim.IBucketClient, @monadahq/wingsdk.tfaws.IBucketClient
+- *Implemented By:* @winglang/wingsdk.cloud.IBucketClient, @winglang/wingsdk.sim.IBucketClient, @winglang/wingsdk.tfaws.IBucketClient
 
 Inflight interface for `Bucket`.
 
@@ -4759,13 +4902,13 @@ Inflight interface for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
-| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
-| <code><a href="#@monadahq/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
+| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
+| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
+| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
 
 ---
 
-##### `get` <a name="get" id="@monadahq/wingsdk.cloud.IBucketClient.get"></a>
+##### `get` <a name="get" id="@winglang/wingsdk.cloud.IBucketClient.get"></a>
 
 ```typescript
 public get(key: string): string
@@ -4773,13 +4916,13 @@ public get(key: string): string
 
 Retrieve an object from the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
 - *Type:* string
 
 ---
 
-##### `list` <a name="list" id="@monadahq/wingsdk.cloud.IBucketClient.list"></a>
+##### `list` <a name="list" id="@winglang/wingsdk.cloud.IBucketClient.list"></a>
 
 ```typescript
 public list(prefix?: string): string[]
@@ -4787,7 +4930,7 @@ public list(prefix?: string): string[]
 
 Retrieve existing objects keys from the bucket.
 
-###### `prefix`<sup>Optional</sup> <a name="prefix" id="@monadahq/wingsdk.cloud.IBucketClient.list.parameter.prefix"></a>
+###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/wingsdk.cloud.IBucketClient.list.parameter.prefix"></a>
 
 - *Type:* string
 
@@ -4795,7 +4938,7 @@ Limits the response to keys that begin with the specified prefix.
 
 ---
 
-##### `put` <a name="put" id="@monadahq/wingsdk.cloud.IBucketClient.put"></a>
+##### `put` <a name="put" id="@winglang/wingsdk.cloud.IBucketClient.put"></a>
 
 ```typescript
 public put(key: string, body: string): void
@@ -4803,52 +4946,52 @@ public put(key: string, body: string): void
 
 Put an object in the bucket.
 
-###### `key`<sup>Required</sup> <a name="key" id="@monadahq/wingsdk.cloud.IBucketClient.put.parameter.key"></a>
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.put.parameter.key"></a>
 
 - *Type:* string
 
 ---
 
-###### `body`<sup>Required</sup> <a name="body" id="@monadahq/wingsdk.cloud.IBucketClient.put.parameter.body"></a>
+###### `body`<sup>Required</sup> <a name="body" id="@winglang/wingsdk.cloud.IBucketClient.put.parameter.body"></a>
 
 - *Type:* string
 
 ---
 
 
-### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.sim.IBucketClient"></a>
+### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.sim.IBucketClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
+- *Extends:* @winglang/wingsdk.cloud.IBucketClient
 
-- *Implemented By:* @monadahq/wingsdk.sim.IBucketClient
+- *Implemented By:* @winglang/wingsdk.sim.IBucketClient
 
 Simulator implementation of inflight client for `cloud.Bucket`.
 
 
 
-### IBucketClient <a name="IBucketClient" id="@monadahq/wingsdk.tfaws.IBucketClient"></a>
+### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.tfaws.IBucketClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IBucketClient
+- *Extends:* @winglang/wingsdk.cloud.IBucketClient
 
-- *Implemented By:* @monadahq/wingsdk.tfaws.IBucketClient
+- *Implemented By:* @winglang/wingsdk.tfaws.IBucketClient
 
 AWS implementation of inflight client for `cloud.Bucket`.
 
 
 
-### ICapturable <a name="ICapturable" id="@monadahq/wingsdk.core.ICapturable"></a>
+### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.Bucket, @monadahq/wingsdk.cloud.BucketBase, @monadahq/wingsdk.cloud.Function, @monadahq/wingsdk.cloud.FunctionBase, @monadahq/wingsdk.cloud.Logger, @monadahq/wingsdk.cloud.LoggerBase, @monadahq/wingsdk.cloud.Queue, @monadahq/wingsdk.cloud.QueueBase, @monadahq/wingsdk.cloud.Resource, @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.tfaws.Bucket, @monadahq/wingsdk.tfaws.Function, @monadahq/wingsdk.tfaws.Queue, @monadahq/wingsdk.core.ICapturable, @monadahq/wingsdk.core.ICapturableConstruct
+- *Implemented By:* @winglang/wingsdk.cloud.Bucket, @winglang/wingsdk.cloud.BucketBase, @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.cloud.Logger, @winglang/wingsdk.cloud.LoggerBase, @winglang/wingsdk.cloud.Queue, @winglang/wingsdk.cloud.QueueBase, @winglang/wingsdk.cloud.Resource, @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.tfaws.Bucket, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.tfaws.Queue, @winglang/wingsdk.core.ICapturable, @winglang/wingsdk.core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
 
 
-### ICapturableConstruct <a name="ICapturableConstruct" id="@monadahq/wingsdk.core.ICapturableConstruct"></a>
+### ICapturableConstruct <a name="ICapturableConstruct" id="@winglang/wingsdk.core.ICapturableConstruct"></a>
 
-- *Extends:* @monadahq/wingsdk.core.ICapturable, constructs.IConstruct
+- *Extends:* @winglang/wingsdk.core.ICapturable, constructs.IConstruct
 
-- *Implemented By:* @monadahq/wingsdk.core.ICapturableConstruct
+- *Implemented By:* @winglang/wingsdk.core.ICapturableConstruct
 
 Represents a construct that is capturable by an Inflight.
 
@@ -4857,11 +5000,11 @@ Represents a construct that is capturable by an Inflight.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.ICapturableConstruct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.core.ICapturableConstruct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.core.ICapturableConstruct.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.core.ICapturableConstruct.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -4873,9 +5016,9 @@ The tree node.
 
 ---
 
-### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.cloud.IFunctionClient"></a>
+### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IFunctionClient, @monadahq/wingsdk.sim.IFunctionClient, @monadahq/wingsdk.tfaws.IFunctionClient
+- *Implemented By:* @winglang/wingsdk.cloud.IFunctionClient, @winglang/wingsdk.sim.IFunctionClient, @winglang/wingsdk.tfaws.IFunctionClient
 
 Inflight interface for `Function`.
 
@@ -4883,11 +5026,11 @@ Inflight interface for `Function`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
+| <code><a href="#@winglang/wingsdk.cloud.IFunctionClient.invoke">invoke</a></code> | Invoke the function asynchronously with a given payload. |
 
 ---
 
-##### `invoke` <a name="invoke" id="@monadahq/wingsdk.cloud.IFunctionClient.invoke"></a>
+##### `invoke` <a name="invoke" id="@winglang/wingsdk.cloud.IFunctionClient.invoke"></a>
 
 ```typescript
 public invoke(payload: string): string
@@ -4895,18 +5038,18 @@ public invoke(payload: string): string
 
 Invoke the function asynchronously with a given payload.
 
-###### `payload`<sup>Required</sup> <a name="payload" id="@monadahq/wingsdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
+###### `payload`<sup>Required</sup> <a name="payload" id="@winglang/wingsdk.cloud.IFunctionClient.invoke.parameter.payload"></a>
 
 - *Type:* string
 
 ---
 
 
-### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.sim.IFunctionClient"></a>
+### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.sim.IFunctionClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
+- *Extends:* @winglang/wingsdk.cloud.IFunctionClient
 
-- *Implemented By:* @monadahq/wingsdk.sim.IFunctionClient
+- *Implemented By:* @winglang/wingsdk.sim.IFunctionClient
 
 Simulator implementation of inflight client for `cloud.Function`.
 
@@ -4914,11 +5057,11 @@ Simulator implementation of inflight client for `cloud.Function`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.IFunctionClient.timesCalled">timesCalled</a></code> | Returns the number of times the function was invoked since its creation. |
+| <code><a href="#@winglang/wingsdk.sim.IFunctionClient.timesCalled">timesCalled</a></code> | Returns the number of times the function was invoked since its creation. |
 
 ---
 
-##### `timesCalled` <a name="timesCalled" id="@monadahq/wingsdk.sim.IFunctionClient.timesCalled"></a>
+##### `timesCalled` <a name="timesCalled" id="@winglang/wingsdk.sim.IFunctionClient.timesCalled"></a>
 
 ```typescript
 public timesCalled(): number
@@ -4927,19 +5070,19 @@ public timesCalled(): number
 Returns the number of times the function was invoked since its creation.
 
 
-### IFunctionClient <a name="IFunctionClient" id="@monadahq/wingsdk.tfaws.IFunctionClient"></a>
+### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.tfaws.IFunctionClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IFunctionClient
+- *Extends:* @winglang/wingsdk.cloud.IFunctionClient
 
-- *Implemented By:* @monadahq/wingsdk.tfaws.IFunctionClient
+- *Implemented By:* @winglang/wingsdk.tfaws.IFunctionClient
 
 AWS implementation of inflight client for `cloud.Function`.
 
 
 
-### ILoggerClient <a name="ILoggerClient" id="@monadahq/wingsdk.cloud.ILoggerClient"></a>
+### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.ILoggerClient
+- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient, @winglang/wingsdk.sim.ILoggerClient
 
 Inflight interface for `Logger`.
 
@@ -4947,23 +5090,22 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with whichever resource is running the inflight code. |
-| <code><a href="#@monadahq/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
+| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with the resource running the inflight code. |
+| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
 
 ---
 
-##### `fetchLatestLogs` <a name="fetchLatestLogs" id="@monadahq/wingsdk.cloud.ILoggerClient.fetchLatestLogs"></a>
+##### `fetchLatestLogs` <a name="fetchLatestLogs" id="@winglang/wingsdk.cloud.ILoggerClient.fetchLatestLogs"></a>
 
 ```typescript
 public fetchLatestLogs(): LogEvent[]
 ```
 
-Fetch the latest logs associated with whichever resource is running the inflight code.
+Fetch the latest logs associated with the resource running the inflight code.
 
-The logs may include cloud-provider specific messages or
-metadata.
+The logs may include cloud-provider specific messages or metadata.
 
-##### `print` <a name="print" id="@monadahq/wingsdk.cloud.ILoggerClient.print"></a>
+##### `print` <a name="print" id="@winglang/wingsdk.cloud.ILoggerClient.print"></a>
 
 ```typescript
 public print(message: string): void
@@ -4974,7 +5116,7 @@ Logs a message.
 The log will be associated with whichever resource is
 running the inflight code.
 
-###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
 
 - *Type:* string
 
@@ -4983,9 +5125,19 @@ The message to print.
 ---
 
 
-### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.cloud.IQueueClient"></a>
+### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.sim.ILoggerClient"></a>
 
-- *Implemented By:* @monadahq/wingsdk.cloud.IQueueClient, @monadahq/wingsdk.sim.IQueueClient, @monadahq/wingsdk.tfaws.IQueueClient
+- *Extends:* @winglang/wingsdk.cloud.ILoggerClient
+
+- *Implemented By:* @winglang/wingsdk.sim.ILoggerClient
+
+Simulator implementation of inflight client for `cloud.Logger`.
+
+
+
+### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.cloud.IQueueClient"></a>
+
+- *Implemented By:* @winglang/wingsdk.cloud.IQueueClient, @winglang/wingsdk.sim.IQueueClient, @winglang/wingsdk.tfaws.IQueueClient
 
 Inflight interface for `Queue`.
 
@@ -4993,11 +5145,11 @@ Inflight interface for `Queue`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
 
 ---
 
-##### `push` <a name="push" id="@monadahq/wingsdk.cloud.IQueueClient.push"></a>
+##### `push` <a name="push" id="@winglang/wingsdk.cloud.IQueueClient.push"></a>
 
 ```typescript
 public push(message: string): void
@@ -5005,7 +5157,7 @@ public push(message: string): void
 
 Push a message to the queue.
 
-###### `message`<sup>Required</sup> <a name="message" id="@monadahq/wingsdk.cloud.IQueueClient.push.parameter.message"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.IQueueClient.push.parameter.message"></a>
 
 - *Type:* string
 
@@ -5014,44 +5166,44 @@ Payload to send to the queue.
 ---
 
 
-### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.sim.IQueueClient"></a>
+### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.sim.IQueueClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
+- *Extends:* @winglang/wingsdk.cloud.IQueueClient
 
-- *Implemented By:* @monadahq/wingsdk.sim.IQueueClient
+- *Implemented By:* @winglang/wingsdk.sim.IQueueClient
 
 Simulator implementation of inflight client for `cloud.Queue`.
 
 
 
-### IQueueClient <a name="IQueueClient" id="@monadahq/wingsdk.tfaws.IQueueClient"></a>
+### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.tfaws.IQueueClient"></a>
 
-- *Extends:* @monadahq/wingsdk.cloud.IQueueClient
+- *Extends:* @winglang/wingsdk.cloud.IQueueClient
 
-- *Implemented By:* @monadahq/wingsdk.tfaws.IQueueClient
+- *Implemented By:* @winglang/wingsdk.tfaws.IQueueClient
 
 AWS implementation of inflight client for `cloud.Queue`.
 
 
 
-### IResource <a name="IResource" id="@monadahq/wingsdk.sim.IResource"></a>
+### IResource <a name="IResource" id="@winglang/wingsdk.sim.IResource"></a>
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @monadahq/wingsdk.sim.Bucket, @monadahq/wingsdk.sim.Function, @monadahq/wingsdk.sim.Queue, @monadahq/wingsdk.sim.IResource
+- *Implemented By:* @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.sim.IResource
 
-Fields shared by all resource implementations for the simulator.
+Interfaces shared by all polycon implementations (preflight classes) targeting the simulator.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@monadahq/wingsdk.sim.IResource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.IResource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 
 ---
 
-##### `node`<sup>Required</sup> <a name="node" id="@monadahq/wingsdk.sim.IResource.property.node"></a>
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.IResource.property.node"></a>
 
 ```typescript
 public readonly node: Node;
@@ -5063,9 +5215,9 @@ The tree node.
 
 ---
 
-### IResourceResolver <a name="IResourceResolver" id="@monadahq/wingsdk.testing.IResourceResolver"></a>
+### IResourceResolver <a name="IResourceResolver" id="@winglang/wingsdk.testing.IResourceResolver"></a>
 
-- *Implemented By:* @monadahq/wingsdk.testing.IResourceResolver
+- *Implemented By:* @winglang/wingsdk.testing.IResourceResolver
 
 A resolver that can be used to look up other resources in the tree.
 
@@ -5073,11 +5225,11 @@ A resolver that can be used to look up other resources in the tree.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.IResourceResolver.lookup">lookup</a></code> | Lookup a resource by its path. |
+| <code><a href="#@winglang/wingsdk.testing.IResourceResolver.lookup">lookup</a></code> | Lookup a resource by its path. |
 
 ---
 
-##### `lookup` <a name="lookup" id="@monadahq/wingsdk.testing.IResourceResolver.lookup"></a>
+##### `lookup` <a name="lookup" id="@winglang/wingsdk.testing.IResourceResolver.lookup"></a>
 
 ```typescript
 public lookup(resourceId: string): BaseResourceSchema
@@ -5085,81 +5237,139 @@ public lookup(resourceId: string): BaseResourceSchema
 
 Lookup a resource by its path.
 
-###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@monadahq/wingsdk.testing.IResourceResolver.lookup.parameter.resourceId"></a>
+###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@winglang/wingsdk.testing.IResourceResolver.lookup.parameter.resourceId"></a>
 
 - *Type:* string
 
 ---
 
 
-### ISimulatorDispatcher <a name="ISimulatorDispatcher" id="@monadahq/wingsdk.testing.ISimulatorDispatcher"></a>
+### ISimulatorContext <a name="ISimulatorContext" id="@winglang/wingsdk.testing.ISimulatorContext"></a>
 
-- *Implemented By:* @monadahq/wingsdk.testing.ISimulatorDispatcher
+- *Implemented By:* @winglang/wingsdk.testing.ISimulatorContext
 
-Represents a class that can start and stop the simulation of an individual resource.
+Context that is passed to individual resource simulations.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.start">start</a></code> | Start simulating a resource. |
-| <code><a href="#@monadahq/wingsdk.testing.ISimulatorDispatcher.stop">stop</a></code> | Stop the resource's simulation and clean up any file system resources it created. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.findInstance">findInstance</a></code> | Find a resource simulation by its handle. |
 
 ---
 
-##### `start` <a name="start" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start"></a>
+##### `findInstance` <a name="findInstance" id="@winglang/wingsdk.testing.ISimulatorContext.findInstance"></a>
 
 ```typescript
-public start(type: string, props: any, context: SimulatorContext): any
+public findInstance(handle: string): ISimulatorResource
 ```
 
-Start simulating a resource.
+Find a resource simulation by its handle.
 
-This function should return an object/map
-containing the resource's attributes.
+Throws if the handle isn't valid.
 
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.type"></a>
+###### `handle`<sup>Required</sup> <a name="handle" id="@winglang/wingsdk.testing.ISimulatorContext.findInstance.parameter.handle"></a>
 
 - *Type:* string
 
 ---
 
-###### `props`<sup>Required</sup> <a name="props" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.props"></a>
+#### Properties <a name="Properties" id="Properties"></a>
 
-- *Type:* any
-
----
-
-###### `context`<sup>Required</sup> <a name="context" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.start.parameter.context"></a>
-
-- *Type:* @monadahq/wingsdk.testing.SimulatorContext
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
 
 ---
 
-##### `stop` <a name="stop" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop"></a>
+##### `assetsDir`<sup>Required</sup> <a name="assetsDir" id="@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir"></a>
 
 ```typescript
-public stop(type: string, attrs: any): void
+public readonly assetsDir: string;
 ```
 
-Stop the resource's simulation and clean up any file system resources it created.
+- *Type:* string
 
-###### `type`<sup>Required</sup> <a name="type" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop.parameter.type"></a>
+The absolute path to where all assets in `app.wx` are stored.
+
+---
+
+### ISimulatorFactory <a name="ISimulatorFactory" id="@winglang/wingsdk.testing.ISimulatorFactory"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.ISimulatorFactory
+
+A factory that can turn resource descriptions into resource simulations.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorFactory.resolve">resolve</a></code> | Resolve the parameters needed for creating a specific resource simulation. |
+
+---
+
+##### `resolve` <a name="resolve" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve"></a>
+
+```typescript
+public resolve(type: string, props: any, context: ISimulatorContext): ISimulatorResource
+```
+
+Resolve the parameters needed for creating a specific resource simulation.
+
+###### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.type"></a>
 
 - *Type:* string
 
 ---
 
-###### `attrs`<sup>Required</sup> <a name="attrs" id="@monadahq/wingsdk.testing.ISimulatorDispatcher.stop.parameter.attrs"></a>
+###### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.props"></a>
 
 - *Type:* any
 
 ---
+
+###### `context`<sup>Required</sup> <a name="context" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.context"></a>
+
+- *Type:* @winglang/wingsdk.testing.ISimulatorContext
+
+---
+
+
+### ISimulatorResource <a name="ISimulatorResource" id="@winglang/wingsdk.sim.ISimulatorResource"></a>
+
+- *Implemented By:* @winglang/wingsdk.sim.ISimulatorResource
+
+Shared interface for resource simulations.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.ISimulatorResource.cleanup">cleanup</a></code> | Stop the resource and clean up any physical resources it may have created (files, ports, etc). |
+| <code><a href="#@winglang/wingsdk.sim.ISimulatorResource.init">init</a></code> | Perform any async initialization required by the resource. |
+
+---
+
+##### `cleanup` <a name="cleanup" id="@winglang/wingsdk.sim.ISimulatorResource.cleanup"></a>
+
+```typescript
+public cleanup(): void
+```
+
+Stop the resource and clean up any physical resources it may have created (files, ports, etc).
+
+##### `init` <a name="init" id="@winglang/wingsdk.sim.ISimulatorResource.init"></a>
+
+```typescript
+public init(): void
+```
+
+Perform any async initialization required by the resource.
 
 
 ## Enums <a name="Enums" id="Enums"></a>
 
-### BucketInflightMethods <a name="BucketInflightMethods" id="@monadahq/wingsdk.cloud.BucketInflightMethods"></a>
+### BucketInflightMethods <a name="BucketInflightMethods" id="@winglang/wingsdk.cloud.BucketInflightMethods"></a>
 
 List of inflight operations available for `Bucket`.
 
@@ -5167,34 +5377,34 @@ List of inflight operations available for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
-| <code><a href="#@monadahq/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
 
 ---
 
-##### `PUT` <a name="PUT" id="@monadahq/wingsdk.cloud.BucketInflightMethods.PUT"></a>
+##### `PUT` <a name="PUT" id="@winglang/wingsdk.cloud.BucketInflightMethods.PUT"></a>
 
 `Bucket.put`.
 
 ---
 
 
-##### `GET` <a name="GET" id="@monadahq/wingsdk.cloud.BucketInflightMethods.GET"></a>
+##### `GET` <a name="GET" id="@winglang/wingsdk.cloud.BucketInflightMethods.GET"></a>
 
 `Bucket.get`.
 
 ---
 
 
-##### `LIST` <a name="LIST" id="@monadahq/wingsdk.cloud.BucketInflightMethods.LIST"></a>
+##### `LIST` <a name="LIST" id="@winglang/wingsdk.cloud.BucketInflightMethods.LIST"></a>
 
 `Bucket.list`.
 
 ---
 
 
-### FunctionInflightMethods <a name="FunctionInflightMethods" id="@monadahq/wingsdk.cloud.FunctionInflightMethods"></a>
+### FunctionInflightMethods <a name="FunctionInflightMethods" id="@winglang/wingsdk.cloud.FunctionInflightMethods"></a>
 
 List of inflight operations available for `Function`.
 
@@ -5202,18 +5412,18 @@ List of inflight operations available for `Function`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE">INVOKE</a></code> | `Function.invoke`. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionInflightMethods.INVOKE">INVOKE</a></code> | `Function.invoke`. |
 
 ---
 
-##### `INVOKE` <a name="INVOKE" id="@monadahq/wingsdk.cloud.FunctionInflightMethods.INVOKE"></a>
+##### `INVOKE` <a name="INVOKE" id="@winglang/wingsdk.cloud.FunctionInflightMethods.INVOKE"></a>
 
 `Function.invoke`.
 
 ---
 
 
-### Language <a name="Language" id="@monadahq/wingsdk.core.Language"></a>
+### Language <a name="Language" id="@winglang/wingsdk.core.Language"></a>
 
 The language of a piece of code.
 
@@ -5221,18 +5431,18 @@ The language of a piece of code.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.core.Language.NODE_JS">NODE_JS</a></code> | Node.js. |
+| <code><a href="#@winglang/wingsdk.core.Language.NODE_JS">NODE_JS</a></code> | Node.js. |
 
 ---
 
-##### `NODE_JS` <a name="NODE_JS" id="@monadahq/wingsdk.core.Language.NODE_JS"></a>
+##### `NODE_JS` <a name="NODE_JS" id="@winglang/wingsdk.core.Language.NODE_JS"></a>
 
 Node.js.
 
 ---
 
 
-### LoggerInflightMethods <a name="LoggerInflightMethods" id="@monadahq/wingsdk.cloud.LoggerInflightMethods"></a>
+### LoggerInflightMethods <a name="LoggerInflightMethods" id="@winglang/wingsdk.cloud.LoggerInflightMethods"></a>
 
 List of inflight operations available for `Logger`.
 
@@ -5240,18 +5450,26 @@ List of inflight operations available for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT">PRINT</a></code> | `Logger.print`. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerInflightMethods.PRINT">PRINT</a></code> | `Logger.print`. |
+| <code><a href="#@winglang/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS">FETCH_LATEST_LOGS</a></code> | `Logger.fetchLatestLogs`. |
 
 ---
 
-##### `PRINT` <a name="PRINT" id="@monadahq/wingsdk.cloud.LoggerInflightMethods.PRINT"></a>
+##### `PRINT` <a name="PRINT" id="@winglang/wingsdk.cloud.LoggerInflightMethods.PRINT"></a>
 
 `Logger.print`.
 
 ---
 
 
-### QueueInflightMethods <a name="QueueInflightMethods" id="@monadahq/wingsdk.cloud.QueueInflightMethods"></a>
+##### `FETCH_LATEST_LOGS` <a name="FETCH_LATEST_LOGS" id="@winglang/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS"></a>
+
+`Logger.fetchLatestLogs`.
+
+---
+
+
+### QueueInflightMethods <a name="QueueInflightMethods" id="@winglang/wingsdk.cloud.QueueInflightMethods"></a>
 
 List of inflight operations available for `Queue`.
 
@@ -5259,11 +5477,11 @@ List of inflight operations available for `Queue`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH">PUSH</a></code> | `Queue.push`. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueInflightMethods.PUSH">PUSH</a></code> | `Queue.push`. |
 
 ---
 
-##### `PUSH` <a name="PUSH" id="@monadahq/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
+##### `PUSH` <a name="PUSH" id="@winglang/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
 
 `Queue.push`.
 

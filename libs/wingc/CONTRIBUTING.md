@@ -20,7 +20,7 @@ and submit pull requests to the GitHub repository.
 
 ## Opening Issues
 
-One of the easiest ways to contribute to the Wing SDK is by opening [issues](https://github.com/monadahq/winglang/issues/new).
+One of the easiest ways to contribute to the Wing SDK is by opening [issues](https://github.com/winglang/wing/issues/new).
 If you're reporting a bug, try to include detailed information including steps to reproduce it, and what you expected to happen.
 If you're suggesting a feature or enhancement, please include information about your use case for it.
 
@@ -37,16 +37,16 @@ These tools are needed to build the library and run unit tests:
 - Your favorite code editor
 
 
-To build the project, you also need to `npm login` into `@monadahq` in order to install private npm packages.
+To build the project, you also need to `npm login` into `@winglang` in order to install private npm packages.
 
 ### Setting up GitHub private packages
 
 First, you need a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to login to the GitHub npm registry. Follow the instructions in the [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token) to create a PAT. Make sure it has the `read:packages` scope.
 
-After, you should configure npm to use the @monadahq package registry by default for the packages under the @monadahq scope by running:
+After, you should configure npm to use the @winglang package registry by default for the packages under the @winglang scope by running:
 
 ```sh
-npm login --scope=@monadahq --registry=https://npm.pkg.github.com
+npm login --scope=@winglang --registry=https://npm.pkg.github.com
 
 # > Username: GITHUB USERNAME
 # > Password: YOUR PAT
@@ -103,7 +103,7 @@ To ensure pull requests are reviewed and accepted as quickly as possible, please
 
 [ ] Your fork is in sync with the upstream repository.
 
-Create a new pull request [here](https://github.com/monadahq/wingsdk/compare), selecting your fork for the 'compare' 
+Create a new pull request [here](https://github.com/winglang/wingsdk/compare), selecting your fork for the 'compare' 
 and `main` for the 'base'. 
 
 The title of the pull request should adhere to [conventional commits](https://www.conventionalcommits.org). For example, 

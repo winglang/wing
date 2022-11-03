@@ -4,7 +4,7 @@ description = "winglang grammar for the tree-sitter parsing library"
 version = "0.0.1"
 keywords = ["incremental", "parsing", "wing"]
 categories = ["parsing", "text-editors"]
-repository = "https://github.com/monadahq/winglang/tree/main/libs/tree-sitter-wing"
+repository = "https://github.com/winglang/wing/tree/main/libs/tree-sitter-wing"
 edition = "2018"
 license = "MIT"
 

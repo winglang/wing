@@ -1,4 +1,4 @@
-import { Polycons } from "@monadahq/polycons";
+import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import { CaptureMetadata, Code, Duration, Inflight } from "../core";
 import { Function, FunctionProps } from "./function";
@@ -63,7 +63,7 @@ export interface QueueOnMessageProps extends FunctionProps {
 /**
  * Represents a serverless queue.
  *
- * @inflight `@monadahq/wingsdk.cloud.IQueueClient`
+ * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends QueueBase {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {

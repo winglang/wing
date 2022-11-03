@@ -21,7 +21,7 @@ and submit pull requests to the GitHub repository.
 
 ## Opening Issues
 
-One of the easiest ways to contribute to the Wing SDK is by opening [issues](https://github.com/monadahq/winglang/issues/new).
+One of the easiest ways to contribute to the Wing SDK is by opening [issues](https://github.com/winglang/wing/issues/new).
 If you're reporting a bug, try to include detailed information including steps to reproduce it, and what you expected to happen.
 If you're suggesting a feature or enhancement, please include information about your use case for it.
 
@@ -43,16 +43,16 @@ These tools are needed to run integration tests that deploy the resources to clo
 - [Terraform CLI](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - (optional) [CDK for Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/cdktf-install?in=terraform/cdktf) - not required if you are using just the commands added to npm in the projen def file
 
-To build the project, you also need to `npm login` into `@monadahq` in order to install private npm packages.
+To build the project, you also need to `npm login` into `@winglang` in order to install private npm packages.
 
 ### Setting up GitHub private packages
 
 First, you need a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to login to the GitHub npm registry. Follow the instructions in the [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token) to create a PAT. Make sure it has the `read:packages` scope.
 
-After, you should configure npm to use the @monadahq package registry by default for the packages under the @monadahq scope by running:
+After, you should configure npm to use the @winglang package registry by default for the packages under the @winglang scope by running:
 
 ```sh
-npm login --scope=@monadahq --registry=https://npm.pkg.github.com
+npm login --scope=@winglang --registry=https://npm.pkg.github.com
 
 # > Username: GITHUB USERNAME
 # > Password: YOUR PAT
@@ -81,7 +81,7 @@ Contains the cloud resources for different targets: local and aws at the moment.
 
 All the resource implementations inherit from the base resources in the `cloud` folder.
 
-The non-base resources there are consumed by the app and their constructors return the injected target implementation (aws or local) using the [Polycons](https://github.com/monadahq/polycons) factory that is configured at synth time.
+The non-base resources there are consumed by the app and their constructors return the injected target implementation (aws or local) using the [Polycons](https://github.com/winglang/polycons) factory that is configured at synth time.
 
 ### `test` folder
 
@@ -165,7 +165,7 @@ npm run sandbox:destroy
 
 A resource in the SDK has several pieces:
 
-* A preflight [polycon](https://github.com/monadahq/polycons) API that is common across all cloud targets. Resource polycons are defined in `src/cloud`. For example, [`src/cloud/bucket.ts`](./src/cloud/bucket.ts).
+* A preflight [polycon](https://github.com/winglang/polycons) API that is common across all cloud targets. Resource polycons are defined in `src/cloud`. For example, [`src/cloud/bucket.ts`](./src/cloud/bucket.ts).
 * An interface representing the inflight API common across all cloud targets. By convention, if the resource is named like `Gizmo`, the inflight interface should be named `IGizmoClient`. This can be in the same file as the preflight API.
 * A simulator implementation in `src/sim`. This includes:
   * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema.ts`](./src/sim/schema.ts).
@@ -266,7 +266,7 @@ To ensure pull requests are reviewed and accepted as quickly as possible, please
 
 - [ ] Your fork is in sync with the upstream repository.
 
-Create a new pull request [here](https://github.com/monadahq/wingsdk/compare), selecting your fork for the 'compare' 
+Create a new pull request [here](https://github.com/winglang/wingsdk/compare), selecting your fork for the 'compare' 
 and `main` for the 'base'. 
 
 The title of the pull request should adhere to [conventional commits](https://www.conventionalcommits.org). For example, 

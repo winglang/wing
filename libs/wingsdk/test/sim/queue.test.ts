@@ -1,9 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/sim";
-import { FunctionClient } from "../../src/sim/function.inflight";
-import { QueueClient } from "../../src/sim/queue.inflight";
-import { QueueSchema } from "../../src/sim/schema-resources";
+import { IFunctionClient, IQueueClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -34,15 +32,10 @@ describe("basic", () => {
     const s = new testing.Simulator({ simfile });
     await s.start();
 
-    const queueAttrs = s.getAttributes("root/my_queue") as QueueSchema["attrs"];
-    const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
-    const queueClient = new QueueClient(queueAttrs.queueAddr);
-
-    expect(queueProps.subscribers[0].batchSize).toEqual(1);
-
-    const fnId = queueProps.subscribers[0].functionId;
-    const fnAttrs = s.getAttributes(fnId);
-    const fnClient = new FunctionClient(fnAttrs.functionAddr);
+    const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
+    const fnClient = s.getResourceByPath(
+      "root/my_queue/OnMessage-236ff3d72ad0ae46"
+    ) as IFunctionClient;
 
     // WHEN
     await queueClient.push("A");
@@ -74,11 +67,10 @@ describe("basic", () => {
     const s = new testing.Simulator({ simfile });
     await s.start();
 
-    const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
-
-    const fnId = queueProps.subscribers[0].functionId;
-    const fnAttrs = s.getAttributes(fnId);
-    const fnClient = new FunctionClient(fnAttrs.functionAddr);
+    // WHEN
+    const fnClient = s.getResourceByPath(
+      "root/my_queue/OnMessage-236ff3d72ad0ae46"
+    ) as IFunctionClient;
 
     await sleep(200);
 
@@ -108,13 +100,10 @@ describe("basic", () => {
     await s.start();
 
     // WHEN
-    const queueAttrs = s.getAttributes("root/my_queue") as QueueSchema["attrs"];
-    const queueProps = s.getProps("root/my_queue") as QueueSchema["props"];
-    const queueClient = new QueueClient(queueAttrs.queueAddr);
-
-    const fnId = queueProps.subscribers[0].functionId;
-    const fnAttrs = s.getAttributes(fnId);
-    const fnClient = new FunctionClient(fnAttrs.functionAddr);
+    const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
+    const fnClient = s.getResourceByPath(
+      "root/my_queue/OnMessage-236ff3d72ad0ae46"
+    ) as IFunctionClient;
 
     await queueClient.push("BAD MESSAGE");
 

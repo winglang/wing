@@ -1,19 +1,19 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, InflightClient } from "../core";
-import { Function } from "./function";
+import { CaptureMetadata, Code } from "../core";
 import { IResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
+import { captureSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
  *
- * @inflight `@monadahq/wingsdk.sim.IBucketClient`
+ * @inflight `@winglang/wingsdk.sim.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase implements IResource {
   private readonly public: boolean;
-  private readonly callers = new Array<string>();
-  private readonly callees = new Array<string>();
+  private readonly inbound = new Array<string>();
+  private readonly outbound = new Array<string>();
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
@@ -28,31 +28,19 @@ export class Bucket extends cloud.BucketBase implements IResource {
         public: this.public,
       },
       attrs: {} as any,
-      callers: this.callers,
-      callees: this.callees,
+      inbound: this.inbound,
+      outbound: this.outbound,
     };
   }
 
-  private get ref(): string {
-    return `\${${this.node.path}#attrs.bucketAddr}`;
+  /** @internal */
+  public _addInbound(...resources: string[]) {
+    this.inbound.push(...resources);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("buckets can only be captured by a sim.Function for now");
-    }
-
-    this.callers.push(captureScope.node.path);
-
-    const env = `BUCKET_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.ref);
-
-    return InflightClient.for(__filename, "BucketClient", [
-      `process.env["${env}"]`,
-    ]);
+    return captureSimulatorResource("bucket", this, captureScope);
   }
 }
 

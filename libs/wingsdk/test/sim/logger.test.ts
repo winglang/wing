@@ -1,8 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/sim";
-import { FunctionClient } from "../../src/sim/function.inflight";
-import { LoggerClient } from "../../src/sim/logger.inflight";
+import { IFunctionClient, ILoggerClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -35,11 +34,8 @@ test("inflight uses a logger", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const fnAttrs = s.getAttributes("root/my_function");
-  const fnClient = new FunctionClient(fnAttrs.functionAddr);
-
-  const loggerAttrs = s.getAttributes("root/WingLogger");
-  const loggerClient = new LoggerClient(loggerAttrs.logsDir, "my_function");
+  const fnClient = s.getResourceByPath("root/my_function") as IFunctionClient;
+  const loggerClient = s.getResourceByPath("root/WingLogger") as ILoggerClient;
 
   // WHEN
   const PAYLOAD = "Alice";

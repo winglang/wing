@@ -4,15 +4,16 @@ import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
+import { captureSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Queue`.
  *
- * @inflight `@monadahq/wingsdk.sim.IQueueClient`
+ * @inflight `@winglang/wingsdk.sim.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements IResource {
-  private readonly callers = new Array<string>();
-  private readonly callees = new Array<string>();
+  private readonly inbound = new Array<string>();
+  private readonly outbound = new Array<string>();
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
@@ -39,9 +40,11 @@ export class Queue extends cloud.QueueBase implements IResource {
     code.push(`    await ${inflight.entrypoint}($cap, $message);`);
     code.push(`  }`);
     code.push(`}`);
+
     const newInflight = new core.Inflight({
       entrypoint: `$queueEventWrapper`,
       code: core.NodeJsCode.fromInline(code.join("\n")),
+      captures: inflight.captures,
     });
 
     const fn = new cloud.Function(
@@ -55,13 +58,14 @@ export class Queue extends cloud.QueueBase implements IResource {
     // call subscribed functions.
     this.node.addDependency(fn);
 
+    const functionHandle = `\${${fn.node.path}#attrs.handle}`; // TODO: proper token mechanism
     this.subscribers.push({
-      functionId: fn.node.path,
+      functionHandle,
       batchSize: props.batchSize ?? 1,
     });
 
-    this.callees.push(fn.node.path);
-    (fn as Function)._addCallers(this.node.path);
+    this.outbound.push(fn.node.path);
+    (fn as Function)._addInbound(this.node.path);
 
     return fn;
   }
@@ -76,34 +80,22 @@ export class Queue extends cloud.QueueBase implements IResource {
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,
-      callers: this.callers,
-      callees: this.callees,
+      inbound: this.inbound,
+      outbound: this.outbound,
     };
   }
 
-  private get ref(): string {
-    return `\${${this.node.path}#attrs.queueAddr}`;
+  /** @internal */
+  public _addInbound(...resources: string[]) {
+    this.inbound.push(...resources);
   }
 
-  /**
-   * @internal
-   */
+  /** @internal */
   public _capture(
     captureScope: IConstruct,
     _metadata: core.CaptureMetadata
   ): core.Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("queues can only be captured by a sim.Function for now");
-    }
-
-    this.callers.push(captureScope.node.path);
-
-    const env = `QUEUE_ADDR__${this.node.id}`;
-    captureScope.addEnvironment(env, this.ref);
-
-    return core.InflightClient.for(__filename, "QueueClient", [
-      `process.env["${env}"]`,
-    ]);
+    return captureSimulatorResource("queue", this, captureScope);
   }
 }
 

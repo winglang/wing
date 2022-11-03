@@ -14,7 +14,7 @@ const log = debug("wing:compile");
 
 const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
 log("wasm path: %s", WINGC_WASM_PATH);
-const WINGSDK_RESOLVED_PATH = require.resolve("@monadahq/wingsdk");
+const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/wingsdk");
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);

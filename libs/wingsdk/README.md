@@ -10,11 +10,11 @@ The actual provider is determined at synth time by setting a target.
 One of the supported targets is `sim` and can be used to run a cloud application locally, without an internet connection, iterate extremely fast and run tests that include cloud resources without needing to mock them.
 
 The SDK is released as a private npm module named
-[`@monadahq/wingsdk`](https://github.com/monadahq/wingsdk/packages/1519521).
+[`@winglang/wingsdk`](https://github.com/winglang/wingsdk/packages/1519521).
 
 ## ⛺ Installation
 ```shell
-npm i @monadahq/wingsdk
+npm i @winglang/wingsdk
 ```
 
 ## 📝 Usage
@@ -37,11 +37,11 @@ Then use `wing build` to compile your program to different clouds. Run `wing bui
 
 ### As a TypeScript/JavaScript Library
 
-The Wing SDK can be used just like ordinary [CDK for TF Constructs](https://github.com/hashicorp/terraform-cdk), with the distinctions that the resources are polymorphic and their concrete implementations are determined at synth time. See [Polycons](https://github.com/monadahq/polycons) for more details.
+The Wing SDK can be used just like ordinary [CDK for TF Constructs](https://github.com/hashicorp/terraform-cdk), with the distinctions that the resources are polymorphic and their concrete implementations are determined at synth time. See [Polycons](https://github.com/winglang/polycons) for more details.
 
 ```ts
 import { Construct } from "constructs";
-import * as wingsdk from "@monadahq/wingsdk";
+import * as wingsdk from "@winglang/wingsdk";
 
 class Root extends Construct {
   constructor(scope: Construct, id: string) {

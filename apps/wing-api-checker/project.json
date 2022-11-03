@@ -1,5 +1,6 @@
 {
   "name": "wing-api-checker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
     "build": {
       "executor": "nx:run-script",

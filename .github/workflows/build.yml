@@ -11,7 +11,7 @@ env:
   NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
-  MONADAHQ_REGISTRY: "https://npm.pkg.github.com"
+  WINGLANG_REGISTRY: "https://npm.pkg.github.com"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
@@ -24,14 +24,14 @@ jobs:
       - name: Checkout
         if: github.ref == 'refs/heads/main'
         uses: actions/checkout@v3
- 
+
       - name: Get tags
         if: github.ref == 'refs/heads/main'
         run: git fetch --unshallow --tags
 
       - name: Login to Private NPM registry
         if: github.ref == 'refs/heads/main'
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         if: github.ref == 'refs/heads/main'
@@ -99,7 +99,7 @@ jobs:
         run: scripts/setup_wasi.sh
 
       - name: Login to Private NPM registry
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -112,7 +112,7 @@ jobs:
         with:
           targets: "build"
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream --verbose"
 
       # wingc require wingsdk to be built first in order to run
       - name: wingc Test
@@ -120,7 +120,7 @@ jobs:
         with:
           targets: "test"
           projects: "wingc"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Package Wing CLI
         working-directory: apps/wing
@@ -163,7 +163,7 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WING_PLAYGROUND }}
           working-directory: apps/wing-playground/dist
           github-comment: false
-          vercel-args: '--prod '
+          vercel-args: "--prod "
 
   build-native:
     needs: prepare
@@ -204,7 +204,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Login to Private NPM registry
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -220,14 +220,14 @@ jobs:
         with:
           targets: "build-native"
           projects: "wing-language-server"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           projects: "wingii"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing Language Server
         uses: actions/upload-artifact@v2
@@ -260,7 +260,7 @@ jobs:
           registry-url: https://npm.pkg.github.com
 
       - name: Login to Private NPM registry
-        run: npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -270,7 +270,7 @@ jobs:
         with:
           targets: "build-multi"
           projects: "vscode-wing"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload extension
         uses: actions/upload-artifact@v2
@@ -308,13 +308,13 @@ jobs:
       - name: Publish Wing
         working-directory: wing
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
         run: npm publish *.tgz
 
       - name: Publish Wing
         working-directory: wingsdk
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.WINGLANG_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
         run: npm publish *.tgz
 
       - name: Compute Checksums

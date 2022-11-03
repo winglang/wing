@@ -5,14 +5,13 @@ import { platform, tmpdir } from "os";
 import fetch, { HeadersInit } from "node-fetch";
 import { Octokit } from "octokit";
 import {
-  window,
-  workspace,
   ExtensionContext,
   ExtensionMode,
-  commands,
   Uri,
+  commands,
+  window,
+  workspace,
 } from "vscode";
-
 import {
   Executable,
   LanguageClient,
@@ -22,8 +21,8 @@ import {
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
-const WINGLANG_REPO_NAME = "winglang";
-const WINGLANG_REPO_OWNER = "monadahq";
+const WINGLANG_REPO_NAME = "wing";
+const WINGLANG_REPO_OWNER = "winglang";
 const UPDATE_RATE_LIMIT_MS = 1 * 60 * 60 * 1000; // 1 hour
 
 const CFG_UPDATES_GITHUB_TOKEN = "updates.githubToken";

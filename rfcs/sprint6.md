@@ -43,4 +43,4 @@ She comes back to the office and tells the people what she's done last two week 
 
 The primary goal of this sprint is to create a self service journey from someone who doesn't have access to wing repo into someone that has all that she needs in order to contribute or use Wing 
 
-You can review all issues tracked related to this sprint in [#334](https://github.com/monadahq/winglang/issues/334)
+You can review all issues tracked related to this sprint in [#334](https://github.com/winglang/wing/issues/334)

@@ -1,12 +1,12 @@
 {
-  "name": "@monadahq/winglang",
+  "name": "@winglang/wing",
   "devDependencies": {
     "@auto-it/conventional-commits": "^10.37.6",
     "@auto-it/git-tag": "^10.37.6",
     "@nxrs/cargo": "^0.3.3",
     "auto": "^10.37.6",
     "npm-run-all": "^4.1.5",
-    "nx": "14.8.0"
+    "nx": "15.0.7"
   },
   "scripts": {
     "nx": "nx",

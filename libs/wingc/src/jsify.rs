@@ -8,7 +8,7 @@ use crate::ast::{
 };
 
 const STDLIB: &str = "$stdlib";
-const STDLIB_MODULE: &str = "@monadahq/wingsdk";
+const STDLIB_MODULE: &str = "@winglang/wingsdk";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -405,15 +405,6 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 					.join("\n")
 			)
 		}
-		Statement::Bring {
-			module_path,
-			statements,
-		} => format!(
-			"/* start bring module: {module} */\n{}\n/* end bring module: {module} */",
-			jsify_scope(statements, &out_dir),
-			module = module_path
-		)
-		.to_string(),
 	}
 }
 

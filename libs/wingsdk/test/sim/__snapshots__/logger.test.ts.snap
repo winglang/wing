@@ -5,18 +5,22 @@ Object {
   "root": Object {
     "children": Object {
       "WingLogger": Object {
+        "inbound": Array [
+          "root/my_function",
+        ],
         "type": "wingsdk.cloud.Logger",
       },
       "my_function": Object {
-        "callees": Array [
+        "dependsOn": Array [
           "root/WingLogger",
         ],
-        "dependsOn": Array [
+        "outbound": Array [
           "root/WingLogger",
         ],
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_ADDR__c80f4a947b44da0af65a2258bcf6ee0bfb76f7e65b": "\${root/WingLogger#attrs.logsDir}",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",

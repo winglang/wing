@@ -1,8 +1,8 @@
 {
-  "name": "@monadahq/wingsdk",
+  "name": "@winglang/wingsdk",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monadahq/wingsdk.git"
+    "url": "https://github.com/winglang/wingsdk.git"
   },
   "scripts": {
     "api-check": "npx projen api-check",
@@ -41,17 +41,16 @@
   },
   "devDependencies": {
     "@cdktf/provider-aws": "10.0.11",
-    "@monadahq/polycons": "0.0.98",
-    "@monadahq/wing-api-checker": "file:../../apps/wing-api-checker",
     "@types/aws-lambda": "^8.10.104",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^27",
     "@types/minipass": "3.1.2",
     "@types/node": "^16",
     "@types/tar": "^6.1.3",
-    "@types/ws": "^8.5.3",
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
+    "@winglang/polycons": "0.0.105",
+    "@winglang/wing-api-checker": "file:../../apps/wing-api-checker",
     "aws-sdk-client-mock": "^2.0.0",
     "cdktf": "0.13.2",
     "cdktf-cli": "^0.12.2",
@@ -82,7 +81,7 @@
   },
   "peerDependencies": {
     "@cdktf/provider-aws": "^10.0.11",
-    "@monadahq/polycons": "^0.0.98",
+    "@winglang/polycons": "^0.0.105",
     "cdktf": "^0.13.2",
     "constructs": "~10.0.25"
   },
@@ -93,11 +92,8 @@
     "@aws-sdk/client-sqs": "^3.171.0",
     "@aws-sdk/util-utf8-node": "^3.170.0",
     "esbuild-wasm": "^0.15.9",
-    "isomorphic-ws": "^5.0.0",
-    "piscina": "*",
     "safe-stable-stringify": "*",
-    "tar": "^6.1.11",
-    "ws": "^7.5.9"
+    "tar": "^6.1.11"
   },
   "bundledDependencies": [
     "@aws-sdk/client-cloudwatch-logs",
@@ -106,11 +102,8 @@
     "@aws-sdk/client-sqs",
     "@aws-sdk/util-utf8-node",
     "esbuild-wasm",
-    "isomorphic-ws",
-    "piscina",
     "safe-stable-stringify",
-    "tar",
-    "ws"
+    "tar"
   ],
   "engines": {
     "node": ">= 16.16.0"
@@ -176,14 +169,6 @@
       "src/**/*.sim.ts",
       "src/**/exports.ts"
     ]
-  },
-  "exports": {
-    ".": "./lib/exports.js",
-    "./cloud": "./lib/cloud/exports.js",
-    "./fs": "./lib/fs/exports.js",
-    "./sim": "./lib/sim/exports.js",
-    "./testing": "./lib/testing/exports.js",
-    "./tf-aws": "./lib/tf-aws/exports.js"
   },
   "overrides": {
     "@types/responselike": "1.0.0",

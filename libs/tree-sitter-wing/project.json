@@ -1,5 +1,6 @@
 {
   "name": "tree-sitter-wing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
@@ -7,7 +8,7 @@
         "{projectRoot}/grammar.js"
       ],
       "outputs": [
-        "src"
+        "{workspaceRoot}/src"
       ],
       "options": {
         "command": "cargo build",

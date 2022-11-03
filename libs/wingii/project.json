@@ -1,10 +1,11 @@
 {
   "name": "wingii",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
       "outputs": [
-        "rust-native"
+        "{workspaceRoot}/rust-native"
       ],
       "options": {
         "command": "cargo build",
@@ -22,7 +23,7 @@
     "build-wasm": {
       "executor": "nx:run-commands",
       "outputs": [
-        "rust-wasm"
+        "{workspaceRoot}/rust-wasm"
       ],
       "options": {
         "command": "cargo wasi build",

@@ -1,17 +1,17 @@
 <p align="center">
   <a href="https://winglang.io">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/monadahq/winglang/raw/main/logo/1x/Symbol-Turq-Dark.png">
-      <source media="(prefers-color-scheme: light)" srcset="https://github.com/monadahq/winglang/raw/main/logo/1x/Symbol-Black-Light.png">
-      <img alt="" src="https://github.com/monadahq/winglang/raw/main/logo/1x/Symbol-Black-Light.png" height="110pt">
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Turq-LightTransparent.png">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Black-Light.png">
+      <img alt="" src="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Black-Light.png" height="110pt">
     </picture>
   </a>
   <h1 align="center">The Wing Programming Language</h1>
 </p>
 
 <p align="center">
-  <a aria-label="Build status" href="https://github.com/monadahq/winglang/actions/workflows/build.yml">
-    <img alt="" src="https://github.com/monadahq/winglang/actions/workflows/build.yml/badge.svg">
+  <a aria-label="Build status" href="https://github.com/winglang/wing/actions/workflows/build.yml">
+    <img alt="" src="https://github.com/winglang/wing/actions/workflows/build.yml/badge.svg">
   </a>
 
   <a aria-label="Join the community" href="https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA">
@@ -58,8 +58,7 @@ guide](./CONTRIBUTING.md).
 
 Here is a list of known issues in "getting started":
 
-* [#50](https://github.com/monadahq/winglang/issues/50) `print()` is not yet implemented.
-* [#359](https://github.com/monadahq/winglang/pull/359) The compiler doesn't support default values for function parameters and structs.
+* [#50](https://github.com/winglang/wing/issues/50) `print()` is not yet implemented.
 
 ### Prerequisites
 
@@ -77,7 +76,7 @@ In order to deploy to AWS, you will also need:
 To access npm private packages (pre-release):
 
 ```sh
-npm login --scope=@monadahq --registry=https://npm.pkg.github.com
+npm login --scope=@winglang --registry=https://npm.pkg.github.com
 ```
 
 > As a password, use a GitHub [personal access token] with **packages:read**
@@ -90,15 +89,18 @@ npm login --scope=@monadahq --registry=https://npm.pkg.github.com
 Install the Wing CLI through npm:
 
 ```sh
-npm install -g @monadahq/wing
+npm install -g @winglang/wing
 ```
 
-Install the Wing VSCode extension (optional) by [downloading](https://github.com/monadahq/winglang/releases/latest/download/vscode-wing.vsix)
+Install the Wing VSCode extension (optional) by [downloading](https://github.com/winglang/wing/releases/latest/download/vscode-wing.vsix)
 the extension package and running:
 
 ```sh 
 code --install-extension ~/Downloads/vscode-wing.vsix
 ```
+
+Install Wing Console by [downloading](https://github.com/winglang/wing-console/releases) the latest release for your platform.
+(currently supporting only macOS)
 
 ### Hello, Wing!
 
@@ -138,13 +140,17 @@ The **Wing Console** will start and in the main view you'll see two resources: a
 **Queue** and a **Function**. You'll also notice that the function is connected
 to the queue through the `message` event.
 
-> TODO: Add console screenshot here
+<img src="./docs/assets/wing-console-view.png">
 
-Now, right-click on the queue and choose **Push Message**. Type `world` and hit
-**Send**.
+Now, click on the queue resource, goto **queue contents** tab. Type `world` and hit
+**Send Message**.
 
-You'll notice that the log window shows a few events and then prints your
-`Hello, world!` log. ***Congratulations! You have just written and tested your
+Now, click on the function resource, goto **Test Function** tab and notice the indication that your function
+was called once.
+
+You can repeat the above testing flow and track the amount of times your function was called.
+
+***Congratulations! You have just written and tested your
 first Wing program!***
 
 As you can see, so far we've tested our program locally using the simulator and
@@ -187,12 +193,12 @@ Click on it and you should see the log message `Hello, cloud!`.
 
 The entire Wing toolchain is continuously released. We follow [semantic
 versioning](https://semver.org/) and release notes are available in the
-[Releases](https://github.com/monadahq/winglang/releases) pages on GitHub.
+[Releases](https://github.com/winglang/wing/releases) pages on GitHub.
 
 To update the toolchain to the latest, run the following command:
 
 ```sh
-npm update -g @monadahq/wing
+npm update -g @winglang/wing
 ```
 
 Our VSCode Extension and Wing Console have automatic updates.
@@ -362,7 +368,7 @@ guidelines for contributing to the project.
 
 This project is licensed under the [MIT License](./LICENSE.md).
 
-[roadmap]: https://github.com/monadahq/winglang/issues/194
+[roadmap]: https://github.com/orgs/winglang/projects/1/views/1
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 [Terraform]: https://www.terraform.io/
 [AWS account]: portal.aws.amazon.com/billing/signup

@@ -1,10 +1,11 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
+import { ISimulatorResource } from "../sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
-const { DefaultSimulatorDispatcher } = require("../sim/dispatcher.sim");
+const { DefaultSimulatorFactory } = require("../sim/factory.sim");
 
 /**
  * Props for `Simulator`.
@@ -16,25 +17,27 @@ export interface SimulatorProps {
   readonly simfile: string;
 
   /**
-   * The factory that dispatches to simulation implementations.
-   * @default - a factory that simulates built-in Wing SDK resources
+   * The factory that produces resource simulations.
+   *
+   * @default - a factory that produces simulations for built-in Wing SDK
+   * resources
    */
-  readonly dispatcher?: ISimulatorDispatcher;
+  readonly factory?: ISimulatorFactory;
 }
 
 /**
  * Context that is passed to individual resource simulations.
  */
-export interface SimulatorContext {
-  /**
-   * A resolver that can be used to look up other resources in the tree.
-   */
-  readonly resolver: IResourceResolver;
-
+export interface ISimulatorContext {
   /**
    * The absolute path to where all assets in `app.wx` are stored.
    */
   readonly assetsDir: string;
+
+  /**
+   * Find a resource simulation by its handle. Throws if the handle isn't valid.
+   */
+  findInstance(handle: string): ISimulatorResource;
 }
 
 /**
@@ -51,10 +54,15 @@ export interface IResourceResolver {
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
-  private readonly _dispatcher: ISimulatorDispatcher;
+  // fields that are same between simulation runs / reloads
+  private readonly _factory: ISimulatorFactory;
   private _tree: WingSimulatorSchema;
   private _simfile: string;
   private _assetsDir: string;
+
+  // fields that change between simulation runs / reloads
+  private _running: boolean;
+  private readonly handles: HandleManager;
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
@@ -62,7 +70,9 @@ export class Simulator {
     this._tree = tree;
     this._assetsDir = assetsDir;
 
-    this._dispatcher = props.dispatcher ?? new DefaultSimulatorDispatcher();
+    this._running = false;
+    this._factory = props.factory ?? new DefaultSimulatorFactory();
+    this.handles = new HandleManager();
   }
 
   private _loadApp(simfile: string): { assetsDir: string; tree: any } {
@@ -104,41 +114,51 @@ export class Simulator {
    * Start the simulator.
    */
   public async start(): Promise<void> {
-    // TODO: what if start() gets called twice in a row?
+    if (this._running) {
+      throw new Error(
+        "A simulation is already running. Did you mean to call `await simulator.stop()` first?"
+      );
+    }
 
-    const context: SimulatorContext = {
-      // This resolver allows resources to resolve deploy-time attributes about
-      // other resources they depend on. For example, a queue that has a function
-      // subscribed to it needs to obtain the function's simulator-unique ID in
-      // order to invoke it.
-      resolver: {
-        lookup: (path: string) => {
-          return findResource(this._tree, path);
-        },
-      },
+    const context: ISimulatorContext = {
       assetsDir: this._assetsDir,
+      findInstance: (handle: string) => {
+        return this.handles.find(handle);
+      },
     };
 
     for (const path of this._tree.startOrder) {
-      const res = findResource(this._tree, path);
-      log(`starting resource ${path} (${res.type})`);
-      const props = resolveTokens(path, res.props, context.resolver);
-      const attrs = await this._dispatcher.start(res.type, props, context);
-      (res as any).attrs = attrs;
+      const resourceData = findResource(this._tree, path);
+      log(`starting resource ${path} (${resourceData.type})`);
+      const props = this.resolveTokens(path, resourceData.props);
+      const resource = this._factory.resolve(resourceData.type, props, context);
+      await resource.init();
+      const handle = this.handles.allocate(resource);
+      (resourceData as any).attrs = { handle };
     }
+
+    this._running = true;
   }
 
   /**
    * Stop the simulation and clean up all resources.
    */
   public async stop(): Promise<void> {
-    // TODO: what if stop() gets called twice in a row?
+    if (!this._running) {
+      throw new Error(
+        "There is no running simulation to stop. Did you mean to call `await simulator.start()` first?"
+      );
+    }
 
     for (const path of this._tree.startOrder.slice().reverse()) {
       const res = findResource(this._tree, path);
       log(`stopping resource ${path} (${res.type})`);
-      await this._dispatcher.stop(res.type, res.attrs);
+      const resource = this.handles.deallocate(res.attrs!.handle);
+      await resource.cleanup();
     }
+
+    this.handles.reset();
+    this._running = false;
 
     // TODO: remove "attrs" data from tree
   }
@@ -155,6 +175,24 @@ export class Simulator {
     this._assetsDir = assetsDir;
 
     await this.start();
+  }
+
+  /**
+   * Get a list of all resource paths.
+   */
+  public listResources(): string[] {
+    return this._tree.startOrder.slice().sort();
+  }
+
+  /**
+   * Get the resource instance for a given path.
+   */
+  public getResourceByPath(path: string): any {
+    const handle = this.getAttributes(path).handle;
+    if (!handle) {
+      throw new Error(`Resource ${path} does not have a handle.`);
+    }
+    return this.handles.find(handle);
   }
 
   /**
@@ -187,56 +225,52 @@ export class Simulator {
   public get tree(): any {
     return JSON.parse(JSON.stringify(this._tree));
   }
+
+  private resolveTokens(tokenOrigin: string, props: any): any {
+    if (typeof props === "string") {
+      if (isToken(props)) {
+        const ref = props.slice(2, -1);
+        const [path, rest] = ref.split("#");
+        const resource = findResource(this._tree, path);
+        if (rest.startsWith("attrs.")) {
+          if (!resource.attrs) {
+            throw new Error(
+              `Tried to resolve token "${props}" but resource ${path} has no attributes defined yet. Is it possible ${tokenOrigin} needs to take a dependency on ${path}?`
+            );
+          }
+          return resource.attrs[rest.slice(6)];
+        } else if (rest.startsWith("props.")) {
+          if (!resource.props) {
+            throw new Error(
+              `Tried to resolve token "${props}" but resource ${path} has no props defined.`
+            );
+          }
+          return resource.props;
+        } else {
+          throw new Error(`Invalid token reference: "${ref}"`);
+        }
+      }
+      return props;
+    }
+
+    if (Array.isArray(props)) {
+      return props.map((x) => this.resolveTokens(tokenOrigin, x));
+    }
+
+    if (typeof props === "object") {
+      const ret: any = {};
+      for (const [key, value] of Object.entries(props)) {
+        ret[key] = this.resolveTokens(tokenOrigin, value);
+      }
+      return ret;
+    }
+
+    return props;
+  }
 }
 
 function isToken(value: string): boolean {
   return value.startsWith("${") && value.endsWith("}");
-}
-
-function resolveTokens(
-  tokenOrigin: string,
-  props: any,
-  resolver: IResourceResolver
-): any {
-  if (typeof props === "string") {
-    if (isToken(props)) {
-      const ref = props.slice(2, -1);
-      const [path, rest] = ref.split("#");
-      const resource = resolver.lookup(path);
-      if (rest.startsWith("attrs.")) {
-        if (!resource.attrs) {
-          throw new Error(
-            `Tried to resolve token ${props} but resource ${path} has no attributes defined yet. Is it possible ${tokenOrigin} needs to take a dependency on ${path}?`
-          );
-        }
-        return resource.attrs[rest.slice(6)];
-      } else if (rest.startsWith("props.")) {
-        if (!resource.props) {
-          throw new Error(
-            `Tried to resolve token ${props} but resource ${path} has no props defined.`
-          );
-        }
-        return resource.props;
-      } else {
-        throw new Error(`Invalid token reference: ${ref}`);
-      }
-    }
-    return props;
-  }
-
-  if (Array.isArray(props)) {
-    return props.map((x) => resolveTokens(tokenOrigin, x, resolver));
-  }
-
-  if (typeof props === "object") {
-    const ret: any = {};
-    for (const [key, value] of Object.entries(props)) {
-      ret[key] = resolveTokens(tokenOrigin, value, resolver);
-    }
-    return ret;
-  }
-
-  return props;
 }
 
 function findResource(tree: any, path: string): BaseResourceSchema {
@@ -253,19 +287,53 @@ function findResource(tree: any, path: string): BaseResourceSchema {
 }
 
 /**
- * Represents a class that can start and stop the simulation of an individual
- * resource.
+ * A factory that can turn resource descriptions into resource simulations.
  */
-export interface ISimulatorDispatcher {
+export interface ISimulatorFactory {
   /**
-   * Start simulating a resource. This function should return an object/map
-   * containing the resource's attributes.
+   * Resolve the parameters needed for creating a specific resource simulation.
    */
-  start(type: string, props: any, context: SimulatorContext): Promise<any>;
+  resolve(
+    type: string,
+    props: any,
+    context: ISimulatorContext
+  ): ISimulatorResource;
+}
 
-  /**
-   * Stop the resource's simulation and clean up any file system resources it
-   * created.
-   */
-  stop(type: string, attrs: any): Promise<void>;
+class HandleManager {
+  private readonly handles: Map<string, ISimulatorResource>;
+  private nextHandle: number;
+
+  public constructor() {
+    this.handles = new Map();
+    this.nextHandle = 0;
+  }
+
+  public allocate(resource: ISimulatorResource): string {
+    const handle = `sim-${this.nextHandle++}`;
+    this.handles.set(handle, resource);
+    return handle;
+  }
+
+  public find(handle: string): ISimulatorResource {
+    const instance = this.handles.get(handle);
+    if (!instance) {
+      throw new Error(`No resource found with handle "${handle}".`);
+    }
+    return instance;
+  }
+
+  public deallocate(handle: string): ISimulatorResource {
+    const instance = this.handles.get(handle);
+    if (!instance) {
+      throw new Error(`No resource found with handle "${handle}".`);
+    }
+    this.handles.delete(handle);
+    return instance;
+  }
+
+  public reset(): void {
+    this.handles.clear();
+    this.nextHandle = 0;
+  }
 }

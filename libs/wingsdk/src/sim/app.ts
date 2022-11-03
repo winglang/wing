@@ -1,6 +1,6 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
-import { IPolyconFactory, Polycons } from "@monadahq/polycons";
+import { IPolyconFactory, Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
 import { DependencyGraph, Files, IApp } from "../core";

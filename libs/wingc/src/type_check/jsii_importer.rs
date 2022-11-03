@@ -8,7 +8,7 @@ use colored::Colorize;
 use serde_json::Value;
 use wingii::jsii;
 
-const RESOURCE_CLASS_FQN: &'static str = "@monadahq/wingsdk.cloud.Resource";
+const RESOURCE_CLASS_FQN: &'static str = "@winglang/wingsdk.cloud.Resource";
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -53,16 +53,16 @@ impl<'a> JsiiImporter<'a> {
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
-				if type_fqn == "@monadahq/wingsdk.core.Inflight" {
+				if type_fqn == "@winglang/wingsdk.core.Inflight" {
 					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
 						flight: Flight::In,
 					})))
-				} else if type_fqn == "@monadahq/wingsdk.core.Duration" {
+				} else if type_fqn == "@winglang/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
-					// TODO: this should be a special type that represents "any resource" https://github.com/monadahq/winglang/issues/261
+					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
 					Some(self.wing_types.anything())
 				} else {
 					Some(self.lookup_or_create_type(type_fqn))
@@ -398,7 +398,7 @@ impl<'a> JsiiImporter<'a> {
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
 		if parameter.variadic.unwrap_or(false) {
-			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/monadahq/winglang/issues/397");
+			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/winglang/wing/issues/397");
 		}
 
 		let param_type = self.type_ref_to_wing_type(&parameter.type_).unwrap();

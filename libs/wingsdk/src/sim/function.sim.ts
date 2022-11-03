@@ -1,129 +1,71 @@
-import { existsSync } from "fs";
-import { join } from "path";
-import Piscina from "piscina";
-import { Server } from "ws";
-import { SimulatorContext } from "../testing/simulator";
+import * as fs from "fs";
+import * as path_ from "path";
+import * as process from "process";
+import * as vm from "vm";
+import { ISimulatorContext } from "../testing/simulator";
 import { log } from "../util";
+import { IFunctionClient } from "./function";
+import { ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
-import { SimulatorRequest, SimulatorResponse } from "./sim-types";
 
-const FUNCTIONS: Record<number, Function> = {};
-
-export async function start(
-  props: FunctionSchema["props"],
-  context: SimulatorContext
-): Promise<FunctionSchema["attrs"]> {
-  const fn = new Function(props, context.assetsDir);
-  FUNCTIONS[fn.addr] = fn;
-  return {
-    functionAddr: fn.addr,
-  };
-}
-
-export async function stop(attrs: FunctionSchema["attrs"]) {
-  const functionAddr = attrs.functionAddr;
-  const fn = FUNCTIONS[functionAddr];
-  if (!fn) {
-    throw new Error(`Invalid functionAddr: ${functionAddr}`);
-  }
-  await fn.stop();
-  delete FUNCTIONS[functionAddr];
-}
-
-class Function {
-  private readonly wss: Server;
-  private readonly worker: Piscina;
+export class Function implements IFunctionClient, ISimulatorResource {
+  private readonly filename: string;
+  private readonly env: Record<string, string>;
   private _timesCalled: number = 0;
+  private readonly context: ISimulatorContext;
 
-  constructor(props: FunctionSchema["props"], assetsDir: string) {
+  constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
     if (props.sourceCodeLanguage !== "javascript") {
       throw new Error("Only JavaScript is supported");
     }
-    const filename = join(assetsDir, props.sourceCodeFile);
-    if (!existsSync(filename)) {
-      throw new Error("File not found: " + filename);
-    }
-    this.worker = new Piscina({
-      filename,
-      env: {
-        ...props.environmentVariables,
-      },
-    });
+    this.filename = path_.resolve(context.assetsDir, props.sourceCodeFile);
+    this.env = props.environmentVariables ?? {};
+    this.context = context;
+  }
 
-    // let the OS choose a free port
-    this.wss = new Server({ port: 0 });
+  public async init(): Promise<void> {
+    return;
+  }
 
-    this.wss.on("connection", (ws) => {
-      ws.on("message", (data) => {
-        log("server receiving:", data);
-        const contents: SimulatorRequest = JSON.parse(data.toString());
-        if (contents.operation === "invoke") {
-          this.invoke(contents.message)
-            .then((result) => {
-              const resp: SimulatorResponse = {
-                id: contents.id,
-                result,
-                timestamp: Date.now(),
-              };
-              log("server sending:", JSON.stringify(resp));
-              ws.send(JSON.stringify(resp));
-            })
-            .catch((err) => {
-              const resp: SimulatorResponse = {
-                id: contents.id,
-                error: `${err} ${err.stack}`,
-                timestamp: Date.now(),
-              };
-              log("server sending:", JSON.stringify(resp));
-              ws.send(JSON.stringify(resp));
-            });
-        } else if (contents.operation === "timesCalled") {
-          const resp: SimulatorResponse = {
-            id: contents.id,
-            result: this._timesCalled.toString(),
-            timestamp: Date.now(),
-          };
-          log("server sending:", JSON.stringify(resp));
-          ws.send(JSON.stringify(resp));
-        }
-      });
-    });
+  public async cleanup(): Promise<void> {
+    return;
   }
 
   public async invoke(payload: string): Promise<string> {
     this._timesCalled += 1;
-    let result = await this.worker.run(payload, {
-      name: "handler",
+
+    const userCode = fs.readFileSync(this.filename, "utf8");
+    const wrapper = [
+      "const exports = {};",
+      "Object.assign(process.env, $env);",
+      userCode,
+      // The last statement is the value that will be returned by vm.runInThisContext
+      `exports.handler(${JSON.stringify(payload)});`,
+    ].join("\n");
+    log("running wrapped code: %s", wrapper);
+
+    const context = vm.createContext({
+      // TODO: include all NodeJS globals?
+      // https://nodejs.org/api/globals.html#global-objects
+      // https://stackoverflow.com/questions/59049140/is-it-possible-to-make-all-of-node-js-globals-available-in-nodes-vm-context
+      console: console,
+      fs: fs,
+      path: path_,
+      process: process,
+
+      $env: { ...this.env },
+
+      // Make the global simulator available to user code so that they can find
+      // and use other resource clients
+      // TODO: Object.freeze this?
+      $simulator: this.context,
     });
+    const result = await vm.runInContext(wrapper, context);
+
     return result;
   }
 
-  public get timesCalled() {
-    return this._timesCalled;
-  }
-
-  public get addr(): number {
-    const address = this.wss.address();
-
-    // expect a WebSocket.AddressInfo
-    if (typeof address === "string") {
-      throw new Error(`Invalid address: ${address}`);
-    }
-    return address.port;
-  }
-
-  public async stop(): Promise<void> {
-    await new Promise((resolve, reject) => {
-      try {
-        this.wss.clients.forEach((socket) => {
-          socket.close();
-        });
-        this.wss.close();
-        resolve(null);
-      } catch (err) {
-        reject(err);
-      }
-    });
-    await this.worker.destroy();
+  public async timesCalled(): Promise<number> {
+    return Promise.resolve(this._timesCalled);
   }
 }
