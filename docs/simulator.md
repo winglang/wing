@@ -23,12 +23,12 @@ program.
 Now, let's try starting the simulator and creating some resource clients to
 interact with the resources.
 
-First, create an empty directory and add your `app.wx` file. Next, run `npm install @monadahq/wingsdk`.
+First, create an empty directory and add your `app.wx` file. Next, run `npm install @winglang/wingsdk`.
 
 Let's create a file in the directory named `main.ts`:
 
 ```typescript
-import { testing } from '@monadahq/wingsdk';
+import { testing } from '@winglang/wingsdk';
 
 async function main() {
   const sim = new testing.Simulator("app.wx");
@@ -70,7 +70,7 @@ has a function at the path `root/my_function`. Let's create a function client
 for it:
 
 ```typescript
-import { FunctionClient } from "@monadahq/wingsdk/sim";
+import { FunctionClient } from "@winglang/wingsdk/sim";
 
 const addr = sim.getAttributes("root/my_function").functionAddr;
 const client = new FunctionClient(addr);
