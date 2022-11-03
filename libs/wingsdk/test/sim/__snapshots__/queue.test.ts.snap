@@ -5,12 +5,9 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
-        "callees": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
-            "callers": Array [
+            "inbound": Array [
               "root/my_queue",
             ],
             "props": Object {
@@ -24,6 +21,9 @@ Object {
           },
         },
         "dependsOn": Array [
+          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
+        "outbound": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
         "props": Object {
@@ -52,12 +52,9 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
-        "callees": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
-            "callers": Array [
+            "inbound": Array [
               "root/my_queue",
             ],
             "props": Object {
@@ -71,6 +68,9 @@ Object {
           },
         },
         "dependsOn": Array [
+          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
+        "outbound": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
         "props": Object {
@@ -107,12 +107,9 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
-        "callees": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
-            "callers": Array [
+            "inbound": Array [
               "root/my_queue",
             ],
             "props": Object {
@@ -126,6 +123,9 @@ Object {
           },
         },
         "dependsOn": Array [
+          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
+        "outbound": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
         "props": Object {

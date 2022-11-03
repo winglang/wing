@@ -11,7 +11,8 @@ import { captureSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.sim.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase implements IResource {
-  private readonly callers = new Array<string>();
+  private readonly inbound = new Array<string>();
+  private readonly outbound = new Array<string>();
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
@@ -22,12 +23,14 @@ export class Logger extends cloud.LoggerBase implements IResource {
       type: cloud.LOGGER_TYPE,
       props: {},
       attrs: {} as any,
+      inbound: this.inbound,
+      outbound: this.outbound,
     };
   }
 
   /** @internal */
-  public _addCallers(...callers: string[]) {
-    this.callers.push(...callers);
+  public _addInbound(...resources: string[]) {
+    this.inbound.push(...resources);
   }
 
   /** @internal */
