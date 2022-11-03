@@ -24,7 +24,7 @@ jobs:
       - name: Checkout
         if: github.ref == 'refs/heads/main'
         uses: actions/checkout@v3
- 
+
       - name: Get tags
         if: github.ref == 'refs/heads/main'
         run: git fetch --unshallow --tags
@@ -112,7 +112,7 @@ jobs:
         with:
           targets: "build"
           projects: "wing,wingsdk,wing-api-checker,wing-playground"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream"
 
       # wingc require wingsdk to be built first in order to run
       - name: wingc Test
@@ -120,7 +120,7 @@ jobs:
         with:
           targets: "test"
           projects: "wingc"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream"
 
       - name: Package Wing CLI
         working-directory: apps/wing
@@ -163,7 +163,7 @@ jobs:
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WING_PLAYGROUND }}
           working-directory: apps/wing-playground/dist
           github-comment: false
-          vercel-args: '--prod '
+          vercel-args: "--prod "
 
   build-native:
     needs: prepare
@@ -220,14 +220,14 @@ jobs:
         with:
           targets: "build-native"
           projects: "wing-language-server"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream"
 
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           projects: "wingii"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream"
 
       - name: Upload Wing Language Server
         uses: actions/upload-artifact@v2
@@ -270,7 +270,7 @@ jobs:
         with:
           targets: "build-multi"
           projects: "vscode-wing"
-          args: "--configuration=release"
+          args: "--configuration=release --output-style=stream"
 
       - name: Upload extension
         uses: actions/upload-artifact@v2
