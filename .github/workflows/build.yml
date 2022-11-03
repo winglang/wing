@@ -103,6 +103,15 @@ jobs:
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm ci --ignore-scripts
+          working-directory: |
+            apps/wing
+            apps/vscode-wing
+            apps/wing-api-checker
+            apps/wing-playground
+            libs/wingsdk
+            ./
 
       - name: Lint Nx
         run: npx nx workspace-lint
@@ -210,7 +219,7 @@ jobs:
         uses: bahmutov/npm-install@v1
         with:
           # Don't need to install sub-project dependencies
-          install-command: npm install --ignore-scripts
+          install-command: npm ci --ignore-scripts
 
       - name: Lint Nx
         run: npx nx workspace-lint
@@ -264,6 +273,11 @@ jobs:
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm ci --ignore-scripts
+          working-directory: 
+            apps/vscode-wing
+            ./
 
       - name: Build
         uses: MansaGroup/nrwl-nx-action@v2
