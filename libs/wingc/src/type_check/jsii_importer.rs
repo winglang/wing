@@ -1,8 +1,9 @@
 use crate::{
 	ast::{Flight, Symbol},
+	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
-	type_check::{Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME}, debug,
+	type_check::{Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -367,10 +368,20 @@ impl<'a> JsiiImporter<'a> {
 		self.add_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env, new_type);
 		if is_resource {
 			// Look for a client interface for this resource
-			let client_interface = self.jsii_types.find_interface(&format!(
-				"{}.{}.I{}Client",
-				self.assembly_name, self.namespace_name, type_name
-			));
+			let client_interface = jsii_class.docs.and_then(|docs| docs.custom).and_then(|custom| {
+				custom
+					.get("inflight")
+					.map(|fqn| {
+						// Some fully qualified package names include "@" characters,
+						// so they have to be escaped in the original docstring.
+						if fqn.starts_with("`") && fqn.ends_with("`") {
+							&fqn[1..fqn.len() - 1]
+						} else {
+							fqn
+						}
+					})
+					.and_then(|fqn| self.jsii_types.find_interface(fqn))
+			});
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
 				self.add_members_to_class_env(&client_interface, false, Flight::In, &mut class_env, new_type);
