@@ -1,12 +1,11 @@
+import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
+import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
+import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
+import { QueueInflightMethods } from "../cloud";
 import * as core from "../core";
 
-import { Construct, IConstruct } from "constructs";
-
 import { Function } from "./function";
-import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
-import { QueueInflightMethods } from "../cloud";
-import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 
 /**
  * AWS implementation of `cloud.Queue`.
