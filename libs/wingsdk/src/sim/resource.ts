@@ -6,9 +6,19 @@ import { BaseResourceSchema } from "./schema";
  * targeting the simulator.
  */
 export interface IResource extends IConstruct {
-  /** @internal */
-  _addCallers(...callers: string[]): void;
-  /** @internal */
+  /**
+   * Annotate this resource with information about another resource that calls,
+   * triggers, or otherwise depends on this resource at runtime.
+   *
+   * @internal
+   */
+  _addInbound(...resources: string[]): void;
+
+  /**
+   * Convert this resource to a resource schema for the simulator.
+   *
+   * @internal
+   */
   _toResourceSchema(): BaseResourceSchema;
 }
 

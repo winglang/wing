@@ -12,8 +12,8 @@ import { captureSimulatorResource } from "./util";
  */
 export class Bucket extends cloud.BucketBase implements IResource {
   private readonly public: boolean;
-  private readonly callers = new Array<string>();
-  private readonly callees = new Array<string>();
+  private readonly inbound = new Array<string>();
+  private readonly outbound = new Array<string>();
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
 
@@ -28,14 +28,14 @@ export class Bucket extends cloud.BucketBase implements IResource {
         public: this.public,
       },
       attrs: {} as any,
-      callers: this.callers,
-      callees: this.callees,
+      inbound: this.inbound,
+      outbound: this.outbound,
     };
   }
 
   /** @internal */
-  public _addCallers(...callers: string[]) {
-    this.callers.push(...callers);
+  public _addInbound(...resources: string[]) {
+    this.inbound.push(...resources);
   }
 
   /** @internal */

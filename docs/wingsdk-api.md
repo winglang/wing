@@ -2989,9 +2989,9 @@ const baseResourceSchema: sim.BaseResourceSchema = { ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.type">type</a></code> | <code>string</code> | The type of the resource. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>@winglang/wingsdk.sim.BaseResourceAttributes</code> | The resource-specific attributes that are set after the resource is created. |
-| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.callees">callees</a></code> | <code>string[]</code> | IDs of resources that this resource calls, triggers, or captures. |
-| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.callers">callers</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or captured by. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.children">children</a></code> | <code>{[ key: string ]: @winglang/wingsdk.sim.BaseResourceSchema}</code> | The resource's children indexed by their IDs. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.inbound">inbound</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or referenced by. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.outbound">outbound</a></code> | <code>string[]</code> | IDs of resources that this resource calls, triggers, or references. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.path">path</a></code> | <code>string</code> | The full path of the resource in the construct tree. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.props">props</a></code> | <code>{[ key: string ]: any}</code> | The resource-specific properties needed to create this resource. |
 
@@ -3021,30 +3021,6 @@ The resource-specific attributes that are set after the resource is created.
 
 ---
 
-##### `callees`<sup>Optional</sup> <a name="callees" id="@winglang/wingsdk.sim.BaseResourceSchema.property.callees"></a>
-
-```typescript
-public readonly callees: string[];
-```
-
-- *Type:* string[]
-
-IDs of resources that this resource calls, triggers, or captures.
-
----
-
-##### `callers`<sup>Optional</sup> <a name="callers" id="@winglang/wingsdk.sim.BaseResourceSchema.property.callers"></a>
-
-```typescript
-public readonly callers: string[];
-```
-
-- *Type:* string[]
-
-IDs of resources that this resource is called, triggered, or captured by.
-
----
-
 ##### `children`<sup>Optional</sup> <a name="children" id="@winglang/wingsdk.sim.BaseResourceSchema.property.children"></a>
 
 ```typescript
@@ -3054,6 +3030,30 @@ public readonly children: {[ key: string ]: BaseResourceSchema};
 - *Type:* {[ key: string ]: @winglang/wingsdk.sim.BaseResourceSchema}
 
 The resource's children indexed by their IDs.
+
+---
+
+##### `inbound`<sup>Optional</sup> <a name="inbound" id="@winglang/wingsdk.sim.BaseResourceSchema.property.inbound"></a>
+
+```typescript
+public readonly inbound: string[];
+```
+
+- *Type:* string[]
+
+IDs of resources that this resource is called, triggered, or referenced by.
+
+---
+
+##### `outbound`<sup>Optional</sup> <a name="outbound" id="@winglang/wingsdk.sim.BaseResourceSchema.property.outbound"></a>
+
+```typescript
+public readonly outbound: string[];
+```
+
+- *Type:* string[]
+
+IDs of resources that this resource calls, triggers, or references.
 
 ---
 
