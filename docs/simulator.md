@@ -31,7 +31,7 @@ Let's create a file in the directory named `main.ts`:
 import { testing } from '@winglang/wingsdk';
 
 async function main() {
-  const mySim = new testing.Simulator("app.wx");
+  const mySim = new testing.Simulator({ simfile: "app.wx" });
   await mySim.start();
 
   // (1)

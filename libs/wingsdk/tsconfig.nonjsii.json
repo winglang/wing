@@ -5,8 +5,7 @@
   },
   "include": [
     "src/**/*.inflight.ts",
-    "src/**/*.sim.ts",
-    "src/**/exports.ts"
+    "src/**/*.sim.ts"
   ],
   "exclude": [
     "node_modules"
