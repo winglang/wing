@@ -31,7 +31,7 @@ Object {
       "my_function": Object {
         "props": Object {
           "environmentVariables": Object {
-            "WING_SIM_RUNTIME_FUNCTION_ADDR": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
+            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
@@ -55,7 +55,7 @@ Object {
         "props": Object {
           "environmentVariables": Object {
             "PIG_LATIN": "true",
-            "WING_SIM_RUNTIME_FUNCTION_ADDR": "c85c4e0e66bf385ab6b159bab34fb32dd81aad0a1d",
+            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",

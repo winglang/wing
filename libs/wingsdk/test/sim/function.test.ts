@@ -43,7 +43,7 @@ test("create a function", async () => {
     sourceCodeLanguage: "javascript",
     environmentVariables: {
       ENV_VAR1: "true",
-      WING_SIM_RUNTIME_FUNCTION_ADDR: expect.any(String),
+      WING_SIM_RUNTIME_FUNCTION_PATH: "root/my_function",
     },
   });
   await s.stop();

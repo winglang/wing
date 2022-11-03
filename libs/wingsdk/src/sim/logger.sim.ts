@@ -3,7 +3,7 @@ import * as os from "os";
 import { join } from "path";
 import { LogEvent } from "../cloud";
 import { ISimulatorContext } from "../testing";
-import { ENV_WING_SIM_RUNTIME_FUNCTION_ADDR } from "./function";
+import { ENV_WING_SIM_RUNTIME_FUNCTION_PATH } from "./function";
 import { ILoggerClient } from "./logger";
 import { ISimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
@@ -32,10 +32,10 @@ export class Logger implements ILoggerClient, ISimulatorResource {
     }
 
     // TODO: add some other compute context mechanism?
-    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_ADDR];
+    const functionPath = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_PATH];
     const logFile = `${this.logsDir}/events.log`;
     const event = {
-      functionHandle,
+      functionHandle: functionPath,
       message,
       timestamp: Date.now(),
     };
@@ -49,7 +49,7 @@ export class Logger implements ILoggerClient, ISimulatorResource {
   }
 
   public async fetchLatestLogs(): Promise<LogEvent[]> {
-    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_ADDR];
+    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_PATH];
     const logFile = `${this.logsDir}/events.log`;
     if (fs.existsSync(logFile)) {
       const contents = await fs.promises.readFile(logFile, "utf-8");

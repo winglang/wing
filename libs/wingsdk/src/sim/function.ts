@@ -7,8 +7,8 @@ import { IResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { captureSimulatorResource } from "./util";
 
-export const ENV_WING_SIM_RUNTIME_FUNCTION_ADDR =
-  "WING_SIM_RUNTIME_FUNCTION_ADDR";
+export const ENV_WING_SIM_RUNTIME_FUNCTION_PATH =
+  "WING_SIM_RUNTIME_FUNCTION_PATH";
 
 /**
  * Simulator implementation of `cloud.Function`.
@@ -52,7 +52,7 @@ export class Function extends cloud.FunctionBase implements IResource {
       this.addEnvironment(name, value);
     }
 
-    this.addEnvironment(ENV_WING_SIM_RUNTIME_FUNCTION_ADDR, this.node.addr);
+    this.addEnvironment(ENV_WING_SIM_RUNTIME_FUNCTION_PATH, this.node.path);
   }
 
   public addEnvironment(name: string, value: string) {
