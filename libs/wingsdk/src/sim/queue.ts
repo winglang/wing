@@ -12,8 +12,8 @@ import { captureSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.sim.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements IResource {
-  private readonly callers = new Array<string>();
-  private readonly callees = new Array<string>();
+  private readonly inbound = new Array<string>();
+  private readonly outbound = new Array<string>();
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
@@ -64,8 +64,8 @@ export class Queue extends cloud.QueueBase implements IResource {
       batchSize: props.batchSize ?? 1,
     });
 
-    this.callees.push(fn.node.path);
-    (fn as Function)._addCallers(this.node.path);
+    this.outbound.push(fn.node.path);
+    (fn as Function)._addInbound(this.node.path);
 
     return fn;
   }
@@ -80,14 +80,14 @@ export class Queue extends cloud.QueueBase implements IResource {
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,
-      callers: this.callers,
-      callees: this.callees,
+      inbound: this.inbound,
+      outbound: this.outbound,
     };
   }
 
   /** @internal */
-  public _addCallers(...callers: string[]) {
-    this.callers.push(...callers);
+  public _addInbound(...resources: string[]) {
+    this.inbound.push(...resources);
   }
 
   /** @internal */

@@ -20,7 +20,7 @@ export function captureSimulatorResource(
   const handle = `\${${resource.node.path}#attrs.handle}`; // TODO: proper token mechanism
   captureScope.addEnvironment(env, handle);
   captureScope.node.addDependency(resource);
-  resource._addCallers(captureScope.node.path);
+  resource._addInbound(captureScope.node.path);
   return NodeJsCode.fromInline(
     `$simulator.findInstance(process.env["${env}"])`
   );

@@ -19,10 +19,10 @@ export interface BaseResourceSchema {
   readonly props?: { [key: string]: any };
   /** The resource-specific attributes that are set after the resource is created. */
   readonly attrs?: BaseResourceAttributes;
-  /** IDs of resources that this resource is called, triggered, or captured by. */
-  readonly callers?: string[];
-  /** IDs of resources that this resource calls, triggers, or captures. */
-  readonly callees?: string[];
+  /** IDs of resources that this resource is called, triggered, or referenced by. */
+  readonly inbound?: string[];
+  /** IDs of resources that this resource calls, triggers, or references. */
+  readonly outbound?: string[];
   /** The resource's children indexed by their IDs. */
   readonly children?: { [key: string]: BaseResourceSchema };
 }

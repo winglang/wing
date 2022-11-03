@@ -16,8 +16,8 @@ export const ENV_WING_SIM_RUNTIME_FUNCTION_PATH =
  * @inflight `@winglang/wingsdk.sim.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements IResource {
-  private readonly callers = new Array<string>();
-  private readonly callees = new Array<string>();
+  private readonly inbound = new Array<string>();
+  private readonly outbound = new Array<string>();
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
@@ -35,7 +35,7 @@ export class Function extends cloud.FunctionBase implements IResource {
 
     for (const capture of Object.values(inflight.captures)) {
       if (capture.resource !== undefined) {
-        this.callees.push(capture.resource.node.path);
+        this.outbound.push(capture.resource.node.path);
       }
     }
 
@@ -60,8 +60,8 @@ export class Function extends cloud.FunctionBase implements IResource {
   }
 
   /** @internal */
-  public _addCallers(...callers: string[]) {
-    this.callers.push(...callers);
+  public _addInbound(...resources: string[]) {
+    this.inbound.push(...resources);
   }
 
   /** @internal */
@@ -79,8 +79,8 @@ export class Function extends cloud.FunctionBase implements IResource {
         environmentVariables: this.env,
       },
       attrs: {} as any,
-      callers: this.callers,
-      callees: this.callees,
+      inbound: this.inbound,
+      outbound: this.outbound,
     };
   }
 }

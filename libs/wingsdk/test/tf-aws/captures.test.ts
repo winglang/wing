@@ -105,7 +105,7 @@ test("function captures a bucket", () => {
       `async function $proc($cap, event) {
         console.log("Hello, " + event.name);
         // TODO: fix this
-        await $cap.bucket.put("hello.txt", Serializable.fromJSON(event));
+        await $cap.bucket.put("hello.txt", JSON.stringify(event));
       }`
     ),
     entrypoint: "$proc",
@@ -152,7 +152,7 @@ test("function captures a function", () => {
     code: core.NodeJsCode.fromInline(
       `async function $proc($cap, event) {
           console.log("Event: " + JSON.stringify(event));
-          const data = await $cap.function.invoke($Serializable.fromJSON({ name: "world" }));
+          const data = await $cap.function.invoke(JSON.stringify({ name: "world" }));
           console.log("Greeting: " + data.value().greeting);
         }`
     ),
@@ -190,7 +190,7 @@ test("two functions reusing the same inflight", () => {
     code: core.NodeJsCode.fromInline(
       `async function $proc($cap, event) {
           console.log("Hello, " + event.name);
-          await $cap.bucket.put("hello.txt", Serializable.fromJSON(event));
+          await $cap.bucket.put("hello.txt", JSON.stringify(event));
         }`
     ),
     entrypoint: "$proc",
@@ -229,7 +229,7 @@ test("function captures a queue", () => {
   const pusher = new core.Inflight({
     code: core.NodeJsCode.fromInline(
       `async function $proc($cap) {
-          await $cap.queue.push(Serializable.fromJSON({ name: "Alice" }));
+          await $cap.queue.push(JSON.stringify({ name: "Alice" }));
         }`
     ),
     entrypoint: "$proc",
