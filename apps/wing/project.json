@@ -8,14 +8,8 @@
   "targets": {
     "copy": {
       "executor": "nx:run-commands",
-      "inputs": [
-        "{workspaceRoot}/target/*/wingc.wasm"
-      ],
       "dependsOn": [
         "^build-wasm"
-      ],
-      "outputs": [
-        "{projectRoot}/wingc.wasm"
       ],
       "options": {
         "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
@@ -35,6 +29,15 @@
       ],
       "options": {
         "script": "build"
+      }
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "dependsOn": [
+        "build"
+      ],
+      "options": {
+        "command": "npm pack"
       }
     }
   }

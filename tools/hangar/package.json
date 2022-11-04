@@ -1,0 +1,17 @@
+{
+  "name": "hangar",
+  "version": "0.0.0",
+  "description": "winglang test suite",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "Monada",
+  "license": "MIT",
+  "devDependencies": {
+    "vitest": "^0.24.4",
+    "zx": "^7.1.1"
+  },
+  "dependencies": {
+  }
+}
