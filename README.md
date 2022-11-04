@@ -42,7 +42,6 @@ new cloud.Function(() ~> {
 
 Wing applications are compiled to [Terraform] and JavaScript, and can be
 deployed to AWS, GCP Azure, or visualized and debugged locally using the Wing Console.
-Console.
 
 Read below about [what makes Wing special](#what-makes-wing-special) and [why
 you should consider Wing](#why-wing).
