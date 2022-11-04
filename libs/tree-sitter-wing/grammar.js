@@ -392,22 +392,27 @@ module.exports = grammar({
 
     _container_value_type: ($) => seq("<", field("type_parameter", $._type), ">"),
 
-    unary_expression: ($) =>
-      choice(
-        ...[
-          ["+", PREC.UNARY],
-          ["-", PREC.UNARY],
-          ["!", PREC.UNARY],
-          //['~', PREC.UNARY],
-        ].map(([operator, precedence]) =>
+    unary_expression: ($) => {
+      /** @type {Array<[RuleOrLiteral, number]>} */
+      const table = [
+        ["+", PREC.UNARY],
+        ["-", PREC.UNARY],
+        ["!", PREC.UNARY],
+        //['~', PREC.UNARY],
+      ];
+
+      return choice(
+        ...table.map(([operator, precedence]) =>
           prec.left(
             precedence,
             seq(field("op", operator), field("arg", $.expression))
           )
         )
-      ),
+      );
+    },
 
     binary_expression: ($) => {
+      /** @type {Array<[RuleOrLiteral, number]>} */
       const table = [
         ["+", PREC.ADD],
         ["-", PREC.ADD],
@@ -474,7 +479,11 @@ module.exports = grammar({
   },
 });
 
-function anonymousClosure($, arrow) {
+/**
+ * @param {GrammarSymbols<"parameter_list" | "_type_annotation" | "block">} $
+ * @param {string} arrow
+ */
+ function anonymousClosure($, arrow) {
   return seq(
     optional("async"),
     field("parameter_list", $.parameter_list),
@@ -484,10 +493,16 @@ function anonymousClosure($, arrow) {
   );
 }
 
+/**
+ * @param {Rule} rule
+ */
 function commaSep1(rule) {
   return seq(rule, repeat(seq(",", rule)), optional(","));
 }
 
+/**
+ * @param {Rule} rule
+ */
 function commaSep(rule) {
   return optional(commaSep1(rule));
 }
