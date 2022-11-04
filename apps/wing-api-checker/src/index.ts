@@ -3,7 +3,7 @@ import * as path from "path";
 import chalk from "chalk";
 import chokidar from "chokidar";
 import * as glob from "glob-promise";
-import { SourceLocatable, TypeMember, TypeSystem } from "jsii-reflect";
+import { SourceLocatable, TypeSystem } from "jsii-reflect";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
@@ -33,8 +33,7 @@ async function generateWarnings(packageDir: string): Promise<number> {
     if (!cls.docs.summary) {
       warn(`Missing docstring for ${cls.fqn} (${loc(cls)})`);
     }
-    for (const m of cls.allMembers) {
-      const member = m as unknown as TypeMember & SourceLocatable;
+    for (const member of cls.allMembers) {
       if (!member.docs.summary) {
         warn(
           `Missing docstring for ${cls.fqn}.${member.name} (${loc(member)})`
@@ -47,8 +46,7 @@ async function generateWarnings(packageDir: string): Promise<number> {
     if (!iface.docs.summary) {
       warn(`Missing docstring for ${iface.fqn} (${loc(iface)})`);
     }
-    for (const m of iface.allMembers) {
-      const member = m as unknown as TypeMember & SourceLocatable;
+    for (const member of iface.allMembers) {
       if (!member.docs.summary) {
         warn(
           `Missing docstring for ${iface.fqn}.${member.name} (${loc(member)})`

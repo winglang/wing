@@ -60,7 +60,7 @@
     "chalk": "^4.1.2",
     "chokidar": "^3.5.3",
     "glob-promise": "^5.0.0",
-    "jsii-reflect": "^1.68.0",
+    "jsii-reflect": "^1.70.0",
     "yargs": "^16.2.0"
   },
   "main": "lib/index.js",
