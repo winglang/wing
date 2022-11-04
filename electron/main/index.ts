@@ -20,12 +20,6 @@ export default class AppUpdater {
 // Set application name for Windows 10+ notifications
 if (process.platform === "win32") app.setAppUserModelId(app.getName());
 
-if (!app.requestSingleInstanceLock()) {
-  app.quit();
-  // eslint-disable-next-line unicorn/no-process-exit
-  process.exit(0);
-}
-
 if (process.defaultApp) {
   const filename = process.argv[1];
   if (filename) {
