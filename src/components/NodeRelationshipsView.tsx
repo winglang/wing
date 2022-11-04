@@ -25,12 +25,12 @@ export interface Relationships {
     id: string;
     path: string;
   }[];
-  callers: {
+  inbound: {
     icon: React.ReactNode;
     id: string;
     path: string;
   }[];
-  callees: {
+  outbound: {
     icon: React.ReactNode;
     id: string;
     path: string;
@@ -38,8 +38,8 @@ export interface Relationships {
 }
 
 const NO_PARENT_TEXT = "No parent";
-const NO_CALLERS_TEXT = "No callers";
-const NO_CALLEES_TEXT = "No callees";
+const NO_INBOUND_TEXT = "No inbound";
+const NO_OUTBOUND_TEXT = "No outbound";
 const NO_CHILDREN_TEXT = "No children";
 const MAX_ITEM_COUNT = 4;
 const LOAD_MORE_ITEMS_TEXT = "Load more…";
@@ -149,8 +149,8 @@ export function NodeRelationshipsView({
   hideUsageRelationship,
   onNodeClick,
 }: NodeRelationshipsViewProps) {
-  const [viewAllCallers, setViewAllCallers] = useState(true);
-  const [viewAllCallees, setViewAllCallees] = useState(true);
+  const [viewAllInbound, setViewAllInbound] = useState(true);
+  const [viewAllOutbound, setViewAllOutbound] = useState(true);
   const [viewAllChildren, setViewAllChildren] = useState(true);
 
   return (
@@ -169,34 +169,34 @@ export function NodeRelationshipsView({
               centerSidesVertically
                 ? 0
                 : MAX_ITEM_COUNT -
-                  (relationships.callers.length === 0 ? 1 : 0) -
-                  relationships.callers.length
+                  (relationships.inbound.length === 0 ? 1 : 0) -
+                  relationships.inbound.length
             }
           >
             <span className="w-full text-center text-xs font-medium text-slate-600">
-              callers ({relationships.callers.length})
+              inbound ({relationships.inbound.length})
             </span>
 
             <div className="relative">
               <div
                 className={classNames("flex flex-col gap-0.5", {
-                  invisible: viewAllCallers && relationships.callers.length > 0,
+                  invisible: viewAllInbound && relationships.inbound.length > 0,
                 })}
               >
-                {relationships.callers.length === 0 && (
-                  <ItemButton title={NO_CALLERS_TEXT} disabled>
+                {relationships.inbound.length === 0 && (
+                  <ItemButton title={NO_INBOUND_TEXT} disabled>
                     <span className="px-2 italic text-slate-500">
-                      {NO_CALLERS_TEXT}
+                      {NO_INBOUND_TEXT}
                     </span>
                   </ItemButton>
                 )}
 
-                {relationships.callers
+                {relationships.inbound
                   .slice(
                     0,
-                    relationships.callers.length > MAX_ITEM_COUNT
+                    relationships.inbound.length > MAX_ITEM_COUNT
                       ? MAX_ITEM_COUNT - 1
-                      : relationships.callers.length,
+                      : relationships.inbound.length,
                   )
                   .map((resource) => (
                     <ItemButton
@@ -211,18 +211,18 @@ export function NodeRelationshipsView({
                     </ItemButton>
                   ))}
 
-                {relationships.callers.length > MAX_ITEM_COUNT && (
+                {relationships.inbound.length > MAX_ITEM_COUNT && (
                   <LoadMoreButton
                     itemCount={
-                      1 + relationships.callers.length - MAX_ITEM_COUNT
+                      1 + relationships.inbound.length - MAX_ITEM_COUNT
                     }
-                    onClick={() => setViewAllCallers(true)}
+                    onClick={() => setViewAllInbound(true)}
                   />
                 )}
               </div>
-              {viewAllCallers && relationships.callers.length > 0 && (
+              {viewAllInbound && relationships.inbound.length > 0 && (
                 <ScrollableArea overflowY className="flex flex-col gap-0.5">
-                  {relationships.callers.map((resource) => (
+                  {relationships.inbound.map((resource) => (
                     <ItemButton
                       key={resource.path}
                       title={resource.path}
@@ -420,35 +420,36 @@ export function NodeRelationshipsView({
                 : Math.max(
                     0,
                     MAX_ITEM_COUNT -
-                      (relationships.callees.length === 0 ? 1 : 0) -
-                      relationships.callees.length,
+                      (relationships.outbound.length === 0 ? 1 : 0) -
+                      relationships.outbound.length,
                   )
             }
           >
             <span className="w-full text-center text-xs font-medium text-slate-600">
-              callees ({relationships.callees.length})
+              outbound ({relationships.outbound.length})
             </span>
 
             <div className="relative">
               <div
                 className={classNames("flex flex-col gap-0.5", {
-                  invisible: viewAllCallees && relationships.callees.length > 0,
+                  invisible:
+                    viewAllOutbound && relationships.outbound.length > 0,
                 })}
               >
-                {relationships.callees.length === 0 && (
-                  <ItemButton title={NO_CALLEES_TEXT} disabled>
+                {relationships.outbound.length === 0 && (
+                  <ItemButton title={NO_OUTBOUND_TEXT} disabled>
                     <span className="px-2 italic text-slate-500">
-                      {NO_CALLEES_TEXT}
+                      {NO_OUTBOUND_TEXT}
                     </span>
                   </ItemButton>
                 )}
 
-                {relationships.callees
+                {relationships.outbound
                   .slice(
                     0,
-                    relationships.callees.length > MAX_ITEM_COUNT
+                    relationships.outbound.length > MAX_ITEM_COUNT
                       ? MAX_ITEM_COUNT - 1
-                      : relationships.callees.length,
+                      : relationships.outbound.length,
                   )
                   .map((resource) => (
                     <ItemButton
@@ -463,18 +464,18 @@ export function NodeRelationshipsView({
                     </ItemButton>
                   ))}
 
-                {relationships.callees.length > MAX_ITEM_COUNT && (
+                {relationships.outbound.length > MAX_ITEM_COUNT && (
                   <LoadMoreButton
                     itemCount={
-                      1 + relationships.callees.length - MAX_ITEM_COUNT
+                      1 + relationships.outbound.length - MAX_ITEM_COUNT
                     }
-                    onClick={() => setViewAllCallees(true)}
+                    onClick={() => setViewAllOutbound(true)}
                   />
                 )}
               </div>
-              {viewAllCallees && relationships.callees.length > 0 && (
+              {viewAllOutbound && relationships.outbound.length > 0 && (
                 <ScrollableArea overflowY className="flex flex-col gap-0.5">
-                  {relationships.callees.map((resource) => (
+                  {relationships.outbound.map((resource) => (
                     <ItemButton
                       key={resource.path}
                       title={resource.path}

@@ -1,11 +1,7 @@
-import { Simulator } from "@monadahq/wingsdk/lib/testing/index.js";
-import { FSWatcher } from "chokidar";
+import { FSWatcher, watch } from "chokidar";
 import log from "electron-log";
 
-import { createSimulator } from "./wingsdk.js";
-
-/* eslint-disable @typescript-eslint/no-require-imports */
-const chokidar = require("chokidar");
+import { Simulator } from "./wingsdk.js";
 
 let watcher: FSWatcher | undefined;
 
@@ -22,14 +18,14 @@ export const initWXFileWatcher = (options: {
     );
   }
 
-  const simulator: Simulator = createSimulator({ simfile: appPath });
+  const simulator = new Simulator({ simfile: appPath });
 
   if (!simulator) {
     log.error("failed to create wing local simulator");
     throw new Error("failed to create wing local simulator");
   }
 
-  watcher = chokidar.watch(appPath, {
+  watcher = watch(appPath, {
     ignored: /(^|[/\\])\../, // ignore dotfiles
     persistent: true,
     awaitWriteFinish: {

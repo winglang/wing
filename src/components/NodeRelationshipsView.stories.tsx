@@ -37,14 +37,14 @@ Default.args = {
         path: "function-3",
       },
     ],
-    callers: [
+    inbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "function-1",
         path: "function-1",
       },
     ],
-    callees: [
+    outbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "function-2",
@@ -68,8 +68,8 @@ NoRelationships.args = {
       path: "image-scrapper",
     },
     children: [],
-    callers: [],
-    callees: [],
+    inbound: [],
+    outbound: [],
   },
 };
 
@@ -87,7 +87,7 @@ UnevenItemCountI.args = {
       path: "image-scrapper",
     },
     children: [],
-    callers: [
+    inbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "scrape-images",
@@ -104,7 +104,7 @@ UnevenItemCountI.args = {
         path: "function-3",
       },
     ],
-    callees: [
+    outbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "scrape-images",
@@ -149,14 +149,14 @@ UnevenItemCountII.args = {
         path: "function-3",
       },
     ],
-    callers: [
+    inbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "scrape-images",
         path: "scrape-images",
       },
     ],
-    callees: [
+    outbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "scrape-images",
@@ -201,7 +201,7 @@ LongNames.args = {
         path: "mutual-christean-european-9-mutual-christean-european-9",
       },
     ],
-    callers: [
+    inbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "encouraging-dorrie-jewish-9",
@@ -218,7 +218,7 @@ LongNames.args = {
         path: "cooing-heath-german-7",
       },
     ],
-    callees: [
+    outbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "kind-shandra-jewish-6",
@@ -273,7 +273,7 @@ ManyRelationships.args = {
         path: "identical-tabatha",
       },
     ],
-    callers: [
+    inbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "hideous-chewy",
@@ -295,7 +295,7 @@ ManyRelationships.args = {
         path: "impressive-tanitansy",
       },
     ],
-    callees: [
+    outbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "stunning-crazy",
@@ -360,7 +360,7 @@ ScrollableRelationships.args = {
         path: "cornelius-bernhard-2",
       },
     ],
-    callers: [
+    inbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "hideous-chewy",
@@ -387,7 +387,7 @@ ScrollableRelationships.args = {
         path: "hideous-chewy-2",
       },
     ],
-    callees: [
+    outbound: [
       {
         icon: <CubeIcon className="w-4 h-4 text-sky-500" aria-hidden="true" />,
         id: "stunning-crazy",

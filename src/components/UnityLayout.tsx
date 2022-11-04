@@ -418,13 +418,13 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
                 >
                   <div className="border-t border-slate-800">
                     <div className="flex flex-col bg-slate-800/40">
-                      {currentNode.callers.length === 0 &&
-                        currentNode.callees.length === 0 && (
+                      {currentNode.inbound.length === 0 &&
+                        currentNode.outbound.length === 0 && (
                           <div className="px-2 py-1 text-slate-400 italic">
                             This resource has no relationships.
                           </div>
                         )}
-                      {currentNode.callers.map((path) => {
+                      {currentNode.inbound.map((path) => {
                         const node = nodeMap?.find(path);
                         if (node) {
                           return (
@@ -439,7 +439,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
                           );
                         }
                       })}
-                      {currentNode.callees.map((path) => {
+                      {currentNode.outbound.map((path) => {
                         const node = nodeMap?.find(path);
                         if (node) {
                           return (

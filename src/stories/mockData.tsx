@@ -181,11 +181,11 @@ export interface Relationships {
     icon: React.ReactNode;
     name: string;
   }[];
-  callers: {
+  inbound: {
     icon: React.ReactNode;
     name: string;
   }[];
-  callees: {
+  outbound: {
     icon: React.ReactNode;
     name: string;
   }[];
@@ -216,8 +216,8 @@ export const relationships: Relationships = {
     //   name: "child-1",
     // },
   ],
-  callers: [],
-  callees: [
+  inbound: [],
+  outbound: [
     {
       icon: (
         <CubeTransparentIcon

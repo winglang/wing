@@ -1,7 +1,7 @@
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { createQueueClient, Simulator } from "../wingsdk.js";
+import { Simulator } from "../wingsdk.js";
 
 export const createQueueRouter = (simulator: Simulator) => {
   return trpc.router().mutation("queue.push", {
@@ -10,8 +10,7 @@ export const createQueueRouter = (simulator: Simulator) => {
       message: z.string(),
     }),
     async resolve({ input }) {
-      const addr = simulator.getAttributes(input.resourcePath).queueAddr;
-      const client = createQueueClient(addr);
+      const client = simulator.getResourceByPath(input.resourcePath);
       return client.push(input.message);
     },
   });

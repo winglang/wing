@@ -4,17 +4,11 @@ import { JobPermission } from "projen/lib/github/workflows-model.js";
 const project = new TypeScriptProject({
   name: "wing-console",
   description: "The Wing Console",
-  deps: [
-    "chokidar",
-    // This dependency has an special `worker.js` that won't be bundled if it's a devDep.
-    "piscina",
-    // The bundling fails in dev (not sure why).
-    "ws",
-  ],
+  deps: ["chokidar"],
   devDeps: [
     "electron-log",
-    "@monadahq/wingsdk",
-    "@monadahq/polycons",
+    "@winglang/wingsdk",
+    "@winglang/polycons",
     "constructs",
     //
     "@monadahq/mona-projen",
@@ -63,6 +57,9 @@ const project = new TypeScriptProject({
     "webpack",
     "require-from-string",
   ],
+  // @ts-ignore
+  minNodeVersion: "16.0.0",
+  workflowNodeVersion: "16.x",
 });
 project.addTask("dev").exec("vite");
 project.compileTask.exec("vite build");
@@ -102,7 +99,10 @@ project.release?.addJobs({
       },
       {
         name: "Login to private npm registry",
-        run: "npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
+        run: [
+          "npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
+          "npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
+        ].join("\n"),
         env: {
           PROJEN_GITHUB_TOKEN: "${{ secrets.PROJEN_GITHUB_TOKEN }}",
         },
@@ -177,7 +177,6 @@ for (const tsconfig of tsconfigFiles) {
       forceConsistentCasingInFileNames: true,
       module: "ESNext",
       moduleResolution: "Node",
-      // moduleResolution: "Node16",
       // moduleResolution: "NodeNext",
       resolveJsonModule: true,
       isolatedModules: true,

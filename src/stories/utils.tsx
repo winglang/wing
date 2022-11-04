@@ -156,8 +156,8 @@ export const constructHubTreeToWingSchema = (): WingSimulatorSchema => {
     const item: {
       path: string;
       children?: {};
-      callers?: string[];
-      callees?: string[];
+      inbound?: string[];
+      outbound?: string[];
       id: string;
       type: string;
       props: Record<string, any>;
@@ -168,8 +168,8 @@ export const constructHubTreeToWingSchema = (): WingSimulatorSchema => {
     };
 
     if (isContHubResource(node)) {
-      item.callers = getRandomArrayOfResourcesPaths(resourcePathsArray);
-      item.callees = getRandomArrayOfResourcesPaths(resourcePathsArray);
+      item.inbound = getRandomArrayOfResourcesPaths(resourcePathsArray);
+      item.outbound = getRandomArrayOfResourcesPaths(resourcePathsArray);
     }
 
     if (node.children) {

@@ -1,7 +1,7 @@
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { createFunctionClient, Simulator } from "../wingsdk.js";
+import { IFunctionClient, Simulator } from "../wingsdk.js";
 
 type ResponseEnvelope =
   | {
@@ -21,8 +21,9 @@ export const createFunctionRouter = (simulator: Simulator) => {
         resourcePath: z.string(),
       }),
       async resolve({ input }) {
-        const addr = simulator.getAttributes(input.resourcePath).functionAddr;
-        const client = createFunctionClient(addr);
+        const client = simulator.getResourceByPath(
+          input.resourcePath,
+        ) as IFunctionClient;
         const response = await client.timesCalled();
         return response;
       },
@@ -33,8 +34,9 @@ export const createFunctionRouter = (simulator: Simulator) => {
         message: z.string(),
       }),
       async resolve({ input }) {
-        const addr = simulator.getAttributes(input.resourcePath).functionAddr;
-        const client = createFunctionClient(addr);
+        const client = simulator.getResourceByPath(
+          input.resourcePath,
+        ) as IFunctionClient;
         try {
           const response: ResponseEnvelope = {
             success: true,

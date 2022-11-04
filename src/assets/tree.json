@@ -19,21 +19,21 @@
               "sourceCodeLanguage": "javascript",
               "environmentVariables": {}
             },
-            "callers": [],
-            "callees": ["ImageStore.cloud.Bucket"]
+            "inbound": [],
+            "outbound": ["ImageStore.cloud.Bucket"]
           },
           "ImageStore.cloud.Bucket": {
             "id": "ImageStore.cloud.Bucket",
             "path": "image-extractor-app/ImageStore/ImageStore.cloud.Bucket",
             "type": "wingsdk.cloud.Bucket",
             "props": {},
-            "callers": ["ImageStore.cloud.Function"],
-            "callees": []
+            "inbound": ["ImageStore.cloud.Function"],
+            "outbound": []
           }
         },
         "props": {},
-        "callers": [],
-        "callees": []
+        "inbound": [],
+        "outbound": []
       }
     }
   }

@@ -21,14 +21,6 @@
       "type": "build"
     },
     {
-      "name": "@monadahq/polycons",
-      "type": "build"
-    },
-    {
-      "name": "@monadahq/wingsdk",
-      "type": "build"
-    },
-    {
       "name": "@storybook/addon-actions",
       "type": "build"
     },
@@ -81,7 +73,7 @@
     },
     {
       "name": "@types/node",
-      "version": "^14",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -108,6 +100,14 @@
     },
     {
       "name": "@vitest/coverage-c8",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/polycons",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/wingsdk",
       "type": "build"
     },
     {
@@ -283,14 +283,6 @@
     },
     {
       "name": "chokidar",
-      "type": "runtime"
-    },
-    {
-      "name": "piscina",
-      "type": "runtime"
-    },
-    {
-      "name": "ws",
       "type": "runtime"
     }
   ],

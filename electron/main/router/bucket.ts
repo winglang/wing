@@ -3,7 +3,7 @@ import fs from "node:fs";
 import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { createBucketClient, Simulator } from "../wingsdk.js";
+import { IBucketClient, Simulator } from "../wingsdk.js";
 
 export const createBucketRouter = (simulator: Simulator) => {
   return trpc
@@ -15,8 +15,9 @@ export const createBucketRouter = (simulator: Simulator) => {
         filePath: z.string(),
       }),
       async resolve({ input }) {
-        const addr = simulator.getAttributes(input.resourcePath).bucketAddr;
-        const client = createBucketClient(addr);
+        const client = simulator.getResourceByPath(
+          input.resourcePath,
+        ) as IBucketClient;
         const fileContent = await fs.promises.readFile(input.filePath, "utf8");
         const response = await client.put(input.fileName, fileContent);
         return response;
@@ -28,8 +29,9 @@ export const createBucketRouter = (simulator: Simulator) => {
         fileName: z.string(),
       }),
       async resolve({ input }) {
-        const addr = simulator.getAttributes(input.resourcePath).bucketAddr;
-        const client = createBucketClient(addr);
+        const client = simulator.getResourceByPath(
+          input.resourcePath,
+        ) as IBucketClient;
         const response = await client.get(input.fileName);
         return response;
       },
@@ -39,8 +41,9 @@ export const createBucketRouter = (simulator: Simulator) => {
         resourcePath: z.string(),
       }),
       async resolve({ input }) {
-        const addr = simulator.getAttributes(input.resourcePath).bucketAddr;
-        const client = createBucketClient(addr);
+        const client = simulator.getResourceByPath(
+          input.resourcePath,
+        ) as IBucketClient;
         const response = await client.list();
         return response;
       },

@@ -112,7 +112,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
           icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
         };
       }),
-      callees: currentNode.callees.map((path) => {
+      outbound: currentNode.outbound.map((path) => {
         const node = nodeMap?.find(path);
         if (!node) {
           // todo [sa] need to handle gracefully
@@ -124,7 +124,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
           icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
         };
       }),
-      callers: currentNode.callers.map((path) => {
+      inbound: currentNode.inbound.map((path) => {
         const node = nodeMap?.find(path);
         if (!node) {
           throw new Error(`Node [${path}] doesn't exist`);
