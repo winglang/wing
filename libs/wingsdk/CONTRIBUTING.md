@@ -1,13 +1,14 @@
 # Contributing to Wing SDK
 
-Thank you for wanting to contribute to Wing SDK! This will guide you through everything you need to know to make changes 
-and submit pull requests to the GitHub repository.
+Thank you for wanting to contribute to Wing SDK! This will guide you through everything you need to know to make changes to this project.
+
+This guide has information relevant for making changes to the SDK specifically.
+For details and FAQs about contributing to Wing toolchain in general, see the main [Contributing Guide](../../CONTRIBUTING.md).
 
 - [Contributing to Wing SDK](#contributing-to-wing-sdk)
   - [Opening Issues](#opening-issues)
   - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-    - [Setting up GitHub private packages](#setting-up-github-private-packages)
   - [Orientation](#orientation)
     - [`src` folder](#src-folder)
     - [`test` folder](#test-folder)
@@ -16,7 +17,6 @@ and submit pull requests to the GitHub repository.
     - [Sandbox](#sandbox)
   - [Creating a resource](#creating-a-resource)
   - [Exporting code and compiling with JSII](#exporting-code-and-compiling-with-jsii)
-  - [Submitting a pull request](#submitting-a-pull-request)
   - [Getting Help](#getting-help)
 
 ## Opening Issues
@@ -32,34 +32,13 @@ is a great place to get started on this process.
 
 ## Prerequisites
 
-These tools are needed to build the library and run unit tests:
-
-- Node.js - we recommend [nvm](https://github.com/nvm-sh/nvm) for managing Node versions
-- Your favorite code editor
-
-These tools are needed to run integration tests that deploy the resources to clouds:
+Beyond the standard prerequisites ([Node.js](https://nodejs.org/en/) and your favorite code editor), you may also need some extra tools if you want to run integration tests that deploy resources to the cloud:
 
 - [AWS CLI](https://aws.amazon.com/cli/) - make sure to do the setup part to create credentials
 - [Terraform CLI](https://learn.hashicorp.com/terraform/getting-started/install.html)
 - (optional) [CDK for Terraform CLI](https://learn.hashicorp.com/tutorials/terraform/cdktf-install?in=terraform/cdktf) - not required if you are using just the commands added to npm in the projen def file
 
-To build the project, you also need to `npm login` into `@winglang` in order to install private npm packages.
-
-### Setting up GitHub private packages
-
-First, you need a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to login to the GitHub npm registry. Follow the instructions in the [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token) to create a PAT. Make sure it has the `read:packages` scope.
-
-After, you should configure npm to use the @winglang package registry by default for the packages under the @winglang scope by running:
-
-```sh
-npm login --scope=@winglang --registry=https://npm.pkg.github.com
-
-# > Username: GITHUB USERNAME
-# > Password: YOUR PAT
-# > Email: PUBLIC-EMAIL-ADDRESS
-```
-
-See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) for more information.
+To build the project, you may also need to `npm login` into `@winglang` in order to install private npm packages. Check out [How do I install GitHub private packages?](../../CONTRIBUTING.md#how-do-i-install-private-github-packages)
 
 ## Orientation
 
@@ -74,6 +53,8 @@ This is a [CDK for Terraform], [JSII], [Projen] project. In a nutshell:
 [CDK for Terraform]: https://github.com/hashicorp/terraform-cdk
 [JSII]: https://github.com/aws/jsii
 [Projen]: https://github.com/projen/projen
+
+Unless otherwise specified, all  instructions below will assume you are running commands from the `libs/wingsdk` folder.
 
 ### `src` folder
 
@@ -252,32 +233,8 @@ export * from "./azure/exports";
 
 Under the hood, we will exclude any files named `exports.ts` from being compiled by JSII, and just compile them with ordinary TypeScript so they are still available to TypeScript/JavaScript consumers.
 
-## Submitting a pull request
-
-To ensure pull requests are reviewed and accepted as quickly as possible, please make sure:
-
-- [ ] Tests are written for all changes.
-
-- [ ] Hand-written documentation in `wingsdk/docs/` is updated if features are being added or removed.
-
-- [ ] `npm run build` has been run to lint, build, and update API docs.
-
-- [ ] Commit messages are clear and descriptive and pushed to your fork.
-
-- [ ] Your fork is in sync with the upstream repository.
-
-Create a new pull request [here](https://github.com/winglang/wingsdk/compare), selecting your fork for the 'compare' 
-and `main` for the 'base'. 
-
-The title of the pull request should adhere to [conventional commits](https://www.conventionalcommits.org). For example, 
-if you're adding new features, the pull request title should start with `feat(sdk):`. If you are fixing a bug, then `fix(sdk):` 
-should be the title prefix.
-
-In the description reference any open issues that the changes resolve. Describe the changes you made and include anything
-you think would be useful for a reviewer to know. It's also a great place to add a shout-out to anyone who helped with the 
-changes.
-
 ## Getting Help
 
-If you need help in contributing to this project please join our [Discord server](https://discord.gg/7wrggS3dZU) where 
-people are waiting to help in the #help channel.
+If you need help in contributing to this project please join the [Wing Slack] where people are waiting to help in the #help channel.
+
+[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
