@@ -1,4 +1,4 @@
-name: Using new form for Bug Report 🐞
+name: Bug Report 🐞
 description: Create a bug report
 labels: ["bug","untriaged"]
 body:
@@ -40,6 +40,7 @@ body:
     - Language Design
     - Compiler
     - SDK
+    - Wing Console
     - IDE Extension
     - Documentation
     - Development Environment
