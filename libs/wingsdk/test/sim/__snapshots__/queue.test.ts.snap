@@ -40,6 +40,7 @@ Object {
     },
     "type": "constructs.Construct",
   },
+  "sdkVersion": "0.0.0",
   "startOrder": Array [
     "root/my_queue/OnMessage-236ff3d72ad0ae46",
     "root/my_queue",
@@ -95,6 +96,7 @@ Object {
     },
     "type": "constructs.Construct",
   },
+  "sdkVersion": "0.0.0",
   "startOrder": Array [
     "root/my_queue/OnMessage-236ff3d72ad0ae46",
     "root/my_queue",
@@ -142,6 +144,7 @@ Object {
     },
     "type": "constructs.Construct",
   },
+  "sdkVersion": "0.0.0",
   "startOrder": Array [
     "root/my_queue/OnMessage-236ff3d72ad0ae46",
     "root/my_queue",

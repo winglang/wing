@@ -7,6 +7,8 @@ export interface WingSimulatorSchema {
    * dependency relationships.
    */
   readonly startOrder: string[];
+  /** The version of the Wing SDK used to synthesize the .wx file. */
+  readonly sdkVersion: string;
 }
 
 /** Schema for individual resources */

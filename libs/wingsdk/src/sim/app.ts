@@ -58,7 +58,9 @@ export class App extends Construct implements IApp {
       .topology()
       .filter((x) => isResource(x))
       .map((x) => x.node.path);
-    const contents: WingSimulatorSchema = { root, startOrder };
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const sdkVersion = require("../../package.json").version;
+    const contents: WingSimulatorSchema = { root, startOrder, sdkVersion };
     writeFileSync(
       join(workdir, "simulator.json"),
       JSON.stringify(contents, null, 2)

@@ -94,6 +94,15 @@ export class Simulator {
     }
     const data = readJsonSync(simJson);
 
+    const foundVersion = data.sdkVersion ?? "unknown";
+    // eslint-disable-next-line @typescript-eslint/no-require-imports
+    const expectedVersion = require("../../package.json").version;
+    if (foundVersion !== expectedVersion) {
+      console.error(
+        `WARNING: The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+      );
+    }
+
     this._annotateTreeWithPaths(data);
 
     return { assetsDir: workdir, tree: data };
