@@ -113,7 +113,7 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-inflight handler(message: str) {
+inflight handler(message: str) :str {
   print("Hello, ${message}!");
 }
 
