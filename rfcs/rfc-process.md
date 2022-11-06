@@ -27,7 +27,7 @@ Once you have an initial version of your RFC document (it is completely fine to 
 
 After first PR submission, use the PR number as the RFC's identifying number and rename your file to the format `NNNN-name.md`.
 
-This is the likely going to be the longest part of your RFC process, and where most of the feedback is collected. Some RFCs resolve quickly and some can take months (!!). *Take into account at least 1-2 weeks to allow community and stakeholders to provide their feedback.*
+This is likely going to be the longest part of your RFC process, and where most of the feedback is collected. Some RFCs resolve quickly and some can take months (!!). *Take into account at least 1-2 weeks to allow community and stakeholders to provide their feedback.*
 
 A few tips:
 

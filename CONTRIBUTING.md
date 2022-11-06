@@ -14,8 +14,9 @@ There are many ways to contribute to Wing:
 * Updating documentation
 * Reviewing open pull requests
 * Submitting pull requests for fixes or new features (see [How do I submit a pull request?])
-* Proposing larger changes or features with a RFC (see [What is an RFC?])
+* Proposing larger changes or features with an RFC (see [What is an RFC?])
 * Answering questions in the [Wing Slack]
+* Posting or answering questions in our forums [Wing Forum]
 
 If you aren't sure where to start, check out issues tagged with the [good first issue] label.
 
@@ -24,12 +25,13 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 [What is an RFC?]: #what-is-an-rfc
 [good first issue]: https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:%22good+first+issue%22
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+[Wing Forum] (TODO: add discourse link)
 
 ## How do I build Wing locally?
 
 The Wing monorepo uses [Nx] to run commands across all code packages in the `libs` and `apps` folders.
 
-Here is a list of minimum requirements for building the Wing repo locally:
+Here is a list of minimal tools you should install to build the Wing repo in your development environment:
 
 * [Node.js] version 18.x or above (we recommend [nvm])
 * [Rust]
@@ -82,7 +84,7 @@ See [Working with the npm registry](https://docs.github.com/en/packages/working-
 
 Adding a code example is a great way to contribute to Wing.  Here's how to do it:
 
-* Fork the Wing repository on GitHub.
+* Fork this repository on GitHub.
 * Create a new branch for your example.
 * Add your example to the `examples/showcase` directory.
   * If your example involves multiple files, create a dedicated directory for it.
@@ -95,6 +97,7 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 An RFC is short for "request for comments".
 It's a document that describes a new feature or change to Wing.
 It's a way to propose, gather feedback, and reach consensus for a change from maintainers, contributors, and users before writing any code.
+For an example of an RFC, check out: https://github.com/winglang/wing/blob/main/rfcs/polycons.md
 
 ## When should I write an RFC?
 
@@ -116,7 +119,7 @@ To help maintainers review them and get them merged in a speedy fashion, please 
 * [ ] Your pull request has a descriptive title (see [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)]).
 * [ ] A description of your changes are included, and a reference to a corresponding issue. (This is also a great place to shout-out anyone who helped with the changes!)
 * [ ] Tests are added for all changes.
-* [ ] Any handwritten documentation in `docs/` or READMEs are updated where appropriate when features are being added or removed. (API docs will be automatically generated for you!)
+* [ ] Any handwritten documentation in `docs/` or READMEs are updated where appropriate when features are being added or removed (API docs will be automatically generated for you!).
 * [ ] Your fork is in sync with the upstream repository.
 
 Other tips:
@@ -155,6 +158,6 @@ To that end, pull request titles must follow this convention:
 
 ## Where can I go to ask questions about Wing?
 
-Come on down and hang out in the [Wing Slack]! We're a friendly bunch and we'd love to help you out. There are no stupid questions, so don't be afraid to ask! Don't forget to introduce yourself in the #intros channel.
+Come on down and hang out in the [Wing Slack]! We're a friendly bunch and we'd love to help you out. There are no stupid questions, so don't be afraid to ask! Don't forget to introduce yourself in the #intro channel.
 
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
