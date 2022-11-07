@@ -1,4 +1,4 @@
-import { TypeScriptProject } from "@monadahq/mona-projen";
+import { TypeScriptProject } from "@winglang/projen";
 import { JobPermission } from "projen/lib/github/workflows-model.js";
 
 const project = new TypeScriptProject({
@@ -11,7 +11,7 @@ const project = new TypeScriptProject({
     "@winglang/polycons",
     "constructs",
     //
-    "@monadahq/mona-projen",
+    "@winglang/projen",
     "@babel/core",
     "@storybook/addon-actions",
     "@storybook/addon-essentials",
@@ -100,7 +100,6 @@ project.release?.addJobs({
       {
         name: "Login to private npm registry",
         run: [
-          "npm config set @monadahq:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
           "npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN",
         ].join("\n"),
         env: {
