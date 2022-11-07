@@ -137,7 +137,7 @@ mod sanity {
 				let intermediate_js = compile(test_file, None);
 				println!("{}\n---", intermediate_js);
 
-				insta::assert_snapshot!(format!("VALID_JSIR_{}", path.file_stem().unwrap().to_str().unwrap()), intermediate_js);
+				insta::assert_snapshot!(format!("VALID_JSIR_{}", test_pathbuf.file_stem().unwrap().to_str().unwrap()), intermediate_js);
 				// TODO add diagnostics snapshot
 			});
 		}
