@@ -1,6 +1,7 @@
-import { useId, useState } from "react";
+import { useContext, useId, useState } from "react";
 
 import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
+import { AppContext } from "../AppContext.js";
 import { Button } from "../design-system/Button.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TextArea } from "../design-system/TextArea.js";
@@ -13,6 +14,7 @@ export interface FunctionInteractionViewProps {
 export const FunctionInteractionView = ({
   node,
 }: FunctionInteractionViewProps) => {
+  const { appMode } = useContext(AppContext);
   const resourcePath = node.path ?? "";
   const timesCalled = trpc.useQuery(["function.timesCalled", { resourcePath }]);
   const utils = trpc.useContext();
@@ -27,6 +29,7 @@ export const FunctionInteractionView = ({
     <form
       className="h-full px-2 flex flex-col"
       method="POST"
+      aria-disabled={appMode === "webapp"}
       onSubmit={(event) => {
         event.preventDefault();
         invoke.mutate({
@@ -73,7 +76,7 @@ export const FunctionInteractionView = ({
 
         <div className="flex gap-4 items-end">
           <div>
-            <Button type="submit" primary>
+            <Button disabled={appMode === "webapp"} type="submit" primary>
               Send
             </Button>
           </div>

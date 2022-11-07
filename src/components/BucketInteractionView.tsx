@@ -38,13 +38,7 @@ export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
   const resourcePath = node.path ?? "";
   const bucketList = trpc.useQuery(["bucket.list", { resourcePath }]);
   const putFile = trpc.useMutation(["bucket.put"]);
-  putFile.mutateAsync;
   const getFile = trpc.useMutation(["bucket.get"]);
-  // const { promisifiedMutate: getFilePromise } = usePromisifyMutation<{
-  //   resourcePath: string | undefined;
-  //   fileName: string;
-  // }>(getFile);
-  // todo [sa] list bucket files on load
   const [entries, setEntries] = useState<FileExplorerEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);

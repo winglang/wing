@@ -4,14 +4,17 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 
+import { AppContext } from "./AppContext.js";
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
 import { ipcLink } from "./utils/ipcLink.js";
 import { trpc } from "./utils/trpc.js";
 
-export interface AppProps {}
+export interface AppProps {
+  querySchema?: WingSimulatorSchema;
+}
 
-export const App = ({}: AppProps) => {
+export const App = ({ querySchema }: AppProps) => {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     createTRPCClient({
@@ -22,6 +25,15 @@ export const App = ({}: AppProps) => {
   const [schema, setSchema] = useState<WingSimulatorSchema>();
 
   useEffect(() => {
+    if (querySchema) {
+      console.log(
+        "setting wing application schema from query string",
+        querySchema,
+      );
+      setSchema(querySchema);
+      return;
+    }
+    console.log("loading application schema from simulator");
     const loadSchema = async () => {
       await queryClient.invalidateQueries("app.tree");
       trpcClient
@@ -40,18 +52,22 @@ export const App = ({}: AppProps) => {
     return () => {
       removeCloudChangeListener();
     };
-  }, [queryClient]);
+  }, [queryClient, querySchema]);
 
   // todo [SA] construct hub story
   // const [schema] = useState(() => constructHubTreeToWingSchema());
   // todo [SA] add vanitiUi
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <NotificationsProvider>
-          <VscodeLayout schema={schema} />
-        </NotificationsProvider>
-      </QueryClientProvider>
-    </trpc.Provider>
+    <AppContext.Provider
+      value={{ appMode: querySchema ? "webapp" : "electron" }}
+    >
+      <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <QueryClientProvider client={queryClient}>
+          <NotificationsProvider>
+            <VscodeLayout schema={schema} />
+          </NotificationsProvider>
+        </QueryClientProvider>
+      </trpc.Provider>
+    </AppContext.Provider>
   );
 };

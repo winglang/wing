@@ -1,7 +1,8 @@
 import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
-import { useCallback, useId, useState } from "react";
+import { useCallback, useContext, useId, useState } from "react";
 
 import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
+import { AppContext } from "../AppContext.js";
 import { Button } from "../design-system/Button.js";
 import { useNotifications } from "../design-system/Notification.js";
 import { TextArea } from "../design-system/TextArea.js";
@@ -12,11 +13,15 @@ export interface QueueInteractionViewProps {
 }
 
 export const QueueInteractionView = ({ node }: QueueInteractionViewProps) => {
+  const { appMode } = useContext(AppContext);
   const pushMessage = trpc.useMutation(["queue.push"]);
   const [message, setMessage] = useState("");
   const { showNotification } = useNotifications();
 
   const sendMessage = useCallback(async () => {
+    if (appMode === "webapp") {
+      return;
+    }
     if (!message || message === "") {
       return;
     }
@@ -52,6 +57,7 @@ export const QueueInteractionView = ({ node }: QueueInteractionViewProps) => {
             icon={PaperAirplaneIcon}
             label="Send Message"
             primary
+            disabled={appMode === "webapp"}
             onClick={() => sendMessage()}
           />
         </div>
