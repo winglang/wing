@@ -3,6 +3,7 @@ import { join } from "path";
 import { IPolyconFactory, Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
+import { SDK_VERSION } from "../constants";
 import { DependencyGraph, Files, IApp } from "../core";
 import { mkdtemp, sanitizeValue } from "../util";
 import { PolyconFactory } from "./factory";
@@ -58,7 +59,8 @@ export class App extends Construct implements IApp {
       .topology()
       .filter((x) => isResource(x))
       .map((x) => x.node.path);
-    const contents: WingSimulatorSchema = { root, startOrder };
+    const sdkVersion = SDK_VERSION;
+    const contents: WingSimulatorSchema = { root, startOrder, sdkVersion };
     writeFileSync(
       join(workdir, "simulator.json"),
       JSON.stringify(contents, null, 2)
