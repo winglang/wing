@@ -8,6 +8,7 @@ import { mkdtemp, sanitizeValue } from "../util";
 import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
 import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
+import { SDK_VERSION } from "../constants";
 
 /**
  * Props for `App`.
@@ -58,8 +59,7 @@ export class App extends Construct implements IApp {
       .topology()
       .filter((x) => isResource(x))
       .map((x) => x.node.path);
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const sdkVersion = require("../../package.json").version;
+    const sdkVersion = SDK_VERSION;
     const contents: WingSimulatorSchema = { root, startOrder, sdkVersion };
     writeFileSync(
       join(workdir, "simulator.json"),
