@@ -6,7 +6,7 @@ import { Breadcrumbs } from "./Breadcrumbs.js";
 
 const BreadcrumbsStory: ComponentStory<typeof Breadcrumbs> = (args) => {
   return (
-    <div className="flex-1 bg-white px-3 py-1.5">
+    <div className="flex-1 bg-white px-4 py-1.5">
       <Breadcrumbs breadcrumbs={breadcrumbs} />
     </div>
   );

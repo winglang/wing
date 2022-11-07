@@ -37,13 +37,13 @@ const InspectorSectionHeading = ({
   return (
     <button
       className={classNames(
-        "w-full px-2 py-1 flex items-center gap-1 hover:bg-slate-50 group relative",
+        "w-full px-4 py-1 flex items-center gap-1 hover:bg-slate-50 group relative",
         // "outline-none focus:ring ring-sky-300",
       )}
       onClick={onClick}
     >
       <Icon
-        className="w-4 h-4 text-slate-500 group-hover:text-slate-600"
+        className="-ml-1 w-4 h-4 text-slate-500 group-hover:text-slate-600"
         aria-hidden="true"
       />
       <div className="text-slate-500 font-medium group-hover:text-slate-600">
@@ -132,12 +132,11 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
 
   useEffect(() => {
     treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
+    treeMenu.setCurrent(schema?.root.path);
   }, [schema]);
 
   useEffect(() => {
-    treeMenu.expand("");
     treeMenu.expandAll();
-    treeMenu.setCurrent("");
   }, [nodeMap]);
 
   useEffect(() => {
@@ -387,11 +386,11 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
             </div>
 
             <LeftResizableWidget className="bg-white flex-shrink min-w-[20rem] border-l">
-              <ScrollableArea overflowY className="h-full text-sm py-2">
+              <ScrollableArea overflowY className="h-full text-sm">
                 {currentNode && (
                   <>
                     {/* <NodeAttributes node={currentNode.schema} />
-                <div className="border-t px-3 py-2">
+                <div className="border-t px-4 py-2">
                   <NodeInteractionView node={currentNode.schema} />
                 </div> */}
                     {attributeGroups?.map((attributeGroup) => {
@@ -407,7 +406,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
                             }
                           >
                             <div className="border-t">
-                              <div className="px-4 py-1.5 grid grid-cols-5 gap-y-1 bg-slate-100">
+                              <div className="px-4 py-1.5 grid grid-cols-5 gap-y-1 gap-x-4 bg-slate-100">
                                 {attributeGroup.attributes.map((attribute) => {
                                   return (
                                     <AttributeView
@@ -444,9 +443,11 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
         </div>
       </div>
 
-      <TopResizableWidget className="border-t bg-white min-h-[5rem] flex flex-col gap-2  px-4 py-2">
+      <TopResizableWidget className="border-t bg-white min-h-[5rem] flex flex-col gap-2 px-4 py-2">
         <div className="flex gap-2">
-          <div className="uppercase text-sm border-b border-gray-600">Logs</div>
+          <div className="uppercase text-sm border-b border-slate-600">
+            Logs
+          </div>
         </div>
         <div className="flex-1 relative">
           <ScrollableArea overflowY></ScrollableArea>

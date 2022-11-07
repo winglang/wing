@@ -21,7 +21,7 @@ export function BaseNodeAttributes({ attributes }: BaseNodeAttributesProps) {
           return (
             <div
               key={attribute.key}
-              className="px-3 py-2.5 sm:grid sm:grid-cols-4 sm:gap-2 group"
+              className="px-4 py-2.5 sm:grid sm:grid-cols-4 sm:gap-2 group"
             >
               <dt className="text-sm font-medium text-slate-500">
                 {attribute.key}

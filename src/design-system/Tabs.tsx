@@ -36,7 +36,7 @@ export const Tabs = (props: TabsProps) => {
             <div
               key={tab.id}
               className={classNames(
-                "relative flex items-center px-3 cursor-pointer group",
+                "relative flex items-center px-4 cursor-pointer group",
                 isCurrent ? "bg-white" : "bg-slate-200",
               )}
               onClick={() => onTabClicked?.(tab)}

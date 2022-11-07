@@ -16,7 +16,6 @@ export const FunctionInteractionView = ({
 }: FunctionInteractionViewProps) => {
   const { appMode } = useContext(AppContext);
   const resourcePath = node.path ?? "";
-  const timesCalled = trpc.useQuery(["function.timesCalled", { resourcePath }]);
   const utils = trpc.useContext();
   const invoke = trpc.useMutation("function.invoke", {
     onSuccess() {
@@ -39,16 +38,6 @@ export const FunctionInteractionView = ({
         setInput("");
       }}
     >
-      <div className="space-y-6 bg-slate-100 p-2 rounded">
-        {timesCalled.data !== undefined && (
-          <div className="block text-sm text-slate-500">
-            {`This function was called ${timesCalled.data} ${
-              timesCalled.data === 1 ? "time" : "times"
-            }`}
-          </div>
-        )}
-      </div>
-
       <div className="space-y-2">
         <div>
           <p className="mt-1 text-sm text-slate-500">
@@ -59,7 +48,7 @@ export const FunctionInteractionView = ({
         <div>
           <label
             htmlFor={id}
-            className="block text-sm font-medium text-slate-700"
+            className="block text-sm font-medium text-slate-500"
           >
             Payload (JSON)
           </label>
@@ -67,8 +56,8 @@ export const FunctionInteractionView = ({
             <TextArea
               rows={4}
               id={id}
-              className="block w-full rounded-md border-slate-300 shadow-sm focus:border-sky-500 focus:ring-sky-500 sm:text-sm"
               value={input}
+              className="text-sm"
               onInput={(event) => setInput(event.currentTarget.value)}
             />
           </div>
@@ -90,15 +79,25 @@ export const FunctionInteractionView = ({
           </span>
         </div>
 
-        <div className="flex-1 min-h-[8rem] relative bg-slate-100 rounded overflow-hidden">
+        {/* <div className="flex-1 min-h-[8rem] relative bg-slate-50 rounded overflow-hidden border border-slate-300 select-text cursor-text">
           <ScrollableArea overflowX overflowY className="text-xs p-2">
             {invoke.data && (
-              <pre className="select-text">
+              <pre>
                 <code>{JSON.stringify(invoke.data, undefined, 2)}</code>
               </pre>
             )}
           </ScrollableArea>
-        </div>
+        </div> */}
+
+        <TextArea
+          rows={4}
+          id={id}
+          className="text-sm"
+          value={
+            invoke.data ? JSON.stringify(invoke.data, undefined, 2) : undefined
+          }
+          disabled
+        />
       </div>
     </form>
   );

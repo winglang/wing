@@ -87,7 +87,7 @@ function NotificationsContainer() {
               }}
             >
               <div className="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
-                <div className="p-4">
+                <div className="p-3">
                   <div className="flex items-start">
                     <div className="flex-shrink-0">
                       {notification.type === "error" ? (
@@ -103,11 +103,11 @@ function NotificationsContainer() {
                       )}
                     </div>
                     <div className="ml-3 w-0 flex-1 pt-0.5">
-                      <p className="text-sm font-medium text-gray-900">
+                      <p className="text-sm font-medium text-slate-900">
                         {notification.title}
                       </p>
                       {notification.body && (
-                        <p className="mt-1 text-sm text-gray-500">
+                        <p className="mt-1 text-sm text-slate-500">
                           {notification.body}
                         </p>
                       )}
@@ -115,7 +115,7 @@ function NotificationsContainer() {
                     <div className="ml-4 flex-shrink-0 flex">
                       <button
                         type="button"
-                        className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        className="bg-white rounded-md inline-flex text-slate-400 hover:text-slate-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                         onClick={() => {
                           closeNotification(notification.id);
                         }}

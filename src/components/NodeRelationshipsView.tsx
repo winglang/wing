@@ -253,7 +253,9 @@ export function NodeRelationshipsView({
             </span>
             {!relationships.parent && (
               <ItemButton title={NO_PARENT_TEXT} disabled>
-                <span className="px-2 italic">{NO_PARENT_TEXT}</span>
+                <span className="px-2 italic text-slate-500">
+                  {NO_PARENT_TEXT}
+                </span>
               </ItemButton>
             )}
             {relationships.parent && (
@@ -279,7 +281,7 @@ export function NodeRelationshipsView({
             aria-hidden="true"
           />
         </div>
-        <div className="flex justify-around items-center">
+        <div className="flex justify-around items-center gap-2">
           {!hideUsageRelationship && (
             <div className="flex-shrink-0">
               <ArrowRightIcon

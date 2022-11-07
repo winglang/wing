@@ -65,7 +65,7 @@ const Button = ({ className, ...props }: ButtonProps) => {
   return (
     <button
       className={classNames(
-        "px-1.5 py-0.5 shadow-sm rounded bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white transition-all ease-in-out",
+        "px-1.5 py-0.5 shadow-sm rounded bg-slate-700 hover:bg-slate-600 text-slate-200 hover:text-white transition ease-in-out",
         "border border-slate-800",
         "outline-none focus:ring-2 ring-sky-700",
         className,
@@ -265,7 +265,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
                       className={classNames(
                         "px-1.5 py-0",
                         "text-xs text-slate-300 w-full placeholder:text-slate-600 rounded",
-                        "transition-all ease-in-out",
+                        "transition ease-in-out",
                         "shadow-sm",
                         "border-t border-x-0 border-b-0 border-slate-900 focus:border-slate-900 bg-slate-800",
                         "outline-none focus:ring-2 ring-sky-700 focus:ring-sky-700",
@@ -483,7 +483,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
                               rows={4}
                               className={classNames(
                                 "px-1.5 py-1 text-xs text-slate-300 w-full placeholder:text-slate-600 rounded",
-                                "transition-all ease-in-out",
+                                "transition ease-in-out",
                                 "shadow-sm",
                                 "border-t border-x-0 border-b-0 border-slate-900 focus:border-slate-900 bg-slate-800",
                                 "outline-none focus:ring-2 ring-sky-700 focus:ring-sky-700",

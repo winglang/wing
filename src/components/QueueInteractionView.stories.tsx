@@ -14,7 +14,7 @@ export default {
 
 export const QueueInteraction = () => {
   return (
-    <div className="max-w-lg h-96 shadow rounded p-4 border border-slate-200">
+    <div className="max-w-lg h-96 shadow rounded p-3 border border-slate-200">
       <div className="relative h-full">
         <QueueInteractionView
           node={{

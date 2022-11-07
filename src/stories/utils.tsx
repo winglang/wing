@@ -201,7 +201,7 @@ const CubeTransparentExIcon = (props: React.SVGProps<SVGSVGElement>) => {
 
       <CubeTransparentIcon
         {...props}
-        className={classNames(props.className, "absolute inset-0")}
+        className={classNames(props.className, "absolute inset-0 opacity-70")}
       />
     </div>
   );

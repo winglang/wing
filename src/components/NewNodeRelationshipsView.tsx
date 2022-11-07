@@ -31,7 +31,7 @@ export const NewNodeRelationshipsView = ({
         className="flex-0 flex flex-col bg-white border border-slate-300/75 shadow-sm min-w-0"
         title={node.id}
       >
-        <div className="px-3.5 py-2.5 flex items-center gap-2">
+        <div className="px-4 py-2.5 flex items-center gap-2">
           <div className="flex-shrink-0 -ml-1">{node.icon}</div>
           <div className="flex-1 truncate text-sm">{node.id}</div>
         </div>

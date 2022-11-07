@@ -36,9 +36,11 @@ export const TreeMenu = ({
 }: TreeMenuProps) => {
   return (
     <>
-      <div className="h-9 flex-shrink-0 flex items-center justify-between gap-1 px-4">
-        <div className="flex items-center">
-          <span className="uppercase text-sm font-semibold">{title}</span>
+      <div className="h-9 flex-shrink-0 flex items-center justify-between gap-2 px-4">
+        <div className="flex items-center min-w-0">
+          <span className="truncate uppercase text-sm font-semibold">
+            {title}
+          </span>
         </div>
 
         <div className="flex items-center">
