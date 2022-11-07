@@ -466,7 +466,7 @@ module.exports = grammar({
     ),
     map_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSep($.map_literal_member), "}"
+      "{", commaSep(field("member", $.map_literal_member)), "}"
     ),
     struct_literal: ($) => seq(field("type", $.custom_type), "{", field("fields", commaSep($.struct_literal_member)), "}"),
 
