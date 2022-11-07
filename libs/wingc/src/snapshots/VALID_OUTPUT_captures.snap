@@ -2,7 +2,7 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/captures.w"
 ---
-preflight.js:
+// ../../examples/tests/valid/captures.w.out/preflight.js
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
@@ -50,7 +50,7 @@ constructor() {
 }
 }
 new MyApp().synth();
-index.js:
+// ../../examples/tests/valid/captures.w.out/proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js
 async function $proc({ bucket1, bucket2 }, event) {
   bucket1.put("file.txt","data");
   bucket2.get("file.txt");

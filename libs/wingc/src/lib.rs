@@ -157,9 +157,8 @@ mod sanity {
 					if let Ok(file) = file {
 						let path = file.path();
 						if path.is_file() {
-							let file_name = path.file_name().unwrap().to_str().unwrap();
 							let file_contents = fs::read_to_string(path).unwrap();
-							snapshot.push_str(&format!("{}:\n{}\n", file_name, file_contents));
+							snapshot.push_str(&format!("// {}\n{}\n", path.to_str().unwrap(), file_contents));
 						}
 					}
 				}

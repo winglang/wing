@@ -2,7 +2,7 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/expressions_binary_operators.w"
 ---
-preflight.js:
+// ../../examples/tests/valid/expressions_binary_operators.w.out/preflight.js
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
