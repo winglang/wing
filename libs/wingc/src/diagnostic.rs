@@ -23,6 +23,36 @@ impl std::fmt::Display for WingSpan {
 	}
 }
 
+impl Ord for WingSpan {
+	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+		if self.file_id == other.file_id {
+			let start_ord = self.start.cmp(&other.start);
+			if start_ord == std::cmp::Ordering::Equal {
+				self.end.cmp(&other.end)
+			} else {
+				start_ord
+			}
+		} else {
+			self.file_id.cmp(&other.file_id)
+		}
+	}
+}
+
+impl PartialOrd for WingSpan {
+	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+		if self.file_id == other.file_id {
+			let start_ord = self.start.partial_cmp(&other.start);
+			if start_ord == Some(std::cmp::Ordering::Equal) {
+				self.end.partial_cmp(&other.end)
+			} else {
+				start_ord
+			}
+		} else {
+			self.file_id.partial_cmp(&other.file_id)
+		}
+	}
+}
+
 #[derive(Debug, Clone)]
 pub enum DiagnosticLevel {
 	Error,

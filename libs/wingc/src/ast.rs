@@ -16,6 +16,28 @@ pub struct Symbol {
 	pub span: WingSpan,
 }
 
+impl Ord for Symbol {
+	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+		let string_ord = self.name.cmp(&other.name);
+		if string_ord == std::cmp::Ordering::Equal {
+			self.span.cmp(&other.span)
+		} else {
+			string_ord
+		}
+	}
+}
+
+impl PartialOrd for Symbol {
+	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+		let string_ord = self.name.partial_cmp(&other.name);
+		if string_ord == Some(std::cmp::Ordering::Equal) {
+			self.span.partial_cmp(&other.span)
+		} else {
+			string_ord
+		}
+	}
+}
+
 impl Hash for Symbol {
 	fn hash<H: Hasher>(&self, state: &mut H) {
 		self.name.hash(state);

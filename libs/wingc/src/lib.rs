@@ -15,8 +15,8 @@ use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
-pub mod debug;
 pub mod capture;
+pub mod debug;
 pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
@@ -124,10 +124,22 @@ mod sanity {
 
 	#[test]
 	fn can_compile_valid_files() {
-		for test_file in get_wing_files("../../examples/tests/valid") {
-			let test_file = test_file.to_str().unwrap();
+		for test_pathbuf in get_wing_files("../../examples/tests/valid") {
+			let test_file = test_pathbuf.to_str().unwrap();
 			println!("\n=== {} ===\n", test_file);
-			println!("{}\n---", compile(test_file, None));
+
+			insta::with_settings!({
+				omit_expression => true,
+				prepend_module_to_snapshot => false,
+				description => test_file,
+			}, {
+
+				let intermediate_js = compile(test_file, None);
+				println!("{}\n---", intermediate_js);
+
+				insta::assert_snapshot!(format!("VALID_JSIR_{}", path.file_stem().unwrap().to_str().unwrap()), intermediate_js);
+				// TODO add diagnostics snapshot
+			});
 		}
 	}
 

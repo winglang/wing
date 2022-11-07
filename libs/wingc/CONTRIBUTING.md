@@ -3,20 +3,21 @@
 Thank you for wanting to contribute to Wing Language! This will guide you through everything you need to know to make changes 
 and submit pull requests to the GitHub repository.
 
-- [Opening Issues](#opening-issues)
-- [Getting Started](#getting-started)
-- [Prerequisites](#prerequisites)
-  - [Setting up GitHub private packages](#setting-up-github-private-packages)
-- [Orientation](#orientation)
-  - [`src` folder](#src-folder)
-  - [`test` folder](#test-folder)
-- [Setting up and building the project](#setting-up-and-building-the-project)
-- [Logs](#logs)
-- [Testing](#testing)
-  - [Sandbox](#sandbox)
-- [Creating a resource](#creating-a-resource)
-- [Submitting a pull request](#submitting-a-pull-request)
-- [Getting Help](#getting-help)
+- [Contributing to WingLang](#contributing-to-winglang)
+  - [Opening Issues](#opening-issues)
+  - [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+    - [Setting up GitHub private packages](#setting-up-github-private-packages)
+    - [Setting up `insta` snapshot tool](#setting-up-insta-snapshot-tool)
+  - [Orientation](#orientation)
+    - [`src` folder](#src-folder)
+  - [Setting up and building the project](#setting-up-and-building-the-project)
+  - [Logs](#logs)
+  - [Testing](#testing)
+    - [Sandbox](#sandbox)
+  - [Creating a resource](#creating-a-resource)
+  - [Submitting a pull request](#submitting-a-pull-request)
+  - [Getting Help](#getting-help)
 
 ## Opening Issues
 
@@ -55,14 +56,32 @@ npm login --scope=@winglang --registry=https://npm.pkg.github.com
 
 See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) for more information.
 
+### Setting up `insta` snapshot tool
+
+Snapshot testing uses [insta](https://insta.rs/) tool to generate and compare snapshots. To install it, run:
+
+```sh
+cargo install cargo-insta
+```
+
+Recommended way to run tests and review snapshot changes:
+
+```sh
+cargo insta test --review
+```
+See https://insta.rs/docs/quickstart/ for more information.
+If would prefer to avoid the `insta` tool, you may set INSTA_UPDATE to `always` to update snapshots without review with a regular test command:
+
+```sh
+INSTA_UPDATE=always cargo test
+```
+
+otherwise, `cargo test` fails if snapshots are out of date.
+
 ## Orientation
 
 
 ### `src` folder
-
-### `test` folder
-
-... we don't have one
 
 
 ## Setting up and building the project

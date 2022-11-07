@@ -1,0 +1,51 @@
+---
+source: libs/wingc/src/lib.rs
+description: "../../examples/tests/valid/captures.w"
+---
+const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
+
+function __app(target) {
+	switch (target) {
+		case "sim":
+			return $stdlib.sim.App;
+		case "tfaws":
+		case "tf-aws":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir });
+  
+  let bucket1 = new cloud.Bucket(this,"cloud.Bucket");
+  let bucket2 = new cloud.Bucket(this,"PublicBucket",{
+  "public": true,}
+  );
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js")),
+    entrypoint: "$proc",
+    captures: {
+      bucket1: {
+        resource: bucket1,
+        methods: ["get","list","put"]
+      },
+      bucket2: {
+        resource: bucket2,
+        methods: ["get","list","put"]
+      },
+    }
+  });
+  new cloud.Function(this,"cloud.Function",handler,{
+  "env": {
+  
+  },}
+  );
+}
+}
+new MyApp().synth();

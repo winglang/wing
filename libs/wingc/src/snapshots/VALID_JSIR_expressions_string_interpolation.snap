@@ -1,0 +1,31 @@
+---
+source: libs/wingc/src/lib.rs
+description: "../../examples/tests/valid/expressions_string_interpolation.w"
+---
+const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
+
+function __app(target) {
+	switch (target) {
+		case "sim":
+			return $stdlib.sim.App;
+		case "tfaws":
+		case "tf-aws":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir });
+  
+  let regular_string = "str\n\"";
+  let empty_string = "";
+  let cool_string = `cool \"\${${regular_string}}\" test`;
+  let really_cool_string = `${empty_string}${empty_string}\n${cool_string}${cool_string}\n\${empty_string}${"string-in-string"}!`;
+}
+}
+new MyApp().synth();
