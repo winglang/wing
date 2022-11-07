@@ -22,7 +22,7 @@ pub mod jsify;
 pub mod parser;
 pub mod type_check;
 
-pub struct CompiledData {
+pub struct CompilerOutput {
 	pub preflight: String,
 	// pub inflights: BTreeMap<String, String>,
 	pub diagnostics: Diagnostics,
@@ -66,7 +66,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	tc.diagnostics.into_inner()
 }
 
-pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompiledData, Diagnostics> {
+pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutput, Diagnostics> {
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
@@ -83,7 +83,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompiledData,
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
-	// error clones
 	let errors = diagnostics
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
@@ -106,7 +105,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompiledData,
 	let intermediate_file = out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
 
-	return Ok(CompiledData {
+	return Ok(CompilerOutput {
 		preflight: intermediate_js,
 		diagnostics,
 	});
