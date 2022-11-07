@@ -4,7 +4,7 @@ description: "../../examples/tests/invalid/types_string_interpolation.w"
 ---
 [
     Diagnostic {
-        message: "Expected type \"string\", but got \"number\" instead: Reference(Identifier(Symbol { name: \"num_example\", span: WingSpan { start: Point { row: 3, column: 11 }, end: Point { row: 3, column: 22 }, start_byte: 60, end_byte: 71, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } }))",
+        message: "Expected type \"string\", but got \"number\" instead",
         span: Some(
             WingSpan {
                 start: Point {
@@ -23,7 +23,7 @@ description: "../../examples/tests/invalid/types_string_interpolation.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"string\", but got \"bool\" instead: Reference(Identifier(Symbol { name: \"bool_example\", span: WingSpan { start: Point { row: 6, column: 11 }, end: Point { row: 6, column: 23 }, start_byte: 138, end_byte: 150, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } }))",
+        message: "Expected type \"string\", but got \"bool\" instead",
         span: Some(
             WingSpan {
                 start: Point {
@@ -42,7 +42,7 @@ description: "../../examples/tests/invalid/types_string_interpolation.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"string\", but got \"number\" instead: Binary { op: Add, lexp: Expr { variant: Literal(Number(2.0)), evaluated_type: RefCell { value: Some(0x14ee09e20) }, span: WingSpan { start: Point { row: 10, column: 11 }, end: Point { row: 10, column: 12 }, start_byte: 219, end_byte: 220, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } }, rexp: Expr { variant: Literal(Number(2.0)), evaluated_type: RefCell { value: Some(0x14ee09e20) }, span: WingSpan { start: Point { row: 10, column: 15 }, end: Point { row: 10, column: 16 }, start_byte: 223, end_byte: 224, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } } }",
+        message: "Expected type \"string\", but got \"number\" instead",
         span: Some(
             WingSpan {
                 start: Point {

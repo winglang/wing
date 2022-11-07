@@ -4,7 +4,7 @@ description: "../../examples/tests/invalid/types_strings_arithmetic.w"
 ---
 [
     Diagnostic {
-        message: "Expected type \"number\", but got \"string\" instead: Literal(String(\"\\\"2\\\"\"))",
+        message: "Expected type \"number\", but got \"string\" instead",
         span: Some(
             WingSpan {
                 start: Point {
@@ -23,7 +23,7 @@ description: "../../examples/tests/invalid/types_strings_arithmetic.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"number\", but got \"string\" instead: Literal(String(\"\\\"2\\\"\"))",
+        message: "Expected type \"number\", but got \"string\" instead",
         span: Some(
             WingSpan {
                 start: Point {
@@ -42,7 +42,7 @@ description: "../../examples/tests/invalid/types_strings_arithmetic.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"number\", but got \"string\" instead: Literal(String(\"\\\"2\\\"\"))",
+        message: "Expected type \"number\", but got \"string\" instead",
         span: Some(
             WingSpan {
                 start: Point {
@@ -61,7 +61,7 @@ description: "../../examples/tests/invalid/types_strings_arithmetic.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"number\", but got \"string\" instead: Literal(String(\"\\\"2\\\"\"))",
+        message: "Expected type \"number\", but got \"string\" instead",
         span: Some(
             WingSpan {
                 start: Point {
@@ -80,7 +80,7 @@ description: "../../examples/tests/invalid/types_strings_arithmetic.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"number\", but got \"string\" instead: Reference(Identifier(Symbol { name: \"num_example\", span: WingSpan { start: Point { row: 9, column: 29 }, end: Point { row: 9, column: 40 }, start_byte: 224, end_byte: 235, file_id: \"../../examples/tests/invalid/types_strings_arithmetic.w\" } }))",
+        message: "Expected type \"number\", but got \"string\" instead",
         span: Some(
             WingSpan {
                 start: Point {
@@ -99,7 +99,7 @@ description: "../../examples/tests/invalid/types_strings_arithmetic.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"number\", but got \"string\" instead: Reference(Identifier(Symbol { name: \"num_example\", span: WingSpan { start: Point { row: 9, column: 29 }, end: Point { row: 9, column: 40 }, start_byte: 224, end_byte: 235, file_id: \"../../examples/tests/invalid/types_strings_arithmetic.w\" } }))",
+        message: "Expected type \"number\", but got \"string\" instead",
         span: Some(
             WingSpan {
                 start: Point {
