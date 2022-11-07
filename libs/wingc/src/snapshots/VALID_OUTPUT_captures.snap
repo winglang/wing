@@ -2,14 +2,7 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/captures.w"
 ---
-
-// ../../examples/tests/valid/captures.w.out/proc.8c960a9a8f34074c215dad8da3cb6ff4ba7ff7e8afebab5ba74a8a4faa1d3055/index.js
-async function $proc({ bucket }, event) {
-  bucket.put("file.txt","data")
-  bucket.get("file.txt")
-};
-
-// ../../examples/tests/valid/captures.w.out/intermediate.js
+intermediate.js:
 const $stdlib = require('@monadahq/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 const $synthesizer = process.env.WING_SIM ? new $stdlib.sim.Synthesizer({ outdir: $outdir }) : new $stdlib.tfaws.Synthesizer({ outdir: $outdir });
@@ -40,14 +33,7 @@ constructor() {
 }
 }
 new MyApp().synth();
-
-// ../../examples/tests/valid/captures.w.out/proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js
-async function $proc({ bucket1, bucket2 }, event) {
-  bucket1.put("file.txt","data");
-  bucket2.get("file.txt");
-};
-
-// ../../examples/tests/valid/captures.w.out/preflight.js
+preflight.js:
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
@@ -74,7 +60,7 @@ constructor() {
   "public": true,}
   );
   const handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.6fb04684fbbb6a5520b6197325fe254f11c3b1bc954004883083381c9c5cd0cd/index.js")),
     entrypoint: "$proc",
     captures: {
       bucket1: {
@@ -95,4 +81,19 @@ constructor() {
 }
 }
 new MyApp().synth();
+index.js:
+async function $proc({ bucket1, bucket2 }, event) {
+  bucket1.put("file.txt","data!");
+  bucket2.get("file.txt");
+};
+index.js:
+async function $proc({ bucket }, event) {
+  bucket.put("file.txt","data")
+  bucket.get("file.txt")
+};
+index.js:
+async function $proc({ bucket1, bucket2 }, event) {
+  bucket1.put("file.txt","data");
+  bucket2.get("file.txt");
+};
 

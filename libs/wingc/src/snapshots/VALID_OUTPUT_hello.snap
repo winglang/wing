@@ -2,14 +2,7 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/hello.w"
 ---
-
-// ../../examples/tests/valid/hello.w.out/proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js
-async function $proc({ bucket }, message) {
-  bucket.put("hello.txt",`Hello, ${message}!`);
-  return message;
-};
-
-// ../../examples/tests/valid/hello.w.out/preflight.js
+preflight.js:
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
@@ -47,4 +40,9 @@ constructor() {
 }
 }
 new MyApp().synth();
+index.js:
+async function $proc({ bucket }, message) {
+  bucket.put("hello.txt",`Hello, ${message}!`);
+  return message;
+};
 

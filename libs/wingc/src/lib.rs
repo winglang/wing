@@ -116,7 +116,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompiledData,
 #[cfg(test)]
 mod sanity {
 	use crate::{compile, diagnostic::print_diagnostics};
-	use std::{fs, path::PathBuf};
+	use std::{borrow::BorrowMut, fs, path::PathBuf};
 
 	fn get_wing_files(dir: &str) -> Vec<PathBuf> {
 		let mut files = Vec::new();
@@ -146,12 +146,13 @@ mod sanity {
 				assert!(result.is_ok(), "Compiler failed to compile valid file: {}", test_file);
 
 				let mut snapshot = String::new();
-				for file in walkdir::WalkDir::new(format!("{}.out", test_file)).into_iter() {
-					if let Ok(file) = file {
-						if file.path().is_file() {
-							let js = fs::read_to_string(file.path()).unwrap();
-							snapshot.push_str(&format!("\n// {}\n{}\n", file.path().to_str().unwrap(), js));
-						}
+				let mut output_files = walkdir::WalkDir::new(format!("{}.out", test_file)).into_iter().filter_map(|e| e.ok()).collect::<Vec<_>>();
+				output_files.sort_by_key(|e| e.path().to_str().unwrap().to_string());
+				for file in output_files {
+					let file_name = file.file_name().to_str().unwrap();
+					if file_name.ends_with(".js") {
+						let file_contents = fs::read_to_string(file.path()).unwrap();
+						snapshot.push_str(&format!("{}:\n{}\n", file_name, file_contents));
 					}
 				}
 

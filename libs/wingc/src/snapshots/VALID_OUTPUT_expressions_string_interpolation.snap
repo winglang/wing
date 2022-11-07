@@ -2,11 +2,9 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/expressions_string_interpolation.w"
 ---
+intermediate.js:
 
-// ../../examples/tests/valid/expressions_string_interpolation.w.out/intermediate.js
-
-
-// ../../examples/tests/valid/expressions_string_interpolation.w.out/preflight.js
+preflight.js:
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 

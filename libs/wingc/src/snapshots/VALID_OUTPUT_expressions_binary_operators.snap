@@ -2,8 +2,7 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/expressions_binary_operators.w"
 ---
-
-// ../../examples/tests/valid/expressions_binary_operators.w.out/intermediate.js
+intermediate.js:
 const $stdlib = require('@monadahq/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 const $synthesizer = process.env.WING_SIM ? new $stdlib.sim.Synthesizer({ outdir: $outdir }) : new $stdlib.tfaws.Synthesizer({ outdir: $outdir });
@@ -18,8 +17,7 @@ constructor() {
 }
 }
 new MyApp().synth();
-
-// ../../examples/tests/valid/expressions_binary_operators.w.out/preflight.js
+preflight.js:
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 

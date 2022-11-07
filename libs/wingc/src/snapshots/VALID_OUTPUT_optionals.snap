@@ -2,12 +2,7 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/optionals.w"
 ---
-
-// ../../examples/tests/valid/optionals.w.out/proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js
-async function $proc({  }, x) {
-};
-
-// ../../examples/tests/valid/optionals.w.out/preflight.js
+preflight.js:
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
@@ -39,4 +34,7 @@ constructor() {
 }
 }
 new MyApp().synth();
+index.js:
+async function $proc({  }, x) {
+};
 
