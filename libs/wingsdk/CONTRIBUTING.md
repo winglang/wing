@@ -2,7 +2,11 @@
 
 Thank you for wanting to contribute to Wing SDK! This will guide you through everything you need to know to make changes to this project.
 
-This guide has information relevant for making changes to the SDK specifically.
+The SDK contains all of the logic for turning standard wing resources like Bucket, Function, and Queue into Terraform or simulation code.
+If you're interested in adding new features to resources, or adding implementations of resources to new cloud providers, keep on reading!
+
+Unless otherwise specified, all  instructions in the guide will assume you are running commands from the `libs/wingsdk` folder.
+
 For details and FAQs about contributing to Wing toolchain in general, see the main [Contributing Guide](../../CONTRIBUTING.md).
 
 - [Contributing to Wing SDK](#contributing-to-wing-sdk)
@@ -45,16 +49,12 @@ To build the project, you may also need to `npm login` into `@winglang` in order
 This is a [CDK for Terraform], [JSII], [Projen] project. In a nutshell:
 
 * [CDK for Terraform] ("cdktf") is a framework for defining Terraform infrastructure in familiar programming languages like TypeScript, Python, Java, C#, and Go.
-* [JSII] is a tool that wraps over the TypeScript compiler that makes it possible to consume the library in multiple languages. JSII code is TypeScript code, but with extra type checks. [1]
-* [Projen] is a tool for managing project configuration. There is a `.projenrc.ts` file which generates `package.json` and other files. You can modify it and run `npx projen` to regenerate the resources.
-
-> [1] Currently we only use JSII to compile preflight code. Inflight code and code for the Wing simulator is compiled with plain TypeScript.
+* [JSII] is a tool that wraps over the TypeScript compiler that makes it possible to consume the library in multiple languages. JSII code is TypeScript code, but with extra type checks. In practice, the main difference from ordinary TypeScript is that you cannot use advanced TypeScript types like `Partial` or generics in public APIs.
+* [Projen] is a tool for managing project configuration. There is a `.projenrc.ts` file which generates `package.json` and other files. You can modify it and run `npx projen` to regenerate the resources. If you are not touching configuration files, you don't need to worry about this.
 
 [CDK for Terraform]: https://github.com/hashicorp/terraform-cdk
 [JSII]: https://github.com/aws/jsii
 [Projen]: https://github.com/projen/projen
-
-Unless otherwise specified, all  instructions below will assume you are running commands from the `libs/wingsdk` folder.
 
 ### `src` folder
 
@@ -68,7 +68,8 @@ The non-base resources there are consumed by the app and their constructors retu
 
 Contains tests for the different parts of the SDK.
 
-It also includes a `sandbox` folder which is a root of a CDK for TF project that you can use to deploy a mock app to the cloud or to our local simulator.
+It also includes a `sandbox` folder which includes a base Wing app that can be deployed to a cloud provider.
+See more details in the [Sandbox](#sandbox) section.
 
 ## Setting up and building the project
 
@@ -87,7 +88,7 @@ npm run build
 Dependencies can be added by editing the `.projenrc.ts` file and running `npx projen` after making the edits.
 If the dependency is a JSII library[2], you should add it to the list named `peerDeps` - otherwise, you should add it to `bundledDeps`.
 
-Here is an example of adding a package named "fast-json-stringify" pinned to major version 5:
+Here is an example of adding a package named "fast-json-stringify" pinned to major version 5 through the projenrc file:
 
 ```diff
 --- a/libs/wingsdk/.projenrc.ts
@@ -128,11 +129,12 @@ npx jest test/tf-aws/bucket.test.ts
 
 ### Sandbox
 
+There are a handful of commands to synthesize the sample app in the `sandbox` folder.
+
 ```shell
 # This will synth the sandbox to either the cloud or wing local based on which
 # synthesizer is specified inside `sandbox/main.ts`.
 # A sim.out or cdktf.out folder will be generated.
-npm install
 npm run sandbox:synth
 
 # This will deploy the sandbox app to the cloud or to the Wing simulator
@@ -149,10 +151,9 @@ A resource in the SDK has several pieces:
 * A preflight [polycon](https://github.com/winglang/polycons) API that is common across all cloud targets. Resource polycons are defined in `src/cloud`. For example, [`src/cloud/bucket.ts`](./src/cloud/bucket.ts).
 * An interface representing the inflight API common across all cloud targets. By convention, if the resource is named like `Gizmo`, the inflight interface should be named `IGizmoClient`. This can be in the same file as the preflight API.
 * A simulator implementation in `src/sim`. This includes:
-  * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema.ts`](./src/sim/schema.ts).
+  * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema-resources.ts`](./src/sim/schema-resources.ts).
   * A class that implements the polycon API and can produce the resource's simulation schema. For example, [`src/sim/bucket.ts`](./src/sim/bucket.ts).
-  * An `init` function that creates the resource simulation. For example, [`src/sim/bucket.sim.ts`](./src/sim/bucket.sim.ts).
-  * A class that implements the inflight API that interacts with the simulation. This class may require parameters that are provided from the `init` function. For example, [`src/sim/bucket.inflight.ts`](./src/sim/bucket.inflight.ts).
+  * An class that implements the inflight API and can simulate the resource. For example, [`src/sim/bucket.sim.ts`](./src/sim/bucket.sim.ts).
   * Unit tests for the simulator implementation. For example, [`test/sim/bucket.test.ts`](./test/sim/bucket.test.ts).
 * An implementation for each target cloud (currently just AWS). This includes:
   * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](./src/tf-aws/bucket.ts).
@@ -164,7 +165,9 @@ If you are implementing a new resource (or implementing an existing resource for
 For more information about designing resources, check out the Wing SDK design guidelines (TODO).
 
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
-You can also join us on our [Discord server](https://discord.gg/7wrggS3dZU) to ask questions (or just say hi)!
+You can also join us on our [Wing Slack] to ask questions (or just say hi)!
+
+[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 
 ## Exporting code and compiling with JSII
 
@@ -172,7 +175,7 @@ The Wing SDK is written in TypeScript and compiled with [JSII], which means that
 
 [JSII]: https://github.com/aws/jsii
 
-> Python, Java, C#, and Go versions of the SDK are coming soon!
+> Published versions of Python, Java, C#, and Go versions of the SDK are coming soon!
 
 In order to group APIs together, we prefer to put all public APIs like classes and interfaces inside modules, and then re-export it at the root of a directory. For example:
 
@@ -193,48 +196,11 @@ export * from "./bucket";
 export * from "./azure";
 ```
 
-However, some of the code in the Wing SDK is either:
-
-1. Not compatible with JSII, OR
-2. Does not need to be made available to other languages because it is an implementation detail. For example, code for simulating resources.
-
-So by convention, any TypeScript files that should not be compiled by JSII should be re-exported to parent directories by files named `exports.ts`, while all other TypeScript files should be re-exported by files named `index.ts`. For example:
-
-```ts
-// src/azure/bucket.ts
-export interface BucketProps {
-  // ...
-}
-
-export class Bucket {
-  // ...
-}
-
-// src/azure/bucket.inflight.ts
-import { BlobServiceClient } from "@azure/storage-blob";
-
-export class BucketClient {
-  // ...
-}
-
-// src/azure/index.ts
-export * from "./bucket";
-
-// src/azure/exports.ts
-export * from "./index";
-export * from "./bucket.inflight";
-
-// src/index.ts
-export * from "./azure";
-
-// src/exports.ts
-export * from "./azure/exports";
-```
-
-Under the hood, we will exclude any files named `exports.ts` from being compiled by JSII, and just compile them with ordinary TypeScript so they are still available to TypeScript/JavaScript consumers.
+However, some of the code in the Wing SDK may not be compatible with JSII because it uses features that are not supported by JSII (for example, advanced TypeScript types).
+In these cases, the APIs should not be exported from the root of the directory.
 
 ## Getting Help
 
-If you need help in contributing to this project please join the [Wing Slack] where people are waiting to help in the #help channel.
+If you need help in contributing to this project (whether it's a unexpected compiler error, or it's how to design a particular API) please join the [Wing Slack] where we would be happy to lend a hand in the #help channel.
 
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
