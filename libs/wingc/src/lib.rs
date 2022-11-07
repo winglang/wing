@@ -146,13 +146,15 @@ mod sanity {
 				assert!(result.is_ok(), "Compiler failed to compile valid file: {}", test_file);
 
 				let mut snapshot = String::new();
-				let mut output_files = walkdir::WalkDir::new(format!("{}.out", test_file)).into_iter().filter_map(|e| e.ok()).collect::<Vec<_>>();
-				output_files.sort_by_key(|e| e.path().to_str().unwrap().to_string());
+				let output_files = walkdir::WalkDir::new(format!("{}.out", test_file)).sort_by_file_name();
 				for file in output_files {
-					let file_name = file.file_name().to_str().unwrap();
-					if file_name.ends_with(".js") {
-						let file_contents = fs::read_to_string(file.path()).unwrap();
-						snapshot.push_str(&format!("{}:\n{}\n", file_name, file_contents));
+					if let Ok(file) = file {
+						let path = file.path();
+						if path.is_file() {
+							let file_name = path.file_name().unwrap().to_str().unwrap();
+							let file_contents = fs::read_to_string(path).unwrap();
+							snapshot.push_str(&format!("{}:\n{}\n", file_name, file_contents));
+						}
 					}
 				}
 
