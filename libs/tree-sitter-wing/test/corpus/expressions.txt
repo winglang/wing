@@ -300,15 +300,15 @@ Map Literal
 (source
     (expression_statement
         (map_literal
-            (map_literal_member
+            member: (map_literal_member
                 (identifier)
                 (number)
             )
-            (map_literal_member
+            member: (map_literal_member
                 (string)
                 (number)
             )
-            (map_literal_member
+            member: (map_literal_member
                 (identifier)
                 (number)
             )
