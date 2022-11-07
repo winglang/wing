@@ -1,0 +1,56 @@
+name: Enhancement 🚀
+description: Suggest a new feature or other improvement
+labels: ["enhancement","need-triage"]
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for taking the time to fill out this enhancement request 
+- type: input
+  id: one-sentence-enhancement-description
+  attributes:
+    label: Summary
+    description: One sentence description of the enhancement you'd like to see in winglang 
+  validations:
+    required: true
+- type: textarea
+  id: spec
+  attributes:
+    label: Feature Spec
+    description: Describe the feature docs
+    placeholder: hypothetical readme/changelog/contributing guide section for this new enhancement, code snippets and al
+  validations:
+    required: true
+- type: textarea
+  id: use-cases
+  attributes:
+    label: Use Cases
+    description: What problems does this solves?
+    placeholder: list of use cases for this enhancement
+  validations:
+    required: true
+- type: textarea
+  id: implementation-notes
+  attributes:
+    label: Implementation Notes
+    description: Any thoughts regarding how this should be implemented
+    placeholder: ideas, references, pointers, thoughts
+  validations:
+    required: false
+- type: dropdown
+  id: Component
+  attributes:
+    label: Component
+    description: Which component is this related to? (one or more)
+    multiple: true
+    options:
+    - Language Design
+    - Compiler
+    - SDK
+    - Wing Console
+    - IDE Extension
+    - Documentation
+    - Development Environment
+    - Contributor Experience
+  validations:
+    required: true
