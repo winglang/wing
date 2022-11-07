@@ -2,10 +2,11 @@
 extern crate lazy_static;
 
 use ast::Scope;
-use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
+use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
+use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
 
@@ -21,6 +22,12 @@ pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
 pub mod type_check;
+
+pub struct CompiledData {
+	pub preflight: String,
+	// pub inflights: BTreeMap<String, String>,
+	pub diagnostics: Diagnostics,
+}
 
 pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let language = tree_sitter_wing::language();
@@ -60,7 +67,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	tc.diagnostics.into_inner()
 }
 
-pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
+pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompiledData, Diagnostics> {
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
@@ -77,17 +84,15 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
+	// error clones
 	let errors = diagnostics
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
+		.cloned()
 		.collect::<Vec<_>>();
 
 	if errors.len() > 0 {
-		panic!(
-			"Compilation failed with {} errors\n{}",
-			errors.len(),
-			errors.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
-		);
+		return Err(errors);
 	}
 
 	// Analyze inflight captures
@@ -102,12 +107,15 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> String {
 	let intermediate_file = out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
 
-	return intermediate_js;
+	return Ok(CompiledData {
+		preflight: intermediate_js,
+		diagnostics,
+	});
 }
 
 #[cfg(test)]
 mod sanity {
-	use crate::compile;
+	use crate::{compile, diagnostic::print_diagnostics};
 	use std::{fs, path::PathBuf};
 
 	fn get_wing_files(dir: &str) -> Vec<PathBuf> {
@@ -126,6 +134,7 @@ mod sanity {
 	fn can_compile_valid_files() {
 		for test_pathbuf in get_wing_files("../../examples/tests/valid") {
 			let test_file = test_pathbuf.to_str().unwrap();
+			let test_file_name = test_pathbuf.file_stem().unwrap().to_str().unwrap();
 			println!("\n=== {} ===\n", test_file);
 
 			insta::with_settings!({
@@ -133,23 +142,42 @@ mod sanity {
 				prepend_module_to_snapshot => false,
 				description => test_file,
 			}, {
+				let result = compile(test_file, None);
+				assert!(result.is_ok(), "Compiler failed to compile valid file: {}", test_file);
 
-				let intermediate_js = compile(test_file, None);
-				println!("{}\n---", intermediate_js);
+				let mut snapshot = String::new();
+				for file in walkdir::WalkDir::new(format!("{}.out", test_file)).into_iter() {
+					if let Ok(file) = file {
+						if file.path().is_file() {
+							let js = fs::read_to_string(file.path()).unwrap();
+							snapshot.push_str(&format!("\n// {}\n{}\n", file.path().to_str().unwrap(), js));
+						}
+					}
+				}
 
-				insta::assert_snapshot!(format!("VALID_JSIR_{}", test_pathbuf.file_stem().unwrap().to_str().unwrap()), intermediate_js);
-				// TODO add diagnostics snapshot
+				insta::assert_snapshot!(format!("VALID_OUTPUT_{}", test_file_name), snapshot);
 			});
 		}
 	}
 
 	#[test]
 	fn cannot_compile_invalid_files() {
-		for test_file in get_wing_files("../../examples/tests/invalid") {
-			let test_file = test_file.to_str().unwrap();
+		for test_pathbuf in get_wing_files("../../examples/tests/invalid") {
+			let test_file = test_pathbuf.to_str().unwrap();
+			let test_file_name = test_pathbuf.file_stem().unwrap().to_str().unwrap();
 			println!("\n=== {} ===\n", test_file);
-			let result = std::panic::catch_unwind(|| compile(test_file, None));
-			assert!(result.is_err());
+
+			insta::with_settings!({
+				omit_expression => true,
+				prepend_module_to_snapshot => false,
+				description => test_file,
+			}, {
+				let result = compile(test_file, None);
+				assert!(result.is_err(), "Compiler compiled invalid file: {}", test_file);
+				let err = result.err().unwrap();
+
+				insta::assert_debug_snapshot!(format!("INVALID_DIAG_{}", test_file_name), err);
+			});
 		}
 	}
 }

@@ -1,7 +1,13 @@
 ---
 source: libs/wingc/src/lib.rs
-description: "../../examples/tests/valid/hello.w"
+description: "../../examples/tests/valid/optionals.w"
 ---
+
+// ../../examples/tests/valid/optionals.w.out/proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js
+async function $proc({  }, x) {
+};
+
+// ../../examples/tests/valid/optionals.w.out/preflight.js
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
@@ -18,24 +24,19 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir });
   
-  let bucket = new cloud.Bucket(this,"cloud.Bucket");
-  let queue = new cloud.Queue(this,"cloud.Queue");
-  const handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js")),
+  let a = 5;
+  const f = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js")),
     entrypoint: "$proc",
-    captures: {
-      bucket: {
-        resource: bucket,
-        methods: ["get","list","put"]
-      },
-    }
+    
   });
-  queue.onMessage(handler);
+  f(a);
+  f();
 }
 }
 new MyApp().synth();
+

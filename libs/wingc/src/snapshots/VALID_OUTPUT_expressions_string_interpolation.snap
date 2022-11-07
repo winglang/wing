@@ -1,7 +1,12 @@
 ---
 source: libs/wingc/src/lib.rs
-description: "../../examples/tests/valid/optionals.w"
+description: "../../examples/tests/valid/expressions_string_interpolation.w"
 ---
+
+// ../../examples/tests/valid/expressions_string_interpolation.w.out/intermediate.js
+
+
+// ../../examples/tests/valid/expressions_string_interpolation.w.out/preflight.js
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
@@ -22,14 +27,11 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir });
   
-  let a = 5;
-  const f = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js")),
-    entrypoint: "$proc",
-    
-  });
-  f(a);
-  f();
+  let regular_string = "str\n\"";
+  let empty_string = "";
+  let cool_string = `cool \"\${${regular_string}}\" test`;
+  let really_cool_string = `${empty_string}${empty_string}\n${cool_string}${cool_string}\n\${empty_string}${"string-in-string"}!`;
 }
 }
 new MyApp().synth();
+

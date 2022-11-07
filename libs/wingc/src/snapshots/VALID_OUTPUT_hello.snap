@@ -1,7 +1,15 @@
 ---
 source: libs/wingc/src/lib.rs
-description: "../../examples/tests/valid/captures.w"
+description: "../../examples/tests/valid/hello.w"
 ---
+
+// ../../examples/tests/valid/hello.w.out/proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js
+async function $proc({ bucket }, message) {
+  bucket.put("hello.txt",`Hello, ${message}!`);
+  return message;
+};
+
+// ../../examples/tests/valid/hello.w.out/preflight.js
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
 
@@ -23,29 +31,20 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir });
   
-  let bucket1 = new cloud.Bucket(this,"cloud.Bucket");
-  let bucket2 = new cloud.Bucket(this,"PublicBucket",{
-  "public": true,}
-  );
+  let bucket = new cloud.Bucket(this,"cloud.Bucket");
+  let queue = new cloud.Queue(this,"cloud.Queue");
   const handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js")),
     entrypoint: "$proc",
     captures: {
-      bucket1: {
-        resource: bucket1,
-        methods: ["get","list","put"]
-      },
-      bucket2: {
-        resource: bucket2,
+      bucket: {
+        resource: bucket,
         methods: ["get","list","put"]
       },
     }
   });
-  new cloud.Function(this,"cloud.Function",handler,{
-  "env": {
-  
-  },}
-  );
+  queue.onMessage(handler);
 }
 }
 new MyApp().synth();
+
