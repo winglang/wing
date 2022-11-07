@@ -18,7 +18,7 @@ body:
   attributes:
     label: Feature Spec
     description: Describe the feature docs
-    placeholder: hypothetical readme/changelog/contributing guide section for this new enhancement, code snippets and al
+    placeholder: hypothetical readme/changelog/contributing guide section for this new enhancement, code snippets and all
   validations:
     required: true
 - type: textarea
