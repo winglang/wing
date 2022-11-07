@@ -42,7 +42,7 @@ description: "../../examples/tests/invalid/types_string_interpolation.w"
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"string\", but got \"number\" instead: Binary { op: Add, lexp: Expr { variant: Literal(Number(2.0)), evaluated_type: RefCell { value: Some(0x14ce09b50) }, span: WingSpan { start: Point { row: 10, column: 11 }, end: Point { row: 10, column: 12 }, start_byte: 219, end_byte: 220, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } }, rexp: Expr { variant: Literal(Number(2.0)), evaluated_type: RefCell { value: Some(0x14ce09b50) }, span: WingSpan { start: Point { row: 10, column: 15 }, end: Point { row: 10, column: 16 }, start_byte: 223, end_byte: 224, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } } }",
+        message: "Expected type \"string\", but got \"number\" instead: Binary { op: Add, lexp: Expr { variant: Literal(Number(2.0)), evaluated_type: RefCell { value: Some(0x14ee09e20) }, span: WingSpan { start: Point { row: 10, column: 11 }, end: Point { row: 10, column: 12 }, start_byte: 219, end_byte: 220, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } }, rexp: Expr { variant: Literal(Number(2.0)), evaluated_type: RefCell { value: Some(0x14ee09e20) }, span: WingSpan { start: Point { row: 10, column: 15 }, end: Point { row: 10, column: 16 }, start_byte: 223, end_byte: 224, file_id: \"../../examples/tests/invalid/types_string_interpolation.w\" } } }",
         span: Some(
             WingSpan {
                 start: Point {
