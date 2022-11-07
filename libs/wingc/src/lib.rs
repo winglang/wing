@@ -2,11 +2,10 @@
 extern crate lazy_static;
 
 use ast::Scope;
-use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
+use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
-use std::collections::BTreeMap;
 use std::fs;
 use std::path::PathBuf;
 
@@ -115,8 +114,8 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompiledData,
 
 #[cfg(test)]
 mod sanity {
-	use crate::{compile, diagnostic::print_diagnostics};
-	use std::{borrow::BorrowMut, fs, path::PathBuf};
+	use crate::compile;
+	use std::{fs, path::PathBuf};
 
 	fn get_wing_files(dir: &str) -> Vec<PathBuf> {
 		let mut files = Vec::new();

@@ -60,7 +60,7 @@ constructor() {
   "public": true,}
   );
   const handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.6fb04684fbbb6a5520b6197325fe254f11c3b1bc954004883083381c9c5cd0cd/index.js")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js")),
     entrypoint: "$proc",
     captures: {
       bucket1: {

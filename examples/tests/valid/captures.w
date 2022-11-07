@@ -6,7 +6,7 @@ let bucket2 = new cloud.Bucket(cloud.BucketProps {
 }) as "PublicBucket";
 
 inflight handler(event: str): str {
-  bucket1.put("file.txt", "data!");
+  bucket1.put("file.txt", "data");
   bucket2.get("file.txt");
 }
 
