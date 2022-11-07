@@ -210,12 +210,7 @@ export const relationships: Relationships = {
     ),
     name: "image-scrapper",
   },
-  children: [
-    // {
-    //   icon: <CubeTransparentIcon className="w-4 h-4 text-slate-500" aria-hidden="true" />,
-    //   name: "child-1",
-    // },
-  ],
+  children: [],
   inbound: [],
   outbound: [
     {
@@ -245,62 +240,5 @@ interface ConstructHubNode {
   children?: Record<string, ConstructHubNode>;
 }
 
-function visitConstructHub(
-  parent: ConstructHubNode | undefined,
-  node: ConstructHubNode,
-  callback: (
-    parent: ConstructHubNode | undefined,
-    child: ConstructHubNode,
-  ) => void,
-) {
-  callback(parent, node);
-
-  for (const child of Object.values(node.children ?? {})) {
-    visitConstructHub(node, child, callback);
-  }
-}
-
-// export function buildConstructHubNodeMap(node: ConstructHubNode): NodeRecord {
-//   let nodes: NodeRecord = {};
-
-//   visitConstructHub(undefined, node, (parent, node) => {
-//     const newNode: Node = {
-//       id: node.id,
-//       path: node.path,
-//       type: (node.constructInfo?.fqn ?? "") as any,
-//       parent: parent?.path,
-//       children: Object.values(node.children ?? {}).map((child) => child.path),
-//       constructInfo: node.constructInfo,
-//       attributes: node.attributes,
-//       schema: node,
-//     };
-//     nodes = {
-//       ...nodes,
-//       [node.path]: {
-//         id: node.id,
-//         path: node.path,
-//         type: (node.constructInfo?.fqn ?? "") as any,
-//         parent: parent?.path,
-//         children: Object.values(node.children ?? {}).map((child) => child.path),
-//         constructInfo: node.constructInfo,
-//         attributes: node.attributes,
-//         schema: node,
-//       },
-//     };
-//   });
-
-//   return nodes;
-// }
-
-// export function useConstructHubNodeMap() {
-//   const [nodeMap, setNodeMap] = useState<NodeRecord>();
-
-//   useEffect(() => {
-//     void import("../assets/construct-hub-tree.json").then((constructHub) => {
-//       const nodeMap = buildConstructHubNodeMap(constructHub.tree);
-//       setNodeMap(nodeMap);
-//     });
-//   }, []);
-
-//   return nodeMap;
-// }
+export const DemoBase64WingSchema =
+  "ewogICAgInJvb3QiOiB7CiAgICAgICJ0eXBlIjogImNvbnN0cnVjdHMuQ29uc3RydWN0IiwKICAgICAgImNoaWxkcmVuIjogewogICAgICAgICJteV9xdWV1ZSI6IHsKICAgICAgICAgICJ0eXBlIjogIndpbmdzZGsuY2xvdWQuUXVldWUiLAogICAgICAgICAgInByb3BzIjogewogICAgICAgICAgICAidGltZW91dCI6IDMwLAogICAgICAgICAgICAic3Vic2NyaWJlcnMiOiBbCiAgICAgICAgICAgICAgewogICAgICAgICAgICAgICAgImZ1bmN0aW9uSWQiOiAicm9vdC9teV9xdWV1ZS9Pbk1lc3NhZ2UtMjM2ZmYzZDcyYWQwYWU0NiIsCiAgICAgICAgICAgICAgICAiYmF0Y2hTaXplIjogMQogICAgICAgICAgICAgIH0KICAgICAgICAgICAgXQogICAgICAgICAgfSwKICAgICAgICAgICJjYWxsZWVzIjogWwogICAgICAgICAgICAicm9vdC9teV9xdWV1ZS9Pbk1lc3NhZ2UtMjM2ZmYzZDcyYWQwYWU0NiIKICAgICAgICAgIF0sCiAgICAgICAgICAiY2hpbGRyZW4iOiB7CiAgICAgICAgICAgICJPbk1lc3NhZ2UtMjM2ZmYzZDcyYWQwYWU0NiI6IHsKICAgICAgICAgICAgICAidHlwZSI6ICJ3aW5nc2RrLmNsb3VkLkZ1bmN0aW9uIiwKICAgICAgICAgICAgICAicHJvcHMiOiB7CiAgICAgICAgICAgICAgICAic291cmNlQ29kZUZpbGUiOiAiYXNzZXRzL09uTWVzc2FnZS0yMzZmZjNkNzJhZDBhZTQ2L2luZGV4LmpzIiwKICAgICAgICAgICAgICAgICJzb3VyY2VDb2RlTGFuZ3VhZ2UiOiAiamF2YXNjcmlwdCIKICAgICAgICAgICAgICB9LAogICAgICAgICAgICAgICJjYWxsZXJzIjogWwogICAgICAgICAgICAgICAgInJvb3QvbXlfcXVldWUiCiAgICAgICAgICAgICAgXSwKICAgICAgICAgICAgICAicGF0aCI6ICJyb290L215X3F1ZXVlL09uTWVzc2FnZS0yMzZmZjNkNzJhZDBhZTQ2IiwKICAgICAgICAgICAgICAiYXR0cnMiOiB7CiAgICAgICAgICAgICAgICAiZnVuY3Rpb25BZGRyIjogNTUxMzcKICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgIH0sCiAgICAgICAgICAiZGVwZW5kc09uIjogWwogICAgICAgICAgICAicm9vdC9teV9xdWV1ZS9Pbk1lc3NhZ2UtMjM2ZmYzZDcyYWQwYWU0NiIKICAgICAgICAgIF0sCiAgICAgICAgICAicGF0aCI6ICJyb290L215X3F1ZXVlIiwKICAgICAgICAgICJhdHRycyI6IHsKICAgICAgICAgICAgInF1ZXVlQWRkciI6IDU1MTM4CiAgICAgICAgICB9CiAgICAgICAgfQogICAgICB9LAogICAgICAicGF0aCI6ICJyb290IgogICAgfSwKICAgICJzdGFydE9yZGVyIjogWwogICAgICAicm9vdC9teV9xdWV1ZS9Pbk1lc3NhZ2UtMjM2ZmYzZDcyYWQwYWU0NiIsCiAgICAgICJyb290L215X3F1ZXVlIgogICAgXQp9Cg==";

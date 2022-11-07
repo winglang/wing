@@ -4,7 +4,6 @@ import { QueryClient, QueryClientProvider } from "react-query";
 
 import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 
-import { AppContext } from "./AppContext.js";
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
 import { ipcLink } from "./utils/ipcLink.js";
@@ -21,7 +20,6 @@ export const App = ({ querySchema }: AppProps) => {
       links: [ipcLink()],
     }),
   );
-
   const [schema, setSchema] = useState<WingSimulatorSchema>();
 
   useEffect(() => {
@@ -58,16 +56,12 @@ export const App = ({ querySchema }: AppProps) => {
   // const [schema] = useState(() => constructHubTreeToWingSchema());
   // todo [SA] add vanitiUi
   return (
-    <AppContext.Provider
-      value={{ appMode: querySchema ? "webapp" : "electron" }}
-    >
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <NotificationsProvider>
-            <VscodeLayout schema={schema} />
-          </NotificationsProvider>
-        </QueryClientProvider>
-      </trpc.Provider>
-    </AppContext.Provider>
+    <trpc.Provider client={trpcClient} queryClient={queryClient}>
+      <QueryClientProvider client={queryClient}>
+        <NotificationsProvider>
+          <VscodeLayout schema={schema} />
+        </NotificationsProvider>
+      </QueryClientProvider>
+    </trpc.Provider>
   );
 };
