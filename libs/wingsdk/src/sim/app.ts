@@ -3,12 +3,12 @@ import { join } from "path";
 import { IPolyconFactory, Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
+import { SDK_VERSION } from "../constants";
 import { DependencyGraph, Files, IApp } from "../core";
 import { mkdtemp, sanitizeValue } from "../util";
 import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
 import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
-import { SDK_VERSION } from "../constants";
 
 /**
  * Props for `App`.
