@@ -36,7 +36,7 @@ export const QueueInteractionView = ({ node }: QueueInteractionViewProps) => {
   const id = useId();
 
   return (
-    <div className="h-full flex flex-col gap-4 p-6">
+    <div className="h-full flex flex-col gap-4 py-2">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-4">
           <label

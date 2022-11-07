@@ -61,7 +61,7 @@ export function buildNodeMap(schema: BaseResourceSchema) {
 
   visitBaseResourceSchemaChildren(undefined, schema, (parent, node) => {
     const newNode: Node = {
-      id: node.path || "",
+      id: node.path?.split("/").pop() || "",
       path: node.path || "",
       type: node.type,
       parent: parent?.path,

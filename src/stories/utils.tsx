@@ -35,7 +35,7 @@ export const SchemaToTreeMenuItems = (
   ) => {
     const item: TreeMenuItem = {
       id: node.path ?? "",
-      label: node.path ?? "",
+      label: node.path?.split("/").pop() ?? "",
       children: [],
       parentId: parent?.id,
       icon: (

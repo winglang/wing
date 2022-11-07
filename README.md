@@ -2,6 +2,8 @@
 
 ## Installation
 
+download the latest release dmg file from [releases](https://github.com/winglang/console/releases)
+
 ```sh
 npm install
 ```
@@ -10,6 +12,12 @@ npm install
 
 ```sh
 npm run dev
+```
+
+In order to see the logs in real time:
+
+```sh
+tail -f ~/Library/Logs/wing-console/main.log
 ```
 
 ## Storybook

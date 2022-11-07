@@ -63,6 +63,8 @@ async function createWindow(wxFilePath: string) {
   win = new BrowserWindow({
     title: "Wing Console",
     icon: path.join(ROOT_PATH.public, "icon.ico"),
+    minWidth: 640,
+    minHeight: 480,
     webPreferences: {
       nodeIntegration: true,
       preload: path.join(__dirname, "../preload/index.js"),

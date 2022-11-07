@@ -54,11 +54,10 @@ function getBaseAttributes(node: BaseResourceSchema): NodeAttribute[] {
   return [
     {
       key: "ID",
-      value: node.path,
+      value: node.path?.split("/").pop(),
     },
     {
       key: "Path",
-      // TODO: Ask if we can get `node.id` to Chris.
       value: node.path,
     },
     {

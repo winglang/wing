@@ -27,7 +27,7 @@ export const FunctionInteractionView = ({
   const id = useId();
   return (
     <form
-      className="h-full px-2 flex flex-col"
+      className="h-full flex flex-col"
       method="POST"
       aria-disabled={appMode === "webapp"}
       onSubmit={(event) => {
@@ -49,7 +49,7 @@ export const FunctionInteractionView = ({
         )}
       </div>
 
-      <div className="space-y-2 bg-white p-2">
+      <div className="space-y-2">
         <div>
           <p className="mt-1 text-sm text-slate-500">
             You can test the function by sending a JSON message.
@@ -83,7 +83,7 @@ export const FunctionInteractionView = ({
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col space-y-2 p-2 pb-4">
+      <div className="flex-1 flex flex-col space-y-2 py-2 pb-4">
         <div>
           <span className="block text-sm font-medium text-slate-500">
             Response

@@ -154,7 +154,7 @@ export function NodeRelationshipsView({
   const [viewAllChildren, setViewAllChildren] = useState(true);
 
   return (
-    <div className="flex-1 text-slate-700 bg-slate-100 flex p-2">
+    <div className="flex-1 text-slate-700 bg-slate-50 flex p-2">
       {!hideUsageRelationship && (
         <div
           className={classNames(

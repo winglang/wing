@@ -573,11 +573,12 @@ function TreeNode({
   const isOpen = openItemIds.includes(node.path ?? "");
   const isSelected = selectedItemId === node.path;
   const ChevronIcon = isOpen ? ChevronDownIcon : ChevronRightIcon;
+  const name = node.path?.split("/").pop();
   return (
     <>
       <div
         key={node.path}
-        className={classNames("hover:bg-slate-600 group", {
+        className={classNames("hover:bg-slate-600 group px-1", {
           "bg-slate-600/75": isSelected,
           [SELECTED_TREE_ITEM_CSS_ID]: isSelected,
         })}
@@ -622,9 +623,10 @@ function TreeNode({
           <div
             className={classNames("px-1 group-hover:text-slate-100 truncate", {
               "text-slate-100": isSelected,
+              italic: !name || name.length === 0,
             })}
           >
-            {node.path?.split("/").pop()}
+            {name != "" ? name : "<root>"}
           </div>
         </button>
       </div>

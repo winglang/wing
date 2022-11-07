@@ -36,7 +36,7 @@ export const TreeMenu = ({
 }: TreeMenuProps) => {
   return (
     <>
-      <div className="h-8 flex-shrink-0 flex items-center justify-between gap-1 px-4">
+      <div className="h-9 flex-shrink-0 flex items-center justify-between gap-1 px-4">
         <div className="flex items-center">
           <span className="uppercase text-sm font-semibold">{title}</span>
         </div>
@@ -121,6 +121,8 @@ function MenuItems({
   );
 }
 
+export const SELECTED_TREE_ITEM_CSS_ID = "current-tree-item";
+
 interface MenuItemProps {
   item: TreeMenuItem;
   selectedItem?: string;
@@ -148,6 +150,7 @@ function MenuItem({
         className={classNames(
           "w-full cursor-pointer group hover:bg-slate-200/50",
           selectedItem === item.id && "bg-slate-200",
+          selectedItem === item.id && SELECTED_TREE_ITEM_CSS_ID,
         )}
         tabIndex={-1}
         onClick={() => {

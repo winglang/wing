@@ -1,53 +1,156 @@
-import { useEffect, useMemo, useState } from "react";
+import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+import classNames from "classnames";
+import { PropsWithChildren, useEffect, useMemo, useState } from "react";
 
 import { WingSimulatorSchema } from "../../electron/main/wingsdk.js";
 import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs.js";
+import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
-import { Tabs } from "../design-system/Tabs.js";
-import { TreeMenu } from "../design-system/TreeMenu.js";
+import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
+import {
+  SELECTED_TREE_ITEM_CSS_ID,
+  TreeMenu,
+} from "../design-system/TreeMenu.js";
 import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
 import { Node, useNodeMap } from "../utils/nodeMap.js";
-import { useTabs } from "../utils/useTabs.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
-import { Relationships } from "./NodeRelationshipsView.js";
-import { NodeTabContents } from "./NodeTabContents.js";
+import { NodeInteractionView } from "./NodeInteractionView.js";
+import {
+  NodeRelationshipsView,
+  Relationships,
+} from "./NodeRelationshipsView.js";
+
+interface InspectorSectionHeadingProps {
+  open?: boolean;
+  text: string;
+  onClick?: () => void;
+}
+
+const InspectorSectionHeading = ({
+  open,
+  text,
+  onClick,
+}: InspectorSectionHeadingProps) => {
+  const Icon = open ? ChevronDownIcon : ChevronRightIcon;
+  return (
+    <button
+      className={classNames(
+        "w-full px-2 py-1 flex items-center gap-1 hover:bg-slate-50 group relative",
+        // "outline-none focus:ring ring-sky-300",
+      )}
+      onClick={onClick}
+    >
+      <Icon
+        className="w-4 h-4 text-slate-500 group-hover:text-slate-600"
+        aria-hidden="true"
+      />
+      <div className="text-slate-500 font-medium group-hover:text-slate-600">
+        {text}
+      </div>
+    </button>
+  );
+};
+
+interface InspectorSectionProps {
+  open?: boolean;
+  text: string;
+  onClick?: () => void;
+}
+
+const InspectorSection = ({
+  open,
+  text,
+  onClick,
+  children,
+}: PropsWithChildren<InspectorSectionProps>) => {
+  return (
+    <>
+      <InspectorSectionHeading text={text} open={open} onClick={onClick} />
+      {open && children}
+    </>
+  );
+};
+
+interface Attribute {
+  key: string;
+  value: string;
+  type?: "url";
+  url?: string;
+}
+
+interface AttributeGroup {
+  groupName: string;
+  attributes: Attribute[];
+}
+
+interface LinkProps
+  extends React.DetailedHTMLProps<
+    React.AnchorHTMLAttributes<HTMLAnchorElement>,
+    HTMLAnchorElement
+  > {}
+
+const Link = ({ className, ...props }: LinkProps) => {
+  return (
+    <a
+      className={classNames(
+        "underline font-medium text-sky-500 hover:text-sky-600",
+        "rounded",
+        "outline-none focus:ring ring-sky-600",
+        className,
+      )}
+      {...props}
+    />
+  );
+};
+
+function AttributeView({ attribute }: { attribute: Attribute }) {
+  return (
+    <>
+      <div className="text-slate-500">{attribute.key}</div>
+      <div className="col-span-4">
+        {attribute.type === "url" ? (
+          <Link href={attribute.url}>{attribute.value}</Link>
+        ) : (
+          <div className="max-w-full truncate text-slate-700">
+            {attribute.value}
+          </div>
+        )}
+      </div>
+    </>
+  );
+}
+
 export interface VscodeLayoutProps {
   schema: WingSimulatorSchema | undefined;
 }
 
 export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
   const treeMenu = useTreeMenuItems();
-  const tabs = useTabs();
   const nodeMap = useNodeMap(schema?.root);
-
-  function openTab(path: string) {
-    const node = nodeMap?.find(path);
-    if (node) {
-      tabs.openTab({
-        id: node.path,
-        name: node.id,
-        icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
-      });
-    }
-  }
 
   useEffect(() => {
     treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
-    tabs.closeAll();
   }, [schema]);
 
   useEffect(() => {
     treeMenu.expand("");
     treeMenu.expandAll();
     treeMenu.setCurrent("");
-    openTab("");
   }, [nodeMap]);
+
+  useEffect(() => {
+    document.querySelector(`.${SELECTED_TREE_ITEM_CSS_ID}`)?.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "nearest",
+    });
+  }, [treeMenu.currentItemId]);
 
   const breadcrumbs = useMemo(() => {
     let breadcrumbs: Breadcrumb[] = [];
-    nodeMap?.visitParents(tabs.currentTabId, (node) => {
+    nodeMap?.visitParents(treeMenu.currentItemId, (node) => {
       breadcrumbs = [
         {
           id: node.path,
@@ -64,13 +167,13 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
       ];
     });
     return breadcrumbs;
-  }, [nodeMap, tabs.currentTabId]);
+  }, [nodeMap, treeMenu.currentItemId]);
 
   const [currentNode, setCurrentNode] = useState<Node>();
   useEffect(() => {
-    const node = nodeMap?.find(tabs.currentTabId);
+    const node = nodeMap?.find(treeMenu.currentItemId);
     setCurrentNode(node);
-  }, [nodeMap, tabs.currentTabId]);
+  }, [nodeMap, treeMenu.currentItemId]);
 
   const relationships = useMemo(() => {
     if (!currentNode) {
@@ -138,10 +241,95 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
     return relationships;
   }, [currentNode]);
 
+  const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>();
+  useEffect(() => {
+    const node = nodeMap?.find(treeMenu.currentItemId);
+    setCurrentNode(node);
+    if (!node) {
+      setAttributeGroups(undefined);
+    } else {
+      let attributeGroups: AttributeGroup[] = [
+        {
+          groupName: "Node",
+          attributes: [
+            { key: "ID", value: node.id },
+            {
+              key: "Path",
+              value: node.path,
+            },
+            { key: "Type", value: node.type },
+            {
+              key: "Source",
+              value: "src/demo.w (20:2)",
+              type: "url",
+              url: "http://",
+            },
+          ],
+        },
+      ];
+
+      if (node.type === "wingsdk.cloud.Bucket") {
+        attributeGroups = [
+          ...attributeGroups,
+          {
+            groupName: "Bucket Attributes",
+            attributes: [
+              {
+                key: "URL",
+                value: "http://localhost:3012",
+                type: "url",
+                url: "http://localhost:3012",
+              },
+              { key: "Secure", value: "true" },
+            ] as Attribute[],
+          },
+        ];
+      }
+
+      if (node.type === "wingsdk.cloud.Endpoint") {
+        attributeGroups = [
+          ...attributeGroups,
+          {
+            groupName: "Endpoint Attributes",
+            attributes: [
+              {
+                key: "URL",
+                value: "http://localhost:3012",
+                type: "url",
+                url: "http://localhost:3012",
+              },
+              { key: "Secure", value: "true" },
+            ] as Attribute[],
+          },
+        ];
+      }
+
+      setAttributeGroups(attributeGroups);
+    }
+    // }, [nodeMap, treeMenu.currentItemId]);
+  }, [treeMenu.currentItemId]);
+
+  const [openInspectorSections, setOpenInspectorSections] = useState([
+    "Node",
+    "interact",
+  ]);
+  const toggleInspectorSection = (section: string) => {
+    setOpenInspectorSections(([...sections]) => {
+      const index = sections.indexOf(section);
+      if (index !== -1) {
+        sections.splice(index, 1);
+        return sections;
+      } else {
+        sections.push(section);
+        return sections;
+      }
+    });
+  };
+
   return (
     <div className="h-full flex flex-col bg-slate-100 select-none">
       <div className="flex-1 flex">
-        <RightResizableWidget className="h-full flex flex-col w-60 min-w-[15rem] min-h-[15rem] border-r border-slate-200">
+        <RightResizableWidget className="h-full flex flex-col w-60 min-w-[10rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu
             title="Wing Application"
             items={treeMenu.items}
@@ -149,11 +337,6 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
             openMenuItemIds={treeMenu.openItemIds}
             onItemClick={(item) => {
               treeMenu.setCurrent(item.id);
-              tabs.openTab({
-                id: item.id,
-                name: item.label,
-                icon: item.icon,
-              });
             }}
             onItemToggle={(item) => {
               treeMenu.toggle(item.id);
@@ -163,62 +346,112 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
           />
         </RightResizableWidget>
 
-        <div className="flex-1 flex flex-col bg-white">
-          <div className="flex-0">
-            <Tabs
-              tabs={tabs.tabs}
-              currentTabId={tabs.currentTabId}
-              onTabClicked={(tab) => {
-                tabs.setCurrentTabId(tab.id);
-                treeMenu.setCurrent(tab.id);
-              }}
-              onTabClosed={(tab) => {
-                tabs.closeTab(tab.id);
-                if (tabs.currentTabId === tab.id) {
-                  tabs.setCurrentTabId(undefined);
-                  treeMenu.setCurrent(undefined);
-                }
-              }}
-            />
-          </div>
-
-          <div className="flex-1 bg-white">
-            <div className="h-full flex flex-col">
-              <div className="flex-0 w-full h-9 relative">
-                {tabs.currentTabId !== undefined && (
-                  <ScrollableArea overflowX scrollbarSize="xs">
-                    <Breadcrumbs
-                      breadcrumbs={breadcrumbs}
-                      onBreadcrumbClicked={(breadcrumb) => {
-                        treeMenu.expand(breadcrumb.id);
-                        treeMenu.setCurrent(breadcrumb.id);
-                        tabs.openTab({
-                          id: breadcrumb.id,
-                          name: breadcrumb.name,
-                          icon: breadcrumb.icon,
-                        });
-                      }}
-                    />
-                  </ScrollableArea>
-                )}
-              </div>
-
-              {currentNode && relationships && (
-                <NodeTabContents
-                  key={currentNode.path}
-                  node={currentNode}
-                  relationships={relationships}
-                  onNodeClick={(path) => {
-                    treeMenu.expand(path);
-                    treeMenu.setCurrent(path);
-                    openTab(path);
+        <div className="flex-1 flex flex-col">
+          <div className="flex-0 flex-shrink-0 w-full h-9 relative bg-white border-b">
+            {treeMenu.currentItemId !== undefined && (
+              <ScrollableArea
+                overflowX
+                scrollbarSize="xs"
+                className="flex flex-col justify-around"
+              >
+                <Breadcrumbs
+                  breadcrumbs={breadcrumbs}
+                  onBreadcrumbClicked={(breadcrumb) => {
+                    treeMenu.expand(breadcrumb.id);
+                    treeMenu.setCurrent(breadcrumb.id);
                   }}
                 />
-              )}
+              </ScrollableArea>
+            )}
+          </div>
+
+          <div className="flex-1 flex">
+            <div className="flex-1 relative">
+              <ScrollableArea
+                overflowX
+                className="flex-1 flex bg-slate-50 justify-around p-2"
+              >
+                <div className="min-w-[10rem] max-w-xl">
+                  {relationships && (
+                    <NodeRelationshipsView
+                      key={currentNode?.path}
+                      relationships={relationships}
+                      onNodeClick={(path) => {
+                        treeMenu.expand(path);
+                        treeMenu.setCurrent(path);
+                      }}
+                    />
+                  )}
+                </div>
+              </ScrollableArea>
             </div>
+
+            <LeftResizableWidget className="bg-white flex-shrink min-w-[20rem] border-l">
+              <ScrollableArea overflowY className="h-full text-sm py-2">
+                {currentNode && (
+                  <>
+                    {/* <NodeAttributes node={currentNode.schema} />
+                <div className="border-t px-3 py-2">
+                  <NodeInteractionView node={currentNode.schema} />
+                </div> */}
+                    {attributeGroups?.map((attributeGroup) => {
+                      return (
+                        <div key={attributeGroup.groupName}>
+                          <InspectorSection
+                            text={attributeGroup.groupName}
+                            open={openInspectorSections.includes(
+                              attributeGroup.groupName,
+                            )}
+                            onClick={() =>
+                              toggleInspectorSection(attributeGroup.groupName)
+                            }
+                          >
+                            <div className="border-t">
+                              <div className="px-4 py-1.5 grid grid-cols-5 gap-y-1 bg-slate-100">
+                                {attributeGroup.attributes.map((attribute) => {
+                                  return (
+                                    <AttributeView
+                                      key={attribute.key}
+                                      attribute={attribute}
+                                    />
+                                  );
+                                })}
+                              </div>
+                            </div>
+                          </InspectorSection>
+                        </div>
+                      );
+                    })}
+
+                    {/* {currentNode.type !== "constructs.Construct" && ( */}
+                    {currentNode.type.startsWith("wingsdk.cloud.") &&
+                      currentNode.type !== "wingsdk.cloud.Custom" && (
+                        <InspectorSection
+                          text="Interact"
+                          open={openInspectorSections.includes("interact")}
+                          onClick={() => toggleInspectorSection("interact")}
+                        >
+                          <div className="border-t px-4 py-2 bg-slate-100">
+                            <NodeInteractionView node={currentNode.schema} />
+                          </div>
+                        </InspectorSection>
+                      )}
+                  </>
+                )}
+              </ScrollableArea>
+            </LeftResizableWidget>
           </div>
         </div>
       </div>
+
+      <TopResizableWidget className="border-t bg-white min-h-[5rem] flex flex-col gap-2  px-4 py-2">
+        <div className="flex gap-2">
+          <div className="uppercase text-sm border-b border-gray-600">Logs</div>
+        </div>
+        <div className="flex-1 relative">
+          <ScrollableArea overflowY></ScrollableArea>
+        </div>
+      </TopResizableWidget>
     </div>
   );
 };
