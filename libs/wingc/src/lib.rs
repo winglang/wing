@@ -141,11 +141,19 @@ mod sanity {
 				prepend_module_to_snapshot => false,
 				description => test_file,
 			}, {
-				let result = compile(test_file, None);
+				let out_dir = format!("{}.out", test_file);
+
+				// reset out_dir
+				let out_dirbuf = PathBuf::from(&out_dir);
+				if out_dirbuf.exists() {
+					fs::remove_dir_all(&out_dirbuf).expect("remove out dir");
+				}
+
+				let result = compile(test_file, Some(out_dir.as_str()));
 				assert!(result.is_ok(), "Compiler failed to compile valid file: {}", test_file);
 
 				let mut snapshot = String::new();
-				let output_files = walkdir::WalkDir::new(format!("{}.out", test_file)).sort_by_file_name();
+				let output_files = walkdir::WalkDir::new(out_dir).sort_by_file_name();
 				for file in output_files {
 					if let Ok(file) = file {
 						let path = file.path();
@@ -174,6 +182,14 @@ mod sanity {
 				prepend_module_to_snapshot => false,
 				description => test_file,
 			}, {
+				let out_dir = format!("{}.out", test_file);
+
+				// reset out_dir
+				let out_dirbuf = PathBuf::from(&out_dir);
+				if out_dirbuf.exists() {
+					fs::remove_dir_all(&out_dirbuf).expect("remove out dir");
+				}
+
 				let result = compile(test_file, None);
 				assert!(result.is_err(), "Compiler compiled invalid file: {}", test_file);
 				let err = result.err().unwrap();

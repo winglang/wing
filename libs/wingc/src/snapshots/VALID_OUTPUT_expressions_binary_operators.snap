@@ -2,21 +2,6 @@
 source: libs/wingc/src/lib.rs
 description: "../../examples/tests/valid/expressions_binary_operators.w"
 ---
-intermediate.js:
-const $stdlib = require('@monadahq/wingsdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
-const $synthesizer = process.env.WING_SIM ? new $stdlib.sim.Synthesizer({ outdir: $outdir }) : new $stdlib.tfaws.Synthesizer({ outdir: $outdir });
-class MyApp extends $stdlib.core.App {
-constructor() {
-  super({ synthesizer: $synthesizer });
-  
-  let x = 1;
-  let y = (2 * x);
-  let z = ((x + y) - 1);
-  let xyz = (((y * y) / (x * x)) * z);
-}
-}
-new MyApp().synth();
 preflight.js:
 const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
