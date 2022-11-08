@@ -47,6 +47,8 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 * [Node.js] version 18.x or above (we recommend [nvm])
 * [Rust]
 
+([Nx] will be installed alongside the rest of the project's dependencies, and can be accessed with `npx nx` - it does not need to be installed separately).
+
 To build the repo locally:
 
 ```bash
