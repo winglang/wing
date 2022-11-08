@@ -4,34 +4,17 @@ import { spawnSync } from "child_process";
 
 const log = debug("wing:update");
 const PJSON = require("../../package.json");
-
-type UpdateRate = "daily" | "weekly" | "monthly" | "yearly";
+const DEFAULT_UPDATE_RATE = 1000 * 60 * 60 * 24; // 1 day
 
 /** Update options passed to CLI */
 export interface IUpdateOptions {
-  /** Frequency of updates */
-  readonly rate: UpdateRate;
   /** Force update install */
   readonly force?: boolean;
 }
 
-function rateToMinute(rate: UpdateRate) {
-  switch (rate) {
-    default:
-    case "daily":
-      return 1000 * 60 * 60 * 24;
-    case "weekly":
-      return 1000 * 60 * 60 * 24 * 7;
-    case "monthly":
-      return 1000 * 60 * 60 * 24 * 30;
-    case "yearly":
-      return 1000 * 60 * 60 * 24 * 365;
-  }
-}
-
 /** Handles updating the toolchain */
-export async function update(options: IUpdateOptions) {
-  const { rate, force } = options;
+export async function upgrade(options: IUpdateOptions) {
+  const { force } = options;
 
   if (!force && !isInstalledGlobally) {
     log("package not installed globally and 'force' is not set, skipping.");
@@ -42,7 +25,7 @@ export async function update(options: IUpdateOptions) {
   // eval is because "update-notifier" is an ESM package and we're CommonJS.
   const updateNotifier = await eval('import("update-notifier")');
   const notifier = updateNotifier.default({
-    updateCheckInterval: rateToMinute(rate),
+    updateCheckInterval: DEFAULT_UPDATE_RATE,
     pkg: PJSON,
   });
 

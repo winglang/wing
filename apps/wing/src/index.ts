@@ -1,14 +1,13 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, update } from "./commands";
+import { compile, upgrade } from "./commands";
 
 import { Command } from "commander";
 import debug from "debug";
 import open from "open";
 import { resolve } from "path";
 
-const DEFAULT_UPDATE_RATE = "daily";
 const PACKAGE_VERSION = require("../package.json").version as string;
 const log = debug("wing:cli");
 
@@ -18,7 +17,7 @@ async function main() {
   program.name("wing");
   program.version(PACKAGE_VERSION);
 
-  await update({ force: false, rate: DEFAULT_UPDATE_RATE });
+  await upgrade({ force: false });
 
   program
     .command("run")
@@ -43,9 +42,9 @@ async function main() {
     .action(compile);
 
   program
-    .command("update")
-    .description("Updates Wing toolchain")
-    .action(() => update({ force: true, rate: DEFAULT_UPDATE_RATE }));
+    .command("upgrade")
+    .description("Upgrades the Wing toolchain to the latest version")
+    .action(() => upgrade({ force: true }));
 
   program.parse();
 }
