@@ -219,7 +219,7 @@ impl<'a> JsiiImporter<'a> {
 			}
 		}
 		// Add properties to the class environment
-		if let Some(properties) = &jsii_interface.properties() {
+		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
 				if flight == Flight::In {

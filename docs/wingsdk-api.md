@@ -3748,6 +3748,7 @@ const wingSimulatorSchema: sim.WingSimulatorSchema = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.WingSimulatorSchema.property.root">root</a></code> | <code>@winglang/wingsdk.sim.BaseResourceSchema</code> | The resource at the root of the tree. |
+| <code><a href="#@winglang/wingsdk.sim.WingSimulatorSchema.property.sdkVersion">sdkVersion</a></code> | <code>string</code> | The version of the Wing SDK used to synthesize the .wx file. |
 | <code><a href="#@winglang/wingsdk.sim.WingSimulatorSchema.property.startOrder">startOrder</a></code> | <code>string[]</code> | The order resources in which resources should be initialized based on dependency relationships. |
 
 ---
@@ -3761,6 +3762,18 @@ public readonly root: BaseResourceSchema;
 - *Type:* @winglang/wingsdk.sim.BaseResourceSchema
 
 The resource at the root of the tree.
+
+---
+
+##### `sdkVersion`<sup>Required</sup> <a name="sdkVersion" id="@winglang/wingsdk.sim.WingSimulatorSchema.property.sdkVersion"></a>
+
+```typescript
+public readonly sdkVersion: string;
+```
+
+- *Type:* string
+
+The version of the Wing SDK used to synthesize the .wx file.
 
 ---
 
