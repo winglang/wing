@@ -32,7 +32,7 @@ language](#what-is-cloud-oriented-programming). It allows developers to build
 distributed systems that fully leverage the power of the cloud, without having
 to worry about the underlying infrastructure.
 
-```ts
+```js
 bring cloud;
 
 let bucket = new cloud.Bucket();
