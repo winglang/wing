@@ -1,16 +1,6 @@
 # Wing Language Specification
 
-> * **Current Owner:** Sepehr L. ([@3p3r](https://github.com/3p3r))
-> * **Contributors (A-Z):**
->   *  Chris R. ([@Chriscbr](https://github.com/Chriscbr))
->   *  Elad B. ([@eladb](https://github.com/eladb))
->   *  Eyal K. ([@ekeren](https://github.com/ekeren))
->   *  Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
->   *  Shai B. ([@ShaiBer](https://github.com/ShaiBer))
->   *  Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
->   *  Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))
-
----
+> 📝 Do you have feedback on this doc? Submit comments [here](https://github.com/winglang/wing/pull/497/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5).
 
 - [0. Preface](#0-preface)
   - [0.1 Motivation](#01-motivation)
@@ -137,7 +127,6 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 "any" must be explicitly declared and annotated.
 
 > ```TS
-> // Wing Code:
 > let x = 1;                  // x is a num
 > let v = 23.6;               // v is a num
 > let y = "Hello";            // y is a str
@@ -145,9 +134,10 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > let w: any = 1;             // w is an any
 > let q: num? = nil;          // q is an optional num
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const x: number = 1;
 > const v: number = 23.6;
 > const y: string = "Hello";
@@ -155,6 +145,8 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > const w: any = 1;
 > const q: number? = undefined;
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -173,7 +165,6 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 | `Promise<T>`  | promise type (async code)             |
 
 > ```TS
-> // Wing Code:
 > let z = {1, 2, 3};            // immutable set
 > let zm = new MutSet<num>();   // mutable set
 > let y = {"a": 1, "b": 2};     // immutable map
@@ -182,9 +173,10 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > let xm = new MutArray<num>(); // mutable array
 > let w = new SampleClass();    // class instance (mutability unknown)
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+  
 > ```TS
-> // Equivalent TypeScript Code:
 > const z: Set<number> = Object.freeze(new Set([1, 2, 3]));
 > const zm: Set<number> = new Set();
 > const y: Map<string, number> = Object.freeze(new Map([["a", 1], ["b", 2]]));
@@ -193,6 +185,8 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > const xm: number[] = [];
 > const w: SampleClass = new SampleClass();
 > ```
+
+</details>
 
 [`▲ top`][top]
 
@@ -211,7 +205,6 @@ them in the closure section.
 ```
 
 > ```TS
-> // Wing Code:
 > // type annotation in wing: (num) -> num
 > let f1 = (x: num): num -> { return x + 1; };
 > // type annotation in wing: (num, str) ~> void
@@ -219,13 +212,16 @@ them in the closure section.
 > // type annotation in wing: (num, num) => void
 > let f3 = (a: num, b: num) => { print(a + b); };
 > ```
-> 
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const f1 = Object.freeze((x: number): number -> { return x + 1; });
 > const f2 = Object.freeze((x: number, s: string): undefined -> { });
 > const f3 = Object.freeze((a: number, b: number): undefined -> { print(a+b) });
 > ```
+
+</details>
 
 
 [`▲ top`][top]
@@ -249,15 +245,16 @@ All structs can be casted to `Struct` and back to `any` at any time as well.
 it cannot be modified anymore.
 
 > ```TS
-> // Wing Code:
 > // assuming fetch_some_data_with_jsii() returns "any":
 > let data: Struct = await fetch_some_data_with_jsii();
 > print(data[0]["prop-1"].id);
 > print(data.name);
 > ```
-> 
+
+  
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const data: any = Object.freeze(await (async () -> {
 >   try {
 >     return JSON.parse(await fetch_some_data_with_jsii());
@@ -269,6 +266,7 @@ it cannot be modified anymore.
 > console.log(data.name);
 > ```
 
+</details>
 
 [`▲ top`][top]
 
@@ -294,15 +292,15 @@ last resort. Exceptions are non fatal and should be used instead for effectively
 communicating errors to the user.
 
 > ```TS
-> // Wing Code:
 > print(23, "Hello", true, { "a": 1, "b": 2 });
 > throw("a recoverable error occurred");
 > panic("a fatal error encountered", [1,2]);
 > assert(x > 0, x < 10);
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > console.log(23, "Hello", true, Object.freeze(new Map([["a", 1], ["b", 2]])));
 > // throws
 > throw new Error("a recoverable error occurred");
@@ -316,6 +314,8 @@ communicating errors to the user.
 > // multiple assertions
 > (() -> { assert.ok(x > 0); assert.ok(x < 10); })();
 > ```
+
+</detais>
 
 [`▲ top`][top]
 
@@ -447,16 +447,18 @@ a value to be present for the l-value (left hand side of the assignment operator
 and guarantees what's returned is type-stripped from its `?` keyword).
 
 > ```TS
-> // Wing Code:
 > let x? = 44;
 > let y = x ?? 55;
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const x: number? = 44;
 > const y: number = x ?? 55;
 > ```
+
+</details>
 
 [`▲ top`][top]
 
@@ -478,7 +480,6 @@ Function arguments and their return type is always required. Function argument
 type is inferred iff a default value is provided.
 
 > ```TS
-> // Wing Code:
 > let i = 5;
 > let m = i;
 > let arr_opt? = new MutArray<num>();
@@ -487,9 +488,10 @@ type is inferred iff a default value is provided.
 > let i1? = nil;
 > let i2: num? = i;
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const i: number = 5;
 > const m: number = i;
 > const arr_opt: number[]? = [];
@@ -498,6 +500,8 @@ type is inferred iff a default value is provided.
 > const i1: any = undefined;
 > const i2: number? = i;
 > ```
+
+</details>
 
 [`▲ top`][top]
 
@@ -518,7 +522,6 @@ must guarantee exception safety by throwing a compile error if an exception is
 expected from a call and it is not being caught.
 
 > ```TS
-> // Wing Code:
 > try {
 >   let x? = 1;
 >   throw("hello exception");
@@ -528,9 +531,10 @@ expected from a call and it is not being caught.
 >   print("done");
 > }
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > try {
 >   let x: number? = 1;
 >   throw new Error("hello exception");
@@ -540,6 +544,8 @@ expected from a call and it is not being caught.
 >   console.log("done");
 > }
 > ```
+  
+<details>
 
 [`▲ top`][top]
 
@@ -613,9 +619,10 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 > let a = MyResource();
 > let b = MyResource() be "my-resource";
 > ```
-> 
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > (new class extends cdk.Stack {
 >   constructor(scope: constructs.Construct, id: string) {
 >     const a = new MyResource(this, "MyResource");
@@ -623,6 +630,8 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 >   }
 > })(new cdk.App(), "WingEntry");
 > ```
+
+</details>
 
 [`▲ top`][top]
 
@@ -646,7 +655,6 @@ this document: [Module System](#4-module-system).
 while loops currently.
 
 > ```TS
-> // Wing Code:
 > for let i in 1..10 {
 >   if i > 5 {
 >     break;
@@ -654,9 +662,10 @@ while loops currently.
 >   print(i);
 > }
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > for (let i = 1; i < 10; i++) {
 >   if (i > 5) {
 >     break;
@@ -664,6 +673,8 @@ while loops currently.
 >   console.log(i);
 > }
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -675,7 +686,6 @@ while loops currently.
 includes for and while loops currently.
 
 > ```TS
-> // Wing Code:
 > for let i in 1..10 {
 >   if i > 5 {
 >     continue;
@@ -683,9 +693,10 @@ includes for and while loops currently.
 >   print(i);
 > }
 > ```
->   
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > for (let i = 1; i < 10; i++) {
 >   if (i > 5) {
 >     continue;
@@ -693,6 +704,8 @@ includes for and while loops currently.
 >   console.log(i);
 > }
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -703,7 +716,6 @@ includes for and while loops currently.
 **return** statement allows to return a value or exit from a called context.  
 
 > ```TS
-> // Wing Code:
 > class MyClass {
 >   public myPublicMethod() {}
 >   private _myPrivateMethod(): void {}
@@ -711,9 +723,10 @@ includes for and while loops currently.
 >   internal _myInternalMethod(): str { return "hi!"; }
 > }
 > ```
-> 
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > class MyClass {
 >   public myPublicMethod(): void {}
 >   private myPrivateMethod(): undefined {}
@@ -722,6 +735,8 @@ includes for and while loops currently.
 >   public __wing__internal_myInternalMethod(): string { return "hi!"; }
 > }
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -747,9 +762,10 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 >   }
 > }
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > class MyClass {
 >   async foo(): number {
 >     let x = await some_promise();
@@ -761,6 +777,8 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 >   }
 > }
 >  ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -783,9 +801,10 @@ The `if` statement is optionally followed by `elif` and `else`.
 >   print("x is 1 and y is sample");
 > }
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const x: number = 1;
 > const y: string = "sample";
 > if (x === 2) {
@@ -796,6 +815,8 @@ The `if` statement is optionally followed by `elif` and `else`.
 >   console.log("x is 1 and y is sample");
 > }
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -821,9 +842,10 @@ The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 >   print(item);
 > }
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const arr: number[] = Object.freeze([1, 2, 3]);
 > const set: Set<number> = Object.freeze(new Set([1, 2, 3]));
 > for (const item of arr) {
@@ -839,6 +861,8 @@ The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 >   console.log(val);
 > }
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -854,13 +878,16 @@ while statement is used to execute a block of code while a condition is true.
 >   print("hello");
 > }
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > while (call_some_function()) {
 >   console.log("hello");
 > }
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -904,9 +931,10 @@ Structs can inherit from multiple other structs.
 >   field5: "sample"
 > };
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > interface MyDataModel1 {
 >   public readonly field1: number;
 >   public readonly field2: string;
@@ -931,6 +959,8 @@ Structs can inherit from multiple other structs.
 >   field6: 11
 > };
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -1203,9 +1233,10 @@ type of visibility (private, protected, etc.).
 >   }
 > };
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > interface IMyInterface1 {
 >   public readonly field1: number;
 >   public method1(x: number): string;
@@ -1232,6 +1263,8 @@ type of visibility (private, protected, etc.).
 >   }
 > }
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -1250,16 +1283,18 @@ Assignment declaration keyword is `let`.
 Type annotation is optional if a default value is given.  
 
 > ```TS
-> // Wing Code:
 > let n = 10;
 > let s: str = "hello";
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const n: number = 10;
 > const s: string = "hello";
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -1275,7 +1310,6 @@ However, it is possible to create anonymous closures and assign to variables
 (function literals). Inflight closures are also supported.
 
 > ```TS
-> // Wing Code:
 > // preflight closure:
 > let f1 = (a: num, b: num) -> { print(a + b); }
 > // inflight closure:
@@ -1305,7 +1339,6 @@ Promises in Wing are defined with `Promise<T>` syntax.
 Functions that use the keyword "await" in their body must return a promise.
 
 > ```TS
-> // Wing Code:
 > let number = (): Promise<num> -> {
 >   return 23;
 > }
@@ -1315,9 +1348,10 @@ Functions that use the keyword "await" in their body must return a promise.
 >   print(t);
 > }
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const number = Object.freeze((): number => {
 >   return 23;
 > })
@@ -1326,6 +1360,8 @@ Functions that use the keyword "await" in their body must return a promise.
 >   console.log(t);
 > })
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -1389,20 +1425,22 @@ Individual array items are also accessed with the `[]` syntax. You can call
 Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 > ```TS
-> // Wing Code:
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
 > let arr3 = Array<str>(arr2);
 > let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const arr1: number[] = Object.freeze([1, 2, 3]);
 > const arr2: string[] = Object.freeze(["a", "b", "c"]);
 > const arr3: string[] = ["a1", "b2", "c3"];
 > const l = arr1.length + arr2.length + arr3.length + arr1[0];
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -1417,7 +1455,6 @@ definitions but required in multi line definitions.
 Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 
 > ```TS
-> // Wing Code:
 > enum SomeEnum { ONE, TWO, THREE };
 > enum MyFoo {
 >   A,
@@ -1427,9 +1464,10 @@ Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 > let x = MyFoo.B;
 > let y = x; // type is MyFoo
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > enum SomeEnum { ONE, TWO, THREE };
 > enum MyFoo {
 >   A,
@@ -1439,6 +1477,8 @@ Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 > const x: MyFoo = MyFoo.B;
 > const y: MyFoo = x;
 > ```
+  
+</details>
 
 `nameof` operator is used to get the name of a constant member at compile time.
 For example `nameof(MyEnum.MEMBER)` resolves to `"MEMBER"` at compile time.
@@ -1515,8 +1555,9 @@ class Rect {
 }
 ```
 
+<details><summary>Equivalent TypeScript Code</summary>
+
 ```TS
-// Equivalent TypeScript Code:
 interface Vec2 { x: number; y: number; }
 class Rect {
   size: Vec2;
@@ -1533,6 +1574,8 @@ class Rect {
   }
 }
 ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -1626,19 +1669,21 @@ Processing unicode escape sequences happens in these strings.
 `"` and `$` can be escaped with backslash `\` inside string substitutions.
 
 > ```TS
-> // Wing Code:
 > let name = "World";
 > let s = "Hello, ${name}!";
 > let l = sizeof(s);
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const name = "World";
 > const s = `Hello, ${name}!`; // with substitution
 > const l = s.length; // length of string
 > ```
 
+</details>
+  
 [`▲ top`][top]
 
 ---
@@ -1663,13 +1708,13 @@ Internally compiler calls the host environment's command processor (e.g.
 `/bin/sh`, `cmd.exe`, `command.com`) with the enclosed command.
 
 > ```TS
-> // Wing Code:
 > let name = `echo "World"`;
 > let s = "Hello, ${name}!";
 > ```
->
+
+<details><summary>Equivalent TypeScript Code</summary>
+
 > ```TS
-> // Equivalent TypeScript Code:
 > const name = (() -> {
 >   let _stdout = "";
 >   try {
@@ -1689,6 +1734,8 @@ Internally compiler calls the host environment's command processor (e.g.
 > })();
 > let s = `Hello, ${name}!`;
 > ```
+  
+</details>
 
 [`▲ top`][top]
 
@@ -1962,6 +2009,18 @@ queue.add_consumer(filter);
 
 ### 6.6 Credits
 
+* **Current Owner:** Sepehr L. ([@3p3r](https://github.com/3p3r))
+* **Contributors (A-Z):**
+  *  Chris R. ([@Chriscbr](https://github.com/Chriscbr))
+  *  Elad B. ([@eladb](https://github.com/eladb))
+  *  Eyal K. ([@ekeren](https://github.com/ekeren))
+  *  Mark MC. ([@MarkMcCulloh](https://github.com/MarkMcCulloh))
+  *  Shai B. ([@ShaiBer](https://github.com/ShaiBer))
+  *  Uri B. ([@staycoolcall911](https://github.com/staycoolcall911))
+  *  Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))  
+
+Inspiration:
+  
 - <https://github.com/WheretIB/nullc>
 - <https://github.com/chaos-lang/chaos>
 - <https://github.com/BlazifyOrg/blazex>
