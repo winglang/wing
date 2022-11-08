@@ -6,19 +6,20 @@ This document describes everything you need to know to contribute to Wing.
 We've structured this as an FAQ to make it easy to find the information you need.
 
 - [Wing Contributor's Handbook](#wing-contributors-handbook)
-  - [How can I help?](#how-can-i-help)
-  - [How is this repository structured?](#how-is-this-repository-structured)
-  - [How do I build Wing locally?](#how-do-i-build-wing-locally)
-  - [How do I install private GitHub packages?](#how-do-i-install-private-github-packages)
-  - [How do I add an example?](#how-do-i-add-an-example)
-  - [What is an RFC?](#what-is-an-rfc)
-  - [What is the RFC process?](#what-is-the-rfc-process)
-  - [How do I submit a pull request?](#how-do-i-submit-a-pull-request)
+  - [👋 How can I help?](#-how-can-i-help)
+  - [🌳 How is this repository structured?](#-how-is-this-repository-structured)
+  - [🔨 How do I build Wing locally?](#-how-do-i-build-wing-locally)
+  - [🧪 How do I install private GitHub packages?](#-how-do-i-install-private-github-packages)
+  - [🎤 How do I add an example?](#-how-do-i-add-an-example)
+  - [🧬 What is an RFC?](#-what-is-an-rfc)
+  - [🔬 What is the RFC process?](#-what-is-the-rfc-process)
+  - [🐞 How do I submit a bug report?](#-how-do-i-submit-a-bug-report)
+  - [📬 How do I submit a pull request?](#-how-do-i-submit-a-pull-request)
     - [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)
-  - [What is the code of conduct?](#what-is-the-code-of-conduct)
-  - [Where can I go to ask questions about Wing?](#where-can-i-go-to-ask-questions-about-wing)
+  - [⚖️ What is the code of conduct?](#️-what-is-the-code-of-conduct)
+  - [🙋 Where can I go to ask questions about Wing?](#-where-can-i-go-to-ask-questions-about-wing)
 
-## How can I help?
+## 👋 How can I help?
 
 There are many ways to contribute to Wing:
 
@@ -42,7 +43,7 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 [Wing Discussions]: https://github.com/winglang/wing/discussions
 
-## How is this repository structured?
+## 🌳 How is this repository structured?
 
 The Wing repository is structured as a monorepo, which means that it contains multiple packages.
 Packages that are primarily meant to be run by users are in the `apps` directory, while packages that are primarily meant to be consumed as libraries are in the `libs` directory.
@@ -54,7 +55,7 @@ This means it includes packages that form the entire toolchain (compiler, SDK, I
 Nx will be installed alongside the rest of the project's dependencies after you run `npm install` from the root directory, and can be accessed with `npx nx`.
 (It does not need to be installed separately).
 
-## How do I build Wing locally?
+## 🔨 How do I build Wing locally?
 
 Here is a list of minimal tools you should install to build the Wing repo in your development environment:
 
@@ -86,7 +87,7 @@ Some parts of the Wing toolchain are written in Rust, while others are written i
 [Node.js]: https://nodejs.org/en/
 [Rust]: https://www.rust-lang.org/tools/install
 
-## How do I install private GitHub packages?
+## 🧪 How do I install private GitHub packages?
 
 While the `winglang` GitHub organization is private, you may need some extra setup to install npm packages like the CLI or SDK.
 
@@ -105,7 +106,7 @@ npm login --scope=@winglang --registry=https://npm.pkg.github.com
 
 See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) for more information.
 
-## How do I add an example?
+## 🎤 How do I add an example?
 
 Adding a code example is a great way to contribute to Wing.  Here's how to do it:
 
@@ -117,7 +118,7 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 * Commit your changes and push them to your fork.
 * Open a pull request. A Wing maintainer will review it as soon as possible!
 
-## What is an RFC?
+## 🧬 What is an RFC?
 
 An RFC is short for "request for comments".
 It's a document that describes a new feature or change to Wing.
@@ -128,11 +129,21 @@ Usually, an RFC is a common practice for major features or complex changes that 
 However, the process is designed to be as lightweight as needed and can be used to request feedback on any change.
 Quite often, even changes that seem obvious and simple at first sight can be significantly improved once a wider group of interested and experienced people have a chance to weigh in.
 
-## What is the RFC process?
+## 🔬 What is the RFC process?
 
 See our dedicated [RFC process](./rfcs/rfc-process.md) page.
 
-## How do I submit a pull request?
+## 🐞 How do I submit a bug report?
+
+Wing is a work in progress!
+Our goal is to to keep the toolchain stable, and to minimize surprising behavior as new features are added -- but even then, sometimes bugs slip through.
+
+If you spot a bug or any behavior that doesn't match how you expected it to work, please go to our GitHub and [open an issue](https://github.com/winglang/wing/issues/new).
+A Wing maintainer will come to triage it and identify where the problem is, and if there's a way we can fix it.
+
+Also, if you think you have an idea of where the bug is, or even think you might be able to fix it -- please let us know in the issue! We can give you some pointers and help you get started.
+
+## 📬 How do I submit a pull request?
 
 We love seeing new pull requests!
 If you're new to GitHub, check out [this guide](https://docs.github.com/en/get-started/quickstart/contributing-to-projects) to learn how to create your own fork of the Wing repository and make a pull request.
@@ -150,7 +161,7 @@ Other tips:
 * We recommend you avoid force pushing or rebasing your branch after a pull request has been opened in order to make it easier to review.
 Your commit history doesn't need to be perfect, since it will get squashed into a single commit when the pull request is merged anyway.
 
-### How are pull request titles formatted?
+###  How are pull request titles formatted?
 
 We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) to generate our changelog.
 To that end, pull request titles must follow this convention:
@@ -179,13 +190,13 @@ To that end, pull request titles must follow this convention:
   * For `feat` changes, subject should describe the feature, not the activity of adding the feature (e.g. `feat(sdk): google cloud platform support` instead of `feat(sdk): add tf-gcp target to sdk`).
   * For `rfc` changes, subject should be the title of the rfc (e.g. `rfc(cli): run command` instead of `rfc(cli): rfc for run cli run command`).
 
-## What is the code of conduct?
+## ⚖️ What is the code of conduct?
 
-Wing follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
+The Wing community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
 Please review it before contributing issues, pull requests, or joining the Wing Slack.
 
-## Where can I go to ask questions about Wing?
+## 🙋 Where can I go to ask questions about Wing?
 
 Come on down and hang out in the [Wing Slack]! We're a friendly bunch and we'd love to help you out. There are no stupid questions, so don't be afraid to ask! Don't forget to introduce yourself in the #intro channel.
 
