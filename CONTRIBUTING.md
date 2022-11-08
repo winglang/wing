@@ -37,8 +37,8 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 
 [GitHub issue]: https://github.com/winglang/wing/issues
 [open pull requests]: https://github.com/winglang/wing/pulls?q=is:pr+is:open+sort:updated-desc
-[pull requests]: #how-do-i-submit-a-pull-request
-[RFC]: #what-is-an-rfc
+[pull requests]: #-how-do-i-submit-a-pull-request
+[RFC]: #-what-is-an-rfc
 [good first issue]: https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:%22good+first+issue%22
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 [Wing Discussions]: https://github.com/winglang/wing/discussions
