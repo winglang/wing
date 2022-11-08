@@ -1,13 +1,14 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import * as open from "open";
+import { compile, update } from "./commands";
 
 import { Command } from "commander";
-import { compile } from "./commands/compile";
 import debug from "debug";
-import {resolve} from "path";
+import open from "open";
+import { resolve } from "path";
 
+const DEFAULT_UPDATE_RATE = "daily";
 const PACKAGE_VERSION = require("../package.json").version as string;
 const log = debug("wing:cli");
 
@@ -16,6 +17,8 @@ async function main() {
 
   program.name("wing");
   program.version(PACKAGE_VERSION);
+
+  await update({ force: false, rate: DEFAULT_UPDATE_RATE });
 
   program
     .command("run")
@@ -38,6 +41,11 @@ async function main() {
       "tf-aws"
     )
     .action(compile);
+
+  program
+    .command("update")
+    .description("Updates Wing toolchain")
+    .action(() => update({ force: true, rate: DEFAULT_UPDATE_RATE }));
 
   program.parse();
 }
