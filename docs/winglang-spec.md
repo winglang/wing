@@ -1,7 +1,5 @@
 # Wing Language Specification
 
-> 📝 Do you have feedback on this doc? Submit comments [here](https://github.com/winglang/wing/pull/497/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5).
-
 - [0. Preface](#0-preface)
   - [0.1 Motivation](#01-motivation)
   - [0.2 Design Tenets](#02-design-tenets)
@@ -67,6 +65,10 @@
   - [6.4 Kitchen Sink](#64-kitchen-sink)
   - [6.5 Roadmap](#65-roadmap)
   - [6.6 Credits](#66-credits)
+
+>
+> 📝 Do you have feedback on this doc? Submit comments [here](https://github.com/winglang/wing/pull/497/files#diff-46a5d9ee8e0085d047c39f03dfda67a39f5087ce50f9b16a8103e0073a0d3d78).
+>
 
 ## 0. Preface
 
