@@ -20,7 +20,7 @@ We've structured this as an FAQ to make it easy to find the information you need
 
 There are many ways to contribute to Wing:
 
-* Reporting bugs (GitHub issue)
+* Reporting bugs through a [GitHub issue](https://github.com/winglang/wing/issues)
 * Adding examples (see [How do I add an example?])
 * Updating documentation
 * Reviewing open pull requests
