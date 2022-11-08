@@ -38,7 +38,8 @@
       ],
       "options": {
         "commands": ["npm run bump", "npm pack", "npm run unbump"],
-        "cwd": "apps/wing"
+        "cwd": "apps/wing",
+        "parallel": false
       }
     }
   }

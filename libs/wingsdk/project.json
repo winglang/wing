@@ -16,7 +16,8 @@
       "executor": "nx:run-commands",
       "options": {
         "commands": ["npm run bump", "npm pack", "npm run unbump"],
-        "cwd": "libs/wingsdk"
+        "cwd": "libs/wingsdk",
+        "parallel": false
       }
     }
   }

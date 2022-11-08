@@ -53,7 +53,8 @@
           "build-wasm",
           "copy",
           "lint",
-          "test"
+          "test",
+          "package"
         ]
       }
     }

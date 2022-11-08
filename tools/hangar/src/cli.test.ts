@@ -1,8 +1,8 @@
 import { test, expect, beforeAll, afterAll } from "vitest";
 import { posix as path } from "path";
 import "zx/globals";
-import { runServer } from 'verdaccio';
-const registryServer = await runServer('./verdaccio.config.yaml');
+import { runServer } from "verdaccio";
+const registryServer = await runServer("./verdaccio.config.yaml");
 
 const repoRoot = path.resolve(__dirname, "../../..");
 const testDir = path.join(repoRoot, "examples/tests");
@@ -34,7 +34,7 @@ const shellEnv = {
 
 afterAll(async () => {
   registryServer.close();
-})
+});
 
 beforeAll(async () => {
   await within(async () => {
@@ -53,9 +53,8 @@ beforeAll(async () => {
     await $`npm run publish-local-tgz -- ${targetWingSDKTGZ}`;
 
     // ensure version works before bothering with the rest of the tests
-    $`cd ${tmpDir}`;
-    let output =
-      await $`npx @winglang/wing --version`;
+    await $`cd ${tmpDir}`;
+    let output = await $`npx @winglang/wing --version`;
 
     expect(output.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
   });
@@ -67,10 +66,9 @@ test.each(validWingFiles)(
     await within(async () => {
       $.env = shellEnv;
       $.cwd = tmpDir;
-      $`cd ${tmpDir}`;
+      await $`cd ${tmpDir}`;
 
-      let output =
-        await $`npx @winglang/wing compile ${wingFile}`;
+      let output = await $`npx @winglang/wing compile ${wingFile}`;
 
       console.log(output.stdout);
     });
