@@ -48,7 +48,9 @@ Packages that are primarily meant to be run by users are in the `apps` directory
 Each has a README explaining what it does and how to use it. (If you see one missing, please open an issue and let us know!)
 
 The Wing monorepo uses [Nx] to run commands across all code packages in the `libs` and `apps` folders.
-[Nx] will be installed alongside the rest of the project's dependencies after you run `npm install` from the root directory, and can be accessed with `npx nx`.
+This means it includes packages that form the entire toolchain (compiler, SDK, IDE extension, etc), and the build and release bind them all together.
+
+Nx will be installed alongside the rest of the project's dependencies after you run `npm install` from the root directory, and can be accessed with `npx nx`.
 (It does not need to be installed separately).
 
 ## How do I build Wing locally?
