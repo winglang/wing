@@ -1,12 +1,12 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import * as open from "open";
+import { compile, upgrade } from "./commands";
 
 import { Command } from "commander";
-import { compile } from "./commands/compile";
 import debug from "debug";
-import {resolve} from "path";
+import open from "open";
+import { resolve } from "path";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const log = debug("wing:cli");
@@ -16,6 +16,8 @@ async function main() {
 
   program.name("wing");
   program.version(PACKAGE_VERSION);
+
+  await upgrade({ force: false });
 
   program
     .command("run")
@@ -38,6 +40,11 @@ async function main() {
       "tf-aws"
     )
     .action(compile);
+
+  program
+    .command("upgrade")
+    .description("Upgrades the Wing toolchain to the latest version")
+    .action(() => upgrade({ force: true }));
 
   program.parse();
 }
