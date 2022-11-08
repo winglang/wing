@@ -7,6 +7,7 @@ We've structured this as an FAQ to make it easy to find the information you need
 
 - [Wing Contributor's Handbook](#wing-contributors-handbook)
   - [How can I help?](#how-can-i-help)
+  - [How is this repository structured?](#how-is-this-repository-structured)
   - [How do I build Wing locally?](#how-do-i-build-wing-locally)
   - [How do I install private GitHub packages?](#how-do-i-install-private-github-packages)
   - [How do I add an example?](#how-do-i-add-an-example)
@@ -38,16 +39,22 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 [Wing Discussions] https://github.com/winglang/wing/discussions
 
-## How do I build Wing locally?
+## How is this repository structured?
+
+The Wing repository is structured as a monorepo, which means that it contains multiple packages.
+Packages that are primarily meant to be run by users are in the `apps` directory, while packages that are primarily meant to be consumed as libraries are in the `libs` directory.
+Each has a README explaining what it does and how to use it. (If you see one missing, please open an issue and let us know!)
 
 The Wing monorepo uses [Nx] to run commands across all code packages in the `libs` and `apps` folders.
+[Nx] will be installed alongside the rest of the project's dependencies after you run `npm install` from the root directory, and can be accessed with `npx nx`.
+(It does not need to be installed separately).
+
+## How do I build Wing locally?
 
 Here is a list of minimal tools you should install to build the Wing repo in your development environment:
 
 * [Node.js] version 18.x or above (we recommend [nvm])
 * [Rust]
-
-([Nx] will be installed alongside the rest of the project's dependencies, and can be accessed with `npx nx` - it does not need to be installed separately).
 
 To build the repo locally:
 
