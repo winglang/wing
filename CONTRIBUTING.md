@@ -15,6 +15,7 @@ We've structured this as an FAQ to make it easy to find the information you need
   - [What is the RFC process?](#what-is-the-rfc-process)
   - [How do I submit a pull request?](#how-do-i-submit-a-pull-request)
     - [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)
+  - [What is the code of conduct?](#what-is-the-code-of-conduct)
   - [Where can I go to ask questions about Wing?](#where-can-i-go-to-ask-questions-about-wing)
 
 ## How can I help?
@@ -177,6 +178,12 @@ To that end, pull request titles must follow this convention:
   * For `fix` changes, subject should describe the problem, not the solution (e.g. `fix(cli): intermediate.js file not found` instead of ~`fix(cli): make sure output directory exists`~).
   * For `feat` changes, subject should describe the feature, not the activity of adding the feature (e.g. `feat(sdk): google cloud platform support` instead of `feat(sdk): add tf-gcp target to sdk`).
   * For `rfc` changes, subject should be the title of the rfc (e.g. `rfc(cli): run command` instead of `rfc(cli): rfc for run cli run command`).
+
+## What is the code of conduct?
+
+Wing follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
+
+Please review it before contributing issues, pull requests, or joining the Wing Slack.
 
 ## Where can I go to ask questions about Wing?
 
