@@ -9,7 +9,6 @@ We've structured this as an FAQ to make it easy to find the information you need
   - [👋 How can I help?](#-how-can-i-help)
   - [🌳 How is this repository structured?](#-how-is-this-repository-structured)
   - [🔨 How do I build Wing locally?](#-how-do-i-build-wing-locally)
-  - [🧪 How do I install private GitHub packages?](#-how-do-i-install-private-github-packages)
   - [🎤 How do I add an example?](#-how-do-i-add-an-example)
   - [🧬 What is an RFC?](#-what-is-an-rfc)
   - [🔬 What is the RFC process?](#-what-is-the-rfc-process)
@@ -86,25 +85,6 @@ Some parts of the Wing toolchain are written in Rust, while others are written i
 [Nx]: https://nx.dev/
 [Node.js]: https://nodejs.org/en/
 [Rust]: https://www.rust-lang.org/tools/install
-
-## 🧪 How do I install private GitHub packages?
-
-While the `winglang` GitHub organization is private, you may need some extra setup to install npm packages like the CLI or SDK.
-
-First, you need a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to login to the GitHub npm registry.
-Follow the instructions in the [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token) to create a PAT. Make sure it has the `read:packages` scope.
-
-After, you should configure npm to use the @winglang package registry by default for the packages under the @winglang scope by running:
-
-```sh
-npm login --scope=@winglang --registry=https://npm.pkg.github.com
-
-# > Username: GITHUB USERNAME
-# > Password: YOUR PAT
-# > Email: PUBLIC-EMAIL-ADDRESS
-```
-
-See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) for more information.
 
 ## 🎤 How do I add an example?
 
