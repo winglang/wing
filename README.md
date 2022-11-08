@@ -42,7 +42,6 @@ new cloud.Function(() ~> {
 
 Wing applications are compiled to [Terraform] and JavaScript, and can be
 deployed to AWS, GCP Azure, or visualized and debugged locally using the Wing Console.
-Console.
 
 Read below about [what makes Wing special](#what-makes-wing-special) and [why
 you should consider Wing](#why-wing).
@@ -119,43 +118,55 @@ inflight handler(message: str) :str {
 
 queue.on_message(handler);
 ```
+Next step is to test your program locally using wing console or a REPL
+### Testing the program using wing console 
+*(currently available only on MacOS)*
 
-Now, let's test our program using the Wing Console:
+1. Compile to the `sim` target
 
-First, compile to the `sim` target:
+    ```sh
+    wing compile --target sim hello.w
+    ```
 
-```sh
-wing compile --target sim hello.w
-```
+2. You will notice that `app.wx` was created, run the Wing Console:
 
-You will notice that `app.wx` was created.
+    ```sh
+    wing run app.wx
+    ```
 
-Now, run the Wing Console:
+    The **Wing Console** will start and in the main view you'll see two resources: a **Queue** and a **Function**. 
+    You'll also notice that the function is connected to the queue through the `message` event.
 
-```sh
-wing run app.wx
-```
+    <img src="./docs/assets/wing-console-view.png">
 
-The **Wing Console** will start and in the main view you'll see two resources: a
-**Queue** and a **Function**. You'll also notice that the function is connected
-to the queue through the `message` event.
 
-<img src="./docs/assets/wing-console-view.png">
+3. Click on the queue resource, goto **queue contents** tab. Type `world` and hit
+  **Send Message**.
 
-Now, click on the queue resource, goto **queue contents** tab. Type `world` and hit
-**Send Message**.
-
-Now, click on the function resource, goto **Test Function** tab and notice the indication that your function
+4. Click on the function resource, goto **Test Function** tab and notice the indication that your function
 was called once.
 
-You can repeat the above testing flow and track the amount of times your function was called.
+5. ***Congratulations! You have just written and tested your first Wing program!***
 
-***Congratulations! You have just written and tested your
-first Wing program!***
+### Testing the program with node REPL
 
-As you can see, so far we've tested our program locally using the simulator and
-Wing Console. Next we'll see how you can deploy your program to AWS using
-Terraform.
+1. Run node command 
+    ```sh
+    node --experimental-repl-await
+    ```
+2.  Run the following code Inside node REPL:
+    ```js
+    let sdk = require("@winglang/wingsdk")
+    let simulator = new sdk.testing.Simulator({ simfile : "./app.wx"})
+    await simulator.start()
+    let queue = simulator.getResourceByPath("root/cloud.Queue") // as sdk.cloud.IQueueClient
+    await queue.push("Wing") // will output "Hello Wing" to console
+    ```
+3. You should expect the node console to output "Hello Wing" 
+4. ***Congratulations! You have just written and tested your first Wing program!***
+
+
+As you can see, so far we've tested our program locally. Next we'll see how you can deploy your program to AWS using Terraform.
 
 > Currently, our SDKs only support AWS, but the Wing compiler can target
 > multiple cloud platforms, including AWS, Azure, Google Cloud, and Kubernetes.
