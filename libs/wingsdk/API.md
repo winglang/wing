@@ -3668,6 +3668,7 @@ const simulatorProps: testing.SimulatorProps = { ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.factory">factory</a></code> | <code>@winglang/wingsdk.testing.ISimulatorFactory</code> | The factory that produces resource simulations. |
+| <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.logger">logger</a></code> | <code>@winglang/wingsdk.testing.ISimulatorLogger</code> | Simulator logger. |
 
 ---
 
@@ -3693,6 +3694,19 @@ public readonly factory: ISimulatorFactory;
 - *Default:* a factory that produces simulations for built-in Wing SDK resources
 
 The factory that produces resource simulations.
+
+---
+
+##### `logger`<sup>Optional</sup> <a name="logger" id="@winglang/wingsdk.testing.SimulatorProps.property.logger"></a>
+
+```typescript
+public readonly logger: ISimulatorLogger;
+```
+
+- *Type:* @winglang/wingsdk.testing.ISimulatorLogger
+- *Default:* console.log
+
+Simulator logger.
 
 ---
 
@@ -5292,6 +5306,7 @@ Throws if the handle isn't valid.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.logger">logger</a></code> | <code>@winglang/wingsdk.testing.ISimulatorLogger</code> | Simulator log object. |
 
 ---
 
@@ -5304,6 +5319,18 @@ public readonly assetsDir: string;
 - *Type:* string
 
 The absolute path to where all assets in `app.wx` are stored.
+
+---
+
+##### `logger`<sup>Required</sup> <a name="logger" id="@winglang/wingsdk.testing.ISimulatorContext.property.logger"></a>
+
+```typescript
+public readonly logger: ISimulatorLogger;
+```
+
+- *Type:* @winglang/wingsdk.testing.ISimulatorLogger
+
+Simulator log object.
 
 ---
 
@@ -5344,6 +5371,95 @@ Resolve the parameters needed for creating a specific resource simulation.
 ###### `context`<sup>Required</sup> <a name="context" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.context"></a>
 
 - *Type:* @winglang/wingsdk.testing.ISimulatorContext
+
+---
+
+
+### ISimulatorLogger <a name="ISimulatorLogger" id="@winglang/wingsdk.testing.ISimulatorLogger"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.ISimulatorLogger
+
+Simulator logger interface.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorLogger.error">error</a></code> | error level log. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorLogger.info">info</a></code> | info level log. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorLogger.warn">warn</a></code> | warn level log. |
+
+---
+
+##### `error` <a name="error" id="@winglang/wingsdk.testing.ISimulatorLogger.error"></a>
+
+```typescript
+public error(msg: string, obj: any): void
+```
+
+error level log.
+
+###### `msg`<sup>Required</sup> <a name="msg" id="@winglang/wingsdk.testing.ISimulatorLogger.error.parameter.msg"></a>
+
+- *Type:* string
+
+string.
+
+---
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/wingsdk.testing.ISimulatorLogger.error.parameter.obj"></a>
+
+- *Type:* any
+
+array of objects.
+
+---
+
+##### `info` <a name="info" id="@winglang/wingsdk.testing.ISimulatorLogger.info"></a>
+
+```typescript
+public info(msg: string, obj: any): void
+```
+
+info level log.
+
+###### `msg`<sup>Required</sup> <a name="msg" id="@winglang/wingsdk.testing.ISimulatorLogger.info.parameter.msg"></a>
+
+- *Type:* string
+
+string.
+
+---
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/wingsdk.testing.ISimulatorLogger.info.parameter.obj"></a>
+
+- *Type:* any
+
+array of objects.
+
+---
+
+##### `warn` <a name="warn" id="@winglang/wingsdk.testing.ISimulatorLogger.warn"></a>
+
+```typescript
+public warn(msg: string, obj: any): void
+```
+
+warn level log.
+
+###### `msg`<sup>Required</sup> <a name="msg" id="@winglang/wingsdk.testing.ISimulatorLogger.warn.parameter.msg"></a>
+
+- *Type:* string
+
+string.
+
+---
+
+###### `obj`<sup>Required</sup> <a name="obj" id="@winglang/wingsdk.testing.ISimulatorLogger.warn.parameter.obj"></a>
+
+- *Type:* any
+
+array of objects.
 
 ---
 
