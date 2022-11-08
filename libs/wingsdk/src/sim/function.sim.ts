@@ -32,6 +32,7 @@ export class Function implements IFunctionClient, ISimulatorResource {
   }
 
   public async invoke(payload: string): Promise<string> {
+    this.context.logger.info(`calling function invoke`, payload);
     this._timesCalled += 1;
 
     const userCode = fs.readFileSync(this.filename, "utf8");
@@ -43,7 +44,6 @@ export class Function implements IFunctionClient, ISimulatorResource {
       `exports.handler(${JSON.stringify(payload)});`,
     ].join("\n");
     log("running wrapped code: %s", wrapper);
-
     const context = vm.createContext({
       // TODO: include all NodeJS globals?
       // https://nodejs.org/api/globals.html#global-objects
@@ -61,7 +61,7 @@ export class Function implements IFunctionClient, ISimulatorResource {
       $simulator: this.context,
     });
     const result = await vm.runInContext(wrapper, context);
-
+    this.context.logger.info(`function invoke return value`, result);
     return result;
   }
 

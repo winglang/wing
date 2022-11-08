@@ -9,6 +9,31 @@ import { log, mkdtemp, readJsonSync } from "../util";
 const { DefaultSimulatorFactory } = require("../sim/factory.sim");
 
 /**
+ * Simulator logger interface
+ */
+export interface ISimulatorLogger {
+  /**
+   * info level log
+   * @param msg string
+   * @param obj array of objects
+   */
+  info(msg: string, ...obj: any[]): void;
+
+  /**
+   * warn level log
+   * @param msg string
+   * @param obj array of objects
+   */
+  warn(msg: string, ...obj: any[]): void;
+
+  /**
+   * error level log
+   * @param msg string
+   * @param obj array of objects
+   */
+  error(msg: string, ...obj: any[]): void;
+}
+/**
  * Props for `Simulator`.
  */
 export interface SimulatorProps {
@@ -24,6 +49,12 @@ export interface SimulatorProps {
    * resources
    */
   readonly factory?: ISimulatorFactory;
+
+  /**
+   * Simulator logger
+   * @default - console.log
+   */
+  readonly logger?: ISimulatorLogger;
 }
 
 /**
@@ -34,6 +65,11 @@ export interface ISimulatorContext {
    * The absolute path to where all assets in `app.wx` are stored.
    */
   readonly assetsDir: string;
+
+  /**
+   * Simulator log object
+   */
+  logger: ISimulatorLogger;
 
   /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
@@ -59,6 +95,7 @@ export class Simulator {
   private readonly _factory: ISimulatorFactory;
   private _tree: WingSimulatorSchema;
   private _simfile: string;
+  private _logger: ISimulatorLogger;
   private _assetsDir: string;
 
   // fields that change between simulation runs / reloads
@@ -67,6 +104,11 @@ export class Simulator {
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
+    this._logger = props.logger ?? {
+      info: (msg: string, ...obj: any[]) => console.info(msg, ...obj),
+      warn: (msg: string, ...obj: any[]) => console.warn(msg, ...obj),
+      error: (msg: string, ...obj: any[]) => console.error(msg, ...obj),
+    };
     const { assetsDir, tree } = this._loadApp(props.simfile);
     this._tree = tree;
     this._assetsDir = assetsDir;
@@ -134,6 +176,7 @@ export class Simulator {
       findInstance: (handle: string) => {
         return this.handles.find(handle);
       },
+      logger: this._logger,
     };
 
     for (const path of this._tree.startOrder) {
