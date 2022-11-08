@@ -2,6 +2,8 @@ import { test, expect, beforeAll, afterAll } from "vitest";
 import { posix as path } from "path";
 import "zx/globals";
 import { runServer } from "verdaccio";
+
+require('dotenv').config()
 const registryServer = await runServer("./verdaccio.config.yaml");
 
 const repoRoot = path.resolve(__dirname, "../../..");
@@ -30,6 +32,7 @@ const shellEnv = {
   npm_config_cache: npmCacheDir,
   npm_config__auth: "hunter2",
   npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
+  npm_config_audit: "false",
 };
 
 afterAll(async () => {
@@ -54,6 +57,9 @@ beforeAll(async () => {
 
     // ensure version works before bothering with the rest of the tests
     await $`cd ${tmpDir}`;
+    await $`npm cache add @winglang/wing`;
+    await $`npm cache add @winglang/wingsdk`;
+    await $`npm cache add @winglang/polycons`;
     let output = await $`npx @winglang/wing --version`;
 
     expect(output.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);

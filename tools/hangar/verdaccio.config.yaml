@@ -5,17 +5,20 @@ uplinks:
     url: https://registry.npmjs.org/
   github:
     url: https://npm.pkg.github.com/
+    auth:
+      type: bearer
+      token_env: true
 packages:
   "@winglang/wing":
-    access: $anonymous
-    publish: $anonymous
+    access: $all
+    publish: $all
   "@winglang/wingsdk":
-    access: $anonymous
-    publish: $anonymous
+    access: $all
+    publish: $all
   "@winglang/*":
-    access: $anonymous
+    access: $all
     proxy: github
   "**":
-    access: $anonymous
+    access: $all
     proxy: npmjs
 logs: { type: stdout, format: pretty, level: error }

@@ -11,6 +11,7 @@
   "author": "Monada",
   "license": "MIT",
   "devDependencies": {
+    "dotenv": "^16.0.3",
     "verdaccio": "^5.16.3",
     "verdaccio-memory": "^10.3.0",
     "vitest": "^0.24.4",
