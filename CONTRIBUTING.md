@@ -58,6 +58,7 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 
 The Wing repository is structured as a monorepo, which means that it contains multiple packages.
 Packages that are primarily meant to be run by users are in the `apps` directory, while packages that are primarily meant to be consumed as libraries are in the `libs` directory.
+Some packages are written in Rust, while others are written in TypeScript.
 Each has a README explaining what it does and how to use it. (If you see one missing, please open an issue and let us know!)
 
 The Wing monorepo uses [Nx] to run commands across all code packages in the `libs` and `apps` folders.
@@ -87,14 +88,6 @@ To run all tests:
 ```bash
 npm run test
 ```
-
-Some parts of the Wing toolchain are written in Rust, while others are written in TypeScript.
-
-* [Wing SDK](./libs/wingsdk/CONTRIBUTING.md)
-* [Wing Compiler](./libs/wingc/CONTRIBUTING.md) (TODO)
-* [Wing Language Server](./apps/wing-language-server/CONTRIBUTING.md) (TODO)
-* [Wing VSCode Extension](./apps/vscode-wing/CONTRIBUTING.md) (TODO)
-* [Wing CLI](./apps/wing/CONTRIBUTING.md) (TODO)
 
 [Nx]: https://nx.dev/
 [Node.js]: https://nodejs.org/en/
