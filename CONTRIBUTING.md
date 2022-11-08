@@ -27,7 +27,7 @@ There are many ways to contribute to Wing:
 * Submitting pull requests for fixes or new features (see [How do I submit a pull request?])
 * Proposing larger changes or features with an RFC (see [What is an RFC?])
 * Answering questions in the [Wing Slack]
-* Posting or answering questions in our forums [Wing Forum]
+* Posting or answering questions in [Wing Discussions]
 
 If you aren't sure where to start, check out issues tagged with the [good first issue] label.
 
@@ -36,7 +36,7 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 [What is an RFC?]: #what-is-an-rfc
 [good first issue]: https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:%22good+first+issue%22
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
-[Wing Forum] (TODO: add discourse link)
+[Wing Discussions] https://github.com/winglang/wing/discussions
 
 ## How do I build Wing locally?
 
