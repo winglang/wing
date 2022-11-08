@@ -1,16 +1,17 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
 	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, Statement, Symbol},
+	debug,
 	type_check::type_env::TypeEnv,
-	type_check::Type, debug,
+	type_check::Type,
 };
 
 /* This is a definition of how a resource is captured. The most basic way to capture a resource
 is to use a subset of its client's methods. In that case we need to specify the name of the method
 used in the capture. Currently this is the only capture definition supported.
 In the future we might want add more verbose capture definitions like regexes on method parameters etc. */
-#[derive(Debug, PartialEq, Eq, Hash)]
+#[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
 pub struct CaptureDef {
 	pub method: String,
 }
@@ -20,14 +21,14 @@ struct Capture {
 	pub def: CaptureDef,
 }
 
-pub type Captures = HashMap<Symbol, HashSet<CaptureDef>>;
+pub type Captures = BTreeMap<Symbol, BTreeSet<CaptureDef>>;
 
 fn collect_captures(capture_list: Vec<Capture>) -> Captures {
-	let mut captures: Captures = HashMap::new();
+	let mut captures: Captures = BTreeMap::new();
 	for capture in capture_list {
 		captures
 			.entry(capture.object)
-			.or_insert(HashSet::new())
+			.or_insert(BTreeSet::new())
 			.insert(capture.def);
 	}
 	captures

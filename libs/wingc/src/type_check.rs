@@ -745,8 +745,8 @@ impl<'a> TypeChecker<'a> {
 		if actual_type != expected_type && actual_type.0 != &Type::Anything {
 			self.diagnostics.borrow_mut().push(Diagnostic {
 				message: format!(
-					"Expected type \"{}\", but got \"{}\" instead: {:?}",
-					expected_type, actual_type, value.variant
+					"Expected type \"{}\", but got \"{}\" instead",
+					expected_type, actual_type
 				),
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
