@@ -2,8 +2,8 @@
 
 Thank you for your interest in contributing to Wing!  ❤️
 
-This document describes everything you need to know to contribute to Wing.
-We've structured this as an FAQ to make it easy to find the information you need.
+This document describes everything you need to know to help out with the Wing project.
+We've structured the handbook as an FAQ to make it easy to find the information you need.
 
 - [Wing Contributor's Handbook](#wing-contributors-handbook)
   - [👋 How can I help?](#-how-can-i-help)
@@ -17,6 +17,10 @@ We've structured this as an FAQ to make it easy to find the information you need
     - [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)
   - [⚖️ What is the code of conduct?](#️-what-is-the-code-of-conduct)
   - [🙋 Where can I go to ask questions about Wing?](#-where-can-i-go-to-ask-questions-about-wing)
+
+Without further ado, let's get started!
+
+<img src="https://media0.giphy.com/media/14bWswbeWGzYEo/giphy.gif?cid=790b7611b10722902e2b4637ae2f846e8fedb82f1f613f2e&rid=giphy.gif&ct=g">
 
 ## 👋 How can I help?
 
@@ -32,7 +36,7 @@ There are many ways to contribute to Wing:
 * Answering questions in the [Wing Slack]
 * Posting or answering questions in [Wing Discussions]
 
-If you aren't sure where to start, check out issues tagged with the [good first issue] label.
+If you aren't sure where to start, check out issues tagged with the [good first issue] label!
 
 [GitHub issue]: https://github.com/winglang/wing/issues
 [open pull requests]: https://github.com/winglang/wing/pulls?q=is:pr+is:open+sort:updated-desc
@@ -130,15 +134,13 @@ If you're new to GitHub, check out [this guide](https://docs.github.com/en/get-s
 
 To help maintainers review them and get them merged in a speedy fashion, please check:
 
-* [ ] Your pull request has a descriptive title (see [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)]).
+* [ ] Your pull request has a [descriptive title](#how-are-pull-request-titles-formatted).
 * [ ] A description of your changes are included, and a reference to a corresponding issue. (This is also a great place to shout-out anyone who helped with the changes!)
 * [ ] Tests are added for all changes.
 * [ ] Any handwritten documentation in `docs/` or READMEs are updated where appropriate when features are being added or removed (API docs will be automatically generated for you!).
 * [ ] Your fork is in sync with the upstream repository.
 
-Other tips:
-
-* We recommend you avoid force pushing or rebasing your branch after a pull request has been opened in order to make it easier to review.
+We also recommend you avoid force pushing or rebasing your branch after a pull request has been opened in order to make it easier to review.
 Your commit history doesn't need to be perfect, since it will get squashed into a single commit when the pull request is merged anyway.
 
 ###  How are pull request titles formatted?
