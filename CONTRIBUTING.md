@@ -11,7 +11,6 @@ We've structured this as an FAQ to make it easy to find the information you need
   - [How do I install private GitHub packages?](#how-do-i-install-private-github-packages)
   - [How do I add an example?](#how-do-i-add-an-example)
   - [What is an RFC?](#what-is-an-rfc)
-  - [When should I write an RFC?](#when-should-i-write-an-rfc)
   - [What is the RFC process?](#what-is-the-rfc-process)
   - [How do I submit a pull request?](#how-do-i-submit-a-pull-request)
     - [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)
@@ -110,8 +109,6 @@ An RFC is short for "request for comments".
 It's a document that describes a new feature or change to Wing.
 It's a way to propose, gather feedback, and reach consensus for a change from maintainers, contributors, and users before writing any code.
 For an example of an RFC, check out: https://github.com/winglang/wing/blob/main/rfcs/polycons.md
-
-## When should I write an RFC?
 
 Usually, an RFC is a common practice for major features or complex changes that require that extra vetting.
 However, the process is designed to be as lightweight as needed and can be used to request feedback on any change.
