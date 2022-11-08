@@ -565,7 +565,7 @@ impl Parser<'_> {
 
 				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
-				for field_node in expression_node.children_by_field_name("map_literal_member", &mut cursor) {
+				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					let key_node = field_node.named_child(0).unwrap();
 					let key = match key_node.kind() {
 						"string" => {

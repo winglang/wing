@@ -30,6 +30,7 @@ Object {
     },
     "type": "constructs.Construct",
   },
+  "sdkVersion": "0.0.0",
   "startOrder": Array [
     "root/WingLogger",
     "root/my_function",

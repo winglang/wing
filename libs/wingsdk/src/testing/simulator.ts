@@ -1,6 +1,7 @@
 import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
+import { SDK_VERSION } from "../constants";
 import { ISimulatorResource } from "../sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
@@ -93,6 +94,14 @@ export class Simulator {
       );
     }
     const data = readJsonSync(simJson);
+
+    const foundVersion = data.sdkVersion ?? "unknown";
+    const expectedVersion = SDK_VERSION;
+    if (foundVersion !== expectedVersion) {
+      console.error(
+        `WARNING: The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+      );
+    }
 
     this._annotateTreeWithPaths(data);
 
