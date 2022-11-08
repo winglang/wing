@@ -25,16 +25,11 @@ impl std::fmt::Display for WingSpan {
 
 impl Ord for WingSpan {
 	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-		if self.file_id == other.file_id {
-			let start_ord = self.start.cmp(&other.start);
-			if start_ord == std::cmp::Ordering::Equal {
-				self.end.cmp(&other.end)
-			} else {
-				start_ord
-			}
-		} else {
-			self.file_id.cmp(&other.file_id)
-		}
+		self
+			.file_id
+			.cmp(&other.file_id)
+			.then(self.start.cmp(&other.start))
+			.then(self.end.cmp(&other.end))
 	}
 }
 

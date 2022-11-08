@@ -18,12 +18,7 @@ pub struct Symbol {
 
 impl Ord for Symbol {
 	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-		let string_ord = self.name.cmp(&other.name);
-		if string_ord == std::cmp::Ordering::Equal {
-			self.span.cmp(&other.span)
-		} else {
-			string_ord
-		}
+		self.name.cmp(&other.name).then(self.span.cmp(&other.span))
 	}
 }
 

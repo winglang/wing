@@ -128,9 +128,8 @@ mod sanity {
 		files
 	}
 
-	#[test]
-	fn can_compile_valid_files() {
-		for test_pathbuf in get_wing_files("../../examples/tests/valid") {
+	fn snapshot_test(test_dir: &str, expect_failure: bool) {
+		for test_pathbuf in get_wing_files(test_dir) {
 			let test_file = test_pathbuf.to_str().unwrap();
 			let test_file_name = test_pathbuf.file_stem().unwrap().to_str().unwrap();
 			println!("\n=== {} ===\n", test_file);
@@ -149,51 +148,39 @@ mod sanity {
 				}
 
 				let result = compile(test_file, Some(out_dir.as_str()));
-				assert!(result.is_ok(), "Compiler failed to compile valid file: {}", test_file);
-
 				let mut snapshot = String::new();
-				let output_files = walkdir::WalkDir::new(out_dir).sort_by_file_name();
-				for file in output_files {
-					if let Ok(file) = file {
-						let path = file.path();
-						if path.is_file() {
-							let file_contents = fs::read_to_string(path).unwrap();
-							snapshot.push_str(&format!("// {}\n{}\n", path.to_str().unwrap(), file_contents));
+
+				if let Err(diagnostics) = result {
+					assert!(expect_failure, "Expected compilation success, but failed");
+
+					insta::assert_debug_snapshot!(format!("invalid_{}", test_file_name), diagnostics);
+				} else {
+					assert!(!expect_failure, "Expected compilation failure, but succeeded");
+
+					let output_files = walkdir::WalkDir::new(out_dir).sort_by_file_name();
+					for file in output_files {
+						if let Ok(file) = file {
+							let path = file.path();
+							if path.is_file() {
+								let file_contents = fs::read_to_string(path).unwrap();
+								snapshot.push_str(&format!("// {}\n{}\n", path.to_str().unwrap(), file_contents));
+							}
 						}
 					}
-				}
 
-				insta::assert_snapshot!(format!("VALID_OUTPUT_{}", test_file_name), snapshot);
+					insta::assert_snapshot!(format!("valid_{}", test_file_name), snapshot);
+				}
 			});
 		}
 	}
 
 	#[test]
+	fn can_compile_valid_files() {
+		snapshot_test("../../examples/tests/valid", false);
+	}
+
+	#[test]
 	fn cannot_compile_invalid_files() {
-		for test_pathbuf in get_wing_files("../../examples/tests/invalid") {
-			let test_file = test_pathbuf.to_str().unwrap();
-			let test_file_name = test_pathbuf.file_stem().unwrap().to_str().unwrap();
-			println!("\n=== {} ===\n", test_file);
-
-			insta::with_settings!({
-				omit_expression => true,
-				prepend_module_to_snapshot => false,
-				description => test_file,
-			}, {
-				let out_dir = format!("{}.out", test_file);
-
-				// reset out_dir
-				let out_dirbuf = PathBuf::from(&out_dir);
-				if out_dirbuf.exists() {
-					fs::remove_dir_all(&out_dirbuf).expect("remove out dir");
-				}
-
-				let result = compile(test_file, None);
-				assert!(result.is_err(), "Compiler compiled invalid file: {}", test_file);
-				let err = result.err().unwrap();
-
-				insta::assert_debug_snapshot!(format!("INVALID_DIAG_{}", test_file_name), err);
-			});
-		}
+		snapshot_test("../../examples/tests/invalid", true);
 	}
 }
