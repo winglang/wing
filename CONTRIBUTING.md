@@ -1,9 +1,21 @@
-# Contributing Guide
+# Wing Contributor's Handbook
 
 Thank you for your interest in contributing to Wing!  ❤️
 
 This document describes everything you need to know to contribute to Wing.
 We've structured this as an FAQ to make it easy to find the information you need.
+
+- [Wing Contributor's Handbook](#wing-contributors-handbook)
+  - [How can I help?](#how-can-i-help)
+  - [How do I build Wing locally?](#how-do-i-build-wing-locally)
+  - [How do I install private GitHub packages?](#how-do-i-install-private-github-packages)
+  - [How do I add an example?](#how-do-i-add-an-example)
+  - [What is an RFC?](#what-is-an-rfc)
+  - [When should I write an RFC?](#when-should-i-write-an-rfc)
+  - [What is the RFC process?](#what-is-the-rfc-process)
+  - [How do I submit a pull request?](#how-do-i-submit-a-pull-request)
+  - [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)
+  - [Where can I go to ask questions about Wing?](#where-can-i-go-to-ask-questions-about-wing)
 
 ## How can I help?
 
