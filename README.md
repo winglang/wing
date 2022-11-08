@@ -42,7 +42,6 @@ new cloud.Function(() ~> {
 
 Wing applications are compiled to [Terraform] and JavaScript, and can be
 deployed to AWS, GCP Azure, or visualized and debugged locally using the Wing Console.
-Console.
 
 Read below about [what makes Wing special](#what-makes-wing-special) and [why
 you should consider Wing](#why-wing).
@@ -82,8 +81,6 @@ npm login --scope=@winglang --registry=https://npm.pkg.github.com
 > As a password, use a GitHub [personal access token] with **packages:read**
 > scope.
 
-[personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
-
 ### Installation
 
 Install the Wing CLI through npm:
@@ -98,6 +95,8 @@ the extension package and running:
 ```sh 
 code --install-extension ~/Downloads/vscode-wing.vsix
 ```
+
+> To enable automatic updates, add a GitHub [personal access token] to the extension's settings under "Wing > Updates".
 
 Install Wing Console by [downloading](https://github.com/winglang/wing-console/releases) the latest release for your platform.
 (currently supporting only macOS)
@@ -376,3 +375,4 @@ This project is licensed under the [MIT License](./LICENSE.md).
 [AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
 [construct programming model]: https://github.com/aws/constructs
 [CDK construct]: https://constructs.dev
+[personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
