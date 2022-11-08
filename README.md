@@ -105,6 +105,8 @@ Install Wing Console by [downloading](https://github.com/winglang/wing-console/r
 
 We are ready to write our first Wing program!
 
+##### Create your first Application
+
 Create a new file called `hello.w` with the following code:
 
 ```ts
@@ -119,7 +121,8 @@ inflight handler(message: str) :str {
 queue.on_message(handler);
 ```
 Next step is to test your program locally using wing console or a REPL
-### Testing the program using wing console 
+
+##### Testing the program using wing console 
 *(currently available only on MacOS)*
 
 1. Compile to the `sim` target
@@ -148,7 +151,7 @@ was called once.
 
 5. ***Congratulations! You have just written and tested your first Wing program!***
 
-### Testing the program with node REPL
+##### Testing the program with node REPL
 
 1. Run node command 
     ```sh
@@ -165,6 +168,7 @@ was called once.
 3. You should expect the node console to output "Hello Wing" 
 4. ***Congratulations! You have just written and tested your first Wing program!***
 
+##### Compile your program to AWS & Terraform
 
 As you can see, so far we've tested our program locally. Next we'll see how you can deploy your program to AWS using Terraform.
 
@@ -177,6 +181,7 @@ First, we need to compile our program to AWS:
 ```sh
 $ wing compile --target tf-aws hello.w
 ```
+##### Deploy your program to AWS
 
 Now, let's deploy our program to AWS:
 
@@ -190,6 +195,8 @@ $ export AWS_REGION=us-east-1 # or any other region
 $ terraform init
 $ terraform apply
 ```
+
+##### Review your AWS account
 
 Now, if you open the [Amazon SQS Console](https://console.aws.amazon.com/sqs),
 select your AWS region, and you should be able to see that you have a queue
