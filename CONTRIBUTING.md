@@ -18,6 +18,9 @@ We've structured the handbook as an FAQ to make it easy to find the information 
   - [⚖️ What is the code of conduct?](#️-what-is-the-code-of-conduct)
   - [🙋 Where can I go to ask questions about Wing?](#-where-can-i-go-to-ask-questions-about-wing)
 
+This guide is, of course, open source as well, and as such many parts of this document might get out of date.
+If you see any errors, please make a [GitHub issue] about it, or better yet open a pull request to fix them!
+
 Without further ado, let's get started!
 
 <img src="https://media0.giphy.com/media/14bWswbeWGzYEo/giphy.gif?cid=790b7611b10722902e2b4637ae2f846e8fedb82f1f613f2e&rid=giphy.gif&ct=g">
