@@ -110,11 +110,11 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 * Fork this repository on GitHub.
 * Create a new branch for your example.
-* Add your example to the `examples/showcase` directory.
+* Add your Wing code to the `examples` directory.
   * If your example involves multiple files, create a dedicated directory for it.
-* Add a link to your example to the `examples/showcase/README.md` file.
+* Add a link to your example to the `examples/README.md` file.
 * Commit your changes and push them to your fork.
-* Open a pull request.
+* Open a pull request. A Wing maintainer will review it as soon as possible!
 
 ## What is an RFC?
 
