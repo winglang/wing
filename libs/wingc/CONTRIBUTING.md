@@ -70,7 +70,7 @@ Recommended way to run tests and review snapshot changes:
 cargo insta test --review
 ```
 See https://insta.rs/docs/quickstart/ for more information.
-If would prefer to avoid the `insta` tool, you may set INSTA_UPDATE to `always` to update snapshots without review with a regular test command:
+If you prefer to avoid the `insta` tool, you may set INSTA_UPDATE to `always` to update snapshots without review with a regular test command:
 
 ```sh
 INSTA_UPDATE=always cargo test
