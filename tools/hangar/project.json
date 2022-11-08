@@ -1,11 +1,12 @@
 {
   "name": "hangar",
   "implicitDependencies": [
-    "wing"
+    "wing",
+    "wingsdk"
   ],
   "targets": {
     "test": {
-      "dependencies": [
+      "dependsOn": [
         "^build",
         "^package"
       ],

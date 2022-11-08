@@ -8,8 +8,15 @@
     "build": {
       "executor": "nx:run-script",
       "options": {
-        "cwd": "libs/wingsdk",
-        "script": "build"
+        "script": "build",
+        "cwd": "libs/wingsdk"
+      }
+    },
+    "package": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["npm run bump", "npm pack", "npm run unbump"],
+        "cwd": "libs/wingsdk"
       }
     }
   }

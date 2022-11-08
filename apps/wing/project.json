@@ -37,7 +37,8 @@
         "build"
       ],
       "options": {
-        "command": "npm pack"
+        "commands": ["npm run bump", "npm pack", "npm run unbump"],
+        "cwd": "apps/wing"
       }
     }
   }

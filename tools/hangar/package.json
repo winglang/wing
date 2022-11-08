@@ -4,14 +4,17 @@
   "description": "winglang test suite",
   "main": "index.js",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest run",
+    "registry": "verdaccio -c ./verdaccio.config.yaml",
+    "publish-local-tgz": "npm publish --@winglang:registry=http://localhost:4873 "
   },
   "author": "Monada",
   "license": "MIT",
   "devDependencies": {
+    "@verdaccio/node-api": "^6.0.0-6-next.50",
+    "verdaccio": "^5.16.3",
+    "verdaccio-memory": "^10.3.0",
     "vitest": "^0.24.4",
     "zx": "^7.1.1"
-  },
-  "dependencies": {
   }
 }

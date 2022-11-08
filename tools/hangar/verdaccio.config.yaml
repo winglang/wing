@@ -1,0 +1,21 @@
+max_body_size: 1000mb
+storage: tmp/registry
+uplinks:
+  npmjs:
+    url: https://registry.npmjs.org/
+  github:
+    url: https://npm.pkg.github.com/
+packages:
+  "@winglang/wing":
+    access: $anonymous
+    publish: $anonymous
+  "@winglang/wingsdk":
+    access: $anonymous
+    publish: $anonymous
+  "@winglang/*":
+    access: $anonymous
+    proxy: github
+  "**":
+    access: $anonymous
+    proxy: npmjs
+logs: { type: stdout, format: pretty, level: error }
