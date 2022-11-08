@@ -24,7 +24,8 @@ There are many ways to contribute to Wing:
 * Reporting bugs through a [GitHub issue]
 * Adding [examples](#how-do-i-add-an-example)
 * Writing [documentation and guides](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:documentation)
-* Submitting [pull requests] for fixes or new features
+* Submitting [pull requests] for new features
+* Fixing [a known bug](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:bug)
 * Reviewing [open pull requests]
 * Proposing larger changes or features with an [RFC]
 * Answering questions in the [Wing Slack]
@@ -38,7 +39,7 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 [RFC]: #what-is-an-rfc
 [good first issue]: https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:%22good+first+issue%22
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
-[Wing Discussions] https://github.com/winglang/wing/discussions
+[Wing Discussions]: https://github.com/winglang/wing/discussions
 
 ## How is this repository structured?
 
