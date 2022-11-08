@@ -19,8 +19,6 @@ ambiguity and risk and get approval for public-facing interfaces (APIs), which a
 
 In many cases, it is useful to develop a **prototype** or even start coding the actual implementation while you are writing the RFC document. Take into account that you may need to throw your code away or refactor it substantially, but our experience shows that good RFCs are the ones who dive into the details. A prototype is great way to make sure your design "holds water".
 
-**If your RFC includes a change to public facing APIs** there are extra steps required. Just add the `public facing` label to your PR and the repo's automatic actions will do the rest.
-
 ## 3. Feedback
 
 Once you have an initial version of your RFC document (it is completely fine to submit an unfinished RFC to get initial feedback), submit it as a pull request against this repo and start collecting feedback.
