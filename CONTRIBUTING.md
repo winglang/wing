@@ -14,7 +14,7 @@ We've structured this as an FAQ to make it easy to find the information you need
   - [When should I write an RFC?](#when-should-i-write-an-rfc)
   - [What is the RFC process?](#what-is-the-rfc-process)
   - [How do I submit a pull request?](#how-do-i-submit-a-pull-request)
-  - [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)
+    - [How are pull request titles formatted?](#how-are-pull-request-titles-formatted)
   - [Where can I go to ask questions about Wing?](#where-can-i-go-to-ask-questions-about-wing)
 
 ## How can I help?
@@ -139,7 +139,7 @@ Other tips:
 * We recommend you avoid force pushing or rebasing your branch after a pull request has been opened in order to make it easier to review.
 Your commit history doesn't need to be perfect, since it will get squashed into a single commit when the pull request is merged anyway.
 
-## How are pull request titles formatted?
+### How are pull request titles formatted?
 
 We use [conventional commits](https://www.conventionalcommits.org/en/v1.0.0/) to generate our changelog.
 To that end, pull request titles must follow this convention:
