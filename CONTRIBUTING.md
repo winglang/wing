@@ -21,20 +21,21 @@ We've structured this as an FAQ to make it easy to find the information you need
 
 There are many ways to contribute to Wing:
 
-* Reporting bugs through a [GitHub issue](https://github.com/winglang/wing/issues)
-* Adding examples (see [How do I add an example?])
-* Updating documentation
-* Reviewing open pull requests
-* Submitting pull requests for fixes or new features (see [How do I submit a pull request?])
-* Proposing larger changes or features with an RFC (see [What is an RFC?])
+* Reporting bugs through a [GitHub issue]
+* Adding [examples](#how-do-i-add-an-example)
+* Writing [documentation and guides](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:documentation)
+* Submitting [pull requests] for fixes or new features
+* Reviewing [open pull requests]
+* Proposing larger changes or features with an [RFC]
 * Answering questions in the [Wing Slack]
 * Posting or answering questions in [Wing Discussions]
 
 If you aren't sure where to start, check out issues tagged with the [good first issue] label.
 
-[How do I add an example?]: #how-do-i-add-an-example
-[How do I submit a pull request?]: #how-do-i-submit-a-pull-request
-[What is an RFC?]: #what-is-an-rfc
+[GitHub issue]: https://github.com/winglang/wing/issues
+[open pull requests]: https://github.com/winglang/wing/pulls?q=is:pr+is:open+sort:updated-desc
+[pull requests]: #how-do-i-submit-a-pull-request
+[RFC]: #what-is-an-rfc
 [good first issue]: https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:%22good+first+issue%22
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 [Wing Discussions] https://github.com/winglang/wing/discussions
