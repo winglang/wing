@@ -1,0 +1,32 @@
+---
+source: libs/wingc/src/lib.rs
+description: "../../examples/tests/valid/statements_if.w"
+---
+// ../../examples/tests/valid/statements_if.w.out/preflight.js
+const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
+
+function __app(target) {
+	switch (target) {
+		case "sim":
+			return $stdlib.sim.App;
+		case "tfaws":
+		case "tf-aws":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir });
+  
+  if (true) {
+    let x = 2;
+  }
+}
+}
+new MyApp().synth();
+
