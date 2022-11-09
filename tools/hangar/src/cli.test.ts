@@ -3,7 +3,7 @@ import { posix as path } from "path";
 import "zx/globals";
 import { runServer } from "verdaccio";
 
-require('dotenv').config()
+require("dotenv").config();
 const registryServer = await runServer("./verdaccio.config.yaml");
 
 const repoRoot = path.resolve(__dirname, "../../..");
@@ -22,8 +22,7 @@ const targetWingSDKTGZ =
 
 const validWingFiles = fs
   .readdirSync(validTestDir)
-  .filter((f) => f.endsWith(".w"))
-  .map((f) => path.join(validTestDir, f));
+  .filter((f) => f.endsWith(".w"));
 
 const shellEnv = {
   ...process.env,
@@ -63,11 +62,13 @@ beforeAll(async () => {
   });
 }, 1000 * 60);
 
-function sanitize_cdftf_json(path: string) {
+function sanitize_json_assets(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
   const assetSourceRegex = /"assets\/.+"/g;
   const jsonText = JSON.stringify(fs.readJsonSync(path));
-  const sanitizedJsonText = jsonText.replace(assetKeyRegex, '"<ASSET_KEY>"').replace(assetSourceRegex, '"<ASSET_SOURCE>"');
+  const sanitizedJsonText = jsonText
+    .replace(assetKeyRegex, '"<ASSET_KEY>"')
+    .replace(assetSourceRegex, '"<ASSET_SOURCE>"');
   return JSON.parse(sanitizedJsonText);
 }
 
@@ -76,18 +77,18 @@ test.each(validWingFiles)(
   async (wingFile) => {
     await within(async () => {
       $.env = shellEnv;
-      const test_dir = path.join(tmpDir, path.basename(wingFile));
-      const tf_manifest = path.join(test_dir, 'cdktf.out/manifest.json');
-      const tf_json = path.join(test_dir, 'cdktf.out/stacks/root/cdk.tf.json');
+      const test_dir = path.join(tmpDir, wingFile);
+      const tf_manifest = path.join(test_dir, "cdktf.out/manifest.json");
+      const tf_json = path.join(test_dir, "cdktf.out/stacks/root/cdk.tf.json");
 
       await $`mkdir -p ${test_dir}`;
       await $`cd ${test_dir}`;
       $.cwd = test_dir;
 
-      await $`npx @winglang/wing compile ${wingFile}`;       
+      await $`npx @winglang/wing compile ${path.join(validTestDir, wingFile)}`;
 
-      expect(sanitize_cdftf_json(tf_manifest)).toMatchSnapshot()
-      expect(sanitize_cdftf_json(tf_json)).toMatchSnapshot()
+      expect(sanitize_json_assets(tf_manifest)).toMatchSnapshot("manifest.json");
+      expect(sanitize_json_assets(tf_json)).toMatchSnapshot("cdk.tf.json");
     });
   },
   {

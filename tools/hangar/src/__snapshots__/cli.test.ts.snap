@@ -1,22 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/captures.w 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.13.3",
-}
-`;
-
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/captures.w 2`] = `
+exports[`wing cdktf compile captures.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -193,7 +177,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_binary_operators.w 1`] = `
+exports[`wing cdktf compile captures.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -209,7 +193,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_binary_operators.w 2`] = `
+exports[`wing cdktf compile expressions_binary_operators.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -240,7 +224,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_string_interpolation.w 1`] = `
+exports[`wing cdktf compile expressions_binary_operators.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -256,7 +240,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_string_interpolation.w 2`] = `
+exports[`wing cdktf compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -287,7 +271,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/hello.w 1`] = `
+exports[`wing cdktf compile expressions_string_interpolation.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -303,7 +287,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/hello.w 2`] = `
+exports[`wing cdktf compile hello.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -455,7 +439,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_if.w 1`] = `
+exports[`wing cdktf compile hello.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -471,7 +455,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_if.w 2`] = `
+exports[`wing cdktf compile statements_if.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -502,7 +486,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_variable_declarations.w 1`] = `
+exports[`wing cdktf compile statements_if.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -518,7 +502,7 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
 }
 `;
 
-exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_variable_declarations.w 2`] = `
+exports[`wing cdktf compile statements_variable_declarations.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -546,5 +530,21 @@ exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/test
       },
     },
   },
+}
+`;
+
+exports[`wing cdktf compile statements_variable_declarations.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
 }
 `;
