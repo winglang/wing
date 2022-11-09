@@ -272,14 +272,12 @@ jobs:
           install-command: npm ci --ignore-scripts
 
       - name: Run E2E Tests
-        working-directory: tools/hangar
         env:
           NPM_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
         run: |
-          export HANGAR_WING_TGZ=$(readlink -f ../../wing/*.tgz)
-          export HANGAR_WINGSDK_TGZ=$(readlink -f ../../wingsdk/*.tgz)
-          echo "Wing CLI: $HANGAR_WING_TGZ"
-          echo "WingSDK: $HANGAR_WINGSDK_TGZ"
+          export HANGAR_WING_TGZ="$(pwd)/$(find wing/*.tgz)"
+          export HANGAR_WINGSDK_TGZ="$(pwd)/$(find wingsdk/*.tgz)"
+          cd tools/hangar
           HANGAR_WING_TGZ=$HANGAR_WING_TGZ HANGAR_WINGSDK_TGZ=$HANGAR_WINGSDK_TGZ npm run test
 
   build-vscode:
