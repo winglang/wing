@@ -22,7 +22,8 @@
           "rm -f resources/native/*",
           "cp -v ../../target/debug/wing-language-server resources/native"
         ],
-        "cwd": "apps/vscode-wing"
+        "cwd": "apps/vscode-wing",
+        "parallel": false
       },
       "configurations": {
         "release": {

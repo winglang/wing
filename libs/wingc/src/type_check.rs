@@ -648,6 +648,16 @@ impl<'a> TypeChecker<'a> {
 					.as_function_sig()
 					.expect(&format!("{:?} should be a function or method", function));
 
+				if func_sig.flight != env.flight {
+					self.expr_error(
+						exp,
+						format!(
+							"Cannot call {} function \"{}\" while in {} phase",
+							func_sig.flight, function, env.flight,
+						),
+					);
+				}
+
 				// Count number of optional parameters from the end of the function's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
