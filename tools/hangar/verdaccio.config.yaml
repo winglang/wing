@@ -1,5 +1,6 @@
 max_body_size: 1000mb
 storage: tmp/registry
+logs: { type: stdout, format: pretty, level: error }
 uplinks:
   npmjs:
     url: https://registry.npmjs.org/
@@ -21,4 +22,3 @@ packages:
   "**":
     access: $all
     proxy: npmjs
-logs: { type: stdout, format: pretty, level: error }

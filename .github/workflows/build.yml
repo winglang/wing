@@ -122,18 +122,12 @@ jobs:
           projects: "wingc"
           args: "--configuration=release --output-style=stream --verbose"
 
-      - name: Package Wing CLI
-        working-directory: apps/wing
-        run: |
-          npm version ${{ env.PROJEN_BUMP_VERSION }}
-          node version.js
-          npm pack
-
-      - name: Package WingSDK
-        working-directory: libs/wingsdk
-        run: |
-          npm version ${{ env.PROJEN_BUMP_VERSION }}
-          npm pack
+      - name: Create NPM packages
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "package"
+          projects: "wing,wingsdk"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2

@@ -1,8 +1,7 @@
 {
   "name": "hangar",
   "version": "0.0.0",
-  "description": "winglang test suite",
-  "main": "index.js",
+  "description": "wing test suite",
   "scripts": {
     "test": "vitest run",
     "test:watch": "vitest watch",
@@ -11,7 +10,7 @@
     "publish-local-tgz": "npm publish --@winglang:registry=http://localhost:4873 "
   },
   "author": "Monada",
-  "license": "MIT",
+  "license": "Apache-2.0",
   "devDependencies": {
     "dotenv": "^16.0.3",
     "verdaccio": "^5.16.3",

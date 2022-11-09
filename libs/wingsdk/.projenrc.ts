@@ -177,7 +177,8 @@ project.eslint!.addRules({
 project.npmignore?.addPatterns(
   "tsconfig.nonjsii.json",
   ".prettierignore",
-  ".prettierrc.json"
+  ".prettierrc.json",
+  "*.tgz"
 );
 
 const apiCheck = project.addTask("api-check", {
