@@ -23,6 +23,8 @@
 Many basic features as still missing. You are more than welcome to join the ride, but don't 
 expect to be able to do much with it at the moment. Check out our [roadmap] for more information.
 
+Do you have feedback on this README? Submit comments [here](https://github.com/winglang/wing/pull/497/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5).
+
 ## Welcome! :wave:
 
 Wing is the world's first [cloud-oriented programming
@@ -105,6 +107,8 @@ Install Wing Console by [downloading](https://github.com/winglang/wing-console/r
 
 We are ready to write our first Wing program!
 
+##### Create your first Application
+
 Create a new file called `hello.w` with the following code:
 
 ```ts
@@ -118,43 +122,65 @@ inflight handler(message: str) :str {
 
 queue.on_message(handler);
 ```
+Next step is to test your program locally using the Wing Console or a REPL.
 
-Now, let's test our program using the Wing Console:
+##### Testing the program using the Wing Console 
 
-First, compile to the `sim` target:
+The Wing Console is a graphical user interface that can be used to interact
+with Wing applications on the local machine.
 
-```sh
-wing compile --target sim hello.w
-```
+*(currently available only on MacOS)*
 
-You will notice that `app.wx` was created.
+1. Compile to the `sim` target
 
-Now, run the Wing Console:
+    ```sh
+    wing compile --target sim hello.w
+    ```
 
-```sh
-wing run app.wx
-```
+2. You will notice that `app.wx` was created, run the Wing Console:
 
-The **Wing Console** will start and in the main view you'll see two resources: a
-**Queue** and a **Function**. You'll also notice that the function is connected
-to the queue through the `message` event.
+    ```sh
+    wing run app.wx
+    ```
 
-<img src="./docs/assets/wing-console-view.png">
+    The **Wing Console** will start and in the main view you'll see two resources: a **Queue** and a **Function**. 
+    You'll also notice that the function is connected to the queue through the `message` event.
 
-Now, click on the queue resource, goto **queue contents** tab. Type `world` and hit
-**Send Message**.
+    <img src="./docs/assets/wing-console-view.png">
 
-Now, click on the function resource, goto **Test Function** tab and notice the indication that your function
+
+3. Click on the queue resource, goto **queue contents** tab. Type `world` and hit
+  **Send Message**.
+
+4. Click on the function resource, goto **Test Function** tab and notice the indication that your function
 was called once.
 
-You can repeat the above testing flow and track the amount of times your function was called.
+5. ***Congratulations! You have just written and tested your first Wing program!***
 
-***Congratulations! You have just written and tested your
-first Wing program!***
+##### Testing the program through the Node.js REPL
 
-As you can see, so far we've tested our program locally using the simulator and
-Wing Console. Next we'll see how you can deploy your program to AWS using
-Terraform.
+In this section we will use the [Node.js REPL] to interact with our
+Wing application through the terminal.
+
+
+1. Run node command 
+    ```sh
+    node --experimental-repl-await
+    ```
+2.  Run the following code inside the REPL:
+    ```js
+    const sdk = require("@winglang/wingsdk");
+    const simulator = new sdk.testing.Simulator({ simfile : "./app.wx"});
+    await simulator.start();
+    const queue = simulator.getResourceByPath("root/cloud.Queue");
+    await queue.push("Wing");
+    ```
+3. You should expect the string "Hello Wing" printed to the terminal.
+4. ***Congratulations! You have just written and tested your first Wing program!***
+
+##### Compile your program to AWS & Terraform
+
+As you can see, so far we've tested our program locally. Next we'll see how you can deploy your program to AWS using Terraform.
 
 > Currently, our SDKs only support AWS, but the Wing compiler can target
 > multiple cloud platforms, including AWS, Azure, Google Cloud, and Kubernetes.
@@ -165,6 +191,7 @@ First, we need to compile our program to AWS:
 ```sh
 $ wing compile --target tf-aws hello.w
 ```
+##### Deploy your program to AWS
 
 Now, let's deploy our program to AWS:
 
@@ -178,6 +205,8 @@ $ export AWS_REGION=us-east-1 # or any other region
 $ terraform init
 $ terraform apply
 ```
+
+##### Review your AWS account
 
 Now, if you open the [Amazon SQS Console](https://console.aws.amazon.com/sqs),
 select your AWS region, and you should be able to see that you have a queue
