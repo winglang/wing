@@ -3,17 +3,16 @@ import * as sim from "../../src/sim";
 import { IBucketClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { simulatorJsonOf, SimApp } from "./util";
 
 test("create a bucket", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
   const simfile = app.synth();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
   expect(s.getAttributes("root/my_bucket")).toEqual({
     handle: expect.any(String),
   });
@@ -27,13 +26,10 @@ test("create a bucket", async () => {
 
 test("put and get objects from bucket", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
-
+  const s = await app.startSimulator();
   const client = s.getResourceByPath("root/my_bucket") as IBucketClient;
 
   const KEY = "greeting.txt";
@@ -47,7 +43,7 @@ test("put and get objects from bucket", async () => {
   expect(response).toEqual(VALUE);
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });
 
 test("put multiple objects and list all from bucket", async () => {

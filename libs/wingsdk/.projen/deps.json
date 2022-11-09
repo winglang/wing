@@ -171,6 +171,10 @@
       "type": "bundled"
     },
     {
+      "name": "@aws-sdk/client-dynamodb",
+      "type": "bundled"
+    },
+    {
       "name": "@aws-sdk/client-lambda",
       "type": "bundled"
     },

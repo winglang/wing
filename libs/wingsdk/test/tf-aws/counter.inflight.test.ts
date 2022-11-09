@@ -1,0 +1,90 @@
+// import { DynamoDBClient, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
+import {
+  UpdateItemCommandInput,
+  UpdateItemCommandOutput,
+} from "@aws-sdk/client-dynamodb";
+import { mockClient } from "aws-sdk-client-mock";
+import { CounterClient } from "../../src/tf-aws/counter.inflight";
+
+const {
+  DynamoDBClient,
+  UpdateItemCommand,
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+} = require("@aws-sdk/client-dynamodb");
+
+const MOCK_TABLE_NAME = "MyBeautifulCounter";
+const dynamoMock = mockClient(DynamoDBClient);
+
+beforeEach(() => {
+  dynamoMock.reset();
+});
+
+test("inc(1)", async () => {
+  // GIVEN
+  const prevValue = 887;
+  setupMock(MOCK_TABLE_NAME, 887, 1);
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.inc();
+
+  // THEN
+  expect(response).toEqual(prevValue); // returns previous value
+});
+
+test("inc(5)", async () => {
+  // GIVEN
+  const prevValue = 887;
+  setupMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    expectedAmount: 5,
+    responseValue: 887,
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.inc(5);
+
+  // THEN
+  expect(response).toEqual(prevValue); // returns previous value
+});
+
+test("counter not initialized", async () => {
+  // GIVEN
+  const prevValue = 887;
+  setupMock(MOCK_TABLE_NAME, 887);
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.inc();
+
+  // THEN
+  expect(response).toEqual(prevValue); // returns previous value
+});
+
+interface MockOptions {
+  readonly expectedTableName: string;
+  readonly expectedAmount: number;
+  readonly responseValue?: number;
+}
+
+function setupMock(opts: MockOptions) {
+  const expectedRequest: UpdateItemCommandInput = {
+    TableName: opts.expectedTableName,
+    Key: { id: { S: "counter" } },
+    UpdateExpression: `SET value = value + :amount`,
+    ExpressionAttributeValues: { ":amount": { N: `${opts.expectedAmount}` } },
+    ConditionExpression: `attribute_exists(value)`,
+    ReturnValues: "UPDATED_OLD",
+  };
+  const mockResponse: UpdateItemCommandOutput = {
+    $metadata: {},
+    Attributes: !opts.responseValue
+      ? undefined
+      : {
+          value: { N: `${opts.responseValue}` },
+        },
+  };
+
+  dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
+}

@@ -22,6 +22,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-s3",
     "@aws-sdk/client-lambda",
     "@aws-sdk/client-sqs",
+    "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-cloudwatch-logs",
     "@aws-sdk/util-utf8-node",
     // simulator dependencies

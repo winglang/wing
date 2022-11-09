@@ -58,7 +58,7 @@ export class Simulator {
   // fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
   private _tree: WingSimulatorSchema;
-  private _simfile: string;
+  public readonly simfile: string;
   private _assetsDir: string;
 
   // fields that change between simulation runs / reloads
@@ -66,7 +66,7 @@ export class Simulator {
   private readonly handles: HandleManager;
 
   constructor(props: SimulatorProps) {
-    this._simfile = props.simfile;
+    this.simfile = props.simfile;
     const { assetsDir, tree } = this._loadApp(props.simfile);
     this._tree = tree;
     this._assetsDir = assetsDir;
@@ -179,7 +179,7 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { assetsDir, tree } = this._loadApp(this._simfile);
+    const { assetsDir, tree } = this._loadApp(this.simfile);
     this._tree = tree;
     this._assetsDir = assetsDir;
 
