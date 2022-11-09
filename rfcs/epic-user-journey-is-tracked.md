@@ -1,6 +1,6 @@
 # EPIC - User Journey is Tracked
 
-To learn more about the origin of this EPIC, please visit [The Community is the Product](#/rfcs/the-community-is-the-product.md) document 
+To learn more about the origin of this EPIC, please visit [The Community is the Product](/rfcs/the-community-is-the-product.md) document 
 The Goal of this EPIC is to be able to tell in a glance, how many people have been exposed to wing, how many signup for preview, how many joined, how many used wing and how many contributed to wing. 
 
 ## Dashboard
