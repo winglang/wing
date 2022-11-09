@@ -61,7 +61,7 @@ beforeAll(async () => {
 
     expect(output.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
   });
-}, 1000 * 30);
+}, 1000 * 60);
 
 function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
@@ -98,6 +98,6 @@ test.each(validWingFiles)(
     });
   },
   {
-    timeout: 1000 * 10,
+    timeout: 1000 * 15,
   }
 );
