@@ -1,4 +1,3 @@
-// import { DynamoDBClient, UpdateItemCommand } from "@aws-sdk/client-dynamodb";
 import {
   UpdateItemCommandInput,
   UpdateItemCommandOutput,
@@ -6,6 +5,8 @@ import {
 import { mockClient } from "aws-sdk-client-mock";
 import { CounterClient } from "../../src/tf-aws/counter.inflight";
 
+// we need to use "require" because some issue with aws-sdk-client-mock:
+// https://github.com/m-radzikowski/aws-sdk-client-mock/issues/121
 const {
   DynamoDBClient,
   UpdateItemCommand,
@@ -22,7 +23,11 @@ beforeEach(() => {
 test("inc(1)", async () => {
   // GIVEN
   const prevValue = 887;
-  setupMock(MOCK_TABLE_NAME, 887, 1);
+  setupMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    expectedAmount: 1,
+    responseValue: prevValue,
+  });
 
   // WHEN
   const client = new CounterClient(MOCK_TABLE_NAME);
@@ -49,17 +54,14 @@ test("inc(5)", async () => {
   expect(response).toEqual(prevValue); // returns previous value
 });
 
-test("counter not initialized", async () => {
-  // GIVEN
-  const prevValue = 887;
-  setupMock(MOCK_TABLE_NAME, 887);
+test("fails when counter is not initialized", async () => {
+  setupMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    expectedAmount: 1,
+  });
 
-  // WHEN
   const client = new CounterClient(MOCK_TABLE_NAME);
-  const response = await client.inc();
-
-  // THEN
-  expect(response).toEqual(prevValue); // returns previous value
+  await expect(client.inc()).rejects.toThrow("");
 });
 
 interface MockOptions {

@@ -18,7 +18,7 @@ export class Counter implements ICounterClient, ISimulatorResource {
 
   public async inc(amount: number = 1): Promise<number> {
     const prev = this.value;
-    this.value += amount ?? 1;
+    this.value += amount;
     return prev;
   }
 }
