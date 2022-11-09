@@ -14,9 +14,10 @@
         "src",
         "examples-tests"
       ],
-      "executor": "nx:run-script",
+      "executor": "nx:run-commands",
       "options": {
-        "script": "test"
+        "command": "npm run test",
+        "cwd": "tools/hangar"
       }
     }
   }
