@@ -5082,20 +5082,7 @@ Stop the simulation and clean up all resources.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.property.tree">tree</a></code> | <code>any</code> | Return a copy of the simulator tree, including all resource attributes. |
-
----
-
-##### `simfile`<sup>Required</sup> <a name="simfile" id="@winglang/wingsdk.testing.Simulator.property.simfile"></a>
-
-```typescript
-public readonly simfile: string;
-```
-
-- *Type:* string
-
-Path to a Wing simulator file (.wx).
 
 ---
 

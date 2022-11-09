@@ -1,10 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/sim";
 import { IFunctionClient, IQueueClient } from "../../src/sim";
-import * as testing from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { SimApp, simulatorJsonOf } from "./util";
+import { SimApp } from "./util";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -46,7 +43,7 @@ describe("basic", () => {
     expect(await fnClient.timesCalled()).toEqual(2);
     await s.stop();
 
-    expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+    expect(s.tree).toMatchSnapshot();
   });
 
   test("queue with batch size of 5", async () => {
@@ -74,7 +71,7 @@ describe("basic", () => {
     expect(await fnClient.timesCalled()).toEqual(2);
     await s.stop();
 
-    expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+    expect(s.tree).toMatchSnapshot();
   });
 
   test("messages are requeued if the function fails", async () => {
@@ -107,7 +104,7 @@ describe("basic", () => {
     expect(await fnClient.timesCalled()).toBeGreaterThan(1);
     await s.stop();
 
-    expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+    expect(s.tree).toMatchSnapshot();
 
     // restore console.error
     console.error = originalError;

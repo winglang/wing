@@ -1,10 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/sim";
 import { IFunctionClient, ILoggerClient } from "../../src/sim";
-import * as testing from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { SimApp, simulatorJsonOf } from "./util";
+import { SimApp } from "./util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -53,7 +50,7 @@ test("inflight uses a logger", async () => {
       timestamp: expect.any(Number),
     },
   ]);
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 
   await s.stop();
 });

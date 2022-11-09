@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { IBucketClient } from "../../src/sim";
-import { simulatorJsonOf, SimApp } from "./util";
+import { SimApp } from "./util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -17,7 +17,7 @@ test("create a bucket", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {
@@ -39,7 +39,7 @@ test("put and get objects from bucket", async () => {
   expect(response).toEqual(VALUE);
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -67,7 +67,7 @@ test("put multiple objects and list all from bucket", async () => {
   expect(response).toEqual([KEY1, KEY2, KEY3]);
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
@@ -83,5 +83,5 @@ test("get invalid object throws an error", async () => {
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });

@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
-import { SimApp, simulatorJsonOf } from "./util";
+import { SimApp } from "./util";
 
 test("create a counter", async () => {
   // GIVEN
@@ -20,7 +20,7 @@ test("create a counter", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("inc", async () => {
@@ -47,5 +47,5 @@ test("inc", async () => {
   expect(value3).toEqual(123 + 1 + 1 + 10);
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });

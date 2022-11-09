@@ -5,11 +5,18 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
+        "attrs": Object {
+          "handle": "sim-1",
+        },
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
+            "attrs": Object {
+              "handle": "sim-0",
+            },
             "inbound": Array [
               "root/my_queue",
             ],
+            "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
             "props": Object {
               "environmentVariables": Object {
                 "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
@@ -26,6 +33,7 @@ Object {
         "outbound": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
+        "path": "root/my_queue",
         "props": Object {
           "subscribers": Array [
             Object {
@@ -38,6 +46,7 @@ Object {
         "type": "wingsdk.cloud.Queue",
       },
     },
+    "path": "root",
     "type": "constructs.Construct",
   },
   "sdkVersion": "0.0.0",
@@ -53,11 +62,18 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
+        "attrs": Object {
+          "handle": "sim-1",
+        },
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
+            "attrs": Object {
+              "handle": "sim-0",
+            },
             "inbound": Array [
               "root/my_queue",
             ],
+            "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
             "props": Object {
               "environmentVariables": Object {
                 "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
@@ -74,6 +90,7 @@ Object {
         "outbound": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
+        "path": "root/my_queue",
         "props": Object {
           "initialMessages": Array [
             "A",
@@ -94,6 +111,7 @@ Object {
         "type": "wingsdk.cloud.Queue",
       },
     },
+    "path": "root",
     "type": "constructs.Construct",
   },
   "sdkVersion": "0.0.0",
@@ -109,11 +127,18 @@ Object {
   "root": Object {
     "children": Object {
       "my_queue": Object {
+        "attrs": Object {
+          "handle": "sim-1",
+        },
         "children": Object {
           "OnMessage-236ff3d72ad0ae46": Object {
+            "attrs": Object {
+              "handle": "sim-0",
+            },
             "inbound": Array [
               "root/my_queue",
             ],
+            "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
             "props": Object {
               "environmentVariables": Object {
                 "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
@@ -130,6 +155,7 @@ Object {
         "outbound": Array [
           "root/my_queue/OnMessage-236ff3d72ad0ae46",
         ],
+        "path": "root/my_queue",
         "props": Object {
           "subscribers": Array [
             Object {
@@ -142,6 +168,7 @@ Object {
         "type": "wingsdk.cloud.Queue",
       },
     },
+    "path": "root",
     "type": "constructs.Construct",
   },
   "sdkVersion": "0.0.0",

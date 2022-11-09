@@ -1,10 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/sim";
 import { IFunctionClient } from "../../src/sim";
-import * as testing from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { SimApp, simulatorJsonOf } from "./util";
+import { SimApp } from "./util";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
@@ -46,7 +43,7 @@ test("create a function", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("invoke function", async () => {
@@ -70,7 +67,7 @@ test("invoke function", async () => {
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
@@ -100,5 +97,5 @@ test("invoke function with environment variables", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });

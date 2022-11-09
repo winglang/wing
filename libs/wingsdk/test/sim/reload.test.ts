@@ -2,7 +2,6 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/sim";
 import { IFunctionClient } from "../../src/sim";
-import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { SimApp } from "./util";
 
