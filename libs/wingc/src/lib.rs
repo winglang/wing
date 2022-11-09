@@ -11,7 +11,7 @@ use std::cell::RefCell;
 use std::fs;
 use std::path::PathBuf;
 
-use crate::ast::Flight;
+use crate::ast::Phase;
 use crate::capture::scan_captures;
 use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
@@ -61,14 +61,14 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
+	scope.set_env(TypeEnv::new(None, None, false, Phase::Preflight));
 
 	add_builtin(
 		"print",
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
-			flight: Flight::Independent,
+			flight: Phase::Independent,
 		}),
 		scope,
 		types,

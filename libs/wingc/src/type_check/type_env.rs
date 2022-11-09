@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Flight, Symbol},
+	ast::{Phase, Symbol},
 	diagnostic::TypeError,
 	type_check::Type,
 	type_check::TypeRef,
@@ -11,14 +11,14 @@ pub struct TypeEnv {
 	parent: Option<*const TypeEnv>,
 	pub return_type: Option<TypeRef>,
 	is_class: bool,
-	pub flight: Flight,
+	pub flight: Phase,
 }
 
 // TODO See TypeRef for why this is necessary
 unsafe impl Send for TypeEnv {}
 
 impl TypeEnv {
-	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool, flight: Flight) -> Self {
+	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool, flight: Phase) -> Self {
 		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
 		Self {
 			type_map: HashMap::new(),
@@ -65,7 +65,7 @@ impl TypeEnv {
 		self.try_lookup_ext(symbol_name).map(|res| res.0)
 	}
 
-	pub fn try_lookup_ext(&self, symbol_name: &str) -> Option<(TypeRef, Flight)> {
+	pub fn try_lookup_ext(&self, symbol_name: &str) -> Option<(TypeRef, Phase)> {
 		if let Some(_type) = self.type_map.get(symbol_name) {
 			Some((*_type, self.flight))
 		} else if let Some(parent_env) = self.parent {
@@ -79,7 +79,7 @@ impl TypeEnv {
 		Ok(self.lookup_ext(symbol)?.0)
 	}
 
-	pub fn lookup_ext(&self, symbol: &Symbol) -> Result<(TypeRef, Flight), TypeError> {
+	pub fn lookup_ext(&self, symbol: &Symbol) -> Result<(TypeRef, Phase), TypeError> {
 		let lookup_result = self.try_lookup_ext(&symbol.name);
 
 		if let Some((type_ref, flight)) = lookup_result {
