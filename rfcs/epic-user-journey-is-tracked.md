@@ -1,3 +1,8 @@
+**Status:** _RFC_
+
+TODO:
+- [ ] attach user stories issues to User Stories
+
 # EPIC - User Journey is Tracked
 
 To learn more about the origin of this EPIC, please visit [The Community is the Product](/rfcs/the-community-is-the-product.md) document 
