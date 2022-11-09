@@ -262,6 +262,9 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://npm.pkg.github.com
 
+      - name: Login to Private NPM registry
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
         with:
