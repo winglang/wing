@@ -2,18 +2,20 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/sim";
 import { IFunctionClient } from "../../src/sim";
+import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { SimApp } from "./util";
 
 test("reloading the simulator updates the state of the tree", async () => {
   let workdir = mkdtemp();
 
   // Create an app.wx file
-  const app = new SimApp();
+  const app = new sim.App({ outdir: workdir });
   new cloud.Bucket(app, "my_bucket", { public: false });
+  const simfile = app.synth();
 
   // Start the simulator
-  const s = await app.startSimulator();
+  const s = new testing.Simulator({ simfile });
+  await s.start();
   expect(s.getProps("root/my_bucket").public).toEqual(false);
 
   // Update the app.wx file in-place
@@ -39,7 +41,7 @@ test("reloading the simulator after working with ws", async () => {
   let workdir = mkdtemp();
 
   // GIVEN
-  const app = new SimApp();
+  const app = new sim.App({ outdir: workdir });
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
@@ -48,8 +50,10 @@ test("reloading the simulator after working with ws", async () => {
     initialMessages: ["A", "B", "C", "D", "E", "F"],
   });
   queue.onMessage(handler, { batchSize: 5 });
+  const simfile = app.synth();
 
-  const s = await app.startSimulator();
+  const s = new testing.Simulator({ simfile });
+  await s.start();
 
   const fnClient = s.getResourceByPath(
     "root/my_queue/OnMessage-236ff3d72ad0ae46"
