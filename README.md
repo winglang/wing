@@ -165,7 +165,7 @@ Wing application through the terminal.
     ```sh
     node --experimental-repl-await
     ```
-2.  Run the following code Inside node REPL:
+2.  Run the following code inside the REPL:
     ```js
     let sdk = require("@winglang/wingsdk")
     let simulator = new sdk.testing.Simulator({ simfile : "./app.wx"})
