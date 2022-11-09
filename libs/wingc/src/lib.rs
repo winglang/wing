@@ -15,8 +15,8 @@ use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
-pub mod debug;
 pub mod capture;
+pub mod debug;
 pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
@@ -53,7 +53,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
+	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre, 0));
 	let mut tc = TypeChecker::new(types);
 	tc.type_check_scope(scope);
 
