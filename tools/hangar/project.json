@@ -10,6 +10,10 @@
         "^build",
         "^package"
       ],
+      "inputs": [
+        "src",
+        "examples-tests"
+      ],
       "executor": "nx:run-script",
       "options": {
         "script": "test"

@@ -246,7 +246,7 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          # - runner: macos-latest
+          - runner: macos-latest
           - runner: ubuntu-latest
     runs-on: ${{ matrix.runner }}
     steps:
@@ -262,9 +262,6 @@ jobs:
           node-version: ${{ env.NODEJS_VERSION }}
           registry-url: https://npm.pkg.github.com
 
-      - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
-
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
         with:
@@ -272,14 +269,12 @@ jobs:
           install-command: npm ci --ignore-scripts
 
       - name: Run E2E Tests
+        working-directory: tools/hangar
         env:
           NPM_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
         run: |
-          ls -al
-          ls -al wing
-          export HANGAR_WING_TGZ=$(readlink -f wing/*.tgz)
-          export HANGAR_WINGSDK_TGZ=$(readlink -f wingsdk/*.tgz)
-          cd tools/hangar
+          export HANGAR_WING_TGZ=$(readlink -f ../../wing/*.tgz)
+          export HANGAR_WINGSDK_TGZ=$(readlink -f ../../wingsdk/*.tgz)
           npm run test
 
   build-vscode:
