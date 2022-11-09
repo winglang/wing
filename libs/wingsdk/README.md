@@ -33,7 +33,7 @@ queue.on_message((message) ~> {
 });
 ```
 
-Then use `wing build` to compile your program to different clouds. Run `wing build --help` to see what options are available!
+Then use `wing compile` to compile your program to different clouds. Run `wing compile --help` to see what options are available!
 
 ### As a TypeScript/JavaScript Library
 
@@ -41,13 +41,13 @@ The Wing SDK can be used just like ordinary [CDK for TF Constructs](https://gith
 
 ```ts
 import { Construct } from "constructs";
-import * as wingsdk from "@winglang/wingsdk";
+import * as sdk from "@winglang/wingsdk";
 
-class Root extends Construct {
+class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    let bucket = new wingsdk.cloud.Bucket(this, "bucket", {
+    let bucket = new sdk.cloud.Bucket(this, "bucket", {
       public: true,
     });
   }
@@ -63,31 +63,30 @@ If the commented out TF AWS synthesizer is used instead, then a Terraform applic
 The Terraform application will include an AWS S3 Bucket to represent the `Bucket`.
 
 ```ts
-import * as core from "../../src/core";
 import * as local from "../../src/local";
 import * as tfaws from "../../src/tf-aws";
 
-const app = new core.App({
-  synthesizer: new local.Synthesizer({ outdir: __dirname }),
-  // synthesizer: new tfaws.Synthesizer({ outdir: __dirname }),
-});
-new Root(app.root, "root");
+// const app = new local.App(); // alternative
+const app = new tfaws.App();
+new HelloWorld(app, "HelloWorld");
 app.synth();
 ```
 
 ## 📖 Documentation
 
-- [Library author guide](./docs)
+- [Simulator guide](../../docs/simulator.md)
 - [API reference](./API.md)
 - Wing SDK design guidelines (TODO)
 
 ## ✋ Contributing
 
-We welcome community contributions and pull requests. See [CONTRIBUTING.md](./CONTRIBUTING.md) for information on how to set up a development environment and submit code on GitHub.
+We welcome community contributions and pull requests. See the [Wing Contributor's Handbook](../../CONTRIBUTING.md) for information on how to set up a development environment and add new resources to the SDK.
 
 ## 🐣 Getting help
 
-If you need help either using or contributing to this project, please join us on our [Discord server](https://discord.gg/7wrggS3dZU).
+If you need help either using or contributing to this project, please join us on our [Wing Slack].
+
+[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
 
 ## ⚖️ License
 
