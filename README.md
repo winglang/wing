@@ -122,7 +122,11 @@ queue.on_message(handler);
 ```
 Next step is to test your program locally using the Wing Console or a REPL.
 
-##### Testing the program using wing console 
+##### Testing the program using the Wing Console 
+
+The Wing Console is a graphical user interface that can be used to interact
+with Wing applications on the local machine.
+
 *(currently available only on MacOS)*
 
 1. Compile to the `sim` target
