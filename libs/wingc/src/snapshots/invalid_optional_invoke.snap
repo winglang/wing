@@ -1,6 +1,6 @@
 ---
 source: libs/wingc/src/lib.rs
-description: "../../examples/tests/invalid/optionals.w"
+description: "../../examples/tests/invalid/optional_invoke.w"
 ---
 [
     Diagnostic {
@@ -8,35 +8,35 @@ description: "../../examples/tests/invalid/optionals.w"
         span: Some(
             WingSpan {
                 start: Point {
-                    row: 5,
+                    row: 6,
                     column: 0,
                 },
                 end: Point {
-                    row: 5,
+                    row: 6,
                     column: 4,
                 },
-                start_byte: 59,
-                end_byte: 63,
-                file_id: "../../examples/tests/invalid/optionals.w",
+                start_byte: 61,
+                end_byte: 65,
+                file_id: "../../examples/tests/invalid/optional_invoke.w",
             },
         ),
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"number\", but got \"number?\" instead",
+        message: "Cannot call inflight function \"f\" while in preflight phase",
         span: Some(
             WingSpan {
                 start: Point {
-                    row: 5,
-                    column: 2,
+                    row: 7,
+                    column: 0,
                 },
                 end: Point {
-                    row: 5,
+                    row: 7,
                     column: 3,
                 },
-                start_byte: 61,
-                end_byte: 62,
-                file_id: "../../examples/tests/invalid/optionals.w",
+                start_byte: 67,
+                end_byte: 70,
+                file_id: "../../examples/tests/invalid/optional_invoke.w",
             },
         ),
         level: Error,
