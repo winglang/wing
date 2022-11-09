@@ -30,9 +30,9 @@ test("inc", async () => {
     initialValue: 123,
   });
 
-  const sim = await app.startSimulator();
+  const s = await app.startSimulator();
 
-  const client = sim.getResourceByPath("root/my_counter") as ICounterClient;
+  const client = s.getResourceByPath("root/my_counter") as ICounterClient;
 
   const value0 = await client.inc();
   expect(value0).toEqual(123); // always returns the value before inc (like "i++");
@@ -45,8 +45,7 @@ test("inc", async () => {
 
   const value3 = await client.inc(10);
   expect(value3).toEqual(123 + 1 + 1 + 10);
+  await s.stop();
 
-  await sim.stop();
-
-  expect(simulatorJsonOf(sim.simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });

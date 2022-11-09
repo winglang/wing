@@ -4,6 +4,7 @@ import * as core from "../../src/core";
 import * as sim from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
+import { SimApp } from "./util";
 
 test("pushing messages through a queue", async () => {
   // GIVEN
@@ -51,13 +52,11 @@ test("pushing messages through a queue", async () => {
     }
   }
 
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   cloud.Logger.register(app);
   new HelloWorld(app, "HelloWorld");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const pusher = s.getResourceByPath(
     "root/HelloWorld/Function"

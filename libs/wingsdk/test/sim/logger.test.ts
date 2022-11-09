@@ -4,7 +4,7 @@ import * as sim from "../../src/sim";
 import { IFunctionClient, ILoggerClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { SimApp, simulatorJsonOf } from "./util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -16,7 +16,7 @@ async function $proc($cap, event) {
 
 test("inflight uses a logger", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   cloud.Logger.register(app);
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
@@ -29,10 +29,8 @@ test("inflight uses a logger", async () => {
     },
   });
   new cloud.Function(app, "my_function", handler);
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const fnClient = s.getResourceByPath("root/my_function") as IFunctionClient;
   const loggerClient = s.getResourceByPath("root/WingLogger") as ILoggerClient;
@@ -55,7 +53,7 @@ test("inflight uses a logger", async () => {
       timestamp: expect.any(Number),
     },
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 
   await s.stop();
 });

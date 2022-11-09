@@ -4,7 +4,7 @@ import * as sim from "../../src/sim";
 import { IFunctionClient, IQueueClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { SimApp, simulatorJsonOf } from "./util";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -20,17 +20,15 @@ async function $proc($cap, message) {
 describe("basic", () => {
   test("queue with default batch size of 1", async () => {
     // GIVEN
-    const app = new sim.App({ outdir: mkdtemp() });
+    const app = new SimApp();
     const handler = new core.Inflight({
       code: INFLIGHT_CODE,
       entrypoint: "$proc",
     });
     const queue = new cloud.Queue(app, "my_queue");
     queue.onMessage(handler);
-    const simfile = app.synth();
 
-    const s = new testing.Simulator({ simfile });
-    await s.start();
+    const s = await app.startSimulator();
 
     const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
     const fnClient = s.getResourceByPath(
@@ -48,12 +46,12 @@ describe("basic", () => {
     expect(await fnClient.timesCalled()).toEqual(2);
     await s.stop();
 
-    expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+    expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
   });
 
   test("queue with batch size of 5", async () => {
     // GIVEN
-    const app = new sim.App({ outdir: mkdtemp() });
+    const app = new SimApp();
     const handler = new core.Inflight({
       code: INFLIGHT_CODE,
       entrypoint: "$proc",
@@ -62,10 +60,8 @@ describe("basic", () => {
       initialMessages: ["A", "B", "C", "D", "E", "F"],
     });
     queue.onMessage(handler, { batchSize: 5 });
-    const simfile = app.synth();
 
-    const s = new testing.Simulator({ simfile });
-    await s.start();
+    const s = await app.startSimulator();
 
     // WHEN
     const fnClient = s.getResourceByPath(
@@ -78,7 +74,7 @@ describe("basic", () => {
     expect(await fnClient.timesCalled()).toEqual(2);
     await s.stop();
 
-    expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+    expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
   });
 
   test("messages are requeued if the function fails", async () => {
@@ -87,17 +83,15 @@ describe("basic", () => {
     console.error = jest.fn();
 
     // GIVEN
-    const app = new sim.App({ outdir: mkdtemp() });
+    const app = new SimApp();
     const handler = new core.Inflight({
       code: INFLIGHT_CODE,
       entrypoint: "$proc",
     });
     const queue = new cloud.Queue(app, "my_queue");
     queue.onMessage(handler);
-    const simfile = app.synth();
 
-    const s = new testing.Simulator({ simfile });
-    await s.start();
+    const s = await app.startSimulator();
 
     // WHEN
     const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
@@ -113,7 +107,7 @@ describe("basic", () => {
     expect(await fnClient.timesCalled()).toBeGreaterThan(1);
     await s.stop();
 
-    expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+    expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 
     // restore console.error
     console.error = originalError;

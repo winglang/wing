@@ -1,15 +1,11 @@
 import * as cloud from "../../src/cloud";
-import * as sim from "../../src/sim";
 import { IBucketClient } from "../../src/sim";
-import * as testing from "../../src/testing";
-import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf, SimApp } from "./util";
 
 test("create a bucket", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
   // THEN
   const s = await app.startSimulator();
@@ -21,7 +17,7 @@ test("create a bucket", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {
@@ -48,12 +44,10 @@ test("put and get objects from bucket", async () => {
 
 test("put multiple objects and list all from bucket", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath("root/my_bucket") as IBucketClient;
   const KEY1 = "greeting1.txt";
@@ -73,17 +67,15 @@ test("put multiple objects and list all from bucket", async () => {
   expect(response).toEqual([KEY1, KEY2, KEY3]);
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath("root/my_bucket") as IBucketClient;
 
@@ -91,5 +83,5 @@ test("get invalid object throws an error", async () => {
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });

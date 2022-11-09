@@ -4,7 +4,7 @@ import * as sim from "../../src/sim";
 import { IFunctionClient } from "../../src/sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { SimApp, simulatorJsonOf } from "./util";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
@@ -20,7 +20,7 @@ async function $proc($cap, event) {
 
 test("create a function", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
@@ -30,11 +30,9 @@ test("create a function", async () => {
       ENV_VAR1: "true",
     },
   });
-  const simfile = app.synth();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
   expect(s.getAttributes("root/my_function")).toEqual({
     handle: expect.any(String),
   });
@@ -48,21 +46,19 @@ test("create a function", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });
 
 test("invoke function", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
   });
   new cloud.Function(app, "my_function", handler);
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath("root/my_function") as IFunctionClient;
 
@@ -74,12 +70,12 @@ test("invoke function", async () => {
   expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
@@ -89,10 +85,8 @@ test("invoke function with environment variables", async () => {
       PIG_LATIN: "true",
     },
   });
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath("root/my_function") as IFunctionClient;
 
@@ -106,5 +100,5 @@ test("invoke function with environment variables", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(simulatorJsonOf(s.simfile)).toMatchSnapshot();
 });
