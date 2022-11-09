@@ -57,6 +57,15 @@ pub enum Flight {
 	Pre,
 }
 
+impl Display for Flight {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Flight::In => write!(f, "inflight"),
+			Flight::Pre => write!(f, "preflight"),
+		}
+	}
+}
+
 #[derive(Debug, Clone)]
 pub enum Type {
 	Number,
