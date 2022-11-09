@@ -1,7 +1,7 @@
 import { test, expect, beforeAll, afterAll } from "vitest";
 import { posix as path } from "path";
-import "zx/globals";
 import { runServer } from "verdaccio";
+import "zx/globals";
 
 require("dotenv").config();
 const registryServer = await runServer("./verdaccio.config.yaml");
@@ -14,13 +14,12 @@ const tmpDir = path.join(hangarDir, "tmp");
 const npmCacheDir = path.join(tmpDir, ".npm");
 const registryDir = path.join(tmpDir, "registry");
 
-const wingVersion = process.env.PROJEN_BUMP_VERSION ?? "0.0.0"; 
 const targetWingTGZ =
   process.env.HANGAR_WING_TGZ ??
-  path.join(repoRoot, `apps/wing/winglang-wing-${wingVersion}.tgz`);
+  path.join(repoRoot, `apps/wing/winglang-wing-0.0.0.tgz`);
 const targetWingSDKTGZ =
   process.env.HANGAR_WINGSDK_TGZ ??
-  path.join(repoRoot, `libs/wingsdk/winglang-wingsdk-${wingVersion}.tgz`);
+  path.join(repoRoot, `libs/wingsdk/winglang-wingsdk-0.0.0.tgz`);
 
 const validWingFiles = fs
   .readdirSync(validTestDir)
@@ -62,13 +61,13 @@ beforeAll(async () => {
 
     expect(output.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
   });
-}, 1000 * 60);
+}, 1000 * 30);
 
 function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
   const assetSourceRegex = /"assets\/.+"/g;
   const json = fs.readJsonSync(path);
-  if(json?.terraform?.backend?.local?.path) {
+  if (json?.terraform?.backend?.local?.path) {
     json.terraform.backend.local.path = "<STATE_FILE>";
   }
 
@@ -99,6 +98,6 @@ test.each(validWingFiles)(
     });
   },
   {
-    timeout: 1000 * 30,
+    timeout: 1000 * 10,
   }
 );
