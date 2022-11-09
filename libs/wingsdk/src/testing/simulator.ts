@@ -58,8 +58,12 @@ export class Simulator {
   // fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
   private _tree: WingSimulatorSchema;
-  public readonly simfile: string;
   private _assetsDir: string;
+
+  /**
+   * Path to a Wing simulator file (.wx).
+   */
+  public readonly simfile: string;
 
   // fields that change between simulation runs / reloads
   private _running: boolean;
