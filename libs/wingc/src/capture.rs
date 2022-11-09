@@ -41,7 +41,7 @@ pub fn scan_captures(ast_root: &Scope) {
 				if let Flight::In = func_def.signature.flight {
 					let mut func_captures = func_def.captures.borrow_mut();
 					assert!(func_captures.is_none());
-					*func_captures = Some(collect_captures(scan_captures_in_scope(&func_def.statements)));
+					*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
 				}
 			}
 			Statement::ForLoop {
@@ -71,7 +71,11 @@ pub fn scan_captures(ast_root: &Scope) {
 				match constructor.signature.flight {
 					Flight::In => {
 						// TODO: what do I do with these?
-						scan_captures_in_scope(&constructor.statements);
+						scan_captures_in_inflight_scope(&constructor.statements);
+					}
+					Flight::Both => {
+						// TODO: what do I do with these?
+						scan_captures_in_inflight_scope(&constructor.statements);
 					}
 					Flight::Pre => scan_captures(&constructor.statements),
 				}
@@ -79,7 +83,11 @@ pub fn scan_captures(ast_root: &Scope) {
 					match m.signature.flight {
 						Flight::In => {
 							// TODO: what do I do with these?
-							scan_captures_in_scope(&m.statements);
+							scan_captures_in_inflight_scope(&m.statements);
+						}
+						Flight::Both => {
+							// TODO: what do I do with these?
+							scan_captures_in_inflight_scope(&constructor.statements);
 						}
 						Flight::Pre => scan_captures(&m.statements),
 					}
@@ -154,7 +162,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 					res.extend(
 						resource
 							.methods()
-							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Flight::In))
+							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Flight::In | Flight::Both))
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
 								def: CaptureDef { method: name.clone() },
@@ -202,12 +210,12 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 	res
 }
 
-fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
+fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 	let mut res = vec![];
 	let env = scope.env.as_ref().unwrap();
 
-	// Make sure we're looking for captures only in inflight code
-	assert!(matches!(env.flight, Flight::In));
+	// Make sure we're looking for captures only in inflight or either-flight code
+	assert!(matches!(env.flight, Flight::In | Flight::Both));
 
 	for s in scope.statements.iter() {
 		match s {
@@ -216,14 +224,14 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				initial_value,
 				type_: _,
 			} => res.extend(scan_captures_in_expression(initial_value, env)),
-			Statement::FunctionDefinition(func_def) => res.extend(scan_captures_in_scope(&func_def.statements)),
+			Statement::FunctionDefinition(func_def) => res.extend(scan_captures_in_inflight_scope(&func_def.statements)),
 			Statement::ForLoop {
 				iterator: _,
 				iterable,
 				statements,
 			} => {
 				res.extend(scan_captures_in_expression(iterable, env));
-				res.extend(scan_captures_in_scope(statements));
+				res.extend(scan_captures_in_inflight_scope(statements));
 			}
 			Statement::If {
 				condition,
@@ -231,9 +239,9 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				else_statements,
 			} => {
 				res.extend(scan_captures_in_expression(condition, env));
-				res.extend(scan_captures_in_scope(statements));
+				res.extend(scan_captures_in_inflight_scope(statements));
 				if let Some(else_statements) = else_statements {
-					res.extend(scan_captures_in_scope(else_statements));
+					res.extend(scan_captures_in_inflight_scope(else_statements));
 				}
 			}
 			Statement::Expression(e) => res.extend(scan_captures_in_expression(e, env)),
@@ -243,7 +251,7 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 					res.extend(scan_captures_in_expression(e, env));
 				}
 			}
-			Statement::Scope(s) => res.extend(scan_captures_in_scope(s)),
+			Statement::Scope(s) => res.extend(scan_captures_in_inflight_scope(s)),
 			Statement::Class {
 				name: _,
 				members: _,
@@ -252,9 +260,9 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				parent: _,
 				is_resource: _,
 			} => {
-				res.extend(scan_captures_in_scope(&constructor.statements));
+				res.extend(scan_captures_in_inflight_scope(&constructor.statements));
 				for m in methods.iter() {
-					res.extend(scan_captures_in_scope(&m.statements))
+					res.extend(scan_captures_in_inflight_scope(&m.statements))
 				}
 			}
 			Statement::Use {

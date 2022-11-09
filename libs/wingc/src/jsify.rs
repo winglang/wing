@@ -216,6 +216,12 @@ fn jsify_expression(expression: &Expr) -> String {
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
 		ExprType::Call { function, args } => {
+			// special case for "print"
+			if let Reference::Identifier(Symbol { name, .. }) = &function {
+				if name == "print" {
+					return format!("console.log({})", jsify_arg_list(args, None, None));
+				}
+			}
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
 		}
 		ExprType::Unary { op, exp } => {
@@ -299,6 +305,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 		}
 		Statement::FunctionDefinition(func_def) => match func_def.signature.flight {
 			Flight::In => jsify_inflight_function(func_def, &out_dir),
+			Flight::Both => unimplemented!(),
 			Flight::Pre => jsify_function(
 				format!("function {}", jsify_symbol(&func_def.name)).as_str(),
 				&func_def.parameters,

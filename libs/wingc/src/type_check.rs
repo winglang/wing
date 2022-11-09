@@ -648,7 +648,7 @@ impl<'a> TypeChecker<'a> {
 					.as_function_sig()
 					.expect(&format!("{:?} should be a function or method", function));
 
-				if func_sig.flight != env.flight {
+				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
 						exp,
 						format!(
@@ -1295,6 +1295,19 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}
+	}
+}
+
+fn can_call_flight(fn_flight: Flight, scope_flight: Flight) -> bool {
+	if fn_flight == Flight::Both {
+		// if the function we're trying to call is an "either-flight" function,
+		// then it can be called both in preflight, inflight, and in
+		// either-flight scopes
+		true
+	} else {
+		// otherwise, preflight functions can only be called in preflight scopes,
+		// and inflight functions can only be called in inflight scopes
+		fn_flight == scope_flight
 	}
 }
 

@@ -63,24 +63,12 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
 
-	// inflight "print"
 	add_builtin(
 		"print",
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
-			flight: Flight::In,
-		}),
-		scope,
-		types,
-	);
-	// preflight "print"
-	add_builtin(
-		"print",
-		Type::Function(FunctionSignature {
-			args: vec![types.string()],
-			return_type: None,
-			flight: Flight::Pre,
+			flight: Flight::Both,
 		}),
 		scope,
 		types,
