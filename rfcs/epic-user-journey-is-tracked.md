@@ -58,6 +58,7 @@ User entity in the system
 - Mixpanel - used for deep app and user analytics 
 - Pipedrive - our CRM, used for sending email and tracking different sale oriented workflows
 - FullStory - an ability to see what our users is doing on the screen (we should remove it eventually from the public site) 
+- HotJar - maybe a competitor to FullStory, we will review both after release and decide which one to work with
 
 ## Prioritize User Stories
 
