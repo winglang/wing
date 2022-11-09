@@ -76,24 +76,11 @@ function getBaseAttributes(node: BaseResourceSchema): NodeAttribute[] {
         </div>
       ),
     },
-    // {
-    //   key: "Source File",
-    //   value: "/Users/Wing/Code/wing-demo/src/demo.w",
-    //   render: () => (
-    //     <button className="font-medium text-sky-600 hover:text-sky-500">
-    //       {meta.source.fileName} ({meta.source.line}:{meta.source.column})
-    //     </button>
-    //   ),
-    // },
   ];
 }
 
 function getNodeAttributes(node: BaseResourceSchema) {
   let attributes = getBaseAttributes(node);
-
-  // if (node.type === "wingsdk.cloud.Endpoint") {
-  //   attributes = [...attributes, {key: "URL", value: node.props.}]
-  // }
 
   if (node.type === "wingsdk.cloud.Function") {
     attributes = [

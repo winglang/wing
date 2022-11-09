@@ -19,7 +19,6 @@ export default defineConfig({
           resolve: {
             // Since we're building for electron (which uses nodejs), we don't want to use the "browser" field in the packages.
             // It makes our build fail for the `ws` and `isomorphic-ws` packages, for example.
-            // @ts-ignore-error
             browserField: false,
             mainFields: ["module", "jsnext:main", "jsnext"],
           },
@@ -34,7 +33,6 @@ export default defineConfig({
           resolve: {
             // Since we're building for electron (which uses nodejs), we don't want to use the "browser" field in the packages.
             // It makes our build fail for the `ws` and `isomorphic-ws` packages, for example.
-            // @ts-ignore-error
             browserField: false,
             mainFields: ["module", "jsnext:main", "jsnext"],
           },

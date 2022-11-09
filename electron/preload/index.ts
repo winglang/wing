@@ -1,26 +1,35 @@
-import { contextBridge, ipcRenderer } from "electron";
-
-import IpcRendererEvent = Electron.IpcRendererEvent;
+import { contextBridge, ipcRenderer, IpcRendererEvent } from "electron";
 
 const api = {
-  rpc: (args: any) => ipcRenderer.invoke("electron-trpc", args),
   ipcRenderer: {
-    sendMessage(channel: any, args: unknown[]) {
-      ipcRenderer.send(channel, args);
+    async invoke(channel: string, ...args: any[]) {
+      return ipcRenderer.invoke(channel, ...args);
     },
-    on(channel: any, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
-      ipcRenderer.on(channel, subscription);
-
-      return () => ipcRenderer.removeListener(channel, subscription);
+    send(channel: string, ...args: any[]) {
+      ipcRenderer.send(channel, ...args);
     },
-    once(channel: any, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
+    on(
+      channel: string,
+      listener: (event: IpcRendererEvent, ...args: any[]) => void,
+    ) {
+      ipcRenderer.on(channel, listener);
+    },
+    once(
+      channel: string,
+      listener: (event: IpcRendererEvent, ...args: any[]) => void,
+    ) {
+      ipcRenderer.once(channel, listener);
+    },
+    removeListener(
+      channel: string,
+      listener: (event: IpcRendererEvent, ...args: any[]) => void,
+    ) {
+      ipcRenderer.removeListener(channel, listener);
     },
   },
 };
 
-contextBridge.exposeInMainWorld("electronTRPC", api);
-
+export const ElectronApiKey = "electronTRPC";
 export type ElectronApi = typeof api;
+
+contextBridge.exposeInMainWorld(ElectronApiKey, api);

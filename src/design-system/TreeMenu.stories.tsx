@@ -48,7 +48,7 @@ const TreeMenuStory: ComponentStory<typeof TreeMenu> = (args) => {
             treeMenu.toggle(item.id);
             treeMenu.setCurrent(item.id);
           }}
-          title={args?.title || "Wing Console"}
+          title={args?.title || "Explorer"}
         />
       </div>
     </div>

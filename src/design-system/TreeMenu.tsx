@@ -38,7 +38,7 @@ export const TreeMenu = ({
     <>
       <div className="h-9 flex-shrink-0 flex items-center justify-between gap-2 px-4">
         <div className="flex items-center min-w-0">
-          <span className="truncate uppercase text-sm font-semibold">
+          <span className="text-slate-600 text-sm truncate uppercase">
             {title}
           </span>
         </div>

@@ -1,20 +1,46 @@
+import { createTRPCClient } from "@trpc/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "react-query";
 
+import { Router } from "../electron/main/router/index.js";
 import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 
 import { App } from "./App.js";
-import { AppContext } from "./AppContext.js";
+import { AppContext, AppMode } from "./AppContext.js";
 import { DemoBase64WingSchema } from "./stories/mockData.js";
+import { trpc } from "./utils/trpc.js";
 
-const appMode = window.electronTRPC ? "electron" : "webapp";
+const main = ({
+  appMode,
+  port,
+  schema,
+}: {
+  appMode: AppMode;
+  port?: number;
+  schema?: WingSimulatorSchema;
+}) => {
+  const queryClient = new QueryClient();
+  const trpcClient = createTRPCClient<Router>({
+    url: `http://localhost:${port}`,
+  });
 
-console.log(`loading wing console in ${appMode} mode`);
+  ReactDOM.createRoot(document.querySelector("#root")!).render(
+    <React.StrictMode>
+      <AppContext.Provider value={{ appMode }}>
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <App querySchema={schema} />
+          </QueryClientProvider>
+        </trpc.Provider>
+      </AppContext.Provider>
+    </React.StrictMode>,
+  );
+
+  document.querySelector("#loader")?.remove();
+};
 
 const getSchemaFromQueryString = () => {
-  if (appMode === "electron") {
-    return;
-  }
   const query = new URLSearchParams(location.search);
   const base64Schema = query.get("schema");
   try {
@@ -25,14 +51,21 @@ const getSchemaFromQueryString = () => {
   }
 };
 
-const schema = getSchemaFromQueryString();
-
-ReactDOM.createRoot(document.querySelector("#root")!).render(
-  <React.StrictMode>
-    <AppContext.Provider value={{ appMode }}>
-      <App querySchema={schema} />
-    </AppContext.Provider>
-  </React.StrictMode>,
-);
-
-document.querySelector("#loader")?.remove();
+if (window.electronTRPC) {
+  window.electronTRPC.ipcRenderer.once(
+    "init",
+    async (event, { port, simfile }) => {
+      main({
+        appMode: "electron",
+        port,
+      });
+    },
+  );
+  window.electronTRPC.ipcRenderer.send("init");
+} else {
+  // Only in Vercel.
+  main({
+    appMode: "webapp",
+    schema: getSchemaFromQueryString(),
+  });
+}

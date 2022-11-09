@@ -6,6 +6,11 @@ const project = new TypeScriptProject({
   description: "The Wing Console",
   deps: ["chokidar"],
   devDeps: [
+    "express",
+    "@types/express",
+    "cors",
+    "@types/cors",
+    "get-port",
     "electron-log",
     "@winglang/wingsdk",
     "@winglang/polycons",

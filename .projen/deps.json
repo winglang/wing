@@ -68,6 +68,14 @@
       "type": "build"
     },
     {
+      "name": "@types/cors",
+      "type": "build"
+    },
+    {
+      "name": "@types/express",
+      "type": "build"
+    },
+    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -131,6 +139,10 @@
       "type": "build"
     },
     {
+      "name": "cors",
+      "type": "build"
+    },
+    {
       "name": "electron",
       "type": "build"
     },
@@ -185,6 +197,10 @@
     {
       "name": "eslint",
       "version": "^8",
+      "type": "build"
+    },
+    {
+      "name": "express",
       "type": "build"
     },
     {

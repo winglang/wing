@@ -32,8 +32,8 @@ npm run storybook
 # Build
 npm run release
 npm exec vite-node scripts/builderElectronApp.mts
-# Open
-open "release/mac-arm64/Wing Console.app" --args $(pwd)/electron/main/demo.wx
+# Open the included demo.wx
+open electron/main/demo.wx -a $(pwd)/release/mac-arm64/Wing\ Console.app
 ```
 
 ## Deeplinks

@@ -1,9 +1,7 @@
-import {ElectronApi} from "../electron/preload";
+import { ElectronApi, ElectronApiKey } from "../electron/preload";
 
 declare global {
-    interface Window {
-        electronTRPC: ElectronApi;
-    }
+  interface Window {
+    [ElectronApiKey]?: ElectronApi;
+  }
 }
-
-export {};
