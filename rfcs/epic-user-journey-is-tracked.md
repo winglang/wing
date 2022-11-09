@@ -1,8 +1,5 @@
 **Status:** _RFC_
 
-TODO:
-- [ ] attach user stories issues to User Stories
-
 # EPIC - User Journey is Tracked
 
 To learn more about the origin of this EPIC, please visit [The Community is the Product](/rfcs/the-community-is-the-product.md) document 
@@ -65,14 +62,18 @@ User entity in the system
 
 ### Analytics Setup 
 
-**Status:** _RFC_
+| Status | Story| 
+| --- | --- | 
+| RFC    | https://github.com/winglang/wing/issues/506 |
+
 
 We want to have accounts in the relevant services and we want to establish a formalize way for naming and collection [standards](#Naming-and-collection-standards), we would also like to create and update our [tracking plane](#Tracking-Plane) that describes what are we measuring and where.
 
 ### Tracking visitors and their onboarding process
 
-**Status:** _RFC_
-
+| Status | Story| 
+| --- | --- | 
+| RFC    | https://github.com/winglang/wing/issues/507 |
 When a visitor goes into winglang.io or any.winglang.io or monada.co we report page load to Segment that reports it to Google Analytics and Mixpanel, it keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview , completing the form, and successfully clicking on the email.
 
 We are able to answer the following questions:
