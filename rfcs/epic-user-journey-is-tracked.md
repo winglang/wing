@@ -57,6 +57,7 @@ User entity in the system
 - Google Analytics - GA used for public websites analytics 
 - Mixpanel - used for deep app and user analytics 
 - Pipedrive - our CRM, used for sending email and tracking different sale oriented workflows
+- FullStory - an ability to see what our users is doing on the screen (we should remove it eventually from the public site) 
 
 ## Prioritize User Stories
 
