@@ -73,7 +73,7 @@ pub fn scan_captures(ast_root: &Scope) {
 						// TODO: what do I do with these?
 						scan_captures_in_inflight_scope(&constructor.statements);
 					}
-					Flight::Either => scan_captures(&constructor.statements),
+					Flight::Independent => scan_captures(&constructor.statements),
 					Flight::Pre => scan_captures(&constructor.statements),
 				}
 				for m in methods.iter() {
@@ -82,7 +82,7 @@ pub fn scan_captures(ast_root: &Scope) {
 							// TODO: what do I do with these?
 							scan_captures_in_inflight_scope(&m.statements);
 						}
-						Flight::Either => scan_captures(&constructor.statements),
+						Flight::Independent => scan_captures(&constructor.statements),
 						Flight::Pre => scan_captures(&m.statements),
 					}
 				}
@@ -156,7 +156,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 					res.extend(
 						resource
 							.methods()
-							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Flight::In | Flight::Either))
+							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Flight::In | Flight::Independent))
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
 								def: CaptureDef { method: name.clone() },

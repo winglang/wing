@@ -1299,7 +1299,7 @@ impl<'a> TypeChecker<'a> {
 }
 
 fn can_call_flight(fn_flight: Flight, scope_flight: Flight) -> bool {
-	if fn_flight == Flight::Either {
+	if fn_flight == Flight::Independent {
 		// if the function we're trying to call is an "either-flight" function,
 		// then it can be called both in preflight, inflight, and in
 		// either-flight scopes

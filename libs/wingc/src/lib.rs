@@ -68,7 +68,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
-			flight: Flight::Either,
+			flight: Flight::Independent,
 		}),
 		scope,
 		types,

@@ -305,7 +305,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 		}
 		Statement::FunctionDefinition(func_def) => match func_def.signature.flight {
 			Flight::In => jsify_inflight_function(func_def, &out_dir),
-			Flight::Either => unimplemented!(),
+			Flight::Independent => unimplemented!(),
 			Flight::Pre => jsify_function(
 				format!("function {}", jsify_symbol(&func_def.name)).as_str(),
 				&func_def.parameters,
