@@ -211,7 +211,7 @@ exports[`wing cdktf compile expressions_binary_operators.w > cdk.tf.json 1`] = `
   "terraform": {
     "backend": {
       "local": {
-        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/expressions_binary_operators.w/terraform.root.tfstate",
+        "path": "<STATE_FILE>",
       },
     },
     "required_providers": {
@@ -258,7 +258,7 @@ exports[`wing cdktf compile expressions_string_interpolation.w > cdk.tf.json 1`]
   "terraform": {
     "backend": {
       "local": {
-        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/expressions_string_interpolation.w/terraform.root.tfstate",
+        "path": "<STATE_FILE>",
       },
     },
     "required_providers": {
@@ -473,7 +473,7 @@ exports[`wing cdktf compile statements_if.w > cdk.tf.json 1`] = `
   "terraform": {
     "backend": {
       "local": {
-        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/statements_if.w/terraform.root.tfstate",
+        "path": "<STATE_FILE>",
       },
     },
     "required_providers": {
@@ -520,7 +520,7 @@ exports[`wing cdktf compile statements_variable_declarations.w > cdk.tf.json 1`]
   "terraform": {
     "backend": {
       "local": {
-        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/statements_variable_declarations.w/terraform.root.tfstate",
+        "path": "<STATE_FILE>",
       },
     },
     "required_providers": {

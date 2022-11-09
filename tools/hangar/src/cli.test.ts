@@ -62,10 +62,15 @@ beforeAll(async () => {
   });
 }, 1000 * 60);
 
-function sanitize_json_assets(path: string) {
+function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
   const assetSourceRegex = /"assets\/.+"/g;
-  const jsonText = JSON.stringify(fs.readJsonSync(path));
+  const json = fs.readJsonSync(path);
+  if(json?.terraform?.backend?.local?.path) {
+    json.terraform.backend.local.path = "<STATE_FILE>";
+  }
+
+  const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
     .replace(assetKeyRegex, '"<ASSET_KEY>"')
     .replace(assetSourceRegex, '"<ASSET_SOURCE>"');
@@ -87,8 +92,8 @@ test.each(validWingFiles)(
 
       await $`npx @winglang/wing compile ${path.join(validTestDir, wingFile)}`;
 
-      expect(sanitize_json_assets(tf_manifest)).toMatchSnapshot("manifest.json");
-      expect(sanitize_json_assets(tf_json)).toMatchSnapshot("cdk.tf.json");
+      expect(sanitize_json_paths(tf_manifest)).toMatchSnapshot("manifest.json");
+      expect(sanitize_json_paths(tf_json)).toMatchSnapshot("cdk.tf.json");
     });
   },
   {

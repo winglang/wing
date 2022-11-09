@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest run",
+    "test:watch": "vitest watch",
+    "test:update": "vitest run --update",
     "registry": "verdaccio -c ./verdaccio.config.yaml",
     "publish-local-tgz": "npm publish --@winglang:registry=http://localhost:4873 "
   },
