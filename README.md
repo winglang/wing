@@ -120,7 +120,7 @@ inflight handler(message: str) :str {
 
 queue.on_message(handler);
 ```
-Next step is to test your program locally using wing console or a REPL
+Next step is to test your program locally using the Wing Console or a REPL.
 
 ##### Testing the program using wing console 
 *(currently available only on MacOS)*
