@@ -278,7 +278,9 @@ jobs:
         run: |
           export HANGAR_WING_TGZ=$(readlink -f ../../wing/*.tgz)
           export HANGAR_WINGSDK_TGZ=$(readlink -f ../../wingsdk/*.tgz)
-          npm run test
+          echo "Wing CLI: $HANGAR_WING_TGZ"
+          echo "WingSDK: $HANGAR_WINGSDK_TGZ"
+          HANGAR_WING_TGZ=$HANGAR_WING_TGZ HANGAR_WINGSDK_TGZ=$HANGAR_WINGSDK_TGZ npm run test
 
   build-vscode:
     name: "Build VSCode Extension"
