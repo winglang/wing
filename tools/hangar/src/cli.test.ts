@@ -57,26 +57,37 @@ beforeAll(async () => {
 
     // ensure version works before bothering with the rest of the tests
     await $`cd ${tmpDir}`;
-    await $`npm cache add @winglang/wing`;
-    await $`npm cache add @winglang/wingsdk`;
-    await $`npm cache add @winglang/polycons`;
     let output = await $`npx @winglang/wing --version`;
 
     expect(output.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
   });
 }, 1000 * 60);
 
+function sanitize_cdftf_json(path: string) {
+  const assetKeyRegex = /"asset\..+"/g;
+  const assetSourceRegex = /"assets\/.+"/g;
+  const jsonText = JSON.stringify(fs.readJsonSync(path));
+  const sanitizedJsonText = jsonText.replace(assetKeyRegex, '"<ASSET_KEY>"').replace(assetSourceRegex, '"<ASSET_SOURCE>"');
+  return JSON.parse(sanitizedJsonText);
+}
+
 test.each(validWingFiles)(
-  "wing compile %s",
+  "wing cdktf compile %s",
   async (wingFile) => {
     await within(async () => {
       $.env = shellEnv;
-      $.cwd = tmpDir;
-      await $`cd ${tmpDir}`;
+      const test_dir = path.join(tmpDir, path.basename(wingFile));
+      const tf_manifest = path.join(test_dir, 'cdktf.out/manifest.json');
+      const tf_json = path.join(test_dir, 'cdktf.out/stacks/root/cdk.tf.json');
 
-      let output = await $`npx @winglang/wing compile ${wingFile}`;
+      await $`mkdir -p ${test_dir}`;
+      await $`cd ${test_dir}`;
+      $.cwd = test_dir;
 
-      console.log(output.stdout);
+      await $`npx @winglang/wing compile ${wingFile}`;       
+
+      expect(sanitize_cdftf_json(tf_manifest)).toMatchSnapshot()
+      expect(sanitize_cdftf_json(tf_json)).toMatchSnapshot()
     });
   },
   {

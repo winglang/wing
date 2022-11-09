@@ -1,0 +1,550 @@
+// Vitest Snapshot v1
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/captures.w 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/captures.w 2`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_cloudFunction_IamRole_DAEC3578": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/IamRole",
+            "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/IamRolePolicy",
+            "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_cloudFunction_6A57BA0A": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/Default",
+            "uniqueId": "root_cloudFunction_6A57BA0A",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME__PublicBucket": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+            "BUCKET_NAME__cloud.Bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "cloud.Function",
+          },
+        },
+        "function_name": "cloud.Function",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_PublicBucket_73AE6C59": {
+        "//": {
+          "metadata": {
+            "path": "root/PublicBucket/Default",
+            "uniqueId": "root_PublicBucket_73AE6C59",
+          },
+        },
+      },
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+      },
+      "root_cloudFunction_Bucket_245CAEB7": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/Bucket",
+            "uniqueId": "root_cloudFunction_Bucket_245CAEB7",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_policy": {
+      "root_PublicBucket_PublicPolicy_98DDAE96": {
+        "//": {
+          "metadata": {
+            "path": "root/PublicBucket/PublicPolicy",
+            "uniqueId": "root_PublicBucket_PublicPolicy_98DDAE96",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"]}]}",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_PublicBucket_Encryption_FB9A8400": {
+        "//": {
+          "metadata": {
+            "path": "root/PublicBucket/Encryption",
+            "uniqueId": "root_PublicBucket_Encryption_FB9A8400",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_cloudFunction_S3Object_C8435368": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/S3Object",
+            "uniqueId": "root_cloudFunction_S3Object_C8435368",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_binary_operators.w 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_binary_operators.w 2`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/expressions_binary_operators.w/terraform.root.tfstate",
+      },
+    },
+    "required_providers": {
+      "aws": {
+        "source": "aws",
+        "version": "4.36.1",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_string_interpolation.w 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/expressions_string_interpolation.w 2`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/expressions_string_interpolation.w/terraform.root.tfstate",
+      },
+    },
+    "required_providers": {
+      "aws": {
+        "source": "aws",
+        "version": "4.36.1",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/hello.w 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/hello.w 2`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_cloudQueue_OnMessagef2236b9947ff57cf_IamRole_1BC2CA4B": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/OnMessage-f2236b9947ff57cf/IamRole",
+            "uniqueId": "root_cloudQueue_OnMessagef2236b9947ff57cf_IamRole_1BC2CA4B",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_cloudQueue_OnMessagef2236b9947ff57cf_IamRolePolicy_53F6F7E2": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/OnMessage-f2236b9947ff57cf/IamRolePolicy",
+            "uniqueId": "root_cloudQueue_OnMessagef2236b9947ff57cf_IamRolePolicy_53F6F7E2",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudQueue_OnMessagef2236b9947ff57cf_IamRole_1BC2CA4B.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_cloudQueue_OnMessagef2236b9947ff57cf_IamRolePolicyAttachment_B18EEFFB": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/OnMessage-f2236b9947ff57cf/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueue_OnMessagef2236b9947ff57cf_IamRolePolicyAttachment_B18EEFFB",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudQueue_OnMessagef2236b9947ff57cf_IamRole_1BC2CA4B.name}",
+      },
+    },
+    "aws_lambda_event_source_mapping": {
+      "root_cloudQueue_EventSourceMapping_A2041279": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/EventSourceMapping",
+            "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
+          },
+        },
+        "batch_size": 1,
+        "event_source_arn": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
+        "function_name": "\${aws_lambda_function.root_cloudQueue_OnMessagef2236b9947ff57cf_6BC03D57.function_name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_cloudQueue_OnMessagef2236b9947ff57cf_6BC03D57": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/OnMessage-f2236b9947ff57cf/Default",
+            "uniqueId": "root_cloudQueue_OnMessagef2236b9947ff57cf_6BC03D57",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "OnMessage-f2236b9947ff57cf",
+          },
+        },
+        "function_name": "OnMessage-f2236b9947ff57cf",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_cloudQueue_OnMessagef2236b9947ff57cf_IamRole_1BC2CA4B.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueue_OnMessagef2236b9947ff57cf_Bucket_ABACB2AB.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudQueue_OnMessagef2236b9947ff57cf_S3Object_AF8A5823.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+      },
+      "root_cloudQueue_OnMessagef2236b9947ff57cf_Bucket_ABACB2AB": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/OnMessage-f2236b9947ff57cf/Bucket",
+            "uniqueId": "root_cloudQueue_OnMessagef2236b9947ff57cf_Bucket_ABACB2AB",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_cloudQueue_OnMessagef2236b9947ff57cf_S3Object_AF8A5823": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/OnMessage-f2236b9947ff57cf/S3Object",
+            "uniqueId": "root_cloudQueue_OnMessagef2236b9947ff57cf_S3Object_AF8A5823",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudQueue_OnMessagef2236b9947ff57cf_Bucket_ABACB2AB.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_if.w 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_if.w 2`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/statements_if.w/terraform.root.tfstate",
+      },
+    },
+    "required_providers": {
+      "aws": {
+        "source": "aws",
+        "version": "4.36.1",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_variable_declarations.w 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing cdktf compile /Users/markm/Documents/GitHub/winglang/examples/tests/valid/statements_variable_declarations.w 2`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "terraform": {
+    "backend": {
+      "local": {
+        "path": "/Users/markm/Documents/GitHub/winglang/tools/hangar/tmp/statements_variable_declarations.w/terraform.root.tfstate",
+      },
+    },
+    "required_providers": {
+      "aws": {
+        "source": "aws",
+        "version": "4.36.1",
+      },
+    },
+  },
+}
+`;
