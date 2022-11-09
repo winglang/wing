@@ -23,6 +23,8 @@
 Many basic features as still missing. You are more than welcome to join the ride, but don't 
 expect to be able to do much with it at the moment. Check out our [roadmap] for more information.
 
+Do you have feedback on this README? Submit comments [here](https://github.com/winglang/wing/pull/497/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5).
+
 ## Welcome! :wave:
 
 Wing is the world's first [cloud-oriented programming
