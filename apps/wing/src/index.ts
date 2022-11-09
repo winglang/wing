@@ -2,11 +2,11 @@
 /// <reference lib="dom" />
 
 import { compile, upgrade } from "./commands";
+import { join, resolve } from "path";
 
 import { Command } from "commander";
 import debug from "debug";
 import open from "open";
-import { resolve } from "path";
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const log = debug("wing:cli");
@@ -33,7 +33,11 @@ async function main() {
     .command("compile")
     .description("Compiles a Wing program")
     .argument("<entrypoint>", "program .w entrypoint")
-    .option("-o, --out-dir <out-dir>", "Output directory", process.cwd())
+    .option(
+      "-o, --out-dir <out-dir>",
+      "Output directory",
+      join(process.cwd(), "target")
+    )
     .option(
       "-t, --target <target>",
       "Target platform (options: 'tf-aws', 'sim')",
