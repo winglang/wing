@@ -1,10 +1,12 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::Scope;
-use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics};
+use ast::{Scope, Symbol};
+use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
+use type_check::{FunctionSignature, Type};
 
 use crate::parser::Parser;
+use std::borrow::BorrowMut;
 use std::cell::RefCell;
 use std::fs;
 use std::path::PathBuf;
@@ -60,10 +62,48 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	scope.set_env(TypeEnv::new(None, None, false, Flight::Pre));
+
+	// inflight "print"
+	add_builtin(
+		"print",
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Flight::In,
+		}),
+		scope,
+		types,
+	);
+	// preflight "print"
+	add_builtin(
+		"print",
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Flight::Pre,
+		}),
+		scope,
+		types,
+	);
+
 	let mut tc = TypeChecker::new(types);
 	tc.type_check_scope(scope);
 
 	tc.diagnostics.into_inner()
+}
+
+fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
+	let sym = Symbol {
+		name: name.to_string(),
+		span: WingSpan {
+			start: CharacterLocation { row: 0, column: 0 },
+			end: CharacterLocation { row: 0, column: 0 },
+			start_byte: 0,
+			end_byte: 0,
+			file_id: "".into(),
+		},
+	};
+	scope.env.as_mut().unwrap().define(&sym, types.add_type(typ));
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutput, Diagnostics> {

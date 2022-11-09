@@ -5,6 +5,8 @@ let bucket2 = new cloud.Bucket(cloud.BucketProps {
   public: true
 }) as "PublicBucket";
 
+print("Hello!");
+
 inflight handler(event: str): str {
   bucket1.put("file.txt", "data");
   bucket2.get("file.txt");
