@@ -73,7 +73,7 @@ pub fn scan_captures(ast_root: &Scope) {
 						// TODO: what do I do with these?
 						scan_captures_in_inflight_scope(&constructor.statements);
 					}
-					Flight::Both => {
+					Flight::Either => {
 						// TODO: what do I do with these?
 						scan_captures_in_inflight_scope(&constructor.statements);
 					}
@@ -85,7 +85,7 @@ pub fn scan_captures(ast_root: &Scope) {
 							// TODO: what do I do with these?
 							scan_captures_in_inflight_scope(&m.statements);
 						}
-						Flight::Both => {
+						Flight::Either => {
 							// TODO: what do I do with these?
 							scan_captures_in_inflight_scope(&constructor.statements);
 						}
@@ -162,7 +162,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 					res.extend(
 						resource
 							.methods()
-							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Flight::In | Flight::Both))
+							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Flight::In | Flight::Either))
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
 								def: CaptureDef { method: name.clone() },
@@ -215,7 +215,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 	let env = scope.env.as_ref().unwrap();
 
 	// Make sure we're looking for captures only in inflight or either-flight code
-	assert!(matches!(env.flight, Flight::In | Flight::Both));
+	assert!(matches!(env.flight, Flight::In | Flight::Either));
 
 	for s in scope.statements.iter() {
 		match s {

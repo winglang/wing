@@ -55,7 +55,7 @@ impl std::fmt::Display for Symbol {
 pub enum Flight {
 	In,
 	Pre,
-	Both,
+	Either,
 }
 
 impl Display for Flight {
@@ -63,7 +63,7 @@ impl Display for Flight {
 		match self {
 			Flight::In => write!(f, "inflight"),
 			Flight::Pre => write!(f, "preflight"),
-			Flight::Both => write!(f, "either-flight"),
+			Flight::Either => write!(f, "either-flight"),
 		}
 	}
 }
