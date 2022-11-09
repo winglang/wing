@@ -173,7 +173,7 @@ Wing application through the terminal.
     let queue = simulator.getResourceByPath("root/cloud.Queue") // as sdk.cloud.IQueueClient
     await queue.push("Wing") // will output "Hello Wing" to console
     ```
-3. You should expect the node console to output "Hello Wing" 
+3. You should expect the string "Hello Wing" printed to the terminal.
 4. ***Congratulations! You have just written and tested your first Wing program!***
 
 ##### Compile your program to AWS & Terraform
