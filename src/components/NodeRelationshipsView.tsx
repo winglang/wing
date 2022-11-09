@@ -7,6 +7,8 @@ import { useState } from "react";
 
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 
+import { NodeListItem } from "./NodeListItem.js";
+
 export interface Relationships {
   self: {
     icon: React.ReactNode;
@@ -58,35 +60,6 @@ function times<T>(times: number, callback: (index: number) => T) {
   return values;
 }
 
-interface ItemButtonProps {
-  title?: string;
-  disabled?: boolean;
-  onClick?: () => void;
-}
-
-function ItemButton({
-  title,
-  disabled,
-  onClick,
-  children,
-}: React.PropsWithChildren<ItemButtonProps>) {
-  return (
-    <button
-      className={classNames(
-        "flex-shrink-0 max-w-full truncate bg-slate-50 border border-slate-300/75 shadow-sm text-xs px-2.5 py-1 flex items-center gap-1.5 min-w-0",
-        {
-          "cursor-not-allowed": disabled,
-          "cursor-pointer hover:bg-slate-100": !disabled,
-        },
-      )}
-      title={title}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-
 function ItemButtonContainer({
   spacerItems = 0,
   children,
@@ -115,11 +88,11 @@ function LoadMoreButton({
 }) {
   const text = `Load ${itemCount} more…`;
   return (
-    <ItemButton title={text} onClick={onClick}>
+    <NodeListItem title={text} onClick={onClick}>
       <span className="w-full text-center italic px-2 text-slate-500">
         {text}
       </span>
-    </ItemButton>
+    </NodeListItem>
   );
 }
 
@@ -184,11 +157,11 @@ export function NodeRelationshipsView({
                 })}
               >
                 {relationships.inbound.length === 0 && (
-                  <ItemButton title={NO_INBOUND_TEXT} disabled>
+                  <NodeListItem title={NO_INBOUND_TEXT} disabled>
                     <span className="px-2 italic text-slate-500">
                       {NO_INBOUND_TEXT}
                     </span>
-                  </ItemButton>
+                  </NodeListItem>
                 )}
 
                 {relationships.inbound
@@ -199,7 +172,7 @@ export function NodeRelationshipsView({
                       : relationships.inbound.length,
                   )
                   .map((resource) => (
-                    <ItemButton
+                    <NodeListItem
                       key={resource.path}
                       title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
@@ -208,7 +181,7 @@ export function NodeRelationshipsView({
                         {resource.icon}
                       </div>
                       <div className="truncate">{resource.id}</div>
-                    </ItemButton>
+                    </NodeListItem>
                   ))}
 
                 {relationships.inbound.length > MAX_ITEM_COUNT && (
@@ -223,7 +196,7 @@ export function NodeRelationshipsView({
               {viewAllInbound && relationships.inbound.length > 0 && (
                 <ScrollableArea overflowY className="flex flex-col gap-0.5">
                   {relationships.inbound.map((resource) => (
-                    <ItemButton
+                    <NodeListItem
                       key={resource.path}
                       title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
@@ -232,7 +205,7 @@ export function NodeRelationshipsView({
                         {resource.icon}
                       </div>
                       <div className="truncate">{resource.id}</div>
-                    </ItemButton>
+                    </NodeListItem>
                   ))}
                 </ScrollableArea>
               )}
@@ -252,14 +225,14 @@ export function NodeRelationshipsView({
               parent
             </span>
             {!relationships.parent && (
-              <ItemButton title={NO_PARENT_TEXT} disabled>
+              <NodeListItem title={NO_PARENT_TEXT} disabled>
                 <span className="px-2 italic text-slate-500">
                   {NO_PARENT_TEXT}
                 </span>
-              </ItemButton>
+              </NodeListItem>
             )}
             {relationships.parent && (
-              <ItemButton
+              <NodeListItem
                 title={relationships.parent.id}
                 onClick={() => {
                   if (relationships.parent) {
@@ -271,7 +244,7 @@ export function NodeRelationshipsView({
                   {relationships.parent.icon}
                 </div>
                 <div className="truncate">{relationships.parent.id}</div>
-              </ItemButton>
+              </NodeListItem>
             )}
           </ItemButtonContainer>
         </div>
@@ -343,11 +316,11 @@ export function NodeRelationshipsView({
                 })}
               >
                 {relationships.children.length === 0 && (
-                  <ItemButton title={NO_CHILDREN_TEXT} disabled>
+                  <NodeListItem title={NO_CHILDREN_TEXT} disabled>
                     <span className="px-2 italic text-slate-500">
                       {NO_CHILDREN_TEXT}
                     </span>
-                  </ItemButton>
+                  </NodeListItem>
                 )}
 
                 {relationships.children
@@ -358,7 +331,7 @@ export function NodeRelationshipsView({
                       : relationships.children.length,
                   )
                   .map((resource, childIndex) => (
-                    <ItemButton
+                    <NodeListItem
                       key={resource.path}
                       title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
@@ -367,7 +340,7 @@ export function NodeRelationshipsView({
                         {resource.icon}
                       </div>
                       <div className="truncate">{resource.id}</div>
-                    </ItemButton>
+                    </NodeListItem>
                   ))}
 
                 {relationships.children.length > MAX_ITEM_COUNT && (
@@ -382,14 +355,14 @@ export function NodeRelationshipsView({
               {viewAllChildren && (
                 <ScrollableArea overflowY className="flex flex-col gap-0.5">
                   {relationships.children.length === 0 && (
-                    <ItemButton title={NO_CHILDREN_TEXT} disabled>
+                    <NodeListItem title={NO_CHILDREN_TEXT} disabled>
                       <span className="px-2 italic text-slate-500">
                         {NO_CHILDREN_TEXT}
                       </span>
-                    </ItemButton>
+                    </NodeListItem>
                   )}
                   {relationships.children.map((resource) => (
-                    <ItemButton
+                    <NodeListItem
                       key={resource.path}
                       title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
@@ -398,7 +371,7 @@ export function NodeRelationshipsView({
                         {resource.icon}
                       </div>
                       <div className="truncate">{resource.id}</div>
-                    </ItemButton>
+                    </NodeListItem>
                   ))}
                 </ScrollableArea>
               )}
@@ -439,11 +412,11 @@ export function NodeRelationshipsView({
                 })}
               >
                 {relationships.outbound.length === 0 && (
-                  <ItemButton title={NO_OUTBOUND_TEXT} disabled>
+                  <NodeListItem title={NO_OUTBOUND_TEXT} disabled>
                     <span className="px-2 italic text-slate-500">
                       {NO_OUTBOUND_TEXT}
                     </span>
-                  </ItemButton>
+                  </NodeListItem>
                 )}
 
                 {relationships.outbound
@@ -454,7 +427,7 @@ export function NodeRelationshipsView({
                       : relationships.outbound.length,
                   )
                   .map((resource) => (
-                    <ItemButton
+                    <NodeListItem
                       key={resource.path}
                       title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
@@ -463,7 +436,7 @@ export function NodeRelationshipsView({
                         {resource.icon}
                       </div>
                       <div className="truncate">{resource.id}</div>
-                    </ItemButton>
+                    </NodeListItem>
                   ))}
 
                 {relationships.outbound.length > MAX_ITEM_COUNT && (
@@ -478,7 +451,7 @@ export function NodeRelationshipsView({
               {viewAllOutbound && relationships.outbound.length > 0 && (
                 <ScrollableArea overflowY className="flex flex-col gap-0.5">
                   {relationships.outbound.map((resource) => (
-                    <ItemButton
+                    <NodeListItem
                       key={resource.path}
                       title={resource.path}
                       onClick={() => onNodeClick?.(resource.path)}
@@ -487,7 +460,7 @@ export function NodeRelationshipsView({
                         {resource.icon}
                       </div>
                       <div className="truncate">{resource.id}</div>
-                    </ItemButton>
+                    </NodeListItem>
                   ))}
                 </ScrollableArea>
               )}

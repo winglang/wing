@@ -1,6 +1,4 @@
-import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
-import classNames from "classnames";
-import { PropsWithChildren, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { WingSimulatorSchema } from "../../electron/main/wingsdk.js";
 import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs.js";
@@ -16,111 +14,11 @@ import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
 import { Node, useNodeMap } from "../utils/nodeMap.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
-import { NodeInteractionView } from "./NodeInteractionView.js";
+import { MetadataPanel } from "./MetadataPanel.js";
 import {
   NodeRelationshipsView,
   Relationships,
 } from "./NodeRelationshipsView.js";
-
-interface InspectorSectionHeadingProps {
-  open?: boolean;
-  text: string;
-  onClick?: () => void;
-}
-
-const InspectorSectionHeading = ({
-  open,
-  text,
-  onClick,
-}: InspectorSectionHeadingProps) => {
-  const Icon = open ? ChevronDownIcon : ChevronRightIcon;
-  return (
-    <button
-      className={classNames(
-        "w-full px-4 py-1 flex items-center gap-1 hover:bg-slate-50 group relative",
-        // "outline-none focus:ring ring-sky-300",
-      )}
-      onClick={onClick}
-    >
-      <Icon
-        className="-ml-1 w-4 h-4 text-slate-500 group-hover:text-slate-600"
-        aria-hidden="true"
-      />
-      <div className="text-slate-500 font-medium group-hover:text-slate-600">
-        {text}
-      </div>
-    </button>
-  );
-};
-
-interface InspectorSectionProps {
-  open?: boolean;
-  text: string;
-  onClick?: () => void;
-}
-
-const InspectorSection = ({
-  open,
-  text,
-  onClick,
-  children,
-}: PropsWithChildren<InspectorSectionProps>) => {
-  return (
-    <>
-      <InspectorSectionHeading text={text} open={open} onClick={onClick} />
-      {open && children}
-    </>
-  );
-};
-
-interface Attribute {
-  key: string;
-  value: string;
-  type?: "url";
-  url?: string;
-}
-
-interface AttributeGroup {
-  groupName: string;
-  attributes: Attribute[];
-}
-
-interface LinkProps
-  extends React.DetailedHTMLProps<
-    React.AnchorHTMLAttributes<HTMLAnchorElement>,
-    HTMLAnchorElement
-  > {}
-
-const Link = ({ className, ...props }: LinkProps) => {
-  return (
-    <a
-      className={classNames(
-        "underline font-medium text-sky-500 hover:text-sky-600",
-        "rounded",
-        "outline-none focus:ring ring-sky-600",
-        className,
-      )}
-      {...props}
-    />
-  );
-};
-
-function AttributeView({ attribute }: { attribute: Attribute }) {
-  return (
-    <>
-      <div className="text-slate-500">{attribute.key}</div>
-      <div className="col-span-4">
-        {attribute.type === "url" ? (
-          <Link href={attribute.url}>{attribute.value}</Link>
-        ) : (
-          <div className="max-w-full truncate text-slate-700">
-            {attribute.value}
-          </div>
-        )}
-      </div>
-    </>
-  );
-}
 
 export interface VscodeLayoutProps {
   schema: WingSimulatorSchema | undefined;
@@ -169,10 +67,35 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
   }, [nodeMap, treeMenu.currentItemId]);
 
   const [currentNode, setCurrentNode] = useState<Node>();
+  const [currentInbound, setCorrectInbound] = useState<Node[]>([]);
+  const [currentOutbound, setCurrentOutbound] = useState<Node[]>([]);
+
   useEffect(() => {
     const node = nodeMap?.find(treeMenu.currentItemId);
     setCurrentNode(node);
   }, [nodeMap, treeMenu.currentItemId]);
+
+  useEffect(() => {
+    if (!currentNode) {
+      return;
+    }
+    const outbound: Node[] = [];
+    const inbound: Node[] = [];
+    for (const path of currentNode.outbound) {
+      const node = nodeMap?.find(path);
+      if (node) {
+        outbound.push(node);
+      }
+    }
+    for (const path of currentNode.inbound) {
+      const node = nodeMap?.find(path);
+      if (node) {
+        inbound.push(node);
+      }
+    }
+    setCorrectInbound(inbound);
+    setCurrentOutbound(outbound);
+  }, [currentNode]);
 
   const relationships = useMemo(() => {
     if (!currentNode) {
@@ -181,6 +104,7 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
 
     const parentNode = nodeMap?.find(currentNode.parent);
 
+    // todo remove for new UI
     const relationships: Relationships = {
       parent: parentNode
         ? {
@@ -239,91 +163,6 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
     };
     return relationships;
   }, [currentNode]);
-
-  const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>();
-  useEffect(() => {
-    const node = nodeMap?.find(treeMenu.currentItemId);
-    setCurrentNode(node);
-    if (!node) {
-      setAttributeGroups(undefined);
-    } else {
-      let attributeGroups: AttributeGroup[] = [
-        {
-          groupName: "Node",
-          attributes: [
-            { key: "ID", value: node.id },
-            {
-              key: "Path",
-              value: node.path,
-            },
-            { key: "Type", value: node.type },
-            {
-              key: "Source",
-              value: "src/demo.w (20:2)",
-              type: "url",
-              url: "http://",
-            },
-          ],
-        },
-      ];
-
-      if (node.type === "wingsdk.cloud.Bucket") {
-        attributeGroups = [
-          ...attributeGroups,
-          {
-            groupName: "Bucket Attributes",
-            attributes: [
-              {
-                key: "URL",
-                value: "http://localhost:3012",
-                type: "url",
-                url: "http://localhost:3012",
-              },
-              { key: "Secure", value: "true" },
-            ] as Attribute[],
-          },
-        ];
-      }
-
-      if (node.type === "wingsdk.cloud.Endpoint") {
-        attributeGroups = [
-          ...attributeGroups,
-          {
-            groupName: "Endpoint Attributes",
-            attributes: [
-              {
-                key: "URL",
-                value: "http://localhost:3012",
-                type: "url",
-                url: "http://localhost:3012",
-              },
-              { key: "Secure", value: "true" },
-            ] as Attribute[],
-          },
-        ];
-      }
-
-      setAttributeGroups(attributeGroups);
-    }
-    // }, [nodeMap, treeMenu.currentItemId]);
-  }, [treeMenu.currentItemId]);
-
-  const [openInspectorSections, setOpenInspectorSections] = useState([
-    "Node",
-    "interact",
-  ]);
-  const toggleInspectorSection = (section: string) => {
-    setOpenInspectorSections(([...sections]) => {
-      const index = sections.indexOf(section);
-      if (index !== -1) {
-        sections.splice(index, 1);
-        return sections;
-      } else {
-        sections.push(section);
-        return sections;
-      }
-    });
-  };
 
   return (
     <div className="h-full flex flex-col bg-slate-100 select-none">
@@ -386,58 +225,17 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
             </div>
 
             <LeftResizableWidget className="bg-white flex-shrink min-w-[20rem] border-l">
-              <ScrollableArea overflowY className="h-full text-sm">
-                {currentNode && (
-                  <>
-                    {/* <NodeAttributes node={currentNode.schema} />
-                <div className="border-t px-4 py-2">
-                  <NodeInteractionView node={currentNode.schema} />
-                </div> */}
-                    {attributeGroups?.map((attributeGroup) => {
-                      return (
-                        <div key={attributeGroup.groupName}>
-                          <InspectorSection
-                            text={attributeGroup.groupName}
-                            open={openInspectorSections.includes(
-                              attributeGroup.groupName,
-                            )}
-                            onClick={() =>
-                              toggleInspectorSection(attributeGroup.groupName)
-                            }
-                          >
-                            <div className="border-t">
-                              <div className="px-4 py-1.5 grid grid-cols-5 gap-y-1 gap-x-4 bg-slate-100">
-                                {attributeGroup.attributes.map((attribute) => {
-                                  return (
-                                    <AttributeView
-                                      key={attribute.key}
-                                      attribute={attribute}
-                                    />
-                                  );
-                                })}
-                              </div>
-                            </div>
-                          </InspectorSection>
-                        </div>
-                      );
-                    })}
-
-                    {/* {currentNode.type !== "constructs.Construct" && ( */}
-                    {currentNode.type.startsWith("wingsdk.cloud.") &&
-                      currentNode.type !== "wingsdk.cloud.Custom" && (
-                        <InspectorSection
-                          text="Interact"
-                          open={openInspectorSections.includes("interact")}
-                          onClick={() => toggleInspectorSection("interact")}
-                        >
-                          <div className="border-t px-4 py-2 bg-slate-100">
-                            <NodeInteractionView node={currentNode.schema} />
-                          </div>
-                        </InspectorSection>
-                      )}
-                  </>
-                )}
-              </ScrollableArea>
+              {currentNode && (
+                <MetadataPanel
+                  node={currentNode}
+                  inbound={currentInbound}
+                  outbound={currentOutbound}
+                  onConnectionNodeClick={(path) => {
+                    treeMenu.expand(path);
+                    treeMenu.setCurrent(path);
+                  }}
+                />
+              )}
             </LeftResizableWidget>
           </div>
         </div>
