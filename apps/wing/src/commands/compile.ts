@@ -53,7 +53,10 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const workDir = resolve(outDir, ".wing");
   log("work dir: %s", workDir);
 
-  await mkdir(workDir, { recursive: true });
+  await Promise.all([
+    mkdir(workDir, { recursive: true }),
+    mkdir(outDir, { recursive: true }),
+  ]);
 
   const args = [argv[0], wingFile, workDir];
 
@@ -63,12 +66,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       ...process.env,
       RUST_BACKTRACE: "full",
       WINGSDK_MANIFEST_ROOT,
+      WINGSDK_SYNTH_DIR: outDir,
       WINGC_PREFLIGHT,
     },
     preopens: {
       [wingDir]: wingDir, // for Rust's access to the source file
       [workDir]: workDir, // for Rust's access to the work directory
       [WINGSDK_MANIFEST_ROOT]: WINGSDK_MANIFEST_ROOT, // .jsii access
+      [outDir]: outDir, // for Rust's access to the output directory
     },
   });
 
