@@ -167,11 +167,11 @@ Wing application through the terminal.
     ```
 2.  Run the following code inside the REPL:
     ```js
-    let sdk = require("@winglang/wingsdk")
-    let simulator = new sdk.testing.Simulator({ simfile : "./app.wx"})
-    await simulator.start()
-    let queue = simulator.getResourceByPath("root/cloud.Queue") // as sdk.cloud.IQueueClient
-    await queue.push("Wing") // will output "Hello Wing" to console
+    const sdk = require("@winglang/wingsdk");
+    const simulator = new sdk.testing.Simulator({ simfile : "./app.wx"});
+    await simulator.start();
+    const queue = simulator.getResourceByPath("root/cloud.Queue");
+    await queue.push("Wing");
     ```
 3. You should expect the string "Hello Wing" printed to the terminal.
 4. ***Congratulations! You have just written and tested your first Wing program!***
