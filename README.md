@@ -155,7 +155,11 @@ was called once.
 
 5. ***Congratulations! You have just written and tested your first Wing program!***
 
-##### Testing the program with node REPL
+##### Testing the program through the Node.js REPL
+
+In this section we will use the [Node.js REPL] to interact with our
+Wing application through the terminal.
+
 
 1. Run node command 
     ```sh
