@@ -103,7 +103,7 @@ export class App extends Construct implements IApp {
         cleaned.terraform = undefined;
         cleaned.provider = undefined;
 
-        return stringify(cleaned, null, 2);
+        return stringify(cleaned, null, 2) ?? "";
       }
     }
 

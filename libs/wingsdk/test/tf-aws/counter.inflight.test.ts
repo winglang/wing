@@ -1,17 +1,12 @@
 import {
   UpdateItemCommandInput,
   UpdateItemCommandOutput,
-} from "@aws-sdk/client-dynamodb";
-import { mockClient } from "aws-sdk-client-mock";
-import { CounterClient } from "../../src/tf-aws/counter.inflight";
-
-// we need to use "require" because some issue with aws-sdk-client-mock:
-// https://github.com/m-radzikowski/aws-sdk-client-mock/issues/121
-const {
   DynamoDBClient,
   UpdateItemCommand,
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-} = require("@aws-sdk/client-dynamodb");
+} from "@aws-sdk/client-dynamodb";
+
+import { mockClient } from "aws-sdk-client-mock";
+import { CounterClient } from "../../src/tf-aws/counter.inflight";
 
 const MOCK_TABLE_NAME = "MyBeautifulCounter";
 const dynamoMock = mockClient(DynamoDBClient);
