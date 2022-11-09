@@ -4,7 +4,7 @@ description: "../../examples/tests/invalid/optional_invoke.w"
 ---
 [
     Diagnostic {
-        message: "Cannot call inflight function \"f\" while preflight",
+        message: "Cannot call inflight function \"f\" while in preflight phase",
         span: Some(
             WingSpan {
                 start: Point {
@@ -23,7 +23,7 @@ description: "../../examples/tests/invalid/optional_invoke.w"
         level: Error,
     },
     Diagnostic {
-        message: "Cannot call inflight function \"f\" while preflight",
+        message: "Cannot call inflight function \"f\" while in preflight phase",
         span: Some(
             WingSpan {
                 start: Point {

@@ -652,7 +652,7 @@ impl<'a> TypeChecker<'a> {
 					self.expr_error(
 						exp,
 						format!(
-							"Cannot call {} function \"{}\" while {}",
+							"Cannot call {} function \"{}\" while in {} phase",
 							func_sig.flight, function, env.flight,
 						),
 					);

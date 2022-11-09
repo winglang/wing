@@ -4,7 +4,7 @@ description: "../../examples/tests/invalid/optionals.w"
 ---
 [
     Diagnostic {
-        message: "Cannot call inflight function \"f\" while preflight",
+        message: "Cannot call inflight function \"f\" while in preflight phase",
         span: Some(
             WingSpan {
                 start: Point {
