@@ -73,10 +73,7 @@ pub fn scan_captures(ast_root: &Scope) {
 						// TODO: what do I do with these?
 						scan_captures_in_inflight_scope(&constructor.statements);
 					}
-					Flight::Either => {
-						// TODO: what do I do with these?
-						scan_captures_in_inflight_scope(&constructor.statements);
-					}
+					Flight::Either => scan_captures(&constructor.statements),
 					Flight::Pre => scan_captures(&constructor.statements),
 				}
 				for m in methods.iter() {
@@ -85,10 +82,7 @@ pub fn scan_captures(ast_root: &Scope) {
 							// TODO: what do I do with these?
 							scan_captures_in_inflight_scope(&m.statements);
 						}
-						Flight::Either => {
-							// TODO: what do I do with these?
-							scan_captures_in_inflight_scope(&constructor.statements);
-						}
+						Flight::Either => scan_captures(&constructor.statements),
 						Flight::Pre => scan_captures(&m.statements),
 					}
 				}
@@ -214,8 +208,8 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 	let mut res = vec![];
 	let env = scope.env.as_ref().unwrap();
 
-	// Make sure we're looking for captures only in inflight or either-flight code
-	assert!(matches!(env.flight, Flight::In | Flight::Either));
+	// Make sure we're looking for captures only in inflight code
+	assert!(matches!(env.flight, Flight::In));
 
 	for s in scope.statements.iter() {
 		match s {
