@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { IBucketClient } from "../../src/sim";
-import { SimApp } from "./util";
+import { SimApp } from "../../src/testing";
 
 test("create a bucket", async () => {
   // GIVEN

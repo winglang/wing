@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import { IFunctionClient, IQueueClient } from "../../src/sim";
-import { SimApp } from "./util";
+import { SimApp } from "../../src/testing";
 
 jest.setTimeout(5_000); // 5 seconds
 

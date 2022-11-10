@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import { IFunctionClient, ILoggerClient } from "../../src/sim";
-import { SimApp } from "./util";
+import { SimApp } from "../../src/testing";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 

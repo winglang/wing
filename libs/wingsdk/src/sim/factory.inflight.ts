@@ -1,10 +1,10 @@
 import * as cloud from "../cloud";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
-import { Bucket } from "./bucket.sim";
-import { Counter } from "./counter.sim";
-import { Function } from "./function.sim";
-import { Logger } from "./logger.sim";
-import { Queue } from "./queue.sim";
+import { Bucket } from "./bucket.inflight";
+import { Counter } from "./counter.inflight";
+import { Function } from "./function.inflight";
+import { Logger } from "./logger.inflight";
+import { Queue } from "./queue.inflight";
 import { ISimulatorResource } from "./resource";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {

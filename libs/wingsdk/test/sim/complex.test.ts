@@ -2,7 +2,7 @@ import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/sim";
-import { SimApp } from "./util";
+import { SimApp } from "../../src/testing";
 
 test("pushing messages through a queue", async () => {
   // GIVEN

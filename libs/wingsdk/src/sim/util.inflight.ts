@@ -4,9 +4,9 @@ export class RandomArrayIterator<T = any> implements Iterable<T> {
     this.length = this.values.length;
   }
 
-  next() {
+  next(): IteratorResult<T> {
     if (this.length === 0) {
-      return { done: true, value: undefined } as { done: true; value: T };
+      return { done: true, value: undefined };
     }
 
     const i = Math.floor(Math.random() * this.length);
@@ -16,7 +16,7 @@ export class RandomArrayIterator<T = any> implements Iterable<T> {
     this.values[i] = this.values[j];
     this.values[j] = value;
 
-    return { done: false, value } as { done: false; value: T };
+    return { value };
   }
 
   [Symbol.iterator]() {

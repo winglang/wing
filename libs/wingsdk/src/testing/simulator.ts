@@ -3,10 +3,10 @@ import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
 import { ISimulatorResource } from "../sim";
+// eslint-disable-next-line import/no-restricted-paths
+import { DefaultSimulatorFactory } from "../sim/factory.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
-// eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
-const { DefaultSimulatorFactory } = require("../sim/factory.sim");
 
 /**
  * Props for `Simulator`.

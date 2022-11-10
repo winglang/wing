@@ -3,7 +3,7 @@ import { IFunctionClient } from "./function";
 import { IQueueClient } from "./queue";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { RandomArrayIterator } from "./util.sim";
+import { RandomArrayIterator } from "./util.inflight";
 
 export class Queue implements IQueueClient, ISimulatorResource {
   private readonly messages = new Array<string>();

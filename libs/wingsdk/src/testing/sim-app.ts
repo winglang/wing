@@ -1,13 +1,13 @@
-import { Construct } from "constructs";
-import * as sim from "../../src/sim";
-import { Simulator } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { Simulator } from ".";
+import * as sim from "../sim";
+import { mkdtemp } from "../util";
 
 /**
  * A simulated app.
  *
- * @todo Do we want to make this available under the "testing"
- * module? Seems like a useful fixture for unit tests. No?
+ * A great way to write unit tests for the cloud. Just use this as your base app
+ * and then call `app.startSimulator()` to start an instance of this app inside
+ * a cloud simulator.
  */
 export class SimApp extends sim.App {
   constructor() {
@@ -25,8 +25,4 @@ export class SimApp extends sim.App {
     await s.start();
     return s;
   }
-}
-
-export interface IScopeCallback {
-  (scope: Construct): void;
 }

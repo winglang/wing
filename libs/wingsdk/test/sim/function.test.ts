@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import { IFunctionClient } from "../../src/sim";
-import { SimApp } from "./util";
+import { SimApp } from "../../src/testing";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {

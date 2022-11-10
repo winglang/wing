@@ -2939,6 +2939,121 @@ with a fresh copy without any consequences.
 ---
 
 
+### SimApp <a name="SimApp" id="@winglang/wingsdk.testing.SimApp"></a>
+
+A simulated app.
+
+A great way to write unit tests for the cloud. Just use this as your base app
+and then call `app.startSimulator()` to start an instance of this app inside
+a cloud simulator.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.testing.SimApp.Initializer"></a>
+
+```typescript
+import { testing } from '@winglang/wingsdk'
+
+new testing.SimApp()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.SimApp.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.testing.SimApp.synth">synth</a></code> | Synthesize the app into an `app.wx` file. Return the path to the file. |
+| <code><a href="#@winglang/wingsdk.testing.SimApp.startSimulator">startSimulator</a></code> | Creates a simulator and starts it. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.testing.SimApp.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `synth` <a name="synth" id="@winglang/wingsdk.testing.SimApp.synth"></a>
+
+```typescript
+public synth(): string
+```
+
+Synthesize the app into an `app.wx` file. Return the path to the file.
+
+##### `startSimulator` <a name="startSimulator" id="@winglang/wingsdk.testing.SimApp.startSimulator"></a>
+
+```typescript
+public startSimulator(): Simulator
+```
+
+Creates a simulator and starts it.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.SimApp.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.testing.SimApp.isConstruct"></a>
+
+```typescript
+import { testing } from '@winglang/wingsdk'
+
+testing.SimApp.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.testing.SimApp.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.SimApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.testing.SimApp.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.testing.SimApp.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.testing.SimApp.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+
+Directory where artifacts are synthesized to.
+
+---
+
+
 ### TextFile <a name="TextFile" id="@winglang/wingsdk.fs.TextFile"></a>
 
 Represents a text file that should be synthesized in the app's outdir.
@@ -5149,7 +5264,7 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @winglang/wingsdk.sim.App, @winglang/wingsdk.tfaws.App, @winglang/wingsdk.core.IApp
+- *Implemented By:* @winglang/wingsdk.sim.App, @winglang/wingsdk.testing.SimApp, @winglang/wingsdk.tfaws.App, @winglang/wingsdk.core.IApp
 
 A Wing application.
 

@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
-import { SimApp } from "./util";
+import { SimApp } from "../../src/testing";
 
 test("create a counter", async () => {
   // GIVEN
