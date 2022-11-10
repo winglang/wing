@@ -60,6 +60,9 @@ guide](./CONTRIBUTING.md).
 Here is a list of known issues in "getting started":
 
 * [#50](https://github.com/winglang/wing/issues/50) `print()` is not yet implemented.
+* [#395](https://github.com/winglang/wing/issues/395) `Case conversion jsii to wing` is not yet implemented (so you should use queue.onMessage instead of on_message).
+* [#318](https://github.com/winglang/wing/issues/318) `Closure literal ~>` is not yet implemented.
+* [#375](https://github.com/winglang/wing/pull/375) `Counter` resource is not yet implemented.
 
 ### Prerequisites
 
