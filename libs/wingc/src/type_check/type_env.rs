@@ -18,14 +18,22 @@ pub struct TypeEnv {
 // TODO See TypeRef for why this is necessary
 unsafe impl Send for TypeEnv {}
 
+// The index (position) of the statement where a certain symbol was defined
+// this is useful to determine if a symbol can be used in a certain
+// expression or whether it is being used before it's defined.
 pub enum StatementIdx {
 	Index(usize),
-	Top,
+	Top, // Special value meaning the symbol should be treated as if it was defined at the top of the scope
 }
 
+// Possible results for a symbol lookup in the environment
 enum LookupResult {
+	// The type of the symbol and its flight phase
 	Found((TypeRef, Flight)),
+	// The symbol was not found in the environment
 	NotFound,
+	// The symbol exists in the environment but it's not defined yet (based on the statement
+	// index passed to the lookup)
 	DefinedLater,
 }
 
@@ -80,18 +88,18 @@ impl TypeEnv {
 		Ok(())
 	}
 
-	pub fn try_lookup(&self, symbol_name: &str, statement_idx: Option<usize>) -> Option<TypeRef> {
-		match self.try_lookup_ext(symbol_name, statement_idx) {
+	pub fn try_lookup(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<TypeRef> {
+		match self.try_lookup_ext(symbol_name, not_after_stmt_idx) {
 			LookupResult::Found((type_, _)) => Some(type_),
 			LookupResult::NotFound | LookupResult::DefinedLater => None,
 		}
 	}
 
-	fn try_lookup_ext(&self, symbol_name: &str, statement_idx: Option<usize>) -> LookupResult {
-		if let Some((_, _type)) = self.type_map.get(symbol_name) {
-			if let Some(statement_idx) = statement_idx {
-				if let StatementIdx::Index(idx) = self.type_map.get(symbol_name).unwrap().0 {
-					if idx > statement_idx {
+	fn try_lookup_ext(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResult {
+		if let Some((definition_idx, _type)) = self.type_map.get(symbol_name) {
+			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
+				if let StatementIdx::Index(definition_idx) = definition_idx {
+					if *definition_idx > not_after_stmt_idx {
 						return LookupResult::DefinedLater;
 					}
 				}
@@ -99,18 +107,18 @@ impl TypeEnv {
 			LookupResult::Found((*_type, self.flight))
 		} else if let Some(parent_env) = self.parent {
 			let parent_env = unsafe { &*parent_env };
-			parent_env.try_lookup_ext(symbol_name, statement_idx.map(|_| self.statement_idx))
+			parent_env.try_lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
 			LookupResult::NotFound
 		}
 	}
 
-	pub fn lookup(&self, symbol: &Symbol, statement_idx: Option<usize>) -> Result<TypeRef, TypeError> {
-		Ok(self.lookup_ext(symbol, statement_idx)?.0)
+	pub fn lookup(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<TypeRef, TypeError> {
+		Ok(self.lookup_ext(symbol, not_after_stmt_idx)?.0)
 	}
 
-	pub fn lookup_ext(&self, symbol: &Symbol, statement_idx: Option<usize>) -> Result<(TypeRef, Flight), TypeError> {
-		let lookup_result = self.try_lookup_ext(&symbol.name, statement_idx);
+	pub fn lookup_ext(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<(TypeRef, Flight), TypeError> {
+		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
 
 		match lookup_result {
 			LookupResult::Found((type_, flight)) => Ok((type_, flight)),
