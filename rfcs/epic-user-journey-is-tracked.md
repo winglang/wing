@@ -2,12 +2,14 @@
 
 # Epic - User Journey is Tracked
 
-To learn more about the origin of this EPIC, please visit [The Community is the Product](/rfcs/the-community-is-the-product.md) document 
-The Goal of this EPIC is to be able to tell in a glance, how many people have been exposed to wing, how many signup for preview, how many joined, how many used wing and how many contributed to wing. 
+To learn more about the origin of this EPIC, please visit [The Community is the Product](/rfcs/the-community-is-the-product.md) document
+The Goal of this EPIC is to be able to tell in a glance, how many people have been exposed to wing, how many signup for preview, how many joined, how
+many used wing and how many contributed to wing. 
 
 ## Dashboard
 
-Here is an example of a dashboard that shows how many visitors/users/contributors we have in the system and how they convert, it is missing retention metrics, advocate accounting and high touch real usage users
+Here is an example of a dashboard that shows how many visitors/users/contributors we have in the system and how they convert, it is missing retention
+metrics, advocate accounting and high touch real usage users
 ![image](https://user-images.githubusercontent.com/1727147/200826865-2f164ceb-6bbe-47c7-adf2-233260539238.png)
 
 ## Event Sources
@@ -68,7 +70,9 @@ User entity in the system
 | RFC    | https://github.com/winglang/wing/issues/507 |
 
 
-When a visitor goes into winglang.io or any.winglang.io or monada.co we report page load to Segment that reports it to Google Analytics and Mixpanel, it keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview, completing the form, and successfully clicking on the email.
+When a visitor goes into winglang.io or any.winglang.io or monada.co we report page load to Segment that reports it to Google Analytics and Mixpanel, it
+keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview, completing the
+form, and successfully clicking on the email.
 
 We are able to answer the following questions:
 - How many visitors seen our web pages
@@ -89,7 +93,8 @@ We are able to answer the following questions:
 
 **Status:** _Draft_
 
-In this story we are able to track user activities using wing toolchain. We want every use of the wing toolchain to report back a wing usage event that can be traced back to the User entity.  There is a way for a user to know what we are tracking and purge his data, and also opt out from reporting. 
+In this story we are able to track user activities using wing toolchain. We want every use of the wing toolchain to report back a wing usage event that
+can be traced back to the User entity.  There is a way for a user to know what we are tracking and purge his data, and also opt out from reporting. 
 
 We are able to answer the following questions:
 - Who is using wing today/this week/this month?
@@ -100,7 +105,8 @@ We are able to answer the following questions:
 
 **Status:** _Draft_
 
-In this story we are able to track user engagement over slack. We want every activity taken in slack to be reporting back as a slack usage event that can be traced back to the User entity.
+In this story we are able to track user engagement over slack. We want every activity taken in slack to be reporting back as a slack usage event that
+can be traced back to the User entity.
 
 We want to know when a User:
 - joined slack
@@ -113,7 +119,8 @@ We want to know when a User:
 
 **Status:** _Draft_
 
-In this story we are able to track user/contributors engagement over github. We want every activity taken in github to be reported back as a github usage event that can be traced back to the User entity.
+In this story we are able to track user/contributors engagement over github. We want every activity taken in github to be reported back as a github
+usage event that can be traced back to the User entity.
 
 We want to know when a User is taking an action on any repo under @winglang and @winglang-contrib 
 - Created an issue
@@ -136,6 +143,8 @@ Every event need to have:
 Implement the above [dashboard](#dashboard) 
 
 
+
+## Appendix 
 
 
 
