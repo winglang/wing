@@ -84,8 +84,8 @@ test.each(validWingFiles)(
     await within(async () => {
       $.env = shellEnv;
       const test_dir = path.join(tmpDir, wingFile);
-      const tf_manifest = path.join(test_dir, "cdktf.out/manifest.json");
-      const tf_json = path.join(test_dir, "cdktf.out/stacks/root/cdk.tf.json");
+      const tf_manifest = path.join(test_dir, "target/cdktf.out/manifest.json");
+      const tf_json = path.join(test_dir, "target/cdktf.out/stacks/root/cdk.tf.json");
 
       await $`mkdir -p ${test_dir}`;
       await $`cd ${test_dir}`;
