@@ -20,7 +20,7 @@ This is a list of sources where we are going to gather analytics events from:
 - Wing CLI
 - Wing VSCode Extension
 - Slack
-- Email CTA / NewsLetter
+- Email CTA
 - Typeform form
 
 ## Naming and collection standards
