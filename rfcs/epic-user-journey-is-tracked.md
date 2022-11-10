@@ -17,7 +17,6 @@ This is a list of sources where we are going to gather analytics events from:
 - winglang.io, blog.winglang.io, docs.winglang.io (and any other winglang.io asset)
 - monada.co
 - winglang/wing Github
-- winglang-contrib/*
 - Wing cli / vscode plugin
 - Slack
 - Email CTA / NewsLetter
