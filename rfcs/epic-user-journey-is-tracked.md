@@ -12,7 +12,7 @@ Here is an example of a dashboard that shows how many visitors/users/contributor
 
 ## Event Sources
 
-This is a list of sources where we are going to gather analytics event from:
+This is a list of sources where we are going to gather analytics events from:
 
 - Winglang.io (including blog.winglang.io and docs.winglang.io)
 - Monada.io
