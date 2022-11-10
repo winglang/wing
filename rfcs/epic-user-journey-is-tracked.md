@@ -63,7 +63,7 @@ User entity in the system
 
 ## Prioritize User Stories
 
-### Tracking visitors and their onboarding process
+### Tracking visitors and signup flow
 
 | Status | Story| 
 | --- | --- | 
