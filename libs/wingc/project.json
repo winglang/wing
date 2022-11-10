@@ -16,6 +16,10 @@
     },
     "test": {
       "executor": "nx:run-commands",
+      "inputs": [
+        "src",
+        "examples-tests"
+      ],
       "options": {
         "command": "INSTA_UPDATE=always cargo test",
         "cwd": "libs/wingc"
