@@ -1,19 +1,16 @@
 import { useContext, useId, useState } from "react";
 
-import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { AppContext } from "../AppContext.js";
 import { Button } from "../design-system/Button.js";
-import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TextArea } from "../design-system/TextArea.js";
+import { Node } from "../utils/nodeMap.js";
 import { trpc } from "../utils/trpc.js";
 
 export interface FunctionInteractionViewProps {
-  node: BaseResourceSchema;
+  node: Node;
 }
 
-export const FunctionInteractionView = ({
-  node,
-}: FunctionInteractionViewProps) => {
+export const FunctionExploreView = ({ node }: FunctionInteractionViewProps) => {
   const { appMode } = useContext(AppContext);
   const resourcePath = node.path ?? "";
   const utils = trpc.useContext();
@@ -26,7 +23,7 @@ export const FunctionInteractionView = ({
   const id = useId();
   return (
     <form
-      className="h-full flex flex-col"
+      className="h-full w-full flex flex-col"
       method="POST"
       aria-disabled={appMode === "webapp"}
       onSubmit={(event) => {
@@ -78,17 +75,6 @@ export const FunctionInteractionView = ({
             Response
           </span>
         </div>
-
-        {/* <div className="flex-1 min-h-[8rem] relative bg-slate-50 rounded overflow-hidden border border-slate-300 select-text cursor-text">
-          <ScrollableArea overflowX overflowY className="text-xs p-2">
-            {invoke.data && (
-              <pre>
-                <code>{JSON.stringify(invoke.data, undefined, 2)}</code>
-              </pre>
-            )}
-          </ScrollableArea>
-        </div> */}
-
         <TextArea
           rows={4}
           id={id}

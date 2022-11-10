@@ -19,11 +19,12 @@ import { Button } from "../design-system/Button.js";
 import { Checkbox } from "../design-system/Checkbox.js";
 import { Input } from "../design-system/Input.js";
 import { dateFormatter } from "../utils/dateUtils.js";
+import { Node } from "../utils/nodeMap.js";
 import { trpc } from "../utils/trpc.js";
 import { useDownloadFile } from "../utils/useDownloadFile.js";
 
 export interface BucketInteractionViewProps {
-  node: BaseResourceSchema;
+  node: Node;
 }
 
 export interface FileExplorerEntry {
@@ -33,7 +34,7 @@ export interface FileExplorerEntry {
   fileSize?: number;
 }
 
-export const BucketInteractionView = ({ node }: BucketInteractionViewProps) => {
+export const BucketExploreView = ({ node }: BucketInteractionViewProps) => {
   const [path] = useState("/");
   const resourcePath = node.path ?? "";
   const bucketList = trpc.useQuery(["bucket.list", { resourcePath }]);

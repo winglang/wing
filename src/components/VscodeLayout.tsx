@@ -19,6 +19,7 @@ import {
   NodeRelationshipsView,
   Relationships,
 } from "./NodeRelationshipsView.js";
+import { ResourceExploreView } from "./ResourceExploreView.js";
 
 export interface VscodeLayoutProps {
   schema: WingSimulatorSchema | undefined;
@@ -207,24 +208,28 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
             <div className="flex-1 relative">
               <ScrollableArea
                 overflowX
-                className="flex-1 flex bg-slate-50 justify-around p-2"
+                className="flex-1 min-w-[20rem] flex bg-slate-50 justify-around p-2"
               >
-                <div className="min-w-[10rem] max-w-xl">
-                  {relationships && (
-                    <NodeRelationshipsView
-                      key={currentNode?.path}
-                      relationships={relationships}
-                      onNodeClick={(path) => {
-                        treeMenu.expand(path);
-                        treeMenu.setCurrent(path);
-                      }}
-                    />
+                <div className="w-full max-w-xl">
+                  {relationships &&
+                    !currentNode?.type.startsWith("wingsdk.cloud") && (
+                      <NodeRelationshipsView
+                        key={currentNode?.path}
+                        relationships={relationships}
+                        onNodeClick={(path) => {
+                          treeMenu.expand(path);
+                          treeMenu.setCurrent(path);
+                        }}
+                      />
+                    )}
+                  {currentNode?.type.startsWith("wingsdk.cloud") && (
+                    <ResourceExploreView node={currentNode} />
                   )}
                 </div>
               </ScrollableArea>
             </div>
 
-            <LeftResizableWidget className="bg-white flex-shrink min-w-[20rem] border-l">
+            <LeftResizableWidget className="bg-white flex-shrink min-w-[20rem] border-l z-10">
               {currentNode && (
                 <MetadataPanel
                   node={currentNode}
