@@ -61,15 +61,6 @@ User entity in the system
 
 ## Prioritize User Stories
 
-### Analytics Setup 
-
-| Status | Story| 
-| --- | --- | 
-| RFC    | https://github.com/winglang/wing/issues/506 |
-
-
-We want to have accounts in the relevant services and we want to establish a formalize way for naming and collection [standards](#Naming-and-collection-standards), we would also like to create and update our [tracking plane](#Tracking-Plane) that describes what are we measuring and where.
-
 ### Tracking visitors and their onboarding process
 
 | Status | Story| 
