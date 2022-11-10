@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
-	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, StmtKind, Symbol},
+	ast::{ArgList, Expr, ExprKind, Flight, Reference, Scope, StmtKind, Symbol},
 	debug,
 	type_check::type_env::TypeEnv,
 	type_check::Type,
@@ -125,8 +125,8 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) -
 
 fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 	let mut res = vec![];
-	match &exp.variant {
-		ExprType::New {
+	match &exp.kind {
+		ExprKind::New {
 			class: _,
 			obj_id: _,
 			obj_scope: _,
@@ -137,7 +137,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				res.extend(scan_captures_in_expression(e, env));
 			}
 		}
-		ExprType::Reference(r) => match r {
+		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
 				let (t, f) = match env.lookup_ext(&symbol) {
@@ -181,19 +181,19 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				// }
 			}
 		},
-		ExprType::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env)),
-		ExprType::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env)),
-		ExprType::Binary { op: _, lexp, rexp } => {
+		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env)),
+		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env)),
+		ExprKind::Binary { op: _, lexp, rexp } => {
 			scan_captures_in_expression(lexp, env);
 			scan_captures_in_expression(rexp, env);
 		}
-		ExprType::Literal(_) => {}
-		ExprType::StructLiteral { fields, .. } => {
+		ExprKind::Literal(_) => {}
+		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {
 				res.extend(scan_captures_in_expression(&v, env));
 			}
 		}
-		ExprType::MapLiteral { fields, .. } => {
+		ExprKind::MapLiteral { fields, .. } => {
 			for v in fields.values() {
 				res.extend(scan_captures_in_expression(&v, env));
 			}

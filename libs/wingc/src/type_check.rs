@@ -485,8 +485,8 @@ impl<'a> TypeChecker<'a> {
 
 	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &TypeEnv) -> Option<TypeRef> {
-		let t = match &exp.variant {
-			ExprType::Literal(lit) => match lit {
+		let t = match &exp.kind {
+			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
 				Literal::InterpolatedString(s) => {
 					s.parts.iter().for_each(|part| {
@@ -501,7 +501,7 @@ impl<'a> TypeChecker<'a> {
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
 			},
-			ExprType::Binary { op, lexp, rexp } => {
+			ExprKind::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
 				let rtype = self.type_check_exp(rexp, env).unwrap();
 
@@ -522,14 +522,14 @@ impl<'a> TypeChecker<'a> {
 					Some(ltype)
 				}
 			}
-			ExprType::Unary { op: _, exp: unary_exp } => {
+			ExprKind::Unary { op: _, exp: unary_exp } => {
 				let _type = self.type_check_exp(unary_exp, env).unwrap();
 				// Add bool vs num support here (! => bool, +- => num)
 				self.validate_type(_type, self.types.number(), unary_exp);
 				Some(_type)
 			}
-			ExprType::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
-			ExprType::New {
+			ExprKind::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
+			ExprKind::New {
 				class,
 				obj_id: _, // TODO
 				arg_list,
@@ -637,7 +637,7 @@ impl<'a> TypeChecker<'a> {
 					Some(self.types.add_type(Type::ClassInstance(type_))) // TODO: don't create new type if one already exists.
 				}
 			}
-			ExprType::Call { function, args } => {
+			ExprKind::Call { function, args } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.resolve_reference(function, env);
 				let this_args = if matches!(function, Reference::NestedIdentifier { .. }) {
@@ -699,7 +699,7 @@ impl<'a> TypeChecker<'a> {
 
 				func_sig.return_type
 			}
-			ExprType::StructLiteral { type_, fields } => {
+			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type(type_, env);
 
@@ -727,7 +727,7 @@ impl<'a> TypeChecker<'a> {
 
 				Some(struct_type)
 			}
-			ExprType::MapLiteral { fields, type_ } => {
+			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type(type_, env)

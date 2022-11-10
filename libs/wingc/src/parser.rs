@@ -4,7 +4,7 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
+	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, Flight, FunctionDefinition, FunctionSignature,
 	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Reference, Scope, Stmt, StmtKind, Symbol,
 	Type, UnaryOperator,
 };
@@ -451,7 +451,7 @@ impl Parser<'_> {
 					None
 				};
 				Ok(Expr::new(
-					ExprType::New {
+					ExprKind::New {
 						class,
 						obj_id,
 						arg_list: arg_list?,
@@ -461,7 +461,7 @@ impl Parser<'_> {
 				))
 			}
 			"binary_expression" => Ok(Expr::new(
-				ExprType::Binary {
+				ExprKind::Binary {
 					lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
 					rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
@@ -485,7 +485,7 @@ impl Parser<'_> {
 				expression_span,
 			)),
 			"unary_expression" => Ok(Expr::new(
-				ExprType::Unary {
+				ExprKind::Unary {
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"+" => UnaryOperator::Plus,
 						"-" => UnaryOperator::Minus,
@@ -500,7 +500,7 @@ impl Parser<'_> {
 			"string" => {
 				if expression_node.named_child_count() == 0 {
 					Ok(Expr::new(
-						ExprType::Literal(Literal::String(self.node_text(&expression_node).into())),
+						ExprKind::Literal(Literal::String(self.node_text(&expression_node).into())),
 						expression_span,
 					))
 				} else {
@@ -540,20 +540,20 @@ impl Parser<'_> {
 					}
 
 					Ok(Expr::new(
-						ExprType::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
+						ExprKind::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
 						expression_span,
 					))
 				}
 			}
 
 			"number" => Ok(Expr::new(
-				ExprType::Literal(Literal::Number(
+				ExprKind::Literal(Literal::Number(
 					self.node_text(&expression_node).parse().expect("Number string"),
 				)),
 				expression_span,
 			)),
 			"bool" => Ok(Expr::new(
-				ExprType::Literal(Literal::Boolean(match self.node_text(&expression_node) {
+				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
@@ -562,17 +562,17 @@ impl Parser<'_> {
 				expression_span,
 			)),
 			"duration" => Ok(Expr::new(
-				ExprType::Literal(self.build_duration(&expression_node)?),
+				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
 			"reference" => Ok(Expr::new(
-				ExprType::Reference(self.build_reference(&expression_node)?),
+				ExprKind::Reference(self.build_reference(&expression_node)?),
 				expression_span,
 			)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
-				ExprType::Call {
+				ExprKind::Call {
 					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
 					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
@@ -611,7 +611,7 @@ impl Parser<'_> {
 				}
 
 				Ok(Expr::new(
-					ExprType::MapLiteral {
+					ExprKind::MapLiteral {
 						fields,
 						type_: map_type,
 					},
@@ -639,7 +639,7 @@ impl Parser<'_> {
 					}
 				}
 				Ok(Expr::new(
-					ExprType::StructLiteral { type_: type_?, fields },
+					ExprKind::StructLiteral { type_: type_?, fields },
 					expression_span,
 				))
 			}

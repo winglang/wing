@@ -3,7 +3,7 @@ use std::{fs, path::PathBuf};
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expr, ExprType, Flight, FunctionDefinition, InterpolatedStringPart, Literal,
+	ArgList, BinaryOperator, ClassMember, Expr, ExprKind, Flight, FunctionDefinition, InterpolatedStringPart, Literal,
 	Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
 };
 
@@ -167,8 +167,8 @@ fn jsify_type(typ: &Type) -> String {
 }
 
 fn jsify_expression(expression: &Expr) -> String {
-	match &expression.variant {
-		ExprType::New {
+	match &expression.kind {
+		ExprKind::New {
 			class,
 			obj_id,
 			arg_list,
@@ -197,7 +197,7 @@ fn jsify_expression(expression: &Expr) -> String {
 				format!("new {}({})", jsify_type(&class), jsify_arg_list(&arg_list, None, None))
 			}
 		}
-		ExprType::Literal(lit) => match lit {
+		ExprKind::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
 			Literal::InterpolatedString(s) => format!(
 				"`{}`",
@@ -214,11 +214,11 @@ fn jsify_expression(expression: &Expr) -> String {
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
-		ExprType::Reference(_ref) => jsify_reference(&_ref),
-		ExprType::Call { function, args } => {
+		ExprKind::Reference(_ref) => jsify_reference(&_ref),
+		ExprKind::Call { function, args } => {
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
 		}
-		ExprType::Unary { op, exp } => {
+		ExprKind::Unary { op, exp } => {
 			let op = match op {
 				UnaryOperator::Plus => "+",
 				UnaryOperator::Minus => "-",
@@ -226,7 +226,7 @@ fn jsify_expression(expression: &Expr) -> String {
 			};
 			format!("({}{})", op, jsify_expression(exp))
 		}
-		ExprType::Binary { op, lexp, rexp } => {
+		ExprKind::Binary { op, lexp, rexp } => {
 			let op = match op {
 				BinaryOperator::Add => "+",
 				BinaryOperator::Sub => "-",
@@ -244,7 +244,7 @@ fn jsify_expression(expression: &Expr) -> String {
 			};
 			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
 		}
-		ExprType::StructLiteral { fields, .. } => {
+		ExprKind::StructLiteral { fields, .. } => {
 			format!(
 				"{{\n{}}}\n",
 				fields
@@ -254,7 +254,7 @@ fn jsify_expression(expression: &Expr) -> String {
 					.join("\n")
 			)
 		}
-		ExprType::MapLiteral { fields, .. } => {
+		ExprKind::MapLiteral { fields, .. } => {
 			format!(
 				"{{\n{}\n}}",
 				fields
