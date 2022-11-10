@@ -16,8 +16,15 @@
       ],
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run test",
+        "command": "npm run test:update",
         "cwd": "tools/hangar"
+      },
+      "configurations": {
+        "release": {
+          "options": {
+            "command": "npm run test"
+          }
+        }
       }
     }
   }

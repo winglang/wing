@@ -232,10 +232,7 @@ jobs:
   e2e:
     name: "E2E Testing"
     needs:
-      - prepare
       - build-wasm
-    env:
-      PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
     strategy:
       fail-fast: true
       matrix:
