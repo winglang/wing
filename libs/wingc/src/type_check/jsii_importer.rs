@@ -283,7 +283,6 @@ impl<'a> JsiiImporter<'a> {
 				None
 			} else {
 				let base_class_name = self.fqn_to_type_name(base_class_fqn);
-				dbg!(&base_class_fqn);
 				let base_class_type = if let Some(base_class_type) = self.namespace_env.try_lookup(&base_class_name, None) {
 					Some(base_class_type)
 				} else {
