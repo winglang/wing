@@ -38,9 +38,9 @@ We are able to answer the following questions:
 
 ## We do not expose our user to any legal or privacy issues [#526](https://github.com/winglang/wing/issues/526)
 
-We want to make sure that our user journey is safe and meets the legal standard, including:
-- having EULA availalbe 
-- 
+We want to make sure that our user journey is safe and meets the legal standard, including: having our EULA available, 
+making sure we do not leak any private information, etc...
+
 
 ## Our service is always available for our users [#527](https://github.com/winglang/wing/issues/527)
 
