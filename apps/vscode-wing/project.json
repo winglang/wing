@@ -1,0 +1,54 @@
+{
+  "name": "vscode-wing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": [
+    "wing-language-server"
+  ],
+  "targets": {
+    "copy": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        "{workspaceRoot}/target/*/wing-language-server"
+      ],
+      "outputs": [
+        "{projectRoot}/resources/native/wing-language-server"
+      ],
+      "dependsOn": [
+        "^build-native"
+      ],
+      "options": {
+        "commands": [
+          "mkdir -p resources/native",
+          "rm -f resources/native/*",
+          "cp -v ../../target/debug/wing-language-server resources/native"
+        ],
+        "cwd": "apps/vscode-wing"
+      },
+      "configurations": {
+        "release": {
+          "commands": [
+            "echo 'Skipping wls copy. Get platform-specific binaries from CI'"
+          ]
+        }
+      }
+    },
+    "build": {
+      "executor": "nx:run-script",
+      "dependsOn": [
+        "^build",
+        "copy"
+      ],
+      "options": {
+        "cwd": "apps/vscode-wing",
+        "script": "build"
+      }
+    },
+    "build-multi": {
+      "executor": "nx:run-script",
+      "options": {
+        "cwd": "apps/vscode-wing",
+        "script": "build"
+      }
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "wing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": [
+    "wingc",
+    "wingsdk"
+  ],
+  "targets": {
+    "copy": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        "{workspaceRoot}/target/*/wingc.wasm"
+      ],
+      "dependsOn": [
+        "^build-wasm"
+      ],
+      "outputs": [
+        "{projectRoot}/wingc.wasm"
+      ],
+      "options": {
+        "command": "cp -v ../../target/wasm32-wasi/debug/wingc.wasm ./",
+        "cwd": "apps/wing"
+      },
+      "configurations": {
+        "release": {
+          "command": "cp -v ../../target/wasm32-wasi/release/wingc.wasm ./"
+        }
+      }
+    },
+    "build": {
+      "executor": "nx:run-script",
+      "dependsOn": [
+        "^build",
+        "copy"
+      ],
+      "options": {
+        "script": "build"
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "name": "tree-sitter-wing",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "build-native": {
+      "executor": "nx:run-commands",
+      "inputs": [
+        "{projectRoot}/grammar.js"
+      ],
+      "outputs": [
+        "{workspaceRoot}/src"
+      ],
+      "options": {
+        "command": "cargo build",
+        "cwd": "libs/tree-sitter-wing"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo build --release"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nxrs/cargo:test"
+    },
+    "build-wasm": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo wasi build",
+        "cwd": "libs/tree-sitter-wing"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo wasi build --release"
+        }
+      }
+    }
+  }
+}

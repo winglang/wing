@@ -1,0 +1,123 @@
+name: WingSDK Mutation
+
+on:
+  push:
+    branches-ignore:
+      - "main"
+    paths:
+      - "libs/wingsdk/**"
+
+permissions:
+  contents: write
+
+defaults:
+  run:
+    working-directory: libs/wingsdk
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
+    env:
+      CI: "true"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.ref }}
+          repository: ${{ github.event.repository.full_name }}
+      - name: Login to private npm registry
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
+        env:
+          PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Build transitive dependency (wing-api-checker)
+        run: npm install && npm run build
+        working-directory: apps/wing-api-checker
+      - name: Install dependencies
+        run: npm install
+      - name: build
+        run: npx projen build
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: coverage
+      - id: self_mutation
+        name: Find mutations
+        run: |-
+          git add .
+          git diff --staged --patch --exit-code > .repo.patch || echo "::set-output name=self_mutation_happened::true"
+      - if: steps.self_mutation.outputs.self_mutation_happened
+        name: Upload patch
+        uses: actions/upload-artifact@v2
+        with:
+          name: .repo.patch
+          path: libs/wingsdk/.repo.patch
+
+      - name: Fail build on mutation
+        if: steps.self_mutation.outputs.self_mutation_happened
+        run: |-
+          echo "::error::Files were changed during build (see build log). If this was triggered from a fork, you will need to update your branch."
+          cat .repo.patch
+          exit 1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v2.1.1
+        with:
+          name: wingsdk-build-artifact
+          path: libs/wingsdk/dist
+  self-mutation:
+    needs: build
+    runs-on: ubuntu-latest
+    if: always() && needs.build.outputs.self_mutation_happened && github.event.repository.full_name == github.repository && github.ref != 'refs/heads/main'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          ref: ${{ github.event.ref }}
+          repository: ${{ github.event.repository.full_name }}
+      - name: Download patch
+        uses: actions/download-artifact@v3
+        with:
+          name: .repo.patch
+          path: ${{ runner.temp }}
+      - name: Apply patch
+        run: '[ -s ${{ runner.temp }}/.repo.patch ] && git apply ${{ runner.temp }}/.repo.patch || echo "Empty patch. Skipping."'
+      - name: Set git identity
+        run: |-
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+      - name: Push changes
+        run: |2-
+            git add .
+            git commit -s -m "chore: self mutation"
+            git push origin HEAD:${{ github.event.ref }}
+  package-js:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions: {}
+    if: "! needs.build.outputs.self_mutation_happened"
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - name: Download build artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: wingsdk-build-artifact
+          path: libs/wingsdk/dist
+      - name: Prepare Repository
+        run: mv dist .repo && npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken $PROJEN_GITHUB_TOKEN
+        env:
+          PROJEN_GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+      - name: Install Dependencies
+        run: cd .repo && npm ci
+      - name: Create js artifact
+        run: cd .repo && npx projen package:js
+      - name: Collect js Artifact
+        run: mv .repo/dist dist

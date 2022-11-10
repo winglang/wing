@@ -1,0 +1,13 @@
+[workspace]
+members = [
+  "apps/wing-language-server",
+  "libs/tree-sitter-wing",
+  "libs/wingc",
+  "libs/wingii",
+]
+
+# See https://insta.rs/docs/quickstart/#optional-faster-runs
+[profile.dev.package.insta]
+opt-level = 3
+[profile.dev.package.similar]
+opt-level = 3

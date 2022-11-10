@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`inflight uses a logger 1`] = `
+Object {
+  "root": Object {
+    "children": Object {
+      "WingLogger": Object {
+        "inbound": Array [
+          "root/my_function",
+        ],
+        "type": "wingsdk.cloud.Logger",
+      },
+      "my_function": Object {
+        "dependsOn": Array [
+          "root/WingLogger",
+        ],
+        "outbound": Array [
+          "root/WingLogger",
+        ],
+        "props": Object {
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    },
+    "type": "constructs.Construct",
+  },
+  "sdkVersion": "0.0.0",
+  "startOrder": Array [
+    "root/WingLogger",
+    "root/my_function",
+  ],
+}
+`;

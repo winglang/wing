@@ -1,0 +1,5 @@
+{
+  "app": "npx tsx main.ts --tsconfig \"../../tsconfig.dev.json\"",
+  "language": "typescript",
+  "projectId": "b3c4b7ea-2fd2-4987-9bc4-6407eb466165"
+}

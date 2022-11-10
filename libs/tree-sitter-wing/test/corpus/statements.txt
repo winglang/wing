@@ -1,0 +1,256 @@
+====================
+For loop
+====================
+
+for fox in sox {
+}
+
+---
+
+(source
+    (for_in_loop
+    iterator: (reference (identifier))
+    iterable: (reference (identifier))
+        block: (block)
+    )
+)
+
+====================
+Variable assignment
+====================
+
+let x: num = 1;
+x = 2;
+
+---
+
+(source
+    (variable_definition_statement
+        name: (identifier)
+        type: (builtin_type)
+        value: (number)
+    )
+    (variable_assignment_statement
+        name: (reference (identifier))
+        value: (number)
+    )
+)
+
+====================
+If
+====================
+
+if false {}
+
+---
+
+(source
+    (if_statement
+        condition: (bool)
+        block: (block)
+    )
+)
+
+====================
+Return
+====================
+
+return 1;
+
+---
+
+(source
+    (return_statement
+        expression: (number)
+    )
+)
+
+====================
+Inflight Function definition
+====================
+
+inflight hi(a: num, b: str?, c: bool) {}
+
+---
+
+(source
+    (inflight_function_definition
+        name: (identifier)
+        parameter_list: (parameter_list
+            (parameter_definition
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (parameter_definition
+                name: (identifier)
+                type: (optional
+                    (builtin_type)
+                )
+            )
+            (parameter_definition
+                name: (identifier)
+                type: (builtin_type)
+            )
+        )
+        block: (block)
+    )
+)
+
+==================================
+Inflight Function with function parameter
+==================================
+
+~ f(callback: (num,num):bool) {}
+
+---
+(source
+    (inflight_function_definition
+        name: (identifier)
+        parameter_list: (parameter_list
+                (parameter_definition
+                    name: (identifier)
+                    type: (function_type
+                        parameter_types: (parameter_type_list
+                            (builtin_type)
+                            (builtin_type)
+                        )
+                        return_type: (builtin_type)
+                    )
+                )
+            )
+        block: (block)
+    )
+)
+
+==================================
+Class definition
+==================================
+
+class A {
+    init() {}
+    ~do_something() {}
+    a_member: str;
+}
+
+---
+(source
+    (class_definition
+        name: (identifier)
+        implementation: (class_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
+            (inflight_function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+        )
+    )
+)
+
+==================================
+Class inheritance
+==================================
+
+class A extends B {}
+
+---
+(source
+    (class_definition
+        name: (identifier)
+        parent: (custom_type 
+            object: (identifier)
+        )
+        implementation: (class_implementation)
+    )
+)
+
+==================================
+Resource definition
+==================================
+
+resource A {
+    init() {}
+    preflight_func() {}
+    inflight inflight_func() {}
+    pf_member: str;
+    inflight if_member: str;
+}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        implementation: (resource_implementation
+            (constructor
+                parameter_list: (parameter_list)
+                block: (block))
+            (function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (inflight_function_definition
+                name: (identifier)
+                parameter_list: (parameter_list)
+                block: (block)
+            )
+            (class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (inflight_class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+        )
+    )
+)
+
+==================================
+Resource inheritance
+==================================
+
+resource A extends B {}
+
+---
+(source
+    (resource_definition
+        name: (identifier)
+        parent: (custom_type 
+            object: (identifier)
+        )
+        implementation: (resource_implementation)
+    )
+)
+
+==================================
+Struct definition
+==================================
+
+struct Test {
+    cool: num;
+    hip: str?;
+}
+
+---
+(source
+    (struct_definition
+        (identifier)
+        (struct_field
+            (identifier)
+            (builtin_type)
+        )
+        (struct_field
+            (identifier)
+            (optional
+                (builtin_type)
+            )
+        )
+    )
+)

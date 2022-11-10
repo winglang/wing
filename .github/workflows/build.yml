@@ -1,0 +1,347 @@
+name: Build
+
+on:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODEJS_VERSION: "18.x"
+  # Testing runs out of memory without this
+  NODE_OPTIONS: "--max-old-space-size=4096"
+  WINGLANG_REGISTRY: "https://npm.pkg.github.com"
+  PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
+
+jobs:
+  prepare:
+    name: "Prepare"
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
+    steps:
+      - name: Checkout
+        if: github.ref == 'refs/heads/main'
+        uses: actions/checkout@v3
+
+      - name: Get tags
+        if: github.ref == 'refs/heads/main'
+        run: git fetch --unshallow --tags
+
+      - name: Login to Private NPM registry
+        if: github.ref == 'refs/heads/main'
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        if: github.ref == 'refs/heads/main'
+        uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm ci --ignore-scripts
+
+      - name: Get Version Info
+        if: github.ref == 'refs/heads/main'
+        id: info
+        env:
+          # Needed for `auto` cli
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          echo "version=$(npx auto release -d | grep 'Would have created a release on GitHub for version: ' | sed 's/.*version: //')" >> $GITHUB_OUTPUT
+          npx auto changelog -d | tail -n +2 > CHANGELOG.md
+          cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
+
+      # newlines are easier to handle in single-line yaml
+      - run: "echo '\n' >> CHANGELOG.md"
+        if: github.ref == 'refs/heads/main'
+
+      - name: PR Version Info
+        id: pr_info
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
+          echo "Pull Request" > CHANGELOG.md
+          cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload Changelog
+        uses: actions/upload-artifact@v2
+        with:
+          name: changelog
+          path: CHANGELOG.md
+
+  build-wasm:
+    name: "Non-Native Build"
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    needs: prepare
+    env:
+      PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Install wasi-sdk
+        run: scripts/setup_wasi.sh
+
+      - name: Login to Private NPM registry
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Lint Nx
+        run: npx nx workspace-lint
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build"
+          projects: "wing,wingsdk,wing-api-checker,wing-playground"
+          args: "--configuration=release --output-style=stream --verbose"
+
+      # wingc require wingsdk to be built first in order to run
+      - name: wingc Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wingc"
+          args: "--configuration=release --output-style=stream --verbose"
+
+      - name: Package Wing CLI
+        working-directory: apps/wing
+        run: |
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
+          node version.js
+          npm pack
+
+      - name: Package WingSDK
+        working-directory: libs/wingsdk
+        run: |
+          npm version ${{ env.PROJEN_BUMP_VERSION }}
+          npm pack
+
+      - name: Upload Wing CLI
+        uses: actions/upload-artifact@v2
+        with:
+          name: wing
+          path: apps/wing/*.tgz
+
+      - name: Upload WingSDK
+        uses: actions/upload-artifact@v2
+        with:
+          name: wingsdk
+          path: libs/wingsdk/*.tgz
+
+      - name: Upload WingC Binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: wingc
+          path: target/wasm32-wasi/release/wingc.wasm
+
+      - name: "Publish Wing Playground"
+        if: github.ref == 'refs/heads/main'
+        uses: amondnet/vercel-action@v25.1.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          vercel-token: ${{ secrets.VERCEL_TOKEN_WING_PLAYGROUND }}
+          vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WING_PLAYGROUND }}
+          working-directory: apps/wing-playground/dist
+          github-comment: false
+          vercel-args: "--prod "
+
+  build-native:
+    needs: prepare
+    env:
+      PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: macos-latest
+            arch: x64
+          - os: ubuntu-latest
+            arch: x64
+          # TODO libnode build currently invalid for the following configs
+          # - os: macos-latest
+          #   arch: arm64
+          # - os: ubuntu-latest
+          #   arch: x86
+    runs-on: ${{ matrix.os }}
+    name: "Native Build"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Setup Cargo Cache
+        uses: Swatinem/rust-cache@v2
+
+      - name: Login to Private NPM registry
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          # Don't need to install sub-project dependencies
+          install-command: npm install --ignore-scripts
+
+      - name: Lint Nx
+        run: npx nx workspace-lint
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build-native"
+          projects: "wing-language-server"
+          args: "--configuration=release --output-style=stream --verbose"
+
+      - name: Test
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "wingii"
+          args: "--configuration=release --output-style=stream --verbose"
+
+      - name: Upload Wing Language Server
+        uses: actions/upload-artifact@v2
+        with:
+          name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
+          path: target/release/wing-language-server
+
+  build-vscode:
+    name: "Build VSCode Extension"
+    needs:
+      - prepare
+      - build-native
+    env:
+      PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Prepare language server binaries
+        run: cp -r wing-language-server-* ./apps/vscode-wing/resources
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Login to Private NPM registry
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+
+      - name: Build
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "build-multi"
+          projects: "vscode-wing"
+          args: "--configuration=release --output-style=stream --verbose"
+
+      - name: Upload extension
+        uses: actions/upload-artifact@v2
+        with:
+          name: vscode-wing.vsix
+          path: apps/vscode-wing/vscode-wing.vsix
+
+  build:
+    needs:
+      - build-native
+      - build-wasm
+      - build-vscode
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Validation
+        run: echo "Build Successful"
+
+  publish:
+    name: Publish
+    if: github.ref == 'refs/heads/main'
+    needs:
+      - build
+      - prepare
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Publish Wing
+        working-directory: wing
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm publish *.tgz
+
+      - name: Publish Wing
+        working-directory: wingsdk
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm publish *.tgz
+
+      - name: Compute Checksums
+        run: |
+          mkdir dist
+          mv ./*/*.vsix ./dist
+          mv ./*/*.tgz ./dist
+          mv ./*/*.wasm ./dist
+          cd dist
+
+          cp ../changelog/CHANGELOG.md ../CHANGELOG.md
+          echo '## SHA-1 Checksums' >> ../CHANGELOG.md
+          echo '```' >> ../CHANGELOG.md
+          sha1sum --binary * >> ../CHANGELOG.md
+          echo '```' >> ../CHANGELOG.md
+          cat ../CHANGELOG.md
+
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.1
+        with:
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          tag: "v${{ needs.prepare.outputs.version }}"
+
+      - name: Cut Development Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: "Wing ${{ needs.prepare.outputs.version }}"
+          tag_name: "v${{ needs.prepare.outputs.version }}"
+          body_path: CHANGELOG.md
+          files: dist/*
