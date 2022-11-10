@@ -209,9 +209,9 @@ pub struct Expr {
 }
 
 impl Expr {
-	pub fn new(expression_variant: ExprKind, span: WingSpan) -> Self {
+	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
 		Self {
-			kind: expression_variant,
+			kind,
 			evaluated_type: RefCell::new(None),
 			span,
 		}
