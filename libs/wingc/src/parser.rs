@@ -5,8 +5,8 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
-	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Reference, Scope, Statement, Symbol, Type,
-	UnaryOperator,
+	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Reference, Scope, Stmt, StmtKind, Symbol,
+	Type, UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -107,15 +107,18 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_statement(&self, statement_node: &Node) -> DiagnosticResult<Statement> {
+	fn build_statement(&self, statement_node: &Node) -> DiagnosticResult<Stmt> {
 		match statement_node.kind() {
-			"short_import_statement" => Ok(Statement::Use {
-				module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
-				identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
-					Some(self.node_symbol(&identifier)?)
-				} else {
-					None
+			"short_import_statement" => Ok(Stmt {
+				kind: StmtKind::Use {
+					module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
+					identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
+						Some(self.node_symbol(&identifier)?)
+					} else {
+						None
+					},
 				},
+				span: self.node_span(statement_node),
 			}),
 			"variable_definition_statement" => {
 				let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
@@ -123,20 +126,30 @@ impl Parser<'_> {
 				} else {
 					None
 				};
-				Ok(Statement::VariableDef {
-					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
-					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-					type_,
+				Ok(Stmt {
+					kind: StmtKind::VariableDef {
+						var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
+						initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+						type_,
+					},
+					span: self.node_span(statement_node),
 				})
 			}
-			"variable_assignment_statement" => Ok(Statement::Assignment {
-				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
-				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+			"variable_assignment_statement" => Ok(Stmt {
+				kind: StmtKind::Assignment {
+					variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
+					value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
+				},
+				span: self.node_span(statement_node),
 			}),
-			"expression_statement" => Ok(Statement::Expression(
-				self.build_expression(&statement_node.named_child(0).unwrap())?,
-			)),
-			"block" => Ok(Statement::Scope(self.build_scope(statement_node))),
+			"expression_statement" => Ok(Stmt {
+				kind: StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap())?),
+				span: self.node_span(statement_node),
+			}),
+			"block" => Ok(Stmt {
+				kind: StmtKind::Scope(self.build_scope(statement_node)),
+				span: self.node_span(statement_node),
+			}),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
 				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
@@ -144,27 +157,37 @@ impl Parser<'_> {
 				} else {
 					None
 				};
-				Ok(Statement::If {
-					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
-					statements: if_block,
-					else_statements: else_block,
+				Ok(Stmt {
+					kind: StmtKind::If {
+						condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+						statements: if_block,
+						else_statements: else_block,
+					},
+					span: self.node_span(statement_node),
 				})
 			}
-			"for_in_loop" => Ok(Statement::ForLoop {
-				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
-				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
-				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
-			}),
-			"inflight_function_definition" => Ok(Statement::FunctionDefinition(
-				self.build_function_definition(statement_node, Flight::In)?,
-			)),
-			"return_statement" => Ok(Statement::Return(
-				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
-					Some(self.build_expression(&return_expression_node)?)
-				} else {
-					None
+			"for_in_loop" => Ok(Stmt {
+				kind: StmtKind::ForLoop {
+					iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
+					iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
+					statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 				},
-			)),
+				span: self.node_span(statement_node),
+			}),
+			"inflight_function_definition" => Ok(Stmt {
+				kind: StmtKind::FunctionDefinition(self.build_function_definition(statement_node, Flight::In)?),
+				span: self.node_span(statement_node),
+			}),
+			"return_statement" => Ok(Stmt {
+				kind: StmtKind::Return(
+					if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
+						Some(self.build_expression(&return_expression_node)?)
+					} else {
+						None
+					},
+				),
+				span: self.node_span(statement_node),
+			}),
 			"class_definition" => Ok(self.build_class_statement(statement_node, false)?),
 			"resource_definition" => Ok(self.build_class_statement(statement_node, true)?),
 			"ERROR" => self.add_error(format!("Expected statement"), statement_node),
@@ -172,7 +195,7 @@ impl Parser<'_> {
 		}
 	}
 
-	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> DiagnosticResult<Statement> {
+	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> DiagnosticResult<Stmt> {
 		let mut cursor = statement_node.walk();
 		let mut members = vec![];
 		let mut methods = vec![];
@@ -252,13 +275,16 @@ impl Parser<'_> {
 		} else {
 			None
 		};
-		Ok(Statement::Class {
-			name,
-			members,
-			methods,
-			parent,
-			constructor: constructor.unwrap(),
-			is_resource,
+		Ok(Stmt {
+			kind: StmtKind::Class {
+				name,
+				members,
+				methods,
+				parent,
+				constructor: constructor.unwrap(),
+				is_resource,
+			},
+			span: self.node_span(statement_node),
 		})
 	}
 

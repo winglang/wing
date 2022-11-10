@@ -455,6 +455,14 @@ impl<'a> TypeChecker<'a> {
 		self.types.anything()
 	}
 
+	fn stmt_error(&self, stmt: &Stmt, message: String) {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message,
+			span: Some(stmt.span.clone()),
+		});
+	}
+
 	fn type_error(&self, type_error: &TypeError) -> TypeRef {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
@@ -814,9 +822,9 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, statement: &mut Statement, env: &mut TypeEnv) {
-		match statement {
-			Statement::VariableDef {
+	fn type_check_statement(&mut self, statement: &mut Stmt, env: &mut TypeEnv) {
+		match &mut statement.kind {
+			StmtKind::VariableDef {
 				var_name,
 				initial_value,
 				type_,
@@ -840,7 +848,7 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 			}
-			Statement::FunctionDefinition(func_def) => {
+			StmtKind::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
 				if matches!(func_def.signature.flight, Flight::In) {
@@ -867,7 +875,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: we created `function_env` but `type_check_scope` will also create a wrapper env for the scope which is redundant
 				self.type_check_scope(&mut func_def.statements);
 			}
-			Statement::ForLoop {
+			StmtKind::ForLoop {
 				iterator,
 				iterable,
 				statements,
@@ -886,7 +894,7 @@ impl<'a> TypeChecker<'a> {
 
 				self.type_check_scope(statements);
 			}
-			Statement::If {
+			StmtKind::If {
 				condition,
 				statements,
 				else_statements,
@@ -902,15 +910,15 @@ impl<'a> TypeChecker<'a> {
 					self.type_check_scope(else_scope);
 				}
 			}
-			Statement::Expression(e) => {
+			StmtKind::Expression(e) => {
 				self.type_check_exp(e, env);
 			}
-			Statement::Assignment { variable, value } => {
+			StmtKind::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env).unwrap();
 				let var_type = self.resolve_reference(variable, env);
 				self.validate_type(exp_type, var_type, value);
 			}
-			Statement::Use {
+			StmtKind::Use {
 				module_name,
 				identifier,
 			} => {
@@ -987,30 +995,33 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
-			Statement::Scope(scope) => {
+			StmtKind::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				for statement in scope.statements.iter_mut() {
 					self.type_check_statement(statement, &mut scope_env);
 				}
 			}
-			Statement::Return(exp) => {
+			StmtKind::Return(exp) => {
 				if let Some(return_expression) = exp {
 					let return_type = self.type_check_exp(return_expression, env).unwrap();
 					if let Some(expected_return_type) = env.return_type {
 						self.validate_type(return_type, expected_return_type, return_expression);
 					} else {
-						self.general_type_error(format!("Return statement outside of function cannot return a value."));
+						self.stmt_error(
+							statement,
+							format!("Return statement outside of function cannot return a value."),
+						);
 					}
 				} else {
 					if let Some(expected_return_type) = env.return_type {
-						self.general_type_error(format!(
-							"Expected return statement to return type {}",
-							expected_return_type
-						));
+						self.stmt_error(
+							statement,
+							format!("Expected return statement to return type {}", expected_return_type),
+						);
 					}
 				}
 			}
-			Statement::Class {
+			StmtKind::Class {
 				name,
 				members,
 				methods,
@@ -1186,7 +1197,7 @@ impl<'a> TypeChecker<'a> {
 					self.type_check_scope(&mut method.statements);
 				}
 			}
-			Statement::Struct { name, extends, members } => {
+			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 				//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 				//   fail type checking.

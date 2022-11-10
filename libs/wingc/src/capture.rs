@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
-	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, Statement, Symbol},
+	ast::{ArgList, Expr, ExprType, Flight, Reference, Scope, StmtKind, Symbol},
 	debug,
 	type_check::type_env::TypeEnv,
 	type_check::Type,
@@ -36,20 +36,20 @@ fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 
 pub fn scan_captures(ast_root: &Scope) {
 	for s in ast_root.statements.iter() {
-		match s {
-			Statement::FunctionDefinition(func_def) => {
+		match &s.kind {
+			StmtKind::FunctionDefinition(func_def) => {
 				if let Flight::In = func_def.signature.flight {
 					let mut func_captures = func_def.captures.borrow_mut();
 					assert!(func_captures.is_none());
 					*func_captures = Some(collect_captures(scan_captures_in_scope(&func_def.statements)));
 				}
 			}
-			Statement::ForLoop {
+			StmtKind::ForLoop {
 				iterator: _,
 				iterable: _,
 				statements,
 			} => scan_captures(&statements),
-			crate::ast::Statement::If {
+			StmtKind::If {
 				condition: _,
 				statements,
 				else_statements,
@@ -59,8 +59,8 @@ pub fn scan_captures(ast_root: &Scope) {
 					scan_captures(else_statements);
 				}
 			}
-			Statement::Scope(s) => scan_captures(s),
-			Statement::Class {
+			StmtKind::Scope(s) => scan_captures(s),
+			StmtKind::Class {
 				name: _,
 				members: _,
 				methods,
@@ -210,14 +210,14 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 	assert!(matches!(env.flight, Flight::In));
 
 	for s in scope.statements.iter() {
-		match s {
-			Statement::VariableDef {
+		match &s.kind {
+			StmtKind::VariableDef {
 				var_name: _,
 				initial_value,
 				type_: _,
 			} => res.extend(scan_captures_in_expression(initial_value, env)),
-			Statement::FunctionDefinition(func_def) => res.extend(scan_captures_in_scope(&func_def.statements)),
-			Statement::ForLoop {
+			StmtKind::FunctionDefinition(func_def) => res.extend(scan_captures_in_scope(&func_def.statements)),
+			StmtKind::ForLoop {
 				iterator: _,
 				iterable,
 				statements,
@@ -225,7 +225,7 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				res.extend(scan_captures_in_expression(iterable, env));
 				res.extend(scan_captures_in_scope(statements));
 			}
-			Statement::If {
+			StmtKind::If {
 				condition,
 				statements,
 				else_statements,
@@ -236,15 +236,15 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 					res.extend(scan_captures_in_scope(else_statements));
 				}
 			}
-			Statement::Expression(e) => res.extend(scan_captures_in_expression(e, env)),
-			Statement::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env)),
-			Statement::Return(e) => {
+			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env)),
+			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env)),
+			StmtKind::Return(e) => {
 				if let Some(e) = e {
 					res.extend(scan_captures_in_expression(e, env));
 				}
 			}
-			Statement::Scope(s) => res.extend(scan_captures_in_scope(s)),
-			Statement::Class {
+			StmtKind::Scope(s) => res.extend(scan_captures_in_scope(s)),
+			StmtKind::Class {
 				name: _,
 				members: _,
 				methods,
@@ -257,13 +257,13 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 					res.extend(scan_captures_in_scope(&m.statements))
 				}
 			}
-			Statement::Use {
+			StmtKind::Use {
 				module_name: _,
 				identifier: _,
 			} => {
 				todo!()
 			}
-			Statement::Struct {
+			StmtKind::Struct {
 				name: _,
 				extends: _,
 				members: _,

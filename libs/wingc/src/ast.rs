@@ -104,7 +104,13 @@ pub struct Constructor {
 }
 
 #[derive(Debug)]
-pub enum Statement {
+pub struct Stmt {
+	pub kind: StmtKind,
+	pub span: WingSpan,
+}
+
+#[derive(Debug)]
+pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
@@ -250,7 +256,7 @@ pub enum InterpolatedStringPart {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Scope {
-	pub statements: Vec<Statement>,
+	pub statements: Vec<Stmt>,
 	#[derivative(Debug = "ignore")]
 	pub env: Option<TypeEnv>, // None after parsing, set to Some during type checking phase
 }
