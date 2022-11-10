@@ -14,7 +14,7 @@ Here is an example of a dashboard that shows how many visitors/users/contributor
 
 This is a list of sources where we are going to gather analytics events from:
 
-- Winglang.io (including blog.winglang.io and docs.winglang.io)
+- winglang.io, blog.winglang.io, docs.winglang.io (and any other winglang.io asset)
 - Monada.io
 - winglang/wing Github
 - winglang/console Github 
