@@ -12,55 +12,6 @@ Here is an example of a dashboard that shows how many visitors/users/contributor
 metrics, advocate accounting and high touch real usage users
 ![image](https://user-images.githubusercontent.com/1727147/200826865-2f164ceb-6bbe-47c7-adf2-233260539238.png)
 
-## Event Sources
-
-This is a list of sources where we are going to gather analytics events from:
-
-- winglang.io, blog.winglang.io, docs.winglang.io (and any other winglang.io asset)
-- monada.co
-- winglang/wing Github
-- Wing CLI
-- Wing VSCode Extension
-- Slack
-- Email CTA
-- Typeform form
-- Wing Console
-## Naming and collection standards
-
-This is a placeholder for our events naming conventions and standards ([example](https://segment.com/docs/protocols/tracking-plan/best-practices/#formalize-your-naming-and-collection-standards))
-
-## Tracking Plane
-
-This is a placeholder for all the events reported in the system, and the entities that are related to 
-
-**Events:**
-| NAME | WHY | PROPERTIES | LOCATION |
-|---   |---  |---         |---       | 
-|      |     |            |          |
-
-**Entities:**
-
-User entity in the system
-- email:str
-- github_username: str
-- Type: “registered|user|contributor” 
-  - Registered - someone that registered for our preview and we have his email and github
-  - User - see definition
-  - Contributor - see definition
-- Monadian: true/false 
-- created_at: date+time
-
-
-
-## Technology Stack
-
-- Segment.com - Segment is like a message bus for all our analytics data, you can connect sources and destinations and keep the development integration to a minimum 
-- Google Analytics - GA used for public websites analytics 
-- Mixpanel - used for deep app and user analytics 
-- Pipedrive - our CRM, used for sending email and tracking different sale oriented workflows
-- FullStory - an ability to see what our users is doing on the screen (we should remove it eventually from the public site) 
-- HotJar - maybe a competitor to FullStory, we will review both after release and decide which one to work with
-
 ## Prioritize User Stories
 
 ### Tracking visitors and signup flow
@@ -146,5 +97,52 @@ Implement the above [dashboard](#dashboard)
 
 ## Appendix 
 
+### Event Sources
 
+This is a list of sources where we are going to gather analytics events from:
+
+- winglang.io, blog.winglang.io, docs.winglang.io (and any other winglang.io asset)
+- monada.co
+- winglang/wing Github
+- Wing CLI
+- Wing VSCode Extension
+- Slack
+- Email CTA
+- Typeform form
+- Wing Console
+
+
+### Naming and collection standards
+
+This is a placeholder for our events naming conventions and standards ([example](https://segment.com/docs/protocols/tracking-plan/best-practices/#formalize-your-naming-and-collection-standards))
+
+### Tracking Plane
+
+This is a placeholder for all the events reported in the system, and the entities that are related to 
+
+**Events:**
+| NAME | WHY | PROPERTIES | LOCATION |
+|---   |---  |---         |---       | 
+|      |     |            |          |
+
+**Entities:**
+
+User entity in the system
+- email:str
+- github_username: str
+- Type: “registered|user|contributor” 
+  - Registered - someone that registered for our preview and we have his email and github
+  - User - see definition
+  - Contributor - see definition
+- Monadian: true/false 
+- created_at: date+time
+
+### Technology Stack
+
+- Segment.com - Segment is like a message bus for all our analytics data, you can connect sources and destinations and keep the development integration to a minimum 
+- Google Analytics - GA used for public websites analytics 
+- Mixpanel - used for deep app and user analytics 
+- Pipedrive - our CRM, used for sending email and tracking different sale oriented workflows
+- FullStory - an ability to see what our users is doing on the screen (we should remove it eventually from the public site) 
+- HotJar - maybe a competitor to FullStory, we will review both after release and decide which one to work with
 
