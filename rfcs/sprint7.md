@@ -5,7 +5,7 @@ This sprint goal is to make sure the system is ready for anyone to go into our w
 
  For the above to be successful we need to complete the following user stories and also declare a code freeze near the release date
 
-## All public assets meets our standards #524
+## All public assets meets our standards [#524](https://github.com/winglang/wing/issues/524)
 
 We want to make sure that all our public assets meet our standards of good UX (performance, experience, branded design) 
 
@@ -15,7 +15,7 @@ We want to make sure that all our public assets meet our standards of good UX (p
 
 **Other assets:** GitHub Discussions
 
-## Tracking visitors and their onboarding process #507  
+## Tracking visitors and their onboarding process [#507](https://github.com/winglang/wing/issues/507) 
 
 When a visitor goes into winglang.io or any.winglang.io or monada.co we report page load to Segment that reports it to Google Analytics and Mixpanel, it keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview , completing the form, and successfully clicking on the email.
 
@@ -34,11 +34,11 @@ We are able to answer the following questions:
 - What happened to visitors who started the form and did not complete it 
   - Show the funnel: Register → Completed form → email cta clicked
 
-# We do not expose our user to any legal or privacy issues #526
+# We do not expose our user to any legal or privacy issues [#526](https://github.com/winglang/wing/issues/526)
 
 We want to make sure that our user journey is safe and meets the legal standard.
 
-# Our service is always available for our users #527
+# Our service is always available for our users [#527](https://github.com/winglang/wing/issues/527)
 
 We are notified when a critical path in our customer journey is broken. 
 
