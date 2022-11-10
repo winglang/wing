@@ -15,7 +15,16 @@
       }
     },
     "test": {
-      "executor": "@nxrs/cargo:test"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "INSTA_UPDATE=always cargo test",
+        "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo test --release"
+        }
+      }
     },
     "build-wasm": {
       "executor": "nx:run-commands",
