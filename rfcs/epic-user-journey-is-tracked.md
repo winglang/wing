@@ -78,7 +78,7 @@ We want to have accounts in the relevant services and we want to establish a for
 | RFC    | https://github.com/winglang/wing/issues/507 |
 
 
-When a visitor goes into winglang.io or any.winglang.io or monada.co we report page load to Segment that reports it to Google Analytics and Mixpanel, it keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview , completing the form, and successfully clicking on the email.
+When a visitor goes into winglang.io or any.winglang.io or monada.co we report page load to Segment that reports it to Google Analytics and Mixpanel, it keeps track of the utm_\* and HTTP referer attributes to determine where they came from, we also track their registration to preview, completing the form, and successfully clicking on the email.
 
 We are able to answer the following questions:
 - How many visitors seen our web pages
