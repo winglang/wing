@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`wing cdktf compile captures.w > cdk.tf.json 1`] = `
+exports[`wing compile captures.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -177,7 +177,7 @@ exports[`wing cdktf compile captures.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing cdktf compile captures.w > manifest.json 1`] = `
+exports[`wing compile captures.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -193,7 +193,7 @@ exports[`wing cdktf compile captures.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing cdktf compile expressions_binary_operators.w > cdk.tf.json 1`] = `
+exports[`wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -224,7 +224,7 @@ exports[`wing cdktf compile expressions_binary_operators.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing cdktf compile expressions_binary_operators.w > manifest.json 1`] = `
+exports[`wing compile expressions_binary_operators.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -240,7 +240,7 @@ exports[`wing cdktf compile expressions_binary_operators.w > manifest.json 1`] =
 }
 `;
 
-exports[`wing cdktf compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
+exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -271,7 +271,7 @@ exports[`wing cdktf compile expressions_string_interpolation.w > cdk.tf.json 1`]
 }
 `;
 
-exports[`wing cdktf compile expressions_string_interpolation.w > manifest.json 1`] = `
+exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -287,7 +287,7 @@ exports[`wing cdktf compile expressions_string_interpolation.w > manifest.json 1
 }
 `;
 
-exports[`wing cdktf compile hello.w > cdk.tf.json 1`] = `
+exports[`wing compile hello.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -439,7 +439,7 @@ exports[`wing cdktf compile hello.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing cdktf compile hello.w > manifest.json 1`] = `
+exports[`wing compile hello.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -455,7 +455,7 @@ exports[`wing cdktf compile hello.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing cdktf compile statements_if.w > cdk.tf.json 1`] = `
+exports[`wing compile statements_if.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -486,7 +486,7 @@ exports[`wing cdktf compile statements_if.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing cdktf compile statements_if.w > manifest.json 1`] = `
+exports[`wing compile statements_if.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -502,7 +502,7 @@ exports[`wing cdktf compile statements_if.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing cdktf compile statements_variable_declarations.w > cdk.tf.json 1`] = `
+exports[`wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -533,7 +533,7 @@ exports[`wing cdktf compile statements_variable_declarations.w > cdk.tf.json 1`]
 }
 `;
 
-exports[`wing cdktf compile statements_variable_declarations.w > manifest.json 1`] = `
+exports[`wing compile statements_variable_declarations.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {

@@ -1,4 +1,4 @@
-import { test, expect, beforeAll, afterAll } from "vitest";
+import { test, expect, beforeAll, afterAll, vitest } from "vitest";
 import { posix as path } from "path";
 import { runServer } from "verdaccio";
 import "zx/globals";
@@ -78,23 +78,44 @@ function sanitize_json_paths(path: string) {
   return JSON.parse(sanitizedJsonText);
 }
 
+async function enterTestDir(testDir: string) {
+  $.env = shellEnv;
+  await $`mkdir -p ${testDir}`;
+  await $`cd ${testDir}`;
+  $.cwd = testDir;
+}
+
 test.each(validWingFiles)(
-  "wing cdktf compile %s",
+  "wing compile %s",
   async (wingFile) => {
     await within(async () => {
-      $.env = shellEnv;
-      const test_dir = path.join(tmpDir, wingFile);
+      const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
       const tf_manifest = path.join(test_dir, "target/cdktf.out/manifest.json");
       const tf_json = path.join(test_dir, "target/cdktf.out/stacks/root/cdk.tf.json");
 
-      await $`mkdir -p ${test_dir}`;
-      await $`cd ${test_dir}`;
-      $.cwd = test_dir;
+      await enterTestDir(test_dir);
 
       await $`npx @winglang/wing compile ${path.join(validTestDir, wingFile)}`;
 
       expect(sanitize_json_paths(tf_manifest)).toMatchSnapshot("manifest.json");
       expect(sanitize_json_paths(tf_json)).toMatchSnapshot("cdk.tf.json");
+    });
+  },
+  {
+    timeout: 1000 * 15,
+  }
+);
+
+test.each(validWingFiles)(
+  "wing compile --target sim %s",
+  async (wingFile) => {
+    await within(async () => {
+      const test_dir = path.join(tmpDir, `${wingFile}_sim`);
+      await enterTestDir(test_dir);
+
+      await $`npx @winglang/wing compile --target sim ${path.join(validTestDir, wingFile)}`;
+
+      // TODO snapshot app.wx contents
     });
   },
   {
