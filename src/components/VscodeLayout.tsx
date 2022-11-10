@@ -205,10 +205,10 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
           </div>
 
           <div className="flex-1 flex">
-            <div className="flex-1 relative">
+            <div className="flex-1 min-w-[20rem] relative">
               <ScrollableArea
                 overflowX
-                className="flex-1 min-w-[20rem] flex bg-slate-50 justify-around p-2"
+                className="flex-1 flex bg-slate-50 justify-around p-2"
               >
                 <div className="w-full max-w-xl">
                   {relationships &&
