@@ -22,7 +22,7 @@ This is a list of sources where we are going to gather analytics events from:
 - Slack
 - Email CTA
 - Typeform form
-
+- Wing Console
 ## Naming and collection standards
 
 This is a placeholder for our events naming conventions and standards ([example](https://segment.com/docs/protocols/tracking-plan/best-practices/#formalize-your-naming-and-collection-standards))
