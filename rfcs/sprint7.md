@@ -3,7 +3,9 @@
 This sprint goal is to make sure the system is ready for anyone to go into our winglang.io website,
  register for wing preview program, consume the docs and guides and engage with the community. 
 
- For the above to be successful we need to complete the following user stories and also declare a code freeze near the release date
+For the above to be successful we need to complete the following user stories
+ 
+
 
 ## All public assets meets our standards [#524](https://github.com/winglang/wing/issues/524)
 
@@ -34,11 +36,13 @@ We are able to answer the following questions:
 - What happened to visitors who started the form and did not complete it 
   - Show the funnel: Register → Completed form → email cta clicked
 
-# We do not expose our user to any legal or privacy issues [#526](https://github.com/winglang/wing/issues/526)
+## We do not expose our user to any legal or privacy issues [#526](https://github.com/winglang/wing/issues/526)
 
-We want to make sure that our user journey is safe and meets the legal standard.
+We want to make sure that our user journey is safe and meets the legal standard, including:
+- having EULA availalbe 
+- 
 
-# Our service is always available for our users [#527](https://github.com/winglang/wing/issues/527)
+## Our service is always available for our users [#527](https://github.com/winglang/wing/issues/527)
 
 We are notified when a critical path in our customer journey is broken. 
 
