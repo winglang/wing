@@ -9,4 +9,5 @@
 ## References
 
 - [Wing SDK API Reference](./wingsdk-api.md)
+- [Wing SDK Architecture](./wingsdk-api.md)
 - [Wing Language Specification](./winglang-spec.md)
