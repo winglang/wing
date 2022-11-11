@@ -1,0 +1,42 @@
+---
+source: libs/wingc/src/lib.rs
+description: "../../examples/tests/valid/print.w"
+---
+// ../../examples/tests/valid/print.w.out/preflight.js
+const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
+
+function __app(target) {
+	switch (target) {
+		case "sim":
+			return $stdlib.sim.App;
+		case "tfaws":
+		case "tf-aws":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir });
+  
+  let bucket1 = new cloud.Bucket(this,"cloud.Bucket");
+  console.log("Hello world!");
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js")),
+    entrypoint: "$proc",
+    
+  });
+  new cloud.Function(this,"cloud.Function",handler);
+}
+}
+new MyApp().synth();
+// ../../examples/tests/valid/print.w.out/proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js
+async function $proc({  }, event) {
+  console.log(event);
+};
+
