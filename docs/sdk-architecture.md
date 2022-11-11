@@ -37,7 +37,7 @@ Inflights are Wing's distributed computing primitive.
 They are isolated code blocks which can be packaged and executed on compute platforms in the cloud (such as containers, CI/CD pipelines or FaaS).
 
 When a resource wants to use an inflight in an API, it is represented in the SDK using the `Inflight` class.
-An `Inflight` is modeled as a struct containing:
+An `Inflight` is modeled as an object containing:
 
 * a snippet of code (inline string or file)
 * an entrypoint (name of a function to call)
