@@ -67,13 +67,16 @@ function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
   const assetSourceRegex = /"assets\/.+"/g;
   const json = fs.readJsonSync(path);
-  delete json.terraform;
 
   const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
     .replace(assetKeyRegex, '"<ASSET_KEY>"')
     .replace(assetSourceRegex, '"<ASSET_SOURCE>"');
-  return JSON.parse(sanitizedJsonText);
+
+  const finalObj = JSON.parse(sanitizedJsonText);
+  delete finalObj.terraform;
+
+  return finalObj;
 }
 
 async function enterTestDir(testDir: string) {
@@ -89,7 +92,10 @@ test.each(validWingFiles)(
     await within(async () => {
       const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
       const tf_manifest = path.join(test_dir, "target/cdktf.out/manifest.json");
-      const tf_json = path.join(test_dir, "target/cdktf.out/stacks/root/cdk.tf.json");
+      const tf_json = path.join(
+        test_dir,
+        "target/cdktf.out/stacks/root/cdk.tf.json"
+      );
 
       await enterTestDir(test_dir);
 
@@ -111,7 +117,10 @@ test.each(validWingFiles)(
       const test_dir = path.join(tmpDir, `${wingFile}_sim`);
       await enterTestDir(test_dir);
 
-      await $`npx @winglang/wing compile --target sim ${path.join(validTestDir, wingFile)}`;
+      await $`npx @winglang/wing compile --target sim ${path.join(
+        validTestDir,
+        wingFile
+      )}`;
 
       // TODO snapshot app.wx contents
     });

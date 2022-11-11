@@ -208,19 +208,6 @@ exports[`wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-  "terraform": {
-    "backend": {
-      "local": {
-        "path": "<STATE_FILE>",
-      },
-    },
-    "required_providers": {
-      "aws": {
-        "source": "aws",
-        "version": "4.36.1",
-      },
-    },
-  },
 }
 `;
 
@@ -254,19 +241,6 @@ exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
     "aws": [
       {},
     ],
-  },
-  "terraform": {
-    "backend": {
-      "local": {
-        "path": "<STATE_FILE>",
-      },
-    },
-    "required_providers": {
-      "aws": {
-        "source": "aws",
-        "version": "4.36.1",
-      },
-    },
   },
 }
 `;
@@ -470,19 +444,6 @@ exports[`wing compile statements_if.w > cdk.tf.json 1`] = `
       {},
     ],
   },
-  "terraform": {
-    "backend": {
-      "local": {
-        "path": "<STATE_FILE>",
-      },
-    },
-    "required_providers": {
-      "aws": {
-        "source": "aws",
-        "version": "4.36.1",
-      },
-    },
-  },
 }
 `;
 
@@ -516,19 +477,6 @@ exports[`wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
     "aws": [
       {},
     ],
-  },
-  "terraform": {
-    "backend": {
-      "local": {
-        "path": "<STATE_FILE>",
-      },
-    },
-    "required_providers": {
-      "aws": {
-        "source": "aws",
-        "version": "4.36.1",
-      },
-    },
   },
 }
 `;
