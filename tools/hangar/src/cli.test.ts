@@ -67,9 +67,7 @@ function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
   const assetSourceRegex = /"assets\/.+"/g;
   const json = fs.readJsonSync(path);
-  if (json?.terraform?.backend?.local?.path) {
-    json.terraform.backend.local.path = "<STATE_FILE>";
-  }
+  delete json.terraform;
 
   const jsonText = JSON.stringify(json);
   const sanitizedJsonText = jsonText
