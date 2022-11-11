@@ -216,11 +216,8 @@ fn jsify_expression(expression: &Expr) -> String {
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
 		ExprType::Call { function, args } => {
-			// special case for "print"
-			if let Reference::Identifier(Symbol { name, .. }) = &function {
-				if name == "print" {
-					return format!("console.log({})", jsify_arg_list(args, None, None));
-				}
+			if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
+				return format!("console.log({})", jsify_arg_list(args, None, None));
 			}
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
 		}

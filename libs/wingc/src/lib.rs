@@ -6,7 +6,6 @@ use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnost
 use type_check::{FunctionSignature, Type};
 
 use crate::parser::Parser;
-use std::borrow::BorrowMut;
 use std::cell::RefCell;
 use std::fs;
 use std::path::PathBuf;
