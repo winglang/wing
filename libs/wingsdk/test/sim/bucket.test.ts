@@ -47,7 +47,12 @@ test("put and get objects from bucket", async () => {
   expect(response).toEqual(VALUE);
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "Bucket created.",
+    "Put (key=greeting.txt) operation succeeded.",
+    "Get (key=greeting.txt) operation succeeded.",
+    "Bucket deleted.",
+  ]);
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -77,7 +82,14 @@ test("put multiple objects and list all from bucket", async () => {
   expect(response).toEqual([KEY1, KEY2, KEY3]);
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "Bucket created.",
+    "Put (key=greeting1.txt) operation succeeded.",
+    "Put (key=greeting2.txt) operation succeeded.",
+    "Put (key=greeting3.txt) operation succeeded.",
+    "List (prefix=null) operation succeeded.",
+    "Bucket deleted.",
+  ]);
 });
 
 test("get invalid object throws an error", async () => {
@@ -95,5 +107,13 @@ test("get invalid object throws an error", async () => {
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "Bucket created.",
+    "Get (key=unknown.txt) operation failed.",
+    "Bucket deleted.",
+  ]);
 });
+
+function listMessages(s: testing.Simulator) {
+  return s.listEvents().map((evt) => evt.message);
+}

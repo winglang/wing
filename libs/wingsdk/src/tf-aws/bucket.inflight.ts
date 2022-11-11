@@ -8,6 +8,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { IBucketClient } from "./bucket";
+
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,

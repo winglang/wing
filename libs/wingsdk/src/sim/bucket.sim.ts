@@ -8,36 +8,74 @@ import { BucketSchema } from "./schema-resources";
 
 export class Bucket implements IBucketClient, ISimulatorResource {
   private readonly fileDir: string;
+  private readonly context: ISimulatorContext;
   public constructor(
     _props: BucketSchema["props"],
-    _context: ISimulatorContext
+    context: ISimulatorContext
   ) {
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
+    this.context = context;
   }
 
   public async init(): Promise<void> {
-    return;
+    this.context.addEvent({
+      message: "Bucket created.",
+    });
   }
 
   public async cleanup(): Promise<void> {
     // TODO: clean up file dir?
-    return;
+    this.context.addEvent({
+      message: "Bucket deleted.",
+    });
   }
 
   public async put(key: string, value: string): Promise<void> {
-    const filename = join(this.fileDir, key);
-    await fs.promises.writeFile(filename, value);
+    try {
+      const filename = join(this.fileDir, key);
+      await fs.promises.writeFile(filename, value);
+      this.context.addEvent({
+        message: `Put (key=${key}) operation succeeded.`,
+      });
+    } catch (e) {
+      this.context.addEvent({
+        message: `Put (key=${key}) operation failed.`,
+      });
+      throw e;
+    }
   }
 
   public async get(key: string): Promise<string> {
-    const filename = join(this.fileDir, key);
-    return fs.promises.readFile(filename, "utf8");
+    try {
+      const filename = join(this.fileDir, key);
+      const value = await fs.promises.readFile(filename, "utf8");
+      this.context.addEvent({
+        message: `Get (key=${key}) operation succeeded.`,
+      });
+      return value;
+    } catch (e) {
+      this.context.addEvent({
+        message: `Get (key=${key}) operation failed.`,
+      });
+      throw e;
+    }
   }
 
   public async list(prefix?: string): Promise<string[]> {
-    const fileNames = await fs.promises.readdir(this.fileDir);
-    return prefix
-      ? fileNames.filter((fileName) => fileName.startsWith(prefix))
-      : fileNames;
+    try {
+      const fileNames = await fs.promises.readdir(this.fileDir);
+      const filtered = prefix
+        ? fileNames.filter((fileName) => fileName.startsWith(prefix))
+        : fileNames;
+      this.context.addEvent({
+        message: `List (prefix=${prefix ?? "null"}) operation succeeded.`,
+      });
+      return filtered;
+    } catch (e) {
+      this.context.addEvent({
+        message: `List (prefix=${prefix ?? "null"}) operation failed.`,
+      });
+      throw e;
+    }
   }
 }

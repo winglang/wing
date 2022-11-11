@@ -26,6 +26,19 @@ export interface SimulatorProps {
   readonly factory?: ISimulatorFactory;
 }
 
+export interface SimulatorEventBase {
+  readonly requestId?: string;
+  readonly message: string;
+}
+
+/**
+ * Represents an event logged during simulation.
+ */
+export interface SimulatorEvent extends SimulatorEventBase {
+  readonly resourceId: string;
+  readonly timestamp: number;
+}
+
 /**
  * Context that is passed to individual resource simulations.
  */
@@ -39,6 +52,11 @@ export interface ISimulatorContext {
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
   findInstance(handle: string): ISimulatorResource;
+
+  /**
+   * Log an event.
+   */
+  addEvent(event: SimulatorEventBase): void;
 }
 
 /**
@@ -63,7 +81,8 @@ export class Simulator {
 
   // fields that change between simulation runs / reloads
   private _running: boolean;
-  private readonly handles: HandleManager;
+  private readonly _handles: HandleManager;
+  private _events: Array<SimulatorEvent>;
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
@@ -73,7 +92,8 @@ export class Simulator {
 
     this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
-    this.handles = new HandleManager();
+    this._handles = new HandleManager();
+    this._events = new Array();
   }
 
   private _loadApp(simfile: string): { assetsDir: string; tree: any } {
@@ -129,20 +149,30 @@ export class Simulator {
       );
     }
 
-    const context: ISimulatorContext = {
-      assetsDir: this._assetsDir,
-      findInstance: (handle: string) => {
-        return this.handles.find(handle);
-      },
-    };
+    this._events = [];
 
     for (const path of this._tree.startOrder) {
+      const context: ISimulatorContext = {
+        assetsDir: this._assetsDir,
+        findInstance: (handle: string) => {
+          return this._handles.find(handle);
+        },
+        addEvent: (event: SimulatorEventBase) => {
+          let fullEvent: SimulatorEvent = {
+            ...event,
+            resourceId: path,
+            timestamp: Date.now(),
+          };
+          this._events.push(fullEvent);
+        },
+      };
+
       const resourceData = findResource(this._tree, path);
       log(`starting resource ${path} (${resourceData.type})`);
       const props = this.resolveTokens(path, resourceData.props);
       const resource = this._factory.resolve(resourceData.type, props, context);
       await resource.init();
-      const handle = this.handles.allocate(resource);
+      const handle = this._handles.allocate(resource);
       (resourceData as any).attrs = { handle };
     }
 
@@ -162,11 +192,11 @@ export class Simulator {
     for (const path of this._tree.startOrder.slice().reverse()) {
       const res = findResource(this._tree, path);
       log(`stopping resource ${path} (${res.type})`);
-      const resource = this.handles.deallocate(res.attrs!.handle);
+      const resource = this._handles.deallocate(res.attrs!.handle);
       await resource.cleanup();
     }
 
-    this.handles.reset();
+    this._handles.reset();
     this._running = false;
 
     // TODO: remove "attrs" data from tree
@@ -194,6 +224,14 @@ export class Simulator {
   }
 
   /**
+   * Get a list of all events that have been logged during the simulation.
+   * The list of events is cleared whenever the simulation is restarted.
+   */
+  public listEvents(): SimulatorEvent[] {
+    return [...this._events];
+  }
+
+  /**
    * Get the resource instance for a given path.
    */
   public getResourceByPath(path: string): any {
@@ -201,7 +239,7 @@ export class Simulator {
     if (!handle) {
       throw new Error(`Resource ${path} does not have a handle.`);
     }
-    return this.handles.find(handle);
+    return this._handles.find(handle);
   }
 
   /**
