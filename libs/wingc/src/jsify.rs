@@ -216,6 +216,8 @@ fn jsify_expression(expression: &Expr) -> String {
 		},
 		ExprType::Reference(_ref) => jsify_reference(&_ref),
 		ExprType::Call { function, args } => {
+			// TODO: implement "print" to use Logger resource
+			// see: https://github.com/winglang/wing/issues/50
 			if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
 				return format!("console.log({})", jsify_arg_list(args, None, None));
 			}
