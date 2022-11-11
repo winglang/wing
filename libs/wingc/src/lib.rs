@@ -79,6 +79,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	tc.diagnostics.into_inner()
 }
 
+// TODO: refactor this (why is scope needed?) (move to separate module?)
 fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 	let sym = Symbol {
 		name: name.to_string(),
