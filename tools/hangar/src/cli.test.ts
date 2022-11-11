@@ -61,7 +61,7 @@ beforeAll(async () => {
 
     expect(output.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
   });
-}, 1000 * 120);
+}, 1000 * 180);
 
 function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
