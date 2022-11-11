@@ -455,6 +455,14 @@ impl<'a> TypeChecker<'a> {
 		self.types.anything()
 	}
 
+	fn stmt_error(&self, stmt: &Stmt, message: String) {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message,
+			span: Some(stmt.span.clone()),
+		});
+	}
+
 	fn type_error(&self, type_error: &TypeError) -> TypeRef {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Error,
@@ -477,8 +485,8 @@ impl<'a> TypeChecker<'a> {
 
 	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &TypeEnv) -> Option<TypeRef> {
-		let t = match &exp.variant {
-			ExprType::Literal(lit) => match lit {
+		let t = match &exp.kind {
+			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
 				Literal::InterpolatedString(s) => {
 					s.parts.iter().for_each(|part| {
@@ -493,7 +501,7 @@ impl<'a> TypeChecker<'a> {
 				Literal::Duration(_) => Some(self.types.duration()),
 				Literal::Boolean(_) => Some(self.types.bool()),
 			},
-			ExprType::Binary { op, lexp, rexp } => {
+			ExprKind::Binary { op, lexp, rexp } => {
 				let ltype = self.type_check_exp(lexp, env).unwrap();
 				let rtype = self.type_check_exp(rexp, env).unwrap();
 
@@ -514,14 +522,14 @@ impl<'a> TypeChecker<'a> {
 					Some(ltype)
 				}
 			}
-			ExprType::Unary { op: _, exp: unary_exp } => {
+			ExprKind::Unary { op: _, exp: unary_exp } => {
 				let _type = self.type_check_exp(unary_exp, env).unwrap();
 				// Add bool vs num support here (! => bool, +- => num)
 				self.validate_type(_type, self.types.number(), unary_exp);
 				Some(_type)
 			}
-			ExprType::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
-			ExprType::New {
+			ExprKind::Reference(_ref) => Some(self.resolve_reference(_ref, env)),
+			ExprKind::New {
 				class,
 				obj_id: _, // TODO
 				arg_list,
@@ -629,7 +637,7 @@ impl<'a> TypeChecker<'a> {
 					Some(self.types.add_type(Type::ClassInstance(type_))) // TODO: don't create new type if one already exists.
 				}
 			}
-			ExprType::Call { function, args } => {
+			ExprKind::Call { function, args } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
 				let func_type = self.resolve_reference(function, env);
 				let this_args = if matches!(function, Reference::NestedIdentifier { .. }) {
@@ -691,7 +699,7 @@ impl<'a> TypeChecker<'a> {
 
 				func_sig.return_type
 			}
-			ExprType::StructLiteral { type_, fields } => {
+			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type(type_, env);
 
@@ -719,7 +727,7 @@ impl<'a> TypeChecker<'a> {
 
 				Some(struct_type)
 			}
-			ExprType::MapLiteral { fields, type_ } => {
+			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type(type_, env)
@@ -814,9 +822,9 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, statement: &mut Statement, env: &mut TypeEnv) {
-		match statement {
-			Statement::VariableDef {
+	fn type_check_statement(&mut self, statement: &mut Stmt, env: &mut TypeEnv) {
+		match &mut statement.kind {
+			StmtKind::VariableDef {
 				var_name,
 				initial_value,
 				type_,
@@ -840,7 +848,7 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 			}
-			Statement::FunctionDefinition(func_def) => {
+			StmtKind::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
 				if matches!(func_def.signature.flight, Phase::Inflight) {
@@ -867,7 +875,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: we created `function_env` but `type_check_scope` will also create a wrapper env for the scope which is redundant
 				self.type_check_scope(&mut func_def.statements);
 			}
-			Statement::ForLoop {
+			StmtKind::ForLoop {
 				iterator,
 				iterable,
 				statements,
@@ -886,7 +894,7 @@ impl<'a> TypeChecker<'a> {
 
 				self.type_check_scope(statements);
 			}
-			Statement::If {
+			StmtKind::If {
 				condition,
 				statements,
 				else_statements,
@@ -902,15 +910,15 @@ impl<'a> TypeChecker<'a> {
 					self.type_check_scope(else_scope);
 				}
 			}
-			Statement::Expression(e) => {
+			StmtKind::Expression(e) => {
 				self.type_check_exp(e, env);
 			}
-			Statement::Assignment { variable, value } => {
+			StmtKind::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env).unwrap();
 				let var_type = self.resolve_reference(variable, env);
 				self.validate_type(exp_type, var_type, value);
 			}
-			Statement::Use {
+			StmtKind::Use {
 				module_name,
 				identifier,
 			} => {
@@ -987,30 +995,33 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
-			Statement::Scope(scope) => {
+			StmtKind::Scope(scope) => {
 				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight);
 				for statement in scope.statements.iter_mut() {
 					self.type_check_statement(statement, &mut scope_env);
 				}
 			}
-			Statement::Return(exp) => {
+			StmtKind::Return(exp) => {
 				if let Some(return_expression) = exp {
 					let return_type = self.type_check_exp(return_expression, env).unwrap();
 					if let Some(expected_return_type) = env.return_type {
 						self.validate_type(return_type, expected_return_type, return_expression);
 					} else {
-						self.general_type_error(format!("Return statement outside of function cannot return a value."));
+						self.stmt_error(
+							statement,
+							format!("Return statement outside of function cannot return a value."),
+						);
 					}
 				} else {
 					if let Some(expected_return_type) = env.return_type {
-						self.general_type_error(format!(
-							"Expected return statement to return type {}",
-							expected_return_type
-						));
+						self.stmt_error(
+							statement,
+							format!("Expected return statement to return type {}", expected_return_type),
+						);
 					}
 				}
 			}
-			Statement::Class {
+			StmtKind::Class {
 				name,
 				members,
 				methods,
@@ -1190,7 +1201,7 @@ impl<'a> TypeChecker<'a> {
 					self.type_check_scope(&mut method.statements);
 				}
 			}
-			Statement::Struct { name, extends, members } => {
+			StmtKind::Struct { name, extends, members } => {
 				// Note: structs don't have a parent environment, instead they flatten their parent's members into the struct's env.
 				//   If we encounter an existing member with the same name and type we skip it, if the types are different we
 				//   fail type checking.

@@ -106,7 +106,13 @@ pub struct Constructor {
 }
 
 #[derive(Debug)]
-pub enum Statement {
+pub struct Stmt {
+	pub kind: StmtKind,
+	pub span: WingSpan,
+}
+
+#[derive(Debug)]
+pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
@@ -163,7 +169,7 @@ pub struct ClassMember {
 }
 
 #[derive(Debug)]
-pub enum ExprType {
+pub enum ExprKind {
 	New {
 		class: Type,
 		obj_id: Option<String>,
@@ -199,15 +205,15 @@ pub enum ExprType {
 
 #[derive(Debug)]
 pub struct Expr {
-	pub variant: ExprType,
+	pub kind: ExprKind,
 	pub evaluated_type: RefCell<Option<TypeRef>>,
 	pub span: WingSpan,
 }
 
 impl Expr {
-	pub fn new(expression_variant: ExprType, span: WingSpan) -> Self {
+	pub fn new(kind: ExprKind, span: WingSpan) -> Self {
 		Self {
-			variant: expression_variant,
+			kind,
 			evaluated_type: RefCell::new(None),
 			span,
 		}
@@ -252,7 +258,7 @@ pub enum InterpolatedStringPart {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Scope {
-	pub statements: Vec<Statement>,
+	pub statements: Vec<Stmt>,
 	#[derivative(Debug = "ignore")]
 	pub env: Option<TypeEnv>, // None after parsing, set to Some during type checking phase
 }
@@ -325,8 +331,8 @@ impl Display for Reference {
 		match &self {
 			Reference::Identifier(symb) => write!(f, "{}", symb.name),
 			Reference::NestedIdentifier { object, property } => {
-				let obj_str = match &object.variant {
-					ExprType::Reference(r) => format!("{}", r),
+				let obj_str = match &object.kind {
+					ExprKind::Reference(r) => format!("{}", r),
 					_ => "object".to_string(), // TODO!
 				};
 				write!(f, "{}.{}", obj_str, property.name)

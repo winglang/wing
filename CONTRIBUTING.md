@@ -79,6 +79,7 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 To build the repo locally:
 
 ```bash
+sudo bash scripts/setup_wasi.sh # one-time setup
 npm install
 npm run build
 ```
@@ -86,6 +87,7 @@ npm run build
 To run all tests:
 
 ```bash
+cargo install cargo-insta # one-time setup
 npm run test
 ```
 
