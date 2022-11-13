@@ -11,7 +11,7 @@ For the above to be successful we need to complete the following user stories
 
 We want to make sure that all our public assets meet our standards of good UX (performance, experience, branded design) 
 
-**Websites:**  winglnag.io, docs.winglang.io, blog.winglang.io, monada.co
+**Websites:**  winglang.io, docs.winglang.io, blog.winglang.io, monada.co
 
 **Guides:** README.md, Contributing.md, docs.winglang.io 
 
