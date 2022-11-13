@@ -3,6 +3,9 @@
 The Wing SDK is the standard library for the Wing language.
 The core of the SDK are its APIs for creating cloud resources.
 
+By using the SDK to specify the desired state of cloud application including resources like API gateways, queues, storage buckets, and so on, the SDK can synthesize an artifact for deploying that application to the cloud.
+Today the SDK supports either synthesizing a collection of Terraform configuration, or synthesizing a simulator file that the SDK's `Simulator` API can use to simulate the app within Node.js.
+
 ## Constructs
 
 The SDK resources are written using the Constructs Programming Model.
@@ -83,65 +86,17 @@ const handler = new sdk.core.Inflight({
 new sdk.cloud.Function(this, "Function", handler);
 ```
 
-Note that "captured" resources do not only refer to resources defined outside of the inflight function, but also resources that are passed as parameters to the inflight function.
-
 The inflight's `captures` field currently serve two purposes.
 
 The first purpose is to provide references to resources so that the CDK code can "glue" the resources together.
-This may include setting up permissions from the compute resource to the referenced resource, and other binding logic necessary to perform operations on the resource during runtime.
+This can include setting up permissions for the compute resource to perform operations on the referenced resource during runtime.
+The `methods` field associated with captured resources specifies what operations need to be used on the resource, so that least privilege permissions can be granted to the resource running the inflight code.
 
 The second purpose is signal to the SDK that there is data that needs to be bundled with the user code.
-For example, when a `cloud.Queue` is captured by an inflight in an AWS application, the user's inflight code needs to be bundled with a class that can perform `push()` (likely calling the AWS SDK).
+For example, when a `cloud.Queue` is captured by an inflight in an AWS application, the user's inflight code needs to be bundled with an inflight "client" that can perform `push()` by calling the AWS SDK.
 
-In a later section, we will explain how the `Inflight` class is currently used to produce a JavaScript bundle during the app's synthesis.
-This JavaScript bundle will inject the appropriate code for `$cap`, and it will be referenced in the final Terraform artifact.
-
-We should note that in the future, it may be possible to "shift left" all of the bundling logic into the compiler. Then, a list of captures would only be needed for the first purpose (glueing together resources based on what actions are performed on the resources).
-
-> 🧪 **Note:** Experimental designs starting here! 🧪
-
-The list of captures should include ALL values, resources, and functions passed or referenced to the user's code.
-For example, given this Wing code:
-
-```wing
-let queue = new cloud.Queue();
-let bucket = new cloud.Bucket();
-let file = "file.txt";
-let add_and_store = (a: num, b: num): num ~> {
-    let result = a + b;
-    bucket.put(file, result.to_str());
-    return result;
-};
-let do_stuff = (queue: cloud.Queue) ~> {
-    let val = add_and_store(3, 5);
-    queue.push(val);
-};
-```
-
-... then the final user code may eventually look something like:
-
-```ts
-const bucket = new sdk.cloud.Bucket(this, "Bucket");
-const queue = new sdk.cloud.Queue(this, "Queue");
-let do_stuff = new sdk.core.Inflight({
-  code: sdk.core.NodeJsCode.fromInline(/* omitted */)
-  entrypoint: "$proc",
-  captures: {
-    queue: {
-      resource: queue,
-      methods: ["push"],
-    },
-    bucket: {
-      resource: bucket,
-      methods: ["put"],
-    },
-  },
-});
-```
-
-Implicit here is that the `code` inserted by the compiler would include code for `add_and_store`, `do_stuff`, `queue`, `bucket`, and `file`. The only captures listed here are `queue` and `bucket` because those are the only captures that represent resources.
-
-> 🧪 **Note:** End of experimental designs! 🧪
+The next section explains how the `Inflight` class is used to produce a JavaScript bundle during the app's synthesis.
+This JavaScript bundle will inject the appropriate code for `$cap`, and the code bundle will be included as a Terraform asset when the app is synthesized.
 
 ## Bundling
 
