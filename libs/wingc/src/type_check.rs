@@ -159,7 +159,7 @@ impl PartialEq for Type {
 pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: Option<TypeRef>,
-	pub flight: Flight,
+	pub flight: Phase,
 }
 
 impl Display for Type {
@@ -656,7 +656,7 @@ impl<'a> TypeChecker<'a> {
 					.as_function_sig()
 					.expect(&format!("{:?} should be a function or method", function));
 
-				if func_sig.flight != env.flight {
+				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
 						exp,
 						format!(
@@ -851,7 +851,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::FunctionDefinition(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
-				if matches!(func_def.signature.flight, Flight::In) {
+				if matches!(func_def.signature.flight, Phase::Inflight) {
 					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
 				}
 
@@ -1034,7 +1034,11 @@ impl<'a> TypeChecker<'a> {
 					self.unimplemented_type("Resource class");
 				}
 
-				let env_flight = if *is_resource { Flight::Pre } else { Flight::In };
+				let env_flight = if *is_resource {
+					Phase::Preflight
+				} else {
+					Phase::Inflight
+				};
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
@@ -1306,6 +1310,19 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 		}
+	}
+}
+
+fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
+	if fn_flight == Phase::Independent {
+		// if the function we're trying to call is an "either-flight" function,
+		// then it can be called both in preflight, inflight, and in
+		// either-flight scopes
+		true
+	} else {
+		// otherwise, preflight functions can only be called in preflight scopes,
+		// and inflight functions can only be called in inflight scopes
+		fn_flight == scope_flight
 	}
 }
 

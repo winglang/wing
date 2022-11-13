@@ -4,9 +4,9 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, Flight, FunctionDefinition, FunctionSignature,
-	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Reference, Scope, Stmt, StmtKind, Symbol,
-	Type, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
+	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Phase, Reference, Scope, Stmt, StmtKind,
+	Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -166,16 +166,16 @@ impl Parser<'_> {
 					span: self.node_span(statement_node),
 				})
 			}
+			"inflight_function_definition" => Ok(Stmt {
+				kind: StmtKind::FunctionDefinition(self.build_function_definition(statement_node, Phase::Inflight)?),
+				span: self.node_span(statement_node),
+			}),
 			"for_in_loop" => Ok(Stmt {
 				kind: StmtKind::ForLoop {
 					iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 					iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 					statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 				},
-				span: self.node_span(statement_node),
-			}),
-			"inflight_function_definition" => Ok(Stmt {
-				kind: StmtKind::FunctionDefinition(self.build_function_definition(statement_node, Flight::In)?),
 				span: self.node_span(statement_node),
 			}),
 			"return_statement" => Ok(Stmt {
@@ -207,19 +207,21 @@ impl Parser<'_> {
 			.named_children(&mut cursor)
 		{
 			match (class_element.kind(), is_resource) {
-				("function_definition", true) => methods.push(self.build_function_definition(&class_element, Flight::Pre)?),
+				("function_definition", true) => {
+					methods.push(self.build_function_definition(&class_element, Phase::Preflight)?)
+				}
 				("inflight_function_definition", _) => {
-					methods.push(self.build_function_definition(&class_element, Flight::In)?)
+					methods.push(self.build_function_definition(&class_element, Phase::Inflight)?)
 				}
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
-					flight: Flight::Pre,
+					flight: Phase::Preflight,
 				}),
 				("inflight_class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
-					flight: Flight::In,
+					flight: Phase::Inflight,
 				}),
 				("constructor", _) => {
 					if let Some(_) = constructor {
@@ -240,7 +242,7 @@ impl Parser<'_> {
 								root: name.clone(),
 								fields: vec![],
 							})),
-							flight: if is_resource { Flight::Pre } else { Flight::In }, // TODO: for now classes can only be constructed inflight
+							flight: if is_resource { Phase::Preflight } else { Phase::Inflight }, // TODO: for now classes can only be constructed inflight
 						},
 					})
 				}
@@ -288,7 +290,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, flight: Flight) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionDefinition {
 			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap())?,
@@ -347,9 +349,9 @@ impl Parser<'_> {
 					parameters,
 					return_type,
 					flight: if type_node.child_by_field_name("inflight").is_some() {
-						Flight::In
+						Phase::Inflight
 					} else {
-						Flight::Pre
+						Phase::Preflight
 					},
 				}))
 			}

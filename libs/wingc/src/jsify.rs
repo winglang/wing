@@ -3,7 +3,7 @@ use std::{fs, path::PathBuf};
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expr, ExprKind, Flight, FunctionDefinition, InterpolatedStringPart, Literal,
+	ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
 	Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
 };
 
@@ -216,6 +216,11 @@ fn jsify_expression(expression: &Expr) -> String {
 		},
 		ExprKind::Reference(_ref) => jsify_reference(&_ref),
 		ExprKind::Call { function, args } => {
+			// TODO: implement "print" to use Logger resource
+			// see: https://github.com/winglang/wing/issues/50
+			if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
+				return format!("console.log({})", jsify_arg_list(args, None, None));
+			}
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
 		}
 		ExprKind::Unary { op, exp } => {
@@ -298,8 +303,9 @@ fn jsify_statement(statement: &Stmt, out_dir: &PathBuf) -> String {
 			format!("let {} = {};", jsify_symbol(var_name), initial_value)
 		}
 		StmtKind::FunctionDefinition(func_def) => match func_def.signature.flight {
-			Flight::In => jsify_inflight_function(func_def, &out_dir),
-			Flight::Pre => jsify_function(
+			Phase::Inflight => jsify_inflight_function(func_def, &out_dir),
+			Phase::Independent => unimplemented!(),
+			Phase::Preflight => jsify_function(
 				format!("function {}", jsify_symbol(&func_def.name)).as_str(),
 				&func_def.parameters,
 				&func_def.statements,
