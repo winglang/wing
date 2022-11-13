@@ -11,11 +11,15 @@ For the above to be successful we need to complete the following user stories
 
 We want to make sure that all our public assets meet our standards of good UX (performance, experience, branded design) 
 
-**Websites:**  winglang.io, docs.winglang.io, blog.winglang.io, monada.co
+**Websites:**  winglang.io, winglang.io/blog, winglang.io/docs,  monada.co
 
-**Guides:** README.md, Contributing.md, docs.winglang.io 
+**Guides:** README.md, Contributing.md, winglang.io/docs
 
 **Other assets:** GitHub Discussions
+
+- Manual testing INSTALL + README (USER) and BUILD (CONTRIBUTION) flows
+- Code freeze
+
 
 ## Tracking visitors and their onboarding process [#507](https://github.com/winglang/wing/issues/507) 
 
