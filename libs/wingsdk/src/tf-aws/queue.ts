@@ -80,7 +80,7 @@ export class Queue extends cloud.QueueBase {
   /**
    * @internal
    */
-  public _capture(
+  public _bind(
     captureScope: IConstruct,
     metadata: core.CaptureMetadata
   ): core.Code {

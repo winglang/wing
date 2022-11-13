@@ -48,7 +48,7 @@ export class Bucket extends BucketBase {
   /**
    * @internal
    */
-  public _capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

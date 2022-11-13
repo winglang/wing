@@ -155,7 +155,7 @@ export class Function extends cloud.FunctionBase {
   /**
    * @internal
    */
-  public _capture(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+  public _bind(captureScope: IConstruct, metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
       throw new Error(
         "functions can only be captured by tfaws.Function for now"

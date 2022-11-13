@@ -39,7 +39,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
   }
 
   /** @internal */
-  public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     return captureSimulatorResource("bucket", this, captureScope);
   }
 }

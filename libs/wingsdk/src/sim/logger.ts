@@ -34,7 +34,7 @@ export class Logger extends cloud.LoggerBase implements IResource {
   }
 
   /** @internal */
-  public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     return captureSimulatorResource("logger", this, captureScope);
   }
 }

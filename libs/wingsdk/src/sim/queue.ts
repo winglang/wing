@@ -91,7 +91,7 @@ export class Queue extends cloud.QueueBase implements IResource {
   }
 
   /** @internal */
-  public _capture(
+  public _bind(
     captureScope: IConstruct,
     _metadata: core.CaptureMetadata
   ): core.Code {
