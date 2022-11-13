@@ -108,10 +108,10 @@ The bundling process starts in the constructor of the class implementing the `cl
 The first step is that the function needs to obtain "clients" for all of the captured resources (modeled as `Record<string, Code>`).
 To do this, it iterates over each entry in `captures`.
 If the capture is a plain value or collection type, it just stringifies it.
-If the capture is a resource, it inverts the control back to the captured resource by calling the resource's `_capture` method.
+If the capture is a resource, it inverts the control back to the captured resource by calling the resource's `_bind` method.
 
-For example, if a `tfaws.Function` named `func` captures a `tfaws.Bucket` named `bucket`, it calls `bucket._capture(func, metadata)` where `metadata` is any extra information like the resource methods.
-`_capture` will update `func`'s AWS IAM policy so that it can perform operations on the bucket, and it will return a `Code` object that contains a `BucketClient` class with methods like `get` and `put`.
+For example, if a `tfaws.Function` named `func` captures a `tfaws.Bucket` named `bucket`, it calls `bucket._bind(func, metadata)` where `metadata` is any extra information like the resource methods.
+`_bind` will update `func`'s AWS IAM policy so that it can perform operations on the bucket, and it will return a `Code` object that contains a `BucketClient` class with methods like `get` and `put`.
 After we repeat this process for all captures, we will have a map from capture names to `Code` objects.
 
 The second step is to call esbuild.

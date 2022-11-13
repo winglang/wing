@@ -65,7 +65,7 @@ export class Function extends cloud.FunctionBase implements IResource {
   }
 
   /** @internal */
-  public _capture(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     return captureSimulatorResource("function", this, captureScope);
   }
 
