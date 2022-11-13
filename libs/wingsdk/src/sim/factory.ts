@@ -7,7 +7,8 @@ import { Logger } from "./logger";
 import { Queue } from "./queue";
 
 /**
- * Polycon factory which resolves `cloud` resources into simulated resources.
+ * Polycon factory which resolves polycons in `cloud` into preflight resources
+ * for the simulator target.
  */
 export class PolyconFactory implements IPolyconFactory {
   resolve(

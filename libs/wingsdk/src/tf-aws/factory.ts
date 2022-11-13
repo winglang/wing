@@ -7,7 +7,8 @@ import { Logger } from "./logger";
 import { Queue } from "./queue";
 
 /**
- * Polycon factory which resolves `cloud` resources into AWS resources.
+ * Polycon factory which resolves polycons in `cloud` into preflight resources
+ * for the AWS target.
  */
 export class PolyconFactory implements IPolyconFactory {
   public resolve(

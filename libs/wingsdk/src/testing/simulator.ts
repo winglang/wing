@@ -296,7 +296,7 @@ function findResource(tree: any, path: string): BaseResourceSchema {
 }
 
 /**
- * A factory that can turn resource descriptions into resource simulations.
+ * A factory that can turn resource descriptions into (inflight) resource simulations.
  */
 export interface ISimulatorFactory {
   /**
