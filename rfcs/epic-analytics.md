@@ -107,6 +107,65 @@ Implement the above [dashboard](#dashboard)
 
 ## Appendix 
 
+## Funnel
+
+We want to be able to measure the success of our effort to expand the reach of wing to the wider audience and span out to advocates outside of the monada team. 
+In order to do so we need to continuously answer the following questions:
+- How are people discovering our product or company? From how many different channels? What are the leading channels? 
+- New channel exploration - which channels other companies use and we don’t have users from?
+- Are these people taking the actions we want them to take in order to use our product?
+- Are users of our product actively contributing to wing?  
+- Are users of wing becoming advocates of wing?
+- Are contributors of wing becoming advocates of wing?
+- Is wing sticky for all of these different user groups?
+
+To answer these question, we define the following two funnels:
+> Visitors > Users  > Advocates
+> 
+> Visitors > Users > Contributors > Advocates
+
+### Visitors
+
+Visitors are developers who are aware that wing exists but have not yet used it. Usually, visitors do one or more of these activities:
+
+- Visiting wing website
+- Following wing on social media 
+- Subscribing to wing newsletter/mailing list
+- Attending a talk/meetup about our project
+- Being exposed to winglang repo
+- People that we’ve talked to 
+
+### Users
+
+Users are developers who use wing products for their software projects. They are the foundation of our open source community, yet they do not actively engage in our community. Typically, users can be spotted by the following activities:
+
+- Starring your repo
+- Asking project-related questions in online forums (Stackoverflow, slack, etc.)
+- Commenting on your social media activities
+- Using wing toolchain (downloading, running, etc…) 
+
+### Contributors
+
+Contributors are developers who actively contribute to your open source project and are engaged in the community. They are the heart of your community and keep things running. Generally, contributors undertake the following activities:
+
+- Opening issues (bugs, features, etc) and giving feedback
+- Submitting pull requests
+- Review pull requests
+- Comment on issues others created
+- Get involved in RFCs
+- Engaging in discussions and supporting users with technical issues (e.g. on Slack, reddit, stack overflow)
+
+### Advocates
+
+Advocates are developers who are true ambassadors of your community and also encourage other developers to come on board. They are firmly convinced of the added value of your project and the values of the community, and they communicate this to the outside world. They should all be personally known to you, but these activities help to recognize them:
+
+- Giving talks at conferences
+- Organizing local meetups 
+- Adding a new resources
+- Private advocacy 
+- Creating content (blogs, tutorials, regular tweets, etc.)
+
+
 ### Event Sources
 
 This is a list of sources where we are going to gather analytics events from:
