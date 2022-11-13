@@ -387,7 +387,7 @@ resources to help you get started:
 We all hang out at the [Wing Slack] workspace. Come as you are, say hi, ask
 questions, help friends, geek out!
 
-Alternatively post any question you have in [Wing Discussions](https://github.com/winglang/wing/discussions)
+Alternatively, post any question you have in [Wing Discussions](https://github.com/winglang/wing/discussions)
 
 
 ## Contributing
