@@ -1,6 +1,6 @@
 import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
-import { QueueClient } from "../../src/tf-aws/queue.inflight";
+import { QueueClient } from "../../src/target-tf-aws/queue.inflight";
 
 const sqsMock = mockClient(SQSClient);
 

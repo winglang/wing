@@ -6,7 +6,7 @@ import {
   S3Client,
 } from "@aws-sdk/client-s3";
 import { mockClient } from "aws-sdk-client-mock";
-import { BucketClient } from "../../src/tf-aws/bucket.inflight";
+import { BucketClient } from "../../src/target-tf-aws/bucket.inflight";
 
 const s3Mock = mockClient(S3Client);
 
