@@ -1,10 +1,20 @@
 **Status:** _RFC_
 
-# Epic - User Journey is Tracked
+## Working Backwards
 
-To learn more about the origin of this EPIC, please visit [The Community is the Product](/rfcs/the-community-is-the-product.md) document
-The Goal of this EPIC is to be able to tell in a glance, how many people have been exposed to wing, how many signup for preview, how many joined, how
-many used wing and how many contributed to wing. 
+It is that time of the month for Wing Monthly meeting. As always it tarts with a snapshot of our community performance metrics. 
+It is possile to see in a glance from, the preson presenting is showing the dashboard and tells reads the number of new/active/chrun wing users, 
+and same for contributors and advocates. 
+There is an uptick in users, the presenter go into details on which activities are happening more this month, 
+and closes the loops with correlation to what was released two months ago. 
+
+
+Someome from the audience is questioning about the low retention numbers for contributors in the last 3 month, 
+a PM takes an action item to dive deeper on where are contributors stoping to engage with the community, 
+he will later opens a ticket that outlines the specific point in time where the biggest drop ocours and suggest a couple of engaging activities with new contributors.
+
+Over the last couple of month, data has been a key tool in making decision. 
+Peope still rely heavily on thie their insticts and intuition but the infomration avaialble within the analytics system allows them to quickly validate and justify the problem they are about to solve, and even more importantly validate that a problem was actually resolved and celebrate outcomes and no only outputs
 
 ## Dashboard
 
