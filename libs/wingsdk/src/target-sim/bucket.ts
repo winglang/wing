@@ -8,7 +8,7 @@ import { captureSimulatorResource } from "./util";
 /**
  * Simulator implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/wingsdk.sim.IBucketClient`
+ * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase implements IResource {
   private readonly public: boolean;
@@ -43,8 +43,3 @@ export class Bucket extends cloud.BucketBase implements IResource {
     return captureSimulatorResource("bucket", this, captureScope);
   }
 }
-
-/**
- * Simulator implementation of inflight client for `cloud.Bucket`.
- */
-export interface IBucketClient extends cloud.IBucketClient {}

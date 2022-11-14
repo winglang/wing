@@ -1,7 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
-import { IFunctionClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -34,7 +33,9 @@ test("inflight uses a logger", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const fnClient = s.getResourceByPath("root/my_function") as IFunctionClient;
+  const fnClient = s.getResourceByPath(
+    "root/my_function"
+  ) as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = "Alice";

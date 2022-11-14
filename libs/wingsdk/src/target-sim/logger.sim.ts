@@ -1,9 +1,9 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
+import { ILoggerClient } from "../cloud";
 import { ISimulatorContext } from "../testing";
 import { ENV_WING_SIM_RUNTIME_FUNCTION_PATH } from "./function";
-import { ILoggerClient } from "./logger";
 import { ISimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
 

@@ -1,8 +1,8 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
+import { IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { IBucketClient } from "./bucket";
 import { ISimulatorResource } from "./resource";
 import { BucketSchema } from "./schema-resources";
 

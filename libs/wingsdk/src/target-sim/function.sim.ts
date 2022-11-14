@@ -2,9 +2,9 @@ import * as fs from "fs";
 import * as path_ from "path";
 import * as process from "process";
 import * as vm from "vm";
+import { IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 import { log } from "../util";
-import { IFunctionClient } from "./function";
 import { ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 

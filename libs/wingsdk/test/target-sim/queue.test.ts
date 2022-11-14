@@ -1,7 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
-import { IQueueClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -51,7 +50,9 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
+  const queueClient = s.getResourceByPath(
+    "root/my_queue"
+  ) as cloud.IQueueClient;
 
   // WHEN
   await queueClient.push("A");
@@ -128,7 +129,9 @@ test("messages are requeued if the function fails", async () => {
   await s.start();
 
   // WHEN
-  const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
+  const queueClient = s.getResourceByPath(
+    "root/my_queue"
+  ) as cloud.IQueueClient;
   await queueClient.push("BAD MESSAGE");
 
   await sleep(300);

@@ -13,7 +13,7 @@ export const ENV_WING_SIM_RUNTIME_FUNCTION_PATH =
 /**
  * Simulator implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.sim.IFunctionClient`
+ * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements IResource {
   private readonly inbound = new Array<string>();
@@ -84,8 +84,3 @@ export class Function extends cloud.FunctionBase implements IResource {
     };
   }
 }
-
-/**
- * Simulator implementation of inflight client for `cloud.Function`.
- */
-export interface IFunctionClient extends cloud.IFunctionClient {}

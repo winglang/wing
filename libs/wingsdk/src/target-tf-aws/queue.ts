@@ -2,15 +2,13 @@ import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-s
 import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
-import { QueueInflightMethods } from "../cloud";
 import * as core from "../core";
-
 import { Function } from "./function";
 
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/wingsdk.tfaws.IQueueClient`
+ * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase {
   private readonly queue: SqsQueue;
@@ -91,7 +89,7 @@ export class Queue extends cloud.QueueBase {
     const env = `QUEUE_URL__${this.node.id}`;
 
     const methods = new Set(metadata.methods ?? []);
-    if (methods.has(QueueInflightMethods.PUSH)) {
+    if (methods.has(cloud.QueueInflightMethods.PUSH)) {
       captureScope.addPolicyStatements({
         effect: "Allow",
         action: [
@@ -112,8 +110,3 @@ export class Queue extends cloud.QueueBase {
     ]);
   }
 }
-
-/**
- * AWS implementation of inflight client for `cloud.Queue`.
- */
-export interface IQueueClient extends cloud.IQueueClient {}

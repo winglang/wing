@@ -1,7 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
-import { IFunctionClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -67,7 +66,9 @@ test("invoke function succeeds", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResourceByPath("root/my_function") as IFunctionClient;
+  const client = s.getResourceByPath(
+    "root/my_function"
+  ) as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -102,7 +103,9 @@ test("invoke function with environment variables", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResourceByPath("root/my_function") as IFunctionClient;
+  const client = s.getResourceByPath(
+    "root/my_function"
+  ) as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -137,7 +140,9 @@ test("invoke function fails", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResourceByPath("root/my_function") as IFunctionClient;
+  const client = s.getResourceByPath(
+    "root/my_function"
+  ) as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "alice" };

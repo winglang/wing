@@ -1,6 +1,5 @@
+import { IFunctionClient, IQueueClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { IFunctionClient } from "./function";
-import { IQueueClient } from "./queue";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";

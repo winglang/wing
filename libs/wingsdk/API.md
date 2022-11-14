@@ -351,7 +351,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.IBucketClient](#@winglang/wingsdk.sim.IBucketClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IBucketClient](#@winglang/wingsdk.cloud.IBucketClient)
 
 Simulator implementation of `cloud.Bucket`.
 
@@ -471,7 +471,7 @@ with a fresh copy without any consequences.
 
 ### Bucket <a name="Bucket" id="@winglang/wingsdk.tfaws.Bucket"></a>
 
-**Inflight client:** [@winglang/wingsdk.tfaws.IBucketClient](#@winglang/wingsdk.tfaws.IBucketClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IBucketClient](#@winglang/wingsdk.cloud.IBucketClient)
 
 AWS implementation of `cloud.Bucket`.
 
@@ -994,7 +994,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.IFunctionClient](#@winglang/wingsdk.sim.IFunctionClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
 
 Simulator implementation of `cloud.Function`.
 
@@ -1142,7 +1142,7 @@ with a fresh copy without any consequences.
 
 ### Function <a name="Function" id="@winglang/wingsdk.tfaws.Function"></a>
 
-**Inflight client:** [@winglang/wingsdk.tfaws.IFunctionClient](#@winglang/wingsdk.tfaws.IFunctionClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
 
 AWS implementation of `cloud.Function`.
 
@@ -1726,7 +1726,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.ILoggerClient](#@winglang/wingsdk.sim.ILoggerClient)
+**Inflight client:** [@winglang/wingsdk.cloud.ILoggerClient](#@winglang/wingsdk.cloud.ILoggerClient)
 
 Simulator implementation of `cloud.Logger`.
 
@@ -2135,7 +2135,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.IQueueClient](#@winglang/wingsdk.sim.IQueueClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IQueueClient](#@winglang/wingsdk.cloud.IQueueClient)
 
 Simulator implementation of `cloud.Queue`.
 
@@ -2276,7 +2276,7 @@ with a fresh copy without any consequences.
 
 ### Queue <a name="Queue" id="@winglang/wingsdk.tfaws.Queue"></a>
 
-**Inflight client:** [@winglang/wingsdk.tfaws.IQueueClient](#@winglang/wingsdk.tfaws.IQueueClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IQueueClient](#@winglang/wingsdk.cloud.IQueueClient)
 
 AWS implementation of `cloud.Queue`.
 
@@ -5099,7 +5099,7 @@ Directory where artifacts are synthesized to.
 
 ### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IBucketClient, @winglang/wingsdk.sim.IBucketClient, @winglang/wingsdk.tfaws.IBucketClient
+- *Implemented By:* @winglang/wingsdk.cloud.IBucketClient
 
 Inflight interface for `Bucket`.
 
@@ -5164,26 +5164,6 @@ Put an object in the bucket.
 ---
 
 
-### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.sim.IBucketClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IBucketClient
-
-- *Implemented By:* @winglang/wingsdk.sim.IBucketClient
-
-Simulator implementation of inflight client for `cloud.Bucket`.
-
-
-
-### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.tfaws.IBucketClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IBucketClient
-
-- *Implemented By:* @winglang/wingsdk.tfaws.IBucketClient
-
-AWS implementation of inflight client for `cloud.Bucket`.
-
-
-
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
 - *Implemented By:* @winglang/wingsdk.cloud.Bucket, @winglang/wingsdk.cloud.BucketBase, @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.cloud.Logger, @winglang/wingsdk.cloud.LoggerBase, @winglang/wingsdk.cloud.Queue, @winglang/wingsdk.cloud.QueueBase, @winglang/wingsdk.cloud.Resource, @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.tfaws.Bucket, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.tfaws.Queue, @winglang/wingsdk.core.ICapturable, @winglang/wingsdk.core.ICapturableConstruct
@@ -5223,7 +5203,7 @@ The tree node.
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IFunctionClient, @winglang/wingsdk.sim.IFunctionClient, @winglang/wingsdk.tfaws.IFunctionClient
+- *Implemented By:* @winglang/wingsdk.cloud.IFunctionClient
 
 Inflight interface for `Function`.
 
@@ -5250,29 +5230,9 @@ Invoke the function asynchronously with a given payload.
 ---
 
 
-### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.sim.IFunctionClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IFunctionClient
-
-- *Implemented By:* @winglang/wingsdk.sim.IFunctionClient
-
-Simulator implementation of inflight client for `cloud.Function`.
-
-
-
-### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.tfaws.IFunctionClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IFunctionClient
-
-- *Implemented By:* @winglang/wingsdk.tfaws.IFunctionClient
-
-AWS implementation of inflight client for `cloud.Function`.
-
-
-
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient, @winglang/wingsdk.sim.ILoggerClient
+- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient
 
 Inflight interface for `Logger`.
 
@@ -5304,19 +5264,9 @@ The message to print.
 ---
 
 
-### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.sim.ILoggerClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.ILoggerClient
-
-- *Implemented By:* @winglang/wingsdk.sim.ILoggerClient
-
-Simulator implementation of inflight client for `cloud.Logger`.
-
-
-
 ### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.cloud.IQueueClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IQueueClient, @winglang/wingsdk.sim.IQueueClient, @winglang/wingsdk.tfaws.IQueueClient
+- *Implemented By:* @winglang/wingsdk.cloud.IQueueClient
 
 Inflight interface for `Queue`.
 
@@ -5343,26 +5293,6 @@ Push a message to the queue.
 Payload to send to the queue.
 
 ---
-
-
-### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.sim.IQueueClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IQueueClient
-
-- *Implemented By:* @winglang/wingsdk.sim.IQueueClient
-
-Simulator implementation of inflight client for `cloud.Queue`.
-
-
-
-### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.tfaws.IQueueClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IQueueClient
-
-- *Implemented By:* @winglang/wingsdk.tfaws.IQueueClient
-
-AWS implementation of inflight client for `cloud.Queue`.
-
 
 
 ### IResource <a name="IResource" id="@winglang/wingsdk.sim.IResource"></a>

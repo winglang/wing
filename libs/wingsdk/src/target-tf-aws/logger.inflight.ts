@@ -1,4 +1,4 @@
-import { ILoggerClient } from "./logger";
+import { ILoggerClient } from "../cloud";
 
 export class LoggerClient implements ILoggerClient {
   constructor() {}

@@ -9,7 +9,7 @@ import { captureSimulatorResource } from "./util";
 /**
  * Simulator implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/wingsdk.sim.IQueueClient`
+ * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements IResource {
   private readonly inbound = new Array<string>();
@@ -98,8 +98,3 @@ export class Queue extends cloud.QueueBase implements IResource {
     return captureSimulatorResource("queue", this, captureScope);
   }
 }
-
-/**
- * Simulator implementation of inflight client for `cloud.Queue`
- */
-export interface IQueueClient extends cloud.IQueueClient {}

@@ -63,7 +63,7 @@ test("pushing messages through a queue", async () => {
 
   const pusher = s.getResourceByPath(
     "root/HelloWorld/Function"
-  ) as sim.IFunctionClient;
+  ) as cloud.IFunctionClient;
 
   // WHEN
   await pusher.invoke("foo");

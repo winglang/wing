@@ -1,5 +1,5 @@
 import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
-import { IQueueClient } from "./queue";
+import { IQueueClient } from "../cloud";
 
 export class QueueClient implements IQueueClient {
   constructor(
