@@ -162,6 +162,8 @@ export async function checkForUpdates(
       void window.showWarningMessage(
         `[Wing] Unable to check for updates: No GitHub token configured`
       );
+
+      await commands.executeCommand(CMD_UPDATES_ADD_TOKEN);
     }
 
     return;
