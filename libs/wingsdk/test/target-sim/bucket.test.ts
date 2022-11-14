@@ -115,5 +115,5 @@ test("get invalid object throws an error", async () => {
 });
 
 function listMessages(s: testing.Simulator) {
-  return s.listEvents().map((evt) => evt.message);
+  return s.listEvents().map((event) => event.message);
 }

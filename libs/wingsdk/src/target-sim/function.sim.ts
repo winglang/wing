@@ -24,16 +24,18 @@ export class Function implements IFunctionClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    return;
+    this.context.addEvent({
+      message: "Function created.",
+    });
   }
 
   public async cleanup(): Promise<void> {
-    return;
+    this.context.addEvent({
+      message: "Function deleted.",
+    });
   }
 
   public async invoke(payload: string): Promise<string> {
-    this._timesCalled += 1;
-
     const userCode = fs.readFileSync(this.filename, "utf8");
     const wrapper = [
       "const exports = {};",
@@ -60,9 +62,21 @@ export class Function implements IFunctionClient, ISimulatorResource {
       // TODO: Object.freeze this?
       $simulator: this.context,
     });
-    const result = await vm.runInContext(wrapper, context);
 
-    return result;
+    try {
+      const result = await vm.runInContext(wrapper, context);
+      this.context.addEvent({
+        message: `Invoke (payload="${payload}") operation succeeded. Response: ${result}`,
+      });
+      this._timesCalled += 1;
+      return result;
+    } catch (e) {
+      this.context.addEvent({
+        message: `Invoke (payload="${payload}") operation failed. Response: ${e}`,
+      });
+      this._timesCalled += 1;
+      throw e;
+    }
   }
 
   public async timesCalled(): Promise<number> {

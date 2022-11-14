@@ -10,12 +10,15 @@ const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
   event = JSON.parse(event);
   let msg;
+  if (event.name[0] !== event.name[0].toUpperCase()) {
+    throw new Error("Name must start with uppercase letter");
+  }
   if (process.env.PIG_LATIN) {
     msg = "Ellohay, " + event.name + "!";
   } else {
     msg = "Hello, " + event.name + "!";
   }
-  return { msg };
+  return JSON.stringify({ msg });
 }`);
 
 test("create a function", async () => {
@@ -51,7 +54,7 @@ test("create a function", async () => {
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
-test("invoke function", async () => {
+test("invoke function succeeds", async () => {
   // GIVEN
   const app = new sim.App({ outdir: mkdtemp() });
   const handler = new core.Inflight({
@@ -71,10 +74,14 @@ test("invoke function", async () => {
   const response = await client.invoke(JSON.stringify(PAYLOAD));
 
   // THEN
-  expect(response).toEqual({ msg: `Hello, ${PAYLOAD.name}!` });
+  expect(response).toEqual(JSON.stringify({ msg: `Hello, ${PAYLOAD.name}!` }));
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "Function created.",
+    'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Hello, Alice!"}',
+    "Function deleted.",
+  ]);
 });
 
 test("invoke function with environment variables", async () => {
@@ -101,10 +108,51 @@ test("invoke function with environment variables", async () => {
   const response = await client.invoke(JSON.stringify(PAYLOAD));
 
   // THEN
-  expect(response).toEqual({
-    msg: `Ellohay, ${PAYLOAD.name}!`,
-  });
+  expect(response).toEqual(
+    JSON.stringify({
+      msg: `Ellohay, ${PAYLOAD.name}!`,
+    })
+  );
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "Function created.",
+    'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Ellohay, Alice!"}',
+    "Function deleted.",
+  ]);
 });
+
+test("invoke function fails", async () => {
+  // GIVEN
+  const app = new sim.App({ outdir: mkdtemp() });
+  const handler = new core.Inflight({
+    code: INFLIGHT_CODE,
+    entrypoint: "$proc",
+  });
+  new cloud.Function(app, "my_function", handler);
+  const simfile = app.synth();
+
+  const s = new testing.Simulator({ simfile });
+  await s.start();
+
+  const client = s.getResourceByPath("root/my_function") as IFunctionClient;
+
+  // WHEN
+  const PAYLOAD = { name: "alice" };
+  await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
+    "Name must start with uppercase letter"
+  );
+
+  // THEN
+  await s.stop();
+
+  expect(listMessages(s)).toEqual([
+    "Function created.",
+    'Invoke (payload="{"name":"alice"}") operation failed. Response: Error: Name must start with uppercase letter',
+    "Function deleted.",
+  ]);
+});
+
+function listMessages(s: testing.Simulator) {
+  return s.listEvents().map((event) => event.message);
+}
