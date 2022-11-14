@@ -9,6 +9,8 @@ import { autoUpdater } from "electron-updater";
 import express from "express";
 import getPort from "get-port";
 
+import { LogEntry } from "../../src/components/NodeLogs.js";
+
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeRouters } from "./router/index.js";
 import { Simulator } from "./wingsdk.js";
@@ -72,30 +74,60 @@ function createWindowManager() {
 
       windows.set(simfile, newWindow);
 
+      const console = {
+        messages: new Array<LogEntry>(),
+        log(message: string) {
+          this.messages.push({
+            timestamp: Date.now(),
+            type: "info",
+            message,
+          });
+          newWindow.webContents.send("invalidate:app.logs");
+        },
+        error(error: unknown) {
+          this.messages.push({
+            timestamp: Date.now(),
+            type: "error",
+            message:
+              error instanceof Error ? error.message : JSON.stringify(error),
+          });
+          newWindow.webContents.send("invalidate:app.logs");
+        },
+      };
+
       const simulator = new Simulator({
         simfile,
       });
 
       // Start the simulator but don't wait for it, yet.
+      console.log("Sarting the simulator...");
       const simulatorStart = simulator.start();
 
       // Create the express server and router for the simulator. Start
       // listening but don't wait for it, yet.
+      console.log("Sarting the dev server...");
       const server = (async () => {
         const app = express();
         app.use(cors());
         app.use(
           "/",
           trpcExpress.createExpressMiddleware({
-            router: mergeRouters(simulator),
+            router: mergeRouters({
+              simulator,
+              logs() {
+                return console.messages;
+              },
+            }),
           }),
         );
 
+        console.log("Looking for an open port...");
         const port = await getPort();
         const server = app.listen(port);
         await new Promise<void>((resolve) => {
           server.on("listening", resolve);
         });
+        console.log(`Listening to the port ${port}`);
         return { port, server };
       })();
 

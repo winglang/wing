@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { WingSimulatorSchema } from "../../electron/main/wingsdk.js";
 import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs.js";
@@ -15,6 +15,7 @@ import { Node, useNodeMap } from "../utils/nodeMap.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
 import { MetadataPanel } from "./MetadataPanel.js";
+import { NodeLogs } from "./NodeLogs.js";
 import {
   NodeRelationshipsView,
   Relationships,
@@ -23,9 +24,16 @@ import { ResourceExploreView } from "./ResourceExploreView.js";
 
 export interface VscodeLayoutProps {
   schema: WingSimulatorSchema | undefined;
+  logs?:
+    | {
+        timestamp: number;
+        type: "info" | "warn" | "error";
+        message: string;
+      }[]
+    | undefined;
 }
 
-export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
+export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
   const treeMenu = useTreeMenuItems();
   const nodeMap = useNodeMap(schema?.root);
 
@@ -165,6 +173,14 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
     return relationships;
   }, [currentNode]);
 
+  const logsRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const div = logsRef.current;
+    if (div) {
+      div.scrollTo({ top: div.scrollHeight });
+    }
+  }, [logs]);
+
   return (
     <div className="h-full flex flex-col bg-slate-100 select-none">
       <div className="flex-1 flex">
@@ -253,7 +269,9 @@ export const VscodeLayout = ({ schema }: VscodeLayoutProps) => {
           </div>
         </div>
         <div className="flex-1 relative">
-          <ScrollableArea overflowY></ScrollableArea>
+          <ScrollableArea ref={logsRef} overflowY>
+            <NodeLogs logs={logs ?? []} />
+          </ScrollableArea>
         </div>
       </TopResizableWidget>
     </div>

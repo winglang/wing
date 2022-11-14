@@ -15,6 +15,7 @@ export interface AppProps {
 
 export const App = ({ querySchema }: AppProps) => {
   const schema = trpc.useQuery(["app.tree"]);
+  const logs = trpc.useQuery(["app.logs"]);
 
   const { invalidateQueries } = trpc.useContext();
   useEffect(() => {
@@ -27,11 +28,26 @@ export const App = ({ querySchema }: AppProps) => {
       window.electronTRPC?.ipcRenderer.removeListener("reload", invalidate);
     };
   }, []);
+  useEffect(() => {
+    const invalidate = async () => {
+      console.log("invalidate:app.logs");
+      await invalidateQueries("app.logs");
+    };
+    window.electronTRPC?.ipcRenderer.on("invalidate:app.logs", invalidate);
+    return () => {
+      window.electronTRPC?.ipcRenderer.removeListener(
+        "invalidate:app.logs",
+        invalidate,
+      );
+    };
+  }, []);
 
   return (
     <NotificationsProvider>
       {querySchema && <VscodeLayout schema={querySchema} />}
-      {schema.data && <VscodeLayout schema={schema.data} />}
+      {schema.data && (
+        <VscodeLayout schema={schema.data} logs={logs.data ?? []} />
+      )}
     </NotificationsProvider>
   );
 };
