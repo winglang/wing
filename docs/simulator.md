@@ -11,8 +11,8 @@ simulator works with any Wing application made with the SDK's `cloud` APIs.
 To use the simulator, you will need to provide a Wing simulator file -- this is
 a file with a `.wx` extension that is output when you compile your Wing program
 with the `--target sim` option. Check out the [Wing Getting Started
-Guide](/README.md#getting-started) for more information on how to write your first Wing
-program.
+Guide](/README.md#getting-started) for more information on how to write your
+first Wing program.
 
 ## Using the simulator API (in Wing)
 
@@ -23,7 +23,8 @@ program.
 Now, let's try starting the simulator and creating some resource clients to
 interact with the resources.
 
-First, create an empty directory and add your `app.wx` file. Next, run `npm install @winglang/wingsdk`.
+First, create an empty directory and add your `app.wx` file.
+Next, run `npm install @winglang/wingsdk`.
 
 Let's create a file in the directory named `main.ts`:
 
@@ -69,7 +70,21 @@ const response = await fn.invoke("hello!");
 console.log(response);
 ```
 
-Congratulations, you've invoked a function using the simulator!
+Finally, when you want to understand how Wing resources are working, you may
+want to debug your application using traces and logs. Simulated resources
+automatically generate traces that you can inspect by calling `listTraces()` on
+your simulator instance. If you are using the `Logger` resource in your inflight
+code, you can list any logs it has produced by calling `listLogs()` on your
+simulator instance. Lastly, you can list all of the events together by calling
+`listEvents()` on your simulator instance.
+
+```typescript
+console.log(JSON.stringify(mySim.listEvents(), null, 2));
+```
+
+<!-- TODO: show how to use Node debugger with simulator? -->
+
+Congratulations, you now know the ins and outs of using the Wing simulator! 🧑‍🎓
 
 Check the API reference for more details about what methods are available on
 different resources and their inflight clients. All client interfaces supported
