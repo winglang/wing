@@ -26,15 +26,30 @@ export interface SimulatorProps {
   readonly factory?: ISimulatorFactory;
 }
 
+/**
+ * Props for `ISimulatorContext.addTrace`.
+ */
 export interface AddTraceProps {
+  /**
+   * A message specified by the resource.
+   */
   readonly message: string;
 }
 
+/**
+ * Props for `ISimulatorContext.addLog`.
+ */
 export interface AddLogProps {
-  readonly message: string;
   /**
-   * The resource path may be explicitly specified in cases where logging
-   * resources operate on behalf of other resources.
+   * A message logged by the application.
+   */
+  readonly message: string;
+
+  /**
+   * An optional resource path. This is needed in cases where a logging resource
+   * operates on behalf of other resources.
+   *
+   * @default - the path of the resource that called `addLog`
    */
   readonly resourcePath?: string;
 }
@@ -44,11 +59,15 @@ export interface AddLogProps {
  */
 export interface SimulatorEvent {
   /**
-   * TODO: unimplemented.
+   * A message associated with the event.
    */
-  readonly requestId?: string;
   readonly message: string;
+
+  /**
+   * The resource that generated the event.
+   */
   readonly resourcePath: string;
+
   /**
    * The event type - either "trace" or "log".
    *
@@ -56,10 +75,14 @@ export interface SimulatorEvent {
    * that occurred during simulation, useful for understanding how resources
    * interact.
    *
-   * Log events are for information the user adds within their application code,
-   * useful for understanding what their inflight code is doing.
+   * Log events are for information the user adds within their inflight code,
+   * useful for understanding application logic.
    */
   readonly type: string;
+
+  /**
+   * The timestamp of the event, in milliseconds since the epoch.
+   */
   readonly timestamp: number;
 }
 
