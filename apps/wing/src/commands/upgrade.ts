@@ -1,6 +1,6 @@
 import debug from "debug";
-import isInstalledGlobally from "is-installed-globally";
 import { spawnSync } from "child_process";
+import isInstalledGlobally = require("is-installed-globally");
 
 const log = debug("wing:update");
 const PJSON = require("../../package.json");
@@ -16,8 +16,8 @@ export interface IUpdateOptions {
 export async function upgrade(options: IUpdateOptions) {
   const { force } = options;
 
-  if (!force && !isInstalledGlobally) {
-    log("package not installed globally and 'force' is not set, skipping.");
+  if (!force) {
+    log("'force' is not set, skipping.");
     return;
   }
 
@@ -34,21 +34,19 @@ export async function upgrade(options: IUpdateOptions) {
     await notifier.fetchInfo();
   }
 
+  const message = [
+    "Update available for Wing {currentVersion} >> {latestVersion}",
+    `Upgrad${force ? "ing" : "e"} with '{updateCommand}'`,
+  ].join("\n");
   log("notifying the user of any updates...");
-  await notifier.notify({ defer: false, isGlobal: isInstalledGlobally });
+  await notifier.notify({ defer: false, isGlobal: isInstalledGlobally, message });
 
   log("notifier: %o", notifier);
   if (force && notifier.update) {
     log("update available:", notifier.update);
     const result = spawnSync(
       "npm",
-      [
-        "install",
-        ...[isInstalledGlobally ? "-g" : ""],
-        "--loglevel",
-        "info",
-        PJSON.name,
-      ],
+      ["install", ...[isInstalledGlobally ? "-g" : ""], PJSON.name],
       {
         stdio: "inherit",
         timeout: 1000 * 60, // 1 minute execution timeout
