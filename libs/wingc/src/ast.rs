@@ -52,16 +52,18 @@ impl std::fmt::Display for Symbol {
 }
 
 #[derive(Debug, Clone, Copy, PartialEq)]
-pub enum Flight {
-	In,
-	Pre,
+pub enum Phase {
+	Inflight,
+	Preflight,
+	Independent,
 }
 
-impl Display for Flight {
+impl Display for Phase {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			Flight::In => write!(f, "inflight"),
-			Flight::Pre => write!(f, "preflight"),
+			Phase::Inflight => write!(f, "inflight"),
+			Phase::Preflight => write!(f, "preflight"),
+			Phase::Independent => write!(f, "independent"),
 		}
 	}
 }
@@ -82,7 +84,7 @@ pub enum Type {
 pub struct FunctionSignature {
 	pub parameters: Vec<Type>,
 	pub return_type: Option<Box<Type>>,
-	pub flight: Flight,
+	pub flight: Phase,
 }
 
 #[derive(Derivative)]
@@ -163,7 +165,7 @@ pub struct ParameterDefinition {
 pub struct ClassMember {
 	pub name: Symbol,
 	pub member_type: Type,
-	pub flight: Flight,
+	pub flight: Phase,
 }
 
 #[derive(Debug)]

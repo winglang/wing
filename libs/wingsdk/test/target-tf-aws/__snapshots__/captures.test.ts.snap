@@ -1,0 +1,561 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`function captures a bucket 1`] = `
+"const $cap = {};
+$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+async function $proc($cap, event) {
+        console.log(\\"Hello, \\" + event.name);
+        // TODO: fix this
+        await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
+      }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures a bucket 2`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"s3:PutObject*\\\\\\",\\\\\\"s3:Abort*\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}\\\\\\",\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}/*\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function_9F694E40\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"BUCKET_NAME__Bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Bucket_966015A6\\": {},
+      \\"root_Function_Bucket_8CDD903C\\": {}
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_Bucket_PublicAccessBlock_B0AF4CE5\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_Bucket_Encryption_BE486177\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`function captures a function 1`] = `
+"const $cap = {};
+async function $proc($cap, event) {
+          console.log(\\"Event: \\" + JSON.stringify(event));
+          return { greeting: \\"Hello, \\" + event.name + \\"!\\" };
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures a function 2`] = `
+"const $cap = {};
+$cap[\\"function\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME__Function1\\"]);
+async function $proc($cap, event) {
+          console.log(\\"Event: \\" + JSON.stringify(event));
+          const data = await $cap.function.invoke(JSON.stringify({ name: \\"world\\" }));
+          console.log(\\"Greeting: \\" + data.value().greeting);
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures a function 3`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_Function1_IamRole_7017166A\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      },
+      \\"root_Function2_IamRole_1D1C491F\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function1_IamRolePolicy_2AD9115C\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+      },
+      \\"root_Function2_IamRolePolicy_66C89FF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"lambda:InvokeFunction\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_lambda_function.root_Function1_F6563EFC.arn}\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function1_IamRolePolicyAttachment_8C092D66\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+      },
+      \\"root_Function2_IamRolePolicyAttachment_689FE230\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function1_F6563EFC\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function1\\"
+          }
+        },
+        \\"function_name\\": \\"Function1\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\"
+      },
+      \\"root_Function2_A135D90B\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"FUNCTION_NAME__Function1\\": \\"\${aws_lambda_function.root_Function1_F6563EFC.arn}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function2\\"
+          }
+        },
+        \\"function_name\\": \\"Function2\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Function1_Bucket_8268CF06\\": {},
+      \\"root_Function2_Bucket_EE4FCA23\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function1_S3Object_AA76C357\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"root_Function2_S3Object_7E3557EA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`function captures a queue 1`] = `
+"const $cap = {};
+$cap[\\"queue\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL__Queue\\"]);
+async function $proc($cap) {
+          await $cap.queue.push(JSON.stringify({ name: \\"Alice\\" }));
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures a queue 2`] = `
+"const $cap = {};
+async function $proc($cap, event) {
+          console.log(\\"Received \\" + event.name);
+        }
+async function $sqsEventWrapper($cap, event) {
+  for (const record of event.Records ?? []) {
+    await $proc($cap, record.body);
+  }
+}
+exports.handler = async function(event) {
+  return await $sqsEventWrapper($cap, event);
+};"
+`;
+
+exports[`function captures a queue 3`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      },
+      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:SendMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      },
+      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRolePolicy_4FF8284F\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      },
+      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRolePolicyAttachment_05CF132B\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.name}\\"
+      }
+    },
+    \\"aws_lambda_event_source_mapping\\": {
+      \\"root_Queue_EventSourceMapping_A20C741D\\": {
+        \\"batch_size\\": 1,
+        \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_Queue_OnMessagecbf6dee05a035c28_20B0F17F.function_name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function_9F694E40\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"QUEUE_URL__Queue\\": \\"\${aws_sqs_queue.root_Queue_7193B145.url}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
+      },
+      \\"root_Queue_OnMessagecbf6dee05a035c28_20B0F17F\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"OnMessage-cbf6dee05a035c28\\"
+          }
+        },
+        \\"function_name\\": \\"OnMessage-cbf6dee05a035c28\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Queue_OnMessagecbf6dee05a035c28_S3Object_592923A9.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Function_Bucket_8CDD903C\\": {},
+      \\"root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"root_Queue_OnMessagecbf6dee05a035c28_S3Object_592923A9\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    },
+    \\"aws_sqs_queue\\": {
+      \\"root_Queue_7193B145\\": {}
+    }
+  }
+}"
+`;
+
+exports[`function captures primitive values 1`] = `
+"const $cap = {};
+$cap[\\"num\\"] = 5;
+$cap[\\"string\\"] = \\"world\\";
+$cap[\\"bool\\"] = true;
+$cap[\\"nothing\\"] = null;
+async function $proc($cap, event) {
+        console.log(\\"Hello, \\" + $cap.string);
+        console.log(\\"My favorite number is \\" + $cap.num);
+        console.log(\\"Is it raining? \\" + $cap.bool);
+        console.log($cap.nothing + \\" hypothesis\\");
+      }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures primitive values 2`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function_9F694E40\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Function_Bucket_8CDD903C\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`function captures structured values 1`] = `
+"const $cap = {};
+$cap[\\"map\\"] = {\\"hello\\":\\"world\\",\\"boom\\":{\\"bam\\":123}};
+$cap[\\"list\\"] = [1,2,\\"thing\\"];
+async function $proc($cap, event) {
+          console.log(\\"Map: \\" + JSON.stringify($cap.map));
+          console.log(\\"List: \\" + JSON.stringify($cap.list));
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`function captures structured values 2`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function_9F694E40\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Function_Bucket_8CDD903C\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`two functions reusing the same inflight 1`] = `
+"const $cap = {};
+$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+async function $proc($cap, event) {
+          console.log(\\"Hello, \\" + event.name);
+          await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`two functions reusing the same inflight 2`] = `
+"const $cap = {};
+$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+async function $proc($cap, event) {
+          console.log(\\"Hello, \\" + event.name);
+          await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`two functions reusing the same inflight 3`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_Function1_IamRole_7017166A\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      },
+      \\"root_Function2_IamRole_1D1C491F\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function1_IamRolePolicy_2AD9115C\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"s3:PutObject*\\\\\\",\\\\\\"s3:Abort*\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}\\\\\\",\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}/*\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+      },
+      \\"root_Function2_IamRolePolicy_66C89FF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"s3:PutObject*\\\\\\",\\\\\\"s3:Abort*\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}\\\\\\",\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}/*\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function1_IamRolePolicyAttachment_8C092D66\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
+      },
+      \\"root_Function2_IamRolePolicyAttachment_689FE230\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function1_F6563EFC\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"BUCKET_NAME__Bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function1\\"
+          }
+        },
+        \\"function_name\\": \\"Function1\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\"
+      },
+      \\"root_Function2_A135D90B\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"BUCKET_NAME__Bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+            \\"WING_FUNCTION_NAME\\": \\"Function2\\"
+          }
+        },
+        \\"function_name\\": \\"Function2\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Bucket_966015A6\\": {},
+      \\"root_Function1_Bucket_8268CF06\\": {},
+      \\"root_Function2_Bucket_EE4FCA23\\": {}
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_Bucket_PublicAccessBlock_B0AF4CE5\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_Bucket_Encryption_BE486177\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function1_S3Object_AA76C357\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      },
+      \\"root_Function2_S3Object_7E3557EA\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;

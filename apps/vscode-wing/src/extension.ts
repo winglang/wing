@@ -23,11 +23,9 @@ const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
 const WINGLANG_REPO_NAME = "wing";
 const WINGLANG_REPO_OWNER = "winglang";
-const UPDATE_RATE_LIMIT_MS = 1 * 60 * 60 * 1000; // 1 hour
 
 const CFG_UPDATES_GITHUB_TOKEN = "updates.githubToken";
 const STATE_INSTALLED_RELEASE_CHECKSUM = "wing.installedReleaseChecksum";
-const STATE_LAST_UPDATE_CHECK = "wing.lastUpdateCheck";
 
 const LANGUAGE_SERVER_NAME = "Wing Language Server";
 const LANGUAGE_SERVER_ID = "wing-language-server";
@@ -40,11 +38,22 @@ export function deactivate() {
 
 export async function activate(context: ExtensionContext) {
   const activationActivities = [
-    checkForUpdates(context),
+    checkForUpdates(context, false),
     startLanguageServer(context),
+    addUpdateCommand(context),
   ];
 
+  // add update command
+
   await Promise.all(activationActivities);
+}
+
+async function addUpdateCommand(context: ExtensionContext) {
+  context.subscriptions.push(
+    commands.registerCommand("wing.updates.check", async () => {
+      await checkForUpdates(context, true);
+    })
+  );
 }
 
 async function startLanguageServer(context: ExtensionContext) {
@@ -120,7 +129,10 @@ async function startLanguageServer(context: ExtensionContext) {
   await client.start();
 }
 
-export async function checkForUpdates(context: ExtensionContext) {
+export async function checkForUpdates(
+  context: ExtensionContext,
+  manual: boolean
+) {
   if (context.extensionMode === ExtensionMode.Development) {
     void window.showWarningMessage(
       `[Wing] Skipping updates in development mode`
@@ -128,112 +140,108 @@ export async function checkForUpdates(context: ExtensionContext) {
     return;
   }
 
-  const lastUpdateCheck =
-    context.globalState.get<number>(STATE_LAST_UPDATE_CHECK) ?? -1;
-  const now = Date.now();
-
-  // Skip update if has been checked before and time diff is less than UPDATE_RATE_LIMIT_MS
-  if (lastUpdateCheck >= 0 && now - lastUpdateCheck <= UPDATE_RATE_LIMIT_MS) {
-    return;
-  }
-
   const configuration = workspace.getConfiguration(EXTENSION_NAME);
   const githubToken = configuration.get<string>(CFG_UPDATES_GITHUB_TOKEN);
 
-  if (githubToken) {
-    const octokit = new Octokit({ auth: githubToken });
-    const latestRelease = await octokit.rest.repos.getLatestRelease({
-      owner: WINGLANG_REPO_OWNER,
-      repo: WINGLANG_REPO_NAME,
-    });
-
-    if (latestRelease.status !== 200) {
-      void window.showErrorMessage(
-        `[Wing] Could not check for updates: ${latestRelease.data}`
+  if (!githubToken) {
+    if (manual) {
+      void window.showWarningMessage(
+        `[Wing] Unable to check for updates: No GitHub token configured`
       );
-      return;
     }
 
-    let latestHash: string | undefined;
-    for (let line of latestRelease.data.body?.split("\n") ?? []) {
-      line = line.trim();
-      if (line.endsWith("*" + EXTENSION_FILENAME)) {
-        // TODO better err handling
-        const sha1 = line.split(" ")[0]!;
-        if (sha1.length === 40) {
-          latestHash = sha1;
-          break;
-        } else {
-          void window.showWarningMessage(`[Wing] Checksum invalid: ${sha1}`);
-        }
+    return;
+  }
+
+  const octokit = new Octokit({ auth: githubToken });
+  const latestRelease = await octokit.rest.repos.getLatestRelease({
+    owner: WINGLANG_REPO_OWNER,
+    repo: WINGLANG_REPO_NAME,
+  });
+
+  if (latestRelease.status !== 200) {
+    void window.showErrorMessage(
+      `[Wing] Could not check for updates: ${latestRelease.data}`
+    );
+    return;
+  }
+
+  let latestHash: string | undefined;
+  for (let line of latestRelease.data.body?.split("\n") ?? []) {
+    line = line.trim();
+    if (line.endsWith("*" + EXTENSION_FILENAME)) {
+      // TODO better err handling
+      const sha1 = line.split(" ")[0]!;
+      if (sha1.length === 40) {
+        latestHash = sha1;
+        break;
+      } else {
+        void window.showWarningMessage(`[Wing] Checksum invalid: ${sha1}`);
       }
     }
+  }
 
-    const installedReleaseChecksum: string | undefined =
-      context.globalState.get(STATE_INSTALLED_RELEASE_CHECKSUM);
-    const latestReleaseChecksum = latestHash;
-    const hasSavedVersion = installedReleaseChecksum !== undefined;
-    const doUpdate =
-      hasSavedVersion && installedReleaseChecksum !== latestReleaseChecksum;
+  const installedReleaseChecksum: string | undefined = context.globalState.get(
+    STATE_INSTALLED_RELEASE_CHECKSUM
+  );
+  const latestReleaseChecksum = latestHash;
+  const hasSavedVersion = installedReleaseChecksum !== undefined;
+  const doUpdate =
+    hasSavedVersion && installedReleaseChecksum !== latestReleaseChecksum;
 
-    if (!hasSavedVersion) {
+  if (!hasSavedVersion) {
+    await context.globalState.update(
+      STATE_INSTALLED_RELEASE_CHECKSUM,
+      latestReleaseChecksum
+    );
+  }
+
+  if (doUpdate) {
+    void window.showInformationMessage(
+      `[Wing] New version available! Updating automatically...`
+    );
+
+    const assetId = latestRelease.data.assets.find(
+      (asset) => asset.name === EXTENSION_FILENAME
+    )?.id;
+
+    if (assetId) {
+      const filePath = `${tmpdir()}/${EXTENSION_FILENAME}`;
+
+      try {
+        await fetchAssetFile(octokit, {
+          id: assetId,
+          outputPath: filePath,
+          owner: WINGLANG_REPO_OWNER,
+          repo: WINGLANG_REPO_NAME,
+          token: githubToken,
+        });
+      } catch (e) {
+        void window.showErrorMessage(`[Wing] Could not download update: ${e}`);
+        return;
+      }
+
+      await commands.executeCommand(
+        "workbench.extensions.installExtension",
+        Uri.parse(filePath)
+      );
+
       await context.globalState.update(
         STATE_INSTALLED_RELEASE_CHECKSUM,
         latestReleaseChecksum
       );
+
+      void window
+        .showInformationMessage(
+          `[Wing] Reload window for update to take effect?`,
+          "Ok"
+        )
+        .then((selectedAction) => {
+          if (selectedAction === "Ok") {
+            void commands.executeCommand("workbench.action.reloadWindow");
+          }
+        });
     }
-
-    if (doUpdate) {
-      void window.showInformationMessage(
-        `[Wing] New version available! Updating automatically...`
-      );
-
-      const assetId = latestRelease.data.assets.find(
-        (asset) => asset.name === EXTENSION_FILENAME
-      )?.id;
-
-      if (assetId) {
-        const filePath = `${tmpdir()}/${EXTENSION_FILENAME}`;
-
-        try {
-          await fetchAssetFile(octokit, {
-            id: assetId,
-            outputPath: filePath,
-            owner: WINGLANG_REPO_OWNER,
-            repo: WINGLANG_REPO_NAME,
-            token: githubToken,
-          });
-        } catch (e) {
-          void window.showErrorMessage(
-            `[Wing] Could not download update: ${e}`
-          );
-          return;
-        }
-
-        await commands.executeCommand(
-          "workbench.extensions.installExtension",
-          Uri.parse(filePath)
-        );
-
-        await context.globalState.update(
-          STATE_INSTALLED_RELEASE_CHECKSUM,
-          latestReleaseChecksum
-        );
-
-        void window
-          .showInformationMessage(
-            `[Wing] Reload window for update to take effect?`,
-            "Ok"
-          )
-          .then((selectedAction) => {
-            if (selectedAction === "Ok") {
-              void commands.executeCommand("workbench.action.reloadWindow");
-            }
-          });
-      }
-    }
-
-    await context.globalState.update(STATE_LAST_UPDATE_CHECK, now);
   }
 }
 
