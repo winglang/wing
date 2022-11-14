@@ -12,7 +12,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
   private readonly context: ISimulatorContext;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    for (const sub of props.subscribers) {
+    for (const sub of props.subscribers ?? []) {
       this.subscribers.push({ ...sub });
     }
 
@@ -25,16 +25,24 @@ export class Queue implements IQueueClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    return;
+    this.context.addEvent({
+      message: "Queue created.",
+    });
   }
 
   public async cleanup(): Promise<void> {
     clearInterval(this.intervalId);
+    this.context.addEvent({
+      message: "Queue deleted.",
+    });
   }
 
   public async push(message: string): Promise<void> {
+    // TODO: enforce maximum queue message size?
     this.messages.push(message);
-    return;
+    this.context.addEvent({
+      message: "Push operation succeeded.",
+    });
   }
 
   private processMessages() {
@@ -54,14 +62,16 @@ export class Queue implements IQueueClient, ISimulatorResource {
         if (!fnClient) {
           throw new Error("No function client found");
         }
+        this.context.addEvent({
+          message: `Sending ${messages.length} messages to subscriber ${subscriber.functionHandle}.`,
+        });
         const event = JSON.stringify({ messages });
         void fnClient.invoke(event).catch((err) => {
           // If the function returns an error, put the message back on the queue
+          this.context.addEvent({
+            message: `Subscriber error (${err}) - returning ${messages.length} messages to queue.`,
+          });
           this.messages.push(...messages);
-          console.error(
-            `Error invoking queue subscriber "${subscriber.functionHandle}" with event "${event}":`,
-            err
-          );
         });
         processedMessages = true;
       }
