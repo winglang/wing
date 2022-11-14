@@ -5,6 +5,8 @@ import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
 test("pushing messages through a queue", async () => {
   // GIVEN
   class HelloWorld extends Construct {
@@ -62,20 +64,13 @@ test("pushing messages through a queue", async () => {
   const pusher = s.getResourceByPath(
     "root/HelloWorld/Function"
   ) as sim.IFunctionClient;
-  const processor = s.getResourceByPath(
-    "root/HelloWorld/Queue/OnMessage-004546ee82d97e73"
-  ) as sim.IFunctionClient;
 
   // WHEN
   await pusher.invoke("foo");
-  await new Promise((resolve) => setTimeout(resolve, 200));
+  await sleep(200);
 
   // THEN
-  const calls = await processor.timesCalled();
-  expect(calls).toEqual(1);
-
   await s.stop();
-
   expect(s.listLogs()).toEqual([
     {
       message: "Hello, world!",

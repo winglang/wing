@@ -1,7 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
-import { IFunctionClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 
@@ -55,10 +54,6 @@ test("reloading the simulator after working with ws", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const fnClient = s.getResourceByPath(
-    "root/my_queue/OnMessage-236ff3d72ad0ae46"
-  ) as IFunctionClient;
-
   await sleep(200);
 
   // Update the app.wx file in-place
@@ -67,7 +62,16 @@ test("reloading the simulator after working with ws", async () => {
   app2.synth();
 
   // THEN
-  expect(await fnClient.timesCalled()).toEqual(2);
+  expect(
+    s
+      .listTraces()
+      .filter((e) => e.resourceId.startsWith("root/my_queue/OnMessage-"))
+      .map((e) => e.message)
+  ).toEqual([
+    "Function created.",
+    'Invoke (payload="{"messages":["F"]}") operation succeeded. Response: undefined',
+    'Invoke (payload="{"messages":["A","B","C","D","E"]}") operation succeeded. Response: undefined',
+  ]);
 
   await s.reload();
 

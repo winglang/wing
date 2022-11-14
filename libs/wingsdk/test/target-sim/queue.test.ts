@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
-import { IFunctionClient, IQueueClient } from "../../src/target-sim";
+import { IQueueClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -52,9 +52,6 @@ test("queue with one subscriber, default batch size of 1", async () => {
   await s.start();
 
   const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
-  const fnClient = s.getResourceByPath(
-    "root/my_queue/OnMessage-236ff3d72ad0ae46"
-  ) as IFunctionClient;
 
   // WHEN
   await queueClient.push("A");
@@ -64,7 +61,6 @@ test("queue with one subscriber, default batch size of 1", async () => {
   await sleep(200);
 
   // THEN
-  expect(await fnClient.timesCalled()).toEqual(2);
   await s.stop();
 
   expect(listMessages(s)).toEqual([
@@ -99,14 +95,9 @@ test("queue with one subscriber, batch size of 5", async () => {
   await s.start();
 
   // WHEN
-  const fnClient = s.getResourceByPath(
-    "root/my_queue/OnMessage-236ff3d72ad0ae46"
-  ) as IFunctionClient;
-
   await sleep(200);
 
   // THEN
-  expect(await fnClient.timesCalled()).toEqual(2);
   await s.stop();
 
   expect(listMessages(s)).toEqual([
@@ -138,16 +129,11 @@ test("messages are requeued if the function fails", async () => {
 
   // WHEN
   const queueClient = s.getResourceByPath("root/my_queue") as IQueueClient;
-  const fnClient = s.getResourceByPath(
-    "root/my_queue/OnMessage-236ff3d72ad0ae46"
-  ) as IFunctionClient;
-
   await queueClient.push("BAD MESSAGE");
 
   await sleep(300);
 
   // THEN
-  expect(await fnClient.timesCalled()).toBeGreaterThan(1);
   await s.stop();
 
   expect(listMessages(s)).toEqual([

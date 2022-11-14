@@ -88,11 +88,4 @@ export class Function extends cloud.FunctionBase implements IResource {
 /**
  * Simulator implementation of inflight client for `cloud.Function`.
  */
-export interface IFunctionClient extends cloud.IFunctionClient {
-  /**
-   * Returns the number of times the function was invoked since its creation.
-   *
-   * @experimental
-   */
-  timesCalled(): Promise<number>;
-}
+export interface IFunctionClient extends cloud.IFunctionClient {}

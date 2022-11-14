@@ -11,7 +11,6 @@ import { FunctionSchema } from "./schema-resources";
 export class Function implements IFunctionClient, ISimulatorResource {
   private readonly filename: string;
   private readonly env: Record<string, string>;
-  private _timesCalled: number = 0;
   private readonly context: ISimulatorContext;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
@@ -68,18 +67,12 @@ export class Function implements IFunctionClient, ISimulatorResource {
       this.context.addTrace({
         message: `Invoke (payload="${payload}") operation succeeded. Response: ${result}`,
       });
-      this._timesCalled += 1;
       return result;
     } catch (e) {
       this.context.addTrace({
         message: `Invoke (payload="${payload}") operation failed. Response: ${e}`,
       });
-      this._timesCalled += 1;
       throw e;
     }
-  }
-
-  public async timesCalled(): Promise<number> {
-    return Promise.resolve(this._timesCalled);
   }
 }
