@@ -17,7 +17,7 @@ export async function upgrade(options: IUpdateOptions) {
   const { force } = options;
 
   if (!force) {
-    log("package not installed globally and 'force' is not set, skipping.");
+    log("'force' is not set, skipping.");
     return;
   }
 
