@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as tfaws from "../../src/tf-aws";
+import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 

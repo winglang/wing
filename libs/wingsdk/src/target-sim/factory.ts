@@ -1,32 +1,33 @@
 import { IPolyconFactory } from "@winglang/polycons";
 import { IConstruct } from "constructs";
-import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE, QUEUE_TYPE } from "../cloud";
+import * as cloud from "../cloud";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
 
 /**
- * Polycon factory which resolves `cloud` resources into AWS resources.
+ * Polycon factory which resolves polycons in `cloud` into preflight resources
+ * for the simulator target.
  */
 export class PolyconFactory implements IPolyconFactory {
-  public resolve(
-    type: string,
+  resolve(
+    polyconId: string,
     scope: IConstruct,
     id: string,
     ...args: any[]
   ): IConstruct {
-    switch (type) {
-      case BUCKET_TYPE:
+    switch (polyconId) {
+      case cloud.BUCKET_TYPE:
         return new Bucket(scope, id, args[0]);
-      case FUNCTION_TYPE:
+      case cloud.FUNCTION_TYPE:
         return new Function(scope, id, args[0], args[1]);
-      case QUEUE_TYPE:
+      case cloud.QUEUE_TYPE:
         return new Queue(scope, id, args[0]);
-      case LOGGER_TYPE:
+      case cloud.LOGGER_TYPE:
         return new Logger(scope, id);
       default:
-        throw new Error(`Type ${type} not implemented.`);
+        throw new Error(`Type ${polyconId} not implemented.`);
     }
   }
 }

@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/sim";
-import { IFunctionClient, IQueueClient } from "../../src/sim";
+import * as sim from "../../src/target-sim";
+import { IFunctionClient, IQueueClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";

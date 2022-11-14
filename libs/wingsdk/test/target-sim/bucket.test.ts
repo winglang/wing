@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
-import * as sim from "../../src/sim";
-import { IBucketClient } from "../../src/sim";
+import * as sim from "../../src/target-sim";
+import { IBucketClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";

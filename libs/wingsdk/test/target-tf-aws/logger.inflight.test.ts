@@ -4,7 +4,7 @@ import {
   GetLogEventsCommand,
 } from "@aws-sdk/client-cloudwatch-logs";
 import { mockClient } from "aws-sdk-client-mock";
-import { LoggerClient } from "../../src/tf-aws/logger.inflight";
+import { LoggerClient } from "../../src/target-tf-aws/logger.inflight";
 
 const cwlMock = mockClient(CloudWatchLogsClient);
 
