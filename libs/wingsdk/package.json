@@ -166,8 +166,7 @@
     },
     "excludeTypescript": [
       "src/**/*.inflight.ts",
-      "src/**/*.sim.ts",
-      "src/**/exports.ts"
+      "src/**/*.sim.ts"
     ]
   },
   "overrides": {

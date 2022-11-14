@@ -4527,7 +4527,7 @@ The code contents.
 
 - *Implements:* @winglang/polycons.IPolyconFactory
 
-Polycon factory which resolves `cloud` resources into simulated resources.
+Polycon factory which resolves polycons in `cloud` into preflight resources for the simulator target.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.PolyconFactory.Initializer"></a>
 
@@ -4589,7 +4589,7 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 - *Implements:* @winglang/polycons.IPolyconFactory
 
-Polycon factory which resolves `cloud` resources into AWS resources.
+Polycon factory which resolves polycons in `cloud` into preflight resources for the AWS target.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.PolyconFactory.Initializer"></a>
 
@@ -5311,7 +5311,7 @@ The absolute path to where all assets in `app.wx` are stored.
 
 - *Implemented By:* @winglang/wingsdk.testing.ISimulatorFactory
 
-A factory that can turn resource descriptions into resource simulations.
+A factory that can turn resource descriptions into (inflight) resource simulations.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
