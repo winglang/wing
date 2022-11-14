@@ -79,6 +79,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
     "Queue deleted.",
     "Function deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("queue with one subscriber, batch size of 5", async () => {
@@ -118,6 +119,7 @@ test("queue with one subscriber, batch size of 5", async () => {
     "Queue deleted.",
     "Function deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("messages are requeued if the function fails", async () => {
@@ -161,6 +163,7 @@ test("messages are requeued if the function fails", async () => {
     "Queue deleted.",
     "Function deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

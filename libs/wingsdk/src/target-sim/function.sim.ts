@@ -24,13 +24,13 @@ export class Function implements IFunctionClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    this.context.addEvent({
+    this.context.addTrace({
       message: "Function created.",
     });
   }
 
   public async cleanup(): Promise<void> {
-    this.context.addEvent({
+    this.context.addTrace({
       message: "Function deleted.",
     });
   }
@@ -65,13 +65,13 @@ export class Function implements IFunctionClient, ISimulatorResource {
 
     try {
       const result = await vm.runInContext(wrapper, context);
-      this.context.addEvent({
+      this.context.addTrace({
         message: `Invoke (payload="${payload}") operation succeeded. Response: ${result}`,
       });
       this._timesCalled += 1;
       return result;
     } catch (e) {
-      this.context.addEvent({
+      this.context.addTrace({
         message: `Invoke (payload="${payload}") operation failed. Response: ${e}`,
       });
       this._timesCalled += 1;

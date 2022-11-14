@@ -82,6 +82,7 @@ test("invoke function succeeds", async () => {
     'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Hello, Alice!"}',
     "Function deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
@@ -120,6 +121,7 @@ test("invoke function with environment variables", async () => {
     'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Ellohay, Alice!"}',
     "Function deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("invoke function fails", async () => {
@@ -151,6 +153,7 @@ test("invoke function fails", async () => {
     'Invoke (payload="{"name":"alice"}") operation failed. Response: Error: Name must start with uppercase letter',
     "Function deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

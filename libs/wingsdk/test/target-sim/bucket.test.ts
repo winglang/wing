@@ -53,6 +53,7 @@ test("put and get objects from bucket", async () => {
     "Get (key=greeting.txt) operation succeeded.",
     "Bucket deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -90,6 +91,7 @@ test("put multiple objects and list all from bucket", async () => {
     "List (prefix=null) operation succeeded.",
     "Bucket deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
@@ -112,6 +114,7 @@ test("get invalid object throws an error", async () => {
     "Get (key=unknown.txt) operation failed.",
     "Bucket deleted.",
   ]);
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

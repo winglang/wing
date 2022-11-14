@@ -24,3 +24,76 @@ Object {
   ],
 }
 `;
+
+exports[`invoke function fails 1`] = `
+Object {
+  "root": Object {
+    "children": Object {
+      "my_function": Object {
+        "props": Object {
+          "environmentVariables": Object {
+            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    },
+    "type": "constructs.Construct",
+  },
+  "sdkVersion": "0.0.0",
+  "startOrder": Array [
+    "root/my_function",
+  ],
+}
+`;
+
+exports[`invoke function succeeds 1`] = `
+Object {
+  "root": Object {
+    "children": Object {
+      "my_function": Object {
+        "props": Object {
+          "environmentVariables": Object {
+            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    },
+    "type": "constructs.Construct",
+  },
+  "sdkVersion": "0.0.0",
+  "startOrder": Array [
+    "root/my_function",
+  ],
+}
+`;
+
+exports[`invoke function with environment variables 1`] = `
+Object {
+  "root": Object {
+    "children": Object {
+      "my_function": Object {
+        "props": Object {
+          "environmentVariables": Object {
+            "PIG_LATIN": "true",
+            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    },
+    "type": "constructs.Construct",
+  },
+  "sdkVersion": "0.0.0",
+  "startOrder": Array [
+    "root/my_function",
+  ],
+}
+`;

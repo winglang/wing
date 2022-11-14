@@ -74,14 +74,20 @@ test("pushing messages through a queue", async () => {
   const calls = await processor.timesCalled();
   expect(calls).toEqual(1);
 
-  const logger = s.getResourceByPath("root/WingLogger") as sim.ILoggerClient;
-  const logs = await logger.fetchLatestLogs();
-  expect(logs).toEqual([
+  await s.stop();
+
+  expect(s.listLogs()).toEqual([
+    {
+      message: "Hello, world!",
+      resourceId: "root/HelloWorld/Function",
+      timestamp: expect.any(Number),
+      type: "log",
+    },
     {
       message: "Received foo",
+      resourceId: "root/HelloWorld/Queue/OnMessage-004546ee82d97e73",
       timestamp: expect.any(Number),
+      type: "log",
     },
   ]);
-
-  await s.stop();
 });

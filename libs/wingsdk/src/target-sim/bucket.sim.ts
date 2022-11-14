@@ -18,14 +18,14 @@ export class Bucket implements IBucketClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    this.context.addEvent({
+    this.context.addTrace({
       message: "Bucket created.",
     });
   }
 
   public async cleanup(): Promise<void> {
     // TODO: clean up file dir?
-    this.context.addEvent({
+    this.context.addTrace({
       message: "Bucket deleted.",
     });
   }
@@ -34,11 +34,11 @@ export class Bucket implements IBucketClient, ISimulatorResource {
     try {
       const filename = join(this.fileDir, key);
       await fs.promises.writeFile(filename, value);
-      this.context.addEvent({
+      this.context.addTrace({
         message: `Put (key=${key}) operation succeeded.`,
       });
     } catch (e) {
-      this.context.addEvent({
+      this.context.addTrace({
         message: `Put (key=${key}) operation failed.`,
       });
       throw e;
@@ -49,12 +49,12 @@ export class Bucket implements IBucketClient, ISimulatorResource {
     try {
       const filename = join(this.fileDir, key);
       const value = await fs.promises.readFile(filename, "utf8");
-      this.context.addEvent({
+      this.context.addTrace({
         message: `Get (key=${key}) operation succeeded.`,
       });
       return value;
     } catch (e) {
-      this.context.addEvent({
+      this.context.addTrace({
         message: `Get (key=${key}) operation failed.`,
       });
       throw e;
@@ -67,12 +67,12 @@ export class Bucket implements IBucketClient, ISimulatorResource {
       const filtered = prefix
         ? fileNames.filter((fileName) => fileName.startsWith(prefix))
         : fileNames;
-      this.context.addEvent({
+      this.context.addTrace({
         message: `List (prefix=${prefix ?? "null"}) operation succeeded.`,
       });
       return filtered;
     } catch (e) {
-      this.context.addEvent({
+      this.context.addTrace({
         message: `List (prefix=${prefix ?? "null"}) operation failed.`,
       });
       throw e;

@@ -25,14 +25,14 @@ export class Queue implements IQueueClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    this.context.addEvent({
+    this.context.addTrace({
       message: "Queue created.",
     });
   }
 
   public async cleanup(): Promise<void> {
     clearInterval(this.intervalId);
-    this.context.addEvent({
+    this.context.addTrace({
       message: "Queue deleted.",
     });
   }
@@ -40,7 +40,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
   public async push(message: string): Promise<void> {
     // TODO: enforce maximum queue message size?
     this.messages.push(message);
-    this.context.addEvent({
+    this.context.addTrace({
       message: "Push operation succeeded.",
     });
   }
@@ -62,13 +62,13 @@ export class Queue implements IQueueClient, ISimulatorResource {
         if (!fnClient) {
           throw new Error("No function client found");
         }
-        this.context.addEvent({
+        this.context.addTrace({
           message: `Sending ${messages.length} messages to subscriber ${subscriber.functionHandle}.`,
         });
         const event = JSON.stringify({ messages });
         void fnClient.invoke(event).catch((err) => {
           // If the function returns an error, put the message back on the queue
-          this.context.addEvent({
+          this.context.addTrace({
             message: `Subscriber error (${err}) - returning ${messages.length} messages to queue.`,
           });
           this.messages.push(...messages);

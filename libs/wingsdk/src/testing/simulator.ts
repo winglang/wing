@@ -26,16 +26,36 @@ export interface SimulatorProps {
   readonly factory?: ISimulatorFactory;
 }
 
-export interface SimulatorEventBase {
-  readonly requestId?: string;
+export interface AddTraceProps {
   readonly message: string;
+}
+
+export interface AddLogProps {
+  readonly message: string;
+  readonly resourceId: string;
 }
 
 /**
  * Represents an event logged during simulation.
  */
-export interface SimulatorEvent extends SimulatorEventBase {
+export interface SimulatorEvent {
+  /**
+   * TODO: unimplemented.
+   */
+  readonly requestId?: string;
+  readonly message: string;
   readonly resourceId: string;
+  /**
+   * The event type - either "trace" or "log".
+   *
+   * Trace events are for breadcrumbs of information about resource operations
+   * that occurred during simulation, useful for understanding how resources
+   * interact.
+   *
+   * Log events are for information the user adds within their application code,
+   * useful for understanding what their inflight code is doing.
+   */
+  readonly type: string;
   readonly timestamp: number;
 }
 
@@ -54,9 +74,18 @@ export interface ISimulatorContext {
   findInstance(handle: string): ISimulatorResource;
 
   /**
-   * Log an event.
+   * Add a trace event to the simulation. Trace events are for breadcrumbs of
+   * information about resource operations that occurred during simulation,
+   * useful for understanding how resources interact.
    */
-  addEvent(event: SimulatorEventBase): void;
+  addTrace(event: AddTraceProps): void;
+
+  /**
+   * Add a log event to the simulation. Log events are for information the user
+   * adds within their application code, useful for understanding what their
+   * inflight code is doing.
+   */
+  addLog(event: AddLogProps): void;
 }
 
 /**
@@ -157,12 +186,21 @@ export class Simulator {
         findInstance: (handle: string) => {
           return this._handles.find(handle);
         },
-        addEvent: (event: SimulatorEventBase) => {
-          let fullEvent: SimulatorEvent = {
+        addTrace: (event: AddTraceProps) => {
+          let fullEvent: SimulatorEvent = Object.freeze({
             ...event,
+            type: "trace",
             resourceId: path,
             timestamp: Date.now(),
-          };
+          });
+          this._events.push(fullEvent);
+        },
+        addLog: (event: AddLogProps) => {
+          let fullEvent: SimulatorEvent = Object.freeze({
+            ...event,
+            type: "log",
+            timestamp: Date.now(),
+          });
           this._events.push(fullEvent);
         },
       };
@@ -229,6 +267,22 @@ export class Simulator {
    */
   public listEvents(): SimulatorEvent[] {
     return [...this._events];
+  }
+
+  /**
+   * Get a list of all trace events that have been logged during the simulation.
+   * The list of events is cleared whenever the simulation is restarted.
+   */
+  public listTraces(): SimulatorEvent[] {
+    return this._events.filter((e) => e.type === "trace");
+  }
+
+  /**
+   * Get a list of all log events that have been logged during the simulation.
+   * The list of events is cleared whenever the simulation is restarted.
+   */
+  public listLogs(): SimulatorEvent[] {
+    return this._events.filter((e) => e.type === "log");
   }
 
   /**
