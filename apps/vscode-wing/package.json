@@ -1,6 +1,6 @@
 {
   "name": "vscode-wing",
-  "description": "Wing Language Support",
+  "description": "Wing language support for VSCode",
   "repository": {
     "type": "git",
     "url": "https://github.com/winglang/wing.git"
@@ -52,12 +52,23 @@
     "octokit": "^2.0.7",
     "vscode-languageclient": "^8.0.2"
   },
+  "keywords": [
+    "cdk",
+    "cloud",
+    "infrastructure",
+    "language",
+    "wing"
+  ],
   "engines": {
     "vscode": "^1.70.0"
   },
   "main": "lib/index.js",
   "license": "Apache-2.0",
+  "homepage": "https://winglang.io",
   "version": "0.0.0",
+  "bugs": {
+    "url": "https://github.com/winglang/wing/issues/new/choose"
+  },
   "types": "lib/index.d.ts",
   "publisher": "Monada",
   "preview": true,
@@ -118,7 +129,11 @@
     "commands": [
       {
         "command": "wing.updates.check",
-        "title": "Check for Wing Updates"
+        "title": "[Wing] Check for updates"
+      },
+      {
+        "command": "wing.updates.addToken",
+        "title": "[Wing] Set update token"
       }
     ]
   },

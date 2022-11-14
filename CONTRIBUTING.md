@@ -10,6 +10,7 @@ We've structured the handbook as an FAQ to make it easy to find the information 
   - [🌳 How is this repository structured?](#-how-is-this-repository-structured)
   - [🔨 How do I build Wing locally?](#-how-do-i-build-wing-locally)
   - [🔨 How do I build just the SDK?](#-how-do-i-build-just-the-sdk)
+  - [🔨 How do I build the VSCode extension?](#-how-do-i-build-the-vscode-extension)
   - [🧱 How do I add a dependency to the SDK?](#-how-do-i-add-a-dependency-to-the-sdk)
   - [🧩 How do I add a resource to the SDK?](#-how-do-i-add-a-resource-to-the-sdk)
   - [🎨 How do I design the API for a SDK resource?](#-how-do-i-design-the-api-for-a-sdk-resource)
@@ -114,6 +115,13 @@ Everything in the SDK can be built by running `npm run build` from `libs/wingsdk
 [CDK for Terraform]: https://github.com/hashicorp/terraform-cdk
 [JSII]: https://github.com/aws/jsii
 [Projen]: https://github.com/projen/projen
+
+## 🔨 How do I build the VSCode extension?
+
+The VSCode extension is located in `apps/vscode`. Most of the logic is in the language server, which is located in `apps/wing-language-server`.
+Running `nx build` from `apps/vscode` will ensure the language server is built first and the binary is available. This creates an installable VSIX file.
+
+A VSCode launch configuration is available to open a VSCode with a development version of the extension.
 
 ## 🧱 How do I add a dependency to the SDK?
 

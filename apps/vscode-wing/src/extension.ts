@@ -26,6 +26,8 @@ const WINGLANG_REPO_OWNER = "winglang";
 
 const CFG_UPDATES_GITHUB_TOKEN = "updates.githubToken";
 const STATE_INSTALLED_RELEASE_CHECKSUM = "wing.installedReleaseChecksum";
+const CMD_UPDATES_ADD_TOKEN = "wing.updates.addToken";
+const CMD_UPDATES_CHECK = "wing.updates.check";
 
 const LANGUAGE_SERVER_NAME = "Wing Language Server";
 const LANGUAGE_SERVER_ID = "wing-language-server";
@@ -40,18 +42,30 @@ export async function activate(context: ExtensionContext) {
   const activationActivities = [
     checkForUpdates(context, false),
     startLanguageServer(context),
-    addUpdateCommand(context),
+    addCommands(context),
   ];
-
-  // add update command
 
   await Promise.all(activationActivities);
 }
 
-async function addUpdateCommand(context: ExtensionContext) {
+async function addCommands(context: ExtensionContext) {
   context.subscriptions.push(
-    commands.registerCommand("wing.updates.check", async () => {
+    commands.registerCommand(CMD_UPDATES_CHECK, async () => {
       await checkForUpdates(context, true);
+    }),
+    commands.registerCommand(CMD_UPDATES_ADD_TOKEN, async () => {
+      const token = await window.showInputBox({
+        prompt:
+          "Enter your GitHub PAT (Personal Access Token) with private repo permissions",
+        placeHolder: "PAT",
+        password: true,
+      });
+      if (token) {
+        await workspace
+          .getConfiguration(EXTENSION_NAME)
+          .update(CFG_UPDATES_GITHUB_TOKEN, token);
+        await checkForUpdates(context, true);
+      }
     })
   );
 }
