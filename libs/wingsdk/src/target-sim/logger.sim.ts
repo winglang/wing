@@ -43,7 +43,7 @@ export class Logger implements ILoggerClient, ISimulatorResource {
     try {
       this.context.addLog({
         message,
-        resourceId: functionPath,
+        resourcePath: functionPath,
       });
       this.context.addTrace({
         message: "Print operation succeeded.",

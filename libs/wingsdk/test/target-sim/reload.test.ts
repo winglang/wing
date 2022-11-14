@@ -65,7 +65,7 @@ test("reloading the simulator after working with ws", async () => {
   expect(
     s
       .listTraces()
-      .filter((e) => e.resourceId.startsWith("root/my_queue/OnMessage-"))
+      .filter((e) => e.resourcePath.startsWith("root/my_queue/OnMessage-"))
       .map((e) => e.message)
   ).toEqual([
     "Function created.",

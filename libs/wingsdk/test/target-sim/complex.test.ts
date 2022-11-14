@@ -74,13 +74,13 @@ test("pushing messages through a queue", async () => {
   expect(s.listLogs()).toEqual([
     {
       message: "Hello, world!",
-      resourceId: "root/HelloWorld/Function",
+      resourcePath: "root/HelloWorld/Function",
       timestamp: expect.any(Number),
       type: "log",
     },
     {
       message: "Received foo",
-      resourceId: "root/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      resourcePath: "root/HelloWorld/Queue/OnMessage-004546ee82d97e73",
       timestamp: expect.any(Number),
       type: "log",
     },

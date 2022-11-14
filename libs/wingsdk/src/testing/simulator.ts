@@ -32,7 +32,11 @@ export interface AddTraceProps {
 
 export interface AddLogProps {
   readonly message: string;
-  readonly resourceId: string;
+  /**
+   * The resource path may be explicitly specified in cases where logging
+   * resources operate on behalf of other resources.
+   */
+  readonly resourcePath?: string;
 }
 
 /**
@@ -44,7 +48,7 @@ export interface SimulatorEvent {
    */
   readonly requestId?: string;
   readonly message: string;
-  readonly resourceId: string;
+  readonly resourcePath: string;
   /**
    * The event type - either "trace" or "log".
    *
@@ -190,13 +194,14 @@ export class Simulator {
           let fullEvent: SimulatorEvent = Object.freeze({
             ...event,
             type: "trace",
-            resourceId: path,
+            resourcePath: path,
             timestamp: Date.now(),
           });
           this._events.push(fullEvent);
         },
         addLog: (event: AddLogProps) => {
           let fullEvent: SimulatorEvent = Object.freeze({
+            resourcePath: path,
             ...event,
             type: "log",
             timestamp: Date.now(),
