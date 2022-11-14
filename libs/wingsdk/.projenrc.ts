@@ -77,7 +77,6 @@ const pkgJson = project.tryFindObjectFile("package.json");
 pkgJson!.addOverride("jsii.excludeTypescript", [
   "src/**/*.inflight.ts",
   "src/**/*.sim.ts",
-  "src/**/exports.ts",
 ]);
 
 // By default, the TypeScript compiler will include all types from @types, even
@@ -117,12 +116,7 @@ enum Zone {
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return srcPathsNotEndingIn([
-        "*.inflight.ts",
-        "*.sim.ts",
-        "*.test.ts",
-        "exports.ts",
-      ]);
+      return srcPathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
     case Zone.TEST:
       return "src/**/*.test.ts";
     case Zone.INFLIGHT:

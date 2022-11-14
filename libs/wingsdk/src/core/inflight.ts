@@ -43,7 +43,7 @@ export interface ICapturable {
    *
    * @internal
    */
-  _capture(captureScope: IConstruct, metadata: CaptureMetadata): Code;
+  _bind(captureScope: IConstruct, metadata: CaptureMetadata): Code;
 }
 
 /**
@@ -285,7 +285,7 @@ function createClient(
   }
 
   if (capture.resource !== undefined) {
-    return capture.resource._capture(captureScope, capture);
+    return capture.resource._bind(captureScope, capture);
   }
 
   throw new Error(

@@ -1,7 +1,7 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
-	ast::{ArgList, Expr, ExprKind, Flight, Reference, Scope, StmtKind, Symbol},
+	ast::{ArgList, Expr, ExprKind, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
 	type_check::type_env::TypeEnv,
 	type_check::Type,
@@ -38,10 +38,10 @@ pub fn scan_captures(ast_root: &Scope) {
 	for s in ast_root.statements.iter() {
 		match &s.kind {
 			StmtKind::FunctionDefinition(func_def) => {
-				if let Flight::In = func_def.signature.flight {
+				if let Phase::Inflight = func_def.signature.flight {
 					let mut func_captures = func_def.captures.borrow_mut();
 					assert!(func_captures.is_none());
-					*func_captures = Some(collect_captures(scan_captures_in_scope(&func_def.statements)));
+					*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
 				}
 			}
 			StmtKind::ForLoop {
@@ -69,19 +69,21 @@ pub fn scan_captures(ast_root: &Scope) {
 				is_resource: _,
 			} => {
 				match constructor.signature.flight {
-					Flight::In => {
+					Phase::Inflight => {
 						// TODO: what do I do with these?
-						scan_captures_in_scope(&constructor.statements);
+						scan_captures_in_inflight_scope(&constructor.statements);
 					}
-					Flight::Pre => scan_captures(&constructor.statements),
+					Phase::Independent => scan_captures(&constructor.statements),
+					Phase::Preflight => scan_captures(&constructor.statements),
 				}
 				for m in methods.iter() {
 					match m.signature.flight {
-						Flight::In => {
+						Phase::Inflight => {
 							// TODO: what do I do with these?
-							scan_captures_in_scope(&m.statements);
+							scan_captures_in_inflight_scope(&m.statements);
 						}
-						Flight::Pre => scan_captures(&m.statements),
+						Phase::Independent => scan_captures(&constructor.statements),
+						Phase::Preflight => scan_captures(&m.statements),
 					}
 				}
 			}
@@ -106,7 +108,7 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) -
 			};
 
 			let func = prop_type.as_function_sig().unwrap();
-			if matches!(func.flight, Flight::Pre) {
+			if matches!(func.flight, Phase::Preflight) {
 				panic!("Can't access preflight method {} inflight", property);
 			}
 			debug!(
@@ -147,14 +149,19 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 					}
 				};
 
-				if let (Some(resource), Flight::Pre) = (t.as_resource_object(), f) {
+				if let (Some(resource), Phase::Preflight) = (t.as_resource_object(), f) {
 					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
 					//   1. explicit capture definitions
 					//   2. analyzing inflight code and figuring out what methods are being used on the object
 					res.extend(
 						resource
 							.methods()
-							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Flight::In))
+							.filter(|(_, sig)| {
+								matches!(
+									sig.as_function_sig().unwrap().flight,
+									Phase::Inflight | Phase::Independent
+								)
+							})
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
 								def: CaptureDef { method: name.clone() },
@@ -202,12 +209,12 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 	res
 }
 
-fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
+fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 	let mut res = vec![];
 	let env = scope.env.as_ref().unwrap();
 
 	// Make sure we're looking for captures only in inflight code
-	assert!(matches!(env.flight, Flight::In));
+	assert!(matches!(env.flight, Phase::Inflight));
 
 	for s in scope.statements.iter() {
 		match &s.kind {
@@ -216,14 +223,14 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				initial_value,
 				type_: _,
 			} => res.extend(scan_captures_in_expression(initial_value, env)),
-			StmtKind::FunctionDefinition(func_def) => res.extend(scan_captures_in_scope(&func_def.statements)),
+			StmtKind::FunctionDefinition(func_def) => res.extend(scan_captures_in_inflight_scope(&func_def.statements)),
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable,
 				statements,
 			} => {
 				res.extend(scan_captures_in_expression(iterable, env));
-				res.extend(scan_captures_in_scope(statements));
+				res.extend(scan_captures_in_inflight_scope(statements));
 			}
 			StmtKind::If {
 				condition,
@@ -231,9 +238,9 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				else_statements,
 			} => {
 				res.extend(scan_captures_in_expression(condition, env));
-				res.extend(scan_captures_in_scope(statements));
+				res.extend(scan_captures_in_inflight_scope(statements));
 				if let Some(else_statements) = else_statements {
-					res.extend(scan_captures_in_scope(else_statements));
+					res.extend(scan_captures_in_inflight_scope(else_statements));
 				}
 			}
 			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env)),
@@ -243,7 +250,7 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 					res.extend(scan_captures_in_expression(e, env));
 				}
 			}
-			StmtKind::Scope(s) => res.extend(scan_captures_in_scope(s)),
+			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s)),
 			StmtKind::Class {
 				name: _,
 				members: _,
@@ -252,9 +259,9 @@ fn scan_captures_in_scope(scope: &Scope) -> Vec<Capture> {
 				parent: _,
 				is_resource: _,
 			} => {
-				res.extend(scan_captures_in_scope(&constructor.statements));
+				res.extend(scan_captures_in_inflight_scope(&constructor.statements));
 				for m in methods.iter() {
-					res.extend(scan_captures_in_scope(&m.statements))
+					res.extend(scan_captures_in_inflight_scope(&m.statements))
 				}
 			}
 			StmtKind::Use {

@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Flight, Symbol},
+	ast::{Phase, Symbol},
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
@@ -58,7 +58,7 @@ impl<'a> JsiiImporter<'a> {
 					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
-						flight: Flight::In,
+						flight: Phase::Inflight,
 					})))
 				} else if type_fqn == "@winglang/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
@@ -178,11 +178,11 @@ impl<'a> JsiiImporter<'a> {
 		&mut self,
 		jsii_interface: &T,
 		is_resource: bool,
-		flight: Flight,
+		flight: Phase,
 		class_env: &mut TypeEnv,
 		wing_type: TypeRef,
 	) {
-		assert!(!is_resource || flight == Flight::Pre);
+		assert!(!is_resource || flight == Phase::Preflight);
 
 		// Add methods to the class environment
 		if let Some(methods) = &jsii_interface.methods() {
@@ -222,7 +222,7 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(properties) = jsii_interface.properties() {
 			for p in properties {
 				debug!("Found property {} with type {:?}", p.name.green(), p.type_);
-				if flight == Flight::In {
+				if flight == Phase::Inflight {
 					todo!("No support for inflight properties yet");
 				}
 				class_env.define(
@@ -365,7 +365,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Add methods and properties to the class environment
-		self.add_members_to_class_env(&jsii_class, is_resource, Flight::Pre, &mut class_env, new_type);
+		self.add_members_to_class_env(&jsii_class, is_resource, Phase::Preflight, &mut class_env, new_type);
 		if is_resource {
 			// Look for a client interface for this resource
 			let client_interface = jsii_class.docs.and_then(|docs| docs.custom).and_then(|custom| {
@@ -384,7 +384,7 @@ impl<'a> JsiiImporter<'a> {
 			});
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
-				self.add_members_to_class_env(&client_interface, false, Flight::In, &mut class_env, new_type);
+				self.add_members_to_class_env(&client_interface, false, Phase::Inflight, &mut class_env, new_type);
 			} else {
 				debug!("Resource {} doesn't not seem to have a client", type_name.green());
 			}

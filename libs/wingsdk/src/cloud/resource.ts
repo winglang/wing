@@ -17,7 +17,7 @@ export abstract class Resource extends Construct implements ICapturable {
   /**
    * @internal
    */
-  public abstract _capture(
+  public abstract _bind(
     captureScope: IConstruct,
     metadata: CaptureMetadata
   ): Code;
