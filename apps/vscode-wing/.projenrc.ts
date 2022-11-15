@@ -13,7 +13,7 @@ const project = new TypeScriptAppProject({
   authorOrganization: true,
   authorUrl: "https://monada.co",
   repository: "https://github.com/winglang/wing.git",
-  bugsUrl: "https://github.com/winglang/wing/issues/new/choose",
+  bugsUrl: "https://github.com/winglang/wing/issues",
   homepage: "https://winglang.io",
   description: "Wing language support for VSCode",
   keywords: ["wing", "language", "cloud", "cdk", "infrastructure"],
