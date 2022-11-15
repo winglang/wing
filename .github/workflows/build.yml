@@ -278,6 +278,9 @@ jobs:
           name: vscode-wing.vsix
           path: apps/vscode-wing/vscode-wing.vsix
 
+      - name: testing
+        run: exit 1
+
   build:
     needs:
       - build-native
@@ -286,10 +289,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build Validation
-        run: exit 1
+        run: echo "Build Successful"
 
       - name: Send slack notification
-        if: !success()
+        if: "!success()"
         uses: ravsamhq/notify-slack-action@v1
         with:
           status: ${{ job.status }}
