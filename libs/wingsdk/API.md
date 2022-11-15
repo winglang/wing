@@ -3748,7 +3748,7 @@ const simulatorEvent: testing.SimulatorEvent = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.message">message</a></code> | <code>string</code> | A message associated with the event. |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.resourcePath">resourcePath</a></code> | <code>string</code> | The resource that generated the event. |
+| <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.resourcePath">resourcePath</a></code> | <code>string</code> | The resource that emitted the event. |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The timestamp of the event, in milliseconds since the epoch. |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.type">type</a></code> | <code>string</code> | The event type - either "trace" or "log". |
 
@@ -3774,7 +3774,7 @@ public readonly resourcePath: string;
 
 - *Type:* string
 
-The resource that generated the event.
+The resource that emitted the event.
 
 ---
 
@@ -3827,6 +3827,7 @@ const simulatorProps: testing.SimulatorProps = { ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.factory">factory</a></code> | <code>@winglang/wingsdk.testing.ISimulatorFactory</code> | The factory that produces resource simulations. |
+| <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.lifecycleHooks">lifecycleHooks</a></code> | <code>@winglang/wingsdk.testing.ISimulatorLifecycleHooks</code> | A collection of callbacks that are invoked at key lifecycle events of the simulator, such as whenever traces or logs are emitted. |
 
 ---
 
@@ -3852,6 +3853,19 @@ public readonly factory: ISimulatorFactory;
 - *Default:* a factory that produces simulations for built-in Wing SDK resources
 
 The factory that produces resource simulations.
+
+---
+
+##### `lifecycleHooks`<sup>Optional</sup> <a name="lifecycleHooks" id="@winglang/wingsdk.testing.SimulatorProps.property.lifecycleHooks"></a>
+
+```typescript
+public readonly lifecycleHooks: ISimulatorLifecycleHooks;
+```
+
+- *Type:* @winglang/wingsdk.testing.ISimulatorLifecycleHooks
+- *Default:* no hooks
+
+A collection of callbacks that are invoked at key lifecycle events of the simulator, such as whenever traces or logs are emitted.
 
 ---
 
@@ -5363,8 +5377,8 @@ Context that is passed to individual resource simulations.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addLog">addLog</a></code> | Add a log event to the simulation. |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addTrace">addTrace</a></code> | Add a trace event to the simulation. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addLog">addLog</a></code> | Add a log to the simulation's event history. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addTrace">addTrace</a></code> | Add a trace to the simulation's event history. |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.findInstance">findInstance</a></code> | Find a resource simulation by its handle. |
 
 ---
@@ -5375,11 +5389,11 @@ Context that is passed to individual resource simulations.
 public addLog(event: AddLogProps): void
 ```
 
-Add a log event to the simulation.
+Add a log to the simulation's event history.
 
-Log events are for information the user
-adds within their application code, useful for understanding what their
-inflight code is doing.
+Log events are for information
+the user adds within their application code, useful for understanding what
+their inflight code is doing.
 
 ###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorContext.addLog.parameter.event"></a>
 
@@ -5393,11 +5407,11 @@ inflight code is doing.
 public addTrace(event: AddTraceProps): void
 ```
 
-Add a trace event to the simulation.
+Add a trace to the simulation's event history.
 
-Trace events are for breadcrumbs of
-information about resource operations that occurred during simulation,
-useful for understanding how resources interact.
+Trace events are for
+breadcrumbs of information about resource operations that occurred during
+simulation, useful for understanding how resources interact.
 
 ###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorContext.addTrace.parameter.event"></a>
 
@@ -5478,6 +5492,35 @@ Resolve the parameters needed for creating a specific resource simulation.
 ###### `context`<sup>Required</sup> <a name="context" id="@winglang/wingsdk.testing.ISimulatorFactory.resolve.parameter.context"></a>
 
 - *Type:* @winglang/wingsdk.testing.ISimulatorContext
+
+---
+
+
+### ISimulatorLifecycleHooks <a name="ISimulatorLifecycleHooks" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.ISimulatorLifecycleHooks
+
+A collection of callbacks that are invoked at key lifecycle events of the simulator.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onEvent">onEvent</a></code> | A function to run whenever a trace or log event is emitted. |
+
+---
+
+##### `onEvent` <a name="onEvent" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onEvent"></a>
+
+```typescript
+public onEvent(event: SimulatorEvent): void
+```
+
+A function to run whenever a trace or log event is emitted.
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onEvent.parameter.event"></a>
+
+- *Type:* @winglang/wingsdk.testing.SimulatorEvent
 
 ---
 

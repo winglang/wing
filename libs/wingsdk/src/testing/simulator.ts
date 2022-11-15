@@ -24,6 +24,27 @@ export interface SimulatorProps {
    * resources
    */
   readonly factory?: ISimulatorFactory;
+
+  /**
+   * A collection of callbacks that are invoked at key lifecycle events of the
+   * simulator, such as whenever traces or logs are emitted.
+   *
+   * @experimental
+   *
+   * @default - no hooks
+   */
+  readonly lifecycleHooks?: ISimulatorLifecycleHooks;
+}
+
+/**
+ * A collection of callbacks that are invoked at key lifecycle events of the
+ * simulator.
+ */
+export interface ISimulatorLifecycleHooks {
+  /**
+   * A function to run whenever a trace or log event is emitted.
+   */
+  onEvent?(event: SimulatorEvent): void;
 }
 
 /**
@@ -64,7 +85,7 @@ export interface SimulatorEvent {
   readonly message: string;
 
   /**
-   * The resource that generated the event.
+   * The resource that emitted the event.
    */
   readonly resourcePath: string;
 
@@ -101,16 +122,16 @@ export interface ISimulatorContext {
   findInstance(handle: string): ISimulatorResource;
 
   /**
-   * Add a trace event to the simulation. Trace events are for breadcrumbs of
-   * information about resource operations that occurred during simulation,
-   * useful for understanding how resources interact.
+   * Add a trace to the simulation's event history. Trace events are for
+   * breadcrumbs of information about resource operations that occurred during
+   * simulation, useful for understanding how resources interact.
    */
   addTrace(event: AddTraceProps): void;
 
   /**
-   * Add a log event to the simulation. Log events are for information the user
-   * adds within their application code, useful for understanding what their
-   * inflight code is doing.
+   * Add a log to the simulation's event history. Log events are for information
+   * the user adds within their application code, useful for understanding what
+   * their inflight code is doing.
    */
   addLog(event: AddLogProps): void;
 }
@@ -139,6 +160,7 @@ export class Simulator {
   private _running: boolean;
   private readonly _handles: HandleManager;
   private _events: Array<SimulatorEvent>;
+  private readonly _lifecycleHooks: ISimulatorLifecycleHooks;
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
@@ -150,6 +172,7 @@ export class Simulator {
     this._factory = props.factory ?? new DefaultSimulatorFactory();
     this._handles = new HandleManager();
     this._events = new Array();
+    this._lifecycleHooks = props.lifecycleHooks ?? {};
   }
 
   private _loadApp(simfile: string): { assetsDir: string; tree: any } {
@@ -218,7 +241,7 @@ export class Simulator {
             resourcePath: path,
             timestamp: Date.now(),
           });
-          this._events.push(fullEvent);
+          this.addEvent(fullEvent);
         },
         addLog: (event: AddLogProps) => {
           let fullEvent: SimulatorEvent = Object.freeze({
@@ -227,7 +250,7 @@ export class Simulator {
             type: "log",
             timestamp: Date.now(),
           });
-          this._events.push(fullEvent);
+          this.addEvent(fullEvent);
         },
       };
 
@@ -243,7 +266,7 @@ export class Simulator {
         resourcePath: path,
         timestamp: Date.now(),
       });
-      this._events.push(event);
+      this.addEvent(event);
     }
 
     this._running = true;
@@ -270,7 +293,7 @@ export class Simulator {
         resourcePath: path,
         timestamp: Date.now(),
       });
-      this._events.push(event);
+      this.addEvent(event);
     }
 
     this._handles.reset();
@@ -364,6 +387,13 @@ export class Simulator {
    */
   public get tree(): any {
     return JSON.parse(JSON.stringify(this._tree));
+  }
+
+  private addEvent(event: SimulatorEvent) {
+    if (this._lifecycleHooks.onEvent) {
+      this._lifecycleHooks.onEvent(event);
+    }
+    this._events.push(event);
   }
 
   private resolveTokens(tokenOrigin: string, props: any): any {
