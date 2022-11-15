@@ -73,10 +73,7 @@ console.log(response);
 Finally, when you want to understand how Wing resources are working, you may
 want to debug your application using traces and logs. Simulated resources
 automatically generate traces that you can inspect by calling `listTraces()` on
-your simulator instance. If you are using the `Logger` resource in your inflight
-code, you can list any logs it has produced by calling `listLogs()` on your
-simulator instance. Lastly, you can list all of the events together by calling
-`listEvents()` on your simulator instance.
+your simulator instance.
 
 ```typescript
 console.log(JSON.stringify(mySim.listEvents(), null, 2));
