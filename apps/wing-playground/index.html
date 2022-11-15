@@ -41,15 +41,22 @@
       <section id="wing-side">
         <textarea id="code">
 bring cloud;
+let bucket1 = new cloud.Bucket();
+let bucket2 = new cloud.Bucket(cloud.BucketProps {
+  public: true
+}) as "PublicBucket";
 
-let bucket = new cloud.Bucket();
-
-inflight handler() {
-  bucket.upload("file.txt", "data");
-  bucket.delete("file.txt");
+inflight handler(event: str): str {
+  bucket1.put("file.txt", "data");
+  bucket2.get("file.txt");
 }
 
-new cloud.Function(handler);</textarea
+new cloud.Function(
+  handler, 
+  cloud.FunctionProps {
+    env: Map<str> {}
+  }
+);</textarea
         >
       </section>
       <section id="js-side">
@@ -57,7 +64,7 @@ new cloud.Function(handler);</textarea
           <code class="language-javascript" id="intermediateJS"></code>
         </pre>
         <pre>
-          <code id="stdout"></code>
+          <code id="stdout" class="no-highlight"></code>
         </pre>
       </section>
     </main>

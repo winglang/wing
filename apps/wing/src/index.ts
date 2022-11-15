@@ -17,7 +17,7 @@ async function main() {
   program.name("wing");
   program.version(PACKAGE_VERSION);
 
-  await upgrade({ force: false });
+  await upgrade({ force: false }).catch(log);
 
   program
     .command("run")

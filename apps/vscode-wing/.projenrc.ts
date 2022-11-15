@@ -13,6 +13,11 @@ const project = new TypeScriptAppProject({
   authorOrganization: true,
   authorUrl: "https://monada.co",
   repository: "https://github.com/winglang/wing.git",
+  bugsUrl: "https://github.com/winglang/wing/issues",
+  homepage: "https://winglang.io",
+  description: "Wing language support for VSCode",
+  keywords: ["wing", "language", "cloud", "cdk", "infrastructure"],
+
   packageManager: NodePackageManager.NPM,
   projenrcTs: true,
   package: false,
@@ -104,7 +109,11 @@ const contributes: VSCodeExtensionContributions = {
   commands: [
     {
       command: "wing.updates.check",
-      title: "Check for Wing Updates",
+      title: "[Wing] Check for updates",
+    },
+    {
+      command: "wing.updates.addToken",
+      title: "[Wing] Set update token",
     },
   ],
 };
@@ -114,7 +123,6 @@ project.addFields({
   preview: true,
   private: true,
   displayName: "Wing [Alpha]",
-  description: "Wing Language Support",
   icon: "resources/logo.png",
   engines: {
     vscode: `^${VSCODE_BASE_VERSION}`,
