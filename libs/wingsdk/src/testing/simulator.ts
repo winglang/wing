@@ -42,9 +42,9 @@ export interface SimulatorProps {
  */
 export interface ISimulatorLifecycleHooks {
   /**
-   * A function to run whenever a trace or log event is emitted.
+   * A function to run whenever a trace is emitted.
    */
-  onEvent?(event: Trace): void;
+  onTrace?(event: Trace): void;
 }
 
 /**
@@ -416,8 +416,8 @@ export class Simulator {
 
   private _addTrace(event: Trace) {
     event = Object.freeze(event);
-    if (this._lifecycleHooks.onEvent) {
-      this._lifecycleHooks.onEvent(event);
+    if (this._lifecycleHooks.onTrace) {
+      this._lifecycleHooks.onTrace(event);
     }
     this._traces.push(event);
   }
