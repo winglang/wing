@@ -58,25 +58,24 @@ export class Queue implements IQueueClient, ISimulatorResource {
         if (!fnClient) {
           throw new Error("No function client found");
         }
-        void this.context
-          .withTrace({
+        this.context.addTrace({
+          type: TraceType.RESOURCE,
+          data: {
             message: `Sending messages (messages=${JSON.stringify(
               messages
             )}, subscriber=${subscriber.functionHandle}).`,
-            activity: async () => {
-              return fnClient.invoke(JSON.stringify({ messages }));
+          },
+        });
+        void fnClient.invoke(JSON.stringify({ messages })).catch((_err) => {
+          // If the function returns an error, put the message back on the queue
+          this.context.addTrace({
+            data: {
+              message: `Subscriber error - returning ${messages.length} messages to queue.`,
             },
-          })
-          .catch((_err) => {
-            // If the function returns an error, put the message back on the queue
-            this.context.addTrace({
-              data: {
-                message: `Subscriber error - returning ${messages.length} messages to queue.`,
-              },
-              type: TraceType.RESOURCE,
-            });
-            this.messages.push(...messages);
+            type: TraceType.RESOURCE,
           });
+          this.messages.push(...messages);
+        });
         processedMessages = true;
       }
     } while (processedMessages);
