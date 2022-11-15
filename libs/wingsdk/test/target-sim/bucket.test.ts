@@ -48,8 +48,8 @@ test("put and get objects from bucket", async () => {
 
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Bucket created.",
-    "Put (key=greeting.txt) operation succeeded.",
-    "Get (key=greeting.txt) operation succeeded.",
+    "Put (key=greeting.txt).",
+    "Get (key=greeting.txt).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
@@ -84,10 +84,10 @@ test("put multiple objects and list all from bucket", async () => {
 
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Bucket created.",
-    "Put (key=greeting1.txt) operation succeeded.",
-    "Put (key=greeting2.txt) operation succeeded.",
-    "Put (key=greeting3.txt) operation succeeded.",
-    "List (prefix=null) operation succeeded.",
+    "Put (key=greeting1.txt).",
+    "Put (key=greeting2.txt).",
+    "Put (key=greeting3.txt).",
+    "List (prefix=null).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
@@ -110,12 +110,13 @@ test("get invalid object throws an error", async () => {
 
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Bucket created.",
-    "Get (key=unknown.txt) operation failed.",
+    "Get (key=unknown.txt).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
+  expect(s.listTraces()[1].data.status).toEqual("failure");
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {
-  return s.listEvents().map((event) => event.message);
+  return s.listTraces().map((event) => event.data.message);
 }

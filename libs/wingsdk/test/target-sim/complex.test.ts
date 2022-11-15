@@ -3,6 +3,7 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
+import { TraceType } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
@@ -71,17 +72,19 @@ test("pushing messages through a queue", async () => {
 
   // THEN
   await s.stop();
-  expect(s.listLogs()).toEqual([
+  expect(s.listTraces().filter((t) => t.type === TraceType.LOG)).toEqual([
     {
-      message: "Hello, world!",
-      resourcePath: "root/HelloWorld/Function",
-      timestamp: expect.any(Number),
+      data: { message: "Hello, world!" },
+      sourcePath: "root/HelloWorld/Function",
+      sourceType: "wingsdk.cloud.Function",
+      timestamp: expect.any(String),
       type: "log",
     },
     {
-      message: "Received foo",
-      resourcePath: "root/HelloWorld/Queue/OnMessage-004546ee82d97e73",
-      timestamp: expect.any(Number),
+      data: { message: "Received foo" },
+      sourcePath: "root/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      sourceType: "wingsdk.cloud.Function",
+      timestamp: expect.any(String),
       type: "log",
     },
   ]);

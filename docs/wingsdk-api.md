@@ -2828,55 +2828,6 @@ The file's relative path to the output directory.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### AddLogProps <a name="AddLogProps" id="@winglang/wingsdk.testing.AddLogProps"></a>
-
-Props for `ISimulatorContext.addLog`.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.testing.AddLogProps.Initializer"></a>
-
-```typescript
-import { testing } from '@winglang/wingsdk'
-
-const addLogProps: testing.AddLogProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.AddLogProps.property.message">message</a></code> | <code>string</code> | A message logged by the application. |
-| <code><a href="#@winglang/wingsdk.testing.AddLogProps.property.resourcePath">resourcePath</a></code> | <code>string</code> | An optional resource path. |
-
----
-
-##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.testing.AddLogProps.property.message"></a>
-
-```typescript
-public readonly message: string;
-```
-
-- *Type:* string
-
-A message logged by the application.
-
----
-
-##### `resourcePath`<sup>Optional</sup> <a name="resourcePath" id="@winglang/wingsdk.testing.AddLogProps.property.resourcePath"></a>
-
-```typescript
-public readonly resourcePath: string;
-```
-
-- *Type:* string
-- *Default:* the path of the resource that called `addLog`
-
-An optional resource path.
-
-This is needed in cases where a logging resource
-operates on behalf of other resources.
-
----
-
 ### AddTraceProps <a name="AddTraceProps" id="@winglang/wingsdk.testing.AddTraceProps"></a>
 
 Props for `ISimulatorContext.addTrace`.
@@ -2893,19 +2844,68 @@ const addTraceProps: testing.AddTraceProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.message">message</a></code> | <code>string</code> | A message specified by the resource. |
+| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.data">data</a></code> | <code>any</code> | A JSON blob with structured data. |
+| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.type">type</a></code> | <code>@winglang/wingsdk.testing.TraceType</code> | The type of a trace. |
+| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.sourcePath">sourcePath</a></code> | <code>string</code> | The path of the resource that emitted the trace. |
+| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.sourceType">sourceType</a></code> | <code>string</code> | The type of the resource that emitted the trace. |
 
 ---
 
-##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.testing.AddTraceProps.property.message"></a>
+##### `data`<sup>Required</sup> <a name="data" id="@winglang/wingsdk.testing.AddTraceProps.property.data"></a>
 
 ```typescript
-public readonly message: string;
+public readonly data: any;
+```
+
+- *Type:* any
+
+A JSON blob with structured data.
+
+---
+
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.AddTraceProps.property.type"></a>
+
+```typescript
+public readonly type: TraceType;
+```
+
+- *Type:* @winglang/wingsdk.testing.TraceType
+
+The type of a trace.
+
+---
+
+##### `sourcePath`<sup>Optional</sup> <a name="sourcePath" id="@winglang/wingsdk.testing.AddTraceProps.property.sourcePath"></a>
+
+```typescript
+public readonly sourcePath: string;
 ```
 
 - *Type:* string
+- *Default:* the path of the resource that called addTrace
 
-A message specified by the resource.
+The path of the resource that emitted the trace.
+
+This can be overridden
+in cases where the resource emits a trace on behalf of another resource
+(e.g. the logger).
+
+---
+
+##### `sourceType`<sup>Optional</sup> <a name="sourceType" id="@winglang/wingsdk.testing.AddTraceProps.property.sourceType"></a>
+
+```typescript
+public readonly sourceType: string;
+```
+
+- *Type:* string
+- *Default:* the type of the resource that called addTrace
+
+The type of the resource that emitted the trace.
+
+This can be overridden
+in cases where the resource emits a trace on behalf of another resource
+(e.g. the logger).
 
 ---
 
@@ -3534,51 +3534,6 @@ The object that will be serialized into the file during synthesis.
 
 ---
 
-### LogEvent <a name="LogEvent" id="@winglang/wingsdk.cloud.LogEvent"></a>
-
-Represents a log event.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.LogEvent.Initializer"></a>
-
-```typescript
-import { cloud } from '@winglang/wingsdk'
-
-const logEvent: cloud.LogEvent = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.LogEvent.property.message">message</a></code> | <code>string</code> | The log message. |
-| <code><a href="#@winglang/wingsdk.cloud.LogEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The log timestamp, in milliseconds since the epoch. |
-
----
-
-##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.LogEvent.property.message"></a>
-
-```typescript
-public readonly message: string;
-```
-
-- *Type:* string
-
-The log message.
-
----
-
-##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/wingsdk.cloud.LogEvent.property.timestamp"></a>
-
-```typescript
-public readonly timestamp: number;
-```
-
-- *Type:* number
-
-The log timestamp, in milliseconds since the epoch.
-
----
-
 ### PolicyStatement <a name="PolicyStatement" id="@winglang/wingsdk.tfaws.PolicyStatement"></a>
 
 AWS IAM Policy Statement.
@@ -3731,84 +3686,6 @@ How long a queue's consumers have to process a message.
 
 ---
 
-### SimulatorEvent <a name="SimulatorEvent" id="@winglang/wingsdk.testing.SimulatorEvent"></a>
-
-Represents an event logged during simulation.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.testing.SimulatorEvent.Initializer"></a>
-
-```typescript
-import { testing } from '@winglang/wingsdk'
-
-const simulatorEvent: testing.SimulatorEvent = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.message">message</a></code> | <code>string</code> | A message associated with the event. |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.resourcePath">resourcePath</a></code> | <code>string</code> | The resource that emitted the event. |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The timestamp of the event, in milliseconds since the epoch. |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorEvent.property.type">type</a></code> | <code>string</code> | The event type - either "trace" or "log". |
-
----
-
-##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.testing.SimulatorEvent.property.message"></a>
-
-```typescript
-public readonly message: string;
-```
-
-- *Type:* string
-
-A message associated with the event.
-
----
-
-##### `resourcePath`<sup>Required</sup> <a name="resourcePath" id="@winglang/wingsdk.testing.SimulatorEvent.property.resourcePath"></a>
-
-```typescript
-public readonly resourcePath: string;
-```
-
-- *Type:* string
-
-The resource that emitted the event.
-
----
-
-##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/wingsdk.testing.SimulatorEvent.property.timestamp"></a>
-
-```typescript
-public readonly timestamp: number;
-```
-
-- *Type:* number
-
-The timestamp of the event, in milliseconds since the epoch.
-
----
-
-##### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.SimulatorEvent.property.type"></a>
-
-```typescript
-public readonly type: string;
-```
-
-- *Type:* string
-
-The event type - either "trace" or "log".
-
-Trace events are for breadcrumbs of information about resource operations
-that occurred during simulation, useful for understanding how resources
-interact.
-
-Log events are for information the user adds within their inflight code,
-useful for understanding application logic.
-
----
-
 ### SimulatorProps <a name="SimulatorProps" id="@winglang/wingsdk.testing.SimulatorProps"></a>
 
 Props for `Simulator`.
@@ -3901,6 +3778,97 @@ public readonly lines: string[];
 The lines of text that will be serialized into the file during synthesis.
 
 They will be joined with newline characters.
+
+---
+
+### Trace <a name="Trace" id="@winglang/wingsdk.testing.Trace"></a>
+
+Represents an trace emitted during simulation.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.testing.Trace.Initializer"></a>
+
+```typescript
+import { testing } from '@winglang/wingsdk'
+
+const trace: testing.Trace = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.data">data</a></code> | <code>any</code> | A JSON blob with structured data. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.sourcePath">sourcePath</a></code> | <code>string</code> | The path of the resource that emitted the trace. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.sourceType">sourceType</a></code> | <code>string</code> | The type of the source that emitted the trace. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.timestamp">timestamp</a></code> | <code>string</code> | The timestamp of the event, in ISO 8601 format. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.type">type</a></code> | <code>@winglang/wingsdk.testing.TraceType</code> | The type of a trace. |
+
+---
+
+##### `data`<sup>Required</sup> <a name="data" id="@winglang/wingsdk.testing.Trace.property.data"></a>
+
+```typescript
+public readonly data: any;
+```
+
+- *Type:* any
+
+A JSON blob with structured data.
+
+---
+
+##### `sourcePath`<sup>Required</sup> <a name="sourcePath" id="@winglang/wingsdk.testing.Trace.property.sourcePath"></a>
+
+```typescript
+public readonly sourcePath: string;
+```
+
+- *Type:* string
+
+The path of the resource that emitted the trace.
+
+---
+
+##### `sourceType`<sup>Required</sup> <a name="sourceType" id="@winglang/wingsdk.testing.Trace.property.sourceType"></a>
+
+```typescript
+public readonly sourceType: string;
+```
+
+- *Type:* string
+
+The type of the source that emitted the trace.
+
+---
+
+##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/wingsdk.testing.Trace.property.timestamp"></a>
+
+```typescript
+public readonly timestamp: string;
+```
+
+- *Type:* string
+
+The timestamp of the event, in ISO 8601 format.
+
+---
+
+*Example*
+
+```typescript
+2020-01-01T00:00:00.000Z
+```
+
+
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.Trace.property.type"></a>
+
+```typescript
+public readonly type: TraceType;
+```
+
+- *Type:* @winglang/wingsdk.testing.TraceType
+
+The type of a trace.
 
 ---
 
@@ -4852,10 +4820,8 @@ new testing.Simulator(props: SimulatorProps)
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getData">getData</a></code> | Obtain a resource's data, including its path, props, attrs, and children. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getResourceByPath">getResourceByPath</a></code> | Get the resource instance for a given path. |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.listEvents">listEvents</a></code> | Get a list of all events that have been logged during the simulation. |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.listLogs">listLogs</a></code> | Get a list of all log events that have been logged during the simulation. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.listTraces">listTraces</a></code> | Get a list of all trace events that have been logged during the simulation. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.listTraces">listTraces</a></code> | Get a list of all traces added during the most recent simulation run. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
@@ -4924,26 +4890,6 @@ Get the resource instance for a given path.
 
 ---
 
-##### `listEvents` <a name="listEvents" id="@winglang/wingsdk.testing.Simulator.listEvents"></a>
-
-```typescript
-public listEvents(): SimulatorEvent[]
-```
-
-Get a list of all events that have been logged during the simulation.
-
-The list of events is cleared whenever the simulation is restarted.
-
-##### `listLogs` <a name="listLogs" id="@winglang/wingsdk.testing.Simulator.listLogs"></a>
-
-```typescript
-public listLogs(): SimulatorEvent[]
-```
-
-Get a list of all log events that have been logged during the simulation.
-
-The list of events is cleared whenever the simulation is restarted.
-
 ##### `listResources` <a name="listResources" id="@winglang/wingsdk.testing.Simulator.listResources"></a>
 
 ```typescript
@@ -4955,12 +4901,10 @@ Get a list of all resource paths.
 ##### `listTraces` <a name="listTraces" id="@winglang/wingsdk.testing.Simulator.listTraces"></a>
 
 ```typescript
-public listTraces(): SimulatorEvent[]
+public listTraces(): Trace[]
 ```
 
-Get a list of all trace events that have been logged during the simulation.
-
-The list of events is cleared whenever the simulation is restarted.
+Get a list of all traces added during the most recent simulation run.
 
 ##### `reload` <a name="reload" id="@winglang/wingsdk.testing.Simulator.reload"></a>
 
@@ -5377,27 +5321,9 @@ Context that is passed to individual resource simulations.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addLog">addLog</a></code> | Add a log to the simulation's event history. |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addTrace">addTrace</a></code> | Add a trace to the simulation's event history. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addTrace">addTrace</a></code> | Add a trace. |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.findInstance">findInstance</a></code> | Find a resource simulation by its handle. |
-
----
-
-##### `addLog` <a name="addLog" id="@winglang/wingsdk.testing.ISimulatorContext.addLog"></a>
-
-```typescript
-public addLog(event: AddLogProps): void
-```
-
-Add a log to the simulation's event history.
-
-Log events are for information
-the user adds within their application code, useful for understanding what
-their inflight code is doing.
-
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorContext.addLog.parameter.event"></a>
-
-- *Type:* @winglang/wingsdk.testing.AddLogProps
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.withTrace">withTrace</a></code> | Register a trace associated with a resource activity. |
 
 ---
 
@@ -5407,11 +5333,11 @@ their inflight code is doing.
 public addTrace(event: AddTraceProps): void
 ```
 
-Add a trace to the simulation's event history.
+Add a trace.
 
-Trace events are for
-breadcrumbs of information about resource operations that occurred during
-simulation, useful for understanding how resources interact.
+Traces are breadcrumbs of information about resource
+operations that occurred during simulation, useful for understanding how
+resources interact or debugging an application.
 
 ###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorContext.addTrace.parameter.event"></a>
 
@@ -5432,6 +5358,23 @@ Throws if the handle isn't valid.
 ###### `handle`<sup>Required</sup> <a name="handle" id="@winglang/wingsdk.testing.ISimulatorContext.findInstance.parameter.handle"></a>
 
 - *Type:* string
+
+---
+
+##### `withTrace` <a name="withTrace" id="@winglang/wingsdk.testing.ISimulatorContext.withTrace"></a>
+
+```typescript
+public withTrace(event: IWithTraceProps): any
+```
+
+Register a trace associated with a resource activity.
+
+The activity will be
+run, and the trace will be populated with the result's success or failure.
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorContext.withTrace.parameter.event"></a>
+
+- *Type:* @winglang/wingsdk.testing.IWithTraceProps
 
 ---
 
@@ -5506,21 +5449,21 @@ A collection of callbacks that are invoked at key lifecycle events of the simula
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onEvent">onEvent</a></code> | A function to run whenever a trace or log event is emitted. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onTrace">onTrace</a></code> | A function to run whenever a trace is emitted. |
 
 ---
 
-##### `onEvent` <a name="onEvent" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onEvent"></a>
+##### `onTrace` <a name="onTrace" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onTrace"></a>
 
 ```typescript
-public onEvent(event: SimulatorEvent): void
+public onTrace(event: Trace): void
 ```
 
-A function to run whenever a trace or log event is emitted.
+A function to run whenever a trace is emitted.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onEvent.parameter.event"></a>
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onTrace.parameter.event"></a>
 
-- *Type:* @winglang/wingsdk.testing.SimulatorEvent
+- *Type:* @winglang/wingsdk.testing.Trace
 
 ---
 
@@ -5556,6 +5499,48 @@ public init(): void
 
 Perform any async initialization required by the resource.
 
+
+### IWithTraceProps <a name="IWithTraceProps" id="@winglang/wingsdk.testing.IWithTraceProps"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.IWithTraceProps
+
+Props for `ISimulatorContext.withTrace`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.IWithTraceProps.activity">activity</a></code> | A function to run as part of the trace. |
+
+---
+
+##### `activity` <a name="activity" id="@winglang/wingsdk.testing.IWithTraceProps.activity"></a>
+
+```typescript
+public activity(): any
+```
+
+A function to run as part of the trace.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.IWithTraceProps.property.message">message</a></code> | <code>any</code> | A message to register with the trace. |
+
+---
+
+##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.testing.IWithTraceProps.property.message"></a>
+
+```typescript
+public readonly message: any;
+```
+
+- *Type:* any
+
+A message to register with the trace.
+
+---
 
 ## Enums <a name="Enums" id="Enums"></a>
 
@@ -5666,6 +5651,33 @@ List of inflight operations available for `Queue`.
 ##### `PUSH` <a name="PUSH" id="@winglang/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
 
 `Queue.push`.
+
+---
+
+
+### TraceType <a name="TraceType" id="@winglang/wingsdk.testing.TraceType"></a>
+
+The type of a trace.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.TraceType.RESOURCE">RESOURCE</a></code> | A trace representing a resource activity. |
+| <code><a href="#@winglang/wingsdk.testing.TraceType.LOG">LOG</a></code> | A trace representing information emitted by the logger. |
+
+---
+
+##### `RESOURCE` <a name="RESOURCE" id="@winglang/wingsdk.testing.TraceType.RESOURCE"></a>
+
+A trace representing a resource activity.
+
+---
+
+
+##### `LOG` <a name="LOG" id="@winglang/wingsdk.testing.TraceType.LOG"></a>
+
+A trace representing information emitted by the logger.
 
 ---
 

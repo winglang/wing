@@ -65,8 +65,19 @@ export interface AddTraceProps {
    * The path of the resource that emitted the trace. This can be overridden
    * in cases where the resource emits a trace on behalf of another resource
    * (e.g. the logger).
+   *
+   * @default - the path of the resource that called addTrace
    */
-  readonly "source-path"?: string;
+  readonly sourcePath?: string;
+
+  /**
+   * The type of the resource that emitted the trace. This can be overridden
+   * in cases where the resource emits a trace on behalf of another resource
+   * (e.g. the logger).
+   *
+   * @default - the type of the resource that called addTrace
+   */
+  readonly sourceType?: string;
 }
 
 // Since we are using JSII we cannot use generics to type this right now:
@@ -80,7 +91,7 @@ export interface AddTraceProps {
 /**
  * Props for `ISimulatorContext.withTrace`.
  */
-export interface WithTraceProps {
+export interface IWithTraceProps {
   /**
    * A message to register with the trace.
    */
@@ -89,7 +100,7 @@ export interface WithTraceProps {
   /**
    * A function to run as part of the trace.
    */
-  readonly activity: () => Promise<any>;
+  activity(): Promise<any>;
 }
 
 /**
@@ -104,12 +115,12 @@ export interface Trace {
   /**
    * The type of the source that emitted the trace.
    */
-  readonly "source-type": string;
+  readonly sourceType: string;
 
   /**
    * The path of the resource that emitted the trace.
    */
-  readonly "source-path": string;
+  readonly sourcePath: string;
 
   /**
    * The type of a trace.
@@ -158,7 +169,11 @@ export interface ISimulatorContext {
    */
   addTrace(event: AddTraceProps): void;
 
-  withTrace(event: WithTraceProps): Promise<any>;
+  /**
+   * Register a trace associated with a resource activity. The activity will be
+   * run, and the trace will be populated with the result's success or failure.
+   */
+  withTrace(event: IWithTraceProps): Promise<any>;
 }
 
 /**
@@ -263,31 +278,35 @@ export class Simulator {
         },
         addTrace: (props: AddTraceProps) => {
           let trace: Trace = {
+            sourcePath: path,
+            sourceType: resourceData.type,
             ...props,
-            "source-path": path,
-            "source-type": resourceData.type,
             timestamp: new Date().toISOString(),
           };
           this._addTrace(trace);
         },
-        withTrace: async (props: WithTraceProps) => {
+        withTrace: async (props: IWithTraceProps) => {
           // TODO: log start time and end time of activity?
           try {
             let result = await props.activity();
             this._addTrace({
-              data: { message: props.message, result: "success" },
+              data: {
+                message: props.message,
+                status: "success",
+                result: JSON.stringify(result),
+              },
               type: TraceType.RESOURCE,
-              "source-path": path,
-              "source-type": resourceData.type,
+              sourcePath: path,
+              sourceType: resourceData.type,
               timestamp: new Date().toISOString(),
             });
             return result;
           } catch (err) {
             this._addTrace({
-              data: { message: props.message, result: "failure", error: err },
+              data: { message: props.message, status: "failure", error: err },
               type: TraceType.RESOURCE,
-              "source-path": path,
-              "source-type": resourceData.type,
+              sourcePath: path,
+              sourceType: resourceData.type,
               timestamp: new Date().toISOString(),
             });
             throw err;
@@ -303,8 +322,8 @@ export class Simulator {
       let event: Trace = {
         type: TraceType.RESOURCE,
         data: { message: `${resourceData.type} created.` },
-        "source-path": path,
-        "source-type": resourceData.type,
+        sourcePath: path,
+        sourceType: resourceData.type,
         timestamp: new Date().toISOString(),
       };
       this._addTrace(event);
@@ -331,8 +350,8 @@ export class Simulator {
       let event: Trace = {
         type: TraceType.RESOURCE,
         data: { message: `${res.type} deleted.` },
-        "source-path": path,
-        "source-type": res.type,
+        sourcePath: path,
+        sourceType: res.type,
         timestamp: new Date().toISOString(),
       };
       this._addTrace(event);

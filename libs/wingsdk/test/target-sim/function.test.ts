@@ -45,7 +45,8 @@ test("create a function", async () => {
     sourceCodeLanguage: "javascript",
     environmentVariables: {
       ENV_VAR1: "true",
-      WING_SIM_RUNTIME_FUNCTION_PATH: "root/my_function",
+      WING_SIM_INFLIGHT_RESOURCE_PATH: "root/my_function",
+      WING_SIM_INFLIGHT_RESOURCE_TYPE: "wingsdk.cloud.Function",
     },
   });
   await s.stop();
@@ -80,7 +81,7 @@ test("invoke function succeeds", async () => {
 
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
-    'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Hello, Alice!"}',
+    'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
@@ -121,7 +122,7 @@ test("invoke function with environment variables", async () => {
 
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
-    'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Ellohay, Alice!"}',
+    'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
@@ -155,12 +156,15 @@ test("invoke function fails", async () => {
 
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
-    'Invoke (payload="{"name":"alice"}") operation failed. Response: Error: Name must start with uppercase letter',
+    'Invoke (payload="{"name":"alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
+  expect(s.listTraces()[1].data.error).toMatchObject({
+    message: "Name must start with uppercase letter",
+  });
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {
-  return s.listEvents().map((event) => event.message);
+  return s.listTraces().map((event) => event.data.message);
 }

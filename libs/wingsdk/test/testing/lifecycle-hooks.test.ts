@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
-import { SimulatorEvent } from "../../src/testing";
+import { Trace } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 
 test("lifecycle hooks - onEvent", async () => {
@@ -10,11 +10,11 @@ test("lifecycle hooks - onEvent", async () => {
   new cloud.Bucket(app, "my_bucket", { public: false });
   const simfile = app.synth();
 
-  let numEvents = 0;
+  let numTraces = 0;
 
   const lifecycleHooks = {
-    onEvent: (_event: SimulatorEvent) => {
-      numEvents++;
+    onTrace: (_trace: Trace) => {
+      numTraces++;
     },
   };
 
@@ -28,5 +28,5 @@ test("lifecycle hooks - onEvent", async () => {
   await s.stop();
 
   // THEN
-  expect(numEvents).toEqual(3); // create resource, put operation, delete resource
+  expect(numTraces).toEqual(3); // create resource, put operation, delete resource
 });

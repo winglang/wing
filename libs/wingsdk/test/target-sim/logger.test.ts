@@ -50,10 +50,8 @@ test("inflight uses a logger", async () => {
     "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Function created.",
     "Hello, Alice",
-    "Print operation succeeded.",
     "Wahoo!",
-    "Print operation succeeded.",
-    'Invoke (payload="Alice") operation succeeded. Response: undefined',
+    'Invoke (payload="Alice").',
     "wingsdk.cloud.Function deleted.",
     "wingsdk.cloud.Logger deleted.",
   ]);
@@ -61,5 +59,5 @@ test("inflight uses a logger", async () => {
 });
 
 function listMessages(s: testing.Simulator) {
-  return s.listEvents().map((event) => event.message);
+  return s.listTraces().map((event) => event.data.message);
 }

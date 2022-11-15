@@ -3,7 +3,10 @@ import * as os from "os";
 import { join } from "path";
 import { ILoggerClient } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing";
-import { ENV_WING_SIM_RUNTIME_FUNCTION_PATH } from "./function";
+import {
+  ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
+  ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
+} from "./function";
 import { ISimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
 
@@ -33,13 +36,14 @@ export class Logger implements ILoggerClient, ISimulatorResource {
     }
 
     // TODO: add some other compute context mechanism?
-    const functionPath =
-      process.env[ENV_WING_SIM_RUNTIME_FUNCTION_PATH] ?? "unknown";
+    const resourcePath = process.env[ENV_WING_SIM_INFLIGHT_RESOURCE_PATH]!;
+    const resourceType = process.env[ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE]!;
 
     return this.context.addTrace({
       data: { message },
       type: TraceType.LOG,
-      "source-path": functionPath,
+      sourcePath: resourcePath,
+      sourceType: resourceType,
     });
   }
 }

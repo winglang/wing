@@ -67,12 +67,12 @@ test("queue with one subscriber, default batch size of 1", async () => {
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
-    "Push operation succeeded.",
-    "Push operation succeeded.",
-    "Sending 1 messages to subscriber sim-0.",
-    "Sending 1 messages to subscriber sim-0.",
-    'Invoke (payload="{"messages":["A"]}") operation succeeded. Response: undefined',
-    'Invoke (payload="{"messages":["B"]}") operation succeeded. Response: undefined',
+    "Push (message=A).",
+    "Push (message=B).",
+    'Sending messages (messages=["A"], subscriber=sim-0).',
+    'Sending messages (messages=["B"], subscriber=sim-0).',
+    'Invoke (payload="{"messages":["A"]}").',
+    'Invoke (payload="{"messages":["B"]}").',
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
@@ -104,10 +104,10 @@ test("queue with one subscriber, batch size of 5", async () => {
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
-    "Sending 5 messages to subscriber sim-0.",
-    "Sending 1 messages to subscriber sim-0.",
-    'Invoke (payload="{"messages":["F"]}") operation succeeded. Response: undefined',
-    'Invoke (payload="{"messages":["A","B","C","D","E"]}") operation succeeded. Response: undefined',
+    'Sending messages (messages=["A","B","C","D","E"], subscriber=sim-0).',
+    'Sending messages (messages=["F"], subscriber=sim-0).',
+    'Invoke (payload="{"messages":["F"]}").',
+    'Invoke (payload="{"messages":["A","B","C","D","E"]}").',
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
@@ -142,13 +142,13 @@ test("messages are requeued if the function fails", async () => {
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
-    "Push operation succeeded.",
-    "Sending 1 messages to subscriber sim-0.",
-    'Invoke (payload="{"messages":["BAD MESSAGE"]}") operation failed. Response: Error: ERROR',
-    "Subscriber error (Error: ERROR) - returning 1 messages to queue.",
-    "Sending 1 messages to subscriber sim-0.",
-    'Invoke (payload="{"messages":["BAD MESSAGE"]}") operation failed. Response: Error: ERROR',
-    "Subscriber error (Error: ERROR) - returning 1 messages to queue.",
+    "Push (message=BAD MESSAGE).",
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
+    'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
+    "Subscriber error - returning 1 messages to queue.",
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
+    'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
+    "Subscriber error - returning 1 messages to queue.",
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
@@ -156,5 +156,5 @@ test("messages are requeued if the function fails", async () => {
 });
 
 function listMessages(s: testing.Simulator) {
-  return s.listEvents().map((evt) => evt.message);
+  return s.listTraces().map((trace) => trace.data.message);
 }
