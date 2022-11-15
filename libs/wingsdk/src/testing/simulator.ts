@@ -235,21 +235,21 @@ export class Simulator {
           return this._handles.find(handle);
         },
         addTrace: (event: AddTraceProps) => {
-          let fullEvent: SimulatorEvent = Object.freeze({
+          let fullEvent: SimulatorEvent = {
             ...event,
             type: "trace",
             resourcePath: path,
             timestamp: Date.now(),
-          });
+          };
           this.addEvent(fullEvent);
         },
         addLog: (event: AddLogProps) => {
-          let fullEvent: SimulatorEvent = Object.freeze({
+          let fullEvent: SimulatorEvent = {
             resourcePath: path,
             ...event,
             type: "log",
             timestamp: Date.now(),
-          });
+          };
           this.addEvent(fullEvent);
         },
       };
@@ -260,12 +260,12 @@ export class Simulator {
       await resource.init();
       const handle = this._handles.allocate(resource);
       (resourceData as any).attrs = { handle };
-      let event: SimulatorEvent = Object.freeze({
+      let event: SimulatorEvent = {
         type: "trace",
         message: `${resourceData.type} created.`,
         resourcePath: path,
         timestamp: Date.now(),
-      });
+      };
       this.addEvent(event);
     }
 
@@ -287,12 +287,12 @@ export class Simulator {
       const resource = this._handles.deallocate(res.attrs!.handle);
       await resource.cleanup();
 
-      let event: SimulatorEvent = Object.freeze({
+      let event: SimulatorEvent = {
         type: "trace",
         message: `${res.type} deleted.`,
         resourcePath: path,
         timestamp: Date.now(),
-      });
+      };
       this.addEvent(event);
     }
 
@@ -390,6 +390,7 @@ export class Simulator {
   }
 
   private addEvent(event: SimulatorEvent) {
+    event = Object.freeze(event);
     if (this._lifecycleHooks.onEvent) {
       this._lifecycleHooks.onEvent(event);
     }
