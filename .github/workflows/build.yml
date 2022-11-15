@@ -345,3 +345,13 @@ jobs:
           tag_name: "v${{ needs.prepare.outputs.version }}"
           body_path: CHANGELOG.md
           files: dist/*
+
+      - name: Send slack notification
+        if: github.ref == 'refs/heads/main' && !success()
+        uses: ravsamhq/notify-slack-action@v1
+        with:
+          status: ${{ job.status }}
+          notify_when: "failure,cancelled,skipped,warnings"
+          notification_title: "{workflow} has {status_message}"
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
