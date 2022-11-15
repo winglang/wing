@@ -67,7 +67,7 @@
   "homepage": "https://winglang.io",
   "version": "0.0.0",
   "bugs": {
-    "url": "https://github.com/winglang/wing/issues/new/choose"
+    "url": "https://github.com/winglang/wing/issues"
   },
   "types": "lib/index.d.ts",
   "publisher": "Monada",
