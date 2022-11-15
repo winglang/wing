@@ -355,8 +355,9 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
+      # sets WORKFLOW_CONCLUSION variable
+      - uses: technote-space/workflow-conclusion-action@v3
       - name: Send slack notification
-        if: "!success()"
         uses: ravsamhq/notify-slack-action@v1
         with:
           status: ${{ job.status }}
@@ -364,3 +365,4 @@ jobs:
           notification_title: "{workflow} has {status_message}"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
+        if: env.WORKFLOW_CONCLUSION == 'failure'
