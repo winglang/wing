@@ -100,13 +100,3 @@ export enum LoggerInflightMethods {
   /** `Logger.print` */
   PRINT = "print",
 }
-
-/**
- * Represents a log event.
- */
-export interface LogEvent {
-  /** The log message. */
-  readonly message: string;
-  /** The log timestamp, in milliseconds since the epoch */
-  readonly timestamp: number;
-}

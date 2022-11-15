@@ -117,9 +117,10 @@ export interface Trace {
   readonly type: TraceType;
 
   /**
-   * The timestamp of the event, in milliseconds since the epoch.
+   * The timestamp of the event, in ISO 8601 format.
+   * @example 2020-01-01T00:00:00.000Z
    */
-  readonly timestamp: number;
+  readonly timestamp: string;
 }
 
 /**
@@ -265,7 +266,7 @@ export class Simulator {
             ...props,
             "source-path": path,
             "source-type": resourceData.type,
-            timestamp: Date.now(),
+            timestamp: new Date().toISOString(),
           };
           this._addTrace(trace);
         },
@@ -278,7 +279,7 @@ export class Simulator {
               type: TraceType.RESOURCE,
               "source-path": path,
               "source-type": resourceData.type,
-              timestamp: Date.now(),
+              timestamp: new Date().toISOString(),
             });
             return result;
           } catch (err) {
@@ -287,7 +288,7 @@ export class Simulator {
               type: TraceType.RESOURCE,
               "source-path": path,
               "source-type": resourceData.type,
-              timestamp: Date.now(),
+              timestamp: new Date().toISOString(),
             });
             throw err;
           }
@@ -304,7 +305,7 @@ export class Simulator {
         data: { message: `${resourceData.type} created.` },
         "source-path": path,
         "source-type": resourceData.type,
-        timestamp: Date.now(),
+        timestamp: new Date().toISOString(),
       };
       this._addTrace(event);
     }
@@ -332,7 +333,7 @@ export class Simulator {
         data: { message: `${res.type} deleted.` },
         "source-path": path,
         "source-type": res.type,
-        timestamp: Date.now(),
+        timestamp: new Date().toISOString(),
       };
       this._addTrace(event);
     }
