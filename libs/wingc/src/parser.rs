@@ -21,7 +21,11 @@ impl Parser<'_> {
 		match root.kind() {
 			"source" => self.build_scope(root),
 			other => {
-				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
+				self.add_error::<Node>(format!("Unexpected \"{}\"", other), root);
+				Scope {
+					env: None,
+					statements: vec![],
+				}
 			}
 		}
 	}
@@ -79,7 +83,7 @@ impl Parser<'_> {
 				value_text.parse::<f64>().expect("Duration string") * 60_f64,
 			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
-			other => panic!("Unexpected duration type {} || {:#?}", other, node),
+			other => self.add_error(format!("Unexpected duration type \"{}\"", other), &node),
 		}
 	}
 
@@ -191,7 +195,7 @@ impl Parser<'_> {
 			"class_definition" => Ok(self.build_class_statement(statement_node, false)?),
 			"resource_definition" => Ok(self.build_class_statement(statement_node, true)?),
 			"ERROR" => self.add_error(format!("Expected statement"), statement_node),
-			other => panic!("Unexpected statement type {} || {:#?}", other, statement_node),
+			other => self.add_error(format!("Unexpected statement type \"{}\"", other), statement_node),
 		}
 	}
 
@@ -248,16 +252,13 @@ impl Parser<'_> {
 				}
 				("ERROR", _) => {
 					self
-						.add_error::<Node>(format!("Expected class element node"), &class_element)
+						.add_error::<Node>(format!("Expected class element"), &class_element)
 						.err();
 				}
 				(other, _) => {
-					panic!(
-						"Unexpected {} element node type {} || {:#?}",
-						if is_resource { "resource" } else { "class" },
-						other,
-						class_element
-					);
+					self
+						.add_error::<Node>(format!("Unexpected class element \"{}\"", other), &class_element)
+						.err();
 				}
 			}
 		}
@@ -328,7 +329,7 @@ impl Parser<'_> {
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
-				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
+				other => self.add_error(format!("Unexpected builtin type \"{}\"", other), type_node),
 			},
 			"optional" => {
 				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
@@ -365,11 +366,14 @@ impl Parser<'_> {
 						type_node,
 					)?,
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
-					other => panic!("Unexpected container type {} || {:#?}", other, type_node),
+					other => self.add_error(
+						format!("Expected builtin container type, found \"{}\"", other),
+						type_node,
+					)?,
 				}
 			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),
-			other => panic!("Unexpected type {} || {:#?}", other, type_node),
+			other => self.add_error(format!("Unexpected type \"{}\"", other), type_node),
 		}
 	}
 
@@ -392,12 +396,12 @@ impl Parser<'_> {
 	}
 
 	fn build_reference(&self, reference_node: &Node) -> DiagnosticResult<Reference> {
-		let actual_node = reference_node.named_child(0).unwrap();
+		let actual_node = &reference_node.named_child(0).unwrap();
 		match actual_node.kind() {
-			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
-			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
-			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
-			other => panic!("Unexpected type node {} || {:#?}", other, reference_node),
+			"identifier" => Ok(Reference::Identifier(self.node_symbol(actual_node)?)),
+			"nested_identifier" => Ok(self.build_nested_identifier(actual_node)?),
+			"ERROR" => self.add_error(format!("Expected reference"), actual_node),
+			other => self.add_error(format!("Unexpected reference \"{}\"", other), actual_node),
 		}
 	}
 
@@ -423,7 +427,9 @@ impl Parser<'_> {
 				"ERROR" => {
 					_ = self.add_error::<ArgList>(format!("Expected argument type"), &child);
 				}
-				other => panic!("Unexpected argument type {} || {:#?}", other, child),
+				other => {
+					_ = self.add_error::<ArgList>(format!("Unexpected argument \"{}\"", other), &child);
+				}
 			}
 		}
 
@@ -481,7 +487,9 @@ impl Parser<'_> {
 						"*" => BinaryOperator::Mul,
 						"/" => BinaryOperator::Div,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
-						other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
+						other => {
+							self.add_error::<BinaryOperator>(format!("Unexpected binary operator \"{}\"", other), expression_node)?
+						}
 					},
 				},
 				expression_span,
@@ -493,7 +501,9 @@ impl Parser<'_> {
 						"-" => UnaryOperator::Minus,
 						"!" => UnaryOperator::Not,
 						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
-						other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
+						other => {
+							self.add_error::<UnaryOperator>(format!("Unexpected unary operator \"{}\"", other), expression_node)?
+						}
 					},
 					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
 				},
@@ -559,7 +569,7 @@ impl Parser<'_> {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
-					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
+					other => self.add_error::<bool>(format!("Unexpected boolean literal \"{}\"", other), expression_node)?,
 				})),
 				expression_span,
 			)),
@@ -602,7 +612,7 @@ impl Parser<'_> {
 							s[1..s.len() - 1].to_string()
 						}
 						"identifier" => self.node_text(&key_node).to_string(),
-						other => panic!("Unexpected map key type {} at {:?}", other, key_node),
+						other => self.add_error(format!("Unexpected map key \"{}\"", other), &key_node)?,
 					};
 					let value_node = field_node.named_child(1).unwrap();
 					if fields.contains_key(&key) {
@@ -649,7 +659,7 @@ impl Parser<'_> {
 				if expression_node.has_error() {
 					self.add_error(format!("Expected expression"), expression_node)
 				} else {
-					panic!("Unexpected expression {} || {:#?}", other, expression_node);
+					self.add_error(format!("Unexpected expression \"{}\"", other), expression_node)
 				}
 			}
 		}
