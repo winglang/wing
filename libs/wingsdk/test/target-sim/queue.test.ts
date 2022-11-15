@@ -65,16 +65,16 @@ test("queue with one subscriber, default batch size of 1", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Function created.",
-    "Queue created.",
+    "wingsdk.cloud.Function created.",
+    "wingsdk.cloud.Queue created.",
     "Push operation succeeded.",
     "Push operation succeeded.",
     "Sending 1 messages to subscriber sim-0.",
     "Sending 1 messages to subscriber sim-0.",
     'Invoke (payload="{"messages":["A"]}") operation succeeded. Response: undefined',
     'Invoke (payload="{"messages":["B"]}") operation succeeded. Response: undefined',
-    "Queue deleted.",
-    "Function deleted.",
+    "wingsdk.cloud.Queue deleted.",
+    "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
@@ -102,14 +102,14 @@ test("queue with one subscriber, batch size of 5", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Function created.",
-    "Queue created.",
+    "wingsdk.cloud.Function created.",
+    "wingsdk.cloud.Queue created.",
     "Sending 5 messages to subscriber sim-0.",
     "Sending 1 messages to subscriber sim-0.",
     'Invoke (payload="{"messages":["F"]}") operation succeeded. Response: undefined',
     'Invoke (payload="{"messages":["A","B","C","D","E"]}") operation succeeded. Response: undefined',
-    "Queue deleted.",
-    "Function deleted.",
+    "wingsdk.cloud.Queue deleted.",
+    "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
@@ -140,8 +140,8 @@ test("messages are requeued if the function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Function created.",
-    "Queue created.",
+    "wingsdk.cloud.Function created.",
+    "wingsdk.cloud.Queue created.",
     "Push operation succeeded.",
     "Sending 1 messages to subscriber sim-0.",
     'Invoke (payload="{"messages":["BAD MESSAGE"]}") operation failed. Response: Error: ERROR',
@@ -149,8 +149,8 @@ test("messages are requeued if the function fails", async () => {
     "Sending 1 messages to subscriber sim-0.",
     'Invoke (payload="{"messages":["BAD MESSAGE"]}") operation failed. Response: Error: ERROR',
     "Subscriber error (Error: ERROR) - returning 1 messages to queue.",
-    "Queue deleted.",
-    "Function deleted.",
+    "wingsdk.cloud.Queue deleted.",
+    "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });

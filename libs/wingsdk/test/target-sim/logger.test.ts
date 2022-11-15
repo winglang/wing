@@ -47,15 +47,15 @@ test("inflight uses a logger", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Logger created.",
-    "Function created.",
+    "wingsdk.cloud.Logger created.",
+    "wingsdk.cloud.Function created.",
     "Hello, Alice",
     "Print operation succeeded.",
     "Wahoo!",
     "Print operation succeeded.",
     'Invoke (payload="Alice") operation succeeded. Response: undefined',
-    "Function deleted.",
-    "Logger deleted.",
+    "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });

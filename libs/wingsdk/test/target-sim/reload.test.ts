@@ -68,7 +68,7 @@ test("reloading the simulator after working with ws", async () => {
       .filter((e) => e.resourcePath.startsWith("root/my_queue/OnMessage-"))
       .map((e) => e.message)
   ).toEqual([
-    "Function created.",
+    "wingsdk.cloud.Function created.",
     'Invoke (payload="{"messages":["F"]}") operation succeeded. Response: undefined',
     'Invoke (payload="{"messages":["A","B","C","D","E"]}") operation succeeded. Response: undefined',
   ]);

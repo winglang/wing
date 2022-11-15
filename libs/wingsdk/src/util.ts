@@ -10,12 +10,6 @@ export function readJsonSync(file: string) {
   return JSON.parse(readFileSync(file, "utf-8"));
 }
 
-export function log(...args: any[]) {
-  if (process.env.NODE_ENV === "development") {
-    console.log("(debug)", ...args);
-  }
-}
-
 export interface SanitizeOptions {
   /**
    * Do not include empty objects (no keys).

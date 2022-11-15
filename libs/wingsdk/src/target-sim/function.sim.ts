@@ -4,7 +4,6 @@ import * as process from "process";
 import * as vm from "vm";
 import { IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { log } from "../util";
 import { ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
@@ -23,15 +22,11 @@ export class Function implements IFunctionClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    this.context.addTrace({
-      message: "Function created.",
-    });
+    return;
   }
 
   public async cleanup(): Promise<void> {
-    this.context.addTrace({
-      message: "Function deleted.",
-    });
+    return;
   }
 
   public async invoke(payload: string): Promise<string> {
@@ -43,7 +38,6 @@ export class Function implements IFunctionClient, ISimulatorResource {
       // The last statement is the value that will be returned by vm.runInThisContext
       `exports.handler(${JSON.stringify(payload)});`,
     ].join("\n");
-    log("running wrapped code: %s", wrapper);
 
     const context = vm.createContext({
       // TODO: include all NodeJS globals?

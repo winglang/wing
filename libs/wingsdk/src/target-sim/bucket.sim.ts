@@ -18,16 +18,12 @@ export class Bucket implements IBucketClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    this.context.addTrace({
-      message: "Bucket created.",
-    });
+    return;
   }
 
   public async cleanup(): Promise<void> {
     // TODO: clean up file dir?
-    this.context.addTrace({
-      message: "Bucket deleted.",
-    });
+    return;
   }
 
   public async put(key: string, value: string): Promise<void> {

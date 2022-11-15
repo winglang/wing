@@ -24,16 +24,12 @@ export class Queue implements IQueueClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    this.context.addTrace({
-      message: "Queue created.",
-    });
+    return;
   }
 
   public async cleanup(): Promise<void> {
     clearInterval(this.intervalId);
-    this.context.addTrace({
-      message: "Queue deleted.",
-    });
+    return;
   }
 
   public async push(message: string): Promise<void> {

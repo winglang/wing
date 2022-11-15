@@ -4,7 +4,7 @@ import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
 import { ISimulatorResource } from "../target-sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
-import { log, mkdtemp, readJsonSync } from "../util";
+import { mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
 const { DefaultSimulatorFactory } = require("../target-sim/factory.sim");
 
@@ -161,8 +161,6 @@ export class Simulator {
       file: simfile,
     });
 
-    log("extracted app to", workdir);
-
     const simJson = join(workdir, "simulator.json");
     if (!existsSync(simJson)) {
       throw new Error(
@@ -234,12 +232,18 @@ export class Simulator {
       };
 
       const resourceData = findResource(this._tree, path);
-      log(`starting resource ${path} (${resourceData.type})`);
       const props = this.resolveTokens(path, resourceData.props);
       const resource = this._factory.resolve(resourceData.type, props, context);
       await resource.init();
       const handle = this._handles.allocate(resource);
       (resourceData as any).attrs = { handle };
+      let event: SimulatorEvent = Object.freeze({
+        type: "trace",
+        message: `${resourceData.type} created.`,
+        resourcePath: path,
+        timestamp: Date.now(),
+      });
+      this._events.push(event);
     }
 
     this._running = true;
@@ -257,9 +261,16 @@ export class Simulator {
 
     for (const path of this._tree.startOrder.slice().reverse()) {
       const res = findResource(this._tree, path);
-      log(`stopping resource ${path} (${res.type})`);
       const resource = this._handles.deallocate(res.attrs!.handle);
       await resource.cleanup();
+
+      let event: SimulatorEvent = Object.freeze({
+        type: "trace",
+        message: `${res.type} deleted.`,
+        resourcePath: path,
+        timestamp: Date.now(),
+      });
+      this._events.push(event);
     }
 
     this._handles.reset();

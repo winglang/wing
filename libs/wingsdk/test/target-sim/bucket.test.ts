@@ -47,10 +47,10 @@ test("put and get objects from bucket", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Bucket created.",
+    "wingsdk.cloud.Bucket created.",
     "Put (key=greeting.txt) operation succeeded.",
     "Get (key=greeting.txt) operation succeeded.",
-    "Bucket deleted.",
+    "wingsdk.cloud.Bucket deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
@@ -83,12 +83,12 @@ test("put multiple objects and list all from bucket", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Bucket created.",
+    "wingsdk.cloud.Bucket created.",
     "Put (key=greeting1.txt) operation succeeded.",
     "Put (key=greeting2.txt) operation succeeded.",
     "Put (key=greeting3.txt) operation succeeded.",
     "List (prefix=null) operation succeeded.",
-    "Bucket deleted.",
+    "wingsdk.cloud.Bucket deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
@@ -109,9 +109,9 @@ test("get invalid object throws an error", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Bucket created.",
+    "wingsdk.cloud.Bucket created.",
     "Get (key=unknown.txt) operation failed.",
-    "Bucket deleted.",
+    "wingsdk.cloud.Bucket deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });

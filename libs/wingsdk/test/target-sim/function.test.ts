@@ -79,9 +79,9 @@ test("invoke function succeeds", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Function created.",
+    "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Hello, Alice!"}',
-    "Function deleted.",
+    "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
@@ -120,9 +120,9 @@ test("invoke function with environment variables", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Function created.",
+    "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"Alice"}") operation succeeded. Response: {"msg":"Ellohay, Alice!"}',
-    "Function deleted.",
+    "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
@@ -154,9 +154,9 @@ test("invoke function fails", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
-    "Function created.",
+    "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"alice"}") operation failed. Response: Error: Name must start with uppercase letter',
-    "Function deleted.",
+    "wingsdk.cloud.Function deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });

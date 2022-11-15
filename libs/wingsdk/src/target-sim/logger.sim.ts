@@ -19,16 +19,12 @@ export class Logger implements ILoggerClient, ISimulatorResource {
   }
 
   public async init(): Promise<void> {
-    this.context.addTrace({
-      message: "Logger created.",
-    });
+    return;
   }
 
   public async cleanup(): Promise<void> {
     // TODO: clean up logs dir?
-    this.context.addTrace({
-      message: "Logger deleted.",
-    });
+    return;
   }
 
   public async print(message: string): Promise<void> {
