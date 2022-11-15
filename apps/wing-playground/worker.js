@@ -2,6 +2,9 @@ import wingcURL from './wingc.wasm?url'
 import { init, WASI } from '@wasmer/wasi';
 import { env } from 'process';
 
+const wingsdkJSIIContent = await import('@winglang/wingsdk/.jsii?raw').then(i => i.default);
+const wingsdkPackageJsonContent = await import('@winglang/wingsdk/package.json?raw').then(i => i.default);
+
 await init();
 
 const wasm = await WebAssembly.compileStreaming(fetch(wingcURL));
@@ -16,7 +19,7 @@ self.onmessage = async event => {
     args: ['wingc', 'code.w'],
     env: {
       ...env,
-      WINGC_SKIP_JSII: "1",
+      WINGSDK_MANIFEST_ROOT: '/wingsdk',
       RUST_BACKTRACE: "full",
     },
   });
@@ -24,15 +27,22 @@ self.onmessage = async event => {
   const instance = await wasi.instantiate(wasm, {});
 
   try {
-    let file = wasi.fs.open("/code.w", {read: true, write: true, create: true});
+    const defaultFilePerms = {read: true, write: true, create: true}
+
+    let file = wasi.fs.open("/code.w", defaultFilePerms);
     file.writeString(event.data);
-    file.seek(0);
+
+    wasi.fs.createDir("/wingsdk");
+    let wingsdk_packagejson_file = wasi.fs.open("/wingsdk/package.json", defaultFilePerms);
+    wingsdk_packagejson_file.writeString(wingsdkPackageJsonContent);
+    let wingsdk_jsii_file = wasi.fs.open("/wingsdk/.jsii", defaultFilePerms);
+    wingsdk_jsii_file.writeString(wingsdkJSIIContent);
 
     wasi.start(instance);
     const stdout = wasi.getStdoutString();
     let intermediateJS = "";
 
-    const intermediateFile = wasi.fs.open("/code.w.out/preflight.js", {read: true});
+    const intermediateFile = wasi.fs.open("/code.w.out/preflight.js", defaultFilePerms);
     intermediateJS += intermediateFile.readString();
 
     let procRegex = /fromFile\("(.+index\.js)"/g;
@@ -40,7 +50,7 @@ self.onmessage = async event => {
     while (procMatch = procRegex.exec(intermediateJS)) {
       const proc = procMatch[1];
       const procPath = `/code.w.out/${proc}`;
-      let procFile = wasi.fs.open(procPath, {read: true});
+      let procFile = wasi.fs.open(procPath, defaultFilePerms);
       intermediateJS += `\n\n// ${proc}\n// START\n${procFile.readString()}\n// END`
     }
     
