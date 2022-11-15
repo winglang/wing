@@ -23,7 +23,7 @@ export const FunctionExploreView = ({ node }: FunctionInteractionViewProps) => {
   const id = useId();
   return (
     <form
-      className="h-full w-full flex flex-col"
+      className="h-full w-full flex flex-col p-4"
       method="POST"
       aria-disabled={appMode === "webapp"}
       onSubmit={(event) => {

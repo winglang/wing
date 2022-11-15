@@ -1,2 +1,4 @@
-export * from "./Square2StackMinus.js";
-export * from "./Square2StackPlus.js";
+export * from "./ArrowLongRightIcon.js";
+export * from "./HorizontalLineIcon.js";
+export * from "./Square2StackMinusIcon.js";
+export * from "./Square2StackPlusIcon.js";

@@ -3,6 +3,7 @@ import { createTRPCClient } from "@trpc/client";
 import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
+import { NotificationsProvider } from "../design-system/Notification.js";
 import { constructHubTreeToWingSchema } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 
@@ -27,11 +28,13 @@ export const Default = () => {
 
   return (
     <Container>
-      <trpc.Provider client={trpcClient} queryClient={queryClient}>
-        <QueryClientProvider client={queryClient}>
-          <VscodeLayout schema={schema} />
-        </QueryClientProvider>
-      </trpc.Provider>
+      <NotificationsProvider>
+        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+          <QueryClientProvider client={queryClient}>
+            <VscodeLayout schema={schema} />
+          </QueryClientProvider>
+        </trpc.Provider>
+      </NotificationsProvider>
     </Container>
   );
 };

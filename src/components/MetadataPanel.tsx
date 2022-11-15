@@ -1,3 +1,8 @@
+import {
+  ArrowLeftOnRectangleIcon,
+  ArrowRightOnRectangleIcon,
+} from "@heroicons/react/20/solid";
+import classNames from "classnames";
 import { ReactNode, useEffect, useState } from "react";
 
 import { InspectorSection } from "../design-system/InspectorSection.js";
@@ -6,7 +11,6 @@ import { ResourceIcon } from "../stories/utils.js";
 import { Node } from "../utils/nodeMap.js";
 
 import { AttributeView } from "./AttributeView.js";
-import { NodeListItem } from "./NodeListItem.js";
 
 interface Attribute {
   key: string;
@@ -22,6 +26,7 @@ interface AttributeGroup {
 
 interface ConnectionsGroup {
   groupName: string;
+  type: "inbound" | "outbound";
   connections: {
     id: string;
     path: string;
@@ -45,9 +50,9 @@ export const MetadataPanel = ({
   const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>();
   const [connectionsGroups, setConnectionsGroups] =
     useState<ConnectionsGroup[]>();
-  const [openInspectorSections, setOpenInspectorSections] = useState<string[]>(
-    [],
-  );
+  const [closedInspectorSections, setClosedInspectorSections] = useState<
+    string[]
+  >([]);
 
   useEffect(() => {
     const connectionsGroupsArray: ConnectionsGroup[] = [];
@@ -65,23 +70,51 @@ export const MetadataPanel = ({
       },
     ];
     if (node.type.startsWith("wingsdk.cloud") && node.attributes) {
-      attrGroups.push({
-        groupName: node.type.split(".").at(-1) || "Custom",
-        attributes: Object.keys(node.attributes).map((attrKey) => {
-          const attrValue = node.attributes![attrKey];
-          return {
-            key: attrKey,
-            value:
-              typeof attrValue === "string"
-                ? attrValue
-                : // eslint-disable-next-line unicorn/no-null
-                  JSON.stringify(attrValue, null, 2),
-          };
-        }),
-      });
+      switch (node.type) {
+        case "wingsdk.cloud.Function": {
+          attrGroups.push({
+            groupName: "Function",
+            attributes: [
+              { key: "Entry", value: node.attributes.sourceCodeFile },
+              { key: "Language", value: node.attributes.sourceCodeLanguage },
+              {
+                key: "Environment",
+                value: JSON.stringify(node.attributes.environmentVariables),
+              },
+            ],
+          });
+
+          break;
+        }
+        case "wingsdk.cloud.Queue": {
+          attrGroups.push({
+            groupName: "Queue",
+            attributes: [
+              { key: "Timeout", value: `${node.attributes.timeout}s` },
+            ],
+          });
+
+          break;
+        }
+        case "wingsdk.cloud.Bucket": {
+          attrGroups.push({
+            groupName: "Bucket",
+            attributes: [
+              {
+                key: "Public",
+                value: node.attributes.public ? "True" : "False",
+              },
+            ],
+          });
+
+          break;
+        }
+      }
+
       if (inbound && inbound.length > 0) {
         connectionsGroupsArray.push({
-          groupName: "inbound",
+          groupName: "Inbound",
+          type: "inbound",
           connections: inbound.map((node) => ({
             id: node.id,
             path: node.path,
@@ -91,7 +124,8 @@ export const MetadataPanel = ({
       }
       if (outbound && outbound.length > 0) {
         connectionsGroupsArray.push({
-          groupName: "outbound",
+          groupName: "Outbound",
+          type: "outbound",
           connections: outbound.map((node) => ({
             id: node.id,
             path: node.path,
@@ -102,14 +136,10 @@ export const MetadataPanel = ({
     }
     setAttributeGroups(attrGroups);
     setConnectionsGroups(connectionsGroupsArray);
-    setOpenInspectorSections([
-      ...attrGroups.map((group) => group.groupName),
-      ...connectionsGroupsArray.map((connection) => connection.groupName),
-    ]);
   }, [node, inbound, outbound]);
 
   const toggleInspectorSection = (section: string) => {
-    setOpenInspectorSections(([...sections]) => {
+    setClosedInspectorSections(([...sections]) => {
       const index = sections.indexOf(section);
       if (index !== -1) {
         sections.splice(index, 1);
@@ -122,7 +152,7 @@ export const MetadataPanel = ({
   };
 
   return (
-    <ScrollableArea overflowY className="h-full text-sm">
+    <ScrollableArea overflowY className="h-full text-sm bg-white">
       {node && (
         <>
           {attributeGroups?.map((attributeGroup) => {
@@ -130,9 +160,9 @@ export const MetadataPanel = ({
               <div key={attributeGroup.groupName}>
                 <InspectorSection
                   text={attributeGroup.groupName}
-                  open={openInspectorSections.includes(
-                    attributeGroup.groupName,
-                  )}
+                  open={
+                    !closedInspectorSections.includes(attributeGroup.groupName)
+                  }
                   onClick={() =>
                     toggleInspectorSection(attributeGroup.groupName)
                   }
@@ -153,35 +183,61 @@ export const MetadataPanel = ({
               </div>
             );
           })}
-          {connectionsGroups?.map((connectionGroup) => (
-            <div key={connectionGroup.groupName}>
-              <InspectorSection
-                text={connectionGroup.groupName}
-                open={openInspectorSections.includes(connectionGroup.groupName)}
-                onClick={() =>
-                  toggleInspectorSection(connectionGroup.groupName)
-                }
-              >
-                <div className="border-t">
-                  <div className={"relative"}>
-                    {connectionGroup.connections.map((connection) => (
-                      <NodeListItem
-                        className={"w-full text-base border-0"}
-                        key={connection.path}
-                        title={connection.path}
-                        onClick={() => onConnectionNodeClick?.(connection.path)}
-                      >
-                        <div className="flex-shrink-0 -ml-0.5">
-                          {connection.icon}
-                        </div>
-                        <div className="truncate">{connection.id}</div>
-                      </NodeListItem>
-                    ))}
+          {connectionsGroups && connectionsGroups.length > 0 && (
+            <InspectorSection
+              text="Relationships"
+              open={!closedInspectorSections.includes("relationships")}
+              onClick={() => toggleInspectorSection("relationships")}
+            >
+              <div className="border-t">
+                {connectionsGroups.map((connectionGroup) => (
+                  <div key={connectionGroup.groupName}>
+                    <div className="relative bg-slate-100">
+                      {connectionGroup.connections.map((connection) => (
+                        <button
+                          className={classNames(
+                            "w-full flex-shrink-0 max-w-full truncate bg-slate-100 hover:bg-slate-200/50 shadow-sm text-sm px-4 py-1 flex items-center gap-1 min-w-0 text-slate-700",
+                          )}
+                          title={connection.path}
+                          onClick={() =>
+                            onConnectionNodeClick?.(connection.path)
+                          }
+                        >
+                          <div className="flex-0 flex-shrink-0 flex items-center gap-2 text-slate-500 min-w-[140px]">
+                            <div className="flex-0 flex-shrink-0">
+                              {connectionGroup.type === "inbound" ? (
+                                <ArrowLeftOnRectangleIcon
+                                  className="w-4 h-4 rotate-180"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <ArrowRightOnRectangleIcon
+                                  className="w-4 h-4"
+                                  aria-hidden="true"
+                                />
+                              )}
+                            </div>
+                            <span className="text-slate-500 uppercase text-xs">
+                              {connectionGroup.type === "inbound"
+                                ? "in"
+                                : "out"}
+                            </span>
+                          </div>
+
+                          <div className="flex items-center gap-1.5 ml-2 5 min-w-0">
+                            <div className="flex-shrink-0 -ml-1">
+                              {connection.icon}
+                            </div>
+                            <div className="truncate">{connection.id}</div>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              </InspectorSection>
-            </div>
-          ))}
+                ))}
+              </div>
+            </InspectorSection>
+          )}
         </>
       )}
     </ScrollableArea>

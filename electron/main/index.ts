@@ -36,6 +36,8 @@ async function createWindow(options?: { title?: string }) {
     icon: path.join(ROOT_PATH.public, "icon.ico"),
     minWidth: 640,
     minHeight: 480,
+    width: 1280,
+    height: 720,
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.js"),
     },
