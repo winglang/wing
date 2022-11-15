@@ -24,16 +24,6 @@ export interface SimulatorProps {
    * resources
    */
   readonly factory?: ISimulatorFactory;
-
-  /**
-   * A collection of callbacks that are invoked at key lifecycle events of the
-   * simulator, such as whenever traces or logs are emitted.
-   *
-   * @experimental
-   *
-   * @default - no hooks
-   */
-  readonly lifecycleHooks?: ISimulatorLifecycleHooks;
 }
 
 /**
@@ -187,6 +177,16 @@ export interface IResourceResolver {
 }
 
 /**
+ * A subscriber that can listen for traces emitted by the simulator.
+ */
+export interface ITraceSubscriber {
+  /**
+   * Called when a trace is emitted.
+   */
+  callback(event: Trace): void;
+}
+
+/**
  * A simulator that can be used to test your application locally.
  */
 export class Simulator {
@@ -200,7 +200,7 @@ export class Simulator {
   private _running: boolean;
   private readonly _handles: HandleManager;
   private _traces: Array<Trace>;
-  private readonly _lifecycleHooks: ISimulatorLifecycleHooks;
+  private readonly _traceSubscribers: Array<ITraceSubscriber>;
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
@@ -212,7 +212,7 @@ export class Simulator {
     this._factory = props.factory ?? new DefaultSimulatorFactory();
     this._handles = new HandleManager();
     this._traces = new Array();
-    this._lifecycleHooks = props.lifecycleHooks ?? {};
+    this._traceSubscribers = new Array();
   }
 
   private _loadApp(simfile: string): { assetsDir: string; tree: any } {
@@ -433,10 +433,18 @@ export class Simulator {
     return JSON.parse(JSON.stringify(this._tree));
   }
 
+  /**
+   * Register a subscriber that will be notified when a trace is emitted by
+   * the simulator.
+   */
+  public onTrace(subscriber: ITraceSubscriber) {
+    this._traceSubscribers.push(subscriber);
+  }
+
   private _addTrace(event: Trace) {
     event = Object.freeze(event);
-    if (this._lifecycleHooks.onTrace) {
-      this._lifecycleHooks.onTrace(event);
+    for (const sub of this._traceSubscribers) {
+      sub.callback(event);
     }
     this._traces.push(event);
   }

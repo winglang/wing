@@ -3704,7 +3704,6 @@ const simulatorProps: testing.SimulatorProps = { ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.simfile">simfile</a></code> | <code>string</code> | Path to a Wing simulator file (.wx). |
 | <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.factory">factory</a></code> | <code>@winglang/wingsdk.testing.ISimulatorFactory</code> | The factory that produces resource simulations. |
-| <code><a href="#@winglang/wingsdk.testing.SimulatorProps.property.lifecycleHooks">lifecycleHooks</a></code> | <code>@winglang/wingsdk.testing.ISimulatorLifecycleHooks</code> | A collection of callbacks that are invoked at key lifecycle events of the simulator, such as whenever traces or logs are emitted. |
 
 ---
 
@@ -3730,19 +3729,6 @@ public readonly factory: ISimulatorFactory;
 - *Default:* a factory that produces simulations for built-in Wing SDK resources
 
 The factory that produces resource simulations.
-
----
-
-##### `lifecycleHooks`<sup>Optional</sup> <a name="lifecycleHooks" id="@winglang/wingsdk.testing.SimulatorProps.property.lifecycleHooks"></a>
-
-```typescript
-public readonly lifecycleHooks: ISimulatorLifecycleHooks;
-```
-
-- *Type:* @winglang/wingsdk.testing.ISimulatorLifecycleHooks
-- *Default:* no hooks
-
-A collection of callbacks that are invoked at key lifecycle events of the simulator, such as whenever traces or logs are emitted.
 
 ---
 
@@ -4822,6 +4808,7 @@ new testing.Simulator(props: SimulatorProps)
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getResourceByPath">getResourceByPath</a></code> | Get the resource instance for a given path. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.listTraces">listTraces</a></code> | Get a list of all traces added during the most recent simulation run. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.onTrace">onTrace</a></code> | Register a subscriber that will be notified when a trace is emitted by the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
@@ -4905,6 +4892,20 @@ public listTraces(): Trace[]
 ```
 
 Get a list of all traces added during the most recent simulation run.
+
+##### `onTrace` <a name="onTrace" id="@winglang/wingsdk.testing.Simulator.onTrace"></a>
+
+```typescript
+public onTrace(subscriber: ITraceSubscriber): void
+```
+
+Register a subscriber that will be notified when a trace is emitted by the simulator.
+
+###### `subscriber`<sup>Required</sup> <a name="subscriber" id="@winglang/wingsdk.testing.Simulator.onTrace.parameter.subscriber"></a>
+
+- *Type:* @winglang/wingsdk.testing.ITraceSubscriber
+
+---
 
 ##### `reload` <a name="reload" id="@winglang/wingsdk.testing.Simulator.reload"></a>
 
@@ -5498,6 +5499,35 @@ public init(): void
 ```
 
 Perform any async initialization required by the resource.
+
+
+### ITraceSubscriber <a name="ITraceSubscriber" id="@winglang/wingsdk.testing.ITraceSubscriber"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.ITraceSubscriber
+
+A subscriber that can listen for traces emitted by the simulator.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ITraceSubscriber.callback">callback</a></code> | Called when a trace is emitted. |
+
+---
+
+##### `callback` <a name="callback" id="@winglang/wingsdk.testing.ITraceSubscriber.callback"></a>
+
+```typescript
+public callback(event: Trace): void
+```
+
+Called when a trace is emitted.
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ITraceSubscriber.callback.parameter.event"></a>
+
+- *Type:* @winglang/wingsdk.testing.Trace
+
+---
 
 
 ### IWithTraceProps <a name="IWithTraceProps" id="@winglang/wingsdk.testing.IWithTraceProps"></a>

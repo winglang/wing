@@ -4,7 +4,7 @@ import * as testing from "../../src/testing";
 import { Trace } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 
-test("lifecycle hooks - onEvent", async () => {
+test("onTrace", async () => {
   // GIVEN
   const app = new sim.App({ outdir: mkdtemp() });
   new cloud.Bucket(app, "my_bucket", { public: false });
@@ -12,14 +12,13 @@ test("lifecycle hooks - onEvent", async () => {
 
   let numTraces = 0;
 
-  const lifecycleHooks = {
-    onTrace: (_trace: Trace) => {
+  // WHEN
+  const s = new testing.Simulator({ simfile });
+  s.onTrace({
+    callback: (_trace: Trace) => {
       numTraces++;
     },
-  };
-
-  // WHEN
-  const s = new testing.Simulator({ simfile, lifecycleHooks });
+  });
   await s.start();
   expect(s.getProps("root/my_bucket").public).toEqual(false);
 
