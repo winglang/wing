@@ -56,17 +56,11 @@ export class Function implements IFunctionClient, ISimulatorResource {
       $simulator: this.context,
     });
 
-    try {
-      const result = await vm.runInContext(wrapper, context);
-      this.context.addTrace({
-        message: `Invoke (payload="${payload}") operation succeeded. Response: ${result}`,
-      });
-      return result;
-    } catch (e) {
-      this.context.addTrace({
-        message: `Invoke (payload="${payload}") operation failed. Response: ${e}`,
-      });
-      throw e;
-    }
+    return this.context.withTrace({
+      message: `Invoke (payload=${payload}).`,
+      activity: async () => {
+        return vm.runInContext(wrapper, context);
+      },
+    });
   }
 }

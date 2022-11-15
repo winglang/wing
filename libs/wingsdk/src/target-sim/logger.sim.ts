@@ -2,7 +2,7 @@ import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
 import { ILoggerClient } from "../cloud";
-import { ISimulatorContext } from "../testing";
+import { ISimulatorContext, TraceType } from "../testing";
 import { ENV_WING_SIM_RUNTIME_FUNCTION_PATH } from "./function";
 import { ISimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
@@ -36,19 +36,10 @@ export class Logger implements ILoggerClient, ISimulatorResource {
     const functionPath =
       process.env[ENV_WING_SIM_RUNTIME_FUNCTION_PATH] ?? "unknown";
 
-    try {
-      this.context.addLog({
-        message,
-        resourcePath: functionPath,
-      });
-      this.context.addTrace({
-        message: "Print operation succeeded.",
-      });
-    } catch (e) {
-      this.context.addTrace({
-        message: "Print operation failed.",
-      });
-      throw e;
-    }
+    return this.context.addTrace({
+      data: { message },
+      type: TraceType.LOG,
+      "source-path": functionPath,
+    });
   }
 }

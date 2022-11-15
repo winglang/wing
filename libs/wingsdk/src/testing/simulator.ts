@@ -44,7 +44,7 @@ export interface ISimulatorLifecycleHooks {
   /**
    * A function to run whenever a trace or log event is emitted.
    */
-  onEvent?(event: SimulatorEvent): void;
+  onEvent?(event: Trace): void;
 }
 
 /**
@@ -52,59 +52,88 @@ export interface ISimulatorLifecycleHooks {
  */
 export interface AddTraceProps {
   /**
-   * A message specified by the resource.
+   * A JSON blob with structured data.
    */
-  readonly message: string;
+  readonly data: any;
+
+  /**
+   * The type of a trace.
+   */
+  readonly type: TraceType;
+
+  /**
+   * The path of the resource that emitted the trace. This can be overridden
+   * in cases where the resource emits a trace on behalf of another resource
+   * (e.g. the logger).
+   */
+  readonly "source-path"?: string;
+}
+
+// Since we are using JSII we cannot use generics to type this right now:
+//
+// export interface WithTraceProps<T> {
+//   readonly activity: () => Promise<T>;
+// }
+// ...
+// withTrace(event: WithTraceProps<T>): Promise<T>;
+
+/**
+ * Props for `ISimulatorContext.withTrace`.
+ */
+export interface WithTraceProps {
+  /**
+   * A message to register with the trace.
+   */
+  readonly message: any;
+
+  /**
+   * A function to run as part of the trace.
+   */
+  readonly activity: () => Promise<any>;
 }
 
 /**
- * Props for `ISimulatorContext.addLog`.
+ * Represents an trace emitted during simulation.
  */
-export interface AddLogProps {
+export interface Trace {
   /**
-   * A message logged by the application.
+   * A JSON blob with structured data.
    */
-  readonly message: string;
+  readonly data: any;
 
   /**
-   * An optional resource path. This is needed in cases where a logging resource
-   * operates on behalf of other resources.
-   *
-   * @default - the path of the resource that called `addLog`
+   * The type of the source that emitted the trace.
    */
-  readonly resourcePath?: string;
-}
-
-/**
- * Represents an event logged during simulation.
- */
-export interface SimulatorEvent {
-  /**
-   * A message associated with the event.
-   */
-  readonly message: string;
+  readonly "source-type": string;
 
   /**
-   * The resource that emitted the event.
+   * The path of the resource that emitted the trace.
    */
-  readonly resourcePath: string;
+  readonly "source-path": string;
 
   /**
-   * The event type - either "trace" or "log".
-   *
-   * Trace events are for breadcrumbs of information about resource operations
-   * that occurred during simulation, useful for understanding how resources
-   * interact.
-   *
-   * Log events are for information the user adds within their inflight code,
-   * useful for understanding application logic.
+   * The type of a trace.
    */
-  readonly type: string;
+  readonly type: TraceType;
 
   /**
    * The timestamp of the event, in milliseconds since the epoch.
    */
   readonly timestamp: number;
+}
+
+/**
+ * The type of a trace.
+ */
+export enum TraceType {
+  /**
+   * A trace representing a resource activity.
+   */
+  RESOURCE = "resource",
+  /**
+   * A trace representing information emitted by the logger.
+   */
+  LOG = "log",
 }
 
 /**
@@ -122,18 +151,13 @@ export interface ISimulatorContext {
   findInstance(handle: string): ISimulatorResource;
 
   /**
-   * Add a trace to the simulation's event history. Trace events are for
-   * breadcrumbs of information about resource operations that occurred during
-   * simulation, useful for understanding how resources interact.
+   * Add a trace. Traces are breadcrumbs of information about resource
+   * operations that occurred during simulation, useful for understanding how
+   * resources interact or debugging an application.
    */
   addTrace(event: AddTraceProps): void;
 
-  /**
-   * Add a log to the simulation's event history. Log events are for information
-   * the user adds within their application code, useful for understanding what
-   * their inflight code is doing.
-   */
-  addLog(event: AddLogProps): void;
+  withTrace(event: WithTraceProps): Promise<any>;
 }
 
 /**
@@ -159,7 +183,7 @@ export class Simulator {
   // fields that change between simulation runs / reloads
   private _running: boolean;
   private readonly _handles: HandleManager;
-  private _events: Array<SimulatorEvent>;
+  private _traces: Array<Trace>;
   private readonly _lifecycleHooks: ISimulatorLifecycleHooks;
 
   constructor(props: SimulatorProps) {
@@ -171,7 +195,7 @@ export class Simulator {
     this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
     this._handles = new HandleManager();
-    this._events = new Array();
+    this._traces = new Array();
     this._lifecycleHooks = props.lifecycleHooks ?? {};
   }
 
@@ -226,47 +250,63 @@ export class Simulator {
       );
     }
 
-    this._events = [];
+    this._traces = [];
 
     for (const path of this._tree.startOrder) {
+      const resourceData = findResource(this._tree, path);
+
       const context: ISimulatorContext = {
         assetsDir: this._assetsDir,
         findInstance: (handle: string) => {
           return this._handles.find(handle);
         },
-        addTrace: (event: AddTraceProps) => {
-          let fullEvent: SimulatorEvent = {
-            ...event,
-            type: "trace",
-            resourcePath: path,
+        addTrace: (props: AddTraceProps) => {
+          let trace: Trace = {
+            ...props,
+            "source-path": path,
+            "source-type": resourceData.type,
             timestamp: Date.now(),
           };
-          this.addEvent(fullEvent);
+          this._addTrace(trace);
         },
-        addLog: (event: AddLogProps) => {
-          let fullEvent: SimulatorEvent = {
-            resourcePath: path,
-            ...event,
-            type: "log",
-            timestamp: Date.now(),
-          };
-          this.addEvent(fullEvent);
+        withTrace: async (props: WithTraceProps) => {
+          // TODO: log start time and end time of activity?
+          try {
+            let result = await props.activity();
+            this._addTrace({
+              data: { message: props.message, result: "success" },
+              type: TraceType.RESOURCE,
+              "source-path": path,
+              "source-type": resourceData.type,
+              timestamp: Date.now(),
+            });
+            return result;
+          } catch (err) {
+            this._addTrace({
+              data: { message: props.message, result: "failure", error: err },
+              type: TraceType.RESOURCE,
+              "source-path": path,
+              "source-type": resourceData.type,
+              timestamp: Date.now(),
+            });
+            throw err;
+          }
         },
       };
 
-      const resourceData = findResource(this._tree, path);
       const props = this.resolveTokens(path, resourceData.props);
       const resource = this._factory.resolve(resourceData.type, props, context);
       await resource.init();
       const handle = this._handles.allocate(resource);
       (resourceData as any).attrs = { handle };
-      let event: SimulatorEvent = {
-        type: "trace",
-        message: `${resourceData.type} created.`,
-        resourcePath: path,
+      let event: Trace = {
+        type: TraceType.RESOURCE,
+        data: { message: `${resourceData.type} created.` },
+        "source-path": path,
+        "source-type": resourceData.type,
         timestamp: Date.now(),
       };
-      this.addEvent(event);
+      this._addTrace(event);
     }
 
     this._running = true;
@@ -287,13 +327,14 @@ export class Simulator {
       const resource = this._handles.deallocate(res.attrs!.handle);
       await resource.cleanup();
 
-      let event: SimulatorEvent = {
-        type: "trace",
-        message: `${res.type} deleted.`,
-        resourcePath: path,
+      let event: Trace = {
+        type: TraceType.RESOURCE,
+        data: { message: `${res.type} deleted.` },
+        "source-path": path,
+        "source-type": res.type,
         timestamp: Date.now(),
       };
-      this.addEvent(event);
+      this._addTrace(event);
     }
 
     this._handles.reset();
@@ -324,27 +365,10 @@ export class Simulator {
   }
 
   /**
-   * Get a list of all events that have been logged during the simulation.
-   * The list of events is cleared whenever the simulation is restarted.
+   * Get a list of all traces added during the most recent simulation run.
    */
-  public listEvents(): SimulatorEvent[] {
-    return [...this._events];
-  }
-
-  /**
-   * Get a list of all trace events that have been logged during the simulation.
-   * The list of events is cleared whenever the simulation is restarted.
-   */
-  public listTraces(): SimulatorEvent[] {
-    return this._events.filter((e) => e.type === "trace");
-  }
-
-  /**
-   * Get a list of all log events that have been logged during the simulation.
-   * The list of events is cleared whenever the simulation is restarted.
-   */
-  public listLogs(): SimulatorEvent[] {
-    return this._events.filter((e) => e.type === "log");
+  public listTraces(): Trace[] {
+    return [...this._traces];
   }
 
   /**
@@ -389,12 +413,12 @@ export class Simulator {
     return JSON.parse(JSON.stringify(this._tree));
   }
 
-  private addEvent(event: SimulatorEvent) {
+  private _addTrace(event: Trace) {
     event = Object.freeze(event);
     if (this._lifecycleHooks.onEvent) {
       this._lifecycleHooks.onEvent(event);
     }
-    this._events.push(event);
+    this._traces.push(event);
   }
 
   private resolveTokens(tokenOrigin: string, props: any): any {

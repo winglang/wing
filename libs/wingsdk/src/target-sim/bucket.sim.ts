@@ -27,51 +27,34 @@ export class Bucket implements IBucketClient, ISimulatorResource {
   }
 
   public async put(key: string, value: string): Promise<void> {
-    try {
-      const filename = join(this.fileDir, key);
-      await fs.promises.writeFile(filename, value);
-      this.context.addTrace({
-        message: `Put (key=${key}) operation succeeded.`,
-      });
-    } catch (e) {
-      this.context.addTrace({
-        message: `Put (key=${key}) operation failed.`,
-      });
-      throw e;
-    }
+    return this.context.withTrace({
+      message: `Put (key=${key}).`,
+      activity: async () => {
+        const filename = join(this.fileDir, key);
+        await fs.promises.writeFile(filename, value);
+      },
+    });
   }
 
   public async get(key: string): Promise<string> {
-    try {
-      const filename = join(this.fileDir, key);
-      const value = await fs.promises.readFile(filename, "utf8");
-      this.context.addTrace({
-        message: `Get (key=${key}) operation succeeded.`,
-      });
-      return value;
-    } catch (e) {
-      this.context.addTrace({
-        message: `Get (key=${key}) operation failed.`,
-      });
-      throw e;
-    }
+    return this.context.withTrace({
+      message: `Get (key=${key}).`,
+      activity: async () => {
+        const filename = join(this.fileDir, key);
+        return fs.promises.readFile(filename, "utf8");
+      },
+    });
   }
 
   public async list(prefix?: string): Promise<string[]> {
-    try {
-      const fileNames = await fs.promises.readdir(this.fileDir);
-      const filtered = prefix
-        ? fileNames.filter((fileName) => fileName.startsWith(prefix))
-        : fileNames;
-      this.context.addTrace({
-        message: `List (prefix=${prefix ?? "null"}) operation succeeded.`,
-      });
-      return filtered;
-    } catch (e) {
-      this.context.addTrace({
-        message: `List (prefix=${prefix ?? "null"}) operation failed.`,
-      });
-      throw e;
-    }
+    return this.context.withTrace({
+      message: `List (prefix=${prefix ?? "null"}).`,
+      activity: async () => {
+        const fileNames = await fs.promises.readdir(this.fileDir);
+        return prefix
+          ? fileNames.filter((fileName) => fileName.startsWith(prefix))
+          : fileNames;
+      },
+    });
   }
 }

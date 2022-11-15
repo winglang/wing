@@ -1,5 +1,5 @@
 import { IFunctionClient, IQueueClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
+import { ISimulatorContext, TraceType } from "../testing/simulator";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";
@@ -33,9 +33,11 @@ export class Queue implements IQueueClient, ISimulatorResource {
 
   public async push(message: string): Promise<void> {
     // TODO: enforce maximum queue message size?
-    this.messages.push(message);
-    this.context.addTrace({
-      message: "Push operation succeeded.",
+    return this.context.withTrace({
+      message: `Push (message=${message}).`,
+      activity: async () => {
+        this.messages.push(message);
+      },
     });
   }
 
@@ -56,17 +58,25 @@ export class Queue implements IQueueClient, ISimulatorResource {
         if (!fnClient) {
           throw new Error("No function client found");
         }
-        this.context.addTrace({
-          message: `Sending ${messages.length} messages to subscriber ${subscriber.functionHandle}.`,
-        });
-        const event = JSON.stringify({ messages });
-        void fnClient.invoke(event).catch((err) => {
-          // If the function returns an error, put the message back on the queue
-          this.context.addTrace({
-            message: `Subscriber error (${err}) - returning ${messages.length} messages to queue.`,
+        void this.context
+          .withTrace({
+            message: `Sending messages (messages=${JSON.stringify(
+              messages
+            )}, subscriber=${subscriber.functionHandle}).`,
+            activity: async () => {
+              return fnClient.invoke(JSON.stringify({ messages }));
+            },
+          })
+          .catch((_err) => {
+            // If the function returns an error, put the message back on the queue
+            this.context.addTrace({
+              data: {
+                message: `Subscriber error - returning ${messages.length} messages to queue.`,
+              },
+              type: TraceType.RESOURCE,
+            });
+            this.messages.push(...messages);
           });
-          this.messages.push(...messages);
-        });
         processedMessages = true;
       }
     } while (processedMessages);
