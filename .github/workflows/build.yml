@@ -291,16 +291,6 @@ jobs:
       - name: Build Validation
         run: echo "Build Successful"
 
-      - name: Send slack notification
-        if: "!success()"
-        uses: ravsamhq/notify-slack-action@v1
-        with:
-          status: ${{ job.status }}
-          notify_when: "failure,cancelled,skipped,warnings"
-          notification_title: "{workflow} has {status_message}"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
-
   publish:
     name: Publish
     if: github.ref == 'refs/heads/main'
@@ -359,8 +349,14 @@ jobs:
           body_path: CHANGELOG.md
           files: dist/*
 
+  alert:
+    needs:
+      - publish
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
       - name: Send slack notification
-        if: github.ref == 'refs/heads/main' && !success()
+        if: "!success()"
         uses: ravsamhq/notify-slack-action@v1
         with:
           status: ${{ job.status }}
