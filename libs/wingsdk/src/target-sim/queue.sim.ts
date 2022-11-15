@@ -29,7 +29,6 @@ export class Queue implements IQueueClient, ISimulatorResource {
 
   public async cleanup(): Promise<void> {
     clearInterval(this.intervalId);
-    return;
   }
 
   public async push(message: string): Promise<void> {
