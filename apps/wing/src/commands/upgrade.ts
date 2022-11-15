@@ -16,11 +16,6 @@ export interface IUpdateOptions {
 export async function upgrade(options: IUpdateOptions) {
   const { force } = options;
 
-  if (!force) {
-    log("'force' is not set, skipping.");
-    return;
-  }
-
   log("checking for updates...");
   // eval is because "update-notifier" is an ESM package and we're CommonJS.
   const updateNotifier = await eval('import("update-notifier")');
@@ -29,10 +24,8 @@ export async function upgrade(options: IUpdateOptions) {
     pkg: PJSON,
   });
 
-  if (force) {
-    log("forcing update info...");
-    await notifier.fetchInfo();
-  }
+  log("forcing update info...");
+  await notifier.fetchInfo();
 
   const message = [
     "Update available for Wing {currentVersion} >> {latestVersion}",
