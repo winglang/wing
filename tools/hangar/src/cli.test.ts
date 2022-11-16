@@ -31,12 +31,8 @@ const validWingFiles = fs
 
 const shellEnv = {
   ...process.env,
-  npm_config_yes: "true",
-  npm_config_registry: "http://localhost:4873/",
   npm_config_cache: npmCacheDir,
-  npm_config__auth: "hunter2",
   npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
-  npm_config_audit: "false",
 };
 
 afterAll(async () => {
