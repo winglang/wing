@@ -1,5 +1,12 @@
 import { JsonFile, cdk, javascript } from "projen";
 
+const JSII_DEPS = [
+  "constructs@~10.0.25",
+  "@winglang/polycons",
+  "cdktf",
+  "@cdktf/provider-aws",
+];
+
 const project = new cdk.JsiiProject({
   name: "@winglang/wingsdk",
   author: "Monada, Inc.",
@@ -8,12 +15,8 @@ const project = new cdk.JsiiProject({
   repositoryUrl: "https://github.com/winglang/wingsdk.git",
   stability: "experimental",
   defaultReleaseBranch: "main",
-  peerDeps: [
-    "constructs@~10.0.25",
-    "@winglang/polycons",
-    "cdktf",
-    "@cdktf/provider-aws",
-  ],
+  peerDeps: [...JSII_DEPS],
+  deps: [...JSII_DEPS],
   bundledDeps: [
     "safe-stable-stringify",
     // preflight dependencies
