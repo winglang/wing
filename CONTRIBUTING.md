@@ -265,6 +265,7 @@ To help maintainers review them and get them merged in a speedy fashion, please 
 * [ ] Tests are added for all changes.
 * [ ] Any handwritten documentation in `docs/` or READMEs are updated where appropriate when features are being added or removed (API docs will be automatically generated for you!).
 * [ ] Your fork is in sync with the upstream repository.
+* [ ] All build checks on GitHub are passing.
 
 We also recommend you avoid force pushing or rebasing your branch after a pull request has been opened in order to make it easier to review.
 Your commit history doesn't need to be perfect, since it will get squashed into a single commit when the pull request is merged anyway.
