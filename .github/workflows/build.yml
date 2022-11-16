@@ -278,9 +278,6 @@ jobs:
           name: vscode-wing.vsix
           path: apps/vscode-wing/vscode-wing.vsix
 
-      - name: testing
-        run: exit 1
-
   build:
     needs:
       - build-native
@@ -352,7 +349,7 @@ jobs:
   alert:
     needs:
       - publish
-    if: always()
+    if: always() && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       # sets WORKFLOW_CONCLUSION variable
