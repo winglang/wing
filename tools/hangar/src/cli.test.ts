@@ -103,6 +103,13 @@ test.each(validWingFiles)(
 
       expect(sanitize_json_paths(tf_manifest)).toMatchSnapshot("manifest.json");
       expect(sanitize_json_paths(tf_json)).toMatchSnapshot("cdk.tf.json");
+
+      await $`yarn init -y`;
+      await $`yarn add @winglang/wing`;
+      await $`node_modules/.bin/wing compile ${path.join(validTestDir, wingFile)}`;
+
+      expect(sanitize_json_paths(tf_manifest)).toMatchSnapshot("manifest.json");
+      expect(sanitize_json_paths(tf_json)).toMatchSnapshot("cdk.tf.json");
     });
   },
   {
@@ -118,6 +125,13 @@ test.each(validWingFiles)(
       await enterTestDir(test_dir);
 
       await $`npx @winglang/wing compile --target sim ${path.join(
+        validTestDir,
+        wingFile
+      )}`;
+
+      await $`yarn init -y`;
+      await $`yarn add @winglang/wing`;
+      await $`node_modules/.bin/wing compile --target sim ${path.join(
         validTestDir,
         wingFile
       )}`;
