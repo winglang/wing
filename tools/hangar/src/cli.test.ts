@@ -5,6 +5,8 @@ import "zx/globals";
 
 require("dotenv").config();
 const registryServer = await runServer("./verdaccio.config.yaml");
+const registryPort = 4873;
+const registryUrl = `http://localhost:${registryPort}`;
 
 const repoRoot = path.resolve(__dirname, "../../..");
 const testDir = path.join(repoRoot, "examples/tests");
@@ -31,7 +33,6 @@ const validWingFiles = fs
 
 const shellEnv = {
   ...process.env,
-  npm_config__auth: "hunter2",
   npm_config_cache: npmCacheDir,
   npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
 };
@@ -52,9 +53,9 @@ beforeAll(async () => {
     await $`mkdir -p ${npmCacheDir}`;
     await $`mkdir -p ${registryDir}`;
 
-    registryServer.listen(4873, () => {});
-    await $`${npmBin} run publish-local-tgz -- ${targetWingTGZ}`;
-    await $`${npmBin} run publish-local-tgz -- ${targetWingSDKTGZ}`;
+    registryServer.listen(registryPort, () => {});
+    await $`${npmBin} publish --registry=${registryUrl} ${targetWingTGZ}`;
+    await $`${npmBin} publish --registry=${registryUrl} ${targetWingSDKTGZ}`;
 
     // ensure version works before bothering with the rest of the tests
     $.cwd = tmpDir;
