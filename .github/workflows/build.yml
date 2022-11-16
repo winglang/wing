@@ -122,18 +122,12 @@ jobs:
           projects: "wingc"
           args: "--configuration=release --output-style=stream --verbose"
 
-      - name: Package Wing CLI
-        working-directory: apps/wing
-        run: |
-          npm version ${{ env.PROJEN_BUMP_VERSION }}
-          node version.js
-          npm pack
-
-      - name: Package WingSDK
-        working-directory: libs/wingsdk
-        run: |
-          npm version ${{ env.PROJEN_BUMP_VERSION }}
-          npm pack
+      - name: Create NPM packages
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "package"
+          projects: "wing,wingsdk"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
         uses: actions/upload-artifact@v2
@@ -235,6 +229,48 @@ jobs:
           name: wing-language-server-${{ matrix.os }}-${{ matrix.arch }}
           path: target/release/wing-language-server
 
+  e2e:
+    name: "E2E Testing"
+    needs:
+      - build-wasm
+    strategy:
+      fail-fast: true
+      matrix:
+        include:
+          - runner: macos-latest
+          - runner: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
+
+      - name: Login to Private NPM registry
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+
+      - name: Install Dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          working-directory: tools/hangar
+          install-command: npm ci --ignore-scripts
+
+      - name: Run E2E Tests
+        env:
+          NPM_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: |
+          export HANGAR_WING_TGZ="$(pwd)/$(find wing/*.tgz)"
+          export HANGAR_WINGSDK_TGZ="$(pwd)/$(find wingsdk/*.tgz)"
+          cd tools/hangar
+          HANGAR_WING_TGZ=$HANGAR_WING_TGZ HANGAR_WINGSDK_TGZ=$HANGAR_WINGSDK_TGZ npm run test
+
   build-vscode:
     name: "Build VSCode Extension"
     needs:
@@ -283,6 +319,7 @@ jobs:
       - build-native
       - build-wasm
       - build-vscode
+      - e2e
     runs-on: ubuntu-latest
     steps:
       - name: Build Validation

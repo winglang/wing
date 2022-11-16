@@ -23,3 +23,4 @@ tsconfig.tsbuildinfo
 tsconfig.nonjsii.json
 .prettierignore
 .prettierrc.json
+*.tgz
