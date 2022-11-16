@@ -33,6 +33,10 @@ const validWingFiles = fs
 
 const shellEnv = {
   ...process.env,
+  npm_config_registry: registryUrl,
+  npm_config_audit: "false",
+  npm_config_progress: "false",
+  npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
   npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
 };
@@ -62,7 +66,7 @@ beforeAll(async () => {
     await $`cd ${tmpDir}`;
     let npxOutput = await $`${npxBin} @winglang/wing --version`;
     await $`${yarnBin} init -y`;
-    await $`${yarnBin} add --no-lockfile @winglang/wing`;
+    await $`${yarnBin} add @winglang/wing --no-lockfile --registry=${registryUrl}`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
 
     expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
