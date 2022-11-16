@@ -56,10 +56,8 @@ beforeAll(async () => {
     await $`mkdir -p ${registryDir}`;
 
     registryServer.listen(4873, () => {});
-    await Promise.all([
-      $`${npmBin} run publish-local-tgz -- ${targetWingTGZ}`,
-      $`${npmBin} run publish-local-tgz -- ${targetWingSDKTGZ}`,
-    ]);
+    await $`${npmBin} run publish-local-tgz -- ${targetWingTGZ}`;
+    await $`${npmBin} run publish-local-tgz -- ${targetWingSDKTGZ}`;
 
     // ensure version works before bothering with the rest of the tests
     $.cwd = tmpDir;
