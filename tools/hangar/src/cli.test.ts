@@ -66,7 +66,7 @@ beforeAll(async () => {
     await $`cd ${tmpDir}`;
     let npxOutput = await $`${npxBin} @winglang/wing --version`;
     await $`${yarnBin} init -y`;
-    await $`${yarnBin} add @winglang/wing --no-lockfile --registry=${registryUrl}`;
+    await $`${yarnBin} add @winglang/wing --verbose --no-lockfile`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
 
     expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
