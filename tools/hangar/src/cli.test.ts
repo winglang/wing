@@ -14,6 +14,10 @@ const tmpDir = path.join(hangarDir, "tmp");
 const npmCacheDir = path.join(tmpDir, ".npm");
 const registryDir = path.join(tmpDir, "registry");
 
+const yarnBin = path.join(hangarDir, "node_modules/.bin/yarn");
+const npmBin = path.join(hangarDir, "node_modules/.bin/npm");
+const npxBin = path.join(hangarDir, "node_modules/.bin/npx");
+
 const targetWingTGZ =
   process.env.HANGAR_WING_TGZ ??
   path.join(repoRoot, `apps/wing/winglang-wing-0.0.0.tgz`);
@@ -52,16 +56,23 @@ beforeAll(async () => {
     await $`mkdir -p ${registryDir}`;
 
     registryServer.listen(4873, () => {});
-    await $`npm run publish-local-tgz -- ${targetWingTGZ}`;
-    await $`npm run publish-local-tgz -- ${targetWingSDKTGZ}`;
+    await Promise.all([
+      $`${npmBin} run publish-local-tgz -- ${targetWingTGZ}`,
+      $`${npmBin} run publish-local-tgz -- ${targetWingSDKTGZ}`,
+    ]);
 
     // ensure version works before bothering with the rest of the tests
+    $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
-    let output = await $`npx @winglang/wing --version`;
+    let npxOutput = await $`${npxBin} @winglang/wing --version`;
+    await $`${yarnBin} init -y`;
+    await $`${yarnBin} add --no-lockfile @winglang/wing`;
+    let yarnOutput = await $`node_modules/.bin/wing --version`;
 
-    expect(output.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
+    expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
+    expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
   });
-}, 1000 * 180);
+}, 1000 * 200);
 
 function sanitize_json_paths(path: string) {
   const assetKeyRegex = /"asset\..+"/g;
@@ -99,21 +110,29 @@ test.each(validWingFiles)(
 
       await enterTestDir(test_dir);
 
-      await $`npx @winglang/wing compile ${path.join(validTestDir, wingFile)}`;
+      await $`${npxBin} @winglang/wing compile ${path.join(
+        validTestDir,
+        wingFile
+      )}`;
+      const npx_tfManifest = sanitize_json_paths(tf_manifest);
+      const npx_tfJson = sanitize_json_paths(tf_json);
 
-      expect(sanitize_json_paths(tf_manifest)).toMatchSnapshot("manifest.json");
-      expect(sanitize_json_paths(tf_json)).toMatchSnapshot("cdk.tf.json");
+      expect(npx_tfManifest).toMatchSnapshot("manifest.json");
+      expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
 
-      await $`yarn init -y`;
-      await $`yarn add @winglang/wing`;
-      await $`node_modules/.bin/wing compile ${path.join(validTestDir, wingFile)}`;
+      await $`${yarnBin} init -y`;
+      await $`${yarnBin} add --no-lockfile @winglang/wing`;
+      await $`node_modules/.bin/wing compile ${path.join(
+        validTestDir,
+        wingFile
+      )}`;
 
-      expect(sanitize_json_paths(tf_manifest)).toMatchSnapshot("manifest.json");
-      expect(sanitize_json_paths(tf_json)).toMatchSnapshot("cdk.tf.json");
+      expect(sanitize_json_paths(tf_manifest)).toStrictEqual(npx_tfManifest);
+      expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
     });
   },
   {
-    timeout: 1000 * 20,
+    timeout: 1000 * 30,
   }
 );
 
@@ -124,13 +143,13 @@ test.each(validWingFiles)(
       const test_dir = path.join(tmpDir, `${wingFile}_sim`);
       await enterTestDir(test_dir);
 
-      await $`npx @winglang/wing compile --target sim ${path.join(
+      await $`${npxBin} @winglang/wing compile --target sim ${path.join(
         validTestDir,
         wingFile
       )}`;
 
-      await $`yarn init -y`;
-      await $`yarn add @winglang/wing`;
+      await $`${yarnBin} init -y`;
+      await $`${yarnBin} add --no-lockfile @winglang/wing`;
       await $`node_modules/.bin/wing compile --target sim ${path.join(
         validTestDir,
         wingFile
@@ -140,6 +159,6 @@ test.each(validWingFiles)(
     });
   },
   {
-    timeout: 1000 * 20,
+    timeout: 1000 * 30,
   }
 );

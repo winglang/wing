@@ -13,9 +13,11 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "dotenv": "^16.0.3",
+    "npm": "^9.1.1",
     "verdaccio": "^5.16.3",
     "verdaccio-memory": "^10.3.0",
     "vitest": "^0.24.4",
+    "yarn": "^1.22.19",
     "zx": "^7.1.1"
   }
 }
