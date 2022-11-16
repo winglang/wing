@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Flight, Symbol},
+	ast::{Phase, Symbol},
 	diagnostic::TypeError,
 	type_check::Type,
 	type_check::TypeRef,
@@ -11,7 +11,7 @@ pub struct TypeEnv {
 	parent: Option<*const TypeEnv>,
 	pub return_type: Option<TypeRef>,
 	is_class: bool,
-	pub flight: Flight,
+	pub flight: Phase,
 	statement_idx: usize,
 }
 
@@ -38,13 +38,7 @@ enum LookupResult {
 }
 
 impl TypeEnv {
-	pub fn new(
-		parent: Option<*const TypeEnv>,
-		return_type: Option<TypeRef>,
-		is_class: bool,
-		flight: Flight,
-		statement_idx: usize,
-	) -> Self {
+	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool, flight: Phase, statement_idx: usize) -> Self {
 		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
 		Self {
 			type_map: HashMap::new(),
@@ -117,7 +111,7 @@ impl TypeEnv {
 		Ok(self.lookup_ext(symbol, not_after_stmt_idx)?.0)
 	}
 
-	pub fn lookup_ext(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<(TypeRef, Flight), TypeError> {
+	pub fn lookup_ext(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<(TypeRef, Phase), TypeError> {
 		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
 
 		match lookup_result {

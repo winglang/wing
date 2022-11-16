@@ -101,6 +101,12 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   },
+  commands: [
+    {
+      command: "wing.updates.check",
+      title: "Check for Wing Updates",
+    },
+  ],
 };
 
 project.addFields({

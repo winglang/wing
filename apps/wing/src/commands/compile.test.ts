@@ -11,7 +11,7 @@ describe("compile command tests", () => {
   it("should be able to compile the SDK capture test", async () => {
     const sdkCaptureExample = resolve(
       __dirname,
-      "../../../../examples/simple/sdk_capture_test.w"
+      "../../../../examples/tests/valid/captures.w"
     );
     await compile(sdkCaptureExample, {
       outDir: process.cwd(),

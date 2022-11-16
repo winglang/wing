@@ -1,0 +1,25 @@
+---
+source: libs/wingc/src/lib.rs
+description: "../../examples/tests/invalid/variable_scoping.w"
+---
+[
+    Diagnostic {
+        message: "Unknown symbol \"x\"",
+        span: Some(
+            WingSpan {
+                start: Point {
+                    row: 5,
+                    column: 10,
+                },
+                end: Point {
+                    row: 5,
+                    column: 11,
+                },
+                start_byte: 54,
+                end_byte: 55,
+                file_id: "../../examples/tests/invalid/variable_scoping.w",
+            },
+        ),
+        level: Error,
+    },
+]

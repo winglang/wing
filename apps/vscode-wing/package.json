@@ -114,7 +114,13 @@
           "description": "PAT to check for and download new versions of this extension from the winglang repo. Leave empty to disable automatic updates.\nNOTE: PAT must have private repo permission."
         }
       }
-    }
+    },
+    "commands": [
+      {
+        "command": "wing.updates.check",
+        "title": "Check for Wing Updates"
+      }
+    ]
   },
   "overrides": {
     "@types/responselike": "1.0.0",

@@ -11,5 +11,12 @@ pub fn main() {
 	let source = &args[1];
 	let outdir = args.get(2).map(|s| s.as_str());
 
-	compile(source, outdir);
+	let results = compile(source, outdir);
+	if let Err(err) = results {
+		panic!(
+			"Compilation failed with {} errors\n{}",
+			err.len(),
+			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
+		);
+	}
 }
