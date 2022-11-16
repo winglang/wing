@@ -116,9 +116,7 @@ test.each(validWingFiles)(
       expect(npx_tfManifest).toMatchSnapshot("manifest.json");
       expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
 
-      await $`${yarnBin} init -y`;
-      await $`${yarnBin} add --no-lockfile @winglang/wing`;
-      await $`node_modules/.bin/wing compile ${path.join(
+      await $`../node_modules/.bin/wing compile ${path.join(
         validTestDir,
         wingFile
       )}`;
@@ -144,9 +142,7 @@ test.each(validWingFiles)(
         wingFile
       )}`;
 
-      await $`${yarnBin} init -y`;
-      await $`${yarnBin} add --no-lockfile @winglang/wing`;
-      await $`node_modules/.bin/wing compile --target sim ${path.join(
+      await $`../node_modules/.bin/wing compile --target sim ${path.join(
         validTestDir,
         wingFile
       )}`;
