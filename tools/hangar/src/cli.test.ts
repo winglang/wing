@@ -31,6 +31,7 @@ const validWingFiles = fs
 
 const shellEnv = {
   ...process.env,
+  npm_config__auth: "hunter2",
   npm_config_cache: npmCacheDir,
   npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
 };
