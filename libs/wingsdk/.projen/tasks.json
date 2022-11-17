@@ -297,7 +297,7 @@
       },
       "steps": [
         {
-          "builtin": "release/reset-version"
+          "exec": "npm version 0.0.0 --allow-same-version"
         }
       ]
     },
