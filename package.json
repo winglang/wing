@@ -101,6 +101,7 @@
     "vite": "^3.2.2",
     "vite-node": "*",
     "vite-plugin-electron": "^0.10.2",
+    "vite-plugin-webfont-dl": "*",
     "vitest": "^0.24.5",
     "webpack": "^4.46.0",
     "zod": "^3.19.1"

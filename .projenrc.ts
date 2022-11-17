@@ -61,6 +61,8 @@ const project = new TypeScriptProject({
     // Peer deps:
     "webpack",
     "require-from-string",
+    // Fonts
+    "vite-plugin-webfont-dl",
   ],
   // @ts-ignore
   minNodeVersion: "16.0.0",

@@ -3,11 +3,13 @@ import { copyFile, mkdir } from "node:fs/promises";
 import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import electron from "vite-plugin-electron";
+import webfontDownload from "vite-plugin-webfont-dl";
 
 import pkg from "./package.json";
 
 export default defineConfig({
   plugins: [
+    webfontDownload(),
     react(),
     electron([
       {

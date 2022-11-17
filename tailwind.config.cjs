@@ -1,4 +1,5 @@
 const colors = require("tailwindcss/colors");
+const defaultTheme = require("tailwindcss/defaultTheme");
 const flattenColorPalette = require("tailwindcss/lib/util/flattenColorPalette");
 const toColorValue = require("tailwindcss/lib/util/toColorValue");
 const plugin = require("tailwindcss/plugin");
@@ -8,6 +9,12 @@ module.exports = {
   darkMode: "class",
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
   theme: {
+    fontFamily: {
+      ...defaultTheme.fontFamily,
+      sans: ["Roboto", ...defaultTheme.fontFamily.sans],
+      mono: ["Roboto Mono", ...defaultTheme.fontFamily.mono],
+    },
+
     extend: {
       colors: {
         // We can specify the tone for the gray color.

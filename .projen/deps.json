@@ -286,6 +286,10 @@
       "type": "build"
     },
     {
+      "name": "vite-plugin-webfont-dl",
+      "type": "build"
+    },
+    {
       "name": "vitest",
       "type": "build"
     },
