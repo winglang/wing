@@ -9,7 +9,10 @@ import debug from "debug";
 import open = require("open");
 
 const PACKAGE_VERSION = require("../package.json").version as string;
-const log = debug("wing:cli");
+const failure = (reason: any) => {
+  console.error(reason);
+  process.exit(1);
+};
 
 async function main() {
   const program = new Command();
@@ -17,7 +20,7 @@ async function main() {
   program.name("wing");
   program.version(PACKAGE_VERSION);
 
-  await upgrade({ force: false }).catch(log);
+  await upgrade({ force: false }).catch(failure);
 
   program
     .command("run")
@@ -26,7 +29,7 @@ async function main() {
     .action(async (executable: string) => {
       executable = resolve(executable);
       debug("calling wing console protocol with:" + executable);
-      open("wing-console://" + executable).catch(log);
+      open("wing-console://" + executable).catch(failure);
     });
 
   program
@@ -53,7 +56,4 @@ async function main() {
   program.parse();
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+main().catch(failure);

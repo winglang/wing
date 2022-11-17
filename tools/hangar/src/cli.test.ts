@@ -142,15 +142,14 @@ test.each(validWingFiles)(
       const test_dir = path.join(tmpDir, `${wingFile}_sim`);
       await enterTestDir(test_dir);
 
-      await $`${npxBin} @winglang/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      const testFile = path.join(validTestDir, wingFile);
 
-      await $`../node_modules/.bin/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await $`${npxBin} @winglang/wing compile --target sim ${testFile}`;
+
+      await $`../node_modules/.bin/wing compile --target sim ${testFile}`;
+
+      const runOutput = await $`${npxBin} @winglang/wing run target/app.wx`;
+      console.log(runOutput.stdout);
 
       // TODO snapshot app.wx contents
     });
