@@ -23,11 +23,6 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir });
   
-  let x = "hi";
-  if (true) {
-    console.log(`${x}`);
-    let y = new R(this,"R");
-  }
   class R
   {
   constructor() {
@@ -40,6 +35,11 @@ constructor() {
   }
   method1() {
   }
+  }
+  let x = "hi";
+  if (true) {
+    console.log(`${x}`);
+    let y = new R(this,"R");
   }
 }
 }
