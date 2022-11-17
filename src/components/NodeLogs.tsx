@@ -23,12 +23,12 @@ const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
 export const NodeLogs = ({ logs }: NodeLogsProps) => {
   return (
     <div
-      className="grid grid-cols-3 gap-x-4 gap-y-2 text-sm"
+      className="grid grid-cols-3 gap-x-4 text-sm"
       style={{ gridTemplateColumns: "max-content max-content 1fr" }}
     >
       {logs.map((log) => (
         <>
-          <div className="text-slate-500 font-mono text-xs py-0.5">
+          <div className="flex items-center text-slate-500 font-mono text-xs">
             {dateTimeFormat.format(log.timestamp)}
           </div>
 
