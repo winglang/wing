@@ -71,6 +71,10 @@
       "type": "build"
     },
     {
+      "name": "eslint-plugin-sort-exports",
+      "type": "build"
+    },
+    {
       "name": "eslint",
       "version": "^8",
       "type": "build"
