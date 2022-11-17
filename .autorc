@@ -1,7 +1,18 @@
 {
   "plugins": [
-    ["conventional-commits", { "preset": "angular" }],
-    "git-tag"
+    [
+      "conventional-commits",
+      {
+        "preset": "angular"
+      }
+    ],
+    "git-tag",
+    [
+      "release",
+      {
+        "message": ":rocket: %TYPE was released in %VERSION :rocket:"
+      }
+    ]
   ],
   "owner": "winglang",
   "repo": "wing",
