@@ -6,7 +6,7 @@ import { join, resolve } from "path";
 
 import { Command } from "commander";
 import debug from "debug";
-import open from "open";
+import open = require("open");
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const log = debug("wing:cli");
