@@ -775,13 +775,13 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	pub fn type_check_scope(&mut self, scope: &'a mut Scope) {
+	pub fn type_check_scope(&mut self, scope: &mut Scope) {
 		let mut inner_scopes = Vec::new();
-		for (i, statement) in scope.statements.iter_mut().enumerate() {
-			inner_scopes.extend(self.type_check_statement(statement, scope.env.as_mut().unwrap(), i));
+		for statement in scope.statements.iter_mut() {
+			inner_scopes.extend(self.type_check_statement(statement, scope.env.as_mut().unwrap()));
 		}
 		for inner_scope in inner_scopes {
-			self.type_check_scope(inner_scope);
+			self.type_check_scope(unsafe { &mut *inner_scope });
 		}
 	}
 
@@ -832,26 +832,32 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, statement: &'a mut Stmt, env: &mut TypeEnv) -> Vec<&'a mut Scope> {
-		let mut inner_scopes = Vec::new();
-		match &mut statement.kind {
+	fn type_check_statement(&mut self, stmt: &mut Stmt, env: &mut TypeEnv) -> Vec<*mut Scope> {
+		// TODO: we return a list of unsafe pointers to the statement's inner scopes. We use
+		// unsafe because we can't return a mutable reference to the inner scopes since this method
+		// already uses references to the statement that contains the scopes. Using unsafe here just
+		// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
+		// to iterate over the inner scopes given the outer scope. Foe this we need to model our AST
+		// so all nodes implement some basic "tree" interface. For now this is good enough.
+		let mut inner_scopes: Vec<*mut Scope> = Vec::new();
+		match &mut stmt.kind {
 			StmtKind::VariableDef {
 				var_name,
 				initial_value,
 				type_,
 			} => {
-				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env, idx));
-				let inferred_type = self.type_check_exp(initial_value, env, idx).unwrap();
+				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env, stmt.idx));
+				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx).unwrap();
 				if let Some(explicit_type) = explicit_type {
 					self.validate_type(inferred_type, explicit_type, initial_value);
-					match env.define(var_name, explicit_type, StatementIdx::Index(idx)) {
+					match env.define(var_name, explicit_type, StatementIdx::Index(stmt.idx)) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
 						_ => {}
 					};
 				} else {
-					match env.define(var_name, inferred_type, StatementIdx::Index(idx)) {
+					match env.define(var_name, inferred_type, StatementIdx::Index(stmt.idx)) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -867,7 +873,7 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
-				let function_type = self.resolve_type(&AstType::FunctionSignature(func_def.signature.clone()), env, idx);
+				let function_type = self.resolve_type(&AstType::FunctionSignature(func_def.signature.clone()), env, stmt.idx);
 				let sig = function_type.as_function_sig().unwrap();
 
 				// Add this function to the env
@@ -879,7 +885,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create an environment for the function
-				let mut function_env = TypeEnv::new(Some(env), sig.return_type, false, func_def.signature.flight, idx);
+				let mut function_env = TypeEnv::new(Some(env), sig.return_type, false, func_def.signature.flight, stmt.idx);
 				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
 				func_def.statements.set_env(function_env);
 
@@ -891,9 +897,9 @@ impl<'a> TypeChecker<'a> {
 				statements,
 			} => {
 				// TODO: Expression must be iterable
-				let exp_type = self.type_check_exp(iterable, env, idx).unwrap();
+				let exp_type = self.type_check_exp(iterable, env, stmt.idx).unwrap();
 
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight, idx);
+				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx);
 				match scope_env.define(&iterator, exp_type, StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
@@ -902,30 +908,30 @@ impl<'a> TypeChecker<'a> {
 				};
 				statements.set_env(scope_env);
 
-				self.type_check_scope(statements);
+				inner_scopes.push(statements);
 			}
 			StmtKind::If {
 				condition,
 				statements,
 				else_statements,
 			} => {
-				let cond_type = self.type_check_exp(condition, env, idx).unwrap();
+				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, idx));
+				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
 				inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
-					else_scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, idx));
+					else_scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
 					inner_scopes.push(else_scope);
 				}
 			}
 			StmtKind::Expression(e) => {
-				self.type_check_exp(e, env);
+				self.type_check_exp(e, env, stmt.idx);
 			}
 			StmtKind::Assignment { variable, value } => {
-				let exp_type = self.type_check_exp(value, env).unwrap();
-				let var_type = self.resolve_reference(variable, env);
+				let exp_type = self.type_check_exp(value, env, stmt.idx).unwrap();
+				let var_type = self.resolve_reference(variable, env, stmt.idx);
 				self.validate_type(exp_type, var_type, value);
 			}
 			StmtKind::Use {
@@ -948,29 +954,29 @@ impl<'a> TypeChecker<'a> {
 							_ => {}
 						};
 					} else {
-						self.add_module_to_env(env, module_name, namespace_name, idx);
+						self.add_module_to_env(env, module_name, namespace_name, stmt.idx);
 					}
 				}
 			}
 			StmtKind::Scope(scope) => {
-				scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, idx));
-				self.type_check_scope(scope);
+				scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
 				if let Some(return_expression) = exp {
-					let return_type = self.type_check_exp(return_expression, env, idx).unwrap();
+					let return_type = self.type_check_exp(return_expression, env, stmt.idx).unwrap();
 					if let Some(expected_return_type) = env.return_type {
 						self.validate_type(return_type, expected_return_type, return_expression);
 					} else {
 						self.stmt_error(
-							statement,
+							stmt,
 							format!("Return statement outside of function cannot return a value."),
 						);
 					}
 				} else {
 					if let Some(expected_return_type) = env.return_type {
 						self.stmt_error(
-							statement,
+							stmt,
 							format!("Expected return statement to return type {}", expected_return_type),
 						);
 					}
@@ -997,7 +1003,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
-					let t = self.resolve_type(parent_type, env, idx);
+					let t = self.resolve_type(parent_type, env, stmt.idx);
 					if *is_resource {
 						if let &Type::Resource(ref class) = t.into() {
 							(Some(t), Some(&class.env as *const TypeEnv))
@@ -1017,7 +1023,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = TypeEnv::new(None, None, true, env_flight, idx);
+				let dummy_env = TypeEnv::new(None, None, true, env_flight, stmt.idx);
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -1038,11 +1044,11 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = TypeEnv::new(parent_class_env, None, true, env_flight, idx);
+				let mut class_env = TypeEnv::new(parent_class_env, None, true, env_flight, stmt.idx);
 
 				// Add members to the class env
 				for member in members.iter() {
-					let mut member_type = self.resolve_type(&member.member_type, env, idx);
+					let mut member_type = self.resolve_type(&member.member_type, env, stmt.idx);
 					// If the type is a class/resource then indicate it's an instance/object (and not the class/resource itself)
 					if member_type.as_class().is_some() {
 						member_type = self.types.add_type(Type::ClassInstance(member_type));
@@ -1069,7 +1075,7 @@ impl<'a> TypeChecker<'a> {
 						},
 					);
 
-					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, idx);
+					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(&method.name, method_type, StatementIdx::Top) {
 						Err(type_error) => {
 							self.type_error(&type_error);
@@ -1079,7 +1085,11 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Add the constructor to the class env
-				let constructor_type = self.resolve_type(&AstType::FunctionSignature(constructor.signature.clone()), env, idx);
+				let constructor_type = self.resolve_type(
+					&AstType::FunctionSignature(constructor.signature.clone()),
+					env,
+					stmt.idx,
+				);
 				match class_env.define(
 					&Symbol {
 						name: WING_CONSTRUCTOR_NAME.into(),
@@ -1116,11 +1126,11 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create constructor environment and prime it with args
-				let mut constructor_env = TypeEnv::new(Some(env), constructor_sig.return_type, false, env_flight, idx);
+				let mut constructor_env = TypeEnv::new(Some(env), constructor_sig.return_type, false, env_flight, stmt.idx);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 				constructor.statements.set_env(constructor_env);
 				// Check function scope
-				self.type_check_scope(&mut constructor.statements);
+				inner_scopes.push(&mut constructor.statements);
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 
@@ -1144,7 +1154,7 @@ impl<'a> TypeChecker<'a> {
 					};
 
 					// Create method environment and prime it with args
-					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false, method_sig.flight, idx);
+					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false, method_sig.flight, stmt.idx);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
@@ -1153,8 +1163,7 @@ impl<'a> TypeChecker<'a> {
 					actual_parameters.extend(method.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
 					method.statements.set_env(method_env);
-					// Check function scope
-					self.type_check_scope(&mut method.statements);
+					inner_scopes.push(&mut method.statements as *mut Scope);
 				}
 			}
 			StmtKind::Struct { name, extends, members } => {
@@ -1163,11 +1172,11 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = TypeEnv::new(None, None, true, env.flight, idx);
+				let mut struct_env = TypeEnv::new(None, None, true, env.flight, stmt.idx);
 
 				// Add members to the struct env
 				for member in members.iter() {
-					let member_type = self.resolve_type(&member.member_type, env, idx);
+					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
 					match struct_env.define(&member.name, member_type, StatementIdx::Top) {
 						Err(type_error) => {
 							self.type_error(&type_error);
@@ -1179,7 +1188,7 @@ impl<'a> TypeChecker<'a> {
 				// Add members from the structs parents
 				let extends_types = extends
 					.iter()
-					.map(|parent| match env.lookup(&parent, Some(idx)) {
+					.map(|parent| match env.lookup(&parent, Some(stmt.idx)) {
 						Ok(_type) => _type,
 						Err(type_error) => {
 							self.type_error(&type_error);

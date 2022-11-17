@@ -29,7 +29,7 @@ pub enum StatementIdx {
 // Possible results for a symbol lookup in the environment
 enum LookupResult {
 	// The type of the symbol and its flight phase
-	Found((TypeRef, Flight)),
+	Found((TypeRef, Phase)),
 	// The symbol was not found in the environment
 	NotFound,
 	// The symbol exists in the environment but it's not defined yet (based on the statement
@@ -38,7 +38,13 @@ enum LookupResult {
 }
 
 impl TypeEnv {
-	pub fn new(parent: Option<*const TypeEnv>, return_type: Option<TypeRef>, is_class: bool, flight: Phase, statement_idx: usize) -> Self {
+	pub fn new(
+		parent: Option<*const TypeEnv>,
+		return_type: Option<TypeRef>,
+		is_class: bool,
+		flight: Phase,
+		statement_idx: usize,
+	) -> Self {
 		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
 		Self {
 			type_map: HashMap::new(),

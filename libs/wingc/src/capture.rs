@@ -188,11 +188,11 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 				// }
 			}
 		},
-		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env)),
-		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env)),
+		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env, statement_idx)),
+		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx)),
 		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(lexp, env);
-			scan_captures_in_expression(rexp, env);
+			scan_captures_in_expression(lexp, env, statement_idx);
+			scan_captures_in_expression(rexp, env, statement_idx);
 		}
 		ExprKind::Literal(_) => {}
 		ExprKind::StructLiteral { fields, .. } => {
@@ -222,14 +222,14 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				var_name: _,
 				initial_value,
 				type_: _,
-			} => res.extend(scan_captures_in_expression(initial_value, env)),
+			} => res.extend(scan_captures_in_expression(initial_value, env, s.idx)),
 			StmtKind::FunctionDefinition(func_def) => res.extend(scan_captures_in_inflight_scope(&func_def.statements)),
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable,
 				statements,
 			} => {
-				res.extend(scan_captures_in_expression(iterable, env));
+				res.extend(scan_captures_in_expression(iterable, env, s.idx));
 				res.extend(scan_captures_in_inflight_scope(statements));
 			}
 			StmtKind::If {
@@ -237,17 +237,17 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				statements,
 				else_statements,
 			} => {
-				res.extend(scan_captures_in_expression(condition, env));
+				res.extend(scan_captures_in_expression(condition, env, s.idx));
 				res.extend(scan_captures_in_inflight_scope(statements));
 				if let Some(else_statements) = else_statements {
 					res.extend(scan_captures_in_inflight_scope(else_statements));
 				}
 			}
-			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env)),
-			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env)),
+			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env, s.idx)),
+			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env, s.idx)),
 			StmtKind::Return(e) => {
 				if let Some(e) = e {
-					res.extend(scan_captures_in_expression(e, env, i));
+					res.extend(scan_captures_in_expression(e, env, s.idx));
 				}
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s)),
