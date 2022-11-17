@@ -33,6 +33,11 @@ const validWingFiles = fs
 
 const shellEnv = {
   ...process.env,
+  npm_config_registry: registryUrl,
+  "npm_config_@winglang:registry": registryUrl,
+  npm_config_audit: "false",
+  npm_config_progress: "false",
+  npm_config_yes: "true",
   npm_config_cache: npmCacheDir,
   npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
 };
@@ -54,15 +59,15 @@ beforeAll(async () => {
     await $`mkdir -p ${registryDir}`;
 
     registryServer.listen(registryPort, () => {});
-    await $`${npmBin} publish --registry=${registryUrl} ${targetWingTGZ}`;
-    await $`${npmBin} publish --registry=${registryUrl} ${targetWingSDKTGZ}`;
+    await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingTGZ}`;
+    await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingSDKTGZ}`;
 
     // ensure version works before bothering with the rest of the tests
     $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
     let npxOutput = await $`${npxBin} @winglang/wing --version`;
     await $`${yarnBin} init -y`;
-    await $`${yarnBin} add --no-lockfile @winglang/wing`;
+    await $`${yarnBin} add @winglang/wing --no-lockfile`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
 
     expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
