@@ -1,4 +1,5 @@
-use std::{fs, path::PathBuf};
+use itertools::Itertools;
+use std::{cmp::Ordering, fs, path::PathBuf};
 
 use sha2::{Digest, Sha256};
 
@@ -46,7 +47,13 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 	let mut js = vec![];
 	let mut imports = vec![];
 
-	for statement in scope.statements.iter() {
+	for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
+		// Put type definitions first so JS won't complain of unknown types
+		(StmtKind::Class { .. }, StmtKind::Class { .. }) => Ordering::Equal,
+		(StmtKind::Class { .. }, _) => Ordering::Less,
+		(_, StmtKind::Class { .. }) => Ordering::Greater,
+		_ => Ordering::Equal,
+	}) {
 		let line = jsify_statement(statement, &out_dir);
 		if line.is_empty() {
 			continue;

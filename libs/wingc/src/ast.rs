@@ -109,6 +109,7 @@ pub struct Constructor {
 pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
+	pub idx: usize,
 }
 
 #[derive(Debug)]
