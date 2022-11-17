@@ -2,11 +2,11 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { ISimulatorResource } from "../sim";
-import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
+import { ISimulatorResource } from "../target-sim";
+import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { log, mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
-const { DefaultSimulatorFactory } = require("../sim/factory.sim");
+const { DefaultSimulatorFactory } = require("../target-sim/factory.sim");
 
 /**
  * Props for `Simulator`.
@@ -296,7 +296,7 @@ function findResource(tree: any, path: string): BaseResourceSchema {
 }
 
 /**
- * A factory that can turn resource descriptions into resource simulations.
+ * A factory that can turn resource descriptions into (inflight) resource simulations.
  */
 export interface ISimulatorFactory {
   /**

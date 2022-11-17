@@ -21,6 +21,12 @@
     "test": [
       "{projectRoot}/test/**/*"
     ],
+    "examples": [
+      "{workspaceRoot}/examples/**/*.w"
+    ],
+    "examples-tests": [
+      "{workspaceRoot}/examples/tests/**/*.w"
+    ],
     "rust-conf": [
       "{projectRoot}/Cargo.toml",
       "{workspaceRoot}/Cargo.toml",
@@ -53,7 +59,8 @@
           "build-wasm",
           "copy",
           "lint",
-          "test"
+          "test",
+          "package"
         ]
       }
     }

@@ -142,7 +142,7 @@ with Wing applications on the local machine.
 2. You will notice that `app.wx` was created, run the Wing Console:
 
     ```sh
-    wing run app.wx
+    wing run target/app.wx
     ```
 
     The **Wing Console** will start and in the main view you'll see two resources: a **Queue** and a **Function**. 
@@ -386,6 +386,9 @@ resources to help you get started:
 
 We all hang out at the [Wing Slack] workspace. Come as you are, say hi, ask
 questions, help friends, geek out!
+
+Alternatively, post any question you have in [Wing Discussions](https://github.com/winglang/wing/discussions)
+
 
 ## Contributing
 
