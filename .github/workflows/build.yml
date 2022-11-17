@@ -254,13 +254,21 @@ jobs:
           registry-url: https://npm.pkg.github.com
 
       - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: |
+          npm config set @winglang:registry https://npm.pkg.github.com
+          npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
         with:
           working-directory: tools/hangar
           install-command: npm ci --ignore-scripts
+      
+      # The tests get confused with these global settings
+      - name: Logout of Private NPM registry
+        run: |
+          npm config delete @winglang:registry
+          npm config delete //npm.pkg.github.com/:_authToken
 
       - name: Run E2E Tests
         env:
