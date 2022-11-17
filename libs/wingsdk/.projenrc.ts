@@ -195,10 +195,13 @@ project.addTask("api-check:watch", {
 });
 project.postCompileTask.prependSpawn(apiCheck);
 
-const bumpTask = project.tasks.tryFind("bump")!;
-bumpTask.reset(
-  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
-);
+project.tasks
+  .tryFind("bump")!
+  .reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
+
+project.tasks
+  .tryFind("unbump")!
+  .reset("npm version 0.0.0 --allow-same-version");
 
 project.preCompileTask.exec("patch-package");
 
