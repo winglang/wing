@@ -36,6 +36,7 @@ const project = new cdk.JsiiProject({
     "@types/fs-extra",
     "@types/tar",
     "aws-sdk-client-mock",
+    "eslint-plugin-sort-exports",
     "patch-package",
   ],
   prettier: true,
@@ -46,6 +47,14 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
+});
+
+project.eslint?.addPlugins("sort-exports");
+project.eslint?.addOverride({
+  files: ["src/**/index.ts"],
+  rules: {
+    "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
+  },
 });
 
 // fix typing issues with "tar" dependency

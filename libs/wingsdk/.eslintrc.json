@@ -7,7 +7,8 @@
   "plugins": [
     "@typescript-eslint",
     "import",
-    "prettier"
+    "prettier",
+    "sort-exports"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -162,6 +163,19 @@
       "rules": {
         "@typescript-eslint/no-require-imports": "off",
         "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": [
+        "src/**/index.ts"
+      ],
+      "rules": {
+        "sort-exports/sort-exports": [
+          "error",
+          {
+            "sortDir": "asc"
+          }
+        ]
       }
     }
   ]
