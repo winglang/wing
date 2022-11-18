@@ -3134,7 +3134,7 @@ const baseResourceSchema: sim.BaseResourceSchema = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.id">id</a></code> | <code>string</code> | The resource ID. |
+| <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.path">path</a></code> | <code>string</code> | The resource path from the app's construct tree. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.type">type</a></code> | <code>string</code> | The type of the resource. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.attrs">attrs</a></code> | <code>@winglang/wingsdk.sim.BaseResourceAttributes</code> | The resource-specific attributes that are set after the resource is created. |
 | <code><a href="#@winglang/wingsdk.sim.BaseResourceSchema.property.inbound">inbound</a></code> | <code>string[]</code> | IDs of resources that this resource is called, triggered, or referenced by. |
@@ -3143,15 +3143,15 @@ const baseResourceSchema: sim.BaseResourceSchema = { ... }
 
 ---
 
-##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.BaseResourceSchema.property.id"></a>
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.sim.BaseResourceSchema.property.path"></a>
 
 ```typescript
-public readonly id: string;
+public readonly path: string;
 ```
 
 - *Type:* string
 
-The resource ID.
+The resource path from the app's construct tree.
 
 ---
 
@@ -4907,10 +4907,10 @@ new testing.Simulator(props: SimulatorProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getAttributes">getAttributes</a></code> | Obtain a resource's attributes. |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.getConfig">getConfig</a></code> | Obtain a resource's configuration, including its id, type, props, attrs. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getConfig">getConfig</a></code> | Obtain a resource's configuration, including its type, props, and attrs. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.getResourceById">getResourceById</a></code> | Get a simulated resource instance. |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource ids. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getResource">getResource</a></code> | Get a simulated resource instance. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.listTraces">listTraces</a></code> | Get a list of all traces added during the most recent simulation run. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.onTrace">onTrace</a></code> | Register a subscriber that will be notified when a trace is emitted by the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
@@ -4922,15 +4922,15 @@ new testing.Simulator(props: SimulatorProps)
 ##### `getAttributes` <a name="getAttributes" id="@winglang/wingsdk.testing.Simulator.getAttributes"></a>
 
 ```typescript
-public getAttributes(id: string): {[ key: string ]: any}
+public getAttributes(path: string): {[ key: string ]: any}
 ```
 
 Obtain a resource's attributes.
 
-This is data that gets resolved when the
-during the resource's in-simulator creation.
+This is resource configuration that gets
+resolved when the simulator is creating the resource.
 
-###### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.testing.Simulator.getAttributes.parameter.id"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getAttributes.parameter.path"></a>
 
 - *Type:* string
 
@@ -4939,12 +4939,12 @@ during the resource's in-simulator creation.
 ##### `getConfig` <a name="getConfig" id="@winglang/wingsdk.testing.Simulator.getConfig"></a>
 
 ```typescript
-public getConfig(id: string): BaseResourceSchema
+public getConfig(path: string): BaseResourceSchema
 ```
 
-Obtain a resource's configuration, including its id, type, props, attrs.
+Obtain a resource's configuration, including its type, props, and attrs.
 
-###### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.testing.Simulator.getConfig.parameter.id"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getConfig.parameter.path"></a>
 
 - *Type:* string
 
@@ -4953,29 +4953,29 @@ Obtain a resource's configuration, including its id, type, props, attrs.
 ##### `getProps` <a name="getProps" id="@winglang/wingsdk.testing.Simulator.getProps"></a>
 
 ```typescript
-public getProps(id: string): {[ key: string ]: any}
+public getProps(path: string): {[ key: string ]: any}
 ```
 
 Obtain a resource's props.
 
 This is resource configuration that is resolved
-at synth time.
+when the app is synthesized (it is included in the .wx file).
 
-###### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.testing.Simulator.getProps.parameter.id"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getProps.parameter.path"></a>
 
 - *Type:* string
 
 ---
 
-##### `getResourceById` <a name="getResourceById" id="@winglang/wingsdk.testing.Simulator.getResourceById"></a>
+##### `getResource` <a name="getResource" id="@winglang/wingsdk.testing.Simulator.getResource"></a>
 
 ```typescript
-public getResourceById(id: string): any
+public getResource(path: string): any
 ```
 
 Get a simulated resource instance.
 
-###### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.testing.Simulator.getResourceById.parameter.id"></a>
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getResource.parameter.path"></a>
 
 - *Type:* string
 
@@ -4987,7 +4987,7 @@ Get a simulated resource instance.
 public listResources(): string[]
 ```
 
-Get a list of all resource ids.
+Get a list of all resource paths.
 
 ##### `listTraces` <a name="listTraces" id="@winglang/wingsdk.testing.Simulator.listTraces"></a>
 
@@ -5368,35 +5368,6 @@ The tree node.
 
 ---
 
-### IResourceResolver <a name="IResourceResolver" id="@winglang/wingsdk.testing.IResourceResolver"></a>
-
-- *Implemented By:* @winglang/wingsdk.testing.IResourceResolver
-
-A resolver that can be used to look up other resources in the tree.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.IResourceResolver.lookup">lookup</a></code> | Lookup a resource by its path. |
-
----
-
-##### `lookup` <a name="lookup" id="@winglang/wingsdk.testing.IResourceResolver.lookup"></a>
-
-```typescript
-public lookup(resourceId: string): BaseResourceSchema
-```
-
-Lookup a resource by its path.
-
-###### `resourceId`<sup>Required</sup> <a name="resourceId" id="@winglang/wingsdk.testing.IResourceResolver.lookup.parameter.resourceId"></a>
-
-- *Type:* string
-
----
-
-
 ### ISimulatorContext <a name="ISimulatorContext" id="@winglang/wingsdk.testing.ISimulatorContext"></a>
 
 - *Implemented By:* @winglang/wingsdk.testing.ISimulatorContext
@@ -5469,7 +5440,7 @@ run, and the trace will be populated with the result's success or failure.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The directory where all assets from `.wx` file have been stored. |
-| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.resourceId">resourceId</a></code> | <code>string</code> | The id of the resource that is being simulated. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.resourcePath">resourcePath</a></code> | <code>string</code> | The path of the resource that is being simulated. |
 
 ---
 
@@ -5485,15 +5456,15 @@ The directory where all assets from `.wx` file have been stored.
 
 ---
 
-##### `resourceId`<sup>Required</sup> <a name="resourceId" id="@winglang/wingsdk.testing.ISimulatorContext.property.resourceId"></a>
+##### `resourcePath`<sup>Required</sup> <a name="resourcePath" id="@winglang/wingsdk.testing.ISimulatorContext.property.resourcePath"></a>
 
 ```typescript
-public readonly resourceId: string;
+public readonly resourcePath: string;
 ```
 
 - *Type:* string
 
-The id of the resource that is being simulated.
+The path of the resource that is being simulated.
 
 ---
 

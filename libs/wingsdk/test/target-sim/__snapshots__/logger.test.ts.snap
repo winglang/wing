@@ -5,26 +5,24 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/WingLogger",
       "inbound": Array [
         "main/my_function",
       ],
       "outbound": Array [],
+      "path": "main/WingLogger",
       "props": Object {},
       "type": "wingsdk.cloud.Logger",
     },
     Object {
       "attrs": Object {},
-      "id": "main/my_function",
       "inbound": Array [],
       "outbound": Array [
         "main/WingLogger",
       ],
+      "path": "main/my_function",
       "props": Object {
         "environmentVariables": Object {
           "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
         },
         "sourceCodeFile": "assets/my_function/index.js",
         "sourceCodeLanguage": "javascript",

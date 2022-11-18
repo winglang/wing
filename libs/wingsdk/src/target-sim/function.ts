@@ -53,9 +53,6 @@ export class Function extends cloud.FunctionBase implements IResource {
     for (const [name, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(name, value);
     }
-
-    this.addEnvironment(ENV_WING_SIM_INFLIGHT_RESOURCE_PATH, this.node.path);
-    this.addEnvironment(ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE, FUNCTION_TYPE);
   }
 
   public addEnvironment(name: string, value: string) {
@@ -75,7 +72,7 @@ export class Function extends cloud.FunctionBase implements IResource {
   /** @internal */
   public _toResourceSchema(): FunctionSchema {
     return {
-      id: this.node.path,
+      path: this.node.path,
       type: FUNCTION_TYPE,
       props: {
         sourceCodeFile: this.code.path,

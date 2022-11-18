@@ -45,8 +45,6 @@ test("create a function", async () => {
     sourceCodeLanguage: "javascript",
     environmentVariables: {
       ENV_VAR1: "true",
-      WING_SIM_INFLIGHT_RESOURCE_PATH: "main/my_function",
-      WING_SIM_INFLIGHT_RESOURCE_TYPE: "wingsdk.cloud.Function",
     },
   });
   await s.stop();

@@ -5,9 +5,9 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_queue",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_queue",
       "props": Object {
         "initialMessages": Array [],
         "subscribers": Array [],
@@ -25,16 +25,13 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_queue/OnMessage-236ff3d72ad0ae46",
       "inbound": Array [
         "main/my_queue",
       ],
       "outbound": Array [],
+      "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
       "props": Object {
-        "environmentVariables": Object {
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_queue/OnMessage-236ff3d72ad0ae46",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-        },
+        "environmentVariables": Object {},
         "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
         "sourceCodeLanguage": "javascript",
       },
@@ -42,11 +39,11 @@ Object {
     },
     Object {
       "attrs": Object {},
-      "id": "main/my_queue",
       "inbound": Array [],
       "outbound": Array [
         "main/my_queue/OnMessage-236ff3d72ad0ae46",
       ],
+      "path": "main/my_queue",
       "props": Object {
         "initialMessages": Array [],
         "subscribers": Array [
@@ -69,16 +66,13 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_queue/OnMessage-236ff3d72ad0ae46",
       "inbound": Array [
         "main/my_queue",
       ],
       "outbound": Array [],
+      "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
       "props": Object {
-        "environmentVariables": Object {
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_queue/OnMessage-236ff3d72ad0ae46",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-        },
+        "environmentVariables": Object {},
         "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
         "sourceCodeLanguage": "javascript",
       },
@@ -86,11 +80,11 @@ Object {
     },
     Object {
       "attrs": Object {},
-      "id": "main/my_queue",
       "inbound": Array [],
       "outbound": Array [
         "main/my_queue/OnMessage-236ff3d72ad0ae46",
       ],
+      "path": "main/my_queue",
       "props": Object {
         "initialMessages": Array [
           "A",
@@ -120,16 +114,13 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_queue/OnMessage-236ff3d72ad0ae46",
       "inbound": Array [
         "main/my_queue",
       ],
       "outbound": Array [],
+      "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
       "props": Object {
-        "environmentVariables": Object {
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_queue/OnMessage-236ff3d72ad0ae46",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-        },
+        "environmentVariables": Object {},
         "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
         "sourceCodeLanguage": "javascript",
       },
@@ -137,11 +128,11 @@ Object {
     },
     Object {
       "attrs": Object {},
-      "id": "main/my_queue",
       "inbound": Array [],
       "outbound": Array [
         "main/my_queue/OnMessage-236ff3d72ad0ae46",
       ],
+      "path": "main/my_queue",
       "props": Object {
         "initialMessages": Array [],
         "subscribers": Array [

@@ -8,8 +8,8 @@ export interface WingSimulatorSchema {
 
 /** Schema for individual resources */
 export interface BaseResourceSchema {
-  /** The resource ID. */
-  readonly id: string;
+  /** The resource path from the app's construct tree. */
+  readonly path: string;
   /** The type of the resource. */
   readonly type: string;
   /** The resource-specific properties needed to create this resource. */

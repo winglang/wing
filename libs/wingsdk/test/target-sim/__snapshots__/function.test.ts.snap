@@ -5,14 +5,12 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_function",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_function",
       "props": Object {
         "environmentVariables": Object {
           "ENV_VAR1": "true",
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
         },
         "sourceCodeFile": "assets/my_function/index.js",
         "sourceCodeLanguage": "javascript",
@@ -29,14 +27,11 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_function",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_function",
       "props": Object {
-        "environmentVariables": Object {
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-        },
+        "environmentVariables": Object {},
         "sourceCodeFile": "assets/my_function/index.js",
         "sourceCodeLanguage": "javascript",
       },
@@ -52,14 +47,11 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_function",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_function",
       "props": Object {
-        "environmentVariables": Object {
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-        },
+        "environmentVariables": Object {},
         "sourceCodeFile": "assets/my_function/index.js",
         "sourceCodeLanguage": "javascript",
       },
@@ -75,14 +67,12 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_function",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_function",
       "props": Object {
         "environmentVariables": Object {
           "PIG_LATIN": "true",
-          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
         },
         "sourceCodeFile": "assets/my_function/index.js",
         "sourceCodeLanguage": "javascript",

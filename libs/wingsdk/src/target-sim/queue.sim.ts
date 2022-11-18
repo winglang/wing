@@ -65,7 +65,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
               messages
             )}, subscriber=${subscriber.functionHandle}).`,
           },
-          sourcePath: this.context.resourceId,
+          sourcePath: this.context.resourcePath,
           sourceType: QUEUE_TYPE,
           timestamp: new Date().toISOString(),
         });
@@ -75,7 +75,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
             data: {
               message: `Subscriber error - returning ${messages.length} messages to queue.`,
             },
-            sourcePath: this.context.resourceId,
+            sourcePath: this.context.resourcePath,
             sourceType: QUEUE_TYPE,
             type: TraceType.RESOURCE,
             timestamp: new Date().toISOString(),

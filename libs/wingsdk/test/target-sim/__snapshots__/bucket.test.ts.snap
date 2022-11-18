@@ -5,9 +5,9 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_bucket",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_bucket",
       "props": Object {
         "public": false,
       },
@@ -23,9 +23,9 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_bucket",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_bucket",
       "props": Object {
         "public": false,
       },
@@ -41,9 +41,9 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_bucket",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_bucket",
       "props": Object {
         "public": false,
       },
@@ -59,9 +59,9 @@ Object {
   "resources": Array [
     Object {
       "attrs": Object {},
-      "id": "main/my_bucket",
       "inbound": Array [],
       "outbound": Array [],
+      "path": "main/my_bucket",
       "props": Object {
         "public": false,
       },
