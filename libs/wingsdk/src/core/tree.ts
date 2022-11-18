@@ -8,7 +8,7 @@ const TREE_FILE_PATH = "tree.json";
 /**
  * A node in the construct tree.
  */
-export interface ConstructTreeNode {
+interface ConstructTreeNode {
   readonly id: string;
   readonly path: string;
   readonly children?: { [key: string]: ConstructTreeNode };
@@ -29,7 +29,14 @@ const JSII_RUNTIME_SYMBOL = Symbol.for("jsii.rtti");
  * Source information on a construct (class fqn and version)
  */
 export interface ConstructInfo {
+  /**
+   * Fully qualified class name.
+   */
   readonly fqn: string;
+
+  /**
+   * Version of the module.
+   */
   readonly version: string;
 }
 

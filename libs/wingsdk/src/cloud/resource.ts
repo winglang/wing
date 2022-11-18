@@ -1,10 +1,22 @@
 import { Construct, IConstruct } from "constructs";
-import { CaptureMetadata, Code, ICapturable } from "../core";
+import {
+  CaptureMetadata,
+  Code,
+  ICapturable,
+  IInspectable,
+  TreeInspector,
+} from "../core";
 
 /**
  * Shared behavior between all Wing SDK resources.
  */
-export abstract class Resource extends Construct implements ICapturable {
+export abstract class Resource
+  extends Construct
+  implements ICapturable, IInspectable
+{
+  private readonly _inbound = new Array<string>();
+  private readonly _outbound = new Array<string>();
+
   /**
    * Whether a resource is stateful, i.e. it stores information that is not
    * defined by your application.
@@ -14,6 +26,7 @@ export abstract class Resource extends Construct implements ICapturable {
    * with a fresh copy without any consequences.
    */
   public abstract readonly stateful: boolean;
+
   /**
    * @internal
    */
@@ -21,4 +34,23 @@ export abstract class Resource extends Construct implements ICapturable {
     captureScope: IConstruct,
     metadata: CaptureMetadata
   ): Code;
+
+  /**
+   * @internal
+   */
+  public _addInbound(...resourcePaths: string[]) {
+    this._inbound.push(...resourcePaths);
+  }
+
+  /**
+   * @internal
+   */
+  public _addOutbound(...resourcePaths: string[]) {
+    this._inbound.push(...resourcePaths);
+  }
+
+  public inspect(inspector: TreeInspector): void {
+    inspector.addAttribute("wing:resource:inbound", this._inbound);
+    inspector.addAttribute("wing:resource:outbound", this._outbound);
+  }
 }

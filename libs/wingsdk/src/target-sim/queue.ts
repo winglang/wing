@@ -2,7 +2,8 @@ import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
-import { IResource } from "./resource";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { captureSimulatorResource } from "./util";
 
@@ -11,9 +12,7 @@ import { captureSimulatorResource } from "./util";
  *
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.QueueBase implements IResource {
-  private readonly inbound = new Array<string>();
-  private readonly outbound = new Array<string>();
+export class Queue extends cloud.QueueBase implements ISimulatorResource {
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
@@ -64,15 +63,14 @@ export class Queue extends cloud.QueueBase implements IResource {
       batchSize: props.batchSize ?? 1,
     });
 
-    this.outbound.push(fn.node.path);
+    this._addOutbound(fn.node.path);
     (fn as Function)._addInbound(this.node.path);
 
     return fn;
   }
 
-  /** @internal */
-  public _toResourceSchema(): QueueSchema {
-    return {
+  public toSimulatorSchema(): BaseResourceSchema {
+    const schema: QueueSchema = {
       path: this.node.path,
       type: cloud.QUEUE_TYPE,
       props: {
@@ -81,14 +79,8 @@ export class Queue extends cloud.QueueBase implements IResource {
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,
-      inbound: this.inbound,
-      outbound: this.outbound,
     };
-  }
-
-  /** @internal */
-  public _addInbound(...resources: string[]) {
-    this.inbound.push(...resources);
+    return schema;
   }
 
   /** @internal */

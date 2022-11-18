@@ -2,7 +2,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { ISimulatorResource } from "../target-sim";
+import { ISimulatable } from "../target-sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
@@ -122,7 +122,7 @@ export interface ISimulatorContext {
   /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
-  findInstance(handle: string): ISimulatorResource;
+  findInstance(handle: string): ISimulatable;
 
   /**
    * Add a trace. Traces are breadcrumbs of information about resource
@@ -461,15 +461,11 @@ export interface ISimulatorFactory {
   /**
    * Resolve the parameters needed for creating a specific resource simulation.
    */
-  resolve(
-    type: string,
-    props: any,
-    context: ISimulatorContext
-  ): ISimulatorResource;
+  resolve(type: string, props: any, context: ISimulatorContext): ISimulatable;
 }
 
 class HandleManager {
-  private readonly handles: Map<string, ISimulatorResource>;
+  private readonly handles: Map<string, ISimulatable>;
   private nextHandle: number;
 
   public constructor() {
@@ -477,13 +473,13 @@ class HandleManager {
     this.nextHandle = 0;
   }
 
-  public allocate(resource: ISimulatorResource): string {
+  public allocate(resource: ISimulatable): string {
     const handle = `sim-${this.nextHandle++}`;
     this.handles.set(handle, resource);
     return handle;
   }
 
-  public find(handle: string): ISimulatorResource {
+  public find(handle: string): ISimulatable {
     const instance = this.handles.get(handle);
     if (!instance) {
       throw new Error(`No resource found with handle "${handle}".`);
@@ -491,7 +487,7 @@ class HandleManager {
     return instance;
   }
 
-  public deallocate(handle: string): ISimulatorResource {
+  public deallocate(handle: string): ISimulatable {
     const instance = this.handles.get(handle);
     if (!instance) {
       throw new Error(`No resource found with handle "${handle}".`);

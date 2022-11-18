@@ -4,14 +4,14 @@ import { Bucket } from "./bucket.sim";
 import { Function } from "./function.sim";
 import { Logger } from "./logger.sim";
 import { Queue } from "./queue.sim";
-import { ISimulatorResource } from "./resource";
+import { ISimulatable } from "./resource";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   public resolve(
     type: string,
     props: any,
     context: ISimulatorContext
-  ): ISimulatorResource {
+  ): ISimulatable {
     switch (type) {
       case cloud.BUCKET_TYPE:
         return new Bucket(props, context);

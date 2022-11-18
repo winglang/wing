@@ -6,8 +6,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [],
         "path": "main/my_function",
         "props": Object {
           "environmentVariables": Object {
@@ -25,6 +23,10 @@ Object {
     "tree": Object {
       "children": Object {
         "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+          },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {
@@ -61,8 +63,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [],
         "path": "main/my_function",
         "props": Object {
           "environmentVariables": Object {},
@@ -78,6 +78,10 @@ Object {
     "tree": Object {
       "children": Object {
         "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+          },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {
@@ -114,8 +118,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [],
         "path": "main/my_function",
         "props": Object {
           "environmentVariables": Object {},
@@ -131,6 +133,10 @@ Object {
     "tree": Object {
       "children": Object {
         "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+          },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {
@@ -167,8 +173,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [],
         "path": "main/my_function",
         "props": Object {
           "environmentVariables": Object {
@@ -186,6 +190,10 @@ Object {
     "tree": Object {
       "children": Object {
         "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+          },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {

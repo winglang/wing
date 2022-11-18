@@ -6,23 +6,12 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [
-          "main/HelloWorld/Function",
-          "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
-        ],
-        "outbound": Array [],
         "path": "main/WingLogger",
         "props": Object {},
         "type": "wingsdk.cloud.Logger",
       },
       Object {
         "attrs": Object {},
-        "inbound": Array [
-          "main/HelloWorld/Queue",
-        ],
-        "outbound": Array [
-          "main/WingLogger",
-        ],
         "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
         "props": Object {
           "environmentVariables": Object {
@@ -35,12 +24,6 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "inbound": Array [
-          "main/HelloWorld/Function",
-        ],
-        "outbound": Array [
-          "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
-        ],
         "path": "main/HelloWorld/Queue",
         "props": Object {
           "initialMessages": Array [],
@@ -56,11 +39,6 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [
-          "main/WingLogger",
-          "main/HelloWorld/Queue",
-        ],
         "path": "main/HelloWorld/Function",
         "props": Object {
           "environmentVariables": Object {
@@ -81,6 +59,13 @@ Object {
         "HelloWorld": Object {
           "children": Object {
             "Function": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [
+                  "main/WingLogger",
+                  "main/HelloWorld/Queue",
+                ],
+                "wing:resource:outbound": Array [],
+              },
               "children": Object {
                 "Code": Object {
                   "constructInfo": Object {
@@ -99,8 +84,22 @@ Object {
               "path": "main/HelloWorld/Function",
             },
             "Queue": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [
+                  "main/HelloWorld/Function",
+                  "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+                ],
+                "wing:resource:outbound": Array [],
+              },
               "children": Object {
                 "OnMessage-004546ee82d97e73": Object {
+                  "attributes": Object {
+                    "wing:resource:inbound": Array [
+                      "main/WingLogger",
+                      "main/HelloWorld/Queue",
+                    ],
+                    "wing:resource:outbound": Array [],
+                  },
                   "children": Object {
                     "Code": Object {
                       "constructInfo": Object {
@@ -135,6 +134,13 @@ Object {
           "path": "main/HelloWorld",
         },
         "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [
+              "main/HelloWorld/Function",
+              "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+            ],
+            "wing:resource:outbound": Array [],
+          },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",

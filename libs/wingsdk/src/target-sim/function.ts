@@ -3,7 +3,8 @@ import * as cloud from "../cloud";
 import { FunctionProps, FUNCTION_TYPE } from "../cloud";
 import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
 import { TextFile } from "../fs";
-import { IResource } from "./resource";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
 import { captureSimulatorResource } from "./util";
 
@@ -17,9 +18,7 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase implements IResource {
-  private readonly inbound = new Array<string>();
-  private readonly outbound = new Array<string>();
+export class Function extends cloud.FunctionBase implements ISimulatorResource {
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
@@ -37,7 +36,7 @@ export class Function extends cloud.FunctionBase implements IResource {
 
     for (const capture of Object.values(inflight.captures)) {
       if (capture.resource !== undefined) {
-        this.outbound.push(capture.resource.node.path);
+        this._addOutbound(capture.resource.node.path);
       }
     }
 
@@ -60,18 +59,12 @@ export class Function extends cloud.FunctionBase implements IResource {
   }
 
   /** @internal */
-  public _addInbound(...resources: string[]) {
-    this.inbound.push(...resources);
-  }
-
-  /** @internal */
   public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     return captureSimulatorResource("function", this, captureScope);
   }
 
-  /** @internal */
-  public _toResourceSchema(): FunctionSchema {
-    return {
+  public toSimulatorSchema(): BaseResourceSchema {
+    const schema: FunctionSchema = {
       path: this.node.path,
       type: FUNCTION_TYPE,
       props: {
@@ -80,8 +73,7 @@ export class Function extends cloud.FunctionBase implements IResource {
         environmentVariables: this.env,
       },
       attrs: {} as any,
-      inbound: this.inbound,
-      outbound: this.outbound,
     };
+    return schema;
   }
 }

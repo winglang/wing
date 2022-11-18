@@ -6,8 +6,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [],
         "path": "main/my_queue",
         "props": Object {
           "initialMessages": Array [],
@@ -23,6 +21,10 @@ Object {
     "tree": Object {
       "children": Object {
         "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+          },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
@@ -49,10 +51,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [
-          "main/my_queue",
-        ],
-        "outbound": Array [],
         "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
@@ -63,10 +61,6 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [
-          "main/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "path": "main/my_queue",
         "props": Object {
           "initialMessages": Array [],
@@ -87,8 +81,20 @@ Object {
     "tree": Object {
       "children": Object {
         "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [
+              "main/my_queue/OnMessage-236ff3d72ad0ae46",
+            ],
+            "wing:resource:outbound": Array [],
+          },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [
+                  "main/my_queue",
+                ],
+                "wing:resource:outbound": Array [],
+              },
               "children": Object {
                 "Code": Object {
                   "constructInfo": Object {
@@ -133,10 +139,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [
-          "main/my_queue",
-        ],
-        "outbound": Array [],
         "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
@@ -147,10 +149,6 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [
-          "main/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "path": "main/my_queue",
         "props": Object {
           "initialMessages": Array [
@@ -178,8 +176,20 @@ Object {
     "tree": Object {
       "children": Object {
         "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [
+              "main/my_queue/OnMessage-236ff3d72ad0ae46",
+            ],
+            "wing:resource:outbound": Array [],
+          },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [
+                  "main/my_queue",
+                ],
+                "wing:resource:outbound": Array [],
+              },
               "children": Object {
                 "Code": Object {
                   "constructInfo": Object {
@@ -224,10 +234,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "inbound": Array [
-          "main/my_queue",
-        ],
-        "outbound": Array [],
         "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
@@ -238,10 +244,6 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "inbound": Array [],
-        "outbound": Array [
-          "main/my_queue/OnMessage-236ff3d72ad0ae46",
-        ],
         "path": "main/my_queue",
         "props": Object {
           "initialMessages": Array [],
@@ -262,8 +264,20 @@ Object {
     "tree": Object {
       "children": Object {
         "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [
+              "main/my_queue/OnMessage-236ff3d72ad0ae46",
+            ],
+            "wing:resource:outbound": Array [],
+          },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [
+                  "main/my_queue",
+                ],
+                "wing:resource:outbound": Array [],
+              },
               "children": Object {
                 "Code": Object {
                   "constructInfo": Object {

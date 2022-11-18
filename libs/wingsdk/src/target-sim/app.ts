@@ -7,9 +7,12 @@ import { SDK_VERSION } from "../constants";
 import { DependencyGraph, Files, IApp, synthesizeTree } from "../core";
 import { mkdtemp } from "../util";
 import { PolyconFactory } from "./factory";
-import { isResource } from "./resource";
+import { isSimResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 
+/**
+ * Path of the simulator configuration file in every .wx tarball.
+ */
 const SIMULATOR_FILE_PATH = "simulator.json";
 
 /**
@@ -89,8 +92,8 @@ export class App extends Construct implements IApp {
   private synthSimulatorFile(outdir: string) {
     const resources = new DependencyGraph(this.node)
       .topology()
-      .filter(isResource)
-      .map((res) => res._toResourceSchema());
+      .filter(isSimResource)
+      .map((res) => res.toSimulatorSchema());
 
     const contents: WingSimulatorSchema = {
       resources,
