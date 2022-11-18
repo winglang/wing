@@ -26,6 +26,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {
@@ -81,6 +82,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {
@@ -136,6 +138,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {
@@ -193,6 +196,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {

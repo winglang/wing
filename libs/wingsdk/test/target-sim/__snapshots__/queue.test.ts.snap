@@ -24,6 +24,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": true,
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
@@ -86,6 +87,7 @@ Object {
               "main/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": true,
           },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
@@ -94,6 +96,7 @@ Object {
                   "main/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
+                "wing:resource:stateful": false,
               },
               "children": Object {
                 "Code": Object {
@@ -181,6 +184,7 @@ Object {
               "main/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": true,
           },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
@@ -189,6 +193,7 @@ Object {
                   "main/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
+                "wing:resource:stateful": false,
               },
               "children": Object {
                 "Code": Object {
@@ -269,6 +274,7 @@ Object {
               "main/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": true,
           },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
@@ -277,6 +283,7 @@ Object {
                   "main/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
+                "wing:resource:stateful": false,
               },
               "children": Object {
                 "Code": Object {

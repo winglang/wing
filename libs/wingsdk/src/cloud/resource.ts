@@ -53,6 +53,7 @@ export abstract class Resource
    * @internal
    */
   public _inspect(inspector: TreeInspector): void {
+    inspector.addAttribute("wing:resource:stateful", this.stateful);
     inspector.addAttribute("wing:resource:inbound", this._inbound);
     inspector.addAttribute("wing:resource:outbound", this._outbound);
   }

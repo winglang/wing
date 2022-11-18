@@ -3442,51 +3442,6 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
-### ConstructInfo <a name="ConstructInfo" id="@winglang/wingsdk.core.ConstructInfo"></a>
-
-Source information on a construct (class fqn and version).
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructInfo.Initializer"></a>
-
-```typescript
-import { core } from '@winglang/wingsdk'
-
-const constructInfo: core.ConstructInfo = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.fqn">fqn</a></code> | <code>string</code> | Fully qualified class name. |
-| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.version">version</a></code> | <code>string</code> | Version of the module. |
-
----
-
-##### `fqn`<sup>Required</sup> <a name="fqn" id="@winglang/wingsdk.core.ConstructInfo.property.fqn"></a>
-
-```typescript
-public readonly fqn: string;
-```
-
-- *Type:* string
-
-Fully qualified class name.
-
----
-
-##### `version`<sup>Required</sup> <a name="version" id="@winglang/wingsdk.core.ConstructInfo.property.version"></a>
-
-```typescript
-public readonly version: string;
-```
-
-- *Type:* string
-
-Version of the module.
-
----
-
 ### FilesProps <a name="FilesProps" id="@winglang/wingsdk.core.FilesProps"></a>
 
 Props for `Files`.
@@ -5195,9 +5150,6 @@ public addAttribute(key: string, value: any): void
 ```
 
 Adds attribute to bag.
-
-Keys should be added by convention to prevent conflicts
-i.e. L1 constructs will contain attributes with keys prefixed with aws:cdk:cloudformation
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.core.TreeInspector.addAttribute.parameter.key"></a>
 

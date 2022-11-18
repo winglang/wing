@@ -65,6 +65,7 @@ Object {
                   "main/HelloWorld/Queue",
                 ],
                 "wing:resource:outbound": Array [],
+                "wing:resource:stateful": false,
               },
               "children": Object {
                 "Code": Object {
@@ -90,6 +91,7 @@ Object {
                   "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
                 ],
                 "wing:resource:outbound": Array [],
+                "wing:resource:stateful": true,
               },
               "children": Object {
                 "OnMessage-004546ee82d97e73": Object {
@@ -99,6 +101,7 @@ Object {
                       "main/HelloWorld/Queue",
                     ],
                     "wing:resource:outbound": Array [],
+                    "wing:resource:stateful": false,
                   },
                   "children": Object {
                     "Code": Object {
@@ -140,6 +143,7 @@ Object {
               "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
             ],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": true,
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",

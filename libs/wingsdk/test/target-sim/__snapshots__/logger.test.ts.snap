@@ -34,6 +34,7 @@ Object {
               "main/my_function",
             ],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": true,
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
@@ -48,6 +49,7 @@ Object {
               "main/WingLogger",
             ],
             "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {

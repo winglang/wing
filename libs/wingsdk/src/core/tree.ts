@@ -28,7 +28,7 @@ const JSII_RUNTIME_SYMBOL = Symbol.for("jsii.rtti");
 /**
  * Source information on a construct (class fqn and version)
  */
-export interface ConstructInfo {
+interface ConstructInfo {
   /**
    * Fully qualified class name.
    */
@@ -40,7 +40,7 @@ export interface ConstructInfo {
   readonly version: string;
 }
 
-export function constructInfoFromConstruct(
+function constructInfoFromConstruct(
   construct: IConstruct
 ): ConstructInfo | undefined {
   const jsiiRuntimeInfo =
@@ -114,8 +114,7 @@ export class TreeInspector {
   public readonly attributes: { [key: string]: any } = {};
 
   /**
-   * Adds attribute to bag. Keys should be added by convention to prevent conflicts
-   * i.e. L1 constructs will contain attributes with keys prefixed with aws:cdk:cloudformation
+   * Adds attribute to bag.
    *
    * @param key - key for metadata
    * @param value - value of metadata.
@@ -127,7 +126,6 @@ export class TreeInspector {
 
 /**
  * Interface for examining a construct and exposing metadata.
- *
  */
 export interface IInspectable {
   /**
