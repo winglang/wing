@@ -92,15 +92,15 @@ pub fn scan_captures(ast_root: &Scope) {
 	}
 }
 
-fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) -> Vec<Capture> {
+fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, statement_idx: usize) -> Vec<Capture> {
 	let mut res = vec![];
 	if let Reference::NestedIdentifier { object, property } = reference {
-		res.extend(scan_captures_in_expression(&object, env));
+		res.extend(scan_captures_in_expression(&object, env, statement_idx));
 
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
 		if let &Type::ResourceObject(resource) = object.evaluated_type.borrow().unwrap().into() {
 			let resource = resource.as_resource().unwrap();
-			let (prop_type, _flight) = match resource.env.lookup_ext(property) {
+			let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
 				Ok(_type) => _type,
 				Err(type_error) => {
 					panic!("Type error: {}", type_error);
@@ -120,12 +120,12 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv) -
 
 	// TODO: named args
 	for arg in args.pos_args.iter() {
-		res.extend(scan_captures_in_expression(&arg, env));
+		res.extend(scan_captures_in_expression(&arg, env, statement_idx));
 	}
 	res
 }
 
-fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
+fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) -> Vec<Capture> {
 	let mut res = vec![];
 	match &exp.kind {
 		ExprKind::New {
@@ -136,13 +136,13 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 		} => {
 			// TODO: named args
 			for e in arg_list.pos_args.iter() {
-				res.extend(scan_captures_in_expression(e, env));
+				res.extend(scan_captures_in_expression(e, env, statement_idx));
 			}
 		}
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
-				let (t, f) = match env.lookup_ext(&symbol) {
+				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
 					Ok(_type) => _type,
 					Err(type_error) => {
 						panic!("Type error: {}", type_error);
@@ -171,7 +171,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				}
 			}
 			Reference::NestedIdentifier { object, property: _ } => {
-				res.extend(scan_captures_in_expression(object, env));
+				res.extend(scan_captures_in_expression(object, env, statement_idx));
 
 				// If the expression evaluates to a resource we should check if we need to capture the property as well
 				// TODO: do we really need this? I think we capture `object` above recursively and therefore don't need special handling of `property`.
@@ -188,21 +188,21 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv) -> Vec<Capture> {
 				// }
 			}
 		},
-		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env)),
-		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env)),
+		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env, statement_idx)),
+		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx)),
 		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(lexp, env);
-			scan_captures_in_expression(rexp, env);
+			scan_captures_in_expression(lexp, env, statement_idx);
+			scan_captures_in_expression(rexp, env, statement_idx);
 		}
 		ExprKind::Literal(_) => {}
 		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {
-				res.extend(scan_captures_in_expression(&v, env));
+				res.extend(scan_captures_in_expression(&v, env, statement_idx));
 			}
 		}
 		ExprKind::MapLiteral { fields, .. } => {
 			for v in fields.values() {
-				res.extend(scan_captures_in_expression(&v, env));
+				res.extend(scan_captures_in_expression(&v, env, statement_idx));
 			}
 		}
 	}
@@ -222,14 +222,14 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				var_name: _,
 				initial_value,
 				type_: _,
-			} => res.extend(scan_captures_in_expression(initial_value, env)),
+			} => res.extend(scan_captures_in_expression(initial_value, env, s.idx)),
 			StmtKind::FunctionDefinition(func_def) => res.extend(scan_captures_in_inflight_scope(&func_def.statements)),
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable,
 				statements,
 			} => {
-				res.extend(scan_captures_in_expression(iterable, env));
+				res.extend(scan_captures_in_expression(iterable, env, s.idx));
 				res.extend(scan_captures_in_inflight_scope(statements));
 			}
 			StmtKind::If {
@@ -237,17 +237,17 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				statements,
 				else_statements,
 			} => {
-				res.extend(scan_captures_in_expression(condition, env));
+				res.extend(scan_captures_in_expression(condition, env, s.idx));
 				res.extend(scan_captures_in_inflight_scope(statements));
 				if let Some(else_statements) = else_statements {
 					res.extend(scan_captures_in_inflight_scope(else_statements));
 				}
 			}
-			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env)),
-			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env)),
+			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env, s.idx)),
+			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env, s.idx)),
 			StmtKind::Return(e) => {
 				if let Some(e) = e {
-					res.extend(scan_captures_in_expression(e, env));
+					res.extend(scan_captures_in_expression(e, env, s.idx));
 				}
 			}
 			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s)),

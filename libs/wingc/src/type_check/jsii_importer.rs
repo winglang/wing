@@ -3,7 +3,7 @@ use crate::{
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
-	type_check::{Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
+	type_check::{type_env::StatementIdx, Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -40,6 +40,7 @@ pub struct JsiiImporter<'a> {
 	pub namespace_env: &'a mut TypeEnv,
 	pub namespace_name: String,
 	pub wing_types: &'a mut Types,
+	pub import_statement_idx: usize,
 }
 
 impl<'a> JsiiImporter<'a> {
@@ -85,7 +86,7 @@ impl<'a> JsiiImporter<'a> {
 	fn lookup_or_create_type(&mut self, type_fqn: &String) -> TypeRef {
 		let type_name = &self.fqn_to_type_name(type_fqn);
 		// Check if this type is already define in this module's namespace
-		if let Some(t) = self.namespace_env.try_lookup(type_name) {
+		if let Some(t) = self.namespace_env.try_lookup(type_name, None) {
 			return t;
 		}
 		// Define new type and return it
@@ -156,7 +157,7 @@ impl<'a> JsiiImporter<'a> {
 			vec![]
 		};
 
-		let struct_env = TypeEnv::new(None, None, true, self.namespace_env.flight);
+		let struct_env = TypeEnv::new(None, None, true, self.namespace_env.flight, self.import_statement_idx);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
 		let wing_type = self.wing_types.add_type(Type::Struct(Struct {
 			name: new_type_symbol.clone(),
@@ -170,7 +171,9 @@ impl<'a> JsiiImporter<'a> {
 		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, struct_env);
 
 		debug!("Adding struct type {}", type_name.green());
-		self.namespace_env.define(&new_type_symbol, wing_type);
+		self
+			.namespace_env
+			.define(&new_type_symbol, wing_type, StatementIdx::Top);
 		Some(wing_type)
 	}
 
@@ -215,7 +218,11 @@ impl<'a> JsiiImporter<'a> {
 					return_type,
 					flight,
 				}));
-				class_env.define(&Self::jsii_name_to_symbol(&m.name, &m.location_in_module), method_sig);
+				class_env.define(
+					&Self::jsii_name_to_symbol(&m.name, &m.location_in_module),
+					method_sig,
+					StatementIdx::Top,
+				);
 			}
 		}
 		// Add properties to the class environment
@@ -228,6 +235,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env.define(
 					&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
 					self.type_ref_to_wing_type(&p.type_).unwrap(),
+					StatementIdx::Top,
 				);
 			}
 		}
@@ -275,7 +283,7 @@ impl<'a> JsiiImporter<'a> {
 				None
 			} else {
 				let base_class_name = self.fqn_to_type_name(base_class_fqn);
-				let base_class_type = if let Some(base_class_type) = self.namespace_env.try_lookup(&base_class_name) {
+				let base_class_type = if let Some(base_class_type) = self.namespace_env.try_lookup(&base_class_name, None) {
 					Some(base_class_type)
 				} else {
 					// If the base class isn't defined yet then define it first (recursive call)
@@ -314,7 +322,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = TypeEnv::new(None, None, true, self.namespace_env.flight);
+		let dummy_env = TypeEnv::new(None, None, true, self.namespace_env.flight, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -329,9 +337,9 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			Type::Class(class_spec)
 		});
-		self.namespace_env.define(&new_type_symbol, new_type);
+		self.namespace_env.define(&new_type_symbol, new_type, StatementIdx::Top);
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = TypeEnv::new(base_class_env, None, true, self.namespace_env.flight);
+		let mut class_env = TypeEnv::new(base_class_env, None, true, self.namespace_env.flight, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -361,6 +369,7 @@ impl<'a> JsiiImporter<'a> {
 			class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
 				method_sig,
+				StatementIdx::Top,
 			);
 		}
 

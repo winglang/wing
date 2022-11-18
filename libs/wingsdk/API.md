@@ -707,6 +707,122 @@ with a fresh copy without any consequences.
 ---
 
 
+### CdktfApp <a name="CdktfApp" id="@winglang/wingsdk.core.CdktfApp"></a>
+
+- *Implements:* @winglang/wingsdk.core.IApp
+
+An app that knows how to synthesize constructs into Terraform configuration using cdktf.
+
+No polycon factory or Terraform providers are included.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.CdktfApp.Initializer"></a>
+
+```typescript
+import { core } from '@winglang/wingsdk'
+
+new core.CdktfApp(props?: CdktfAppProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.CdktfAppProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.core.CdktfApp.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.core.CdktfAppProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.synth">synth</a></code> | Synthesize the app into Terraform configuration in a `cdktf.out` directory. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.core.CdktfApp.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `synth` <a name="synth" id="@winglang/wingsdk.core.CdktfApp.synth"></a>
+
+```typescript
+public synth(): string
+```
+
+Synthesize the app into Terraform configuration in a `cdktf.out` directory.
+
+This method eturn a cleaned snapshot of the resulting Terraform manifest
+for unit testing.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.core.CdktfApp.isConstruct"></a>
+
+```typescript
+import { core } from '@winglang/wingsdk'
+
+core.CdktfApp.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.core.CdktfApp.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.core.CdktfApp.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.core.CdktfApp.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+
+Directory where artifacts are synthesized to.
+
+---
+
+
 ### FileBase <a name="FileBase" id="@winglang/wingsdk.fs.FileBase"></a>
 
 Represents a file to be synthesized in the app's output directory.
@@ -2891,22 +3007,9 @@ const appProps: tfaws.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 | <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 | <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
-
----
-
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.tfaws.AppProps.property.customFactory"></a>
-
-```typescript
-public readonly customFactory: IPolyconFactory;
-```
-
-- *Type:* @winglang/polycons.IPolyconFactory
-- *Default:* use the default polycon factory included in the Wing SDK
-
-A custom factory to resolve polycons.
+| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 
 ---
 
@@ -2936,6 +3039,19 @@ The path to a state file which will track all synthesized files.
 
 If a
 statefile is not specified, we won't be able to remove extrenous files.
+
+---
+
+##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.tfaws.AppProps.property.customFactory"></a>
+
+```typescript
+public readonly customFactory: IPolyconFactory;
+```
+
+- *Type:* @winglang/polycons.IPolyconFactory
+- *Default:* use the default polycon factory included in the Wing SDK
+
+A custom factory to resolve polycons.
 
 ---
 
@@ -3205,6 +3321,56 @@ public readonly methods: string[];
 - *Type:* string[]
 
 Which methods are called on the captured resource.
+
+---
+
+### CdktfAppProps <a name="CdktfAppProps" id="@winglang/wingsdk.core.CdktfAppProps"></a>
+
+Props for `CdktfApp`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.CdktfAppProps.Initializer"></a>
+
+```typescript
+import { core } from '@winglang/wingsdk'
+
+const cdktfAppProps: core.CdktfAppProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.core.CdktfAppProps.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+- *Default:* current working directory
+
+Directory where artifacts are synthesized to.
+
+---
+
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.CdktfAppProps.property.stateFile"></a>
+
+```typescript
+public readonly stateFile: string;
+```
+
+- *Type:* string
+- *Default:* no state file
+
+The path to a state file which will track all synthesized files.
+
+If a
+statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
@@ -4922,7 +5088,7 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @winglang/wingsdk.sim.App, @winglang/wingsdk.tfaws.App, @winglang/wingsdk.core.IApp
+- *Implemented By:* @winglang/wingsdk.core.CdktfApp, @winglang/wingsdk.sim.App, @winglang/wingsdk.tfaws.App, @winglang/wingsdk.core.IApp
 
 A Wing application.
 

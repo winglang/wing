@@ -3,6 +3,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Symbol};
 use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
+use type_check::type_env::StatementIdx;
 use type_check::{FunctionSignature, Type};
 
 use crate::parser::Parser;
@@ -60,7 +61,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	scope.set_env(TypeEnv::new(None, None, false, Phase::Preflight));
+	scope.set_env(TypeEnv::new(None, None, false, Phase::Preflight, 0));
 
 	add_builtin(
 		"print",
@@ -91,7 +92,11 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 			file_id: "".into(),
 		},
 	};
-	scope.env.as_mut().unwrap().define(&sym, types.add_type(typ));
+	scope
+		.env
+		.as_mut()
+		.unwrap()
+		.define(&sym, types.add_type(typ), StatementIdx::Top);
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutput, Diagnostics> {

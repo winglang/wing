@@ -16,6 +16,7 @@ We've structured the handbook as an FAQ to make it easy to find the information 
   - [🎨 How do I design the API for a SDK resource?](#-how-do-i-design-the-api-for-a-sdk-resource)
   - [🏁 How do I add and run tests to the SDK?](#-how-do-i-add-and-run-tests-to-the-sdk)
   - [🖼️ How do I add an example?](#️-how-do-i-add-an-example)
+  - [🧪 How do I run E2E tests?](#-how-do-i-run-e2e-tests)
   - [🧬 What is an RFC?](#-what-is-an-rfc)
   - [🔬 What is the RFC process?](#-what-is-the-rfc-process)
   - [🐞 How do I submit a bug report?](#-how-do-i-submit-a-bug-report)
@@ -209,6 +210,24 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 * Commit your changes and push them to your fork.
 * Open a pull request. A Wing maintainer will review it as soon as possible!
 
+## 🧪 How do I run E2E tests?
+
+The [Hangar](./tools/hangar) project hosts our E2E tests. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
+
+Add a `.env` file to `tools/hangar` with the following:
+
+```env
+NPM_TOKEN=<GitHub PAT with access to @winglang packages>
+```
+
+This allows spun-up registry to pull down @winglang/polycons from the private github registry.
+
+To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
+
+```shell
+npx nx test
+```
+
 ## 🧬 What is an RFC?
 
 An RFC is short for "request for comments".
@@ -246,6 +265,7 @@ To help maintainers review them and get them merged in a speedy fashion, please 
 * [ ] Tests are added for all changes.
 * [ ] Any handwritten documentation in `docs/` or READMEs are updated where appropriate when features are being added or removed (API docs will be automatically generated for you!).
 * [ ] Your fork is in sync with the upstream repository.
+* [ ] All build checks on GitHub are passing.
 
 We also recommend you avoid force pushing or rebasing your branch after a pull request has been opened in order to make it easier to review.
 Your commit history doesn't need to be perfect, since it will get squashed into a single commit when the pull request is merged anyway.
