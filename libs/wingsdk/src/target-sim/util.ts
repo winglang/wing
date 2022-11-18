@@ -2,10 +2,11 @@ import { IConstruct } from "constructs";
 import { Resource } from "../cloud";
 import { NodeJsCode } from "../core";
 import { Function } from "./function";
+import { ISimulatorResource } from "./resource";
 
 export function captureSimulatorResource(
   type: string,
-  resource: Resource,
+  resource: Resource & ISimulatorResource,
   captureScope: IConstruct
 ) {
   if (!(captureScope instanceof Function)) {
