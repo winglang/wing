@@ -108,20 +108,3 @@ export class App extends Construct implements IApp {
     );
   }
 }
-
-// /**
-//  * Whether to resource should be included in the simulator.json tree.
-//  * If a construct is not a resource or does not contain any resources, there is
-//  * nothing to simulate, so we can skip it.
-//  */
-// function shouldIncludeInTree(c: IConstruct): boolean {
-//   if (isResource(c)) {
-//     return true;
-//   }
-
-//   if (c.node.children.some((x) => shouldIncludeInTree(x))) {
-//     return true;
-//   }
-
-//   return false;
-// }
