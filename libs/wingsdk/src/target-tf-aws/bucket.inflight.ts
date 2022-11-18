@@ -7,7 +7,8 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { IBucketClient } from "./bucket";
+import { IBucketClient } from "../cloud";
+
 export class BucketClient implements IBucketClient {
   constructor(
     private readonly bucketName: string,

@@ -1,20 +1,24 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { LogEvent } from "../cloud";
-import { ISimulatorContext } from "../testing";
-import { ENV_WING_SIM_RUNTIME_FUNCTION_PATH } from "./function";
-import { ILoggerClient } from "./logger";
+import { ILoggerClient } from "../cloud";
+import { ISimulatorContext, TraceType } from "../testing";
+import {
+  ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
+  ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
+} from "./function";
 import { ISimulatorResource } from "./resource";
 import { LoggerSchema } from "./schema-resources";
 
 export class Logger implements ILoggerClient, ISimulatorResource {
   private readonly logsDir: string;
+  private readonly context: ISimulatorContext;
   public constructor(
     _props: LoggerSchema["props"],
-    _context: ISimulatorContext
+    context: ISimulatorContext
   ) {
     this.logsDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
+    this.context = context;
   }
 
   public async init(): Promise<void> {
@@ -32,48 +36,15 @@ export class Logger implements ILoggerClient, ISimulatorResource {
     }
 
     // TODO: add some other compute context mechanism?
-    const functionPath = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_PATH];
-    const logFile = `${this.logsDir}/events.log`;
-    const event = {
-      functionHandle: functionPath,
-      message,
-      timestamp: Date.now(),
-    };
+    const resourcePath = process.env[ENV_WING_SIM_INFLIGHT_RESOURCE_PATH]!;
+    const resourceType = process.env[ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE]!;
 
-    // operations need to be sync to avoid only partial writes to files
-    if (!fs.existsSync(logFile)) {
-      fs.writeFileSync(logFile, JSON.stringify(event) + "\n");
-    } else {
-      fs.appendFileSync(logFile, JSON.stringify(event) + "\n");
-    }
-  }
-
-  public async fetchLatestLogs(): Promise<LogEvent[]> {
-    const functionHandle = process.env[ENV_WING_SIM_RUNTIME_FUNCTION_PATH];
-    const logFile = `${this.logsDir}/events.log`;
-    if (fs.existsSync(logFile)) {
-      const contents = await fs.promises.readFile(logFile, "utf-8");
-      return contents
-        .split("\n")
-        .map((line) => {
-          if (line === "") {
-            return undefined;
-          }
-          const event = JSON.parse(line);
-
-          // only return logs for the current function
-          if (event.functionHandle !== functionHandle) {
-            return undefined;
-          }
-
-          return {
-            message: event.message,
-            timestamp: event.timestamp,
-          };
-        })
-        .filter((e) => e !== undefined) as LogEvent[];
-    } else {
-      return [];
-    }
+    return this.context.addTrace({
+      data: { message },
+      type: TraceType.LOG,
+      sourcePath: resourcePath,
+      sourceType: resourceType,
+      timestamp: new Date().toISOString(),
+    });
   }
 }

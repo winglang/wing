@@ -7,13 +7,15 @@ import { IResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 import { captureSimulatorResource } from "./util";
 
-export const ENV_WING_SIM_RUNTIME_FUNCTION_PATH =
-  "WING_SIM_RUNTIME_FUNCTION_PATH";
+export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
+  "WING_SIM_INFLIGHT_RESOURCE_PATH";
+export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
+  "WING_SIM_INFLIGHT_RESOURCE_TYPE";
 
 /**
  * Simulator implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.sim.IFunctionClient`
+ * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements IResource {
   private readonly inbound = new Array<string>();
@@ -52,7 +54,8 @@ export class Function extends cloud.FunctionBase implements IResource {
       this.addEnvironment(name, value);
     }
 
-    this.addEnvironment(ENV_WING_SIM_RUNTIME_FUNCTION_PATH, this.node.path);
+    this.addEnvironment(ENV_WING_SIM_INFLIGHT_RESOURCE_PATH, this.node.path);
+    this.addEnvironment(ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE, FUNCTION_TYPE);
   }
 
   public addEnvironment(name: string, value: string) {
@@ -83,16 +86,4 @@ export class Function extends cloud.FunctionBase implements IResource {
       outbound: this.outbound,
     };
   }
-}
-
-/**
- * Simulator implementation of inflight client for `cloud.Function`.
- */
-export interface IFunctionClient extends cloud.IFunctionClient {
-  /**
-   * Returns the number of times the function was invoked since its creation.
-   *
-   * @experimental
-   */
-  timesCalled(): Promise<number>;
 }

@@ -1,7 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
-import { IFunctionClient, ILoggerClient } from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { simulatorJsonOf } from "./util";
@@ -34,8 +33,9 @@ test("inflight uses a logger", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const fnClient = s.getResourceByPath("root/my_function") as IFunctionClient;
-  const loggerClient = s.getResourceByPath("root/WingLogger") as ILoggerClient;
+  const fnClient = s.getResourceByPath(
+    "root/my_function"
+  ) as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = "Alice";
@@ -44,18 +44,20 @@ test("inflight uses a logger", async () => {
   await sleep(200);
 
   // THEN
-  const logs = await loggerClient.fetchLatestLogs();
-  expect(logs).toEqual([
-    {
-      message: `Hello, ${PAYLOAD}`,
-      timestamp: expect.any(Number),
-    },
-    {
-      message: `Wahoo!`,
-      timestamp: expect.any(Number),
-    },
+  await s.stop();
+
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
+    "wingsdk.cloud.Function created.",
+    "Hello, Alice",
+    "Wahoo!",
+    'Invoke (payload="Alice").',
+    "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
   expect(simulatorJsonOf(simfile)).toMatchSnapshot();
-
-  await s.stop();
 });
+
+function listMessages(s: testing.Simulator) {
+  return s.listTraces().map((event) => event.data.message);
+}

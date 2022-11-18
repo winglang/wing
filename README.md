@@ -397,6 +397,11 @@ We welcome and celebrate contributions from the community! Please see our
 development environment, what we are working on, where we need help and other
 guidelines for contributing to the project.
 
+We are also actively tracking planned features in our roadmaps:
+
+- [Wing Language Roadmap](https://github.com/orgs/winglang/projects/1/views/1)
+- [Wing SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
+
 ## License
 
 This project is licensed under the [MIT License](./LICENSE.md).

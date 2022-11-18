@@ -2,16 +2,14 @@ import * as fs from "fs";
 import * as path_ from "path";
 import * as process from "process";
 import * as vm from "vm";
+import { IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { log } from "../util";
-import { IFunctionClient } from "./function";
 import { ISimulatorResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
 export class Function implements IFunctionClient, ISimulatorResource {
   private readonly filename: string;
   private readonly env: Record<string, string>;
-  private _timesCalled: number = 0;
   private readonly context: ISimulatorContext;
 
   constructor(props: FunctionSchema["props"], context: ISimulatorContext) {
@@ -32,8 +30,6 @@ export class Function implements IFunctionClient, ISimulatorResource {
   }
 
   public async invoke(payload: string): Promise<string> {
-    this._timesCalled += 1;
-
     const userCode = fs.readFileSync(this.filename, "utf8");
     const wrapper = [
       "const exports = {};",
@@ -42,7 +38,6 @@ export class Function implements IFunctionClient, ISimulatorResource {
       // The last statement is the value that will be returned by vm.runInThisContext
       `exports.handler(${JSON.stringify(payload)});`,
     ].join("\n");
-    log("running wrapped code: %s", wrapper);
 
     const context = vm.createContext({
       // TODO: include all NodeJS globals?
@@ -60,12 +55,12 @@ export class Function implements IFunctionClient, ISimulatorResource {
       // TODO: Object.freeze this?
       $simulator: this.context,
     });
-    const result = await vm.runInContext(wrapper, context);
 
-    return result;
-  }
-
-  public async timesCalled(): Promise<number> {
-    return Promise.resolve(this._timesCalled);
+    return this.context.withTrace({
+      message: `Invoke (payload="${payload}").`,
+      activity: async () => {
+        return vm.runInContext(wrapper, context);
+      },
+    });
   }
 }

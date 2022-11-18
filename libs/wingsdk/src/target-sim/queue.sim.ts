@@ -1,6 +1,5 @@
-import { ISimulatorContext } from "../testing/simulator";
-import { IFunctionClient } from "./function";
-import { IQueueClient } from "./queue";
+import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
+import { ISimulatorContext, TraceType } from "../testing/simulator";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 import { RandomArrayIterator } from "./util.sim";
@@ -12,7 +11,7 @@ export class Queue implements IQueueClient, ISimulatorResource {
   private readonly context: ISimulatorContext;
 
   constructor(props: QueueSchema["props"], context: ISimulatorContext) {
-    for (const sub of props.subscribers) {
+    for (const sub of props.subscribers ?? []) {
       this.subscribers.push({ ...sub });
     }
 
@@ -33,8 +32,13 @@ export class Queue implements IQueueClient, ISimulatorResource {
   }
 
   public async push(message: string): Promise<void> {
-    this.messages.push(message);
-    return;
+    // TODO: enforce maximum queue message size?
+    return this.context.withTrace({
+      message: `Push (message=${message}).`,
+      activity: async () => {
+        this.messages.push(message);
+      },
+    });
   }
 
   private processMessages() {
@@ -54,14 +58,29 @@ export class Queue implements IQueueClient, ISimulatorResource {
         if (!fnClient) {
           throw new Error("No function client found");
         }
-        const event = JSON.stringify({ messages });
-        void fnClient.invoke(event).catch((err) => {
+        this.context.addTrace({
+          type: TraceType.RESOURCE,
+          data: {
+            message: `Sending messages (messages=${JSON.stringify(
+              messages
+            )}, subscriber=${subscriber.functionHandle}).`,
+          },
+          sourcePath: this.context.resourcePath,
+          sourceType: QUEUE_TYPE,
+          timestamp: new Date().toISOString(),
+        });
+        void fnClient.invoke(JSON.stringify({ messages })).catch((_err) => {
           // If the function returns an error, put the message back on the queue
+          this.context.addTrace({
+            data: {
+              message: `Subscriber error - returning ${messages.length} messages to queue.`,
+            },
+            sourcePath: this.context.resourcePath,
+            sourceType: QUEUE_TYPE,
+            type: TraceType.RESOURCE,
+            timestamp: new Date().toISOString(),
+          });
           this.messages.push(...messages);
-          console.error(
-            `Error invoking queue subscriber "${subscriber.functionHandle}" with event "${event}":`,
-            err
-          );
         });
         processedMessages = true;
       }

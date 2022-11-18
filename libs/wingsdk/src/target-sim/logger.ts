@@ -8,7 +8,7 @@ import { captureSimulatorResource } from "./util";
 /**
  * Simulator implementation of `cloud.Logger`.
  *
- * @inflight `@winglang/wingsdk.sim.ILoggerClient`
+ * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase implements IResource {
   private readonly inbound = new Array<string>();
@@ -38,8 +38,3 @@ export class Logger extends cloud.LoggerBase implements IResource {
     return captureSimulatorResource("logger", this, captureScope);
   }
 }
-
-/**
- * Simulator implementation of inflight client for `cloud.Logger`.
- */
-export interface ILoggerClient extends cloud.ILoggerClient {}

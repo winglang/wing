@@ -1,6 +1,26 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`basic messages are requeued if the function fails 1`] = `
+exports[`create a queue 1`] = `
+Object {
+  "root": Object {
+    "children": Object {
+      "my_queue": Object {
+        "props": Object {
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    },
+    "type": "constructs.Construct",
+  },
+  "sdkVersion": "0.0.0",
+  "startOrder": Array [
+    "root/my_queue",
+  ],
+}
+`;
+
+exports[`messages are requeued if the function fails 1`] = `
 Object {
   "root": Object {
     "children": Object {
@@ -12,7 +32,8 @@ Object {
             ],
             "props": Object {
               "environmentVariables": Object {
-                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+                "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+                "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
               },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
@@ -48,7 +69,7 @@ Object {
 }
 `;
 
-exports[`basic queue with batch size of 5 1`] = `
+exports[`queue with one subscriber, batch size of 5 1`] = `
 Object {
   "root": Object {
     "children": Object {
@@ -60,7 +81,8 @@ Object {
             ],
             "props": Object {
               "environmentVariables": Object {
-                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+                "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+                "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
               },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",
@@ -104,7 +126,7 @@ Object {
 }
 `;
 
-exports[`basic queue with default batch size of 1 1`] = `
+exports[`queue with one subscriber, default batch size of 1 1`] = `
 Object {
   "root": Object {
     "children": Object {
@@ -116,7 +138,8 @@ Object {
             ],
             "props": Object {
               "environmentVariables": Object {
-                "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+                "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+                "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
               },
               "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
               "sourceCodeLanguage": "javascript",

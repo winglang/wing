@@ -20,7 +20,8 @@ Object {
         "props": Object {
           "environmentVariables": Object {
             "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-            "WING_SIM_RUNTIME_FUNCTION_PATH": "root/my_function",
+            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_function",
+            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
