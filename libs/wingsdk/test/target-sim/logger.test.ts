@@ -3,7 +3,7 @@ import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { directorySnapshot } from "../util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -53,7 +53,7 @@ test("inflight uses a logger", async () => {
     "wingsdk.cloud.Function deleted.",
     "wingsdk.cloud.Logger deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

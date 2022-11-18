@@ -2,72 +2,172 @@
 
 exports[`create a bucket 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_bucket",
-      "props": Object {
-        "public": false,
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_bucket",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
       },
-      "type": "wingsdk.cloud.Bucket",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_bucket": Object {
+          "attributes": Object {},
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_bucket",
+          "path": "main/my_bucket",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`get invalid object throws an error 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_bucket",
-      "props": Object {
-        "public": false,
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_bucket",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
       },
-      "type": "wingsdk.cloud.Bucket",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_bucket": Object {
+          "attributes": Object {},
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_bucket",
+          "path": "main/my_bucket",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`put and get objects from bucket 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_bucket",
-      "props": Object {
-        "public": false,
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_bucket",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
       },
-      "type": "wingsdk.cloud.Bucket",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_bucket": Object {
+          "attributes": Object {},
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_bucket",
+          "path": "main/my_bucket",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`put multiple objects and list all from bucket 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_bucket",
-      "props": Object {
-        "public": false,
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_bucket",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
       },
-      "type": "wingsdk.cloud.Bucket",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_bucket": Object {
+          "attributes": Object {},
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_bucket",
+          "path": "main/my_bucket",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;

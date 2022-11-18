@@ -3,7 +3,7 @@ import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { directorySnapshot } from "../util";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
@@ -49,7 +49,7 @@ test("create a function", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("invoke function succeeds", async () => {
@@ -80,7 +80,7 @@ test("invoke function succeeds", async () => {
     'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
@@ -119,7 +119,7 @@ test("invoke function with environment variables", async () => {
     'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("invoke function fails", async () => {
@@ -154,7 +154,7 @@ test("invoke function fails", async () => {
   expect(s.listTraces()[1].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

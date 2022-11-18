@@ -2,76 +2,163 @@
 
 exports[`pushing messages through a queue 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [
-        "main/HelloWorld/Function",
-        "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
-      ],
-      "outbound": Array [],
-      "path": "main/WingLogger",
-      "props": Object {},
-      "type": "wingsdk.cloud.Logger",
-    },
-    Object {
-      "attrs": Object {},
-      "inbound": Array [
-        "main/HelloWorld/Queue",
-      ],
-      "outbound": Array [
-        "main/WingLogger",
-      ],
-      "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
-      "props": Object {
-        "environmentVariables": Object {
-          "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
-        },
-        "sourceCodeFile": "assets/OnMessage-004546ee82d97e73/index.js",
-        "sourceCodeLanguage": "javascript",
-      },
-      "type": "wingsdk.cloud.Function",
-    },
-    Object {
-      "attrs": Object {},
-      "inbound": Array [
-        "main/HelloWorld/Function",
-      ],
-      "outbound": Array [
-        "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
-      ],
-      "path": "main/HelloWorld/Queue",
-      "props": Object {
-        "initialMessages": Array [],
-        "subscribers": Array [
-          Object {
-            "batchSize": 1,
-            "functionHandle": "\${main/HelloWorld/Queue/OnMessage-004546ee82d97e73#attrs.handle}",
-          },
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [
+          "main/HelloWorld/Function",
+          "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
         ],
-        "timeout": 30,
+        "outbound": Array [],
+        "path": "main/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
       },
-      "type": "wingsdk.cloud.Queue",
-    },
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [
-        "main/WingLogger",
-        "main/HelloWorld/Queue",
-      ],
-      "path": "main/HelloWorld/Function",
-      "props": Object {
-        "environmentVariables": Object {
-          "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
-          "QUEUE_HANDLE_27b52eeb": "\${main/HelloWorld/Queue#attrs.handle}",
+      Object {
+        "attrs": Object {},
+        "inbound": Array [
+          "main/HelloWorld/Queue",
+        ],
+        "outbound": Array [
+          "main/WingLogger",
+        ],
+        "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+        "props": Object {
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/OnMessage-004546ee82d97e73/index.js",
+          "sourceCodeLanguage": "javascript",
         },
-        "sourceCodeFile": "assets/Function/index.js",
-        "sourceCodeLanguage": "javascript",
+        "type": "wingsdk.cloud.Function",
       },
-      "type": "wingsdk.cloud.Function",
+      Object {
+        "attrs": Object {},
+        "inbound": Array [
+          "main/HelloWorld/Function",
+        ],
+        "outbound": Array [
+          "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+        ],
+        "path": "main/HelloWorld/Queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [
+            Object {
+              "batchSize": 1,
+              "functionHandle": "\${main/HelloWorld/Queue/OnMessage-004546ee82d97e73#attrs.handle}",
+            },
+          ],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [
+          "main/WingLogger",
+          "main/HelloWorld/Queue",
+        ],
+        "path": "main/HelloWorld/Function",
+        "props": Object {
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+            "QUEUE_HANDLE_27b52eeb": "\${main/HelloWorld/Queue#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "HelloWorld": Object {
+          "attributes": Object {},
+          "children": Object {
+            "Function": Object {
+              "attributes": Object {},
+              "children": Object {
+                "Code": Object {
+                  "attributes": Object {},
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "Code",
+                  "path": "main/HelloWorld/Function/Code",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Function",
+              "path": "main/HelloWorld/Function",
+            },
+            "Queue": Object {
+              "attributes": Object {},
+              "children": Object {
+                "OnMessage-004546ee82d97e73": Object {
+                  "attributes": Object {},
+                  "children": Object {
+                    "Code": Object {
+                      "attributes": Object {},
+                      "constructInfo": Object {
+                        "fqn": "constructs.Construct",
+                        "version": "10.0.25",
+                      },
+                      "id": "Code",
+                      "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73/Code",
+                    },
+                  },
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "OnMessage-004546ee82d97e73",
+                  "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Queue",
+              "path": "main/HelloWorld/Queue",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "HelloWorld",
+          "path": "main/HelloWorld",
+        },
+        "WingLogger": Object {
+          "attributes": Object {},
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "main/WingLogger",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;

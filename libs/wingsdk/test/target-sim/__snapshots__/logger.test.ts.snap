@@ -2,34 +2,79 @@
 
 exports[`inflight uses a logger 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [
-        "main/my_function",
-      ],
-      "outbound": Array [],
-      "path": "main/WingLogger",
-      "props": Object {},
-      "type": "wingsdk.cloud.Logger",
-    },
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [
-        "main/WingLogger",
-      ],
-      "path": "main/my_function",
-      "props": Object {
-        "environmentVariables": Object {
-          "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
-        },
-        "sourceCodeFile": "assets/my_function/index.js",
-        "sourceCodeLanguage": "javascript",
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [
+          "main/my_function",
+        ],
+        "outbound": Array [],
+        "path": "main/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
       },
-      "type": "wingsdk.cloud.Function",
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [
+          "main/WingLogger",
+        ],
+        "path": "main/my_function",
+        "props": Object {
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {},
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "main/WingLogger",
+        },
+        "my_function": Object {
+          "attributes": Object {},
+          "children": Object {
+            "Code": Object {
+              "attributes": Object {},
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "main/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "main/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;

@@ -5,7 +5,7 @@ import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { TraceType } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { directorySnapshot } from "../util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -90,5 +90,5 @@ test("pushing messages through a queue", async () => {
     },
   ]);
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });

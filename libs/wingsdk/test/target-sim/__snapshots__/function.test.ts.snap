@@ -2,84 +2,228 @@
 
 exports[`create a function 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_function",
-      "props": Object {
-        "environmentVariables": Object {
-          "ENV_VAR1": "true",
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_function",
+        "props": Object {
+          "environmentVariables": Object {
+            "ENV_VAR1": "true",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
         },
-        "sourceCodeFile": "assets/my_function/index.js",
-        "sourceCodeLanguage": "javascript",
+        "type": "wingsdk.cloud.Function",
       },
-      "type": "wingsdk.cloud.Function",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {},
+          "children": Object {
+            "Code": Object {
+              "attributes": Object {},
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "main/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "main/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`invoke function fails 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_function",
-      "props": Object {
-        "environmentVariables": Object {},
-        "sourceCodeFile": "assets/my_function/index.js",
-        "sourceCodeLanguage": "javascript",
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_function",
+        "props": Object {
+          "environmentVariables": Object {},
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
       },
-      "type": "wingsdk.cloud.Function",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {},
+          "children": Object {
+            "Code": Object {
+              "attributes": Object {},
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "main/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "main/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`invoke function succeeds 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_function",
-      "props": Object {
-        "environmentVariables": Object {},
-        "sourceCodeFile": "assets/my_function/index.js",
-        "sourceCodeLanguage": "javascript",
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_function",
+        "props": Object {
+          "environmentVariables": Object {},
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
       },
-      "type": "wingsdk.cloud.Function",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {},
+          "children": Object {
+            "Code": Object {
+              "attributes": Object {},
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "main/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "main/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`invoke function with environment variables 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_function",
-      "props": Object {
-        "environmentVariables": Object {
-          "PIG_LATIN": "true",
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_function",
+        "props": Object {
+          "environmentVariables": Object {
+            "PIG_LATIN": "true",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
         },
-        "sourceCodeFile": "assets/my_function/index.js",
-        "sourceCodeLanguage": "javascript",
+        "type": "wingsdk.cloud.Function",
       },
-      "type": "wingsdk.cloud.Function",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {},
+          "children": Object {
+            "Code": Object {
+              "attributes": Object {},
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "main/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "main/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;

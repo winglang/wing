@@ -2,7 +2,7 @@ import * as cloud from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { directorySnapshot } from "../util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -21,7 +21,7 @@ test("create a bucket", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {
@@ -52,7 +52,7 @@ test("put and get objects from bucket", async () => {
     "Get (key=greeting.txt).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("put multiple objects and list all from bucket", async () => {
@@ -90,7 +90,7 @@ test("put multiple objects and list all from bucket", async () => {
     "List (prefix=null).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
@@ -114,7 +114,7 @@ test("get invalid object throws an error", async () => {
     "wingsdk.cloud.Bucket deleted.",
   ]);
   expect(s.listTraces()[1].data.status).toEqual("failure");
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

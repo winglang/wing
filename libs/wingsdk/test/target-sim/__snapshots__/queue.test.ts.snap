@@ -2,150 +2,316 @@
 
 exports[`create a queue 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [],
-      "path": "main/my_queue",
-      "props": Object {
-        "initialMessages": Array [],
-        "subscribers": Array [],
-        "timeout": 30,
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [],
+        "path": "main/my_queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
       },
-      "type": "wingsdk.cloud.Queue",
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_queue": Object {
+          "attributes": Object {},
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue",
+          "path": "main/my_queue",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`messages are requeued if the function fails 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [
-        "main/my_queue",
-      ],
-      "outbound": Array [],
-      "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
-      "props": Object {
-        "environmentVariables": Object {},
-        "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
-        "sourceCodeLanguage": "javascript",
-      },
-      "type": "wingsdk.cloud.Function",
-    },
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [
-        "main/my_queue/OnMessage-236ff3d72ad0ae46",
-      ],
-      "path": "main/my_queue",
-      "props": Object {
-        "initialMessages": Array [],
-        "subscribers": Array [
-          Object {
-            "batchSize": 1,
-            "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
-          },
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [
+          "main/my_queue",
         ],
-        "timeout": 30,
+        "outbound": Array [],
+        "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        "props": Object {
+          "environmentVariables": Object {},
+          "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
       },
-      "type": "wingsdk.cloud.Queue",
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [
+          "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
+        "path": "main/my_queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [
+            Object {
+              "batchSize": 1,
+              "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+            },
+          ],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_queue": Object {
+          "attributes": Object {},
+          "children": Object {
+            "OnMessage-236ff3d72ad0ae46": Object {
+              "attributes": Object {},
+              "children": Object {
+                "Code": Object {
+                  "attributes": Object {},
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "Code",
+                  "path": "main/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "OnMessage-236ff3d72ad0ae46",
+              "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue",
+          "path": "main/my_queue",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [
-        "main/my_queue",
-      ],
-      "outbound": Array [],
-      "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
-      "props": Object {
-        "environmentVariables": Object {},
-        "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
-        "sourceCodeLanguage": "javascript",
-      },
-      "type": "wingsdk.cloud.Function",
-    },
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [
-        "main/my_queue/OnMessage-236ff3d72ad0ae46",
-      ],
-      "path": "main/my_queue",
-      "props": Object {
-        "initialMessages": Array [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E",
-          "F",
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [
+          "main/my_queue",
         ],
-        "subscribers": Array [
-          Object {
-            "batchSize": 5,
-            "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+        "outbound": Array [],
+        "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        "props": Object {
+          "environmentVariables": Object {},
+          "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [
+          "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
+        "path": "main/my_queue",
+        "props": Object {
+          "initialMessages": Array [
+            "A",
+            "B",
+            "C",
+            "D",
+            "E",
+            "F",
+          ],
+          "subscribers": Array [
+            Object {
+              "batchSize": 5,
+              "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+            },
+          ],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_queue": Object {
+          "attributes": Object {},
+          "children": Object {
+            "OnMessage-236ff3d72ad0ae46": Object {
+              "attributes": Object {},
+              "children": Object {
+                "Code": Object {
+                  "attributes": Object {},
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "Code",
+                  "path": "main/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "OnMessage-236ff3d72ad0ae46",
+              "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+            },
           },
-        ],
-        "timeout": 30,
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue",
+          "path": "main/my_queue",
+        },
       },
-      "type": "wingsdk.cloud.Queue",
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 Object {
-  "resources": Array [
-    Object {
-      "attrs": Object {},
-      "inbound": Array [
-        "main/my_queue",
-      ],
-      "outbound": Array [],
-      "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
-      "props": Object {
-        "environmentVariables": Object {},
-        "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
-        "sourceCodeLanguage": "javascript",
-      },
-      "type": "wingsdk.cloud.Function",
-    },
-    Object {
-      "attrs": Object {},
-      "inbound": Array [],
-      "outbound": Array [
-        "main/my_queue/OnMessage-236ff3d72ad0ae46",
-      ],
-      "path": "main/my_queue",
-      "props": Object {
-        "initialMessages": Array [],
-        "subscribers": Array [
-          Object {
-            "batchSize": 1,
-            "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
-          },
+  "main.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "inbound": Array [
+          "main/my_queue",
         ],
-        "timeout": 30,
+        "outbound": Array [],
+        "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        "props": Object {
+          "environmentVariables": Object {},
+          "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
       },
-      "type": "wingsdk.cloud.Queue",
+      Object {
+        "attrs": Object {},
+        "inbound": Array [],
+        "outbound": Array [
+          "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        ],
+        "path": "main/my_queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [
+            Object {
+              "batchSize": 1,
+              "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+            },
+          ],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "attributes": Object {},
+      "children": Object {
+        "my_queue": Object {
+          "attributes": Object {},
+          "children": Object {
+            "OnMessage-236ff3d72ad0ae46": Object {
+              "attributes": Object {},
+              "children": Object {
+                "Code": Object {
+                  "attributes": Object {},
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "Code",
+                  "path": "main/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "OnMessage-236ff3d72ad0ae46",
+              "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue",
+          "path": "main/my_queue",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "main",
+      "path": "main",
     },
-  ],
-  "sdkVersion": "0.0.0",
+    "version": "tree-0.1",
+  },
 }
 `;

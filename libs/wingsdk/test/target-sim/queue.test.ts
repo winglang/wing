@@ -3,7 +3,7 @@ import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { directorySnapshot } from "../util";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -35,7 +35,7 @@ test("create a queue", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("queue with one subscriber, default batch size of 1", async () => {
@@ -76,7 +76,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("queue with one subscriber, batch size of 5", async () => {
@@ -111,7 +111,7 @@ test("queue with one subscriber, batch size of 5", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 test("messages are requeued if the function fails", async () => {
@@ -150,7 +150,7 @@ test("messages are requeued if the function fails", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {
