@@ -2,11 +2,11 @@
 
 exports[`create a bucket 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_bucket",
+        "path": "app/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -29,15 +29,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "main/my_bucket",
+          "path": "app/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },
@@ -46,11 +46,11 @@ Object {
 
 exports[`get invalid object throws an error 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_bucket",
+        "path": "app/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -73,15 +73,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "main/my_bucket",
+          "path": "app/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },
@@ -90,11 +90,11 @@ Object {
 
 exports[`put and get objects from bucket 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_bucket",
+        "path": "app/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -117,15 +117,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "main/my_bucket",
+          "path": "app/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },
@@ -134,11 +134,11 @@ Object {
 
 exports[`put multiple objects and list all from bucket 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_bucket",
+        "path": "app/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -161,15 +161,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "main/my_bucket",
+          "path": "app/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },

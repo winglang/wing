@@ -3025,7 +3025,7 @@ public readonly name: string;
 ```
 
 - *Type:* string
-- *Default:* "main"
+- *Default:* "app"
 
 Name of the app.
 
@@ -3074,7 +3074,7 @@ public readonly name: string;
 ```
 
 - *Type:* string
-- *Default:* "main"
+- *Default:* "app"
 
 Name of the app.
 
@@ -3407,7 +3407,7 @@ public readonly name: string;
 ```
 
 - *Type:* string
-- *Default:* "main"
+- *Default:* "app"
 
 Name of the app.
 
@@ -4942,28 +4942,14 @@ new testing.Simulator(props: SimulatorProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.Simulator.getConfig">getConfig</a></code> | Obtain a resource's configuration, including its type, props, and attrs. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getResource">getResource</a></code> | Get a simulated resource instance. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.getResourceConfig">getResourceConfig</a></code> | Obtain a resource's configuration, including its type, props, and attrs. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.listTraces">listTraces</a></code> | Get a list of all traces added during the most recent simulation run. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.onTrace">onTrace</a></code> | Register a subscriber that will be notified when a trace is emitted by the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
-
----
-
-##### `getConfig` <a name="getConfig" id="@winglang/wingsdk.testing.Simulator.getConfig"></a>
-
-```typescript
-public getConfig(path: string): BaseResourceSchema
-```
-
-Obtain a resource's configuration, including its type, props, and attrs.
-
-###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getConfig.parameter.path"></a>
-
-- *Type:* string
 
 ---
 
@@ -4976,6 +4962,20 @@ public getResource(path: string): any
 Get a simulated resource instance.
 
 ###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getResource.parameter.path"></a>
+
+- *Type:* string
+
+---
+
+##### `getResourceConfig` <a name="getResourceConfig" id="@winglang/wingsdk.testing.Simulator.getResourceConfig"></a>
+
+```typescript
+public getResourceConfig(path: string): BaseResourceSchema
+```
+
+Obtain a resource's configuration, including its type, props, and attrs.
+
+###### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.testing.Simulator.getResourceConfig.parameter.path"></a>
 
 - *Type:* string
 

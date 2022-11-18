@@ -30,7 +30,7 @@ export interface CdktfAppProps {
 
   /**
    * Name of the app.
-   * @default "main"
+   * @default "app"
    */
   readonly name?: string;
 
@@ -65,7 +65,7 @@ export class CdktfApp extends Construct implements IApp {
 
       constructor() {
         const outdir = props.outdir ?? ".";
-        const name = props.name ?? "main";
+        const name = props.name ?? "app";
         const root = new cdktf.App({ outdir: path.join(outdir, "cdktf.out") });
 
         super(root, name);

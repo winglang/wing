@@ -41,7 +41,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const queueClient = s.getResource("main/my_queue") as cloud.IQueueClient;
+  const queueClient = s.getResource("app/my_queue") as cloud.IQueueClient;
 
   // WHEN
   await queueClient.push("A");
@@ -118,7 +118,7 @@ test("messages are requeued if the function fails", async () => {
   await s.start();
 
   // WHEN
-  const queueClient = s.getResource("main/my_queue") as cloud.IQueueClient;
+  const queueClient = s.getResource("app/my_queue") as cloud.IQueueClient;
   await queueClient.push("BAD MESSAGE");
 
   await sleep(300);

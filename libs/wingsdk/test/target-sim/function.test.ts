@@ -52,7 +52,7 @@ test("invoke function succeeds", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResource("main/my_function") as cloud.IFunctionClient;
+  const client = s.getResource("app/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -87,7 +87,7 @@ test("invoke function with environment variables", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResource("main/my_function") as cloud.IFunctionClient;
+  const client = s.getResource("app/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -122,7 +122,7 @@ test("invoke function fails", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResource("main/my_function") as cloud.IFunctionClient;
+  const client = s.getResource("app/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "alice" };

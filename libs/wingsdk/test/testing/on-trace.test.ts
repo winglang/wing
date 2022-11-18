@@ -20,9 +20,9 @@ test("onTrace", async () => {
     },
   });
   await s.start();
-  expect(s.getResourceConfig("main/my_bucket").props.public).toEqual(false);
+  expect(s.getResourceConfig("app/my_bucket").props.public).toEqual(false);
 
-  const client = s.getResource("main/my_bucket") as cloud.IBucketClient;
+  const client = s.getResource("app/my_bucket") as cloud.IBucketClient;
   await client.put("greeting.txt", "Hello world!");
   await s.stop();
 

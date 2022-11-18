@@ -27,7 +27,7 @@ export interface AppProps {
 
   /**
    * Name of the app.
-   * @default "main"
+   * @default "app"
    */
   readonly name?: string;
 
@@ -50,7 +50,7 @@ export class App extends Construct implements IApp {
   private readonly files: Files;
 
   constructor(props: AppProps) {
-    const name = props.name ?? "main";
+    const name = props.name ?? "app";
     super(undefined as any, name);
     this.outdir = props.outdir ?? ".";
     this.files = new Files({ app: this });

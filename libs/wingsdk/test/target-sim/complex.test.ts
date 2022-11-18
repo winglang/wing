@@ -64,7 +64,7 @@ test("pushing messages through a queue", async () => {
   await s.start();
 
   const pusher = s.getResource(
-    "main/HelloWorld/Function"
+    "app/HelloWorld/Function"
   ) as cloud.IFunctionClient;
 
   // WHEN
@@ -76,14 +76,14 @@ test("pushing messages through a queue", async () => {
   expect(s.listTraces().filter((t) => t.type === TraceType.LOG)).toEqual([
     {
       data: { message: "Hello, world!" },
-      sourcePath: "main/HelloWorld/Function",
+      sourcePath: "app/HelloWorld/Function",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      sourcePath: "app/HelloWorld/Queue/OnMessage-004546ee82d97e73",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",

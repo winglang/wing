@@ -2,20 +2,20 @@
 
 exports[`pushing messages through a queue 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/WingLogger",
+        "path": "app/WingLogger",
         "props": Object {},
         "type": "wingsdk.cloud.Logger",
       },
       Object {
         "attrs": Object {},
-        "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+        "path": "app/HelloWorld/Queue/OnMessage-004546ee82d97e73",
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+            "LOGGER_HANDLE_33143f6f": "\${app/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/OnMessage-004546ee82d97e73/index.js",
           "sourceCodeLanguage": "javascript",
@@ -24,13 +24,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "main/HelloWorld/Queue",
+        "path": "app/HelloWorld/Queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${main/HelloWorld/Queue/OnMessage-004546ee82d97e73#attrs.handle}",
+              "functionHandle": "\${app/HelloWorld/Queue/OnMessage-004546ee82d97e73#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -39,11 +39,11 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "main/HelloWorld/Function",
+        "path": "app/HelloWorld/Function",
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
-            "QUEUE_HANDLE_27b52eeb": "\${main/HelloWorld/Queue#attrs.handle}",
+            "LOGGER_HANDLE_33143f6f": "\${app/WingLogger#attrs.handle}",
+            "QUEUE_HANDLE_9d79cd78": "\${app/HelloWorld/Queue#attrs.handle}",
           },
           "sourceCodeFile": "assets/Function/index.js",
           "sourceCodeLanguage": "javascript",
@@ -61,8 +61,8 @@ Object {
             "Function": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "main/WingLogger",
-                  "main/HelloWorld/Queue",
+                  "app/WingLogger",
+                  "app/HelloWorld/Queue",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
@@ -74,7 +74,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "main/HelloWorld/Function/Code",
+                  "path": "app/HelloWorld/Function/Code",
                 },
               },
               "constructInfo": Object {
@@ -82,13 +82,13 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Function",
-              "path": "main/HelloWorld/Function",
+              "path": "app/HelloWorld/Function",
             },
             "Queue": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "main/HelloWorld/Function",
-                  "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+                  "app/HelloWorld/Function",
+                  "app/HelloWorld/Queue/OnMessage-004546ee82d97e73",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": true,
@@ -97,8 +97,8 @@ Object {
                 "OnMessage-004546ee82d97e73": Object {
                   "attributes": Object {
                     "wing:resource:inbound": Array [
-                      "main/WingLogger",
-                      "main/HelloWorld/Queue",
+                      "app/WingLogger",
+                      "app/HelloWorld/Queue",
                     ],
                     "wing:resource:outbound": Array [],
                     "wing:resource:stateful": false,
@@ -110,7 +110,7 @@ Object {
                         "version": "10.0.25",
                       },
                       "id": "Code",
-                      "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73/Code",
+                      "path": "app/HelloWorld/Queue/OnMessage-004546ee82d97e73/Code",
                     },
                   },
                   "constructInfo": Object {
@@ -118,7 +118,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "OnMessage-004546ee82d97e73",
-                  "path": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+                  "path": "app/HelloWorld/Queue/OnMessage-004546ee82d97e73",
                 },
               },
               "constructInfo": Object {
@@ -126,7 +126,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Queue",
-              "path": "main/HelloWorld/Queue",
+              "path": "app/HelloWorld/Queue",
             },
           },
           "constructInfo": Object {
@@ -134,13 +134,13 @@ Object {
             "version": "10.0.25",
           },
           "id": "HelloWorld",
-          "path": "main/HelloWorld",
+          "path": "app/HelloWorld",
         },
         "WingLogger": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [
-              "main/HelloWorld/Function",
-              "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+              "app/HelloWorld/Function",
+              "app/HelloWorld/Queue/OnMessage-004546ee82d97e73",
             ],
             "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
@@ -150,15 +150,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "WingLogger",
-          "path": "main/WingLogger",
+          "path": "app/WingLogger",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },

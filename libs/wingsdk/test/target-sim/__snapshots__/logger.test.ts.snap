@@ -2,20 +2,20 @@
 
 exports[`inflight uses a logger 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/WingLogger",
+        "path": "app/WingLogger",
         "props": Object {},
         "type": "wingsdk.cloud.Logger",
       },
       Object {
         "attrs": Object {},
-        "path": "main/my_function",
+        "path": "app/my_function",
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+            "LOGGER_HANDLE_33143f6f": "\${app/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
@@ -31,7 +31,7 @@ Object {
         "WingLogger": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [
-              "main/my_function",
+              "app/my_function",
             ],
             "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
@@ -41,12 +41,12 @@ Object {
             "version": "10.0.25",
           },
           "id": "WingLogger",
-          "path": "main/WingLogger",
+          "path": "app/WingLogger",
         },
         "my_function": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [
-              "main/WingLogger",
+              "app/WingLogger",
             ],
             "wing:resource:outbound": Array [],
             "wing:resource:stateful": false,
@@ -58,7 +58,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Code",
-              "path": "main/my_function/Code",
+              "path": "app/my_function/Code",
             },
           },
           "constructInfo": Object {
@@ -66,15 +66,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_function",
-          "path": "main/my_function",
+          "path": "app/my_function",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },

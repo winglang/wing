@@ -2,11 +2,11 @@
 
 exports[`create a queue 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_queue",
+        "path": "app/my_queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [],
@@ -31,15 +31,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "main/my_queue",
+          "path": "app/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },
@@ -48,11 +48,11 @@ Object {
 
 exports[`messages are requeued if the function fails 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
           "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
@@ -62,13 +62,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "main/my_queue",
+        "path": "app/my_queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${app/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -84,7 +84,7 @@ Object {
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [
-              "main/my_queue/OnMessage-236ff3d72ad0ae46",
+              "app/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
@@ -93,7 +93,7 @@ Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "main/my_queue",
+                  "app/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
@@ -105,7 +105,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "main/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                  "path": "app/my_queue/OnMessage-236ff3d72ad0ae46/Code",
                 },
               },
               "constructInfo": Object {
@@ -113,7 +113,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "OnMessage-236ff3d72ad0ae46",
-              "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+              "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
             },
           },
           "constructInfo": Object {
@@ -121,15 +121,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "main/my_queue",
+          "path": "app/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },
@@ -138,11 +138,11 @@ Object {
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
           "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
@@ -152,7 +152,7 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "main/my_queue",
+        "path": "app/my_queue",
         "props": Object {
           "initialMessages": Array [
             "A",
@@ -165,7 +165,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 5,
-              "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${app/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -181,7 +181,7 @@ Object {
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [
-              "main/my_queue/OnMessage-236ff3d72ad0ae46",
+              "app/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
@@ -190,7 +190,7 @@ Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "main/my_queue",
+                  "app/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
@@ -202,7 +202,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "main/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                  "path": "app/my_queue/OnMessage-236ff3d72ad0ae46/Code",
                 },
               },
               "constructInfo": Object {
@@ -210,7 +210,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "OnMessage-236ff3d72ad0ae46",
-              "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+              "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
             },
           },
           "constructInfo": Object {
@@ -218,15 +218,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "main/my_queue",
+          "path": "app/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },
@@ -235,11 +235,11 @@ Object {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 Object {
-  "main.wx": Object {
+  "app.wx": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+        "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
           "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
@@ -249,13 +249,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "main/my_queue",
+        "path": "app/my_queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${main/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${app/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -271,7 +271,7 @@ Object {
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [
-              "main/my_queue/OnMessage-236ff3d72ad0ae46",
+              "app/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
@@ -280,7 +280,7 @@ Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "main/my_queue",
+                  "app/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
@@ -292,7 +292,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "main/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                  "path": "app/my_queue/OnMessage-236ff3d72ad0ae46/Code",
                 },
               },
               "constructInfo": Object {
@@ -300,7 +300,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "OnMessage-236ff3d72ad0ae46",
-              "path": "main/my_queue/OnMessage-236ff3d72ad0ae46",
+              "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
             },
           },
           "constructInfo": Object {
@@ -308,15 +308,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "main/my_queue",
+          "path": "app/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "main",
-      "path": "main",
+      "id": "app",
+      "path": "app",
     },
     "version": "tree-0.1",
   },

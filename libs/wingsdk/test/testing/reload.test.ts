@@ -14,7 +14,7 @@ test("reloading the simulator updates the state of the tree", async () => {
   // Start the simulator
   const s = new testing.Simulator({ simfile });
   await s.start();
-  expect(s.getResourceConfig("main/my_bucket").props.public).toEqual(false);
+  expect(s.getResourceConfig("app/my_bucket").props.public).toEqual(false);
 
   // Update the .wx file in-place
   const app2 = new sim.App({ outdir: workdir });
@@ -23,5 +23,5 @@ test("reloading the simulator updates the state of the tree", async () => {
 
   // Reload the simulator
   await s.reload();
-  expect(s.getResourceConfig("main/my_bucket").props.public).toEqual(true);
+  expect(s.getResourceConfig("app/my_bucket").props.public).toEqual(true);
 });

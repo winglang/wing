@@ -4,17 +4,17 @@ exports[`bucket is public 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
-      \\"main_mybucket_D82BB8A6\\": {}
+      \\"app_mybucket_42A01400\\": {}
     },
     \\"aws_s3_bucket_policy\\": {
-      \\"main_mybucket_PublicPolicy_75426D93\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.main_mybucket_D82BB8A6.bucket}\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.main_mybucket_D82BB8A6.arn}/*\\\\\\"]}]}\\"
+      \\"app_mybucket_PublicPolicy_74BEE766\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.app_mybucket_42A01400.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.app_mybucket_42A01400.arn}/*\\\\\\"]}]}\\"
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"main_mybucket_Encryption_B7F93ECC\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.main_mybucket_D82BB8A6.bucket}\\",
+      \\"app_mybucket_Encryption_072CC506\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.app_mybucket_42A01400.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
@@ -32,20 +32,20 @@ exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
-      \\"main_mybucket_D82BB8A6\\": {}
+      \\"app_mybucket_42A01400\\": {}
     },
     \\"aws_s3_bucket_public_access_block\\": {
-      \\"main_mybucket_PublicAccessBlock_2F5C011D\\": {
+      \\"app_mybucket_PublicAccessBlock_64B2B31E\\": {
         \\"block_public_acls\\": true,
         \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.main_mybucket_D82BB8A6.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.app_mybucket_42A01400.bucket}\\",
         \\"ignore_public_acls\\": true,
         \\"restrict_public_buckets\\": true
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"main_mybucket_Encryption_B7F93ECC\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.main_mybucket_D82BB8A6.bucket}\\",
+      \\"app_mybucket_Encryption_072CC506\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.app_mybucket_42A01400.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
