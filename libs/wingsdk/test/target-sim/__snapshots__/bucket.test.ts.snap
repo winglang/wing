@@ -2,88 +2,72 @@
 
 exports[`create a bucket 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_bucket",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_bucket": Object {
-        "id": "my_bucket",
-        "props": Object {
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_bucket",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "public": false,
       },
+      "type": "wingsdk.cloud.Bucket",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;
 
 exports[`get invalid object throws an error 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_bucket",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_bucket": Object {
-        "id": "my_bucket",
-        "props": Object {
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_bucket",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "public": false,
       },
+      "type": "wingsdk.cloud.Bucket",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;
 
 exports[`put and get objects from bucket 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_bucket",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_bucket": Object {
-        "id": "my_bucket",
-        "props": Object {
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_bucket",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "public": false,
       },
+      "type": "wingsdk.cloud.Bucket",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;
 
 exports[`put multiple objects and list all from bucket 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_bucket",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_bucket": Object {
-        "id": "my_bucket",
-        "props": Object {
-          "public": false,
-        },
-        "type": "wingsdk.cloud.Bucket",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_bucket",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "public": false,
       },
+      "type": "wingsdk.cloud.Bucket",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;

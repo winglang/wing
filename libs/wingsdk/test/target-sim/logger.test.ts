@@ -33,9 +33,7 @@ test("inflight uses a logger", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const fnClient = s.getResourceByPath(
-    "main/my_function"
-  ) as cloud.IFunctionClient;
+  const fnClient = s.getResource("main/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = "Alice";

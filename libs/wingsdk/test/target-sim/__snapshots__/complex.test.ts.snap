@@ -1,0 +1,81 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`pushing messages through a queue 1`] = `
+Object {
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/WingLogger",
+      "inbound": Array [
+        "main/HelloWorld/Function",
+        "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      ],
+      "outbound": Array [],
+      "props": Object {},
+      "type": "wingsdk.cloud.Logger",
+    },
+    Object {
+      "attrs": Object {},
+      "id": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      "inbound": Array [
+        "main/HelloWorld/Queue",
+      ],
+      "outbound": Array [
+        "main/WingLogger",
+      ],
+      "props": Object {
+        "environmentVariables": Object {
+          "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
+        },
+        "sourceCodeFile": "assets/OnMessage-004546ee82d97e73/index.js",
+        "sourceCodeLanguage": "javascript",
+      },
+      "type": "wingsdk.cloud.Function",
+    },
+    Object {
+      "attrs": Object {},
+      "id": "main/HelloWorld/Queue",
+      "inbound": Array [
+        "main/HelloWorld/Function",
+      ],
+      "outbound": Array [
+        "main/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      ],
+      "props": Object {
+        "initialMessages": Array [],
+        "subscribers": Array [
+          Object {
+            "batchSize": 1,
+            "functionHandle": "\${main/HelloWorld/Queue/OnMessage-004546ee82d97e73#attrs.handle}",
+          },
+        ],
+        "timeout": 30,
+      },
+      "type": "wingsdk.cloud.Queue",
+    },
+    Object {
+      "attrs": Object {},
+      "id": "main/HelloWorld/Function",
+      "inbound": Array [],
+      "outbound": Array [
+        "main/WingLogger",
+        "main/HelloWorld/Queue",
+      ],
+      "props": Object {
+        "environmentVariables": Object {
+          "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+          "QUEUE_HANDLE_27b52eeb": "\${main/HelloWorld/Queue#attrs.handle}",
+          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/HelloWorld/Function",
+          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
+        },
+        "sourceCodeFile": "assets/Function/index.js",
+        "sourceCodeLanguage": "javascript",
+      },
+      "type": "wingsdk.cloud.Function",
+    },
+  ],
+  "sdkVersion": "0.0.0",
+}
+`;

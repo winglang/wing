@@ -33,7 +33,7 @@ test("put and get objects from bucket", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResourceByPath("main/my_bucket") as cloud.IBucketClient;
+  const client = s.getResource("main/my_bucket") as cloud.IBucketClient;
 
   const KEY = "greeting.txt";
   const VALUE = JSON.stringify({ msg: "Hello world!" });
@@ -64,7 +64,7 @@ test("put multiple objects and list all from bucket", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResourceByPath("main/my_bucket") as cloud.IBucketClient;
+  const client = s.getResource("main/my_bucket") as cloud.IBucketClient;
   const KEY1 = "greeting1.txt";
   const KEY2 = "greeting2.txt";
   const KEY3 = "greeting3.txt";
@@ -102,7 +102,7 @@ test("get invalid object throws an error", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const client = s.getResourceByPath("main/my_bucket") as cloud.IBucketClient;
+  const client = s.getResource("main/my_bucket") as cloud.IBucketClient;
 
   // THEN
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();

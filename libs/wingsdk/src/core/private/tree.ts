@@ -1,0 +1,84 @@
+import * as fs from "fs";
+import * as path from "path";
+import { IConstruct } from "constructs";
+import { IApp } from "../app";
+
+const TREE_FILE_PATH = "tree.json";
+
+/**
+ * A node in the construct tree.
+ */
+export interface ConstructTreeNode {
+  readonly id: string;
+  readonly path: string;
+  readonly children?: { [key: string]: ConstructTreeNode };
+  readonly attributes?: { [key: string]: any };
+
+  /**
+   * Information on the construct class that led to this node, if available
+   */
+  readonly constructInfo?: ConstructInfo;
+}
+
+/**
+ * Symbol for accessing jsii runtime information
+ */
+const JSII_RUNTIME_SYMBOL = Symbol.for("jsii.rtti");
+
+/**
+ * Source information on a construct (class fqn and version)
+ */
+export interface ConstructInfo {
+  readonly fqn: string;
+  readonly version: string;
+}
+
+export function constructInfoFromConstruct(
+  construct: IConstruct
+): ConstructInfo | undefined {
+  const jsiiRuntimeInfo =
+    Object.getPrototypeOf(construct).constructor[JSII_RUNTIME_SYMBOL];
+  if (
+    typeof jsiiRuntimeInfo === "object" &&
+    jsiiRuntimeInfo !== null &&
+    typeof jsiiRuntimeInfo.fqn === "string" &&
+    typeof jsiiRuntimeInfo.version === "string"
+  ) {
+    return { fqn: jsiiRuntimeInfo.fqn, version: jsiiRuntimeInfo.version };
+  }
+  return undefined;
+}
+
+export function synthesizeTree(app: IApp) {
+  const lookup: { [path: string]: ConstructTreeNode } = {};
+
+  const visit = (construct: IConstruct): ConstructTreeNode => {
+    const children = construct.node.children.map((c) => visit(c));
+    const childrenMap = children
+      .filter((child) => child !== undefined)
+      .reduce((map, child) => Object.assign(map, { [child!.id]: child }), {});
+
+    const node: ConstructTreeNode = {
+      id: construct.node.id || "App",
+      path: construct.node.path,
+      children: Object.keys(childrenMap).length === 0 ? undefined : childrenMap,
+      attributes: {}, // TODO
+      constructInfo: constructInfoFromConstruct(construct),
+    };
+
+    lookup[node.path] = node;
+
+    return node;
+  };
+
+  const tree = {
+    version: "tree-0.1",
+    tree: visit(app.node.root),
+  };
+
+  fs.writeFileSync(
+    path.join(app.outdir, TREE_FILE_PATH),
+    JSON.stringify(tree, undefined, 2),
+    { encoding: "utf8" }
+  );
+}

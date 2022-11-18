@@ -2,42 +2,36 @@
 
 exports[`inflight uses a logger 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/WingLogger",
-    "main/my_function",
-  ],
-  "tree": Object {
-    "children": Object {
-      "WingLogger": Object {
-        "id": "WingLogger",
-        "inbound": Array [
-          "main/my_function",
-        ],
-        "type": "wingsdk.cloud.Logger",
-      },
-      "my_function": Object {
-        "dependsOn": Array [
-          "main/WingLogger",
-        ],
-        "id": "my_function",
-        "outbound": Array [
-          "main/WingLogger",
-        ],
-        "props": Object {
-          "environmentVariables": Object {
-            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-          },
-          "sourceCodeFile": "assets/my_function/index.js",
-          "sourceCodeLanguage": "javascript",
-        },
-        "type": "wingsdk.cloud.Function",
-      },
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/WingLogger",
+      "inbound": Array [
+        "main/my_function",
+      ],
+      "outbound": Array [],
+      "props": Object {},
+      "type": "wingsdk.cloud.Logger",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+    Object {
+      "attrs": Object {},
+      "id": "main/my_function",
+      "inbound": Array [],
+      "outbound": Array [
+        "main/WingLogger",
+      ],
+      "props": Object {
+        "environmentVariables": Object {
+          "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
+          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
+        },
+        "sourceCodeFile": "assets/my_function/index.js",
+        "sourceCodeLanguage": "javascript",
+      },
+      "type": "wingsdk.cloud.Function",
+    },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;

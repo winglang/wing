@@ -2,110 +2,94 @@
 
 exports[`create a function 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_function",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_function": Object {
-        "id": "my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "ENV_VAR1": "true",
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-          },
-          "sourceCodeFile": "assets/my_function/index.js",
-          "sourceCodeLanguage": "javascript",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_function",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "environmentVariables": Object {
+          "ENV_VAR1": "true",
+          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
+          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
         },
-        "type": "wingsdk.cloud.Function",
+        "sourceCodeFile": "assets/my_function/index.js",
+        "sourceCodeLanguage": "javascript",
       },
+      "type": "wingsdk.cloud.Function",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;
 
 exports[`invoke function fails 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_function",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_function": Object {
-        "id": "my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-          },
-          "sourceCodeFile": "assets/my_function/index.js",
-          "sourceCodeLanguage": "javascript",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_function",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "environmentVariables": Object {
+          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
+          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
         },
-        "type": "wingsdk.cloud.Function",
+        "sourceCodeFile": "assets/my_function/index.js",
+        "sourceCodeLanguage": "javascript",
       },
+      "type": "wingsdk.cloud.Function",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;
 
 exports[`invoke function succeeds 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_function",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_function": Object {
-        "id": "my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-          },
-          "sourceCodeFile": "assets/my_function/index.js",
-          "sourceCodeLanguage": "javascript",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_function",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "environmentVariables": Object {
+          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
+          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
         },
-        "type": "wingsdk.cloud.Function",
+        "sourceCodeFile": "assets/my_function/index.js",
+        "sourceCodeLanguage": "javascript",
       },
+      "type": "wingsdk.cloud.Function",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;
 
 exports[`invoke function with environment variables 1`] = `
 Object {
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "main/my_function",
-  ],
-  "tree": Object {
-    "children": Object {
-      "my_function": Object {
-        "id": "my_function",
-        "props": Object {
-          "environmentVariables": Object {
-            "PIG_LATIN": "true",
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-          },
-          "sourceCodeFile": "assets/my_function/index.js",
-          "sourceCodeLanguage": "javascript",
+  "resources": Array [
+    Object {
+      "attrs": Object {},
+      "id": "main/my_function",
+      "inbound": Array [],
+      "outbound": Array [],
+      "props": Object {
+        "environmentVariables": Object {
+          "PIG_LATIN": "true",
+          "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
+          "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
         },
-        "type": "wingsdk.cloud.Function",
+        "sourceCodeFile": "assets/my_function/index.js",
+        "sourceCodeLanguage": "javascript",
       },
+      "type": "wingsdk.cloud.Function",
     },
-    "id": "main",
-    "type": "constructs.Construct",
-  },
+  ],
+  "sdkVersion": "0.0.0",
 }
 `;

@@ -29,6 +29,8 @@ test("create a queue", async () => {
     handle: expect.any(String),
   });
   expect(s.getProps("main/my_queue")).toEqual({
+    initialMessages: [],
+    subscribers: [],
     timeout: 30,
   });
   await s.stop();
@@ -50,9 +52,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const queueClient = s.getResourceByPath(
-    "main/my_queue"
-  ) as cloud.IQueueClient;
+  const queueClient = s.getResource("main/my_queue") as cloud.IQueueClient;
 
   // WHEN
   await queueClient.push("A");
@@ -129,9 +129,7 @@ test("messages are requeued if the function fails", async () => {
   await s.start();
 
   // WHEN
-  const queueClient = s.getResourceByPath(
-    "main/my_queue"
-  ) as cloud.IQueueClient;
+  const queueClient = s.getResource("main/my_queue") as cloud.IQueueClient;
   await queueClient.push("BAD MESSAGE");
 
   await sleep(300);

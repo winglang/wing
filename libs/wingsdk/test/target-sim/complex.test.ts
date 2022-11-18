@@ -5,6 +5,7 @@ import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { TraceType } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
+import { simulatorJsonOf } from "./util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -62,7 +63,7 @@ test("pushing messages through a queue", async () => {
   const s = new testing.Simulator({ simfile });
   await s.start();
 
-  const pusher = s.getResourceByPath(
+  const pusher = s.getResource(
     "main/HelloWorld/Function"
   ) as cloud.IFunctionClient;
 
@@ -88,4 +89,6 @@ test("pushing messages through a queue", async () => {
       type: "log",
     },
   ]);
+
+  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });

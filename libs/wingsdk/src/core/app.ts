@@ -1,4 +1,4 @@
-import { join } from "path";
+import * as path from "path";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -66,7 +66,7 @@ export class CdktfApp extends Construct implements IApp {
       constructor() {
         const outdir = props.outdir ?? ".";
         const name = props.name ?? "main";
-        const root = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
+        const root = new cdktf.App({ outdir: path.join(outdir, "cdktf.out") });
 
         super(root, name);
 

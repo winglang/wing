@@ -115,9 +115,9 @@ export interface ISimulatorContext {
   readonly assetsDir: string;
 
   /**
-   * The app-unique ID of the resource that is being simulated.
+   * The id of the resource that is being simulated.
    */
-  readonly resourcePath: string;
+  readonly resourceId: string;
 
   /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
@@ -164,7 +164,7 @@ export interface ITraceSubscriber {
 export class Simulator {
   // fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
-  private _schema: WingSimulatorSchema;
+  private _config: WingSimulatorSchema;
   private _simfile: string;
   private _assetsDir: string;
 
@@ -176,8 +176,8 @@ export class Simulator {
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
-    const { assetsDir, schema } = this._loadApp(props.simfile);
-    this._schema = schema;
+    const { assetsDir, config } = this._loadApp(props.simfile);
+    this._config = config;
     this._assetsDir = assetsDir;
 
     this._running = false;
@@ -187,7 +187,10 @@ export class Simulator {
     this._traceSubscribers = new Array();
   }
 
-  private _loadApp(simfile: string): { assetsDir: string; schema: any } {
+  private _loadApp(simfile: string): {
+    assetsDir: string;
+    config: WingSimulatorSchema;
+  } {
     // create a temporary directory to store extracted files
     const workdir = mkdtemp();
     tar.extract({
@@ -202,9 +205,9 @@ export class Simulator {
         `Invalid Wing app (${simfile}) - simulator.json not found.`
       );
     }
-    const data = readJsonSync(simJson);
+    const config = readJsonSync(simJson);
 
-    const foundVersion = data.sdkVersion ?? "unknown";
+    const foundVersion = config.sdkVersion ?? "unknown";
     const expectedVersion = SDK_VERSION;
     if (foundVersion !== expectedVersion) {
       console.error(
@@ -212,21 +215,7 @@ export class Simulator {
       );
     }
 
-    this._annotateTreeWithPaths(data.tree);
-
-    return { assetsDir: workdir, schema: data };
-  }
-
-  private _annotateTreeWithPaths(tree: any) {
-    function walk(path: string, node: BaseResourceSchema) {
-      const childPath = path ? `${path}/${node.id}` : node.id;
-      (node as any).path = childPath;
-      for (const child of Object.values(node.children ?? {})) {
-        walk(childPath, child);
-      }
-    }
-
-    walk("", tree);
+    return { assetsDir: workdir, config };
   }
 
   /**
@@ -241,12 +230,10 @@ export class Simulator {
 
     this._traces = [];
 
-    for (const path of this._schema.startOrder) {
-      const resourceData = findResource(this._schema, path);
-
+    for (const resourceConfig of this._config.resources) {
       const context: ISimulatorContext = {
         assetsDir: this._assetsDir,
-        resourcePath: path,
+        resourceId: resourceConfig.id,
         findInstance: (handle: string) => {
           return this._handles.find(handle);
         },
@@ -264,8 +251,8 @@ export class Simulator {
                 result: JSON.stringify(result),
               },
               type: TraceType.RESOURCE,
-              sourcePath: path,
-              sourceType: resourceData.type,
+              sourcePath: resourceConfig.id,
+              sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
             });
             return result;
@@ -273,8 +260,8 @@ export class Simulator {
             this._addTrace({
               data: { message: props.message, status: "failure", error: err },
               type: TraceType.RESOURCE,
-              sourcePath: path,
-              sourceType: resourceData.type,
+              sourcePath: resourceConfig.id,
+              sourceType: resourceConfig.type,
               timestamp: new Date().toISOString(),
             });
             throw err;
@@ -282,16 +269,23 @@ export class Simulator {
         },
       };
 
-      const props = this.resolveTokens(path, resourceData.props);
-      const resource = this._factory.resolve(resourceData.type, props, context);
+      const resolvedProps = this.resolveTokens(
+        resourceConfig.props,
+        resourceConfig.id
+      );
+      const resource = this._factory.resolve(
+        resourceConfig.type,
+        resolvedProps,
+        context
+      );
       await resource.init();
       const handle = this._handles.allocate(resource);
-      (resourceData as any).attrs = { handle };
+      (resourceConfig as any).attrs = { handle };
       let event: Trace = {
         type: TraceType.RESOURCE,
-        data: { message: `${resourceData.type} created.` },
-        sourcePath: path,
-        sourceType: resourceData.type,
+        data: { message: `${resourceConfig.type} created.` },
+        sourcePath: resourceConfig.id,
+        sourceType: resourceConfig.type,
         timestamp: new Date().toISOString(),
       };
       this._addTrace(event);
@@ -310,16 +304,21 @@ export class Simulator {
       );
     }
 
-    for (const path of this._schema.startOrder.slice().reverse()) {
-      const res = findResource(this._schema, path);
-      const resource = this._handles.deallocate(res.attrs!.handle);
+    for (const resourceConfig of this._config.resources.slice().reverse()) {
+      const handle = resourceConfig.attrs?.handle;
+      if (!handle) {
+        throw new Error(
+          `Resource ${resourceConfig.id} could not be cleaned up, no handle for it was found.`
+        );
+      }
+      const resource = this._handles.deallocate(resourceConfig.attrs!.handle);
       await resource.cleanup();
 
       let event: Trace = {
         type: TraceType.RESOURCE,
-        data: { message: `${res.type} deleted.` },
-        sourcePath: path,
-        sourceType: res.type,
+        data: { message: `${resourceConfig.type} deleted.` },
+        sourcePath: resourceConfig.id,
+        sourceType: resourceConfig.type,
         timestamp: new Date().toISOString(),
       };
       this._addTrace(event);
@@ -338,18 +337,18 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { assetsDir, schema } = this._loadApp(this._simfile);
-    this._schema = schema;
+    const { assetsDir, config: schema } = this._loadApp(this._simfile);
+    this._config = schema;
     this._assetsDir = assetsDir;
 
     await this.start();
   }
 
   /**
-   * Get a list of all resource paths.
+   * Get a list of all resource ids.
    */
   public listResources(): string[] {
-    return this._schema.startOrder.slice().sort();
+    return this._config.resources.map((config) => config.id).sort();
   }
 
   /**
@@ -360,45 +359,46 @@ export class Simulator {
   }
 
   /**
-   * Get the resource instance for a given path.
+   * Get a simulated resource instance.
    */
-  public getResourceByPath(path: string): any {
-    const handle = this.getAttributes(path).handle;
+  public getResource(id: string): any {
+    const handle = this.getAttributes(id).handle;
     if (!handle) {
-      throw new Error(`Resource ${path} does not have a handle.`);
+      throw new Error(`Resource ${id} does not have a handle.`);
     }
     return this._handles.find(handle);
   }
 
   /**
-   * Obtain a resource's attributes. This is data that gets resolved when the
-   * during the resource's in-simulator creation.
+   * Obtain a resource's attributes. This is resource configuration that gets
+   * resolved when the simulator is creating the resource.
    */
-  public getAttributes(path: string): { [key: string]: any } {
-    // TODO: this should throw if called while the simulator is not running
-    return findResource(this._schema, path).attrs ?? {};
+  public getAttributes(id: string): { [key: string]: any } {
+    if (!this._running) {
+      throw new Error(
+        "Cannot get resource attributes while the simulator is not running."
+      );
+    }
+    return this.getConfig(id).attrs ?? {};
   }
 
   /**
-   * Obtain a resource's props. This is data about the resource's configuration
-   * that is resolved at synth time.
+   * Obtain a resource's props. This is resource configuration that is resolved
+   * when the app is synthesized (it is included in the .wx file).
    */
-  public getProps(path: string): { [key: string]: any } {
-    return findResource(this._schema, path).props ?? {};
+  public getProps(id: string): { [key: string]: any } {
+    return this.getConfig(id).props ?? {};
   }
 
   /**
-   * Obtain a resource's data, including its path, props, attrs, and children.
+   * Obtain a resource's configuration, including its id, type, props, and attrs.
    */
-  public getData(path: string): BaseResourceSchema {
-    return findResource(this._schema, path);
-  }
-
-  /**
-   * Return a copy of the simulator tree, including all resource attributes.
-   */
-  public get tree(): any {
-    return JSON.parse(JSON.stringify(this._schema.tree));
+  public getConfig(id: string): BaseResourceSchema {
+    const config = this._config.resources.find((r) => r.id === id);
+    if (!config) {
+      throw new Error(`Resource ${id} not found.`);
+    }
+    return config;
   }
 
   /**
@@ -417,69 +417,51 @@ export class Simulator {
     this._traces.push(event);
   }
 
-  private resolveTokens(tokenOrigin: string, props: any): any {
-    if (typeof props === "string") {
-      if (isToken(props)) {
-        const ref = props.slice(2, -1);
-        const [path, rest] = ref.split("#");
-        const resource = findResource(this._schema, path);
+  private resolveTokens(obj: any, source: string): any {
+    if (typeof obj === "string") {
+      if (isToken(obj)) {
+        const ref = obj.slice(2, -1);
+        const [id, rest] = ref.split("#");
+        const resourceConfig = this.getConfig(id);
         if (rest.startsWith("attrs.")) {
-          if (!resource.attrs) {
+          if (!resourceConfig.attrs) {
             throw new Error(
-              `Tried to resolve token "${props}" but resource ${path} has no attributes defined yet. Is it possible ${tokenOrigin} needs to take a dependency on ${path}?`
+              `Tried to resolve token "${obj}" but resource ${id} has no attributes defined yet. Is it possible ${source} needs to take a dependency on ${id}?`
             );
           }
-          return resource.attrs[rest.slice(6)];
+          return resourceConfig.attrs[rest.slice(6)];
         } else if (rest.startsWith("props.")) {
-          if (!resource.props) {
+          if (!resourceConfig.props) {
             throw new Error(
-              `Tried to resolve token "${props}" but resource ${path} has no props defined.`
+              `Tried to resolve token "${obj}" but resource ${id} has no props defined.`
             );
           }
-          return resource.props;
+          return resourceConfig.props;
         } else {
           throw new Error(`Invalid token reference: "${ref}"`);
         }
       }
-      return props;
+      return obj;
     }
 
-    if (Array.isArray(props)) {
-      return props.map((x) => this.resolveTokens(tokenOrigin, x));
+    if (Array.isArray(obj)) {
+      return obj.map((x) => this.resolveTokens(x, source));
     }
 
-    if (typeof props === "object") {
+    if (typeof obj === "object") {
       const ret: any = {};
-      for (const [key, value] of Object.entries(props)) {
-        ret[key] = this.resolveTokens(tokenOrigin, value);
+      for (const [key, val] of Object.entries(obj)) {
+        ret[key] = this.resolveTokens(val, source);
       }
       return ret;
     }
 
-    return props;
+    return obj;
   }
 }
 
 function isToken(value: string): boolean {
   return value.startsWith("${") && value.endsWith("}");
-}
-
-function findResource(
-  schema: WingSimulatorSchema,
-  path: string
-): BaseResourceSchema {
-  const parts = path.split("/");
-  parts.shift(); // skip name of tree
-  let node = schema.tree;
-  for (const part of parts) {
-    node = (node.children ?? {})[part];
-    if (!node) {
-      throw new Error(
-        `Resource not found: ${path}. Try calling listResources() to see what resources are available.`
-      );
-    }
-  }
-  return node;
 }
 
 /**
