@@ -19,10 +19,8 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_bucket": Object {
-          "attributes": Object {},
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
@@ -62,10 +60,8 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_bucket": Object {
-          "attributes": Object {},
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
@@ -105,10 +101,8 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_bucket": Object {
-          "attributes": Object {},
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
@@ -148,10 +142,8 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_bucket": Object {
-          "attributes": Object {},
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",

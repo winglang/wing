@@ -23,13 +23,10 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_function": Object {
-          "attributes": Object {},
           "children": Object {
             "Code": Object {
-              "attributes": Object {},
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
@@ -79,13 +76,10 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_function": Object {
-          "attributes": Object {},
           "children": Object {
             "Code": Object {
-              "attributes": Object {},
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
@@ -135,13 +129,10 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_function": Object {
-          "attributes": Object {},
           "children": Object {
             "Code": Object {
-              "attributes": Object {},
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
@@ -193,13 +184,10 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_function": Object {
-          "attributes": Object {},
           "children": Object {
             "Code": Object {
-              "attributes": Object {},
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",

@@ -21,10 +21,8 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_queue": Object {
-          "attributes": Object {},
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
@@ -87,16 +85,12 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_queue": Object {
-          "attributes": Object {},
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
-              "attributes": Object {},
               "children": Object {
                 "Code": Object {
-                  "attributes": Object {},
                   "constructInfo": Object {
                     "fqn": "constructs.Construct",
                     "version": "10.0.25",
@@ -182,16 +176,12 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_queue": Object {
-          "attributes": Object {},
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
-              "attributes": Object {},
               "children": Object {
                 "Code": Object {
-                  "attributes": Object {},
                   "constructInfo": Object {
                     "fqn": "constructs.Construct",
                     "version": "10.0.25",
@@ -270,16 +260,12 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "my_queue": Object {
-          "attributes": Object {},
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
-              "attributes": Object {},
               "children": Object {
                 "Code": Object {
-                  "attributes": Object {},
                   "constructInfo": Object {
                     "fqn": "constructs.Construct",
                     "version": "10.0.25",

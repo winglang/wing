@@ -77,16 +77,12 @@ Object {
   },
   "tree.json": Object {
     "tree": Object {
-      "attributes": Object {},
       "children": Object {
         "HelloWorld": Object {
-          "attributes": Object {},
           "children": Object {
             "Function": Object {
-              "attributes": Object {},
               "children": Object {
                 "Code": Object {
-                  "attributes": Object {},
                   "constructInfo": Object {
                     "fqn": "constructs.Construct",
                     "version": "10.0.25",
@@ -103,13 +99,10 @@ Object {
               "path": "main/HelloWorld/Function",
             },
             "Queue": Object {
-              "attributes": Object {},
               "children": Object {
                 "OnMessage-004546ee82d97e73": Object {
-                  "attributes": Object {},
                   "children": Object {
                     "Code": Object {
-                      "attributes": Object {},
                       "constructInfo": Object {
                         "fqn": "constructs.Construct",
                         "version": "10.0.25",
@@ -142,7 +135,6 @@ Object {
           "path": "main/HelloWorld",
         },
         "WingLogger": Object {
-          "attributes": Object {},
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",

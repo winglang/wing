@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
-import { IApp } from "../app";
+import { IApp } from "./app";
 
 const TREE_FILE_PATH = "tree.json";
 
@@ -62,7 +62,7 @@ export function synthesizeTree(app: IApp) {
       id: construct.node.id || "App",
       path: construct.node.path,
       children: Object.keys(childrenMap).length === 0 ? undefined : childrenMap,
-      attributes: {}, // TODO
+      attributes: synthAttributes(construct),
       constructInfo: constructInfoFromConstruct(construct),
     };
 
@@ -81,4 +81,56 @@ export function synthesizeTree(app: IApp) {
     JSON.stringify(tree, undefined, 2),
     { encoding: "utf8" }
   );
+}
+
+function synthAttributes(
+  construct: IConstruct
+): { [key: string]: any } | undefined {
+  // check if a construct implements IInspectable
+  function canInspect(inspectable: any): inspectable is IInspectable {
+    return inspectable.inspect !== undefined;
+  }
+
+  const inspector = new TreeInspector();
+
+  // get attributes from the inspector
+  if (canInspect(construct)) {
+    construct.inspect(inspector);
+    return inspector.attributes;
+  }
+  return undefined;
+}
+
+/**
+ * Inspector that maintains an attribute bag
+ */
+export class TreeInspector {
+  /**
+   * Represents the bag of attributes as key-value pairs.
+   */
+  public readonly attributes: { [key: string]: any } = {};
+
+  /**
+   * Adds attribute to bag. Keys should be added by convention to prevent conflicts
+   * i.e. L1 constructs will contain attributes with keys prefixed with aws:cdk:cloudformation
+   *
+   * @param key - key for metadata
+   * @param value - value of metadata.
+   */
+  public addAttribute(key: string, value: any) {
+    this.attributes[key] = value;
+  }
+}
+
+/**
+ * Interface for examining a construct and exposing metadata.
+ *
+ */
+export interface IInspectable {
+  /**
+   * Examines construct
+   *
+   * @param inspector - tree inspector to collect and process attributes
+   */
+  inspect(inspector: TreeInspector): void;
 }
