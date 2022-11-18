@@ -57,8 +57,6 @@ export function constructInfoFromConstruct(
 }
 
 export function synthesizeTree(app: IApp) {
-  const lookup: { [path: string]: ConstructTreeNode } = {};
-
   const visit = (construct: IConstruct): ConstructTreeNode => {
     const children = construct.node.children.map((c) => visit(c));
     const childrenMap = children
@@ -72,8 +70,6 @@ export function synthesizeTree(app: IApp) {
       attributes: synthAttributes(construct),
       constructInfo: constructInfoFromConstruct(construct),
     };
-
-    lookup[node.path] = node;
 
     return node;
   };
