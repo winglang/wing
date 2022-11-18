@@ -2,26 +2,17 @@ import * as cloud from "../../src/cloud";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { directorySnapshot } from "../util";
+import { appSnapshot, directorySnapshot } from "../util";
 
 test("create a bucket", async () => {
   // GIVEN
   const app = new sim.App({ outdir: mkdtemp() });
+
+  // WHEN
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
-  expect(s.getAttributes("main/my_bucket")).toEqual({
-    handle: expect.any(String),
-  });
-  expect(s.getProps("main/my_bucket")).toEqual({
-    public: false,
-  });
-  await s.stop();
-
-  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
+  expect(appSnapshot(app)).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {

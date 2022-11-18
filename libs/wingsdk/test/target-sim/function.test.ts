@@ -3,7 +3,7 @@ import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { directorySnapshot } from "../util";
+import { appSnapshot, directorySnapshot } from "../util";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
@@ -23,6 +23,8 @@ async function $proc($cap, event) {
 test("create a function", async () => {
   // GIVEN
   const app = new sim.App({ outdir: mkdtemp() });
+
+  // WHEN
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
@@ -32,24 +34,9 @@ test("create a function", async () => {
       ENV_VAR1: "true",
     },
   });
-  const simfile = app.synth();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
-  expect(s.getAttributes("main/my_function")).toEqual({
-    handle: expect.any(String),
-  });
-  expect(s.getProps("main/my_function")).toEqual({
-    sourceCodeFile: expect.any(String),
-    sourceCodeLanguage: "javascript",
-    environmentVariables: {
-      ENV_VAR1: "true",
-    },
-  });
-  await s.stop();
-
-  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
+  expect(appSnapshot(app)).toMatchSnapshot();
 });
 
 test("invoke function succeeds", async () => {

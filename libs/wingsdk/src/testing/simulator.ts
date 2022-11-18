@@ -352,7 +352,7 @@ export class Simulator {
    * Get a simulated resource instance.
    */
   public getResource(path: string): any {
-    const handle = this.getAttributes(path).handle;
+    const handle = this.getData(path).attrs?.handle;
     if (!handle) {
       throw new Error(`Resource ${path} does not have a handle.`);
     }
@@ -360,30 +360,9 @@ export class Simulator {
   }
 
   /**
-   * Obtain a resource's attributes. This is resource configuration that gets
-   * resolved when the simulator is creating the resource.
-   */
-  public getAttributes(path: string): { [key: string]: any } {
-    if (!this._running) {
-      throw new Error(
-        "Cannot get resource attributes while the simulator is not running."
-      );
-    }
-    return this.getConfig(path).attrs ?? {};
-  }
-
-  /**
-   * Obtain a resource's props. This is resource configuration that is resolved
-   * when the app is synthesized (it is included in the .wx file).
-   */
-  public getProps(path: string): { [key: string]: any } {
-    return this.getConfig(path).props ?? {};
-  }
-
-  /**
    * Obtain a resource's configuration, including its type, props, and attrs.
    */
-  public getConfig(path: string): BaseResourceSchema {
+  public getData(path: string): BaseResourceSchema {
     const config = this._config.resources.find((r) => r.path === path);
     if (!config) {
       throw new Error(`Resource ${path} not found.`);
@@ -412,7 +391,7 @@ export class Simulator {
       if (isToken(obj)) {
         const ref = obj.slice(2, -1);
         const [path, rest] = ref.split("#");
-        const resourceConfig = this.getConfig(path);
+        const resourceConfig = this.getData(path);
         if (rest.startsWith("attrs.")) {
           if (!resourceConfig.attrs) {
             throw new Error(

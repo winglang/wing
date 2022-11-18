@@ -3,7 +3,7 @@ import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
 import { mkdtemp } from "../../src/util";
-import { directorySnapshot } from "../util";
+import { appSnapshot, directorySnapshot } from "../util";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -19,23 +19,12 @@ async function $proc($cap, message) {
 test("create a queue", async () => {
   // GIVEN
   const app = new sim.App({ outdir: mkdtemp() });
+
+  // WHEN
   new cloud.Queue(app, "my_queue");
-  const simfile = app.synth();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
-  expect(s.getAttributes("main/my_queue")).toEqual({
-    handle: expect.any(String),
-  });
-  expect(s.getProps("main/my_queue")).toEqual({
-    initialMessages: [],
-    subscribers: [],
-    timeout: 30,
-  });
-  await s.stop();
-
-  expect(directorySnapshot(app.outdir)).toMatchSnapshot();
+  expect(appSnapshot(app)).toMatchSnapshot();
 });
 
 test("queue with one subscriber, default batch size of 1", async () => {
