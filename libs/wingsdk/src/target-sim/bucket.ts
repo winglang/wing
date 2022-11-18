@@ -23,6 +23,7 @@ export class Bucket extends cloud.BucketBase implements IResource {
   /** @internal */
   public _toResourceSchema(): BucketSchema {
     return {
+      id: this.node.id,
       type: cloud.BUCKET_TYPE,
       props: {
         public: this.public,

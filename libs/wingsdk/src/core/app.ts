@@ -29,6 +29,12 @@ export interface CdktfAppProps {
   readonly outdir?: string;
 
   /**
+   * Name of the app.
+   * @default "main"
+   */
+  readonly name?: string;
+
+  /**
    * The path to a state file which will track all synthesized files. If a
    * statefile is not specified, we won't be able to remove extrenous files.
    * @default - no state file
@@ -46,6 +52,7 @@ export class CdktfApp extends Construct implements IApp {
    */
   public readonly outdir: string;
   constructor(props: CdktfAppProps = {}) {
+    // this construct will get thrown away
     super(null as any, "");
 
     // this value gets thrown away since we are returning a different object
@@ -58,9 +65,10 @@ export class CdktfApp extends Construct implements IApp {
 
       constructor() {
         const outdir = props.outdir ?? ".";
+        const name = props.name ?? "main";
         const root = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
 
-        super(root, "root");
+        super(root, name);
 
         this.outdir = outdir;
         this.cdktfApp = root;

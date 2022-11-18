@@ -20,6 +20,7 @@ export class Logger extends cloud.LoggerBase implements IResource {
   /** @internal */
   public _toResourceSchema(): BaseResourceSchema {
     return {
+      id: this.node.id,
       type: cloud.LOGGER_TYPE,
       props: {},
       attrs: {} as any,

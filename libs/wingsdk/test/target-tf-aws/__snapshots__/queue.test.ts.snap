@@ -4,7 +4,7 @@ exports[`default queue behavior 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {}
+      \\"main_Queue_72A36BF0\\": {}
     }
   }
 }"
@@ -29,31 +29,31 @@ exports[`queue with a consumer function 2`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996\\": {
+      \\"main_Queue_OnMessagecbf6dee05a035c28_IamRole_79985A81\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRolePolicy_4FF8284F\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.name}\\"
+      \\"main_Queue_OnMessagecbf6dee05a035c28_IamRolePolicy_C0E80632\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.main_Queue_72A36BF0.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.main_Queue_OnMessagecbf6dee05a035c28_IamRole_79985A81.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRolePolicyAttachment_05CF132B\\": {
+      \\"main_Queue_OnMessagecbf6dee05a035c28_IamRolePolicyAttachment_4E6871CF\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.name}\\"
+        \\"role\\": \\"\${aws_iam_role.main_Queue_OnMessagecbf6dee05a035c28_IamRole_79985A81.name}\\"
       }
     },
     \\"aws_lambda_event_source_mapping\\": {
-      \\"root_Queue_EventSourceMapping_A20C741D\\": {
+      \\"main_Queue_EventSourceMapping_EA95712A\\": {
         \\"batch_size\\": 1,
-        \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_Queue_OnMessagecbf6dee05a035c28_20B0F17F.function_name}\\"
+        \\"event_source_arn\\": \\"\${aws_sqs_queue.main_Queue_72A36BF0.arn}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.main_Queue_OnMessagecbf6dee05a035c28_11346663.function_name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_20B0F17F\\": {
+      \\"main_Queue_OnMessagecbf6dee05a035c28_11346663\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"OnMessage-cbf6dee05a035c28\\"
@@ -61,24 +61,24 @@ exports[`queue with a consumer function 2`] = `
         },
         \\"function_name\\": \\"OnMessage-cbf6dee05a035c28\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.main_Queue_OnMessagecbf6dee05a035c28_IamRole_79985A81.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Queue_OnMessagecbf6dee05a035c28_S3Object_592923A9.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.main_Queue_OnMessagecbf6dee05a035c28_Bucket_1A89CECC.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.main_Queue_OnMessagecbf6dee05a035c28_S3Object_BA67452B.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329\\": {}
+      \\"main_Queue_OnMessagecbf6dee05a035c28_Bucket_1A89CECC\\": {}
     },
     \\"aws_s3_object\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_S3Object_592923A9\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329.bucket}\\",
+      \\"main_Queue_OnMessagecbf6dee05a035c28_S3Object_BA67452B\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.main_Queue_OnMessagecbf6dee05a035c28_Bucket_1A89CECC.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {
+      \\"main_Queue_72A36BF0\\": {
         \\"visibility_timeout_seconds\\": 30
       }
     }
@@ -90,7 +90,7 @@ exports[`queue with custom timeout 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {
+      \\"main_Queue_72A36BF0\\": {
         \\"visibility_timeout_seconds\\": 30
       }
     }

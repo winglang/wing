@@ -75,6 +75,7 @@ export class Function extends cloud.FunctionBase implements IResource {
   /** @internal */
   public _toResourceSchema(): FunctionSchema {
     return {
+      id: this.node.id,
       type: FUNCTION_TYPE,
       props: {
         sourceCodeFile: this.code.path,

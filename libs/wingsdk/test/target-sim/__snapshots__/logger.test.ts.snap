@@ -2,25 +2,32 @@
 
 exports[`inflight uses a logger 1`] = `
 Object {
-  "root": Object {
+  "sdkVersion": "0.0.0",
+  "startOrder": Array [
+    "main/WingLogger",
+    "main/my_function",
+  ],
+  "tree": Object {
     "children": Object {
       "WingLogger": Object {
+        "id": "WingLogger",
         "inbound": Array [
-          "root/my_function",
+          "main/my_function",
         ],
         "type": "wingsdk.cloud.Logger",
       },
       "my_function": Object {
         "dependsOn": Array [
-          "root/WingLogger",
+          "main/WingLogger",
         ],
+        "id": "my_function",
         "outbound": Array [
-          "root/WingLogger",
+          "main/WingLogger",
         ],
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_function",
+            "LOGGER_HANDLE_065d2483": "\${main/WingLogger#attrs.handle}",
+            "WING_SIM_INFLIGHT_RESOURCE_PATH": "main/my_function",
             "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
           },
           "sourceCodeFile": "assets/my_function/index.js",
@@ -29,12 +36,8 @@ Object {
         "type": "wingsdk.cloud.Function",
       },
     },
+    "id": "main",
     "type": "constructs.Construct",
   },
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "root/WingLogger",
-    "root/my_function",
-  ],
 }
 `;

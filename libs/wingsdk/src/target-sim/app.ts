@@ -21,6 +21,12 @@ export interface AppProps {
   readonly outdir?: string;
 
   /**
+   * Name of the app.
+   * @default "main"
+   */
+  readonly name?: string;
+
+  /**
    * A custom factory to resolve polycons.
    * @default - use the default polycon factory included in the Wing SDK
    */
@@ -39,14 +45,15 @@ export class App extends Construct implements IApp {
   private readonly files: Files;
 
   constructor(props: AppProps) {
-    super(undefined as any, "root");
+    const name = props.name ?? "root";
+    super(undefined as any, name);
     this.outdir = props.outdir ?? ".";
     this.files = new Files({ app: this });
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }
 
   /**
-   * Synthesize the app into an `app.wx` file. Return the path to the file.
+   * Synthesize the app into an .wx file. Return the path to the file.
    */
   public synth(): string {
     const workdir = mkdtemp();
@@ -54,20 +61,21 @@ export class App extends Construct implements IApp {
     this.files.synth(workdir);
 
     // write "simulator.json" into the workdir
-    const root = toSchema(this);
+    const tree = toSchema(this);
     const startOrder = new DependencyGraph(this.node)
       .topology()
       .filter((x) => isResource(x))
       .map((x) => x.node.path);
     const sdkVersion = SDK_VERSION;
-    const contents: WingSimulatorSchema = { root, startOrder, sdkVersion };
+    const contents: WingSimulatorSchema = { tree, startOrder, sdkVersion };
     writeFileSync(
       join(workdir, "simulator.json"),
       JSON.stringify(contents, null, 2)
     );
 
-    // zip it up, and write it as app.wx to the outdir
-    const simfile = join(this.outdir, "app.wx");
+    // tar + gzip the directory, and write it as a .wx file to the outdir
+    const filename = `${this.node.path}.wx`;
+    const simfile = join(this.outdir, filename);
     tar.create(
       {
         gzip: true,
@@ -115,6 +123,7 @@ function toSchema(c: IConstruct): BaseResourceSchema {
 
   return sanitizeValue(
     {
+      id: c.node.id,
       type: resourceFields.type ?? "constructs.Construct",
       ...resourceFields,
       children,

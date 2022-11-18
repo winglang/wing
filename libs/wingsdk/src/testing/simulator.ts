@@ -110,7 +110,7 @@ export enum TraceType {
  */
 export interface ISimulatorContext {
   /**
-   * The absolute path to where all assets in `app.wx` are stored.
+   * The directory where all assets from `.wx` file have been stored.
    */
   readonly assetsDir: string;
 
@@ -164,7 +164,7 @@ export interface ITraceSubscriber {
 export class Simulator {
   // fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
-  private _tree: WingSimulatorSchema;
+  private _schema: WingSimulatorSchema;
   private _simfile: string;
   private _assetsDir: string;
 
@@ -176,8 +176,8 @@ export class Simulator {
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
-    const { assetsDir, tree } = this._loadApp(props.simfile);
-    this._tree = tree;
+    const { assetsDir, schema } = this._loadApp(props.simfile);
+    this._schema = schema;
     this._assetsDir = assetsDir;
 
     this._running = false;
@@ -187,7 +187,7 @@ export class Simulator {
     this._traceSubscribers = new Array();
   }
 
-  private _loadApp(simfile: string): { assetsDir: string; tree: any } {
+  private _loadApp(simfile: string): { assetsDir: string; schema: any } {
     // create a temporary directory to store extracted files
     const workdir = mkdtemp();
     tar.extract({
@@ -212,20 +212,21 @@ export class Simulator {
       );
     }
 
-    this._annotateTreeWithPaths(data);
+    this._annotateTreeWithPaths(data.tree);
 
-    return { assetsDir: workdir, tree: data };
+    return { assetsDir: workdir, schema: data };
   }
 
   private _annotateTreeWithPaths(tree: any) {
     function walk(path: string, node: BaseResourceSchema) {
-      (node as any).path = path;
-      for (const [childId, child] of Object.entries(node.children ?? {})) {
-        walk(path + "/" + childId, child);
+      const childPath = path ? `${path}/${node.id}` : node.id;
+      (node as any).path = childPath;
+      for (const child of Object.values(node.children ?? {})) {
+        walk(childPath, child);
       }
     }
 
-    walk("root", tree.root);
+    walk("", tree);
   }
 
   /**
@@ -240,8 +241,8 @@ export class Simulator {
 
     this._traces = [];
 
-    for (const path of this._tree.startOrder) {
-      const resourceData = findResource(this._tree, path);
+    for (const path of this._schema.startOrder) {
+      const resourceData = findResource(this._schema, path);
 
       const context: ISimulatorContext = {
         assetsDir: this._assetsDir,
@@ -309,8 +310,8 @@ export class Simulator {
       );
     }
 
-    for (const path of this._tree.startOrder.slice().reverse()) {
-      const res = findResource(this._tree, path);
+    for (const path of this._schema.startOrder.slice().reverse()) {
+      const res = findResource(this._schema, path);
       const resource = this._handles.deallocate(res.attrs!.handle);
       await resource.cleanup();
 
@@ -337,8 +338,8 @@ export class Simulator {
   public async reload(): Promise<void> {
     await this.stop();
 
-    const { assetsDir, tree } = this._loadApp(this._simfile);
-    this._tree = tree;
+    const { assetsDir, schema } = this._loadApp(this._simfile);
+    this._schema = schema;
     this._assetsDir = assetsDir;
 
     await this.start();
@@ -348,7 +349,7 @@ export class Simulator {
    * Get a list of all resource paths.
    */
   public listResources(): string[] {
-    return this._tree.startOrder.slice().sort();
+    return this._schema.startOrder.slice().sort();
   }
 
   /**
@@ -375,7 +376,7 @@ export class Simulator {
    */
   public getAttributes(path: string): { [key: string]: any } {
     // TODO: this should throw if called while the simulator is not running
-    return findResource(this._tree, path).attrs ?? {};
+    return findResource(this._schema, path).attrs ?? {};
   }
 
   /**
@@ -383,21 +384,21 @@ export class Simulator {
    * that is resolved at synth time.
    */
   public getProps(path: string): { [key: string]: any } {
-    return findResource(this._tree, path).props ?? {};
+    return findResource(this._schema, path).props ?? {};
   }
 
   /**
    * Obtain a resource's data, including its path, props, attrs, and children.
    */
   public getData(path: string): BaseResourceSchema {
-    return findResource(this._tree, path);
+    return findResource(this._schema, path);
   }
 
   /**
    * Return a copy of the simulator tree, including all resource attributes.
    */
   public get tree(): any {
-    return JSON.parse(JSON.stringify(this._tree));
+    return JSON.parse(JSON.stringify(this._schema.tree));
   }
 
   /**
@@ -421,7 +422,7 @@ export class Simulator {
       if (isToken(props)) {
         const ref = props.slice(2, -1);
         const [path, rest] = ref.split("#");
-        const resource = findResource(this._tree, path);
+        const resource = findResource(this._schema, path);
         if (rest.startsWith("attrs.")) {
           if (!resource.attrs) {
             throw new Error(
@@ -463,14 +464,19 @@ function isToken(value: string): boolean {
   return value.startsWith("${") && value.endsWith("}");
 }
 
-function findResource(tree: any, path: string): BaseResourceSchema {
+function findResource(
+  schema: WingSimulatorSchema,
+  path: string
+): BaseResourceSchema {
   const parts = path.split("/");
-  let node: any = { children: tree };
+  parts.shift(); // skip name of tree
+  let node = schema.tree;
   for (const part of parts) {
-    node = node.children[part];
+    node = (node.children ?? {})[part];
     if (!node) {
-      // TODO: better error message - "Try calling listResources() on your simulator to see what resources are available."
-      throw new Error(`Resource not found: ${path}`);
+      throw new Error(
+        `Resource not found: ${path}. Try calling listResources() to see what resources are available.`
+      );
     }
   }
   return node;

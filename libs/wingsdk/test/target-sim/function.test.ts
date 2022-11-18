@@ -37,15 +37,15 @@ test("create a function", async () => {
   // THEN
   const s = new testing.Simulator({ simfile });
   await s.start();
-  expect(s.getAttributes("root/my_function")).toEqual({
+  expect(s.getAttributes("main/my_function")).toEqual({
     handle: expect.any(String),
   });
-  expect(s.getProps("root/my_function")).toEqual({
+  expect(s.getProps("main/my_function")).toEqual({
     sourceCodeFile: expect.any(String),
     sourceCodeLanguage: "javascript",
     environmentVariables: {
       ENV_VAR1: "true",
-      WING_SIM_INFLIGHT_RESOURCE_PATH: "root/my_function",
+      WING_SIM_INFLIGHT_RESOURCE_PATH: "main/my_function",
       WING_SIM_INFLIGHT_RESOURCE_TYPE: "wingsdk.cloud.Function",
     },
   });
@@ -68,7 +68,7 @@ test("invoke function succeeds", async () => {
   await s.start();
 
   const client = s.getResourceByPath(
-    "root/my_function"
+    "main/my_function"
   ) as cloud.IFunctionClient;
 
   // WHEN
@@ -105,7 +105,7 @@ test("invoke function with environment variables", async () => {
   await s.start();
 
   const client = s.getResourceByPath(
-    "root/my_function"
+    "main/my_function"
   ) as cloud.IFunctionClient;
 
   // WHEN
@@ -142,7 +142,7 @@ test("invoke function fails", async () => {
   await s.start();
 
   const client = s.getResourceByPath(
-    "root/my_function"
+    "main/my_function"
   ) as cloud.IFunctionClient;
 
   // WHEN

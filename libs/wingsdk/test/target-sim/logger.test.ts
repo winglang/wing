@@ -34,7 +34,7 @@ test("inflight uses a logger", async () => {
   await s.start();
 
   const fnClient = s.getResourceByPath(
-    "root/my_function"
+    "main/my_function"
   ) as cloud.IFunctionClient;
 
   // WHEN

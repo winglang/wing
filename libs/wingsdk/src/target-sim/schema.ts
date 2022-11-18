@@ -1,7 +1,7 @@
 /** Schema for simulator.json */
 export interface WingSimulatorSchema {
   /** The resource at the root of the tree. */
-  readonly root: BaseResourceSchema;
+  readonly tree: BaseResourceSchema;
   /**
    * The order resources in which resources should be initialized based on
    * dependency relationships.
@@ -13,6 +13,8 @@ export interface WingSimulatorSchema {
 
 /** Schema for individual resources */
 export interface BaseResourceSchema {
+  /** The resource ID. */
+  readonly id: string;
   /** The full path of the resource in the construct tree. */
   readonly path?: string;
   /** The type of the resource. */

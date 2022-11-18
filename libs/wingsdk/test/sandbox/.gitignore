@@ -3,4 +3,4 @@ local.out/
 sim.out/
 *.tfstate
 *.tfstate.backup
-app.wx
+*.wx
