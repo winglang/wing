@@ -110,7 +110,7 @@ export enum TraceType {
  */
 export interface ISimulatorContext {
   /**
-   * The directory where all assets from `.wx` file have been stored.
+   * The directory where all assets from `.wx` file are stored.
    */
   readonly assetsDir: string;
 
@@ -352,7 +352,7 @@ export class Simulator {
    * Get a simulated resource instance.
    */
   public getResource(path: string): any {
-    const handle = this.getData(path).attrs?.handle;
+    const handle = this.getResourceConfig(path).attrs?.handle;
     if (!handle) {
       throw new Error(`Resource ${path} does not have a handle.`);
     }
@@ -362,7 +362,7 @@ export class Simulator {
   /**
    * Obtain a resource's configuration, including its type, props, and attrs.
    */
-  public getData(path: string): BaseResourceSchema {
+  public getResourceConfig(path: string): BaseResourceSchema {
     const config = this._config.resources.find((r) => r.path === path);
     if (!config) {
       throw new Error(`Resource ${path} not found.`);
@@ -391,7 +391,7 @@ export class Simulator {
       if (isToken(obj)) {
         const ref = obj.slice(2, -1);
         const [path, rest] = ref.split("#");
-        const resourceConfig = this.getData(path);
+        const resourceConfig = this.getResourceConfig(path);
         if (rest.startsWith("attrs.")) {
           if (!resourceConfig.attrs) {
             throw new Error(
