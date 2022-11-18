@@ -275,7 +275,6 @@ new cloud.Bucket(scope: Construct, id: string, props?: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.Bucket.inspect">inspect</a></code> | Examines construct. |
 
 ---
 
@@ -286,20 +285,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.Bucket.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.Bucket.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -412,7 +397,6 @@ new sim.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.sim.Bucket.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.sim.Bucket.toSimulatorSchema">toSimulatorSchema</a></code> | Convert this resource to a resource schema for the simulator. |
 
 ---
@@ -424,20 +408,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.sim.Bucket.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.sim.Bucket.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `toSimulatorSchema` <a name="toSimulatorSchema" id="@winglang/wingsdk.sim.Bucket.toSimulatorSchema"></a>
 
@@ -556,7 +526,6 @@ new tfaws.Bucket(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.tfaws.Bucket.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.tfaws.Bucket.inspect">inspect</a></code> | Examines construct. |
 
 ---
 
@@ -567,20 +536,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.tfaws.Bucket.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.tfaws.Bucket.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -689,7 +644,6 @@ new cloud.BucketBase(scope: Construct, id: string, props: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.BucketBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.BucketBase.inspect">inspect</a></code> | Examines construct. |
 
 ---
 
@@ -700,20 +654,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.BucketBase.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.BucketBase.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -1082,7 +1022,6 @@ new cloud.Function(scope: Construct, id: string, inflight: Inflight, props?: Fun
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.Function.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
@@ -1094,20 +1033,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.Function.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.Function.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.cloud.Function.addEnvironment"></a>
 
@@ -1247,7 +1172,6 @@ new sim.Function(scope: Construct, id: string, inflight: Inflight, props: Functi
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.sim.Function.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.sim.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 | <code><a href="#@winglang/wingsdk.sim.Function.toSimulatorSchema">toSimulatorSchema</a></code> | Convert this resource to a resource schema for the simulator. |
 
@@ -1260,20 +1184,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.sim.Function.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.sim.Function.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.sim.Function.addEnvironment"></a>
 
@@ -1419,7 +1329,6 @@ new tfaws.Function(scope: Construct, id: string, inflight: Inflight, props: Func
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.tfaws.Function.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.tfaws.Function.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.tfaws.Function.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 | <code><a href="#@winglang/wingsdk.tfaws.Function.addPolicyStatements">addPolicyStatements</a></code> | Add a policy statement to the Lambda role. |
 
@@ -1432,20 +1341,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.tfaws.Function.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.tfaws.Function.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.tfaws.Function.addEnvironment"></a>
 
@@ -1595,7 +1490,6 @@ new cloud.FunctionBase(scope: Construct, id: string, inflight: Inflight, props: 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.FunctionBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.FunctionBase.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.cloud.FunctionBase.addEnvironment">addEnvironment</a></code> | Add an environment variable to the function. |
 
 ---
@@ -1607,20 +1501,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.FunctionBase.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.FunctionBase.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `addEnvironment` <a name="addEnvironment" id="@winglang/wingsdk.cloud.FunctionBase.addEnvironment"></a>
 
@@ -1853,7 +1733,6 @@ A cloud logging facility.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.Logger.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
 
 ---
@@ -1865,20 +1744,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.Logger.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.Logger.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `print` <a name="print" id="@winglang/wingsdk.cloud.Logger.print"></a>
 
@@ -2034,7 +1899,6 @@ new sim.Logger(scope: Construct, id: string)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.Logger.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.sim.Logger.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.sim.Logger.print">print</a></code> | Logs a message. |
 | <code><a href="#@winglang/wingsdk.sim.Logger.toSimulatorSchema">toSimulatorSchema</a></code> | Convert this resource to a resource schema for the simulator. |
 
@@ -2047,20 +1911,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.sim.Logger.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.sim.Logger.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `print` <a name="print" id="@winglang/wingsdk.sim.Logger.print"></a>
 
@@ -2194,7 +2044,6 @@ dash `--`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.LoggerBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.LoggerBase.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.cloud.LoggerBase.print">print</a></code> | Logs a message. |
 
 ---
@@ -2206,20 +2055,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.LoggerBase.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.LoggerBase.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `print` <a name="print" id="@winglang/wingsdk.cloud.LoggerBase.print"></a>
 
@@ -2346,7 +2181,6 @@ new cloud.Queue(scope: Construct, id: string, props?: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.Queue.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
 
 ---
@@ -2358,20 +2192,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.Queue.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.Queue.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.cloud.Queue.onMessage"></a>
 
@@ -2504,7 +2324,6 @@ new sim.Queue(scope: Construct, id: string, props?: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.sim.Queue.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.sim.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
 | <code><a href="#@winglang/wingsdk.sim.Queue.toSimulatorSchema">toSimulatorSchema</a></code> | Convert this resource to a resource schema for the simulator. |
 
@@ -2517,20 +2336,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.sim.Queue.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.sim.Queue.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.sim.Queue.onMessage"></a>
 
@@ -2669,7 +2474,6 @@ new tfaws.Queue(scope: Construct, id: string, props?: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.tfaws.Queue.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.tfaws.Queue.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.tfaws.Queue.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
 
 ---
@@ -2681,20 +2485,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.tfaws.Queue.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.tfaws.Queue.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.tfaws.Queue.onMessage"></a>
 
@@ -2823,7 +2613,6 @@ new cloud.QueueBase(scope: Construct, id: string, props?: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.QueueBase.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.QueueBase.inspect">inspect</a></code> | Examines construct. |
 | <code><a href="#@winglang/wingsdk.cloud.QueueBase.onMessage">onMessage</a></code> | Create a function to consume messages from this queue. |
 
 ---
@@ -2835,20 +2624,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.QueueBase.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.QueueBase.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 ##### `onMessage` <a name="onMessage" id="@winglang/wingsdk.cloud.QueueBase.onMessage"></a>
 
@@ -2980,7 +2755,6 @@ dash `--`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Resource.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.cloud.Resource.inspect">inspect</a></code> | Examines construct. |
 
 ---
 
@@ -2991,20 +2765,6 @@ public toString(): string
 ```
 
 Returns a string representation of this construct.
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.cloud.Resource.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.cloud.Resource.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
----
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -5675,29 +5435,6 @@ Invoke the function asynchronously with a given payload.
 
 Interface for examining a construct and exposing metadata.
 
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.core.IInspectable.inspect">inspect</a></code> | Examines construct. |
-
----
-
-##### `inspect` <a name="inspect" id="@winglang/wingsdk.core.IInspectable.inspect"></a>
-
-```typescript
-public inspect(inspector: TreeInspector): void
-```
-
-Examines construct.
-
-###### `inspector`<sup>Required</sup> <a name="inspector" id="@winglang/wingsdk.core.IInspectable.inspect.parameter.inspector"></a>
-
-- *Type:* @winglang/wingsdk.core.TreeInspector
-
-tree inspector to collect and process attributes.
-
----
 
 
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.cloud.ILoggerClient"></a>

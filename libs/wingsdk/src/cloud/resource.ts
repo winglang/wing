@@ -38,18 +38,21 @@ export abstract class Resource
   /**
    * @internal
    */
-  public _addInbound(...resourcePaths: string[]) {
+  public _addInbound(...resourcePaths: string[]): void {
     this._inbound.push(...resourcePaths);
   }
 
   /**
    * @internal
    */
-  public _addOutbound(...resourcePaths: string[]) {
+  public _addOutbound(...resourcePaths: string[]): void {
     this._inbound.push(...resourcePaths);
   }
 
-  public inspect(inspector: TreeInspector): void {
+  /**
+   * @internal
+   */
+  public _inspect(inspector: TreeInspector): void {
     inspector.addAttribute("wing:resource:inbound", this._inbound);
     inspector.addAttribute("wing:resource:outbound", this._outbound);
   }

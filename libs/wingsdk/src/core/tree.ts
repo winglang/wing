@@ -95,14 +95,14 @@ function synthAttributes(
 ): { [key: string]: any } | undefined {
   // check if a construct implements IInspectable
   function canInspect(inspectable: any): inspectable is IInspectable {
-    return inspectable.inspect !== undefined;
+    return inspectable._inspect !== undefined;
   }
 
   const inspector = new TreeInspector();
 
   // get attributes from the inspector
   if (canInspect(construct)) {
-    construct.inspect(inspector);
+    construct._inspect(inspector);
     return inspector.attributes;
   }
   return undefined;
@@ -138,6 +138,8 @@ export interface IInspectable {
    * Examines construct
    *
    * @param inspector - tree inspector to collect and process attributes
+   *
+   * @internal
    */
-  inspect(inspector: TreeInspector): void;
+  _inspect(inspector: TreeInspector): void;
 }
