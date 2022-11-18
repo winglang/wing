@@ -37,39 +37,6 @@ export interface ISimulatorLifecycleHooks {
   onTrace?(event: Trace): void;
 }
 
-/**
- * Props for `ISimulatorContext.addTrace`.
- */
-export interface AddTraceProps {
-  /**
-   * A JSON blob with structured data.
-   */
-  readonly data: any;
-
-  /**
-   * The type of a trace.
-   */
-  readonly type: TraceType;
-
-  /**
-   * The path of the resource that emitted the trace. This can be overridden
-   * in cases where the resource emits a trace on behalf of another resource
-   * (e.g. the logger).
-   *
-   * @default - the path of the resource that called addTrace
-   */
-  readonly sourcePath?: string;
-
-  /**
-   * The type of the resource that emitted the trace. This can be overridden
-   * in cases where the resource emits a trace on behalf of another resource
-   * (e.g. the logger).
-   *
-   * @default - the type of the resource that called addTrace
-   */
-  readonly sourceType?: string;
-}
-
 // Since we are using JSII we cannot use generics to type this right now:
 //
 // export interface WithTraceProps<T> {
@@ -83,7 +50,7 @@ export interface AddTraceProps {
  */
 export interface IWithTraceProps {
   /**
-   * A message to register with the trace.
+   * The trace message.
    */
   readonly message: any;
 
@@ -148,6 +115,11 @@ export interface ISimulatorContext {
   readonly assetsDir: string;
 
   /**
+   * The app-unique ID of the resource that is being simulated.
+   */
+  readonly resourcePath: string;
+
+  /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
   findInstance(handle: string): ISimulatorResource;
@@ -157,13 +129,13 @@ export interface ISimulatorContext {
    * operations that occurred during simulation, useful for understanding how
    * resources interact or debugging an application.
    */
-  addTrace(event: AddTraceProps): void;
+  addTrace(trace: Trace): void;
 
   /**
    * Register a trace associated with a resource activity. The activity will be
    * run, and the trace will be populated with the result's success or failure.
    */
-  withTrace(event: IWithTraceProps): Promise<any>;
+  withTrace(trace: IWithTraceProps): Promise<any>;
 }
 
 /**
@@ -273,16 +245,11 @@ export class Simulator {
 
       const context: ISimulatorContext = {
         assetsDir: this._assetsDir,
+        resourcePath: path,
         findInstance: (handle: string) => {
           return this._handles.find(handle);
         },
-        addTrace: (props: AddTraceProps) => {
-          let trace: Trace = {
-            sourcePath: path,
-            sourceType: resourceData.type,
-            ...props,
-            timestamp: new Date().toISOString(),
-          };
+        addTrace: (trace: Trace) => {
           this._addTrace(trace);
         },
         withTrace: async (props: IWithTraceProps) => {

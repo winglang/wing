@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/target-sim";
-// import * as tfaws from "../../src/target-tf-aws";
+// import * as sim from "../../src/target-sim";
+import * as tfaws from "../../src/target-tf-aws";
 
 class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
@@ -33,22 +33,16 @@ class HelloWorld extends Construct {
     const processor = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, event) {
-          await $cap.logger.print("Received " + event);
+          console.log("Received " + event);
         }`
       ),
-      captures: {
-        logger: {
-          resource: cloud.Logger.of(this),
-          methods: [cloud.LoggerInflightMethods.PRINT],
-        },
-      },
       entrypoint: "$proc",
     });
     queue.onMessage(processor);
   }
 }
 
-const app = new sim.App({ outdir: __dirname });
+const app = new tfaws.App({ outdir: __dirname });
 cloud.Logger.register(app);
 new HelloWorld(app, "HelloWorld");
 app.synth();

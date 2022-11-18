@@ -2828,87 +2828,6 @@ The file's relative path to the output directory.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### AddTraceProps <a name="AddTraceProps" id="@winglang/wingsdk.testing.AddTraceProps"></a>
-
-Props for `ISimulatorContext.addTrace`.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.testing.AddTraceProps.Initializer"></a>
-
-```typescript
-import { testing } from '@winglang/wingsdk'
-
-const addTraceProps: testing.AddTraceProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.data">data</a></code> | <code>any</code> | A JSON blob with structured data. |
-| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.type">type</a></code> | <code>@winglang/wingsdk.testing.TraceType</code> | The type of a trace. |
-| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.sourcePath">sourcePath</a></code> | <code>string</code> | The path of the resource that emitted the trace. |
-| <code><a href="#@winglang/wingsdk.testing.AddTraceProps.property.sourceType">sourceType</a></code> | <code>string</code> | The type of the resource that emitted the trace. |
-
----
-
-##### `data`<sup>Required</sup> <a name="data" id="@winglang/wingsdk.testing.AddTraceProps.property.data"></a>
-
-```typescript
-public readonly data: any;
-```
-
-- *Type:* any
-
-A JSON blob with structured data.
-
----
-
-##### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.AddTraceProps.property.type"></a>
-
-```typescript
-public readonly type: TraceType;
-```
-
-- *Type:* @winglang/wingsdk.testing.TraceType
-
-The type of a trace.
-
----
-
-##### `sourcePath`<sup>Optional</sup> <a name="sourcePath" id="@winglang/wingsdk.testing.AddTraceProps.property.sourcePath"></a>
-
-```typescript
-public readonly sourcePath: string;
-```
-
-- *Type:* string
-- *Default:* the path of the resource that called addTrace
-
-The path of the resource that emitted the trace.
-
-This can be overridden
-in cases where the resource emits a trace on behalf of another resource
-(e.g. the logger).
-
----
-
-##### `sourceType`<sup>Optional</sup> <a name="sourceType" id="@winglang/wingsdk.testing.AddTraceProps.property.sourceType"></a>
-
-```typescript
-public readonly sourceType: string;
-```
-
-- *Type:* string
-- *Default:* the type of the resource that called addTrace
-
-The type of the resource that emitted the trace.
-
-This can be overridden
-in cases where the resource emits a trace on behalf of another resource
-(e.g. the logger).
-
----
-
 ### AppProps <a name="AppProps" id="@winglang/wingsdk.sim.AppProps"></a>
 
 Props for `App`.
@@ -5331,7 +5250,7 @@ Context that is passed to individual resource simulations.
 ##### `addTrace` <a name="addTrace" id="@winglang/wingsdk.testing.ISimulatorContext.addTrace"></a>
 
 ```typescript
-public addTrace(event: AddTraceProps): void
+public addTrace(trace: Trace): void
 ```
 
 Add a trace.
@@ -5340,9 +5259,9 @@ Traces are breadcrumbs of information about resource
 operations that occurred during simulation, useful for understanding how
 resources interact or debugging an application.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorContext.addTrace.parameter.event"></a>
+###### `trace`<sup>Required</sup> <a name="trace" id="@winglang/wingsdk.testing.ISimulatorContext.addTrace.parameter.trace"></a>
 
-- *Type:* @winglang/wingsdk.testing.AddTraceProps
+- *Type:* @winglang/wingsdk.testing.Trace
 
 ---
 
@@ -5365,7 +5284,7 @@ Throws if the handle isn't valid.
 ##### `withTrace` <a name="withTrace" id="@winglang/wingsdk.testing.ISimulatorContext.withTrace"></a>
 
 ```typescript
-public withTrace(event: IWithTraceProps): any
+public withTrace(trace: IWithTraceProps): any
 ```
 
 Register a trace associated with a resource activity.
@@ -5373,7 +5292,7 @@ Register a trace associated with a resource activity.
 The activity will be
 run, and the trace will be populated with the result's success or failure.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorContext.withTrace.parameter.event"></a>
+###### `trace`<sup>Required</sup> <a name="trace" id="@winglang/wingsdk.testing.ISimulatorContext.withTrace.parameter.trace"></a>
 
 - *Type:* @winglang/wingsdk.testing.IWithTraceProps
 
@@ -5384,6 +5303,7 @@ run, and the trace will be populated with the result's success or failure.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.resourcePath">resourcePath</a></code> | <code>string</code> | The app-unique ID of the resource that is being simulated. |
 
 ---
 
@@ -5396,6 +5316,18 @@ public readonly assetsDir: string;
 - *Type:* string
 
 The absolute path to where all assets in `app.wx` are stored.
+
+---
+
+##### `resourcePath`<sup>Required</sup> <a name="resourcePath" id="@winglang/wingsdk.testing.ISimulatorContext.property.resourcePath"></a>
+
+```typescript
+public readonly resourcePath: string;
+```
+
+- *Type:* string
+
+The app-unique ID of the resource that is being simulated.
 
 ---
 
@@ -5556,7 +5488,7 @@ A function to run as part of the trace.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.testing.IWithTraceProps.property.message">message</a></code> | <code>any</code> | A message to register with the trace. |
+| <code><a href="#@winglang/wingsdk.testing.IWithTraceProps.property.message">message</a></code> | <code>any</code> | The trace message. |
 
 ---
 
@@ -5568,7 +5500,7 @@ public readonly message: any;
 
 - *Type:* any
 
-A message to register with the trace.
+The trace message.
 
 ---
 

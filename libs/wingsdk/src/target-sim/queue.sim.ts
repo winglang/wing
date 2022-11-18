@@ -1,4 +1,4 @@
-import { IFunctionClient, IQueueClient } from "../cloud";
+import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
@@ -65,6 +65,9 @@ export class Queue implements IQueueClient, ISimulatorResource {
               messages
             )}, subscriber=${subscriber.functionHandle}).`,
           },
+          sourcePath: this.context.resourcePath,
+          sourceType: QUEUE_TYPE,
+          timestamp: new Date().toISOString(),
         });
         void fnClient.invoke(JSON.stringify({ messages })).catch((_err) => {
           // If the function returns an error, put the message back on the queue
@@ -72,7 +75,10 @@ export class Queue implements IQueueClient, ISimulatorResource {
             data: {
               message: `Subscriber error - returning ${messages.length} messages to queue.`,
             },
+            sourcePath: this.context.resourcePath,
+            sourceType: QUEUE_TYPE,
             type: TraceType.RESOURCE,
+            timestamp: new Date().toISOString(),
           });
           this.messages.push(...messages);
         });

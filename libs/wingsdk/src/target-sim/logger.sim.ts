@@ -44,6 +44,7 @@ export class Logger implements ILoggerClient, ISimulatorResource {
       type: TraceType.LOG,
       sourcePath: resourcePath,
       sourceType: resourceType,
+      timestamp: new Date().toISOString(),
     });
   }
 }
