@@ -38,7 +38,7 @@ resource Tasks {
   
   async public ~add(task: Task): TaskItem {
     let doc = await this._model(task.to_json())
-    return TaskItem { title: task.title, completed: task.completed, id:doc.id }
+    return TaskItem { id:doc.id, task }
   }
   
   async public ~update(id: str, task: Task): void {
