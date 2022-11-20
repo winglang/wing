@@ -21,7 +21,7 @@ export abstract class LoggerBase extends Resource {
   }
 
   /** @internal */
-  public abstract _capture(
+  public abstract _bind(
     captureScope: IConstruct,
     metadata: CaptureMetadata
   ): Code;
@@ -75,7 +75,7 @@ export class Logger extends LoggerBase {
   }
 
   /** @internal */
-  public _capture(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -91,14 +91,6 @@ export interface ILoggerClient {
    * @param message The message to print
    */
   print(message: string): Promise<void>;
-
-  /**
-   * Fetch the latest logs associated with the resource running the inflight
-   * code. The logs may include cloud-provider specific messages or metadata.
-   *
-   * @experimental
-   */
-  fetchLatestLogs(): Promise<LogEvent[]>;
 }
 
 /**
@@ -107,16 +99,4 @@ export interface ILoggerClient {
 export enum LoggerInflightMethods {
   /** `Logger.print` */
   PRINT = "print",
-  /** `Logger.fetchLatestLogs` */
-  FETCH_LATEST_LOGS = "fetchLatestLogs",
-}
-
-/**
- * Represents a log event.
- */
-export interface LogEvent {
-  /** The log message. */
-  readonly message: string;
-  /** The log timestamp, in milliseconds since the epoch */
-  readonly timestamp: number;
 }

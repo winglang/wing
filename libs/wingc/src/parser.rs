@@ -4,9 +4,9 @@ use std::{str, vec};
 use tree_sitter::Node;
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprType, Flight, FunctionDefinition, FunctionSignature,
-	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Reference, Scope, Statement, Symbol, Type,
-	UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
+	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Phase, Reference, Scope, Stmt, StmtKind,
+	Symbol, Type, UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -101,42 +101,44 @@ impl Parser<'_> {
 			statements: scope_node
 				.named_children(&mut cursor)
 				.filter(|child| !child.is_extra())
-				.filter_map(|st_node| self.build_statement(&st_node).ok())
+				.enumerate()
+				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
 			env: None, // env should be set later when scope is type-checked
 		}
 	}
 
-	fn build_statement(&self, statement_node: &Node) -> DiagnosticResult<Statement> {
-		match statement_node.kind() {
-			"short_import_statement" => Ok(Statement::Use {
+	fn build_statement(&self, statement_node: &Node, idx: usize) -> DiagnosticResult<Stmt> {
+		let stmt_kind = match statement_node.kind() {
+			"short_import_statement" => StmtKind::Use {
 				module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
 				identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
 					Some(self.node_symbol(&identifier)?)
 				} else {
 					None
 				},
-			}),
+			},
+
 			"variable_definition_statement" => {
 				let type_ = if let Some(type_node) = statement_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)
 				} else {
 					None
 				};
-				Ok(Statement::VariableDef {
+
+				StmtKind::VariableDef {
 					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
 					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 					type_,
-				})
+				}
 			}
-			"variable_assignment_statement" => Ok(Statement::Assignment {
+			"variable_assignment_statement" => StmtKind::Assignment {
 				variable: self.build_reference(&statement_node.child_by_field_name("name").unwrap())?,
 				value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
-			}),
-			"expression_statement" => Ok(Statement::Expression(
-				self.build_expression(&statement_node.named_child(0).unwrap())?,
-			)),
-			"block" => Ok(Statement::Scope(self.build_scope(statement_node))),
+			},
+
+			"expression_statement" => StmtKind::Expression(self.build_expression(&statement_node.named_child(0).unwrap())?),
+			"block" => StmtKind::Scope(self.build_scope(statement_node)),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
 				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
@@ -144,35 +146,42 @@ impl Parser<'_> {
 				} else {
 					None
 				};
-				Ok(Statement::If {
+				StmtKind::If {
 					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
 					statements: if_block,
 					else_statements: else_block,
-				})
+				}
 			}
-			"for_in_loop" => Ok(Statement::ForLoop {
+			"inflight_function_definition" => {
+				StmtKind::FunctionDefinition(self.build_function_definition(statement_node, Phase::Inflight)?)
+			}
+
+			"for_in_loop" => StmtKind::ForLoop {
 				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
-			}),
-			"inflight_function_definition" => Ok(Statement::FunctionDefinition(
-				self.build_function_definition(statement_node, Flight::In)?,
-			)),
-			"return_statement" => Ok(Statement::Return(
+			},
+			"return_statement" => StmtKind::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 					Some(self.build_expression(&return_expression_node)?)
 				} else {
 					None
 				},
-			)),
-			"class_definition" => Ok(self.build_class_statement(statement_node, false)?),
-			"resource_definition" => Ok(self.build_class_statement(statement_node, true)?),
-			"ERROR" => self.add_error(format!("Expected statement"), statement_node),
+			),
+			"class_definition" => self.build_class_statement(statement_node, false)?,
+			"resource_definition" => self.build_class_statement(statement_node, true)?,
+			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => panic!("Unexpected statement type {} || {:#?}", other, statement_node),
-		}
+		};
+
+		Ok(Stmt {
+			kind: stmt_kind,
+			span: self.node_span(statement_node),
+			idx,
+		})
 	}
 
-	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> DiagnosticResult<Statement> {
+	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> DiagnosticResult<StmtKind> {
 		let mut cursor = statement_node.walk();
 		let mut members = vec![];
 		let mut methods = vec![];
@@ -184,19 +193,21 @@ impl Parser<'_> {
 			.named_children(&mut cursor)
 		{
 			match (class_element.kind(), is_resource) {
-				("function_definition", true) => methods.push(self.build_function_definition(&class_element, Flight::Pre)?),
+				("function_definition", true) => {
+					methods.push(self.build_function_definition(&class_element, Phase::Preflight)?)
+				}
 				("inflight_function_definition", _) => {
-					methods.push(self.build_function_definition(&class_element, Flight::In)?)
+					methods.push(self.build_function_definition(&class_element, Phase::Inflight)?)
 				}
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
-					flight: Flight::Pre,
+					flight: Phase::Preflight,
 				}),
 				("inflight_class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
-					flight: Flight::In,
+					flight: Phase::Inflight,
 				}),
 				("constructor", _) => {
 					if let Some(_) = constructor {
@@ -217,7 +228,7 @@ impl Parser<'_> {
 								root: name.clone(),
 								fields: vec![],
 							})),
-							flight: if is_resource { Flight::Pre } else { Flight::In }, // TODO: for now classes can only be constructed inflight
+							flight: if is_resource { Phase::Preflight } else { Phase::Inflight }, // TODO: for now classes can only be constructed inflight
 						},
 					})
 				}
@@ -252,7 +263,7 @@ impl Parser<'_> {
 		} else {
 			None
 		};
-		Ok(Statement::Class {
+		Ok(StmtKind::Class {
 			name,
 			members,
 			methods,
@@ -262,7 +273,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_function_definition(&self, func_def_node: &Node, flight: Flight) -> DiagnosticResult<FunctionDefinition> {
+	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionDefinition {
 			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap())?,
@@ -321,9 +332,9 @@ impl Parser<'_> {
 					parameters,
 					return_type,
 					flight: if type_node.child_by_field_name("inflight").is_some() {
-						Flight::In
+						Phase::Inflight
 					} else {
-						Flight::Pre
+						Phase::Preflight
 					},
 				}))
 			}
@@ -425,7 +436,7 @@ impl Parser<'_> {
 					None
 				};
 				Ok(Expr::new(
-					ExprType::New {
+					ExprKind::New {
 						class,
 						obj_id,
 						arg_list: arg_list?,
@@ -435,7 +446,7 @@ impl Parser<'_> {
 				))
 			}
 			"binary_expression" => Ok(Expr::new(
-				ExprType::Binary {
+				ExprKind::Binary {
 					lexp: Box::new(self.build_expression(&expression_node.child_by_field_name("left").unwrap())?),
 					rexp: Box::new(self.build_expression(&expression_node.child_by_field_name("right").unwrap())?),
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
@@ -459,7 +470,7 @@ impl Parser<'_> {
 				expression_span,
 			)),
 			"unary_expression" => Ok(Expr::new(
-				ExprType::Unary {
+				ExprKind::Unary {
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
 						"+" => UnaryOperator::Plus,
 						"-" => UnaryOperator::Minus,
@@ -474,7 +485,7 @@ impl Parser<'_> {
 			"string" => {
 				if expression_node.named_child_count() == 0 {
 					Ok(Expr::new(
-						ExprType::Literal(Literal::String(self.node_text(&expression_node).into())),
+						ExprKind::Literal(Literal::String(self.node_text(&expression_node).into())),
 						expression_span,
 					))
 				} else {
@@ -514,20 +525,20 @@ impl Parser<'_> {
 					}
 
 					Ok(Expr::new(
-						ExprType::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
+						ExprKind::Literal(Literal::InterpolatedString(InterpolatedString { parts })),
 						expression_span,
 					))
 				}
 			}
 
 			"number" => Ok(Expr::new(
-				ExprType::Literal(Literal::Number(
+				ExprKind::Literal(Literal::Number(
 					self.node_text(&expression_node).parse().expect("Number string"),
 				)),
 				expression_span,
 			)),
 			"bool" => Ok(Expr::new(
-				ExprType::Literal(Literal::Boolean(match self.node_text(&expression_node) {
+				ExprKind::Literal(Literal::Boolean(match self.node_text(&expression_node) {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
@@ -536,17 +547,17 @@ impl Parser<'_> {
 				expression_span,
 			)),
 			"duration" => Ok(Expr::new(
-				ExprType::Literal(self.build_duration(&expression_node)?),
+				ExprKind::Literal(self.build_duration(&expression_node)?),
 				expression_span,
 			)),
 			"reference" => Ok(Expr::new(
-				ExprType::Reference(self.build_reference(&expression_node)?),
+				ExprKind::Reference(self.build_reference(&expression_node)?),
 				expression_span,
 			)),
 			"positional_argument" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
-				ExprType::Call {
+				ExprKind::Call {
 					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
 					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
@@ -585,7 +596,7 @@ impl Parser<'_> {
 				}
 
 				Ok(Expr::new(
-					ExprType::MapLiteral {
+					ExprKind::MapLiteral {
 						fields,
 						type_: map_type,
 					},
@@ -613,7 +624,7 @@ impl Parser<'_> {
 					}
 				}
 				Ok(Expr::new(
-					ExprType::StructLiteral { type_: type_?, fields },
+					ExprKind::StructLiteral { type_: type_?, fields },
 					expression_span,
 				))
 			}

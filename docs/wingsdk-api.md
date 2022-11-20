@@ -351,7 +351,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.IBucketClient](#@winglang/wingsdk.sim.IBucketClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IBucketClient](#@winglang/wingsdk.cloud.IBucketClient)
 
 Simulator implementation of `cloud.Bucket`.
 
@@ -471,7 +471,7 @@ with a fresh copy without any consequences.
 
 ### Bucket <a name="Bucket" id="@winglang/wingsdk.tfaws.Bucket"></a>
 
-**Inflight client:** [@winglang/wingsdk.tfaws.IBucketClient](#@winglang/wingsdk.tfaws.IBucketClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IBucketClient](#@winglang/wingsdk.cloud.IBucketClient)
 
 AWS implementation of `cloud.Bucket`.
 
@@ -703,6 +703,122 @@ Whether a resource is stateful, i.e. it stores information that is not defined b
 A non-stateful resource does not remember information about past
 transactions or events, and can typically be replaced by a cloud provider
 with a fresh copy without any consequences.
+
+---
+
+
+### CdktfApp <a name="CdktfApp" id="@winglang/wingsdk.core.CdktfApp"></a>
+
+- *Implements:* @winglang/wingsdk.core.IApp
+
+An app that knows how to synthesize constructs into Terraform configuration using cdktf.
+
+No polycon factory or Terraform providers are included.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.CdktfApp.Initializer"></a>
+
+```typescript
+import { core } from '@winglang/wingsdk'
+
+new core.CdktfApp(props?: CdktfAppProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.CdktfAppProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.core.CdktfApp.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.core.CdktfAppProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.toString">toString</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.synth">synth</a></code> | Synthesize the app into Terraform configuration in a `cdktf.out` directory. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.core.CdktfApp.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+##### `synth` <a name="synth" id="@winglang/wingsdk.core.CdktfApp.synth"></a>
+
+```typescript
+public synth(): string
+```
+
+Synthesize the app into Terraform configuration in a `cdktf.out` directory.
+
+This method eturn a cleaned snapshot of the resulting Terraform manifest
+for unit testing.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.core.CdktfApp.isConstruct"></a>
+
+```typescript
+import { core } from '@winglang/wingsdk'
+
+core.CdktfApp.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.core.CdktfApp.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.core.CdktfApp.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `outdir`<sup>Required</sup> <a name="outdir" id="@winglang/wingsdk.core.CdktfApp.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+
+Directory where artifacts are synthesized to.
 
 ---
 
@@ -994,7 +1110,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.IFunctionClient](#@winglang/wingsdk.sim.IFunctionClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
 
 Simulator implementation of `cloud.Function`.
 
@@ -1142,7 +1258,7 @@ with a fresh copy without any consequences.
 
 ### Function <a name="Function" id="@winglang/wingsdk.tfaws.Function"></a>
 
-**Inflight client:** [@winglang/wingsdk.tfaws.IFunctionClient](#@winglang/wingsdk.tfaws.IFunctionClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
 
 AWS implementation of `cloud.Function`.
 
@@ -1726,7 +1842,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.ILoggerClient](#@winglang/wingsdk.sim.ILoggerClient)
+**Inflight client:** [@winglang/wingsdk.cloud.ILoggerClient](#@winglang/wingsdk.cloud.ILoggerClient)
 
 Simulator implementation of `cloud.Logger`.
 
@@ -2135,7 +2251,7 @@ with a fresh copy without any consequences.
 
 - *Implements:* @winglang/wingsdk.sim.IResource
 
-**Inflight client:** [@winglang/wingsdk.sim.IQueueClient](#@winglang/wingsdk.sim.IQueueClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IQueueClient](#@winglang/wingsdk.cloud.IQueueClient)
 
 Simulator implementation of `cloud.Queue`.
 
@@ -2276,7 +2392,7 @@ with a fresh copy without any consequences.
 
 ### Queue <a name="Queue" id="@winglang/wingsdk.tfaws.Queue"></a>
 
-**Inflight client:** [@winglang/wingsdk.tfaws.IQueueClient](#@winglang/wingsdk.tfaws.IQueueClient)
+**Inflight client:** [@winglang/wingsdk.cloud.IQueueClient](#@winglang/wingsdk.cloud.IQueueClient)
 
 AWS implementation of `cloud.Queue`.
 
@@ -2891,22 +3007,9 @@ const appProps: tfaws.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 | <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 | <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
-
----
-
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.tfaws.AppProps.property.customFactory"></a>
-
-```typescript
-public readonly customFactory: IPolyconFactory;
-```
-
-- *Type:* @winglang/polycons.IPolyconFactory
-- *Default:* use the default polycon factory included in the Wing SDK
-
-A custom factory to resolve polycons.
+| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 
 ---
 
@@ -2936,6 +3039,19 @@ The path to a state file which will track all synthesized files.
 
 If a
 statefile is not specified, we won't be able to remove extrenous files.
+
+---
+
+##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.tfaws.AppProps.property.customFactory"></a>
+
+```typescript
+public readonly customFactory: IPolyconFactory;
+```
+
+- *Type:* @winglang/polycons.IPolyconFactory
+- *Default:* use the default polycon factory included in the Wing SDK
+
+A custom factory to resolve polycons.
 
 ---
 
@@ -3208,6 +3324,56 @@ Which methods are called on the captured resource.
 
 ---
 
+### CdktfAppProps <a name="CdktfAppProps" id="@winglang/wingsdk.core.CdktfAppProps"></a>
+
+Props for `CdktfApp`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.CdktfAppProps.Initializer"></a>
+
+```typescript
+import { core } from '@winglang/wingsdk'
+
+const cdktfAppProps: core.CdktfAppProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.core.CdktfAppProps.property.outdir"></a>
+
+```typescript
+public readonly outdir: string;
+```
+
+- *Type:* string
+- *Default:* current working directory
+
+Directory where artifacts are synthesized to.
+
+---
+
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.CdktfAppProps.property.stateFile"></a>
+
+```typescript
+public readonly stateFile: string;
+```
+
+- *Type:* string
+- *Default:* no state file
+
+The path to a state file which will track all synthesized files.
+
+If a
+statefile is not specified, we won't be able to remove extrenous files.
+
+---
+
 ### FilesProps <a name="FilesProps" id="@winglang/wingsdk.core.FilesProps"></a>
 
 Props for `Files`.
@@ -3453,51 +3619,6 @@ The object that will be serialized into the file during synthesis.
 
 ---
 
-### LogEvent <a name="LogEvent" id="@winglang/wingsdk.cloud.LogEvent"></a>
-
-Represents a log event.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.LogEvent.Initializer"></a>
-
-```typescript
-import { cloud } from '@winglang/wingsdk'
-
-const logEvent: cloud.LogEvent = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.LogEvent.property.message">message</a></code> | <code>string</code> | The log message. |
-| <code><a href="#@winglang/wingsdk.cloud.LogEvent.property.timestamp">timestamp</a></code> | <code>number</code> | The log timestamp, in milliseconds since the epoch. |
-
----
-
-##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.LogEvent.property.message"></a>
-
-```typescript
-public readonly message: string;
-```
-
-- *Type:* string
-
-The log message.
-
----
-
-##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/wingsdk.cloud.LogEvent.property.timestamp"></a>
-
-```typescript
-public readonly timestamp: number;
-```
-
-- *Type:* number
-
-The log timestamp, in milliseconds since the epoch.
-
----
-
 ### PolicyStatement <a name="PolicyStatement" id="@winglang/wingsdk.tfaws.PolicyStatement"></a>
 
 AWS IAM Policy Statement.
@@ -3728,6 +3849,97 @@ public readonly lines: string[];
 The lines of text that will be serialized into the file during synthesis.
 
 They will be joined with newline characters.
+
+---
+
+### Trace <a name="Trace" id="@winglang/wingsdk.testing.Trace"></a>
+
+Represents an trace emitted during simulation.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.testing.Trace.Initializer"></a>
+
+```typescript
+import { testing } from '@winglang/wingsdk'
+
+const trace: testing.Trace = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.data">data</a></code> | <code>any</code> | A JSON blob with structured data. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.sourcePath">sourcePath</a></code> | <code>string</code> | The path of the resource that emitted the trace. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.sourceType">sourceType</a></code> | <code>string</code> | The type of the source that emitted the trace. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.timestamp">timestamp</a></code> | <code>string</code> | The timestamp of the event, in ISO 8601 format. |
+| <code><a href="#@winglang/wingsdk.testing.Trace.property.type">type</a></code> | <code>@winglang/wingsdk.testing.TraceType</code> | The type of a trace. |
+
+---
+
+##### `data`<sup>Required</sup> <a name="data" id="@winglang/wingsdk.testing.Trace.property.data"></a>
+
+```typescript
+public readonly data: any;
+```
+
+- *Type:* any
+
+A JSON blob with structured data.
+
+---
+
+##### `sourcePath`<sup>Required</sup> <a name="sourcePath" id="@winglang/wingsdk.testing.Trace.property.sourcePath"></a>
+
+```typescript
+public readonly sourcePath: string;
+```
+
+- *Type:* string
+
+The path of the resource that emitted the trace.
+
+---
+
+##### `sourceType`<sup>Required</sup> <a name="sourceType" id="@winglang/wingsdk.testing.Trace.property.sourceType"></a>
+
+```typescript
+public readonly sourceType: string;
+```
+
+- *Type:* string
+
+The type of the source that emitted the trace.
+
+---
+
+##### `timestamp`<sup>Required</sup> <a name="timestamp" id="@winglang/wingsdk.testing.Trace.property.timestamp"></a>
+
+```typescript
+public readonly timestamp: string;
+```
+
+- *Type:* string
+
+The timestamp of the event, in ISO 8601 format.
+
+---
+
+*Example*
+
+```typescript
+2020-01-01T00:00:00.000Z
+```
+
+
+##### `type`<sup>Required</sup> <a name="type" id="@winglang/wingsdk.testing.Trace.property.type"></a>
+
+```typescript
+public readonly type: TraceType;
+```
+
+- *Type:* @winglang/wingsdk.testing.TraceType
+
+The type of a trace.
 
 ---
 
@@ -4527,7 +4739,7 @@ The code contents.
 
 - *Implements:* @winglang/polycons.IPolyconFactory
 
-Polycon factory which resolves `cloud` resources into simulated resources.
+Polycon factory which resolves polycons in `cloud` into preflight resources for the simulator target.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.PolyconFactory.Initializer"></a>
 
@@ -4589,7 +4801,7 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 - *Implements:* @winglang/polycons.IPolyconFactory
 
-Polycon factory which resolves `cloud` resources into AWS resources.
+Polycon factory which resolves polycons in `cloud` into preflight resources for the AWS target.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.PolyconFactory.Initializer"></a>
 
@@ -4680,6 +4892,8 @@ new testing.Simulator(props: SimulatorProps)
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getProps">getProps</a></code> | Obtain a resource's props. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.getResourceByPath">getResourceByPath</a></code> | Get the resource instance for a given path. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.listResources">listResources</a></code> | Get a list of all resource paths. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.listTraces">listTraces</a></code> | Get a list of all traces added during the most recent simulation run. |
+| <code><a href="#@winglang/wingsdk.testing.Simulator.onTrace">onTrace</a></code> | Register a subscriber that will be notified when a trace is emitted by the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.reload">reload</a></code> | Stop the simulation, reload the simulation tree from the latest version of the app file, and restart the simulation. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.start">start</a></code> | Start the simulator. |
 | <code><a href="#@winglang/wingsdk.testing.Simulator.stop">stop</a></code> | Stop the simulation and clean up all resources. |
@@ -4755,6 +4969,28 @@ public listResources(): string[]
 ```
 
 Get a list of all resource paths.
+
+##### `listTraces` <a name="listTraces" id="@winglang/wingsdk.testing.Simulator.listTraces"></a>
+
+```typescript
+public listTraces(): Trace[]
+```
+
+Get a list of all traces added during the most recent simulation run.
+
+##### `onTrace` <a name="onTrace" id="@winglang/wingsdk.testing.Simulator.onTrace"></a>
+
+```typescript
+public onTrace(subscriber: ITraceSubscriber): void
+```
+
+Register a subscriber that will be notified when a trace is emitted by the simulator.
+
+###### `subscriber`<sup>Required</sup> <a name="subscriber" id="@winglang/wingsdk.testing.Simulator.onTrace.parameter.subscriber"></a>
+
+- *Type:* @winglang/wingsdk.testing.ITraceSubscriber
+
+---
 
 ##### `reload` <a name="reload" id="@winglang/wingsdk.testing.Simulator.reload"></a>
 
@@ -4852,7 +5088,7 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @winglang/wingsdk.sim.App, @winglang/wingsdk.tfaws.App, @winglang/wingsdk.core.IApp
+- *Implemented By:* @winglang/wingsdk.core.CdktfApp, @winglang/wingsdk.sim.App, @winglang/wingsdk.tfaws.App, @winglang/wingsdk.core.IApp
 
 A Wing application.
 
@@ -4907,7 +5143,7 @@ Directory where artifacts are synthesized to.
 
 ### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.cloud.IBucketClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IBucketClient, @winglang/wingsdk.sim.IBucketClient, @winglang/wingsdk.tfaws.IBucketClient
+- *Implemented By:* @winglang/wingsdk.cloud.IBucketClient
 
 Inflight interface for `Bucket`.
 
@@ -4972,26 +5208,6 @@ Put an object in the bucket.
 ---
 
 
-### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.sim.IBucketClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IBucketClient
-
-- *Implemented By:* @winglang/wingsdk.sim.IBucketClient
-
-Simulator implementation of inflight client for `cloud.Bucket`.
-
-
-
-### IBucketClient <a name="IBucketClient" id="@winglang/wingsdk.tfaws.IBucketClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IBucketClient
-
-- *Implemented By:* @winglang/wingsdk.tfaws.IBucketClient
-
-AWS implementation of inflight client for `cloud.Bucket`.
-
-
-
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
 - *Implemented By:* @winglang/wingsdk.cloud.Bucket, @winglang/wingsdk.cloud.BucketBase, @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.cloud.Logger, @winglang/wingsdk.cloud.LoggerBase, @winglang/wingsdk.cloud.Queue, @winglang/wingsdk.cloud.QueueBase, @winglang/wingsdk.cloud.Resource, @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.tfaws.Bucket, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.tfaws.Queue, @winglang/wingsdk.core.ICapturable, @winglang/wingsdk.core.ICapturableConstruct
@@ -5031,7 +5247,7 @@ The tree node.
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.cloud.IFunctionClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IFunctionClient, @winglang/wingsdk.sim.IFunctionClient, @winglang/wingsdk.tfaws.IFunctionClient
+- *Implemented By:* @winglang/wingsdk.cloud.IFunctionClient
 
 Inflight interface for `Function`.
 
@@ -5058,44 +5274,9 @@ Invoke the function asynchronously with a given payload.
 ---
 
 
-### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.sim.IFunctionClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IFunctionClient
-
-- *Implemented By:* @winglang/wingsdk.sim.IFunctionClient
-
-Simulator implementation of inflight client for `cloud.Function`.
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.sim.IFunctionClient.timesCalled">timesCalled</a></code> | Returns the number of times the function was invoked since its creation. |
-
----
-
-##### `timesCalled` <a name="timesCalled" id="@winglang/wingsdk.sim.IFunctionClient.timesCalled"></a>
-
-```typescript
-public timesCalled(): number
-```
-
-Returns the number of times the function was invoked since its creation.
-
-
-### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.tfaws.IFunctionClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IFunctionClient
-
-- *Implemented By:* @winglang/wingsdk.tfaws.IFunctionClient
-
-AWS implementation of inflight client for `cloud.Function`.
-
-
-
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.cloud.ILoggerClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient, @winglang/wingsdk.sim.ILoggerClient
+- *Implemented By:* @winglang/wingsdk.cloud.ILoggerClient
 
 Inflight interface for `Logger`.
 
@@ -5103,20 +5284,9 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.fetchLatestLogs">fetchLatestLogs</a></code> | Fetch the latest logs associated with the resource running the inflight code. |
 | <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
 
 ---
-
-##### `fetchLatestLogs` <a name="fetchLatestLogs" id="@winglang/wingsdk.cloud.ILoggerClient.fetchLatestLogs"></a>
-
-```typescript
-public fetchLatestLogs(): LogEvent[]
-```
-
-Fetch the latest logs associated with the resource running the inflight code.
-
-The logs may include cloud-provider specific messages or metadata.
 
 ##### `print` <a name="print" id="@winglang/wingsdk.cloud.ILoggerClient.print"></a>
 
@@ -5138,19 +5308,9 @@ The message to print.
 ---
 
 
-### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.sim.ILoggerClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.ILoggerClient
-
-- *Implemented By:* @winglang/wingsdk.sim.ILoggerClient
-
-Simulator implementation of inflight client for `cloud.Logger`.
-
-
-
 ### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.cloud.IQueueClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.IQueueClient, @winglang/wingsdk.sim.IQueueClient, @winglang/wingsdk.tfaws.IQueueClient
+- *Implemented By:* @winglang/wingsdk.cloud.IQueueClient
 
 Inflight interface for `Queue`.
 
@@ -5177,26 +5337,6 @@ Push a message to the queue.
 Payload to send to the queue.
 
 ---
-
-
-### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.sim.IQueueClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IQueueClient
-
-- *Implemented By:* @winglang/wingsdk.sim.IQueueClient
-
-Simulator implementation of inflight client for `cloud.Queue`.
-
-
-
-### IQueueClient <a name="IQueueClient" id="@winglang/wingsdk.tfaws.IQueueClient"></a>
-
-- *Extends:* @winglang/wingsdk.cloud.IQueueClient
-
-- *Implemented By:* @winglang/wingsdk.tfaws.IQueueClient
-
-AWS implementation of inflight client for `cloud.Queue`.
-
 
 
 ### IResource <a name="IResource" id="@winglang/wingsdk.sim.IResource"></a>
@@ -5267,7 +5407,27 @@ Context that is passed to individual resource simulations.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.addTrace">addTrace</a></code> | Add a trace. |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.findInstance">findInstance</a></code> | Find a resource simulation by its handle. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.withTrace">withTrace</a></code> | Register a trace associated with a resource activity. |
+
+---
+
+##### `addTrace` <a name="addTrace" id="@winglang/wingsdk.testing.ISimulatorContext.addTrace"></a>
+
+```typescript
+public addTrace(trace: Trace): void
+```
+
+Add a trace.
+
+Traces are breadcrumbs of information about resource
+operations that occurred during simulation, useful for understanding how
+resources interact or debugging an application.
+
+###### `trace`<sup>Required</sup> <a name="trace" id="@winglang/wingsdk.testing.ISimulatorContext.addTrace.parameter.trace"></a>
+
+- *Type:* @winglang/wingsdk.testing.Trace
 
 ---
 
@@ -5287,11 +5447,29 @@ Throws if the handle isn't valid.
 
 ---
 
+##### `withTrace` <a name="withTrace" id="@winglang/wingsdk.testing.ISimulatorContext.withTrace"></a>
+
+```typescript
+public withTrace(trace: IWithTraceProps): any
+```
+
+Register a trace associated with a resource activity.
+
+The activity will be
+run, and the trace will be populated with the result's success or failure.
+
+###### `trace`<sup>Required</sup> <a name="trace" id="@winglang/wingsdk.testing.ISimulatorContext.withTrace.parameter.trace"></a>
+
+- *Type:* @winglang/wingsdk.testing.IWithTraceProps
+
+---
+
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.assetsDir">assetsDir</a></code> | <code>string</code> | The absolute path to where all assets in `app.wx` are stored. |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorContext.property.resourcePath">resourcePath</a></code> | <code>string</code> | The app-unique ID of the resource that is being simulated. |
 
 ---
 
@@ -5307,11 +5485,23 @@ The absolute path to where all assets in `app.wx` are stored.
 
 ---
 
+##### `resourcePath`<sup>Required</sup> <a name="resourcePath" id="@winglang/wingsdk.testing.ISimulatorContext.property.resourcePath"></a>
+
+```typescript
+public readonly resourcePath: string;
+```
+
+- *Type:* string
+
+The app-unique ID of the resource that is being simulated.
+
+---
+
 ### ISimulatorFactory <a name="ISimulatorFactory" id="@winglang/wingsdk.testing.ISimulatorFactory"></a>
 
 - *Implemented By:* @winglang/wingsdk.testing.ISimulatorFactory
 
-A factory that can turn resource descriptions into resource simulations.
+A factory that can turn resource descriptions into (inflight) resource simulations.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -5348,6 +5538,35 @@ Resolve the parameters needed for creating a specific resource simulation.
 ---
 
 
+### ISimulatorLifecycleHooks <a name="ISimulatorLifecycleHooks" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.ISimulatorLifecycleHooks
+
+A collection of callbacks that are invoked at key lifecycle events of the simulator.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onTrace">onTrace</a></code> | A function to run whenever a trace is emitted. |
+
+---
+
+##### `onTrace` <a name="onTrace" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onTrace"></a>
+
+```typescript
+public onTrace(event: Trace): void
+```
+
+A function to run whenever a trace is emitted.
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ISimulatorLifecycleHooks.onTrace.parameter.event"></a>
+
+- *Type:* @winglang/wingsdk.testing.Trace
+
+---
+
+
 ### ISimulatorResource <a name="ISimulatorResource" id="@winglang/wingsdk.sim.ISimulatorResource"></a>
 
 - *Implemented By:* @winglang/wingsdk.sim.ISimulatorResource
@@ -5379,6 +5598,77 @@ public init(): void
 
 Perform any async initialization required by the resource.
 
+
+### ITraceSubscriber <a name="ITraceSubscriber" id="@winglang/wingsdk.testing.ITraceSubscriber"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.ITraceSubscriber
+
+A subscriber that can listen for traces emitted by the simulator.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.ITraceSubscriber.callback">callback</a></code> | Called when a trace is emitted. |
+
+---
+
+##### `callback` <a name="callback" id="@winglang/wingsdk.testing.ITraceSubscriber.callback"></a>
+
+```typescript
+public callback(event: Trace): void
+```
+
+Called when a trace is emitted.
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.testing.ITraceSubscriber.callback.parameter.event"></a>
+
+- *Type:* @winglang/wingsdk.testing.Trace
+
+---
+
+
+### IWithTraceProps <a name="IWithTraceProps" id="@winglang/wingsdk.testing.IWithTraceProps"></a>
+
+- *Implemented By:* @winglang/wingsdk.testing.IWithTraceProps
+
+Props for `ISimulatorContext.withTrace`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.IWithTraceProps.activity">activity</a></code> | A function to run as part of the trace. |
+
+---
+
+##### `activity` <a name="activity" id="@winglang/wingsdk.testing.IWithTraceProps.activity"></a>
+
+```typescript
+public activity(): any
+```
+
+A function to run as part of the trace.
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.IWithTraceProps.property.message">message</a></code> | <code>any</code> | The trace message. |
+
+---
+
+##### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.testing.IWithTraceProps.property.message"></a>
+
+```typescript
+public readonly message: any;
+```
+
+- *Type:* any
+
+The trace message.
+
+---
 
 ## Enums <a name="Enums" id="Enums"></a>
 
@@ -5464,20 +5754,12 @@ List of inflight operations available for `Logger`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.LoggerInflightMethods.PRINT">PRINT</a></code> | `Logger.print`. |
-| <code><a href="#@winglang/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS">FETCH_LATEST_LOGS</a></code> | `Logger.fetchLatestLogs`. |
 
 ---
 
 ##### `PRINT` <a name="PRINT" id="@winglang/wingsdk.cloud.LoggerInflightMethods.PRINT"></a>
 
 `Logger.print`.
-
----
-
-
-##### `FETCH_LATEST_LOGS` <a name="FETCH_LATEST_LOGS" id="@winglang/wingsdk.cloud.LoggerInflightMethods.FETCH_LATEST_LOGS"></a>
-
-`Logger.fetchLatestLogs`.
 
 ---
 
@@ -5497,6 +5779,33 @@ List of inflight operations available for `Queue`.
 ##### `PUSH` <a name="PUSH" id="@winglang/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
 
 `Queue.push`.
+
+---
+
+
+### TraceType <a name="TraceType" id="@winglang/wingsdk.testing.TraceType"></a>
+
+The type of a trace.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.testing.TraceType.RESOURCE">RESOURCE</a></code> | A trace representing a resource activity. |
+| <code><a href="#@winglang/wingsdk.testing.TraceType.LOG">LOG</a></code> | A trace representing information emitted by the logger. |
+
+---
+
+##### `RESOURCE` <a name="RESOURCE" id="@winglang/wingsdk.testing.TraceType.RESOURCE"></a>
+
+A trace representing a resource activity.
+
+---
+
+
+##### `LOG` <a name="LOG" id="@winglang/wingsdk.testing.TraceType.LOG"></a>
+
+A trace representing information emitted by the logger.
 
 ---
 

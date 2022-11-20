@@ -92,7 +92,7 @@
     },
     "type-primitive": {
       "name": "support.type.wing",
-      "match": "\\b(?:str|num|bool|any|Map|Set|MutMap|MutSet|Array|MutArray|Promise)\\b"
+      "match": "\\b(?:void|str|num|bool|any|Map|Set|MutMap|MutSet|Array|MutArray|Promise)\\b"
     },
     "numbers": {
       "patterns": [

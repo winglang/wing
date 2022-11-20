@@ -42,3 +42,6 @@ apps/wing-playground/dist
 # vscode-wing
 apps/vscode-wing/resources/native/wing-language-server
 .vercel
+
+# hangar
+tools/hangar/tmp/

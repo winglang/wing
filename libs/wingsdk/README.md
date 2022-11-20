@@ -57,17 +57,17 @@ class HelloWorld extends Construct {
 This construct contains a `Bucket` from the cloud library which represents a polymorphic cloud resources whose actual implementation (local, aws, other clouds) is determined at synth time.
 
 To use it in an application, you need to supply a synthesizer which will synthesize resources for the desired target.
-In the example below, a `local` synthesizer is used which tells the SDK to produce a `.wx` file.
+In the example below, a `sim` synthesizer is used which tells the SDK to produce a simulator  (`.wx`) file.
 The `.wx` file can be passed to the Wing console to simulate the bucket using your file system.
 If the commented out TF AWS synthesizer is used instead, then a Terraform application will be synthesized.
 The Terraform application will include an AWS S3 Bucket to represent the `Bucket`.
 
 ```ts
-import * as local from "../../src/local";
+import * as sim from "../../src/sim";
 import * as tfaws from "../../src/tf-aws";
 
-// const app = new local.App(); // alternative
-const app = new tfaws.App();
+const app = new sim.App();
+// const app = new tfaws.App(); // alternative
 new HelloWorld(app, "HelloWorld");
 app.synth();
 ```
@@ -75,6 +75,7 @@ app.synth();
 ## 📖 Documentation
 
 - [Simulator guide](../../docs/simulator.md)
+- [SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
 - [API reference](./API.md)
 - Wing SDK design guidelines (TODO)
 

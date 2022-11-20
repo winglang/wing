@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-// import * as sim from "../../src/sim";
-import * as tfaws from "../../src/tf-aws";
+// import * as sim from "../../src/target-sim";
+import * as tfaws from "../../src/target-tf-aws";
 
 class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {

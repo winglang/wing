@@ -1,0 +1,61 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`inflight function uses a logger 1`] = `
+"const $cap = {};
+$cap[\\"logger\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient(\\"/aws/lambda/Function\\");
+async function $proc($cap) {
+          await $cap.logger.print(\\"hello world!\\");
+        }
+exports.handler = async function(event) {
+  return await $proc($cap, event);
+};"
+`;
+
+exports[`inflight function uses a logger 2`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"Function_IamRole_678BE84C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"Function_IamRolePolicy_E3B26607\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"Function_IamRolePolicyAttachment_CACE1358\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"Function\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.Function_S3Object_C62A0C2D.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"Function_Bucket_CC3697BD\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"Function_S3Object_C62A0C2D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.Function_Bucket_CC3697BD.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
