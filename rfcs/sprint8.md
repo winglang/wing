@@ -57,6 +57,7 @@ resource TaskApi{
   
     // we can also create use the (req,res):void tuple convention, 
     // I used the (req):res here and on the other I used the (req, res), we need to decide
+    // TODO decide which API should we have
     api.on_get("/tasks", (req: cloud.ApiRequest) : cloud.ApiResponse ~> { 
       let ar = new MutArray<Struct>()
       for t in await tasks.list(){
