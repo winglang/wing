@@ -1,6 +1,10 @@
 {
   "dependencies": [
     {
+      "name": "@aws-sdk/client-s3",
+      "type": "build"
+    },
+    {
       "name": "@babel/core",
       "type": "build"
     },

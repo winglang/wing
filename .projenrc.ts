@@ -58,6 +58,8 @@ const project = new TypeScriptProject({
     "@tanstack/react-query",
     "zod",
     "get-port",
+    "@aws-sdk/client-s3",
+    "tsx",
     // Peer deps:
     "webpack",
     "require-from-string",
@@ -143,12 +145,20 @@ project.release?.addJobs({
         },
       },
       {
-        name: "Release",
+        name: "Release to GitHub",
         run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/Wing\\ Console-* release/latest-mac.yml 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
         env: {
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}",
           GITHUB_REPOSITORY: "${{ github.repository }}",
           GITHUB_REF: "${{ github.ref }}",
+        },
+      },
+      {
+        name: "Release to S3",
+        run: "npm exec tsx scripts/releaseToS3.mts",
+        env: {
+          AWS_ACCESS_KEY_ID: "${{ secrets.RELEASE_AWS_ACCESS_KEY_ID }}",
+          AWS_SECRET_ACCESS_KEY: "${{ secrets.RELEASE_AWS_SECRET_ACCESS_KEY }}",
         },
       },
     ],
