@@ -55,14 +55,19 @@ resource TaskApi{
   init(tasks: Tasks){
     this._api = new cloud.Api();
   
-    // we can also create new response, and not pass the req, res tuple... not sure what is better
-    api.on_get("/tasks", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
+    // we can also create use the (req,res):void tuple convention, 
+    // I used the (req):res here and on the other I used the (req, res), we need to decide
+    
+    api.on_get("/tasks", (req: cloud.ApiRequest) : cloud.ApiResponse ~> { 
       let ar = new MutArray<Struct>()
       for t in await tasks.list(){
         ar.push(t.to_json())
       }
-      // Yikes is this possible? maybe we need a JSON equivilant or should I have used something else then MutArray? 
-      res.response = ar.to_json() 
+      
+      return cloud.ApiResponse(
+        response : ar.to_json(), // Yikes is this possible? maybe we need a JSON equivilant or should I have used something else then MutArray? 
+        status: 200
+       )
     })
 
     api.on_post("/task", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
@@ -85,7 +90,6 @@ resource TaskApi{
         res.status = 200;
       else
         res.status = 404;
-
     })
 
   }
