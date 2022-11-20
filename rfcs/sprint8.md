@@ -33,7 +33,7 @@ resource Tasks {
   }
 
   async public ~list(): TaskItem[] {
-    return this._model.list()
+    return await this._model.list()
   }
   
   async public ~add(task: Task): TaskItem {
@@ -41,8 +41,8 @@ resource Tasks {
     return TaskItem { id:doc.id, task } // using struct expansion
   }
   
-  async public ~update(id: str, task: Task): void {
-    await this._model.find_and_update(id, task.to_json())
+  async public ~update(id: str, task: Task): boolean {
+    return await this._model.find_and_update(id, task.to_json())
   }
   
   async public ~delete(id: str): boolean {
@@ -81,7 +81,11 @@ resource TaskApi{
     api.on_put("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
       // in express you need to use json body parser middleware, and here?  
       let task = Task { title: req.body.title,  completed: req.body.completed } 
-      res.status = await tasks.update(req.parame.id, task)
+      if await tasks.update(req.parame.id, task)
+        res.status = 200;
+      else
+        res.status = 404;
+
     })
 
   }
