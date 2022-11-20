@@ -72,8 +72,7 @@ resource TaskApi{
     }
 
     api.on_delete("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
-      let deletedId = await tasks.delete(req.parame.id)
-      if deletedId 
+      if await tasks.delete(req.parame.id) 
         res.status = 200;
       else
         res.status = 404;
