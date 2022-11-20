@@ -69,6 +69,7 @@ try {
       dmg: {
         sign: true,
         icon: "electron/resources/icon.icns",
+        background: "electron/resources/background.png",
       },
       afterSign: async (context) => {
         if (context.electronPlatformName === "darwin") {
