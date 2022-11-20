@@ -38,7 +38,7 @@ resource Tasks {
   
   async public ~add(task: Task): TaskItem {
     let doc = await this._model(task.to_json())
-    return TaskItem { id:doc.id, task }
+    return TaskItem { id:doc.id, task } // using struct expansion
   }
   
   async public ~update(id: str, task: Task): void {
@@ -72,7 +72,11 @@ resource TaskApi{
     }
 
     api.on_delete("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
-      res.status = (await tasks.delete(req.parame.id)) ? 200 : 404;
+      let deletedId = await tasks.delete(req.parame.id)
+      if deletedId 
+        res.status = 200;
+      else
+        res.status = 404;
     }
 
     api.on_put("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
