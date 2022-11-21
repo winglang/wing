@@ -152,7 +152,7 @@ test.each(validWingFiles)(
         wingFile
       )}`;
 
-      // TODO snapshot app.wx contents
+      // TODO snapshot .wx contents
     });
   },
   {

@@ -139,10 +139,10 @@ with Wing applications on the local machine.
     wing compile --target sim hello.w
     ```
 
-2. You will notice that `app.wx` was created, run the Wing Console:
+2. You will notice that `hello.wx` was created, run the Wing Console:
 
     ```sh
-    wing run target/app.wx
+    wing run target/hello.wx
     ```
 
     The **Wing Console** will start and in the main view you'll see two resources: a **Queue** and a **Function**. 
@@ -172,7 +172,7 @@ Wing application through the terminal.
 2.  Run the following code inside the REPL:
     ```js
     const sdk = require("@winglang/wingsdk");
-    const simulator = new sdk.testing.Simulator({ simfile : "./app.wx"});
+    const simulator = new sdk.testing.Simulator({ simfile : "./hello.wx"});
     await simulator.start();
     const queue = simulator.getResourceByPath("root/cloud.Queue");
     await queue.push("Wing");

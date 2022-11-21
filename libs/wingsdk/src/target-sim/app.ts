@@ -54,7 +54,8 @@ export class App extends Construct implements IApp {
   }
 
   /**
-   * Synthesize the app into an `app.wx` file. Return the path to the file.
+   * Synthesize the app into an `.wx` file, named after the `name` prop.
+   * Return the path to the file.
    */
   public synth(): string {
     const workdir = mkdtemp();
