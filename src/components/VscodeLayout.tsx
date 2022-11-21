@@ -14,6 +14,7 @@ import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
 import { Node, useNodeMap } from "../utils/nodeMap.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
+import { HeaderBanner } from "./HeaderBanner.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { NewNodeRelationshipsView } from "./NewNodeRelationshipsView.js";
 import { NodeLogs } from "./NodeLogs.js";
@@ -41,9 +42,19 @@ export interface VscodeLayoutProps {
     | undefined;
 }
 
+const NewIssueUrl =
+  "https://github.com/winglang/wing/issues/new?labels=console&title=Feature%20Request(Console):";
+
 export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
+  const [showBanner, setShowBanner] = useState(true);
   const treeMenu = useTreeMenuItems();
   const nodeMap = useNodeMap(schema?.root);
+
+  const openExternalUrl = (url: string) => {
+    if (window.electronTRPC) {
+      window.electronTRPC.ipcRenderer.send("open-external-url", url);
+    }
+  };
 
   useEffect(() => {
     treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
@@ -228,6 +239,16 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
 
   return (
     <div className="h-full flex flex-col bg-slate-100 select-none">
+      {showBanner && (
+        <HeaderBanner
+          title={
+            "Our Console is at an initial stage of development, and we'd love to hear your feedback!"
+          }
+          buttonLabel={"Open an issue"}
+          onClick={() => openExternalUrl(NewIssueUrl)}
+          onClose={() => setShowBanner(false)}
+        />
+      )}
       <div className="flex-1 flex">
         <RightResizableWidget className="h-full flex flex-col w-60 min-w-[20rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu

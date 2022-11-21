@@ -3,7 +3,7 @@ import path from "node:path";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { watch } from "chokidar";
 import cors from "cors";
-import { app, BrowserWindow, dialog, Menu } from "electron";
+import { app, BrowserWindow, dialog, Menu, shell } from "electron";
 import console from "electron-log";
 import { autoUpdater } from "electron-updater";
 import express from "express";
@@ -135,21 +135,28 @@ function createWindowManager() {
 
       // The renderer process will send a message asking
       // for the server port and the name of the file.
-      newWindow.webContents.on("ipc-message", async (event, channel) => {
-        if (channel === "init") {
-          try {
-            await simulatorStart;
-          } catch (error) {
-            console.error(error);
-            dialog.showErrorBox(
-              "Error starting the simulation",
-              error instanceof Error ? error.message : "Unknown error",
-            );
+      newWindow.webContents.on(
+        "ipc-message",
+        async (event, channel, message) => {
+          if (channel === "open-external-url") {
+            await shell.openExternal(message);
+            return;
           }
-          const { port } = await server;
-          newWindow.webContents.send("init", { port, simfile });
-        }
-      });
+          if (channel === "init") {
+            try {
+              await simulatorStart;
+            } catch (error) {
+              console.error(error);
+              dialog.showErrorBox(
+                "Error starting the simulation",
+                error instanceof Error ? error.message : "Unknown error",
+              );
+            }
+            const { port } = await server;
+            newWindow.webContents.send("init", { port, simfile });
+          }
+        },
+      );
 
       // Watch for changes in the simfile.
       const watcher = watch(simfile, {
