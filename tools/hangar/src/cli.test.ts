@@ -1,4 +1,4 @@
-import { test, expect, beforeAll, afterAll, vitest } from "vitest";
+import { test, expect, beforeAll, afterAll, vitest, describe } from "vitest";
 import { posix as path } from "path";
 import { runServer } from "verdaccio";
 import "zx/globals";
@@ -42,119 +42,125 @@ const shellEnv = {
   npm_config_userconfig: path.join(hangarDir, "test.npmrc"),
 };
 
-afterAll(async () => {
-  registryServer.close();
-});
-
-beforeAll(async () => {
-  await within(async () => {
-    $.env = shellEnv;
-    $.cwd = hangarDir;
-
-    $.verbose = true;
-    await $`cd ${hangarDir}`;
-
-    await $`rm -rf ${tmpDir}`;
-    await $`mkdir -p ${npmCacheDir}`;
-    await $`mkdir -p ${registryDir}`;
-
-    registryServer.listen(registryPort, () => {});
-    await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingTGZ}`;
-    await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingSDKTGZ}`;
-
-    // ensure version works before bothering with the rest of the tests
-    $.cwd = tmpDir;
-    await $`cd ${tmpDir}`;
-    let npxOutput = await $`${npxBin} @winglang/wing --version`;
-    await $`${yarnBin} init -y`;
-    await $`${yarnBin} add @winglang/wing --no-lockfile`;
-    let yarnOutput = await $`node_modules/.bin/wing --version`;
-
-    expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
-    expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
+describe("compiler", () => {
+  afterAll(async () => {
+    registryServer.close();
   });
-}, 1000 * 200);
 
-function sanitize_json_paths(path: string) {
-  const assetKeyRegex = /"asset\..+"/g;
-  const assetSourceRegex = /"assets\/.+"/g;
-  const json = fs.readJsonSync(path);
-
-  const jsonText = JSON.stringify(json);
-  const sanitizedJsonText = jsonText
-    .replace(assetKeyRegex, '"<ASSET_KEY>"')
-    .replace(assetSourceRegex, '"<ASSET_SOURCE>"');
-
-  const finalObj = JSON.parse(sanitizedJsonText);
-  delete finalObj.terraform;
-
-  return finalObj;
-}
-
-async function enterTestDir(testDir: string) {
-  $.env = shellEnv;
-  await $`mkdir -p ${testDir}`;
-  await $`cd ${testDir}`;
-  $.cwd = testDir;
-}
-
-test.each(validWingFiles)(
-  "wing compile %s",
-  async (wingFile) => {
+  beforeAll(async () => {
     await within(async () => {
-      const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
-      const tf_manifest = path.join(test_dir, "target/cdktf.out/manifest.json");
-      const tf_json = path.join(
-        test_dir,
-        "target/cdktf.out/stacks/root/cdk.tf.json"
-      );
+      $.env = shellEnv;
+      $.cwd = hangarDir;
 
-      await enterTestDir(test_dir);
+      $.verbose = true;
+      await $`cd ${hangarDir}`;
 
-      await $`${npxBin} @winglang/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
-      const npx_tfManifest = sanitize_json_paths(tf_manifest);
-      const npx_tfJson = sanitize_json_paths(tf_json);
+      await $`rm -rf ${tmpDir}`;
+      await $`mkdir -p ${npmCacheDir}`;
+      await $`mkdir -p ${registryDir}`;
 
-      expect(npx_tfManifest).toMatchSnapshot("manifest.json");
-      expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
+      registryServer.listen(registryPort, () => {});
+      await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingTGZ}`;
+      await $`${npmBin} publish --@winglang:registry=${registryUrl} ${targetWingSDKTGZ}`;
 
-      await $`../node_modules/.bin/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      // ensure version works before bothering with the rest of the tests
+      $.cwd = tmpDir;
+      await $`cd ${tmpDir}`;
+      let npxOutput = await $`${npxBin} @winglang/wing --version`;
+      await $`${yarnBin} init -y`;
+      await $`${yarnBin} add @winglang/wing --no-lockfile`;
+      let yarnOutput = await $`node_modules/.bin/wing --version`;
 
-      expect(sanitize_json_paths(tf_manifest)).toStrictEqual(npx_tfManifest);
-      expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
+      expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
+      expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
     });
-  },
-  {
-    timeout: 1000 * 30,
+  }, 1000 * 200);
+
+  function sanitize_json_paths(path: string) {
+    const assetKeyRegex = /"asset\..+"/g;
+    const assetSourceRegex = /"assets\/.+"/g;
+    const json = fs.readJsonSync(path);
+
+    const jsonText = JSON.stringify(json);
+    const sanitizedJsonText = jsonText
+      .replace(assetKeyRegex, '"<ASSET_KEY>"')
+      .replace(assetSourceRegex, '"<ASSET_SOURCE>"');
+
+    const finalObj = JSON.parse(sanitizedJsonText);
+    delete finalObj.terraform;
+
+    return finalObj;
   }
-);
 
-test.each(validWingFiles)(
-  "wing compile --target sim %s",
-  async (wingFile) => {
-    await within(async () => {
-      const test_dir = path.join(tmpDir, `${wingFile}_sim`);
-      await enterTestDir(test_dir);
-
-      const testFile = path.join(validTestDir, wingFile);
-
-      await $`${npxBin} @winglang/wing compile --target sim ${testFile}`;
-
-      await $`../node_modules/.bin/wing compile --target sim ${testFile}`;
-
-      const runOutput = await $`${npxBin} @winglang/wing run target/app.wx`;
-      console.log(runOutput.stdout);
-
-      // TODO snapshot app.wx contents
-    });
-  },
-  {
-    timeout: 1000 * 30,
+  async function enterTestDir(testDir: string) {
+    $.env = shellEnv;
+    await $`mkdir -p ${testDir}`;
+    await $`cd ${testDir}`;
+    $.cwd = testDir;
   }
-);
+
+  test.each(validWingFiles)(
+    "wing compile %s",
+    async (wingFile) => {
+      await within(async () => {
+        const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
+        const tf_manifest = path.join(
+          test_dir,
+          "target/cdktf.out/manifest.json"
+        );
+        const tf_json = path.join(
+          test_dir,
+          "target/cdktf.out/stacks/root/cdk.tf.json"
+        );
+
+        await enterTestDir(test_dir);
+
+        await $`${npxBin} @winglang/wing compile ${path.join(
+          validTestDir,
+          wingFile
+        )}`;
+        const npx_tfManifest = sanitize_json_paths(tf_manifest);
+        const npx_tfJson = sanitize_json_paths(tf_json);
+
+        expect(npx_tfManifest).toMatchSnapshot("manifest.json");
+        expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
+
+        await $`../node_modules/.bin/wing compile ${path.join(
+          validTestDir,
+          wingFile
+        )}`;
+
+        expect(sanitize_json_paths(tf_manifest)).toStrictEqual(npx_tfManifest);
+        expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
+      });
+    },
+    {
+      timeout: 1000 * 30,
+    }
+  );
+
+  test.each(validWingFiles)(
+    "wing compile --target sim %s",
+    async (wingFile) => {
+      await within(async () => {
+        const test_dir = path.join(tmpDir, `${wingFile}_sim`);
+        await enterTestDir(test_dir);
+
+        const testFile = path.join(validTestDir, wingFile);
+
+        await $`${npxBin} @winglang/wing compile --target sim ${testFile}`;
+
+        await $`../node_modules/.bin/wing compile --target sim ${testFile}`;
+
+        const runOutput =
+          await $`${npxBin} @winglang/wing run target/app.wx`;
+        expect(runOutput.exitCode).toBe(0);
+
+        // TODO snapshot app.wx contents
+      });
+    },
+    {
+      timeout: 1000 * 30,
+    }
+  );
+});

@@ -1,6 +1,20 @@
 // Vitest Snapshot v1
 
-exports[`wing compile captures.w > cdk.tf.json 1`] = `
+exports[`compiler > wing compile --target sim captures.w > run output 1`] = `""`;
+
+exports[`compiler > wing compile --target sim expressions_binary_operators.w > run output 1`] = `""`;
+
+exports[`compiler > wing compile --target sim expressions_string_interpolation.w > run output 1`] = `""`;
+
+exports[`compiler > wing compile --target sim hello.w > run output 1`] = `""`;
+
+exports[`compiler > wing compile --target sim print.w > run output 1`] = `""`;
+
+exports[`compiler > wing compile --target sim statements_if.w > run output 1`] = `""`;
+
+exports[`compiler > wing compile --target sim statements_variable_declarations.w > run output 1`] = `""`;
+
+exports[`compiler > wing compile captures.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -177,7 +191,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile captures.w > manifest.json 1`] = `
+exports[`compiler > wing compile captures.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -193,7 +207,7 @@ exports[`wing compile captures.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
+exports[`compiler > wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -211,7 +225,7 @@ exports[`wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_binary_operators.w > manifest.json 1`] = `
+exports[`compiler > wing compile expressions_binary_operators.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -227,7 +241,7 @@ exports[`wing compile expressions_binary_operators.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
+exports[`compiler > wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -245,7 +259,7 @@ exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
+exports[`compiler > wing compile expressions_string_interpolation.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -261,7 +275,7 @@ exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile hello.w > cdk.tf.json 1`] = `
+exports[`compiler > wing compile hello.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -413,7 +427,7 @@ exports[`wing compile hello.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile hello.w > manifest.json 1`] = `
+exports[`compiler > wing compile hello.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -429,7 +443,7 @@ exports[`wing compile hello.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile print.w > cdk.tf.json 1`] = `
+exports[`compiler > wing compile print.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -568,7 +582,7 @@ exports[`wing compile print.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile print.w > manifest.json 1`] = `
+exports[`compiler > wing compile print.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -584,7 +598,7 @@ exports[`wing compile print.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_if.w > cdk.tf.json 1`] = `
+exports[`compiler > wing compile statements_if.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -602,7 +616,7 @@ exports[`wing compile statements_if.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_if.w > manifest.json 1`] = `
+exports[`compiler > wing compile statements_if.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -618,7 +632,7 @@ exports[`wing compile statements_if.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
+exports[`compiler > wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -636,7 +650,7 @@ exports[`wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_variable_declarations.w > manifest.json 1`] = `
+exports[`compiler > wing compile statements_variable_declarations.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
