@@ -27,5 +27,5 @@ constructor() {
   let y = x;
 }
 }
-new MyApp().synth();
+new MyApp({ name: "statements_variable_declarations" }).synth();
 

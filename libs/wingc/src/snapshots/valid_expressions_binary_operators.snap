@@ -29,5 +29,5 @@ constructor() {
   let xyz = (((y * y) / (x * x)) * z);
 }
 }
-new MyApp().synth();
+new MyApp({ name: "expressions_binary_operators" }).synth();
 

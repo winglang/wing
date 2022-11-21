@@ -9,7 +9,7 @@ use type_check::{FunctionSignature, Type};
 use crate::parser::Parser;
 use std::cell::RefCell;
 use std::fs;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
 use crate::capture::scan_captures;
@@ -133,7 +133,8 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
-	let intermediate_js = jsify::jsify(&scope, &out_dir, true);
+	let app_name = Path::new(source_file).file_stem().unwrap().to_str().unwrap();
+	let intermediate_js = jsify::jsify(&scope, &out_dir, app_name, true);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
 	let intermediate_file = out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");

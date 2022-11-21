@@ -34,7 +34,7 @@ constructor() {
   new cloud.Function(this,"cloud.Function",handler);
 }
 }
-new MyApp().synth();
+new MyApp({ name: "print" }).synth();
 // ../../examples/tests/valid/print.w.out/proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js
 async function $proc({  }, event) {
   console.log(event);

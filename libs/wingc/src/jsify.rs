@@ -43,7 +43,7 @@ fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -
 	return lines.join("\n");
 }
 
-pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
+pub fn jsify(scope: &Scope, out_dir: &PathBuf, app_name: &str, shim: bool) -> String {
 	let mut js = vec![];
 	let mut imports = vec![];
 
@@ -86,7 +86,7 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 			TARGET_APP,
 			render_block(js)
 		));
-		output.push("new MyApp().synth();".to_string());
+		output.push(format!("new MyApp({{ name: \"{}\" }}).synth();", app_name));
 	} else {
 		output.append(&mut js);
 	}
