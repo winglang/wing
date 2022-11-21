@@ -132,7 +132,7 @@ resource TaskApi{
       }
       let taskList = arr.to_array(); // generics in action MutArray<T>.to_array(): T[]
       
-      return cloud.ApiResponse(
+      return cloud.ApiResponse{
         /** 
          * Meta comment on taskList.stringify() (vs taskList.to_string())
          *  Initially I used to_string here, but I feel that it is not the appropriate function to use, 
@@ -141,7 +141,7 @@ resource TaskApi{
          **/ 
         response : taskList.stringify()),
         status: 200
-       )
+      }
     })
 
     api.on_post("/task", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
