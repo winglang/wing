@@ -14,7 +14,8 @@ bring cloud;
 bring util; // Hello util
 
 
-/** Meata comment about async/await
+/** 
+ * Meta: async/await
  *  As of this wriring I've placed a async/await syntax here, but I am 
  *  aware that elad would love to remove it
  *  to be discussed
@@ -39,29 +40,34 @@ resource Tasks {
   }
 
   async public ~list(): TaskItem[] {
-     /* META comment on this._bucket.list().files:File[] 
-      *   It would be nice to have this._bucket.list() return File[] but 
-      *   I am pretty sure this will not hold water, cause there will be situations where we get and empty list 
-      *   and we want to know why the list is empty:
-      *   - There is no bucket
-      *   - There is no permissions to read the bucket (the SDK need to include API for no permisssions scenarios  )
-      *   - There are no files
-      *  Hence we need to retun a FileListResponse which includeds { files: File[] }
-      *  for this excersize (because we are optimistic) we can only implement that portion of the API
-      **/
+    /**
+     * Meta: cloud.Bucket.list().files:File[] 
+     *  It would be nice to have this._bucket.list() return File[] but 
+     *  I am pretty sure this will not hold water, cause there will be situations where we get and empty list 
+     *  and we want to know why the list is empty:
+     *   - There is no bucket
+     *   - There is no permissions to read the bucket (the SDK need to include API for no permisssions scenarios  )
+     *   - There are no files
+     *  
+     *  Hence we need to retun a FileListResponse which includeds { files: File[] }
+     *  for this excersize (because we are optimistic) we can only implement that portion of the API
+     **/
     let files =  await this._bucket.list().files  //  :Filles
     let mutArray = new MutArray<TaskItem>()
     for f in files {
-      /* META comment on File {name:str} 
+      /**
+       *  Meta: File {name:str} 
        *   Maybe this should be called file_name? (name vs full_path vs base_name)
       **/
       let id = f.name 
-      /* META comment on this._bucket.get(path:str) : ?
-       * What is the return type here, does this return byteAttay?
-       * For now, I've decided to simply just return an interface with to_string(<encoding>)  
+      /**
+       * Meta: cloud.Bucket.get(path:str) : ?
+       *  What is the return type here, does this return byteAttay?
+       *  For now, I've decided to simply just return an interface with to_string(<encoding>)  
       **/
       let data = *await this._bucket.get(id)).to_string('utf-8');
-      /* META util.struct (vs util.json)
+      /**
+       * Meta: util.struct (vs util.json)
        *  There is an advantsage to repeat the word struct in our api for everytime 
        *  the user "thinks" about json, but there is also a disatvantage 
       **/
@@ -81,21 +87,30 @@ resource Tasks {
     await this._bucket.put(id, s) 
   }
   async public ~update(id: str, task: Task): boolean {
-    /* META comment on this._bucket.get(id)
-     *  assuming we get a null if the file doesn't exists, but I think it is not good enough because there are differnt
-     *  type of resposnse for a file to not exists:
+    /**
+     * Meta: cloud.Bucket.get(id).exists
+     *  We should be getting some FileGetResponse from the get command 
+     *  getting just a file is or null if the file doesn't feel good enought
+     *  because there are different reasons for a file not to exists, for example
      *    404 - we know it does not exists
      *    403 - we don't know if it does not exists because we don't have permissions to know :) 
+     * 
+     *  Hence we need to return some some FileGetResponse which includeds { exists: boolean }
+     *  for this excersize we can implement only that portion of the API 
      **/
-    if !(await this._bucket.get(id)) 
+    if !(await this._bucket.get(id)).exists) 
       return false;
     await this.save()
     return true;
   }
   
   async public ~delete(id: str): boolean {
+    /** 
+     * Meta cloud.Bucket.delete(id:str): FileDeleteResponse
+     *  Following the same logic as before we will return { delete: boolean } object 
+     **/ 
     let response =  await this._bucket.delete(id)
-    return response.status == 200 
+    return response.deleted
   }
 }
 
@@ -103,8 +118,8 @@ resource Tasks {
 resource TaskApi{ 
   init(tasks: Tasks){
     this._api = new cloud.ApiGateway();
-  
-    /* META comment on api.on_get("/tasks", (req: cloud.ApiRequest) : cloud.ApiResponse  
+    /** 
+     * Meta comment on api.on_get("/tasks", (req: cloud.ApiRequest) : cloud.ApiResponse  
      *  we can also create use the (req,res):void tuple convention, instead of the (req):res one 
      *  I used the (req):res here and on the other I used the (req, res), we need to decide
      *  
@@ -118,10 +133,11 @@ resource TaskApi{
       let taskList = arr.to_array(); // generics in action MutArray<T>.to_array(): T[]
       
       return cloud.ApiResponse(
-        /* Meta comment on taskList.stringify() (vs taskList.to_string())
-         * Initially I used to_string here, but I feel that it is not the appropriate function to use, 
-         * in Java it is considered a bad practive to rely on toString api 
-         * for something that is not debugging, because it can be overriden for debugging purposes 
+        /** 
+         * Meta comment on taskList.stringify() (vs taskList.to_string())
+         *  Initially I used to_string here, but I feel that it is not the appropriate function to use, 
+         *  in Java it is considered a bad practive to rely on toString api 
+         *  for something that is not debugging, because it can be overriden for debugging purposes 
          **/ 
         response : taskList.stringify()),
         status: 200
@@ -142,7 +158,10 @@ resource TaskApi{
     }
 
     api.on_put("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
-      // in express you need to use json body parser middleware, and here?  
+      /** 
+       * Meta in express you need to use json body parser middleware, and here?  
+       *
+       **/ 
       let struct = req.body
       let task = Task { title: struct.title,  completed: struct.completed } 
       if await tasks.update(req.parame.id, task)
