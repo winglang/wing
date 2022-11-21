@@ -4,19 +4,25 @@
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to waycup, his favorite coffee shop. 
 He starts his day going over his emails, slack messages, his CLI based TODO app, updates from github, etc… 
 But this story is not about that CEO, nor it is about that day. 
-This story is about that TODO app, and the team that created it using a completely new language in just 2 weeks.
+This story is about that TODO app, and the team that created it using a completely new language called Wing
 
 You mission, if you choose to accept it, is to implement this the following single tennant TODO app for sim and for aws:
 
 ```js
 
 bring cloud;
-bring util;
+bring util; // Hello util
 
+
+/** Meata comment about async/await
+ *  As of this wriring I've placed a async/await syntax here, but I am 
+ *  aware that elad would love to remove it
+ *  to be discussed
+ **/
 
 struct Task {
   title: str;
-  completed: bool = false // do we have defaults? 
+  completed: bool // currently we don't have defaults in the spec :(
 }
 
 struct TaskItem extends Task {
@@ -33,23 +39,33 @@ resource Tasks {
   }
 
   async public ~list(): TaskItem[] {
-     /* META comment on this._bucket.list() API
-      *   assuming we want to return content and not response and then get files from response.body
-      *   But, I am pretty sure this will not hold water, cause there will be situations where we get and empty list 
+     /* META comment on this._bucket.list().files:File[] 
+      *   It would be nice to have this._bucket.list() return File[] but 
+      *   I am pretty sure this will not hold water, cause there will be situations where we get and empty list 
       *   and we want to know why the list is empty:
       *   - There is no bucket
       *   - There is no permissions to read the bucket (the SDK need to include API for no permisssions scenarios  )
       *   - There are no files
+      *  Hence we need to retun a FileListResponse which includeds { files: File[] }
+      *  for this excersize (because we are optimistic) we can only implement that portion of the API
       **/
-    let files =  await this._bucket.list()  //  :Files[] ?
+    let files =  await this._bucket.list().files  //  :Filles
     let mutArray = new MutArray<TaskItem>()
     for f in files {
-      // Maybe this should be called file_name? (name vs full_path vs base_name)
+      /* META comment on File {name:str} 
+       *   Maybe this should be called file_name? (name vs full_path vs base_name)
+      **/
       let id = f.name 
-      // does this return byteAttay?, or simply for now  just an interface with to_string(<encoding>)
-      let data = await this._bucket.get(id) 
-      let s = data.to_string('utf-8');
-      let j = util.json.parse(s); //optimistic 
+      /* META comment on this._bucket.get(path:str) : ?
+       * What is the return type here, does this return byteAttay?
+       * For now, I've decided to simply just return an interface with to_string(<encoding>)  
+      **/
+      let data = *await this._bucket.get(id)).to_string('utf-8');
+      /* META util.struct (vs util.json)
+       *  There is an advantsage to repeat the word struct in our api for everytime 
+       *  the user "thinks" about json, but there is also a disatvantage 
+      **/
+      let j = util.strcut.parse(s); //:Strcut optimistic 
       mutArray.push(TaskItem {id: id, title:j.title, completed: j.completed })
     }
     return mutArray.to_array()
@@ -61,7 +77,7 @@ resource Tasks {
     return {TaskItem { id:id, task }}
   }
   async private save(id: str, task: Task){
-    let j = task.to_string() // equivilant to JSON.stringify(j) on Task
+    let j = task.stringify() // equivilant to JSON.stringify(j) on Task
     await this._bucket.put(id, s) 
   }
   async public ~update(id: str, task: Task): boolean {
