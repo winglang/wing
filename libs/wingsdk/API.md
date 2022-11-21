@@ -2961,6 +2961,7 @@ const appProps: sim.AppProps = { ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@winglang/wingsdk.sim.AppProps.property.name">name</a></code> | <code>string</code> | The name of the app. |
 | <code><a href="#@winglang/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 
 ---
@@ -2975,6 +2976,19 @@ public readonly customFactory: IPolyconFactory;
 - *Default:* use the default polycon factory included in the Wing SDK
 
 A custom factory to resolve polycons.
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/wingsdk.sim.AppProps.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+- *Default:* "app"
+
+The name of the app.
 
 ---
 
@@ -3007,9 +3021,23 @@ const appProps: tfaws.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.name">name</a></code> | <code>string</code> | The name of the app. |
 | <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 | <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
 | <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/wingsdk.tfaws.AppProps.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+- *Default:* "app"
+
+The name of the app.
 
 ---
 
@@ -3340,8 +3368,22 @@ const cdktfAppProps: core.CdktfAppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.name">name</a></code> | <code>string</code> | The name of the app. |
 | <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 | <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
+
+---
+
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/wingsdk.core.CdktfAppProps.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+- *Default:* "app"
+
+The name of the app.
 
 ---
 

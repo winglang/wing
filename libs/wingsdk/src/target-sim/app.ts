@@ -21,6 +21,12 @@ export interface AppProps {
   readonly outdir?: string;
 
   /**
+   * The name of the app.
+   * @default "app"
+   */
+  readonly name?: string;
+
+  /**
    * A custom factory to resolve polycons.
    * @default - use the default polycon factory included in the Wing SDK
    */
@@ -37,11 +43,13 @@ export class App extends Construct implements IApp {
    */
   public readonly outdir: string;
   private readonly files: Files;
+  private readonly name: string;
 
   constructor(props: AppProps) {
     super(undefined as any, "root");
     this.outdir = props.outdir ?? ".";
     this.files = new Files({ app: this });
+    this.name = props.name ?? "app";
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }
 
@@ -66,8 +74,8 @@ export class App extends Construct implements IApp {
       JSON.stringify(contents, null, 2)
     );
 
-    // zip it up, and write it as app.wx to the outdir
-    const simfile = join(this.outdir, "app.wx");
+    // zip it up, and write it as .wx to the outdir
+    const simfile = join(this.outdir, `${this.name}.wx`);
     tar.create(
       {
         gzip: true,
