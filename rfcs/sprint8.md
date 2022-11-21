@@ -11,11 +11,12 @@ You mission, if you choose to accept it, is to implement this the following sing
 ```js
 
 bring cloud;
+bring util;
 
 
 struct Task {
   title: str;
-  completed: bool?;
+  completed: bool;
 }
 
 struct TaskItem extends Task {
@@ -25,28 +26,42 @@ struct TaskItem extends Task {
 
 // could have been a wonderful CRUD<Task> if we had generics
 resource Tasks {
-  _model: cloud.KeyValueStore.Model // we only care about the actual model here
+  _bucket: cloud.Bucket
 
   init(){ 
-    let data = new cloud.KeyValueStore();
-    this._model = data.model("task")
+    this._bucket = new cloud.Bucket()
   }
 
   async public ~list(): TaskItem[] {
-    return await this._model.list()
+    let files =  await this._bucket.list()
+    let mutArray = new MutArray<TaskItem>()
+    for f in files {
+      let id = f.name // Maybe this should be called file_name? (name vs full_path vs base_name)
+      let data = await this._bucket.get(id) // does this return byteAttay?, maybe just an interface with toString(<encoding>) for now
+      let s = data.to_string('utf-8');
+      let j = util.json.parse(s); //optimistic 
+      mutArray.push(TaskItem {id: id, title:j.title, completed: j.completed })
+    }
+    return mutArray.to_array()
   }
   
   async public ~add(task: Task): TaskItem {
-    let doc = await this._model(task.to_json())
-    return TaskItem { id:doc.id, task } // using struct expansion
+    let id = util.uuid() // :str
+    await this.update(id, task);
+    return {TaskItem { id:id, task }}
   }
   
   async public ~update(id: str, task: Task): boolean {
-    return await this._model.find_and_update(id, task.to_json())
+    if !(await this._bucket.get(id))
+      return false;
+    let j = task.to_string() // equivilant to JSON.stringify(j) on Task
+    await this._bucket.put(id, s) 
+    return true;
   }
   
   async public ~delete(id: str): boolean {
-    return await this._model.delete(id)
+    let response =  await this._bucket.delete(id)
+    return response.status == 200 
   }
 }
 
