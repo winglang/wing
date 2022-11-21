@@ -61,31 +61,36 @@ resource Tasks {
       **/
       let id = f.name 
       /**
-       * Meta: cloud.Bucket.get(path:str) : ?
+       * Meta: cloud.Bucket.get(path:str) : FileGetResponse
        *  What is the return type here, does this return byteAttay?
        *  For now, I've decided to simply just return an interface with to_string(<encoding>)  
+       * { content: IData } where IData has a function  to_string(encoding:str)  : str
       **/
-      let data = *await this._bucket.get(id)).to_string('utf-8');
+      let data = await this._bucket.get(id).content
+      let s = data.to_string('utf-8');
       /**
        * Meta: util.struct (vs util.json)
        *  There is an advantsage to repeat the word struct in our api for everytime 
        *  the user "thinks" about json, but there is also a disatvantage 
       **/
-      let j = util.strcut.parse(s); //:Strcut optimistic 
+      let j = util.struct.parse(s); //:struct optimistic 
       mutArray.push(TaskItem {id: id, title:j.title, completed: j.completed })
     }
     return mutArray.to_array()
   }
   
   async public ~add(task: Task): TaskItem {
-    let id = util.uuid(); // :str
+    let id = util.uuid(); // :str - which uuid should we use , maybe we should explicitly say util.uuid.v5()
     await this.save();
-    return {TaskItem { id:id, task }}
+    // requires struct expansion 
+    return TaskItem { id:id, task }
   }
+
   async private save(id: str, task: Task){
     let j = task.stringify() // equivilant to JSON.stringify(j) on Task
     await this._bucket.put(id, s) 
   }
+
   async public ~update(id: str, task: Task): boolean {
     /**
      * Meta: cloud.Bucket.get(id).exists
@@ -151,10 +156,10 @@ resource TaskApi{
     }
 
     api.on_delete("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
-      if await tasks.delete(req.parame.id) 
-        res.status = 200;
+      if await tasks.delete(req.params.id) 
+        res.status = 204;
       else
-        res.status = 404;
+        res.status = 400;
     }
 
     api.on_put("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
@@ -165,9 +170,9 @@ resource TaskApi{
       let struct = req.body
       let task = Task { title: struct.title,  completed: struct.completed } 
       if await tasks.update(req.parame.id, task)
-        res.status = 200;
+        res.status = 204;
       else
-        res.status = 404;
+        res.status = 400;
     })
 
   }
