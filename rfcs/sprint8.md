@@ -16,7 +16,7 @@ bring util;
 
 struct Task {
   title: str;
-  completed: bool;
+  completed: bool = false // do we have defaults? 
 }
 
 struct TaskItem extends Task {
@@ -33,11 +33,21 @@ resource Tasks {
   }
 
   async public ~list(): TaskItem[] {
-    let files =  await this._bucket.list()
+     /* META comment on this._bucket.list() API
+      *   assuming we want to return content and not response and then get files from response.body
+      *   But, I am pretty sure this will not hold water, cause there will be situations where we get and empty list 
+      *   and we want to know why the list is empty:
+      *   - There is no bucket
+      *   - There is no permissions to read the bucket (the SDK need to include API for no permisssions scenarios  )
+      *   - There are no files
+      **/
+    let files =  await this._bucket.list()  //  :Files[] ?
     let mutArray = new MutArray<TaskItem>()
     for f in files {
-      let id = f.name // Maybe this should be called file_name? (name vs full_path vs base_name)
-      let data = await this._bucket.get(id) // does this return byteAttay?, maybe just an interface with toString(<encoding>) for now
+      // Maybe this should be called file_name? (name vs full_path vs base_name)
+      let id = f.name 
+      // does this return byteAttay?, or simply for now  just an interface with to_string(<encoding>)
+      let data = await this._bucket.get(id) 
       let s = data.to_string('utf-8');
       let j = util.json.parse(s); //optimistic 
       mutArray.push(TaskItem {id: id, title:j.title, completed: j.completed })
@@ -46,16 +56,24 @@ resource Tasks {
   }
   
   async public ~add(task: Task): TaskItem {
-    let id = util.uuid() // :str
-    await this.update(id, task);
+    let id = util.uuid(); // :str
+    await this.save();
     return {TaskItem { id:id, task }}
   }
-  
-  async public ~update(id: str, task: Task): boolean {
-    if !(await this._bucket.get(id))
-      return false;
+  async private save(id: str, task: Task){
     let j = task.to_string() // equivilant to JSON.stringify(j) on Task
     await this._bucket.put(id, s) 
+  }
+  async public ~update(id: str, task: Task): boolean {
+    /* META comment on this._bucket.get(id)
+     *  assuming we get a null if the file doesn't exists, but I think it is not good enough because there are differnt
+     *  type of resposnse for a file to not exists:
+     *    404 - we know it does not exists
+     *    403 - we don't know if it does not exists because we don't have permissions to know :) 
+     **/
+    if !(await this._bucket.get(id)) 
+      return false;
+    await this.save()
     return true;
   }
   
@@ -68,19 +86,28 @@ resource Tasks {
 
 resource TaskApi{ 
   init(tasks: Tasks){
-    this._api = new cloud.Api();
+    this._api = new cloud.ApiGateway();
   
-    // we can also create use the (req,res):void tuple convention, 
-    // I used the (req):res here and on the other I used the (req, res), we need to decide
-    // TODO decide which API should we have
+    /* META comment on api.on_get("/tasks", (req: cloud.ApiRequest) : cloud.ApiResponse  
+     *  we can also create use the (req,res):void tuple convention, instead of the (req):res one 
+     *  I used the (req):res here and on the other I used the (req, res), we need to decide
+     *  
+     **/
+    //TODO decide which API should we have
     api.on_get("/tasks", (req: cloud.ApiRequest) : cloud.ApiResponse ~> { 
-      let ar = new MutArray<Struct>()
+      let ar = new MutArray<TaskItem>()
       for t in await tasks.list(){
-        ar.push(t.to_json())
+        ar.push(t)
       }
+      let taskList = arr.to_array(); // generics in action MutArray<T>.to_array(): T[]
       
       return cloud.ApiResponse(
-        response : ar.to_json(), // Yikes is this possible? maybe we need a JSON equivilant or should I have used something else then MutArray? 
+        /* Meta comment on taskList.stringify() (vs taskList.to_string())
+         * Initially I used to_string here, but I feel that it is not the appropriate function to use, 
+         * in Java it is considered a bad practive to rely on toString api 
+         * for something that is not debugging, because it can be overriden for debugging purposes 
+         **/ 
+        response : taskList.stringify()),
         status: 200
        )
     })
@@ -100,7 +127,8 @@ resource TaskApi{
 
     api.on_put("/task/:id", (req: cloud.ApiRequest, res: cloud.ApiResponse) ~> { 
       // in express you need to use json body parser middleware, and here?  
-      let task = Task { title: req.body.title,  completed: req.body.completed } 
+      let struct = req.body
+      let task = Task { title: struct.title,  completed: struct.completed } 
       if await tasks.update(req.parame.id, task)
         res.status = 200;
       else
@@ -110,7 +138,6 @@ resource TaskApi{
   }
 }
 
-
 resource TODOApp{
   init(){
     new TaskApi(new Tasks())
@@ -119,6 +146,4 @@ resource TODOApp{
 
 
 new TODOApp()
-
-
 ```
