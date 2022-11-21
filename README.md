@@ -102,7 +102,7 @@ code --install-extension ~/Downloads/vscode-wing.vsix
 
 > To enable automatic updates, add a GitHub [personal access token] to the extension's settings under "Wing > Updates".
 
-Install Wing Console by [downloading](https://github.com/winglang/wing-console/releases) the latest release for your platform.
+Install Wing Console by [downloading](https://wing-console.s3.amazonaws.com/wing-console.dmg) the latest release for your platform.
 (currently supporting only macOS)
 
 ### Hello, Wing!
