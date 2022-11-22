@@ -148,9 +148,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
   useEffect(() => {
     const node = nodeMap?.find(treeMenu.currentItemId);
     setCurrentNode(node);
-    if (!node) {
-      setAttributeGroups(undefined);
-    } else {
+    if (node) {
       let attributeGroups: AttributeGroup[] = [
         {
           groupName: "Node",
@@ -207,6 +205,8 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
       }
 
       setAttributeGroups(attributeGroups);
+    } else {
+      setAttributeGroups(undefined);
     }
     // }, [nodeMap, treeMenu.currentItemId]);
   }, [treeMenu.currentItemId]);
@@ -237,11 +237,11 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
   const toggleInspectorSection = (section: string) => {
     setOpenInspectorSections(([...sections]) => {
       const index = sections.indexOf(section);
-      if (index !== -1) {
-        sections.splice(index, 1);
+      if (index === -1) {
+        sections.push(section);
         return sections;
       } else {
-        sections.push(section);
+        sections.splice(index, 1);
         return sections;
       }
     });
@@ -626,7 +626,7 @@ function TreeNode({
               italic: !name || name.length === 0,
             })}
           >
-            {name != "" ? name : "<root>"}
+            {name == "" ? "<root>" : name}
           </div>
         </button>
       </div>

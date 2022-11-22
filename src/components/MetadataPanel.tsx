@@ -141,11 +141,11 @@ export const MetadataPanel = ({
   const toggleInspectorSection = (section: string) => {
     setClosedInspectorSections(([...sections]) => {
       const index = sections.indexOf(section);
-      if (index !== -1) {
-        sections.splice(index, 1);
+      if (index === -1) {
+        sections.push(section);
         return sections;
       } else {
-        sections.push(section);
+        sections.splice(index, 1);
         return sections;
       }
     });

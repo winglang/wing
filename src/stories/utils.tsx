@@ -147,6 +147,7 @@ export const constructHubTreeToWingSchema = (): WingSimulatorSchema => {
       children: {},
     },
     startOrder: [],
+    sdkVersion: "",
   };
 
   const resourcePathsArray = getConstructHubResourcePaths();

@@ -14,42 +14,28 @@ type ResponseEnvelope =
     };
 
 export const createFunctionRouter = (simulator: Simulator) => {
-  return trpc
-    .router()
-    .query("function.timesCalled", {
-      input: z.object({
-        resourcePath: z.string(),
-      }),
-      async resolve({ input }) {
-        const client = simulator.getResourceByPath(
-          input.resourcePath,
-        ) as IFunctionClient;
-        const response = await client.timesCalled();
+  return trpc.router().mutation("function.invoke", {
+    input: z.object({
+      resourcePath: z.string(),
+      message: z.string(),
+    }),
+    async resolve({ input }) {
+      const client = simulator.getResourceByPath(
+        input.resourcePath,
+      ) as IFunctionClient;
+      try {
+        const response: ResponseEnvelope = {
+          success: true,
+          response: await client.invoke(input.message),
+        };
         return response;
-      },
-    })
-    .mutation("function.invoke", {
-      input: z.object({
-        resourcePath: z.string(),
-        message: z.string(),
-      }),
-      async resolve({ input }) {
-        const client = simulator.getResourceByPath(
-          input.resourcePath,
-        ) as IFunctionClient;
-        try {
-          const response: ResponseEnvelope = {
-            success: true,
-            response: await client.invoke(input.message),
-          };
-          return response;
-        } catch (error) {
-          const response: ResponseEnvelope = {
-            success: false,
-            error: error instanceof Error ? error.message : error,
-          };
-          return response;
-        }
-      },
-    });
+      } catch (error) {
+        const response: ResponseEnvelope = {
+          success: false,
+          error: error instanceof Error ? error.message : error,
+        };
+        return response;
+      }
+    },
+  });
 };

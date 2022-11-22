@@ -44,13 +44,13 @@ export function buildNodeMapFromRecord(nodeRecord: NodeRecord): NodeMap {
   return {
     record: nodeRecord,
     find(path) {
-      return path !== undefined ? nodeRecord[path] : undefined;
+      return path === undefined ? undefined : nodeRecord[path];
     },
     visitParents(path, callback) {
-      let node = path !== undefined ? nodeRecord[path] : undefined;
+      let node = path === undefined ? undefined : nodeRecord[path];
       while (node) {
         callback(node);
-        node = node.parent !== undefined ? nodeRecord[node.parent] : undefined;
+        node = node.parent === undefined ? undefined : nodeRecord[node.parent];
       }
     },
   };

@@ -13,12 +13,7 @@ export interface FunctionInteractionViewProps {
 export const FunctionExploreView = ({ node }: FunctionInteractionViewProps) => {
   const { appMode } = useContext(AppContext);
   const resourcePath = node.path ?? "";
-  const utils = trpc.useContext();
-  const invoke = trpc.useMutation("function.invoke", {
-    onSuccess() {
-      void utils.invalidateQueries(["function.timesCalled", { resourcePath }]);
-    },
-  });
+  const invoke = trpc.useMutation("function.invoke");
   const [input, setInput] = useState("");
   const id = useId();
   return (
