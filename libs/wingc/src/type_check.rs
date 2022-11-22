@@ -51,6 +51,7 @@ pub struct Class {
 	parent: Option<TypeRef>, // Must be a Type::Class type
 	#[derivative(Debug = "ignore")]
 	pub env: TypeEnv,
+	pub should_case_convert_jsii: bool,
 }
 
 impl Class {
@@ -208,8 +209,8 @@ impl Display for Type {
 				write!(f, "object of {}", resource_type.name.name)
 			}
 			Type::ClassInstance(class) => {
-				let class_type_name = class.as_class().expect("Class instance must reference to a class");
-				write!(f, "instance of {}", class_type_name)
+				let class_type = class.as_class().expect("Class instance must reference to a class");
+				write!(f, "instance of {}", class_type.name.name)
 			}
 			Type::Namespace(namespace) => write!(f, "{}", namespace.name),
 			Type::Struct(s) => write!(f, "{}", s.name),
@@ -251,6 +252,19 @@ impl From<TypeRef> for &mut Type {
 }
 
 impl TypeRef {
+	pub fn as_class_or_resource_object(&self) -> Option<&Class> {
+		self.as_class_object().or_else(|| self.as_resource_object())
+	}
+
+	pub fn as_class_object(&self) -> Option<&Class> {
+		if let &Type::ClassInstance(ref class_instance) = (*self).into() {
+			let class = class_instance.as_class().unwrap();
+			Some(class)
+		} else {
+			None
+		}
+	}
+
 	pub fn as_resource_object(&self) -> Option<&Class> {
 		if let &Type::ResourceObject(ref res_obj) = (*self).into() {
 			let res = res_obj.as_resource().unwrap();
@@ -268,9 +282,9 @@ impl TypeRef {
 		}
 	}
 
-	fn as_class(&self) -> Option<&Type> {
-		if let &Type::Class(_) = (*self).into() {
-			Some((*self).into())
+	fn as_class(&self) -> Option<&Class> {
+		if let &Type::Class(ref class) = (*self).into() {
+			Some(class)
 		} else {
 			None
 		}
@@ -1027,6 +1041,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
+					should_case_convert_jsii: false,
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,

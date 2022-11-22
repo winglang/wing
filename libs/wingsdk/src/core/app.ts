@@ -91,7 +91,7 @@ export class CdktfApp extends Construct implements IApp {
         const tfConfig = this.toTerraform();
         const cleaned = cleanTerraformConfig(tfConfig);
 
-        return stringify(cleaned, null, 2);
+        return stringify(cleaned, null, 2) ?? "";
       }
     }
 

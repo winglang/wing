@@ -701,6 +701,39 @@ Which methods are called on the captured resource.
 
 ---
 
+### CounterProps <a name="CounterProps" id="@winglang/wingsdk.cloud.CounterProps"></a>
+
+Properties for `Counter`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.CounterProps.Initializer"></a>
+
+```typescript
+import { cloud } from '@winglang/wingsdk'
+
+const counterProps: cloud.CounterProps = { ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initialValue">initialValue</a></code> | <code>number</code> | The initial value of the counter. |
+
+---
+
+##### `initialValue`<sup>Optional</sup> <a name="initialValue" id="@winglang/wingsdk.cloud.CounterProps.property.initialValue"></a>
+
+```typescript
+public readonly initialValue: number;
+```
+
+- *Type:* number
+- *Default:* 0
+
+The initial value of the counter.
+
+---
+
 ### FilesProps <a name="FilesProps" id="@winglang/wingsdk.core.FilesProps"></a>
 
 Props for `Files`.
@@ -1937,6 +1970,37 @@ The tree node.
 
 ---
 
+### ICounterClient <a name="ICounterClient" id="@winglang/wingsdk.cloud.ICounterClient"></a>
+
+- *Implemented By:* @winglang/wingsdk.cloud.ICounterClient
+
+Inflight interface for `Queue`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
+
+---
+
+##### `inc` <a name="inc" id="@winglang/wingsdk.cloud.ICounterClient.inc"></a>
+
+```typescript
+public inc(amount?: number): number
+```
+
+Increments the counter atomically by a certain amount and returns the previous value.
+
+###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/wingsdk.cloud.ICounterClient.inc.parameter.amount"></a>
+
+- *Type:* number
+
+amount to increment (default is 1).
+
+---
+
+
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.cloud.IFunctionClient"></a>
 
 - *Implemented By:* cloud.IFunctionClient
@@ -2064,6 +2128,25 @@ List of inflight operations available for `Bucket`.
 ##### `LIST` <a name="LIST" id="@winglang/wingsdk.cloud.BucketInflightMethods.LIST"></a>
 
 `Bucket.list`.
+
+---
+
+
+### CounterInflightMethods <a name="CounterInflightMethods" id="@winglang/wingsdk.cloud.CounterInflightMethods"></a>
+
+List of inflight operations available for `Counter`.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.CounterInflightMethods.INC">INC</a></code> | `Counter.inc`. |
+
+---
+
+##### `INC` <a name="INC" id="@winglang/wingsdk.cloud.CounterInflightMethods.INC"></a>
+
+`Counter.inc`.
 
 ---
 

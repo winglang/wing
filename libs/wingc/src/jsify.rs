@@ -3,9 +3,12 @@ use std::{cmp::Ordering, fs, path::PathBuf};
 
 use sha2::{Digest, Sha256};
 
-use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+use crate::{
+	ast::{
+		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+	},
+	utilities::snake_case_to_camel_case,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -109,13 +112,23 @@ fn jsify_scope(scope: &Scope, out_dir: &PathBuf) -> String {
 	return lines.join("\n");
 }
 
-fn jsify_reference(reference: &Reference) -> String {
+fn jsify_reference(reference: &Reference, case_convert: Option<bool>) -> String {
+	let symbolize = if case_convert.unwrap_or(false) {
+		jsify_symbol_case_converted
+	} else {
+		jsify_symbol
+	};
 	match reference {
-		Reference::Identifier(identifier) => jsify_symbol(identifier),
-		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol(property),
+		Reference::Identifier(identifier) => symbolize(identifier),
+		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &symbolize(property),
 	}
 }
 
+fn jsify_symbol_case_converted(symbol: &Symbol) -> String {
+	let mut result = symbol.name.clone();
+	result = snake_case_to_camel_case(&result);
+	return format!("{}", result);
+}
 fn jsify_symbol(symbol: &Symbol) -> String {
 	return format!("{}", symbol.name);
 }
@@ -217,14 +230,22 @@ fn jsify_expression(expression: &Expr) -> String {
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
-		ExprKind::Reference(_ref) => jsify_reference(&_ref),
+		ExprKind::Reference(_ref) => jsify_reference(&_ref, None),
 		ExprKind::Call { function, args } => {
 			// TODO: implement "print" to use Logger resource
 			// see: https://github.com/winglang/wing/issues/50
+			let mut needs_case_conversion = false;
 			if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
 				return format!("console.log({})", jsify_arg_list(args, None, None));
+			} else if let Reference::NestedIdentifier { object, .. } = function {
+				let object_type = object.evaluated_type.borrow().unwrap();
+				needs_case_conversion = object_type.as_class_or_resource_object().unwrap().should_case_convert_jsii;
 			}
-			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
+			format!(
+				"{}({})",
+				jsify_reference(&function, Some(needs_case_conversion)),
+				jsify_arg_list(&args, None, None)
+			)
 		}
 		ExprKind::Unary { op, exp } => {
 			let op = match op {
@@ -347,7 +368,7 @@ fn jsify_statement(statement: &Stmt, out_dir: &PathBuf) -> String {
 		}
 		StmtKind::Expression(e) => format!("{};", jsify_expression(e)),
 		StmtKind::Assignment { variable, value } => {
-			format!("{} = {};", jsify_reference(&variable), jsify_expression(value))
+			format!("{} = {};", jsify_reference(&variable, None), jsify_expression(value))
 		}
 		StmtKind::Scope(scope) => jsify_scope(scope, &out_dir),
 		StmtKind::Return(exp) => {
