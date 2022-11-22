@@ -1,5 +1,5 @@
-import { IPolyconFactory } from "@winglang/polycons";
 import { IConstruct } from "constructs";
+import { IPolyconFactory } from "polycons";
 import * as cloud from "../cloud";
 import { Bucket } from "./bucket";
 import { Function } from "./function";
