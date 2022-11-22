@@ -44,19 +44,11 @@ let counter = new cloud.Counter(initial_value: 100);
 let queue = new cloud.Queue(timeout: 10s);
 
 queue.on_message((body: str) ~> {
-  let next = counter.increment();
+  let next = counter.inc();
   let key = "myfile-${next}.txt";
   bucket.put(key, body);
 });
 ```
-
-:::caution WIP
-
-Sorry but this example is not working yet. The counter resource is still
-being developed. Check out [this pull request](https://github.com/winglang/wing/pull/375).
-
-:::
-
 
 In this simple application, every message that goes into the queue is written to
 a new object inside a cloud bucket. An atomic counter is used to generate an
