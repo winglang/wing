@@ -956,6 +956,274 @@ The initial value of the counter.
 ---
 
 
+### Counter <a name="Counter" id="@winglang/wingsdk.sim.Counter"></a>
+
+- *Implements:* @winglang/wingsdk.sim.IResource
+
+**Inflight client:** [@winglang/wingsdk.cloud.ICounterClient](#@winglang/wingsdk.cloud.ICounterClient)
+
+Simulator implementation of `cloud.Counter`.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.sim.Counter.Initializer"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+new sim.Counter(scope: Construct, id: string, props?: CounterProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Counter.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Counter.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.Counter.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.CounterProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.sim.Counter.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.sim.Counter.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.sim.Counter.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.CounterProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Counter.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.sim.Counter.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Counter.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.sim.Counter.isConstruct"></a>
+
+```typescript
+import { sim } from '@winglang/wingsdk'
+
+sim.Counter.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.sim.Counter.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.sim.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.sim.Counter.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.sim.Counter.property.initialValue">initialValue</a></code> | <code>number</code> | The initial value of the counter. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.sim.Counter.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.sim.Counter.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+##### `initialValue`<sup>Required</sup> <a name="initialValue" id="@winglang/wingsdk.sim.Counter.property.initialValue"></a>
+
+```typescript
+public readonly initialValue: number;
+```
+
+- *Type:* number
+
+The initial value of the counter.
+
+---
+
+
+### Counter <a name="Counter" id="@winglang/wingsdk.tfaws.Counter"></a>
+
+**Inflight client:** [@monadahq/wingsdk.cloud.ICounterClient](#@monadahq/wingsdk.cloud.ICounterClient)
+
+AWS implementation of `cloud.Counter`.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.tfaws.Counter.Initializer"></a>
+
+```typescript
+import { tfaws } from '@winglang/wingsdk'
+
+new tfaws.Counter(scope: Construct, id: string, props?: CounterProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.Initializer.parameter.scope">scope</a></code> | <code>constructs.Construct</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.Initializer.parameter.id">id</a></code> | <code>string</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.cloud.CounterProps</code> | *No description.* |
+
+---
+
+##### `scope`<sup>Required</sup> <a name="scope" id="@winglang/wingsdk.tfaws.Counter.Initializer.parameter.scope"></a>
+
+- *Type:* constructs.Construct
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.tfaws.Counter.Initializer.parameter.id"></a>
+
+- *Type:* string
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.tfaws.Counter.Initializer.parameter.props"></a>
+
+- *Type:* @winglang/wingsdk.cloud.CounterProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.toString">toString</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `toString` <a name="toString" id="@winglang/wingsdk.tfaws.Counter.toString"></a>
+
+```typescript
+public toString(): string
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.isConstruct">isConstruct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`isConstruct`~~ <a name="isConstruct" id="@winglang/wingsdk.tfaws.Counter.isConstruct"></a>
+
+```typescript
+import { tfaws } from '@winglang/wingsdk'
+
+tfaws.Counter.isConstruct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.tfaws.Counter.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.property.stateful">stateful</a></code> | <code>boolean</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.tfaws.Counter.property.initialValue">initialValue</a></code> | <code>number</code> | The initial value of the counter. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.tfaws.Counter.property.node"></a>
+
+```typescript
+public readonly node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.tfaws.Counter.property.stateful"></a>
+
+```typescript
+public readonly stateful: boolean;
+```
+
+- *Type:* boolean
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+##### `initialValue`<sup>Required</sup> <a name="initialValue" id="@winglang/wingsdk.tfaws.Counter.property.initialValue"></a>
+
+```typescript
+public readonly initialValue: number;
+```
+
+- *Type:* number
+
+The initial value of the counter.
+
+---
+
+
 ### CounterBase <a name="CounterBase" id="@winglang/wingsdk.cloud.CounterBase"></a>
 
 Functionality shared between all `Counter` implementations.
@@ -5622,7 +5890,7 @@ Put an object in the bucket.
 
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.Bucket, @winglang/wingsdk.cloud.BucketBase, @winglang/wingsdk.cloud.Counter, @winglang/wingsdk.cloud.CounterBase, @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.cloud.Logger, @winglang/wingsdk.cloud.LoggerBase, @winglang/wingsdk.cloud.Queue, @winglang/wingsdk.cloud.QueueBase, @winglang/wingsdk.cloud.Resource, @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.tfaws.Bucket, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.tfaws.Queue, @winglang/wingsdk.core.ICapturable, @winglang/wingsdk.core.ICapturableConstruct
+- *Implemented By:* @winglang/wingsdk.cloud.Bucket, @winglang/wingsdk.cloud.BucketBase, @winglang/wingsdk.cloud.Counter, @winglang/wingsdk.cloud.CounterBase, @winglang/wingsdk.cloud.Function, @winglang/wingsdk.cloud.FunctionBase, @winglang/wingsdk.cloud.Logger, @winglang/wingsdk.cloud.LoggerBase, @winglang/wingsdk.cloud.Queue, @winglang/wingsdk.cloud.QueueBase, @winglang/wingsdk.cloud.Resource, @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Counter, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.tfaws.Bucket, @winglang/wingsdk.tfaws.Counter, @winglang/wingsdk.tfaws.Function, @winglang/wingsdk.tfaws.Queue, @winglang/wingsdk.core.ICapturable, @winglang/wingsdk.core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
@@ -5786,7 +6054,7 @@ Payload to send to the queue.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.sim.IResource
+- *Implemented By:* @winglang/wingsdk.sim.Bucket, @winglang/wingsdk.sim.Counter, @winglang/wingsdk.sim.Function, @winglang/wingsdk.sim.Logger, @winglang/wingsdk.sim.Queue, @winglang/wingsdk.sim.IResource
 
 Interfaces shared by all polycon implementations (preflight classes) targeting the simulator.
 
