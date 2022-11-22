@@ -1,37 +1,14 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
-import { IPolyconFactory, Polycons } from "@winglang/polycons";
+import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { DependencyGraph, Files, IApp } from "../core";
+import { AppProps, DependencyGraph, Files, IApp } from "../core";
 import { mkdtemp, sanitizeValue } from "../util";
 import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
 import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
-
-/**
- * Props for `App`.
- */
-export interface AppProps {
-  /**
-   * Directory where artifacts are synthesized to.
-   * @default - current working directory
-   */
-  readonly outdir?: string;
-
-  /**
-   * The name of the app.
-   * @default "app"
-   */
-  readonly name?: string;
-
-  /**
-   * A custom factory to resolve polycons.
-   * @default - use the default polycon factory included in the Wing SDK
-   */
-  readonly customFactory?: IPolyconFactory;
-}
 
 /**
  * A construct that knows how to synthesize simulator resources into a
@@ -48,7 +25,7 @@ export class App extends Construct implements IApp {
   constructor(props: AppProps) {
     super(undefined as any, "root");
     this.outdir = props.outdir ?? ".";
-    this.files = new Files({ app: this });
+    this.files = new Files({ app: this, stateFile: props.stateFile });
     this.name = props.name ?? "app";
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }

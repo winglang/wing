@@ -1,4 +1,5 @@
 import { join } from "path";
+import { IPolyconFactory } from "@winglang/polycons";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
 import stringify from "safe-stable-stringify";
@@ -19,9 +20,9 @@ export interface IApp extends IConstruct {
 }
 
 /**
- * Props for `CdktfApp`.
+ * Props for all `App` classes.
  */
-export interface CdktfAppProps {
+export interface AppProps {
   /**
    * Directory where artifacts are synthesized to.
    * @default - current working directory
@@ -40,6 +41,12 @@ export interface CdktfAppProps {
    * @default - no state file
    */
   readonly stateFile?: string;
+
+  /**
+   * A custom factory to resolve polycons.
+   * @default - use the default polycon factory included in the Wing SDK
+   */
+  readonly customFactory?: IPolyconFactory;
 }
 
 /**
@@ -51,7 +58,7 @@ export class CdktfApp extends Construct implements IApp {
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
-  constructor(props: CdktfAppProps = {}) {
+  constructor(props: AppProps = {}) {
     super(null as any, "");
 
     // this value gets thrown away since we are returning a different object
