@@ -91,10 +91,7 @@ project.addTask("sandbox:destroy", {
 // the root of the package, so accessing them requires barrel imports:
 // const { BucketClient } = require("wingsdk/lib/aws/bucket.inflight");
 const pkgJson = project.tryFindObjectFile("package.json");
-pkgJson!.addOverride("jsii.excludeTypescript", [
-  "src/**/*.inflight.ts",
-  "src/**/*.sim.ts",
-]);
+pkgJson!.addOverride("jsii.excludeTypescript", ["src/**/*.inflight.ts"]);
 
 // By default, the TypeScript compiler will include all types from @types, even
 // if the package is not used anywhere in our source code (`/src`). This is
@@ -117,7 +114,7 @@ const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
     compilerOptions: {
       esModuleInterop: true,
     },
-    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts"],
+    include: ["src/**/*.inflight.ts"],
     exclude: ["node_modules"],
   },
 });
@@ -126,20 +123,17 @@ project.compileTask.exec(`tsc -p ${tsconfigNonJsii.path}`);
 enum Zone {
   PREFLIGHT = "preflight",
   INFLIGHT = "inflight",
-  SIMULATOR = "simulator",
   TEST = "test",
 }
 
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return srcPathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
+      return srcPathsNotEndingIn(["*.inflight.ts", "*.test.ts"]);
     case Zone.TEST:
       return "src/**/*.test.ts";
     case Zone.INFLIGHT:
       return "src/**/*.inflight.ts";
-    case Zone.SIMULATOR:
-      return "src/**/*.sim.ts";
   }
 }
 
@@ -177,9 +171,6 @@ project.eslint!.addRules({
         // avoid importing inflight or simulator code into preflight code since
         // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
-        disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
-        // implementation details of simulator should not be leaked to inflight code
-        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],

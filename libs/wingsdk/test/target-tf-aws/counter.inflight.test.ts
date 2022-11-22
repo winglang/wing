@@ -21,7 +21,8 @@ test("inc(1)", async () => {
   setupMock({
     expectedTableName: MOCK_TABLE_NAME,
     expectedAmount: 1,
-    responseValue: prevValue,
+    initialValue: 0,
+    responseValue: prevValue + 1,
   });
 
   // WHEN
@@ -38,7 +39,8 @@ test("inc(5)", async () => {
   setupMock({
     expectedTableName: MOCK_TABLE_NAME,
     expectedAmount: 5,
-    responseValue: 887,
+    initialValue: 0,
+    responseValue: 887 + 5,
   });
 
   // WHEN
@@ -49,19 +51,10 @@ test("inc(5)", async () => {
   expect(response).toEqual(prevValue); // returns previous value
 });
 
-test("fails when counter is not initialized", async () => {
-  setupMock({
-    expectedTableName: MOCK_TABLE_NAME,
-    expectedAmount: 1,
-  });
-
-  const client = new CounterClient(MOCK_TABLE_NAME);
-  await expect(client.inc()).rejects.toThrow("");
-});
-
 interface MockOptions {
   readonly expectedTableName: string;
   readonly expectedAmount: number;
+  readonly initialValue?: number;
   readonly responseValue?: number;
 }
 
@@ -69,17 +62,19 @@ function setupMock(opts: MockOptions) {
   const expectedRequest: UpdateItemCommandInput = {
     TableName: opts.expectedTableName,
     Key: { id: { S: "counter" } },
-    UpdateExpression: `SET value = value + :amount`,
-    ExpressionAttributeValues: { ":amount": { N: `${opts.expectedAmount}` } },
-    ConditionExpression: `attribute_exists(value)`,
-    ReturnValues: "UPDATED_OLD",
+    UpdateExpression: `SET counter_value = if_not_exists(counter_value, :initial_value) + :amount`,
+    ExpressionAttributeValues: {
+      ":amount": { N: `${opts.expectedAmount}` },
+      ":initial_value": { N: `${opts.initialValue}` },
+    },
+    ReturnValues: "UPDATED_NEW",
   };
   const mockResponse: UpdateItemCommandOutput = {
     $metadata: {},
     Attributes: !opts.responseValue
       ? undefined
       : {
-          value: { N: `${opts.responseValue}` },
+          counter_value: { N: `${opts.responseValue}` },
         },
   };
 

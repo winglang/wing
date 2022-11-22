@@ -2,7 +2,7 @@
 
 exports[`counter captured by a function 1`] = `
 "const $cap = {};
-$cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME__Counter\\"]);
+$cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME__Counter\\"], 0);
 async function $proc($cap, event) {
           const val = await $cap.my_counter.inc(2);
           console.log(val);

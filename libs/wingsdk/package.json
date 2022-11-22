@@ -172,8 +172,7 @@
       "types": []
     },
     "excludeTypescript": [
-      "src/**/*.inflight.ts",
-      "src/**/*.sim.ts"
+      "src/**/*.inflight.ts"
     ]
   },
   "overrides": {
