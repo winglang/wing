@@ -205,6 +205,16 @@ project.tasks
 
 project.preCompileTask.exec("patch-package");
 
-project.tasks.tryFind("docgen")!.exec("cp API.md ../../docs/wingsdk-api.md");
+const docsFrontMatter = `---
+title: SDK
+id: sdk
+description: Wing SDK API Reference
+---
+`;
+
+const docsPath = "../../docs/04-reference/wingsdk-api.md";
+const docgen = project.tasks.tryFind("docgen")!;
+docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
+docgen.exec(`cat API.md >> ${docsPath}`);
 
 project.synth();
