@@ -2,7 +2,7 @@
 
 exports[`function captures a bucket 1`] = `
 "const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
         console.log(\\"Hello, \\" + event.name);
         // TODO: fix this
@@ -98,7 +98,7 @@ exports.handler = async function(event) {
 
 exports[`function captures a function 2`] = `
 "const $cap = {};
-$cap[\\"function\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME__Function1\\"]);
+$cap[\\"function\\"] = new (require(\\"[REDACTED]/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME__Function1\\"]);
 async function $proc($cap, event) {
           console.log(\\"Event: \\" + JSON.stringify(event));
           const data = await $cap.function.invoke(JSON.stringify({ name: \\"world\\" }));
@@ -191,7 +191,7 @@ exports[`function captures a function 3`] = `
 
 exports[`function captures a queue 1`] = `
 "const $cap = {};
-$cap[\\"queue\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL__Queue\\"]);
+$cap[\\"queue\\"] = new (require(\\"[REDACTED]/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL__Queue\\"]);
 async function $proc($cap) {
           await $cap.queue.push(JSON.stringify({ name: \\"Alice\\" }));
         }
@@ -435,7 +435,7 @@ exports[`function captures structured values 2`] = `
 
 exports[`two functions reusing the same inflight 1`] = `
 "const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
           await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
@@ -447,7 +447,7 @@ exports.handler = async function(event) {
 
 exports[`two functions reusing the same inflight 2`] = `
 "const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
+$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME__Bucket\\"]);
 async function $proc($cap, event) {
           console.log(\\"Hello, \\" + event.name);
           await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));

@@ -2,7 +2,7 @@
 
 exports[`inflight function uses a logger 1`] = `
 "const $cap = {};
-$cap[\\"logger\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient(\\"/aws/lambda/Function\\");
+$cap[\\"logger\\"] = new (require(\\"[REDACTED]/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient(\\"/aws/lambda/Function\\");
 async function $proc($cap) {
           await $cap.logger.print(\\"hello world!\\");
         }
