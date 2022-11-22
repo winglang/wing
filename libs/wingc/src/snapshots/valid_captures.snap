@@ -49,7 +49,7 @@ constructor() {
   );
 }
 }
-new MyApp().synth();
+new MyApp({ name: "captures" }).synth();
 // ../../examples/tests/valid/captures.w.out/proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js
 async function $proc({ bucket1, bucket2 }, event) {
   bucket1.put("file.txt","data");

@@ -1,31 +1,14 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
-import { IPolyconFactory, Polycons } from "@winglang/polycons";
+import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { DependencyGraph, Files, IApp } from "../core";
+import { AppProps, DependencyGraph, Files, IApp } from "../core";
 import { mkdtemp, sanitizeValue } from "../util";
 import { PolyconFactory } from "./factory";
 import { isResource } from "./resource";
 import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
-
-/**
- * Props for `App`.
- */
-export interface AppProps {
-  /**
-   * Directory where artifacts are synthesized to.
-   * @default - current working directory
-   */
-  readonly outdir?: string;
-
-  /**
-   * A custom factory to resolve polycons.
-   * @default - use the default polycon factory included in the Wing SDK
-   */
-  readonly customFactory?: IPolyconFactory;
-}
 
 /**
  * A construct that knows how to synthesize simulator resources into a
@@ -37,16 +20,18 @@ export class App extends Construct implements IApp {
    */
   public readonly outdir: string;
   private readonly files: Files;
+  private readonly name: string;
 
   constructor(props: AppProps) {
     super(undefined as any, "root");
     this.outdir = props.outdir ?? ".";
-    this.files = new Files({ app: this });
+    this.files = new Files({ app: this, stateFile: props.stateFile });
+    this.name = props.name ?? "app";
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }
 
   /**
-   * Synthesize the app into an `app.wx` file. Return the path to the file.
+   * Synthesize the app into a `.wx` file. Return the path to the file.
    */
   public synth(): string {
     const workdir = mkdtemp();
@@ -66,8 +51,8 @@ export class App extends Construct implements IApp {
       JSON.stringify(contents, null, 2)
     );
 
-    // zip it up, and write it as app.wx to the outdir
-    const simfile = join(this.outdir, "app.wx");
+    // zip it up, and write it as .wx to the outdir
+    const simfile = join(this.outdir, `${this.name}.wx`);
     tar.create(
       {
         gzip: true,

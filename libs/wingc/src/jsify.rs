@@ -46,7 +46,7 @@ fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -
 	return lines.join("\n");
 }
 
-pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
+pub fn jsify(scope: &Scope, out_dir: &PathBuf, app_name: &str, shim: bool) -> String {
 	let mut js = vec![];
 	let mut imports = vec![];
 
@@ -89,7 +89,7 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 			TARGET_APP,
 			render_block(js)
 		));
-		output.push("new MyApp().synth();".to_string());
+		output.push(format!("new MyApp({{ name: \"{}\" }}).synth();", app_name));
 	} else {
 		output.append(&mut js);
 	}
@@ -174,11 +174,7 @@ fn jsify_type(typ: &Type) -> String {
 				format!(
 					"{}.{}",
 					jsify_symbol(root),
-					fields
-						.iter()
-						.map(|f| jsify_symbol(f))
-						.collect::<Vec<String>>()
-						.join(".")
+					fields.iter().map(jsify_symbol).collect::<Vec<String>>().join(".")
 				)
 			}
 		}
@@ -402,7 +398,7 @@ fn jsify_statement(statement: &Stmt, out_dir: &PathBuf) -> String {
 				),
 				members
 					.iter()
-					.map(|m| jsify_class_member(m))
+					.map(jsify_class_member)
 					.collect::<Vec<String>>()
 					.join("\n"),
 				methods
@@ -426,7 +422,7 @@ fn jsify_statement(statement: &Stmt, out_dir: &PathBuf) -> String {
 				},
 				members
 					.iter()
-					.map(|m| jsify_class_member(m))
+					.map(jsify_class_member)
 					.collect::<Vec<String>>()
 					.join("\n")
 			)
@@ -491,7 +487,7 @@ fn jsify_inflight_function(func_def: &FunctionDefinition, out_dir: &PathBuf) -> 
 	)
 }
 
-fn jsify_function(name: &str, parameters: &Vec<Symbol>, body: &Scope, out_dir: &PathBuf) -> String {
+fn jsify_function(name: &str, parameters: &[Symbol], body: &Scope, out_dir: &PathBuf) -> String {
 	let mut parameter_list = vec![];
 	for p in parameters.iter() {
 		parameter_list.push(jsify_symbol(p));
