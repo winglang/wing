@@ -50,14 +50,6 @@ queue.on_message((body: str) ~> {
 });
 ```
 
-:::caution WIP
-
-Sorry but this example is not working yet. The counter resource is still
-being developed. Check out [this pull request](https://github.com/winglang/wing/pull/375).
-
-:::
-
-
 In this simple application, every message that goes into the queue is written to
 a new object inside a cloud bucket. An atomic counter is used to generate an
 incrementing and unique key for each object.
