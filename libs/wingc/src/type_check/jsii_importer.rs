@@ -4,6 +4,7 @@ use crate::{
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
 	type_check::{type_env::StatementIdx, Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
+	utilities::{camel_case_to_snake_case},
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -218,8 +219,9 @@ impl<'a> JsiiImporter<'a> {
 					return_type,
 					flight,
 				}));
+				let name = camel_case_to_snake_case(&m.name);
 				class_env.define(
-					&Self::jsii_name_to_symbol(&m.name, &m.location_in_module),
+					&Self::jsii_name_to_symbol(&name, &m.location_in_module),
 					method_sig,
 					StatementIdx::Top,
 				);
@@ -328,6 +330,7 @@ impl<'a> JsiiImporter<'a> {
 		// When adding the class methods below we'll be able to reference this type.
 		debug!("Adding type {} to namespace", type_name.green());
 		let class_spec = Class {
+			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
 			parent: base_class,

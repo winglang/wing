@@ -8,4 +8,4 @@ inflight handler(message: str): str {
   return message;
 }
 
-queue.onMessage(handler);
+queue.on_message(handler);
