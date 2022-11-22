@@ -5,6 +5,8 @@ import {
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
+import { SdkStream } from "@aws-sdk/types";
+import { sdkStreamMixin } from "@aws-sdk/util-stream-node";
 import { mockClient } from "aws-sdk-client-mock";
 import { BucketClient } from "../../src/target-tf-aws/bucket.inflight";
 
@@ -14,12 +16,14 @@ beforeEach(() => {
   s3Mock.reset();
 });
 
-function createMockStream(text: string): Readable {
-  const s = new Readable();
-  s._read = () => {};
-  s.push(text);
-  s.push(null); // indicate end of file
-  return s;
+// https://github.com/m-radzikowski/aws-sdk-client-mock/issues/131
+function createMockStream(text: string): SdkStream<Readable> {
+  const stream = new Readable();
+  stream._read = () => {};
+  stream.push(text);
+  stream.push(null); // indicate end of file
+  const sdkStream = sdkStreamMixin(stream);
+  return sdkStream;
 }
 
 test("get object from a bucket", async () => {

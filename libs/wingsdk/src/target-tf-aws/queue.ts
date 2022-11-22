@@ -40,6 +40,7 @@ export class Queue extends cloud.QueueBase {
     const newInflight = new core.Inflight({
       entrypoint: `$sqsEventWrapper`,
       code: core.NodeJsCode.fromInline(code.join("\n")),
+      captures: inflight.captures,
     });
 
     const fn = new cloud.Function(

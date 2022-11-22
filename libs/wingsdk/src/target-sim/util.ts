@@ -3,7 +3,7 @@ import { NodeJsCode } from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
 
-export function captureSimulatorResource(
+export function bindSimulatorResource(
   type: string,
   resource: IResource,
   captureScope: IConstruct

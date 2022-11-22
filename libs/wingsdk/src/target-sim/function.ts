@@ -5,7 +5,7 @@ import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
 import { TextFile } from "../fs";
 import { IResource } from "./resource";
 import { FunctionSchema } from "./schema-resources";
-import { captureSimulatorResource } from "./util";
+import { bindSimulatorResource } from "./util";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
   "WING_SIM_INFLIGHT_RESOURCE_PATH";
@@ -69,7 +69,7 @@ export class Function extends cloud.FunctionBase implements IResource {
 
   /** @internal */
   public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    return captureSimulatorResource("function", this, captureScope);
+    return bindSimulatorResource("function", this, captureScope);
   }
 
   /** @internal */
