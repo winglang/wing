@@ -8,35 +8,30 @@ class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
+    const counter = new cloud.Counter(this, "Counter", {
+      initialValue: 1000,
+    });
+    const bucket = new cloud.Bucket(this, "Bucket");
     const queue = new cloud.Queue(this, "Queue");
-    const pusher = new core.Inflight({
+    const processor = new core.Inflight({
       code: core.NodeJsCode.fromInline(
-        `async function $proc($cap, event) {
-          await $cap.logger.print("Hello, world!");
-          await $cap.queue.push(event);
+        `async function $proc($cap, body) {
+          let next = await $cap.counter.inc();
+          let key = "file-" + next + ".txt";
+          await $cap.bucket.put(key, body);
         }`
       ),
       entrypoint: "$proc",
       captures: {
-        logger: {
-          resource: cloud.Logger.of(this),
-          methods: [cloud.LoggerInflightMethods.PRINT],
+        counter: {
+          resource: counter,
+          methods: [cloud.CounterInflightMethods.INC],
         },
-        queue: {
-          resource: queue,
-          methods: [cloud.QueueInflightMethods.PUSH],
+        bucket: {
+          resource: bucket,
+          methods: [cloud.BucketInflightMethods.PUT],
         },
       },
-    });
-    new cloud.Function(this, "Function", pusher);
-
-    const processor = new core.Inflight({
-      code: core.NodeJsCode.fromInline(
-        `async function $proc($cap, event) {
-          console.log("Received " + event);
-        }`
-      ),
-      entrypoint: "$proc",
     });
     queue.onMessage(processor);
   }
