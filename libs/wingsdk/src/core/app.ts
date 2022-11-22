@@ -1,7 +1,7 @@
 import { join } from "path";
-import { IPolyconFactory } from "@winglang/polycons";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
+import { IPolyconFactory } from "polycons";
 import stringify from "safe-stable-stringify";
 import { Files } from "./files";
 

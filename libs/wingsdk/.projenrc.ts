@@ -2,7 +2,7 @@ import { JsonFile, cdk, javascript } from "projen";
 
 const JSII_DEPS = [
   "constructs@~10.0.25",
-  "@winglang/polycons",
+  "polycons",
   "cdktf",
   "@cdktf/provider-aws",
 ];

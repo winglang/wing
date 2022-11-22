@@ -129,6 +129,3 @@ exports.handler = function(event) { entrypoint($cap, event) };
 
 Today the SDK currently expects the user code to always have an object containing captures as its first argument, and an event as a second argument, but this may change in the future.
 
-## Simulator
-
-🚧 **TODO** 🚧

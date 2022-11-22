@@ -1,5 +1,5 @@
-import { IPolyconFactory } from "@winglang/polycons";
 import { IConstruct } from "constructs";
+import { IPolyconFactory } from "polycons";
 import {
   BUCKET_TYPE,
   COUNTER_TYPE,

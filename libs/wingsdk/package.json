@@ -78,9 +78,9 @@
   },
   "peerDependencies": {
     "@cdktf/provider-aws": "^10.0.11",
-    "@winglang/polycons": "^0.0.105",
     "cdktf": "^0.13.2",
-    "constructs": "~10.0.25"
+    "constructs": "~10.0.25",
+    "polycons": "^0.1.1"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "3.215.0",
@@ -92,10 +92,10 @@
     "@aws-sdk/util-stream-node": "3.215.0",
     "@aws-sdk/util-utf8-node": "3.208.0",
     "@cdktf/provider-aws": "^10.0.11",
-    "@winglang/polycons": "^0.0.105",
     "cdktf": "^0.13.2",
     "constructs": "~10.0.25",
     "esbuild-wasm": "^0.15.9",
+    "polycons": "^0.1.1",
     "safe-stable-stringify": "*",
     "tar": "^6.1.11"
   },
