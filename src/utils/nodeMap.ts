@@ -22,6 +22,7 @@ export interface NodeRecord {
 export interface NodeMap {
   record: NodeRecord;
   find(path: string | undefined): Node | undefined;
+  findAll(paths: string[]): Node[];
   visitParents(path: string | undefined, callback: (node: Node) => void): void;
 }
 
@@ -45,6 +46,11 @@ export function buildNodeMapFromRecord(nodeRecord: NodeRecord): NodeMap {
     record: nodeRecord,
     find(path) {
       return path === undefined ? undefined : nodeRecord[path];
+    },
+    findAll(paths) {
+      return paths
+        .map((path) => this.find(path))
+        .filter((node): node is Node => node !== undefined);
     },
     visitParents(path, callback) {
       let node = path === undefined ? undefined : nodeRecord[path];

@@ -23,8 +23,8 @@ export const ArrowLongRightIcon = React.forwardRef<
     >
       {title && <title id={titleId}>{title}</title>}
       <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeLinecap="round"
+        strokeLinejoin="round"
         d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H0"
       />
     </svg>

@@ -107,89 +107,8 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
     if (!currentNode) {
       return;
     }
-    const outbound: Node[] = [];
-    const inbound: Node[] = [];
-    for (const path of currentNode.outbound) {
-      const node = nodeMap?.find(path);
-      if (node) {
-        outbound.push(node);
-      }
-    }
-    for (const path of currentNode.inbound) {
-      const node = nodeMap?.find(path);
-      if (node) {
-        inbound.push(node);
-      }
-    }
-    setCorrectInbound(inbound);
-    setCurrentOutbound(outbound);
-  }, [currentNode]);
-
-  const relationships = useMemo(() => {
-    if (!currentNode) {
-      return;
-    }
-
-    const parentNode = nodeMap?.find(currentNode.parent);
-
-    // todo remove for new UI
-    const relationships: Relationships = {
-      parent: parentNode
-        ? {
-            id: parentNode.id,
-            path: parentNode.path,
-            icon: (
-              <ResourceIcon
-                resourceType={parentNode.type}
-                className="w-4 h-4"
-              />
-            ),
-          }
-        : undefined,
-      self: {
-        id: currentNode.id,
-        path: currentNode.path,
-        icon: (
-          <ResourceIcon resourceType={currentNode.type} className="w-4 h-4" />
-        ),
-      },
-      children: currentNode.children.map((path) => {
-        const node = nodeMap?.find(path);
-        // todo [sa] handle gracefully
-        if (!node) {
-          throw new Error(`Node [${path}] doesn't exist`);
-        }
-        return {
-          id: node.id,
-          path: node.path,
-          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
-        };
-      }),
-      outbound: currentNode.outbound.map((path) => {
-        const node = nodeMap?.find(path);
-        if (!node) {
-          // todo [sa] need to handle gracefully
-          throw new Error(`Node [${path}] doesn't exist`);
-        }
-        return {
-          id: node.id,
-          path: node.path,
-          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
-        };
-      }),
-      inbound: currentNode.inbound.map((path) => {
-        const node = nodeMap?.find(path);
-        if (!node) {
-          throw new Error(`Node [${path}] doesn't exist`);
-        }
-        return {
-          id: node.id,
-          path: node.path,
-          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
-        };
-      }),
-    };
-    return relationships;
+    setCorrectInbound(nodeMap?.findAll(currentNode.inbound) ?? []);
+    setCurrentOutbound(nodeMap?.findAll(currentNode.outbound) ?? []);
   }, [currentNode]);
 
   const logsRef = useRef<HTMLDivElement>(null);
@@ -209,30 +128,11 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
       return;
     }
 
-    return currentNode.children.map((path) => {
-      const node = nodeMap?.find(path);
-      if (!node) {
-        throw new Error(`Node [${path}] doesn't exist`);
-      }
-
+    return nodeMap.findAll(currentNode.children).map((node) => {
       return {
         node,
-        inbound: node.inbound.map((path) => {
-          const node = nodeMap?.find(path);
-          if (!node) {
-            throw new Error(`Node [${path}] doesn't exist`);
-          }
-
-          return node;
-        }),
-        outbound: node.outbound.map((path) => {
-          const node = nodeMap?.find(path);
-          if (!node) {
-            throw new Error(`Node [${path}] doesn't exist`);
-          }
-
-          return node;
-        }),
+        inbound: nodeMap.findAll(node.inbound),
+        outbound: nodeMap.findAll(node.outbound),
       };
     });
   }, [currentNode, nodeMap]);
