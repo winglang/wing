@@ -87,7 +87,7 @@ We welcome community contributions and pull requests. See the [Wing Contributor'
 
 If you need help either using or contributing to this project, please join us on our [Wing Slack].
 
-[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+[Wing Slack]: https://t.winglang.io/slack
 
 ## ⚖️ License
 

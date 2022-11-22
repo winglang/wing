@@ -13,6 +13,9 @@
       }
     },
     "package": {
+      "dependsOn": [
+        "build"
+      ],
       "executor": "nx:run-commands",
       "options": {
         "commands": ["npm run bump", "npm pack", "npm run unbump"],

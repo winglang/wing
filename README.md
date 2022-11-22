@@ -1,36 +1,34 @@
-<p align="center">
-  <a href="https://winglang.io">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Turq-LightTransparent.png">
-      <source media="(prefers-color-scheme: light)" srcset="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Black-Light.png">
-      <img alt="" src="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Black-Light.png" height="110pt">
-    </picture>
-  </a>
-  <h1 align="center">The Wing Programming Language</h1>
-</p>
+![](./logo/banner-dark.png#gh-dark-mode-only)
+![](./logo/banner-light.png#gh-light-mode-only)
 
 <p align="center">
-  <a aria-label="Build status" href="https://github.com/winglang/wing/actions/workflows/build.yml">
-    <img alt="" src="https://github.com/winglang/wing/actions/workflows/build.yml/badge.svg">
-  </a>
-
-  <a aria-label="Join the community" href="https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA">
-    <img alt="" src="https://img.shields.io/badge/Join%20the%20community-blue.svg?style=flat&logo=slack&labelColor=000000">
-  </a>
+  &nbsp;
+  <a href="https://docs.winglang.io/getting-started">Quick Start</a>
+  ▪︎
+  <a href="http://t.winglang.io/slack">Slack</a>
+  ▪︎
+  <a href="https://docs.winglang.io/">Docs</a>
+  ▪︎
+  <a href="https://github.com/winglang/wing/issues">Issues</a>
+  ▪︎
+  <a href="https://github.com/winglang/wing/discussions">Discussions</a>
+  ▪︎
+  <a href="https://stackoverflow.com/questions/tagged/winglang">Stack Overflow</a>
+  ▪︎
+  <a href="https://docs.winglang.io/contributors/handbook">Contribute</a>
 </p>
 
-> **:construction: Under (heavy) construction!** Wing is in early stages of development. 
-Many basic features as still missing. You are more than welcome to join the ride, but don't 
-expect to be able to do much with it at the moment. Check out our [roadmap] for more information.
+# Welcome! :wave:
 
-Do you have feedback on this README? Submit comments [here](https://github.com/winglang/wing/pull/497/files#diff-b335630551682c19a781afebcf4d07bf978fb1f8ac04c6bf87428ed5106870f5).
+**Wing** is a [cloud~oriented programming language]. It is a modern,
+object-oriented, and strongly-typed language. Most programming languages think
+about computers as machines. In Wing, ***the cloud is the computer***.
 
-## Welcome! :wave:
+Wing applications compile to Terraform and JavaScript that are ready to deploy
+to your favorite cloud provider, and can also be tested in your local
+environment using the [Wing Console](https://docs.winglang.io/getting-started/console).
 
-Wing is the world's first [cloud-oriented programming
-language](#what-is-cloud-oriented-programming). It allows developers to build
-distributed systems that fully leverage the power of the cloud, without having
-to worry about the underlying infrastructure.
+[cloud~oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
 
 ```js
 bring cloud;
@@ -42,353 +40,42 @@ new cloud.Function(() ~> {
 });
 ```
 
-Wing applications are compiled to [Terraform] and JavaScript, and can be
-deployed to AWS, GCP Azure, or visualized and debugged locally using the Wing Console.
+## This is Alpha
 
-Read below about [what makes Wing special](#what-makes-wing-special) and [why
-you should consider Wing](#why-wing).
+Wing is in very early stages of development and not recommended for production
+use. Many features are still missing, and APIs will dramatically evolve in the
+coming months. We are excited for anyone to take part in influencing the
+direction of every part of this project.
 
-This README is for *users* of the language. It contains information about how to
-install the toolchain, and how to build Wing applications. If you wish to
-*contribute* :pray: to the project, head over to our [contribution
-guide](./CONTRIBUTING.md).
+Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
+more information about stability and roadmap 👷‍♀️ 
+
+## Installation
+
+* [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites)
+* [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli)
+* [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension)
+* [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console)
 
 ## Getting Started
 
-### Known issues
-
-Here is a list of known issues in "getting started":
-
-* [#395](https://github.com/winglang/wing/issues/395) `Case conversion jsii to wing` is not yet implemented (so you should use queue.onMessage instead of on_message).
-* [#318](https://github.com/winglang/wing/issues/318) `Closure literal ~>` is not yet implemented.
-* [#375](https://github.com/winglang/wing/pull/375) `Counter` resource is not yet implemented.
-
-### Prerequisites
-
-To install Wing, you will need the following setup:
-
-* [Node.js](https://nodejs.org/en/) version 18.x or above (we recommend
-  [nvm](https://github.com/nvm-sh/nvm))
-* [VSCode](https://code.visualstudio.com/) (recommended)
-
-In order to deploy to AWS, you will also need:
-
-* [Terraform](https://terraform.io/downloads)
-* [AWS account] and the [AWS CLI] with [AWS credentials]
-
-To access npm private packages (pre-release):
-
-```sh
-npm login --scope=@winglang --registry=https://npm.pkg.github.com
-```
-
-> As a password, use a GitHub [personal access token] with **packages:read**
-> scope.
-
-### Installation
-
-Install the Wing CLI through npm:
-
-```sh
-npm install -g @winglang/wing
-```
-
-Install the Wing VSCode extension (optional) by [downloading](https://github.com/winglang/wing/releases/latest/download/vscode-wing.vsix)
-the extension package and running:
-
-```sh 
-code --install-extension ~/Downloads/vscode-wing.vsix
-```
-
-> To enable automatic updates, add a GitHub [personal access token] to the extension's settings under "Wing > Updates".
-
-Install Wing Console by [downloading](https://github.com/winglang/wing-console/releases) the latest release for your platform.
-(currently supporting only macOS)
-
-### Hello, Wing!
-
-We are ready to write our first Wing program!
-
-##### Create your first Application
-
-Create a new file called `hello.w` with the following code:
-
-```ts
-bring cloud;
-
-let queue = new cloud.Queue();
-
-inflight handler(message: str) :str {
-  print("Hello, ${message}!");
-}
-
-queue.on_message(handler);
-```
-Next step is to test your program locally using the Wing Console or a REPL.
-
-##### Testing the program using the Wing Console 
-
-The Wing Console is a graphical user interface that can be used to interact
-with Wing applications on the local machine.
-
-*(currently available only on MacOS)*
-
-1. Compile to the `sim` target
-
-    ```sh
-    wing compile --target sim hello.w
-    ```
-
-2. You will notice that `hello.wx` was created, run the Wing Console:
-
-    ```sh
-    wing run target/hello.wx
-    ```
-
-    The **Wing Console** will start and in the main view you'll see two resources: a **Queue** and a **Function**. 
-    You'll also notice that the function is connected to the queue through the `message` event.
-
-    <img src="./docs/assets/wing-console-view.png">
-
-
-3. Click on the queue resource, goto **queue contents** tab. Type `world` and hit
-  **Send Message**.
-
-4. Click on the function resource, goto **Test Function** tab and notice the indication that your function
-was called once.
-
-5. ***Congratulations! You have just written and tested your first Wing program!***
-
-##### Testing the program through the Node.js REPL
-
-In this section we will use the [Node.js REPL] to interact with our
-Wing application through the terminal.
-
-
-1. Run node command 
-    ```sh
-    node --experimental-repl-await
-    ```
-2.  Run the following code inside the REPL:
-    ```js
-    const sdk = require("@winglang/wingsdk");
-    const simulator = new sdk.testing.Simulator({ simfile : "./hello.wx"});
-    await simulator.start();
-    const queue = simulator.getResourceByPath("root/cloud.Queue");
-    await queue.push("Wing");
-    ```
-3. You should expect the string "Hello Wing" printed to the terminal.
-4. ***Congratulations! You have just written and tested your first Wing program!***
-
-##### Compile your program to AWS & Terraform
-
-As you can see, so far we've tested our program locally. Next we'll see how you can deploy your program to AWS using Terraform.
-
-> Currently, our SDKs only support AWS, but the Wing compiler can target
-> multiple cloud platforms, including AWS, Azure, Google Cloud, and Kubernetes.
-> We are working on adding support for other cloud providers and welcome contributions in those areas.
-
-First, we need to compile our program to AWS:
-
-```sh
-$ wing compile --target tf-aws hello.w
-```
-##### Deploy your program to AWS
-
-Now, let's deploy our program to AWS:
-
-> You will need to have AWS credentials configured on your system. See
-> [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html)
-> for more information.
-
-```sh
-$ cd ./target/tf-aws
-$ export AWS_REGION=us-east-1 # or any other region
-$ terraform init
-$ terraform apply
-```
-
-##### Review your AWS account
-
-Now, if you open the [Amazon SQS Console](https://console.aws.amazon.com/sqs),
-select your AWS region, and you should be able to see that you have a queue
-there. Click **Send and receive messages**, in the **Message Body** box type
-`cloud` and hit **Send message**.
-
-Now, jump over to the [CloudWatch Console](https://console.aws.amazon.com/cloudwatch) 
-and under **Log groups** you should see a log group called `/aws/lambda/...`. 
-Click on it and you should see the log message `Hello, cloud!`.
-
-### Staying up to date
-
-The entire Wing toolchain is continuously released. We follow [semantic
-versioning](https://semver.org/) and release notes are available in the
-[Releases](https://github.com/winglang/wing/releases) pages on GitHub.
-
-To update the toolchain to the latest, run the following command:
-
-```sh
-npm update -g @winglang/wing
-```
-
-Our VSCode Extension and Wing Console have automatic updates.
-
-## Rationale
-
-### What is cloud-oriented programming?
-
-Let's consider this example:
-
-```js
-bring cloud;
-
-let bucket = new cloud.Bucket();
-let counter = new cloud.Counter(initial_value: 100);
-let queue = new cloud.Queue(timeout: 10s);
-
-queue.on_message((body: str) ~> {
-  let next = counter.increment();
-  let key = "myfile-${next}.txt";
-  bucket.put(key, body);
-});
-```
-
-In this simple application, every message that goes into the queue is written to
-a new object inside a cloud bucket. An atomic counter is used to generate an
-incrementing and unique key for each object.
-
-**But don't let the simplicity of this example fool you!**
-
-When deployed to a cloud provider, this application can handle an infinite
-amount of traffic, with no need for you to explicitly take care of scaling, load
-balancing, security policies or any other infrastructure-related concerns. For
-example, when targeting AWS, Wing will use Amazon S3 for the bucket, Amazon SQS
-for the queue, Amazon DynamoDB for the atomic counter, and AWS Lambda for the
-handler. It will also render least privilege IAM security policies, wire up
-environment variables and produce the code bundles needed for this to work.
-
-In addition to targeting cloud providers, Wing applications can also be compiled
-to run inside a local **Cloud Simulator**. This means that you can now iterate
-on your code without having to deploy it to the cloud, write **unit tests** that
-cover your complete cloud architecture and **debug** your code in a local
-environment.
-
-This is what we call **cloud-oriented programming**. It's a programming paradigm
-which treats the cloud as a computer, and heavily relies on managed services and
-distributed programming to build and deliver systems that are intrinsically
-scalable, highly-available and robust.
-
-### Why Wing?
-
-The cloud has evolved to become a ubiquitous platform for running almost every
-type of application. It allows individuals and teams to deliver value by
-leveraging services and infrastructure, which take care of many of the
-challenges of building and running software.
-
-However, the cloud has also introduced a new set of challenges for developers.
-The cloud is a complex environment, and writing applications often requires
-understanding low-level details of cloud services. It is also difficult to build
-applications that are portable across cloud providers, and to test and debug
-applications locally. Furthermore, leaky abstractions and poor tooling can make
-it hard to refactor cloud architectures into reusable components.
-
-Wing is designed to address these challenges in the following ways:
-
-* **Iteration speed** - Wing applications can run in a local cloud simulator.
-  This allows developers to iterate at a much faster pace, and to see the
-  effects of incremental changes at milliseconds latency.
-* **High-level cloud primitives** - Wing allows developers to leverage the cloud
-  to its full extent through a set of rich, high-level and cloud-independent
-  resources. This allows developers build complete cloud applications without
-  having to be infrastructure experts.
-* **Cloud unit tests** - Wing allows developers to use the cloud simulator as
-  a library inside unit tests, and test complete architectures without requiring
-  deployments or heavy mocking.
-* **Infrastructure as policy** - infrastructure concerns such as deployment,
-  networking, security and observability can be applied horizontally through
-  policies instead of inside the application code.
-
-### What's special about the Wing language?
-
-Wing includes all the features you would expect from a modern, object-oriented,
-strongly-typed language. But in order to support [cloud
-orientation](#what-is-cloud-oriented-programming), Wing includes the following
-additional language primitives:
-
-#### Resources
-
-Resources represent cloud services that are part of the application. They expose
-both a *preflight API* used to define their deployment configuration and an
-*inflight API* used to interact with them at runtime. Resources are an extension
-of the [construct programming model] and as such any [CDK construct] can be
-natively used in Wing applications.
-
-The following code defines a bucket resource:
-
-```js
-new cloud.Bucket();
-```
-
-The following code declares a new resource called `SafeQueue` which contains
-a queue with a dead-letter-queue associated with it:
-
-```js
-resource SafeQueue extends cloud.Queue {
-  init() {
-    let dlq = new cloud.Queue();
-    dlq.on_message((m: str) ~> {
-      log.error("dead-letter: ${m}")
-    });
-
-    this.add_dead_letter_queue(dlq);
-  }
-}
-```
-
-#### Inflights
-
-Inflights are Wing's distributed computing primitive. They are isolated code
-blocks which can be packaged and executed on compute platforms in the cloud
-(such as containers, CI/CD pipelines or FaaS).
-
-Inflights can seamlessly interact with resources through the resource's inflight
-API.
-
-The following example shows how `my_inflight` is hosted inside a cloud function
-and puts an object inside a bucket:
-
-```js
-let bucket = new cloud.Bucket();
-
-let my_inflight = () ~> {
-  bucket.put("hello.txt", "world");
-};
-
-new cloud.Function(my_inflight);
-```
-
-#### Dependency Injection
-
-Wing allows writing code that defines complete architectures without having to
-know in advance how these resources will be implemented. This mechanism allows
-developers to write code that is portable across cloud providers, as well as can
-run in a local simulator for testing and development.
-
-## Learning more
-
-Now that you've written your first Wing program, what's next? Here are some
-resources to help you get started:
-
-- [Wing Language Specification](./docs/winglang-spec.md)
-- [Wing SDK Reference](./docs/wingsdk-api.md)
+The [Getting Started](https://docs.winglang.io/getting-started) guide is a
+once-in-a-lifetime adventure into the Wing rabbit hole.
+
+To learn more about Wing concepts such as
+[resources](https://docs.winglang.io/concepts/resources) and
+[inflights](https://docs.winglang.io/concepts/inflights), jump over to the
+[Concepts](https://docs.winglang.io/category/concepts) section in our docs.
+
+For a comprehensive reference of the language, check out the [Wing Language
+Specification](https://docs.winglang.io/reference/spec) and the [API
+Reference](https://docs.winglang.io/reference/sdk).
 
 ## Community
 
-We all hang out at the [Wing Slack] workspace. Come as you are, say hi, ask
-questions, help friends, geek out!
-
-Alternatively, post any question you have in [Wing Discussions](https://github.com/winglang/wing/discussions)
-
+We all hang out on [Wing Slack]. Come as you are, say hi, ask questions, help
+friends, geek out! Alternatively, post any question you have on [GitHub
+Discussions](https://github.com/winglang/wing/discussions).
 
 ## Contributing
 
@@ -397,21 +84,13 @@ We welcome and celebrate contributions from the community! Please see our
 development environment, what we are working on, where we need help and other
 guidelines for contributing to the project.
 
-We are also actively tracking planned features in our roadmaps:
+We are also actively tracking planned features in our roadmap:
 
 - [Wing Language Roadmap](https://github.com/orgs/winglang/projects/1/views/1)
 - [Wing SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
 
 ## License
 
-This project is licensed under the [MIT License](./LICENSE.md).
+This project is licensed under the [MIT License](./LICENSE.md). Contributions are made under our [contribution license](https://docs.winglang.io/terms-and-policies/contribution-license.html).
 
-[roadmap]: https://github.com/orgs/winglang/projects/1/views/1
-[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
-[Terraform]: https://www.terraform.io/
-[AWS account]: portal.aws.amazon.com/billing/signup
-[AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
-[AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-[construct programming model]: https://github.com/aws/constructs
-[CDK construct]: https://constructs.dev
-[personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+[Wing Slack]: https://t.winglang.io/slack
