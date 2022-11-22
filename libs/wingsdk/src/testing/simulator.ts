@@ -6,7 +6,7 @@ import { ISimulatorResource } from "../target-sim";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { mkdtemp, readJsonSync } from "../util";
 // eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
-const { DefaultSimulatorFactory } = require("../target-sim/factory.sim");
+const { DefaultSimulatorFactory } = require("../target-sim/factory.inflight");
 
 /**
  * Props for `Simulator`.

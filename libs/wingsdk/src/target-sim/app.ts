@@ -1,7 +1,7 @@
 import { writeFileSync } from "fs";
 import { join } from "path";
-import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
+import { Polycons } from "polycons";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
 import { AppProps, DependencyGraph, Files, IApp } from "../core";

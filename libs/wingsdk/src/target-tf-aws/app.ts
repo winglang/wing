@@ -1,5 +1,5 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
-import { Polycons } from "@winglang/polycons";
+import { Polycons } from "polycons";
 import { IApp, CdktfApp, AppProps } from "../core";
 import { PolyconFactory } from "./factory";
 

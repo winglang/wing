@@ -1,5 +1,5 @@
-import { Polycons } from "@winglang/polycons";
 import { Construct, IConstruct } from "constructs";
+import { Polycons } from "polycons";
 import { CaptureMetadata, Code, Inflight } from "../core";
 import { Resource } from "./resource";
 

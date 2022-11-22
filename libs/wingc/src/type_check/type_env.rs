@@ -2,7 +2,7 @@ use crate::{
 	ast::{Phase, Symbol},
 	diagnostic::TypeError,
 	type_check::Type,
-	type_check::TypeRef, utilities::{camel_case_to_snake_case},
+	type_check::TypeRef,
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
@@ -61,18 +61,16 @@ impl TypeEnv {
 	}
 
 	pub fn define(&mut self, symbol: &Symbol, _type: TypeRef, pos: StatementIdx) -> Result<(), TypeError> {
-		let key = &symbol.name;
-
-		if self.type_map.contains_key(key) {
+		if self.type_map.contains_key(&symbol.name) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
-				message: format!("Symbol \"{}\" already defined in this scope", key),
+				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
 			});
 		}
 
 		// Avoid variable shadowing
 		if let Some(_parent_env) = self.parent {
-			if let Some(parent_type) = self.try_lookup(key, None) {
+			if let Some(parent_type) = self.try_lookup(&symbol.name, None) {
 				// If we're a class we allow "symbol shadowing" for methods
 				if !(self.is_class
 					&& matches!(parent_type.into(), &Type::Function(_))
@@ -80,12 +78,12 @@ impl TypeEnv {
 				{
 					return Err(TypeError {
 						span: symbol.span.clone(),
-						message: format!("Symbol \"{}\" already defined in parent scope.", key),
+						message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
 					});
 				}
 			}
 		}
-		self.type_map.insert(key.clone(), (pos, _type));
+		self.type_map.insert(symbol.name.clone(), (pos, _type));
 
 		Ok(())
 	}
