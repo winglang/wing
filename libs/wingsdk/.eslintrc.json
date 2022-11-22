@@ -137,19 +137,9 @@
       {
         "zones": [
           {
-            "target": "src/**/!(*.inflight.ts|*.sim.ts|*.test.ts)",
+            "target": "src/**/!(*.inflight.ts|*.test.ts)",
             "from": "src/**/*.inflight.ts",
             "message": "Importing inflight code in a preflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
-          },
-          {
-            "target": "src/**/!(*.inflight.ts|*.sim.ts|*.test.ts)",
-            "from": "src/**/*.sim.ts",
-            "message": "Importing simulator code in a preflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
-          },
-          {
-            "target": "src/**/*.inflight.ts",
-            "from": "src/**/*.sim.ts",
-            "message": "Importing simulator code in a inflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           }
         ]
       }
