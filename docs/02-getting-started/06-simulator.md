@@ -32,10 +32,10 @@ const sdk = require("@winglang/wingsdk");
 ```
 
 Next, we create an instance of the `Simulator` class and point it to our
-`app.wx` file, and start the simulator.
+`hello.wx` file, and start the simulator.
 
 ```js
-const simulator = new sdk.testing.Simulator({ simfile : "./target/app.wx"});
+const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wx"});
 await simulator.start();
 ```
 
