@@ -248,7 +248,7 @@ jobs:
       fail-fast: true
       matrix:
         include:
-          - runner: macos-latest
+          # - runner: macos-latest
           - runner: ubuntu-latest
     runs-on: ${{ matrix.runner }}
     steps:
