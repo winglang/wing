@@ -10,7 +10,7 @@ export const HASH_KEY = "id";
 /**
  * AWS implementation of `cloud.Counter`.
  *
- * @inflight `@monadahq/wingsdk.cloud.ICounterClient`
+ * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase {
   private readonly table: DynamodbTable;

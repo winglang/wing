@@ -44,7 +44,7 @@ export abstract class CounterBase extends Resource {
 /**
  * Represents a distributed atomic counter.
  *
- * @inflight `@monadahq/wingsdk.cloud.ICounterClient`
+ * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends CounterBase {
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
