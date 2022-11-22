@@ -234,10 +234,18 @@ fn jsify_expression(expression: &Expr) -> String {
 		ExprKind::Call { function, args } => {
 			// TODO: implement "print" to use Logger resource
 			// see: https://github.com/winglang/wing/issues/50
+			let mut needs_case_conversion = false;
 			if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
 				return format!("console.log({})", jsify_arg_list(args, None, None));
+			} else if let Reference::NestedIdentifier { object, .. } = function {
+				let object_type = object.evaluated_type.borrow().unwrap();
+				needs_case_conversion = object_type.as_class_or_resource_object().unwrap().should_case_convert_jsii;
 			}
-			format!("{}({})", jsify_reference(&function, Some(true)), jsify_arg_list(&args, None, None))
+			format!(
+				"{}({})",
+				jsify_reference(&function, Some(needs_case_conversion)),
+				jsify_arg_list(&args, None, None)
+			)
 		}
 		ExprKind::Unary { op, exp } => {
 			let op = match op {

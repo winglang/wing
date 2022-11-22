@@ -61,17 +61,9 @@ impl TypeEnv {
 	}
 
 	pub fn define(&mut self, symbol: &Symbol, _type: TypeRef, pos: StatementIdx) -> Result<(), TypeError> {
-		let key = if let Some(func_sig) = _type.as_function_sig() {
-			if func_sig.needs_jsii_case_conversion {
-				camel_case_to_snake_case(symbol.name.as_str())
-			} else {
-				symbol.name.clone()
-			}
-		} else {
-			symbol.name.clone()
-		};
+		let key = &symbol.name;
 
-		if self.type_map.contains_key(key.as_str()) {
+		if self.type_map.contains_key(key) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
 				message: format!("Symbol \"{}\" already defined in this scope", key),
@@ -80,7 +72,7 @@ impl TypeEnv {
 
 		// Avoid variable shadowing
 		if let Some(_parent_env) = self.parent {
-			if let Some(parent_type) = self.try_lookup(key.as_str(), None) {
+			if let Some(parent_type) = self.try_lookup(key, None) {
 				// If we're a class we allow "symbol shadowing" for methods
 				if !(self.is_class
 					&& matches!(parent_type.into(), &Type::Function(_))

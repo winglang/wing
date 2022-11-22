@@ -61,7 +61,6 @@ impl<'a> JsiiImporter<'a> {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
 						flight: Phase::Inflight,
-						needs_jsii_case_conversion: false,
 					})))
 				} else if type_fqn == "@winglang/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
@@ -216,16 +215,11 @@ impl<'a> JsiiImporter<'a> {
 					}
 				}
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
-					needs_jsii_case_conversion: true,
 					args: arg_types,
 					return_type,
 					flight,
 				}));
-				let name = if method_sig.as_function_sig().unwrap().needs_jsii_case_conversion {
-					camel_case_to_snake_case(&m.name)
-				} else {
-					m.name.clone()
-				};
+				let name = camel_case_to_snake_case(&m.name);
 				class_env.define(
 					&Self::jsii_name_to_symbol(&name, &m.location_in_module),
 					method_sig,
@@ -336,6 +330,7 @@ impl<'a> JsiiImporter<'a> {
 		// When adding the class methods below we'll be able to reference this type.
 		debug!("Adding type {} to namespace", type_name.green());
 		let class_spec = Class {
+			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
 			parent: base_class,
@@ -373,7 +368,6 @@ impl<'a> JsiiImporter<'a> {
 				args: arg_types,
 				return_type: Some(new_type),
 				flight: class_env.flight,
-				needs_jsii_case_conversion: false,
 			}));
 			class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),

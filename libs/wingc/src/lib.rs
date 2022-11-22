@@ -70,7 +70,6 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 			args: vec![types.string()],
 			return_type: None,
 			flight: Phase::Independent,
-			needs_jsii_case_conversion: false,
 		}),
 		scope,
 		types,
