@@ -24,13 +24,13 @@ new sim.App(props: AppProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.sim.App.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.sim.AppProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.sim.App.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.AppProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.sim.App.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.sim.AppProps
+- *Type:* @winglang/wingsdk.core.AppProps
 
 ---
 
@@ -39,7 +39,7 @@ new sim.App(props: AppProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into an `app.wx` file. Return the path to the file. |
+| <code><a href="#@winglang/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into a `.wx` file. Return the path to the file. |
 
 ---
 
@@ -57,7 +57,7 @@ Returns a string representation of this construct.
 public synth(): string
 ```
 
-Synthesize the app into an `app.wx` file. Return the path to the file.
+Synthesize the app into a `.wx` file. Return the path to the file.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -135,13 +135,13 @@ new tfaws.App(props?: AppProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.tfaws.App.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.tfaws.AppProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.tfaws.App.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.AppProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.tfaws.App.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.tfaws.AppProps
+- *Type:* @winglang/wingsdk.core.AppProps
 
 ---
 
@@ -726,18 +726,18 @@ No polycon factory or Terraform providers are included.
 ```typescript
 import { core } from '@winglang/wingsdk'
 
-new core.CdktfApp(props?: CdktfAppProps)
+new core.CdktfApp(props?: AppProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.CdktfApp.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.CdktfAppProps</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.core.CdktfApp.Initializer.parameter.props">props</a></code> | <code>@winglang/wingsdk.core.AppProps</code> | *No description.* |
 
 ---
 
 ##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.core.CdktfApp.Initializer.parameter.props"></a>
 
-- *Type:* @winglang/wingsdk.core.CdktfAppProps
+- *Type:* @winglang/wingsdk.core.AppProps
 
 ---
 
@@ -2950,28 +2950,30 @@ The file's relative path to the output directory.
 
 ## Structs <a name="Structs" id="Structs"></a>
 
-### AppProps <a name="AppProps" id="@winglang/wingsdk.sim.AppProps"></a>
+### AppProps <a name="AppProps" id="@winglang/wingsdk.core.AppProps"></a>
 
-Props for `App`.
+Props for all `App` classes.
 
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.sim.AppProps.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.AppProps.Initializer"></a>
 
 ```typescript
-import { sim } from '@winglang/wingsdk'
+import { core } from '@winglang/wingsdk'
 
-const appProps: sim.AppProps = { ... }
+const appProps: core.AppProps = { ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.sim.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
-| <code><a href="#@winglang/wingsdk.sim.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.core.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@winglang/wingsdk.core.AppProps.property.name">name</a></code> | <code>string</code> | The name of the app. |
+| <code><a href="#@winglang/wingsdk.core.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
+| <code><a href="#@winglang/wingsdk.core.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.sim.AppProps.property.customFactory"></a>
+##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.core.AppProps.property.customFactory"></a>
 
 ```typescript
 public readonly customFactory: IPolyconFactory;
@@ -2984,7 +2986,20 @@ A custom factory to resolve polycons.
 
 ---
 
-##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.sim.AppProps.property.outdir"></a>
+##### `name`<sup>Optional</sup> <a name="name" id="@winglang/wingsdk.core.AppProps.property.name"></a>
+
+```typescript
+public readonly name: string;
+```
+
+- *Type:* string
+- *Default:* "app"
+
+The name of the app.
+
+---
+
+##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.core.AppProps.property.outdir"></a>
 
 ```typescript
 public readonly outdir: string;
@@ -2997,42 +3012,7 @@ Directory where artifacts are synthesized to.
 
 ---
 
-### AppProps <a name="AppProps" id="@winglang/wingsdk.tfaws.AppProps"></a>
-
-Props for `App`.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.tfaws.AppProps.Initializer"></a>
-
-```typescript
-import { tfaws } from '@winglang/wingsdk'
-
-const appProps: tfaws.AppProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
-| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
-| <code><a href="#@winglang/wingsdk.tfaws.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
-
----
-
-##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.tfaws.AppProps.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-- *Default:* current working directory
-
-Directory where artifacts are synthesized to.
-
----
-
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.tfaws.AppProps.property.stateFile"></a>
+##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.AppProps.property.stateFile"></a>
 
 ```typescript
 public readonly stateFile: string;
@@ -3045,19 +3025,6 @@ The path to a state file which will track all synthesized files.
 
 If a
 statefile is not specified, we won't be able to remove extrenous files.
-
----
-
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.tfaws.AppProps.property.customFactory"></a>
-
-```typescript
-public readonly customFactory: IPolyconFactory;
-```
-
-- *Type:* @winglang/polycons.IPolyconFactory
-- *Default:* use the default polycon factory included in the Wing SDK
-
-A custom factory to resolve polycons.
 
 ---
 
@@ -3327,56 +3294,6 @@ public readonly methods: string[];
 - *Type:* string[]
 
 Which methods are called on the captured resource.
-
----
-
-### CdktfAppProps <a name="CdktfAppProps" id="@winglang/wingsdk.core.CdktfAppProps"></a>
-
-Props for `CdktfApp`.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.CdktfAppProps.Initializer"></a>
-
-```typescript
-import { core } from '@winglang/wingsdk'
-
-const cdktfAppProps: core.CdktfAppProps = { ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
-| <code><a href="#@winglang/wingsdk.core.CdktfAppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
-
----
-
-##### `outdir`<sup>Optional</sup> <a name="outdir" id="@winglang/wingsdk.core.CdktfAppProps.property.outdir"></a>
-
-```typescript
-public readonly outdir: string;
-```
-
-- *Type:* string
-- *Default:* current working directory
-
-Directory where artifacts are synthesized to.
-
----
-
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.CdktfAppProps.property.stateFile"></a>
-
-```typescript
-public readonly stateFile: string;
-```
-
-- *Type:* string
-- *Default:* no state file
-
-The path to a state file which will track all synthesized files.
-
-If a
-statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 

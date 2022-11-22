@@ -27,7 +27,7 @@ first Wing program.
 Now, let's try starting the simulator and creating some resource clients to
 interact with the resources.
 
-First, create an empty directory and add your `app.wx` file.
+First, create an empty directory and add your `.wx` file.
 Next, run `npm install @winglang/wingsdk`.
 
 Let's create a file in the directory named `main.ts`:
@@ -36,7 +36,7 @@ Let's create a file in the directory named `main.ts`:
 import { testing } from '@winglang/wingsdk';
 
 async function main() {
-  const mySim = new testing.Simulator({ simfile: "app.wx" });
+  const mySim = new testing.Simulator({ simfile: "hello.wx" });
   await mySim.start();
 
   // (1)
