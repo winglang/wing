@@ -1,5 +1,5 @@
+import { ICounterClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { ICounterClient } from "./counter";
 import { ISimulatorResource } from "./resource";
 import { CounterSchema } from "./schema-resources";
 

@@ -8,7 +8,7 @@ import { bindSimulatorResource } from "./util";
 /**
  * Simulator implementation of `cloud.Counter`.
  *
- * @inflight `@winglang/wingsdk.sim.ICounterClient`
+ * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase implements IResource {
   private readonly inbound = new Array<string>();
@@ -42,8 +42,3 @@ export class Counter extends cloud.CounterBase implements IResource {
     return bindSimulatorResource("counter", this, captureScope);
   }
 }
-
-/**
- * Simulator implementation of inflight client for `cloud.Counter`.
- */
-export interface ICounterClient extends cloud.ICounterClient {}

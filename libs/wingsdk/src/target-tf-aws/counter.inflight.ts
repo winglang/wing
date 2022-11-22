@@ -1,5 +1,6 @@
 import { UpdateItemCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { HASH_KEY, ICounterClient } from "./counter";
+import { ICounterClient } from "../cloud";
+import { HASH_KEY } from "./counter";
 
 const AMOUNT_TOKEN = "amount";
 const COUNTER_ID = "counter";

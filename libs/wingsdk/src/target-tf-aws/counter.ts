@@ -10,7 +10,7 @@ export const HASH_KEY = "id";
 /**
  * AWS implementation of `cloud.Counter`.
  *
- * @inflight `@monadahq/wingsdk.tfaws.ICounterClient`
+ * @inflight `@monadahq/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase {
   private readonly table: DynamodbTable;
@@ -57,8 +57,3 @@ export class Counter extends cloud.CounterBase {
     ]);
   }
 }
-
-/**
- * AWS implementation of inflight client for `cloud.Counter`.
- */
-export interface ICounterClient extends cloud.ICounterClient {}
