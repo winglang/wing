@@ -65,10 +65,10 @@ beforeAll(async () => {
     // ensure version works before bothering with the rest of the tests
     $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
-    let npxOutput = await $`${npxBin} @winglang/wing --version`;
     await $`${yarnBin} init -y`;
     await $`${yarnBin} add @winglang/wing --no-lockfile`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
+    let npxOutput = await $`${npxBin} @winglang/wing --version`;
 
     expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
     expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
