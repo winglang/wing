@@ -114,6 +114,125 @@ with a fresh copy without any consequences.
 ---
 
 
+### Counter <a name="Counter" id="@winglang/wingsdk.cloud.Counter"></a>
+
+**Inflight client:** [@monadahq/wingsdk.cloud.ICounterClient](#@monadahq/wingsdk.cloud.ICounterClient)
+
+Represents a distributed atomic counter.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Counter.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Counter(props?: CounterProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.Initializer.parameter.props">props</a></code> | <code>cloud.CounterProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.Counter.Initializer.parameter.props"></a>
+
+- *Type:* cloud.CounterProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.toString">to_string</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `to_string` <a name="to_string" id="@winglang/wingsdk.cloud.Counter.toString"></a>
+
+```wing
+to_string(): str
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.isConstruct">is_construct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Counter.isConstruct"></a>
+
+```wing
+bring cloud;
+
+cloud.Counter.is_construct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Counter.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.initialValue">initialValue</a></code> | <code>num</code> | The initial value of the counter. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.Counter.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.Counter.property.stateful"></a>
+
+```wing
+stateful: bool;
+```
+
+- *Type:* bool
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+##### `initialValue`<sup>Required</sup> <a name="initialValue" id="@winglang/wingsdk.cloud.Counter.property.initialValue"></a>
+
+```wing
+initial_value: num;
+```
+
+- *Type:* num
+
+The initial value of the counter.
+
+---
+
+
 ### Function <a name="Function" id="@winglang/wingsdk.cloud.Function"></a>
 
 **Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
@@ -713,27 +832,27 @@ Properties for `Counter`.
 
 #### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.CounterProps.Initializer"></a>
 
-```typescript
-import { cloud } from '@winglang/wingsdk'
+```wing
+bring cloud;
 
-const counterProps: cloud.CounterProps = { ... }
+let counter_props = cloud.CounterProps{ ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initialValue">initialValue</a></code> | <code>number</code> | The initial value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initialValue">initialValue</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
 ##### `initialValue`<sup>Optional</sup> <a name="initialValue" id="@winglang/wingsdk.cloud.CounterProps.property.initialValue"></a>
 
-```typescript
-public readonly initialValue: number;
+```wing
+initial_value: num;
 ```
 
-- *Type:* number
+- *Type:* num
 - *Default:* 0
 
 The initial value of the counter.
@@ -1819,7 +1938,7 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* core.CdktfApp, sim.App, tfaws.App, core.IApp
+- *Implemented By:* core.CdktfApp, sim.App, testing.SimApp, tfaws.App, core.IApp
 
 A Wing application.
 
@@ -1941,7 +2060,7 @@ Put an object in the bucket.
 
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Resource, sim.Bucket, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Function, tfaws.Queue, core.ICapturable, core.ICapturableConstruct
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.ICapturable, core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
@@ -1978,7 +2097,7 @@ The tree node.
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/wingsdk.cloud.ICounterClient"></a>
 
-- *Implemented By:* @winglang/wingsdk.cloud.ICounterClient
+- *Implemented By:* cloud.ICounterClient
 
 Inflight interface for `Queue`.
 
@@ -1992,15 +2111,15 @@ Inflight interface for `Queue`.
 
 ##### `inc` <a name="inc" id="@winglang/wingsdk.cloud.ICounterClient.inc"></a>
 
-```typescript
-public inc(amount?: number): number
+```wing
+inc(amount?: num): num
 ```
 
 Increments the counter atomically by a certain amount and returns the previous value.
 
 ###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/wingsdk.cloud.ICounterClient.inc.parameter.amount"></a>
 
-- *Type:* number
+- *Type:* num
 
 amount to increment (default is 1).
 
