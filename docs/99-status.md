@@ -3,9 +3,9 @@ title: Project Status
 id: status
 ---
 
-:::caution Maturity Level
+:::caution Maturity: Alpha
 
-Wing is currently in Alpha
+Under active development.
 
 :::
 
@@ -21,9 +21,12 @@ We are hard at work to get it to a state where it is ready to be used for real
 world projects (let's call it **Beta**). To that end, we need to cover
 sufficient surface area across the various components.
 
-We maintain the following roadmaps on GitHub, which should offer an up-to-date
-view on what we've completed, what we are working on and our backlog:
+## Roadmap
 
-- [Compiler Roadmap](https://github.com/orgs/winglang/projects/1)
-- [SDK Roadmap](https://github.com/orgs/winglang/projects/3)
+We manage our project roadmap through GitHub project, which should offer an
+up-to-date view on what we've completed, what we are working on and our backlog:
+
+- [Wing Compiler](https://github.com/orgs/winglang/projects/1)
+- [Wing SDK](https://github.com/orgs/winglang/projects/3)
+
 

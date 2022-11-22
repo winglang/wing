@@ -7,19 +7,25 @@ hide_title: true
 
 # Howdy, and welcome! :wave: 
 
-This handbook is your ultimate guide for learning about the Wing language.
+:::caution This is Alpha
 
-The handbook is intended to be a comprehensive document. It is organized like a
-book, so you can read it by going from top to bottom by clicking "Next" at the
-bottom of each page. Alternatively, you can browse topics through the left-hand
-navigation bar. You know, the regular structure...
+Wing is in very early stages of development and not recommended for production
+use. Many features are still missing, and APIs will dramatically evolve in the
+coming months. We are excited for anyone to take part in influencing the
+direction of every part of this project.
 
-:::tip TL;DR
-
-If you are eager to get going and can't be bothered with all the philosophical
-blabber, feel free to jump right in and **[get started](./getting-started)**.
+Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
+more information about stability and roadmap 👷‍♀️ 
 
 :::
+
+This handbook is your ultimate guide for learning about the Wing language. It is
+organized like a book, so you can read it by going from top to bottom by
+clicking "Next" at the bottom of each page. Alternatively, you can browse topics
+through the left-hand navigation bar. You know, the regular structure...
+
+TL;DR: if you can't be bothered with all the philosophical blabber, feel free to
+jump right in and [get started](./getting-started).
 
 ## What is a cloud-oriented language?
 
