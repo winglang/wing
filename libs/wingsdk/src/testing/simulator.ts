@@ -3,10 +3,10 @@ import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
 import { ISimulatorResource } from "../target-sim";
+// eslint-disable-next-line import/no-restricted-paths
+import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { mkdtemp, readJsonSync } from "../util";
-// eslint-disable-next-line import/no-restricted-paths, @typescript-eslint/no-require-imports
-const { DefaultSimulatorFactory } = require("../target-sim/factory.inflight");
 
 /**
  * Props for `Simulator`.
@@ -165,7 +165,7 @@ export class Simulator {
   // fields that are same between simulation runs / reloads
   private readonly _factory: ISimulatorFactory;
   private _tree: WingSimulatorSchema;
-  private _simfile: string;
+  private readonly _simfile: string;
   private _assetsDir: string;
 
   // fields that change between simulation runs / reloads

@@ -2,27 +2,31 @@ import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { CaptureMetadata, Code } from "../core";
 import { IResource } from "./resource";
-import { BaseResourceSchema } from "./schema";
+import { CounterSchema } from "./schema-resources";
 import { bindSimulatorResource } from "./util";
 
 /**
- * Simulator implementation of `cloud.Logger`.
+ * Simulator implementation of `cloud.Counter`.
  *
- * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
+ * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
-export class Logger extends cloud.LoggerBase implements IResource {
+export class Counter extends cloud.CounterBase implements IResource {
   private readonly inbound = new Array<string>();
   private readonly outbound = new Array<string>();
-  constructor(scope: Construct, id: string) {
-    super(scope, id);
+  public readonly initialValue: number;
+  constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
+    super(scope, id, props);
+
+    this.initialValue = props.initialValue ?? 0;
   }
 
   /** @internal */
-  public _toResourceSchema(): BaseResourceSchema {
+  public _toResourceSchema(): CounterSchema {
     return {
-      type: cloud.LOGGER_TYPE,
-      props: {},
-      attrs: {} as any,
+      type: cloud.COUNTER_TYPE,
+      props: {
+        initialValue: this.initialValue,
+      },
       inbound: this.inbound,
       outbound: this.outbound,
     };
@@ -35,6 +39,6 @@ export class Logger extends cloud.LoggerBase implements IResource {
 
   /** @internal */
   public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    return bindSimulatorResource("logger", this, captureScope);
+    return bindSimulatorResource("counter", this, captureScope);
   }
 }
