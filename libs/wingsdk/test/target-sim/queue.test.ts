@@ -126,13 +126,15 @@ test("messages are requeued if the function fails", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
+  expect(listMessages(s).slice(0, 6)).toEqual([
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
     "Push (message=BAD MESSAGE).",
     'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
     'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
     "Subscriber error - returning 1 messages to queue.",
+  ]);
+  expect(listMessages(s).slice(-5)).toEqual([
     'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
     'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
     "Subscriber error - returning 1 messages to queue.",
