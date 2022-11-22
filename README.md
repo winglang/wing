@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://winglang.io">
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Turq-LightTransparent.png">
-      <source media="(prefers-color-scheme: light)" srcset="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Black-Light.png">
-      <img alt="" src="https://github.com/winglang/wing/raw/main/logo/1x/Symbol-Black-Light.png" height="110pt">
+      <source media="(prefers-color-scheme: dark)" srcset="https://github.com/winglang/wing/raw/main/logo/svg/Symbol-Turq.svg">
+      <source media="(prefers-color-scheme: light)" srcset="https://github.com/winglang/wing/raw/main/logo/svg/Symbol-Black.svg">
+      <img alt="" src="https://github.com/winglang/wing/raw/main/logo/svg/Symbol-Black.svg" height="110pt">
     </picture>
   </a>
   <h1 align="center">The Wing Programming Language</h1>
