@@ -18,15 +18,20 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
-    "safe-stable-stringify",
     // preflight dependencies
     "esbuild-wasm",
+    "safe-stable-stringify",
     // aws client dependencies
-    "@aws-sdk/client-s3",
-    "@aws-sdk/client-lambda",
-    "@aws-sdk/client-sqs",
-    "@aws-sdk/client-cloudwatch-logs",
-    "@aws-sdk/util-utf8-node",
+    // (note: these should always be updated together, otherwise they will
+    // conflict with each other)
+    "@aws-sdk/client-cloudwatch-logs@3.215.0",
+    "@aws-sdk/client-dynamodb@3.215.0",
+    "@aws-sdk/client-lambda@3.215.0",
+    "@aws-sdk/client-s3@3.215.0",
+    "@aws-sdk/client-sqs@3.215.0",
+    "@aws-sdk/types@3.215.0",
+    "@aws-sdk/util-stream-node@3.215.0",
+    "@aws-sdk/util-utf8-node@3.208.0",
     // simulator dependencies
     "tar",
   ],

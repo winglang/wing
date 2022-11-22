@@ -1,18 +1,13 @@
 import * as cloud from "../../src/cloud";
-import * as sim from "../../src/target-sim";
-import * as testing from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { SimApp, Simulator } from "../../src/testing";
 
 test("create a bucket", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
   expect(s.getAttributes("root/my_bucket")).toEqual({
     handle: expect.any(String),
   });
@@ -21,18 +16,15 @@ test("create a bucket", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("put and get objects from bucket", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
-
+  const s = await app.startSimulator();
   const client = s.getResourceByPath("root/my_bucket") as cloud.IBucketClient;
 
   const KEY = "greeting.txt";
@@ -46,23 +38,21 @@ test("put and get objects from bucket", async () => {
   expect(response).toEqual(VALUE);
   await s.stop();
 
+  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Bucket created.",
     "Put (key=greeting.txt).",
     "Get (key=greeting.txt).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("put multiple objects and list all from bucket", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath("root/my_bucket") as cloud.IBucketClient;
   const KEY1 = "greeting1.txt";
@@ -82,6 +72,7 @@ test("put multiple objects and list all from bucket", async () => {
   expect(response).toEqual([KEY1, KEY2, KEY3]);
   await s.stop();
 
+  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Bucket created.",
     "Put (key=greeting1.txt).",
@@ -90,17 +81,14 @@ test("put multiple objects and list all from bucket", async () => {
     "List (prefix=null).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("get invalid object throws an error", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath("root/my_bucket") as cloud.IBucketClient;
 
@@ -108,15 +96,15 @@ test("get invalid object throws an error", async () => {
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
 
+  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Bucket created.",
     "Get (key=unknown.txt).",
     "wingsdk.cloud.Bucket deleted.",
   ]);
   expect(s.listTraces()[1].data.status).toEqual("failure");
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
-function listMessages(s: testing.Simulator) {
+function listMessages(s: Simulator) {
   return s.listTraces().map((event) => event.data.message);
 }

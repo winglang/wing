@@ -4,7 +4,7 @@ import * as core from "../core";
 import { Function } from "./function";
 import { IResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { captureSimulatorResource } from "./util";
+import { bindSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -95,6 +95,6 @@ export class Queue extends cloud.QueueBase implements IResource {
     captureScope: IConstruct,
     _metadata: core.CaptureMetadata
   ): core.Code {
-    return captureSimulatorResource("queue", this, captureScope);
+    return bindSimulatorResource("queue", this, captureScope);
   }
 }

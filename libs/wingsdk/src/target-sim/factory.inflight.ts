@@ -1,6 +1,7 @@
 import * as cloud from "../cloud";
 import { ISimulatorFactory, ISimulatorContext } from "../testing/simulator";
 import { Bucket } from "./bucket.inflight";
+import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
@@ -21,6 +22,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Queue(props, context);
       case cloud.LOGGER_TYPE:
         return new Logger(props, context);
+      case cloud.COUNTER_TYPE:
+        return new Counter(props, context);
       default:
         throw new Error(`Type ${type} not implemented.`);
     }
