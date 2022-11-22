@@ -2960,7 +2960,7 @@ const appProps: core.AppProps = { ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.AppProps.property.customFactory">customFactory</a></code> | <code>@winglang/polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@winglang/wingsdk.core.AppProps.property.customFactory">customFactory</a></code> | <code>polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 | <code><a href="#@winglang/wingsdk.core.AppProps.property.name">name</a></code> | <code>string</code> | The name of the app. |
 | <code><a href="#@winglang/wingsdk.core.AppProps.property.outdir">outdir</a></code> | <code>string</code> | Directory where artifacts are synthesized to. |
 | <code><a href="#@winglang/wingsdk.core.AppProps.property.stateFile">stateFile</a></code> | <code>string</code> | The path to a state file which will track all synthesized files. |
@@ -2973,7 +2973,7 @@ const appProps: core.AppProps = { ... }
 public readonly customFactory: IPolyconFactory;
 ```
 
-- *Type:* @winglang/polycons.IPolyconFactory
+- *Type:* polycons.IPolyconFactory
 - *Default:* use the default polycon factory included in the Wing SDK
 
 A custom factory to resolve polycons.
@@ -4654,7 +4654,7 @@ The code contents.
 
 ### PolyconFactory <a name="PolyconFactory" id="@winglang/wingsdk.sim.PolyconFactory"></a>
 
-- *Implements:* @winglang/polycons.IPolyconFactory
+- *Implements:* polycons.IPolyconFactory
 
 Polycon factory which resolves polycons in `cloud` into preflight resources for the simulator target.
 
@@ -4716,7 +4716,7 @@ Resolve the parameters needed for creating a specific polycon into a concrete co
 
 ### PolyconFactory <a name="PolyconFactory" id="@winglang/wingsdk.tfaws.PolyconFactory"></a>
 
-- *Implements:* @winglang/polycons.IPolyconFactory
+- *Implements:* polycons.IPolyconFactory
 
 Polycon factory which resolves polycons in `cloud` into preflight resources for the AWS target.
 
