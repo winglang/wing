@@ -1,5 +1,12 @@
 import { JsonFile, cdk, javascript } from "projen";
 
+const JSII_DEPS = [
+  "constructs@~10.0.25",
+  "@winglang/polycons",
+  "cdktf",
+  "@cdktf/provider-aws",
+];
+
 const project = new cdk.JsiiProject({
   name: "@winglang/wingsdk",
   author: "Monada, Inc.",
@@ -8,12 +15,8 @@ const project = new cdk.JsiiProject({
   repositoryUrl: "https://github.com/winglang/wingsdk.git",
   stability: "experimental",
   defaultReleaseBranch: "main",
-  peerDeps: [
-    "constructs@~10.0.25",
-    "@winglang/polycons",
-    "cdktf",
-    "@cdktf/provider-aws",
-  ],
+  peerDeps: [...JSII_DEPS],
+  deps: [...JSII_DEPS],
   bundledDeps: [
     "safe-stable-stringify",
     // preflight dependencies
@@ -24,7 +27,9 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-sqs",
     "@aws-sdk/client-dynamodb",
     "@aws-sdk/client-cloudwatch-logs",
+    "@aws-sdk/types",
     "@aws-sdk/util-utf8-node",
+    "@aws-sdk/util-stream-node",
     // simulator dependencies
     "tar",
   ],
@@ -34,6 +39,7 @@ const project = new cdk.JsiiProject({
     "@types/fs-extra",
     "@types/tar",
     "aws-sdk-client-mock",
+    "eslint-plugin-sort-exports",
     "patch-package",
   ],
   prettier: true,
@@ -44,6 +50,14 @@ const project = new cdk.JsiiProject({
   codeCovTokenSecret: "CODECOV_TOKEN",
   github: false,
   projenrcTs: true,
+});
+
+project.eslint?.addPlugins("sort-exports");
+project.eslint?.addOverride({
+  files: ["src/**/index.ts"],
+  rules: {
+    "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
+  },
 });
 
 // fix typing issues with "tar" dependency
@@ -78,7 +92,6 @@ const pkgJson = project.tryFindObjectFile("package.json");
 pkgJson!.addOverride("jsii.excludeTypescript", [
   "src/**/*.inflight.ts",
   "src/**/*.sim.ts",
-  "src/**/exports.ts",
 ]);
 
 // By default, the TypeScript compiler will include all types from @types, even
@@ -118,12 +131,7 @@ enum Zone {
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return srcPathsNotEndingIn([
-        "*.inflight.ts",
-        "*.sim.ts",
-        "*.test.ts",
-        "exports.ts",
-      ]);
+      return srcPathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
     case Zone.TEST:
       return "src/**/*.test.ts";
     case Zone.INFLIGHT:
@@ -178,7 +186,8 @@ project.eslint!.addRules({
 project.npmignore?.addPatterns(
   "tsconfig.nonjsii.json",
   ".prettierignore",
-  ".prettierrc.json"
+  ".prettierrc.json",
+  "*.tgz"
 );
 
 const apiCheck = project.addTask("api-check", {
@@ -189,10 +198,13 @@ project.addTask("api-check:watch", {
 });
 project.postCompileTask.prependSpawn(apiCheck);
 
-const bumpTask = project.tasks.tryFind("bump")!;
-bumpTask.reset(
-  "npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version"
-);
+project.tasks
+  .tryFind("bump")!
+  .reset("npm version ${PROJEN_BUMP_VERSION:-0.0.0} --allow-same-version");
+
+project.tasks
+  .tryFind("unbump")!
+  .reset("npm version 0.0.0 --allow-same-version");
 
 project.preCompileTask.exec("patch-package");
 

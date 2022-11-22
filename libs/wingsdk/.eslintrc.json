@@ -7,7 +7,8 @@
   "plugins": [
     "@typescript-eslint",
     "import",
-    "prettier"
+    "prettier",
+    "sort-exports"
   ],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -136,12 +137,12 @@
       {
         "zones": [
           {
-            "target": "src/**/!(*.inflight.ts|*.sim.ts|*.test.ts|exports.ts)",
+            "target": "src/**/!(*.inflight.ts|*.sim.ts|*.test.ts)",
             "from": "src/**/*.inflight.ts",
             "message": "Importing inflight code in a preflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           },
           {
-            "target": "src/**/!(*.inflight.ts|*.sim.ts|*.test.ts|exports.ts)",
+            "target": "src/**/!(*.inflight.ts|*.sim.ts|*.test.ts)",
             "from": "src/**/*.sim.ts",
             "message": "Importing simulator code in a preflight module is not allowed. Add \"// eslint-disable-next-line import/no-restricted-paths\" to disable."
           },
@@ -162,6 +163,19 @@
       "rules": {
         "@typescript-eslint/no-require-imports": "off",
         "import/no-extraneous-dependencies": "off"
+      }
+    },
+    {
+      "files": [
+        "src/**/index.ts"
+      ],
+      "rules": {
+        "sort-exports/sort-exports": [
+          "error",
+          {
+            "sortDir": "asc"
+          }
+        ]
       }
     }
   ]

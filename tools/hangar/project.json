@@ -1,0 +1,31 @@
+{
+  "name": "hangar",
+  "implicitDependencies": [
+    "wing",
+    "wingsdk"
+  ],
+  "targets": {
+    "test": {
+      "dependsOn": [
+        "^build",
+        "^package"
+      ],
+      "inputs": [
+        "src",
+        "examples-tests"
+      ],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run test:update",
+        "cwd": "tools/hangar"
+      },
+      "configurations": {
+        "release": {
+          "options": {
+            "command": "npm run test"
+          }
+        }
+      }
+    }
+  }
+}

@@ -17,6 +17,7 @@
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:wing": "npm --prefix apps/wing install",
-    "install:wingsdk": "npm --prefix libs/wingsdk install"
+    "install:wingsdk": "npm --prefix libs/wingsdk install",
+    "install:hangar": "npm --prefix tools/hangar install"
   }
 }

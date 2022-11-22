@@ -10,11 +10,13 @@ We've structured the handbook as an FAQ to make it easy to find the information 
   - [🌳 How is this repository structured?](#-how-is-this-repository-structured)
   - [🔨 How do I build Wing locally?](#-how-do-i-build-wing-locally)
   - [🔨 How do I build just the SDK?](#-how-do-i-build-just-the-sdk)
+  - [🔨 How do I build the VSCode extension?](#-how-do-i-build-the-vscode-extension)
   - [🧱 How do I add a dependency to the SDK?](#-how-do-i-add-a-dependency-to-the-sdk)
   - [🧩 How do I add a resource to the SDK?](#-how-do-i-add-a-resource-to-the-sdk)
   - [🎨 How do I design the API for a SDK resource?](#-how-do-i-design-the-api-for-a-sdk-resource)
   - [🏁 How do I add and run tests to the SDK?](#-how-do-i-add-and-run-tests-to-the-sdk)
   - [🖼️ How do I add an example?](#️-how-do-i-add-an-example)
+  - [🧪 How do I run E2E tests?](#-how-do-i-run-e2e-tests)
   - [🧬 What is an RFC?](#-what-is-an-rfc)
   - [🔬 What is the RFC process?](#-what-is-the-rfc-process)
   - [🐞 How do I submit a bug report?](#-how-do-i-submit-a-bug-report)
@@ -79,6 +81,7 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 To build the repo locally:
 
 ```bash
+sudo bash scripts/setup_wasi.sh # one-time setup
 npm install
 npm run build
 ```
@@ -86,6 +89,7 @@ npm run build
 To run all tests:
 
 ```bash
+cargo install cargo-insta # one-time setup
 npm run test
 ```
 
@@ -112,6 +116,13 @@ Everything in the SDK can be built by running `npm run build` from `libs/wingsdk
 [CDK for Terraform]: https://github.com/hashicorp/terraform-cdk
 [JSII]: https://github.com/aws/jsii
 [Projen]: https://github.com/projen/projen
+
+## 🔨 How do I build the VSCode extension?
+
+The VSCode extension is located in `apps/vscode`. Most of the logic is in the language server, which is located in `apps/wing-language-server`.
+Running `nx build` from `apps/vscode` will ensure the language server is built first and the binary is available. This creates an installable VSIX file.
+
+A VSCode launch configuration is available to open a VSCode with a development version of the extension.
 
 ## 🧱 How do I add a dependency to the SDK?
 
@@ -199,6 +210,24 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 * Commit your changes and push them to your fork.
 * Open a pull request. A Wing maintainer will review it as soon as possible!
 
+## 🧪 How do I run E2E tests?
+
+The [Hangar](./tools/hangar) project hosts our E2E tests. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
+
+Add a `.env` file to `tools/hangar` with the following:
+
+```env
+NPM_TOKEN=<GitHub PAT with access to @winglang packages>
+```
+
+This allows spun-up registry to pull down @winglang/polycons from the private github registry.
+
+To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
+
+```shell
+npx nx test
+```
+
 ## 🧬 What is an RFC?
 
 An RFC is short for "request for comments".
@@ -236,6 +265,7 @@ To help maintainers review them and get them merged in a speedy fashion, please 
 * [ ] Tests are added for all changes.
 * [ ] Any handwritten documentation in `docs/` or READMEs are updated where appropriate when features are being added or removed (API docs will be automatically generated for you!).
 * [ ] Your fork is in sync with the upstream repository.
+* [ ] All build checks on GitHub are passing.
 
 We also recommend you avoid force pushing or rebasing your branch after a pull request has been opened in order to make it easier to review.
 Your commit history doesn't need to be perfect, since it will get squashed into a single commit when the pull request is merged anyway.

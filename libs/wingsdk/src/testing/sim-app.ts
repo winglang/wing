@@ -1,5 +1,5 @@
 import { Simulator } from ".";
-import * as sim from "../sim";
+import * as sim from "../target-sim";
 import { mkdtemp } from "../util";
 
 /**

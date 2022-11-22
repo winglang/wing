@@ -1,10 +1,11 @@
-use std::{fs, path::PathBuf};
+use itertools::Itertools;
+use std::{cmp::Ordering, fs, path::PathBuf};
 
 use sha2::{Digest, Sha256};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expr, ExprType, Flight, FunctionDefinition, InterpolatedStringPart, Literal,
-	Reference, Scope, Statement, Symbol, Type, UnaryOperator,
+	ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
+	Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -46,15 +47,21 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, shim: bool) -> String {
 	let mut js = vec![];
 	let mut imports = vec![];
 
-	for statement in scope.statements.iter() {
+	for statement in scope.statements.iter().sorted_by(|a, b| match (&a.kind, &b.kind) {
+		// Put type definitions first so JS won't complain of unknown types
+		(StmtKind::Class { .. }, StmtKind::Class { .. }) => Ordering::Equal,
+		(StmtKind::Class { .. }, _) => Ordering::Less,
+		(_, StmtKind::Class { .. }) => Ordering::Greater,
+		_ => Ordering::Equal,
+	}) {
 		let line = jsify_statement(statement, &out_dir);
 		if line.is_empty() {
 			continue;
 		}
-		if let Statement::Use {
+		if let StmtKind::Use {
 			identifier: _,
 			module_name: _,
-		} = statement
+		} = statement.kind
 		{
 			imports.push(line);
 		} else {
@@ -167,8 +174,8 @@ fn jsify_type(typ: &Type) -> String {
 }
 
 fn jsify_expression(expression: &Expr) -> String {
-	match &expression.variant {
-		ExprType::New {
+	match &expression.kind {
+		ExprKind::New {
 			class,
 			obj_id,
 			arg_list,
@@ -197,7 +204,7 @@ fn jsify_expression(expression: &Expr) -> String {
 				format!("new {}({})", jsify_type(&class), jsify_arg_list(&arg_list, None, None))
 			}
 		}
-		ExprType::Literal(lit) => match lit {
+		ExprKind::Literal(lit) => match lit {
 			Literal::String(s) => format!("{}", s),
 			Literal::InterpolatedString(s) => format!(
 				"`{}`",
@@ -214,11 +221,16 @@ fn jsify_expression(expression: &Expr) -> String {
 			Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 			Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 		},
-		ExprType::Reference(_ref) => jsify_reference(&_ref),
-		ExprType::Call { function, args } => {
+		ExprKind::Reference(_ref) => jsify_reference(&_ref),
+		ExprKind::Call { function, args } => {
+			// TODO: implement "print" to use Logger resource
+			// see: https://github.com/winglang/wing/issues/50
+			if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
+				return format!("console.log({})", jsify_arg_list(args, None, None));
+			}
 			format!("{}({})", jsify_reference(&function), jsify_arg_list(&args, None, None))
 		}
-		ExprType::Unary { op, exp } => {
+		ExprKind::Unary { op, exp } => {
 			let op = match op {
 				UnaryOperator::Plus => "+",
 				UnaryOperator::Minus => "-",
@@ -226,7 +238,7 @@ fn jsify_expression(expression: &Expr) -> String {
 			};
 			format!("({}{})", op, jsify_expression(exp))
 		}
-		ExprType::Binary { op, lexp, rexp } => {
+		ExprKind::Binary { op, lexp, rexp } => {
 			let op = match op {
 				BinaryOperator::Add => "+",
 				BinaryOperator::Sub => "-",
@@ -244,7 +256,7 @@ fn jsify_expression(expression: &Expr) -> String {
 			};
 			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
 		}
-		ExprType::StructLiteral { fields, .. } => {
+		ExprKind::StructLiteral { fields, .. } => {
 			format!(
 				"{{\n{}}}\n",
 				fields
@@ -254,7 +266,7 @@ fn jsify_expression(expression: &Expr) -> String {
 					.join("\n")
 			)
 		}
-		ExprType::MapLiteral { fields, .. } => {
+		ExprKind::MapLiteral { fields, .. } => {
 			format!(
 				"{{\n{}\n}}",
 				fields
@@ -267,9 +279,9 @@ fn jsify_expression(expression: &Expr) -> String {
 	}
 }
 
-fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
-	match statement {
-		Statement::Use {
+fn jsify_statement(statement: &Stmt, out_dir: &PathBuf) -> String {
+	match &statement.kind {
+		StmtKind::Use {
 			module_name,
 			identifier,
 		} => {
@@ -289,7 +301,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 				}
 			)
 		}
-		Statement::VariableDef {
+		StmtKind::VariableDef {
 			var_name,
 			initial_value,
 			type_: _,
@@ -297,16 +309,17 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 			let initial_value = jsify_expression(initial_value);
 			format!("let {} = {};", jsify_symbol(var_name), initial_value)
 		}
-		Statement::FunctionDefinition(func_def) => match func_def.signature.flight {
-			Flight::In => jsify_inflight_function(func_def, &out_dir),
-			Flight::Pre => jsify_function(
+		StmtKind::FunctionDefinition(func_def) => match func_def.signature.flight {
+			Phase::Inflight => jsify_inflight_function(func_def, &out_dir),
+			Phase::Independent => unimplemented!(),
+			Phase::Preflight => jsify_function(
 				format!("function {}", jsify_symbol(&func_def.name)).as_str(),
 				&func_def.parameters,
 				&func_def.statements,
 				&out_dir,
 			),
 		},
-		Statement::ForLoop {
+		StmtKind::ForLoop {
 			iterator,
 			iterable,
 			statements,
@@ -316,7 +329,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 			jsify_expression(iterable),
 			jsify_scope(statements, &out_dir)
 		),
-		Statement::If {
+		StmtKind::If {
 			condition,
 			statements,
 			else_statements,
@@ -336,19 +349,19 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 				)
 			}
 		}
-		Statement::Expression(e) => format!("{};", jsify_expression(e)),
-		Statement::Assignment { variable, value } => {
+		StmtKind::Expression(e) => format!("{};", jsify_expression(e)),
+		StmtKind::Assignment { variable, value } => {
 			format!("{} = {};", jsify_reference(&variable), jsify_expression(value))
 		}
-		Statement::Scope(scope) => jsify_scope(scope, &out_dir),
-		Statement::Return(exp) => {
+		StmtKind::Scope(scope) => jsify_scope(scope, &out_dir),
+		StmtKind::Return(exp) => {
 			if let Some(exp) = exp {
 				format!("return {};", jsify_expression(exp))
 			} else {
 				"return;".into()
 			}
 		}
-		Statement::Class {
+		StmtKind::Class {
 			name,
 			members,
 			methods,
@@ -386,7 +399,7 @@ fn jsify_statement(statement: &Statement, out_dir: &PathBuf) -> String {
 					.join("\n")
 			)
 		}
-		Statement::Struct { name, extends, members } => {
+		StmtKind::Struct { name, extends, members } => {
 			format!(
 				"interface {}{} {{\n{}\n}}",
 				jsify_symbol(name),

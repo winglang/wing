@@ -2,11 +2,11 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { ISimulatorResource } from "../sim";
+import { ISimulatorResource } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
-import { DefaultSimulatorFactory } from "../sim/factory.inflight";
-import { BaseResourceSchema, WingSimulatorSchema } from "../sim/schema";
-import { log, mkdtemp, readJsonSync } from "../util";
+import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
+import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
+import { mkdtemp, readJsonSync } from "../util";
 
 /**
  * Props for `Simulator`.
@@ -27,6 +27,85 @@ export interface SimulatorProps {
 }
 
 /**
+ * A collection of callbacks that are invoked at key lifecycle events of the
+ * simulator.
+ */
+export interface ISimulatorLifecycleHooks {
+  /**
+   * A function to run whenever a trace is emitted.
+   */
+  onTrace?(event: Trace): void;
+}
+
+// Since we are using JSII we cannot use generics to type this right now:
+//
+// export interface WithTraceProps<T> {
+//   readonly activity: () => Promise<T>;
+// }
+// ...
+// withTrace(event: WithTraceProps<T>): Promise<T>;
+
+/**
+ * Props for `ISimulatorContext.withTrace`.
+ */
+export interface IWithTraceProps {
+  /**
+   * The trace message.
+   */
+  readonly message: any;
+
+  /**
+   * A function to run as part of the trace.
+   */
+  activity(): Promise<any>;
+}
+
+/**
+ * Represents an trace emitted during simulation.
+ */
+export interface Trace {
+  /**
+   * A JSON blob with structured data.
+   */
+  readonly data: any;
+
+  /**
+   * The type of the source that emitted the trace.
+   */
+  readonly sourceType: string;
+
+  /**
+   * The path of the resource that emitted the trace.
+   */
+  readonly sourcePath: string;
+
+  /**
+   * The type of a trace.
+   */
+  readonly type: TraceType;
+
+  /**
+   * The timestamp of the event, in ISO 8601 format.
+   * @example 2020-01-01T00:00:00.000Z
+   */
+  readonly timestamp: string;
+}
+
+/**
+ * The type of a trace.
+ */
+export enum TraceType {
+  /**
+   * A trace representing a resource activity.
+   */
+  RESOURCE = "resource",
+  /**
+   * A trace representing information emitted by the logger.
+   */
+  LOG = "log",
+}
+
+/**
  * Context that is passed to individual resource simulations.
  */
 export interface ISimulatorContext {
@@ -36,9 +115,27 @@ export interface ISimulatorContext {
   readonly assetsDir: string;
 
   /**
+   * The app-unique ID of the resource that is being simulated.
+   */
+  readonly resourcePath: string;
+
+  /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
   findInstance(handle: string): ISimulatorResource;
+
+  /**
+   * Add a trace. Traces are breadcrumbs of information about resource
+   * operations that occurred during simulation, useful for understanding how
+   * resources interact or debugging an application.
+   */
+  addTrace(trace: Trace): void;
+
+  /**
+   * Register a trace associated with a resource activity. The activity will be
+   * run, and the trace will be populated with the result's success or failure.
+   */
+  withTrace(trace: IWithTraceProps): Promise<any>;
 }
 
 /**
@@ -49,6 +146,16 @@ export interface IResourceResolver {
    * Lookup a resource by its path.
    */
   lookup(resourceId: string): BaseResourceSchema;
+}
+
+/**
+ * A subscriber that can listen for traces emitted by the simulator.
+ */
+export interface ITraceSubscriber {
+  /**
+   * Called when a trace is emitted.
+   */
+  callback(event: Trace): void;
 }
 
 /**
@@ -63,7 +170,9 @@ export class Simulator {
 
   // fields that change between simulation runs / reloads
   private _running: boolean;
-  private readonly handles: HandleManager;
+  private readonly _handles: HandleManager;
+  private _traces: Array<Trace>;
+  private readonly _traceSubscribers: Array<ITraceSubscriber>;
 
   constructor(props: SimulatorProps) {
     this._simfile = props.simfile;
@@ -73,7 +182,9 @@ export class Simulator {
 
     this._running = false;
     this._factory = props.factory ?? new DefaultSimulatorFactory();
-    this.handles = new HandleManager();
+    this._handles = new HandleManager();
+    this._traces = new Array();
+    this._traceSubscribers = new Array();
   }
 
   private _loadApp(simfile: string): { assetsDir: string; tree: any } {
@@ -84,8 +195,6 @@ export class Simulator {
       sync: true,
       file: simfile,
     });
-
-    log("extracted app to", workdir);
 
     const simJson = join(workdir, "simulator.json");
     if (!existsSync(simJson)) {
@@ -129,21 +238,62 @@ export class Simulator {
       );
     }
 
-    const context: ISimulatorContext = {
-      assetsDir: this._assetsDir,
-      findInstance: (handle: string) => {
-        return this.handles.find(handle);
-      },
-    };
+    this._traces = [];
 
     for (const path of this._tree.startOrder) {
       const resourceData = findResource(this._tree, path);
-      log(`starting resource ${path} (${resourceData.type})`);
+
+      const context: ISimulatorContext = {
+        assetsDir: this._assetsDir,
+        resourcePath: path,
+        findInstance: (handle: string) => {
+          return this._handles.find(handle);
+        },
+        addTrace: (trace: Trace) => {
+          this._addTrace(trace);
+        },
+        withTrace: async (props: IWithTraceProps) => {
+          // TODO: log start time and end time of activity?
+          try {
+            let result = await props.activity();
+            this._addTrace({
+              data: {
+                message: props.message,
+                status: "success",
+                result: JSON.stringify(result),
+              },
+              type: TraceType.RESOURCE,
+              sourcePath: path,
+              sourceType: resourceData.type,
+              timestamp: new Date().toISOString(),
+            });
+            return result;
+          } catch (err) {
+            this._addTrace({
+              data: { message: props.message, status: "failure", error: err },
+              type: TraceType.RESOURCE,
+              sourcePath: path,
+              sourceType: resourceData.type,
+              timestamp: new Date().toISOString(),
+            });
+            throw err;
+          }
+        },
+      };
+
       const props = this.resolveTokens(path, resourceData.props);
       const resource = this._factory.resolve(resourceData.type, props, context);
       await resource.init();
-      const handle = this.handles.allocate(resource);
+      const handle = this._handles.allocate(resource);
       (resourceData as any).attrs = { handle };
+      let event: Trace = {
+        type: TraceType.RESOURCE,
+        data: { message: `${resourceData.type} created.` },
+        sourcePath: path,
+        sourceType: resourceData.type,
+        timestamp: new Date().toISOString(),
+      };
+      this._addTrace(event);
     }
 
     this._running = true;
@@ -161,12 +311,20 @@ export class Simulator {
 
     for (const path of this._tree.startOrder.slice().reverse()) {
       const res = findResource(this._tree, path);
-      log(`stopping resource ${path} (${res.type})`);
-      const resource = this.handles.deallocate(res.attrs!.handle);
+      const resource = this._handles.deallocate(res.attrs!.handle);
       await resource.cleanup();
+
+      let event: Trace = {
+        type: TraceType.RESOURCE,
+        data: { message: `${res.type} deleted.` },
+        sourcePath: path,
+        sourceType: res.type,
+        timestamp: new Date().toISOString(),
+      };
+      this._addTrace(event);
     }
 
-    this.handles.reset();
+    this._handles.reset();
     this._running = false;
 
     // TODO: remove "attrs" data from tree
@@ -194,6 +352,13 @@ export class Simulator {
   }
 
   /**
+   * Get a list of all traces added during the most recent simulation run.
+   */
+  public listTraces(): Trace[] {
+    return [...this._traces];
+  }
+
+  /**
    * Get the resource instance for a given path.
    */
   public getResourceByPath(path: string): any {
@@ -201,7 +366,7 @@ export class Simulator {
     if (!handle) {
       throw new Error(`Resource ${path} does not have a handle.`);
     }
-    return this.handles.find(handle);
+    return this._handles.find(handle);
   }
 
   /**
@@ -233,6 +398,22 @@ export class Simulator {
    */
   public get tree(): any {
     return JSON.parse(JSON.stringify(this._tree));
+  }
+
+  /**
+   * Register a subscriber that will be notified when a trace is emitted by
+   * the simulator.
+   */
+  public onTrace(subscriber: ITraceSubscriber) {
+    this._traceSubscribers.push(subscriber);
+  }
+
+  private _addTrace(event: Trace) {
+    event = Object.freeze(event);
+    for (const sub of this._traceSubscribers) {
+      sub.callback(event);
+    }
+    this._traces.push(event);
   }
 
   private resolveTokens(tokenOrigin: string, props: any): any {
@@ -296,7 +477,7 @@ function findResource(tree: any, path: string): BaseResourceSchema {
 }
 
 /**
- * A factory that can turn resource descriptions into resource simulations.
+ * A factory that can turn resource descriptions into (inflight) resource simulations.
  */
 export interface ISimulatorFactory {
   /**

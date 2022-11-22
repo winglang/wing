@@ -59,7 +59,9 @@ guide](./CONTRIBUTING.md).
 
 Here is a list of known issues in "getting started":
 
-* [#50](https://github.com/winglang/wing/issues/50) `print()` is not yet implemented.
+* [#395](https://github.com/winglang/wing/issues/395) `Case conversion jsii to wing` is not yet implemented (so you should use queue.onMessage instead of on_message).
+* [#318](https://github.com/winglang/wing/issues/318) `Closure literal ~>` is not yet implemented.
+* [#375](https://github.com/winglang/wing/pull/375) `Counter` resource is not yet implemented.
 
 ### Prerequisites
 
@@ -140,7 +142,7 @@ with Wing applications on the local machine.
 2. You will notice that `app.wx` was created, run the Wing Console:
 
     ```sh
-    wing run app.wx
+    wing run target/app.wx
     ```
 
     The **Wing Console** will start and in the main view you'll see two resources: a **Queue** and a **Function**. 
@@ -385,12 +387,20 @@ resources to help you get started:
 We all hang out at the [Wing Slack] workspace. Come as you are, say hi, ask
 questions, help friends, geek out!
 
+Alternatively, post any question you have in [Wing Discussions](https://github.com/winglang/wing/discussions)
+
+
 ## Contributing
 
 We welcome and celebrate contributions from the community! Please see our
 [contribution guide](./CONTRIBUTING.md) for more information about setting up a
 development environment, what we are working on, where we need help and other
 guidelines for contributing to the project.
+
+We are also actively tracking planned features in our roadmaps:
+
+- [Wing Language Roadmap](https://github.com/orgs/winglang/projects/1/views/1)
+- [Wing SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
 
 ## License
 
