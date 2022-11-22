@@ -33,7 +33,7 @@ new sim.App(props: AppProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.sim.App.toString">toString</a></code> | Returns a string representation of this construct. |
-| <code><a href="#@winglang/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into an `.wx` file. Return the path to the file. |
+| <code><a href="#@winglang/wingsdk.sim.App.synth">synth</a></code> | Synthesize the app into a `.wx` file. Return the path to the file. |
 
 ---
 
@@ -51,7 +51,7 @@ Returns a string representation of this construct.
 public synth(): string
 ```
 
-Synthesize the app into an `.wx` file. Return the path to the file.
+Synthesize the app into a `.wx` file. Return the path to the file.
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
