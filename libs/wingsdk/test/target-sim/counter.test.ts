@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
-import { SimApp } from "../../src/testing";
+import { SimApp, Simulator } from "../../src/testing";
 
 test("create a counter", async () => {
   // GIVEN
@@ -48,4 +48,17 @@ test("inc", async () => {
   await s.stop();
 
   expect(s.tree).toMatchSnapshot();
+
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Counter created.",
+    "Inc (amount=1).",
+    "Inc (amount=1).",
+    "Inc (amount=10).",
+    "Inc (amount=10).",
+    "wingsdk.cloud.Counter deleted.",
+  ]);
 });
+
+function listMessages(s: Simulator) {
+  return s.listTraces().map((event) => event.data.message);
+}

@@ -5,20 +5,27 @@ import { CounterSchema } from "./schema-resources";
 
 export class Counter implements ICounterClient, ISimulatorResource {
   private value: number;
+  private readonly context: ISimulatorContext;
 
   public constructor(
     props: CounterSchema["props"],
-    _context: ISimulatorContext
+    context: ISimulatorContext
   ) {
     this.value = props.initialValue;
+    this.context = context;
   }
 
   public async init(): Promise<void> {}
   public async cleanup(): Promise<void> {}
 
   public async inc(amount: number = 1): Promise<number> {
-    const prev = this.value;
-    this.value += amount;
-    return prev;
+    return this.context.withTrace({
+      message: `Inc (amount=${amount}).`,
+      activity: async () => {
+        const prev = this.value;
+        this.value += amount;
+        return prev;
+      },
+    });
   }
 }
