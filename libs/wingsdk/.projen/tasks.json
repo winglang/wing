@@ -127,7 +127,10 @@
           "exec": "jsii-docgen -o API.md"
         },
         {
-          "exec": "cp API.md ../../docs/wingsdk-api.md"
+          "exec": "echo '---\ntitle: SDK\nid: sdk\ndescription: Wing SDK API Reference\n---\n' > ../../docs/04-reference/wingsdk-api.md"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/04-reference/wingsdk-api.md"
         }
       ]
     },
