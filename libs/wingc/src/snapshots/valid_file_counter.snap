@@ -1,0 +1,54 @@
+---
+source: libs/wingc/src/lib.rs
+description: "../../examples/tests/valid/file_counter.w"
+---
+// ../../examples/tests/valid/file_counter.w.out/preflight.js
+const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? ".";
+
+function __app(target) {
+	switch (target) {
+		case "sim":
+			return $stdlib.sim.App;
+		case "tfaws":
+		case "tf-aws":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir });
+  
+  let bucket = new cloud.Bucket(this,"cloud.Bucket");
+  let counter = new cloud.Counter(this,"cloud.Counter");
+  let queue = new cloud.Queue(this,"cloud.Queue");
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.86754ece6e35adfd186315aa4bfcf647f5f280df200188741606e0383871bfc3/index.js")),
+    entrypoint: "$proc",
+    captures: {
+      bucket: {
+        resource: bucket,
+        methods: ["get","list","put"]
+      },
+      counter: {
+        resource: counter,
+        methods: ["inc"]
+      },
+    }
+  });
+  queue.onMessage(handler);
+}
+}
+new MyApp({ name: "file_counter" }).synth();
+// ../../examples/tests/valid/file_counter.w.out/proc.86754ece6e35adfd186315aa4bfcf647f5f280df200188741606e0383871bfc3/index.js
+async function $proc({ bucket, counter }, body) {
+  let next = counter.inc();
+  let key = `myfile-${"hi"}.txt`;
+  bucket.put(key,body);
+};
+

@@ -110,7 +110,7 @@ with a fresh copy without any consequences.
 
 ### Counter <a name="Counter" id="@winglang/wingsdk.cloud.Counter"></a>
 
-**Inflight client:** [@monadahq/wingsdk.cloud.ICounterClient](#@monadahq/wingsdk.cloud.ICounterClient)
+**Inflight client:** [@winglang/wingsdk.cloud.ICounterClient](#@winglang/wingsdk.cloud.ICounterClient)
 
 Represents a distributed atomic counter.
 
