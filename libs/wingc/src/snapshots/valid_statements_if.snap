@@ -28,5 +28,5 @@ constructor() {
   }
 }
 }
-new MyApp().synth();
+new MyApp({ name: "statements_if" }).synth();
 

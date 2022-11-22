@@ -39,7 +39,7 @@ constructor() {
   queue.onMessage(handler);
 }
 }
-new MyApp().synth();
+new MyApp({ name: "hello" }).synth();
 // ../../examples/tests/valid/hello.w.out/proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js
 async function $proc({ bucket }, message) {
   bucket.put("hello.txt",`Hello, ${message}!`);

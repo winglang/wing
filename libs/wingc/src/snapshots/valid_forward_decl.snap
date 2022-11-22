@@ -43,5 +43,5 @@ constructor() {
   }
 }
 }
-new MyApp().synth();
+new MyApp({ name: "forward_decl" }).synth();
 
