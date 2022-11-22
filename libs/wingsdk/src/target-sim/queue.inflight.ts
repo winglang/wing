@@ -2,7 +2,6 @@ import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
 import { ISimulatorResource } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { RandomArrayIterator } from "./util.sim";
 
 export class Queue implements IQueueClient, ISimulatorResource {
   private readonly messages = new Array<string>();
@@ -85,5 +84,31 @@ export class Queue implements IQueueClient, ISimulatorResource {
         processedMessages = true;
       }
     } while (processedMessages);
+  }
+}
+
+class RandomArrayIterator<T = any> implements Iterable<T> {
+  private length: number;
+  constructor(private readonly values: T[]) {
+    this.length = this.values.length;
+  }
+
+  next() {
+    if (this.length === 0) {
+      return { done: true, value: undefined } as { done: true; value: T };
+    }
+
+    const i = Math.floor(Math.random() * this.length);
+    const j = --this.length;
+    const value = this.values[i];
+
+    this.values[i] = this.values[j];
+    this.values[j] = value;
+
+    return { done: false, value } as { done: false; value: T };
+  }
+
+  [Symbol.iterator]() {
+    return this;
   }
 }

@@ -78,9 +78,9 @@
   },
   "peerDependencies": {
     "@cdktf/provider-aws": "^10.0.11",
-    "@winglang/polycons": "^0.0.105",
     "cdktf": "^0.13.2",
-    "constructs": "~10.0.25"
+    "constructs": "~10.0.25",
+    "polycons": "^0.1.1"
   },
   "dependencies": {
     "@aws-sdk/client-cloudwatch-logs": "^3.171.0",
@@ -89,10 +89,10 @@
     "@aws-sdk/client-sqs": "^3.171.0",
     "@aws-sdk/util-utf8-node": "^3.170.0",
     "@cdktf/provider-aws": "^10.0.11",
-    "@winglang/polycons": "^0.0.105",
     "cdktf": "^0.13.2",
     "constructs": "~10.0.25",
     "esbuild-wasm": "^0.15.9",
+    "polycons": "^0.1.1",
     "safe-stable-stringify": "*",
     "tar": "^6.1.11"
   },
@@ -166,8 +166,7 @@
       "types": []
     },
     "excludeTypescript": [
-      "src/**/*.inflight.ts",
-      "src/**/*.sim.ts"
+      "src/**/*.inflight.ts"
     ]
   },
   "overrides": {
