@@ -124,7 +124,7 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
-          "exec": "jsii-docgen -o API.md"
+          "exec": "jsii-docgen -o API.md -l wing"
         },
         {
           "exec": "echo '---\ntitle: SDK\nid: sdk\ndescription: Wing SDK API Reference\n---\n' > ../../docs/04-reference/wingsdk-api.md"

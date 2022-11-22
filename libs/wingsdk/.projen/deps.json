@@ -38,6 +38,10 @@
       "type": "build"
     },
     {
+      "name": "@winglang/jsii-docgen",
+      "type": "build"
+    },
+    {
       "name": "@winglang/wing-api-checker",
       "version": "file:../../apps/wing-api-checker",
       "type": "build"
@@ -95,10 +99,6 @@
     },
     {
       "name": "jsii-diff",
-      "type": "build"
-    },
-    {
-      "name": "jsii-docgen",
       "type": "build"
     },
     {

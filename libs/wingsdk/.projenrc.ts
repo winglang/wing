@@ -62,6 +62,10 @@ project.eslint?.addOverride({
   },
 });
 
+// use fork of jsii-docgen with wing-ish support
+project.deps.removeDependency("jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen");
+
 // fix typing issues with "tar" dependency
 project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
 project.package.addPackageResolutions("minipass@3.1.6");
@@ -210,6 +214,8 @@ description: Wing SDK API Reference
 
 const docsPath = "../../docs/04-reference/wingsdk-api.md";
 const docgen = project.tasks.tryFind("docgen")!;
+docgen.reset();
+docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
