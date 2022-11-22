@@ -162,6 +162,7 @@ pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: Option<TypeRef>,
 	pub flight: Phase,
+	pub needs_jsii_case_conversion: bool,
 }
 
 impl Display for Type {
@@ -801,6 +802,7 @@ impl<'a> TypeChecker<'a> {
 					args.push(self.resolve_type(arg, env, statement_idx));
 				}
 				let sig = FunctionSignature {
+					needs_jsii_case_conversion: true,
 					args,
 					return_type: ast_sig
 						.return_type

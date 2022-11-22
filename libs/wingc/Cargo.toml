@@ -15,6 +15,7 @@ colored = "2.0"
 lazy_static = "1.4.0"
 globset = "0.4.9"
 itertools = "0.10"
+inflections = "1.1.1"
 
 [dev-dependencies]
 insta = "1.21.0"

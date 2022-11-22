@@ -23,6 +23,7 @@ pub mod diagnostic;
 pub mod jsify;
 pub mod parser;
 pub mod type_check;
+pub mod utilities;
 
 pub struct CompilerOutput {
 	pub preflight: String,
@@ -69,6 +70,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 			args: vec![types.string()],
 			return_type: None,
 			flight: Phase::Independent,
+			needs_jsii_case_conversion: false,
 		}),
 		scope,
 		types,

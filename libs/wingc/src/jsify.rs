@@ -3,9 +3,12 @@ use std::{cmp::Ordering, fs, path::PathBuf};
 
 use sha2::{Digest, Sha256};
 
-use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+use crate::{
+	ast::{
+		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+	},
+	utilities::{is_snake_case, snake_case_to_camel_case},
 };
 
 const STDLIB: &str = "$stdlib";
@@ -111,11 +114,18 @@ fn jsify_scope(scope: &Scope, out_dir: &PathBuf) -> String {
 
 fn jsify_reference(reference: &Reference) -> String {
 	match reference {
-		Reference::Identifier(identifier) => jsify_symbol(identifier),
-		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol(property),
+		Reference::Identifier(identifier) => jsify_symbol_case_converted(identifier),
+		Reference::NestedIdentifier { object, property } => jsify_expression(object) + "." + &jsify_symbol_case_converted(property),
 	}
 }
 
+fn jsify_symbol_case_converted(symbol: &Symbol) -> String {
+	let mut result = symbol.name.clone();
+	if is_snake_case(&result) {
+		result = snake_case_to_camel_case(&result);
+	}
+	return format!("{}", result);
+}
 fn jsify_symbol(symbol: &Symbol) -> String {
 	return format!("{}", symbol.name);
 }

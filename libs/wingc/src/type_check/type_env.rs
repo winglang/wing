@@ -2,7 +2,7 @@ use crate::{
 	ast::{Phase, Symbol},
 	diagnostic::TypeError,
 	type_check::Type,
-	type_check::TypeRef,
+	type_check::TypeRef, utilities::{is_snake_case, snake_case_to_camel_case, is_camel_case, camel_case_to_snake_case},
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
@@ -61,16 +61,27 @@ impl TypeEnv {
 	}
 
 	pub fn define(&mut self, symbol: &Symbol, _type: TypeRef, pos: StatementIdx) -> Result<(), TypeError> {
-		if self.type_map.contains_key(&symbol.name) {
+		let key = if _type.as_function_sig().is_some() {
+			let func_sig = _type.as_function_sig().unwrap();
+			if func_sig.needs_jsii_case_conversion && is_camel_case(symbol.name.as_str()) {
+				camel_case_to_snake_case(symbol.name.as_str())
+			} else {
+				symbol.name.clone()
+			}
+		} else {
+			symbol.name.clone()
+		};
+
+		if self.type_map.contains_key(key.as_str()) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
-				message: format!("Symbol \"{}\" already defined in this scope", symbol.name),
+				message: format!("Symbol \"{}\" already defined in this scope", key),
 			});
 		}
 
 		// Avoid variable shadowing
 		if let Some(_parent_env) = self.parent {
-			if let Some(parent_type) = self.try_lookup(&symbol.name, None) {
+			if let Some(parent_type) = self.try_lookup(key.as_str(), None) {
 				// If we're a class we allow "symbol shadowing" for methods
 				if !(self.is_class
 					&& matches!(parent_type.into(), &Type::Function(_))
@@ -78,12 +89,12 @@ impl TypeEnv {
 				{
 					return Err(TypeError {
 						span: symbol.span.clone(),
-						message: format!("Symbol \"{}\" already defined in parent scope.", symbol.name),
+						message: format!("Symbol \"{}\" already defined in parent scope.", key),
 					});
 				}
 			}
 		}
-		self.type_map.insert(symbol.name.clone(), (pos, _type));
+		self.type_map.insert(key.clone(), (pos, _type));
 
 		Ok(())
 	}

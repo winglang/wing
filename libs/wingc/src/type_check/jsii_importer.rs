@@ -4,6 +4,7 @@ use crate::{
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
 	type_check::{type_env::StatementIdx, Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
+	utilities::{is_snake_case, is_camel_case, camel_case_to_snake_case},
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -60,6 +61,7 @@ impl<'a> JsiiImporter<'a> {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
 						flight: Phase::Inflight,
+						needs_jsii_case_conversion: false,
 					})))
 				} else if type_fqn == "@winglang/wingsdk.core.Duration" {
 					Some(self.wing_types.duration())
@@ -214,12 +216,18 @@ impl<'a> JsiiImporter<'a> {
 					}
 				}
 				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
+					needs_jsii_case_conversion: is_camel_case(m.name.as_str()),
 					args: arg_types,
 					return_type,
 					flight,
 				}));
+				let name = if method_sig.as_function_sig().unwrap().needs_jsii_case_conversion && is_camel_case(&m.name) {
+					camel_case_to_snake_case(&m.name)
+				} else {
+					m.name.clone()
+				};
 				class_env.define(
-					&Self::jsii_name_to_symbol(&m.name, &m.location_in_module),
+					&Self::jsii_name_to_symbol(&name, &m.location_in_module),
 					method_sig,
 					StatementIdx::Top,
 				);
@@ -365,6 +373,7 @@ impl<'a> JsiiImporter<'a> {
 				args: arg_types,
 				return_type: Some(new_type),
 				flight: class_env.flight,
+				needs_jsii_case_conversion: false,
 			}));
 			class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
