@@ -44,7 +44,7 @@ let counter = new cloud.Counter(initial_value: 100);
 let queue = new cloud.Queue(timeout: 10s);
 
 queue.on_message((body: str) ~> {
-  let next = counter.increment();
+  let next = counter.inc();
   let key = "myfile-${next}.txt";
   bucket.put(key, body);
 });
