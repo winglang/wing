@@ -1,17 +1,23 @@
 use inflections::*;
 
-pub fn is_snake_case(s: &str) -> bool {
+fn is_snake_case(s: &str) -> bool {
 	case::is_snake_case(s)
 }
-pub fn is_camel_case(s: &str) -> bool {
+fn is_camel_case(s: &str) -> bool {
 	case::is_camel_case(s)
 }
 
 pub fn camel_case_to_snake_case(s: &str) -> String {
+	if !is_camel_case(s) {
+		return s.to_string();
+	}
 	case::to_snake_case(s)
 }
 
 pub fn snake_case_to_camel_case(s: &str) -> String {
+	if !is_snake_case(s) {
+		return s.to_string();
+	}
 	case::to_camel_case(s)
 }
 

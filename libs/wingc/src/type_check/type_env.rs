@@ -2,7 +2,7 @@ use crate::{
 	ast::{Phase, Symbol},
 	diagnostic::TypeError,
 	type_check::Type,
-	type_check::TypeRef, utilities::{is_snake_case, snake_case_to_camel_case, is_camel_case, camel_case_to_snake_case},
+	type_check::TypeRef, utilities::{camel_case_to_snake_case},
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
@@ -61,9 +61,8 @@ impl TypeEnv {
 	}
 
 	pub fn define(&mut self, symbol: &Symbol, _type: TypeRef, pos: StatementIdx) -> Result<(), TypeError> {
-		let key = if _type.as_function_sig().is_some() {
-			let func_sig = _type.as_function_sig().unwrap();
-			if func_sig.needs_jsii_case_conversion && is_camel_case(symbol.name.as_str()) {
+		let key = if let Some(func_sig) = _type.as_function_sig() {
+			if func_sig.needs_jsii_case_conversion {
 				camel_case_to_snake_case(symbol.name.as_str())
 			} else {
 				symbol.name.clone()

@@ -157,12 +157,20 @@ impl PartialEq for Type {
 	}
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(Debug)]
 pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
 	pub return_type: Option<TypeRef>,
 	pub flight: Phase,
 	pub needs_jsii_case_conversion: bool,
+}
+
+impl PartialEq for FunctionSignature {
+	fn eq(&self, other: &Self) -> bool {
+		// We compare all fields except `needs_jsii_case_conversion` it's only a hint for JSification and
+		// not relevant for type checking (this way JSII imported signatures can match wing signatures)
+		self.args == other.args && self.return_type == other.return_type && self.flight == other.flight
+	}
 }
 
 impl Display for Type {
