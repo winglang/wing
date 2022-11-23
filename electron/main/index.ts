@@ -105,12 +105,12 @@ function createWindowManager() {
       });
 
       // Start the simulator but don't wait for it, yet.
-      console.log("Sarting the simulator...");
+      console.log("Starting the simulator...");
       const simulatorStart = simulator.start();
 
       // Create the express server and router for the simulator. Start
       // listening but don't wait for it, yet.
-      console.log("Sarting the dev server...");
+      console.log("Starting the dev server...");
       const server = (async () => {
         const app = express();
         app.use(cors());
