@@ -108,11 +108,11 @@ const contributes: VSCodeExtensionContributions = {
   },
   commands: [
     {
-      command: "wing.updates.check",
+      command: "wing.checkUpdates",
       title: "[Wing] Check for updates",
     },
     {
-      command: "wing.updates.addToken",
+      command: "wing.addToken",
       title: "[Wing] Set update token",
     },
   ],
@@ -128,7 +128,11 @@ project.addFields({
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
   categories: ["Programming Languages"],
-  activationEvents: ["onLanguage:wing", "onStartupFinished"],
+  activationEvents: [
+    "onLanguage:wing",
+    "onCommand:wing.addToken",
+    "onCommand:wing.checkUpdates",
+  ],
   contributes,
 });
 

@@ -80,7 +80,8 @@
   ],
   "activationEvents": [
     "onLanguage:wing",
-    "onStartupFinished"
+    "onCommand:wing.addToken",
+    "onCommand:wing.checkUpdates"
   ],
   "contributes": {
     "languages": [
@@ -129,11 +130,11 @@
     },
     "commands": [
       {
-        "command": "wing.updates.check",
+        "command": "wing.checkUpdates",
         "title": "[Wing] Check for updates"
       },
       {
-        "command": "wing.updates.addToken",
+        "command": "wing.addToken",
         "title": "[Wing] Set update token"
       }
     ]
