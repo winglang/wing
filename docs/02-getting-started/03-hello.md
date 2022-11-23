@@ -28,7 +28,7 @@ inflight handler(message: str): str {
   print("Hello, ${message}!");
 }
 
-queue.onMessage(handler);
+queue.on_message(handler);
 ```
 
 This code should be mostly self explanatory. We define a queue, and every time a
