@@ -752,7 +752,7 @@ let capture = core.Capture{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Capture.property.methods">methods</a></code> | <code>MutArray<str></code> | Which methods are called on the captured resource. |
+| <code><a href="#@winglang/wingsdk.core.Capture.property.methods">methods</a></code> | <code>MutArray\<str></code> | Which methods are called on the captured resource. |
 | <code><a href="#@winglang/wingsdk.core.Capture.property.resource">resource</a></code> | <code>core.ICapturableConstruct</code> | A captured resource. |
 | <code><a href="#@winglang/wingsdk.core.Capture.property.value">value</a></code> | <code>any</code> | A captured immutable value (like string, number, boolean, a struct, or null). |
 
