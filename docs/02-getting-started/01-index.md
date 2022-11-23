@@ -14,14 +14,13 @@ We want this guide to be really fun, easy to read and to offer exactly the
 confusing or overwhelming. Naturally, it will take us some time to make this an
 awesome experience, and we would love you feedback and help! :pray:
 
-New experiences are always better with friends and support, so jump right into
-[#getting-started](https://winglang.slack.com/archives/C04BBDQUWQP) channel on
-the Wing Slack. Say :wave: and feel free to ask questions, post rants and offer
-advice to your fellow Wingians.
+New experiences are always better with friends and support, [join](https://t.winglang.io/slack) 
+the **Wing Community Slack** and jump right into the [#getting-started](https://winglang.slack.com/archives/C04BBDQUWQP) 
+channel. Say :wave: and feel free to ask questions, post rants and 
+offer advice to your fellow Wingians.
 
 If you run into issues, please submit a [new
 issue](https://github.com/winglang/wing/issues/new/choose) on GitHub and let us
 know as soon as possible.
 
 So without further ado, let this party started!
-
