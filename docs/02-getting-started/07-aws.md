@@ -47,9 +47,9 @@ Let's change the working directory to where our Terraform configuration is and
 initialize the state file:
 
 ```sh
-$ cd ./target/cdktf.out/stacks/root
-$ export AWS_REGION=us-east-1 # or any other region
-$ terraform init
+cd ./target/cdktf.out/stacks/root
+export AWS_REGION=us-east-1 # or any other region
+terraform init
 ```
 
 ## Terraform deploy

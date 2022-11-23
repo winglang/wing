@@ -31,8 +31,8 @@ During the private alpha period, Wing is distributed through a private npm
 repository. You will need to obtain a [personal access token] from GitHub with a
 **packages:read** scope and then login your npm client like this:
 
-```terminal
-$ npm login --scope=@winglang --registry=https://npm.pkg.github.com
+```sh
+npm login --scope=@winglang --registry=https://npm.pkg.github.com
 ```
 
 This token can also be used to keep the VSCode extension up to date with additional `repo` permissions.
