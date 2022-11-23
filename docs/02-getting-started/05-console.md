@@ -50,7 +50,7 @@ Type `world` and hit **Send Message**.
 
 :::warning NOTE
 
-Viewing logs is not available in the Wing Console yet. Subscribe to [this issue](https://github.com/winglang/wing/issues/730#issuecomment-1325607002) to be notified when application logs are available!
+Viewing logs is not available in the Wing Console yet. Subscribe to [this issue](https://github.com/winglang/wing/issues/730#issuecomment-1325607002) to be notified when application logs are added!
 
 :::
 
