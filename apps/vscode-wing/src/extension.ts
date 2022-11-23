@@ -39,13 +39,9 @@ export function deactivate() {
 }
 
 export async function activate(context: ExtensionContext) {
-  const activationActivities = [
-    checkForUpdates(context, false),
-    startLanguageServer(context),
-    addCommands(context),
-  ];
-
-  await Promise.all(activationActivities);
+  await addCommands(context);
+  await checkForUpdates(context, false);
+  await startLanguageServer(context);
 }
 
 async function addCommands(context: ExtensionContext) {

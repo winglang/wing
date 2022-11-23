@@ -79,7 +79,8 @@
     "Programming Languages"
   ],
   "activationEvents": [
-    "onLanguage:wing"
+    "onLanguage:wing",
+    "onStartupFinished"
   ],
   "contributes": {
     "languages": [

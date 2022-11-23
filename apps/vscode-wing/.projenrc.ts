@@ -128,7 +128,7 @@ project.addFields({
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
   categories: ["Programming Languages"],
-  activationEvents: ["onLanguage:wing"],
+  activationEvents: ["onLanguage:wing", "onStartupFinished"],
   contributes,
 });
 
