@@ -761,7 +761,7 @@ let capture = core.Capture{ ... }
 ##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/wingsdk.core.Capture.property.methods"></a>
 
 ```wing
-methods: MutArray&lt;str&gt;;
+methods: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
@@ -817,7 +817,7 @@ let capture_metadata = core.CaptureMetadata{ ... }
 ##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/wingsdk.core.CaptureMetadata.property.methods"></a>
 
 ```wing
-methods: MutArray&lt;str&gt;;
+methods: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
@@ -933,7 +933,7 @@ let function_props = cloud.FunctionProps{ ... }
 ##### `env`<sup>Optional</sup> <a name="env" id="@winglang/wingsdk.cloud.FunctionProps.property.env"></a>
 
 ```wing
-env: MutMap&lt;str&gt;;
+env: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
@@ -968,7 +968,7 @@ let inflight_bundle_options = core.InflightBundleOptions{ ... }
 ##### `capture_clients`<sup>Required</sup> <a name="capture_clients" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureClients"></a>
 
 ```wing
-capture_clients: MutMap&lt;Code&gt;;
+capture_clients: MutMap<Code>;
 ```
 
 - *Type:* MutMap&lt;core.Code&gt;
@@ -992,7 +992,7 @@ Associate the inflight bundle with a given capture scope.
 ##### `external`<sup>Optional</sup> <a name="external" id="@winglang/wingsdk.core.InflightBundleOptions.property.external"></a>
 
 ```wing
-external: MutArray&lt;str&gt;;
+external: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
@@ -1057,7 +1057,7 @@ Name of the exported function to run.
 ##### `captures`<sup>Optional</sup> <a name="captures" id="@winglang/wingsdk.core.InflightProps.property.captures"></a>
 
 ```wing
-captures: MutMap&lt;Capture&gt;;
+captures: MutMap<Capture>;
 ```
 
 - *Type:* MutMap&lt;core.Capture&gt;
@@ -1128,7 +1128,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 ##### `env`<sup>Optional</sup> <a name="env" id="@winglang/wingsdk.cloud.QueueOnMessageProps.property.env"></a>
 
 ```wing
-env: MutMap&lt;str&gt;;
+env: MutMap<str>;
 ```
 
 - *Type:* MutMap&lt;str&gt;
@@ -1175,7 +1175,7 @@ let queue_props = cloud.QueueProps{ ... }
 ##### `initial_messages`<sup>Optional</sup> <a name="initial_messages" id="@winglang/wingsdk.cloud.QueueProps.property.initialMessages"></a>
 
 ```wing
-initial_messages: MutArray&lt;str&gt;;
+initial_messages: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
@@ -1221,7 +1221,7 @@ let text_file_props = fs.TextFileProps{ ... }
 ##### `lines`<sup>Optional</sup> <a name="lines" id="@winglang/wingsdk.fs.TextFileProps.property.lines"></a>
 
 ```wing
-lines: MutArray&lt;str&gt;;
+lines: MutArray<str>;
 ```
 
 - *Type:* MutArray&lt;str&gt;
@@ -1279,7 +1279,7 @@ new core.DependencyGraph(node: Node)
 ##### `topology` <a name="topology" id="@winglang/wingsdk.core.DependencyGraph.topology"></a>
 
 ```wing
-topology(): MutArray&lt;IConstruct&gt;
+topology(): MutArray<IConstruct>
 ```
 
 Returns a topologically sorted array of the constructs in the sub-graph.
@@ -1367,7 +1367,7 @@ The dependency.
 ##### `topology` <a name="topology" id="@winglang/wingsdk.core.DependencyVertex.topology"></a>
 
 ```wing
-topology(): MutArray&lt;IConstruct&gt;
+topology(): MutArray<IConstruct>
 ```
 
 Returns a topologically sorted array of the constructs in the sub-graph.
@@ -1386,7 +1386,7 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 ##### `inbound`<sup>Required</sup> <a name="inbound" id="@winglang/wingsdk.core.DependencyVertex.property.inbound"></a>
 
 ```wing
-inbound: MutArray&lt;DependencyVertex&gt;;
+inbound: MutArray<DependencyVertex>;
 ```
 
 - *Type:* MutArray&lt;core.DependencyVertex&gt;
@@ -1398,7 +1398,7 @@ Returns the parents of the vertex (i.e dependants).
 ##### `outbound`<sup>Required</sup> <a name="outbound" id="@winglang/wingsdk.core.DependencyVertex.property.outbound"></a>
 
 ```wing
-outbound: MutArray&lt;DependencyVertex&gt;;
+outbound: MutArray<DependencyVertex>;
 ```
 
 - *Type:* MutArray&lt;core.DependencyVertex&gt;
@@ -1675,7 +1675,7 @@ High level implementation:
 ##### `make_clients` <a name="make_clients" id="@winglang/wingsdk.core.Inflight.makeClients"></a>
 
 ```wing
-make_clients(capture_scope: IConstruct): MutMap&lt;Code&gt;
+make_clients(capture_scope: IConstruct): MutMap<Code>
 ```
 
 Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime.
@@ -1700,7 +1700,7 @@ Resolve this inflight's captured objects into a map of clients that be safely re
 ##### `captures`<sup>Required</sup> <a name="captures" id="@winglang/wingsdk.core.Inflight.property.captures"></a>
 
 ```wing
-captures: MutMap&lt;Capture&gt;;
+captures: MutMap<Capture>;
 ```
 
 - *Type:* MutMap&lt;core.Capture&gt;
@@ -1757,7 +1757,7 @@ Utility class with functions about inflight clients.
 ```wing
 bring core;
 
-core.InflightClient.for(filename: str, client_class: str, args: MutArray&lt;str&gt;)
+core.InflightClient.for(filename: str, client_class: str, args: MutArray<str>)
 ```
 
 Creates a `Code` instance with code for creating an inflight client.
@@ -2024,7 +2024,7 @@ Retrieve an object from the bucket.
 ##### `list` <a name="list" id="@winglang/wingsdk.cloud.IBucketClient.list"></a>
 
 ```wing
-list(prefix?: str): MutArray&lt;str&gt;
+list(prefix?: str): MutArray<str>
 ```
 
 Retrieve existing objects keys from the bucket.
