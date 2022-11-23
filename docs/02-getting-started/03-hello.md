@@ -16,7 +16,7 @@ cd hello-wing
 
 ## Your application entrypoint
 
-And a new file called `hello.w` with the following code. This file is the
+Add a new file called `hello.w` with the following code. This file is the
 entrypoint of your Wing application.
 
 ```ts
