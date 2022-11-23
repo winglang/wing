@@ -35,9 +35,11 @@ bring cloud;
 
 let bucket = new cloud.Bucket();
 
-new cloud.Function(() ~> {
+inflight handler(_: str): str {
   bucket.put("greeting.txt", "hello, world!");
-});
+}
+
+new cloud.Function(handler);
 ```
 
 ## This is Alpha
