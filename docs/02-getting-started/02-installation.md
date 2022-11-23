@@ -28,7 +28,7 @@ In order to deploy to AWS, you will also need:
 :::info
 
 During the private alpha period, Wing is distributed through a private npm
-repository. You will need to obtain a [personal access token](https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages) from GitHub with a
+repository. You will need to obtain a [personal access token] from GitHub with a
 **packages:read** scope and then login your npm client like this:
 
 ```terminal
@@ -86,5 +86,5 @@ Wing applications running locally on the cloud simulator.
 [AWS account]: portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 [AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-[personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages
 [VSCode]: https://code.visualstudio.com/
