@@ -39,6 +39,12 @@ Email: "your github email"
 ```
 
 This token can also be used to keep the VSCode extension up to date with additional `repo` permissions.
+
+> **_NOTE:_** You may have to add this in the terminal if you receive a 403 error:
+
+```sh
+npm config set registry https://registry.npmjs.org/
+```
 :::
 
 Install the Wing CLI through npm:
