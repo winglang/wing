@@ -4,7 +4,7 @@ id: summary
 ---
 
 Congratulations on building your very first Wing application. We hope that this guide was helpful
-in demonstrating the power of the abstractions the Wing language and SDK offer for the cloud.
+in demonstrating the power of the abstractions the Wing Language.
 
 ## A quick recap
 
