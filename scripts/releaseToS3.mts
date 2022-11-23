@@ -14,5 +14,6 @@ await client.send(
     Key: "wing-console.dmg",
     Bucket: "wing-console",
     Body: createReadStream(dmgFilename),
+    ACL: "public-read",
   }),
 );
