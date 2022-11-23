@@ -35,6 +35,7 @@ repository. You will need to obtain a [personal access token] from GitHub with a
 npm login --scope=@winglang --registry=https://npm.pkg.github.com
 ```
 
+This token can also be used to keep the VSCode extension up to date with additional `repo` permissions.
 :::
 
 Install the Wing CLI through npm:
@@ -85,5 +86,5 @@ Wing applications running locally on the cloud simulator.
 [AWS account]: portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 [AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-[personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages
 [VSCode]: https://code.visualstudio.com/
