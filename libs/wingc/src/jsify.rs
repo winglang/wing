@@ -83,13 +83,13 @@ pub fn jsify(scope: &Scope, out_dir: &PathBuf, app_name: &str, shim: bool) -> St
 	output.append(&mut imports);
 
 	if shim {
-		js.insert(0, format!("super({{ outdir: $outdir }});\n"));
+		js.insert(0, format!("super({{ outdir: $outdir, name: \"{}\" }});\n", app_name));
 		output.push(format!(
 			"class MyApp extends {} {{\nconstructor() {}\n}}",
 			TARGET_APP,
 			render_block(js)
 		));
-		output.push(format!("new MyApp({{ name: \"{}\" }}).synth();", app_name));
+		output.push(format!("new MyApp().synth();"));
 	} else {
 		output.append(&mut js);
 	}
@@ -239,7 +239,10 @@ fn jsify_expression(expression: &Expr) -> String {
 				return format!("console.log({})", jsify_arg_list(args, None, None));
 			} else if let Reference::NestedIdentifier { object, .. } = function {
 				let object_type = object.evaluated_type.borrow().unwrap();
-				needs_case_conversion = object_type.as_class_or_resource_object().unwrap().should_case_convert_jsii;
+				needs_case_conversion = object_type
+					.as_class_or_resource_object()
+					.unwrap()
+					.should_case_convert_jsii;
 			}
 			format!(
 				"{}({})",
