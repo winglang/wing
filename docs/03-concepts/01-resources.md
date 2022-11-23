@@ -24,7 +24,7 @@ resource SafeQueue extends cloud.Queue {
   init() {
     let dlq = new cloud.Queue();
     dlq.on_message((m: str) ~> {
-      log.error("dead-letter: ${m}")
+      log.error("dead-letter: ${m}");
     });
 
     this.add_dead_letter_queue(dlq);
