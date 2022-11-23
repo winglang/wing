@@ -37,7 +37,7 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 [pull requests]: #-how-do-i-submit-a-pull-request
 [RFC]: #-what-is-an-rfc
 [good first issue]: https://github.com/winglang/wing/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee+sort%3Aupdated-desc+
-[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+[Wing Slack]: https://t.winglang.io/slack
 [Wing Discussions]: https://github.com/winglang/wing/discussions
 
 ## 🌳 How is this repository structured?
@@ -287,7 +287,7 @@ To that end, pull request titles must follow this convention:
 
 The Wing community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
-Please review it before contributing issues, pull requests, or joining the Wing Slack.
+Please review it before contributing issues, pull requests, or joining the [Wing Slack].
 
 ## 🙋 Where can I go to ask questions about Wing?
 
