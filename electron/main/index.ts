@@ -1,7 +1,6 @@
 import path from "node:path";
 
 import * as trpcExpress from "@trpc/server/adapters/express";
-import { watch } from "chokidar";
 import cors from "cors";
 import { app, BrowserWindow, dialog, Menu, shell } from "electron";
 import console from "electron-log";
@@ -14,6 +13,10 @@ import { LogEntry } from "../../src/components/NodeLogs.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeRouters } from "./router/index.js";
 import { Simulator } from "./wingsdk.js";
+
+// Chokidar is a CJS-only module and doesn't play well with ESM imports.
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const chokidar = require("chokidar");
 
 class AppUpdater {
   constructor() {
@@ -159,13 +162,14 @@ function createWindowManager() {
       );
 
       // Watch for changes in the simfile.
-      const watcher = watch(simfile, {
-        persistent: true,
-        awaitWriteFinish: {
-          stabilityThreshold: 2000,
-          pollInterval: 100,
-        },
-      })
+      const watcher = chokidar
+        .watch(simfile, {
+          persistent: true,
+          awaitWriteFinish: {
+            stabilityThreshold: 2000,
+            pollInterval: 100,
+          },
+        })
         .on("change", async () => {
           console.log(`File ${simfile} has been changed`);
           try {
