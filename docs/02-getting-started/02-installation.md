@@ -69,7 +69,9 @@ to use it, but it's great.
 :::caution Wing Console is currently only supported in macOS
 
 Click :thumbsup: on [this issue](https://github.com/winglang/wing/issues/630)
-to indicate that you are looking for Windows Support. 
+to indicate that you are looking for Windows support, or :thumbsup: on
+[this issue](https://github.com/winglang/wing/issues/723) to indicate that you
+are looking for Linux support.
 
 :::
 
