@@ -10,8 +10,8 @@ OK, we are ready for our first Wing program!
 Let's create an empty directory for our project.
 
 ```sh
-$ mkdir hello-wing
-$ cd hello-wing
+mkdir hello-wing
+cd hello-wing
 ```
 
 ## Your application entrypoint
