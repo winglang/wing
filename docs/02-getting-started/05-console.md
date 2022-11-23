@@ -58,9 +58,9 @@ Now, take a look at the bottom pane which says "LOGS". You should be able to
 see the `print` statement produced by your function when it processed the message
 you sent to the queue.
 
-## Congrats! :rocket:
+## Congrats! :clap:
 
-:clap: You have just written and tested your first Wing program :rocket:
+You have just written and tested your first Wing program!
 
 
 ---
