@@ -33,6 +33,9 @@ repository. You will need to obtain a [personal access token] from GitHub with a
 
 ```sh
 npm login --scope=@winglang --registry=https://npm.pkg.github.com
+Username: "lowercase-github-username"
+Password: "the just created Github token"
+Email: "your github email"
 ```
 
 This token can also be used to keep the VSCode extension up to date with additional `repo` permissions.
