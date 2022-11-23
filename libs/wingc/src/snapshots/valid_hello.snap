@@ -22,7 +22,7 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/wingsdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir });
+  super({ outdir: $outdir, name: "hello" });
   
   let bucket = new cloud.Bucket(this,"cloud.Bucket");
   let queue = new cloud.Queue(this,"cloud.Queue");
@@ -39,7 +39,7 @@ constructor() {
   queue.onMessage(handler);
 }
 }
-new MyApp({ name: "hello" }).synth();
+new MyApp().synth();
 // ../../examples/tests/valid/hello.w.out/proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js
 async function $proc({ bucket }, message) {
   bucket.put("hello.txt",`Hello, ${message}!`);
