@@ -508,7 +508,8 @@ impl<'a> TypeChecker<'a> {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx).unwrap();
-							self.validate_type(exp_type, self.types.string(), interpolated_expr);
+							// We only support numbers or strings in interpolated strings
+							self.validate_type_in(exp_type, &[self.types.string(), self.types.number()], interpolated_expr);
 						}
 					});
 					Some(self.types.string())
@@ -782,6 +783,24 @@ impl<'a> TypeChecker<'a> {
 				message: format!(
 					"Expected type \"{}\", but got \"{}\" instead",
 					expected_type, actual_type
+				),
+				span: Some(value.span.clone()),
+				level: DiagnosticLevel::Error,
+			});
+		}
+	}
+
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
+		if actual_type.0 != &Type::Anything && !expected_types.contains(&actual_type) {
+			self.diagnostics.borrow_mut().push(Diagnostic {
+				message: format!(
+					"Expected type to be one of \"{}\", but got \"{}\" instead",
+					expected_types
+						.iter()
+						.map(|t| format!("{}", t))
+						.collect::<Vec<String>>()
+						.join(","),
+					actual_type
 				),
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
