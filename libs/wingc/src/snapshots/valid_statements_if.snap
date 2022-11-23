@@ -21,12 +21,12 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir });
+  super({ outdir: $outdir, name: "statements_if" });
   
   if (true) {
     let x = 2;
   }
 }
 }
-new MyApp({ name: "statements_if" }).synth();
+new MyApp().synth();
 
