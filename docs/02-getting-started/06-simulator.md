@@ -11,7 +11,11 @@ application directly from the Node.js CLI.
 :::info Prerequisite
 
 If you are using the Wing CLI through a global installation, you'll need to
-install the Wing SDK library locally using `npm i @winglang/wingsdk`.
+install the Wing SDK library locally using:
+
+```sh
+npm i @winglang/wingsdk
+```
 
 :::
 
