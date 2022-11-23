@@ -45,14 +45,16 @@ Best explained through an example:
 bring cloud;
 
 let bucket = new cloud.Bucket();
-let counter = new cloud.Counter(initial_value: 100);
-let queue = new cloud.Queue(timeout: 10s);
+let counter = new cloud.Counter(cloud.CounterProps{initialValue: 100});
+let queue = new cloud.Queue();
 
-queue.on_message((body: str) ~> {
+inflight handler(body: str): str {
   let next = counter.inc();
   let key = "myfile-${next}.txt";
   bucket.put(key, body);
-});
+}
+
+queue.on_message(handler);
 ```
 
 In this simple application, every message that goes into the queue is written to
