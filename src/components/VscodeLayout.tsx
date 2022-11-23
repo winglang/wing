@@ -42,8 +42,7 @@ export interface VscodeLayoutProps {
     | undefined;
 }
 
-const NewIssueUrl =
-  "https://github.com/winglang/wing/issues/new?labels=console&title=Feature%20Request(Console):";
+const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
 export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
