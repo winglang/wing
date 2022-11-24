@@ -39,7 +39,7 @@ export class Counter extends cloud.CounterBase {
       );
     }
 
-    const env = `DYNAMODB_TABLE_NAME__${this.node.id}`;
+    const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
     if (methods.has(CounterInflightMethods.INC)) {
