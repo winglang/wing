@@ -18,15 +18,20 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
-    "safe-stable-stringify",
     // preflight dependencies
     "esbuild-wasm",
+    "safe-stable-stringify",
     // aws client dependencies
-    "@aws-sdk/client-s3",
-    "@aws-sdk/client-lambda",
-    "@aws-sdk/client-sqs",
-    "@aws-sdk/client-cloudwatch-logs",
-    "@aws-sdk/util-utf8-node",
+    // (note: these should always be updated together, otherwise they will
+    // conflict with each other)
+    "@aws-sdk/client-cloudwatch-logs@3.215.0",
+    "@aws-sdk/client-dynamodb@3.215.0",
+    "@aws-sdk/client-lambda@3.215.0",
+    "@aws-sdk/client-s3@3.215.0",
+    "@aws-sdk/client-sqs@3.215.0",
+    "@aws-sdk/types@3.215.0",
+    "@aws-sdk/util-stream-node@3.215.0",
+    "@aws-sdk/util-utf8-node@3.208.0",
     // simulator dependencies
     "tar",
   ],
@@ -56,6 +61,10 @@ project.eslint?.addOverride({
     "sort-exports/sort-exports": ["error", { sortDir: "asc" }],
   },
 });
+
+// use fork of jsii-docgen with wing-ish support
+project.deps.removeDependency("jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen");
 
 // fix typing issues with "tar" dependency
 project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
@@ -205,6 +214,8 @@ description: Wing SDK API Reference
 
 const docsPath = "../../docs/04-reference/wingsdk-api.md";
 const docgen = project.tasks.tryFind("docgen")!;
+docgen.reset();
+docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 

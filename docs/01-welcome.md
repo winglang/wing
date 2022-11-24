@@ -24,6 +24,11 @@ organized like a book, so you can read it by going from top to bottom by
 clicking "Next" at the bottom of each page. Alternatively, you can browse topics
 through the left-hand navigation bar. You know, the regular structure...
 
+You are invited to join the [Wing Community Slack]. We would love to get to know you!
+Come say hi, hang out, geek out, help friends and share your experience ❤️
+
+[Wing Community Slack]: https://t.winglang.io/slack
+
 TL;DR: if you can't be bothered with all the philosophical blabber, feel free to
 jump right in and [get started](./getting-started).
 
@@ -40,23 +45,17 @@ Best explained through an example:
 bring cloud;
 
 let bucket = new cloud.Bucket();
-let counter = new cloud.Counter(initial_value: 100);
-let queue = new cloud.Queue(timeout: 10s);
+let counter = new cloud.Counter(cloud.CounterProps{initialValue: 100});
+let queue = new cloud.Queue();
 
-queue.on_message((body: str) ~> {
-  let next = counter.increment();
+inflight handler(body: str): str {
+  let next = counter.inc();
   let key = "myfile-${next}.txt";
   bucket.put(key, body);
-});
+}
+
+queue.on_message(handler);
 ```
-
-:::caution WIP
-
-Sorry but this example is not working yet. The counter resource is still
-being developed. Check out [this pull request](https://github.com/winglang/wing/pull/375).
-
-:::
-
 
 In this simple application, every message that goes into the queue is written to
 a new object inside a cloud bucket. An atomic counter is used to generate an

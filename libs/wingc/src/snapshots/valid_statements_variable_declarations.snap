@@ -21,11 +21,11 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir });
+  super({ outdir: $outdir, name: "statements_variable_declarations" });
   
   let x = 2;
   let y = x;
 }
 }
-new MyApp({ name: "statements_variable_declarations" }).synth();
+new MyApp().synth();
 

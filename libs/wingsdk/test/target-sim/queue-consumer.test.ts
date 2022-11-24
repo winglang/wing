@@ -1,10 +1,7 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/target-sim";
-import * as testing from "../../src/testing";
-import { TraceType } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { SimApp, TraceType } from "../../src/testing";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -54,13 +51,11 @@ test("pushing messages through a queue", async () => {
     }
   }
 
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   cloud.Logger.register(app);
   new HelloWorld(app, "HelloWorld");
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const pusher = s.getResourceByPath(
     "root/HelloWorld/Function"

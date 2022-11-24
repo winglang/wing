@@ -21,7 +21,7 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir });
+  super({ outdir: $outdir, name: "forward_decl" });
   
   class R
   {
@@ -43,5 +43,5 @@ constructor() {
   }
 }
 }
-new MyApp({ name: "forward_decl" }).synth();
+new MyApp().synth();
 

@@ -10,13 +10,13 @@ OK, we are ready for our first Wing program!
 Let's create an empty directory for our project.
 
 ```sh
-$ mkdir hello-wing
-$ cd hello-wing
+mkdir hello-wing
+cd hello-wing
 ```
 
 ## Your application entrypoint
 
-And a new file called `hello.w` with the following code. This file is the
+Add a new file called `hello.w` with the following code. This file is the
 entrypoint of your Wing application.
 
 ```ts
@@ -28,7 +28,7 @@ inflight handler(message: str): str {
   print("Hello, ${message}!");
 }
 
-queue.onMessage(handler);
+queue.on_message(handler);
 ```
 
 This code should be mostly self explanatory. We define a queue, and every time a

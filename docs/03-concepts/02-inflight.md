@@ -15,11 +15,12 @@ The following example shows how `my_inflight` is hosted inside a cloud function
 and puts an object inside a bucket:
 
 ```js
+bring cloud;
 let bucket = new cloud.Bucket();
 
-inflight my_inflight() {
+inflight my_inflight(_: str): str {
   bucket.put("hello.txt", "world");
-};
+}
 
 new cloud.Function(my_inflight);
 ```

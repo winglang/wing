@@ -3,7 +3,7 @@ import * as cloud from "../cloud";
 import { CaptureMetadata, Code } from "../core";
 import { IResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
-import { captureSimulatorResource } from "./util";
+import { bindSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Logger`.
@@ -35,6 +35,6 @@ export class Logger extends cloud.LoggerBase implements IResource {
 
   /** @internal */
   public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    return captureSimulatorResource("logger", this, captureScope);
+    return bindSimulatorResource("logger", this, captureScope);
   }
 }

@@ -4,57 +4,38 @@ description: "../../examples/tests/invalid/types_string_interpolation.w"
 ---
 [
     Diagnostic {
-        message: "Expected type \"string\", but got \"number\" instead",
+        message: "Expected type to be one of \"string,number\", but got \"bool\" instead",
         span: Some(
             WingSpan {
                 start: Point {
-                    row: 3,
+                    row: 2,
                     column: 11,
                 },
                 end: Point {
-                    row: 3,
-                    column: 22,
-                },
-                start_byte: 60,
-                end_byte: 71,
-                file_id: "../../examples/tests/invalid/types_string_interpolation.w",
-            },
-        ),
-        level: Error,
-    },
-    Diagnostic {
-        message: "Expected type \"string\", but got \"bool\" instead",
-        span: Some(
-            WingSpan {
-                start: Point {
-                    row: 6,
-                    column: 11,
-                },
-                end: Point {
-                    row: 6,
+                    row: 2,
                     column: 23,
                 },
-                start_byte: 138,
-                end_byte: 150,
+                start_byte: 37,
+                end_byte: 49,
                 file_id: "../../examples/tests/invalid/types_string_interpolation.w",
             },
         ),
         level: Error,
     },
     Diagnostic {
-        message: "Expected type \"string\", but got \"number\" instead",
+        message: "Expected type to be one of \"string,number\", but got \"bool\" instead",
         span: Some(
             WingSpan {
                 start: Point {
-                    row: 10,
+                    row: 5,
                     column: 11,
                 },
                 end: Point {
-                    row: 10,
-                    column: 16,
+                    row: 5,
+                    column: 14,
                 },
-                start_byte: 219,
-                end_byte: 224,
+                start_byte: 127,
+                end_byte: 130,
                 file_id: "../../examples/tests/invalid/types_string_interpolation.w",
             },
         ),

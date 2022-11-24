@@ -21,13 +21,14 @@ const $App = __app(process.env.WING_TARGET);
 
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir });
+  super({ outdir: $outdir, name: "expressions_string_interpolation" });
   
   let regular_string = "str\n\"";
   let empty_string = "";
+  let number = 1;
   let cool_string = `cool \"\${${regular_string}}\" test`;
-  let really_cool_string = `${empty_string}${empty_string}\n${cool_string}${cool_string}\n\${empty_string}${"string-in-string"}!`;
+  let really_cool_string = `${number}${number}${empty_string}${empty_string}\n${cool_string}${cool_string}\n\${empty_string}${"string-in-string"}!`;
 }
 }
-new MyApp({ name: "expressions_string_interpolation" }).synth();
+new MyApp().synth();
 

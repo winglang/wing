@@ -26,8 +26,8 @@ const WINGLANG_REPO_OWNER = "winglang";
 
 const CFG_UPDATES_GITHUB_TOKEN = "updates.githubToken";
 const STATE_INSTALLED_RELEASE_CHECKSUM = "wing.installedReleaseChecksum";
-const CMD_UPDATES_ADD_TOKEN = "wing.updates.addToken";
-const CMD_UPDATES_CHECK = "wing.updates.check";
+const CMD_UPDATES_ADD_TOKEN = "wing.addToken";
+const CMD_UPDATES_CHECK = "wing.checkUpdates";
 
 const LANGUAGE_SERVER_NAME = "Wing Language Server";
 const LANGUAGE_SERVER_ID = "wing-language-server";
@@ -39,13 +39,9 @@ export function deactivate() {
 }
 
 export async function activate(context: ExtensionContext) {
-  const activationActivities = [
-    checkForUpdates(context, false),
-    startLanguageServer(context),
-    addCommands(context),
-  ];
-
-  await Promise.all(activationActivities);
+  await addCommands(context);
+  await checkForUpdates(context, false);
+  await startLanguageServer(context);
 }
 
 async function addCommands(context: ExtensionContext) {

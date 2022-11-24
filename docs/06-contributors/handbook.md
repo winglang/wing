@@ -37,7 +37,7 @@ If you aren't sure where to start, check out issues tagged with the [good first 
 [pull requests]: #-how-do-i-submit-a-pull-request
 [RFC]: #-what-is-an-rfc
 [good first issue]: https://github.com/winglang/wing/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22+no%3Aassignee+sort%3Aupdated-desc+
-[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+[Wing Slack]: https://t.winglang.io/slack
 [Wing Discussions]: https://github.com/winglang/wing/discussions
 
 ## 🌳 How is this repository structured?
@@ -64,7 +64,7 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 
 To build the repo locally:
 
-```bash
+```sh
 sudo bash scripts/setup_wasi.sh # one-time setup
 npm install
 npm run build
@@ -72,7 +72,7 @@ npm run build
 
 To run all tests:
 
-```bash
+```sh
 cargo install cargo-insta # one-time setup
 npm run test
 ```
@@ -82,6 +82,7 @@ npm run test
 [Rust]: https://www.rust-lang.org/tools/install
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
+[nvm]: https://github.com/nvm-sh/nvm
 
 ## 🔨 How do I build just the SDK?
 
@@ -166,19 +167,19 @@ All features and bug fixes should have tests! They're easy to forget, but they p
 
 All tests can be run by running the following command from `libs/wingsdk`:
 
-```shell
+```sh
 npm run test
 ```
 
 During development, you might find it useful to watch for changes and automatically re-run the tests:
 
-```shell
+```sh
 npm run test:watch
 ```
 
 To re-run individual tests, you can directly use the `jest` command -- for example:
 
-```shell
+```sh
 npx jest test/tf-aws/bucket.test.ts
 ```
 
@@ -208,7 +209,7 @@ This allows spun-up registry to pull down @winglang/polycons from the private gi
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
-```shell
+```sh
 npx nx test
 ```
 
@@ -287,7 +288,7 @@ To that end, pull request titles must follow this convention:
 
 The Wing community follows the [CNCF Code of Conduct](https://github.com/cncf/foundation/blob/main/code-of-conduct.md).
 
-Please review it before contributing issues, pull requests, or joining the Wing Slack.
+Please review it before contributing issues, pull requests, or joining the [Wing Slack].
 
 ## 🙋 Where can I go to ask questions about Wing?
 

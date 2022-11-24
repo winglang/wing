@@ -1,9 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/target-sim";
-import * as testing from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { SimApp, Simulator } from "../../src/testing";
 
 const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
 async function $proc($cap, event) {
@@ -22,7 +19,7 @@ async function $proc($cap, event) {
 
 test("create a function", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
@@ -32,11 +29,9 @@ test("create a function", async () => {
       ENV_VAR1: "true",
     },
   });
-  const simfile = app.synth();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
   expect(s.getAttributes("root/my_function")).toEqual({
     handle: expect.any(String),
   });
@@ -51,21 +46,19 @@ test("create a function", async () => {
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(s.tree).toMatchSnapshot();
 });
 
 test("invoke function succeeds", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
   });
   new cloud.Function(app, "my_function", handler);
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath(
     "root/my_function"
@@ -79,17 +72,17 @@ test("invoke function succeeds", async () => {
   expect(response).toEqual(JSON.stringify({ msg: `Hello, ${PAYLOAD.name}!` }));
   await s.stop();
 
+  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
@@ -99,10 +92,8 @@ test("invoke function with environment variables", async () => {
       PIG_LATIN: "true",
     },
   });
-  const simfile = app.synth();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath(
     "root/my_function"
@@ -120,26 +111,23 @@ test("invoke function with environment variables", async () => {
   );
   await s.stop();
 
+  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
 test("invoke function fails", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
   });
   new cloud.Function(app, "my_function", handler);
-  const simfile = app.synth();
-
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   const client = s.getResourceByPath(
     "root/my_function"
@@ -154,6 +142,7 @@ test("invoke function fails", async () => {
   // THEN
   await s.stop();
 
+  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"alice"}").',
@@ -162,9 +151,8 @@ test("invoke function fails", async () => {
   expect(s.listTraces()[1].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
 });
 
-function listMessages(s: testing.Simulator) {
+function listMessages(s: Simulator) {
   return s.listTraces().map((event) => event.data.message);
 }
