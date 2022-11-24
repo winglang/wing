@@ -32,117 +32,36 @@ node --experimental-repl-await
 Now, we import the Wing SDK library:
 
 ```js
-const sdk = require("@winglang/wingsdk");
+const sdk = require("@winglang/wingsdk"); // import the wing sdk library
+const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wx"}); // create an instance of the Simulator
+await simulator.start(); // start the simulator 
 ```
 
-Next, we create an instance of the `Simulator` class and point it to our
-`hello.wx` file, and start the simulator.
+Now that our app is running, lets trigger a message on the queue
 
-```js
-const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wx"});
-await simulator.start();
-```
-
-Now that our app is running, we can start exploring.
-
-## List all resources
+## Trigger a message to the queue
 
 For example, we can list all the resources in the app:
 
 ```js
-simulator.listResources()
+ const queue = simulator.getResourceByPath("root/cloud.Queue"); // retrieve the queue resource
+ await queue.push("Wing")
 ```
 
-Should return something like:
+## Viewing generated file
 
 ```js
-[ 'root/cloud.Queue', 'root/cloud.Queue/OnMessage-87636ee85d7e550d' ]
+const bucket = simulator.getResourceByPath("root/cloud.Bucket"); // retrieve the bucket resource
+await bucket.list() // will show available files
+await bucket.get("wing.txt") // will show the file content
 ```
 
-## Send a message to the queue
-
-Or we can directly access a simulated resource by its path. For example,
-let's find the queue resource:
-
-```js
-const queue = simulator.getResourceByPath("root/cloud.Queue");
+The result of the last two function calls will be
+```
+[ 'wing.txt' ]
+'Hello, Wing'
 ```
 
-And push a message to it:
-
-```js
-await queue.push("wingination");
-```
-
-## Viewing logs
-
-As a result of this `push()` you should see the output of our handler
-written to STDOUT:
-
-```
-> Hello, wingination!
-```
-
-## Viewing traces
-
-You can also use the `listTraces()` method to list all the trace events that
-occurred during execution:
-
-```js
-simulator.listTraces();
-```
-
-Output should look like this:
-
-```js
-[
-  {
-    type: 'resource',
-    data: { message: 'wingsdk.cloud.Function created.' },
-    sourcePath: 'root/cloud.Queue/OnMessage-87636ee85d7e550d',
-    sourceType: 'wingsdk.cloud.Function',
-    timestamp: '2022-11-20T22:35:43.681Z'
-  },
-  {
-    type: 'resource',
-    data: { message: 'wingsdk.cloud.Queue created.' },
-    sourcePath: 'root/cloud.Queue',
-    sourceType: 'wingsdk.cloud.Queue',
-    timestamp: '2022-11-20T22:35:43.682Z'
-  },
-  {
-    data: {
-      message: 'Push (message=wingination).',
-      status: 'success',
-      result: undefined
-    },
-    type: 'resource',
-    sourcePath: 'root/cloud.Queue',
-    sourceType: 'wingsdk.cloud.Queue',
-    timestamp: '2022-11-20T22:41:07.215Z'
-  },
-  {
-    type: 'resource',
-    data: {
-      message: 'Sending messages (messages=["wingination"], subscriber=sim-0).'
-    },
-    sourcePath: 'root/cloud.Queue',
-    sourceType: 'wingsdk.cloud.Queue',
-    timestamp: '2022-11-20T22:41:07.301Z'
-  },
-  {
-    data: {
-      message: 'Invoke (payload="{"messages":["wingination"]}").',
-      status: 'success',
-      result: undefined
-    },
-    type: 'resource',
-    sourcePath: 'root/cloud.Queue/OnMessage-87636ee85d7e550d',
-    sourceType: 'wingsdk.cloud.Function',
-    timestamp: '2022-11-20T22:41:07.304Z'
-  }
-]
-```
 
 ## Congratulations! :rocket:
 
