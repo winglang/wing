@@ -22,10 +22,11 @@ entrypoint of your Wing application.
 ```ts
 bring cloud;
 
+let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 
 inflight handler(message: str): str {
-  print("Hello, ${message}!");
+    bucket.put("myfile", message);
 }
 
 queue.on_message(handler);
