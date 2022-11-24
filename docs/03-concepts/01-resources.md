@@ -16,6 +16,12 @@ The following code defines a bucket resource:
 new cloud.Bucket();
 ```
 
+:::caution Conceptual Example
+The following code block is meant to serve as an example of what is possible 
+based on the wing language specifications. Additional feature implementations
+will need to be completed to make the example possible.
+:::
+
 The following code declares a new resource called `SafeQueue` which contains
 a queue with a dead-letter-queue associated with it:
 
