@@ -411,3 +411,15 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
         if: env.WORKFLOW_CONCLUSION == 'failure'
+
+  update-docsite:
+    needs:
+      - publish
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dispatch docsite workflow event
+        run: |
+          curl -X POST -H "Accept: application/vnd.github+json" -H "Authorization: Bearer $GITHUB_TOKEN" https://api.github.com/repos/winglang/docsite/actions/workflows/41365537/dispatches -d '{"ref":"main"}'
+        with:
+          GITHUB_TOKEN: ${{ secrets.DOCSITE_WORKFLOW_GITHUB_TOKEN }}
