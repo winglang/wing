@@ -31,10 +31,14 @@ During the private alpha period, Wing is distributed through a private npm
 repository. You will need to obtain a [personal access token] from GitHub with a
 **packages:read** scope and then login your npm client like this:
 
-```terminal
-$ npm login --scope=@winglang --registry=https://npm.pkg.github.com
+```sh
+npm login --scope=@winglang --registry=https://npm.pkg.github.com
+Username: "lowercase-github-username"
+Password: "the just created Github token"
+Email: "your github email"
 ```
 
+This token can also be used to keep the VSCode extension up to date with additional `repo` permissions.
 :::
 
 Install the Wing CLI through npm:
@@ -68,7 +72,9 @@ to use it, but it's great.
 :::caution Wing Console is currently only supported in macOS
 
 Click :thumbsup: on [this issue](https://github.com/winglang/wing/issues/630)
-to indicate that you are looking for Windows Support. 
+to indicate that you are looking for Windows support, or :thumbsup: on
+[this issue](https://github.com/winglang/wing/issues/723) to indicate that you
+are looking for Linux support.
 
 :::
 
@@ -85,5 +91,5 @@ Wing applications running locally on the cloud simulator.
 [AWS account]: portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 [AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-[personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token
+[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages
 [VSCode]: https://code.visualstudio.com/

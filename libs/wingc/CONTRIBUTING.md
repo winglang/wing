@@ -88,7 +88,7 @@ otherwise, `cargo test` fails if snapshots are out of date.
 
 Install the dependencies using npm:
 
-```shell
+```sh
 cargo something
 ```
 

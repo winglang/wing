@@ -514,7 +514,6 @@ impl<'a> TypeChecker<'a> {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx).unwrap();
-							// We only support numbers or strings in interpolated strings
 							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});

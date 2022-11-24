@@ -64,7 +64,7 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 
 To build the repo locally:
 
-```bash
+```sh
 sudo bash scripts/setup_wasi.sh # one-time setup
 npm install
 npm run build
@@ -72,7 +72,7 @@ npm run build
 
 To run all tests:
 
-```bash
+```sh
 cargo install cargo-insta # one-time setup
 npm run test
 ```
@@ -82,6 +82,7 @@ npm run test
 [Rust]: https://www.rust-lang.org/tools/install
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
+[nvm]: https://github.com/nvm-sh/nvm
 
 ## 🔨 How do I build just the SDK?
 
@@ -166,19 +167,19 @@ All features and bug fixes should have tests! They're easy to forget, but they p
 
 All tests can be run by running the following command from `libs/wingsdk`:
 
-```shell
+```sh
 npm run test
 ```
 
 During development, you might find it useful to watch for changes and automatically re-run the tests:
 
-```shell
+```sh
 npm run test:watch
 ```
 
 To re-run individual tests, you can directly use the `jest` command -- for example:
 
-```shell
+```sh
 npx jest test/tf-aws/bucket.test.ts
 ```
 
@@ -208,7 +209,7 @@ This allows spun-up registry to pull down @winglang/polycons from the private gi
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
-```shell
+```sh
 npx nx test
 ```
 

@@ -188,7 +188,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-| <code><a href="#@winglang/wingsdk.cloud.Counter.property.initialValue">initialValue</a></code> | <code>num</code> | The initial value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.initialValue">initial_value</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
@@ -220,7 +220,7 @@ with a fresh copy without any consequences.
 
 ---
 
-##### `initialValue`<sup>Required</sup> <a name="initialValue" id="@winglang/wingsdk.cloud.Counter.property.initialValue"></a>
+##### `initial_value`<sup>Required</sup> <a name="initial_value" id="@winglang/wingsdk.cloud.Counter.property.initialValue"></a>
 
 ```wing
 initial_value: num;
@@ -637,14 +637,14 @@ let app_props = core.AppProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.AppProps.property.customFactory">customFactory</a></code> | <code>polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
+| <code><a href="#@winglang/wingsdk.core.AppProps.property.customFactory">custom_factory</a></code> | <code>polycons.IPolyconFactory</code> | A custom factory to resolve polycons. |
 | <code><a href="#@winglang/wingsdk.core.AppProps.property.name">name</a></code> | <code>str</code> | The name of the app. |
 | <code><a href="#@winglang/wingsdk.core.AppProps.property.outdir">outdir</a></code> | <code>str</code> | Directory where artifacts are synthesized to. |
-| <code><a href="#@winglang/wingsdk.core.AppProps.property.stateFile">stateFile</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
+| <code><a href="#@winglang/wingsdk.core.AppProps.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
-##### `customFactory`<sup>Optional</sup> <a name="customFactory" id="@winglang/wingsdk.core.AppProps.property.customFactory"></a>
+##### `custom_factory`<sup>Optional</sup> <a name="custom_factory" id="@winglang/wingsdk.core.AppProps.property.customFactory"></a>
 
 ```wing
 custom_factory: IPolyconFactory;
@@ -683,7 +683,7 @@ Directory where artifacts are synthesized to.
 
 ---
 
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.AppProps.property.stateFile"></a>
+##### `state_file`<sup>Optional</sup> <a name="state_file" id="@winglang/wingsdk.core.AppProps.property.stateFile"></a>
 
 ```wing
 state_file: str;
@@ -752,7 +752,7 @@ let capture = core.Capture{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Capture.property.methods">methods</a></code> | <code>MutArray<str></code> | Which methods are called on the captured resource. |
+| <code><a href="#@winglang/wingsdk.core.Capture.property.methods">methods</a></code> | <code>MutArray&lt;str&gt;</code> | Which methods are called on the captured resource. |
 | <code><a href="#@winglang/wingsdk.core.Capture.property.resource">resource</a></code> | <code>core.ICapturableConstruct</code> | A captured resource. |
 | <code><a href="#@winglang/wingsdk.core.Capture.property.value">value</a></code> | <code>any</code> | A captured immutable value (like string, number, boolean, a struct, or null). |
 
@@ -764,7 +764,7 @@ let capture = core.Capture{ ... }
 methods: MutArray<str>;
 ```
 
-- *Type:* MutArray<str>
+- *Type:* MutArray&lt;str&gt;
 
 Which methods are called on the captured resource.
 
@@ -810,7 +810,7 @@ let capture_metadata = core.CaptureMetadata{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>MutArray<str></code> | Which methods are called on the captured resource. |
+| <code><a href="#@winglang/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>MutArray&lt;str&gt;</code> | Which methods are called on the captured resource. |
 
 ---
 
@@ -820,7 +820,7 @@ let capture_metadata = core.CaptureMetadata{ ... }
 methods: MutArray<str>;
 ```
 
-- *Type:* MutArray<str>
+- *Type:* MutArray&lt;str&gt;
 
 Which methods are called on the captured resource.
 
@@ -842,11 +842,11 @@ let counter_props = cloud.CounterProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initialValue">initialValue</a></code> | <code>num</code> | The initial value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initialValue">initial_value</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
-##### `initialValue`<sup>Optional</sup> <a name="initialValue" id="@winglang/wingsdk.cloud.CounterProps.property.initialValue"></a>
+##### `initial_value`<sup>Optional</sup> <a name="initial_value" id="@winglang/wingsdk.cloud.CounterProps.property.initialValue"></a>
 
 ```wing
 initial_value: num;
@@ -876,7 +876,7 @@ let files_props = core.FilesProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.FilesProps.property.app">app</a></code> | <code>core.IApp</code> | The app with files to synthesize. |
-| <code><a href="#@winglang/wingsdk.core.FilesProps.property.stateFile">stateFile</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
+| <code><a href="#@winglang/wingsdk.core.FilesProps.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
@@ -892,7 +892,7 @@ The app with files to synthesize.
 
 ---
 
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.FilesProps.property.stateFile"></a>
+##### `state_file`<sup>Optional</sup> <a name="state_file" id="@winglang/wingsdk.core.FilesProps.property.stateFile"></a>
 
 ```wing
 state_file: str;
@@ -926,7 +926,7 @@ let function_props = cloud.FunctionProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap<str></code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/wingsdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
 
 ---
 
@@ -936,7 +936,7 @@ let function_props = cloud.FunctionProps{ ... }
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap<str>
+- *Type:* MutMap&lt;str&gt;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
@@ -959,25 +959,25 @@ let inflight_bundle_options = core.InflightBundleOptions{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureClients">captureClients</a></code> | <code>MutMap<core.Code></code> | A map of capture clients that can be bundled with the Inflight's code. |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureScope">captureScope</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given capture scope. |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.external">external</a></code> | <code>MutArray<str></code> | List of dependencies to exclude from the bundle. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureClients">capture_clients</a></code> | <code>MutMap&lt;core.Code&gt;</code> | A map of capture clients that can be bundled with the Inflight's code. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureScope">capture_scope</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given capture scope. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.external">external</a></code> | <code>MutArray&lt;str&gt;</code> | List of dependencies to exclude from the bundle. |
 
 ---
 
-##### `captureClients`<sup>Required</sup> <a name="captureClients" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureClients"></a>
+##### `capture_clients`<sup>Required</sup> <a name="capture_clients" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureClients"></a>
 
 ```wing
 capture_clients: MutMap<Code>;
 ```
 
-- *Type:* MutMap<core.Code>
+- *Type:* MutMap&lt;core.Code&gt;
 
 A map of capture clients that can be bundled with the Inflight's code.
 
 ---
 
-##### `captureScope`<sup>Optional</sup> <a name="captureScope" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureScope"></a>
+##### `capture_scope`<sup>Optional</sup> <a name="capture_scope" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureScope"></a>
 
 ```wing
 capture_scope: IConstruct;
@@ -995,7 +995,7 @@ Associate the inflight bundle with a given capture scope.
 external: MutArray<str>;
 ```
 
-- *Type:* MutArray<str>
+- *Type:* MutArray&lt;str&gt;
 
 List of dependencies to exclude from the bundle.
 
@@ -1019,7 +1019,7 @@ let inflight_props = core.InflightProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
 | <code><a href="#@winglang/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function to run. |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.captures">captures</a></code> | <code>MutMap<core.Capture></code> | Capture information. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.captures">captures</a></code> | <code>MutMap&lt;core.Capture&gt;</code> | Capture information. |
 
 ---
 
@@ -1060,7 +1060,7 @@ Name of the exported function to run.
 captures: MutMap<Capture>;
 ```
 
-- *Type:* MutMap<core.Capture>
+- *Type:* MutMap&lt;core.Capture&gt;
 - *Default:* No captures
 
 Capture information.
@@ -1120,8 +1120,8 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>MutMap<str></code> | Environment variables to pass to the function. |
-| <code><a href="#@winglang/wingsdk.cloud.QueueOnMessageProps.property.batchSize">batchSize</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueOnMessageProps.property.batchSize">batch_size</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
 
@@ -1131,14 +1131,14 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 env: MutMap<str>;
 ```
 
-- *Type:* MutMap<str>
+- *Type:* MutMap&lt;str&gt;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
 
 ---
 
-##### `batchSize`<sup>Optional</sup> <a name="batchSize" id="@winglang/wingsdk.cloud.QueueOnMessageProps.property.batchSize"></a>
+##### `batch_size`<sup>Optional</sup> <a name="batch_size" id="@winglang/wingsdk.cloud.QueueOnMessageProps.property.batchSize"></a>
 
 ```wing
 batch_size: num;
@@ -1167,18 +1167,18 @@ let queue_props = cloud.QueueProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.initialMessages">initialMessages</a></code> | <code>MutArray<str></code> | Initialize the queue with a set of messages. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
 | <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>core.Duration</code> | How long a queue's consumers have to process a message. |
 
 ---
 
-##### `initialMessages`<sup>Optional</sup> <a name="initialMessages" id="@winglang/wingsdk.cloud.QueueProps.property.initialMessages"></a>
+##### `initial_messages`<sup>Optional</sup> <a name="initial_messages" id="@winglang/wingsdk.cloud.QueueProps.property.initialMessages"></a>
 
 ```wing
 initial_messages: MutArray<str>;
 ```
 
-- *Type:* MutArray<str>
+- *Type:* MutArray&lt;str&gt;
 - *Default:* []
 
 Initialize the queue with a set of messages.
@@ -1214,7 +1214,7 @@ let text_file_props = fs.TextFileProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.fs.TextFileProps.property.lines">lines</a></code> | <code>MutArray<str></code> | The lines of text that will be serialized into the file during synthesis. |
+| <code><a href="#@winglang/wingsdk.fs.TextFileProps.property.lines">lines</a></code> | <code>MutArray&lt;str&gt;</code> | The lines of text that will be serialized into the file during synthesis. |
 
 ---
 
@@ -1224,7 +1224,7 @@ let text_file_props = fs.TextFileProps{ ... }
 lines: MutArray<str>;
 ```
 
-- *Type:* MutArray<str>
+- *Type:* MutArray&lt;str&gt;
 - *Default:* []
 
 The lines of text that will be serialized into the file during synthesis.
@@ -1377,8 +1377,8 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.inbound">inbound</a></code> | <code>MutArray<core.DependencyVertex></code> | Returns the parents of the vertex (i.e dependants). |
-| <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>MutArray<core.DependencyVertex></code> | Returns the children of the vertex (i.e dependencies). |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.inbound">inbound</a></code> | <code>MutArray&lt;core.DependencyVertex&gt;</code> | Returns the parents of the vertex (i.e dependants). |
+| <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.outbound">outbound</a></code> | <code>MutArray&lt;core.DependencyVertex&gt;</code> | Returns the children of the vertex (i.e dependencies). |
 | <code><a href="#@winglang/wingsdk.core.DependencyVertex.property.value">value</a></code> | <code>constructs.IConstruct</code> | Returns the IConstruct this graph vertex represents. |
 
 ---
@@ -1389,7 +1389,7 @@ Returns a topologically sorted array of the constructs in the sub-graph.
 inbound: MutArray<DependencyVertex>;
 ```
 
-- *Type:* MutArray<core.DependencyVertex>
+- *Type:* MutArray&lt;core.DependencyVertex&gt;
 
 Returns the parents of the vertex (i.e dependants).
 
@@ -1401,7 +1401,7 @@ Returns the parents of the vertex (i.e dependants).
 outbound: MutArray<DependencyVertex>;
 ```
 
-- *Type:* MutArray<core.DependencyVertex>
+- *Type:* MutArray&lt;core.DependencyVertex&gt;
 
 Returns the children of the vertex (i.e dependencies).
 
@@ -1594,11 +1594,11 @@ The output directory, if not specified, the app's outdir will be used.
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Files.property.stateFile">stateFile</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
+| <code><a href="#@winglang/wingsdk.core.Files.property.stateFile">state_file</a></code> | <code>str</code> | The path to a state file which will track all synthesized files. |
 
 ---
 
-##### `stateFile`<sup>Optional</sup> <a name="stateFile" id="@winglang/wingsdk.core.Files.property.stateFile"></a>
+##### `state_file`<sup>Optional</sup> <a name="state_file" id="@winglang/wingsdk.core.Files.property.stateFile"></a>
 
 ```wing
 state_file: str;
@@ -1675,12 +1675,12 @@ High level implementation:
 ##### `make_clients` <a name="make_clients" id="@winglang/wingsdk.core.Inflight.makeClients"></a>
 
 ```wing
-make_clients(captureScope: IConstruct): MutMap<Code>
+make_clients(capture_scope: IConstruct): MutMap<Code>
 ```
 
 Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime.
 
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@winglang/wingsdk.core.Inflight.makeClients.parameter.captureScope"></a>
+###### `capture_scope`<sup>Required</sup> <a name="capture_scope" id="@winglang/wingsdk.core.Inflight.makeClients.parameter.captureScope"></a>
 
 - *Type:* constructs.IConstruct
 
@@ -1691,7 +1691,7 @@ Resolve this inflight's captured objects into a map of clients that be safely re
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Inflight.property.captures">captures</a></code> | <code>MutMap<core.Capture></code> | Capture information. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.property.captures">captures</a></code> | <code>MutMap&lt;core.Capture&gt;</code> | Capture information. |
 | <code><a href="#@winglang/wingsdk.core.Inflight.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
 | <code><a href="#@winglang/wingsdk.core.Inflight.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function which will be run. |
 
@@ -1703,7 +1703,7 @@ Resolve this inflight's captured objects into a map of clients that be safely re
 captures: MutMap<Capture>;
 ```
 
-- *Type:* MutMap<core.Capture>
+- *Type:* MutMap&lt;core.Capture&gt;
 
 Capture information.
 
@@ -1757,7 +1757,7 @@ Utility class with functions about inflight clients.
 ```wing
 bring core;
 
-core.InflightClient.for(filename: str, clientClass: str, args: MutArray<str>)
+core.InflightClient.for(filename: str, client_class: str, args: MutArray<str>)
 ```
 
 Creates a `Code` instance with code for creating an inflight client.
@@ -1768,7 +1768,7 @@ Creates a `Code` instance with code for creating an inflight client.
 
 ---
 
-###### `clientClass`<sup>Required</sup> <a name="clientClass" id="@winglang/wingsdk.core.InflightClient.for.parameter.clientClass"></a>
+###### `client_class`<sup>Required</sup> <a name="client_class" id="@winglang/wingsdk.core.InflightClient.for.parameter.clientClass"></a>
 
 - *Type:* str
 
@@ -1776,7 +1776,7 @@ Creates a `Code` instance with code for creating an inflight client.
 
 ###### `args`<sup>Required</sup> <a name="args" id="@winglang/wingsdk.core.InflightClient.for.parameter.args"></a>
 
-- *Type:* MutArray<str>
+- *Type:* MutArray&lt;str&gt;
 
 ---
 
@@ -1919,12 +1919,12 @@ new core.Testing()
 ```wing
 bring core;
 
-core.Testing.inspect_prebundled_code(captureScope: IConstruct)
+core.Testing.inspect_prebundled_code(capture_scope: IConstruct)
 ```
 
 Obtain a reference to the prebundled Code for a given capture scope.
 
-###### `captureScope`<sup>Required</sup> <a name="captureScope" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode.parameter.captureScope"></a>
+###### `capture_scope`<sup>Required</sup> <a name="capture_scope" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode.parameter.captureScope"></a>
 
 - *Type:* constructs.IConstruct
 

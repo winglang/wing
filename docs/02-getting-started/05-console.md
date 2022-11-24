@@ -46,21 +46,23 @@ the function that handles messages).
 In the center you should be able to type in a message and send it to the queue.
 Type `world` and hit **Send Message**.
 
-## Viewing the logs
+## (not available yet) Viewing the logs
 
 :::warning NOTE
 
-The logging feature is still not fully implemented in the console.
+Viewing logs is not available in the Wing Console yet. Subscribe to [this issue](https://github.com/winglang/wing/issues/730#issuecomment-1325607002) to be notified when application logs are added!
 
 :::
 
+<!--
 Now, take a look at the bottom pane which says "LOGS". You should be able to
 see the `print` statement produced by your function when it processed the message
 you sent to the queue.
+-->
 
-## Congrats! :rocket:
+## Congrats! :clap:
 
-:clap: You have just written and tested your first Wing program :rocket:
+You have just written and tested your first Wing program!
 
 
 ---
