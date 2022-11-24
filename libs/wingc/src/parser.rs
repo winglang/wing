@@ -1,5 +1,6 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
+use std::collections::hash_map::Entry;
 use std::{str, vec};
 use tree_sitter::Node;
 
@@ -24,6 +25,16 @@ impl Parser<'_> {
 				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
 			}
 		}
+	}
+
+	fn unimplemented_grammars(&self) -> HashMap<&str, &str> {
+		// k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
+		HashMap::from([
+			("struct_definition", ""),
+			("any", ""),
+			("void", ""),
+			("hours", "")
+		])
 	}
 
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
@@ -79,7 +90,12 @@ impl Parser<'_> {
 				value_text.parse::<f64>().expect("Duration string") * 60_f64,
 			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
-			other => panic!("Unexpected duration type {} || {:#?}", other, node),
+			other => {
+				match self.unimplemented_grammars().entry(&other) {
+					Entry::Occupied(e) => unimplemented!("duration '{}' is not yet supported {}", other, e.get()),
+					Entry::Vacant(_) => panic!("Unexpected duration type {} || {:#?}", other, node)
+				}
+			},
 		}
 	}
 
@@ -171,7 +187,12 @@ impl Parser<'_> {
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
-			other => panic!("Unexpected statement type {} || {:#?}", other, statement_node),
+			other => {
+				match self.unimplemented_grammars().entry(&other) {
+					Entry::Occupied(e) => unimplemented!("statement '{}' is not yet supported {}", other, e.get()),
+					Entry::Vacant(_) => panic!("Unexpected statement type {} || {:#?}", other, statement_node)
+				};
+			}
 		};
 
 		Ok(Stmt {
@@ -311,7 +332,12 @@ impl Parser<'_> {
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
-				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
+				other => {
+					match self.unimplemented_grammars().entry(&other) {
+						Entry::Occupied(e) => unimplemented!("builtin '{}' is not yet supported {}", other, e.get()),
+						Entry::Vacant(_) => panic!("Unexpected builtin {} || {:#?}", other, type_node)
+					};
+				},
 			},
 			"optional" => {
 				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
