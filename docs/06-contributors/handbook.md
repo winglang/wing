@@ -82,6 +82,7 @@ npm run test
 [Rust]: https://www.rust-lang.org/tools/install
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
+[nvm]: https://github.com/nvm-sh/nvm
 
 ## 🔨 How do I build just the SDK?
 
