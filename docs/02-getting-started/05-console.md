@@ -46,19 +46,17 @@ the function that handles messages).
 In the center you should be able to type in a message and send it to the queue.
 Type `world` and hit **Send Message**.
 
-## (not available yet) Viewing the logs
+## Viewing the file
 
-:::warning NOTE
+On the left sidebar click on the Bucket, you will see the following view:
 
-Viewing logs is not available in the Wing Console yet. Subscribe to [this issue](https://github.com/winglang/wing/issues/730#issuecomment-1325607002) to be notified when application logs are added!
+![](./console-bucket-1.png)
 
-:::
+Now, check the `wing.txt` file and download it, using the download button
 
-<!--
-Now, take a look at the bottom pane which says "LOGS". You should be able to
-see the `print` statement produced by your function when it processed the message
-you sent to the queue.
--->
+![](./console-bucket-1.png)
+
+The downloaded file should contain `Hello, Wing` text 
 
 ## Congrats! :clap:
 
