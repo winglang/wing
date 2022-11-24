@@ -73,7 +73,7 @@ import TOCInline from '@theme/TOCInline';
 | `str`  | UTF-16 encoded strings             |
 | `bool` | represents true or false           |
 
-User defined explicit "any" is supported if declared by the user.  
+User defined explicit "any" is supported iff declared by the user.  
 Almost all types can be implicitly resolved by the compiler except for "any".  
 "any" must be explicitly declared and annotated.
 
@@ -428,7 +428,7 @@ All defined symbols are immutable (constant) by default.
 Type casting is generally not allowed unless otherwise specified.
 
 Function arguments and their return type is always required. Function argument
-type is inferred if a default value is provided.
+type is inferred iff a default value is provided.
 
 > ```TS
 > let i = 5;
@@ -1017,7 +1017,7 @@ class Boo extends Foo {
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
-Classes can implement interfaces if the interfaces does not contain `~`. You
+Classes can implement interfaces iff the interfaces does not contain `~`. You
 can use the keyword `final` to stop the inheritance chain.
 
 ```TS
@@ -1103,7 +1103,7 @@ Resources all have a scope and a unique ID. Compiler provides an implicit scope
 and ID for each resource, both overrideable by user-defined ones in constructor.
 
 The default for scope is `this`, which means the scope in which the resource was
-defined. The implicit ID is the type name of the resource if the resource type
+defined. The implicit ID is the type name of the resource iff the resource type
 is the only resource type being used in the current scope. In other words, if
 there are multiple resources of the same type defined in the same scope, they
 must all have an explicit id.
