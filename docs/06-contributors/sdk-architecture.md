@@ -13,8 +13,16 @@ The SDK resources are written using the Constructs Programming Model.
 constructs serves as the low-level foundation of several other infrastructure-as-code frameworks, such as the [AWS CDK](https://github.com/aws/aws-cdk), [cdk8s](https://github.com/cdk8s-team/cdk8s), and [cdktf](https://github.com/hashicorp/terraform-cdk).
 
 Conceptually, constructs are ordinary classes that additionally have a unique **scope** (parent construct) and **id**.
-By adding constructs as children of other constructs, they can form in-memory trees, where each construct is uniquely addressible based on the "path" of nodes from the tree root.
-When a collection of constructs all implement a method like `toTerraform()`, then it is possible to traverse the construct tree and aggregate the result of calling the method on each construct in order to synthesize a result or artifact.
+By adding constructs as children of other constructs, they can form in-memory trees, where each construct is uniquely addressible based on its location within the tree.
+
+A construct's **path** is obtained by joining the sequence of construct ids from the tree root to the construct, with the "/" character.
+For example, if a construct with no parent is declared the root with an id "root", and it has a child named "Child1", the child has a path of "root/Child1".
+Constructs with the same parent are required to have different ids.
+
+> Each construct also has an **address**, which is just a hexadecimal hash of the construct's **path**.
+> This value is useful for generating application identifiers in situations where the **path** cannot be used because of character / punctuation limitations.
+
+When a tree of constructs all implement a method like `toTerraform()`, then it is possible to traverse the construct tree and aggregate the result of calling the method on each construct in order to synthesize a result or artifact.
 
 ## Polycons
 

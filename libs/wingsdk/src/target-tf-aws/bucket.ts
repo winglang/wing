@@ -71,7 +71,7 @@ export class Bucket extends cloud.BucketBase {
       throw new Error("buckets can only be captured by tfaws.Function for now");
     }
 
-    const env = `BUCKET_NAME__${this.node.id}`;
+    const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
     if (methods.has(BucketInflightMethods.PUT)) {
