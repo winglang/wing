@@ -425,6 +425,12 @@ impl Types {
 		self.types.push(Box::new(t));
 		(&self.types[self.types.len() - 1]).into()
 	}
+
+	pub fn stringables(&self) -> Vec<TypeRef> {
+		// TODO: This should be more complex and return all types that have some stringification facility
+		// see: https://github.com/winglang/wing/issues/741
+		vec![self.string(), self.number()]
+	}
 }
 
 pub struct TypeChecker<'a> {
@@ -508,8 +514,7 @@ impl<'a> TypeChecker<'a> {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx).unwrap();
-							// We only support numbers or strings in interpolated strings
-							self.validate_type_in(exp_type, &[self.types.string(), self.types.number()], interpolated_expr);
+							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
 					Some(self.types.string())
