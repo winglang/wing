@@ -30,7 +30,7 @@ Using polycons, the SDK resources are structured as follows:
 * Each cloud target has a unique `App` construct that specifies logic for synthesizing a one or more types of constructs.
   It also registers the cloud target's polycon factory to that node on the construct tree.
 
-Through polycons, when a user writes `new cloud.Bucket()` within the scope of an AWS `App`, the constructor of `cloud.Bucket` will automatically look up the polycon factory associated with the construct tree, and call the factory's `resolve` method to produce the class instance specific to that clodu target (`new tfaws.Bucket()`), and return that back to the caller.
+Through polycons, when a user writes `new cloud.Bucket()` within the scope of an AWS `App`, the constructor of `cloud.Bucket` will automatically look up the polycon factory associated with the construct tree, and call the factory's `resolve` method to produce the class instance specific to that cloud target (`new tfaws.Bucket()`), and return that back to the caller.
 
 Each `App` class has an automatically registered polycon factory, but it's possible to pass a custom factory in `new App(...)` that builds on top of (or overrides) the original factory to support more polycons, or different resolution behavior.
 
