@@ -26,15 +26,14 @@ let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 
 inflight handler(message: str): str {
-    bucket.put("myfile", message);
+    bucket.put("wing.txt", "Hello ${message}");
 }
 
 queue.on_message(handler);
 ```
 
 This code should be mostly self explanatory. We define a queue, and every time a
-message is added to the queue, a handler is triggered and prints the text
-`"Hello, ${message}!"`.
+message is added to the queue, a handler is triggered and creates a file named `wing.txt` with `"Hello, ${message}!"` content .
 
 Now that we've written this program, let's compile and test it.
 
