@@ -54,7 +54,7 @@ On the left sidebar click on the Bucket, you will see the following view:
 
 Now, check the `wing.txt` file and download it, using the download button
 
-![](./console-bucket-1.png)
+![](./console-bucket-2.png)
 
 The downloaded file should contain `Hello, Wing` text 
 
