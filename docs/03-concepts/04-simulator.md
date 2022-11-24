@@ -80,7 +80,7 @@ automatically generate traces that you can inspect by calling `listTraces()` on
 your simulator instance.
 
 ```typescript
-console.log(JSON.stringify(mySim.listEvents(), null, 2));
+console.log(JSON.stringify(mySim.listTraces(), null, 2));
 ```
 
 <!-- TODO: show how to use Node debugger with simulator? -->
