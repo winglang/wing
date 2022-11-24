@@ -73,7 +73,6 @@ npm run build
 To run all tests:
 
 ```sh
-cargo install cargo-insta # one-time setup
 npm run test
 ```
 
@@ -205,7 +204,7 @@ Add a `.env` file to `tools/hangar` with the following:
 NPM_TOKEN=<GitHub PAT with access to @winglang packages>
 ```
 
-This allows spun-up registry to pull down @winglang/polycons from the private github registry.
+This allows the spun-up registry to pull down @winglang packages from the private github registry.
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
