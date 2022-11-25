@@ -45,10 +45,10 @@ Object {
         },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [
               "app/WingLogger",
             ],
-            "wing:resource:outbound": Array [],
             "wing:resource:stateful": false,
           },
           "children": Object {

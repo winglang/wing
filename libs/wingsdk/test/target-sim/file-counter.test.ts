@@ -58,4 +58,6 @@ test("can create sequential files in a bucket", async () => {
   await expect(bucket.get("file-1000.txt")).resolves.toEqual("kachow!");
   await expect(bucket.get("file-1001.txt")).resolves.toEqual("zoom!");
   await s.stop();
+
+  expect(app.snapshot()).toMatchSnapshot();
 });

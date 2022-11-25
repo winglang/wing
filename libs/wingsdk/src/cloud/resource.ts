@@ -46,7 +46,7 @@ export abstract class Resource
    * @internal
    */
   public _addOutbound(...resources: Resource[]): void {
-    this._inbound.push(...resources.map((r) => r.node.path));
+    this._outbound.push(...resources.map((r) => r.node.path));
   }
 
   /**

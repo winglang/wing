@@ -83,10 +83,10 @@ Object {
       "children": Object {
         "my_queue": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [
               "app/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
-            "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
           },
           "children": Object {
@@ -180,10 +180,10 @@ Object {
       "children": Object {
         "my_queue": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [
               "app/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
-            "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
           },
           "children": Object {
@@ -270,10 +270,10 @@ Object {
       "children": Object {
         "my_queue": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [
               "app/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
-            "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
           },
           "children": Object {

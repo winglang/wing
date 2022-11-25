@@ -1,0 +1,172 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`can create sequential files in a bucket 1`] = `
+Object {
+  "app.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "app/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "app/HelloWorld/Counter",
+        "props": Object {
+          "initialValue": 1000,
+        },
+        "type": "wingsdk.cloud.Counter",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "app/HelloWorld/Bucket",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+        "props": Object {
+          "environmentVariables": Object {
+            "BUCKET_HANDLE_20ef3cac": "\${app/HelloWorld/Bucket#attrs.handle}",
+            "COUNTER_HANDLE_cc2ee44e": "\${app/HelloWorld/Counter#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/OnMessage-b9553f7cc235c8e4/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "app/HelloWorld/Queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [
+            Object {
+              "batchSize": 1,
+              "functionHandle": "\${app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4#attrs.handle}",
+            },
+          ],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "HelloWorld": Object {
+          "children": Object {
+            "Bucket": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [
+                  "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                ],
+                "wing:resource:outbound": Array [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Bucket",
+              "path": "app/HelloWorld/Bucket",
+            },
+            "Counter": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [
+                  "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                ],
+                "wing:resource:outbound": Array [],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Counter",
+              "path": "app/HelloWorld/Counter",
+            },
+            "Queue": Object {
+              "attributes": Object {
+                "wing:resource:inbound": Array [],
+                "wing:resource:outbound": Array [
+                  "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                ],
+                "wing:resource:stateful": true,
+              },
+              "children": Object {
+                "OnMessage-b9553f7cc235c8e4": Object {
+                  "attributes": Object {
+                    "wing:resource:inbound": Array [
+                      "app/HelloWorld/Queue",
+                    ],
+                    "wing:resource:outbound": Array [
+                      "app/HelloWorld/Counter",
+                      "app/HelloWorld/Bucket",
+                    ],
+                    "wing:resource:stateful": false,
+                  },
+                  "children": Object {
+                    "Code": Object {
+                      "constructInfo": Object {
+                        "fqn": "constructs.Construct",
+                        "version": "10.0.25",
+                      },
+                      "id": "Code",
+                      "path": "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4/Code",
+                    },
+                  },
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "OnMessage-b9553f7cc235c8e4",
+                  "path": "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Queue",
+              "path": "app/HelloWorld/Queue",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "HelloWorld",
+          "path": "app/HelloWorld",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "app/WingLogger",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "app",
+      "path": "app",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
