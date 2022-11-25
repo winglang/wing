@@ -23,7 +23,6 @@ pub struct Parser<'a> {
 // k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
 static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
-	"hours" => "",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433"
@@ -91,12 +90,15 @@ impl Parser<'_> {
 				// Specific "Minutes" duration needed here
 				value_text.parse::<f64>().expect("Duration string") * 60_f64,
 			)),
+			"hours" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
+			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
-			other => {
+			other => return {
 				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-					unimplemented!("duration type {} is not yet supported {}", other, entry)
+					self.add_error(format!("duration type {} is not yet supported {}", other, entry), &node)
 				} else {
-					panic!("Unexpected duration type {} || {:#?}", other, node)
+					self.add_error(format!("Unexpected duration type {} || {:#?}", other, node), &node)
 				}
 			},
 		}
@@ -190,11 +192,11 @@ impl Parser<'_> {
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
-			other => {
+			other => return {
 				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-					unimplemented!("statement type {} is not yet supported {}", other, entry);
+					self.add_error(format!("statement type {} is not yet supported {}", other, entry), statement_node)
 				} else {
-					panic!("Unexpected statement type {} || {:#?}", other, statement_node)
+					self.add_error(format!("Unexpected statement type {} || {:#?}", other, statement_node), statement_node)
 				}
 			}
 		};
@@ -336,11 +338,11 @@ impl Parser<'_> {
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
-				other => {
+				other => return {
 					if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-						unimplemented!("builtin {} is not yet supported {}", other, entry);
+						self.add_error(format!("builtin {} is not yet supported {}", other, entry), type_node)
 					} else {
-						panic!("Unexpected builtin {} || {:#?}", other, type_node);
+						self.add_error(format!("Unexpected builtin {} || {:#?}", other, type_node), type_node)
 					}
 				},
 			},
