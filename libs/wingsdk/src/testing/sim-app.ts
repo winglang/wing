@@ -1,6 +1,6 @@
 import { Simulator } from ".";
 import * as sim from "../target-sim";
-import { mkdtemp } from "../util";
+import { directorySnapshot, mkdtemp } from "../util";
 
 /**
  * A simulated app.
@@ -24,5 +24,9 @@ export class SimApp extends sim.App {
     const s = new Simulator({ simfile });
     await s.start();
     return s;
+  }
+
+  public snapshot(): Record<string, any> {
+    return directorySnapshot(this.outdir);
   }
 }

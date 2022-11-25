@@ -2,122 +2,228 @@
 
 exports[`create a function 1`] = `
 Object {
-  "root": Object {
-    "children": Object {
-      "my_function": Object {
-        "attrs": Object {
-          "handle": "sim-0",
-        },
-        "path": "root/my_function",
+  "app.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "app/my_function",
         "props": Object {
           "environmentVariables": Object {
             "ENV_VAR1": "true",
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
       },
-    },
-    "path": "root",
-    "type": "constructs.Construct",
+    ],
+    "sdkVersion": "0.0.0",
   },
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "root/my_function",
-  ],
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "app/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "app/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "app",
+      "path": "app",
+    },
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`invoke function fails 1`] = `
 Object {
-  "root": Object {
-    "children": Object {
-      "my_function": Object {
-        "attrs": Object {
-          "handle": "sim-0",
-        },
-        "path": "root/my_function",
+  "app.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "app/my_function",
         "props": Object {
-          "environmentVariables": Object {
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-          },
+          "environmentVariables": Object {},
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
       },
-    },
-    "path": "root",
-    "type": "constructs.Construct",
+    ],
+    "sdkVersion": "0.0.0",
   },
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "root/my_function",
-  ],
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "app/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "app/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "app",
+      "path": "app",
+    },
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`invoke function succeeds 1`] = `
 Object {
-  "root": Object {
-    "children": Object {
-      "my_function": Object {
-        "attrs": Object {
-          "handle": "sim-0",
-        },
-        "path": "root/my_function",
+  "app.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "app/my_function",
         "props": Object {
-          "environmentVariables": Object {
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-          },
+          "environmentVariables": Object {},
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
       },
-    },
-    "path": "root",
-    "type": "constructs.Construct",
+    ],
+    "sdkVersion": "0.0.0",
   },
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "root/my_function",
-  ],
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "app/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "app/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "app",
+      "path": "app",
+    },
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`invoke function with environment variables 1`] = `
 Object {
-  "root": Object {
-    "children": Object {
-      "my_function": Object {
-        "attrs": Object {
-          "handle": "sim-0",
-        },
-        "path": "root/my_function",
+  "app.wx": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "app/my_function",
         "props": Object {
           "environmentVariables": Object {
             "PIG_LATIN": "true",
-            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_function",
-            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
       },
-    },
-    "path": "root",
-    "type": "constructs.Construct",
+    ],
+    "sdkVersion": "0.0.0",
   },
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "root/my_function",
-  ],
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "my_function": Object {
+          "attributes": Object {
+            "wing:resource:inbound": Array [],
+            "wing:resource:outbound": Array [],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Code",
+              "path": "app/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_function",
+          "path": "app/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "app",
+      "path": "app",
+    },
+    "version": "tree-0.1",
+  },
 }
 `;

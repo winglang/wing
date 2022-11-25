@@ -1,7 +1,8 @@
 import { Construct, IConstruct } from "constructs";
 import * as cloud from "../cloud";
 import { CaptureMetadata, Code } from "../core";
-import { IResource } from "./resource";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
 import { CounterSchema } from "./schema-resources";
 import { bindSimulatorResource } from "./util";
 
@@ -10,9 +11,7 @@ import { bindSimulatorResource } from "./util";
  *
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.CounterBase implements IResource {
-  private readonly inbound = new Array<string>();
-  private readonly outbound = new Array<string>();
+export class Counter extends cloud.CounterBase implements ISimulatorResource {
   public readonly initialValue: number;
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
@@ -20,21 +19,16 @@ export class Counter extends cloud.CounterBase implements IResource {
     this.initialValue = props.initialValue ?? 0;
   }
 
-  /** @internal */
-  public _toResourceSchema(): CounterSchema {
-    return {
+  public toSimulatorSchema(): BaseResourceSchema {
+    const schema: CounterSchema = {
       type: cloud.COUNTER_TYPE,
+      path: this.node.path,
       props: {
         initialValue: this.initialValue,
       },
-      inbound: this.inbound,
-      outbound: this.outbound,
+      attrs: {} as any,
     };
-  }
-
-  /** @internal */
-  public _addInbound(...resources: string[]) {
-    this.inbound.push(...resources);
+    return schema;
   }
 
   /** @internal */

@@ -2,12 +2,16 @@ import * as fs from "fs";
 import * as path_ from "path";
 import * as process from "process";
 import * as vm from "vm";
-import { IFunctionClient } from "../cloud";
+import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { ISimulatorResource } from "./resource";
+import {
+  ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
+  ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
+} from "./function";
+import { ISimulatable } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
-export class Function implements IFunctionClient, ISimulatorResource {
+export class Function implements IFunctionClient, ISimulatable {
   private readonly filename: string;
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
@@ -48,7 +52,11 @@ export class Function implements IFunctionClient, ISimulatorResource {
       path: path_,
       process: process,
 
-      $env: { ...this.env },
+      $env: {
+        ...this.env,
+        [ENV_WING_SIM_INFLIGHT_RESOURCE_PATH]: this.context.resourcePath,
+        [ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE]: FUNCTION_TYPE,
+      },
 
       // Make the global simulator available to user code so that they can find
       // and use other resource clients

@@ -1,14 +1,25 @@
-import { writeFileSync } from "fs";
-import { join } from "path";
-import { Construct, IConstruct } from "constructs";
+import * as fs from "fs";
+import * as path from "path";
+import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { AppProps, DependencyGraph, Files, IApp } from "../core";
-import { mkdtemp, sanitizeValue } from "../util";
+import {
+  AppProps,
+  DependencyGraph,
+  Files,
+  IApp,
+  synthesizeTree,
+} from "../core";
+import { mkdtemp } from "../util";
 import { PolyconFactory } from "./factory";
-import { isResource } from "./resource";
-import { BaseResourceSchema, WingSimulatorSchema } from "./schema";
+import { isSimResource } from "./resource";
+import { WingSimulatorSchema } from "./schema";
+
+/**
+ * Path of the simulator configuration file in every .wx tarball.
+ */
+export const SIMULATOR_FILE_PATH = "simulator.json";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
@@ -20,39 +31,31 @@ export class App extends Construct implements IApp {
    */
   public readonly outdir: string;
   private readonly files: Files;
-  private readonly name: string;
 
   constructor(props: AppProps) {
-    super(undefined as any, "root");
+    const name = props.name ?? "app";
+    super(undefined as any, name);
     this.outdir = props.outdir ?? ".";
     this.files = new Files({ app: this, stateFile: props.stateFile });
-    this.name = props.name ?? "app";
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }
 
   /**
-   * Synthesize the app into a `.wx` file. Return the path to the file.
+   * Synthesize the app. This creates a tree.json file and a .wx file in the
+   * app's outdir, and returns a path to the .wx file.
    */
   public synth(): string {
     const workdir = mkdtemp();
 
+    // write application assets into workdir
     this.files.synth(workdir);
 
-    // write "simulator.json" into the workdir
-    const root = toSchema(this);
-    const startOrder = new DependencyGraph(this.node)
-      .topology()
-      .filter((x) => isResource(x))
-      .map((x) => x.node.path);
-    const sdkVersion = SDK_VERSION;
-    const contents: WingSimulatorSchema = { root, startOrder, sdkVersion };
-    writeFileSync(
-      join(workdir, "simulator.json"),
-      JSON.stringify(contents, null, 2)
-    );
+    // write simulator.json file into workdir
+    this.synthSimulatorFile(workdir);
 
-    // zip it up, and write it as .wx to the outdir
-    const simfile = join(this.outdir, `${this.name}.wx`);
+    // tar + gzip the workdir, and write it as a .wx file to the outdir
+    const filename = `${this.node.path}.wx`;
+    const simfile = path.join(this.outdir, filename);
     tar.create(
       {
         gzip: true,
@@ -62,49 +65,29 @@ export class App extends Construct implements IApp {
       },
       ["./"]
     );
+
+    // write tree.json file to the outdir
+    synthesizeTree(this);
+
     return simfile;
   }
-}
 
-/**
- * Whether to resource should be included in the simulator.json tree.
- * If a construct is not a resource or does not contain any resources, there is
- * nothing to simulate, so we can skip it.
- */
-function shouldIncludeInTree(c: IConstruct): boolean {
-  if (isResource(c)) {
-    return true;
-  }
+  private synthSimulatorFile(outdir: string) {
+    const resources = new DependencyGraph(this.node)
+      .topology()
+      .filter(isSimResource)
+      .map((res) => res.toSimulatorSchema());
 
-  if (c.node.children.some((x) => shouldIncludeInTree(x))) {
-    return true;
-  }
-
-  return false;
-}
-
-function toSchema(c: IConstruct): BaseResourceSchema {
-  const children = c.node.children.reduce((acc, child) => {
-    if (!shouldIncludeInTree(child)) {
-      return acc;
-    }
-    const childSchema = toSchema(child);
-    return {
-      ...acc,
-      [child.node.id]: childSchema,
+    const contents: WingSimulatorSchema = {
+      resources,
+      sdkVersion: SDK_VERSION,
     };
-  }, {});
 
-  const resourceFields: any = isResource(c) ? c._toResourceSchema() : {};
-  const dependsOn = c.node.dependencies.map((dep) => dep.node.path);
-
-  return sanitizeValue(
-    {
-      type: resourceFields.type ?? "constructs.Construct",
-      ...resourceFields,
-      children,
-      dependsOn,
-    },
-    { filterEmptyArrays: true, filterEmptyObjects: true, sortKeys: false }
-  );
+    // write simulator.json file
+    fs.writeFileSync(
+      path.join(outdir, SIMULATOR_FILE_PATH),
+      JSON.stringify(contents, undefined, 2),
+      { encoding: "utf8" }
+    );
+  }
 }

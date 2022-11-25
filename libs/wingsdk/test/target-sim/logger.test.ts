@@ -29,9 +29,7 @@ test("inflight uses a logger", async () => {
 
   const s = await app.startSimulator();
 
-  const fnClient = s.getResourceByPath(
-    "root/my_function"
-  ) as cloud.IFunctionClient;
+  const fnClient = s.getResource("app/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = "Alice";
@@ -51,7 +49,7 @@ test("inflight uses a logger", async () => {
     "wingsdk.cloud.Function deleted.",
     "wingsdk.cloud.Logger deleted.",
   ]);
-  expect(s.tree).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

@@ -3,10 +3,10 @@ import * as os from "os";
 import { join } from "path";
 import { IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { ISimulatorResource } from "./resource";
+import { ISimulatable } from "./resource";
 import { BucketSchema } from "./schema-resources";
 
-export class Bucket implements IBucketClient, ISimulatorResource {
+export class Bucket implements IBucketClient, ISimulatable {
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
   public constructor(
