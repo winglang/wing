@@ -26,6 +26,10 @@ export class SimApp extends sim.App {
     return s;
   }
 
+  /**
+   * Takes a snapshot of the output directory, returning a map of filenames to
+   * their contents.
+   */
   public snapshot(): Record<string, any> {
     return directorySnapshot(this.outdir);
   }

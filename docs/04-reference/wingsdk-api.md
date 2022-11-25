@@ -1932,6 +1932,77 @@ Obtain a reference to the prebundled Code for a given capture scope.
 
 
 
+### TreeInspector <a name="TreeInspector" id="@winglang/wingsdk.core.TreeInspector"></a>
+
+Inspector that maintains an attribute bag.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.TreeInspector.Initializer"></a>
+
+```wing
+bring core;
+
+new core.TreeInspector()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.TreeInspector.addAttribute">add_attribute</a></code> | Adds attribute to bag. |
+
+---
+
+##### `add_attribute` <a name="add_attribute" id="@winglang/wingsdk.core.TreeInspector.addAttribute"></a>
+
+```wing
+add_attribute(key: str, value: any): void
+```
+
+Adds attribute to bag.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.core.TreeInspector.addAttribute.parameter.key"></a>
+
+- *Type:* str
+
+key for metadata.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/wingsdk.core.TreeInspector.addAttribute.parameter.value"></a>
+
+- *Type:* any
+
+value of metadata.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.TreeInspector.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | Represents the bag of attributes as key-value pairs. |
+
+---
+
+##### `attributes`<sup>Required</sup> <a name="attributes" id="@winglang/wingsdk.core.TreeInspector.property.attributes"></a>
+
+```wing
+attributes: MutMap<any>;
+```
+
+- *Type:* MutMap&lt;any&gt;
+
+Represents the bag of attributes as key-value pairs.
+
+---
+
+
 ## Protocols <a name="Protocols" id="Protocols"></a>
 
 ### IApp <a name="IApp" id="@winglang/wingsdk.core.IApp"></a>
@@ -2153,6 +2224,14 @@ Invoke the function asynchronously with a given payload.
 - *Type:* str
 
 ---
+
+
+### IInspectable <a name="IInspectable" id="@winglang/wingsdk.core.IInspectable"></a>
+
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.IInspectable
+
+Interface for examining a construct and exposing metadata.
+
 
 
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.cloud.ILoggerClient"></a>
