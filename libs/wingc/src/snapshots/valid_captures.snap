@@ -29,7 +29,7 @@ constructor() {
   "public": true,}
   );
   const handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, "proc.3c27dff7ec53a218a4ca25351afb11c1b197f7bc0fcb9bf4545272c39f486879/index.js")),
     entrypoint: "$proc",
     captures: {
       bucket1: {
@@ -50,9 +50,10 @@ constructor() {
 }
 }
 new MyApp().synth();
-// ../../examples/tests/valid/captures.w.out/proc.c15f4d977b724291ff429aad30c5d2ac64731eb4e878aa592ab62795fe73418d/index.js
+// ../../examples/tests/valid/captures.w.out/proc.3c27dff7ec53a218a4ca25351afb11c1b197f7bc0fcb9bf4545272c39f486879/index.js
 async function $proc({ bucket1, bucket2 }, event) {
   bucket1.put("file.txt","data");
   bucket2.get("file.txt");
+  bucket2.get("file2.txt");
 };
 

@@ -162,7 +162,7 @@ export class Function extends cloud.FunctionBase {
       );
     }
 
-    const env = `FUNCTION_NAME__${this.node.id}`;
+    const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
     if (methods.has(FunctionInflightMethods.INVOKE)) {
@@ -183,6 +183,9 @@ export class Function extends cloud.FunctionBase {
   }
 
   public addEnvironment(name: string, value: string) {
+    if (this.env[name] !== undefined) {
+      throw new Error(`Environment variable "${name}" already set.`);
+    }
     this.env[name] = value;
   }
 
