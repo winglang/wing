@@ -16,6 +16,7 @@ lazy_static = "1.4.0"
 globset = "0.4.9"
 itertools = "0.10"
 inflections = "1.1.1"
+phf = { version = "0.11", features = ["macros"] }
 
 [dev-dependencies]
 insta = "1.21.0"

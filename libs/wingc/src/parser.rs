@@ -2,6 +2,7 @@ use std::cell::RefCell;
 use std::collections::HashMap;
 use std::{str, vec};
 use tree_sitter::Node;
+use phf::phf_map;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
@@ -15,6 +16,17 @@ pub struct Parser<'a> {
 	pub source_name: String,
 	pub diagnostics: RefCell<Diagnostics>,
 }
+
+
+// A custom struct could be used to better maintain metadata and issue tracking, though ideally
+// this is meant to serve as a bandaide to be removed once wing is further developed.
+// k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
+static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
+	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
+	"any" => "see https://github.com/winglang/wing/issues/434",
+	"void" => "see https://github.com/winglang/wing/issues/432",
+	"nil" => "see https://github.com/winglang/wing/issues/433"
+};
 
 impl Parser<'_> {
 	pub fn wingit(&self, root: &Node) -> Scope {
@@ -78,8 +90,17 @@ impl Parser<'_> {
 				// Specific "Minutes" duration needed here
 				value_text.parse::<f64>().expect("Duration string") * 60_f64,
 			)),
+			"hours" => Ok(Literal::Duration(
+				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
+			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
-			other => panic!("Unexpected duration type {} || {:#?}", other, node),
+			other => return {
+				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
+					self.add_error(format!("duration type {} is not yet supported {}", other, entry), &node)
+				} else {
+					self.add_error(format!("Unexpected duration type {} || {:#?}", other, node), &node)
+				}
+			},
 		}
 	}
 
@@ -171,7 +192,13 @@ impl Parser<'_> {
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
-			other => panic!("Unexpected statement type {} || {:#?}", other, statement_node),
+			other => return {
+				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
+					self.add_error(format!("statement type {} is not yet supported {}", other, entry), statement_node)
+				} else {
+					self.add_error(format!("Unexpected statement type {} || {:#?}", other, statement_node), statement_node)
+				}
+			}
 		};
 
 		Ok(Stmt {
@@ -311,7 +338,13 @@ impl Parser<'_> {
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
-				other => panic!("Unexpected builtin type {} || {:#?}", other, type_node),
+				other => return {
+					if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
+						self.add_error(format!("builtin {} is not yet supported {}", other, entry), type_node)
+					} else {
+						self.add_error(format!("Unexpected builtin {} || {:#?}", other, type_node), type_node)
+					}
+				},
 			},
 			"optional" => {
 				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
