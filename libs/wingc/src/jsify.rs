@@ -451,12 +451,12 @@ fn jsify_inflight_function(func_def: &FunctionDefinition, out_dir: &PathBuf) -> 
 	let mut bindings = vec![];
 	let mut capture_names = vec![];
 	for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
-		capture_names.push(obj.name.clone());
+		capture_names.push(obj.clone());
 		bindings.push(format!(
 			"{}: {},",
-			obj.name,
+			obj,
 			render_block([
-				format!("resource: {},", obj.name),
+				format!("resource: {},", obj),
 				format!(
 					"methods: [{}]",
 					cap_def
