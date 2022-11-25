@@ -1,8 +1,8 @@
 use std::cell::RefCell;
 use std::collections::HashMap;
-use std::collections::hash_map::Entry;
 use std::{str, vec};
 use tree_sitter::Node;
+use phf::phf_map;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
@@ -17,6 +17,18 @@ pub struct Parser<'a> {
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
+
+// A custom struct could be used to better maintain metadata and issue tracking, though ideally
+// this is meant to serve as a bandaide to be removed once wing is further developed.
+// k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
+static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
+	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
+	"hours" => "",
+	"any" => "see https://github.com/winglang/wing/issues/434",
+	"void" => "see https://github.com/winglang/wing/issues/432",
+	"nil" => "see https://github.com/winglang/wing/issues/433"
+};
+
 impl Parser<'_> {
 	pub fn wingit(&self, root: &Node) -> Scope {
 		match root.kind() {
@@ -25,16 +37,6 @@ impl Parser<'_> {
 				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
 			}
 		}
-	}
-
-	fn unimplemented_grammars(&self) -> HashMap<&str, &str> {
-		// k=grammar, v=optional_message, example: ("generic", "targed impl: 1.0.0")
-		HashMap::from([
-			("struct_definition", ""),
-			("any", ""),
-			("void", ""),
-			("hours", "")
-		])
 	}
 
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
@@ -91,9 +93,10 @@ impl Parser<'_> {
 			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
 			other => {
-				match self.unimplemented_grammars().entry(&other) {
-					Entry::Occupied(e) => unimplemented!("duration '{}' is not yet supported {}", other, e.get()),
-					Entry::Vacant(_) => panic!("Unexpected duration type {} || {:#?}", other, node)
+				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
+					unimplemented!("duration type {} is not yet supported {}", other, entry)
+				} else {
+					panic!("Unexpected duration type {} || {:#?}", other, node)
 				}
 			},
 		}
@@ -188,10 +191,11 @@ impl Parser<'_> {
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => {
-				match self.unimplemented_grammars().entry(&other) {
-					Entry::Occupied(e) => unimplemented!("statement '{}' is not yet supported {}", other, e.get()),
-					Entry::Vacant(_) => panic!("Unexpected statement type {} || {:#?}", other, statement_node)
-				};
+				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
+					unimplemented!("statement type {} is not yet supported {}", other, entry);
+				} else {
+					panic!("Unexpected statement type {} || {:#?}", other, statement_node)
+				}
 			}
 		};
 
@@ -333,10 +337,11 @@ impl Parser<'_> {
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
 				other => {
-					match self.unimplemented_grammars().entry(&other) {
-						Entry::Occupied(e) => unimplemented!("builtin '{}' is not yet supported {}", other, e.get()),
-						Entry::Vacant(_) => panic!("Unexpected builtin {} || {:#?}", other, type_node)
-					};
+					if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
+						unimplemented!("builtin {} is not yet supported {}", other, entry);
+					} else {
+						panic!("Unexpected builtin {} || {:#?}", other, type_node);
+					}
 				},
 			},
 			"optional" => {
