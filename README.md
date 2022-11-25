@@ -1,8 +1,10 @@
 # Wing Console
 
-## Installation
+## Download link
 
-download the latest release dmg file from [releases](https://github.com/winglang/console/releases)
+Download the latest release: https://wing-console.s3.amazonaws.com/wing-console.dmg
+
+## Installation
 
 ```sh
 npm install
