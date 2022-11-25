@@ -59,6 +59,9 @@ export class Function extends cloud.FunctionBase implements IResource {
   }
 
   public addEnvironment(name: string, value: string) {
+    if (this.env[name] !== undefined) {
+      throw new Error(`Environment variable "${name}" already set.`);
+    }
     this.env[name] = value;
   }
 

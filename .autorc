@@ -3,6 +3,26 @@
     ["conventional-commits", { "preset": "angular" }],
     "git-tag"
   ],
+  "labels": [
+    {
+      "name": "documentation",
+      "releaseType": "patch"
+    },
+    {
+      "name": "internal",
+      "releaseType": "patch"
+    },
+    {
+      "name": "tests",
+      "releaseType": "patch"
+    },
+    {
+      "name": "dependencies",
+      "releaseType": "patch"
+    }
+  ],
+  "onlyPublishWithReleaseLabel": false,
+  "baseBranch": "main",
   "owner": "winglang",
   "repo": "wing",
   "name": "MonadaBot",
