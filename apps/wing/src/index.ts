@@ -3,6 +3,7 @@
 
 import { compile, upgrade } from "./commands";
 import { join, resolve } from "path";
+import {compare} from 'compare-versions';
 
 import { Command } from "commander";
 import debug from "debug";
@@ -22,6 +23,7 @@ async function main() {
   program
     .command("run")
     .description("Runs a Wing executable in the Wing Console")
+    .hook('preAction', checkNodeVersion)
     .argument("<executable>", "executable .wx file")
     .action(async (executable: string) => {
       executable = resolve(executable);
@@ -32,6 +34,7 @@ async function main() {
   program
     .command("compile")
     .description("Compiles a Wing program")
+    .hook('preAction', checkNodeVersion)
     .argument("<entrypoint>", "program .w entrypoint")
     .option(
       "-o, --out-dir <out-dir>",
@@ -48,9 +51,17 @@ async function main() {
   program
     .command("upgrade")
     .description("Upgrades the Wing toolchain to the latest version")
+    .hook('preAction', checkNodeVersion)
     .action(() => upgrade({ force: true }));
 
   program.parse();
+}
+
+function checkNodeVersion(){
+  const minVer = "18.0.0"
+
+  if(compare(process.version, minVer, "<"))
+    console.log("WARN: You are running node " + process.version + " please update to >=" + minVer)
 }
 
 main().catch((err) => {
