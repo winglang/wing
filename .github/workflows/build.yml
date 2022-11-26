@@ -247,10 +247,10 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        include:
-          # - runner: macos-latest
-          - runner: ubuntu-latest
-          - node: [18, 19]
+        runner:
+          - ubuntu-latest
+          # - macos-latest
+        node: [18, 19]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
