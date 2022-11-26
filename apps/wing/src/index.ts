@@ -3,7 +3,7 @@
 
 import { compile, upgrade } from "./commands";
 import { join, resolve } from "path";
-import {compare} from 'compare-versions';
+import { satisfies } from 'compare-versions';
 
 import { Command } from "commander";
 import debug from "debug";
@@ -58,10 +58,10 @@ async function main() {
 }
 
 function checkNodeVersion(){
-  const minVer = "18.0.0"
+  const supportedVersion = "^v18.0.0"
 
-  if(compare(process.version, minVer, "<"))
-    console.log("WARN: You are running node " + process.version + " please update to >=" + minVer)
+  if(!satisfies(process.version, supportedVersion))
+    console.log("WARN: You are running node " + process.version + ", please change to " + supportedVersion)
 }
 
 main().catch((err) => {
