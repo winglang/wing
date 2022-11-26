@@ -61,7 +61,7 @@ function checkNodeVersion(){
   const supportedVersion = "^v18.0.0"
 
   if(!satisfies(process.version, supportedVersion)){
-    console.log("WARN: You are running node " + process.version + ", please change to " + supportedVersion)
+    console.log(`WARN: You are running node ${process.version} please change to ${supportedVersion}`)
   }
 }
 
