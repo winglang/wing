@@ -249,7 +249,7 @@ jobs:
       matrix:
         include:
           # - runner: macos-latest
-          - runner: [ubuntu-latest]
+          - runner: ubuntu-latest
           - node: [18, 19]
     runs-on: ${{ matrix.runner }}
     steps:
