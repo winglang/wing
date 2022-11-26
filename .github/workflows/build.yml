@@ -249,7 +249,8 @@ jobs:
       matrix:
         include:
           # - runner: macos-latest
-          - runner: ubuntu-latest
+          - runner: [ubuntu-latest]
+          - node: [18, 19]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
@@ -261,7 +262,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.NODEJS_VERSION }}
+          node-version: ${{ matrix.node }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
