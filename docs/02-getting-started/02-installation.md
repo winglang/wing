@@ -15,8 +15,9 @@ The toolchain includes three tools:
 
 To install Wing, you will need the following setup:
 
-* [Node.js](https://nodejs.org/en/) version 18.x (we recommend [nvm](https://github.com/nvm-sh/nvm)).
 * [VSCode] (recommended).
+* [Node.js](https://nodejs.org/en/) version 18.x (we recommend [nvm](https://github.com/nvm-sh/nvm)).
+> There is a [known issue](https://github.com/winglang/wing/issues/757) with node.js 19.x
 
 In order to deploy to AWS, you will also need:
 
