@@ -192,7 +192,7 @@ with the outside world. `Struct` can be casted back to `any` at any time.
 All structs can be casted to `Struct` and back to `any` at any time as well.  
 `Struct` cannot be casted to any other type.
 
-"Struct" is immutable be design. Meaning that once parsed from its `any` buffer,
+"Struct" is immutable by design. Meaning that once parsed from its `any` buffer,
 it cannot be modified anymore.
 
 > ```TS

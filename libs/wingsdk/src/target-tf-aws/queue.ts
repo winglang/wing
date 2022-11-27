@@ -87,7 +87,7 @@ export class Queue extends cloud.QueueBase {
       throw new Error("queues can only be captured by tfaws.Function for now");
     }
 
-    const env = `QUEUE_URL__${this.node.id}`;
+    const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
     if (methods.has(cloud.QueueInflightMethods.PUSH)) {
