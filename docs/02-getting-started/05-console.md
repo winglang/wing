@@ -44,7 +44,7 @@ the function that handles messages).
 ## Sending a message to the queue
 
 In the center you should be able to type in a message and send it to the queue.
-Type `world` and hit **Send Message**.
+Type `Wing` and hit **Send Message**.
 
 ## Viewing the file
 
