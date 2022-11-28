@@ -11,6 +11,9 @@ import open = require("open");
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
+if (!SUPPORTED_NODE_VERSION) {
+  throw new Error("couldn't parse engines.node version from package.json");
+}
 const log = debug("wing:cli");
 
 async function main() {
