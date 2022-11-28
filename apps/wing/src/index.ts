@@ -57,7 +57,7 @@ async function main() {
   program.parse();
 }
 
-function checkNodeVersion(){
+function checkNodeVersion() {
   const supportedVersion = SUPPORTED_NODE_VERSION;
 
   if(!satisfies(process.version, supportedVersion)){
