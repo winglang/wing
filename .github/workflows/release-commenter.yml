@@ -11,4 +11,6 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           comment-template: |
-            :rocket: A fix related to this issue has been released in {release_name}! :rocket:
+            Congrats! :rocket: This was released in [Wing v{release_name}](https://github.com/winglang/wing/releases/tag/v{release_name}).
+
+
