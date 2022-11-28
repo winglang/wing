@@ -6,7 +6,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_queue",
+        "path": "root/my_queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [],
@@ -31,15 +31,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "app/my_queue",
+          "path": "root/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },
@@ -52,7 +52,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
+        "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
           "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
@@ -62,13 +62,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "app/my_queue",
+        "path": "root/my_queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${app/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -85,7 +85,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [
-              "app/my_queue/OnMessage-236ff3d72ad0ae46",
+              "root/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:stateful": true,
           },
@@ -93,7 +93,7 @@ Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "app/my_queue",
+                  "root/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
@@ -105,7 +105,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "app/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                  "path": "root/my_queue/OnMessage-236ff3d72ad0ae46/Code",
                 },
               },
               "constructInfo": Object {
@@ -113,7 +113,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "OnMessage-236ff3d72ad0ae46",
-              "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
+              "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
             },
           },
           "constructInfo": Object {
@@ -121,15 +121,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "app/my_queue",
+          "path": "root/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },
@@ -142,7 +142,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
+        "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
           "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
@@ -152,7 +152,7 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "app/my_queue",
+        "path": "root/my_queue",
         "props": Object {
           "initialMessages": Array [
             "A",
@@ -165,7 +165,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 5,
-              "functionHandle": "\${app/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -182,7 +182,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [
-              "app/my_queue/OnMessage-236ff3d72ad0ae46",
+              "root/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:stateful": true,
           },
@@ -190,7 +190,7 @@ Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "app/my_queue",
+                  "root/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
@@ -202,7 +202,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "app/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                  "path": "root/my_queue/OnMessage-236ff3d72ad0ae46/Code",
                 },
               },
               "constructInfo": Object {
@@ -210,7 +210,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "OnMessage-236ff3d72ad0ae46",
-              "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
+              "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
             },
           },
           "constructInfo": Object {
@@ -218,15 +218,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "app/my_queue",
+          "path": "root/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },
@@ -239,7 +239,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
+        "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
         "props": Object {
           "environmentVariables": Object {},
           "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
@@ -249,13 +249,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "app/my_queue",
+        "path": "root/my_queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${app/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -272,7 +272,7 @@ Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [
-              "app/my_queue/OnMessage-236ff3d72ad0ae46",
+              "root/my_queue/OnMessage-236ff3d72ad0ae46",
             ],
             "wing:resource:stateful": true,
           },
@@ -280,7 +280,7 @@ Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "app/my_queue",
+                  "root/my_queue",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
@@ -292,7 +292,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "app/my_queue/OnMessage-236ff3d72ad0ae46/Code",
+                  "path": "root/my_queue/OnMessage-236ff3d72ad0ae46/Code",
                 },
               },
               "constructInfo": Object {
@@ -300,7 +300,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "OnMessage-236ff3d72ad0ae46",
-              "path": "app/my_queue/OnMessage-236ff3d72ad0ae46",
+              "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
             },
           },
           "constructInfo": Object {
@@ -308,15 +308,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_queue",
-          "path": "app/my_queue",
+          "path": "root/my_queue",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },

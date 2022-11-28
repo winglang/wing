@@ -31,10 +31,11 @@ export class App extends Construct implements IApp {
    */
   public readonly outdir: string;
   private readonly files: Files;
+  private readonly name: string;
 
   constructor(props: AppProps) {
-    const name = props.name ?? "app";
-    super(undefined as any, name);
+    super(undefined as any, "root");
+    this.name = props.name ?? "app";
     this.outdir = props.outdir ?? ".";
     this.files = new Files({ app: this, stateFile: props.stateFile });
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
@@ -54,7 +55,7 @@ export class App extends Construct implements IApp {
     this.synthSimulatorFile(workdir);
 
     // tar + gzip the workdir, and write it as a .wsim file to the outdir
-    const filename = `${this.node.path}.wsim`;
+    const filename = `${this.name}.wsim`;
     const simfile = path.join(this.outdir, filename);
     tar.create(
       {

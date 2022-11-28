@@ -58,6 +58,7 @@ export class CdktfApp extends Construct implements IApp {
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
+
   constructor(props: AppProps = {}) {
     // this construct will get thrown away
     super(null as any, "");
@@ -72,10 +73,9 @@ export class CdktfApp extends Construct implements IApp {
 
       constructor() {
         const outdir = props.outdir ?? ".";
-        const name = props.name ?? "app";
         const root = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
 
-        super(root, name);
+        super(root, "root");
 
         this.outdir = outdir;
         this.cdktfApp = root;

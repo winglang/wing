@@ -29,7 +29,7 @@ test("inflight uses a logger", async () => {
 
   const s = await app.startSimulator();
 
-  const fnClient = s.getResource("app/my_function") as cloud.IFunctionClient;
+  const fnClient = s.getResource("/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = "Alice";

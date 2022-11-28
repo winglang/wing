@@ -6,7 +6,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_bucket",
+        "path": "root/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -29,15 +29,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "app/my_bucket",
+          "path": "root/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },
@@ -50,7 +50,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_bucket",
+        "path": "root/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -73,15 +73,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "app/my_bucket",
+          "path": "root/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },
@@ -94,7 +94,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_bucket",
+        "path": "root/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -117,15 +117,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "app/my_bucket",
+          "path": "root/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },
@@ -138,7 +138,7 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/my_bucket",
+        "path": "root/my_bucket",
         "props": Object {
           "public": false,
         },
@@ -161,15 +161,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_bucket",
-          "path": "app/my_bucket",
+          "path": "root/my_bucket",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },

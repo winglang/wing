@@ -367,7 +367,12 @@ export class Simulator {
    * Obtain a resource's configuration, including its type, props, and attrs.
    */
   public getResourceConfig(path: string): BaseResourceSchema {
+    // shorthand - assume tree root is named "root" by default
+    if (path.startsWith("/")) {
+      path = `root${path}`;
+    }
     const config = this._config.resources.find((r) => r.path === path);
+    console.error(JSON.stringify(this._config, null, 2));
     if (!config) {
       throw new Error(`Resource ${path} not found.`);
     }

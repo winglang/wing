@@ -2,7 +2,7 @@
 
 exports[`counter captured by a function 1`] = `
 "const $cap = {};
-$cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_feca22d6\\"], 0);
+$cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0);
 async function $proc($cap, event) {
           const val = await $cap.my_counter.inc(2);
           console.log(val);
@@ -16,7 +16,7 @@ exports[`counter captured by a function 2`] = `
 "{
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"app_Counter_F14A57F0\\": {
+      \\"root_Counter_2358A01E\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -25,48 +25,48 @@ exports[`counter captured by a function 2`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-c8a940a5f1f1f4cf216d344752132d97d7feca22d6\\"
+        \\"name\\": \\"wingsdk-counter-c824ef629aadade823aada5b40953dd23b6cb5a3a4\\"
       }
     },
     \\"aws_iam_role\\": {
-      \\"app_Function_IamRole_56665C88\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"app_Function_IamRolePolicy_BD322466\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.app_Counter_F14A57F0.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.name}\\"
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"dynamodb:UpdateItem\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_dynamodb_table.root_Counter_2358A01E.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"app_Function_IamRolePolicyAttachment_B4E996A7\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"app_Function_C48386A8\\": {
+      \\"root_Function_9F694E40\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"DYNAMODB_TABLE_NAME_feca22d6\\": \\"\${aws_dynamodb_table.app_Counter_F14A57F0.name}\\",
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function\\"
           }
         },
         \\"function_name\\": \\"Function\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.app_Function_Bucket_1EEC349E.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.app_Function_S3Object_3291715D.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"app_Function_Bucket_1EEC349E\\": {}
+      \\"root_Function_Bucket_8CDD903C\\": {}
     },
     \\"aws_s3_object\\": {
-      \\"app_Function_S3Object_3291715D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.app_Function_Bucket_1EEC349E.bucket}\\",
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -79,7 +79,7 @@ exports[`counter with initial value 1`] = `
 "{
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"app_Counter_F14A57F0\\": {
+      \\"root_Counter_2358A01E\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -88,7 +88,7 @@ exports[`counter with initial value 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-c8a940a5f1f1f4cf216d344752132d97d7feca22d6\\"
+        \\"name\\": \\"wingsdk-counter-c824ef629aadade823aada5b40953dd23b6cb5a3a4\\"
       }
     }
   }
@@ -99,7 +99,7 @@ exports[`default counter behavior 1`] = `
 "{
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
-      \\"app_Counter_F14A57F0\\": {
+      \\"root_Counter_2358A01E\\": {
         \\"attribute\\": [
           {
             \\"name\\": \\"id\\",
@@ -108,7 +108,7 @@ exports[`default counter behavior 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-c8a940a5f1f1f4cf216d344752132d97d7feca22d6\\"
+        \\"name\\": \\"wingsdk-counter-c824ef629aadade823aada5b40953dd23b6cb5a3a4\\"
       }
     }
   }

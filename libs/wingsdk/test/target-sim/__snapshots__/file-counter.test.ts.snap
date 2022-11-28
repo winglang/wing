@@ -6,13 +6,13 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/WingLogger",
+        "path": "root/WingLogger",
         "props": Object {},
         "type": "wingsdk.cloud.Logger",
       },
       Object {
         "attrs": Object {},
-        "path": "app/HelloWorld/Counter",
+        "path": "root/HelloWorld/Counter",
         "props": Object {
           "initialValue": 1000,
         },
@@ -20,7 +20,7 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "app/HelloWorld/Bucket",
+        "path": "root/HelloWorld/Bucket",
         "props": Object {
           "public": false,
         },
@@ -28,11 +28,11 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+        "path": "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
         "props": Object {
           "environmentVariables": Object {
-            "BUCKET_HANDLE_20ef3cac": "\${app/HelloWorld/Bucket#attrs.handle}",
-            "COUNTER_HANDLE_cc2ee44e": "\${app/HelloWorld/Counter#attrs.handle}",
+            "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
+            "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
           },
           "sourceCodeFile": "assets/OnMessage-b9553f7cc235c8e4/index.js",
           "sourceCodeLanguage": "javascript",
@@ -41,13 +41,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "app/HelloWorld/Queue",
+        "path": "root/HelloWorld/Queue",
         "props": Object {
           "initialMessages": Array [],
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4#attrs.handle}",
+              "functionHandle": "\${root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -65,7 +65,7 @@ Object {
             "Bucket": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                  "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": true,
@@ -75,12 +75,12 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Bucket",
-              "path": "app/HelloWorld/Bucket",
+              "path": "root/HelloWorld/Bucket",
             },
             "Counter": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [
-                  "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                  "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
                 ],
                 "wing:resource:outbound": Array [],
                 "wing:resource:stateful": true,
@@ -90,13 +90,13 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Counter",
-              "path": "app/HelloWorld/Counter",
+              "path": "root/HelloWorld/Counter",
             },
             "Queue": Object {
               "attributes": Object {
                 "wing:resource:inbound": Array [],
                 "wing:resource:outbound": Array [
-                  "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                  "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
                 ],
                 "wing:resource:stateful": true,
               },
@@ -104,11 +104,11 @@ Object {
                 "OnMessage-b9553f7cc235c8e4": Object {
                   "attributes": Object {
                     "wing:resource:inbound": Array [
-                      "app/HelloWorld/Queue",
+                      "root/HelloWorld/Queue",
                     ],
                     "wing:resource:outbound": Array [
-                      "app/HelloWorld/Counter",
-                      "app/HelloWorld/Bucket",
+                      "root/HelloWorld/Counter",
+                      "root/HelloWorld/Bucket",
                     ],
                     "wing:resource:stateful": false,
                   },
@@ -119,7 +119,7 @@ Object {
                         "version": "10.0.25",
                       },
                       "id": "Code",
-                      "path": "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4/Code",
+                      "path": "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4/Code",
                     },
                   },
                   "constructInfo": Object {
@@ -127,7 +127,7 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "OnMessage-b9553f7cc235c8e4",
-                  "path": "app/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                  "path": "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
                 },
               },
               "constructInfo": Object {
@@ -135,7 +135,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Queue",
-              "path": "app/HelloWorld/Queue",
+              "path": "root/HelloWorld/Queue",
             },
           },
           "constructInfo": Object {
@@ -143,7 +143,7 @@ Object {
             "version": "10.0.25",
           },
           "id": "HelloWorld",
-          "path": "app/HelloWorld",
+          "path": "root/HelloWorld",
         },
         "WingLogger": Object {
           "attributes": Object {
@@ -156,15 +156,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "WingLogger",
-          "path": "app/WingLogger",
+          "path": "root/WingLogger",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },

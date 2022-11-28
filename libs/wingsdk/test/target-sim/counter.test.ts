@@ -12,11 +12,11 @@ test("create a counter", async () => {
   expect(c.initialValue).toBe(123);
 
   const s = await app.startSimulator();
-  expect(s.getResourceConfig("app/my_counter")).toEqual({
+  expect(s.getResourceConfig("/my_counter")).toEqual({
     attrs: {
       handle: expect.any(String),
     },
-    path: "app/my_counter",
+    path: "root/my_counter",
     props: {
       initialValue: 123,
     },
@@ -36,7 +36,7 @@ test("inc", async () => {
 
   const s = await app.startSimulator();
 
-  const client = s.getResource("app/my_counter") as ICounterClient;
+  const client = s.getResource("/my_counter") as ICounterClient;
 
   const value0 = await client.inc();
   expect(value0).toEqual(123); // always returns the value before inc (like "i++");

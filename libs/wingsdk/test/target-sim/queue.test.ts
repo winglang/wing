@@ -21,11 +21,11 @@ test("create a queue", async () => {
   const s = await app.startSimulator();
 
   // THEN
-  expect(s.getResourceConfig("app/my_queue")).toEqual({
+  expect(s.getResourceConfig("/my_queue")).toEqual({
     attrs: {
       handle: expect.any(String),
     },
-    path: "app/my_queue",
+    path: "root/my_queue",
     props: {
       initialMessages: [],
       subscribers: [],
@@ -49,7 +49,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   queue.onMessage(handler);
   const s = await app.startSimulator();
 
-  const queueClient = s.getResource("app/my_queue") as cloud.IQueueClient;
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
 
   // WHEN
   await queueClient.push("A");
@@ -120,7 +120,7 @@ test("messages are requeued if the function fails", async () => {
   const s = await app.startSimulator();
 
   // WHEN
-  const queueClient = s.getResource("app/my_queue") as cloud.IQueueClient;
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
   await queueClient.push("BAD MESSAGE");
 
   await sleep(300);

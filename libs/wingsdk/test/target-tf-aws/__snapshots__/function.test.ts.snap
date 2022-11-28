@@ -4,24 +4,24 @@ exports[`basic function 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"app_Function_IamRole_56665C88\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"app_Function_IamRolePolicy_BD322466\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"app_Function_IamRolePolicyAttachment_B4E996A7\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"app_Function_C48386A8\\": {
+      \\"root_Function_9F694E40\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Function\\"
@@ -29,18 +29,18 @@ exports[`basic function 1`] = `
         },
         \\"function_name\\": \\"Function\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.app_Function_Bucket_1EEC349E.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.app_Function_S3Object_3291715D.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"app_Function_Bucket_1EEC349E\\": {}
+      \\"root_Function_Bucket_8CDD903C\\": {}
     },
     \\"aws_s3_object\\": {
-      \\"app_Function_S3Object_3291715D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.app_Function_Bucket_1EEC349E.bucket}\\",
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -53,24 +53,24 @@ exports[`basic function with environment variables 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"app_Function_IamRole_56665C88\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"app_Function_IamRolePolicy_BD322466\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"app_Function_IamRolePolicyAttachment_B4E996A7\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"app_Function_C48386A8\\": {
+      \\"root_Function_9F694E40\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"BOOM\\": \\"BAM\\",
@@ -80,18 +80,18 @@ exports[`basic function with environment variables 1`] = `
         },
         \\"function_name\\": \\"Function\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.app_Function_IamRole_56665C88.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.app_Function_Bucket_1EEC349E.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.app_Function_S3Object_3291715D.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"app_Function_Bucket_1EEC349E\\": {}
+      \\"root_Function_Bucket_8CDD903C\\": {}
     },
     \\"aws_s3_object\\": {
-      \\"app_Function_S3Object_3291715D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.app_Function_Bucket_1EEC349E.bucket}\\",
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }

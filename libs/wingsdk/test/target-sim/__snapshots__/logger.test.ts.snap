@@ -6,16 +6,16 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "app/WingLogger",
+        "path": "root/WingLogger",
         "props": Object {},
         "type": "wingsdk.cloud.Logger",
       },
       Object {
         "attrs": Object {},
-        "path": "app/my_function",
+        "path": "root/my_function",
         "props": Object {
           "environmentVariables": Object {
-            "LOGGER_HANDLE_33143f6f": "\${app/WingLogger#attrs.handle}",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
@@ -31,7 +31,7 @@ Object {
         "WingLogger": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [
-              "app/my_function",
+              "root/my_function",
             ],
             "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
@@ -41,13 +41,13 @@ Object {
             "version": "10.0.25",
           },
           "id": "WingLogger",
-          "path": "app/WingLogger",
+          "path": "root/WingLogger",
         },
         "my_function": Object {
           "attributes": Object {
             "wing:resource:inbound": Array [],
             "wing:resource:outbound": Array [
-              "app/WingLogger",
+              "root/WingLogger",
             ],
             "wing:resource:stateful": false,
           },
@@ -58,7 +58,7 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Code",
-              "path": "app/my_function/Code",
+              "path": "root/my_function/Code",
             },
           },
           "constructInfo": Object {
@@ -66,15 +66,15 @@ Object {
             "version": "10.0.25",
           },
           "id": "my_function",
-          "path": "app/my_function",
+          "path": "root/my_function",
         },
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
         "version": "10.0.25",
       },
-      "id": "app",
-      "path": "app",
+      "id": "root",
+      "path": "root",
     },
     "version": "tree-0.1",
   },

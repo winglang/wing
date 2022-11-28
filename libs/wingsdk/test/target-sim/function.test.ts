@@ -32,11 +32,11 @@ test("create a function", async () => {
 
   // THEN
   const s = await app.startSimulator();
-  expect(s.getResourceConfig("app/my_function")).toEqual({
+  expect(s.getResourceConfig("/my_function")).toEqual({
     attrs: {
       handle: expect.any(String),
     },
-    path: "app/my_function",
+    path: "root/my_function",
     props: {
       sourceCodeFile: expect.any(String),
       sourceCodeLanguage: "javascript",
@@ -62,7 +62,7 @@ test("invoke function succeeds", async () => {
 
   const s = await app.startSimulator();
 
-  const client = s.getResource("app/my_function") as cloud.IFunctionClient;
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -95,7 +95,7 @@ test("invoke function with environment variables", async () => {
 
   const s = await app.startSimulator();
 
-  const client = s.getResource("app/my_function") as cloud.IFunctionClient;
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -127,7 +127,7 @@ test("invoke function fails", async () => {
   new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
 
-  const client = s.getResource("app/my_function") as cloud.IFunctionClient;
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "alice" };

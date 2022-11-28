@@ -8,11 +8,11 @@ test("create a bucket", async () => {
 
   // THEN
   const s = await app.startSimulator();
-  expect(s.getResourceConfig("app/my_bucket")).toEqual({
+  expect(s.getResourceConfig("/my_bucket")).toEqual({
     attrs: {
       handle: expect.any(String),
     },
-    path: "app/my_bucket",
+    path: "root/my_bucket",
     props: {
       public: false,
     },
@@ -29,7 +29,7 @@ test("put and get objects from bucket", async () => {
   new cloud.Bucket(app, "my_bucket");
 
   const s = await app.startSimulator();
-  const client = s.getResource("app/my_bucket") as cloud.IBucketClient;
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
   const KEY = "greeting.txt";
   const VALUE = JSON.stringify({ msg: "Hello world!" });
@@ -58,7 +58,7 @@ test("put multiple objects and list all from bucket", async () => {
 
   const s = await app.startSimulator();
 
-  const client = s.getResource("app/my_bucket") as cloud.IBucketClient;
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
   const KEY1 = "greeting1.txt";
   const KEY2 = "greeting2.txt";
   const KEY3 = "greeting3.txt";
@@ -94,7 +94,7 @@ test("get invalid object throws an error", async () => {
 
   const s = await app.startSimulator();
 
-  const client = s.getResource("app/my_bucket") as cloud.IBucketClient;
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
 
   // THEN
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();

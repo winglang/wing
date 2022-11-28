@@ -57,9 +57,7 @@ test("pushing messages through a queue", async () => {
 
   const s = await app.startSimulator();
 
-  const pusher = s.getResource(
-    "app/HelloWorld/Function"
-  ) as cloud.IFunctionClient;
+  const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
 
   // WHEN
   await pusher.invoke("foo");
@@ -70,14 +68,14 @@ test("pushing messages through a queue", async () => {
   expect(s.listTraces().filter((t) => t.type === TraceType.LOG)).toEqual([
     {
       data: { message: "Hello, world!" },
-      sourcePath: "app/HelloWorld/Function",
+      sourcePath: "root/HelloWorld/Function",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "app/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      sourcePath: "root/HelloWorld/Queue/OnMessage-004546ee82d97e73",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",
