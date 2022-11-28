@@ -8,7 +8,7 @@
     "dist/"
   ],
   "engines": {
-    "node": "^v18.0.0"
+    "node": ">=v18.0.0"
   },
   "bin": "bin/wing",
   "repository": {
