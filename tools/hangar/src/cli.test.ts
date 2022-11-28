@@ -126,7 +126,7 @@ test.each(validWingFiles)(
       });
       for (const irFile in dotWingFiles) {
         if (dotWingFiles[irFile].isFile()) {
-          expect(fs.readFileSync(irFile)).toMatchSnapshot(
+          expect(fs.readFileSync(irFile, 'utf8')).toMatchSnapshot(
             path.basename(irFile)
           );
         }
