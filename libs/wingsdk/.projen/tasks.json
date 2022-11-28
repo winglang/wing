@@ -103,10 +103,10 @@
       "description": "Only compile",
       "steps": [
         {
-          "exec": "tsc -p tsconfig.nonjsii.json"
+          "exec": "jsii --silence-warnings=reserved-word"
         },
         {
-          "exec": "jsii --silence-warnings=reserved-word"
+          "exec": "tsc -p tsconfig.nonjsii.json"
         }
       ]
     },

@@ -122,7 +122,7 @@ const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
     exclude: ["node_modules"],
   },
 });
-project.compileTask.prependExec(`tsc -p ${tsconfigNonJsii.path}`);
+project.compileTask.exec(`tsc -p ${tsconfigNonJsii.path}`);
 
 enum Zone {
   PREFLIGHT = "preflight",
