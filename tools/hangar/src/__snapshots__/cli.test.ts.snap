@@ -35,7 +35,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
       },
     },
@@ -61,6 +61,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
         },
         "environment": {
           "variables": {
+            "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "WING_FUNCTION_NAME": "cloud.Function",
@@ -75,6 +76,14 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_s3_bucket": {
+      "root_PrivateBucket_82B4DCC5": {
+        "//": {
+          "metadata": {
+            "path": "root/PrivateBucket/Default",
+            "uniqueId": "root_PrivateBucket_82B4DCC5",
+          },
+        },
+      },
       "root_PublicBucket_73AE6C59": {
         "//": {
           "metadata": {
@@ -113,6 +122,19 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_s3_bucket_public_access_block": {
+      "root_PrivateBucket_PublicAccessBlock_DB813250": {
+        "//": {
+          "metadata": {
+            "path": "root/PrivateBucket/PublicAccessBlock",
+            "uniqueId": "root_PrivateBucket_PublicAccessBlock_DB813250",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
       "root_cloudBucket_PublicAccessBlock_319C1C2E": {
         "//": {
           "metadata": {
@@ -128,6 +150,22 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_PrivateBucket_Encryption_F9F2144A": {
+        "//": {
+          "metadata": {
+            "path": "root/PrivateBucket/Encryption",
+            "uniqueId": "root_PrivateBucket_Encryption_F9F2144A",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
       "root_PublicBucket_Encryption_FB9A8400": {
         "//": {
           "metadata": {
@@ -178,10 +216,10 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
 `;
 
 exports[`wing compile captures.w > index.js 1`] = `
-"async function $proc({ bucket1, bucket2 }, event) {
+"async function $proc({ bucket1, bucket2, bucket3 }, event) {
   bucket1.put(\\"file.txt\\",\\"data\\");
   bucket2.get(\\"file.txt\\");
-  bucket2.get(\\"file2.txt\\");
+  bucket3.get(\\"file2.txt\\");
 };"
 `;
 
@@ -227,8 +265,9 @@ constructor() {
   let bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
   \\"public\\": true,}
   );
+  let bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
   const handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.3c27dff7ec53a218a4ca25351afb11c1b197f7bc0fcb9bf4545272c39f486879/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2466c5655ab66e5930126277bf4c2b61edf1cefecd91d11cfb003e8e3854bdb5/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
       bucket1: {
@@ -237,6 +276,10 @@ constructor() {
       },
       bucket2: {
         resource: bucket2,
+        methods: [\\"get\\",\\"list\\",\\"put\\"]
+      },
+      bucket3: {
+        resource: bucket3,
         methods: [\\"get\\",\\"list\\",\\"put\\"]
       },
     }
@@ -600,8 +643,8 @@ constructor() {
   super({ outdir: $outdir, name: \\"file_counter\\" });
   
   let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  let counter = new cloud.Counter(this,\\"cloud.Counter\\");
-  let queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  let counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial_value: 100 });
+  let queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.core.Duration.fromSeconds(10) });
   const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.86754ece6e35adfd186315aa4bfcf647f5f280df200188741606e0383871bfc3/index.js\\")),
     entrypoint: \\"$proc\\",
