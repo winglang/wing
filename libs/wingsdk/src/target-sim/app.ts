@@ -17,13 +17,13 @@ import { isSimResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 
 /**
- * Path of the simulator configuration file in every .wx tarball.
+ * Path of the simulator configuration file in every .wsim tarball.
  */
 export const SIMULATOR_FILE_PATH = "simulator.json";
 
 /**
  * A construct that knows how to synthesize simulator resources into a
- * Wing simulator (.wx) file.
+ * Wing simulator (.wsim) file.
  */
 export class App extends Construct implements IApp {
   /**
@@ -41,8 +41,8 @@ export class App extends Construct implements IApp {
   }
 
   /**
-   * Synthesize the app. This creates a tree.json file and a .wx file in the
-   * app's outdir, and returns a path to the .wx file.
+   * Synthesize the app. This creates a tree.json file and a .wsim file in the
+   * app's outdir, and returns a path to the .wsim file.
    */
   public synth(): string {
     const workdir = mkdtemp();
@@ -53,8 +53,8 @@ export class App extends Construct implements IApp {
     // write simulator.json file into workdir
     this.synthSimulatorFile(workdir);
 
-    // tar + gzip the workdir, and write it as a .wx file to the outdir
-    const filename = `${this.node.path}.wx`;
+    // tar + gzip the workdir, and write it as a .wsim file to the outdir
+    const filename = `${this.node.path}.wsim`;
     const simfile = path.join(this.outdir, filename);
     tar.create(
       {

@@ -2,7 +2,7 @@
 
 exports[`create a bucket 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -46,7 +46,7 @@ Object {
 
 exports[`get invalid object throws an error 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -90,7 +90,7 @@ Object {
 
 exports[`put and get objects from bucket 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -134,7 +134,7 @@ Object {
 
 exports[`put multiple objects and list all from bucket 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},

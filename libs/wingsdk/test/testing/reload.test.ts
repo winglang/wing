@@ -6,7 +6,7 @@ import { mkdtemp } from "../../src/util";
 test("reloading the simulator updates the state of the tree", async () => {
   let workdir = mkdtemp();
 
-  // Create a .wx file
+  // Create a .wsim file
   const app = new sim.App({ outdir: workdir });
   new cloud.Bucket(app, "my_bucket", { public: false });
   const simfile = app.synth();
@@ -16,7 +16,7 @@ test("reloading the simulator updates the state of the tree", async () => {
   await s.start();
   expect(s.getResourceConfig("app/my_bucket").props.public).toEqual(false);
 
-  // Update the .wx file in-place
+  // Update the .wsim file in-place
   const app2 = new sim.App({ outdir: workdir });
   new cloud.Bucket(app2, "my_bucket", { public: true });
   app2.synth();

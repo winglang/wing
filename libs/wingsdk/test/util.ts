@@ -50,7 +50,7 @@ export function directorySnapshot(root: string) {
         if (extname(f) === ".json") {
           const data = readFileSync(abspath, "utf-8");
           snapshot[relpath] = JSON.parse(data);
-        } else if (extname(f) === ".wx") {
+        } else if (extname(f) === ".wsim") {
           const workdir = mkdtemp();
           tar.extract({
             cwd: workdir,

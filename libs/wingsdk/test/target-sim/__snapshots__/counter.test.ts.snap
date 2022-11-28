@@ -2,7 +2,7 @@
 
 exports[`create a counter 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -46,7 +46,7 @@ Object {
 
 exports[`inc 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},

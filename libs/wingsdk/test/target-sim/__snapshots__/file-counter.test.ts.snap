@@ -2,7 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},

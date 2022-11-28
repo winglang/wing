@@ -2,7 +2,7 @@
 export interface WingSimulatorSchema {
   /** The list of resources. */
   readonly resources: BaseResourceSchema[];
-  /** The version of the Wing SDK used to synthesize the .wx file. */
+  /** The version of the Wing SDK used to synthesize the .wsim file. */
   readonly sdkVersion: string;
 }
 

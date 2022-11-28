@@ -2,7 +2,7 @@
 
 exports[`create a function 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -60,7 +60,7 @@ Object {
 
 exports[`invoke function fails 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -116,7 +116,7 @@ Object {
 
 exports[`invoke function succeeds 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -172,7 +172,7 @@ Object {
 
 exports[`invoke function with environment variables 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},

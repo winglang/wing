@@ -2,7 +2,7 @@
 
 exports[`inflight uses a logger 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},

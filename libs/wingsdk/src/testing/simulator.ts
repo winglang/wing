@@ -13,7 +13,7 @@ import { mkdtemp, readJsonSync } from "../util";
  */
 export interface SimulatorProps {
   /**
-   * Path to a Wing simulator file (.wx).
+   * Path to a Wing simulator file (.wsim).
    */
   readonly simfile: string;
 
@@ -110,7 +110,7 @@ export enum TraceType {
  */
 export interface ISimulatorContext {
   /**
-   * The directory where all assets extracted from `.wx` file are stored
+   * The directory where all assets extracted from `.wsim` file are stored
    * during the simulation run.
    */
   readonly assetsDir: string;
@@ -205,7 +205,7 @@ export class Simulator {
     }
     if (config.resources === undefined) {
       throw new Error(
-        `Incompatible .wx file. The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
+        `Incompatible .wsim file. The simulator file (${simfile}) was generated with Wing SDK v${foundVersion} but it is being simulated with Wing SDK v${expectedVersion}.`
       );
     }
 

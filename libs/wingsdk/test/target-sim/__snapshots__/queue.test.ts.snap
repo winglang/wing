@@ -2,7 +2,7 @@
 
 exports[`create a queue 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -48,7 +48,7 @@ Object {
 
 exports[`messages are requeued if the function fails 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -138,7 +138,7 @@ Object {
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -235,7 +235,7 @@ Object {
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
 Object {
-  "app.wx": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
