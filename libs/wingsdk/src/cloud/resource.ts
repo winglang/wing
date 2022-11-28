@@ -5,6 +5,9 @@ import {
   ICapturable,
   IInspectable,
   TreeInspector,
+  WING_ATTRIBUTE_RESOURCE_INBOUND,
+  WING_ATTRIBUTE_RESOURCE_OUTBOUND,
+  WING_ATTRIBUTE_RESOURCE_STATEFUL,
 } from "../core";
 
 /**
@@ -53,8 +56,8 @@ export abstract class Resource
    * @internal
    */
   public _inspect(inspector: TreeInspector): void {
-    inspector.addAttribute("wing:resource:stateful", this.stateful);
-    inspector.addAttribute("wing:resource:inbound", this._inbound);
-    inspector.addAttribute("wing:resource:outbound", this._outbound);
+    inspector.addAttribute(WING_ATTRIBUTE_RESOURCE_STATEFUL, this.stateful);
+    inspector.addAttribute(WING_ATTRIBUTE_RESOURCE_INBOUND, this._inbound);
+    inspector.addAttribute(WING_ATTRIBUTE_RESOURCE_OUTBOUND, this._outbound);
   }
 }
