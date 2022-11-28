@@ -10,9 +10,12 @@ import debug from "debug";
 import open = require("open");
 
 const PACKAGE_VERSION = require("../package.json").version as string;
+const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
 const log = debug("wing:cli");
 
 async function main() {
+  checkNodeVersion()
+
   const program = new Command();
 
   program.name("wing");
@@ -23,7 +26,6 @@ async function main() {
   program
     .command("run")
     .description("Runs a Wing executable in the Wing Console")
-    .hook('preAction', checkNodeVersion)
     .argument("<executable>", "executable .wx file")
     .action(async (executable: string) => {
       executable = resolve(executable);
@@ -34,7 +36,6 @@ async function main() {
   program
     .command("compile")
     .description("Compiles a Wing program")
-    .hook('preAction', checkNodeVersion)
     .argument("<entrypoint>", "program .w entrypoint")
     .option(
       "-o, --out-dir <out-dir>",
@@ -51,14 +52,13 @@ async function main() {
   program
     .command("upgrade")
     .description("Upgrades the Wing toolchain to the latest version")
-    .hook('preAction', checkNodeVersion)
     .action(() => upgrade({ force: true }));
 
   program.parse();
 }
 
 function checkNodeVersion(){
-  const supportedVersion = "^v18.0.0"
+  const supportedVersion = SUPPORTED_NODE_VERSION
 
   if(!satisfies(process.version, supportedVersion)){
     console.log(`WARN: You are running node ${process.version} please change to ${supportedVersion}`)
