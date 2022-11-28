@@ -21,13 +21,13 @@ struct Capture {
 	pub def: CaptureDef,
 }
 
-pub type Captures = BTreeMap<Symbol, BTreeSet<CaptureDef>>;
+pub type Captures = BTreeMap<String, BTreeSet<CaptureDef>>;
 
 fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 	let mut captures: Captures = BTreeMap::new();
 	for capture in capture_list {
 		captures
-			.entry(capture.object)
+			.entry(capture.object.name)
 			.or_insert(BTreeSet::new())
 			.insert(capture.def);
 	}

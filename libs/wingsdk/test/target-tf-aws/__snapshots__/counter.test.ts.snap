@@ -2,7 +2,7 @@
 
 exports[`counter captured by a function 1`] = `
 "const $cap = {};
-$cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME__Counter\\"], 0);
+$cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0);
 async function $proc($cap, event) {
           const val = await $cap.my_counter.inc(2);
           console.log(val);
@@ -49,7 +49,7 @@ exports[`counter captured by a function 2`] = `
       \\"root_Function_9F694E40\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"DYNAMODB_TABLE_NAME__Counter\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
+            \\"DYNAMODB_TABLE_NAME_6cb5a3a4\\": \\"\${aws_dynamodb_table.root_Counter_2358A01E.name}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function\\"
           }
         },

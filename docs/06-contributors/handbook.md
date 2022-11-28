@@ -132,17 +132,17 @@ Here is an example of adding a package named "fast-json-stringify" pinned to maj
 
 A resource in the SDK has several parts:
 
-* A preflight [polycon](https://github.com/winglang/polycons) API that is shared across all cloud targets. Resource polycons are defined in `src/cloud`. For example, [`src/cloud/bucket.ts`](./libs/wingsdk/src/cloud/bucket.ts).
+* A preflight [polycon](https://github.com/winglang/polycons) API that is shared across all cloud targets. Resource polycons are defined in `src/cloud`. For example, [`src/cloud/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/cloud/bucket.ts).
 * An interface representing the inflight API common across all cloud targets. By convention, if the resource is named like `Gizmo`, the inflight interface should be named `IGizmoClient`. This is usually in the same file as the preflight API.
 * A simulator implementation in `src/sim`. This includes:
-  * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema-resources.ts`](./libs/wingsdk/src/sim/schema-resources.ts).
-  * A class that implements the polycon API and can produce the resource's simulation schema. For example, [`src/sim/bucket.ts`](./libs/wingsdk/src/sim/bucket.ts).
-  * An class that implements the inflight API and can simulate the resource. For example, [`src/sim/bucket.sim.ts`](./libs/wingsdk/src/sim/bucket.sim.ts).
-  * Unit tests for the simulator implementation. For example, [`test/sim/bucket.test.ts`](./libs/wingsdk/test/sim/bucket.test.ts).
+  * A schema with information to simulate the resource and display the resource in the Wing console. Currently these are in [`src/sim/schema-resources.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/sim/schema-resources.ts).
+  * A class that implements the polycon API and can produce the resource's simulation schema. For example, [`src/sim/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/sim/bucket.ts).
+  * An class that implements the inflight API and can simulate the resource. For example, [`src/sim/bucket.sim.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/sim/bucket.sim.ts).
+  * Unit tests for the simulator implementation. For example, [`test/sim/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/sim/bucket.test.ts).
 * An implementation for each target cloud (currently just AWS). This includes:
-  * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](./libs/wingsdk/src/tf-aws/bucket.ts).
-  * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/tf-aws/bucket.inflight.ts`](./libs/wingsdk/src/tf-aws/bucket.inflight.ts).
-  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](./libs/wingsdk/test/tf-aws/bucket.test.ts) and [`test/tf-aws/capture.test.ts`](./libs/wingsdk/test/tf-aws/captures.test.ts).
+  * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.ts).
+  * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/tf-aws/bucket.inflight.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts).
+  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/bucket.test.ts) and [`test/tf-aws/capture.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/captures.test.ts).
   * (TODO) Integration tests for the cloud infrastructure.
 
 If you are implementing a new resource, or implementing an existing resource for a new cloud provider, try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
@@ -294,3 +294,28 @@ Please review it before contributing issues, pull requests, or joining the [Wing
 Come on down and hang out in the [Wing Slack]! We're a friendly bunch and we'd love to help you out. There are no stupid questions, so don't be afraid to ask! Don't forget to introduce yourself in the [#intro](https://winglang.slack.com/archives/C048QDSMC7L) channel.
 
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+
+## 📕 How do I update documentation
+
+Our documentation lives under the [`docs`](https://github.com/winglang/wing/tree/main/docs) directory 
+of the Wing GitHub repository. 
+
+To propose an update to the docs, simply submit a pull request against the
+relevant markdown file.
+
+## 📕 Can I view the local documentation website on my machine?
+
+Yes, you can! We use the awesome [Docusaurus](https://docusaurus.io/) project
+for our docs.
+
+To start the documentation website, run the following command from the root of
+the repo:
+
+```sh
+npm run docs
+```
+
+This magical script will clone the
+[winglang/docsite](https://github.com/winglang/docsite) repository into
+`~/.winglang-docsite`, symlink your local copy into it and start a browser with
+the site.
