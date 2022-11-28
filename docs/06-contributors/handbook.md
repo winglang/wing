@@ -197,20 +197,19 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 ## 🧪 How do I run E2E tests?
 
-The [Hangar](./tools/hangar) project hosts our E2E tests. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
-
-Add a `.env` file to `tools/hangar` with the following:
-
-```env
-NPM_TOKEN=<GitHub PAT with access to @winglang packages>
-```
-
-This allows spun-up registry to pull down @winglang/polycons from the private github registry.
-
-To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
+The [Hangar](./tools/hangar) project hosts our E2E tests. To get started, first
+[build Wing](#🔨-how-do-i-build-wing-locally).
 
 ```sh
-npx nx test
+npm run build
+```
+
+To run the tests (and update snapshots), run the following commands from the
+root of the Hangar project:
+
+```sh
+cd tools/hangar
+npm run test
 ```
 
 ## 🧬 What is an RFC?

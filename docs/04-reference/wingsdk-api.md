@@ -904,7 +904,7 @@ state_file: str;
 The path to a state file which will track all synthesized files.
 
 If a
-statefile is not specified, we won't be able to remove extrenous files.
+statefile is not specified, we won't be able to remove extraneous files.
 
 ---
 
@@ -2060,7 +2060,7 @@ Put an object in the bucket.
 
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.ICapturable, core.ICapturableConstruct
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, core.FileBase, core.Resource, fs.JsonFile, fs.TextFile, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.ICapturable, core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 

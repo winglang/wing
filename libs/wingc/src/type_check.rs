@@ -1265,8 +1265,8 @@ impl<'a> TypeChecker<'a> {
 	) {
 		// Create a new env for the imported module's namespace
 		let mut namespace_env = TypeEnv::new(None, None, false, env.flight, statement_idx);
-		// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
-		if module_name.name == "cloud" {
+		// TODO Hack: treat "cloud", "fs" and "core" as "xxx in wingsdk" until I figure out the path issue
+		if module_name.name == "cloud" || module_name.name == "fs" || module_name.name == "core" {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,

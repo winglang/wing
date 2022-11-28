@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code } from "../core";
-import { Resource } from "./resource";
+import { CaptureMetadata, Code, Resource } from "../core";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);

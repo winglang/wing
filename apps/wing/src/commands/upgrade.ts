@@ -17,8 +17,7 @@ export async function upgrade(options: IUpdateOptions) {
   const { force } = options;
 
   log("checking for updates...");
-  // eval is because "update-notifier" is an ESM package and we're CommonJS.
-  const updateNotifier = await eval('import("update-notifier")');
+  const updateNotifier = await import("update-notifier");
   const notifier = updateNotifier.default({
     updateCheckInterval: DEFAULT_UPDATE_RATE,
     pkg: PJSON,

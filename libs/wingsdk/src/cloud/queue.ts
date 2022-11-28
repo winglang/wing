@@ -1,8 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Duration, Inflight } from "../core";
+import { CaptureMetadata, Code, Duration, Inflight, Resource } from "../core";
 import { Function, FunctionProps } from "./function";
-import { Resource } from "./resource";
 
 /**
  * Global identifier for `Queue`.

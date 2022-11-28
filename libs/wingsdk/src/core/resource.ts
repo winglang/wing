@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { CaptureMetadata, Code, ICapturable } from "../core";
+import type { CaptureMetadata, ICapturable, Code } from "./inflight";
 
 /**
  * Shared behavior between all Wing SDK resources.
@@ -14,6 +14,7 @@ export abstract class Resource extends Construct implements ICapturable {
    * with a fresh copy without any consequences.
    */
   public abstract readonly stateful: boolean;
+
   /**
    * @internal
    */

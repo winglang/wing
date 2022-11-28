@@ -1,7 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Inflight } from "../core";
-import { Resource } from "./resource";
+import { CaptureMetadata, Code, Inflight, Resource } from "../core";
 
 /**
  * Global identifier for `Function`.
