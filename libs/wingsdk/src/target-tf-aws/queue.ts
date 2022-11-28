@@ -44,8 +44,8 @@ export class Queue extends cloud.QueueBase {
     });
 
     const fn = new cloud.Function(
-      this,
-      `OnMessage-${newInflight.code.hash.slice(0, 16)}`,
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${newInflight.code.hash.slice(0, 16)}`,
       newInflight,
       props
     );
