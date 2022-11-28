@@ -9,7 +9,8 @@ let bucket3 = new cloud.Bucket(public: false) as "PrivateBucket";
 inflight handler(event: str): str {
   bucket1.put("file.txt", "data");
   bucket2.get("file.txt");
-  bucket3.get("file2.txt");
+  bucket2.get("file2.txt");
+  bucket3.get("file3.txt");
 }
 
 new cloud.Function(

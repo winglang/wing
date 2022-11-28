@@ -219,7 +219,8 @@ exports[`wing compile captures.w > index.js 1`] = `
 "async function $proc({ bucket1, bucket2, bucket3 }, event) {
   bucket1.put(\\"file.txt\\",\\"data\\");
   bucket2.get(\\"file.txt\\");
-  bucket3.get(\\"file2.txt\\");
+  bucket2.get(\\"file2.txt\\");
+  bucket3.get(\\"file3.txt\\");
 };"
 `;
 
@@ -267,7 +268,7 @@ constructor() {
   );
   let bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
   const handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2466c5655ab66e5930126277bf4c2b61edf1cefecd91d11cfb003e8e3854bdb5/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.fbe8390dfb806ebb9cf6fb068b954cc08fea3056e20a3e69ee8e07cbc86449bf/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
       bucket1: {
