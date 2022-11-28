@@ -134,13 +134,8 @@ fn jsify_symbol(symbol: &Symbol) -> String {
 }
 
 fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> String {
-	if !arg_list.pos_args.is_empty() && !arg_list.named_args.is_empty() {
-		// TODO?
-		// JS doesn't support named args, this is probably to pass props to a construct. Can't mix that with positional args.
-		panic!("Cannot use positional and named arguments in the same call");
-	}
-
 	let mut args = vec![];
+	let mut structure_args = vec![];
 
 	if let Some(scope_str) = scope {
 		args.push(scope_str.to_string());
@@ -150,18 +145,22 @@ fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> 
 		args.push(format!("\"{}\"", id_str));
 	}
 
-	if !arg_list.pos_args.is_empty() || !args.is_empty() {
-		for arg in arg_list.pos_args.iter() {
-			args.push(jsify_expression(arg));
-		}
-		return args.join(",");
-	} else if !arg_list.named_args.is_empty() {
-		for arg in arg_list.named_args.iter() {
-			args.push(format!("{}: {}", arg.0.name, jsify_expression(arg.1)));
-		}
-		return format!("{{{}}}", args.join(","));
+	for arg in arg_list.pos_args.iter() {
+		args.push(jsify_expression(arg));
+	}
+
+	for arg in arg_list.named_args.iter() {
+		structure_args.push(format!("{}: {}", arg.0.name, jsify_expression(arg.1)));
+	}
+
+	if !structure_args.is_empty() {
+		args.push(format!("{{ {} }}", structure_args.join(", ")));
+	}
+
+	if args.is_empty() {
+		"".to_string()
 	} else {
-		return "".to_string();
+		args.join(",")
 	}
 }
 

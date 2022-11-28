@@ -118,9 +118,11 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, s
 		}
 	}
 
-	// TODO: named args
 	for arg in args.pos_args.iter() {
 		res.extend(scan_captures_in_expression(&arg, env, statement_idx));
+	}
+	for arg in args.named_args.values() {
+		res.extend(scan_captures_in_expression(arg, env, statement_idx));
 	}
 	res
 }
@@ -134,8 +136,10 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 			obj_scope: _,
 			arg_list,
 		} => {
-			// TODO: named args
 			for e in arg_list.pos_args.iter() {
+				res.extend(scan_captures_in_expression(e, env, statement_idx));
+			}
+			for e in arg_list.named_args.values() {
 				res.extend(scan_captures_in_expression(e, env, statement_idx));
 			}
 		}

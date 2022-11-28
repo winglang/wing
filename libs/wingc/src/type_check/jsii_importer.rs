@@ -4,7 +4,7 @@ use crate::{
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
 	type_check::{type_env::StatementIdx, Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
-	utilities::{camel_case_to_snake_case},
+	utilities::camel_case_to_snake_case,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -234,9 +234,19 @@ impl<'a> JsiiImporter<'a> {
 				if flight == Phase::Inflight {
 					todo!("No support for inflight properties yet");
 				}
+				let base_wing_type = self.type_ref_to_wing_type(&p.type_).unwrap();
+				let is_optional = if let Some(true) = p.optional { true } else { false };
+
+				let wing_type = if is_optional {
+					// TODO Will this create a bunch of duplicate types?
+					self.wing_types.add_type(Type::Optional(base_wing_type))
+				} else {
+					base_wing_type
+				};
+
 				class_env.define(
-					&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
-					self.type_ref_to_wing_type(&p.type_).unwrap(),
+					&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
+					wing_type,
 					StatementIdx::Top,
 				);
 			}
@@ -412,11 +422,13 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn optional_type_to_wing_type(&mut self, jsii_optional_type: &jsii::OptionalValue) -> Option<TypeRef> {
+		let base_type = self.type_ref_to_wing_type(&jsii_optional_type.type_);
 		if let Some(true) = jsii_optional_type.optional {
 			// TODO: we assume Some(false) and None are both non-optional - verify!!
-			panic!("TODO: handle optional types");
+			Some(self.wing_types.add_type(Type::Optional(base_type.unwrap())))
+		} else {
+			base_type
 		}
-		self.type_ref_to_wing_type(&jsii_optional_type.type_)
 	}
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {
