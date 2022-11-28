@@ -21,7 +21,7 @@
         "examples-tests"
       ],
       "options": {
-        "command": "INSTA_UPDATE=always cargo test",
+        "command": "cargo test",
         "cwd": "libs/wingc"
       },
       "configurations": {

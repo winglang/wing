@@ -177,6 +177,14 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
 }
 `;
 
+exports[`wing compile captures.w > index.js 1`] = `
+"async function $proc({ bucket1, bucket2 }, event) {
+  bucket1.put(\\"file.txt\\",\\"data\\");
+  bucket2.get(\\"file.txt\\");
+  bucket2.get(\\"file2.txt\\");
+};"
+`;
+
 exports[`wing compile captures.w > manifest.json 1`] = `
 {
   "stacks": {
@@ -191,6 +199,56 @@ exports[`wing compile captures.w > manifest.json 1`] = `
   },
   "version": "0.13.3",
 }
+`;
+
+exports[`wing compile captures.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"captures\\" });
+  
+  let bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  let bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
+  \\"public\\": true,}
+  );
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.3c27dff7ec53a218a4ca25351afb11c1b197f7bc0fcb9bf4545272c39f486879/index.js\\")),
+    entrypoint: \\"$proc\\",
+    captures: {
+      bucket1: {
+        resource: bucket1,
+        methods: [\\"get\\",\\"list\\",\\"put\\"]
+      },
+      bucket2: {
+        resource: bucket2,
+        methods: [\\"get\\",\\"list\\",\\"put\\"]
+      },
+    }
+  });
+  new cloud.Function(this,\\"cloud.Function\\",handler,{
+  \\"env\\": {
+  
+  },}
+  );
+}
+}
+new MyApp().synth();"
 `;
 
 exports[`wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
@@ -227,6 +285,36 @@ exports[`wing compile expressions_binary_operators.w > manifest.json 1`] = `
 }
 `;
 
+exports[`wing compile expressions_binary_operators.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"expressions_binary_operators\\" });
+  
+  let x = 1;
+  let y = (2 * x);
+  let z = ((x + y) - 1);
+  let xyz = (((y * y) / (x * x)) * z);
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -259,6 +347,37 @@ exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
   },
   "version": "0.13.3",
 }
+`;
+
+exports[`wing compile expressions_string_interpolation.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"expressions_string_interpolation\\" });
+  
+  let regular_string = \\"str\\\\n\\\\\\"\\";
+  let empty_string = \\"\\";
+  let number = 1;
+  let cool_string = \`cool \\\\\\"\\\\\${\${regular_string}}\\\\\\" test\`;
+  let really_cool_string = \`\${number}\${number}\${empty_string}\${empty_string}\\\\n\${cool_string}\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
+}
+}
+new MyApp().synth();"
 `;
 
 exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
@@ -434,6 +553,14 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
 }
 `;
 
+exports[`wing compile file_counter.w > index.js 1`] = `
+"async function $proc({ bucket, counter }, body) {
+  let next = counter.inc();
+  let key = \`myfile-\${\\"hi\\"}.txt\`;
+  bucket.put(key,body);
+};"
+`;
+
 exports[`wing compile file_counter.w > manifest.json 1`] = `
 {
   "stacks": {
@@ -448,6 +575,51 @@ exports[`wing compile file_counter.w > manifest.json 1`] = `
   },
   "version": "0.13.3",
 }
+`;
+
+exports[`wing compile file_counter.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"file_counter\\" });
+  
+  let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  let counter = new cloud.Counter(this,\\"cloud.Counter\\");
+  let queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.86754ece6e35adfd186315aa4bfcf647f5f280df200188741606e0383871bfc3/index.js\\")),
+    entrypoint: \\"$proc\\",
+    captures: {
+      bucket: {
+        resource: bucket,
+        methods: [\\"get\\",\\"list\\",\\"put\\"]
+      },
+      counter: {
+        resource: counter,
+        methods: [\\"inc\\"]
+      },
+    }
+  });
+  queue.onMessage(handler);
+}
+}
+new MyApp().synth();"
 `;
 
 exports[`wing compile forward_decl.w > cdk.tf.json 1`] = `
@@ -482,6 +654,50 @@ exports[`wing compile forward_decl.w > manifest.json 1`] = `
   },
   "version": "0.13.3",
 }
+`;
+
+exports[`wing compile forward_decl.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"forward_decl\\" });
+  
+  class R
+  {
+  constructor() {
+  }
+  f;
+  method2() {
+    this.method1();
+    console.log(\`\${this.f}\`);
+    this.method2();
+  }
+  method1() {
+  }
+  }
+  let x = \\"hi\\";
+  if (true) {
+    console.log(\`\${x}\`);
+    let y = new R(this,\\"R\\");
+  }
+}
+}
+new MyApp().synth();"
 `;
 
 exports[`wing compile hello.w > cdk.tf.json 1`] = `
@@ -637,6 +853,13 @@ exports[`wing compile hello.w > cdk.tf.json 1`] = `
 }
 `;
 
+exports[`wing compile hello.w > index.js 1`] = `
+"async function $proc({ bucket }, message) {
+  bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`);
+  return message;
+};"
+`;
+
 exports[`wing compile hello.w > manifest.json 1`] = `
 {
   "stacks": {
@@ -651,6 +874,46 @@ exports[`wing compile hello.w > manifest.json 1`] = `
   },
   "version": "0.13.3",
 }
+`;
+
+exports[`wing compile hello.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"hello\\" });
+  
+  let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  let queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js\\")),
+    entrypoint: \\"$proc\\",
+    captures: {
+      bucket: {
+        resource: bucket,
+        methods: [\\"get\\",\\"list\\",\\"put\\"]
+      },
+    }
+  });
+  queue.onMessage(handler);
+}
+}
+new MyApp().synth();"
 `;
 
 exports[`wing compile print.w > cdk.tf.json 1`] = `
@@ -792,6 +1055,12 @@ exports[`wing compile print.w > cdk.tf.json 1`] = `
 }
 `;
 
+exports[`wing compile print.w > index.js 1`] = `
+"async function $proc({  }, event) {
+  console.log(event);
+};"
+`;
+
 exports[`wing compile print.w > manifest.json 1`] = `
 {
   "stacks": {
@@ -806,6 +1075,41 @@ exports[`wing compile print.w > manifest.json 1`] = `
   },
   "version": "0.13.3",
 }
+`;
+
+exports[`wing compile print.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"print\\" });
+  
+  let bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  console.log(\\"Hello world!\\");
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js\\")),
+    entrypoint: \\"$proc\\",
+    
+  });
+  new cloud.Function(this,\\"cloud.Function\\",handler);
+}
+}
+new MyApp().synth();"
 `;
 
 exports[`wing compile statements_if.w > cdk.tf.json 1`] = `
@@ -842,6 +1146,35 @@ exports[`wing compile statements_if.w > manifest.json 1`] = `
 }
 `;
 
+exports[`wing compile statements_if.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"statements_if\\" });
+  
+  if (true) {
+    let x = 2;
+  }
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -874,4 +1207,32 @@ exports[`wing compile statements_variable_declarations.w > manifest.json 1`] = `
   },
   "version": "0.13.3",
 }
+`;
+
+exports[`wing compile statements_variable_declarations.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"statements_variable_declarations\\" });
+  
+  let x = 2;
+  let y = x;
+}
+}
+new MyApp().synth();"
 `;
