@@ -55,7 +55,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     this.env[name] = value;
   }
 
-  public toSimulatorSchema(): BaseResourceSchema {
+  public toSimulator(): BaseResourceSchema {
     const schema: FunctionSchema = {
       type: FUNCTION_TYPE,
       path: this.node.path,

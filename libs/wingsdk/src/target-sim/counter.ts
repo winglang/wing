@@ -19,7 +19,7 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
     this.initialValue = props.initialValue ?? 0;
   }
 
-  public toSimulatorSchema(): BaseResourceSchema {
+  public toSimulator(): BaseResourceSchema {
     const schema: CounterSchema = {
       type: cloud.COUNTER_TYPE,
       path: this.node.path,

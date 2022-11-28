@@ -76,7 +76,7 @@ export class App extends Construct implements IApp {
     const resources = new DependencyGraph(this.node)
       .topology()
       .filter(isSimResource)
-      .map((res) => res.toSimulatorSchema());
+      .map((res) => res.toSimulator());
 
     const contents: WingSimulatorSchema = {
       resources,

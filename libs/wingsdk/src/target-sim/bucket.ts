@@ -19,7 +19,7 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
     this.public = props.public ?? false;
   }
 
-  public toSimulatorSchema(): BaseResourceSchema {
+  public toSimulator(): BaseResourceSchema {
     const schema: BucketSchema = {
       type: cloud.BUCKET_TYPE,
       path: this.node.path,

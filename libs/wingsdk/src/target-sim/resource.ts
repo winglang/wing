@@ -9,13 +9,13 @@ export interface ISimulatorResource extends IConstruct {
   /**
    * Convert this resource to a resource schema for the simulator.
    */
-  toSimulatorSchema(): BaseResourceSchema;
+  toSimulator(): BaseResourceSchema;
 }
 
 export function isSimResource(obj: any): obj is ISimulatorResource {
   return (
     typeof obj == "object" &&
-    typeof (obj as ISimulatorResource).toSimulatorSchema === "function"
+    typeof (obj as ISimulatorResource).toSimulator === "function"
   );
 }
 

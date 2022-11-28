@@ -16,7 +16,7 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
     super(scope, id);
   }
 
-  public toSimulatorSchema(): BaseResourceSchema {
+  public toSimulator(): BaseResourceSchema {
     const schema: LoggerSchema = {
       type: cloud.LOGGER_TYPE,
       path: this.node.path,

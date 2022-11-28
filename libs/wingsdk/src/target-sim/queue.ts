@@ -68,7 +68,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     return fn;
   }
 
-  public toSimulatorSchema(): BaseResourceSchema {
+  public toSimulator(): BaseResourceSchema {
     const schema: QueueSchema = {
       type: cloud.QUEUE_TYPE,
       path: this.node.path,
