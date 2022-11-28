@@ -13,7 +13,7 @@ import {
 } from "../core";
 import { mkdtemp } from "../util";
 import { PolyconFactory } from "./factory";
-import { isSimResource } from "./resource";
+import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 
 /**
@@ -75,7 +75,7 @@ export class App extends Construct implements IApp {
   private synthSimulatorFile(outdir: string) {
     const resources = new DependencyGraph(this.node)
       .topology()
-      .filter(isSimResource)
+      .filter(isSimulatorResource)
       .map((res) => res.toSimulator());
 
     const contents: WingSimulatorSchema = {

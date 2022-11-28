@@ -12,7 +12,7 @@ export interface ISimulatorResource extends IConstruct {
   toSimulator(): BaseResourceSchema;
 }
 
-export function isSimResource(obj: any): obj is ISimulatorResource {
+export function isSimulatorResource(obj: any): obj is ISimulatorResource {
   return (
     typeof obj == "object" &&
     typeof (obj as ISimulatorResource).toSimulator === "function"
