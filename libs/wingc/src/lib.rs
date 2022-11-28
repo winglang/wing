@@ -156,66 +156,45 @@ mod sanity {
 		for entry in fs::read_dir(dir).unwrap() {
 			let entry = entry.unwrap();
 			let path = entry.path();
-			if path.extension().unwrap() == "w" {
-				files.push(path);
+			if let Some(ext) = path.extension() {
+				if ext == "w" {
+					files.push(path);
+				}
 			}
 		}
 		files
 	}
 
-	fn snapshot_test(test_dir: &str, expect_failure: bool) {
+	fn compile_test(test_dir: &str, expect_failure: bool) {
 		for test_pathbuf in get_wing_files(test_dir) {
 			let test_file = test_pathbuf.to_str().unwrap();
-			let test_file_name = test_pathbuf.file_stem().unwrap().to_str().unwrap();
 			println!("\n=== {} ===\n", test_file);
 
-			insta::with_settings!({
-				omit_expression => true,
-				prepend_module_to_snapshot => false,
-				description => test_file,
-			}, {
-				let out_dir = format!("{}.out", test_file);
+			let out_dir = format!("{}.out", test_file);
 
-				// reset out_dir
-				let out_dirbuf = PathBuf::from(&out_dir);
-				if out_dirbuf.exists() {
-					fs::remove_dir_all(&out_dirbuf).expect("remove out dir");
-				}
+			// reset out_dir
+			let out_dirbuf = PathBuf::from(&out_dir);
+			if out_dirbuf.exists() {
+				fs::remove_dir_all(&out_dirbuf).expect("remove out dir");
+			}
 
-				let result = compile(test_file, Some(out_dir.as_str()));
-				let mut snapshot = String::new();
+			let result = compile(test_file, Some(out_dir.as_str()));
 
-				if let Err(diagnostics) = result {
-					assert!(expect_failure, "Expected compilation success, but failed");
-
-					insta::assert_debug_snapshot!(format!("invalid_{}", test_file_name), diagnostics);
-				} else {
-					assert!(!expect_failure, "Expected compilation failure, but succeeded");
-
-					let output_files = walkdir::WalkDir::new(out_dir).sort_by_file_name();
-					for file in output_files {
-						if let Ok(file) = file {
-							let path = file.path();
-							if path.is_file() {
-								let file_contents = fs::read_to_string(path).unwrap();
-								snapshot.push_str(&format!("// {}\n{}\n", path.to_str().unwrap(), file_contents));
-							}
-						}
-					}
-
-					insta::assert_snapshot!(format!("valid_{}", test_file_name), snapshot);
-				}
-			});
+			if result.is_err() {
+				assert!(expect_failure, "Expected compilation success, but failed");
+			} else {
+				assert!(!expect_failure, "Expected compilation failure, but succeeded");
+			}
 		}
 	}
 
 	#[test]
 	fn can_compile_valid_files() {
-		snapshot_test("../../examples/tests/valid", false);
+		compile_test("../../examples/tests/valid", false);
 	}
 
 	#[test]
 	fn cannot_compile_invalid_files() {
-		snapshot_test("../../examples/tests/invalid", true);
+		compile_test("../../examples/tests/invalid", true);
 	}
 }
