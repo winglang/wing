@@ -3,7 +3,7 @@ import path from "node:path";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
 import { app, BrowserWindow, dialog, Menu, shell } from "electron";
-import console from "electron-log";
+import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import express from "express";
 import getPort from "get-port";
@@ -18,11 +18,20 @@ import { Simulator } from "./wingsdk.js";
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const chokidar = require("chokidar");
 
+log.info("Application entrypoint");
+
 class AppUpdater {
   constructor() {
-    console.transports.file.level = "info";
-    autoUpdater.logger = console;
+    log.info("init auto-updater");
+    log.transports.file.level = "info";
+    autoUpdater.logger = log;
     void autoUpdater.checkForUpdatesAndNotify();
+    autoUpdater.addListener("update-available", () => {
+      log.info("update is available");
+    });
+    autoUpdater.addListener("update-downloaded", () => {
+      log.info("update was downloaded");
+    });
   }
 }
 
@@ -32,6 +41,7 @@ const ROOT_PATH = {
 };
 
 async function createWindow(options?: { title?: string }) {
+  log.info("createWindow", { options });
   await app.whenReady();
 
   const window = new BrowserWindow({
@@ -82,6 +92,7 @@ function createWindowManager() {
       const console = {
         messages: new Array<LogEntry>(),
         log(message: string) {
+          log.info(message);
           this.messages.push({
             timestamp: Date.now(),
             type: "info",
@@ -90,6 +101,7 @@ function createWindowManager() {
           newWindow.webContents.send("invalidate:app.logs");
         },
         error(error: unknown) {
+          log.error(error);
           this.messages.push({
             timestamp: Date.now(),
             type: "error",
@@ -224,10 +236,12 @@ function createWindowManager() {
   };
 }
 
+log.info("Create window manager");
 const windowManager = createWindowManager();
 
 async function main() {
   if (!app.requestSingleInstanceLock()) {
+    log.info("Another instance is already running, exiting");
     app.quit();
     return;
   }
@@ -257,14 +271,14 @@ async function main() {
     shouldShowGetStarted = false;
 
     const filename = url.slice(`${WING_PROTOCOL_SCHEME}://`.length);
-    console.log("open-url", { url, filename });
+    log.info("open-url", { url, filename });
     void windowManager.open(filename);
   });
 
   app.on("open-file", (event, filename) => {
     shouldShowGetStarted = false;
 
-    console.log("open-file", { filename });
+    log.info("open-file", { filename });
     void windowManager.open(filename);
   });
 
@@ -274,7 +288,9 @@ async function main() {
     }
   });
 
+  log.info("waiting for app to be ready...");
   await app.whenReady();
+  log.info("app is ready");
 
   if (process.platform === "darwin") {
     // The default menu from Electron come with very useful items. We're going to reuse everything
@@ -334,4 +350,5 @@ async function main() {
   }
 }
 
+log.info("Application start: main()");
 void main();
