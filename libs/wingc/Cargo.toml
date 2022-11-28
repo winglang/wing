@@ -18,10 +18,6 @@ itertools = "0.10"
 inflections = "1.1.1"
 phf = { version = "0.11", features = ["macros"] }
 
-[dev-dependencies]
-insta = "1.21.0"
-walkdir = "2.3.2"
-
 [lib]
 path = "src/lib.rs"
 

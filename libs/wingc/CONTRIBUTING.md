@@ -8,7 +8,6 @@ and submit pull requests to the GitHub repository.
   - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
     - [Setting up GitHub private packages](#setting-up-github-private-packages)
-    - [Setting up `insta` snapshot tool](#setting-up-insta-snapshot-tool)
   - [Orientation](#orientation)
     - [`src` folder](#src-folder)
   - [Setting up and building the project](#setting-up-and-building-the-project)
@@ -55,28 +54,6 @@ npm login --scope=@winglang --registry=https://npm.pkg.github.com
 ```
 
 See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) for more information.
-
-### Setting up `insta` snapshot tool
-
-Snapshot testing uses [insta](https://insta.rs/) tool to generate and compare snapshots. To install it, run:
-
-```sh
-cargo install cargo-insta
-```
-
-Recommended way to run tests and review snapshot changes:
-
-```sh
-cargo insta test --review
-```
-See https://insta.rs/docs/quickstart/ for more information.
-If you prefer to avoid the `insta` tool, you may set INSTA_UPDATE to `always` to update snapshots without review with a regular cargo test command, or just use nx:
-
-```sh
-npx nx test
-```
-
-otherwise, `cargo test` fails if snapshots are out of date.
 
 ## Orientation
 
