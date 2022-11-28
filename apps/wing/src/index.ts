@@ -60,7 +60,7 @@ async function main() {
 function checkNodeVersion() {
   const supportedVersion = SUPPORTED_NODE_VERSION;
 
-  if(!satisfies(process.version, supportedVersion)){
+  if (!satisfies(process.version, supportedVersion)) {
     console.log(`WARN: You are running node ${process.version} please change to ${supportedVersion}`)
   }
 }
