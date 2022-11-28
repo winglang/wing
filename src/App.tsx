@@ -8,6 +8,7 @@ import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
 import { trpc } from "./utils/trpc.js";
+import { useIpcEventListener } from "./utils/useIpcEventListener.js";
 
 export interface AppProps {
   querySchema?: WingSimulatorSchema;
@@ -18,36 +19,13 @@ export const App = ({ querySchema }: AppProps) => {
   const logs = trpc.useQuery(["app.logs"]);
 
   const { invalidateQueries } = trpc.useContext();
-  useEffect(() => {
-    const invalidate = async () => {
-      console.log("reload");
-      await invalidateQueries("app.tree");
-    };
-    window.electronTRPC?.ipcRenderer.on("reload", invalidate);
-    return () => {
-      window.electronTRPC?.ipcRenderer.removeListener("reload", invalidate);
-    };
-  }, []);
-  useEffect(() => {
-    const invalidate = async () => {
-      console.log("invalidate:app.logs");
-      await invalidateQueries("app.logs");
-    };
-    window.electronTRPC?.ipcRenderer.on("invalidate:app.logs", invalidate);
-    return () => {
-      window.electronTRPC?.ipcRenderer.removeListener(
-        "invalidate:app.logs",
-        invalidate,
-      );
-    };
-  }, []);
+  useIpcEventListener("trpc.invalidate", async (pathAndInput: any) => {
+    await invalidateQueries(pathAndInput);
+  });
 
   return (
     <NotificationsProvider>
-      {querySchema && <VscodeLayout schema={querySchema} />}
-      {schema.data && (
-        <VscodeLayout schema={schema.data} logs={logs.data ?? []} />
-      )}
+      <VscodeLayout schema={querySchema ?? schema.data} logs={logs.data} />
     </NotificationsProvider>
   );
 };

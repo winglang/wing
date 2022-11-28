@@ -1,23 +1,18 @@
-import * as trpc from "@trpc/server";
+import { createRouter } from "../utils/createRouter.js";
+import { WingSimulatorSchema } from "../wingsdk.js";
 
-import { LogEntry } from "../../../src/components/NodeLogs.js";
-import { Simulator, WingSimulatorSchema } from "../wingsdk.js";
-
-export const createAppRouter = (options: {
-  simulator: Simulator;
-  logs: () => LogEntry[];
-}) => {
-  return trpc
-    .router()
+export const createAppRouter = () => {
+  return createRouter()
     .query("app.tree", {
-      async resolve() {
+      async resolve({ ctx }) {
+        const simulator = await ctx.simulator();
         // TODO: Ask Chris to fix the types
-        return options.simulator.tree as WingSimulatorSchema;
+        return simulator.tree as WingSimulatorSchema;
       },
     })
     .query("app.logs", {
-      async resolve() {
-        return options.logs();
+      async resolve({ ctx }) {
+        return ctx.logs();
       },
     });
 };

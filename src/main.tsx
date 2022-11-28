@@ -1,4 +1,5 @@
 import { createTRPCClient } from "@trpc/client";
+import { httpLink } from "@trpc/client/links/httpLink";
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
@@ -20,9 +21,11 @@ const main = ({
   port?: number;
   schema?: WingSimulatorSchema;
 }) => {
+  const url = `http://localhost:${port}`;
   const queryClient = new QueryClient();
   const trpcClient = createTRPCClient<Router>({
-    url: `http://localhost:${port}`,
+    url,
+    links: [httpLink({ url })],
   });
 
   ReactDOM.createRoot(document.querySelector("#root")!).render(
@@ -36,12 +39,11 @@ const main = ({
       </AppContext.Provider>
     </React.StrictMode>,
   );
-
-  document.querySelector("#loader")?.remove();
 };
 
+const query = new URLSearchParams(location.search);
+
 const getSchemaFromQueryString = () => {
-  const query = new URLSearchParams(location.search);
   const base64Schema = query.get("schema");
   try {
     const jsonSchema = atob(base64Schema ?? DemoBase64WingSchema);
@@ -52,16 +54,10 @@ const getSchemaFromQueryString = () => {
 };
 
 if (window.electronTRPC) {
-  window.electronTRPC.ipcRenderer.once(
-    "init",
-    async (event, { port, simfile }) => {
-      main({
-        appMode: "electron",
-        port,
-      });
-    },
-  );
-  window.electronTRPC.ipcRenderer.send("init");
+  main({
+    appMode: "electron",
+    port: Number(query.get("port")),
+  });
 } else {
   // Only in Vercel.
   main({
@@ -69,3 +65,5 @@ if (window.electronTRPC) {
     schema: getSchemaFromQueryString(),
   });
 }
+
+document.querySelector("#loader")?.remove();

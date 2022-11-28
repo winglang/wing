@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { Fragment } from "react";
 
 import {
   ArrowLongRightIcon,
@@ -85,7 +86,7 @@ export const NewNodeRelationshipsView = ({
       </div>
 
       {inbound.map((node, nodeIndex) => (
-        <>
+        <Fragment key={node.path}>
           <div
             className="flex justify-end"
             style={{ gridColumnStart: "1", gridRowStart: `${1 + nodeIndex}` }}
@@ -113,11 +114,11 @@ export const NewNodeRelationshipsView = ({
               </div>
             )}
           </div>
-        </>
+        </Fragment>
       ))}
 
       {outbound.map((node, nodeIndex) => (
-        <>
+        <Fragment key={node.path}>
           <div
             className="flex items-center relative"
             style={{
@@ -151,7 +152,7 @@ export const NewNodeRelationshipsView = ({
           >
             <RelationshipButton node={node} onClick={onClick} />
           </div>
-        </>
+        </Fragment>
       ))}
     </div>
   );

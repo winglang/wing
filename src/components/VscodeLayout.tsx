@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { WingSimulatorSchema } from "../../electron/main/wingsdk.js";
 import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs.js";
+import { SpinnerIcon } from "../design-system/icons/SpinnerIcon.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
@@ -32,7 +33,7 @@ function deduceRelationshipName(nodeType: string) {
 }
 
 export interface VscodeLayoutProps {
-  schema: WingSimulatorSchema | undefined;
+  schema?: WingSimulatorSchema | undefined;
   logs?:
     | {
         timestamp: number;
@@ -148,7 +149,8 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
           onClose={() => setShowBanner(false)}
         />
       )}
-      <div className="flex-1 flex">
+
+      <div className="flex-1 flex relative">
         <RightResizableWidget className="h-full flex flex-col w-60 min-w-[20rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu
             title="Explorer"
@@ -192,6 +194,7 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
                   <div className="flex-1 bg-white min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
                     {childRelationships.map((relationship) => (
                       <NewNodeRelationshipsView
+                        key={relationship.node.id}
                         node={{
                           id: relationship.node.id,
                           path: relationship.node.path,
@@ -256,6 +259,12 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
             </LeftResizableWidget>
           </div>
         </div>
+
+        {!schema && (
+          <div className="absolute inset-0 bg-white/75 z-10 flex justify-around items-center">
+            <SpinnerIcon className="w-8 h-8 text-slate-200 animate-spin dark:text-slate-600 fill-sky-600" />
+          </div>
+        )}
       </div>
 
       <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] flex flex-col gap-2 px-4 py-2">

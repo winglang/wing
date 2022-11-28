@@ -1,5 +1,6 @@
-import { ipcRenderer } from "electron";
 import { useEffect } from "react";
+
+const ipcRenderer = window.electronTRPC?.ipcRenderer;
 
 export interface IpcEventListenerOptions {
   immediate?: boolean;
@@ -7,18 +8,18 @@ export interface IpcEventListenerOptions {
 
 export function useIpcEventListener(
   channel: string,
-  callback: () => any,
+  listener: (...args: any[]) => any,
   options?: IpcEventListenerOptions,
 ) {
   useEffect(() => {
-    ipcRenderer.on(channel, () => callback());
+    ipcRenderer?.on(channel, listener);
 
     if (options?.immediate) {
-      callback();
+      void listener();
     }
 
     return () => {
-      ipcRenderer.removeAllListeners(channel);
+      ipcRenderer?.removeListener(channel, listener);
     };
   }, []);
 }

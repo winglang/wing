@@ -12,7 +12,7 @@ import { LogEntry } from "../../src/components/NodeLogs.js";
 
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeRouters } from "./router/index.js";
-import { Simulator } from "./wingsdk.js";
+import { createSimulator } from "./utils/createSimulator.js";
 
 // Chokidar is a CJS-only module and doesn't play well with ESM imports.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -40,12 +40,12 @@ const ROOT_PATH = {
   public: path.join(__dirname, "../.."),
 };
 
-async function createWindow(options?: { title?: string }) {
+async function createWindow(options: { title?: string; port: number }) {
   log.info("createWindow", { options });
   await app.whenReady();
 
   const window = new BrowserWindow({
-    title: options?.title ?? "Get Started",
+    title: options.title ?? "Get Started",
     icon: path.join(ROOT_PATH.public, "icon.ico"),
     minWidth: 640,
     minHeight: 480,
@@ -57,10 +57,16 @@ async function createWindow(options?: { title?: string }) {
   });
 
   if (import.meta.env.DEV && process.env.VITE_DEV_SERVER_URL) {
-    void window.loadURL(process.env.VITE_DEV_SERVER_URL);
+    void window.loadURL(
+      `${process.env.VITE_DEV_SERVER_URL}?port=${options.port}`,
+    );
     window.webContents.openDevTools();
   } else {
-    void window.loadFile(path.join(ROOT_PATH.dist, "index.html"));
+    void window.loadFile(path.join(ROOT_PATH.dist, "index.html"), {
+      query: {
+        port: options.port.toString(),
+      },
+    });
   }
 
   return window;
@@ -82,13 +88,7 @@ function createWindowManager() {
         return window;
       }
 
-      const newWindow = await createWindow({
-        title: path.basename(simfile),
-      });
-      newWindow.setRepresentedFilename(simfile);
-
-      windows.set(simfile, newWindow);
-
+      let newWindow: BrowserWindow | undefined;
       const console = {
         messages: new Array<LogEntry>(),
         log(message: string) {
@@ -98,7 +98,7 @@ function createWindowManager() {
             type: "info",
             message,
           });
-          newWindow.webContents.send("invalidate:app.logs");
+          newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
         error(error: unknown) {
           log.error(error);
@@ -108,33 +108,41 @@ function createWindowManager() {
             message:
               error instanceof Error ? error.message : JSON.stringify(error),
           });
-          newWindow.webContents.send("invalidate:app.logs");
+          newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
       };
 
-      const simulator = new Simulator({
-        simfile,
-      });
-
-      // Start the simulator but don't wait for it, yet.
       console.log("Starting the simulator...");
-      const simulatorStart = simulator.start();
+      const simulator = createSimulator({
+        simulator: {
+          simfile,
+        },
+        onError(error) {
+          console.error(error);
+        },
+      });
 
       // Create the express server and router for the simulator. Start
       // listening but don't wait for it, yet.
       console.log("Starting the dev server...");
-      const server = (async () => {
+      const server = await (async () => {
         const app = express();
         app.use(cors());
         app.use(
           "/",
           trpcExpress.createExpressMiddleware({
-            router: mergeRouters({
-              simulator,
-              logs() {
-                return console.messages;
-              },
-            }),
+            router: mergeRouters(),
+            batching: { enabled: false },
+            createContext() {
+              return {
+                async simulator() {
+                  return simulator.get();
+                },
+                logs() {
+                  return console.messages;
+                },
+              };
+            },
           }),
         );
 
@@ -148,6 +156,14 @@ function createWindowManager() {
         return { port, server };
       })();
 
+      newWindow = await createWindow({
+        title: path.basename(simfile),
+        port: server.port,
+      });
+      newWindow.setRepresentedFilename(simfile);
+
+      windows.set(simfile, newWindow);
+
       // The renderer process will send a message asking
       // for the server port and the name of the file.
       newWindow.webContents.on(
@@ -156,19 +172,6 @@ function createWindowManager() {
           if (channel === "open-external-url") {
             await shell.openExternal(message);
             return;
-          }
-          if (channel === "init") {
-            try {
-              await simulatorStart;
-            } catch (error) {
-              console.error(error);
-              dialog.showErrorBox(
-                "Error starting the simulation",
-                error instanceof Error ? error.message : "Unknown error",
-              );
-            }
-            const { port } = await server;
-            newWindow.webContents.send("init", { port, simfile });
           }
         },
       );
@@ -194,7 +197,7 @@ function createWindowManager() {
             );
           }
           console.log("Reloaded");
-          newWindow.webContents.send("reload");
+          newWindow?.webContents.send("trpc.invalidate", "app.tree");
         })
         .on("unlink", async () => {
           console.log(`File ${simfile} has been removed`);
@@ -207,7 +210,7 @@ function createWindowManager() {
         try {
           await Promise.all([
             watcher.close(),
-            server.then(({ server }) => server.close()),
+            server.server.close(),
             simulator.stop(),
           ]);
         } catch (error) {
@@ -340,7 +343,7 @@ async function main() {
     const installExtension = await import("electron-devtools-installer");
     await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
 
-    await windowManager.open(`${__dirname}/../../../../electron/main/demo.wx`);
+    await windowManager.open(`${__dirname}/../../../../demo/target/index.wx`);
   } else {
     new AppUpdater();
 

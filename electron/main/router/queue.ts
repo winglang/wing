@@ -1,15 +1,15 @@
-import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { Simulator } from "../wingsdk.js";
+import { createRouter } from "../utils/createRouter.js";
 
-export const createQueueRouter = (simulator: Simulator) => {
-  return trpc.router().mutation("queue.push", {
+export const createQueueRouter = () => {
+  return createRouter().mutation("queue.push", {
     input: z.object({
       resourcePath: z.string(),
       message: z.string(),
     }),
-    async resolve({ input }) {
+    async resolve({ input, ctx }) {
+      const simulator = await ctx.simulator();
       const client = simulator.getResourceByPath(input.resourcePath);
       return client.push(input.message);
     },

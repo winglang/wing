@@ -1,20 +1,20 @@
 import fs from "node:fs";
 
-import * as trpc from "@trpc/server";
 import { z } from "zod";
 
-import { IBucketClient, Simulator } from "../wingsdk.js";
+import { createRouter } from "../utils/createRouter.js";
+import { IBucketClient } from "../wingsdk.js";
 
-export const createBucketRouter = (simulator: Simulator) => {
-  return trpc
-    .router()
+export const createBucketRouter = () => {
+  return createRouter()
     .mutation("bucket.put", {
       input: z.object({
         resourcePath: z.string(),
         fileName: z.string(),
         filePath: z.string(),
       }),
-      async resolve({ input }) {
+      async resolve({ input, ctx }) {
+        const simulator = await ctx.simulator();
         const client = simulator.getResourceByPath(
           input.resourcePath,
         ) as IBucketClient;
@@ -28,7 +28,8 @@ export const createBucketRouter = (simulator: Simulator) => {
         resourcePath: z.string(),
         fileName: z.string(),
       }),
-      async resolve({ input }) {
+      async resolve({ input, ctx }) {
+        const simulator = await ctx.simulator();
         const client = simulator.getResourceByPath(
           input.resourcePath,
         ) as IBucketClient;
@@ -40,7 +41,8 @@ export const createBucketRouter = (simulator: Simulator) => {
       input: z.object({
         resourcePath: z.string(),
       }),
-      async resolve({ input }) {
+      async resolve({ input, ctx }) {
+        const simulator = await ctx.simulator();
         const client = simulator.getResourceByPath(
           input.resourcePath,
         ) as IBucketClient;

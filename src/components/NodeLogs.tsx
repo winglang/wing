@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { Fragment } from "react";
 
 export interface LogEntry {
   timestamp: number;
@@ -26,8 +27,8 @@ export const NodeLogs = ({ logs }: NodeLogsProps) => {
       className="grid grid-cols-3 gap-x-4 text-sm"
       style={{ gridTemplateColumns: "max-content max-content 1fr" }}
     >
-      {logs.map((log) => (
-        <>
+      {logs.map((log, logIndex) => (
+        <Fragment key={logIndex}>
           <div className="flex items-center text-slate-500 font-mono text-xs">
             {dateTimeFormat.format(log.timestamp)}
           </div>
@@ -48,7 +49,7 @@ export const NodeLogs = ({ logs }: NodeLogsProps) => {
           </div>
 
           <div>{log.message}</div>
-        </>
+        </Fragment>
       ))}
     </div>
   );
