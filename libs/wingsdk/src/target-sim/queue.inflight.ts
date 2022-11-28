@@ -1,9 +1,9 @@
 import { IFunctionClient, IQueueClient, QUEUE_TYPE } from "../cloud";
 import { ISimulatorContext, TraceType } from "../testing/simulator";
-import { ISimulatable } from "./resource";
+import { ISimulatorResourceInstance } from "./resource";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
 
-export class Queue implements IQueueClient, ISimulatable {
+export class Queue implements IQueueClient, ISimulatorResourceInstance {
   private readonly messages = new Array<string>();
   private readonly subscribers = new Array<QueueSubscriber>();
   private readonly intervalId: NodeJS.Timeout;
@@ -53,7 +53,7 @@ export class Queue implements IQueueClient, ISimulatable {
         }
         const fnClient = this.context.findInstance(
           subscriber.functionHandle!
-        ) as IFunctionClient & ISimulatable;
+        ) as IFunctionClient & ISimulatorResourceInstance;
         if (!fnClient) {
           throw new Error("No function client found");
         }

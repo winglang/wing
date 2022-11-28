@@ -7,10 +7,10 @@ import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
-import { ISimulatable } from "./resource";
+import { ISimulatorResourceInstance } from "./resource";
 import { LoggerSchema } from "./schema-resources";
 
-export class Logger implements ILoggerClient, ISimulatable {
+export class Logger implements ILoggerClient, ISimulatorResourceInstance {
   private readonly logsDir: string;
   private readonly context: ISimulatorContext;
   public constructor(

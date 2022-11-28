@@ -1,9 +1,9 @@
 import { ICounterClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
-import { ISimulatable } from "./resource";
+import { ISimulatorResourceInstance } from "./resource";
 import { CounterSchema } from "./schema-resources";
 
-export class Counter implements ICounterClient, ISimulatable {
+export class Counter implements ICounterClient, ISimulatorResourceInstance {
   private value: number;
   private readonly context: ISimulatorContext;
 

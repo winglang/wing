@@ -2,7 +2,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import { ISimulatable } from "../target-sim";
+import { ISimulatorResourceInstance } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
@@ -123,7 +123,7 @@ export interface ISimulatorContext {
   /**
    * Find a resource simulation by its handle. Throws if the handle isn't valid.
    */
-  findInstance(handle: string): ISimulatable;
+  findInstance(handle: string): ISimulatorResourceInstance;
 
   /**
    * Add a trace. Traces are breadcrumbs of information about resource
@@ -459,11 +459,15 @@ export interface ISimulatorFactory {
   /**
    * Resolve the parameters needed for creating a specific resource simulation.
    */
-  resolve(type: string, props: any, context: ISimulatorContext): ISimulatable;
+  resolve(
+    type: string,
+    props: any,
+    context: ISimulatorContext
+  ): ISimulatorResourceInstance;
 }
 
 class HandleManager {
-  private readonly handles: Map<string, ISimulatable>;
+  private readonly handles: Map<string, ISimulatorResourceInstance>;
   private nextHandle: number;
 
   public constructor() {
@@ -471,13 +475,13 @@ class HandleManager {
     this.nextHandle = 0;
   }
 
-  public allocate(resource: ISimulatable): string {
+  public allocate(resource: ISimulatorResourceInstance): string {
     const handle = `sim-${this.nextHandle++}`;
     this.handles.set(handle, resource);
     return handle;
   }
 
-  public find(handle: string): ISimulatable {
+  public find(handle: string): ISimulatorResourceInstance {
     const instance = this.handles.get(handle);
     if (!instance) {
       throw new Error(`No resource found with handle "${handle}".`);
@@ -485,7 +489,7 @@ class HandleManager {
     return instance;
   }
 
-  public deallocate(handle: string): ISimulatable {
+  public deallocate(handle: string): ISimulatorResourceInstance {
     const instance = this.handles.get(handle);
     if (!instance) {
       throw new Error(`No resource found with handle "${handle}".`);

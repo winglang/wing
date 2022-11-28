@@ -5,14 +5,14 @@ import { Counter } from "./counter.inflight";
 import { Function } from "./function.inflight";
 import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
-import { ISimulatable } from "./resource";
+import { ISimulatorResourceInstance } from "./resource";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   public resolve(
     type: string,
     props: any,
     context: ISimulatorContext
-  ): ISimulatable {
+  ): ISimulatorResourceInstance {
     switch (type) {
       case cloud.BUCKET_TYPE:
         return new Bucket(props, context);

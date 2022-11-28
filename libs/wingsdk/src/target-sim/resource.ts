@@ -22,7 +22,7 @@ export function isSimulatorResource(obj: any): obj is ISimulatorResource {
 /**
  * Shared interface for resource simulations.
  */
-export interface ISimulatable {
+export interface ISimulatorResourceInstance {
   /**
    * Perform any async initialization required by the resource.
    */

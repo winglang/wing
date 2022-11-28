@@ -8,10 +8,10 @@ import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
-import { ISimulatable } from "./resource";
+import { ISimulatorResourceInstance } from "./resource";
 import { FunctionSchema } from "./schema-resources";
 
-export class Function implements IFunctionClient, ISimulatable {
+export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
   private readonly env: Record<string, string>;
   private readonly context: ISimulatorContext;
