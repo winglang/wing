@@ -61,7 +61,7 @@ function checkNodeVersion() {
   const supportedVersion = SUPPORTED_NODE_VERSION;
 
   if (!satisfies(process.version, supportedVersion)) {
-    console.log(`WARN: You are running node ${process.version} please change to ${supportedVersion}`)
+    console.warn(`WARNING: You are running an incompatible node.js version ${process.version}. Compatible engine is: ${supportedVersion}.`)
   }
 }
 
