@@ -10,6 +10,7 @@ import { directorySnapshot, mkdtemp } from "../util";
  * a cloud simulator.
  */
 export class SimApp extends sim.App {
+  private _synthesized: boolean = false;
   constructor() {
     super({ outdir: mkdtemp() });
   }
@@ -20,6 +21,7 @@ export class SimApp extends sim.App {
    * @returns A started `Simulator` instance. No need to call `start()` again.
    */
   public async startSimulator(): Promise<Simulator> {
+    this.synthIfNeeded();
     const simfile = this.synth();
     const s = new Simulator({ simfile });
     await s.start();
@@ -31,6 +33,14 @@ export class SimApp extends sim.App {
    * their contents.
    */
   public snapshot(): Record<string, any> {
+    this.synthIfNeeded();
     return directorySnapshot(this.outdir);
+  }
+
+  private synthIfNeeded() {
+    if (!this._synthesized) {
+      this.synth();
+      this._synthesized = true;
+    }
   }
 }

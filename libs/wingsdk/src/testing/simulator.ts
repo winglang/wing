@@ -372,7 +372,6 @@ export class Simulator {
       path = `root${path}`;
     }
     const config = this._config.resources.find((r) => r.path === path);
-    console.error(JSON.stringify(this._config, null, 2));
     if (!config) {
       throw new Error(`Resource ${path} not found.`);
     }
