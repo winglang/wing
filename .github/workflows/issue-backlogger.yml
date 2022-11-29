@@ -11,4 +11,4 @@ jobs:
       - uses: actions/add-to-project@RELEASE_VERSION
         with:
           project-url: https://github.com/orgs/winglang/projects/2
-          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
