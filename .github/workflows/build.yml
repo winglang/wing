@@ -8,6 +8,7 @@ concurrency:
   cancel-in-progress: true
 
 env:
+  CI: true
   NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
