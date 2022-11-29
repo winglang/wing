@@ -47,8 +47,8 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     });
 
     const fn = new cloud.Function(
-      this,
-      `OnMessage-${inflight.code.hash.slice(0, 16)}`,
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${inflight.code.hash.slice(0, 16)}`,
       newInflight,
       props
     );
