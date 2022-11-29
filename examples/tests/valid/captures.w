@@ -15,7 +15,5 @@ inflight handler(event: str): str {
 
 new cloud.Function(
   handler, 
-  cloud.FunctionProps {
-    env: Map<str> {}
-  }
+  env: Map<str> {}
 );

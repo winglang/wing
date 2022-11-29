@@ -94,12 +94,10 @@ impl Parser<'_> {
 			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
 			other => {
-				return {
-					if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-						self.add_error(format!("duration type {} is not yet supported {}", other, entry), &node)
-					} else {
-						self.add_error(format!("Unexpected duration type {} || {:#?}", other, node), &node)
-					}
+				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
+					self.add_error(format!("duration type {} is not yet supported {}", other, entry), &node)
+				} else {
+					self.add_error(format!("Unexpected duration type {} || {:#?}", other, node), &node)
 				}
 			}
 		}
@@ -433,17 +431,17 @@ impl Parser<'_> {
 		let mut named_args = HashMap::new();
 
 		let mut cursor = arg_list_node.walk();
-		let mut prevention_positional_args = false;
+		let mut seen_keyword_args = false;
 		for child in arg_list_node.named_children(&mut cursor) {
 			match child.kind() {
 				"positional_argument" => {
-					if prevention_positional_args {
+					if seen_keyword_args {
 						self.add_error(format!("Positional arguments must come before named arguments"), &child)?;
 					}
 					pos_args.push(self.build_expression(&child)?);
 				}
 				"keyword_argument" => {
-					prevention_positional_args = true;
+					seen_keyword_args = true;
 					let arg_name_node = &child.named_child(0).unwrap();
 					let arg_name = self.node_symbol(arg_name_node)?;
 					if named_args.contains_key(&arg_name) {
