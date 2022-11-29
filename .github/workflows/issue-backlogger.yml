@@ -1,13 +1,14 @@
 on:
   issues:
-    types: [opened]
+    types:
+      - opened
 
 jobs:
   add-to-backlog:
     name: "Add issue to backlog"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@RELEASE_VERSION
+      - uses: actions/add-to-project@v0.4.0
         with:
           project-url: https://github.com/orgs/winglang/projects/2
-          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}

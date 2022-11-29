@@ -11,6 +11,4 @@ jobs:
         with:
           GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           comment-template: |
-            Congrats! :rocket: This was released in [{release_name}]({release_link}).
-
-
+            Congrats! :rocket: This was released in {release_link}.
