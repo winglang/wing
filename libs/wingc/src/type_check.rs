@@ -785,7 +785,7 @@ impl<'a> TypeChecker<'a> {
 						.unwrap();
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					// Because map literals are immutable, we assume an empty map can be used as a map to anything
+					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
 					self.types.add_type(Type::Map(self.types.anything()))
 				};
 

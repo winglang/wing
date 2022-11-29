@@ -17,11 +17,11 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
   },
   "resource": {
     "aws_iam_role": {
-      "root_EmptyEnvFunction_IamRole_F0206E21": {
+      "root_AnotherFunction_IamRole_09A4D8EF": {
         "//": {
           "metadata": {
-            "path": "root/EmptyEnvFunction/IamRole",
-            "uniqueId": "root_EmptyEnvFunction_IamRole_F0206E21",
+            "path": "root/AnotherFunction/IamRole",
+            "uniqueId": "root_AnotherFunction_IamRole_09A4D8EF",
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
@@ -46,15 +46,15 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_iam_role_policy": {
-      "root_EmptyEnvFunction_IamRolePolicy_65CF19CD": {
+      "root_AnotherFunction_IamRolePolicy_5B37F663": {
         "//": {
           "metadata": {
-            "path": "root/EmptyEnvFunction/IamRolePolicy",
-            "uniqueId": "root_EmptyEnvFunction_IamRolePolicy_65CF19CD",
+            "path": "root/AnotherFunction/IamRolePolicy",
+            "uniqueId": "root_AnotherFunction_IamRolePolicy_5B37F663",
           },
         },
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.root_EmptyEnvFunction_IamRole_F0206E21.name}",
+        "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.name}",
       },
       "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
         "//": {
@@ -78,15 +78,15 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_iam_role_policy_attachment": {
-      "root_EmptyEnvFunction_IamRolePolicyAttachment_C73CEF64": {
+      "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB": {
         "//": {
           "metadata": {
-            "path": "root/EmptyEnvFunction/IamRolePolicyAttachment",
-            "uniqueId": "root_EmptyEnvFunction_IamRolePolicyAttachment_C73CEF64",
+            "path": "root/AnotherFunction/IamRolePolicyAttachment",
+            "uniqueId": "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB",
           },
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.root_EmptyEnvFunction_IamRole_F0206E21.name}",
+        "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.name}",
       },
       "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
         "//": {
@@ -123,11 +123,11 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_lambda_function": {
-      "root_EmptyEnvFunction_932C1BF4": {
+      "root_AnotherFunction_1D5A4455": {
         "//": {
           "metadata": {
-            "path": "root/EmptyEnvFunction/Default",
-            "uniqueId": "root_EmptyEnvFunction_932C1BF4",
+            "path": "root/AnotherFunction/Default",
+            "uniqueId": "root_AnotherFunction_1D5A4455",
           },
         },
         "environment": {
@@ -135,15 +135,15 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "EmptyEnvFunction",
+            "WING_FUNCTION_NAME": "AnotherFunction",
           },
         },
-        "function_name": "EmptyEnvFunction",
+        "function_name": "AnotherFunction",
         "handler": "index.handler",
-        "role": "\${aws_iam_role.root_EmptyEnvFunction_IamRole_F0206E21.arn}",
+        "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_EmptyEnvFunction_Bucket_53AA7521.bucket}",
-        "s3_key": "\${aws_s3_object.root_EmptyEnvFunction_S3Object_E2D51BD1.key}",
+        "s3_bucket": "\${aws_s3_bucket.root_AnotherFunction_Bucket_A1A8B652.bucket}",
+        "s3_key": "\${aws_s3_object.root_AnotherFunction_S3Object_5AD7E879.key}",
       },
       "root_cloudFunction_6A57BA0A": {
         "//": {
@@ -191,11 +191,11 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_s3_bucket": {
-      "root_EmptyEnvFunction_Bucket_53AA7521": {
+      "root_AnotherFunction_Bucket_A1A8B652": {
         "//": {
           "metadata": {
-            "path": "root/EmptyEnvFunction/Bucket",
-            "uniqueId": "root_EmptyEnvFunction_Bucket_53AA7521",
+            "path": "root/AnotherFunction/Bucket",
+            "uniqueId": "root_AnotherFunction_Bucket_A1A8B652",
           },
         },
       },
@@ -331,14 +331,14 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
       },
     },
     "aws_s3_object": {
-      "root_EmptyEnvFunction_S3Object_E2D51BD1": {
+      "root_AnotherFunction_S3Object_5AD7E879": {
         "//": {
           "metadata": {
-            "path": "root/EmptyEnvFunction/S3Object",
-            "uniqueId": "root_EmptyEnvFunction_S3Object_E2D51BD1",
+            "path": "root/AnotherFunction/S3Object",
+            "uniqueId": "root_AnotherFunction_S3Object_5AD7E879",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_EmptyEnvFunction_Bucket_53AA7521.bucket}",
+        "bucket": "\${aws_s3_bucket.root_AnotherFunction_Bucket_A1A8B652.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -424,7 +424,7 @@ constructor() {
   let empty_env = {
   
   };
-  new cloud.Function(this,\\"EmptyEnvFunction\\",handler,{ env: empty_env });
+  new cloud.Function(this,\\"AnotherFunction\\",handler,{ env: empty_env });
 }
 }
 new MyApp().synth();"

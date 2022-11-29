@@ -21,9 +21,9 @@ new cloud.Function(
   env: Map<str> {}
 );
 
-let empty_env = {};
+let empty_env = Map<str> {};
 
 new cloud.Function(
   handler, 
   env: empty_env
-) as "EmptyEnvFunction";
+) as "AnotherFunction";
