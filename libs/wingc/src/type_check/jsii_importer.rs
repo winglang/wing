@@ -10,7 +10,7 @@ use colored::Colorize;
 use serde_json::Value;
 use wingii::jsii;
 
-const RESOURCE_CLASS_FQN: &'static str = "@winglang/wingsdk.cloud.Resource";
+const RESOURCE_CLASS_FQN: &'static str = "@winglang/wingsdk.core.Resource";
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
