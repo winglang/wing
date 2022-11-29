@@ -30,10 +30,13 @@ Object {
       "children": Object {
         "WingLogger": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [
-              "root/my_function",
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_function",
+              },
             ],
-            "wing:resource:outbound": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {
@@ -45,9 +48,12 @@ Object {
         },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [
-              "root/WingLogger",
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
             ],
             "wing:resource:stateful": false,
           },

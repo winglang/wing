@@ -1,6 +1,6 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code } from "../core";
+import { CaptureMetadata, Code, Resource } from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { BucketSchema } from "./schema-resources";
@@ -32,7 +32,7 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
     return bindSimulatorResource("bucket", this, captureScope);
   }
 }

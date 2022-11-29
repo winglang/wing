@@ -1,7 +1,13 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { FunctionProps, FUNCTION_TYPE } from "../cloud";
-import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
+import {
+  Code,
+  Language,
+  NodeJsCode,
+  Inflight,
+  CaptureMetadata,
+  Resource,
+} from "../core";
 import { TextFile } from "../fs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -26,7 +32,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     scope: Construct,
     id: string,
     inflight: Inflight,
-    props: FunctionProps
+    props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
 
@@ -57,7 +63,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
 
   public toSimulator(): BaseResourceSchema {
     const schema: FunctionSchema = {
-      type: FUNCTION_TYPE,
+      type: cloud.FUNCTION_TYPE,
       path: this.node.path,
       props: {
         sourceCodeFile: this.code.path,
@@ -70,7 +76,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
     return bindSimulatorResource("function", this, captureScope);
   }
 }

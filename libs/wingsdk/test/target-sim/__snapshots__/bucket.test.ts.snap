@@ -20,8 +20,7 @@ Object {
       "children": Object {
         "my_bucket": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {
@@ -64,8 +63,7 @@ Object {
       "children": Object {
         "my_bucket": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {
@@ -108,8 +106,7 @@ Object {
       "children": Object {
         "my_bucket": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {
@@ -152,8 +149,7 @@ Object {
       "children": Object {
         "my_bucket": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {

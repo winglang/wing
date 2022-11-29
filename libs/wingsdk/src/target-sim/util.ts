@@ -1,13 +1,11 @@
-import { IConstruct } from "constructs";
-import { Resource } from "../cloud";
-import { NodeJsCode } from "../core";
+import { Direction, NodeJsCode, Resource } from "../core";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 
 export function bindSimulatorResource(
   type: string,
   resource: Resource & ISimulatorResource,
-  captureScope: IConstruct
+  captureScope: Resource
 ) {
   if (!(captureScope instanceof Function)) {
     throw new Error(
@@ -21,8 +19,16 @@ export function bindSimulatorResource(
   const handle = `\${${resource.node.path}#attrs.handle}`; // TODO: proper token mechanism
   captureScope.addEnvironment(env, handle);
   captureScope.node.addDependency(resource);
-  resource._addInbound(captureScope);
-  captureScope._addOutbound(resource);
+  resource.addConnection({
+    direction: Direction.INBOUND,
+    relationship: `inflight-reference`,
+    resource: captureScope,
+  });
+  captureScope.addConnection({
+    direction: Direction.OUTBOUND,
+    relationship: `inflight-reference`,
+    resource: resource,
+  });
   return NodeJsCode.fromInline(
     `$simulator.findInstance(process.env["${env}"])`
   );

@@ -24,8 +24,7 @@ Object {
       "children": Object {
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": false,
           },
           "children": Object {
@@ -80,8 +79,7 @@ Object {
       "children": Object {
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": false,
           },
           "children": Object {
@@ -136,8 +134,7 @@ Object {
       "children": Object {
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": false,
           },
           "children": Object {
@@ -194,8 +191,7 @@ Object {
       "children": Object {
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": false,
           },
           "children": Object {

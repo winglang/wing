@@ -1,6 +1,7 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Direction, Resource } from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
@@ -62,8 +63,16 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
       batchSize: props.batchSize ?? 1,
     });
 
-    this._addOutbound(fn);
-    fn._addInbound(this);
+    this.addConnection({
+      direction: Direction.OUTBOUND,
+      relationship: "on_message",
+      resource: fn,
+    });
+    fn.addConnection({
+      direction: Direction.INBOUND,
+      relationship: "on_message",
+      resource: this,
+    });
 
     return fn;
   }
@@ -84,7 +93,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
 
   /** @internal */
   public _bind(
-    captureScope: IConstruct,
+    captureScope: Resource,
     _metadata: core.CaptureMetadata
   ): core.Code {
     return bindSimulatorResource("queue", this, captureScope);

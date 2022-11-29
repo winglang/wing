@@ -64,10 +64,13 @@ Object {
           "children": Object {
             "Bucket": Object {
               "attributes": Object {
-                "wing:resource:inbound": Array [
-                  "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "inflight-reference",
+                    "resource": "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                  },
                 ],
-                "wing:resource:outbound": Array [],
                 "wing:resource:stateful": true,
               },
               "constructInfo": Object {
@@ -79,10 +82,13 @@ Object {
             },
             "Counter": Object {
               "attributes": Object {
-                "wing:resource:inbound": Array [
-                  "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "inflight-reference",
+                    "resource": "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                  },
                 ],
-                "wing:resource:outbound": Array [],
                 "wing:resource:stateful": true,
               },
               "constructInfo": Object {
@@ -94,21 +100,34 @@ Object {
             },
             "Queue": Object {
               "attributes": Object {
-                "wing:resource:inbound": Array [],
-                "wing:resource:outbound": Array [
-                  "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "outbound",
+                    "relationship": "on_message",
+                    "resource": "root/HelloWorld/Queue/OnMessage-b9553f7cc235c8e4",
+                  },
                 ],
                 "wing:resource:stateful": true,
               },
               "children": Object {
                 "OnMessage-b9553f7cc235c8e4": Object {
                   "attributes": Object {
-                    "wing:resource:inbound": Array [
-                      "root/HelloWorld/Queue",
-                    ],
-                    "wing:resource:outbound": Array [
-                      "root/HelloWorld/Counter",
-                      "root/HelloWorld/Bucket",
+                    "wing:resource:connections": Array [
+                      Object {
+                        "direction": "outbound",
+                        "relationship": "inflight-reference",
+                        "resource": "root/HelloWorld/Counter",
+                      },
+                      Object {
+                        "direction": "outbound",
+                        "relationship": "inflight-reference",
+                        "resource": "root/HelloWorld/Bucket",
+                      },
+                      Object {
+                        "direction": "inbound",
+                        "relationship": "on_message",
+                        "resource": "root/HelloWorld/Queue",
+                      },
                     ],
                     "wing:resource:stateful": false,
                   },
@@ -147,8 +166,7 @@ Object {
         },
         "WingLogger": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {

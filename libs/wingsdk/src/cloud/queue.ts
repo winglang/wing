@@ -1,8 +1,8 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import { CaptureMetadata, Code, Duration, Inflight } from "../core";
+import { Resource } from "../core/resource";
 import { Function, FunctionProps } from "./function";
-import { Resource } from "./resource";
 
 /**
  * Global identifier for `Queue`.
@@ -74,7 +74,7 @@ export class Queue extends QueueBase {
   /**
    * @internal
    */
-  public _bind(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 

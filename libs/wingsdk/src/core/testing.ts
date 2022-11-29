@@ -1,6 +1,6 @@
-import { IConstruct } from "constructs";
 import { Code, NodeJsCode } from "./inflight";
 import { PREBUNDLE_SYMBOL } from "./internal";
+import { Resource } from "./resource";
 
 /**
  * Testing utilities.
@@ -9,7 +9,7 @@ export class Testing {
   /**
    * Obtain a reference to the prebundled Code for a given capture scope.
    */
-  public static inspectPrebundledCode(captureScope: IConstruct): Code {
+  public static inspectPrebundledCode(captureScope: Resource): Code {
     const prebundle = (captureScope as any)[PREBUNDLE_SYMBOL];
     if (!prebundle) {
       throw new Error("No prebundled code found on this resource.");

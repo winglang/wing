@@ -22,8 +22,7 @@ Object {
       "children": Object {
         "my_queue": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {
@@ -83,19 +82,25 @@ Object {
       "children": Object {
         "my_queue": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [
-              "root/my_queue/OnMessage-236ff3d72ad0ae46",
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "on_message",
+                "resource": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
             ],
             "wing:resource:stateful": true,
           },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
-                "wing:resource:inbound": Array [
-                  "root/my_queue",
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "on_message",
+                    "resource": "root/my_queue",
+                  },
                 ],
-                "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
               },
               "children": Object {
@@ -180,19 +185,25 @@ Object {
       "children": Object {
         "my_queue": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [
-              "root/my_queue/OnMessage-236ff3d72ad0ae46",
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "on_message",
+                "resource": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
             ],
             "wing:resource:stateful": true,
           },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
-                "wing:resource:inbound": Array [
-                  "root/my_queue",
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "on_message",
+                    "resource": "root/my_queue",
+                  },
                 ],
-                "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
               },
               "children": Object {
@@ -270,19 +281,25 @@ Object {
       "children": Object {
         "my_queue": Object {
           "attributes": Object {
-            "wing:resource:inbound": Array [],
-            "wing:resource:outbound": Array [
-              "root/my_queue/OnMessage-236ff3d72ad0ae46",
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "on_message",
+                "resource": "root/my_queue/OnMessage-236ff3d72ad0ae46",
+              },
             ],
             "wing:resource:stateful": true,
           },
           "children": Object {
             "OnMessage-236ff3d72ad0ae46": Object {
               "attributes": Object {
-                "wing:resource:inbound": Array [
-                  "root/my_queue",
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "on_message",
+                    "resource": "root/my_queue",
+                  },
                 ],
-                "wing:resource:outbound": Array [],
                 "wing:resource:stateful": false,
               },
               "children": Object {
