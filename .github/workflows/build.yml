@@ -22,33 +22,25 @@ jobs:
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         uses: actions/checkout@v3
 
       - name: Get tags
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: git fetch --unshallow --tags
 
       - name: Login to Private NPM registry
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         uses: bahmutov/npm-install@v1
         with:
           install-command: npm ci --ignore-scripts
 
-      - name: Test
-        # if: github.ref == 'refs/heads/main'
-        env:
-          # Needed for `auto` cli
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          npx auto changelog -d
-
       - name: Get Version Info
-        # if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
         id: info
         env:
           # Needed for `auto` cli
@@ -58,16 +50,18 @@ jobs:
           echo "version=$(npx auto release -d | grep 'Would have created a release on GitHub for version: ' | sed 's/.*version: //')" >> $GITHUB_OUTPUT
           npx auto changelog -d | tail -n +2 > CHANGELOG.md
           cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
-          # newlines are easier to handle in single-line yaml
-          echo '\n' >> CHANGELOG.md
 
-      # - name: PR Version Info
-      #   id: pr_info
-      #   if: github.ref != 'refs/heads/main'
-      #   run: |
-      #     echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
-      #     echo "Pull Request" > CHANGELOG.md
-      #     cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
+      # newlines are easier to handle in single-line yaml
+      - run: "echo '\n' >> CHANGELOG.md"
+        if: github.ref == 'refs/heads/main'
+
+      - name: PR Version Info
+        id: pr_info
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
+          echo "Pull Request" > CHANGELOG.md
+          cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Changelog
         uses: actions/upload-artifact@v2
