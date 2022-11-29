@@ -4,6 +4,10 @@ import * as tar from "tar";
 import { IApp } from "../src/core";
 import { mkdtemp } from "../src/util";
 
+export function treeJsonOf(outdir: string): any {
+  return JSON.parse(readFileSync(join(outdir, "tree.json"), "utf8"));
+}
+
 export function tfResourcesOf(templateStr: string): string[] {
   return Object.keys(JSON.parse(templateStr).resource).sort();
 }

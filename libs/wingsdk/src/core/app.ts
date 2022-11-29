@@ -4,6 +4,7 @@ import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory } from "polycons";
 import stringify from "safe-stable-stringify";
 import { Files } from "./files";
+import { synthesizeTree } from "./tree";
 
 /**
  * A Wing application.
@@ -89,7 +90,8 @@ export class CdktfApp extends Construct implements IApp {
         this.cdktfApp.synth();
         this.files.synth();
 
-        // TODO: synthesize tree.json
+        // write tree.json file to the outdir
+        synthesizeTree(this);
 
         const tfConfig = this.toTerraform();
         const cleaned = cleanTerraformConfig(tfConfig);
