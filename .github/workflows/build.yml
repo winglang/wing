@@ -40,7 +40,7 @@ jobs:
           install-command: npm ci --ignore-scripts
 
       - name: Get Version Info
-        if: github.ref == 'refs/heads/main'
+        # if: github.ref == 'refs/heads/main'
         id: info
         env:
           # Needed for `auto` cli
@@ -50,18 +50,16 @@ jobs:
           echo "version=$(npx auto release -d | grep 'Would have created a release on GitHub for version: ' | sed 's/.*version: //')" >> $GITHUB_OUTPUT
           npx auto changelog -d | tail -n +2 > CHANGELOG.md
           cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
+          # newlines are easier to handle in single-line yaml
+          echo '\n' >> CHANGELOG.md
 
-      # newlines are easier to handle in single-line yaml
-      - run: "echo '\n' >> CHANGELOG.md"
-        if: github.ref == 'refs/heads/main'
-
-      - name: PR Version Info
-        id: pr_info
-        if: github.ref != 'refs/heads/main'
-        run: |
-          echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
-          echo "Pull Request" > CHANGELOG.md
-          cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
+      # - name: PR Version Info
+      #   id: pr_info
+      #   if: github.ref != 'refs/heads/main'
+      #   run: |
+      #     echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
+      #     echo "Pull Request" > CHANGELOG.md
+      #     cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
 
       - name: Upload Changelog
         uses: actions/upload-artifact@v2
