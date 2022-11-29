@@ -29,50 +29,50 @@ exports[`queue with a consumer function 2`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996\\": {
+      \\"root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRolePolicy_4FF8284F\\": {
+      \\"root_QueueOnMessagecbf6dee05a035c28_IamRolePolicy_113E5CE8\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_IamRolePolicyAttachment_05CF132B\\": {
+      \\"root_QueueOnMessagecbf6dee05a035c28_IamRolePolicyAttachment_0594DFB1\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E.name}\\"
       }
     },
     \\"aws_lambda_event_source_mapping\\": {
       \\"root_Queue_EventSourceMapping_A20C741D\\": {
         \\"batch_size\\": 1,
         \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_Queue_OnMessagecbf6dee05a035c28_20B0F17F.function_name}\\"
+        \\"function_name\\": \\"\${aws_lambda_function.root_QueueOnMessagecbf6dee05a035c28_DB212311.function_name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_20B0F17F\\": {
+      \\"root_QueueOnMessagecbf6dee05a035c28_DB212311\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"OnMessage-cbf6dee05a035c28\\"
+            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-cbf6dee05a035c28\\"
           }
         },
-        \\"function_name\\": \\"OnMessage-cbf6dee05a035c28\\",
+        \\"function_name\\": \\"Queue-OnMessage-cbf6dee05a035c28\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_Queue_OnMessagecbf6dee05a035c28_IamRole_7C7D3996.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Queue_OnMessagecbf6dee05a035c28_S3Object_592923A9.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagecbf6dee05a035c28_Bucket_A66E23DF.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagecbf6dee05a035c28_S3Object_B088705D.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329\\": {}
+      \\"root_QueueOnMessagecbf6dee05a035c28_Bucket_A66E23DF\\": {}
     },
     \\"aws_s3_object\\": {
-      \\"root_Queue_OnMessagecbf6dee05a035c28_S3Object_592923A9\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Queue_OnMessagecbf6dee05a035c28_Bucket_F8FFB329.bucket}\\",
+      \\"root_QueueOnMessagecbf6dee05a035c28_S3Object_B088705D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagecbf6dee05a035c28_Bucket_A66E23DF.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
