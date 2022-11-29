@@ -1,5 +1,5 @@
 import { Construct } from "constructs";
-import { FileBase } from "../core";
+import { FileBase } from "./filebase";
 
 /**
  * Props for `TextFile`.
