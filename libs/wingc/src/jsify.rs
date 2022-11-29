@@ -150,7 +150,12 @@ fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> 
 	}
 
 	for arg in arg_list.named_args.iter() {
-		structure_args.push(format!("{}: {}", arg.0.name, jsify_expression(arg.1)));
+		// convert snake to camel case
+		structure_args.push(format!(
+			"{}: {}",
+			snake_case_to_camel_case(&arg.0.name),
+			jsify_expression(arg.1)
+		));
 	}
 
 	if !structure_args.is_empty() {
