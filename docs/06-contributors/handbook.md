@@ -65,7 +65,6 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 To build the repo locally:
 
 ```sh
-sudo bash scripts/setup_wasi.sh # one-time setup
 npm install
 npm run build
 ```
