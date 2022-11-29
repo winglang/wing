@@ -57,7 +57,7 @@ Nx will be installed alongside the rest of the project's dependencies after you 
 
 Here is a list of minimal tools you should install to build the Wing repo in your development environment:
 
-* [Node.js] version 18.x or above (we recommend [nvm])
+* [Node.js] version 18.x or above (we recommend [volta])
 * [Rust]
 * [AWS CLI] (only needed for integration tests - make sure to do the setup part to create credentials)
 * [Terraform CLI] (only needed for integration tests)
@@ -80,7 +80,7 @@ npm run test
 [Rust]: https://www.rust-lang.org/tools/install
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
-[nvm]: https://github.com/nvm-sh/nvm
+[volta]: https://volta.sh
 
 ## 🔨 How do I build just the SDK?
 
