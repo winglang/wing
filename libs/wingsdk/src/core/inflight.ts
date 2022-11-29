@@ -5,6 +5,7 @@ import { basename, dirname, join, resolve } from "path";
 import { IConstruct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import { PREBUNDLE_SYMBOL } from "./internal";
+import { Resource } from "./resource";
 
 /**
  * Capture information. A capture is a reference from an Inflight to a
@@ -43,7 +44,7 @@ export interface ICapturable {
    *
    * @internal
    */
-  _bind(captureScope: IConstruct, metadata: CaptureMetadata): Code;
+  _bind(captureScope: Resource, metadata: CaptureMetadata): Code;
 }
 
 /**
@@ -248,7 +249,7 @@ export class Inflight {
    * Resolve this inflight's captured objects into a map of clients that be
    * safely referenced at runtime.
    */
-  public makeClients(captureScope: IConstruct): Record<string, Code> {
+  public makeClients(captureScope: Resource): Record<string, Code> {
     const clients: Record<string, Code> = {};
     for (const [name, capture] of Object.entries(this.captures)) {
       clients[name] = createClient(captureScope, name, capture);
@@ -276,7 +277,7 @@ export interface InflightBundleOptions {
 }
 
 function createClient(
-  captureScope: IConstruct,
+  captureScope: Resource,
   captureName: string,
   capture: Capture
 ): Code {

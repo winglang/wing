@@ -57,9 +57,7 @@ test("pushing messages through a queue", async () => {
 
   const s = await app.startSimulator();
 
-  const pusher = s.getResourceByPath(
-    "root/HelloWorld/Function"
-  ) as cloud.IFunctionClient;
+  const pusher = s.getResource("/HelloWorld/Function") as cloud.IFunctionClient;
 
   // WHEN
   await pusher.invoke("foo");

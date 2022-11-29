@@ -14,6 +14,6 @@ test("app name can be customized", async () => {
   const simfile = app.synth();
 
   // THEN
-  expect(basename(simfile)).toEqual(`${APP_NAME}.wx`);
+  expect(basename(simfile)).toEqual(`${APP_NAME}.wsim`);
   expect(JSON.stringify(simulatorJsonOf(simfile))).toContain("my_bucket");
 });

@@ -21,15 +21,21 @@ test("create a queue", async () => {
   const s = await app.startSimulator();
 
   // THEN
-  expect(s.getAttributes("root/my_queue")).toEqual({
-    handle: expect.any(String),
-  });
-  expect(s.getProps("root/my_queue")).toEqual({
-    timeout: 30,
+  expect(s.getResourceConfig("/my_queue")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_queue",
+    props: {
+      initialMessages: [],
+      subscribers: [],
+      timeout: 30,
+    },
+    type: "wingsdk.cloud.Queue",
   });
   await s.stop();
 
-  expect(s.tree).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("queue with one subscriber, default batch size of 1", async () => {
@@ -43,9 +49,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
   queue.onMessage(handler);
   const s = await app.startSimulator();
 
-  const queueClient = s.getResourceByPath(
-    "root/my_queue"
-  ) as cloud.IQueueClient;
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
 
   // WHEN
   await queueClient.push("A");
@@ -69,7 +73,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(s.tree).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("queue with one subscriber, batch size of 5", async () => {
@@ -101,7 +105,7 @@ test("queue with one subscriber, batch size of 5", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(s.tree).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("messages are requeued if the function fails", async () => {
@@ -116,9 +120,7 @@ test("messages are requeued if the function fails", async () => {
   const s = await app.startSimulator();
 
   // WHEN
-  const queueClient = s.getResourceByPath(
-    "root/my_queue"
-  ) as cloud.IQueueClient;
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
   await queueClient.push("BAD MESSAGE");
 
   await sleep(300);
@@ -141,7 +143,7 @@ test("messages are requeued if the function fails", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(s.tree).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

@@ -21,7 +21,7 @@ this step, jump over to the [testing programmatically](./simulator) page.
 We can use the Wing CLI to start the console with our newly created app file:
 
 ```sh
-wing run target/hello.wx
+wing run target/hello.wsim
 ```
 
 This will start the Wing Console desktop application with the following view:

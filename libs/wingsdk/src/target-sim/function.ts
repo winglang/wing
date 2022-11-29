@@ -1,9 +1,16 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { FunctionProps, FUNCTION_TYPE } from "../cloud";
-import { Code, Language, NodeJsCode, Inflight, CaptureMetadata } from "../core";
+import {
+  Code,
+  Language,
+  NodeJsCode,
+  Inflight,
+  CaptureMetadata,
+  Resource,
+} from "../core";
 import { TextFile } from "../fs";
-import { IResource } from "./resource";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
 import { bindSimulatorResource } from "./util";
 
@@ -17,9 +24,7 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
-export class Function extends cloud.FunctionBase implements IResource {
-  private readonly inbound = new Array<string>();
-  private readonly outbound = new Array<string>();
+export class Function extends cloud.FunctionBase implements ISimulatorResource {
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
@@ -27,18 +32,12 @@ export class Function extends cloud.FunctionBase implements IResource {
     scope: Construct,
     id: string,
     inflight: Inflight,
-    props: FunctionProps
+    props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
 
     if (inflight.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is currently supported.");
-    }
-
-    for (const capture of Object.values(inflight.captures)) {
-      if (capture.resource !== undefined) {
-        this.outbound.push(capture.resource.node.path);
-      }
     }
 
     const captureClients = inflight.makeClients(this);
@@ -53,9 +52,6 @@ export class Function extends cloud.FunctionBase implements IResource {
     for (const [name, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(name, value);
     }
-
-    this.addEnvironment(ENV_WING_SIM_INFLIGHT_RESOURCE_PATH, this.node.path);
-    this.addEnvironment(ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE, FUNCTION_TYPE);
   }
 
   public addEnvironment(name: string, value: string) {
@@ -65,28 +61,22 @@ export class Function extends cloud.FunctionBase implements IResource {
     this.env[name] = value;
   }
 
-  /** @internal */
-  public _addInbound(...resources: string[]) {
-    this.inbound.push(...resources);
-  }
-
-  /** @internal */
-  public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
-    return bindSimulatorResource("function", this, captureScope);
-  }
-
-  /** @internal */
-  public _toResourceSchema(): FunctionSchema {
-    return {
-      type: FUNCTION_TYPE,
+  public toSimulator(): BaseResourceSchema {
+    const schema: FunctionSchema = {
+      type: cloud.FUNCTION_TYPE,
+      path: this.node.path,
       props: {
         sourceCodeFile: this.code.path,
         sourceCodeLanguage: "javascript",
         environmentVariables: this.env,
       },
       attrs: {} as any,
-      inbound: this.inbound,
-      outbound: this.outbound,
     };
+    return schema;
+  }
+
+  /** @internal */
+  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
+    return bindSimulatorResource("function", this, captureScope);
   }
 }

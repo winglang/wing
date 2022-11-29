@@ -55,15 +55,11 @@ export interface LoggerSchema extends BaseResourceSchema {
   readonly props: {};
 }
 
+/** Schema for cloud.Counter */
 export interface CounterSchema extends BaseResourceSchema {
   readonly type: typeof COUNTER_TYPE;
   readonly props: {
     /** The initial value of the counter. */
     readonly initialValue: number;
   };
-}
-
-/** Schema for ordinary constructs */
-export interface ConstructSchema extends BaseResourceSchema {
-  readonly type: "constructs.Construct";
 }

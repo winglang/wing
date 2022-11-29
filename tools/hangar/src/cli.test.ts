@@ -126,7 +126,7 @@ test.each(validWingFiles)(
       });
       for (const irFile in dotWingFiles) {
         if (dotWingFiles[irFile].isFile()) {
-          expect(fs.readFileSync(irFile, 'utf8')).toMatchSnapshot(
+          expect(fs.readFileSync(irFile, "utf8")).toMatchSnapshot(
             path.basename(irFile)
           );
         }
@@ -163,7 +163,7 @@ test.each(validWingFiles)(
         wingFile
       )}`;
 
-      // TODO snapshot .wx contents
+      // TODO snapshot .wsim contents
     });
   },
   {
