@@ -609,7 +609,7 @@ impl<'a> TypeChecker<'a> {
 
 				if !arg_list.named_args.is_empty() {
 					let last_arg = constructor_sig.args.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&arg_list.named_args, &last_arg, exp);
+					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the constructor's params
@@ -707,7 +707,7 @@ impl<'a> TypeChecker<'a> {
 
 				if !args.named_args.is_empty() {
 					let last_arg = func_sig.args.last().unwrap().maybe_unwrap_option();
-					self.validate_structural_type(&args.named_args, &last_arg, exp);
+					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
 				}
 
 				// Count number of optional parameters from the end of the function's params
@@ -785,10 +785,8 @@ impl<'a> TypeChecker<'a> {
 						.unwrap();
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					panic!(
-						"Cannot infer type of empty map literal with no type annotation: {:?}",
-						exp
-					);
+					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
+					self.types.add_type(Type::Map(self.types.anything()))
 				};
 
 				let value_type = match container_type.into() {
@@ -810,7 +808,14 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	/// Validate that a given hashmap can be assigned to a variable of given struct type
-	fn validate_structural_type(&mut self, object: &HashMap<Symbol, Expr>, expected_type: &TypeRef, value: &Expr) {
+	fn validate_structural_type(
+		&mut self,
+		object: &HashMap<Symbol, Expr>,
+		expected_type: &TypeRef,
+		value: &Expr,
+		env: &TypeEnv,
+		statement_idx: usize,
+	) {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
 			expected_struct
 		} else {
@@ -822,7 +827,7 @@ impl<'a> TypeChecker<'a> {
 		// Also map original field names to the ones in the struct type
 		let mut field_map = HashMap::new();
 		for (k, _) in object.iter() {
-			let field_type = expected_struct.env.try_lookup(&k.name, None);
+			let field_type = expected_struct.env.try_lookup(&k.name, Some(statement_idx));
 			if let Some(field_type) = field_type {
 				field_map.insert(k.name.clone(), (k, field_type));
 			} else {
@@ -834,7 +839,7 @@ impl<'a> TypeChecker<'a> {
 		for (k, v) in expected_struct.env.iter() {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
 				let provided_exp = object.get(symb).unwrap();
-				let t = self.type_check_exp(provided_exp, &expected_struct.env, 0).unwrap();
+				let t = self.type_check_exp(provided_exp, env, statement_idx).unwrap();
 				self.validate_type(t, *expected_field_type, provided_exp);
 			} else if !v.is_option() {
 				self.expr_error(
