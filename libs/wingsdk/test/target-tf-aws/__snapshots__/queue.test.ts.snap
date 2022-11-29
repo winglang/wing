@@ -10,6 +10,70 @@ exports[`default queue behavior 1`] = `
 }"
 `;
 
+exports[`default queue behavior 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Queue": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "10.0.11",
+                },
+                "id": "Default",
+                "path": "root/Queue/Default",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Queue",
+            "path": "root/Queue",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "10.0.11",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.13.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.13.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.13.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`queue with a consumer function 1`] = `
 "const $cap = {};
 async function $proc($cap, event) {
@@ -86,6 +150,160 @@ exports[`queue with a consumer function 2`] = `
 }"
 `;
 
+exports[`queue with a consumer function 3`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Queue": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "outbound",
+                  "relationship": "on_message",
+                  "resource": "root/Queue-OnMessage-cbf6dee05a035c28",
+                },
+              ],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "10.0.11",
+                },
+                "id": "Default",
+                "path": "root/Queue/Default",
+              },
+              "EventSourceMapping": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.lambdaEventSourceMapping.LambdaEventSourceMapping",
+                  "version": "10.0.11",
+                },
+                "id": "EventSourceMapping",
+                "path": "root/Queue/EventSourceMapping",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Queue",
+            "path": "root/Queue",
+          },
+          "Queue-OnMessage-cbf6dee05a035c28": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "relationship": "on_message",
+                  "resource": "root/Queue",
+                },
+              ],
+              "wing:resource:stateful": false,
+            },
+            "children": Object {
+              "Asset": Object {
+                "constructInfo": Object {
+                  "fqn": "cdktf.TerraformAsset",
+                  "version": "0.13.2",
+                },
+                "id": "Asset",
+                "path": "root/Queue-OnMessage-cbf6dee05a035c28/Asset",
+              },
+              "Bucket": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "10.0.11",
+                },
+                "id": "Bucket",
+                "path": "root/Queue-OnMessage-cbf6dee05a035c28/Bucket",
+              },
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                  "version": "10.0.11",
+                },
+                "id": "Default",
+                "path": "root/Queue-OnMessage-cbf6dee05a035c28/Default",
+              },
+              "IamRole": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                  "version": "10.0.11",
+                },
+                "id": "IamRole",
+                "path": "root/Queue-OnMessage-cbf6dee05a035c28/IamRole",
+              },
+              "IamRolePolicy": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                  "version": "10.0.11",
+                },
+                "id": "IamRolePolicy",
+                "path": "root/Queue-OnMessage-cbf6dee05a035c28/IamRolePolicy",
+              },
+              "IamRolePolicyAttachment": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                  "version": "10.0.11",
+                },
+                "id": "IamRolePolicyAttachment",
+                "path": "root/Queue-OnMessage-cbf6dee05a035c28/IamRolePolicyAttachment",
+              },
+              "S3Object": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                  "version": "10.0.11",
+                },
+                "id": "S3Object",
+                "path": "root/Queue-OnMessage-cbf6dee05a035c28/S3Object",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Queue-OnMessage-cbf6dee05a035c28",
+            "path": "root/Queue-OnMessage-cbf6dee05a035c28",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "10.0.11",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.13.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.13.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.13.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`queue with custom timeout 1`] = `
 "{
   \\"resource\\": {
@@ -96,4 +314,68 @@ exports[`queue with custom timeout 1`] = `
     }
   }
 }"
+`;
+
+exports[`queue with custom timeout 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Queue": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "10.0.11",
+                },
+                "id": "Default",
+                "path": "root/Queue/Default",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Queue",
+            "path": "root/Queue",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "10.0.11",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.13.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.13.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.13.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
 `;

@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("create a bucket", () => {
   // GIVEN
@@ -16,6 +16,7 @@ test("create a bucket", () => {
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("bucket is public", () => {
@@ -31,4 +32,5 @@ test("bucket is public", () => {
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

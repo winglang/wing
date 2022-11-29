@@ -2,7 +2,7 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default counter behavior", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
@@ -22,6 +22,7 @@ test("counter with initial value", () => {
 
   expect(tfResourcesOf(output)).toEqual(["aws_dynamodb_table"]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("counter captured by a function", () => {
@@ -56,4 +57,5 @@ test("counter captured by a function", () => {
     "aws_s3_object", // S3 object for code
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

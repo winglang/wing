@@ -5,34 +5,24 @@ import { BaseResourceSchema } from "./schema";
  * Interfaces shared by all polycon implementations (preflight classes)
  * targeting the simulator.
  */
-export interface IResource extends IConstruct {
-  /**
-   * Annotate this resource with information about another resource that calls,
-   * triggers, or otherwise depends on this resource at runtime.
-   *
-   * @internal
-   */
-  _addInbound(...resources: string[]): void;
-
+export interface ISimulatorResource extends IConstruct {
   /**
    * Convert this resource to a resource schema for the simulator.
-   *
-   * @internal
    */
-  _toResourceSchema(): BaseResourceSchema;
+  toSimulator(): BaseResourceSchema;
 }
 
-export function isResource(obj: any): obj is IResource {
+export function isSimulatorResource(obj: any): obj is ISimulatorResource {
   return (
     typeof obj == "object" &&
-    typeof (obj as IResource)._toResourceSchema === "function"
+    typeof (obj as ISimulatorResource).toSimulator === "function"
   );
 }
 
 /**
  * Shared interface for resource simulations.
  */
-export interface ISimulatorResource {
+export interface ISimulatorResourceInstance {
   /**
    * Perform any async initialization required by the resource.
    */

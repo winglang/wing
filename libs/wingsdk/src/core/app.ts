@@ -4,6 +4,7 @@ import { Construct, IConstruct } from "constructs";
 import { IPolyconFactory } from "polycons";
 import stringify from "safe-stable-stringify";
 import { Files } from "./files";
+import { synthesizeTree } from "./tree";
 
 /**
  * A Wing application.
@@ -58,7 +59,9 @@ export class CdktfApp extends Construct implements IApp {
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
+
   constructor(props: AppProps = {}) {
+    // this construct will get thrown away
     super(null as any, "");
 
     // this value gets thrown away since we are returning a different object
@@ -73,7 +76,6 @@ export class CdktfApp extends Construct implements IApp {
         const outdir = props.outdir ?? ".";
         const root = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
 
-        // TODO: use app name as the tree root name
         super(root, "root");
 
         this.outdir = outdir;
@@ -87,6 +89,9 @@ export class CdktfApp extends Construct implements IApp {
       public synth(): string {
         this.cdktfApp.synth();
         this.files.synth();
+
+        // write tree.json file to the outdir
+        synthesizeTree(this);
 
         const tfConfig = this.toTerraform();
         const cleaned = cleanTerraformConfig(tfConfig);

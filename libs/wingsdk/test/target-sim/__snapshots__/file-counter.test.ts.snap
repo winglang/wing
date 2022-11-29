@@ -1,0 +1,188 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`can create sequential files in a bucket 1`] = `
+Object {
+  "app.wsim": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/HelloWorld/Counter",
+        "props": Object {
+          "initialValue": 1000,
+        },
+        "type": "wingsdk.cloud.Counter",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/HelloWorld/Bucket",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+        "props": Object {
+          "environmentVariables": Object {
+            "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
+            "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/Queue-OnMessage-b9553f7cc235c8e4/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/HelloWorld/Queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [
+            Object {
+              "batchSize": 1,
+              "functionHandle": "\${root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4#attrs.handle}",
+            },
+          ],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "HelloWorld": Object {
+          "children": Object {
+            "Bucket": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "inflight-reference",
+                    "resource": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+                  },
+                ],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Bucket",
+              "path": "root/HelloWorld/Bucket",
+            },
+            "Counter": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "inflight-reference",
+                    "resource": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+                  },
+                ],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Counter",
+              "path": "root/HelloWorld/Counter",
+            },
+            "Queue": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "outbound",
+                    "relationship": "on_message",
+                    "resource": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+                  },
+                ],
+                "wing:resource:stateful": true,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Queue",
+              "path": "root/HelloWorld/Queue",
+            },
+            "Queue-OnMessage-b9553f7cc235c8e4": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "outbound",
+                    "relationship": "inflight-reference",
+                    "resource": "root/HelloWorld/Counter",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "relationship": "inflight-reference",
+                    "resource": "root/HelloWorld/Bucket",
+                  },
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "on_message",
+                    "resource": "root/HelloWorld/Queue",
+                  },
+                ],
+                "wing:resource:stateful": false,
+              },
+              "children": Object {
+                "Code": Object {
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "Code",
+                  "path": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4/Code",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Queue-OnMessage-b9553f7cc235c8e4",
+              "path": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "HelloWorld",
+          "path": "root/HelloWorld",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;

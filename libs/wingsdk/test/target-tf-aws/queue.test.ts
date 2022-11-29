@@ -2,7 +2,7 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default queue behavior", () => {
   // GIVEN
@@ -13,6 +13,7 @@ test("default queue behavior", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual(["aws_sqs_queue"]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("queue with custom timeout", () => {
@@ -26,6 +27,7 @@ test("queue with custom timeout", () => {
   // THEN
   expect(tfResourcesOf(output)).toEqual(["aws_sqs_queue"]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("queue with a consumer function", () => {
@@ -61,4 +63,5 @@ test("queue with a consumer function", () => {
     "aws_sqs_queue", // main queue
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

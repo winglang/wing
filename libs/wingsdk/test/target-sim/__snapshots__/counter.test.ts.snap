@@ -2,50 +2,86 @@
 
 exports[`create a counter 1`] = `
 Object {
-  "root": Object {
-    "children": Object {
-      "my_counter": Object {
-        "attrs": Object {
-          "handle": "sim-0",
-        },
+  "app.wsim": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
         "path": "root/my_counter",
         "props": Object {
           "initialValue": 123,
         },
         "type": "wingsdk.cloud.Counter",
       },
-    },
-    "path": "root",
-    "type": "constructs.Construct",
+    ],
+    "sdkVersion": "0.0.0",
   },
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "root/my_counter",
-  ],
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "my_counter": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_counter",
+          "path": "root/my_counter",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
 }
 `;
 
 exports[`inc 1`] = `
 Object {
-  "root": Object {
-    "children": Object {
-      "my_counter": Object {
-        "attrs": Object {
-          "handle": "sim-0",
-        },
+  "app.wsim": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
         "path": "root/my_counter",
         "props": Object {
           "initialValue": 123,
         },
         "type": "wingsdk.cloud.Counter",
       },
-    },
-    "path": "root",
-    "type": "constructs.Construct",
+    ],
+    "sdkVersion": "0.0.0",
   },
-  "sdkVersion": "0.0.0",
-  "startOrder": Array [
-    "root/my_counter",
-  ],
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "my_counter": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_counter",
+          "path": "root/my_counter",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
 }
 `;

@@ -5,7 +5,7 @@ import * as tar from "tar";
 import { mkdtemp, readJsonSync } from "../../src/util";
 
 export function simulatorJsonOf(simfile: string) {
-  // extract the simulator.json from the .wx file
+  // extract the simulator.json from the .wsim file
   const workdir = mkdtemp();
   tar.extract({
     cwd: workdir,
