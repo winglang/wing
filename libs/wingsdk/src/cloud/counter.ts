@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code } from "../core";
-import { Resource } from "../core/resource";
+import { CaptureMetadata, Code, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.

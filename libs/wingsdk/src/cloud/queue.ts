@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Duration, Inflight } from "../core";
-import { Resource } from "../core/resource";
+import { CaptureMetadata, Code, Duration, Inflight, Resource } from "../core";
 import { Function, FunctionProps } from "./function";
 
 /**
