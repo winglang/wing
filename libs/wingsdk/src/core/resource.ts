@@ -62,7 +62,7 @@ export abstract class Resource
 /**
  * The direction of a connection.
  *
- * Visually speaking, if a resource A has an outbound connection to resource B,
+ * Visually speaking, if a resource A has an outbound connection with resource B,
  * the arrow would point from A to B, and vice versa for inbound connections.
  */
 export enum Direction {
@@ -89,7 +89,7 @@ export interface Connection {
   readonly resource: Resource;
 
   /**
-   * The type of relationship between the two resources.
+   * The type of relationship with the resource.
    */
   readonly relationship: string;
 

@@ -933,7 +933,7 @@ let connection = core.Connection{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.Connection.property.direction">direction</a></code> | <code>core.Direction</code> | The direction of the connection. |
-| <code><a href="#@winglang/wingsdk.core.Connection.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship between the two resources. |
+| <code><a href="#@winglang/wingsdk.core.Connection.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship with the resource. |
 | <code><a href="#@winglang/wingsdk.core.Connection.property.resource">resource</a></code> | <code>core.Resource</code> | The resource this connection is to. |
 
 ---
@@ -958,7 +958,7 @@ relationship: str;
 
 - *Type:* str
 
-The type of relationship between the two resources.
+The type of relationship with the resource.
 
 ---
 
@@ -2507,7 +2507,7 @@ List of inflight operations available for `Counter`.
 
 The direction of a connection.
 
-Visually speaking, if a resource A has an outbound connection to resource B,
+Visually speaking, if a resource A has an outbound connection with resource B,
 the arrow would point from A to B, and vice versa for inbound connections.
 
 #### Members <a name="Members" id="Members"></a>
