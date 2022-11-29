@@ -14,8 +14,16 @@ inflight handler(event: str): str {
   bucket3.get("file3.txt");
 }
 
+queue.on_message(handler, batch_size: 5);
+
 new cloud.Function(
   handler, 
-  env: {}
+  env: Map<str> {}
 );
-queue.on_message(handler, batch_size: 5);
+
+let empty_env = {};
+
+new cloud.Function(
+  handler, 
+  env: empty_env
+) as "EmptyEnvFunction";
