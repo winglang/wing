@@ -33,43 +33,41 @@ Object {
         "attrs": Object {
           "handle": "sim-1",
         },
-        "children": Object {
-          "OnMessage-236ff3d72ad0ae46": Object {
-            "attrs": Object {
-              "handle": "sim-0",
-            },
-            "inbound": Array [
-              "root/my_queue",
-            ],
-            "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
-            "props": Object {
-              "environmentVariables": Object {
-                "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
-                "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-              },
-              "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
-              "sourceCodeLanguage": "javascript",
-            },
-            "type": "wingsdk.cloud.Function",
-          },
-        },
         "dependsOn": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+          "root/my_queue-OnMessage-236ff3d72ad0ae46",
         ],
         "outbound": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+          "root/my_queue-OnMessage-236ff3d72ad0ae46",
         ],
         "path": "root/my_queue",
         "props": Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue-OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      "my_queue-OnMessage-236ff3d72ad0ae46": Object {
+        "attrs": Object {
+          "handle": "sim-0",
+        },
+        "inbound": Array [
+          "root/my_queue",
+        ],
+        "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+        "props": Object {
+          "environmentVariables": Object {
+            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
+          },
+          "sourceCodeFile": "assets/my_queue-OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
       },
     },
     "path": "root",
@@ -77,7 +75,7 @@ Object {
   },
   "sdkVersion": "0.0.0",
   "startOrder": Array [
-    "root/my_queue/OnMessage-236ff3d72ad0ae46",
+    "root/my_queue-OnMessage-236ff3d72ad0ae46",
     "root/my_queue",
   ],
 }
@@ -91,31 +89,11 @@ Object {
         "attrs": Object {
           "handle": "sim-1",
         },
-        "children": Object {
-          "OnMessage-236ff3d72ad0ae46": Object {
-            "attrs": Object {
-              "handle": "sim-0",
-            },
-            "inbound": Array [
-              "root/my_queue",
-            ],
-            "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
-            "props": Object {
-              "environmentVariables": Object {
-                "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
-                "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-              },
-              "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
-              "sourceCodeLanguage": "javascript",
-            },
-            "type": "wingsdk.cloud.Function",
-          },
-        },
         "dependsOn": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+          "root/my_queue-OnMessage-236ff3d72ad0ae46",
         ],
         "outbound": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+          "root/my_queue-OnMessage-236ff3d72ad0ae46",
         ],
         "path": "root/my_queue",
         "props": Object {
@@ -130,12 +108,30 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 5,
-              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue-OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      "my_queue-OnMessage-236ff3d72ad0ae46": Object {
+        "attrs": Object {
+          "handle": "sim-0",
+        },
+        "inbound": Array [
+          "root/my_queue",
+        ],
+        "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+        "props": Object {
+          "environmentVariables": Object {
+            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
+          },
+          "sourceCodeFile": "assets/my_queue-OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
       },
     },
     "path": "root",
@@ -143,7 +139,7 @@ Object {
   },
   "sdkVersion": "0.0.0",
   "startOrder": Array [
-    "root/my_queue/OnMessage-236ff3d72ad0ae46",
+    "root/my_queue-OnMessage-236ff3d72ad0ae46",
     "root/my_queue",
   ],
 }
@@ -157,43 +153,41 @@ Object {
         "attrs": Object {
           "handle": "sim-1",
         },
-        "children": Object {
-          "OnMessage-236ff3d72ad0ae46": Object {
-            "attrs": Object {
-              "handle": "sim-0",
-            },
-            "inbound": Array [
-              "root/my_queue",
-            ],
-            "path": "root/my_queue/OnMessage-236ff3d72ad0ae46",
-            "props": Object {
-              "environmentVariables": Object {
-                "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue/OnMessage-236ff3d72ad0ae46",
-                "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
-              },
-              "sourceCodeFile": "assets/OnMessage-236ff3d72ad0ae46/index.js",
-              "sourceCodeLanguage": "javascript",
-            },
-            "type": "wingsdk.cloud.Function",
-          },
-        },
         "dependsOn": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+          "root/my_queue-OnMessage-236ff3d72ad0ae46",
         ],
         "outbound": Array [
-          "root/my_queue/OnMessage-236ff3d72ad0ae46",
+          "root/my_queue-OnMessage-236ff3d72ad0ae46",
         ],
         "path": "root/my_queue",
         "props": Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue/OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue-OnMessage-236ff3d72ad0ae46#attrs.handle}",
             },
           ],
           "timeout": 30,
         },
         "type": "wingsdk.cloud.Queue",
+      },
+      "my_queue-OnMessage-236ff3d72ad0ae46": Object {
+        "attrs": Object {
+          "handle": "sim-0",
+        },
+        "inbound": Array [
+          "root/my_queue",
+        ],
+        "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+        "props": Object {
+          "environmentVariables": Object {
+            "WING_SIM_INFLIGHT_RESOURCE_PATH": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+            "WING_SIM_INFLIGHT_RESOURCE_TYPE": "wingsdk.cloud.Function",
+          },
+          "sourceCodeFile": "assets/my_queue-OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
       },
     },
     "path": "root",
@@ -201,7 +195,7 @@ Object {
   },
   "sdkVersion": "0.0.0",
   "startOrder": Array [
-    "root/my_queue/OnMessage-236ff3d72ad0ae46",
+    "root/my_queue-OnMessage-236ff3d72ad0ae46",
     "root/my_queue",
   ],
 }

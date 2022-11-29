@@ -20,5 +20,9 @@
     "install:wing": "npm --prefix apps/wing install",
     "install:wingsdk": "npm --prefix libs/wingsdk install",
     "install:hangar": "npm --prefix tools/hangar install"
+  },
+  "volta": {
+    "node": "18.12.1",
+    "npm": "8.19.3"
   }
 }

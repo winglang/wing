@@ -77,7 +77,7 @@ test("pushing messages through a queue", async () => {
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "root/HelloWorld/Queue/OnMessage-004546ee82d97e73",
+      sourcePath: "root/HelloWorld/Queue-OnMessage-004546ee82d97e73",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",
