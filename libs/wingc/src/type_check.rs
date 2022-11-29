@@ -785,10 +785,8 @@ impl<'a> TypeChecker<'a> {
 						.unwrap();
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					panic!(
-						"Cannot infer type of empty map literal with no type annotation: {:?}",
-						exp
-					);
+					// Because map literals are immutable, we assume an empty map can be used as a map to anything
+					self.types.add_type(Type::Map(self.types.anything()))
 				};
 
 				let value_type = match container_type.into() {

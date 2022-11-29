@@ -16,6 +16,6 @@ inflight handler(event: str): str {
 
 new cloud.Function(
   handler, 
-  env: Map<str> {}
+  env: {}
 );
 queue.on_message(handler, batch_size: 5);
