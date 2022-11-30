@@ -28,12 +28,12 @@ async function main() {
 
   program
     .command("run")
-    .description("Runs a Wing executable in the Wing Console")
-    .argument("<executable>", "executable .wx file")
-    .action(async (executable: string) => {
-      executable = resolve(executable);
-      debug("calling wing console protocol with:" + executable);
-      open("wing-console://" + executable).catch(log);
+    .description("Runs a Wing simulator file in the Wing Console")
+    .argument("<simfile>", ".wsim simulator file")
+    .action(async (simfile: string) => {
+      simfile = resolve(simfile);
+      debug("calling wing console protocol with:" + simfile);
+      open("wing-console://" + simfile).catch(log);
     });
 
   program

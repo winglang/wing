@@ -32,21 +32,23 @@ test("create a function", async () => {
 
   // THEN
   const s = await app.startSimulator();
-  expect(s.getAttributes("root/my_function")).toEqual({
-    handle: expect.any(String),
-  });
-  expect(s.getProps("root/my_function")).toEqual({
-    sourceCodeFile: expect.any(String),
-    sourceCodeLanguage: "javascript",
-    environmentVariables: {
-      ENV_VAR1: "true",
-      WING_SIM_INFLIGHT_RESOURCE_PATH: "root/my_function",
-      WING_SIM_INFLIGHT_RESOURCE_TYPE: "wingsdk.cloud.Function",
+  expect(s.getResourceConfig("/my_function")).toEqual({
+    attrs: {
+      handle: expect.any(String),
     },
+    path: "root/my_function",
+    props: {
+      sourceCodeFile: expect.any(String),
+      sourceCodeLanguage: "javascript",
+      environmentVariables: {
+        ENV_VAR1: "true",
+      },
+    },
+    type: "wingsdk.cloud.Function",
   });
   await s.stop();
 
-  expect(s.tree).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("invoke function succeeds", async () => {
@@ -60,9 +62,7 @@ test("invoke function succeeds", async () => {
 
   const s = await app.startSimulator();
 
-  const client = s.getResourceByPath(
-    "root/my_function"
-  ) as cloud.IFunctionClient;
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -72,12 +72,12 @@ test("invoke function succeeds", async () => {
   expect(response).toEqual(JSON.stringify({ msg: `Hello, ${PAYLOAD.name}!` }));
   await s.stop();
 
-  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("invoke function with environment variables", async () => {
@@ -95,9 +95,7 @@ test("invoke function with environment variables", async () => {
 
   const s = await app.startSimulator();
 
-  const client = s.getResourceByPath(
-    "root/my_function"
-  ) as cloud.IFunctionClient;
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "Alice" };
@@ -111,12 +109,12 @@ test("invoke function with environment variables", async () => {
   );
   await s.stop();
 
-  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"Alice"}").',
     "wingsdk.cloud.Function deleted.",
   ]);
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("invoke function fails", async () => {
@@ -129,9 +127,7 @@ test("invoke function fails", async () => {
   new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
 
-  const client = s.getResourceByPath(
-    "root/my_function"
-  ) as cloud.IFunctionClient;
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
 
   // WHEN
   const PAYLOAD = { name: "alice" };
@@ -142,7 +138,6 @@ test("invoke function fails", async () => {
   // THEN
   await s.stop();
 
-  expect(s.tree).toMatchSnapshot();
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Function created.",
     'Invoke (payload="{"name":"alice"}").',
@@ -151,6 +146,7 @@ test("invoke function fails", async () => {
   expect(s.listTraces()[1].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 function listMessages(s: Simulator) {

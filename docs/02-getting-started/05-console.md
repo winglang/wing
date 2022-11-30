@@ -3,8 +3,18 @@ title: Testing using the Wing Console
 id: console
 ---
 
+:::info Under Construction
+
+:construction: The Wing Console does not yet work with the recently added `.wsim` file format (added in Wing 0.3.0), so some of the steps in this section may fail.
+
+Follow [this issue](https://github.com/winglang/wing/issues/809) to track when support for this is fixed!
+
+:::
+
 The Wing Console is a graphical user interface that can be used to interact with
 Wing applications on the local machine.
+
+## Opening your app in the console
 
 :::info
 
@@ -16,12 +26,10 @@ this step, jump over to the [testing programmatically](./simulator) page.
 
 :::
 
-## Opening your app in the console
-
 We can use the Wing CLI to start the console with our newly created app file:
 
 ```sh
-wing run target/hello.wx
+wing run target/hello.wsim
 ```
 
 This will start the Wing Console desktop application with the following view:

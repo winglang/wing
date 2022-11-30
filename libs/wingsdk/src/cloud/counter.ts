@@ -1,7 +1,6 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code } from "../core";
-import { Resource } from "./resource";
+import { CaptureMetadata, Code, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.
@@ -55,7 +54,7 @@ export class Counter extends CounterBase {
   /**
    * @internal
    */
-  public _bind(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }
