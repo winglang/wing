@@ -783,7 +783,7 @@ async calls are serialized by the compiler properly across user code.
 >     return this;
 >   }
 > }
-> let a = Chainable().method1().method2();
+> let a = new Chainable().method1().method2();
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
@@ -1729,7 +1729,7 @@ let bucket = cdk.aws_s3.Bucket(
 );
 ```
 
-### 5.2 Wing JSII Libraries
+### 5.2 Wing Libraries
 
 Wing libraries themselves are JSII modules. They can be used in all other JSII
 supported languages.
