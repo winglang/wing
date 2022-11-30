@@ -47,4 +47,8 @@ Run the `[Wing] Set update token` VSCode command from the command palette to add
 
 ## Contributing
 
-See the FAQ in [CONTRIBUTING.md](../../CONTRIBUTING.md#🔨-how-do-i-build-the-vscode-extension) for how to contribute!
+See the FAQ in [Contributor's Handbook](https://docs.winglang.io/contributors/handbook#-how-do-i-build-the-vscode-extension) for how to contribute!
+
+To modify the package.json, please edit .projenrc.ts and run `npx projen`.
+
+To release the extension locally- please run `npx nx build` and then re-install the newly created vscode-wing.vsix
