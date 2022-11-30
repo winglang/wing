@@ -36,7 +36,7 @@ const JSII_RUNTIME_SYMBOL = Symbol.for("jsii.rtti");
 /**
  * Source information on a construct (class fqn and version)
  */
-interface ConstructInfo {
+export interface ConstructInfo {
   /**
    * Fully qualified class name.
    */
