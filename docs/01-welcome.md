@@ -45,7 +45,7 @@ Best explained through an example:
 bring cloud;
 
 let bucket = new cloud.Bucket();
-let counter = new cloud.Counter(cloud.CounterProps{initialValue: 100});
+let counter = new cloud.Counter(initial_value: 100);
 let queue = new cloud.Queue();
 
 inflight handler(body: str): str {
