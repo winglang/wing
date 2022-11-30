@@ -37,13 +37,6 @@ fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 pub fn scan_captures(ast_root: &Scope) {
 	for s in ast_root.statements.iter() {
 		match &s.kind {
-			StmtKind::FunctionDefinition(func_def) => {
-				if let Phase::Inflight = func_def.signature.flight {
-					let mut func_captures = func_def.captures.borrow_mut();
-					assert!(func_captures.is_none());
-					*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
-				}
-			}
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable: _,
@@ -76,14 +69,14 @@ pub fn scan_captures(ast_root: &Scope) {
 					Phase::Independent => scan_captures(&constructor.statements),
 					Phase::Preflight => scan_captures(&constructor.statements),
 				}
-				for m in methods.iter() {
-					match m.signature.flight {
+				for (_, method_def) in methods.iter() {
+					match method_def.signature.flight {
 						Phase::Inflight => {
 							// TODO: what do I do with these?
-							scan_captures_in_inflight_scope(&m.statements);
+							scan_captures_in_inflight_scope(&method_def.statements);
 						}
 						Phase::Independent => scan_captures(&constructor.statements),
-						Phase::Preflight => scan_captures(&m.statements),
+						Phase::Preflight => scan_captures(&method_def.statements),
 					}
 				}
 			}
@@ -205,13 +198,23 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 				res.extend(scan_captures_in_expression(&v, env, statement_idx));
 			}
 		}
+		ExprKind::FunctionDefinition(func_def) => {
+			assert!(func_def.signature.flight != Phase::Preflight);
+			if let Phase::Inflight = func_def.signature.flight {
+				let mut func_captures = func_def.captures.borrow_mut();
+				assert!(func_captures.is_none());
+				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
+			}
+			// TODO: Phase::Independent
+		}
 	}
 	res
 }
 
 fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 	let mut res = vec![];
-	let env = scope.env.as_ref().unwrap();
+	let env_ref = scope.env.borrow();
+	let env = env_ref.as_ref().unwrap();
 
 	// Make sure we're looking for captures only in inflight code
 	assert!(matches!(env.flight, Phase::Inflight));
@@ -223,7 +226,6 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				initial_value,
 				type_: _,
 			} => res.extend(scan_captures_in_expression(initial_value, env, s.idx)),
-			StmtKind::FunctionDefinition(func_def) => res.extend(scan_captures_in_inflight_scope(&func_def.statements)),
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable,
@@ -260,7 +262,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				is_resource: _,
 			} => {
 				res.extend(scan_captures_in_inflight_scope(&constructor.statements));
-				for m in methods.iter() {
+				for (_, m) in methods.iter() {
 					res.extend(scan_captures_in_inflight_scope(&m.statements))
 				}
 			}

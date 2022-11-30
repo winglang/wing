@@ -28,12 +28,12 @@ constructor() {
   constructor() {
   }
   f;
-  method2() {
+  method2 = () => {
     this.method1();
     console.log(`${this.f}`);
     this.method2();
   }
-  method1() {
+  method1 = () => {
   }
   }
   let x = "hi";

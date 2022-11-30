@@ -5,8 +5,8 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
-	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, Type, UnaryOperator,
+	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
+	UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -35,6 +35,8 @@ impl Parser<'_> {
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
 
+		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
+		// the error and continue parsing.
 		Err(())
 	}
 
@@ -104,7 +106,7 @@ impl Parser<'_> {
 				.enumerate()
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
-			env: None, // env should be set later when scope is type-checked
+			env: RefCell::new(None), // env should be set later when scope is type-checked
 		}
 	}
 
@@ -152,10 +154,6 @@ impl Parser<'_> {
 					else_statements: else_block,
 				}
 			}
-			"inflight_function_definition" => {
-				StmtKind::FunctionDefinition(self.build_function_definition(statement_node, Phase::Inflight)?)
-			}
-
 			"for_in_loop" => StmtKind::ForLoop {
 				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
@@ -194,10 +192,20 @@ impl Parser<'_> {
 		{
 			match (class_element.kind(), is_resource) {
 				("function_definition", true) => {
-					methods.push(self.build_function_definition(&class_element, Phase::Preflight)?)
+					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
+					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
+					match (method_name, func_def) {
+						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
+						_ => {}
+					}
 				}
 				("inflight_function_definition", _) => {
-					methods.push(self.build_function_definition(&class_element, Phase::Inflight)?)
+					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
+					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
+					match (method_name, func_def) {
+						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
+						_ => {}
+					}
 				}
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
@@ -220,10 +228,10 @@ impl Parser<'_> {
 					}
 					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
 					constructor = Some(Constructor {
-						parameters: parameters.iter().map(|p| p.name.clone()).collect(),
+						parameters: parameters.iter().map(|p| p.0.clone()).collect(),
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
-							parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 							return_type: Some(Box::new(Type::CustomType {
 								root: name.clone(),
 								fields: vec![],
@@ -273,14 +281,32 @@ impl Parser<'_> {
 		})
 	}
 
+	fn build_anonymous_closure(&self, anon_closure_node: &Node) -> DiagnosticResult<FunctionDefinition> {
+		let mut cur = anon_closure_node.walk();
+		let block_node_idx = anon_closure_node
+			.children(&mut cur)
+			.position(|c| c.kind() == "block")
+			.unwrap();
+		let flight = match self.node_text(&anon_closure_node.child(block_node_idx - 1).unwrap()) {
+			"->" => Phase::Preflight,
+			"~>" => Phase::Inflight,
+			"=>" => unimplemented!(),
+			other => panic!(
+				"Unexpected closure phase specifier '{}', use one of '->', '~>', '=>'",
+				other
+			),
+		};
+
+		self.build_function_definition(anon_closure_node, flight)
+	}
+
 	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionDefinition {
-			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap())?,
-			parameters: parameters.iter().map(|p| p.name.clone()).collect(),
+			parameter_names: parameters.iter().map(|p| p.0.clone()).collect(),
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			signature: FunctionSignature {
-				parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: func_def_node
 					.child_by_field_name("type")
 					.map(|rt| Box::new(self.build_type(&rt).unwrap())),
@@ -290,14 +316,14 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<ParameterDefinition>> {
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type)>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
-			res.push(ParameterDefinition {
-				name: self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				parameter_type: self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
-			})
+			res.push((
+				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
+				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+			))
 		}
 
 		Ok(res)
@@ -565,7 +591,10 @@ impl Parser<'_> {
 			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
-			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"inflight_closure" => Ok(Expr::new(
+				ExprKind::FunctionDefinition(self.build_anonymous_closure(&expression_node)?),
+				expression_span,
+			)),
 			"pure_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
