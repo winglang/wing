@@ -206,11 +206,12 @@ fn jsify_expression(expression: &Expr) -> String {
 				// Currently, this occurs when a JSII import is untyped, such as when `WINGC_SKIP_JSII` is enabled and `bring cloud` is used.
 				true
 			};
-			let should_case_convert = expression_type
-				.unwrap()
-				.as_class_or_resource_object()
-				.unwrap()
-				.should_case_convert_jsii;
+			let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource_object() {
+				cls.should_case_convert_jsii
+			} else {
+				// This should only happen in the case of `any`, which are almost certainly JSII imports.
+				true
+			};
 
 			// If this is a resource then add the scope and id to the arg list
 			if is_resource {
