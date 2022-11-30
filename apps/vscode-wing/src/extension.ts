@@ -11,6 +11,7 @@ import {
   commands,
   window,
   workspace,
+  ConfigurationTarget,
 } from "vscode";
 import {
   Executable,
@@ -59,7 +60,7 @@ async function addCommands(context: ExtensionContext) {
       if (token) {
         await workspace
           .getConfiguration(EXTENSION_NAME)
-          .update(CFG_UPDATES_GITHUB_TOKEN, token);
+          .update(CFG_UPDATES_GITHUB_TOKEN, token, ConfigurationTarget.Global);
         await checkForUpdates(context, true);
       }
     })
