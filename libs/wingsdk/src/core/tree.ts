@@ -8,7 +8,7 @@ const TREE_FILE_PATH = "tree.json";
 /**
  * A node in the construct tree.
  */
-interface ConstructTreeNode {
+export interface ConstructTreeNode {
   readonly id: string;
   readonly path: string;
   readonly children?: { [key: string]: ConstructTreeNode };
@@ -18,6 +18,14 @@ interface ConstructTreeNode {
    * Information on the construct class that led to this node, if available
    */
   readonly constructInfo?: ConstructInfo;
+}
+
+/**
+ * The construct tree.
+ */
+export interface ConstructTree {
+  readonly version: string;
+  readonly tree: ConstructTreeNode;
 }
 
 /**
@@ -74,7 +82,7 @@ export function synthesizeTree(app: IApp) {
     return node;
   };
 
-  const tree = {
+  const tree: ConstructTree = {
     version: "tree-0.1",
     tree: visit(app.node.root),
   };
