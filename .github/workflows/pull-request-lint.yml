@@ -24,6 +24,7 @@ jobs:
             cli
             examples
             build
+            spec
             repo
           types: |-
             feat

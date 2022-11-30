@@ -11,6 +11,79 @@ description: The Wing Language Specification
  
 :::
 
+- [0. Preface](#0-preface)
+  - [0.1 Motivation](#01-motivation)
+  - [0.2 Design Tenets](#02-design-tenets)
+  - [0.3 Table of Contents](#03-table-of-contents)
+- [1. General](#1-general)
+  - [1.1 Types](#11-types)
+    - [1.1.1 Primitive Types](#111-primitive-types)
+    - [1.1.2 Container Types](#112-container-types)
+    - [1.1.3 Function Types](#113-function-types)
+    - [1.1.4 Struct type](#114-struct-type)
+  - [1.2 Utility Functions](#12-utility-functions)
+  - [1.3 Phase Modifiers](#13-phase-modifiers)
+  - [1.4 Storage Modifiers](#14-storage-modifiers)
+  - [1.5 Access Modifiers](#15-access-modifiers)
+  - [1.6 Reassignability](#16-reassignability)
+  - [1.7 Optionality](#17-optionality)
+  - [1.8 Type Inference](#18-type-inference)
+  - [1.9 Error Handling](#19-error-handling)
+  - [1.10 Recommended Formatting](#110-recommended-formatting)
+  - [1.11 Memory Management](#111-memory-management)
+  - [1.12 Documentation Style](#112-documentation-style)
+  - [1.13 Execution Model](#113-execution-model)
+  - [1.14 Asynchronous Execution Model](#114-asynchronous-execution-model)
+    - [1.14.1 "defer" Keyword](#1141-defer-keyword)
+    - [1.14.2 "await" Keyword](#1142-await-keyword)
+    - [1.14.3 Asynchronous Error Handling](#1143-asynchronous-error-handling)
+    - [1.14.4 Asynchronous Method Chaining](#1144-asynchronous-method-chaining)
+- [2. Statements](#2-statements)
+  - [2.1 bring](#21-bring)
+  - [2.2 break](#22-break)
+  - [2.3 continue](#23-continue)
+  - [2.4 return](#24-return)
+  - [2.5 if](#25-if)
+  - [2.6 for](#26-for)
+  - [2.7 while](#27-while)
+- [3. Declarations](#3-declarations)
+  - [3.1 Structs](#31-structs)
+  - [3.2 Classes](#32-classes)
+  - [3.3 Resources](#33-resources)
+  - [3.4 Interfaces](#34-interfaces)
+  - [3.5 Variables](#35-variables)
+  - [3.6 Functions](#36-functions)
+    - [3.6.1 Closures](#361-closures)
+    - [3.6.2 Struct Expansion](#362-struct-expansion)
+    - [3.6.3 Variadic Arguments](#363-variadic-arguments)
+  - [3.7 Arrays](#37-arrays)
+  - [3.8 Enumeration](#38-enumeration)
+  - [3.9 Computed Properties](#39-computed-properties)
+- [4. Module System](#4-module-system)
+  - [4.1 Imports](#41-imports)
+  - [4.2 Exports](#42-exports)
+- [5. Polyglot Interoperability](#5-polyglot-interoperability)
+  - [5.1 External JSII Libraries](#51-external-jsii-libraries)
+  - [5.2 Wing JSII Libraries](#52-wing-jsii-libraries)
+  - [5.3 External JavaScript Libraries](#53-external-javascript-libraries)
+  - [5.4 "bring.resolve" Algorithm](#54-bringresolve-algorithm)
+- [6. Miscellaneous](#6-miscellaneous)
+  - [6.1 Strings](#61-strings)
+    - [6.1.1 Normal strings "..."](#611-normal-strings-)
+    - [6.1.2 Shell strings \`...\`](#612-shell-strings-)
+  - [6.2 Comments](#62-comments)
+  - [6.3 Operators](#63-operators)
+    - [6.3.1 Relational Operators](#631-relational-operators)
+    - [6.3.2 Logical Operators](#632-logical-operators)
+    - [6.3.3 Mathematics Operators](#633-mathematics-operators)
+    - [6.3.4 Operator Precedence](#634-operator-precedence)
+    - [6.3.5 Short Circuiting](#635-short-circuiting)
+    - [6.3.6 Equality](#636-equality)
+  - [6.4 Kitchen Sink](#64-kitchen-sink)
+  - [6.5 Roadmap](#65-roadmap)
+  - [6.6 Credits](#66-credits)
+
+
 ## 0. Preface
 
 ### 0.1 Motivation
@@ -197,7 +270,7 @@ it cannot be modified anymore.
 
 > ```TS
 > // assuming fetch_some_data_with_jsii() returns "any":
-> let data: Struct = await fetch_some_data_with_jsii();
+> let data: Struct = fetch_some_data_with_jsii();
 > print(data[0]["prop-1"].id);
 > print(data.name);
 > ```
@@ -588,6 +661,154 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
+### 1.14 Asynchronous Execution Model
+
+Wing has an opt-out model in asynchronous execution. Meaning that all functions
+are asynchronous by default, unless otherwise specified. As a result, all async
+execution is properly serialized and leaves little to no room for user errors.  
+Compare this model to JavaScript's `async/await` model where you opt-in to async
+execution of your application logic.
+
+This model is often times referred to as "implicit async execution model".
+
+Keywords in Wing to support this model are `defer` and `await`. Since the async
+model is opt-out, as an end user, you interact with these keywords rarely.
+
+The opt-out model is a result of inflight being majorly async (think AWS Lambda
+handlers or AWS ECS task runners). Preflight is rarely async, however `await`ing
+synchronous functions is allowed and results in a no-op.
+
+The only exception to the opt-out model is class constructors and all resource
+initializers. Constructors and initializers are always synchronous and are not
+allowed to be async. Asynchronous construction is not deterministic and is not
+allowed in Wing.
+
+#### 1.14.1 "defer" Keyword
+
+`defer` keyword only starts the execution without waiting for it to fulfill.  
+Every usage of the `defer` keyword must be paired with an `await` keyword in the
+same scope. Lack of a balancing `await` keyword is a compile error.  
+As a result, returning a `defer`ed object is not possible. This prevents double
+promisified calls that are very hard to debug and track.
+
+> ```TS
+> // Wing Code:
+> let some_random_number = () => { return 123; };
+> let a = some_random_number();
+> let b = defer some_random_number();
+> ```
+
+<details><summary>Equivalent TypeScript Code</summary>
+
+> ```TS
+> // TypeScript Code:
+> const some_random_number = async () => { return 123; };
+> const a: number = await some_random_number();
+> const b: Promise<number> = some_random_number();
+> ```
+
+</details>
+
+#### 1.14.2 "await" Keyword
+
+`await` keyword is used to wait for the execution of `defer`ed calls to fulfill.
+
+> ```TS
+> // Wing Code:
+> let some_random_number = () => { return 123; };
+> let a = defer some_random_number();
+> let b = await a;
+> ```
+
+<details><summary>Equivalent TypeScript Code</summary>
+
+> ```TS
+> // TypeScript Code:
+> const some_random_number = async () => { return 123; };
+> const a: Promise<number> = some_random_number();
+> const b: number = await a;
+> ```
+
+</details>
+
+#### 1.14.3 Asynchronous Error Handling
+
+When `defer/await` is not used, error handling is done by `try/catch`.  
+When `await` is used, error handling is done by regular `try/catch` blocks.  
+When `defer` is used, error handling is done by a `catch` clause on the `defer`.
+
+> ```TS
+> // Wing Code:
+> let some_random_number = () => { return 123; };
+> let a = defer some_random_number() catch e {
+>   print("an async exception occurred");
+>   print(e);
+> };
+> let b = await a;
+> ```
+
+<details><summary>Equivalent TypeScript Code</summary>
+
+> ```TS
+> // TypeScript Code:
+> const some_random_number = async () => { return 123; };
+> const a: Promise<number> = some_random_number().catch((e) => {
+>   console.log("an async exception occurred");
+>   console.log(e);
+> });
+> const b: number = await a;
+> ```
+
+</details>
+
+[`▲ top`][top]
+
+---
+
+#### 1.14.4 Asynchronous Method Chaining
+
+Method chaining is supported in Wing. It is done by using the `.` operator.  
+This is possible since Wing does not allow returning unfulfilled promises, and
+async calls are serialized by the compiler properly across user code.
+
+> ```TS
+> // Wing Code:
+> class Chainable {
+>   method1() {
+>     // do some work
+>     return this;
+>   }
+>   method2() {
+>     // do some more work
+>     return this;
+>   }
+> }
+> let a = Chainable().method1().method2();
+> ```
+
+<details><summary>Equivalent TypeScript Code</summary>
+
+> ```TS
+> // TypeScript Code:
+> class Chainable {
+>   async method1() {
+>    // do some work
+>    return this;
+>   }
+>   async method2() {
+>     // do some more work
+>     return this;
+>   }
+> }
+> const a: Chainable = await (await (new Chainable()).method1()).method2();
+> ```
+
+</details>
+
+[`▲ top`][top]
+
+---
+
 ## 2. Statements
 
 ### 2.1 bring
@@ -679,11 +900,11 @@ includes for and while loops currently.
 
 > ```TS
 > class MyClass {
->   public myPublicMethod(): void {}
->   private myPrivateMethod(): undefined {}
->   protected myProtectedMethod(): undefined { return undefined; }
+>   public async myPublicMethod(): Promise<void> {}
+>   private async myPrivateMethod(): Promise<undefined> {}
+>   protected async myProtectedMethod(): Promise<undefined> { return undefined; }
 >   // specific compiled instruction is up to implementation of the compiler
->   public __wing__internal_myInternalMethod(): string { return "hi!"; }
+>   public async __wing__internal_myInternalMethod(): Promise<string> { return "hi!"; }
 > }
 > ```
   
@@ -693,49 +914,7 @@ includes for and while loops currently.
 
 ---
 
-### 2.5 await
-
-**await** statement allows to wait for a promise and grab its execution result.
-"await" and "promise" are semantically similar to JavaScript's promises.  
-"await" statement is only valid in `async` function declarations.  
-awaiting non promises in Wing is a no-op just like in JavaScript.
-
-> ```TS
-> // Wing program:
-> class MyClass {
->   async foo(): num {
->     let x = await some_promise();
->     return x;
->   }
->   boo(): Promise<num> {
->     let x = some_promise();
->     return x;
->   }
-> }
-> ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> class MyClass {
->   async foo(): number {
->     let x = await some_promise();
->     return x;
->   }
->   boo(): Promise<number> {
->     let x = some_promise();
->     return x;
->   }
-> }
->  ```
-  
-</details>
-
-[`▲ top`][top]
-
----
-
-### 2.6 if
+### 2.5 if
 
 Flow control can be done with `if/elif/else` statements.  
 The `if` statement is optionally followed by `elif` and `else`.  
@@ -773,7 +952,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 ---
 
-### 2.7 for
+### 2.6 for
 
 `for..in` statement is used to iterate over a array or set.  
 Type annotation after an iteratee (left hand side of `in`) is optional.  
@@ -819,7 +998,7 @@ The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 
 ---
 
-### 2.8 while
+### 2.7 while
 
 while statement is used to execute a block of code while a condition is true.  
 
@@ -833,7 +1012,7 @@ while statement is used to execute a block of code while a condition is true.
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> while (call_some_function()) {
+> while (await call_some_function()) {
 >   console.log("hello");
 > }
 > ```
@@ -1070,7 +1249,6 @@ resource Foo {
   init() { /* initialize preflight fields */ } // preflight constructor
   ~ init() {} // optional client initializer
   finalizer() {} // optional sync finalizer
-  async finalizer() {} // async finalizer (can be either sync or async)
 
   // phase independent fields (advanced usage only)
   = foo(arg: num): num { return arg; }
@@ -1190,11 +1368,11 @@ type of visibility (private, protected, etc.).
 > ```TS
 > interface IMyInterface1 {
 >   public readonly field1: number;
->   public method1(x: number): string;
+>   public async method1(x: number): Promise<string>;
 > }
 > interface IMyInterface2 {
 >   public readonly __inflight__field2: string;
->   public __inflight__method2(): string;
+>   public async __inflight__method2(): Promise<string>;
 > }
 > // this is only shown as a hypothetical sample
 > class MyResource extends constructs.Construct
@@ -1206,10 +1384,10 @@ type of visibility (private, protected, etc.).
 >     this.field1 = x;
 >     this.__inflight__field2 = "sample";
 >   }
->   public __inflight__method2(): string {
+>   public async __inflight__method2(): Promise<string> {
 >     return this.__inflight__field2;
 >   }
->   public method1(x: number): string {
+>   public async method1(x: number): Promise<string> {
 >     return `sample: ${x}`;
 >   }
 > }
@@ -1284,41 +1462,7 @@ can they return any resources. They do pure "compute" operations.
 
 ---
 
-#### 3.6.2 Promises
-
-Promises in Wing are defined with `Promise<T>` syntax.  
-Functions that use the keyword "await" in their body must return a promise.
-
-> ```TS
-> let number = (): Promise<num> -> {
->   return 23;
-> }
-> // handler returns Promise<void>
-> let handler = async (): void -> {
->   let t = await number();
->   print(t);
-> }
-> ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const number = Object.freeze((): number => {
->   return 23;
-> })
-> const handler = Object.freeze((): void => {
->   const t: number = await number();
->   console.log(t);
-> })
-> ```
-  
-</details>
-
-[`▲ top`][top]
-
----
-
-#### 3.6.3 Struct Expansion
+#### 3.6.2 Struct Expansion
 
 If the last argument of a function call is a struct, then the struct in the call
 is "expandable" with a special `:` syntax.  
@@ -1349,7 +1493,7 @@ f(1, 2, field1: 3, field2: 4);
 
 ---
 
-#### 3.6.4 Variadic Arguments
+#### 3.6.3 Variadic Arguments
 
 If the last argument of a function type is the `...args` keyword followed by a
 `Array` type, then the function accepts typed variadic arguments. Expansion of
@@ -1479,7 +1623,8 @@ of the property itself.
 
 Both preflight and inflight computed properties are allowed.  
 Keyword `readwrite` behind computed properties is not allowed.  
-Async computed properties are not allowed.
+Async computed properties are not allowed.  
+`defer` keyword is not allowed in computed properties blocks.
 
 ```TS
 // Wing Code:
@@ -1551,9 +1696,6 @@ bring cloud; // from cloud bring * as cloud;
 bring "path/to/what.js" as what; // from "path/to/what.js" bring * as what;
 ```
 
-Currently, "bringing" other Wing files is treated as a preprocessor step and it
-acts like C `#include`s. Symbols collision is fatal in this style of imports.
-
 [`▲ top`][top]
 
 ---
@@ -1568,16 +1710,13 @@ Variables are not exportable.
 Resources are not usable in inflight functions. There is no synthesizer inside
 and no deployment system in the inflight body to synthesize inflight resources.
 
-"Bringing" other Wing files currently ignores exports, but bringing JSII modules
-respect the visibility of JSII module exports.
-
 [`▲ top`][top]
 
 ---
 
-## 5. JSII Interoperability
+## 5. Polyglot Interoperability
 
-### 5.1 External Libraries
+### 5.1 External JSII Libraries
 
 You may import JSII modules in Wing and they are considered resources if their
 JSII type manifest shows that the JSII module is a construct. Wing is a consumer
@@ -1590,10 +1729,43 @@ let bucket = cdk.aws_s3.Bucket(
 );
 ```
 
-### 5.2 Internal Libraries
+### 5.2 Wing JSII Libraries
 
 Wing libraries themselves are JSII modules. They can be used in all other JSII
 supported languages.
+
+### 5.3 External JavaScript Libraries
+
+You may import regular JavaScript/npm modules in Wing.  
+Symbols imported from JS modules have type `brought`, which is a special type
+denoting that the object is a JS object which is imported directly without going
+through the JSII type guards and type checks.
+
+Result of calls and expressions on `brought` objects are all `any` values/types.
+`brought` objects are considered "unsafe" and should be used with caution.  
+`brought` objects are capture-able into inflight phase, they get bundled inside
+the inflight function code and are available at runtime.
+
+```ts
+bring "axios" as axios;
+let response = axios.get("https://example.com");
+// compiles to "await axios.get("https://example.com");"
+```
+
+### 5.4 "bring.resolve" Algorithm
+
+The "resolve" algorithm is used to resolve the path of a `bring` statement.
+The algorithm is as follows:
+
+```mermaid
+graph TD
+    A[parse bring's path] --> C{enclosed in double quotes?}
+    C -->|No| D[bring as Wing module]
+    C -->|Yes| E[path is either JSII or JS]
+    E --> G{look for a .jsii manifest}
+    G -->|Found .jsii| H[bring as JSII module]
+    G -->|Missing .jsii| I[bring as JS module]
+```
 
 [`▲ top`][top]
 
@@ -1938,8 +2110,8 @@ queue.add_consumer(filter);
 
 ### 6.5 Roadmap
 
-- [ ] Make the language `async` by default.
-- [ ] Make inflight functions `async` by default.
+- [x] Make the language `async` by default.
+- [x] Make inflight functions `async` by default.
 - [ ] First class support for `regx`, `glob`, and `cron` types.
 - [ ] Support of math operations over `date` and `duration` types.
 - [ ] Add `time`, `date`, and `durations` as first class types with syntax.
