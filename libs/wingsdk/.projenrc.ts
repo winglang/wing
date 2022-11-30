@@ -2,7 +2,7 @@ import { JsonFile, cdk, javascript } from "projen";
 
 const JSII_DEPS = [
   "constructs@~10.0.25",
-  "@winglang/polycons",
+  "polycons",
   "cdktf",
   "@cdktf/provider-aws",
 ];
@@ -18,15 +18,20 @@ const project = new cdk.JsiiProject({
   peerDeps: [...JSII_DEPS],
   deps: [...JSII_DEPS],
   bundledDeps: [
-    "safe-stable-stringify",
     // preflight dependencies
     "esbuild-wasm",
+    "safe-stable-stringify",
     // aws client dependencies
-    "@aws-sdk/client-s3",
-    "@aws-sdk/client-lambda",
-    "@aws-sdk/client-sqs",
-    "@aws-sdk/client-cloudwatch-logs",
-    "@aws-sdk/util-utf8-node",
+    // (note: these should always be updated together, otherwise they will
+    // conflict with each other)
+    "@aws-sdk/client-cloudwatch-logs@3.215.0",
+    "@aws-sdk/client-dynamodb@3.215.0",
+    "@aws-sdk/client-lambda@3.215.0",
+    "@aws-sdk/client-s3@3.215.0",
+    "@aws-sdk/client-sqs@3.215.0",
+    "@aws-sdk/types@3.215.0",
+    "@aws-sdk/util-stream-node@3.215.0",
+    "@aws-sdk/util-utf8-node@3.208.0",
     // simulator dependencies
     "tar",
   ],
@@ -57,6 +62,10 @@ project.eslint?.addOverride({
   },
 });
 
+// use fork of jsii-docgen with wing-ish support
+project.deps.removeDependency("jsii-docgen");
+project.addDevDeps("@winglang/jsii-docgen");
+
 // fix typing issues with "tar" dependency
 project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
 project.package.addPackageResolutions("minipass@3.1.6");
@@ -86,10 +95,7 @@ project.addTask("sandbox:destroy", {
 // the root of the package, so accessing them requires barrel imports:
 // const { BucketClient } = require("wingsdk/lib/aws/bucket.inflight");
 const pkgJson = project.tryFindObjectFile("package.json");
-pkgJson!.addOverride("jsii.excludeTypescript", [
-  "src/**/*.inflight.ts",
-  "src/**/*.sim.ts",
-]);
+pkgJson!.addOverride("jsii.excludeTypescript", ["src/**/*.inflight.ts"]);
 
 // By default, the TypeScript compiler will include all types from @types, even
 // if the package is not used anywhere in our source code (`/src`). This is
@@ -112,7 +118,7 @@ const tsconfigNonJsii = new JsonFile(project, "tsconfig.nonjsii.json", {
     compilerOptions: {
       esModuleInterop: true,
     },
-    include: ["src/**/*.inflight.ts", "src/**/*.sim.ts"],
+    include: ["src/**/*.inflight.ts"],
     exclude: ["node_modules"],
   },
 });
@@ -121,20 +127,17 @@ project.compileTask.exec(`tsc -p ${tsconfigNonJsii.path}`);
 enum Zone {
   PREFLIGHT = "preflight",
   INFLIGHT = "inflight",
-  SIMULATOR = "simulator",
   TEST = "test",
 }
 
 function zonePattern(zone: Zone): string {
   switch (zone) {
     case Zone.PREFLIGHT:
-      return srcPathsNotEndingIn(["*.inflight.ts", "*.sim.ts", "*.test.ts"]);
+      return srcPathsNotEndingIn(["*.inflight.ts", "*.test.ts"]);
     case Zone.TEST:
       return "src/**/*.test.ts";
     case Zone.INFLIGHT:
       return "src/**/*.inflight.ts";
-    case Zone.SIMULATOR:
-      return "src/**/*.sim.ts";
   }
 }
 
@@ -172,9 +175,6 @@ project.eslint!.addRules({
         // avoid importing inflight or simulator code into preflight code since
         // preflight code gets compiled with JSII
         disallowImportsRule(Zone.PREFLIGHT, Zone.INFLIGHT),
-        disallowImportsRule(Zone.PREFLIGHT, Zone.SIMULATOR),
-        // implementation details of simulator should not be leaked to inflight code
-        disallowImportsRule(Zone.INFLIGHT, Zone.SIMULATOR),
       ],
     },
   ],
@@ -205,6 +205,18 @@ project.tasks
 
 project.preCompileTask.exec("patch-package");
 
-project.tasks.tryFind("docgen")!.exec("cp API.md ../../docs/wingsdk-api.md");
+const docsFrontMatter = `---
+title: SDK
+id: sdk
+description: Wing SDK API Reference
+---
+`;
+
+const docsPath = "../../docs/04-reference/wingsdk-api.md";
+const docgen = project.tasks.tryFind("docgen")!;
+docgen.reset();
+docgen.exec(`jsii-docgen -o API.md -l wing`);
+docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
+docgen.exec(`cat API.md >> ${docsPath}`);
 
 project.synth();

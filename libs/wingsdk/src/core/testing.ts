@@ -1,6 +1,6 @@
-import { IConstruct } from "constructs";
 import { Code, NodeJsCode } from "./inflight";
 import { PREBUNDLE_SYMBOL } from "./internal";
+import { Resource } from "./resource";
 
 /**
  * Testing utilities.
@@ -9,7 +9,7 @@ export class Testing {
   /**
    * Obtain a reference to the prebundled Code for a given capture scope.
    */
-  public static inspectPrebundledCode(captureScope: IConstruct): Code {
+  public static inspectPrebundledCode(captureScope: Resource): Code {
     const prebundle = (captureScope as any)[PREBUNDLE_SYMBOL];
     if (!prebundle) {
       throw new Error("No prebundled code found on this resource.");
@@ -21,8 +21,8 @@ export class Testing {
 }
 
 function removeAbsolutePath(text: string) {
-  const regex = /"\/.+?\/(?:wing|winglang)\/libs\/(.+?)"/g;
+  const regex = /"\/.+?\/libs\/wingsdk\/(.+?)"/g;
 
   // replace first group with static text
-  return text.replace(regex, '"[REDACTED]/$1"');
+  return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
 }

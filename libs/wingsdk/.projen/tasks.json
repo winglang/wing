@@ -124,10 +124,13 @@
       "description": "Generate API.md from .jsii manifest",
       "steps": [
         {
-          "exec": "jsii-docgen -o API.md"
+          "exec": "jsii-docgen -o API.md -l wing"
         },
         {
-          "exec": "cp API.md ../../docs/wingsdk-api.md"
+          "exec": "echo '---\ntitle: SDK\nid: sdk\ndescription: Wing SDK API Reference\n---\n' > ../../docs/04-reference/wingsdk-api.md"
+        },
+        {
+          "exec": "cat API.md >> ../../docs/04-reference/wingsdk-api.md"
         }
       ]
     },
@@ -312,19 +315,19 @@
           "exec": "npm update npm-check-updates"
         },
         {
-          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,constructs'"
+          "exec": "npm-check-updates --dep dev --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,constructs'"
+          "exec": "npm-check-updates --dep optional --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,constructs'"
+          "exec": "npm-check-updates --dep peer --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,constructs'"
+          "exec": "npm-check-updates --dep prod --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,constructs'"
         },
         {
-          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,constructs'"
+          "exec": "npm-check-updates --dep bundle --upgrade --target=minor --reject='@types/minipass,@winglang/wing-api-checker,minipass,@aws-sdk/client-cloudwatch-logs,@aws-sdk/client-dynamodb,@aws-sdk/client-lambda,@aws-sdk/client-s3,@aws-sdk/client-sqs,@aws-sdk/types,@aws-sdk/util-stream-node,@aws-sdk/util-utf8-node,constructs'"
         },
         {
           "exec": "npm install"

@@ -91,12 +91,16 @@ impl JSifier {
 
 		if self.shim {
 			js.insert(0, format!("super({{ outdir: $outdir }});\n"));
+			js.insert(
+				0,
+				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
+			);
 			output.push(format!(
 				"class MyApp extends {} {{\nconstructor() {}\n}}",
 				TARGET_APP,
 				JSifier::render_block(js)
 			));
-			output.push("new MyApp().synth();".to_string());
+			output.push(format!("new MyApp().synth();"));
 		} else {
 			output.append(&mut js);
 		}
@@ -119,13 +123,24 @@ impl JSifier {
 		return lines.join("\n");
 	}
 
-	fn jsify_reference(&self, reference: &Reference) -> String {
+	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>) -> String {
+		let symbolize = if case_convert.unwrap_or(false) {
+			Self::jsify_symbol_case_converted
+		} else {
+			Self::jsify_symbol
+		};
 		match reference {
-			Reference::Identifier(identifier) => self.jsify_symbol(identifier),
+			Reference::Identifier(identifier) => symbolize(self, identifier),
 			Reference::NestedIdentifier { object, property } => {
-				self.jsify_expression(object) + "." + &self.jsify_symbol(property)
+				self.jsify_expression(object) + "." + &symbolize(self, property)
 			}
 		}
+	}
+
+	fn jsify_symbol_case_converted(&self, symbol: &Symbol) -> String {
+		let mut result = symbol.name.clone();
+		result = snake_case_to_camel_case(&result);
+		return format!("{}", result);
 	}
 
 	fn jsify_symbol(&self, symbol: &Symbol) -> String {
@@ -133,13 +148,8 @@ impl JSifier {
 	}
 
 	fn jsify_arg_list(&self, arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> String {
-		if !arg_list.pos_args.is_empty() && !arg_list.named_args.is_empty() {
-			// TODO?
-			// JS doesn't support named args, this is probably to pass props to a construct. Can't mix that with positional args.
-			panic!("Cannot use positional and named arguments in the same call");
-		}
-
 		let mut args = vec![];
+		let mut structure_args = vec![];
 
 		if let Some(scope_str) = scope {
 			args.push(scope_str.to_string());
@@ -149,18 +159,27 @@ impl JSifier {
 			args.push(format!("\"{}\"", id_str));
 		}
 
-		if !arg_list.pos_args.is_empty() || !args.is_empty() {
-			for arg in arg_list.pos_args.iter() {
-				args.push(self.jsify_expression(arg));
-			}
-			return args.join(",");
-		} else if !arg_list.named_args.is_empty() {
-			for arg in arg_list.named_args.iter() {
-				args.push(format!("{}: {}", arg.0.name, self.jsify_expression(arg.1)));
-			}
-			return format!("{{{}}}", args.join(","));
+		for arg in arg_list.pos_args.iter() {
+			args.push(self.jsify_expression(arg));
+		}
+
+		for arg in arg_list.named_args.iter() {
+			// convert snake to camel case
+			structure_args.push(format!(
+				"{}: {}",
+				snake_case_to_camel_case(&arg.0.name),
+				self.jsify_expression(arg.1)
+			));
+		}
+
+		if !structure_args.is_empty() {
+			args.push(format!("{{ {} }}", structure_args.join(", ")));
+		}
+
+		if args.is_empty() {
+			"".to_string()
 		} else {
-			return "".to_string();
+			args.join(",")
 		}
 	}
 
@@ -237,16 +256,23 @@ impl JSifier {
 				Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
-			ExprKind::Reference(_ref) => self.jsify_reference(&_ref),
+			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None),
 			ExprKind::Call { function, args } => {
 				// TODO: implement "print" to use Logger resource
 				// see: https://github.com/winglang/wing/issues/50
+				let mut needs_case_conversion = false;
 				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
 					return format!("console.log({})", self.jsify_arg_list(args, None, None));
+				} else if let Reference::NestedIdentifier { object, .. } = function {
+					let object_type = object.evaluated_type.borrow().unwrap();
+					needs_case_conversion = object_type
+						.as_class_or_resource_object()
+						.unwrap()
+						.should_case_convert_jsii;
 				}
 				format!(
 					"{}({})",
-					self.jsify_reference(&function),
+					self.jsify_reference(&function, Some(needs_case_conversion)),
 					self.jsify_arg_list(&args, None, None)
 				)
 			}
@@ -373,7 +399,7 @@ impl JSifier {
 			StmtKind::Assignment { variable, value } => {
 				format!(
 					"{} = {};",
-					self.jsify_reference(&variable),
+					self.jsify_reference(&variable, None),
 					self.jsify_expression(value)
 				)
 			}
@@ -458,12 +484,12 @@ impl JSifier {
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
 		for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
-			capture_names.push(obj.name.clone());
+			capture_names.push(obj.clone());
 			bindings.push(format!(
 				"{}: {},",
-				obj.name,
+				obj,
 				Self::render_block([
-					format!("resource: {},", obj.name),
+					format!("resource: {},", obj),
 					format!(
 						"methods: [{}]",
 						cap_def
@@ -502,7 +528,7 @@ impl JSifier {
 		format!("new {}.core.Inflight({});", STDLIB, props_block)
 	}
 
-	fn jsify_function(&self, name: Option<&str>, parameters: &Vec<Symbol>, body: &Scope) -> String {
+	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
 			parameter_list.push(self.jsify_symbol(p));

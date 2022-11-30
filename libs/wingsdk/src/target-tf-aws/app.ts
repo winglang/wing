@@ -1,18 +1,7 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
-import { IPolyconFactory, Polycons } from "@winglang/polycons";
-import { IApp, CdktfApp, CdktfAppProps } from "../core";
+import { Polycons } from "polycons";
+import { IApp, CdktfApp, AppProps } from "../core";
 import { PolyconFactory } from "./factory";
-
-/**
- * Props for `App`.
- */
-export interface AppProps extends CdktfAppProps {
-  /**
-   * A custom factory to resolve polycons.
-   * @default - use the default polycon factory included in the Wing SDK
-   */
-  readonly customFactory?: IPolyconFactory;
-}
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration

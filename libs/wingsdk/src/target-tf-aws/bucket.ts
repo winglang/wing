@@ -2,11 +2,12 @@ import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
-import { CaptureMetadata, Code, InflightClient } from "../core";
+import { CaptureMetadata, Code, InflightClient, Resource } from "../core";
 import { Function } from "./function";
+import { addBindConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -66,12 +67,12 @@ export class Bucket extends cloud.BucketBase {
   /**
    * @internal
    */
-  public _bind(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
       throw new Error("buckets can only be captured by tfaws.Function for now");
     }
 
-    const env = `BUCKET_NAME__${this.node.id}`;
+    const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
     if (methods.has(BucketInflightMethods.PUT)) {
@@ -98,6 +99,8 @@ export class Bucket extends cloud.BucketBase {
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     captureScope.addEnvironment(env, this.bucket.bucket);
+
+    addBindConnections(this, captureScope);
 
     return InflightClient.for(__filename, "BucketClient", [
       `process.env["${env}"]`,

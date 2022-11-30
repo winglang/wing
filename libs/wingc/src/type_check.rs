@@ -6,6 +6,7 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use type_env::TypeEnv;
 
@@ -51,6 +52,7 @@ pub struct Class {
 	parent: Option<TypeRef>, // Must be a Type::Class type
 	#[derivative(Debug = "ignore")]
 	pub env: TypeEnv,
+	pub should_case_convert_jsii: bool,
 }
 
 impl Class {
@@ -208,8 +210,8 @@ impl Display for Type {
 				write!(f, "object of {}", resource_type.name.name)
 			}
 			Type::ClassInstance(class) => {
-				let class_type_name = class.as_class().expect("Class instance must reference to a class");
-				write!(f, "instance of {}", class_type_name)
+				let class_type = class.as_class().expect("Class instance must reference to a class");
+				write!(f, "instance of {}", class_type.name.name)
 			}
 			Type::Namespace(namespace) => write!(f, "{}", namespace.name),
 			Type::Struct(s) => write!(f, "{}", s.name),
@@ -251,6 +253,19 @@ impl From<TypeRef> for &mut Type {
 }
 
 impl TypeRef {
+	pub fn as_class_or_resource_object(&self) -> Option<&Class> {
+		self.as_class_object().or_else(|| self.as_resource_object())
+	}
+
+	pub fn as_class_object(&self) -> Option<&Class> {
+		if let &Type::ClassInstance(ref class_instance) = (*self).into() {
+			let class = class_instance.as_class().unwrap();
+			Some(class)
+		} else {
+			None
+		}
+	}
+
 	pub fn as_resource_object(&self) -> Option<&Class> {
 		if let &Type::ResourceObject(ref res_obj) = (*self).into() {
 			let res = res_obj.as_resource().unwrap();
@@ -268,9 +283,9 @@ impl TypeRef {
 		}
 	}
 
-	fn as_class(&self) -> Option<&Type> {
-		if let &Type::Class(_) = (*self).into() {
-			Some((*self).into())
+	fn as_class(&self) -> Option<&Class> {
+		if let &Type::Class(ref class) = (*self).into() {
+			Some(class)
 		} else {
 			None
 		}
@@ -281,6 +296,14 @@ impl TypeRef {
 			Some(s)
 		} else {
 			None
+		}
+	}
+
+	fn maybe_unwrap_option(&self) -> TypeRef {
+		if let &Type::Optional(ref t) = (*self).into() {
+			*t
+		} else {
+			*self
 		}
 	}
 
@@ -411,6 +434,12 @@ impl Types {
 		self.types.push(Box::new(t));
 		(&self.types[self.types.len() - 1]).into()
 	}
+
+	pub fn stringables(&self) -> Vec<TypeRef> {
+		// TODO: This should be more complex and return all types that have some stringification facility
+		// see: https://github.com/winglang/wing/issues/741
+		vec![self.string(), self.number()]
+	}
 }
 
 pub struct TypeChecker<'a> {
@@ -505,7 +534,7 @@ impl<'a> TypeChecker<'a> {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx).unwrap();
-							self.validate_type(exp_type, self.types.string(), interpolated_expr);
+							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
 					Some(self.types.string())
@@ -588,7 +617,11 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type.unwrap(), type_, exp);
-				// TODO: named args
+
+				if !arg_list.named_args.is_empty() {
+					let last_arg = constructor_sig.args.last().unwrap().maybe_unwrap_option();
+					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
+				}
 
 				// Count number of optional parameters from the end of the constructor's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
@@ -600,17 +633,22 @@ impl<'a> TypeChecker<'a> {
 					.count();
 
 				// Verify arity
-				let arg_count = arg_list.pos_args.len();
+				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 				let min_args = constructor_sig.args.len() - num_optionals;
 				let max_args = constructor_sig.args.len();
 				if arg_count < min_args || arg_count > max_args {
-					self.expr_error(
-						exp,
+					let err_text = if min_args == max_args {
 						format!(
-							"Expected between {} and {} args but got {} when instantiating \"{}\"",
+							"Expected {} arguments but got {} when instantiating \"{}\"",
+							min_args, arg_count, type_
+						)
+					} else {
+						format!(
+							"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
 							min_args, max_args, arg_count, type_
-						),
-					);
+						)
+					};
+					self.expr_error(exp, err_text);
 				}
 
 				// Verify passed arguments match the constructor
@@ -678,23 +716,32 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
+				if !args.named_args.is_empty() {
+					let last_arg = func_sig.args.last().unwrap().maybe_unwrap_option();
+					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
+				}
+
 				// Count number of optional parameters from the end of the function's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
 
-				// TODO: named args
 				// Verity arity
-				let arg_count = args.pos_args.len();
+				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
 				let min_args = func_sig.args.len() - num_optionals - this_args;
 				let max_args = func_sig.args.len() - this_args;
 				if arg_count < min_args || arg_count > max_args {
-					self.expr_error(
-						exp,
+					let err_text = if min_args == max_args {
 						format!(
-							"Expected between {} and {} arguments for {:?} but got {}.",
-							min_args, max_args, function, arg_count
-						),
-					);
+							"Expected {} arguments but got {} when invoking \"{}\"",
+							min_args, arg_count, function
+						)
+					} else {
+						format!(
+							"Expected between {} and {} arguments but got {} when invoking \"{}\"",
+							min_args, max_args, arg_count, function
+						)
+					};
+					self.expr_error(exp, err_text);
 				}
 
 				let params = func_sig
@@ -749,10 +796,8 @@ impl<'a> TypeChecker<'a> {
 						.unwrap();
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					panic!(
-						"Cannot infer type of empty map literal with no type annotation: {:?}",
-						exp
-					);
+					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
+					self.types.add_type(Type::Map(self.types.anything()))
 				};
 
 				let value_type = match container_type.into() {
@@ -803,12 +848,76 @@ impl<'a> TypeChecker<'a> {
 		t
 	}
 
+	/// Validate that a given hashmap can be assigned to a variable of given struct type
+	fn validate_structural_type(
+		&mut self,
+		object: &HashMap<Symbol, Expr>,
+		expected_type: &TypeRef,
+		value: &Expr,
+		env: &TypeEnv,
+		statement_idx: usize,
+	) {
+		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
+			expected_struct
+		} else {
+			self.expr_error(value, format!("Named arguments provided for non-struct argument"));
+			return;
+		};
+
+		// Verify that there are no extraneous fields
+		// Also map original field names to the ones in the struct type
+		let mut field_map = HashMap::new();
+		for (k, _) in object.iter() {
+			let field_type = expected_struct.env.try_lookup(&k.name, Some(statement_idx));
+			if let Some(field_type) = field_type {
+				field_map.insert(k.name.clone(), (k, field_type));
+			} else {
+				self.expr_error(value, format!("\"{}\" is not a field of \"{}\"", k.name, expected_type));
+			}
+		}
+
+		// Verify that all non-optional fields are present and are of the right type
+		for (k, v) in expected_struct.env.iter() {
+			if let Some((symb, expected_field_type)) = field_map.get(&k) {
+				let provided_exp = object.get(symb).unwrap();
+				let t = self.type_check_exp(provided_exp, env, statement_idx).unwrap();
+				self.validate_type(t, *expected_field_type, provided_exp);
+			} else if !v.is_option() {
+				self.expr_error(
+					value,
+					format!(
+						"Missing required field \"{}\" from \"{}\"",
+						k, expected_struct.name.name
+					),
+				);
+			}
+		}
+	}
+
 	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) {
 		if actual_type != expected_type && actual_type.0 != &Type::Anything {
 			self.diagnostics.borrow_mut().push(Diagnostic {
 				message: format!(
 					"Expected type \"{}\", but got \"{}\" instead",
 					expected_type, actual_type
+				),
+				span: Some(value.span.clone()),
+				level: DiagnosticLevel::Error,
+			});
+		}
+	}
+
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
+		if actual_type.0 != &Type::Anything && !expected_types.contains(&actual_type) {
+			self.diagnostics.borrow_mut().push(Diagnostic {
+				message: format!(
+					"Expected type to be one of \"{}\", but got \"{}\" instead",
+					expected_types
+						.iter()
+						.map(|t| format!("{}", t))
+						.collect::<Vec<String>>()
+						.join(","),
+					actual_type
 				),
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
@@ -1036,6 +1145,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
+					should_case_convert_jsii: false,
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,

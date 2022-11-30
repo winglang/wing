@@ -3,15 +3,22 @@
 
 import { compile, upgrade } from "./commands";
 import { join, resolve } from "path";
+import { satisfies } from 'compare-versions';
 
 import { Command } from "commander";
 import debug from "debug";
 import open = require("open");
 
 const PACKAGE_VERSION = require("../package.json").version as string;
+const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
+if (!SUPPORTED_NODE_VERSION) {
+  throw new Error("couldn't parse engines.node version from package.json");
+}
 const log = debug("wing:cli");
 
 async function main() {
+  checkNodeVersion()
+
   const program = new Command();
 
   program.name("wing");
@@ -21,12 +28,12 @@ async function main() {
 
   program
     .command("run")
-    .description("Runs a Wing executable in the Wing Console")
-    .argument("<executable>", "executable .wx file")
-    .action(async (executable: string) => {
-      executable = resolve(executable);
-      debug("calling wing console protocol with:" + executable);
-      open("wing-console://" + executable).catch(log);
+    .description("Runs a Wing simulator file in the Wing Console")
+    .argument("<simfile>", ".wsim simulator file")
+    .action(async (simfile: string) => {
+      simfile = resolve(simfile);
+      debug("calling wing console protocol with:" + simfile);
+      open("wing-console://" + simfile).catch(log);
     });
 
   program
@@ -51,6 +58,14 @@ async function main() {
     .action(() => upgrade({ force: true }));
 
   program.parse();
+}
+
+function checkNodeVersion() {
+  const supportedVersion = SUPPORTED_NODE_VERSION;
+
+  if (!satisfies(process.version, supportedVersion)) {
+    console.warn(`WARNING: You are running an incompatible node.js version ${process.version}. Compatible engine is: ${supportedVersion}.`)
+  }
 }
 
 main().catch((err) => {

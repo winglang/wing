@@ -1,19 +1,18 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Function } from "./function";
-import { IResource } from "./resource";
+import { Direction, Resource } from "../core";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { captureSimulatorResource } from "./util";
+import { bindSimulatorResource } from "./util";
 
 /**
  * Simulator implementation of `cloud.Queue`.
  *
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
-export class Queue extends cloud.QueueBase implements IResource {
-  private readonly inbound = new Array<string>();
-  private readonly outbound = new Array<string>();
+export class Queue extends cloud.QueueBase implements ISimulatorResource {
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
@@ -48,8 +47,8 @@ export class Queue extends cloud.QueueBase implements IResource {
     });
 
     const fn = new cloud.Function(
-      this,
-      `OnMessage-${inflight.code.hash.slice(0, 16)}`,
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${inflight.code.hash.slice(0, 16)}`,
       newInflight,
       props
     );
@@ -64,37 +63,39 @@ export class Queue extends cloud.QueueBase implements IResource {
       batchSize: props.batchSize ?? 1,
     });
 
-    this.outbound.push(fn.node.path);
-    (fn as Function)._addInbound(this.node.path);
+    this.addConnection({
+      direction: Direction.OUTBOUND,
+      relationship: "on_message",
+      resource: fn,
+    });
+    fn.addConnection({
+      direction: Direction.INBOUND,
+      relationship: "on_message",
+      resource: this,
+    });
 
     return fn;
   }
 
-  /** @internal */
-  public _toResourceSchema(): QueueSchema {
-    return {
+  public toSimulator(): BaseResourceSchema {
+    const schema: QueueSchema = {
       type: cloud.QUEUE_TYPE,
+      path: this.node.path,
       props: {
         timeout: this.timeout.seconds,
         subscribers: this.subscribers,
         initialMessages: this.initialMessages,
       },
       attrs: {} as any,
-      inbound: this.inbound,
-      outbound: this.outbound,
     };
-  }
-
-  /** @internal */
-  public _addInbound(...resources: string[]) {
-    this.inbound.push(...resources);
+    return schema;
   }
 
   /** @internal */
   public _bind(
-    captureScope: IConstruct,
+    captureScope: Resource,
     _metadata: core.CaptureMetadata
   ): core.Code {
-    return captureSimulatorResource("queue", this, captureScope);
+    return bindSimulatorResource("queue", this, captureScope);
   }
 }

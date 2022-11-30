@@ -1,4 +1,10 @@
-import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE, QUEUE_TYPE } from "../cloud";
+import {
+  BUCKET_TYPE,
+  COUNTER_TYPE,
+  FUNCTION_TYPE,
+  LOGGER_TYPE,
+  QUEUE_TYPE,
+} from "../cloud";
 import { BaseResourceSchema } from "./schema";
 
 export type FunctionHandle = string;
@@ -49,7 +55,11 @@ export interface LoggerSchema extends BaseResourceSchema {
   readonly props: {};
 }
 
-/** Schema for ordinary constructs */
-export interface ConstructSchema extends BaseResourceSchema {
-  readonly type: "constructs.Construct";
+/** Schema for cloud.Counter */
+export interface CounterSchema extends BaseResourceSchema {
+  readonly type: typeof COUNTER_TYPE;
+  readonly props: {
+    /** The initial value of the counter. */
+    readonly initialValue: number;
+  };
 }

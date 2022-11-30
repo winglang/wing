@@ -1,7 +1,14 @@
-import { IPolyconFactory } from "@winglang/polycons";
 import { IConstruct } from "constructs";
-import { BUCKET_TYPE, FUNCTION_TYPE, LOGGER_TYPE, QUEUE_TYPE } from "../cloud";
+import { IPolyconFactory } from "polycons";
+import {
+  BUCKET_TYPE,
+  COUNTER_TYPE,
+  FUNCTION_TYPE,
+  LOGGER_TYPE,
+  QUEUE_TYPE,
+} from "../cloud";
 import { Bucket } from "./bucket";
+import { Counter } from "./counter";
 import { Function } from "./function";
 import { Logger } from "./logger";
 import { Queue } from "./queue";
@@ -26,6 +33,8 @@ export class PolyconFactory implements IPolyconFactory {
         return new Queue(scope, id, args[0]);
       case LOGGER_TYPE:
         return new Logger(scope, id);
+      case COUNTER_TYPE:
+        return new Counter(scope, id, args[0]);
       default:
         throw new Error(`Type ${type} not implemented.`);
     }

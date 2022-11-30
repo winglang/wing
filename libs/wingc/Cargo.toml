@@ -15,10 +15,8 @@ colored = "2.0"
 lazy_static = "1.4.0"
 globset = "0.4.9"
 itertools = "0.10"
-
-[dev-dependencies]
-insta = "1.21.0"
-walkdir = "2.3.2"
+inflections = "1.1.1"
+phf = { version = "0.11", features = ["macros"] }
 
 [lib]
 path = "src/lib.rs"

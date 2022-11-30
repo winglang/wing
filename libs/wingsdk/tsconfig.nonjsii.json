@@ -4,8 +4,7 @@
     "esModuleInterop": true
   },
   "include": [
-    "src/**/*.inflight.ts",
-    "src/**/*.sim.ts"
+    "src/**/*.inflight.ts"
   ],
   "exclude": [
     "node_modules"
