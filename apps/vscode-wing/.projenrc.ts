@@ -71,7 +71,7 @@ const contributes: VSCodeExtensionContributions = {
     {
       id: "wing",
       aliases: ["Wing", "wing"],
-      extensions: [".w"],
+      extensions: [".w", ".wsim"],
       configuration: "./language-configuration.json",
       icon: {
         light: "resources/icon-light.png",
