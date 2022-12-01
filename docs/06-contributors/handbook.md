@@ -107,6 +107,8 @@ Running `nx build` from `apps/vscode` will ensure the language server is built f
 
 A VSCode launch configuration is available to open a VSCode with a development version of the extension.
 
+To modify the package.json, please edit .projenrc.ts and run `npx projen`.
+
 ## 🧱 How do I add a dependency to the SDK?
 
 If you need to add a new npm dependency to the SDK, you can do so by editing the `.projenrc.ts` file and running `npx projen` after making the edits.
