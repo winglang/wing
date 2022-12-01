@@ -11,7 +11,7 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
     props: CounterSchema["props"],
     context: ISimulatorContext
   ) {
-    this.value = props.initialValue;
+    this.value = props.initial;
     this.context = context;
   }
 

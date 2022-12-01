@@ -779,7 +779,7 @@ constructor() {
   super({ outdir: $outdir, name: \\"file_counter\\" });
   
   let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  let counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initialValue: 100 });
+  let counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial: 100 });
   let queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.core.Duration.fromSeconds(10) });
   const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.86754ece6e35adfd186315aa4bfcf647f5f280df200188741606e0383871bfc3/index.js\\")),
