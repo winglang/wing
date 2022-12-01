@@ -210,6 +210,10 @@
       "type": "peer"
     },
     {
+      "name": "@cdktf/provider-google",
+      "type": "peer"
+    },
+    {
       "name": "cdktf",
       "type": "peer"
     },
@@ -224,6 +228,10 @@
     },
     {
       "name": "@cdktf/provider-aws",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/provider-google",
       "type": "runtime"
     },
     {

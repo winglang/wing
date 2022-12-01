@@ -22,6 +22,8 @@ function __app(target) {
 		case "tfaws":
 		case "tf-aws":
 			return $stdlib.tfaws.App;
+		case "tf-gcp":
+			return $stdlib.tfgcp.App;
 		default:
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}

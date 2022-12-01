@@ -1,0 +1,71 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "App",
+    "path": "",
+    "children": {
+      "root": {
+        "id": "root",
+        "path": "root",
+        "children": {
+          "google": {
+            "id": "google",
+            "path": "root/google",
+            "constructInfo": {
+              "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+              "version": "4.0.1"
+            }
+          },
+          "HelloWorld": {
+            "id": "HelloWorld",
+            "path": "root/HelloWorld",
+            "children": {
+              "Bucket": {
+                "id": "Bucket",
+                "path": "root/HelloWorld/Bucket",
+                "children": {
+                  "Default": {
+                    "id": "Default",
+                    "path": "root/HelloWorld/Bucket/Default",
+                    "constructInfo": {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "4.0.1"
+                    }
+                  }
+                },
+                "attributes": {
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": []
+                },
+                "constructInfo": {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.25"
+                }
+              }
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25"
+            }
+          },
+          "backend": {
+            "id": "backend",
+            "path": "root/backend",
+            "constructInfo": {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.14.1"
+            }
+          }
+        },
+        "constructInfo": {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.14.1"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "cdktf.App",
+      "version": "0.14.1"
+    }
+  }
+}

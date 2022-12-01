@@ -78,7 +78,8 @@
   },
   "peerDependencies": {
     "@cdktf/provider-aws": "^10.0.11",
-    "cdktf": "^0.13.2",
+    "@cdktf/provider-google": "*",
+    "cdktf": "^0.14.1",
     "constructs": "~10.0.25",
     "polycons": "^0.1.1"
   },
@@ -91,8 +92,9 @@
     "@aws-sdk/types": "3.215.0",
     "@aws-sdk/util-stream-node": "3.215.0",
     "@aws-sdk/util-utf8-node": "3.208.0",
-    "@cdktf/provider-aws": "^10.0.11",
-    "cdktf": "^0.13.2",
+    "@cdktf/provider-aws": "^11",
+    "@cdktf/provider-google": "*",
+    "cdktf": "^0.14.1",
     "constructs": "~10.0.25",
     "esbuild-wasm": "^0.15.15",
     "polycons": "^0.1.1",

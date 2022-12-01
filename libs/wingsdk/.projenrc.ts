@@ -5,6 +5,7 @@ const JSII_DEPS = [
   "polycons",
   "cdktf",
   "@cdktf/provider-aws",
+  "@cdktf/provider-google",
 ];
 
 const project = new cdk.JsiiProject({
