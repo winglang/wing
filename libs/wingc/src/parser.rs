@@ -385,7 +385,8 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
-					"Set" | "Array" | "MutSet" | "MutMap" | "MutArray" | "Promise" => self.add_error(
+					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
+					"Set" | "MutSet" | "MutMap" | "MutArray" | "Promise" => self.add_error(
 						format!("{} container type currently unsupported", container_type),
 						type_node,
 					)?,
@@ -614,6 +615,30 @@ impl Parser<'_> {
 			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
 			"pure_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"array_literal" => {
+				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut items = Vec::new();
+				let mut cursor = expression_node.walk();
+				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+					//fixme: get the correct index
+					let index = 0;
+					let value_node = field_node.named_child(1).unwrap();
+					items.insert(index, self.build_expression(&value_node)?);
+				}
+
+				Ok(Expr::new(
+					ExprKind::ArrayLiteral {
+						items,
+						type_: array_type,
+					},
+					expression_span,
+				))
+			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)

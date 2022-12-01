@@ -280,6 +280,16 @@ fn jsify_expression(expression: &Expr) -> String {
 			};
 			format!("({} {} {})", jsify_expression(lexp), op, jsify_expression(rexp))
 		}
+		ExprKind::ArrayLiteral { items, .. } => {
+			format!(
+				"{{\n{}}}\n",
+				items
+					.iter()
+					.map(|expr| format!("{},", jsify_expression(expr)))
+					.collect::<Vec<String>>()
+					.join("\n")
+			)
+		}
 		ExprKind::StructLiteral { fields, .. } => {
 			format!(
 				"{{\n{}}}\n",

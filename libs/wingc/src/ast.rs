@@ -75,6 +75,7 @@ pub enum Type {
 	Bool,
 	Duration,
 	Optional(Box<Type>),
+	Array(Box<Type>),
 	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
@@ -193,6 +194,10 @@ pub enum ExprKind {
 		op: BinaryOperator,
 		lexp: Box<Expr>,
 		rexp: Box<Expr>,
+	},
+	ArrayLiteral {
+		type_: Option<Type>,
+		items: Vec<Expr>,
 	},
 	StructLiteral {
 		type_: Type,

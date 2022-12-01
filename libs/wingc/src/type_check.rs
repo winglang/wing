@@ -20,6 +20,7 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Optional(TypeRef),
+	Array(TypeRef),
 	Map(TypeRef),
 	Set(TypeRef),
 	Function(FunctionSignature),
@@ -130,6 +131,12 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
+			(Self::Array(l0), Self::Array(r0)) => {
+				// Arrays are of the same type if they have the same value type
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// Maps are of the same type if they have the same value type
 				let l: &Type = (*l0).into();
@@ -219,6 +226,7 @@ impl Display for Type {
 				let struct_type = s.as_struct().expect("Struct instance must reference to a struct");
 				write!(f, "instance of {}", struct_type.name.name)
 			}
+			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
 		}
@@ -747,6 +755,33 @@ impl<'a> TypeChecker<'a> {
 
 				func_sig.return_type
 			}
+			ExprKind::ArrayLiteral { type_, items } => {
+				// Infer type based on either the explicit type or the value in one of the items
+				let container_type = if let Some(type_) = type_ {
+					self.resolve_type(type_, env, statement_idx)
+				} else if !items.is_empty() {
+					let some_val_type = self
+						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
+						.unwrap();
+					self.types.add_type(Type::Array(some_val_type))
+				} else {
+					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
+					self.types.add_type(Type::Array(self.types.anything()))
+				};
+
+				let value_type = match container_type.into() {
+					&Type::Array(t) => t,
+					_ => panic!("Expected array type, found {}", container_type),
+				};
+
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					self.validate_type(t, value_type, v);
+				}
+
+				Some(container_type)
+			}
 			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type(type_, env, statement_idx);
@@ -932,6 +967,11 @@ impl<'a> TypeChecker<'a> {
 						self.types.anything()
 					}
 				}
+			}
+			AstType::Array(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each array resolution
+				self.types.add_type(Type::Array(value_type))
 			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
