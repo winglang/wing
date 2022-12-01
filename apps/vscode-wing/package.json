@@ -92,7 +92,8 @@
           "wing"
         ],
         "extensions": [
-          ".w"
+          ".w",
+          ".wsim"
         ],
         "configuration": "./language-configuration.json",
         "icon": {

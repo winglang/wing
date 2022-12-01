@@ -47,4 +47,5 @@ Run the `[Wing] Set update token` VSCode command from the command palette to add
 
 ## Contributing
 
-See the FAQ in [CONTRIBUTING.md](../../CONTRIBUTING.md#🔨-how-do-i-build-the-vscode-extension) for how to contribute!
+See the FAQ in [Contributor's Handbook](https://docs.winglang.io/contributors/handbook#-how-do-i-build-the-vscode-extension) for how to contribute!
+
