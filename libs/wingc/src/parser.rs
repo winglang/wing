@@ -637,12 +637,18 @@ impl Parser<'_> {
 				expression_span,
 			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"preflight_closure" => Ok(Expr::new(
+				ExprKind::FunctionDefinition(self.build_anonymous_closure(&expression_node)?),
+				expression_span,
+			)),
 			"inflight_closure" => Ok(Expr::new(
 				ExprKind::FunctionDefinition(self.build_anonymous_closure(&expression_node)?),
 				expression_span,
 			)),
-			"pure_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"pure_closure" => self.add_error(
+				format!("Pure phased anonymous closures not implemented yet"),
+				expression_node,
+			),
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)
