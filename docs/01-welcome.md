@@ -44,9 +44,9 @@ Best explained through an example:
 ```js
 bring cloud;
 
+let queue = new cloud.Queue(timeout: 2m);
 let bucket = new cloud.Bucket();
 let counter = new cloud.Counter(initial: 100);
-let queue = new cloud.Queue();
 
 inflight handler(body: str): str {
   let next = counter.inc();
