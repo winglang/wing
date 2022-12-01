@@ -624,11 +624,8 @@ impl Parser<'_> {
 
 				let mut items = Vec::new();
 				let mut cursor = expression_node.walk();
-				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
-					//fixme: get the correct index
-					let index = 0;
-					let value_node = field_node.named_child(1).unwrap();
-					items.insert(index, self.build_expression(&value_node)?);
+				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+					items.push(self.build_expression(&element_node)?);
 				}
 
 				Ok(Expr::new(
