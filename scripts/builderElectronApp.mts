@@ -64,7 +64,10 @@ try {
       files: ["dist/vite"],
 
       mac: {
-        target: "default",
+        target: {
+          target: "default",
+          arch: ["x64", "arm64"],
+        },
       },
       dmg: {
         sign: true,

@@ -52,7 +52,7 @@ jobs:
   release_electron_builder:
     name: Publish using electron-builder
     needs: release
-    runs-on: macos-latest
+    runs-on: ghcr.io/cirruslabs/macos-monterey-base:latest
     permissions:
       contents: write
     env:
