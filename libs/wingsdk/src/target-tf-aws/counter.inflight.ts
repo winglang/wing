@@ -10,7 +10,7 @@ const VALUE_ATTRIBUTE = "counter_value";
 export class CounterClient implements ICounterClient {
   constructor(
     private readonly tableName: string,
-    private readonly initialValue: number = 0,
+    private readonly initial: number = 0,
     private readonly client = new DynamoDBClient({})
   ) {}
 
@@ -21,7 +21,7 @@ export class CounterClient implements ICounterClient {
       UpdateExpression: `SET ${VALUE_ATTRIBUTE} = if_not_exists(${VALUE_ATTRIBUTE}, :${INITIAL_VALUE_TOKEN}) + :${AMOUNT_TOKEN}`,
       ExpressionAttributeValues: {
         [`:${AMOUNT_TOKEN}`]: { N: `${amount}` },
-        [`:${INITIAL_VALUE_TOKEN}`]: { N: `${this.initialValue}` },
+        [`:${INITIAL_VALUE_TOKEN}`]: { N: `${this.initial}` },
       },
       ReturnValues: "UPDATED_NEW",
     });
