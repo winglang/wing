@@ -98,7 +98,6 @@ impl JSifier {
 		output.append(&mut imports);
 
 		if self.shim {
-			js.insert(0, format!("super({{ outdir: $outdir }});\n"));
 			js.insert(
 				0,
 				format!("super({{ outdir: $outdir, name: \"{}\" }});\n", self.app_name),
@@ -533,7 +532,7 @@ impl JSifier {
 				"".to_string()
 			},
 		]);
-		format!("new {}.core.Inflight({});", STDLIB, props_block)
+		format!("new {}.core.Inflight({})", STDLIB, props_block)
 	}
 
 	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope) -> String {
