@@ -1,8 +1,3 @@
-import { createTRPCClient } from "@trpc/client";
-import { useEffect, useState } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-
-import { Router } from "../electron/main/router/index.js";
 import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 
 import { VscodeLayout } from "./components/VscodeLayout.js";
@@ -10,12 +5,9 @@ import { NotificationsProvider } from "./design-system/Notification.js";
 import { trpc } from "./utils/trpc.js";
 import { useIpcEventListener } from "./utils/useIpcEventListener.js";
 
-export interface AppProps {
-  querySchema?: WingSimulatorSchema;
-}
+export interface AppProps {}
 
-export const App = ({ querySchema }: AppProps) => {
-  const schema = trpc.useQuery(["app.tree"]);
+export const App = ({}: AppProps) => {
   const logs = trpc.useQuery(["app.logs"]);
 
   const { invalidateQueries } = trpc.useContext();
@@ -25,7 +17,7 @@ export const App = ({ querySchema }: AppProps) => {
 
   return (
     <NotificationsProvider>
-      <VscodeLayout schema={querySchema ?? schema.data} logs={logs.data} />
+      <VscodeLayout logs={logs.data} />
     </NotificationsProvider>
   );
 };

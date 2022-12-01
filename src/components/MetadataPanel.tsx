@@ -3,12 +3,11 @@ import {
   ArrowRightOnRectangleIcon,
 } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { InspectorSection } from "../design-system/InspectorSection.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { ResourceIcon } from "../stories/utils.js";
-import { Node } from "../utils/nodeMap.js";
 
 import { AttributeView } from "./AttributeView.js";
 
@@ -34,10 +33,25 @@ interface ConnectionsGroup {
   }[];
 }
 
+interface Relationship {
+  id: string;
+  path: string;
+  type: string;
+}
+
 export interface MetadataProps {
-  node: Node;
-  inbound?: Node[];
-  outbound?: Node[];
+  node: {
+    id: string;
+    path: string;
+    type: string;
+    props?:
+      | {
+          [key: string]: any;
+        }
+      | undefined;
+  };
+  inbound?: Relationship[];
+  outbound?: Relationship[];
   onConnectionNodeClick?: (path: string) => void;
 }
 
@@ -69,17 +83,17 @@ export const MetadataPanel = ({
         ],
       },
     ];
-    if (node.type.startsWith("wingsdk.cloud") && node.attributes) {
+    if (node.type.startsWith("wingsdk.cloud") && node.props) {
       switch (node.type) {
         case "wingsdk.cloud.Function": {
           attrGroups.push({
             groupName: "Function",
             attributes: [
-              { key: "Entry", value: node.attributes.sourceCodeFile },
-              { key: "Language", value: node.attributes.sourceCodeLanguage },
+              { key: "Entry", value: node.props.sourceCodeFile },
+              { key: "Language", value: node.props.sourceCodeLanguage },
               {
                 key: "Environment",
-                value: JSON.stringify(node.attributes.environmentVariables),
+                value: JSON.stringify(node.props.environmentVariables),
               },
             ],
           });
@@ -89,9 +103,7 @@ export const MetadataPanel = ({
         case "wingsdk.cloud.Queue": {
           attrGroups.push({
             groupName: "Queue",
-            attributes: [
-              { key: "Timeout", value: `${node.attributes.timeout}s` },
-            ],
+            attributes: [{ key: "Timeout", value: `${node.props.timeout}s` }],
           });
 
           break;
@@ -102,7 +114,7 @@ export const MetadataPanel = ({
             attributes: [
               {
                 key: "Public",
-                value: node.attributes.public ? "True" : "False",
+                value: node.props.public ? "True" : "False",
               },
             ],
           });

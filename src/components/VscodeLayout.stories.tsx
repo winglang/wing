@@ -4,7 +4,6 @@ import { PropsWithChildren, useState } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import { NotificationsProvider } from "../design-system/Notification.js";
-import { constructHubTreeToWingSchema } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 
 import { VscodeLayout } from "./VscodeLayout.js";
@@ -18,7 +17,6 @@ const Container = ({ children }: PropsWithChildren) => {
 };
 
 export const Default = () => {
-  const schema = constructHubTreeToWingSchema();
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
     createTRPCClient({
@@ -31,18 +29,10 @@ export const Default = () => {
       <NotificationsProvider>
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
-            <VscodeLayout schema={schema} />
+            <VscodeLayout />
           </QueryClientProvider>
         </trpc.Provider>
       </NotificationsProvider>
-    </Container>
-  );
-};
-
-export const Empty = () => {
-  return (
-    <Container>
-      <VscodeLayout schema={undefined} />
     </Container>
   );
 };

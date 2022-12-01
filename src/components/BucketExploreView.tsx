@@ -14,17 +14,15 @@ import {
   useState,
 } from "react";
 
-import { BaseResourceSchema } from "../../electron/main/wingsdk.js";
 import { Button } from "../design-system/Button.js";
 import { Checkbox } from "../design-system/Checkbox.js";
 import { Input } from "../design-system/Input.js";
 import { dateFormatter } from "../utils/dateUtils.js";
-import { Node } from "../utils/nodeMap.js";
 import { trpc } from "../utils/trpc.js";
 import { useDownloadFile } from "../utils/useDownloadFile.js";
 
 export interface BucketInteractionViewProps {
-  node: Node;
+  resourcePath: string;
 }
 
 export interface FileExplorerEntry {
@@ -34,9 +32,10 @@ export interface FileExplorerEntry {
   fileSize?: number;
 }
 
-export const BucketExploreView = ({ node }: BucketInteractionViewProps) => {
+export const BucketExploreView = ({
+  resourcePath,
+}: BucketInteractionViewProps) => {
   const [path] = useState("/");
-  const resourcePath = node.path ?? "";
   const bucketList = trpc.useQuery(["bucket.list", { resourcePath }]);
   const putFile = trpc.useMutation(["bucket.put"]);
   const getFile = trpc.useMutation(["bucket.get"]);
@@ -50,7 +49,7 @@ export const BucketExploreView = ({ node }: BucketInteractionViewProps) => {
     const newEntries = new Array<FileExplorerEntry>();
     for (const file of event.currentTarget.files ?? []) {
       await putFile.mutateAsync({
-        resourcePath: node.path ?? "",
+        resourcePath,
         fileName: file.name,
         filePath: file.path,
       });
@@ -89,7 +88,7 @@ export const BucketExploreView = ({ node }: BucketInteractionViewProps) => {
   const downloadSelectedEntries = useCallback(async () => {
     for (const entry of selectedEntries) {
       const file = await getFile.mutateAsync({
-        resourcePath: node.path ?? "",
+        resourcePath,
         fileName: entry,
       });
       download(entry, file);

@@ -13,7 +13,6 @@ import {
   BaseResourceSchema,
   WingSimulatorSchema,
 } from "../../electron/main/wingsdk.js";
-import constructHubTree from "../assets/construct-hub-tree.json";
 import { TreeMenuItem } from "../design-system/TreeMenu.js";
 
 export const flattenTreeMenuItems = (items: TreeMenuItem[]): TreeMenuItem[] => {
@@ -51,145 +50,7 @@ export const SchemaToTreeMenuItems = (
     } else {
       tree.push(item);
     }
-    if (node.children) {
-      for (const child of Object.values(node.children)) {
-        buildTree(child, item);
-      }
-    }
   };
-  buildTree(schema.root, undefined);
-  return tree;
-};
-
-// resource id is not unique, so we need to use the path
-const getConstructHubResourcePaths = (): string[] => {
-  const resourceIds: string[] = [];
-  const getResourceIds = (node: any) => {
-    if (isContHubResource(node)) {
-      resourceIds.push(node.path);
-    }
-    if (node.children && Object.keys(node.children).length > 0) {
-      // eslint-disable-next-line unicorn/no-array-for-each
-      Object.keys(node.children).forEach((child: any) => {
-        getResourceIds(node.children[child]);
-      });
-    }
-  };
-  getResourceIds(constructHubTree.tree.children["construct-hub-dev"]);
-  return resourceIds;
-};
-
-const getRandomArrayOfResourcesPaths = (resourcesArray: any[]): string[] => {
-  // random index array
-  const arrayLength = Math.floor(Math.random() * 8);
-  if (!arrayLength) return [];
-
-  const indexArray = Array.from({ length: arrayLength }, () =>
-    Math.floor(Math.random() * resourcesArray.length),
-  );
-  // random resource paths array
-  const resourcePaths = [];
-  for (let i = 0; i < arrayLength; i++) {
-    // @ts-ignore
-    resourcePaths.push(resourcesArray[indexArray[i]]);
-  }
-  return resourcePaths;
-};
-
-const isContHubResource = (node: any): boolean => {
-  return node?.attributes?.["aws:cdk:cloudformation:type"] !== undefined;
-};
-
-const hubNodeTypeAndProps = (
-  node: any,
-): {
-  type: string;
-  props: Record<string, any>;
-} => {
-  if (isContHubResource(node)) {
-    switch (node.attributes["aws:cdk:cloudformation:type"]) {
-      case "AWS::S3::Bucket": {
-        return {
-          type: "wingsdk.cloud.Bucket",
-          props: {},
-        };
-      }
-      case "AWS::Lambda::Function": {
-        return {
-          type: "wingsdk.cloud.Function",
-          props: {
-            sourceCodeFile: "func.js",
-            sourceCodeLanguage: "javascript",
-            environmentVariables: {
-              FOO: "bar",
-            },
-          },
-        };
-      }
-      case "AWS::SQS::Queue": {
-        return { type: "wingsdk.cloud.Queue", props: { timeout: "3000" } };
-      }
-      default: {
-        // TODO: update schema to support custom resources
-        return { type: "wingsdk.cloud.Custom", props: {} };
-      }
-    }
-  } else {
-    return { type: "wingsdk.constructs.Construct", props: {} };
-  }
-};
-
-export const constructHubTreeToWingSchema = (): WingSimulatorSchema => {
-  const tree: WingSimulatorSchema = {
-    root: {
-      path: "",
-      type: "constructs.Construct",
-      children: {},
-    },
-    startOrder: [],
-    sdkVersion: "",
-  };
-
-  const resourcePathsArray = getConstructHubResourcePaths();
-
-  // TODO: fix types
-  const buildTree = (node: any, parent: any | undefined) => {
-    const item: {
-      path: string;
-      children?: {};
-      inbound?: string[];
-      outbound?: string[];
-      id: string;
-      type: string;
-      props: Record<string, any>;
-    } = {
-      id: node.id,
-      path: node.path,
-      ...hubNodeTypeAndProps(node),
-    };
-
-    if (isContHubResource(node)) {
-      item.inbound = getRandomArrayOfResourcesPaths(resourcePathsArray);
-      item.outbound = getRandomArrayOfResourcesPaths(resourcePathsArray);
-    }
-
-    if (node.children) {
-      item.children = {};
-    }
-    if (parent) {
-      parent.children[item.id] = item;
-    } else {
-      // @ts-ignore
-      tree.root.children[item.id] = item;
-    }
-    if (node.children && Object.keys(node.children).length > 0) {
-      // eslint-disable-next-line unicorn/no-array-for-each
-      Object.keys(node.children).forEach((child: any) => {
-        buildTree(node.children[child], item);
-      });
-    }
-  };
-  buildTree(constructHubTree.tree.children["construct-hub-dev"], undefined);
   return tree;
 };
 
@@ -208,7 +69,9 @@ const CubeTransparentExIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-const getResourceIconComponent = (resourceType: BaseResourceSchema["type"]) => {
+const getResourceIconComponent = (
+  resourceType: BaseResourceSchema["type"] | undefined,
+) => {
   switch (resourceType) {
     case "wingsdk.cloud.Bucket": {
       return ArchiveBoxIcon;
@@ -232,7 +95,7 @@ const getResourceIconComponent = (resourceType: BaseResourceSchema["type"]) => {
 };
 
 const getResourceIconColors = (options: {
-  resourceType: BaseResourceSchema["type"];
+  resourceType: BaseResourceSchema["type"] | undefined;
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
 }) => {
@@ -281,7 +144,7 @@ const getResourceIconColors = (options: {
 };
 
 export interface ResourceIconProps extends React.SVGProps<SVGSVGElement> {
-  resourceType: BaseResourceSchema["type"];
+  resourceType: BaseResourceSchema["type"] | undefined;
   darkenOnGroupHover?: boolean;
   forceDarken?: boolean;
 }

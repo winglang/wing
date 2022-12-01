@@ -71,6 +71,8 @@ export const ConstructAttributes = () => {
         node={{
           path: "App/construct-hub-dev/Custom::S3AutoDeleteObjectsCustomResourceProvider",
           type: "constructs.Construct",
+          attrs: { handle: "" },
+          props: {},
         }}
       />
     </div>
@@ -84,6 +86,8 @@ export const BucketAttributes = () => {
         node={{
           path: "App/construct-hub-dev/Images",
           type: "wingsdk.cloud.Bucket",
+          attrs: { handle: "" },
+          props: {},
         }}
       />
     </div>
@@ -97,6 +101,7 @@ export const EndpointAttributes = () => {
         node={{
           path: "App/construct-hub-dev/ScrapeImagesEndpoint",
           type: "wingsdk.cloud.Endpoint",
+          attrs: { handle: "" },
           props: {
             requestMethod: "POST",
             requestPath: "/",

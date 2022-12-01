@@ -1,22 +1,26 @@
-import { Node } from "../utils/nodeMap.js";
-
 import { BucketExploreView } from "./BucketExploreView.js";
 import { FunctionExploreView } from "./FunctionExploreView.js";
 import { QueueExploreView } from "./QueueExploreView.js";
 
 export interface ResourceExploreViewProps {
-  node: Node;
+  resourceType: string;
+  resourcePath: string;
 }
 
-export const ResourceExploreView = ({ node }: ResourceExploreViewProps) => {
+export const ResourceExploreView = ({
+  resourceType,
+  resourcePath,
+}: ResourceExploreViewProps) => {
   return (
     <div className={"flex-1 flex w-full"}>
-      {node.type === "wingsdk.cloud.Queue" && <QueueExploreView node={node} />}
-      {node.type === "wingsdk.cloud.Function" && (
-        <FunctionExploreView node={node} />
+      {resourceType === "wingsdk.cloud.Queue" && (
+        <QueueExploreView resourcePath={resourcePath} />
       )}
-      {node.type === "wingsdk.cloud.Bucket" && (
-        <BucketExploreView node={node} />
+      {resourceType === "wingsdk.cloud.Function" && (
+        <FunctionExploreView resourcePath={resourcePath} />
+      )}
+      {resourceType === "wingsdk.cloud.Bucket" && (
+        <BucketExploreView resourcePath={resourcePath} />
       )}
     </div>
   );

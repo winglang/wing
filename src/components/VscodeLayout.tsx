@@ -1,7 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
+import { ExplorerItem } from "../../electron/main/router/app.js";
 import { WingSimulatorSchema } from "../../electron/main/wingsdk.js";
-import { Breadcrumb, Breadcrumbs } from "../design-system/Breadcrumbs.js";
+import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { SpinnerIcon } from "../design-system/icons/SpinnerIcon.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
@@ -10,30 +11,19 @@ import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import {
   SELECTED_TREE_ITEM_CSS_ID,
   TreeMenu,
+  TreeMenuItem,
 } from "../design-system/TreeMenu.js";
-import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
-import { Node, useNodeMap } from "../utils/nodeMap.js";
+import { ResourceIcon } from "../stories/utils.js";
+import { trpc } from "../utils/trpc.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
 import { HeaderBanner } from "./HeaderBanner.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { NewNodeRelationshipsView } from "./NewNodeRelationshipsView.js";
 import { NodeLogs } from "./NodeLogs.js";
-import { Relationships } from "./NodeRelationshipsView.js";
 import { ResourceExploreView } from "./ResourceExploreView.js";
 
-function deduceRelationshipName(nodeType: string) {
-  if (nodeType === "wingsdk.cloud.Function") {
-    return "invoke";
-  }
-
-  if (nodeType === "wingsdk.cloud.Bucket") {
-    return "put file";
-  }
-}
-
 export interface VscodeLayoutProps {
-  schema?: WingSimulatorSchema | undefined;
   logs?:
     | {
         timestamp: number;
@@ -45,10 +35,20 @@ export interface VscodeLayoutProps {
 
 const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
-export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
+export const VscodeLayout = ({ logs }: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
+
   const treeMenu = useTreeMenuItems();
-  const nodeMap = useNodeMap(schema?.root);
+  const explorerTree = trpc.useQuery(["app.explorerTree"], {
+    onSuccess(rootItem) {
+      treeMenu.setItems([createTreeMenuItemFromExplorerTreeItem(rootItem)]);
+      treeMenu.setCurrent("root");
+    },
+  });
+
+  useEffect(() => {
+    treeMenu.expandAll();
+  }, [treeMenu.items]);
 
   const openExternalUrl = (url: string) => {
     if (window.electronTRPC) {
@@ -56,14 +56,10 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
     }
   };
 
-  useEffect(() => {
-    treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
-    treeMenu.setCurrent(schema?.root.path);
-  }, [schema]);
-
-  useEffect(() => {
-    treeMenu.expandAll();
-  }, [nodeMap]);
+  const childRelationships = trpc.useQuery([
+    "app.childRelationships",
+    { path: treeMenu.currentItemId },
+  ]);
 
   useEffect(() => {
     document.querySelector(`.${SELECTED_TREE_ITEM_CSS_ID}`)?.scrollIntoView({
@@ -73,43 +69,15 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
     });
   }, [treeMenu.currentItemId]);
 
-  const breadcrumbs = useMemo(() => {
-    let breadcrumbs: Breadcrumb[] = [];
-    nodeMap?.visitParents(treeMenu.currentItemId, (node) => {
-      breadcrumbs = [
-        {
-          id: node.path,
-          name: node.id,
-          icon: (
-            <ResourceIcon
-              resourceType={node.type}
-              className="w-4 h-4"
-              darkenOnGroupHover
-            />
-          ),
-        },
-        ...breadcrumbs,
-      ];
-    });
-    return breadcrumbs;
-  }, [nodeMap, treeMenu.currentItemId]);
+  const breadcrumbs = trpc.useQuery([
+    "app.nodeBreadcrumbs",
+    { path: treeMenu.currentItemId },
+  ]);
 
-  const [currentNode, setCurrentNode] = useState<Node>();
-  const [currentInbound, setCorrectInbound] = useState<Node[]>([]);
-  const [currentOutbound, setCurrentOutbound] = useState<Node[]>([]);
-
-  useEffect(() => {
-    const node = nodeMap?.find(treeMenu.currentItemId);
-    setCurrentNode(node);
-  }, [nodeMap, treeMenu.currentItemId]);
-
-  useEffect(() => {
-    if (!currentNode) {
-      return;
-    }
-    setCorrectInbound(nodeMap?.findAll(currentNode.inbound) ?? []);
-    setCurrentOutbound(nodeMap?.findAll(currentNode.outbound) ?? []);
-  }, [currentNode]);
+  const currentNode = trpc.useQuery([
+    "app.node",
+    { path: treeMenu.currentItemId },
+  ]);
 
   const logsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -119,23 +87,12 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
     }
   }, [logs]);
 
-  const childRelationships = useMemo(() => {
-    if (!currentNode || !nodeMap) {
-      return;
-    }
-
-    if (!currentNode.type.endsWith("constructs.Construct")) {
-      return;
-    }
-
-    return nodeMap.findAll(currentNode.children).map((node) => {
-      return {
-        node,
-        inbound: nodeMap.findAll(node.inbound),
-        outbound: nodeMap.findAll(node.outbound),
-      };
-    });
-  }, [currentNode, nodeMap]);
+  const metadata = trpc.useQuery([
+    "app.nodeMetadata",
+    {
+      path: treeMenu.currentItemId,
+    },
+  ]);
 
   return (
     <div className="h-full flex flex-col bg-slate-100 select-none">
@@ -170,14 +127,23 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
 
         <div className="flex-1 flex flex-col">
           <div className="flex-0 flex-shrink-0 w-full h-9 relative bg-white border-b">
-            {treeMenu.currentItemId !== undefined && (
+            {breadcrumbs.data && (
               <ScrollableArea
                 overflowX
                 scrollbarSize="xs"
                 className="flex flex-col justify-around overflow-y-hidden"
               >
                 <Breadcrumbs
-                  breadcrumbs={breadcrumbs}
+                  breadcrumbs={breadcrumbs.data.map((node) => ({
+                    id: node.path,
+                    name: node.id,
+                    icon: (
+                      <ResourceIcon
+                        resourceType={node.type}
+                        className="w-4 h-4"
+                      />
+                    ),
+                  }))}
                   onBreadcrumbClicked={(breadcrumb) => {
                     treeMenu.expand(breadcrumb.id);
                     treeMenu.setCurrent(breadcrumb.id);
@@ -190,66 +156,68 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
           <div className="flex-1 flex">
             <div className="flex-1 relative">
               <ScrollableArea overflowX className="flex flex-col bg-white">
-                {childRelationships && (
-                  <div className="flex-1 bg-white min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
-                    {childRelationships.map((relationship) => (
-                      <NewNodeRelationshipsView
-                        key={relationship.node.id}
-                        node={{
-                          id: relationship.node.id,
-                          path: relationship.node.path,
-                          icon: (
-                            <ResourceIcon
-                              resourceType={relationship.node.type}
-                              className="w-4 h-4"
-                            />
-                          ),
-                        }}
-                        inbound={relationship.inbound.map((node) => ({
-                          id: node.id,
-                          path: node.path,
-                          icon: (
-                            <ResourceIcon
-                              resourceType={node.type}
-                              className="w-4 h-4"
-                            />
-                          ),
-                          relationshipName: deduceRelationshipName(
-                            relationship.node.type,
-                          ),
-                        }))}
-                        outbound={relationship.outbound.map((node) => ({
-                          id: node.id,
-                          path: node.path,
-                          icon: (
-                            <ResourceIcon
-                              resourceType={node.type}
-                              className="w-4 h-4"
-                            />
-                          ),
-                          relationshipName: deduceRelationshipName(node.type),
-                        }))}
-                        onClick={(path) => {
-                          treeMenu.expand(path);
-                          treeMenu.setCurrent(path);
-                        }}
-                      />
-                    ))}
-                  </div>
-                )}
+                {currentNode.data?.type === "constructs.Construct" &&
+                  childRelationships.data && (
+                    <div className="flex-1 bg-white min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
+                      {childRelationships.data.map((child) => (
+                        <NewNodeRelationshipsView
+                          key={child.node.id}
+                          node={{
+                            id: child.node.id,
+                            path: child.node.path,
+                            icon: (
+                              <ResourceIcon
+                                resourceType={child.node.type}
+                                className="w-4 h-4"
+                              />
+                            ),
+                          }}
+                          inbound={child.inbound.map((relationship) => ({
+                            id: relationship.node.id,
+                            path: relationship.node.path,
+                            icon: (
+                              <ResourceIcon
+                                resourceType={relationship.node.type}
+                                className="w-4 h-4"
+                              />
+                            ),
+                            relationshipName: relationship.relationshipType,
+                          }))}
+                          outbound={child.outbound.map((relationship) => ({
+                            id: relationship.node.id,
+                            path: relationship.node.path,
+                            icon: (
+                              <ResourceIcon
+                                resourceType={relationship.node.type}
+                                className="w-4 h-4"
+                              />
+                            ),
+                            relationshipName: relationship.relationshipType,
+                          }))}
+                          onClick={(path) => {
+                            treeMenu.expand(path);
+                            treeMenu.setCurrent(path);
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
 
-                {currentNode?.type.startsWith("wingsdk.cloud") && (
-                  <ResourceExploreView node={currentNode} />
+                {currentNode.data?.type?.startsWith("wingsdk.cloud") && (
+                  <ResourceExploreView
+                    resourceType={currentNode.data.type}
+                    resourcePath={currentNode.data.path}
+                  />
                 )}
               </ScrollableArea>
             </div>
 
             <LeftResizableWidget className="bg-white flex-shrink min-w-[20rem] border-l z-10">
-              {currentNode && (
+              {metadata.data && (
                 <MetadataPanel
-                  node={currentNode}
-                  inbound={currentInbound}
-                  outbound={currentOutbound}
+                  node={metadata.data.node}
+                  inbound={metadata.data.inbound}
+                  outbound={metadata.data.outbound}
                   onConnectionNodeClick={(path) => {
                     treeMenu.expand(path);
                     treeMenu.setCurrent(path);
@@ -260,7 +228,7 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
           </div>
         </div>
 
-        {!schema && (
+        {explorerTree.isLoading && (
           <div className="absolute inset-0 bg-white/75 z-10 flex justify-around items-center">
             <SpinnerIcon className="w-8 h-8 text-slate-200 animate-spin dark:text-slate-600 fill-sky-600" />
           </div>
@@ -282,3 +250,22 @@ export const VscodeLayout = ({ schema, logs }: VscodeLayoutProps) => {
     </div>
   );
 };
+
+function createTreeMenuItemFromExplorerTreeItem(
+  item: ExplorerItem,
+): TreeMenuItem {
+  return {
+    id: item.id,
+    label: item.label,
+    icon: item.type ? (
+      <ResourceIcon
+        resourceType={item.type}
+        className="w-4 h-4"
+        darkenOnGroupHover
+      />
+    ) : undefined,
+    children: item.childItems?.map((item) =>
+      createTreeMenuItemFromExplorerTreeItem(item),
+    ),
+  };
+}

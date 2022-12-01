@@ -5,14 +5,15 @@ import { AppContext } from "../AppContext.js";
 import { Button } from "../design-system/Button.js";
 import { useNotifications } from "../design-system/Notification.js";
 import { TextArea } from "../design-system/TextArea.js";
-import { Node } from "../utils/nodeMap.js";
 import { trpc } from "../utils/trpc.js";
 
 export interface QueueInteractionViewProps {
-  node: Node;
+  resourcePath: string;
 }
 
-export const QueueExploreView = ({ node }: QueueInteractionViewProps) => {
+export const QueueExploreView = ({
+  resourcePath,
+}: QueueInteractionViewProps) => {
   const { appMode } = useContext(AppContext);
   const pushMessage = trpc.useMutation(["queue.push"]);
   const [message, setMessage] = useState("");
@@ -26,7 +27,7 @@ export const QueueExploreView = ({ node }: QueueInteractionViewProps) => {
       return;
     }
     await pushMessage.mutateAsync({
-      resourcePath: node.path ?? "",
+      resourcePath,
       message: message,
     });
     showNotification("message sent", { body: message, type: "success" });

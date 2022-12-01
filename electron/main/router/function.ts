@@ -21,7 +21,7 @@ export const createFunctionRouter = () => {
     }),
     async resolve({ input, ctx }) {
       const simulator = await ctx.simulator();
-      const client = simulator.getResourceByPath(
+      const client = simulator.getResource(
         input.resourcePath,
       ) as IFunctionClient;
       try {

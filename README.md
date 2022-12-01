@@ -49,4 +49,7 @@ Once installed, the Wing Console will be able to process deeplinks with the `win
 ```sh
 cd demo
 wing compile -t sim index.w
+# Extract the wsim, for debugging purposes
+cd target
+tar -xf index.wsim
 ```

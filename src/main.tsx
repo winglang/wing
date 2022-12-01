@@ -33,7 +33,7 @@ const main = ({
       <AppContext.Provider value={{ appMode }}>
         <trpc.Provider client={trpcClient} queryClient={queryClient}>
           <QueryClientProvider client={queryClient}>
-            <App querySchema={schema} />
+            <App />
           </QueryClientProvider>
         </trpc.Provider>
       </AppContext.Provider>

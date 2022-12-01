@@ -1,0 +1,40 @@
+{
+  "resources": [
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/cloud.Bucket",
+      "props": {
+        "public": false
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/cloud.Queue-OnMessage-b29fc28fa9d650f5",
+      "props": {
+        "sourceCodeFile": "assets/cloud.Queue-OnMessage-b29fc28fa9d650f5/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {
+          "BUCKET_HANDLE_2cd0933d": "${root/cloud.Bucket#attrs.handle}"
+        }
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Queue",
+      "path": "root/cloud.Queue",
+      "props": {
+        "timeout": 30,
+        "subscribers": [
+          {
+            "functionHandle": "${root/cloud.Queue-OnMessage-b29fc28fa9d650f5#attrs.handle}",
+            "batchSize": 1
+          }
+        ],
+        "initialMessages": []
+      },
+      "attrs": {}
+    }
+  ],
+  "sdkVersion": "0.3.3"
+}

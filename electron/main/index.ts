@@ -16,7 +16,7 @@ import { createSimulator } from "./utils/createSimulator.js";
 
 // Chokidar is a CJS-only module and doesn't play well with ESM imports.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const chokidar = require("chokidar");
+const chokidar = require("chokidar") as typeof import("chokidar");
 
 log.info("Application entrypoint");
 
@@ -138,6 +138,9 @@ function createWindowManager() {
                 async simulator() {
                   return simulator.get();
                 },
+                async tree() {
+                  return simulator.tree();
+                },
                 logs() {
                   return console.messages;
                 },
@@ -221,9 +224,10 @@ function createWindowManager() {
       return newWindow;
     },
     async showOpenFileDialog() {
+      await app.whenReady();
       const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ["openFile"],
-        filters: [{ name: "Wing Local File", extensions: ["wx"] }],
+        filters: [{ name: "Wing Sim File", extensions: ["wsim"] }],
       });
       if (canceled) {
         return;
@@ -312,7 +316,7 @@ async function main() {
               async click() {
                 const { canceled, filePaths } = await dialog.showOpenDialog({
                   properties: ["openFile"],
-                  filters: [{ name: "Wing Local File", extensions: ["wx"] }],
+                  filters: [{ name: "Wing Sim File", extensions: ["wsim"] }],
                 });
                 if (canceled) {
                   return;
@@ -343,7 +347,7 @@ async function main() {
     const installExtension = await import("electron-devtools-installer");
     await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
 
-    await windowManager.open(`${__dirname}/../../../../demo/target/index.wx`);
+    await windowManager.open(`${__dirname}/../../../../demo/target/index.wsim`);
   } else {
     new AppUpdater();
 

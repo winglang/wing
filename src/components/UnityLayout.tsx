@@ -22,7 +22,6 @@ import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
 import { ResourceIcon, SchemaToTreeMenuItems } from "../stories/utils.js";
-import { Node, useNodeMap } from "../utils/nodeMap.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
 interface Attribute {
@@ -131,8 +130,6 @@ export interface UnityLayoutProps {
 }
 
 export function UnityLayout({ schema }: UnityLayoutProps) {
-  const nodeMap = useNodeMap(schema?.root);
-  const invokeFunctionId = useId();
   const treeMenu = useTreeMenuItems();
   useEffect(() => {
     treeMenu.setItems(schema ? SchemaToTreeMenuItems(schema) : []);
@@ -142,74 +139,6 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
     treeMenu.expandAll();
     treeMenu.setCurrent("");
   }, [treeMenu.items]);
-  const [currentNode, setCurrentNode] = useState<Node>();
-  const [attributeGroups, setAttributeGroups] = useState<AttributeGroup[]>();
-
-  useEffect(() => {
-    const node = nodeMap?.find(treeMenu.currentItemId);
-    setCurrentNode(node);
-    if (node) {
-      let attributeGroups: AttributeGroup[] = [
-        {
-          groupName: "Node",
-          attributes: [
-            { key: "ID", value: node.id },
-            {
-              key: "Path",
-              value: node.path,
-            },
-            {
-              key: "Source",
-              value: "src/demo.w (20:2)",
-              type: "url",
-              url: "http://",
-            },
-          ],
-        },
-      ];
-
-      if (node.type === "wingsdk.cloud.Bucket") {
-        attributeGroups = [
-          ...attributeGroups,
-          {
-            groupName: "Bucket Attributes",
-            attributes: [
-              {
-                key: "URL",
-                value: "http://localhost:3012",
-                type: "url",
-                url: "http://localhost:3012",
-              },
-              { key: "Secure", value: "true" },
-            ] as Attribute[],
-          },
-        ];
-      }
-
-      if (node.type === "wingsdk.cloud.Endpoint") {
-        attributeGroups = [
-          ...attributeGroups,
-          {
-            groupName: "Endpoint Attributes",
-            attributes: [
-              {
-                key: "URL",
-                value: "http://localhost:3012",
-                type: "url",
-                url: "http://localhost:3012",
-              },
-              { key: "Secure", value: "true" },
-            ] as Attribute[],
-          },
-        ];
-      }
-
-      setAttributeGroups(attributeGroups);
-    } else {
-      setAttributeGroups(undefined);
-    }
-    // }, [nodeMap, treeMenu.currentItemId]);
-  }, [treeMenu.currentItemId]);
 
   useEffect(() => {
     document.querySelector(`.${SELECTED_TREE_ITEM_CSS_ID}`)?.scrollIntoView({
@@ -218,34 +147,6 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
       inline: "nearest",
     });
   }, [treeMenu.currentItemId]);
-
-  const onTreeMenuItemClick = useCallback(
-    (path: string) => {
-      treeMenu.setCurrent(path);
-      // if (treeMenu.currentItemId === path) {
-      //   treeMenu.toggle(path);
-      // }
-    },
-    [treeMenu.currentItemId],
-  );
-
-  const onTreeMenuItemDoubleClick = (path: string) => {
-    treeMenu.toggle(path);
-  };
-
-  const [openInspectorSections, setOpenInspectorSections] = useState(["Node"]);
-  const toggleInspectorSection = (section: string) => {
-    setOpenInspectorSections(([...sections]) => {
-      const index = sections.indexOf(section);
-      if (index === -1) {
-        sections.push(section);
-        return sections;
-      } else {
-        sections.splice(index, 1);
-        return sections;
-      }
-    });
-  };
 
   return (
     <div className="dark h-full text-slate-300 text-xs pt-px bg-slate-900 select-none">
@@ -280,7 +181,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
                   overflowY
                   className="flex flex-col overflow-x-hidden"
                 >
-                  {schema && (
+                  {/* {schema && (
                     <RootNode
                       root={schema.root}
                       openItemIds={treeMenu.openItemIds}
@@ -288,7 +189,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
                       onItemClick={onTreeMenuItemClick}
                       onItemDoubleClick={onTreeMenuItemDoubleClick}
                     />
-                  )}
+                  )} */}
                 </ScrollableArea>
               </div>
             </RightResizableWidget>
@@ -362,7 +263,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
             </div>
           </div>
           <div className="flex-1 bg-slate-700 z-10">
-            {currentNode && (
+            {/* {currentNode && (
               <>
                 <div className="flex items-center gap-2 px-2 py-1.5">
                   <div className="flex-shrink-0">
@@ -546,7 +447,7 @@ export function UnityLayout({ schema }: UnityLayoutProps) {
                   </div>
                 </InspectorSection>
               </>
-            )}
+            )} */}
           </div>
         </LeftResizableWidget>
       </div>
@@ -569,7 +470,6 @@ function TreeNode({
   onItemClick?: (path: string) => void;
   onItemDoubleClick?: (path: string) => void;
 }): JSX.Element {
-  const hasChildren = node.children != undefined;
   const isOpen = openItemIds.includes(node.path ?? "");
   const isSelected = selectedItemId === node.path;
   const ChevronIcon = isOpen ? ChevronDownIcon : ChevronRightIcon;
@@ -592,7 +492,6 @@ function TreeNode({
           <div className="flex-0">
             <ChevronIcon
               className={classNames("w-4 h-4 group-hover:text-slate-300", {
-                invisible: !hasChildren,
                 "text-slate-300": isSelected,
                 "text-slate-400": !isSelected,
               })}
@@ -631,7 +530,7 @@ function TreeNode({
         </button>
       </div>
 
-      {isOpen &&
+      {/* {isOpen &&
         Object.values(node.children ?? {}).map((child) => (
           <TreeNode
             key={child.path}
@@ -642,7 +541,7 @@ function TreeNode({
             onItemClick={onItemClick}
             onItemDoubleClick={onItemDoubleClick}
           />
-        ))}
+        ))} */}
     </>
   );
 }
@@ -721,16 +620,16 @@ function RelationshipItem({
 
       <div className="flex items-center gap-1.5 min-w-0 pr-2">
         <div className="flex-shrink-0">
-          <ResourceIcon
+          {/* <ResourceIcon
             resourceType={node.type}
             className="w-4 h-4"
             darkenOnGroupHover
-          />
+          /> */}
         </div>
 
-        <div className="truncate" title={node.id}>
+        {/* <div className="truncate" title={node.id}>
           {node.id}
-        </div>
+        </div> */}
 
         <Pill xxs>Invoke</Pill>
       </div>

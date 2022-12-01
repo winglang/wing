@@ -15,7 +15,7 @@ export const createBucketRouter = () => {
       }),
       async resolve({ input, ctx }) {
         const simulator = await ctx.simulator();
-        const client = simulator.getResourceByPath(
+        const client = simulator.getResource(
           input.resourcePath,
         ) as IBucketClient;
         const fileContent = await fs.promises.readFile(input.filePath, "utf8");
@@ -30,7 +30,7 @@ export const createBucketRouter = () => {
       }),
       async resolve({ input, ctx }) {
         const simulator = await ctx.simulator();
-        const client = simulator.getResourceByPath(
+        const client = simulator.getResource(
           input.resourcePath,
         ) as IBucketClient;
         const response = await client.get(input.fileName);
@@ -43,7 +43,7 @@ export const createBucketRouter = () => {
       }),
       async resolve({ input, ctx }) {
         const simulator = await ctx.simulator();
-        const client = simulator.getResourceByPath(
+        const client = simulator.getResource(
           input.resourcePath,
         ) as IBucketClient;
         const response = await client.list();

@@ -1,0 +1,82 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "root",
+    "path": "root",
+    "children": {
+      "cloud.Bucket": {
+        "id": "cloud.Bucket",
+        "path": "root/cloud.Bucket",
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "inbound",
+              "relationship": "inflight-reference",
+              "resource": "root/cloud.Queue-OnMessage-b29fc28fa9d650f5"
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.0.130"
+        }
+      },
+      "cloud.Queue": {
+        "id": "cloud.Queue",
+        "path": "root/cloud.Queue",
+        "attributes": {
+          "wing:resource:stateful": true,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "on_message",
+              "resource": "root/cloud.Queue-OnMessage-b29fc28fa9d650f5"
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.0.130"
+        }
+      },
+      "cloud.Queue-OnMessage-b29fc28fa9d650f5": {
+        "id": "cloud.Queue-OnMessage-b29fc28fa9d650f5",
+        "path": "root/cloud.Queue-OnMessage-b29fc28fa9d650f5",
+        "children": {
+          "Code": {
+            "id": "Code",
+            "path": "root/cloud.Queue-OnMessage-b29fc28fa9d650f5/Code",
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130"
+            }
+          }
+        },
+        "attributes": {
+          "wing:resource:stateful": false,
+          "wing:resource:connections": [
+            {
+              "direction": "outbound",
+              "relationship": "inflight-reference",
+              "resource": "root/cloud.Bucket"
+            },
+            {
+              "direction": "inbound",
+              "relationship": "on_message",
+              "resource": "root/cloud.Queue"
+            }
+          ]
+        },
+        "constructInfo": {
+          "fqn": "constructs.Construct",
+          "version": "10.0.130"
+        }
+      }
+    },
+    "constructInfo": {
+      "fqn": "constructs.Construct",
+      "version": "10.0.130"
+    }
+  }
+}
