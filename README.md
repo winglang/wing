@@ -8,6 +8,8 @@ Download the latest release: https://wing-console.s3.amazonaws.com/wing-console.
 
 ```sh
 npm install
+
+npx projen
 ```
 
 ## Dev
