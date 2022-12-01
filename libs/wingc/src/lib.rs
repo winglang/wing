@@ -13,7 +13,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
-use crate::capture::scan_captures;
+use crate::capture::scan_for_inflights_in_scope;
 use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
 
@@ -130,7 +130,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	}
 
 	// Analyze inflight captures
-	scan_captures(&scope);
+	scan_for_inflights_in_scope(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));

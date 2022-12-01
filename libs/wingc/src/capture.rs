@@ -1,7 +1,10 @@
-use std::collections::{BTreeMap, BTreeSet};
+use std::{
+	cell::Ref,
+	collections::{BTreeMap, BTreeSet},
+};
 
 use crate::{
-	ast::{ArgList, Expr, ExprKind, Phase, Reference, Scope, StmtKind, Symbol},
+	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
 	type_check::type_env::TypeEnv,
 	type_check::Type,
@@ -34,25 +37,25 @@ fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 	captures
 }
 
-pub fn scan_captures(ast_root: &Scope) {
-	for s in ast_root.statements.iter() {
+pub fn scan_for_inflights_in_scope(scope: &Scope) {
+	for s in scope.statements.iter() {
 		match &s.kind {
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable: _,
 				statements,
-			} => scan_captures(&statements),
+			} => scan_for_inflights_in_scope(&statements),
 			StmtKind::If {
 				condition: _,
 				statements,
 				else_statements,
 			} => {
-				scan_captures(statements);
+				scan_for_inflights_in_scope(statements);
 				if let Some(else_statements) = else_statements {
-					scan_captures(else_statements);
+					scan_for_inflights_in_scope(else_statements);
 				}
 			}
-			StmtKind::Scope(s) => scan_captures(s),
+			StmtKind::Scope(s) => scan_for_inflights_in_scope(s),
 			StmtKind::Class {
 				name: _,
 				members: _,
@@ -66,8 +69,8 @@ pub fn scan_captures(ast_root: &Scope) {
 						// TODO: what do I do with these?
 						scan_captures_in_inflight_scope(&constructor.statements);
 					}
-					Phase::Independent => scan_captures(&constructor.statements),
-					Phase::Preflight => scan_captures(&constructor.statements),
+					Phase::Independent => scan_for_inflights_in_scope(&constructor.statements),
+					Phase::Preflight => scan_for_inflights_in_scope(&constructor.statements),
 				}
 				for (_, method_def) in methods.iter() {
 					match method_def.signature.flight {
@@ -75,13 +78,96 @@ pub fn scan_captures(ast_root: &Scope) {
 							// TODO: what do I do with these?
 							scan_captures_in_inflight_scope(&method_def.statements);
 						}
-						Phase::Independent => scan_captures(&constructor.statements),
-						Phase::Preflight => scan_captures(&method_def.statements),
+						Phase::Independent => scan_for_inflights_in_scope(&constructor.statements),
+						Phase::Preflight => scan_for_inflights_in_scope(&method_def.statements),
 					}
 				}
 			}
+			StmtKind::VariableDef {
+				var_name: _,
+				initial_value,
+				type_: _,
+			} => {
+				scan_for_inflights_in_expression(initial_value);
+			}
+			StmtKind::Expression(exp) => {
+				scan_for_inflights_in_expression(exp);
+			}
+			StmtKind::Assignment { variable: _, value } => {
+				scan_for_inflights_in_expression(value);
+			}
+			StmtKind::Return(Some(exp)) => {
+				scan_for_inflights_in_expression(exp);
+			}
 			_ => (),
 		}
+	}
+}
+
+pub fn scan_for_inflights_in_expression(expr: &Expr) {
+	match &expr.kind {
+		ExprKind::New {
+			class: _,
+			obj_id: _,
+			obj_scope,
+			arg_list,
+		} => {
+			if let Some(obj_scope) = obj_scope {
+				scan_for_inflights_in_expression(obj_scope);
+			}
+			scan_for_inflights_in_arglist(arg_list);
+		}
+		ExprKind::Literal(Literal::InterpolatedString(istr)) => {
+			for part in istr.parts.iter() {
+				if let InterpolatedStringPart::Expr(e) = part {
+					scan_for_inflights_in_expression(e);
+				}
+			}
+		}
+		ExprKind::Reference(Reference::NestedIdentifier { object, property: _ }) => {
+			scan_for_inflights_in_expression(object);
+		}
+		ExprKind::Call { function, args } => {
+			if let Reference::NestedIdentifier { object, property: _ } = function {
+				scan_for_inflights_in_expression(object);
+			}
+			scan_for_inflights_in_arglist(args);
+		}
+		ExprKind::Unary { op: _, exp } => {
+			scan_for_inflights_in_expression(exp);
+		}
+		ExprKind::Binary { op: _, lexp, rexp } => {
+			scan_for_inflights_in_expression(lexp);
+			scan_for_inflights_in_expression(rexp);
+		}
+		ExprKind::StructLiteral { type_: _, fields } => {
+			for (_, value) in fields.iter() {
+				scan_for_inflights_in_expression(value);
+			}
+		}
+		ExprKind::MapLiteral { type_: _, fields } => {
+			for (_, value) in fields.iter() {
+				scan_for_inflights_in_expression(value);
+			}
+		}
+		ExprKind::FunctionDefinition(func_def) => {
+			// TODO: Phase::Independent
+			if let Phase::Inflight = func_def.signature.flight {
+				let mut func_captures = func_def.captures.borrow_mut();
+				assert!(func_captures.is_none());
+				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
+			}
+		}
+		_ => (),
+	}
+}
+
+fn scan_for_inflights_in_arglist(args: &ArgList) {
+	for arg in args.pos_args.iter() {
+		scan_for_inflights_in_expression(arg);
+	}
+	for (_, arg_expr) in args.named_args.iter() {
+		scan_for_inflights_in_expression(arg_expr);
 	}
 }
 
@@ -203,13 +289,14 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 			}
 		}
 		ExprKind::FunctionDefinition(func_def) => {
+			// Can't define preflight stuff in inflight context
 			assert!(func_def.signature.flight != Phase::Preflight);
+			// TODO: Phase::Independent
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
 				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
 			}
-			// TODO: Phase::Independent
 		}
 	}
 	res

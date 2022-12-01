@@ -3,9 +3,12 @@ use std::{cmp::Ordering, fs, path::PathBuf};
 
 use sha2::{Digest, Sha256};
 
-use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-	Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+use crate::{
+	ast::{
+		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+	},
+	utilities::snake_case_to_camel_case,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -30,11 +33,16 @@ const TARGET_APP: &str = "$App";
 pub struct JSifier {
 	pub out_dir: PathBuf,
 	shim: bool,
+	app_name: String,
 }
 
 impl JSifier {
-	pub fn new(out_dir: PathBuf, shim: bool) -> Self {
-		Self { out_dir, shim }
+	pub fn new(out_dir: PathBuf, app_name: &str, shim: bool) -> Self {
+		Self {
+			out_dir,
+			shim,
+			app_name: app_name.to_string(),
+		}
 	}
 
 	fn render_block(statements: impl IntoIterator<Item = impl core::fmt::Display>) -> String {
