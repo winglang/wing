@@ -3,7 +3,7 @@ import { ICounterClient } from "../cloud";
 import { HASH_KEY } from "./counter";
 
 const AMOUNT_TOKEN = "amount";
-const INITIAL_VALUE_TOKEN = "initial_value";
+const INITIAL_VALUE_TOKEN = "initial";
 const COUNTER_ID = "counter";
 const VALUE_ATTRIBUTE = "counter_value";
 
