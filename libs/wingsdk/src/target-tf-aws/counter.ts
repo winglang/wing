@@ -57,7 +57,7 @@ export class Counter extends cloud.CounterBase {
 
     return core.InflightClient.for(__filename, "CounterClient", [
       `process.env["${env}"]`,
-      `${this.initialValue}`,
+      `${this.initial}`,
     ]);
   }
 }
