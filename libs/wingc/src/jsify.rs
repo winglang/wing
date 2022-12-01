@@ -154,7 +154,7 @@ impl JSifier {
 		return format!("{}", symbol.name);
 	}
 
-	fn jsify_arg_list(&self, arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> String {
+	fn jsify_arg_list(&self, arg_list: &ArgList, scope: Option<&str>, id: Option<&str>, case_convert: bool) -> String {
 		let mut args = vec![];
 		let mut structure_args = vec![];
 
@@ -174,7 +174,11 @@ impl JSifier {
 			// convert snake to camel case
 			structure_args.push(format!(
 				"{}: {}",
-				snake_case_to_camel_case(&arg.0.name),
+				if case_convert {
+					snake_case_to_camel_case(&arg.0.name)
+				} else {
+					arg.0.name.clone()
+				},
 				self.jsify_expression(arg.1)
 			));
 		}
@@ -219,11 +223,18 @@ impl JSifier {
 				arg_list,
 				obj_scope: _, // TODO
 			} => {
+				let expression_type = expression.evaluated_type.borrow();
 				let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
 					evaluated_type.as_resource_object().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
 					// Currently, this occurs when a JSII import is untyped, such as when `WINGC_SKIP_JSII` is enabled and `bring cloud` is used.
+					true
+				};
+				let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource_object() {
+					cls.should_case_convert_jsii
+				} else {
+					// This should only happen in the case of `any`, which are almost certainly JSII imports.
 					true
 				};
 
@@ -235,14 +246,15 @@ impl JSifier {
 						self.jsify_arg_list(
 							&arg_list,
 							Some("this"),
-							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class))))
+							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
+							should_case_convert
 						)
 					)
 				} else {
 					format!(
 						"new {}({})",
 						self.jsify_type(&class),
-						self.jsify_arg_list(&arg_list, None, None)
+						self.jsify_arg_list(&arg_list, None, None, should_case_convert)
 					)
 				}
 			}
@@ -269,7 +281,7 @@ impl JSifier {
 				// see: https://github.com/winglang/wing/issues/50
 				let mut needs_case_conversion = false;
 				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
-					return format!("console.log({})", self.jsify_arg_list(args, None, None));
+					return format!("console.log({})", self.jsify_arg_list(args, None, None, false));
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
 					needs_case_conversion = object_type
@@ -280,7 +292,7 @@ impl JSifier {
 				format!(
 					"{}({})",
 					self.jsify_reference(&function, Some(needs_case_conversion)),
-					self.jsify_arg_list(&args, None, None)
+					self.jsify_arg_list(&args, None, None, needs_case_conversion)
 				)
 			}
 			ExprKind::Unary { op, exp } => {
