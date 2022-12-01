@@ -60,6 +60,6 @@ export interface CounterSchema extends BaseResourceSchema {
   readonly type: typeof COUNTER_TYPE;
   readonly props: {
     /** The initial value of the counter. */
-    readonly initialValue: number;
+    readonly initial: number;
   };
 }

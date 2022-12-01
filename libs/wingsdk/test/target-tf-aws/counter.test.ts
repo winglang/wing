@@ -16,7 +16,7 @@ test("default counter behavior", () => {
 test("counter with initial value", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   new cloud.Counter(app, "Counter", {
-    initialValue: 9991,
+    initial: 9991,
   });
   const output = app.synth();
 

@@ -14,7 +14,7 @@ Object {
         "attrs": Object {},
         "path": "root/HelloWorld/Counter",
         "props": Object {
-          "initialValue": 1000,
+          "initial": 1000,
         },
         "type": "wingsdk.cloud.Counter",
       },

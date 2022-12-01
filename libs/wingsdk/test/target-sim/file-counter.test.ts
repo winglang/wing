@@ -12,7 +12,7 @@ test("can create sequential files in a bucket", async () => {
       super(scope, id);
 
       const counter = new cloud.Counter(this, "Counter", {
-        initialValue: 1000,
+        initial: 1000,
       });
       const bucket = new cloud.Bucket(this, "Bucket");
       const queue = new cloud.Queue(this, "Queue");

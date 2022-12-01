@@ -133,7 +133,7 @@ fn jsify_symbol(symbol: &Symbol) -> String {
 	return format!("{}", symbol.name);
 }
 
-fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> String {
+fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>, case_convert: bool) -> String {
 	let mut args = vec![];
 	let mut structure_args = vec![];
 
@@ -153,7 +153,11 @@ fn jsify_arg_list(arg_list: &ArgList, scope: Option<&str>, id: Option<&str>) -> 
 		// convert snake to camel case
 		structure_args.push(format!(
 			"{}: {}",
-			snake_case_to_camel_case(&arg.0.name),
+			if case_convert {
+				snake_case_to_camel_case(&arg.0.name)
+			} else {
+				arg.0.name.clone()
+			},
 			jsify_expression(arg.1)
 		));
 	}
@@ -194,11 +198,18 @@ fn jsify_expression(expression: &Expr) -> String {
 			arg_list,
 			obj_scope: _, // TODO
 		} => {
-			let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+			let expression_type = expression.evaluated_type.borrow();
+			let is_resource = if let Some(evaluated_type) = expression_type.as_ref() {
 				evaluated_type.as_resource_object().is_some()
 			} else {
 				// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
 				// Currently, this occurs when a JSII import is untyped, such as when `WINGC_SKIP_JSII` is enabled and `bring cloud` is used.
+				true
+			};
+			let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource_object() {
+				cls.should_case_convert_jsii
+			} else {
+				// This should only happen in the case of `any`, which are almost certainly JSII imports.
 				true
 			};
 
@@ -210,11 +221,16 @@ fn jsify_expression(expression: &Expr) -> String {
 					jsify_arg_list(
 						&arg_list,
 						Some("this"),
-						Some(&format!("{}", obj_id.as_ref().unwrap_or(&jsify_type(class))))
+						Some(&format!("{}", obj_id.as_ref().unwrap_or(&jsify_type(class)))),
+						should_case_convert
 					)
 				)
 			} else {
-				format!("new {}({})", jsify_type(&class), jsify_arg_list(&arg_list, None, None))
+				format!(
+					"new {}({})",
+					jsify_type(&class),
+					jsify_arg_list(&arg_list, None, None, should_case_convert)
+				)
 			}
 		}
 		ExprKind::Literal(lit) => match lit {
@@ -240,7 +256,7 @@ fn jsify_expression(expression: &Expr) -> String {
 			// see: https://github.com/winglang/wing/issues/50
 			let mut needs_case_conversion = false;
 			if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
-				return format!("console.log({})", jsify_arg_list(args, None, None));
+				return format!("console.log({})", jsify_arg_list(args, None, None, false));
 			} else if let Reference::NestedIdentifier { object, .. } = function {
 				let object_type = object.evaluated_type.borrow().unwrap();
 				needs_case_conversion = object_type
@@ -251,7 +267,7 @@ fn jsify_expression(expression: &Expr) -> String {
 			format!(
 				"{}({})",
 				jsify_reference(&function, Some(needs_case_conversion)),
-				jsify_arg_list(&args, None, None)
+				jsify_arg_list(&args, None, None, needs_case_conversion)
 			)
 		}
 		ExprKind::Unary { op, exp } => {
