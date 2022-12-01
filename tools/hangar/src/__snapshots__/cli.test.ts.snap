@@ -399,7 +399,7 @@ constructor() {
   );
   let bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
   let queue = new cloud.Queue(this,\\"cloud.Queue\\");
-  const handler = new $stdlib.core.Inflight({
+  let handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.fbe8390dfb806ebb9cf6fb068b954cc08fea3056e20a3e69ee8e07cbc86449bf/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
@@ -781,7 +781,7 @@ constructor() {
   let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   let counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initialValue: 100 });
   let queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.core.Duration.fromSeconds(10) });
-  const handler = new $stdlib.core.Inflight({
+  let handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.86754ece6e35adfd186315aa4bfcf647f5f280df200188741606e0383871bfc3/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
@@ -861,12 +861,12 @@ constructor() {
   constructor() {
   }
   f;
-  method2() {
+  method2 = () => {
     this.method1();
     console.log(\`\${this.f}\`);
     this.method2();
   }
-  method1() {
+  method1 = () => {
   }
   }
   let x = \\"hi\\";
@@ -1079,7 +1079,7 @@ constructor() {
   
   let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   let queue = new cloud.Queue(this,\\"cloud.Queue\\");
-  const handler = new $stdlib.core.Inflight({
+  let handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
@@ -1280,12 +1280,11 @@ constructor() {
   
   let bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
   console.log(\\"Hello world!\\");
-  const handler = new $stdlib.core.Inflight({
+  new cloud.Function(this,\\"cloud.Function\\",new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js\\")),
     entrypoint: \\"$proc\\",
     
-  });
-  new cloud.Function(this,\\"cloud.Function\\",handler);
+  }));
 }
 }
 new MyApp().synth();"
