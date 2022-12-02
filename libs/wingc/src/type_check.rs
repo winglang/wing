@@ -450,7 +450,7 @@ pub struct TypeChecker<'a> {
 	// unsafe because we can't return a mutable reference to the inner scopes since this method
 	// already uses references to the statement that contains the scopes. Using unsafe here just
 	// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
-	// to iterate over the inner scopes given the outer scope. Foe this we need to model our AST
+	// to iterate over the inner scopes given the outer scope. For this we need to model our AST
 	// so all nodes implement some basic "tree" interface. For now this is good enough.
 	inner_scopes: Vec<*const Scope>,
 
