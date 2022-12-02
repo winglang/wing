@@ -15,7 +15,7 @@ export interface CounterProps {
    * The initial value of the counter.
    * @default 0
    */
-  readonly initialValue?: number;
+  readonly initial?: number;
 }
 
 /**
@@ -27,16 +27,16 @@ export abstract class CounterBase extends Resource {
   /**
    * The initial value of the counter.
    */
-  public readonly initialValue: number;
+  public readonly initial: number;
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(scope, id);
     if (!scope) {
-      this.initialValue = -1; // not used
+      this.initial = -1; // not used
       return;
     }
 
-    this.initialValue = props.initialValue ?? 0;
+    this.initial = props.initial ?? 0;
   }
 }
 

@@ -6,10 +6,10 @@ test("create a counter", async () => {
   // GIVEN
   const app = new SimApp();
   const c = new cloud.Counter(app, "my_counter", {
-    initialValue: 123,
+    initial: 123,
   });
 
-  expect(c.initialValue).toBe(123);
+  expect(c.initial).toBe(123);
 
   const s = await app.startSimulator();
   expect(s.getResourceConfig("/my_counter")).toEqual({
@@ -18,7 +18,7 @@ test("create a counter", async () => {
     },
     path: "root/my_counter",
     props: {
-      initialValue: 123,
+      initial: 123,
     },
     type: "wingsdk.cloud.Counter",
   });
@@ -31,7 +31,7 @@ test("inc", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Counter(app, "my_counter", {
-    initialValue: 123,
+    initial: 123,
   });
 
   const s = await app.startSimulator();
