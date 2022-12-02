@@ -24,7 +24,8 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
-	"nil" => "see https://github.com/winglang/wing/issues/433"
+	"nil" => "see https://github.com/winglang/wing/issues/433",
+	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
 impl Parser<'_> {
@@ -49,6 +50,28 @@ impl Parser<'_> {
 		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
 		// the error and continue parsing.
 		Err(())
+	}
+
+	fn report_unimplemented_grammar<T>(
+		&self,
+		grammar_element: &str,
+		grammar_context: &str,
+		node: &Node,
+	) -> DiagnosticResult<T> {
+		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
+			self.add_error(
+				format!(
+					"{} '{}' is not yet supported {}",
+					grammar_context, grammar_element, entry
+				),
+				node,
+			)?
+		} else {
+			self.add_error(
+				format!("Unexpected {} '{}' || {:#?}", grammar_context, grammar_element, node),
+				node,
+			)?
+		}
 	}
 
 	fn node_text<'a>(&'a self, node: &Node) -> &'a str {
@@ -95,13 +118,7 @@ impl Parser<'_> {
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
 			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
-			other => {
-				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-					self.add_error(format!("duration type {} is not yet supported {}", other, entry), &node)
-				} else {
-					self.add_error(format!("Unexpected duration type {} || {:#?}", other, node), &node)
-				}
-			}
+			other => self.report_unimplemented_grammar(other, "duration type", &node),
 		}
 	}
 
@@ -189,21 +206,7 @@ impl Parser<'_> {
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
-			other => {
-				return {
-					if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-						self.add_error(
-							format!("statement type {} is not yet supported {}", other, entry),
-							statement_node,
-						)
-					} else {
-						self.add_error(
-							format!("Unexpected statement type {} || {:#?}", other, statement_node),
-							statement_node,
-						)
-					}
-				}
-			}
+			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
 		Ok(Stmt {
@@ -324,11 +327,7 @@ impl Parser<'_> {
 		let flight = match self.node_text(&anon_closure_node.child(block_node_idx - 1).unwrap()) {
 			"->" => Phase::Preflight,
 			"~>" => Phase::Inflight,
-			"=>" => unimplemented!(),
-			other => panic!(
-				"Unexpected closure phase specifier '{}', use one of '->', '~>', '=>'",
-				other
-			),
+			other => self.report_unimplemented_grammar(other, "closure phase specifier", anon_closure_node)?,
 		};
 
 		self.build_function_definition(anon_closure_node, flight)
@@ -371,15 +370,7 @@ impl Parser<'_> {
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
-				other => {
-					return {
-						if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-							self.add_error(format!("builtin {} is not yet supported {}", other, entry), type_node)
-						} else {
-							self.add_error(format!("Unexpected builtin {} || {:#?}", other, type_node), type_node)
-						}
-					}
-				}
+				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
 				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
