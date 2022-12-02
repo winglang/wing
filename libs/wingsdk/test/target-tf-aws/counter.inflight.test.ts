@@ -21,7 +21,7 @@ test("inc(1)", async () => {
   setupMock({
     expectedTableName: MOCK_TABLE_NAME,
     expectedAmount: 1,
-    initialValue: 0,
+    initial: 0,
     responseValue: prevValue + 1,
   });
 
@@ -39,7 +39,7 @@ test("inc(5)", async () => {
   setupMock({
     expectedTableName: MOCK_TABLE_NAME,
     expectedAmount: 5,
-    initialValue: 0,
+    initial: 0,
     responseValue: 887 + 5,
   });
 
@@ -54,7 +54,7 @@ test("inc(5)", async () => {
 interface MockOptions {
   readonly expectedTableName: string;
   readonly expectedAmount: number;
-  readonly initialValue?: number;
+  readonly initial?: number;
   readonly responseValue?: number;
 }
 
@@ -62,10 +62,10 @@ function setupMock(opts: MockOptions) {
   const expectedRequest: UpdateItemCommandInput = {
     TableName: opts.expectedTableName,
     Key: { id: { S: "counter" } },
-    UpdateExpression: `SET counter_value = if_not_exists(counter_value, :initial_value) + :amount`,
+    UpdateExpression: `SET counter_value = if_not_exists(counter_value, :initial) + :amount`,
     ExpressionAttributeValues: {
       ":amount": { N: `${opts.expectedAmount}` },
-      ":initial_value": { N: `${opts.initialValue}` },
+      ":initial": { N: `${opts.initial}` },
     },
     ReturnValues: "UPDATED_NEW",
   };

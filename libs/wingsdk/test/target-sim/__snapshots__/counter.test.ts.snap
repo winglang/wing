@@ -8,7 +8,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_counter",
         "props": Object {
-          "initialValue": 123,
+          "initial": 123,
         },
         "type": "wingsdk.cloud.Counter",
       },
@@ -51,7 +51,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_counter",
         "props": Object {
-          "initialValue": 123,
+          "initial": 123,
         },
         "type": "wingsdk.cloud.Counter",
       },
