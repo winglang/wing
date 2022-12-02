@@ -382,7 +382,8 @@ impl JSifier {
 				type_: _,
 			} => {
 				let initial_value = self.jsify_expression(initial_value);
-				format!("let {} = {};", self.jsify_symbol(var_name), initial_value)
+				// TODO: decide on `const` vs `let` once we have mutables
+				format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
 			}
 			StmtKind::ForLoop {
 				iterator,

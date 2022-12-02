@@ -55,7 +55,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"anon_function\\" });
   
-  let myfunc = (x) => {
+  const myfunc = (x) => {
     console.log(\`\${x}\`);
     x = (x + 1);
     if ((x > 3)) {
@@ -462,13 +462,13 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"captures\\" });
   
-  let bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  let bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
+  const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
   \\"public\\": true,}
   );
-  let bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
-  let queue = new cloud.Queue(this,\\"cloud.Queue\\");
-  let handler = new $stdlib.core.Inflight({
+  const bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.fbe8390dfb806ebb9cf6fb068b954cc08fea3056e20a3e69ee8e07cbc86449bf/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
@@ -490,7 +490,7 @@ constructor() {
   new cloud.Function(this,\\"cloud.Function\\",handler,{ env: {
   
   } });
-  let empty_env = {
+  const empty_env = {
   
   };
   new cloud.Function(this,\\"AnotherFunction\\",handler,{ env: empty_env });
@@ -554,10 +554,10 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"expressions_binary_operators\\" });
   
-  let x = 1;
-  let y = (2 * x);
-  let z = ((x + y) - 1);
-  let xyz = (((y * y) / (x * x)) * z);
+  const x = 1;
+  const y = (2 * x);
+  const z = ((x + y) - 1);
+  const xyz = (((y * y) / (x * x)) * z);
 }
 }
 new MyApp().synth();"
@@ -618,11 +618,11 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"expressions_string_interpolation\\" });
   
-  let regular_string = \\"str\\\\n\\\\\\"\\";
-  let empty_string = \\"\\";
-  let number = 1;
-  let cool_string = \`cool \\\\\\"\\\\\${\${regular_string}}\\\\\\" test\`;
-  let really_cool_string = \`\${number}\${number}\${empty_string}\${empty_string}\\\\n\${cool_string}\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
+  const regular_string = \\"str\\\\n\\\\\\"\\";
+  const empty_string = \\"\\";
+  const number = 1;
+  const cool_string = \`cool \\\\\\"\\\\\${\${regular_string}}\\\\\\" test\`;
+  const really_cool_string = \`\${number}\${number}\${empty_string}\${empty_string}\\\\n\${cool_string}\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
 }
 }
 new MyApp().synth();"
@@ -664,38 +664,38 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
       },
     },
     "aws_iam_role": {
-      "root_cloudQueueOnMessage5cd9e35eaf590a95_IamRole_B8EE3B3D": {
+      "root_cloudQueueOnMessagedac8947acd3d75df_IamRole_8E288563": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-5cd9e35eaf590a95/IamRole",
-            "uniqueId": "root_cloudQueueOnMessage5cd9e35eaf590a95_IamRole_B8EE3B3D",
+            "path": "root/cloud.Queue-OnMessage-dac8947acd3d75df/IamRole",
+            "uniqueId": "root_cloudQueueOnMessagedac8947acd3d75df_IamRole_8E288563",
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "root_cloudQueueOnMessage5cd9e35eaf590a95_IamRolePolicy_F51E4AD2": {
+      "root_cloudQueueOnMessagedac8947acd3d75df_IamRolePolicy_456EA52D": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-5cd9e35eaf590a95/IamRolePolicy",
-            "uniqueId": "root_cloudQueueOnMessage5cd9e35eaf590a95_IamRolePolicy_F51E4AD2",
+            "path": "root/cloud.Queue-OnMessage-dac8947acd3d75df/IamRolePolicy",
+            "uniqueId": "root_cloudQueueOnMessagedac8947acd3d75df_IamRolePolicy_456EA52D",
           },
         },
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessage5cd9e35eaf590a95_IamRole_B8EE3B3D.name}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessagedac8947acd3d75df_IamRole_8E288563.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudQueueOnMessage5cd9e35eaf590a95_IamRolePolicyAttachment_07CFCB3A": {
+      "root_cloudQueueOnMessagedac8947acd3d75df_IamRolePolicyAttachment_DBD0C9A3": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-5cd9e35eaf590a95/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudQueueOnMessage5cd9e35eaf590a95_IamRolePolicyAttachment_07CFCB3A",
+            "path": "root/cloud.Queue-OnMessage-dac8947acd3d75df/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueueOnMessagedac8947acd3d75df_IamRolePolicyAttachment_DBD0C9A3",
           },
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessage5cd9e35eaf590a95_IamRole_B8EE3B3D.name}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessagedac8947acd3d75df_IamRole_8E288563.name}",
       },
     },
     "aws_lambda_event_source_mapping": {
@@ -708,30 +708,30 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
         },
         "batch_size": 1,
         "event_source_arn": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
-        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessage5cd9e35eaf590a95_51FEAB8D.function_name}",
+        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessagedac8947acd3d75df_BAE70C2A.function_name}",
       },
     },
     "aws_lambda_function": {
-      "root_cloudQueueOnMessage5cd9e35eaf590a95_51FEAB8D": {
+      "root_cloudQueueOnMessagedac8947acd3d75df_BAE70C2A": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-5cd9e35eaf590a95/Default",
-            "uniqueId": "root_cloudQueueOnMessage5cd9e35eaf590a95_51FEAB8D",
+            "path": "root/cloud.Queue-OnMessage-dac8947acd3d75df/Default",
+            "uniqueId": "root_cloudQueueOnMessagedac8947acd3d75df_BAE70C2A",
           },
         },
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "DYNAMODB_TABLE_NAME_49baa65c": "\${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-5cd9e35eaf590a95",
+            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-dac8947acd3d75df",
           },
         },
-        "function_name": "cloud.Queue-OnMessage-5cd9e35eaf590a95",
+        "function_name": "cloud.Queue-OnMessage-dac8947acd3d75df",
         "handler": "index.handler",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessage5cd9e35eaf590a95_IamRole_B8EE3B3D.arn}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessagedac8947acd3d75df_IamRole_8E288563.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessage5cd9e35eaf590a95_Bucket_87B2BDF5.bucket}",
-        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessage5cd9e35eaf590a95_S3Object_EAF97DD7.key}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagedac8947acd3d75df_Bucket_0BB03FAB.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagedac8947acd3d75df_S3Object_1C8B1F73.key}",
       },
     },
     "aws_s3_bucket": {
@@ -743,11 +743,11 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
           },
         },
       },
-      "root_cloudQueueOnMessage5cd9e35eaf590a95_Bucket_87B2BDF5": {
+      "root_cloudQueueOnMessagedac8947acd3d75df_Bucket_0BB03FAB": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-5cd9e35eaf590a95/Bucket",
-            "uniqueId": "root_cloudQueueOnMessage5cd9e35eaf590a95_Bucket_87B2BDF5",
+            "path": "root/cloud.Queue-OnMessage-dac8947acd3d75df/Bucket",
+            "uniqueId": "root_cloudQueueOnMessagedac8947acd3d75df_Bucket_0BB03FAB",
           },
         },
       },
@@ -786,14 +786,14 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
       },
     },
     "aws_s3_object": {
-      "root_cloudQueueOnMessage5cd9e35eaf590a95_S3Object_EAF97DD7": {
+      "root_cloudQueueOnMessagedac8947acd3d75df_S3Object_1C8B1F73": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-5cd9e35eaf590a95/S3Object",
-            "uniqueId": "root_cloudQueueOnMessage5cd9e35eaf590a95_S3Object_EAF97DD7",
+            "path": "root/cloud.Queue-OnMessage-dac8947acd3d75df/S3Object",
+            "uniqueId": "root_cloudQueueOnMessagedac8947acd3d75df_S3Object_1C8B1F73",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessage5cd9e35eaf590a95_Bucket_87B2BDF5.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagedac8947acd3d75df_Bucket_0BB03FAB.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -803,8 +803,8 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
 
 exports[`wing compile file_counter.w > index.js 1`] = `
 "async function $proc({ bucket, counter }, body) {
-  let next = counter.inc();
-  let key = \`myfile-\${\\"hi\\"}.txt\`;
+  const next = counter.inc();
+  const key = \`myfile-\${\\"hi\\"}.txt\`;
   bucket.put(key,body);
 };"
 `;
@@ -847,11 +847,11 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"file_counter\\" });
   
-  let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  let counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initialValue: 100 });
-  let queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.core.Duration.fromSeconds(10) });
-  let handler = new $stdlib.core.Inflight({
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.86754ece6e35adfd186315aa4bfcf647f5f280df200188741606e0383871bfc3/index.js\\")),
+  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initialValue: 100 });
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.core.Duration.fromSeconds(10) });
+  const handler = new $stdlib.core.Inflight({
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.3d92ae400542548600c5fd9f369eb043032b16ea0cd84abf633b08be0b8ece10/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
       bucket: {
@@ -938,10 +938,10 @@ constructor() {
   method1 = () => {
   }
   }
-  let x = \\"hi\\";
+  const x = \\"hi\\";
   if (true) {
     console.log(\`\${x}\`);
-    let y = new R(this,\\"R\\");
+    const y = new R(this,\\"R\\");
   }
 }
 }
@@ -1146,9 +1146,9 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"hello\\" });
   
-  let bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  let queue = new cloud.Queue(this,\\"cloud.Queue\\");
-  let handler = new $stdlib.core.Inflight({
+  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js\\")),
     entrypoint: \\"$proc\\",
     captures: {
@@ -1347,7 +1347,7 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"print\\" });
   
-  let bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
   console.log(\\"Hello world!\\");
   new cloud.Function(this,\\"cloud.Function\\",new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js\\")),
@@ -1415,7 +1415,7 @@ constructor() {
   super({ outdir: $outdir, name: \\"statements_if\\" });
   
   if (true) {
-    let x = 2;
+    const x = 2;
   }
 }
 }
@@ -1477,8 +1477,8 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"statements_variable_declarations\\" });
   
-  let x = 2;
-  let y = x;
+  const x = 2;
+  const y = x;
 }
 }
 new MyApp().synth();"
