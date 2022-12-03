@@ -21,7 +21,7 @@ export abstract class LoggerBase extends Resource {
 
   /** @internal */
   public abstract _bind(
-    captureScope: IConstruct,
+    captureScope: Resource,
     metadata: CaptureMetadata
   ): Code;
 }
@@ -74,7 +74,7 @@ export class Logger extends LoggerBase {
   }
 
   /** @internal */
-  public _bind(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

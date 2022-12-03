@@ -1,7 +1,7 @@
 bring cloud;
 
 let bucket = new cloud.Bucket();
-let counter = new cloud.Counter(initial_value: 100);
+let counter = new cloud.Counter(initial: 100);
 let queue = new cloud.Queue(timeout: 10s);
 
 inflight handler(body: str): str {

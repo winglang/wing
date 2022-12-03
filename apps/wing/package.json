@@ -8,7 +8,7 @@
     "dist/"
   ],
   "engines": {
-    "node": ">=18"
+    "node": ">=v18.0.0"
   },
   "bin": "bin/wing",
   "repository": {
@@ -26,6 +26,7 @@
   "dependencies": {
     "@winglang/wingsdk": "file:../../libs/wingsdk",
     "commander": "^9.4.1",
+    "compare-versions": "^5.0.1",
     "debug": "^4.3.4",
     "is-installed-globally": "^0.4.0",
     "open": "^8.4.0",

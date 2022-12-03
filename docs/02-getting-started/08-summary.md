@@ -12,7 +12,7 @@ Let's quickly walk through everything we've done together:
 
 1. We've written a simple [Hello, World!](./03-hello.md) program.
 2. We've learned about **compilation targets** and [compiled](./04-compile.md)
-   our program to the `sim` target, which created an `hello.wx` file that includes
+   our program to the `sim` target, which created an `hello.wsim` file that includes
    a simulated version of our entire cloud application.
 3. We've explored and interacted with our app through the [Wing Console](./05-console.md).
 4. Then we've loaded our app into an instance of the `Simulator` class and

@@ -6,6 +6,8 @@ id: console
 The Wing Console is a graphical user interface that can be used to interact with
 Wing applications on the local machine.
 
+## Opening your app in the console
+
 :::info
 
 Make sure you have [installed](./installation#wing-console) the Wing Console on your system
@@ -16,12 +18,10 @@ this step, jump over to the [testing programmatically](./simulator) page.
 
 :::
 
-## Opening your app in the console
-
 We can use the Wing CLI to start the console with our newly created app file:
 
 ```sh
-wing run target/hello.wx
+wing run target/hello.wsim
 ```
 
 This will start the Wing Console desktop application with the following view:
@@ -56,12 +56,11 @@ Now, check the `wing.txt` file and download it, using the download button
 
 ![](./console-bucket-2.png)
 
-The downloaded file should contain `Hello, Wing` text 
+The downloaded file should contain `Hello, Wing` text
 
 ## Congrats! :clap:
 
 You have just written and tested your first Wing program!
-
 
 ---
 

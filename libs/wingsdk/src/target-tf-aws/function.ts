@@ -8,16 +8,17 @@ import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { FunctionInflightMethods, FunctionProps } from "../cloud";
 import {
   Code,
   Language,
   Inflight,
   CaptureMetadata,
   InflightClient,
+  Resource,
 } from "../core";
+import { addBindConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -34,7 +35,7 @@ export class Function extends cloud.FunctionBase {
     scope: Construct,
     id: string,
     inflight: Inflight,
-    props: FunctionProps
+    props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
 
@@ -155,7 +156,7 @@ export class Function extends cloud.FunctionBase {
   /**
    * @internal
    */
-  public _bind(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
       throw new Error(
         "functions can only be captured by tfaws.Function for now"
@@ -165,7 +166,7 @@ export class Function extends cloud.FunctionBase {
     const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
-    if (methods.has(FunctionInflightMethods.INVOKE)) {
+    if (methods.has(cloud.FunctionInflightMethods.INVOKE)) {
       captureScope.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],
@@ -176,6 +177,8 @@ export class Function extends cloud.FunctionBase {
     // The function name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     captureScope.addEnvironment(env, this.function.arn);
+
+    addBindConnections(this, captureScope);
 
     return InflightClient.for(__filename, "FunctionClient", [
       `process.env["${env}"]`,

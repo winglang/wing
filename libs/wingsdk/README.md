@@ -57,8 +57,8 @@ class HelloWorld extends Construct {
 This construct contains a `Bucket` from the cloud library which represents a polymorphic cloud resources whose actual implementation (local, aws, other clouds) is determined at synth time.
 
 To use it in an application, you need to supply a synthesizer which will synthesize resources for the desired target.
-In the example below, a `sim` synthesizer is used which tells the SDK to produce a simulator  (`.wx`) file.
-The `.wx` file can be passed to the Wing console to simulate the bucket using your file system.
+In the example below, a `sim` synthesizer is used which tells the SDK to produce a simulator  (`.wsim`) file.
+The `.wsim` file can be passed to the Wing console to simulate the bucket using your file system.
 If the commented out TF AWS synthesizer is used instead, then a Terraform application will be synthesized.
 The Terraform application will include an AWS S3 Bucket to represent the `Bucket`.
 

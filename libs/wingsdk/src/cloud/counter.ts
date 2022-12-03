@@ -1,4 +1,4 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import { CaptureMetadata, Code, Resource } from "../core";
 
@@ -15,7 +15,7 @@ export interface CounterProps {
    * The initial value of the counter.
    * @default 0
    */
-  readonly initialValue?: number;
+  readonly initial?: number;
 }
 
 /**
@@ -27,16 +27,16 @@ export abstract class CounterBase extends Resource {
   /**
    * The initial value of the counter.
    */
-  public readonly initialValue: number;
+  public readonly initial: number;
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(scope, id);
     if (!scope) {
-      this.initialValue = -1; // not used
+      this.initial = -1; // not used
       return;
     }
 
-    this.initialValue = props.initialValue ?? 0;
+    this.initial = props.initial ?? 0;
   }
 }
 
@@ -54,7 +54,7 @@ export class Counter extends CounterBase {
   /**
    * @internal
    */
-  public _bind(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 }

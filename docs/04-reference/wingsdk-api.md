@@ -39,6 +39,7 @@ new cloud.Bucket(props?: BucketProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Bucket.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.addConnection">add_connection</a></code> | Adds a connection to this resource. |
 
 ---
 
@@ -49,6 +50,23 @@ to_string(): str
 ```
 
 Returns a string representation of this construct.
+
+##### `add_connection` <a name="add_connection" id="@winglang/wingsdk.cloud.Bucket.addConnection"></a>
+
+```wing
+add_connection(connections: Connection): void
+```
+
+Adds a connection to this resource.
+
+A connection is a piece of metadata
+describing how this resource is related to another resource.
+
+###### `connections`<sup>Required</sup> <a name="connections" id="@winglang/wingsdk.cloud.Bucket.addConnection.parameter.connections"></a>
+
+- *Type:* core.Connection
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -145,6 +163,7 @@ new cloud.Counter(props?: CounterProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.addConnection">add_connection</a></code> | Adds a connection to this resource. |
 
 ---
 
@@ -155,6 +174,23 @@ to_string(): str
 ```
 
 Returns a string representation of this construct.
+
+##### `add_connection` <a name="add_connection" id="@winglang/wingsdk.cloud.Counter.addConnection"></a>
+
+```wing
+add_connection(connections: Connection): void
+```
+
+Adds a connection to this resource.
+
+A connection is a piece of metadata
+describing how this resource is related to another resource.
+
+###### `connections`<sup>Required</sup> <a name="connections" id="@winglang/wingsdk.cloud.Counter.addConnection.parameter.connections"></a>
+
+- *Type:* core.Connection
+
+---
 
 #### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
@@ -188,7 +224,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-| <code><a href="#@winglang/wingsdk.cloud.Counter.property.initialValue">initial_value</a></code> | <code>num</code> | The initial value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
@@ -220,10 +256,10 @@ with a fresh copy without any consequences.
 
 ---
 
-##### `initial_value`<sup>Required</sup> <a name="initial_value" id="@winglang/wingsdk.cloud.Counter.property.initialValue"></a>
+##### `initial`<sup>Required</sup> <a name="initial" id="@winglang/wingsdk.cloud.Counter.property.initial"></a>
 
 ```wing
-initial_value: num;
+initial: num;
 ```
 
 - *Type:* num
@@ -271,6 +307,7 @@ new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Function.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.addConnection">add_connection</a></code> | Adds a connection to this resource. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.addEnvironment">add_environment</a></code> | Add an environment variable to the function. |
 
 ---
@@ -282,6 +319,23 @@ to_string(): str
 ```
 
 Returns a string representation of this construct.
+
+##### `add_connection` <a name="add_connection" id="@winglang/wingsdk.cloud.Function.addConnection"></a>
+
+```wing
+add_connection(connections: Connection): void
+```
+
+Adds a connection to this resource.
+
+A connection is a piece of metadata
+describing how this resource is related to another resource.
+
+###### `connections`<sup>Required</sup> <a name="connections" id="@winglang/wingsdk.cloud.Function.addConnection.parameter.connections"></a>
+
+- *Type:* core.Connection
+
+---
 
 ##### `add_environment` <a name="add_environment" id="@winglang/wingsdk.cloud.Function.addEnvironment"></a>
 
@@ -378,6 +432,7 @@ A cloud logging facility.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.addConnection">add_connection</a></code> | Adds a connection to this resource. |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
 
 ---
@@ -389,6 +444,23 @@ to_string(): str
 ```
 
 Returns a string representation of this construct.
+
+##### `add_connection` <a name="add_connection" id="@winglang/wingsdk.cloud.Logger.addConnection"></a>
+
+```wing
+add_connection(connections: Connection): void
+```
+
+Adds a connection to this resource.
+
+A connection is a piece of metadata
+describing how this resource is related to another resource.
+
+###### `connections`<sup>Required</sup> <a name="connections" id="@winglang/wingsdk.cloud.Logger.addConnection.parameter.connections"></a>
+
+- *Type:* core.Connection
+
+---
 
 ##### `print` <a name="print" id="@winglang/wingsdk.cloud.Logger.print"></a>
 
@@ -523,6 +595,7 @@ new cloud.Queue(props?: QueueProps)
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.addConnection">add_connection</a></code> | Adds a connection to this resource. |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.onMessage">on_message</a></code> | Create a function to consume messages from this queue. |
 
 ---
@@ -534,6 +607,23 @@ to_string(): str
 ```
 
 Returns a string representation of this construct.
+
+##### `add_connection` <a name="add_connection" id="@winglang/wingsdk.cloud.Queue.addConnection"></a>
+
+```wing
+add_connection(connections: Connection): void
+```
+
+Adds a connection to this resource.
+
+A connection is a piece of metadata
+describing how this resource is related to another resource.
+
+###### `connections`<sup>Required</sup> <a name="connections" id="@winglang/wingsdk.cloud.Queue.addConnection.parameter.connections"></a>
+
+- *Type:* core.Connection
+
+---
 
 ##### `on_message` <a name="on_message" id="@winglang/wingsdk.cloud.Queue.onMessage"></a>
 
@@ -826,6 +916,64 @@ Which methods are called on the captured resource.
 
 ---
 
+### Connection <a name="Connection" id="@winglang/wingsdk.core.Connection"></a>
+
+A connection between two resources.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.Connection.Initializer"></a>
+
+```wing
+bring core;
+
+let connection = core.Connection{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.Connection.property.direction">direction</a></code> | <code>core.Direction</code> | The direction of the connection. |
+| <code><a href="#@winglang/wingsdk.core.Connection.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship with the resource. |
+| <code><a href="#@winglang/wingsdk.core.Connection.property.resource">resource</a></code> | <code>core.Resource</code> | The resource this connection is to. |
+
+---
+
+##### `direction`<sup>Required</sup> <a name="direction" id="@winglang/wingsdk.core.Connection.property.direction"></a>
+
+```wing
+direction: Direction;
+```
+
+- *Type:* core.Direction
+
+The direction of the connection.
+
+---
+
+##### `relationship`<sup>Required</sup> <a name="relationship" id="@winglang/wingsdk.core.Connection.property.relationship"></a>
+
+```wing
+relationship: str;
+```
+
+- *Type:* str
+
+The type of relationship with the resource.
+
+---
+
+##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.Connection.property.resource"></a>
+
+```wing
+resource: Resource;
+```
+
+- *Type:* core.Resource
+
+The resource this connection is to.
+
+---
+
 ### CounterProps <a name="CounterProps" id="@winglang/wingsdk.cloud.CounterProps"></a>
 
 Properties for `Counter`.
@@ -842,14 +990,14 @@ let counter_props = cloud.CounterProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initialValue">initial_value</a></code> | <code>num</code> | The initial value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
-##### `initial_value`<sup>Optional</sup> <a name="initial_value" id="@winglang/wingsdk.cloud.CounterProps.property.initialValue"></a>
+##### `initial`<sup>Optional</sup> <a name="initial" id="@winglang/wingsdk.cloud.CounterProps.property.initial"></a>
 
 ```wing
-initial_value: num;
+initial: num;
 ```
 
 - *Type:* num
@@ -1675,14 +1823,14 @@ High level implementation:
 ##### `make_clients` <a name="make_clients" id="@winglang/wingsdk.core.Inflight.makeClients"></a>
 
 ```wing
-make_clients(capture_scope: IConstruct): MutMap<Code>
+make_clients(capture_scope: Resource): MutMap<Code>
 ```
 
 Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime.
 
 ###### `capture_scope`<sup>Required</sup> <a name="capture_scope" id="@winglang/wingsdk.core.Inflight.makeClients.parameter.captureScope"></a>
 
-- *Type:* constructs.IConstruct
+- *Type:* core.Resource
 
 ---
 
@@ -1919,17 +2067,88 @@ new core.Testing()
 ```wing
 bring core;
 
-core.Testing.inspect_prebundled_code(capture_scope: IConstruct)
+core.Testing.inspect_prebundled_code(capture_scope: Resource)
 ```
 
 Obtain a reference to the prebundled Code for a given capture scope.
 
 ###### `capture_scope`<sup>Required</sup> <a name="capture_scope" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode.parameter.captureScope"></a>
 
-- *Type:* constructs.IConstruct
+- *Type:* core.Resource
 
 ---
 
+
+
+### TreeInspector <a name="TreeInspector" id="@winglang/wingsdk.core.TreeInspector"></a>
+
+Inspector that maintains an attribute bag.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.TreeInspector.Initializer"></a>
+
+```wing
+bring core;
+
+new core.TreeInspector()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.TreeInspector.addAttribute">add_attribute</a></code> | Adds attribute to bag. |
+
+---
+
+##### `add_attribute` <a name="add_attribute" id="@winglang/wingsdk.core.TreeInspector.addAttribute"></a>
+
+```wing
+add_attribute(key: str, value: any): void
+```
+
+Adds attribute to bag.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.core.TreeInspector.addAttribute.parameter.key"></a>
+
+- *Type:* str
+
+key for metadata.
+
+---
+
+###### `value`<sup>Required</sup> <a name="value" id="@winglang/wingsdk.core.TreeInspector.addAttribute.parameter.value"></a>
+
+- *Type:* any
+
+value of metadata.
+
+---
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.TreeInspector.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | Represents the bag of attributes as key-value pairs. |
+
+---
+
+##### `attributes`<sup>Required</sup> <a name="attributes" id="@winglang/wingsdk.core.TreeInspector.property.attributes"></a>
+
+```wing
+attributes: MutMap<any>;
+```
+
+- *Type:* MutMap&lt;any&gt;
+
+Represents the bag of attributes as key-value pairs.
+
+---
 
 
 ## Protocols <a name="Protocols" id="Protocols"></a>
@@ -2060,7 +2279,7 @@ Put an object in the bucket.
 
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, core.Resource, fs.FileBase, fs.JsonFile, fs.TextFile, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.ICapturable, core.ICapturableConstruct
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.ICapturable, core.ICapturableConstruct
 
 Represents something that is capturable by an Inflight.
 
@@ -2153,6 +2372,14 @@ Invoke the function asynchronously with a given payload.
 - *Type:* str
 
 ---
+
+
+### IInspectable <a name="IInspectable" id="@winglang/wingsdk.core.IInspectable"></a>
+
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.IInspectable
+
+Interface for examining a construct and exposing metadata.
+
 
 
 ### ILoggerClient <a name="ILoggerClient" id="@winglang/wingsdk.cloud.ILoggerClient"></a>
@@ -2272,6 +2499,36 @@ List of inflight operations available for `Counter`.
 ##### `INC` <a name="INC" id="@winglang/wingsdk.cloud.CounterInflightMethods.INC"></a>
 
 `Counter.inc`.
+
+---
+
+
+### Direction <a name="Direction" id="@winglang/wingsdk.core.Direction"></a>
+
+The direction of a connection.
+
+Visually speaking, if a resource A has an outbound connection with resource B,
+the arrow would point from A to B, and vice versa for inbound connections.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.Direction.OUTBOUND">OUTBOUND</a></code> | Indicates that this resource calls, triggers, or references the resource it is connected to. |
+| <code><a href="#@winglang/wingsdk.core.Direction.INBOUND">INBOUND</a></code> | Indicates that this resource is called, triggered, or referenced by the resource it is connected to. |
+
+---
+
+##### `OUTBOUND` <a name="OUTBOUND" id="@winglang/wingsdk.core.Direction.OUTBOUND"></a>
+
+Indicates that this resource calls, triggers, or references the resource it is connected to.
+
+---
+
+
+##### `INBOUND` <a name="INBOUND" id="@winglang/wingsdk.core.Direction.INBOUND"></a>
+
+Indicates that this resource is called, triggered, or referenced by the resource it is connected to.
 
 ---
 

@@ -57,7 +57,7 @@ Nx will be installed alongside the rest of the project's dependencies after you 
 
 Here is a list of minimal tools you should install to build the Wing repo in your development environment:
 
-* [Node.js] version 18.x or above (we recommend [nvm])
+* [Node.js] version 18.x or above (we recommend [volta])
 * [Rust]
 * [AWS CLI] (only needed for integration tests - make sure to do the setup part to create credentials)
 * [Terraform CLI] (only needed for integration tests)
@@ -65,7 +65,6 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 To build the repo locally:
 
 ```sh
-sudo bash scripts/setup_wasi.sh # one-time setup
 npm install
 npm run build
 ```
@@ -81,7 +80,7 @@ npm run test
 [Rust]: https://www.rust-lang.org/tools/install
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
-[nvm]: https://github.com/nvm-sh/nvm
+[volta]: https://volta.sh
 
 ## 🔨 How do I build just the SDK?
 
@@ -107,6 +106,8 @@ The VSCode extension is located in `apps/vscode`. Most of the logic is in the la
 Running `nx build` from `apps/vscode` will ensure the language server is built first and the binary is available. This creates an installable VSIX file.
 
 A VSCode launch configuration is available to open a VSCode with a development version of the extension.
+
+To modify the package.json, please edit .projenrc.ts and run `npx projen`.
 
 ## 🧱 How do I add a dependency to the SDK?
 

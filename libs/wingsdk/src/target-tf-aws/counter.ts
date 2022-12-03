@@ -1,9 +1,10 @@
 import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CounterInflightMethods } from "../cloud";
 import * as core from "../core";
+import { Resource } from "../core";
 import { Function } from "./function";
+import { addBindConnections } from "./util";
 
 export const HASH_KEY = "id";
 
@@ -30,7 +31,7 @@ export class Counter extends cloud.CounterBase {
    * @internal
    */
   public _bind(
-    captureScope: IConstruct,
+    captureScope: Resource,
     metadata: core.CaptureMetadata
   ): core.Code {
     if (!(captureScope instanceof Function)) {
@@ -42,7 +43,7 @@ export class Counter extends cloud.CounterBase {
     const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
-    if (methods.has(CounterInflightMethods.INC)) {
+    if (methods.has(cloud.CounterInflightMethods.INC)) {
       captureScope.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:UpdateItem"],
@@ -52,9 +53,11 @@ export class Counter extends cloud.CounterBase {
 
     captureScope.addEnvironment(env, this.table.name);
 
+    addBindConnections(this, captureScope);
+
     return core.InflightClient.for(__filename, "CounterClient", [
       `process.env["${env}"]`,
-      `${this.initialValue}`,
+      `${this.initial}`,
     ]);
   }
 }

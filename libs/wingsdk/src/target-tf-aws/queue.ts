@@ -1,9 +1,11 @@
 import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
 import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { Direction, Resource } from "../core";
 import { Function } from "./function";
+import { addBindConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -44,8 +46,8 @@ export class Queue extends cloud.QueueBase {
     });
 
     const fn = new cloud.Function(
-      this,
-      `OnMessage-${newInflight.code.hash.slice(0, 16)}`,
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${newInflight.code.hash.slice(0, 16)}`,
       newInflight,
       props
     );
@@ -73,6 +75,17 @@ export class Queue extends cloud.QueueBase {
       batchSize: props.batchSize ?? 1,
     });
 
+    this.addConnection({
+      direction: Direction.OUTBOUND,
+      relationship: "on_message",
+      resource: fn,
+    });
+    fn.addConnection({
+      direction: Direction.INBOUND,
+      relationship: "on_message",
+      resource: this,
+    });
+
     return fn;
   }
 
@@ -80,7 +93,7 @@ export class Queue extends cloud.QueueBase {
    * @internal
    */
   public _bind(
-    captureScope: IConstruct,
+    captureScope: Resource,
     metadata: core.CaptureMetadata
   ): core.Code {
     if (!(captureScope instanceof Function)) {
@@ -105,6 +118,8 @@ export class Queue extends cloud.QueueBase {
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     captureScope.addEnvironment(env, this.queue.url);
+
+    addBindConnections(this, captureScope);
 
     return core.InflightClient.for(__filename, "QueueClient", [
       `process.env["${env}"]`,
