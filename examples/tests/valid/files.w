@@ -1,3 +1,6 @@
 bring fs;
 
-new fs.JsonFile("hi.json", obj: {});
+let hi = new fs.JsonFile("hi.json");
+hi.patch("foo", "bar");
+hi.patch("goo", 12);
+hi.patch("shoom.boom.good", false);
