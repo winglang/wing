@@ -813,7 +813,7 @@ impl<'a> TypeChecker<'a> {
 
 				Some(container_type)
 			}
-			ExprKind::FunctionDefinition(func_def) => {
+			ExprKind::FunctionClosure(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
 
 				if matches!(func_def.signature.flight, Phase::Inflight) {

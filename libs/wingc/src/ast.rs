@@ -194,7 +194,7 @@ pub enum ExprKind {
 		type_: Option<Type>,
 		fields: HashMap<String, Expr>,
 	},
-	FunctionDefinition(FunctionDefinition),
+	FunctionClosure(FunctionDefinition),
 }
 
 #[derive(Debug)]

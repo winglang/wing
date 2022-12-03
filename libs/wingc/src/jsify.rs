@@ -58,7 +58,7 @@ impl JSifier {
 		}
 
 		lines.push("}".to_string());
-		return lines.join("\n");
+		lines.join("\n")
 	}
 
 	pub fn jsify(&self, scope: &Scope) -> String {
@@ -127,7 +127,7 @@ impl JSifier {
 		}
 
 		lines.push("}".to_string());
-		return lines.join("\n");
+		lines.join("\n")
 	}
 
 	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>) -> String {
@@ -346,7 +346,7 @@ impl JSifier {
 						.join("\n")
 				)
 			}
-			ExprKind::FunctionDefinition(func_def) => match func_def.signature.flight {
+			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),
 				Phase::Preflight => self.jsify_function(None, &func_def.parameter_names, &func_def.statements),

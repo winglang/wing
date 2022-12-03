@@ -629,11 +629,11 @@ impl Parser<'_> {
 			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionDefinition(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
 				expression_span,
 			)),
 			"inflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionDefinition(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
 				expression_span,
 			)),
 			"pure_closure" => self.add_error(
