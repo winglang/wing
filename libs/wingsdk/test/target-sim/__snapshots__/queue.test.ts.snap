@@ -111,6 +111,10 @@ Object {
           },
           "children": Object {
             "Code": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [],
+                "wing:resource:stateful": false,
+              },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
@@ -212,6 +216,10 @@ Object {
           },
           "children": Object {
             "Code": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [],
+                "wing:resource:stateful": false,
+              },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
@@ -306,6 +314,10 @@ Object {
           },
           "children": Object {
             "Code": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [],
+                "wing:resource:stateful": false,
+              },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
