@@ -25,6 +25,18 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
+	"Set" => "see https://github.com/winglang/wing/issues/530",
+	"Array" => "see https://github.com/winglang/wing/issues/246",
+	"MutSet" => "see https://github.com/winglang/wing/issues/98",
+	"MutArray" => "see https://github.com/winglang/wing/issues/663",
+	"Promise" => "see https://github.com/winglang/wing/issues/529",
+	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
+	"inflight_closure" => "see https://github.com/winglang/wing/issues/474",
+	"pure_closure" => "see https://github.com/winglang/wing/issues/435",
+	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
+	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
+	"await_expression" => "see https://github.com/winglang/wing/issues/116",
+	"for_in_loop" => "see https://github.com/winglang/wing/issues/118",
 	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
@@ -118,7 +130,7 @@ impl Parser<'_> {
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
 			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
-			other => self.report_unimplemented_grammar(other, "duration type", &node),
+			other => self.report_unimplemented_grammar(other, "duration type", node),
 		}
 	}
 
@@ -402,16 +414,12 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
-					"Set" | "Array" | "MutSet" | "MutMap" | "MutArray" | "Promise" => self.add_error(
-						format!("{} container type currently unsupported", container_type),
-						type_node,
-					)?,
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
-					other => panic!("Unexpected container type {} || {:#?}", other, type_node),
+					other => self.report_unimplemented_grammar(other, "bultin container type", type_node),
 				}
 			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),
-			other => panic!("Unexpected type {} || {:#?}", other, type_node),
+			other => self.report_unimplemented_grammar(other, "type", type_node),
 		}
 	}
 
@@ -439,7 +447,7 @@ impl Parser<'_> {
 			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
-			other => panic!("Unexpected type node {} || {:#?}", other, reference_node),
+			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
 		}
 	}
 
@@ -528,7 +536,7 @@ impl Parser<'_> {
 						"*" => BinaryOperator::Mul,
 						"/" => BinaryOperator::Div,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
-						other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
+						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
 				},
 				expression_span,
@@ -540,7 +548,7 @@ impl Parser<'_> {
 						"-" => UnaryOperator::Minus,
 						"!" => UnaryOperator::Not,
 						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
-						other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
+						other => return self.report_unimplemented_grammar(other, "unary operator", expression_node),
 					},
 					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
 				},
@@ -606,7 +614,7 @@ impl Parser<'_> {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
-					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
+					other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
 				})),
 				expression_span,
 			)),
