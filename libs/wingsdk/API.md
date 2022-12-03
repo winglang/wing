@@ -1234,13 +1234,14 @@ let json_file_props = fs.JsonFileProps{ ... }
 
 ---
 
-##### `obj`<sup>Required</sup> <a name="obj" id="@winglang/wingsdk.fs.JsonFileProps.property.obj"></a>
+##### `obj`<sup>Optional</sup> <a name="obj" id="@winglang/wingsdk.fs.JsonFileProps.property.obj"></a>
 
 ```wing
 obj: any;
 ```
 
 - *Type:* any
+- *Default:* Empty object, use `addXxx()` methods to update.
 
 The object that will be serialized into the file during synthesis.
 
