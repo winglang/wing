@@ -83,7 +83,7 @@ project.release?.addJobs({
   release_electron_builder: {
     name: "Publish using electron-builder",
     needs: ["release"],
-    runsOn: ["macos-latest"],
+    runsOn: ["ghcr.io/cirruslabs/macos-ventura-xcode:latest"],
     permissions: {
       contents: JobPermission.WRITE,
     },
