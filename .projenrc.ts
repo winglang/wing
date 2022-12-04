@@ -83,7 +83,7 @@ project.release?.addJobs({
   release_electron_builder: {
     name: "Publish using electron-builder",
     needs: ["release"],
-    runsOn: ["ghcr.io/cirruslabs/macos-ventura-xcode:latest"],
+    runsOn: ["macos-latest"],
     permissions: {
       contents: JobPermission.WRITE,
     },
@@ -126,7 +126,7 @@ project.release?.addJobs({
           "security create-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
           "security default-keychain -s build.keychain \n" +
           "security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain \n" +
-          "security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign -T /usr/bin/pkgbuild \n" +
+          "security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign \n" +
           "security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain",
         env: {
           CSC_LINK: "${{ secrets.CSC_LINK }}",

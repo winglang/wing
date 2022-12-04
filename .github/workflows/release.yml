@@ -52,7 +52,7 @@ jobs:
   release_electron_builder:
     name: Publish using electron-builder
     needs: release
-    runs-on: ghcr.io/cirruslabs/macos-ventura-xcode:latest
+    runs-on: macos-latest
     permissions:
       contents: write
     env:
@@ -86,7 +86,7 @@ jobs:
           security create-keychain -p $CSC_KEY_PASSWORD build.keychain 
           security default-keychain -s build.keychain 
           security unlock-keychain -p $CSC_KEY_PASSWORD build.keychain 
-          security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign -T /usr/bin/pkgbuild 
+          security import $HOME/certificate.p12 -k build.keychain -P $CSC_KEY_PASSWORD -T /usr/bin/codesign 
           security set-key-partition-list -S apple-tool:,apple:,codesign: -s -k $CSC_KEY_PASSWORD build.keychain
       - name: Build Electron Application
         env:
