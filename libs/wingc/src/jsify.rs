@@ -331,7 +331,7 @@ impl JSifier {
           "{{\n{}}}\n",
           items
             .iter()
-            .map(|expr| format!("{},", jsify_expression(expr)))
+            .map(|expr| format!("{},", self.jsify_expression(expr)))
             .collect::<Vec<String>>()
             .join("\n")
         )
