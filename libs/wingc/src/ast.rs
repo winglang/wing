@@ -91,8 +91,7 @@ pub struct FunctionSignature {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	pub name: Symbol,
-	pub parameters: Vec<Symbol>,
+	pub parameter_names: Vec<Symbol>, // TODO: move into FunctionSignature and make optional
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 	#[derivative(Debug = "ignore")]
@@ -124,7 +123,6 @@ pub enum StmtKind {
 		initial_value: Expr,
 		type_: Option<Type>,
 	},
-	FunctionDefinition(FunctionDefinition),
 	ForLoop {
 		iterator: Symbol,
 		iterable: Expr,
@@ -145,7 +143,7 @@ pub enum StmtKind {
 	Class {
 		name: Symbol,
 		members: Vec<ClassMember>,
-		methods: Vec<FunctionDefinition>,
+		methods: Vec<(Symbol, FunctionDefinition)>,
 		constructor: Constructor,
 		parent: Option<Type>,
 		is_resource: bool,
@@ -155,12 +153,6 @@ pub enum StmtKind {
 		extends: Vec<Symbol>,
 		members: Vec<ClassMember>,
 	},
-}
-
-#[derive(Debug)]
-pub struct ParameterDefinition {
-	pub name: Symbol,
-	pub parameter_type: Type,
 }
 
 #[derive(Debug)]
@@ -207,6 +199,7 @@ pub enum ExprKind {
 		type_: Option<Type>,
 		fields: HashMap<String, Expr>,
 	},
+	FunctionClosure(FunctionDefinition),
 }
 
 #[derive(Debug)]
@@ -266,13 +259,14 @@ pub enum InterpolatedStringPart {
 pub struct Scope {
 	pub statements: Vec<Stmt>,
 	#[derivative(Debug = "ignore")]
-	pub env: Option<TypeEnv>, // None after parsing, set to Some during type checking phase
+	pub env: RefCell<Option<TypeEnv>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
-	pub fn set_env(&mut self, env: TypeEnv) {
-		assert!(self.env.is_none());
-		self.env = Some(env);
+	pub fn set_env(&self, new_env: TypeEnv) {
+		let mut env = self.env.borrow_mut();
+		assert!((*env).is_none());
+		*env = Some(new_env);
 	}
 }
 

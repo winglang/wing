@@ -3,6 +3,7 @@ extern crate lazy_static;
 
 use ast::{Scope, Symbol};
 use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
+use jsify::JSifier;
 use type_check::type_env::StatementIdx;
 use type_check::{FunctionSignature, Type};
 
@@ -12,7 +13,7 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
-use crate::capture::scan_captures;
+use crate::capture::scan_for_inflights_in_scope;
 use crate::type_check::type_env::TypeEnv;
 use crate::type_check::{TypeChecker, Types};
 
@@ -95,6 +96,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 	};
 	scope
 		.env
+		.borrow_mut()
 		.as_mut()
 		.unwrap()
 		.define(&sym, types.add_type(typ), StatementIdx::Top);
@@ -128,16 +130,17 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	}
 
 	// Analyze inflight captures
-	scan_captures(&scope);
+	scan_for_inflights_in_scope(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
 	fs::create_dir_all(&out_dir).expect("create output dir");
 
 	let app_name = Path::new(source_file).file_stem().unwrap().to_str().unwrap();
-	let intermediate_js = jsify::jsify(&scope, &out_dir, app_name, true);
+	let jsifier = JSifier::new(out_dir, app_name, true);
+	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
-	let intermediate_file = out_dir.join(intermediate_name);
+	let intermediate_file = jsifier.out_dir.join(intermediate_name);
 	fs::write(&intermediate_file, &intermediate_js).expect("Write intermediate JS to disk");
 
 	return Ok(CompilerOutput {
