@@ -1,0 +1,31 @@
+name: Close stale PR's and Issues
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  stale:
+    name: "Closing stale issues & PRs"
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - uses: actions/stale@v6
+        with:
+          days-before-pr-stale: 20
+          stale-issue-message: |
+            Hi,
+
+            This issue hasn't seen activity in 60 days. Therefore, we are closing this issue for now.
+            Feel free to re-open this issue when there's an update or relevant information to be added.
+            Thanks!
+          stale-pr-message: |
+            Hi,
+
+            This PR has not seen activity in 20 days. Therefore, we are closing the PR for now.
+            If you need help with the PR, do not hesitate to reach out in the winglang community slack at [winglang.slack.com](https://winglang.slack.com).
+            Feel free to re-open this PR when it is still relevant and ready to be worked on again.
+            Thanks!
+
