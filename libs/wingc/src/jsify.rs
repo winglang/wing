@@ -328,7 +328,7 @@ impl JSifier {
 			}
       ExprKind::ArrayLiteral { items, .. } => {
         format!(
-          "{{\n{}}}\n",
+          "[\n{}]\n",
           items
             .iter()
             .map(|expr| format!("{},", self.jsify_expression(expr)))
