@@ -3,14 +3,6 @@ title: Testing using the Wing Console
 id: console
 ---
 
-:::info Under Construction
-
-:construction: The Wing Console does not yet work with the recently added `.wsim` file format (added in Wing 0.3.0), so some of the steps in this section may fail.
-
-Follow [this issue](https://github.com/winglang/wing/issues/809) to track when support for this is fixed!
-
-:::
-
 The Wing Console is a graphical user interface that can be used to interact with
 Wing applications on the local machine.
 
@@ -64,12 +56,11 @@ Now, check the `wing.txt` file and download it, using the download button
 
 ![](./console-bucket-2.png)
 
-The downloaded file should contain `Hello, Wing` text 
+The downloaded file should contain `Hello, Wing` text
 
 ## Congrats! :clap:
 
 You have just written and tested your first Wing program!
-
 
 ---
 

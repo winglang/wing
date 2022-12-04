@@ -218,7 +218,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-| <code><a href="#@winglang/wingsdk.cloud.Counter.property.initialValue">initial_value</a></code> | <code>num</code> | The initial value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
@@ -250,10 +250,10 @@ with a fresh copy without any consequences.
 
 ---
 
-##### `initial_value`<sup>Required</sup> <a name="initial_value" id="@winglang/wingsdk.cloud.Counter.property.initialValue"></a>
+##### `initial`<sup>Required</sup> <a name="initial" id="@winglang/wingsdk.cloud.Counter.property.initial"></a>
 
 ```wing
-initial_value: num;
+initial: num;
 ```
 
 - *Type:* num
@@ -984,14 +984,14 @@ let counter_props = cloud.CounterProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initialValue">initial_value</a></code> | <code>num</code> | The initial value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.CounterProps.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
 ---
 
-##### `initial_value`<sup>Optional</sup> <a name="initial_value" id="@winglang/wingsdk.cloud.CounterProps.property.initialValue"></a>
+##### `initial`<sup>Optional</sup> <a name="initial" id="@winglang/wingsdk.cloud.CounterProps.property.initial"></a>
 
 ```wing
-initial_value: num;
+initial: num;
 ```
 
 - *Type:* num
