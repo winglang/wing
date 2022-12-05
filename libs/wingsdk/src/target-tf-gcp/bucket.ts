@@ -2,6 +2,7 @@ import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { Resource, CaptureMetadata, Code } from "../core";
+import { App } from "./app";
 
 export class Bucket extends cloud.BucketBase {
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
@@ -14,7 +15,7 @@ export class Bucket extends cloud.BucketBase {
     // TODO: generate random string with terraform?
     new StorageBucket(this, "Default", {
       name: this.node.addr,
-      location: "EU",
+      location: App.of(this).region,
       lifecycle: {
         // TODO: disable for test apps?
         preventDestroy: true,

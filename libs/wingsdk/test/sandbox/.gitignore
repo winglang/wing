@@ -4,4 +4,4 @@ sim.out/
 *.tfstate
 *.tfstate.backup
 *.wsim
-*.tree.json
+tree.json

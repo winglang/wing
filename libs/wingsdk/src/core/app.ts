@@ -60,57 +60,44 @@ export class CdktfApp extends Construct implements IApp {
    */
   public readonly outdir: string;
 
+  private readonly cdktfApp: cdktf.App;
+  private readonly cdktfStack: cdktf.TerraformStack;
+  private readonly files: Files;
+
   constructor(props: AppProps = {}) {
-    // this construct will get thrown away
-    super(null as any, "");
+    const outdir = props.outdir ?? ".";
+    const cdktfApp = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
+    const cdktfStack = new cdktf.TerraformStack(cdktfApp, "cdktf-stack");
 
-    // this value gets thrown away since we are returning a different object
-    this.outdir = "";
+    super(cdktfStack, "wing-app");
 
-    class InnerApp extends cdktf.TerraformStack {
-      public readonly outdir: string;
-      private readonly cdktfApp: cdktf.App;
-      private readonly files: Files;
+    this.outdir = outdir;
+    this.cdktfApp = cdktfApp;
+    this.cdktfStack = cdktfStack;
 
-      constructor() {
-        const outdir = props.outdir ?? ".";
-        const root = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
-
-        super(root, "root");
-
-        this.outdir = outdir;
-        this.cdktfApp = root;
-        this.files = new Files({
-          app: this,
-          stateFile: props.stateFile,
-        });
-      }
-
-      public synth(): string {
-        this.cdktfApp.synth();
-        this.files.synth();
-
-        // write tree.json file to the outdir
-        synthesizeTree(this);
-
-        const tfConfig = this.toTerraform();
-        const cleaned = cleanTerraformConfig(tfConfig);
-
-        return stringify(cleaned, null, 2) ?? "";
-      }
-    }
-
-    return new InnerApp();
+    this.files = new Files({
+      app: this,
+      stateFile: props.stateFile,
+    });
   }
 
   /**
    * Synthesize the app into Terraform configuration in a `cdktf.out` directory.
    *
-   * This method eturn a cleaned snapshot of the resulting Terraform manifest
+   * This method returns a cleaned snapshot of the resulting Terraform manifest
    * for unit testing.
    */
   public synth(): string {
-    throw new Error("Unimplemented");
+    this.cdktfApp.synth();
+    this.files.synth();
+
+    // write tree.json file to the outdir
+    synthesizeTree(this);
+
+    const tfConfig = this.cdktfStack.toTerraform();
+    const cleaned = cleanTerraformConfig(tfConfig);
+
+    return stringify(cleaned, null, 2) ?? "";
   }
 }
 

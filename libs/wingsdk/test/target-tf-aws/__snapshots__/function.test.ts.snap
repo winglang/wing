@@ -4,24 +4,24 @@ exports[`basic function 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
+      \\"cdktfstack_wingapp_Function_IamRole_D839DAD0\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+      \\"cdktfstack_wingapp_Function_IamRolePolicy_7D736E5A\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_Function_IamRole_D839DAD0.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+      \\"cdktfstack_wingapp_Function_IamRolePolicyAttachment_F24018FA\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_Function_IamRole_D839DAD0.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
+      \\"cdktfstack_wingapp_Function_EBD52E07\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"WING_FUNCTION_NAME\\": \\"Function\\"
@@ -29,18 +29,18 @@ exports[`basic function 1`] = `
         },
         \\"function_name\\": \\"Function\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_Function_IamRole_D839DAD0.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_Function_Bucket_A67EF78E.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.cdktfstack_wingapp_Function_S3Object_F34234B4.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Bucket_8CDD903C\\": {}
+      \\"cdktfstack_wingapp_Function_Bucket_A67EF78E\\": {}
     },
     \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+      \\"cdktfstack_wingapp_Function_S3Object_F34234B4\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_Function_Bucket_A67EF78E.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -53,106 +53,116 @@ exports[`basic function 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "root": Object {
+      "cdktf-stack": Object {
         "children": Object {
-          "Function": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": false,
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.14.1",
             },
+            "id": "backend",
+            "path": "cdktf-stack/backend",
+          },
+          "wing-app": Object {
             "children": Object {
-              "Asset": Object {
-                "constructInfo": Object {
-                  "fqn": "cdktf.TerraformAsset",
-                  "version": "0.13.2",
+              "Function": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": false,
                 },
-                "id": "Asset",
-                "path": "root/Function/Asset",
+                "children": Object {
+                  "Asset": Object {
+                    "constructInfo": Object {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.14.1",
+                    },
+                    "id": "Asset",
+                    "path": "cdktf-stack/wing-app/Function/Asset",
+                  },
+                  "Bucket": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "11.0.4",
+                    },
+                    "id": "Bucket",
+                    "path": "cdktf-stack/wing-app/Function/Bucket",
+                  },
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "11.0.4",
+                    },
+                    "id": "Default",
+                    "path": "cdktf-stack/wing-app/Function/Default",
+                  },
+                  "IamRole": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "11.0.4",
+                    },
+                    "id": "IamRole",
+                    "path": "cdktf-stack/wing-app/Function/IamRole",
+                  },
+                  "IamRolePolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "11.0.4",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "cdktf-stack/wing-app/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "11.0.4",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "cdktf-stack/wing-app/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "11.0.4",
+                    },
+                    "id": "S3Object",
+                    "path": "cdktf-stack/wing-app/Function/S3Object",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.25",
+                },
+                "id": "Function",
+                "path": "cdktf-stack/wing-app/Function",
               },
-              "Bucket": Object {
+              "aws": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.11",
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "11.0.4",
                 },
-                "id": "Bucket",
-                "path": "root/Function/Bucket",
-              },
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "10.0.11",
-                },
-                "id": "Default",
-                "path": "root/Function/Default",
-              },
-              "IamRole": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "10.0.11",
-                },
-                "id": "IamRole",
-                "path": "root/Function/IamRole",
-              },
-              "IamRolePolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "10.0.11",
-                },
-                "id": "IamRolePolicy",
-                "path": "root/Function/IamRolePolicy",
-              },
-              "IamRolePolicyAttachment": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "10.0.11",
-                },
-                "id": "IamRolePolicyAttachment",
-                "path": "root/Function/IamRolePolicyAttachment",
-              },
-              "S3Object": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "10.0.11",
-                },
-                "id": "S3Object",
-                "path": "root/Function/S3Object",
+                "id": "aws",
+                "path": "cdktf-stack/wing-app/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.25",
             },
-            "id": "Function",
-            "path": "root/Function",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
-            },
-            "id": "backend",
-            "path": "root/backend",
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.14.1",
         },
-        "id": "root",
-        "path": "root",
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
       },
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.14.1",
     },
     "id": "App",
     "path": "",
@@ -165,24 +175,24 @@ exports[`basic function with environment variables 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_Function_IamRole_88AD864C\\": {
+      \\"cdktfstack_wingapp_Function_IamRole_D839DAD0\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+      \\"cdktfstack_wingapp_Function_IamRolePolicy_7D736E5A\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_Function_IamRole_D839DAD0.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+      \\"cdktfstack_wingapp_Function_IamRolePolicyAttachment_F24018FA\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_Function_IamRole_D839DAD0.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_Function_9F694E40\\": {
+      \\"cdktfstack_wingapp_Function_EBD52E07\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"BOOM\\": \\"BAM\\",
@@ -192,18 +202,18 @@ exports[`basic function with environment variables 1`] = `
         },
         \\"function_name\\": \\"Function\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_Function_IamRole_D839DAD0.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_Function_Bucket_A67EF78E.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.cdktfstack_wingapp_Function_S3Object_F34234B4.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Bucket_8CDD903C\\": {}
+      \\"cdktfstack_wingapp_Function_Bucket_A67EF78E\\": {}
     },
     \\"aws_s3_object\\": {
-      \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+      \\"cdktfstack_wingapp_Function_S3Object_F34234B4\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_Function_Bucket_A67EF78E.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -216,106 +226,116 @@ exports[`basic function with environment variables 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "root": Object {
+      "cdktf-stack": Object {
         "children": Object {
-          "Function": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": false,
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.14.1",
             },
+            "id": "backend",
+            "path": "cdktf-stack/backend",
+          },
+          "wing-app": Object {
             "children": Object {
-              "Asset": Object {
-                "constructInfo": Object {
-                  "fqn": "cdktf.TerraformAsset",
-                  "version": "0.13.2",
+              "Function": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": false,
                 },
-                "id": "Asset",
-                "path": "root/Function/Asset",
+                "children": Object {
+                  "Asset": Object {
+                    "constructInfo": Object {
+                      "fqn": "cdktf.TerraformAsset",
+                      "version": "0.14.1",
+                    },
+                    "id": "Asset",
+                    "path": "cdktf-stack/wing-app/Function/Asset",
+                  },
+                  "Bucket": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "11.0.4",
+                    },
+                    "id": "Bucket",
+                    "path": "cdktf-stack/wing-app/Function/Bucket",
+                  },
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                      "version": "11.0.4",
+                    },
+                    "id": "Default",
+                    "path": "cdktf-stack/wing-app/Function/Default",
+                  },
+                  "IamRole": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                      "version": "11.0.4",
+                    },
+                    "id": "IamRole",
+                    "path": "cdktf-stack/wing-app/Function/IamRole",
+                  },
+                  "IamRolePolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                      "version": "11.0.4",
+                    },
+                    "id": "IamRolePolicy",
+                    "path": "cdktf-stack/wing-app/Function/IamRolePolicy",
+                  },
+                  "IamRolePolicyAttachment": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                      "version": "11.0.4",
+                    },
+                    "id": "IamRolePolicyAttachment",
+                    "path": "cdktf-stack/wing-app/Function/IamRolePolicyAttachment",
+                  },
+                  "S3Object": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                      "version": "11.0.4",
+                    },
+                    "id": "S3Object",
+                    "path": "cdktf-stack/wing-app/Function/S3Object",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.25",
+                },
+                "id": "Function",
+                "path": "cdktf-stack/wing-app/Function",
               },
-              "Bucket": Object {
+              "aws": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.11",
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "11.0.4",
                 },
-                "id": "Bucket",
-                "path": "root/Function/Bucket",
-              },
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "10.0.11",
-                },
-                "id": "Default",
-                "path": "root/Function/Default",
-              },
-              "IamRole": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "10.0.11",
-                },
-                "id": "IamRole",
-                "path": "root/Function/IamRole",
-              },
-              "IamRolePolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "10.0.11",
-                },
-                "id": "IamRolePolicy",
-                "path": "root/Function/IamRolePolicy",
-              },
-              "IamRolePolicyAttachment": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "10.0.11",
-                },
-                "id": "IamRolePolicyAttachment",
-                "path": "root/Function/IamRolePolicyAttachment",
-              },
-              "S3Object": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "10.0.11",
-                },
-                "id": "S3Object",
-                "path": "root/Function/S3Object",
+                "id": "aws",
+                "path": "cdktf-stack/wing-app/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.25",
             },
-            "id": "Function",
-            "path": "root/Function",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
-            },
-            "id": "backend",
-            "path": "root/backend",
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.14.1",
         },
-        "id": "root",
-        "path": "root",
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
       },
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.14.1",
     },
     "id": "App",
     "path": "",

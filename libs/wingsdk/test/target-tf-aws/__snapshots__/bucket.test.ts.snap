@@ -4,17 +4,17 @@ exports[`bucket is public 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {}
+      \\"cdktfstack_wingapp_mybucket_5FF05DA9\\": {}
     },
     \\"aws_s3_bucket_policy\\": {
-      \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
+      \\"cdktfstack_wingapp_mybucket_PublicPolicy_676AE553\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_mybucket_5FF05DA9.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.cdktfstack_wingapp_mybucket_5FF05DA9.arn}/*\\\\\\"]}]}\\"
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_mybucket_Encryption_AA43F7E8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+      \\"cdktfstack_wingapp_mybucket_Encryption_FCC8D840\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_mybucket_5FF05DA9.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
@@ -32,74 +32,84 @@ exports[`bucket is public 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "root": Object {
+      "cdktf-stack": Object {
         "children": Object {
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
+              "version": "0.14.1",
             },
             "id": "backend",
-            "path": "root/backend",
+            "path": "cdktf-stack/backend",
           },
-          "my_bucket": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
+          "wing-app": Object {
             "children": Object {
-              "Default": Object {
+              "aws": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.11",
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "11.0.4",
                 },
-                "id": "Default",
-                "path": "root/my_bucket/Default",
+                "id": "aws",
+                "path": "cdktf-stack/wing-app/aws",
               },
-              "Encryption": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.11",
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
                 },
-                "id": "Encryption",
-                "path": "root/my_bucket/Encryption",
-              },
-              "PublicPolicy": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                  "version": "10.0.11",
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "11.0.4",
+                    },
+                    "id": "Default",
+                    "path": "cdktf-stack/wing-app/my_bucket/Default",
+                  },
+                  "Encryption": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                      "version": "11.0.4",
+                    },
+                    "id": "Encryption",
+                    "path": "cdktf-stack/wing-app/my_bucket/Encryption",
+                  },
+                  "PublicPolicy": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
+                      "version": "11.0.4",
+                    },
+                    "id": "PublicPolicy",
+                    "path": "cdktf-stack/wing-app/my_bucket/PublicPolicy",
+                  },
                 },
-                "id": "PublicPolicy",
-                "path": "root/my_bucket/PublicPolicy",
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.25",
+                },
+                "id": "my_bucket",
+                "path": "cdktf-stack/wing-app/my_bucket",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.25",
             },
-            "id": "my_bucket",
-            "path": "root/my_bucket",
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.14.1",
         },
-        "id": "root",
-        "path": "root",
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
       },
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.14.1",
     },
     "id": "App",
     "path": "",
@@ -112,20 +122,20 @@ exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {}
+      \\"cdktfstack_wingapp_mybucket_5FF05DA9\\": {}
     },
     \\"aws_s3_bucket_public_access_block\\": {
-      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
+      \\"cdktfstack_wingapp_mybucket_PublicAccessBlock_2B2E0E5F\\": {
         \\"block_public_acls\\": true,
         \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_mybucket_5FF05DA9.bucket}\\",
         \\"ignore_public_acls\\": true,
         \\"restrict_public_buckets\\": true
       }
     },
     \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_mybucket_Encryption_AA43F7E8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+      \\"cdktfstack_wingapp_mybucket_Encryption_FCC8D840\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_mybucket_5FF05DA9.bucket}\\",
         \\"rule\\": [
           {
             \\"apply_server_side_encryption_by_default\\": {
@@ -143,74 +153,84 @@ exports[`create a bucket 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "root": Object {
+      "cdktf-stack": Object {
         "children": Object {
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
+              "version": "0.14.1",
             },
             "id": "backend",
-            "path": "root/backend",
+            "path": "cdktf-stack/backend",
           },
-          "my_bucket": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
+          "wing-app": Object {
             "children": Object {
-              "Default": Object {
+              "aws": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.11",
+                  "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+                  "version": "11.0.4",
                 },
-                "id": "Default",
-                "path": "root/my_bucket/Default",
+                "id": "aws",
+                "path": "cdktf-stack/wing-app/aws",
               },
-              "Encryption": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.11",
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
                 },
-                "id": "Encryption",
-                "path": "root/my_bucket/Encryption",
-              },
-              "PublicAccessBlock": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                  "version": "10.0.11",
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                      "version": "11.0.4",
+                    },
+                    "id": "Default",
+                    "path": "cdktf-stack/wing-app/my_bucket/Default",
+                  },
+                  "Encryption": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                      "version": "11.0.4",
+                    },
+                    "id": "Encryption",
+                    "path": "cdktf-stack/wing-app/my_bucket/Encryption",
+                  },
+                  "PublicAccessBlock": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                      "version": "11.0.4",
+                    },
+                    "id": "PublicAccessBlock",
+                    "path": "cdktf-stack/wing-app/my_bucket/PublicAccessBlock",
+                  },
                 },
-                "id": "PublicAccessBlock",
-                "path": "root/my_bucket/PublicAccessBlock",
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.0.25",
+                },
+                "id": "my_bucket",
+                "path": "cdktf-stack/wing-app/my_bucket",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.25",
             },
-            "id": "my_bucket",
-            "path": "root/my_bucket",
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.14.1",
         },
-        "id": "root",
-        "path": "root",
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
       },
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.14.1",
     },
     "id": "App",
     "path": "",

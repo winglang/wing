@@ -4,38 +4,56 @@
     "id": "App",
     "path": "",
     "children": {
-      "root": {
-        "id": "root",
-        "path": "root",
+      "cdktf-stack": {
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
         "children": {
-          "google": {
-            "id": "google",
-            "path": "root/google",
-            "constructInfo": {
-              "fqn": "@cdktf/provider-google.provider.GoogleProvider",
-              "version": "4.0.1"
-            }
-          },
-          "HelloWorld": {
-            "id": "HelloWorld",
-            "path": "root/HelloWorld",
+          "wing-app": {
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
             "children": {
-              "Bucket": {
-                "id": "Bucket",
-                "path": "root/HelloWorld/Bucket",
+              "google": {
+                "id": "google",
+                "path": "cdktf-stack/wing-app/google",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+                  "version": "4.0.1"
+                }
+              },
+              "config": {
+                "id": "config",
+                "path": "cdktf-stack/wing-app/config",
+                "constructInfo": {
+                  "fqn": "@cdktf/provider-google.dataGoogleClientConfig.DataGoogleClientConfig",
+                  "version": "4.0.1"
+                }
+              },
+              "HelloWorld": {
+                "id": "HelloWorld",
+                "path": "cdktf-stack/wing-app/HelloWorld",
                 "children": {
-                  "Default": {
-                    "id": "Default",
-                    "path": "root/HelloWorld/Bucket/Default",
+                  "Bucket": {
+                    "id": "Bucket",
+                    "path": "cdktf-stack/wing-app/HelloWorld/Bucket",
+                    "children": {
+                      "Default": {
+                        "id": "Default",
+                        "path": "cdktf-stack/wing-app/HelloWorld/Bucket/Default",
+                        "constructInfo": {
+                          "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                          "version": "4.0.1"
+                        }
+                      }
+                    },
+                    "attributes": {
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
                     "constructInfo": {
-                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
-                      "version": "4.0.1"
+                      "fqn": "constructs.Construct",
+                      "version": "10.0.25"
                     }
                   }
-                },
-                "attributes": {
-                  "wing:resource:stateful": true,
-                  "wing:resource:connections": []
                 },
                 "constructInfo": {
                   "fqn": "constructs.Construct",
@@ -50,7 +68,7 @@
           },
           "backend": {
             "id": "backend",
-            "path": "root/backend",
+            "path": "cdktf-stack/backend",
             "constructInfo": {
               "fqn": "cdktf.LocalBackend",
               "version": "0.14.1"
