@@ -18,11 +18,9 @@ and puts an object inside a bucket:
 bring cloud;
 let bucket = new cloud.Bucket();
 
-inflight my_inflight(_: str): str {
+new cloud.Function((_: str): str ~> {
   bucket.put("hello.txt", "world");
-}
-
-new cloud.Function(my_inflight);
+});
 ```
 
 But before we explain what inflight functions are (we also call them
