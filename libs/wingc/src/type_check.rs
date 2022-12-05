@@ -176,9 +176,9 @@ pub struct FunctionSignature {
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			Type::Anything => write!(f, "anything"),
-			Type::Number => write!(f, "number"),
-			Type::String => write!(f, "string"),
+			Type::Anything => write!(f, "any"),
+			Type::Number => write!(f, "num"),
+			Type::String => write!(f, "str"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Optional(v) => write!(f, "{}?", v),
@@ -801,7 +801,7 @@ impl<'a> TypeChecker<'a> {
 					return Some(struct_type);
 				}
 
-				// Make it really is a a struct type
+				// Make sure it really is a struct type
 				let st = struct_type
 					.as_struct()
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
