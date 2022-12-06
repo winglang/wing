@@ -8,7 +8,7 @@ description: The Wing Language Specification
 
 📝 Do you want to leave comments directly on this doc? Submit comments
 [here](https://github.com/winglang/wing/pull/497/files#diff-46a5d9ee8e0085d047c39f03dfda67a39f5087ce50f9b16a8103e0073a0d3d78).
-
+ 
 :::
 
 ## 0. Preface
@@ -73,8 +73,8 @@ import TOCInline from '@theme/TOCInline';
 | `str`  | UTF-16 encoded strings             |
 | `bool` | represents true or false           |
 
-User defined explicit "any" is supported iff declared by the user.
-Almost all types can be implicitly resolved by the compiler except for "any".
+User defined explicit "any" is supported iff declared by the user.  
+Almost all types can be implicitly resolved by the compiler except for "any".  
 "any" must be explicitly declared and annotated.
 
 > ```TS
@@ -96,7 +96,7 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > const w: any = 1;
 > const q: number? = undefined;
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -126,7 +126,7 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
-
+  
 > ```TS
 > const z: Set = Object.freeze(new Set([1, 2, 3]));
 > const zm: Set = new Set();
@@ -174,6 +174,7 @@ them in the closure section.
 
 </details>
 
+
 [`▲ top`][top]
 
 ---
@@ -187,8 +188,8 @@ from `any`. During the assignment, the compiler internally knows about the
 length of this type and attempts to read it as either a JSON string or buffer.
 
 Since casting is not allowed in Wing, `Struct` data type is `any`'s interface
-with the outside world. `Struct` can be casted back to `any` at any time.
-All structs can be casted to `Struct` and back to `any` at any time as well.
+with the outside world. `Struct` can be casted back to `any` at any time.  
+All structs can be casted to `Struct` and back to `any` at any time as well.  
 `Struct` cannot be casted to any other type.
 
 "Struct" is immutable by design. Meaning that once parsed from its `any` buffer,
@@ -201,6 +202,7 @@ it cannot be modified anymore.
 > print(data.name);
 > ```
 
+  
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
@@ -231,7 +233,7 @@ it cannot be modified anymore.
 | `assert` | checks a condition and _panics_ if evaluated to false    |
 
 Wing is a statically typed language, so attempting to redefine any of the above
-functions, just like any other "symbol" will result in a compile-time error.
+functions, just like any other "symbol" will result in a compile-time error.  
 
 Above functions can accept variadic arguments of any type except `throw` which
 only accepts one argument and that is the message to be contained in the error.
@@ -323,7 +325,7 @@ a permanent storage (such as a global variable).
 
 Currently the only storage modifier is `static`. `static` indicates a definition
 is only available once per program and for the entire duration of that program.
-All statics must be defined inline and initialized right away.
+All statics must be defined inline and initialized right away.  
 Statics are not allowed on structs or interfaces.
 
 Statics are both supported in inflight as well as preflight mode of execution.
@@ -339,7 +341,7 @@ Code samples for `static` are not shown here. They are shown in the relevant
 sections below.
 
 To avoid confusion, it is invalid to have a static and a non-static with the
-same name. Overloading a static is allowed however.
+same name. Overloading a static is allowed however.  
 Accessing static is done via the type name and the `.` operator.
 
 [`▲ top`][top]
@@ -360,7 +362,7 @@ Visibility inference is done with the following rules:
 
 Accessing fields, members, or structured data is done with `.`.
 
-Visibility modifiers can be applied to members of classes and resources.
+Visibility modifiers can be applied to members of classes and resources.  
 Mixing `protected` and `internal` is not allowed.
 
 [`▲ top`][top]
@@ -374,7 +376,7 @@ Re-assignment to variables that are defined with `let` is not allowed in Wing.
 Re-assignment to class fields is allowed if field is marked with `readwrite`.
 Examples in the class section below.
 
-`readwrite` is available in the body of class declarations.
+`readwrite` is available in the body of class declarations.  
 Assigning `readwrite` to immutables of the same type is allowed. That is similar
 to assigning non `readonly`s to `readonly`s in TypeScript.
 
@@ -384,11 +386,11 @@ to assigning non `readonly`s to `readonly`s in TypeScript.
 
 ### 1.7 Optionality
 
-Symbol `?` can mark a type as optional.
+Symbol `?` can mark a type as optional.  
 Optionality means the value behind type can be either present or nil.
 
 Rules of optionality apply to the entire new container type of `type?` and not
-the value behind it (`type`).
+the value behind it (`type`).  
 
 Using the `??` operator allows one to safely access the value behind an optional
 variable by always providing a default, in case the variable is nil. This forces
@@ -415,14 +417,14 @@ and guarantees what's returned is type-stripped from its `?` keyword).
 
 ### 1.8 Type Inference
 
-Type can optionally be put between name and the equal sign, using a colon.
+Type can optionally be put between name and the equal sign, using a colon.  
 Partial type inference is allowed while using the `?` keyword immediately after
 the variable name.
 
-When type annotation is missing, type will be inferred from r-value type.
+When type annotation is missing, type will be inferred from r-value type.  
 r-value refers to the right hand side of an assignment here.
 
-All defined symbols are immutable (constant) by default.
+All defined symbols are immutable (constant) by default.  
 Type casting is generally not allowed unless otherwise specified.
 
 Function arguments and their return type is always required. Function argument
@@ -463,7 +465,7 @@ translate to JavaScript. You can create a new exception with a `throw` call.
 
 In the presence of `try`, `catch` is required but `finally` is optional.
 
-`panic` is meant to be fatal error handling.
+`panic` is meant to be fatal error handling.  
 `throw` is meant to be recoverable error handling.
 
 An uncaught exception is considered user error but a panic call is not. Compiler
@@ -493,7 +495,7 @@ expected from a call and it is not being caught.
 >   console.log("done");
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -622,7 +624,7 @@ while loops currently.
 >   console.log(i);
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -653,7 +655,7 @@ includes for and while loops currently.
 >   console.log(i);
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -662,7 +664,7 @@ includes for and while loops currently.
 
 ### 2.4 return
 
-**return** statement allows to return a value or exit from a called context.
+**return** statement allows to return a value or exit from a called context.  
 
 > ```TS
 > class MyClass {
@@ -684,7 +686,7 @@ includes for and while loops currently.
 >   public __wing__internal_myInternalMethod(): string { return "hi!"; }
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -694,8 +696,8 @@ includes for and while loops currently.
 ### 2.5 await
 
 **await** statement allows to wait for a promise and grab its execution result.
-"await" and "promise" are semantically similar to JavaScript's promises.
-"await" statement is only valid in `async` function declarations.
+"await" and "promise" are semantically similar to JavaScript's promises.  
+"await" statement is only valid in `async` function declarations.  
 awaiting non promises in Wing is a no-op just like in JavaScript.
 
 > ```TS
@@ -725,8 +727,8 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 >     return x;
 >   }
 > }
-> ```
-
+>  ```
+  
 </details>
 
 [`▲ top`][top]
@@ -735,8 +737,8 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 
 ### 2.6 if
 
-Flow control can be done with `if/elif/else` statements.
-The `if` statement is optionally followed by `elif` and `else`.
+Flow control can be done with `if/elif/else` statements.  
+The `if` statement is optionally followed by `elif` and `else`.  
 
 > ```TS
 > // Wing program:
@@ -764,7 +766,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 >   console.log("x is 1 and y is sample");
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -773,8 +775,8 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 ### 2.7 for
 
-`for..in` statement is used to iterate over a array or set.
-Type annotation after an iteratee (left hand side of `in`) is optional.
+`for..in` statement is used to iterate over a array or set.  
+Type annotation after an iteratee (left hand side of `in`) is optional.  
 The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 
 > ```TS
@@ -810,7 +812,7 @@ The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 >   console.log(val);
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -819,7 +821,7 @@ The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 
 ### 2.8 while
 
-while statement is used to execute a block of code while a condition is true.
+while statement is used to execute a block of code while a condition is true.  
 
 > ```TS
 > // Wing program:
@@ -835,7 +837,7 @@ while statement is used to execute a block of code while a condition is true.
 >   console.log("hello");
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -846,12 +848,12 @@ while statement is used to execute a block of code while a condition is true.
 
 ### 3.1 Structs
 
-Structs are loosely modeled after typed JSON literals in JavaScript.
-Structs are defined with the `struct` keyword.
+Structs are loosely modeled after typed JSON literals in JavaScript.  
+Structs are defined with the `struct` keyword.  
 Structs are "bags" of immutable data.
 
-Structs can only have fields of primitive types, resources, and other structs.
-Array, set, and map of above types is also allowed in struct field definition.
+Structs can only have fields of primitive types, resources, and other structs.  
+Array, set, and map of above types is also allowed in struct field definition.  
 Visibility, storage and phase modifiers are not allowed in struct fields.
 
 Structs can inherit from multiple other structs.
@@ -874,7 +876,7 @@ Structs can inherit from multiple other structs.
 > let s3 = MyDataModel2 { field3: 1 };
 > let s4 = MyDataModel3 {
 >   field1: 12,
->   field2: "sample",
+>   field2: "sample", 
 >   field3: 11,
 >   field4: false,
 >   field5: "sample"
@@ -908,7 +910,7 @@ Structs can inherit from multiple other structs.
 >   field6: 11
 > };
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -917,8 +919,8 @@ Structs can inherit from multiple other structs.
 
 ### 3.2 Classes
 
-Classes consist of fields and methods in any order.
-The class system is single-dispatch class based object orientated system.
+Classes consist of fields and methods in any order.  
+The class system is single-dispatch class based object orientated system.  
 Classes are instantiated with the `new` keyword.
 
 A class member function that has the name **init** is considered to be a class
@@ -988,7 +990,7 @@ a.print(); // prints 20.
 
 Overloading methods is allowed. This means functions can be overloaded with many
 signatures only varying in the number of arguments and their unique type order.
-Overloading the constructor is also allowed.
+Overloading the constructor is also allowed.  
 Inheritance is allowed with the `extends` keyword. `super` can be used to access
 the base class, immediately up the inheritance chain (parent class).
 
@@ -1014,7 +1016,7 @@ class Boo extends Foo {
 }
 ```
 
-Classes can inherit and extend other classes using the `extends` keyword.
+Classes can inherit and extend other classes using the `extends` keyword.  
 Classes can implement interfaces iff the interfaces does not contain `~`. You
 can use the keyword `final` to stop the inheritance chain.
 
@@ -1035,18 +1037,18 @@ final class Boo extends Foo {
 ```
 
 By default all methods are virtual. But if you are about to override a method,
-you need to explicitly provide the keyword **override**.
-Static, private, and internal methods cannot be and are not virtual.
+you need to explicitly provide the keyword **override**.  
+Static, private, and internal methods cannot be and are not virtual.  
 
-Statics are not inherited.
+Statics are not inherited.  
 As a result, statics can be overridden mid hierarchy chain. Access to statics is
-through the class name that originally defined it `<class name>.Foo`.
+through the class name that originally defined it `<class name>.Foo`.  
 
 Child class must not introduce additional signatures (overloads) for overridden
 (virtual) methods.
 
-Multiple inheritance is invalid and forbidden.
-Multiple implementations of various interfaces is allowed.
+Multiple inheritance is invalid and forbidden.  
+Multiple implementations of various interfaces is allowed.  
 Multiple implementations of the same interface is invalid and forbidden.
 
 In methods if return type is missing, `: void` is assumed.
@@ -1059,7 +1061,7 @@ In methods if return type is missing, `: void` is assumed.
 
 Resources provide first class composite pattern support in Wing. They are
 modeled after and leverage the [constructs](https://github.com/aws/constructs)
-programming model and as such are fully interoperable with CDK constructs.
+programming model and as such are fully interoperable with CDK constructs.  
 Resources can be defined like so:
 
 ```TS
@@ -1085,7 +1087,7 @@ resource Foo {
   // preflight members
   foo(arg: num): num { return arg; }
   boo(): num { return 32; }
-
+  
   // preflight fields
   field4: num;
   field5: str;
@@ -1125,12 +1127,12 @@ let a = Foo(...) be "custom-id2" in scope; // with constructor arguments
 ```
 
 "id" must be of type string. It can also be a string literal with substitution
-support (normal strings as well as shell strings).
+support (normal strings as well as shell strings).  
 "scope" must be an expression of resource type.
 
 In addition to the `init` keyword for defining initializers, resources have a
 unique `finalizer` definable method that offers async finalization of a resource
-in preflight time.
+in preflight time.  
 Order of execution of async finalization is not guaranteed.
 
 Resources can be captured into inflight functions and once that happens, inside
@@ -1139,7 +1141,7 @@ the capture block only the inflight members are available.
 Resources can extend other resources (but not structs) and implement interfaces.
 
 Declaration of fields with different phases is not allowed due to requirement of
-having inflight fields of same name being implicitly initialized by the compiler
+having inflight fields of same name being implicitly initialized by the compiler  
 but declaration of methods with different phases is allowed.
 
 [`▲ top`][top]
@@ -1148,9 +1150,9 @@ but declaration of methods with different phases is allowed.
 
 ### 3.4 Interfaces
 
-Interfaces represent a contract that a class or resource must fulfill.
-Interfaces are defined with the `interface` keyword.
-Both preflight and inflight signatures are allowed.
+Interfaces represent a contract that a class or resource must fulfill.  
+Interfaces are defined with the `interface` keyword.  
+Both preflight and inflight signatures are allowed.  
 `impl` keyword is used to implement an interface or multiple interfaces that are
 separated with commas.
 
@@ -1212,7 +1214,7 @@ type of visibility (private, protected, etc.).
 >   }
 > }
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1227,9 +1229,9 @@ type of visibility (private, protected, etc.).
 let <name>[: <type>] = <value>;
 ```
 
-Assignment operator is `=`.
-Assignment declaration keyword is `let`.
-Type annotation is optional if a default value is given.
+Assignment operator is `=`.  
+Assignment declaration keyword is `let`.  
+Type annotation is optional if a default value is given.  
 
 > ```TS
 > let n = 10;
@@ -1242,7 +1244,7 @@ Type annotation is optional if a default value is given.
 > const n: number = 10;
 > const s: string = "hello";
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1253,8 +1255,8 @@ Type annotation is optional if a default value is given.
 
 #### 3.6.1 Closures
 
-It is possible to create closures.
-It is not possible to create named closures.
+It is possible to create closures.  
+It is not possible to create named closures.  
 However, it is possible to create anonymous closures and assign to variables
 (function literals). Inflight closures are also supported.
 
@@ -1284,7 +1286,7 @@ can they return any resources. They do pure "compute" operations.
 
 #### 3.6.2 Promises
 
-Promises in Wing are defined with `Promise<T>` syntax.
+Promises in Wing are defined with `Promise<T>` syntax.  
 Functions that use the keyword "await" in their body must return a promise.
 
 > ```TS
@@ -1309,7 +1311,7 @@ Functions that use the keyword "await" in their body must return a promise.
 >   console.log(t);
 > })
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1319,8 +1321,8 @@ Functions that use the keyword "await" in their body must return a promise.
 #### 3.6.3 Struct Expansion
 
 If the last argument of a function call is a struct, then the struct in the call
-is "expandable" with a special `:` syntax.
-In this calling signature, order of struct members do not matter.
+is "expandable" with a special `:` syntax.  
+In this calling signature, order of struct members do not matter.  
 Partial struct expansion in terms of supplying less number of arguments than the
 number of fields on type of the struct expected is not allowed. Omitting `nil`s
 is allowed with the same rules as explicit initialization in class constructors.
@@ -1368,9 +1370,9 @@ f(1, 2, 3, 4, 5, 6, 34..100);
 
 ### 3.7 Arrays
 
-Arrays are dynamically sized in Wing and are defined with the `[]` syntax.
+Arrays are dynamically sized in Wing and are defined with the `[]` syntax.  
 Individual array items are also accessed with the `[]` syntax. You can call
-`sizeof` to get the size of the array.
+`sizeof` to get the size of the array.  
 Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 > ```TS
@@ -1388,7 +1390,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > const arr3: string[] = ["a1", "b2", "c3"];
 > const l = arr1.length + arr2.length + arr3.length + arr1[0];
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1400,7 +1402,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 Enumeration type (enum) is a type that groups a list of named constant members.
 Enumeration is defined by writing **enum**, followed by enumeration name and a
 list of comma-separated constants in a {}. Last comma is optional in single line
-definitions but required in multi line definitions.
+definitions but required in multi line definitions.  
 Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 
 > ```TS
@@ -1426,7 +1428,7 @@ Naming convention for enums is to use "TitleCase" for name ALL_CAPS for members.
 > const x: MyFoo = MyFoo.B;
 > const y: MyFoo = x;
 > ```
-
+  
 </details>
 
 `nameof` operator is used to get the name of a constant member at compile time.
@@ -1465,18 +1467,18 @@ if some_val == "ONE" {
 
 ### 3.9 Computed Properties
 
-You may use the following syntax to define computed properties.
+You may use the following syntax to define computed properties.  
 Computed properties are syntactic sugar for getters and setters which themselves
-are syntactic sugar for methods, therefore omitting either one is acceptable.
+are syntactic sugar for methods, therefore omitting either one is acceptable.  
 
 "Read block" must always return a value of the same type as the property.
 
 Keyword `new` can be used inside the write block to access the incoming r-value
 of the assignment (write) operation. `new` is always the same type as the type
-of the property itself.
+of the property itself.  
 
-Both preflight and inflight computed properties are allowed.
-Keyword `readwrite` behind computed properties is not allowed.
+Both preflight and inflight computed properties are allowed.  
+Keyword `readwrite` behind computed properties is not allowed.  
 Async computed properties are not allowed.
 
 ```TS
@@ -1523,7 +1525,7 @@ class Rect {
   }
 }
 ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1532,9 +1534,9 @@ class Rect {
 
 ## 4. Module System
 
-The module system in Wing uses the "bring" expression to reuse code.
+The module system in Wing uses the "bring" expression to reuse code.  
 **bring** expression allows code to "import" functions, classes and variables
-from other files, to allow reusability.
+from other files, to allow reusability.  
 **bring** expression is only allowed at the top of the file before any other
 code. Comments before the first bring expression are valid.
 
@@ -1558,9 +1560,9 @@ acts like C `#include`s. Symbols collision is fatal in this style of imports.
 
 ### 4.2 Exports
 
-In preflight, anything with `public` at block scope level is importable.
-This includes functions, classes, structs, interfaces and resources.
-In inflight, the above excluding resources are importable.
+In preflight, anything with `public` at block scope level is importable.  
+This includes functions, classes, structs, interfaces and resources.  
+In inflight, the above excluding resources are importable.  
 Variables are not exportable.
 
 Resources are not usable in inflight functions. There is no synthesizer inside
@@ -1601,8 +1603,8 @@ supported languages.
 
 ### 6.1 Strings
 
-Type of string is UTF-16 internally.
-All string declaration variants are multi-line.
+Type of string is UTF-16 internally.  
+All string declaration variants are multi-line.  
 You can call `sizeof` to get the length of the string.
 
 [`▲ top`][top]
@@ -1613,8 +1615,8 @@ You can call `sizeof` to get the length of the string.
 
 The string inside the double quotes is processed, and all notations of form
 `${<expression>}` are substituted from their respective scopes. The behavior is
-similar to `` `text ${sub.prop}` `` notation in JavaScript.
-Processing unicode escape sequences happens in these strings.
+similar to `` `text ${sub.prop}` `` notation in JavaScript.  
+Processing unicode escape sequences happens in these strings.  
 `"` and `$` can be escaped with backslash `\` inside string substitutions.
 
 > ```TS
@@ -1632,7 +1634,7 @@ Processing unicode escape sequences happens in these strings.
 > ```
 
 </details>
-
+  
 [`▲ top`][top]
 
 ---
@@ -1641,15 +1643,15 @@ Processing unicode escape sequences happens in these strings.
 
 If string is enclosed with backticks, the contents of that string will be
 interpreted as a shell command and its output will be used as a string. `` `echo
-"Hello"` `` is equal to `"Hello"`.
+"Hello"` `` is equal to `"Hello"`.  
 The string inside the backtick is evaluated in shell at compile time and its
 stdout is returned as a string. If command exits with non-zero, this throws with
 an exception containing the stderr of the command and its return code.
 
 The string is evaluated at compile time as a escape hatch for ops workflows.
 
-Substitution is not allowed in shell strings.
-Shell strings are invalid in the bring expression.
+Substitution is not allowed in shell strings.  
+Shell strings are invalid in the bring expression.  
 Not all targets support shell execution. Backticks throw in absence of a shell.
 This is specifically geared towards WebAssembly builds of Wing.
 
@@ -1683,7 +1685,7 @@ Internally compiler calls the host environment's command processor (e.g.
 > })();
 > let s = `Hello, ${name}!`;
 > ```
-
+  
 </details>
 
 [`▲ top`][top]
@@ -1692,9 +1694,9 @@ Internally compiler calls the host environment's command processor (e.g.
 
 ### 6.2 Comments
 
-Single line comments start with a `//` and continue to the end of the line.
-Multi-line comments are supported with the `/* ... */` syntax.
-Commenting in Wing has a style that's described earlier in this document.
+Single line comments start with a `//` and continue to the end of the line.  
+Multi-line comments are supported with the `/* ... */` syntax.  
+Commenting in Wing has a style that's described earlier in this document. 
 
 > ```TS
 > // comment
@@ -1710,8 +1712,8 @@ Commenting in Wing has a style that's described earlier in this document.
 
 ### 6.3 Operators
 
-Unary operators are not supported except outline below.
-Arithmetic assignment operators are not supported.
+Unary operators are not supported except outline below.  
+Arithmetic assignment operators are not supported.  
 Ternary or conditional operators are not supported.
 
 #### 6.3.1 Relational Operators
@@ -1770,8 +1772,8 @@ Ternary or conditional operators are not supported.
 | &&                   | Logical AND                                       |
 | \|\|                 | Logical OR                                        |
 
-Table above is in descending order of precedence.
-`=` operator in Wing does not return a value so you cannot do `let x = y = 1`.
+Table above is in descending order of precedence.  
+`=` operator in Wing does not return a value so you cannot do `let x = y = 1`.  
 Operators of the same row in the table above have precedence from left to right
 in the expression they appear in (e.g. `4 * 2 \ 3`). In other words, order is
 determined by associativity.
@@ -1874,7 +1876,7 @@ resource DenyList {
   _write_to_file(list: MutArray<DenyListRule>,  filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map = MutMap<DenyListRule>();
+    let map = MutMap<DenyListRule>(); 
     for rule in list {
       DenyList._append_rule(map, rule);
     }
@@ -1882,11 +1884,11 @@ resource DenyList {
     return tmpdir;
   }
 
-  ~ rules: MutMap<DenyListRule>?;
+  ~ rules: MutMap<DenyListRule>?; 
 
   ~ init() {
     // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>();
+    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>(); 
   }
 
   ~ lookup(name: str, version: str): DenyListRule? {
@@ -1969,7 +1971,7 @@ queue.add_consumer(filter);
   *  Yoav S. ([@yoav-steinberg](https://github.com/yoav-steinberg))  
 
 Inspiration:
-
+  
 - <https://github.com/WheretIB/nullc>
 - <https://github.com/chaos-lang/chaos>
 - <https://github.com/BlazifyOrg/blazex>
