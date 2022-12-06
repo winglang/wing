@@ -6,7 +6,7 @@ He starts his day going over his emails, slack messages, his CLI based TODO app,
 But this story is not about that CEO, nor it is about that day. 
 This story is about the compiler behind that TODO app, and the team that implemented the compiler features that were used in order to develop that TODO app
 
-You mission, if you choose to accept it, is to implement the following code that creates an API-less, bucket backed, single tennant TODO app for sim and aws. The main focus of this code is only compiler capabilities that are required for the TODO app.
+Your mission, if you choose to accept it, is to implement the following code that creates an API-less, bucket backed, single tenant TODO app for sim and aws. The main focus of this code is only compiler capabilities that are required for the TODO app.
 
 ```js
 
