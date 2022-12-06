@@ -1060,20 +1060,7 @@ impl<'a> TypeChecker<'a> {
 					// If provided use alias identifier as the namespace name
 					let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
-					let skip_import = std::env::var_os("WINGC_SKIP_JSII")
-						.map(|v| v != "false")
-						.unwrap_or(false);
-
-					if skip_import {
-						match env.define(namespace_name, self.types.anything(), StatementIdx::Top) {
-							Err(type_error) => {
-								self.type_error(&type_error);
-							}
-							_ => {}
-						};
-					} else {
-						self.add_module_to_env(env, module_name, namespace_name, stmt.idx);
-					}
+					self.add_module_to_env(env, module_name, namespace_name, stmt.idx);
 				}
 			}
 			StmtKind::Scope(scope) => {
@@ -1445,17 +1432,16 @@ impl<'a> TypeChecker<'a> {
 
 					match instance_type.into() {
 						&Type::Class(ref class) | &Type::Resource(ref class) => class,
-						_ => panic!("Expected \"{}\" to be a class or resource type", instance_type),
+						_ => {
+							return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", instance_type))
+						}
 					}
 				};
 
 				// Find property in class's environment
 				match class.env.lookup(property, None) {
 					Ok(_type) => _type,
-					Err(type_error) => {
-						self.type_error(&type_error);
-						self.types.anything()
-					}
+					Err(type_error) => self.type_error(&type_error),
 				}
 			}
 		}
