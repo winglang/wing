@@ -2,15 +2,14 @@
 
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to waycup, his favorite coffee shop. 
-He starts his day going over his emails, slack messages, his CLI based TODO app, updates from github, etc… 
+He starts his day going over his emails, slack messages, his CLI based TODO app, updates from github, etc... 
 But this story is not about that CEO, nor it is about that day. 
-This story is about the compiler behind that TODO app, and the team that implemented the compiler features that were used in order to develop that TODO app
+This story is about the compiler behind that TODO app, and the team that implemented the compiler features that were used in order to develop that TODO app.
 
 Your mission, if you choose to accept it, is to implement the following code that creates an API-less, bucket backed, single tenant TODO app for sim and aws. The main focus of this code is only compiler capabilities that are required for the TODO app.
 
 ```js
-
-resource TaskList{
+resource TaskList {
   _bucket: cloud.Bucket;
   _counter: cloud.Counter;
 
@@ -21,7 +20,7 @@ resource TaskList{
 
   /** 
    * Adds a task to the task list.
-   * @returns {string} the ID of the new task.
+   * @returns The ID of the new task.
    */
   ~ add_task(title: str): str {
     let id = "${this._counter.inc()}";
@@ -32,7 +31,7 @@ resource TaskList{
   /** 
    * Gets a task from the task list.
    * @param id - the id of the task to return
-   * @returns the title of the task (Optimistic)
+   * @returns the title of the task (optimistic)
    */
   ~ get_task(id: str): str {
     return this._bucket.get(id);
@@ -63,7 +62,7 @@ resource TaskList{
     let result = this.list_task_ids();
     let output = new MutSet<str>();
     for id in result {
-      // TODO: how can we make this concurrent
+      // TODO: how can we make this concurrent?
       let title = this.get_task(id);
       if title.contains(term) {
         output.add(id)
@@ -74,6 +73,7 @@ resource TaskList{
 }
 
 let tasks = new TaskList();
+
 let clear_tasks = new cloud.Function((s: str): str ~> {
   let results = tasks.list_task_ids();
   let i = 0;
@@ -107,5 +107,4 @@ let new cloud.Function((s: str): str ~> {
   assert(result.len == 0);
   assert("clean the dishes" == tasks.get_task());
 }) as "test:get, remove and find task";
-
 ```
