@@ -228,7 +228,6 @@ impl JSifier {
 					evaluated_type.as_resource_object().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
-					// Currently, this occurs when a JSII import is untyped, such as when `WINGC_SKIP_JSII` is enabled and `bring cloud` is used.
 					true
 				};
 				let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource_object() {
