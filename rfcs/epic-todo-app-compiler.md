@@ -23,7 +23,7 @@ resource TaskList{
    * Adds a task to the task list.
    * @returns {string} the ID of the new task.
    */
-  ~add_task(title: str): str {
+  ~ add_task(title: str): str {
     let id = "${this._counter.inc()}";
     this._bucket.put(id, title);
     return id;
