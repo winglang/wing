@@ -29,12 +29,12 @@ resource TaskList{
     return id;
   }
 
-   /** 
+  /** 
    * Gets a task from the task list.
    * @param id - the id of the task to return
    * @returns the title of the task (Optimistic)
    */
-  ~get_task(id: str): str {
+  ~ get_task(id: str): str {
     return this._bucket.get(id);
   }
 
@@ -42,7 +42,7 @@ resource TaskList{
    * Removes a task from the list
    * @param id - the id of the task to be removed
    */
-  ~remove_task(id: str) {
+  ~ remove_task(id: str) {
     this._bucket.delete(id);
   }
 
@@ -50,7 +50,7 @@ resource TaskList{
    * Gets the tasks ids 
    * @returns set of task id
    */
-  ~list_task_ids(): Set<str> {
+  ~ list_task_ids(): Set<str> {
     return this._bucket.list();
   }
 
@@ -59,7 +59,7 @@ resource TaskList{
    * @param term - the term to search
    * @returns set of task id that matches the term
    */
-  ~find_tasks_with(term: str): Set<str> {
+  ~ find_tasks_with(term: str): Set<str> {
     let result = this.list_task_ids();
     let output = new MutSet<str>();
     for id in result {
@@ -73,7 +73,7 @@ resource TaskList{
   }
 }
 
-let tasks = new TaskList()
+let tasks = new TaskList();
 let clear_tasks = new cloud.Function((s: str): str ~> {
   let results = tasks.list_task_ids();
   for id in results {
