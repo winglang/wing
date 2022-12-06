@@ -1,5 +1,5 @@
-import { Polycons } from "@winglang/polycons";
 import * as cdktf from "cdktf";
+import { Polycons } from "polycons";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";

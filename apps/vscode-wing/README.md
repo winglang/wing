@@ -43,8 +43,9 @@ code --install-extension ~/Downloads/vscode-wing.vsix
 
 ## Automatic Updates
 
-Run the `[Wing] Set update token` VSCode command from the command palette to add a GitHub PAT to your VSCode settings. This token is used to authenticate with GitHub to pull the latest release.
+Run the `[Wing] Set update token` VSCode command from the command palette to add a GitHub PAT to your VSCode settings. This token is used to authenticate with GitHub to pull the latest release. [Use this link to generate a token](https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages).
 
 ## Contributing
 
-See the FAQ in [CONTRIBUTING.md](../../CONTRIBUTING.md#🔨-how-do-i-build-the-vscode-extension) for how to contribute!
+See the FAQ in [Contributor's Handbook](https://docs.winglang.io/contributors/handbook#-how-do-i-build-the-vscode-extension) for how to contribute!
+

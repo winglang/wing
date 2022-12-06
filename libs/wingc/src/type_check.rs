@@ -6,6 +6,7 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
+use std::collections::HashMap;
 use std::fmt::{Debug, Display};
 use type_env::TypeEnv;
 
@@ -51,6 +52,7 @@ pub struct Class {
 	parent: Option<TypeRef>, // Must be a Type::Class type
 	#[derivative(Debug = "ignore")]
 	pub env: TypeEnv,
+	pub should_case_convert_jsii: bool,
 }
 
 impl Class {
@@ -208,8 +210,8 @@ impl Display for Type {
 				write!(f, "object of {}", resource_type.name.name)
 			}
 			Type::ClassInstance(class) => {
-				let class_type_name = class.as_class().expect("Class instance must reference to a class");
-				write!(f, "instance of {}", class_type_name)
+				let class_type = class.as_class().expect("Class instance must reference to a class");
+				write!(f, "instance of {}", class_type.name.name)
 			}
 			Type::Namespace(namespace) => write!(f, "{}", namespace.name),
 			Type::Struct(s) => write!(f, "{}", s.name),
@@ -251,6 +253,19 @@ impl From<TypeRef> for &mut Type {
 }
 
 impl TypeRef {
+	pub fn as_class_or_resource_object(&self) -> Option<&Class> {
+		self.as_class_object().or_else(|| self.as_resource_object())
+	}
+
+	pub fn as_class_object(&self) -> Option<&Class> {
+		if let &Type::ClassInstance(ref class_instance) = (*self).into() {
+			let class = class_instance.as_class().unwrap();
+			Some(class)
+		} else {
+			None
+		}
+	}
+
 	pub fn as_resource_object(&self) -> Option<&Class> {
 		if let &Type::ResourceObject(ref res_obj) = (*self).into() {
 			let res = res_obj.as_resource().unwrap();
@@ -268,9 +283,9 @@ impl TypeRef {
 		}
 	}
 
-	fn as_class(&self) -> Option<&Type> {
-		if let &Type::Class(_) = (*self).into() {
-			Some((*self).into())
+	fn as_class(&self) -> Option<&Class> {
+		if let &Type::Class(ref class) = (*self).into() {
+			Some(class)
 		} else {
 			None
 		}
@@ -281,6 +296,14 @@ impl TypeRef {
 			Some(s)
 		} else {
 			None
+		}
+	}
+
+	fn maybe_unwrap_option(&self) -> TypeRef {
+		if let &Type::Optional(ref t) = (*self).into() {
+			*t
+		} else {
+			*self
 		}
 	}
 
@@ -411,10 +434,26 @@ impl Types {
 		self.types.push(Box::new(t));
 		(&self.types[self.types.len() - 1]).into()
 	}
+
+	pub fn stringables(&self) -> Vec<TypeRef> {
+		// TODO: This should be more complex and return all types that have some stringification facility
+		// see: https://github.com/winglang/wing/issues/741
+		vec![self.string(), self.number()]
+	}
 }
 
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
+
+	// Scratchpad for storing inner scopes so we can do breadth first traversal of the AST tree during type checking
+	// TODO: this is a list of unsafe pointers to the statement's inner scopes. We use
+	// unsafe because we can't return a mutable reference to the inner scopes since this method
+	// already uses references to the statement that contains the scopes. Using unsafe here just
+	// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
+	// to iterate over the inner scopes given the outer scope. For this we need to model our AST
+	// so all nodes implement some basic "tree" interface. For now this is good enough.
+	inner_scopes: Vec<*const Scope>,
+
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
@@ -422,6 +461,7 @@ impl<'a> TypeChecker<'a> {
 	pub fn new(types: &'a mut Types) -> Self {
 		Self {
 			types: types,
+			inner_scopes: vec![],
 			diagnostics: RefCell::new(Diagnostics::new()),
 		}
 	}
@@ -494,7 +534,7 @@ impl<'a> TypeChecker<'a> {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
 							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx).unwrap();
-							self.validate_type(exp_type, self.types.string(), interpolated_expr);
+							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
 					Some(self.types.string())
@@ -577,7 +617,11 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type.unwrap(), type_, exp);
-				// TODO: named args
+
+				if !arg_list.named_args.is_empty() {
+					let last_arg = constructor_sig.args.last().unwrap().maybe_unwrap_option();
+					self.validate_structural_type(&arg_list.named_args, &last_arg, exp, env, statement_idx);
+				}
 
 				// Count number of optional parameters from the end of the constructor's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
@@ -589,17 +633,22 @@ impl<'a> TypeChecker<'a> {
 					.count();
 
 				// Verify arity
-				let arg_count = arg_list.pos_args.len();
+				let arg_count = arg_list.pos_args.len() + (if arg_list.named_args.is_empty() { 0 } else { 1 });
 				let min_args = constructor_sig.args.len() - num_optionals;
 				let max_args = constructor_sig.args.len();
 				if arg_count < min_args || arg_count > max_args {
-					self.expr_error(
-						exp,
+					let err_text = if min_args == max_args {
 						format!(
-							"Expected between {} and {} args but got {} when instantiating \"{}\"",
+							"Expected {} arguments but got {} when instantiating \"{}\"",
+							min_args, arg_count, type_
+						)
+					} else {
+						format!(
+							"Expected between {} and {} arguments but got {} when instantiating \"{}\"",
 							min_args, max_args, arg_count, type_
-						),
-					);
+						)
+					};
+					self.expr_error(exp, err_text);
 				}
 
 				// Verify passed arguments match the constructor
@@ -667,23 +716,32 @@ impl<'a> TypeChecker<'a> {
 					);
 				}
 
+				if !args.named_args.is_empty() {
+					let last_arg = func_sig.args.last().unwrap().maybe_unwrap_option();
+					self.validate_structural_type(&args.named_args, &last_arg, exp, env, statement_idx);
+				}
+
 				// Count number of optional parameters from the end of the function's params
 				// Allow arg_list to be missing up to that number of nil values to try and make the number of arguments match
 				let num_optionals = func_sig.args.iter().rev().take_while(|arg| arg.is_option()).count();
 
-				// TODO: named args
 				// Verity arity
-				let arg_count = args.pos_args.len();
+				let arg_count = args.pos_args.len() + (if args.named_args.is_empty() { 0 } else { 1 });
 				let min_args = func_sig.args.len() - num_optionals - this_args;
 				let max_args = func_sig.args.len() - this_args;
 				if arg_count < min_args || arg_count > max_args {
-					self.expr_error(
-						exp,
+					let err_text = if min_args == max_args {
 						format!(
-							"Expected between {} and {} arguments for {:?} but got {}.",
-							min_args, max_args, function, arg_count
-						),
-					);
+							"Expected {} arguments but got {} when invoking \"{}\"",
+							min_args, arg_count, function
+						)
+					} else {
+						format!(
+							"Expected between {} and {} arguments but got {} when invoking \"{}\"",
+							min_args, max_args, arg_count, function
+						)
+					};
+					self.expr_error(exp, err_text);
 				}
 
 				let params = func_sig
@@ -738,10 +796,8 @@ impl<'a> TypeChecker<'a> {
 						.unwrap();
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
-					panic!(
-						"Cannot infer type of empty map literal with no type annotation: {:?}",
-						exp
-					);
+					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
+					self.types.add_type(Type::Map(self.types.anything()))
 				};
 
 				let value_type = match container_type.into() {
@@ -757,9 +813,85 @@ impl<'a> TypeChecker<'a> {
 
 				Some(container_type)
 			}
+			ExprKind::FunctionClosure(func_def) => {
+				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
+
+				if matches!(func_def.signature.flight, Phase::Inflight) {
+					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
+				}
+
+				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
+				let function_type = self.resolve_type(
+					&AstType::FunctionSignature(func_def.signature.clone()),
+					env,
+					statement_idx,
+				);
+				let sig = function_type.as_function_sig().unwrap();
+
+				// Create an environment for the function
+				let mut function_env = TypeEnv::new(
+					Some(env),
+					sig.return_type,
+					false,
+					func_def.signature.flight,
+					statement_idx,
+				);
+				self.add_arguments_to_env(&func_def.parameter_names, &sig, &mut function_env);
+				func_def.statements.set_env(function_env);
+
+				self.inner_scopes.push(&func_def.statements);
+
+				Some(function_type)
+			}
 		};
 		*exp.evaluated_type.borrow_mut() = t;
 		t
+	}
+
+	/// Validate that a given hashmap can be assigned to a variable of given struct type
+	fn validate_structural_type(
+		&mut self,
+		object: &HashMap<Symbol, Expr>,
+		expected_type: &TypeRef,
+		value: &Expr,
+		env: &TypeEnv,
+		statement_idx: usize,
+	) {
+		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
+			expected_struct
+		} else {
+			self.expr_error(value, format!("Named arguments provided for non-struct argument"));
+			return;
+		};
+
+		// Verify that there are no extraneous fields
+		// Also map original field names to the ones in the struct type
+		let mut field_map = HashMap::new();
+		for (k, _) in object.iter() {
+			let field_type = expected_struct.env.try_lookup(&k.name, Some(statement_idx));
+			if let Some(field_type) = field_type {
+				field_map.insert(k.name.clone(), (k, field_type));
+			} else {
+				self.expr_error(value, format!("\"{}\" is not a field of \"{}\"", k.name, expected_type));
+			}
+		}
+
+		// Verify that all non-optional fields are present and are of the right type
+		for (k, v) in expected_struct.env.iter() {
+			if let Some((symb, expected_field_type)) = field_map.get(&k) {
+				let provided_exp = object.get(symb).unwrap();
+				let t = self.type_check_exp(provided_exp, env, statement_idx).unwrap();
+				self.validate_type(t, *expected_field_type, provided_exp);
+			} else if !v.is_option() {
+				self.expr_error(
+					value,
+					format!(
+						"Missing required field \"{}\" from \"{}\"",
+						k, expected_struct.name.name
+					),
+				);
+			}
+		}
 	}
 
 	fn validate_type(&mut self, actual_type: TypeRef, expected_type: TypeRef, value: &Expr) {
@@ -775,13 +907,32 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	pub fn type_check_scope(&mut self, scope: &mut Scope) {
-		let mut inner_scopes = Vec::new();
-		for statement in scope.statements.iter_mut() {
-			inner_scopes.extend(self.type_check_statement(statement, scope.env.as_mut().unwrap()));
+	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
+		if actual_type.0 != &Type::Anything && !expected_types.contains(&actual_type) {
+			self.diagnostics.borrow_mut().push(Diagnostic {
+				message: format!(
+					"Expected type to be one of \"{}\", but got \"{}\" instead",
+					expected_types
+						.iter()
+						.map(|t| format!("{}", t))
+						.collect::<Vec<String>>()
+						.join(","),
+					actual_type
+				),
+				span: Some(value.span.clone()),
+				level: DiagnosticLevel::Error,
+			});
 		}
+	}
+
+	pub fn type_check_scope(&mut self, scope: &Scope) {
+		assert!(self.inner_scopes.is_empty());
+		for statement in scope.statements.iter() {
+			self.type_check_statement(statement, scope.env.borrow_mut().as_mut().unwrap());
+		}
+		let inner_scopes = self.inner_scopes.drain(..).collect::<Vec<_>>();
 		for inner_scope in inner_scopes {
-			self.type_check_scope(unsafe { &mut *inner_scope });
+			self.type_check_scope(unsafe { &*inner_scope });
 		}
 	}
 
@@ -832,15 +983,8 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, stmt: &mut Stmt, env: &mut TypeEnv) -> Vec<*mut Scope> {
-		// TODO: we return a list of unsafe pointers to the statement's inner scopes. We use
-		// unsafe because we can't return a mutable reference to the inner scopes since this method
-		// already uses references to the statement that contains the scopes. Using unsafe here just
-		// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
-		// to iterate over the inner scopes given the outer scope. Foe this we need to model our AST
-		// so all nodes implement some basic "tree" interface. For now this is good enough.
-		let mut inner_scopes: Vec<*mut Scope> = Vec::new();
-		match &mut stmt.kind {
+	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut TypeEnv) {
+		match &stmt.kind {
 			StmtKind::VariableDef {
 				var_name,
 				initial_value,
@@ -865,32 +1009,6 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 			}
-			StmtKind::FunctionDefinition(func_def) => {
-				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
-
-				if matches!(func_def.signature.flight, Phase::Inflight) {
-					self.unimplemented_type("Inflight function signature"); // TODO: what typechecking do we need here?self??
-				}
-
-				// Create a type_checker function signature from the AST function definition, assuming success we can add this function to the env
-				let function_type = self.resolve_type(&AstType::FunctionSignature(func_def.signature.clone()), env, stmt.idx);
-				let sig = function_type.as_function_sig().unwrap();
-
-				// Add this function to the env
-				match env.define(&func_def.name, function_type, StatementIdx::Top) {
-					Err(type_error) => {
-						self.type_error(&type_error);
-					}
-					_ => {}
-				};
-
-				// Create an environment for the function
-				let mut function_env = TypeEnv::new(Some(env), sig.return_type, false, func_def.signature.flight, stmt.idx);
-				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
-				func_def.statements.set_env(function_env);
-
-				inner_scopes.push(&mut func_def.statements);
-			}
 			StmtKind::ForLoop {
 				iterator,
 				iterable,
@@ -908,7 +1026,7 @@ impl<'a> TypeChecker<'a> {
 				};
 				statements.set_env(scope_env);
 
-				inner_scopes.push(statements);
+				self.inner_scopes.push(statements);
 			}
 			StmtKind::If {
 				condition,
@@ -919,11 +1037,11 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(cond_type, self.types.bool(), condition);
 
 				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
-				inner_scopes.push(statements);
+				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
 					else_scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
-					inner_scopes.push(else_scope);
+					self.inner_scopes.push(else_scope);
 				}
 			}
 			StmtKind::Expression(e) => {
@@ -960,7 +1078,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			StmtKind::Scope(scope) => {
 				scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
-				inner_scopes.push(scope)
+				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
 				if let Some(return_expression) = exp {
@@ -1027,6 +1145,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
+					should_case_convert_jsii: false,
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,
@@ -1063,8 +1182,8 @@ impl<'a> TypeChecker<'a> {
 					};
 				}
 				// Add methods to the class env
-				for method in methods.iter() {
-					let mut sig = method.signature.clone();
+				for (method_name, method_def) in methods.iter() {
+					let mut sig = method_def.signature.clone();
 
 					// Add myself as first parameter to all class methods (self)
 					sig.parameters.insert(
@@ -1076,7 +1195,7 @@ impl<'a> TypeChecker<'a> {
 					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
-					match class_env.define(&method.name, method_type, StatementIdx::Top) {
+					match class_env.define(method_name, method_type, StatementIdx::Top) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -1130,14 +1249,14 @@ impl<'a> TypeChecker<'a> {
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 				constructor.statements.set_env(constructor_env);
 				// Check function scope
-				inner_scopes.push(&mut constructor.statements);
+				self.inner_scopes.push(&constructor.statements);
 
 				// TODO: handle member/method overrides in our env based on whatever rules we define in our spec
 
 				// Type check methods
-				for method in methods.iter_mut() {
+				for (method_name, method_def) in methods.iter() {
 					// Lookup the method in the class_env
-					let method_type = match class_env.lookup(&method.name, None) {
+					let method_type = match class_env.lookup(method_name, None) {
 						Ok(_type) => _type,
 						Err(type_error) => {
 							self.type_error(&type_error);
@@ -1149,7 +1268,7 @@ impl<'a> TypeChecker<'a> {
 					} else {
 						panic!(
 							"Method {}.{} isn't defined as a function in the class environment",
-							name, method.name
+							name, method_name
 						)
 					};
 
@@ -1158,12 +1277,12 @@ impl<'a> TypeChecker<'a> {
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
-						span: method.name.span.clone(),
+						span: method_name.span.clone(),
 					}];
-					actual_parameters.extend(method.parameters.clone());
+					actual_parameters.extend(method_def.parameter_names.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
-					method.statements.set_env(method_env);
-					inner_scopes.push(&mut method.statements as *mut Scope);
+					method_def.statements.set_env(method_env);
+					self.inner_scopes.push(&method_def.statements);
 				}
 			}
 			StmtKind::Struct { name, extends, members } => {
@@ -1214,7 +1333,6 @@ impl<'a> TypeChecker<'a> {
 				};
 			}
 		}
-		return inner_scopes;
 	}
 
 	fn add_module_to_env(

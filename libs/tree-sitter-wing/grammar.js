@@ -75,8 +75,6 @@ module.exports = grammar({
         $.for_in_loop,
         $.if_statement,
         $.struct_definition,
-        // TODO Remove free functions whenever possible
-        $.inflight_function_definition
       ),
 
     short_import_statement: ($) =>

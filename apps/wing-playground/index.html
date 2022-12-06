@@ -7,7 +7,8 @@
     import hljs from "https://unpkg.com/@highlightjs/cdn-assets@11.6.0/es/highlight.min.js";
     import javascript from "https://unpkg.com/@highlightjs/cdn-assets@11.6.0/es/languages/javascript.min.js";
     hljs.registerLanguage("javascript", javascript);
-
+    
+    const examples = import.meta.glob('../../examples/tests/valid/*.w', { as: 'raw' })
     import MyWorker from "./worker?worker";
 
     const worker = new MyWorker();
@@ -20,44 +21,44 @@
       const code = document.getElementById("code");
       const intermediateJS = document.getElementById("intermediateJS");
       const stdout = document.getElementById("stdout");
+      const example = document.getElementById("example");
 
       code.addEventListener("input", () => sendCodeToWorker(code.value));
+
+      for (const path of Object.keys(examples)) {
+        const option = document.createElement("option");
+        option.value = path;
+        option.text = path.split("/").pop();
+        example.appendChild(option);
+      }
+
+      example.addEventListener("change", async () => {
+        code.value = await examples[example.value]();
+      });
 
       worker.addEventListener("message", (e) => {
         if (e.data === "WORKER_READY") {
           // worker is ready (takes a while), send whatever initial data is currently in the textarea
           sendCodeToWorker(code.value);
-        } else {
+        } else if(e.data) {
           stdout.textContent = e.data.stdout;
           intermediateJS.textContent = e.data.intermediateJS;
           hljs.highlightAll();
+        } else {
+          stdout.textContent = "";
+          intermediateJS.textContent = "";
         }
       });
+
+      example.dispatchEvent(new Event("change"));
     };
   </script>
   <body>
     <h1>Wing Playground</h1>
+    <select id="example"></select>
     <main>
       <section id="wing-side">
-        <textarea id="code">
-bring cloud;
-let bucket1 = new cloud.Bucket();
-let bucket2 = new cloud.Bucket(cloud.BucketProps {
-  public: true
-}) as "PublicBucket";
-
-inflight handler(event: str): str {
-  bucket1.put("file.txt", "data");
-  bucket2.get("file.txt");
-}
-
-new cloud.Function(
-  handler, 
-  cloud.FunctionProps {
-    env: Map<str> {}
-  }
-);</textarea
-        >
+        <textarea id="code"></textarea>
       </section>
       <section id="js-side">
         <pre>

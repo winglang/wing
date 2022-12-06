@@ -1,6 +1,7 @@
 import { test, expect, beforeAll, afterAll, vitest } from "vitest";
 import { posix as path } from "path";
 import { runServer } from "verdaccio";
+import * as walk from "walkdir";
 import "zx/globals";
 
 require("dotenv").config();
@@ -65,10 +66,10 @@ beforeAll(async () => {
     // ensure version works before bothering with the rest of the tests
     $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
-    let npxOutput = await $`${npxBin} @winglang/wing --version`;
     await $`${yarnBin} init -y`;
     await $`${yarnBin} add @winglang/wing --no-lockfile`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
+    let npxOutput = await $`${npxBin} @winglang/wing --version`;
 
     expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
     expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
@@ -103,11 +104,9 @@ test.each(validWingFiles)(
   async (wingFile) => {
     await within(async () => {
       const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
-      const tf_manifest = path.join(test_dir, "target/cdktf.out/manifest.json");
-      const tf_json = path.join(
-        test_dir,
-        "target/cdktf.out/stacks/root/cdk.tf.json"
-      );
+      const targetDir = path.join(test_dir, "target");
+      const tf_manifest = path.join(targetDir, "cdktf.out/manifest.json");
+      const tf_json = path.join(targetDir, "cdktf.out/stacks/root/cdk.tf.json");
 
       await enterTestDir(test_dir);
 
@@ -120,6 +119,18 @@ test.each(validWingFiles)(
 
       expect(npx_tfManifest).toMatchSnapshot("manifest.json");
       expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
+
+      // get all files in .wing dir
+      const dotWingFiles = await walk.async(path.join(targetDir, ".wing"), {
+        return_object: true,
+      });
+      for (const irFile in dotWingFiles) {
+        if (dotWingFiles[irFile].isFile()) {
+          expect(fs.readFileSync(irFile, "utf8")).toMatchSnapshot(
+            path.basename(irFile)
+          );
+        }
+      }
 
       await $`../node_modules/.bin/wing compile ${path.join(
         validTestDir,
@@ -152,7 +163,7 @@ test.each(validWingFiles)(
         wingFile
       )}`;
 
-      // TODO snapshot app.wx contents
+      // TODO snapshot .wsim contents
     });
   },
   {

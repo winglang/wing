@@ -1,9 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as sim from "../../src/target-sim";
 import * as testing from "../../src/testing";
-import { mkdtemp } from "../../src/util";
-import { simulatorJsonOf } from "./util";
+import { SimApp } from "../../src/testing";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -18,41 +16,40 @@ async function $proc($cap, message) {
 
 test("create a queue", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   new cloud.Queue(app, "my_queue");
-  const simfile = app.synth();
+  const s = await app.startSimulator();
 
   // THEN
-  const s = new testing.Simulator({ simfile });
-  await s.start();
-  expect(s.getAttributes("root/my_queue")).toEqual({
-    handle: expect.any(String),
-  });
-  expect(s.getProps("root/my_queue")).toEqual({
-    timeout: 30,
+  expect(s.getResourceConfig("/my_queue")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_queue",
+    props: {
+      initialMessages: [],
+      subscribers: [],
+      timeout: 30,
+    },
+    type: "wingsdk.cloud.Queue",
   });
   await s.stop();
 
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("queue with one subscriber, default batch size of 1", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
   });
   const queue = new cloud.Queue(app, "my_queue");
   queue.onMessage(handler);
-  const simfile = app.synth();
+  const s = await app.startSimulator();
 
-  const s = new testing.Simulator({ simfile });
-  await s.start();
-
-  const queueClient = s.getResourceByPath(
-    "root/my_queue"
-  ) as cloud.IQueueClient;
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
 
   // WHEN
   await queueClient.push("A");
@@ -76,12 +73,12 @@ test("queue with one subscriber, default batch size of 1", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
@@ -90,10 +87,7 @@ test("queue with one subscriber, batch size of 5", async () => {
     initialMessages: ["A", "B", "C", "D", "E", "F"],
   });
   queue.onMessage(handler, { batchSize: 5 });
-  const simfile = app.synth();
-
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   // WHEN
   await sleep(200);
@@ -111,27 +105,22 @@ test("queue with one subscriber, batch size of 5", async () => {
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("messages are requeued if the function fails", async () => {
   // GIVEN
-  const app = new sim.App({ outdir: mkdtemp() });
+  const app = new SimApp();
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
   });
   const queue = new cloud.Queue(app, "my_queue");
   queue.onMessage(handler);
-  const simfile = app.synth();
-
-  const s = new testing.Simulator({ simfile });
-  await s.start();
+  const s = await app.startSimulator();
 
   // WHEN
-  const queueClient = s.getResourceByPath(
-    "root/my_queue"
-  ) as cloud.IQueueClient;
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
   await queueClient.push("BAD MESSAGE");
 
   await sleep(300);
@@ -139,20 +128,22 @@ test("messages are requeued if the function fails", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
+  expect(listMessages(s).slice(0, 6)).toEqual([
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
     "Push (message=BAD MESSAGE).",
     'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
     'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
     "Subscriber error - returning 1 messages to queue.",
+  ]);
+  expect(listMessages(s).slice(-5)).toEqual([
     'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
     'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
     "Subscriber error - returning 1 messages to queue.",
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
   ]);
-  expect(simulatorJsonOf(simfile)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 function listMessages(s: testing.Simulator) {

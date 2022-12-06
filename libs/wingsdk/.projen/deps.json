@@ -38,6 +38,10 @@
       "type": "build"
     },
     {
+      "name": "@winglang/jsii-docgen",
+      "type": "build"
+    },
+    {
       "name": "@winglang/wing-api-checker",
       "version": "file:../../apps/wing-api-checker",
       "type": "build"
@@ -98,10 +102,6 @@
       "type": "build"
     },
     {
-      "name": "jsii-docgen",
-      "type": "build"
-    },
-    {
       "name": "jsii-pacmak",
       "type": "build"
     },
@@ -155,22 +155,42 @@
     },
     {
       "name": "@aws-sdk/client-cloudwatch-logs",
+      "version": "3.215.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/client-dynamodb",
+      "version": "3.215.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-lambda",
+      "version": "3.215.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-s3",
+      "version": "3.215.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sqs",
+      "version": "3.215.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/types",
+      "version": "3.215.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/util-stream-node",
+      "version": "3.215.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-utf8-node",
+      "version": "3.208.0",
       "type": "bundled"
     },
     {
@@ -190,16 +210,16 @@
       "type": "peer"
     },
     {
-      "name": "@winglang/polycons",
-      "type": "peer"
-    },
-    {
       "name": "cdktf",
       "type": "peer"
     },
     {
       "name": "constructs",
       "version": "~10.0.25",
+      "type": "peer"
+    },
+    {
+      "name": "polycons",
       "type": "peer"
     },
     {
@@ -207,16 +227,16 @@
       "type": "runtime"
     },
     {
-      "name": "@winglang/polycons",
-      "type": "runtime"
-    },
-    {
       "name": "cdktf",
       "type": "runtime"
     },
     {
       "name": "constructs",
       "version": "~10.0.25",
+      "type": "runtime"
+    },
+    {
+      "name": "polycons",
       "type": "runtime"
     }
   ],
