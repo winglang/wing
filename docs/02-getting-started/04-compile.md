@@ -35,10 +35,6 @@ wing compile -t sim hello.w
 This would create a new file called `target/hello.wsim` which is the simulated
 version of your entire cloud application.
 
-:::info
-The "wx" extension stands for "wing executable".
-:::
-
 Now that we have an `hello.wsim` file, we can either interact with through the Wing
 Console or load it into a `Simulator` class and use it programmatically.
 
