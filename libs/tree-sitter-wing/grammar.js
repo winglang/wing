@@ -16,7 +16,7 @@ const PREC = {
 module.exports = grammar({
   name: "wing",
 
-  extras: ($) => [$._comment, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
+  extras: ($) => [$.comment, /[\s\p{Zs}\uFEFF\u2060\u200B]/],
 
   word: ($) => $.identifier,
 
@@ -36,7 +36,7 @@ module.exports = grammar({
     // Basics
     source: ($) => repeat($._statement),
     block: ($) => seq("{", optional(repeat($._statement)), "}"),
-    _comment: ($) =>
+    comment: ($) =>
       token(
         choice(seq("//", /.*/), seq("/*", /[^*]*\*+([^/*][^*]*\*+)*/, "/"))
       ),
