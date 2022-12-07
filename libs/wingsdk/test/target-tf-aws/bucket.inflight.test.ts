@@ -1,5 +1,6 @@
 import { Readable } from "stream";
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsCommand,
   PutObjectCommand,
@@ -72,4 +73,22 @@ test("list bucket objects", async () => {
   const response = await client.list();
   // THEN
   expect(response).toEqual([KEY1, KEY2]);
+});
+
+test("delete object from a bucket", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = true;
+
+  s3Mock.on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    DeleteMarker: true,
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.delete(KEY);
+
+  // THEN
+  expect(response).toEqual(VALUE);
 });
