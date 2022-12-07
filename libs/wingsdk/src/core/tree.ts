@@ -8,27 +8,57 @@ const TREE_FILE_PATH = "tree.json";
 /**
  * A node in the construct tree.
  */
-interface ConstructTreeNode {
+export interface ConstructTreeNode {
+  /**
+   * The ID of the node. Is part of the `path`.
+   */
   readonly id: string;
+
+  /**
+   * The path of the node.
+   */
   readonly path: string;
+
+  /**
+   * The child nodes.
+   */
   readonly children?: { [key: string]: ConstructTreeNode };
+
+  /**
+   * The node attributes.
+   */
   readonly attributes?: { [key: string]: any };
 
   /**
-   * Information on the construct class that led to this node, if available
+   * Information on the construct class that led to this node, if available.
    */
   readonly constructInfo?: ConstructInfo;
 }
 
 /**
- * Symbol for accessing jsii runtime information
+ * The construct tree.
+ */
+export interface ConstructTree {
+  /**
+   * The construct tree version.
+   */
+  readonly version: string;
+
+  /**
+   * The root node.
+   */
+  readonly tree: ConstructTreeNode;
+}
+
+/**
+ * Symbol for accessing jsii runtime information.
  */
 const JSII_RUNTIME_SYMBOL = Symbol.for("jsii.rtti");
 
 /**
- * Source information on a construct (class fqn and version)
+ * Source information on a construct (class fqn and version).
  */
-interface ConstructInfo {
+export interface ConstructInfo {
   /**
    * Fully qualified class name.
    */
@@ -74,7 +104,7 @@ export function synthesizeTree(app: IApp) {
     return node;
   };
 
-  const tree = {
+  const tree: ConstructTree = {
     version: "tree-0.1",
     tree: visit(app.node.root),
   };
