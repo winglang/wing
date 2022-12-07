@@ -99,7 +99,7 @@ let new cloud.Function((s: str): str ~> {
   assert("clean the dishes" == tasks.get_task(result.at(0)));
 }) as "test:get and find task";
 
-let new cloud.Function((s: str): str ~> {
+new cloud.Function((s: str): str ~> {
   clear_tasks.invoke();
   add_tasks.invoke();
   tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0))
