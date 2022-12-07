@@ -121,7 +121,7 @@ new cloud.Function((s: str): str ~> {
     tasks.remove_tasks("fake-id"); // should throw an exception
     assert(false); // this code should not be reachable 
   } catch (e) {
-    assert(true) // redundant, keeping it here to show the intent of the code
+    assert(true); // redundant, keeping it here to show the intent of the code
   }
 }) as "test: deleting an unexisting task should throw an exception";
 ```
