@@ -25,11 +25,9 @@ bring cloud;
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 
-inflight handler(message: str): str {
+queue.on_message((message: str): str ~> {
     bucket.put("wing.txt", "Hello, ${message}");
-}
-
-queue.on_message(handler);
+});
 ```
 
 This code should be mostly self explanatory. We define a queue, and every time a

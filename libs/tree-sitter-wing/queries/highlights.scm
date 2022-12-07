@@ -21,16 +21,11 @@
 (inflight_function_definition
   name: (identifier) @function
 )
-(method_call 
-  call_name: (nested_identifier
-    property: (identifier) @function.method 
-  ) 
-)
 
 ; Functions
 
 (keyword_argument_key) @variable.parameter
-(function_call 
+(call 
   call_name: (reference) @function.method
 )
 
@@ -39,8 +34,9 @@
 [
  (number)
  (duration)
-] @number
+] @constant.builtin
 (string) @string
+(bool) @constant.builtin
 (builtin_type) @type.builtin
 
 ; Special
@@ -88,6 +84,7 @@
   "in"
   "init"
   "inflight"
+  "let"
   "new"
   "return"
 ] @keyword
