@@ -91,7 +91,7 @@ let add_tasks = new cloud.Function((s: str): str ~> {
   tasks.add_task("clean the kitchen");
 }) as "utility:add tasks";
 
-let new cloud.Function((s: str): str ~> {
+new cloud.Function((s: str): str ~> {
   clear_tasks.invoke();
   add_tasks.invoke();
   let result = tasks.find_tasks_with("clean the dish");
