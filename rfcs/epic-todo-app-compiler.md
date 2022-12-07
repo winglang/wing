@@ -41,9 +41,14 @@ resource TaskList {
 
   /** 
    * Removes a task from the list
+   * @throws Will throw an error if taks with id doesn't exist
    * @param id - the id of the task to be removed
    */
   ~ remove_task(id: str) {
+    let content = this._bucket.get(id)
+    if !content {
+      throw("Task with id ${id} doesn't exist");
+    }
     this._bucket.delete(id);
   }
 
@@ -109,4 +114,14 @@ new cloud.Function((s: str): str ~> {
   assert(result.len == 0);
   assert("clean the dishes" == tasks.get_task());
 }) as "test:get, remove and find task";
+
+new cloud.Function((s: str): str ~> {
+  clear_tasks.invoke();
+  try {
+    tasks.remove_tasks("fake-id"); // should throw an exception
+    assert(false) // this code should not be reachable 
+  } catch (e) {
+    assert(true) // redundant, keeping it here to show the intent of the code
+  }
+}) as "test: deleting an unexisting task should throw an exception";
 ```
