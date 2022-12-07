@@ -19,6 +19,7 @@ import {
   LanguageClientOptions,
   ServerOptions,
 } from "vscode-languageclient/node";
+import { dirname } from "path";
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
@@ -111,12 +112,14 @@ async function startLanguageServer(context: ExtensionContext) {
     execSync(`chmod +x ${serverPath}`);
   }
 
+  const wingsdkManifestRoot = dirname(require.resolve("@winglang/wingsdk/.jsii"));
+
   const run: Executable = {
     command: serverPath,
     options: {
       env: {
         ...process.env,
-        WINGC_SKIP_JSII: "1",
+        WINGSDK_MANIFEST_ROOT: wingsdkManifestRoot,
         RUST_LOG: "debug",
       },
     },
