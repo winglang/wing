@@ -66,9 +66,9 @@ resource TaskList {
    * @returns set of task id that matches the term
    */
   ~ find_tasks_with(term: str): Set<str> {
-    let result = this.list_task_ids();
+    let task_ids = this.list_task_ids();
     let output = new MutSet<str>();
-    for id in result {
+    for id in task_ids {
       // TODO: how can we make this concurrent?
       let title = this.get_task(id);
       if title.contains(term) {
