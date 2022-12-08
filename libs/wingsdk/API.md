@@ -2400,7 +2400,7 @@ Inflight interface for `Bucket`.
 ##### `delete` <a name="delete" id="@winglang/wingsdk.cloud.IBucketClient.delete"></a>
 
 ```wing
-delete(key: str): bool
+delete(key: str): void
 ```
 
 Delete existing objects using a key from the bucket.
