@@ -91,3 +91,61 @@ test("delete object from a bucket", async () => {
   // THEN
   expect(response).toEqual(undefined);
 });
+
+test("should delete from bucket using mustExist as parameter and hasVersioning", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+  const VALUE = true;
+
+  s3Mock.on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
+    DeleteMarker: VALUE,
+  });
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.delete(KEY, {
+    mustExists: true,
+    hasVersioning: true,
+  });
+
+  // THEN
+  expect(response).toEqual(VALUE);
+});
+
+test("should delete from bucket using mustExist as parameter but hasVersioning in false", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+
+  s3Mock
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.delete(KEY, {
+    mustExists: true,
+    hasVersioning: false,
+  });
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
+test("delete object from a bucket using mustExist as parameter", async () => {
+  // GIVEN
+  const BUCKET_NAME = "BUCKET_NAME";
+  const KEY = "KEY";
+
+  s3Mock
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({});
+
+  // WHEN
+  const client = new BucketClient(BUCKET_NAME);
+  const response = await client.delete(KEY, { mustExists: true });
+
+  // THEN
+  expect(response).toEqual(undefined);
+});

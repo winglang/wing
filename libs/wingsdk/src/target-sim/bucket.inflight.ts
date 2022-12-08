@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { IBucketClient } from "../cloud";
+import { DeleteFromBucketOptions, IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
@@ -58,10 +58,28 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async delete(key: string): Promise<void> {
+  public async delete(
+    key: string,
+    opts?: DeleteFromBucketOptions
+  ): Promise<boolean | void> {
     return this.context.withTrace({
       message: `Delete (key=${key}).`,
       activity: async () => {
+        if (opts?.mustExists) {
+          try {
+            // check fi they exists
+            const filePath = join(this.fileDir, key);
+            const fileExists = fs.existsSync(filePath);
+
+            if (!fileExists) throw Error("File must exists");
+
+            return await fs.promises.unlink(filePath);
+          } catch (er) {
+            throw er;
+          }
+        }
+
+        // we just try to delete the file if must_exists is disabled
         return fs.promises.unlink(join(this.fileDir, key));
       },
     });

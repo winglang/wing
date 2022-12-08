@@ -1177,6 +1177,39 @@ The initial value of the counter.
 
 ---
 
+### DeleteFromBucketOptions <a name="DeleteFromBucketOptions" id="@winglang/wingsdk.cloud.DeleteFromBucketOptions"></a>
+
+Interface for delete method inside `Bucket`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.DeleteFromBucketOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let delete_from_bucket_options = cloud.DeleteFromBucketOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.DeleteFromBucketOptions.property.mustExists">must_exists</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
+
+---
+
+##### `must_exists`<sup>Optional</sup> <a name="must_exists" id="@winglang/wingsdk.cloud.DeleteFromBucketOptions.property.mustExists"></a>
+
+```wing
+must_exists: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Check failures on the method and retrieve errors if any.
+
+---
+
 ### FilesProps <a name="FilesProps" id="@winglang/wingsdk.core.FilesProps"></a>
 
 Props for `Files`.
@@ -2400,7 +2433,7 @@ Inflight interface for `Bucket`.
 ##### `delete` <a name="delete" id="@winglang/wingsdk.cloud.IBucketClient.delete"></a>
 
 ```wing
-delete(key: str): bool
+delete(key: str, opts?: DeleteFromBucketOptions): void
 ```
 
 Delete existing objects using a key from the bucket.
@@ -2410,6 +2443,14 @@ Delete existing objects using a key from the bucket.
 - *Type:* str
 
 Key of the object.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.opts"></a>
+
+- *Type:* cloud.DeleteFromBucketOptions
+
+Options available for delete an item from a bucket.
 
 ---
 
