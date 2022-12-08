@@ -4,6 +4,7 @@ import {
   FUNCTION_TYPE,
   LOGGER_TYPE,
   QUEUE_TYPE,
+  TOPIC_TYPE,
 } from "../cloud";
 import { BaseResourceSchema } from "./schema";
 
@@ -41,6 +42,19 @@ export interface QueueSubscriber {
   readonly functionHandle: FunctionHandle;
   /** Maximum number of messages that will be batched together to the subscriber. */
   readonly batchSize: number;
+}
+
+/** Schema for cloud.Topic */
+export interface TopicSchema extends BaseResourceSchema {
+  readonly type: typeof TOPIC_TYPE;
+  readonly props: {
+    readonly subscribers: TopicSubscriber[];
+  };
+}
+
+export interface TopicSubscriber {
+  /** Function that should be called */
+  readonly functionHandle: FunctionHandle;
 }
 
 /** Schema for cloud.Bucket */
