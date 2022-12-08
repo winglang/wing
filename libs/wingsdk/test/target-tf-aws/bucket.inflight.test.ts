@@ -79,16 +79,15 @@ test("delete object from a bucket", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
-  const VALUE = true;
 
-  s3Mock.on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY }).resolves({
-    DeleteMarker: true,
-  });
+  s3Mock
+    .on(DeleteObjectCommand, { Bucket: BUCKET_NAME, Key: KEY })
+    .resolves({});
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
   const response = await client.delete(KEY);
 
   // THEN
-  expect(response).toEqual(VALUE);
+  expect(response).toEqual(undefined);
 });

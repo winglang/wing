@@ -82,9 +82,8 @@ export interface IBucketClient {
    * Delete existing objects using a key from the bucket
    * @param key Key of the object.
    * @Throws if no object with the given key exists.
-   * @Returns a boolean to check if the object was deleted successfuly.
    */
-  delete(key: string): Promise<boolean>;
+  delete(key: string): Promise<void>;
 }
 
 /**

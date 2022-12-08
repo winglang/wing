@@ -58,12 +58,11 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     });
   }
 
-  public async delete(key: string): Promise<boolean> {
+  public async delete(key: string): Promise<void> {
     return this.context.withTrace({
       message: `Delete (key=${key}).`,
       activity: async () => {
-        // seek for guidance here
-        throw Error("ERROR: Not implemented yet.");
+        return fs.promises.unlink(join(this.fileDir, key));
       },
     });
   }

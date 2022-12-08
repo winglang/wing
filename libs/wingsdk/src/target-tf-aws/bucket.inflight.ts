@@ -2,7 +2,6 @@ import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
   DeleteObjectCommand,
-  DeleteObjectCommandOutput,
   GetObjectCommand,
   ListObjectsCommand,
   ListObjectsCommandOutput,
@@ -68,16 +67,14 @@ export class BucketClient implements IBucketClient {
    * Delete an object from a bucket using a key
    * @param key Key of the object.
    */
-  public async delete(key: string): Promise<boolean> {
+  public async delete(key: string): Promise<void> {
     const command = new DeleteObjectCommand({
       Key: key,
       Bucket: this.bucketName,
     });
 
     try {
-      const resp: DeleteObjectCommandOutput = await this.s3Client.send(command);
-      // return if the object was permanently deleted or not
-      return Boolean(resp?.DeleteMarker);
+      await this.s3Client.send(command);
     } catch (er) {
       // return error if any
       throw er;

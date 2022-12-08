@@ -100,10 +100,9 @@ export class Bucket extends cloud.BucketBase {
       captureScope.addPolicyStatements({
         effect: "Allow",
         action: [
-          "s3:GetObject*",
-          "s3:GetBucket*",
-          "s3:List*",
           "s3:DeleteObject*",
+          "s3:DeleteObjectVersion*",
+          "s3:PutLifecycleConfiguration*",
         ],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
