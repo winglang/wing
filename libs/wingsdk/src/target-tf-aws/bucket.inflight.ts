@@ -2,14 +2,13 @@ import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
   DeleteObjectCommand,
-  DeleteObjectCommandOutput,
   GetObjectCommand,
   ListObjectsCommand,
   ListObjectsCommandOutput,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { DeleteFromBucketOptions, IBucketClient } from "../cloud";
+import { BucketDeleteOptions, IBucketClient } from "../cloud";
 
 export class BucketClient implements IBucketClient {
   constructor(
@@ -69,36 +68,22 @@ export class BucketClient implements IBucketClient {
    * @param key Key of the object.
    * @param opts Option object supporting additional strategies to delete an item from a bucket
    */
-  public async delete(
-    key: string,
-    opts?: DeleteFromBucketOptions
-  ): Promise<boolean | void> {
+  public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
     const command = new DeleteObjectCommand({
       Key: key,
       Bucket: this.bucketName,
     });
 
-    const returnMarkerIfAny = (
-      response: DeleteObjectCommandOutput
-    ): boolean | void => {
-      if (opts?.hasVersioning) {
-        return Boolean(response.DeleteMarker);
-      }
-      return;
-    };
-
     if (opts?.mustExists) {
       try {
-        const response: DeleteObjectCommandOutput = await this.s3Client.send(
-          command
-        );
-        return returnMarkerIfAny(response);
+        // TODO: Implement a method called ``exists()`` to check if they key exists before deletion
+        await this.s3Client.send(command);
+        return;
       } catch (er) {
         throw er;
       }
     }
 
-    const response = await this.s3Client.send(command);
-    return returnMarkerIfAny(response);
+    await this.s3Client.send(command);
   }
 }

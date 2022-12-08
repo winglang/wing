@@ -783,6 +783,39 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
+### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/wingsdk.cloud.BucketDeleteOptions"></a>
+
+Interface for delete method inside `Bucket`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.BucketDeleteOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let bucket_delete_options = cloud.BucketDeleteOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExists">must_exists</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
+
+---
+
+##### `must_exists`<sup>Optional</sup> <a name="must_exists" id="@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExists"></a>
+
+```wing
+must_exists: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Check failures on the method and retrieve errors if any.
+
+---
+
 ### BucketProps <a name="BucketProps" id="@winglang/wingsdk.cloud.BucketProps"></a>
 
 Properties for `Bucket`.
@@ -1174,39 +1207,6 @@ initial: num;
 - *Default:* 0
 
 The initial value of the counter.
-
----
-
-### DeleteFromBucketOptions <a name="DeleteFromBucketOptions" id="@winglang/wingsdk.cloud.DeleteFromBucketOptions"></a>
-
-Interface for delete method inside `Bucket`.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.DeleteFromBucketOptions.Initializer"></a>
-
-```wing
-bring cloud;
-
-let delete_from_bucket_options = cloud.DeleteFromBucketOptions{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.DeleteFromBucketOptions.property.mustExists">must_exists</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
-
----
-
-##### `must_exists`<sup>Optional</sup> <a name="must_exists" id="@winglang/wingsdk.cloud.DeleteFromBucketOptions.property.mustExists"></a>
-
-```wing
-must_exists: bool;
-```
-
-- *Type:* bool
-- *Default:* false
-
-Check failures on the method and retrieve errors if any.
 
 ---
 
@@ -2433,11 +2433,7 @@ Inflight interface for `Bucket`.
 ##### `delete` <a name="delete" id="@winglang/wingsdk.cloud.IBucketClient.delete"></a>
 
 ```wing
-<<<<<<< HEAD
-delete(key: str, opts?: DeleteFromBucketOptions): void
-=======
-delete(key: str): void
->>>>>>> 54726e0328abd18c006bc07c1778d0f98ba10e92
+delete(key: str, opts?: BucketDeleteOptions): void
 ```
 
 Delete existing objects using a key from the bucket.
@@ -2452,7 +2448,7 @@ Key of the object.
 
 ###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.opts"></a>
 
-- *Type:* cloud.DeleteFromBucketOptions
+- *Type:* cloud.BucketDeleteOptions
 
 Options available for delete an item from a bucket.
 

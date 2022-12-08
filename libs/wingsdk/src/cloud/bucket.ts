@@ -53,19 +53,13 @@ export class Bucket extends BucketBase {
 }
 
 /** Interface for delete method inside `Bucket` */
-export interface DeleteFromBucketOptions {
+export interface BucketDeleteOptions {
   /**
    * Check failures on the method and retrieve errors if any
    * @Throws if the file is not found or any other error-related.
    * @default false
    */
   readonly mustExists?: boolean;
-
-  /**
-   * Return marker in case the bucket has versioning enabled
-   * @default false
-   */
-  readonly hasVersioning?: boolean;
 }
 
 /**
@@ -99,7 +93,7 @@ export interface IBucketClient {
    * @param key Key of the object.
    * @param opts Options available for delete an item from a bucket.
    */
-  delete(key: string, opts?: DeleteFromBucketOptions): Promise<boolean | void>;
+  delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 }
 
 /**
