@@ -75,7 +75,12 @@ test("topic publishes messages to multiple subscribers", async () => {
     entrypoint: "$proc",
   });
   const otherHandler = new core.Inflight({
-    code: INFLIGHT_CODE,
+    code: core.NodeJsCode.fromInline(`
+    async function $proc($cap, message) {
+        if (message === "Super Bad MESSAGE") {
+            throw new Error("ERROR");
+        }
+    }`),
     entrypoint: "$proc",
   });
   const topic = new cloud.Topic(app, "my_topic");

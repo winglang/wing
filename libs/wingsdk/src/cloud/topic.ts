@@ -39,7 +39,7 @@ export abstract class TopicBase extends Resource {
 export interface TopicOnMessageProps {}
 
 /**
- * Represents a serverless topic.
+ * Represents a topic.
  *
  * @inflight `@winglang/wingsdk.cloud.ITopicClient`
  */

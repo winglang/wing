@@ -267,7 +267,7 @@ The initial value of the counter.
 
 **Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
 
-Represents a serverless function.
+Represents a function.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Function.Initializer"></a>
 
@@ -562,7 +562,7 @@ with a fresh copy without any consequences.
 
 **Inflight client:** [@winglang/wingsdk.cloud.IQueueClient](#@winglang/wingsdk.cloud.IQueueClient)
 
-Represents a serverless queue.
+Represents a queue.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Queue.Initializer"></a>
 
@@ -707,7 +707,7 @@ with a fresh copy without any consequences.
 
 **Inflight client:** [@winglang/wingsdk.cloud.ITopicClient](#@winglang/wingsdk.cloud.ITopicClient)
 
-Represents a serverless topic.
+Represents a topic.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Topic.Initializer"></a>
 

@@ -14,11 +14,9 @@ import { bindSimulatorResource } from "./util";
  */
 export class Topic extends cloud.TopicBase implements ISimulatorResource {
   private readonly subscribers: TopicSubscriber[];
-  private subs: number;
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
 
-    this.subs = 0;
     this.subscribers = [];
   }
 
@@ -26,7 +24,6 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
     inflight: core.Inflight,
     props: cloud.TopicOnMessageProps = {}
   ): cloud.Function {
-    this.subs++; // TODO: Find better way to allow duplicate handlers
     const code: string[] = [];
     code.push(inflight.code.text);
     code.push(`async function $topicEventWrapper($cap, event) {`);
@@ -47,10 +44,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
 
     const fn = new cloud.Function(
       this.node.scope!,
-      `${this.node.id}-OnMessage${this.subs}-${inflight.code.hash.slice(
-        0,
-        16
-      )}`,
+      `${this.node.id}-OnMessage-${inflight.code.hash.slice(0, 16)}`,
       newInflight,
       props
     );

@@ -47,7 +47,7 @@ export abstract class FunctionBase extends Resource {
 }
 
 /**
- * Represents a serverless function.
+ * Represents a function.
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */

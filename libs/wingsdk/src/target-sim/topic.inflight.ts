@@ -14,7 +14,7 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
     this.context = context;
   }
 
-  private async processMessage(message: string) {
+  private async publishMessage(message: string) {
     for (const subscriber of this.subscribers) {
       const fnClient = this.context.findInstance(
         subscriber.functionHandle!
@@ -36,12 +36,10 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
         timestamp: new Date().toISOString(),
       });
 
-      void (await fnClient.invoke(JSON.stringify({ message })).catch((_err) => {
-        // Something went wrong
-        // console.log(_err); <-- Very helpful when something goes wrong :)
+      void (await fnClient.invoke(JSON.stringify({ message })).catch((err) => {
         this.context.addTrace({
           data: {
-            message: `Subscriber error`,
+            message: `Subscriber error: ${err}`,
           },
           sourcePath: this.context.resourcePath,
           sourceType: TOPIC_TYPE,
@@ -63,7 +61,7 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
       timestamp: new Date().toISOString(),
     });
 
-    return this.processMessage(message);
+    return this.publishMessage(message);
   }
 
   public async init(): Promise<void> {
