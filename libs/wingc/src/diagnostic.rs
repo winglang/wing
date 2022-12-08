@@ -79,6 +79,7 @@ pub fn print_diagnostics(diagnostics: &Diagnostics) {
 	}
 }
 
+#[derive(Debug)]
 pub struct TypeError {
 	pub message: String,
 	pub span: WingSpan,
