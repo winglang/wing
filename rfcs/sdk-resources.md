@@ -408,3 +408,4 @@ interface ITableClient {
 * Workflow
 * Repo
 * Secret
+* Stream
