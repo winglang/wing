@@ -126,7 +126,7 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
-  
+
 > ```TS
 > const z: Set = Object.freeze(new Set([1, 2, 3]));
 > const zm: Set = new Set();
