@@ -34,6 +34,7 @@
 
       example.addEventListener("change", async () => {
         code.value = await examples[example.value]();
+        code.dispatchEvent(new Event("input"));
       });
 
       worker.addEventListener("message", (e) => {

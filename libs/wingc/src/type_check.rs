@@ -466,7 +466,8 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	#[deprecated = "Remember to implement this!"]
+	// TODO: All calls to this should be removed and we should make sure type checks are done
+	// for unimplemented types
 	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Warning,
@@ -1060,20 +1061,7 @@ impl<'a> TypeChecker<'a> {
 					// If provided use alias identifier as the namespace name
 					let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
-					let skip_import = std::env::var_os("WINGC_SKIP_JSII")
-						.map(|v| v != "false")
-						.unwrap_or(false);
-
-					if skip_import {
-						match env.define(namespace_name, self.types.anything(), StatementIdx::Top) {
-							Err(type_error) => {
-								self.type_error(&type_error);
-							}
-							_ => {}
-						};
-					} else {
-						self.add_module_to_env(env, module_name, namespace_name, stmt.idx);
-					}
+					self.add_module_to_env(env, module_name, namespace_name, stmt.idx);
 				}
 			}
 			StmtKind::Scope(scope) => {
@@ -1316,7 +1304,9 @@ impl<'a> TypeChecker<'a> {
 					})
 					.collect::<Vec<_>>();
 
-				add_parent_members_to_struct_env(&extends_types, name, &mut struct_env);
+				if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
+					self.type_error(&e);
+				}
 				match env.define(
 					name,
 					self.types.add_type(Type::Struct(Struct {
@@ -1445,17 +1435,16 @@ impl<'a> TypeChecker<'a> {
 
 					match instance_type.into() {
 						&Type::Class(ref class) | &Type::Resource(ref class) => class,
-						_ => panic!("Expected \"{}\" to be a class or resource type", instance_type),
+						_ => {
+							return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", instance_type))
+						}
 					}
 				};
 
 				// Find property in class's environment
 				match class.env.lookup(property, None) {
 					Ok(_type) => _type,
-					Err(type_error) => {
-						self.type_error(&type_error);
-						self.types.anything()
-					}
+					Err(type_error) => self.type_error(&type_error),
 				}
 			}
 		}
@@ -1475,25 +1464,36 @@ fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
 	}
 }
 
-fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol, struct_env: &mut TypeEnv) {
+fn add_parent_members_to_struct_env(
+	extends_types: &Vec<TypeRef>,
+	name: &Symbol,
+	struct_env: &mut TypeEnv,
+) -> Result<(), TypeError> {
 	for parent_type in extends_types.iter() {
-		let parent_struct = parent_type.as_struct().expect(
-			format!(
-				"Type \"{}\" extends \"{}\" which should be a struct",
-				name.name, parent_type
-			)
-			.as_str(),
-		);
+		let parent_struct = if let Some(parent_struct) = parent_type.as_struct() {
+			parent_struct
+		} else {
+			return Err(TypeError {
+				message: format!(
+					"Type \"{}\" extends \"{}\" which should be a struct",
+					name.name, parent_type
+				),
+				span: name.span.clone(),
+			});
+		};
 		for (parent_member_name, member_type) in parent_struct.env.iter() {
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
 				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
 				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
 				//   when we want to check for subtypes and use equality for strict comparisons.
 				if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
-					panic!(
-						"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
-						name, parent_type, parent_member_name, existing_type, member_type
-					);
+					return Err(TypeError {
+						span: name.span.clone(),
+						message: format!(
+							"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
+							name, parent_type, parent_member_name, existing_type, member_type
+						),
+					});
 				}
 			} else {
 				struct_env.define(
@@ -1503,8 +1503,9 @@ fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol,
 					},
 					member_type,
 					StatementIdx::Top,
-				);
+				)?;
 			}
 		}
 	}
+	Ok(())
 }

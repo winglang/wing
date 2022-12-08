@@ -45,7 +45,7 @@ self.onmessage = async event => {
     const intermediateFile = wasi.fs.open("/code.w.out/preflight.js", defaultFilePerms);
     intermediateJS += intermediateFile.readString();
 
-    let procRegex = /fromFile\("(.+index\.js)"/g;
+    let procRegex = /fromFile\(.+"(.+index\.js)"/g;
     let procMatch;
     while (procMatch = procRegex.exec(intermediateJS)) {
       const proc = procMatch[1];
