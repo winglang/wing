@@ -1113,6 +1113,182 @@ The resource this connection is to.
 
 ---
 
+### ConstructInfo <a name="ConstructInfo" id="@winglang/wingsdk.core.ConstructInfo"></a>
+
+Source information on a construct (class fqn and version).
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructInfo.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_info = core.ConstructInfo{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.fqn">fqn</a></code> | <code>str</code> | Fully qualified class name. |
+| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.version">version</a></code> | <code>str</code> | Version of the module. |
+
+---
+
+##### `fqn`<sup>Required</sup> <a name="fqn" id="@winglang/wingsdk.core.ConstructInfo.property.fqn"></a>
+
+```wing
+fqn: str;
+```
+
+- *Type:* str
+
+Fully qualified class name.
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="@winglang/wingsdk.core.ConstructInfo.property.version"></a>
+
+```wing
+version: str;
+```
+
+- *Type:* str
+
+Version of the module.
+
+---
+
+### ConstructTree <a name="ConstructTree" id="@winglang/wingsdk.core.ConstructTree"></a>
+
+The construct tree.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructTree.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_tree = core.ConstructTree{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructTree.property.tree">tree</a></code> | <code>core.ConstructTreeNode</code> | The root node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTree.property.version">version</a></code> | <code>str</code> | The construct tree version. |
+
+---
+
+##### `tree`<sup>Required</sup> <a name="tree" id="@winglang/wingsdk.core.ConstructTree.property.tree"></a>
+
+```wing
+tree: ConstructTreeNode;
+```
+
+- *Type:* core.ConstructTreeNode
+
+The root node.
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="@winglang/wingsdk.core.ConstructTree.property.version"></a>
+
+```wing
+version: str;
+```
+
+- *Type:* str
+
+The construct tree version.
+
+---
+
+### ConstructTreeNode <a name="ConstructTreeNode" id="@winglang/wingsdk.core.ConstructTreeNode"></a>
+
+A node in the construct tree.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructTreeNode.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_tree_node = core.ConstructTreeNode{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.id">id</a></code> | <code>str</code> | The ID of the node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.path">path</a></code> | <code>str</code> | The path of the node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | The node attributes. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.children">children</a></code> | <code>MutMap&lt;core.ConstructTreeNode&gt;</code> | The child nodes. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.constructInfo">construct_info</a></code> | <code>core.ConstructInfo</code> | Information on the construct class that led to this node, if available. |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.core.ConstructTreeNode.property.id"></a>
+
+```wing
+id: str;
+```
+
+- *Type:* str
+
+The ID of the node.
+
+Is part of the `path`.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.core.ConstructTreeNode.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+The path of the node.
+
+---
+
+##### `attributes`<sup>Optional</sup> <a name="attributes" id="@winglang/wingsdk.core.ConstructTreeNode.property.attributes"></a>
+
+```wing
+attributes: MutMap<any>;
+```
+
+- *Type:* MutMap&lt;any&gt;
+
+The node attributes.
+
+---
+
+##### `children`<sup>Optional</sup> <a name="children" id="@winglang/wingsdk.core.ConstructTreeNode.property.children"></a>
+
+```wing
+children: MutMap<ConstructTreeNode>;
+```
+
+- *Type:* MutMap&lt;core.ConstructTreeNode&gt;
+
+The child nodes.
+
+---
+
+##### `construct_info`<sup>Optional</sup> <a name="construct_info" id="@winglang/wingsdk.core.ConstructTreeNode.property.constructInfo"></a>
+
+```wing
+construct_info: ConstructInfo;
+```
+
+- *Type:* core.ConstructInfo
+
+Information on the construct class that led to this node, if available.
+
+---
+
 ### CounterProps <a name="CounterProps" id="@winglang/wingsdk.cloud.CounterProps"></a>
 
 Properties for `Counter`.

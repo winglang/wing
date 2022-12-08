@@ -79,6 +79,10 @@
       "type": "runtime"
     },
     {
+      "name": "@winglang/wingsdk",
+      "type": "runtime"
+    },
+    {
       "name": "node-fetch",
       "type": "runtime"
     },
