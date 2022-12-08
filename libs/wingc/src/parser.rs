@@ -6,8 +6,8 @@ use tree_sitter::Node;
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
-	InterpolatedString, InterpolatedStringPart, Literal, ParameterDefinition, Phase, Reference, Scope, Stmt, StmtKind,
-	Symbol, Type, UnaryOperator,
+	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
+	UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -24,7 +24,20 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"struct_definition" => "see https://github.com/winglang/wing/issues/120",
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
-	"nil" => "see https://github.com/winglang/wing/issues/433"
+	"nil" => "see https://github.com/winglang/wing/issues/433",
+	"Set" => "see https://github.com/winglang/wing/issues/530",
+	"Array" => "see https://github.com/winglang/wing/issues/246",
+	"MutSet" => "see https://github.com/winglang/wing/issues/98",
+	"MutArray" => "see https://github.com/winglang/wing/issues/663",
+	"Promise" => "see https://github.com/winglang/wing/issues/529",
+	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
+	"inflight_closure" => "see https://github.com/winglang/wing/issues/474",
+	"pure_closure" => "see https://github.com/winglang/wing/issues/435",
+	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
+	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
+	"await_expression" => "see https://github.com/winglang/wing/issues/116",
+	"for_in_loop" => "see https://github.com/winglang/wing/issues/118",
+	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
 
 impl Parser<'_> {
@@ -46,7 +59,31 @@ impl Parser<'_> {
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
 
+		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
+		// the error and continue parsing.
 		Err(())
+	}
+
+	fn report_unimplemented_grammar<T>(
+		&self,
+		grammar_element: &str,
+		grammar_context: &str,
+		node: &Node,
+	) -> DiagnosticResult<T> {
+		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
+			self.add_error(
+				format!(
+					"{} '{}' is not yet supported {}",
+					grammar_context, grammar_element, entry
+				),
+				node,
+			)?
+		} else {
+			self.add_error(
+				format!("Unexpected {} '{}' || {:#?}", grammar_context, grammar_element, node),
+				node,
+			)?
+		}
 	}
 
 	fn node_text<'a>(&'a self, node: &Node) -> &'a str {
@@ -93,13 +130,7 @@ impl Parser<'_> {
 				value_text.parse::<f64>().expect("Duration string") * 3600_f64,
 			)),
 			"ERROR" => self.add_error(format!("Expected duration type"), &node),
-			other => {
-				if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-					self.add_error(format!("duration type {} is not yet supported {}", other, entry), &node)
-				} else {
-					self.add_error(format!("Unexpected duration type {} || {:#?}", other, node), &node)
-				}
-			}
+			other => self.report_unimplemented_grammar(other, "duration type", node),
 		}
 	}
 
@@ -124,7 +155,7 @@ impl Parser<'_> {
 				.enumerate()
 				.filter_map(|(i, st_node)| self.build_statement(&st_node, i).ok())
 				.collect(),
-			env: None, // env should be set later when scope is type-checked
+			env: RefCell::new(None), // env should be set later when scope is type-checked
 		}
 	}
 
@@ -172,10 +203,6 @@ impl Parser<'_> {
 					else_statements: else_block,
 				}
 			}
-			"inflight_function_definition" => {
-				StmtKind::FunctionDefinition(self.build_function_definition(statement_node, Phase::Inflight)?)
-			}
-
 			"for_in_loop" => StmtKind::ForLoop {
 				iterator: self.node_symbol(&statement_node.child_by_field_name("iterator").unwrap())?,
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
@@ -191,21 +218,7 @@ impl Parser<'_> {
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
-			other => {
-				return {
-					if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-						self.add_error(
-							format!("statement type {} is not yet supported {}", other, entry),
-							statement_node,
-						)
-					} else {
-						self.add_error(
-							format!("Unexpected statement type {} || {:#?}", other, statement_node),
-							statement_node,
-						)
-					}
-				}
-			}
+			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
 
 		Ok(Stmt {
@@ -226,12 +239,25 @@ impl Parser<'_> {
 			.unwrap()
 			.named_children(&mut cursor)
 		{
+			if class_element.is_extra() {
+				continue;
+			}
 			match (class_element.kind(), is_resource) {
 				("function_definition", true) => {
-					methods.push(self.build_function_definition(&class_element, Phase::Preflight)?)
+					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
+					let func_def = self.build_function_definition(&class_element, Phase::Preflight);
+					match (method_name, func_def) {
+						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
+						_ => {}
+					}
 				}
 				("inflight_function_definition", _) => {
-					methods.push(self.build_function_definition(&class_element, Phase::Inflight)?)
+					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
+					let func_def = self.build_function_definition(&class_element, Phase::Inflight);
+					match (method_name, func_def) {
+						(Ok(method_name), Ok(func_def)) => methods.push((method_name, func_def)),
+						_ => {}
+					}
 				}
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
@@ -254,10 +280,10 @@ impl Parser<'_> {
 					}
 					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
 					constructor = Some(Constructor {
-						parameters: parameters.iter().map(|p| p.name.clone()).collect(),
+						parameters: parameters.iter().map(|p| p.0.clone()).collect(),
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
-							parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 							return_type: Some(Box::new(Type::CustomType {
 								root: name.clone(),
 								fields: vec![],
@@ -307,14 +333,28 @@ impl Parser<'_> {
 		})
 	}
 
+	fn build_anonymous_closure(&self, anon_closure_node: &Node) -> DiagnosticResult<FunctionDefinition> {
+		let mut cur = anon_closure_node.walk();
+		let block_node_idx = anon_closure_node
+			.children(&mut cur)
+			.position(|c| c.kind() == "block")
+			.unwrap();
+		let flight = match self.node_text(&anon_closure_node.child(block_node_idx - 1).unwrap()) {
+			"->" => Phase::Preflight,
+			"~>" => Phase::Inflight,
+			other => self.report_unimplemented_grammar(other, "closure phase specifier", anon_closure_node)?,
+		};
+
+		self.build_function_definition(anon_closure_node, flight)
+	}
+
 	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionDefinition {
-			name: self.node_symbol(&func_def_node.child_by_field_name("name").unwrap())?,
-			parameters: parameters.iter().map(|p| p.name.clone()).collect(),
+			parameter_names: parameters.iter().map(|p| p.0.clone()).collect(),
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			signature: FunctionSignature {
-				parameters: parameters.iter().map(|p| p.parameter_type.clone()).collect(),
+				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
 				return_type: func_def_node
 					.child_by_field_name("type")
 					.map(|rt| Box::new(self.build_type(&rt).unwrap())),
@@ -324,14 +364,17 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<ParameterDefinition>> {
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type)>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
-			res.push(ParameterDefinition {
-				name: self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
-				parameter_type: self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
-			})
+			if parameter_definition_node.is_extra() {
+				continue;
+			}
+			res.push((
+				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
+				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+			))
 		}
 
 		Ok(res)
@@ -345,15 +388,7 @@ impl Parser<'_> {
 				"bool" => Ok(Type::Bool),
 				"duration" => Ok(Type::Duration),
 				"ERROR" => self.add_error(format!("Expected builtin type"), type_node),
-				other => {
-					return {
-						if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&other) {
-							self.add_error(format!("builtin {} is not yet supported {}", other, entry), type_node)
-						} else {
-							self.add_error(format!("Unexpected builtin {} || {:#?}", other, type_node), type_node)
-						}
-					}
-				}
+				other => return self.report_unimplemented_grammar(other, "builtin", type_node),
 			},
 			"optional" => {
 				let inner_type = self.build_type(&type_node.named_child(0).unwrap()).unwrap();
@@ -385,16 +420,12 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
-					"Set" | "Array" | "MutSet" | "MutMap" | "MutArray" | "Promise" => self.add_error(
-						format!("{} container type currently unsupported", container_type),
-						type_node,
-					)?,
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
-					other => panic!("Unexpected container type {} || {:#?}", other, type_node),
+					other => self.report_unimplemented_grammar(other, "bultin container type", type_node),
 				}
 			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),
-			other => panic!("Unexpected type {} || {:#?}", other, type_node),
+			other => self.report_unimplemented_grammar(other, "type", type_node),
 		}
 	}
 
@@ -422,7 +453,7 @@ impl Parser<'_> {
 			"identifier" => Ok(Reference::Identifier(self.node_symbol(&actual_node)?)),
 			"nested_identifier" => Ok(self.build_nested_identifier(&actual_node)?),
 			"ERROR" => self.add_error(format!("Expected type || {:#?}", reference_node), &actual_node),
-			other => panic!("Unexpected type node {} || {:#?}", other, reference_node),
+			other => self.report_unimplemented_grammar(other, "type node", &actual_node),
 		}
 	}
 
@@ -433,6 +464,9 @@ impl Parser<'_> {
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
 		for child in arg_list_node.named_children(&mut cursor) {
+			if child.is_extra() {
+				continue;
+			}
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
@@ -511,7 +545,7 @@ impl Parser<'_> {
 						"*" => BinaryOperator::Mul,
 						"/" => BinaryOperator::Div,
 						"ERROR" => self.add_error::<BinaryOperator>(format!("Expected binary operator"), expression_node)?,
-						other => panic!("Unexpected binary operator {} || {:#?}", other, expression_node),
+						other => return self.report_unimplemented_grammar(other, "binary operator", expression_node),
 					},
 				},
 				expression_span,
@@ -523,7 +557,7 @@ impl Parser<'_> {
 						"-" => UnaryOperator::Minus,
 						"!" => UnaryOperator::Not,
 						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,
-						other => panic!("Unexpected unary operator {} || {:#?}", other, expression_node),
+						other => return self.report_unimplemented_grammar(other, "unary operator", expression_node),
 					},
 					exp: Box::new(self.build_expression(&expression_node.child_by_field_name("arg").unwrap())?),
 				},
@@ -546,6 +580,9 @@ impl Parser<'_> {
 					let mut last_end = end;
 
 					for interpolation_node in expression_node.named_children(&mut cursor) {
+						if interpolation_node.is_extra() {
+							continue;
+						}
 						let interpolation_start = interpolation_node.start_byte();
 						let interpolation_end = interpolation_node.end_byte();
 
@@ -589,7 +626,7 @@ impl Parser<'_> {
 					"true" => true,
 					"false" => false,
 					"ERROR" => self.add_error::<bool>(format!("Expected boolean literal"), expression_node)?,
-					other => panic!("Unexpected boolean literal {} || {:#?}", other, expression_node),
+					other => return self.report_unimplemented_grammar(other, "boolean literal", expression_node),
 				})),
 				expression_span,
 			)),
@@ -611,9 +648,18 @@ impl Parser<'_> {
 				expression_span,
 			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
-			"preflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
-			"inflight_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
-			"pure_closure" => self.add_error(format!("Anonymous closures not implemented yet"), expression_node),
+			"preflight_closure" => Ok(Expr::new(
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				expression_span,
+			)),
+			"inflight_closure" => Ok(Expr::new(
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				expression_span,
+			)),
+			"pure_closure" => self.add_error(
+				format!("Pure phased anonymous closures not implemented yet"),
+				expression_node,
+			),
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)
@@ -624,6 +670,9 @@ impl Parser<'_> {
 				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+					if field_node.is_extra() {
+						continue;
+					}
 					let key_node = field_node.named_child(0).unwrap();
 					let key = match key_node.kind() {
 						"string" => {
@@ -655,7 +704,7 @@ impl Parser<'_> {
 				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
-					if !field.is_named() {
+					if !field.is_named() || field.is_extra() {
 						continue;
 					}
 					let field_name = self.node_symbol(&field.named_child(0).unwrap());
