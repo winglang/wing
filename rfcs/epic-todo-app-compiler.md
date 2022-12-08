@@ -85,8 +85,9 @@ let clear_tasks = new cloud.Function((s: str): str ~> {
   let results = tasks.list_task_ids();
   let i = 0;
   // I hate this code, but wanted to use while here
-  while (i < results.len){
-    tasks.remove_task(results.at(i++)) 
+  while (i < results.len) {
+    tasks.remove_task(results.at(i))
+    i += 1;
   }
 }) as "utility:clear tasks"
 
