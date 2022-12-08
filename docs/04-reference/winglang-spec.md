@@ -146,34 +146,25 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 #### 1.1.3 Function Types
 
 Function type annotations are written as if they were closure declarations, with
-the difference that body is replaced with return type annotation. Phase of the
-function is determined with `->` or `~>` operators. Latter being inflight. `=>`
-indicates a special type of function that is phase independent. Learn more about
-them in the closure section.
+the difference that body is replaced with return type annotation. 
+
+* The `async` modifier indicates that a function is an async function.
+* The `inflight` modifier indicates that a function is an inflight function.
 
 ```pre
-(arg1: <type1>, arg2: <type2>, ...) [=|~|-]> <type>
+(arg1: <type1>, arg2: <type2>, ...) => <type>
+async (arg1: <type1>, arg2: <type2>, ...) => <type>
+inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 ```
 
 > ```TS
 > // type annotation in wing: (num) -> num
-> let f1 = (x: num): num -> { return x + 1; };
-> // type annotation in wing: (num, str) ~> void
-> let f2 = (x: num, s: str) ~> { /* no-op */ };
-> // type annotation in wing: (num, num) => void
-> let f3 = (a: num, b: num) => { print(a + b); };
+> let f1 = (x: num): num => { return x + 1; };
+> // type annotation in wing: inflight (num, str) => void
+> let f2 = inflight (x: num, s: str) => { /* no-op */ };
+> // type annotation in wing: async (num, num) => void
+> let f3 = async (a: num, b: num) => { print(a + b); };
 > ```
-
-<details><summary>Equivalent TypeScript Code</summary>
-
-> ```TS
-> const f1 = Object.freeze((x: number): number -> { return x + 1; });
-> const f2 = Object.freeze((x: number, s: string): undefined -> { });
-> const f3 = Object.freeze((a: number, b: number): undefined -> { print(a+b) });
-> ```
-
-</details>
-
 
 [`▲ top`][top]
 
@@ -278,39 +269,85 @@ In Wing, we differentiate between code that executes during compilation and code
 that executes after the application has been deployed by referring to them as
 **preflight** and **inflight** code respectively.
 
-The default (and implicit) execution context in Wing is preflight. This is
-because in cloud applications, the entrypoint is definition of the app's cloud
-infrastructure (and not the code that runs within a specific machine within this
-cloud infrastructure).
+The default (and implicit) execution context in Wing is **preflight**. This is
+because in cloud applications, the entrypoint is the definition of the app's
+cloud architecture, and not the code that runs within a specific machine within
+this cloud infrastructure.
 
-Phase modifier `~` is allowed in the context of declaring interface and resource
-members. Example code is shown in the [resources](#33-resources) section.
+The phase modifier `inflight` is allowed in the context of declaring interface
+and resource members (methods, fields and properties). Example code is shown in
+the [resources](#33-resources) section.
 
-Design of language features in Wing loosely follow the design of WebAssembly and
-its relation to WASI. Some features are designed to be "compute" and independent
-of the underlying phase of the operation. Classes fall into this category. You
-may use these features regardless of the execution phase.
+```TS
+resource Bucket {
+  // preflight method
+  allow_public_access() {
 
-Some features on the other hand are "phase-aware" and are available during
-specific phases and/or their behavior changes. Resources fall into this
-category.
+  }
+
+  // inflight method
+  inflight put(key: str, contents: str): void {
+
+  }
+}
+```
+
+Inflight members can only be accessed from an **inflight context** (an inflight
+method or an inflight closure) and preflight members can only be accessed from a
+**preflight context** (a preflight method or a preflight closure).
+
+It is also possible to use the `inflight` modifier when defining a function
+closure:
+
+```TS
+let handler = inflight () => {
+  print("hello, world";)
+};
+```
+
+For example (continuing the `Bucket` example above):
+
+```ts
+let bucket = new Bucket();
+bucket.allow_public_access();      // OK! We are calling a preflight method from a preflight context
+bucket.put("file.txt", "hello");   // ERROR: cannot call inflight methods from preflight context
+
+let handler = inflight () => {
+  // now we are in inflight context
+  bucket.put("file.txt", "hello"); // OK! We are calling an inflight methods from an inflight context
+};
+```
+
+Classes can only be instantiated within **inflight** context:
+
+```TS
+class Foo {}
+
+let handler = inflight () => {
+  new Foo(); // OK!
+};
+
+new Foo(); // ERROR: cannot instantiate a class from preflight context
+```
+
+Resources can only be instantiated within **preflight** context:
+
+```TS
+resource Bar {}
+
+new Bar(); // OK! Bar is a resource
+
+let handler2 = inflight() => {
+  new Bar(); // ERROR: cannot instantiate a resource from an inflight context
+}
+```
 
 Bridge between preflight and inflight is crossed with the help of immutable data
-structures, "structs", and capture mechanic in Wing. In addition, preflight can
-receive an inflight function as an argument. This enables resources to define
-code that will be executed on the deployed resource (lambda functions, docker,
-virtual machines etc).
+structures, "structs", and the capture mechanism.
 
-You will encounter the following symbols while writing or reading Wing code:
-
-| Symbol      | Phase       |
-| ----------- | ----------- |
-| `->` or `-` | preflight   |
-| `~>` or `~` | inflight    |
-| `=>` or `=` | independent |
-
-Phase independent code is an advanced use case of Wing where lots of logic needs
-to be shared among phases. This is not recommended for most use cases.
+Preflight resource methods and initializers can receive an inflight function as
+an argument. This enables resources to define code that will be executed on the
+deployed resource (lambda functions, docker, virtual machines etc).
 
 [`▲ top`][top]
 
@@ -1017,7 +1054,7 @@ class Boo extends Foo {
 ```
 
 Classes can inherit and extend other classes using the `extends` keyword.  
-Classes can implement interfaces iff the interfaces does not contain `~`. You
+Classes can implement interfaces iff the interfaces does not contain `inflight`. You
 can use the keyword `final` to stop the inheritance chain.
 
 ```TS
@@ -1068,21 +1105,18 @@ Resources can be defined like so:
 // Wing Code:
 resource Foo {
   init() { /* initialize preflight fields */ } // preflight constructor
-  ~ init() {} // optional client initializer
+  inflight init() {} // optional client initializer
   finalizer() {} // optional sync finalizer
   async finalizer() {} // async finalizer (can be either sync or async)
 
-  // phase independent fields (advanced usage only)
-  = foo(arg: num): num { return arg; }
-
   // inflight members
-  ~ foo(arg: num): num { return arg; }
-  ~ boo(): num { return 32; }
+  inflight foo(arg: num): num { return arg; }
+  inflight boo(): num { return 32; }
 
   // inflight fields
-  ~ field1: num;
-  ~ field2: str;
-  ~ field3: bool;
+  inflight field1: num;
+  inflight field2: str;
+  inflight field3: bool;
 
   // preflight members
   foo(arg: num): num { return arg; }
@@ -1166,12 +1200,12 @@ type of visibility (private, protected, etc.).
 >   method1(x: num): str;
 > };
 > interface IMyInterface2 {
->   ~ field2: str;
->   ~ method2(): str;
+>   inflight field2: str;
+>   inflight method2(): str;
 > };
 > resource MyResource impl IMyInterface1, IMyInterface2 {
->   ~ field2: str;
->   ~ init(x: num) {
+>   inflight field2: str;
+>   inflight init(x: num) {
 >     // inflight client initialization
 >     this.field2 = "sample";
 >     this.field1 = x;
@@ -1179,7 +1213,7 @@ type of visibility (private, protected, etc.).
 >   method1(x: num): str {
 >     return "sample: ${x}";
 >   }
->   ~ method2(): str {
+>   inflight method2(): str {
 >     return this.field2;
 >   }
 > };
@@ -1262,23 +1296,15 @@ However, it is possible to create anonymous closures and assign to variables
 
 > ```TS
 > // preflight closure:
-> let f1 = (a: num, b: num) -> { print(a + b); }
+> let f1 = (a: num, b: num) => { print(a + b); }
 > // inflight closure:
-> let f2 = (a: num, b: num) ~> { print(a + b); }
-> // phase independent closure:
-> let f2 = (a: num, b: num) => { print(a + b); }
+> let f2 = inflight (a: num, b: num) => { print(a + b); }
 > // OR:
 > // preflight closure:
-> let f4 = (a: num, b: num): void -> { print(a + b); }
+> let f4 = (a: num, b: num): void => { print(a + b); }
 > // inflight closure:
-> let f5 = (a: num, b: num): void ~> { print(a + b); }
-> // phase independent closure:
-> let f6 = (a: num, b: num): void => { print(a + b); }
+> let f5 = inflight (a: num, b: num): void => { print(a + b); }
 > ```
-
-`=>` closure types are special in which the user can write phase independent or
-"phase-shared" closures. These closures cannot consume any resources, neither
-can they return any resources. They do pure "compute" operations.
 
 [`▲ top`][top]
 
@@ -1884,29 +1910,29 @@ resource DenyList {
     return tmpdir;
   }
 
-  ~ rules: MutMap<DenyListRule>?; 
+  inflight rules: MutMap<DenyListRule>?; 
 
-  ~ init() {
+  inflight init() {
     // this._bucket is already initialized by the capture mechanic!
     this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>(); 
   }
 
-  ~ lookup(name: str, version: str): DenyListRule? {
+  inflight lookup(name: str, version: str): DenyListRule? {
     return this.rules[name] ?? this.rules["${name}/v${version}"];
   }
 
-  ~ add_rule(rule: DenyListRule) {
+  inflight add_rule(rule: DenyListRule) {
     DenyList._append_rule(this.rules, rule);
     this._bucket.set(this._object_key, this.rules);
   }
 
-  = static _append_rule(map: MutMap<DenyListRule>, rule: DenyListRule) {
+  static _append_rule(map: MutMap<DenyListRule>, rule: DenyListRule) {
     let suffix = DenyList._maybe_suffix(rule.version);
     let path = "${rule.package_name}${suffix}";
     map[path] = rule;
   }
 
-  = static _maybe_suffix(version: str?): str {
+  static _maybe_suffix(version: str?): str {
     if version {
       return "/v${version}";
     } else {
@@ -1916,7 +1942,7 @@ resource DenyList {
 }
 
 let deny_list = DenyList();
-let filter_fn = (event: cloud.QueueEvent) ~> {
+let filter_fn = inflight (event: cloud.QueueEvent) => {
   let package_name = event.data["package_name"];
   let version = event.data["version"];
   let reason = event.data["reason"];
@@ -1925,7 +1951,7 @@ let filter_fn = (event: cloud.QueueEvent) ~> {
   } else {
     print("Package accepted: ${package_name}");
   }
-}
+};
 
 queue = cloud.Queue();
 filter = cloud.Function(filter_fn);
