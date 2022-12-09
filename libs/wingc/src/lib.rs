@@ -99,7 +99,8 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.borrow_mut()
 		.as_mut()
 		.unwrap()
-		.define(&sym, types.add_type(typ), StatementIdx::Top);
+		.define(&sym, types.add_type(typ), StatementIdx::Top)
+		.expect("Failed to add builtin");
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutput, Diagnostics> {
