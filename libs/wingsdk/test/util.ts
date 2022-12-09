@@ -12,6 +12,13 @@ export function tfResourcesOf(templateStr: string): string[] {
   return Object.keys(JSON.parse(templateStr).resource).sort();
 }
 
+export function tfResourcesOfCount(
+  templateStr: string,
+  resourceId: string
+): number {
+  return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
+}
+
 export function tfSanitize(templateStr: string): string {
   const template = JSON.parse(templateStr);
 
