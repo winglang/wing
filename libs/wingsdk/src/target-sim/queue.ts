@@ -92,10 +92,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(
-    captureScope: Resource,
-    _metadata: core.CaptureMetadata
-  ): core.Code {
-    return bindSimulatorResource("queue", this, captureScope);
+  public _bind(host: Resource, _policies: core.Policies): core.Code {
+    return bindSimulatorResource("queue", this, host);
   }
 }

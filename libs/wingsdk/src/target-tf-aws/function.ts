@@ -14,9 +14,9 @@ import {
   Code,
   Language,
   Inflight,
-  CaptureMetadata,
   InflightClient,
   Resource,
+  Policies,
 } from "../core";
 import { addBindConnections } from "./util";
 
@@ -51,7 +51,7 @@ export class Function extends cloud.FunctionBase {
 
     const captureClients = inflight.makeClients(this);
     const code = inflight.bundle({
-      captureScope: this,
+      host: this,
       captureClients,
       external: ["aws-sdk"],
     });
@@ -160,8 +160,8 @@ export class Function extends cloud.FunctionBase {
   /**
    * @internal
    */
-  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
+  public _bind(host: Resource, policies: Policies): Code {
+    if (!(host instanceof Function)) {
       throw new Error(
         "functions can only be captured by tfaws.Function for now"
       );
@@ -169,9 +169,9 @@ export class Function extends cloud.FunctionBase {
 
     const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.FunctionInflightMethods.INVOKE)) {
-      captureScope.addPolicyStatements({
+    const methods = policies[this.node.path]?.methods ?? [];
+    if (methods.includes(cloud.FunctionInflightMethods.INVOKE)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],
         resource: [`${this.function.arn}`],
@@ -180,9 +180,9 @@ export class Function extends cloud.FunctionBase {
 
     // The function name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(env, this.function.arn);
+    host.addEnvironment(env, this.function.arn);
 
-    addBindConnections(this, captureScope);
+    addBindConnections(this, host);
 
     return InflightClient.for(__filename, "FunctionClient", [
       `process.env["${env}"]`,

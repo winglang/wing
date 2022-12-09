@@ -72,11 +72,8 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(
-    captureScope: core.Resource,
-    _metadata: core.CaptureMetadata
-  ): core.Code {
-    return bindSimulatorResource("topic", this, captureScope);
+  public _bind(host: core.Resource, _metadata: core.Policies): core.Code {
+    return bindSimulatorResource("topic", this, host);
   }
 
   toSimulator(): BaseResourceSchema {

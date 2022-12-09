@@ -3,7 +3,7 @@ import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Direction, Resource } from "../core";
+import { Direction, Policies, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -92,19 +92,16 @@ export class Queue extends cloud.QueueBase {
   /**
    * @internal
    */
-  public _bind(
-    captureScope: Resource,
-    metadata: core.CaptureMetadata
-  ): core.Code {
-    if (!(captureScope instanceof Function)) {
+  public _bind(host: Resource, policies: Policies): core.Code {
+    if (!(host instanceof Function)) {
       throw new Error("queues can only be captured by tfaws.Function for now");
     }
 
     const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
 
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.QueueInflightMethods.PUSH)) {
-      captureScope.addPolicyStatements({
+    const methods = policies[this.node.path]?.methods ?? [];
+    if (methods.includes(cloud.QueueInflightMethods.PUSH)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: [
           "sqs:SendMessage",
@@ -117,9 +114,9 @@ export class Queue extends cloud.QueueBase {
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(env, this.queue.url);
+    host.addEnvironment(env, this.queue.url);
 
-    addBindConnections(this, captureScope);
+    addBindConnections(this, host);
 
     return core.InflightClient.for(__filename, "QueueClient", [
       `process.env["${env}"]`,

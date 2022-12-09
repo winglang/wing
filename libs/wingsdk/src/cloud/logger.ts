@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Resource } from "../core";
+import { Code, Policies, Resource } from "../core";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
@@ -18,12 +18,6 @@ export abstract class LoggerBase extends Resource {
     // default implementation, can be overridden
     console.log(message);
   }
-
-  /** @internal */
-  public abstract _bind(
-    captureScope: Resource,
-    metadata: CaptureMetadata
-  ): Code;
 }
 
 /**
@@ -74,7 +68,7 @@ export class Logger extends LoggerBase {
   }
 
   /** @internal */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  public _bind(_host: Resource, _policies: Policies): Code {
     throw new Error("Method not implemented.");
   }
 }

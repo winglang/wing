@@ -9,8 +9,8 @@ export class Testing {
   /**
    * Obtain a reference to the prebundled Code for a given capture scope.
    */
-  public static inspectPrebundledCode(captureScope: Resource): Code {
-    const prebundle = (captureScope as any)[PREBUNDLE_SYMBOL];
+  public static inspectPrebundledCode(host: Resource): Code {
+    const prebundle = (host as any)[PREBUNDLE_SYMBOL];
     if (!prebundle) {
       throw new Error("No prebundled code found on this resource.");
     }

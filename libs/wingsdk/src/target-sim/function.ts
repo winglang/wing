@@ -5,8 +5,8 @@ import {
   Language,
   NodeJsCode,
   Inflight,
-  CaptureMetadata,
   Resource,
+  Policies,
 } from "../core";
 import { TextFile } from "../fs";
 import { ISimulatorResource } from "./resource";
@@ -41,7 +41,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     }
 
     const captureClients = inflight.makeClients(this);
-    const bundledCode = inflight.bundle({ captureScope: this, captureClients });
+    const bundledCode = inflight.bundle({ host: this, captureClients });
 
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
@@ -76,7 +76,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
-    return bindSimulatorResource("function", this, captureScope);
+  public _bind(host: Resource, _policies: Policies): Code {
+    return bindSimulatorResource("function", this, host);
   }
 }

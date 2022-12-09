@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, Resource } from "../core";
+import { Code, Policies, Resource } from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { LoggerSchema } from "./schema-resources";
@@ -27,7 +27,7 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
-    return bindSimulatorResource("logger", this, captureScope);
+  public _bind(host: Resource, _policies: Policies): Code {
+    return bindSimulatorResource("logger", this, host);
   }
 }

@@ -4,7 +4,7 @@ import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscrip
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Direction, Resource } from "../core";
+import { Direction, Policies, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -92,28 +92,25 @@ export class Topic extends cloud.TopicBase {
   /**
    * @internal
    */
-  public _bind(
-    captureScope: Resource,
-    metadata: core.CaptureMetadata
-  ): core.Code {
-    if (!(captureScope instanceof Function)) {
+  public _bind(host: Resource, policies: Policies): core.Code {
+    if (!(host instanceof Function)) {
       throw new Error("topics can only be captured by tfaws.Function for now");
     }
 
     const env = `TOPIC_ARN_${this.node.addr.slice(-8)}`;
 
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.TopicInflightMethods.PUBLISH)) {
-      captureScope.addPolicyStatements({
+    const methods = policies[this.node.path]?.methods ?? [];
+    if (methods.includes(cloud.TopicInflightMethods.PUBLISH)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["sns:Publish"],
         resource: this.topic.arn,
       });
     }
 
-    captureScope.addEnvironment(env, this.topic.arn);
+    host.addEnvironment(env, this.topic.arn);
 
-    addBindConnections(this, captureScope);
+    addBindConnections(this, host);
 
     return core.InflightClient.for(__filename, "TopicClient", [
       `process.env["${env}"]`,

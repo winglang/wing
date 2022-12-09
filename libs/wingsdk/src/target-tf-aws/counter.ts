@@ -2,7 +2,6 @@ import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -30,11 +29,8 @@ export class Counter extends cloud.CounterBase {
   /**
    * @internal
    */
-  public _bind(
-    captureScope: Resource,
-    metadata: core.CaptureMetadata
-  ): core.Code {
-    if (!(captureScope instanceof Function)) {
+  public _bind(host: core.Resource, policies: core.Policies): core.Code {
+    if (!(host instanceof Function)) {
       throw new Error(
         "counters can only be captured by tfaws.Function for now"
       );
@@ -42,18 +38,18 @@ export class Counter extends cloud.CounterBase {
 
     const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
 
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.CounterInflightMethods.INC)) {
-      captureScope.addPolicyStatements({
+    const methods = policies[this.node.path]?.methods ?? [];
+    if (methods.includes(cloud.CounterInflightMethods.INC)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:UpdateItem"],
         resource: this.table.arn,
       });
     }
 
-    captureScope.addEnvironment(env, this.table.name);
+    host.addEnvironment(env, this.table.name);
 
-    addBindConnections(this, captureScope);
+    addBindConnections(this, host);
 
     return core.InflightClient.for(__filename, "CounterClient", [
       `process.env["${env}"]`,

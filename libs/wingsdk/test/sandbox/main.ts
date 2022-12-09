@@ -3,7 +3,7 @@ import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
-// import * as tfaws from "../../src/target-tf-aws";
+import * as tfaws from "../../src/target-tf-aws";
 
 class MyBucket extends Construct {
   private inner: cloud.Bucket;
@@ -14,8 +14,8 @@ class MyBucket extends Construct {
     this.thing = message;
   }
 
-  _bind(host: core.Resource, metadata: core.CaptureMetadata) {
-    const inner_client = this.inner._bind(host, metadata);
+  _bind(host: core.Resource, policies: core.Policies) {
+    const inner_client = this.inner._bind(host, policies);
     const thing_client = JSON.stringify(this.thing);
     const my_bucket_client_path = join(__dirname, "MyBucket.inflight.js");
     return core.NodeJsCode.fromInline(
@@ -31,8 +31,8 @@ class Handler extends Construct {
     this.b = b;
   }
 
-  _bind(host: core.Resource, metadata: core.CaptureMetadata) {
-    const b_client = this.b._bind(host, metadata);
+  _bind(host: core.Resource, policies: core.Policies) {
+    const b_client = this.b._bind(host, policies);
     const handler_client_path = join(__dirname, "Handler.inflight.js");
     return core.NodeJsCode.fromInline(
       `new (require("${handler_client_path}")).Handler__Inflight({ b: ${b_client.text} })`
@@ -54,9 +54,11 @@ class HelloWorld extends Construct {
       ),
       entrypoint: "$proc",
       captures: {
-        handler: {
-          resource: handler,
-          methods: [], // ???
+        handler: handler,
+      },
+      policies: {
+        "root/HelloWorld/MyBucket/Bucket": {
+          methods: ["put"],
         },
       },
     });

@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, InflightClient, Resource } from "../core";
+import { Code, InflightClient, Policies, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -15,15 +15,15 @@ export class Logger extends cloud.LoggerBase {
   }
 
   /** @internal */
-  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
+  public _bind(host: Resource, _policies: Policies): Code {
+    if (!(host instanceof Function)) {
       throw new Error("loggers can only be captured by tfaws.Function for now");
     }
 
-    addBindConnections(this, captureScope);
+    addBindConnections(this, host);
 
     return InflightClient.for(__filename, "LoggerClient", [
-      `"/aws/lambda/${captureScope.node.id}"`,
+      `"/aws/lambda/${host.node.id}"`,
     ]);
   }
 }

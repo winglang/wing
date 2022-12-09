@@ -5,7 +5,7 @@ import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
-import { CaptureMetadata, Code, InflightClient, Resource } from "../core";
+import { Code, InflightClient, Policies, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -67,30 +67,30 @@ export class Bucket extends cloud.BucketBase {
   /**
    * @internal
    */
-  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
+  public _bind(host: Resource, policies: Policies): Code {
+    if (!(host instanceof Function)) {
       throw new Error("buckets can only be captured by tfaws.Function for now");
     }
 
     const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(BucketInflightMethods.PUT)) {
-      captureScope.addPolicyStatements({
+    const methods = policies[this.node.path]?.methods ?? [];
+    if (methods.includes(BucketInflightMethods.PUT)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.has(BucketInflightMethods.GET)) {
-      captureScope.addPolicyStatements({
+    if (methods.includes(BucketInflightMethods.GET)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.has(BucketInflightMethods.LIST)) {
-      captureScope.addPolicyStatements({
+    if (methods.includes(BucketInflightMethods.LIST)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
@@ -98,9 +98,9 @@ export class Bucket extends cloud.BucketBase {
     }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(env, this.bucket.bucket);
+    host.addEnvironment(env, this.bucket.bucket);
 
-    addBindConnections(this, captureScope);
+    addBindConnections(this, host);
 
     return InflightClient.for(__filename, "BucketClient", [
       `process.env["${env}"]`,

@@ -7,31 +7,15 @@ import * as esbuild from "esbuild-wasm";
 import { PREBUNDLE_SYMBOL } from "./internal";
 import { Resource } from "./resource";
 
-/**
- * Capture information. A capture is a reference from an Inflight to a
- * construction-time resource or value. Either the "resource" or "value" field
- * will be set, but not both.
- */
-export interface Capture extends CaptureMetadata {
-  /**
-   * A captured resource
-   */
-  readonly resource?: ICapturableConstruct;
-
-  /**
-   * A captured immutable value (like string, number, boolean, a struct, or null).
-   */
-  readonly value?: any;
+export interface Policies {
+  [path: string]: Policy | undefined;
 }
 
-/**
- * Extra metadata associated with a captured resource.
- */
-export interface CaptureMetadata {
+export interface Policy {
   /**
-   * Which methods are called on the captured resource.
+   * Which methods are called on the resource.
    */
-  readonly methods?: string[];
+  readonly methods: string[];
 }
 
 /**
@@ -44,7 +28,7 @@ export interface ICapturable {
    *
    * @internal
    */
-  _bind(captureScope: Resource, metadata: CaptureMetadata): Code;
+  _bind(host: Resource, policies: Policies): Code;
 }
 
 /**
@@ -140,13 +124,15 @@ export interface InflightProps {
   readonly entrypoint: string;
 
   /**
-   * Capture information. During runtime, a map containing all captured values
+   * Capture information. During runtime, a map containing all captured resources
    * will be passed as the first argument of the entrypoint function.
    *
    * Each key here will be the key for the final value in the map.
    * @default - No captures
    */
-  readonly captures?: { [name: string]: Capture };
+  readonly captures?: { [name: string]: ICapturableConstruct };
+
+  readonly policies?: Policies;
 }
 
 /**
@@ -170,12 +156,15 @@ export class Inflight {
    *
    * Each key here will be the key for the final value in the map.
    */
-  public readonly captures: { [name: string]: Capture };
+  public readonly captures: { [name: string]: ICapturableConstruct };
+
+  public readonly policies: Policies;
 
   constructor(props: InflightProps) {
     this.code = props.code;
     this.entrypoint = props.entrypoint;
     this.captures = props.captures ?? {};
+    this.policies = props.policies ?? {};
   }
 
   /**
@@ -219,9 +208,8 @@ export class Inflight {
 
     // expose the inflight code before esbuild inlines dependencies, for unit
     // testing purposes... ugly
-    if (options.captureScope) {
-      (options.captureScope as any)[PREBUNDLE_SYMBOL] =
-        NodeJsCode.fromInline(contents);
+    if (options.host) {
+      (options.host as any)[PREBUNDLE_SYMBOL] = NodeJsCode.fromInline(contents);
     }
 
     const tempdir = mkdtemp("wingsdk.");
@@ -249,10 +237,10 @@ export class Inflight {
    * Resolve this inflight's captured objects into a map of clients that be
    * safely referenced at runtime.
    */
-  public makeClients(captureScope: Resource): Record<string, Code> {
+  public makeClients(host: Resource): Record<string, Code> {
     const clients: Record<string, Code> = {};
     for (const [name, capture] of Object.entries(this.captures)) {
-      clients[name] = createClient(captureScope, name, capture);
+      clients[name] = capture._bind(host, this.policies);
     }
     return clients;
   }
@@ -265,7 +253,7 @@ export interface InflightBundleOptions {
   /**
    * Associate the inflight bundle with a given capture scope.
    */
-  readonly captureScope?: IConstruct;
+  readonly host?: IConstruct;
   /**
    * A map of capture clients that can be bundled with the Inflight's code.
    */
@@ -274,24 +262,6 @@ export interface InflightBundleOptions {
    * List of dependencies to exclude from the bundle.
    */
   readonly external?: string[];
-}
-
-function createClient(
-  captureScope: Resource,
-  captureName: string,
-  capture: Capture
-): Code {
-  if (capture.value !== undefined) {
-    return NodeJsCode.fromInline(JSON.stringify(capture.value));
-  }
-
-  if (capture.resource !== undefined) {
-    return capture.resource._bind(captureScope, capture);
-  }
-
-  throw new Error(
-    `Unable to capture "${captureName}", no "value" or "resource" specified.`
-  );
 }
 
 function mkdtemp(prefix: string): string {

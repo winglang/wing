@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Inflight, Resource } from "../core";
+import { Code, Inflight, Policies, Resource } from "../core";
 import { Function } from "./function";
 
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
@@ -52,7 +52,7 @@ export class Topic extends TopicBase {
   /**
    * @internal
    */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  public _bind(_host: Resource, _policies: Policies): Code {
     throw new Error("Method not implemented");
   }
 
