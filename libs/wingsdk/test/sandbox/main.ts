@@ -1,63 +1,70 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-// import * as sim from "../../src/target-sim";
-import * as tfaws from "../../src/target-tf-aws";
+import * as sim from "../../src/target-sim";
+// import * as tfaws from "../../src/target-tf-aws";
+
+class MyBucket extends Construct {
+  private inner: cloud.Bucket;
+  private thing: string;
+  constructor(scope: Construct, id: string, message: string) {
+    super(scope, id);
+    this.inner = new cloud.Bucket(this, "Bucket");
+    this.thing = message;
+  }
+
+  _bind(host: core.Resource, metadata: core.CaptureMetadata) {
+    const inner_client = this.inner._bind(host, metadata);
+    const thing_client = JSON.stringify(this.thing);
+    const my_bucket_client_path = join(__dirname, "MyBucket.inflight.js");
+    return core.NodeJsCode.fromInline(
+      `new (require("${my_bucket_client_path}")).MyBucket__Inflight({ inner: ${inner_client.text}, thing: ${thing_client} })`
+    );
+  }
+}
+
+class Handler extends Construct {
+  private b: MyBucket;
+  constructor(scope: Construct, id: string, b: MyBucket) {
+    super(scope, id);
+    this.b = b;
+  }
+
+  _bind(host: core.Resource, metadata: core.CaptureMetadata) {
+    const b_client = this.b._bind(host, metadata);
+    const handler_client_path = join(__dirname, "Handler.inflight.js");
+    return core.NodeJsCode.fromInline(
+      `new (require("${handler_client_path}")).Handler__Inflight({ b: ${b_client.text} })`
+    );
+  }
+}
 
 class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const counter = new cloud.Counter(this, "Counter", {
-      initial: 1000,
-    });
-    const bucket = new cloud.Bucket(this, "Bucket");
-    const queue = new cloud.Queue(this, "Queue");
-    const processor = new core.Inflight({
+    const my_bucket = new MyBucket(this, "MyBucket", "Hello, World!");
+    const handler = new Handler(this, "Handler", my_bucket);
+    const code = new core.Inflight({
       code: core.NodeJsCode.fromInline(
         `async function $proc($cap, body) {
-          let next = await $cap.counter.inc();
-          let key = "file-" + next + ".txt";
-          await $cap.bucket.put(key, body);
+          await $cap.handler.handle();
         }`
       ),
       entrypoint: "$proc",
       captures: {
-        counter: {
-          resource: counter,
-          methods: [cloud.CounterInflightMethods.INC],
-        },
-        bucket: {
-          resource: bucket,
-          methods: [cloud.BucketInflightMethods.PUT],
+        handler: {
+          resource: handler,
+          methods: [], // ???
         },
       },
     });
-    queue.onMessage(processor);
-
-    // Subscribing & publishing to Topics
-    const topic = new cloud.Topic(this, "Topic");
-    const otherTopic = new cloud.Topic(this, "OtherTopic");
-
-    const subscriber = new core.Inflight({
-      code: core.NodeJsCode.fromInline(
-        `async function $proc($cap, event) {
-          await $cap.topic.publish("Forwarding On Message: " + event.Message);
-        }`
-      ),
-      entrypoint: "$proc",
-      captures: {
-        topic: {
-          resource: otherTopic,
-          methods: [cloud.TopicInflightMethods.PUBLISH],
-        },
-      },
-    });
-    topic.onMessage(subscriber);
+    new cloud.Function(this, "Function", code);
   }
 }
 
-const app = new tfaws.App({ outdir: __dirname });
+const app = new sim.App({ outdir: __dirname });
 cloud.Logger.register(app);
 new HelloWorld(app, "HelloWorld");
 app.synth();
