@@ -34,6 +34,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-utf8-node@3.208.0",
     // simulator dependencies
     "tar",
+    "fs-extra",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
@@ -43,7 +44,6 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock",
     "eslint-plugin-sort-exports",
     "patch-package",
-    "fs-extra",
   ],
   prettier: true,
   minNodeVersion: "16.16.0",

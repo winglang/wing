@@ -84,10 +84,6 @@
       "type": "build"
     },
     {
-      "name": "fs-extra",
-      "type": "build"
-    },
-    {
       "name": "jest-junit",
       "version": "^13",
       "type": "build"
@@ -199,6 +195,10 @@
     },
     {
       "name": "esbuild-wasm",
+      "type": "bundled"
+    },
+    {
+      "name": "fs-extra",
       "type": "bundled"
     },
     {

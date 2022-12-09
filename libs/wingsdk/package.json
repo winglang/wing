@@ -59,7 +59,6 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-sort-exports": "^0.8.0",
-    "fs-extra": "^8.1.0",
     "jest": "^27",
     "jest-junit": "^13",
     "jsii": "^1.68.0",
@@ -96,6 +95,7 @@
     "cdktf": "^0.13.2",
     "constructs": "~10.0.25",
     "esbuild-wasm": "^0.15.15",
+    "fs-extra": "^8.1.0",
     "polycons": "^0.1.1",
     "safe-stable-stringify": "*",
     "tar": "^6.1.11"
@@ -110,6 +110,7 @@
     "@aws-sdk/util-stream-node",
     "@aws-sdk/util-utf8-node",
     "esbuild-wasm",
+    "fs-extra",
     "safe-stable-stringify",
     "tar"
   ],

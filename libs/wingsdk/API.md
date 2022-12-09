@@ -944,14 +944,14 @@ let bucket_delete_options = cloud.BucketDeleteOptions{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExists">must_exists</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExist">must_exist</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
 
 ---
 
-##### `must_exists`<sup>Optional</sup> <a name="must_exists" id="@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExists"></a>
+##### `must_exist`<sup>Optional</sup> <a name="must_exist" id="@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExist"></a>
 
 ```wing
-must_exists: bool;
+must_exist: bool;
 ```
 
 - *Type:* bool
@@ -2594,7 +2594,7 @@ Inflight interface for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.delete">delete</a></code> | Delete existing objects using a key from the bucket. |
+| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
@@ -2607,7 +2607,7 @@ Inflight interface for `Bucket`.
 delete(key: str, opts?: BucketDeleteOptions): void
 ```
 
-Delete existing objects using a key from the bucket.
+Delete an existing object using a key from the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.key"></a>
 
