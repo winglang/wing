@@ -7,6 +7,7 @@ import {
   ListObjectsCommandOutput,
   PutObjectCommand,
   S3Client,
+  S3ServiceException,
 } from "@aws-sdk/client-s3";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 
@@ -74,10 +75,18 @@ export class BucketClient implements IBucketClient {
       Bucket: this.bucketName,
     });
 
-    if (opts?.mustExist) {
-      throw Error("`mustExist` not implemented yet.");
-    }
+    try {
+      await this.s3Client.send(command);
+    } catch (er) {
+      if (er instanceof S3ServiceException) {
+        if (!opts?.mustExist && er.name == "NoSuchKey") {
+          return;
+        }
 
-    await this.s3Client.send(command);
+        throw Error(`unable to delete "${key}": ${er.message}`);
+      }
+
+      throw er;
+    }
   }
 }

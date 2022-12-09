@@ -92,7 +92,7 @@ test("delete object from a bucket", async () => {
   expect(response).toEqual(undefined);
 });
 
-test("delete object from a bucket using mustExist as option", async () => {
+test("delete object from a bucket with mustExist option", async () => {
   // GIVEN
   const BUCKET_NAME = "BUCKET_NAME";
   const KEY = "KEY";
@@ -103,9 +103,8 @@ test("delete object from a bucket using mustExist as option", async () => {
 
   // WHEN
   const client = new BucketClient(BUCKET_NAME);
+  const response = await client.delete(KEY, { mustExist: true });
 
   // THEN
-  await expect(async () =>
-    client.delete(KEY, { mustExist: true })
-  ).rejects.toThrow("`mustExist` not implemented yet.");
+  expect(response).toEqual(undefined);
 });
