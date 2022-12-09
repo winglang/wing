@@ -1,6 +1,7 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
+import { promisify } from "util";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 import { ISimulatorResourceInstance } from "./resource";
@@ -66,7 +67,8 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
           try {
             // check if the file exists
             const filePath = join(this.fileDir, key);
-            const fileExists = fs.existsSync(filePath);
+            const existsAsync = promisify(fs.existsSync);
+            const fileExists = await existsAsync(filePath);
 
             if (!fileExists) {
               throw Error(`Object with "${key}" not found`);

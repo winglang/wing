@@ -789,6 +789,39 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
+### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/wingsdk.cloud.BucketDeleteOptions"></a>
+
+Interface for delete method inside `Bucket`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.BucketDeleteOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let bucket_delete_options = cloud.BucketDeleteOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExists">must_exists</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
+
+---
+
+##### `must_exists`<sup>Optional</sup> <a name="must_exists" id="@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExists"></a>
+
+```wing
+must_exists: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Check failures on the method and retrieve errors if any.
+
+---
+
 ### BucketProps <a name="BucketProps" id="@winglang/wingsdk.cloud.BucketProps"></a>
 
 Properties for `Bucket`.
@@ -971,6 +1004,182 @@ resource: Resource;
 - *Type:* core.Resource
 
 The resource this connection is to.
+
+---
+
+### ConstructInfo <a name="ConstructInfo" id="@winglang/wingsdk.core.ConstructInfo"></a>
+
+Source information on a construct (class fqn and version).
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructInfo.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_info = core.ConstructInfo{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.fqn">fqn</a></code> | <code>str</code> | Fully qualified class name. |
+| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.version">version</a></code> | <code>str</code> | Version of the module. |
+
+---
+
+##### `fqn`<sup>Required</sup> <a name="fqn" id="@winglang/wingsdk.core.ConstructInfo.property.fqn"></a>
+
+```wing
+fqn: str;
+```
+
+- *Type:* str
+
+Fully qualified class name.
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="@winglang/wingsdk.core.ConstructInfo.property.version"></a>
+
+```wing
+version: str;
+```
+
+- *Type:* str
+
+Version of the module.
+
+---
+
+### ConstructTree <a name="ConstructTree" id="@winglang/wingsdk.core.ConstructTree"></a>
+
+The construct tree.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructTree.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_tree = core.ConstructTree{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructTree.property.tree">tree</a></code> | <code>core.ConstructTreeNode</code> | The root node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTree.property.version">version</a></code> | <code>str</code> | The construct tree version. |
+
+---
+
+##### `tree`<sup>Required</sup> <a name="tree" id="@winglang/wingsdk.core.ConstructTree.property.tree"></a>
+
+```wing
+tree: ConstructTreeNode;
+```
+
+- *Type:* core.ConstructTreeNode
+
+The root node.
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="@winglang/wingsdk.core.ConstructTree.property.version"></a>
+
+```wing
+version: str;
+```
+
+- *Type:* str
+
+The construct tree version.
+
+---
+
+### ConstructTreeNode <a name="ConstructTreeNode" id="@winglang/wingsdk.core.ConstructTreeNode"></a>
+
+A node in the construct tree.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructTreeNode.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_tree_node = core.ConstructTreeNode{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.id">id</a></code> | <code>str</code> | The ID of the node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.path">path</a></code> | <code>str</code> | The path of the node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | The node attributes. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.children">children</a></code> | <code>MutMap&lt;core.ConstructTreeNode&gt;</code> | The child nodes. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.constructInfo">construct_info</a></code> | <code>core.ConstructInfo</code> | Information on the construct class that led to this node, if available. |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.core.ConstructTreeNode.property.id"></a>
+
+```wing
+id: str;
+```
+
+- *Type:* str
+
+The ID of the node.
+
+Is part of the `path`.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.core.ConstructTreeNode.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+The path of the node.
+
+---
+
+##### `attributes`<sup>Optional</sup> <a name="attributes" id="@winglang/wingsdk.core.ConstructTreeNode.property.attributes"></a>
+
+```wing
+attributes: MutMap<any>;
+```
+
+- *Type:* MutMap&lt;any&gt;
+
+The node attributes.
+
+---
+
+##### `children`<sup>Optional</sup> <a name="children" id="@winglang/wingsdk.core.ConstructTreeNode.property.children"></a>
+
+```wing
+children: MutMap<ConstructTreeNode>;
+```
+
+- *Type:* MutMap&lt;core.ConstructTreeNode&gt;
+
+The child nodes.
+
+---
+
+##### `construct_info`<sup>Optional</sup> <a name="construct_info" id="@winglang/wingsdk.core.ConstructTreeNode.property.constructInfo"></a>
+
+```wing
+construct_info: ConstructInfo;
+```
+
+- *Type:* core.ConstructInfo
+
+Information on the construct class that led to this node, if available.
 
 ---
 
@@ -2220,9 +2429,34 @@ Inflight interface for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.delete">delete</a></code> | Delete existing objects using a key from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
+
+---
+
+##### `delete` <a name="delete" id="@winglang/wingsdk.cloud.IBucketClient.delete"></a>
+
+```wing
+delete(key: str, opts?: BucketDeleteOptions): void
+```
+
+Delete existing objects using a key from the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.opts"></a>
+
+- *Type:* cloud.BucketDeleteOptions
+
+Options available for delete an item from a bucket.
 
 ---
 
@@ -2237,6 +2471,8 @@ Retrieve an object from the bucket.
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
 - *Type:* str
+
+Key of the object.
 
 ---
 
@@ -2268,11 +2504,15 @@ Put an object in the bucket.
 
 - *Type:* str
 
+Key of the object.
+
 ---
 
 ###### `body`<sup>Required</sup> <a name="body" id="@winglang/wingsdk.cloud.IBucketClient.put.parameter.body"></a>
 
 - *Type:* str
+
+Content of the object we want to store into the bucket.
 
 ---
 
@@ -2460,6 +2700,7 @@ List of inflight operations available for `Bucket`.
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.DELETE">DELETE</a></code> | `Bucket.delete`. |
 
 ---
 
@@ -2480,6 +2721,13 @@ List of inflight operations available for `Bucket`.
 ##### `LIST` <a name="LIST" id="@winglang/wingsdk.cloud.BucketInflightMethods.LIST"></a>
 
 `Bucket.list`.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/wingsdk.cloud.BucketInflightMethods.DELETE"></a>
+
+`Bucket.delete`.
 
 ---
 
