@@ -64,7 +64,7 @@ export class BucketClient implements IBucketClient {
   }
 
   /**
-   * Delete an object from a bucket using a key
+   * Delete an existing object using a key from the bucket
    * @param key Key of the object.
    * @param opts Option object supporting additional strategies to delete an item from a bucket
    */
@@ -74,14 +74,8 @@ export class BucketClient implements IBucketClient {
       Bucket: this.bucketName,
     });
 
-    if (opts?.mustExists) {
-      try {
-        // TODO: Implement a method called ``exists()`` to check if they key exists before deletion
-        await this.s3Client.send(command);
-        return;
-      } catch (er) {
-        throw er;
-      }
+    if (opts?.mustExist) {
+      throw Error("`mustExist` not implemented yet.");
     }
 
     await this.s3Client.send(command);

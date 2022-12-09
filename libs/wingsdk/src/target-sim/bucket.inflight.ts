@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { promisify } from "util";
+import { pathExists } from "fs-extra";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 import { ISimulatorResourceInstance } from "./resource";
@@ -63,25 +63,21 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Delete (key=${key}).`,
       activity: async () => {
-        if (opts?.mustExists) {
-          try {
-            // check if the file exists
-            const filePath = join(this.fileDir, key);
-            const existsAsync = promisify(fs.existsSync);
-            const fileExists = await existsAsync(filePath);
+        const filePath = join(this.fileDir, key);
 
-            if (!fileExists) {
-              throw Error(`Object with "${key}" not found`);
-            }
+        if (opts?.mustExist) {
+          // check if the file exists
+          const fileExists = await pathExists(filePath);
 
-            return await fs.promises.unlink(filePath);
-          } catch (er) {
-            throw er;
+          if (!fileExists) {
+            throw Error(`Object with "${key}" not found`);
           }
+
+          return fs.promises.unlink(filePath);
         }
 
         // we just try to delete the file if must_exists is disabled
-        return fs.promises.unlink(join(this.fileDir, key));
+        return fs.promises.unlink(filePath);
       },
     });
   }

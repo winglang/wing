@@ -43,6 +43,7 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock",
     "eslint-plugin-sort-exports",
     "patch-package",
+    "fs-extra",
   ],
   prettier: true,
   minNodeVersion: "16.16.0",

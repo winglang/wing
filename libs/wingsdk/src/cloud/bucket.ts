@@ -59,7 +59,7 @@ export interface BucketDeleteOptions {
    * @Throws if the file is not found or any other error-related.
    * @default false
    */
-  readonly mustExists?: boolean;
+  readonly mustExist?: boolean;
 }
 
 /**
@@ -89,7 +89,7 @@ export interface IBucketClient {
   list(prefix?: string): Promise<string[]>;
 
   /**
-   * Delete existing objects using a key from the bucket
+   * Delete an existing object using a key from the bucket
    * @param key Key of the object.
    * @param opts Options available for delete an item from a bucket.
    */

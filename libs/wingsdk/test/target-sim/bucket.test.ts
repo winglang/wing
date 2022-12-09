@@ -109,6 +109,38 @@ test("get invalid object throws an error", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("remove object from a bucket with mustExist as option", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+
+  // create file
+  await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
+
+  // delete file
+  const response = await client.delete(fileName, { mustExist: true });
+
+  await s.stop();
+
+  expect(response).toEqual(undefined);
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Bucket created.",
+    `Put (key=${fileName}).`,
+    `Delete (key=${fileName}).`,
+    "wingsdk.cloud.Bucket deleted.",
+  ]);
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("remove object from a bucket", async () => {
   const bucketName = "my_bucket";
   const fileName = "unknown.txt";
