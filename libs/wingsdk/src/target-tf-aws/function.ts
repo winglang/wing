@@ -30,6 +30,8 @@ export class Function extends cloud.FunctionBase {
   private readonly env: Record<string, string> = {};
   private readonly role: IamRole;
   private readonly policyStatements: any[] = [];
+  /** Function ARN */
+  public readonly arn: string;
 
   constructor(
     scope: Construct,
@@ -148,6 +150,8 @@ export class Function extends cloud.FunctionBase {
         variables: this.env,
       },
     });
+
+    this.arn = this.function.arn;
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
