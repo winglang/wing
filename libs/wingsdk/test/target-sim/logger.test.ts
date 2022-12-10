@@ -18,7 +18,7 @@ test("inflight uses a logger", async () => {
   const handler = new core.Inflight({
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
-    captures: {
+    bindings: {
       logger: {
         resource: cloud.Logger.of(app),
         methods: [cloud.LoggerInflightMethods.PRINT],

@@ -7,7 +7,7 @@ import { Resource } from "./resource";
  */
 export class Testing {
   /**
-   * Obtain a reference to the prebundled Code for a given capture scope.
+   * Obtain a reference to the prebundled Code for a given host resource.
    */
   public static inspectPrebundledCode(host: Resource): Code {
     const prebundle = (host as any)[PREBUNDLE_SYMBOL];

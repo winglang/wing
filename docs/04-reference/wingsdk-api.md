@@ -967,100 +967,6 @@ Whether the bucket's objects should be publicly accessible.
 
 ---
 
-### Capture <a name="Capture" id="@winglang/wingsdk.core.Capture"></a>
-
-Capture information.
-
-A capture is a reference from an Inflight to a
-construction-time resource or value. Either the "resource" or "value" field
-will be set, but not both.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.Capture.Initializer"></a>
-
-```wing
-bring core;
-
-let capture = core.Capture{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Capture.property.methods">methods</a></code> | <code>MutArray&lt;str&gt;</code> | Which methods are called on the captured resource. |
-| <code><a href="#@winglang/wingsdk.core.Capture.property.resource">resource</a></code> | <code>core.ICapturableConstruct</code> | A captured resource. |
-| <code><a href="#@winglang/wingsdk.core.Capture.property.value">value</a></code> | <code>any</code> | A captured immutable value (like string, number, boolean, a struct, or null). |
-
----
-
-##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/wingsdk.core.Capture.property.methods"></a>
-
-```wing
-methods: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-
-Which methods are called on the captured resource.
-
----
-
-##### `resource`<sup>Optional</sup> <a name="resource" id="@winglang/wingsdk.core.Capture.property.resource"></a>
-
-```wing
-resource: ICapturableConstruct;
-```
-
-- *Type:* core.ICapturableConstruct
-
-A captured resource.
-
----
-
-##### `value`<sup>Optional</sup> <a name="value" id="@winglang/wingsdk.core.Capture.property.value"></a>
-
-```wing
-value: any;
-```
-
-- *Type:* any
-
-A captured immutable value (like string, number, boolean, a struct, or null).
-
----
-
-### CaptureMetadata <a name="CaptureMetadata" id="@winglang/wingsdk.core.CaptureMetadata"></a>
-
-Extra metadata associated with a captured resource.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.CaptureMetadata.Initializer"></a>
-
-```wing
-bring core;
-
-let capture_metadata = core.CaptureMetadata{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.CaptureMetadata.property.methods">methods</a></code> | <code>MutArray&lt;str&gt;</code> | Which methods are called on the captured resource. |
-
----
-
-##### `methods`<sup>Optional</sup> <a name="methods" id="@winglang/wingsdk.core.CaptureMetadata.property.methods"></a>
-
-```wing
-methods: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-
-Which methods are called on the captured resource.
-
----
-
 ### Connection <a name="Connection" id="@winglang/wingsdk.core.Connection"></a>
 
 A connection between two resources.
@@ -1412,6 +1318,51 @@ Environment variables to pass to the function.
 
 ---
 
+### InflightBinding <a name="InflightBinding" id="@winglang/wingsdk.core.InflightBinding"></a>
+
+A resource that is used by an Inflight and the methods that are called on it.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBinding.Initializer"></a>
+
+```wing
+bring core;
+
+let inflight_binding = core.InflightBinding{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.methods">methods</a></code> | <code>MutArray&lt;str&gt;</code> | The methods that are called on the resource. |
+| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.resource">resource</a></code> | <code>core.ICapturableConstruct</code> | The resource that is used by the Inflight. |
+
+---
+
+##### `methods`<sup>Required</sup> <a name="methods" id="@winglang/wingsdk.core.InflightBinding.property.methods"></a>
+
+```wing
+methods: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+The methods that are called on the resource.
+
+---
+
+##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightBinding.property.resource"></a>
+
+```wing
+resource: ICapturableConstruct;
+```
+
+- *Type:* core.ICapturableConstruct
+
+The resource that is used by the Inflight.
+
+---
+
 ### InflightBundleOptions <a name="InflightBundleOptions" id="@winglang/wingsdk.core.InflightBundleOptions"></a>
 
 Options for `Inflight.bundle`.
@@ -1428,33 +1379,21 @@ let inflight_bundle_options = core.InflightBundleOptions{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureClients">capture_clients</a></code> | <code>MutMap&lt;core.Code&gt;</code> | A map of capture clients that can be bundled with the Inflight's code. |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.captureScope">capture_scope</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given capture scope. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.resourceClients">resource_clients</a></code> | <code>MutMap&lt;core.Code&gt;</code> | A map of resource clients that can be bundled with the Inflight's code. |
 | <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.external">external</a></code> | <code>MutArray&lt;str&gt;</code> | List of dependencies to exclude from the bundle. |
+| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.host">host</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given host resource. |
 
 ---
 
-##### `capture_clients`<sup>Required</sup> <a name="capture_clients" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureClients"></a>
+##### `resource_clients`<sup>Required</sup> <a name="resource_clients" id="@winglang/wingsdk.core.InflightBundleOptions.property.resourceClients"></a>
 
 ```wing
-capture_clients: MutMap<Code>;
+resource_clients: MutMap<Code>;
 ```
 
 - *Type:* MutMap&lt;core.Code&gt;
 
-A map of capture clients that can be bundled with the Inflight's code.
-
----
-
-##### `capture_scope`<sup>Optional</sup> <a name="capture_scope" id="@winglang/wingsdk.core.InflightBundleOptions.property.captureScope"></a>
-
-```wing
-capture_scope: IConstruct;
-```
-
-- *Type:* constructs.IConstruct
-
-Associate the inflight bundle with a given capture scope.
+A map of resource clients that can be bundled with the Inflight's code.
 
 ---
 
@@ -1467,6 +1406,18 @@ external: MutArray<str>;
 - *Type:* MutArray&lt;str&gt;
 
 List of dependencies to exclude from the bundle.
+
+---
+
+##### `host`<sup>Optional</sup> <a name="host" id="@winglang/wingsdk.core.InflightBundleOptions.property.host"></a>
+
+```wing
+host: IConstruct;
+```
+
+- *Type:* constructs.IConstruct
+
+Associate the inflight bundle with a given host resource.
 
 ---
 
@@ -1488,7 +1439,7 @@ let inflight_props = core.InflightProps{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
 | <code><a href="#@winglang/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function to run. |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.captures">captures</a></code> | <code>MutMap&lt;core.Capture&gt;</code> | Capture information. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Binding information. |
 
 ---
 
@@ -1523,18 +1474,18 @@ Name of the exported function to run.
 ```
 
 
-##### `captures`<sup>Optional</sup> <a name="captures" id="@winglang/wingsdk.core.InflightProps.property.captures"></a>
+##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/wingsdk.core.InflightProps.property.bindings"></a>
 
 ```wing
-captures: MutMap<Capture>;
+bindings: MutMap<InflightBinding>;
 ```
 
-- *Type:* MutMap&lt;core.Capture&gt;
-- *Default:* No captures
+- *Type:* MutMap&lt;core.InflightBinding&gt;
+- *Default:* no bindings
 
-Capture information.
+Binding information.
 
-During runtime, a map containing all captured values
+During runtime, a map containing all bound resources
 will be passed as the first argument of the entrypoint function.
 
 Each key here will be the key for the final value in the map.
@@ -2134,8 +2085,8 @@ new core.Inflight(props: InflightProps)
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Inflight.bundle">bundle</a></code> | Bundle this inflight process so that it can be used in the given capture scope. |
-| <code><a href="#@winglang/wingsdk.core.Inflight.makeClients">make_clients</a></code> | Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.bundle">bundle</a></code> | Bundle this inflight process so that it can be used in the inflight host. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.makeClients">make_clients</a></code> | Resolve this Inflight's bindings into a map of resource clients. |
 
 ---
 
@@ -2145,17 +2096,16 @@ new core.Inflight(props: InflightProps)
 bundle(options: InflightBundleOptions): Code
 ```
 
-Bundle this inflight process so that it can be used in the given capture scope.
+Bundle this inflight process so that it can be used in the inflight host.
 
 Returns the path to a JavaScript file that has been rewritten to include
-all dependencies and captured values or clients. The file is isolated in
-its own directory so that it can be zipped up and uploaded to cloud
-providers.
+all dependencies and bound resources. The file is isolated in its own
+directory so that it can be zipped up and uploaded to cloud providers.
 
 High level implementation:
 1. Read the file (let's say its path is path/to/foo.js)
 2. Create a new javascript file named path/to/foo.prebundle.js, including a
-    map of all capture clients, a new handler that calls the original
+    map of all resource clients, a new handler that calls the original
     handler with the clients passed in, and a copy of the user's code from
     path/to/foo.js.
 3. Use esbuild to bundle all dependencies, outputting the result to
@@ -2170,12 +2120,12 @@ High level implementation:
 ##### `make_clients` <a name="make_clients" id="@winglang/wingsdk.core.Inflight.makeClients"></a>
 
 ```wing
-make_clients(capture_scope: Resource): MutMap<Code>
+make_clients(host: Resource): MutMap<Code>
 ```
 
-Resolve this inflight's captured objects into a map of clients that be safely referenced at runtime.
+Resolve this Inflight's bindings into a map of resource clients.
 
-###### `capture_scope`<sup>Required</sup> <a name="capture_scope" id="@winglang/wingsdk.core.Inflight.makeClients.parameter.captureScope"></a>
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/wingsdk.core.Inflight.makeClients.parameter.host"></a>
 
 - *Type:* core.Resource
 
@@ -2186,23 +2136,23 @@ Resolve this inflight's captured objects into a map of clients that be safely re
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Inflight.property.captures">captures</a></code> | <code>MutMap&lt;core.Capture&gt;</code> | Capture information. |
+| <code><a href="#@winglang/wingsdk.core.Inflight.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Binding information. |
 | <code><a href="#@winglang/wingsdk.core.Inflight.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
 | <code><a href="#@winglang/wingsdk.core.Inflight.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function which will be run. |
 
 ---
 
-##### `captures`<sup>Required</sup> <a name="captures" id="@winglang/wingsdk.core.Inflight.property.captures"></a>
+##### `bindings`<sup>Required</sup> <a name="bindings" id="@winglang/wingsdk.core.Inflight.property.bindings"></a>
 
 ```wing
-captures: MutMap<Capture>;
+bindings: MutMap<InflightBinding>;
 ```
 
-- *Type:* MutMap&lt;core.Capture&gt;
+- *Type:* MutMap&lt;core.InflightBinding&gt;
 
-Capture information.
+Binding information.
 
-During runtime, a map containing all captured values
+During runtime, a map containing all bound values
 will be passed as the first argument of the entrypoint function.
 
 Each key here will be the key for the final value in the map.
@@ -2383,6 +2333,105 @@ The code contents.
 ---
 
 
+### Policies <a name="Policies" id="@winglang/wingsdk.core.Policies"></a>
+
+Represents a collection of resource policies, each specifying a resource and the methods that are allowed to be called on them.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Policies.Initializer"></a>
+
+```wing
+bring core;
+
+new core.Policies()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.Policies.find">find</a></code> | Find the policy for a resource, and construct it if it doesn't exist. |
+
+---
+
+##### `find` <a name="find" id="@winglang/wingsdk.core.Policies.find"></a>
+
+```wing
+find(resource: IConstruct): Policy
+```
+
+Find the policy for a resource, and construct it if it doesn't exist.
+
+###### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.Policies.find.parameter.resource"></a>
+
+- *Type:* constructs.IConstruct
+
+---
+
+
+
+
+### Policy <a name="Policy" id="@winglang/wingsdk.core.Policy"></a>
+
+Represents a policy for a resource, specifying the methods that are allowed to be called on it.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Policy.Initializer"></a>
+
+```wing
+bring core;
+
+new core.Policy()
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.Policy.addCall">add_call</a></code> | Adds a method to the policy. |
+| <code><a href="#@winglang/wingsdk.core.Policy.calls">calls</a></code> | Returns true if the policy allows the given method to be called. |
+
+---
+
+##### `add_call` <a name="add_call" id="@winglang/wingsdk.core.Policy.addCall"></a>
+
+```wing
+add_call(method: str): void
+```
+
+Adds a method to the policy.
+
+###### `method`<sup>Required</sup> <a name="method" id="@winglang/wingsdk.core.Policy.addCall.parameter.method"></a>
+
+- *Type:* str
+
+---
+
+##### `calls` <a name="calls" id="@winglang/wingsdk.core.Policy.calls"></a>
+
+```wing
+calls(method: str): bool
+```
+
+Returns true if the policy allows the given method to be called.
+
+###### `method`<sup>Required</sup> <a name="method" id="@winglang/wingsdk.core.Policy.calls.parameter.method"></a>
+
+- *Type:* str
+
+---
+
+
+
+
 ### Testing <a name="Testing" id="@winglang/wingsdk.core.Testing"></a>
 
 Testing utilities.
@@ -2405,7 +2454,7 @@ new core.Testing()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Testing.inspectPrebundledCode">inspect_prebundled_code</a></code> | Obtain a reference to the prebundled Code for a given capture scope. |
+| <code><a href="#@winglang/wingsdk.core.Testing.inspectPrebundledCode">inspect_prebundled_code</a></code> | Obtain a reference to the prebundled Code for a given host resource. |
 
 ---
 
@@ -2414,12 +2463,12 @@ new core.Testing()
 ```wing
 bring core;
 
-core.Testing.inspect_prebundled_code(capture_scope: Resource)
+core.Testing.inspect_prebundled_code(host: Resource)
 ```
 
-Obtain a reference to the prebundled Code for a given capture scope.
+Obtain a reference to the prebundled Code for a given host resource.
 
-###### `capture_scope`<sup>Required</sup> <a name="capture_scope" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode.parameter.captureScope"></a>
+###### `host`<sup>Required</sup> <a name="host" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode.parameter.host"></a>
 
 - *Type:* core.Resource
 

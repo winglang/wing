@@ -9,7 +9,7 @@ export function bindSimulatorResource(
 ) {
   if (!(host instanceof Function)) {
     throw new Error(
-      `Resources of ${type} can only be captured by a sim.Function for now`
+      `Resources of ${type} can only be bound by a sim.Function for now`
     );
   }
 

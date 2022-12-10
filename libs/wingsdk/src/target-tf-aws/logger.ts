@@ -17,7 +17,7 @@ export class Logger extends cloud.LoggerBase {
   /** @internal */
   public _bind(host: Resource, _policies: Policies): Code {
     if (!(host instanceof Function)) {
-      throw new Error("loggers can only be captured by tfaws.Function for now");
+      throw new Error("loggers can only be bound by tfaws.Function for now");
     }
 
     addBindConnections(this, host);

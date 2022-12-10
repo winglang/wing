@@ -49,10 +49,10 @@ export class Function extends cloud.FunctionBase {
       throw new Error("Only JavaScript code is currently supported.");
     }
 
-    const captureClients = inflight.makeClients(this);
+    const resourceClients = inflight.makeClients(this);
     const code = inflight.bundle({
       host: this,
-      captureClients,
+      resourceClients,
       external: ["aws-sdk"],
     });
 
@@ -104,7 +104,7 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Add policy to Lambda role for any custom policy statements, such as
-    // those needed by captures
+    // those needed by bound resources
     new IamRolePolicy(this, "IamRolePolicy", {
       role: this.role.name,
       policy: Lazy.stringValue({
@@ -162,15 +162,13 @@ export class Function extends cloud.FunctionBase {
    */
   public _bind(host: Resource, policies: Policies): Code {
     if (!(host instanceof Function)) {
-      throw new Error(
-        "functions can only be captured by tfaws.Function for now"
-      );
+      throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
     const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
-    const methods = policies[this.node.path]?.methods ?? [];
-    if (methods.includes(cloud.FunctionInflightMethods.INVOKE)) {
+    const policy = policies.find(this);
+    if (policy.calls(cloud.FunctionInflightMethods.INVOKE)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],

@@ -15,6 +15,10 @@ class MyBucket extends Construct {
   }
 
   _bind(host: core.Resource, policies: core.Policies) {
+    if (policies.find(this).calls("put_something")) {
+      policies.find(this.inner).addCall("put");
+    }
+
     const inner_client = this.inner._bind(host, policies);
     const thing_client = JSON.stringify(this.thing);
     const my_bucket_client_path = join(__dirname, "MyBucket.inflight.js");
@@ -32,6 +36,10 @@ class Handler extends Construct {
   }
 
   _bind(host: core.Resource, policies: core.Policies) {
+    if (policies.find(this).calls("handle")) {
+      policies.find(this.b).addCall("put_something");
+    }
+
     const b_client = this.b._bind(host, policies);
     const handler_client_path = join(__dirname, "Handler.inflight.js");
     return core.NodeJsCode.fromInline(
@@ -53,12 +61,10 @@ class HelloWorld extends Construct {
         }`
       ),
       entrypoint: "$proc",
-      captures: {
-        handler: handler,
-      },
-      policies: {
-        "root/HelloWorld/MyBucket/Bucket": {
-          methods: ["put"],
+      bindings: {
+        handler: {
+          resource: handler,
+          methods: ["handle"],
         },
       },
     });

@@ -9,94 +9,7 @@ import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
-test("function captures primitive values", () => {
-  // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-        console.log("Hello, " + $cap.string);
-        console.log("My favorite number is " + $cap.num);
-        console.log("Is it raining? " + $cap.bool);
-        console.log($cap.nothing + " hypothesis");
-      }`
-    ),
-    entrypoint: "$proc",
-    captures: {
-      num: {
-        value: 5,
-      },
-      string: {
-        value: "world",
-      },
-      bool: {
-        value: true,
-      },
-      nothing: {
-        value: null,
-      },
-    },
-  });
-  const fn = new cloud.Function(app, "Function", inflight);
-  const output = app.synth();
-
-  // THEN
-  expect(core.Testing.inspectPrebundledCode(fn).text).toMatchSnapshot();
-
-  expect(tfResourcesOf(output)).toEqual([
-    "aws_iam_role",
-    "aws_iam_role_policy",
-    "aws_iam_role_policy_attachment",
-    "aws_lambda_function",
-    "aws_s3_bucket",
-    "aws_s3_object",
-  ]);
-  expect(tfSanitize(output)).toMatchSnapshot();
-});
-
-test("function captures structured values", () => {
-  // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          console.log("Map: " + JSON.stringify($cap.map));
-          console.log("List: " + JSON.stringify($cap.list));
-        }`
-    ),
-    entrypoint: "$proc",
-    captures: {
-      map: {
-        value: {
-          hello: "world",
-          boom: {
-            bam: 123,
-          },
-        },
-      },
-      list: {
-        value: [1, 2, "thing"],
-      },
-    },
-  });
-  const fn = new cloud.Function(app, "Function", inflight);
-  const output = app.synth();
-
-  // THEN
-  expect(core.Testing.inspectPrebundledCode(fn).text).toMatchSnapshot();
-
-  expect(tfResourcesOf(output)).toEqual([
-    "aws_iam_role",
-    "aws_iam_role_policy",
-    "aws_iam_role_policy_attachment",
-    "aws_lambda_function",
-    "aws_s3_bucket",
-    "aws_s3_object",
-  ]);
-  expect(tfSanitize(output)).toMatchSnapshot();
-});
-
-test("function captures a bucket", () => {
+test("function with a bucket binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = new cloud.Bucket(app, "Bucket");
@@ -109,7 +22,7 @@ test("function captures a bucket", () => {
       }`
     ),
     entrypoint: "$proc",
-    captures: {
+    bindings: {
       bucket: {
         resource: bucket,
         methods: [BucketInflightMethods.PUT],
@@ -135,7 +48,7 @@ test("function captures a bucket", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
-test("function captures a function", () => {
+test("function with a function binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const inflight1 = new core.Inflight({
@@ -157,7 +70,7 @@ test("function captures a function", () => {
         }`
     ),
     entrypoint: "$proc",
-    captures: {
+    bindings: {
       function: {
         resource: fn1,
         methods: [FunctionInflightMethods.INVOKE],
@@ -194,7 +107,7 @@ test("two functions reusing the same inflight", () => {
         }`
     ),
     entrypoint: "$proc",
-    captures: {
+    bindings: {
       bucket: {
         resource: bucket,
         methods: [BucketInflightMethods.PUT],
@@ -222,7 +135,7 @@ test("two functions reusing the same inflight", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
-test("function captures a queue", () => {
+test("function with a queue binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const queue = new cloud.Queue(app, "Queue");
@@ -233,7 +146,7 @@ test("function captures a queue", () => {
         }`
     ),
     entrypoint: "$proc",
-    captures: {
+    bindings: {
       queue: {
         resource: queue,
         methods: [QueueInflightMethods.PUSH],

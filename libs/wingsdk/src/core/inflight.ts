@@ -7,15 +7,52 @@ import * as esbuild from "esbuild-wasm";
 import { PREBUNDLE_SYMBOL } from "./internal";
 import { Resource } from "./resource";
 
-export interface Policies {
-  [path: string]: Policy | undefined;
+/**
+ * Represents a collection of resource policies, each specifying a resource and
+ * the methods that are allowed to be called on them.
+ */
+export class Policies {
+  private readonly _map: Map<string, Policy>;
+  constructor() {
+    this._map = new Map();
+  }
+  /**
+   * Find the policy for a resource, and construct it if it doesn't exist.
+   */
+  public find(resource: IConstruct): Policy {
+    let policy = this._map.get(resource.node.path);
+    if (!policy) {
+      policy = new Policy();
+      this._map.set(resource.node.path, policy);
+    }
+    return policy;
+  }
 }
 
-export interface Policy {
+/**
+ * Represents a policy for a resource, specifying the methods that are allowed
+ * to be called on it.
+ */
+export class Policy {
+  private readonly methods: string[];
+
+  constructor() {
+    this.methods = [];
+  }
+
   /**
-   * Which methods are called on the resource.
+   * Returns true if the policy allows the given method to be called.
    */
-  readonly methods: string[];
+  public calls(method: string): boolean {
+    return this.methods.includes(method);
+  }
+
+  /**
+   * Adds a method to the policy.
+   */
+  public addCall(method: string) {
+    this.methods.push(method);
+  }
 }
 
 /**
@@ -23,8 +60,9 @@ export interface Policy {
  */
 export interface ICapturable {
   /**
-   * Captures the resource so that it can be referenced inside an Inflight
-   * executed in the given scope.
+   * Binds the resource to the host so that it can be used by inflight code.
+   * Returns a reference to the code that can be used to instantiate the
+   * resource in the inflight code.
    *
    * @internal
    */
@@ -108,6 +146,21 @@ export class NodeJsCode extends Code {
 }
 
 /**
+ * A resource that is used by an Inflight and the methods that are called on it.
+ */
+export interface InflightBinding {
+  /**
+   * The resource that is used by the Inflight.
+   */
+  readonly resource: ICapturableConstruct;
+
+  /**
+   * The methods that are called on the resource.
+   */
+  readonly methods: string[];
+}
+
+/**
  * Options for `Inflight`.
  */
 export interface InflightProps {
@@ -124,15 +177,14 @@ export interface InflightProps {
   readonly entrypoint: string;
 
   /**
-   * Capture information. During runtime, a map containing all captured resources
+   * Binding information. During runtime, a map containing all bound resources
    * will be passed as the first argument of the entrypoint function.
    *
    * Each key here will be the key for the final value in the map.
-   * @default - No captures
+   *
+   * @default - no bindings
    */
-  readonly captures?: { [name: string]: ICapturableConstruct };
-
-  readonly policies?: Policies;
+  readonly bindings?: { [name: string]: InflightBinding };
 }
 
 /**
@@ -151,35 +203,41 @@ export class Inflight {
   public readonly entrypoint: string;
 
   /**
-   * Capture information. During runtime, a map containing all captured values
+   * Binding information. During runtime, a map containing all bound values
    * will be passed as the first argument of the entrypoint function.
    *
    * Each key here will be the key for the final value in the map.
    */
-  public readonly captures: { [name: string]: ICapturableConstruct };
+  public readonly bindings: { [name: string]: InflightBinding };
 
-  public readonly policies: Policies;
+  private readonly policies: Policies;
 
   constructor(props: InflightProps) {
     this.code = props.code;
     this.entrypoint = props.entrypoint;
-    this.captures = props.captures ?? {};
-    this.policies = props.policies ?? {};
+    this.bindings = props.bindings ?? {};
+
+    const policies = new Policies();
+    for (const binding of Object.values(this.bindings)) {
+      const policy = policies.find(binding.resource);
+      for (const method of binding.methods) {
+        policy.addCall(method);
+      }
+    }
+    this.policies = policies;
   }
 
   /**
-   * Bundle this inflight process so that it can be used in the given capture
-   * scope.
+   * Bundle this inflight process so that it can be used in the inflight host.
    *
    * Returns the path to a JavaScript file that has been rewritten to include
-   * all dependencies and captured values or clients. The file is isolated in
-   * its own directory so that it can be zipped up and uploaded to cloud
-   * providers.
+   * all dependencies and bound resources. The file is isolated in its own
+   * directory so that it can be zipped up and uploaded to cloud providers.
    *
    * High level implementation:
    * 1. Read the file (let's say its path is path/to/foo.js)
    * 2. Create a new javascript file named path/to/foo.prebundle.js, including a
-   *    map of all capture clients, a new handler that calls the original
+   *    map of all resource clients, a new handler that calls the original
    *    handler with the clients passed in, and a copy of the user's code from
    *    path/to/foo.js.
    * 3. Use esbuild to bundle all dependencies, outputting the result to
@@ -194,7 +252,7 @@ export class Inflight {
     const workdir = dirname(absolutePath);
 
     lines.push("const $cap = {};");
-    for (const [name, client] of Object.entries(options.captureClients)) {
+    for (const [name, client] of Object.entries(options.resourceClients)) {
       lines.push(`$cap["${name}"] = ${client.text};`);
     }
     lines.push();
@@ -234,13 +292,12 @@ export class Inflight {
   }
 
   /**
-   * Resolve this inflight's captured objects into a map of clients that be
-   * safely referenced at runtime.
+   * Resolve this Inflight's bindings into a map of resource clients.
    */
   public makeClients(host: Resource): Record<string, Code> {
     const clients: Record<string, Code> = {};
-    for (const [name, capture] of Object.entries(this.captures)) {
-      clients[name] = capture._bind(host, this.policies);
+    for (const [name, binding] of Object.entries(this.bindings)) {
+      clients[name] = binding.resource._bind(host, this.policies);
     }
     return clients;
   }
@@ -251,13 +308,15 @@ export class Inflight {
  */
 export interface InflightBundleOptions {
   /**
-   * Associate the inflight bundle with a given capture scope.
+   * Associate the inflight bundle with a given host resource.
    */
   readonly host?: IConstruct;
+
   /**
-   * A map of capture clients that can be bundled with the Inflight's code.
+   * A map of resource clients that can be bundled with the Inflight's code.
    */
-  readonly captureClients: Record<string, Code>;
+  readonly resourceClients: Record<string, Code>;
+
   /**
    * List of dependencies to exclude from the bundle.
    */

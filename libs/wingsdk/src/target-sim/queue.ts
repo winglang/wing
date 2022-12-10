@@ -43,7 +43,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     const newInflight = new core.Inflight({
       entrypoint: `$queueEventWrapper`,
       code: core.NodeJsCode.fromInline(code.join("\n")),
-      captures: inflight.captures,
+      bindings: inflight.bindings,
     });
 
     const fn = new cloud.Function(

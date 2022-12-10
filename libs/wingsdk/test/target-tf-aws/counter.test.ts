@@ -25,7 +25,7 @@ test("counter with initial value", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("counter captured by a function", () => {
+test("function with a counter binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const counter = new cloud.Counter(app, "Counter");
   const inflight = new core.Inflight({
@@ -35,7 +35,7 @@ test("counter captured by a function", () => {
           console.log(val);
         }`
     ),
-    captures: {
+    bindings: {
       my_counter: {
         resource: counter,
         methods: ["inc"],

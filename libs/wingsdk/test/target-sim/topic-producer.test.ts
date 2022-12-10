@@ -18,7 +18,7 @@ test("publishing messages to topic", async () => {
                     }`
         ),
         entrypoint: "$proc",
-        captures: {
+        bindings: {
           topic: {
             resource: topic,
             methods: [cloud.TopicInflightMethods.PUBLISH],

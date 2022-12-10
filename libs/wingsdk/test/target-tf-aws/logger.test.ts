@@ -18,7 +18,7 @@ test("inflight function uses a logger", () => {
         }`
       ),
       entrypoint: "$proc",
-      captures: {
+      bindings: {
         logger: {
           resource: cloud.Logger.of(scope),
           methods: [cloud.LoggerInflightMethods.PRINT],

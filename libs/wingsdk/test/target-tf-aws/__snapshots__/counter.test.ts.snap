@@ -1,6 +1,110 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`counter captured by a function 1`] = `
+exports[`counter with initial value 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_dynamodb_table\\": {
+      \\"root_Counter_2358A01E\\": {
+        \\"attribute\\": [
+          {
+            \\"name\\": \\"id\\",
+            \\"type\\": \\"S\\"
+          }
+        ],
+        \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
+        \\"hash_key\\": \\"id\\",
+        \\"name\\": \\"wingsdk-counter-c824ef629aadade823aada5b40953dd23b6cb5a3a4\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`counter with initial value 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "Counter": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
+                  "version": "10.0.11",
+                },
+                "id": "Default",
+                "path": "root/Counter/Default",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Counter",
+            "path": "root/Counter",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "10.0.11",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.13.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.13.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.13.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`default counter behavior 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_dynamodb_table\\": {
+      \\"root_Counter_2358A01E\\": {
+        \\"attribute\\": [
+          {
+            \\"name\\": \\"id\\",
+            \\"type\\": \\"S\\"
+          }
+        ],
+        \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
+        \\"hash_key\\": \\"id\\",
+        \\"name\\": \\"wingsdk-counter-c824ef629aadade823aada5b40953dd23b6cb5a3a4\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`function with a counter binding 1`] = `
 "const $cap = {};
 $cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0);
 async function $proc($cap, event) {
@@ -12,7 +116,7 @@ exports.handler = async function(event) {
 };"
 `;
 
-exports[`counter captured by a function 2`] = `
+exports[`function with a counter binding 2`] = `
 "{
   \\"resource\\": {
     \\"aws_dynamodb_table\\": {
@@ -75,7 +179,7 @@ exports[`counter captured by a function 2`] = `
 }"
 `;
 
-exports[`counter captured by a function 3`] = `
+exports[`function with a counter binding 3`] = `
 Object {
   "tree": Object {
     "children": Object {
@@ -219,108 +323,4 @@ Object {
   },
   "version": "tree-0.1",
 }
-`;
-
-exports[`counter with initial value 1`] = `
-"{
-  \\"resource\\": {
-    \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
-        \\"attribute\\": [
-          {
-            \\"name\\": \\"id\\",
-            \\"type\\": \\"S\\"
-          }
-        ],
-        \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
-        \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-c824ef629aadade823aada5b40953dd23b6cb5a3a4\\"
-      }
-    }
-  }
-}"
-`;
-
-exports[`counter with initial value 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "Counter": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "children": Object {
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                  "version": "10.0.11",
-                },
-                "id": "Default",
-                "path": "root/Counter/Default",
-              },
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "Counter",
-            "path": "root/Counter",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-        },
-        "constructInfo": Object {
-          "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
-        },
-        "id": "root",
-        "path": "root",
-      },
-    },
-    "constructInfo": Object {
-      "fqn": "cdktf.App",
-      "version": "0.13.2",
-    },
-    "id": "App",
-    "path": "",
-  },
-  "version": "tree-0.1",
-}
-`;
-
-exports[`default counter behavior 1`] = `
-"{
-  \\"resource\\": {
-    \\"aws_dynamodb_table\\": {
-      \\"root_Counter_2358A01E\\": {
-        \\"attribute\\": [
-          {
-            \\"name\\": \\"id\\",
-            \\"type\\": \\"S\\"
-          }
-        ],
-        \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
-        \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-c824ef629aadade823aada5b40953dd23b6cb5a3a4\\"
-      }
-    }
-  }
-}"
 `;

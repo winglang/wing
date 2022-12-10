@@ -20,7 +20,7 @@ test("pushing messages through a queue", async () => {
           }`
         ),
         entrypoint: "$proc",
-        captures: {
+        bindings: {
           logger: {
             resource: cloud.Logger.of(this),
             methods: [cloud.LoggerInflightMethods.PRINT],
@@ -39,7 +39,7 @@ test("pushing messages through a queue", async () => {
             await $cap.logger.print("Received " + event);
           }`
         ),
-        captures: {
+        bindings: {
           logger: {
             resource: cloud.Logger.of(this),
             methods: [cloud.LoggerInflightMethods.PRINT],

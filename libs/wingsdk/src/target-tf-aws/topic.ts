@@ -36,7 +36,7 @@ export class Topic extends cloud.TopicBase {
     const newInflight = new core.Inflight({
       entrypoint,
       code: core.NodeJsCode.fromInline(code.join("\n")),
-      captures: inflight.captures,
+      bindings: inflight.bindings,
     });
 
     const newInflightHash = newInflight.code.hash.slice(0, 16);
@@ -94,13 +94,13 @@ export class Topic extends cloud.TopicBase {
    */
   public _bind(host: Resource, policies: Policies): core.Code {
     if (!(host instanceof Function)) {
-      throw new Error("topics can only be captured by tfaws.Function for now");
+      throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
     const env = `TOPIC_ARN_${this.node.addr.slice(-8)}`;
 
-    const methods = policies[this.node.path]?.methods ?? [];
-    if (methods.includes(cloud.TopicInflightMethods.PUBLISH)) {
+    const policy = policies.find(this);
+    if (policy.calls(cloud.TopicInflightMethods.PUBLISH)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["sns:Publish"],

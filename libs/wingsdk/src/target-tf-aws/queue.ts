@@ -42,7 +42,7 @@ export class Queue extends cloud.QueueBase {
     const newInflight = new core.Inflight({
       entrypoint: `$sqsEventWrapper`,
       code: core.NodeJsCode.fromInline(code.join("\n")),
-      captures: inflight.captures,
+      bindings: inflight.bindings,
     });
 
     const fn = new cloud.Function(
@@ -94,13 +94,13 @@ export class Queue extends cloud.QueueBase {
    */
   public _bind(host: Resource, policies: Policies): core.Code {
     if (!(host instanceof Function)) {
-      throw new Error("queues can only be captured by tfaws.Function for now");
+      throw new Error("queues can only be bound by tfaws.Function for now");
     }
 
     const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
 
-    const methods = policies[this.node.path]?.methods ?? [];
-    if (methods.includes(cloud.QueueInflightMethods.PUSH)) {
+    const policy = policies.find(this);
+    if (policy.calls(cloud.QueueInflightMethods.PUSH)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: [

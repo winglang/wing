@@ -39,7 +39,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
     const newInflight = new core.Inflight({
       entrypoint: `$topicEventWrapper`,
       code: core.NodeJsCode.fromInline(code.join("\n")),
-      captures: inflight.captures,
+      bindings: inflight.bindings,
     });
 
     const fn = new cloud.Function(

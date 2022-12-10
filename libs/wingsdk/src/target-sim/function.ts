@@ -40,8 +40,11 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
       throw new Error("Only Node.js code is currently supported.");
     }
 
-    const captureClients = inflight.makeClients(this);
-    const bundledCode = inflight.bundle({ host: this, captureClients });
+    const resourceClients = inflight.makeClients(this);
+    const bundledCode = inflight.bundle({
+      host: this,
+      resourceClients,
+    });
 
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {

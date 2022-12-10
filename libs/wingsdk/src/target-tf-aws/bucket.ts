@@ -69,27 +69,27 @@ export class Bucket extends cloud.BucketBase {
    */
   public _bind(host: Resource, policies: Policies): Code {
     if (!(host instanceof Function)) {
-      throw new Error("buckets can only be captured by tfaws.Function for now");
+      throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
-    const methods = policies[this.node.path]?.methods ?? [];
-    if (methods.includes(BucketInflightMethods.PUT)) {
+    const policy = policies.find(this);
+    if (policy.calls(BucketInflightMethods.PUT)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.includes(BucketInflightMethods.GET)) {
+    if (policy.calls(BucketInflightMethods.GET)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.includes(BucketInflightMethods.LIST)) {
+    if (policy.calls(BucketInflightMethods.LIST)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],

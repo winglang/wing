@@ -25,7 +25,7 @@ test("can create sequential files in a bucket", async () => {
           }`
         ),
         entrypoint: "$proc",
-        captures: {
+        bindings: {
           counter: {
             resource: counter,
             methods: [cloud.CounterInflightMethods.INC],
