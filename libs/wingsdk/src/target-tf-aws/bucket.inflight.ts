@@ -79,7 +79,7 @@ export class BucketClient implements IBucketClient {
       await this.s3Client.send(command);
     } catch (er) {
       if (er instanceof S3ServiceException) {
-        if (!opts?.mustExist && er.name == "NoSuchKey") {
+        if (!opts?.mustExist && er.name === "NoSuchKey") {
           return;
         }
 

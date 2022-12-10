@@ -65,18 +65,17 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
       activity: async () => {
         const filePath = join(this.fileDir, key);
 
-        if (opts?.mustExist) {
+        if (!opts?.mustExist) {
           // check if the file exists
           const fileExists = await pathExists(filePath);
 
           if (!fileExists) {
-            throw Error(`Object with "${key}" not found`);
+            // nothing to delete, return without throwing
+            return;
           }
-
-          return fs.promises.unlink(filePath);
         }
 
-        // we just try to delete the file if must_exists is disabled
+        // unlink file from the filesystem
         return fs.promises.unlink(filePath);
       },
     });

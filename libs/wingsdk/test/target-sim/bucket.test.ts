@@ -173,6 +173,45 @@ test("remove object from a bucket", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("remove non-existent object from a bucket", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+  const response = await client.delete(fileName, { mustExist: false });
+  await s.stop();
+
+  expect(response).toEqual(undefined);
+});
+
+test("remove non-existent object from a bucket with mustExist option", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+  await s.stop();
+
+  await expect(async () =>
+    client.delete(fileName, { mustExist: true })
+  ).rejects.toThrowError();
+});
+
 function listMessages(s: Simulator) {
   return s.listTraces().map((event) => event.data.message);
 }
