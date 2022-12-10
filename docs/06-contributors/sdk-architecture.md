@@ -52,7 +52,7 @@ An `Inflight` is modeled as an object containing:
 
 * a snippet of code (inline string or file)
 * an entrypoint (name of a function to call)
-* a map of "captured" data and resources
+* a map of resource bindings
 
 For example, given the following Wing code:
 
@@ -71,13 +71,14 @@ new cloud.Function((event: str) ~> {
 const queue = new sdk.cloud.Queue(this, "Queue");
 const handler = new sdk.core.Inflight({
   code: sdk.core.NodeJsCode.fromInline(
-    `async function $proc($cap, event) {
-      await $cap.logger.print($cap.greeting);
+    `const $greeting = "Hello, world!";
+    async function $proc($cap, event) {
+      await $cap.logger.print($greeting);
       await $cap.queue.push(event);
     }`
   ),
   entrypoint: "$proc",
-  captures: {
+  bindings: {
     logger: {
       resource: sdk.cloud.Logger.of(this),
       methods: ["print"],
@@ -94,14 +95,14 @@ const handler = new sdk.core.Inflight({
 new sdk.cloud.Function(this, "Function", handler);
 ```
 
-The inflight's `captures` field currently serve two purposes.
+The inflight's `bindings` field currently serve two purposes.
 
 The first purpose is to provide references to resources so that the CDK code can "glue" the resources together.
 This can include setting up permissions for the compute resource to perform operations on the referenced resource during runtime.
-The `methods` field associated with captured resources specifies what operations need to be used on the resource, so that least privilege permissions can be granted to the resource running the inflight code.
+The `methods` field associated with referenced resources specifies what operations need to be used on the resource, so that least privilege permissions can be granted to the resource running the inflight code.
 
 The second purpose is signal to the SDK that there is data that needs to be bundled with the user code.
-For example, when a `cloud.Queue` is captured by an inflight in an AWS application, the user's inflight code needs to be bundled with an inflight "client" that can perform `push()` by calling the AWS SDK.
+For example, when a `cloud.Queue` is used by an inflight in an AWS application, the user's inflight code needs to be bundled with an inflight "client" that can perform `push()` by calling the AWS SDK.
 
 The next section explains how the `Inflight` class is used to produce a JavaScript bundle during the app's synthesis.
 This JavaScript bundle will inject the appropriate code for `$cap`, and the code bundle will be included as a Terraform asset when the app is synthesized.
@@ -113,27 +114,24 @@ For simplicity, this discussion will focus on the example of a `cloud.Function` 
 
 The bundling process starts in the constructor of the class implementing the `cloud.Function` polycon -- for example, `tfaws.Function`.
 
-The first step is that the function needs to obtain "clients" for all of the captured resources (modeled as `Record<string, Code>`).
-To do this, it iterates over each entry in `captures`.
-If the capture is a plain value or collection type, it just stringifies it.
-If the capture is a resource, it inverts the control back to the captured resource by calling the resource's `_bind` method.
+The first step is that the function needs to obtain "clients" for all of the bound resources (modeled as `Record<string, Code>`).
+To do this, it iterates over each resource in `bindings`, and inverts the control back to the bound resource by calling the resource's `_bind` method with the `host` (the `cloud.Function`) and a set of `policies` (list of resource names and methods that are called on them).
 
-For example, if a `tfaws.Function` named `func` captures a `tfaws.Bucket` named `bucket`, it calls `bucket._bind(func, metadata)` where `metadata` is any extra information like the resource methods.
+For example, if a `tfaws.Bucket` named `bucket` binds to a `tfaws.Function` named `func`, then `bucket._bind(func, policies)` is called.
 `_bind` will update `func`'s AWS IAM policy so that it can perform operations on the bucket, and it will return a `Code` object that contains a `BucketClient` class with methods like `get` and `put`.
-After we repeat this process for all captures, we will have a map from capture names to `Code` objects.
+After we repeat this process for all resources, we will have a map from binding names to `Code` objects.
 
 The second step is to call esbuild.
 Each `Inflight` has a `bundle` method that combines the user's code with the collection of "clients", in a template that looks something like:
 
-```
+```ts
 const $cap = {
-  <capture1>: <capture1-client>,
-  <capture2>: <capture2-client>,
+  <binding1>: <binding1-client>,
+  <binding2>: <binding2-client>,
   ...
 };
-<user code with named entrypoint>
+// user code with named entrypoint
 exports.handler = function(event) { entrypoint($cap, event) };
 ```
 
-Today the SDK currently expects the user code to always have an object containing captures as its first argument, and an event as a second argument, but this may change in the future.
-
+Today the SDK currently expects the user code included in an `Inflight` to always have an object containing bound resources as its first argument, and an event as a second argument.
