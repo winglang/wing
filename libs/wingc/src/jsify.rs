@@ -539,7 +539,7 @@ impl JSifier {
 			),
 			format!("entrypoint: \"$proc\","),
 			if !bindings.is_empty() {
-				format!("captures: {}", Self::render_block(&bindings))
+				format!("bindings: {}", Self::render_block(&bindings))
 			} else {
 				"".to_string()
 			},

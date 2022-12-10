@@ -471,7 +471,7 @@ constructor() {
   const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.fbe8390dfb806ebb9cf6fb068b954cc08fea3056e20a3e69ee8e07cbc86449bf/index.js\\")),
     entrypoint: \\"$proc\\",
-    captures: {
+    bindings: {
       bucket1: {
         resource: bucket1,
         methods: [\\"get\\",\\"list\\",\\"put\\"]
@@ -853,7 +853,7 @@ constructor() {
   const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.3d92ae400542548600c5fd9f369eb043032b16ea0cd84abf633b08be0b8ece10/index.js\\")),
     entrypoint: \\"$proc\\",
-    captures: {
+    bindings: {
       bucket: {
         resource: bucket,
         methods: [\\"get\\",\\"list\\",\\"put\\"]
@@ -1151,7 +1151,7 @@ constructor() {
   const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.cefd654de30673ff4ee63c1586a3ac0e4b69217f987c07f9274ecb1c7b7e2066/index.js\\")),
     entrypoint: \\"$proc\\",
-    captures: {
+    bindings: {
       bucket: {
         resource: bucket,
         methods: [\\"get\\",\\"list\\",\\"put\\"]
