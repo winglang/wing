@@ -347,12 +347,12 @@ impl JSifier {
 			}
 			ExprKind::MapLiteral { fields, .. } => {
 				format!(
-					"{{\n{}\n}}",
+					"Object.freeze({{{}}})",
 					fields
 						.iter()
-						.map(|(key, expr)| format!("\"{}\": {},", key, self.jsify_expression(expr)))
+						.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr)))
 						.collect::<Vec<String>>()
-						.join("\n")
+						.join(", ")
 				)
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
