@@ -5,15 +5,27 @@ import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 const version = await readFile("dist/version.txt", "utf8");
 const dmgFilename = `release/Wing Console-${version}.dmg`;
+const dmgArm64Filename = `release/Wing Console-${version}-arm64.dmg`;
 
 const client = new S3Client({
   region: "us-east-1",
 });
-await client.send(
-  new PutObjectCommand({
-    Key: "wing-console.dmg",
-    Bucket: "wing-console",
-    Body: createReadStream(dmgFilename),
-    ACL: "public-read",
-  }),
-);
+
+await Promise.all([
+  client.send(
+    new PutObjectCommand({
+      Key: "wing-console.dmg",
+      Bucket: "wing-console",
+      Body: createReadStream(dmgFilename),
+      ACL: "public-read",
+    }),
+  ),
+  client.send(
+    new PutObjectCommand({
+      Key: "wing-console-arm64.dmg",
+      Bucket: "wing-console",
+      Body: createReadStream(dmgArm64Filename),
+      ACL: "public-read",
+    }),
+  ),
+]);
