@@ -69,6 +69,8 @@ export class BucketClient implements IBucketClient {
    * @param opts Option object supporting additional strategies to delete an item from a bucket
    */
   public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
+    const mustExist = opts?.mustExist ?? false;
+
     const command = new DeleteObjectCommand({
       Key: key,
       Bucket: this.bucketName,
@@ -78,7 +80,7 @@ export class BucketClient implements IBucketClient {
       await this.s3Client.send(command);
     } catch (er) {
       const error = er as any;
-      if (!opts?.mustExist && error.name === "NoSuchKey") {
+      if (!mustExist && error.name === "NoSuchKey") {
         return;
       }
 

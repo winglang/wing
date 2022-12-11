@@ -1,11 +1,11 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { pathExists } from "fs-extra";
 import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
+import { exists } from "./util";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly fileDir: string;
@@ -63,11 +63,12 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Delete (key=${key}).`,
       activity: async () => {
+        const mustExist = opts?.mustExist ?? false;
         const filePath = join(this.fileDir, key);
 
-        if (!opts?.mustExist) {
+        if (!mustExist) {
           // check if the file exists
-          const fileExists = await pathExists(filePath);
+          const fileExists = await exists(filePath);
 
           if (!fileExists) {
             // nothing to delete, return without throwing

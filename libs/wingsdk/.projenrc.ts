@@ -35,7 +35,6 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/util-utf8-node@3.208.0",
     // simulator dependencies
     "tar",
-    "fs-extra",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",

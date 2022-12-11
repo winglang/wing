@@ -207,10 +207,6 @@
       "type": "bundled"
     },
     {
-      "name": "fs-extra",
-      "type": "bundled"
-    },
-    {
       "name": "safe-stable-stringify",
       "type": "bundled"
     },

@@ -97,7 +97,6 @@
     "cdktf": "^0.13.2",
     "constructs": "~10.0.25",
     "esbuild-wasm": "^0.15.15",
-    "fs-extra": "^8.1.0",
     "polycons": "^0.1.1",
     "safe-stable-stringify": "*",
     "tar": "^6.1.11"
@@ -113,7 +112,6 @@
     "@aws-sdk/util-stream-node",
     "@aws-sdk/util-utf8-node",
     "esbuild-wasm",
-    "fs-extra",
     "safe-stable-stringify",
     "tar"
   ],
