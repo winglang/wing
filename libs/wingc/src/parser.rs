@@ -239,6 +239,9 @@ impl Parser<'_> {
 			.unwrap()
 			.named_children(&mut cursor)
 		{
+			if class_element.is_extra() {
+				continue;
+			}
 			match (class_element.kind(), is_resource) {
 				("function_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
@@ -365,6 +368,9 @@ impl Parser<'_> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
+			if parameter_definition_node.is_extra() {
+				continue;
+			}
 			res.push((
 				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
 				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
@@ -459,6 +465,9 @@ impl Parser<'_> {
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
 		for child in arg_list_node.named_children(&mut cursor) {
+			if child.is_extra() {
+				continue;
+			}
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
@@ -572,6 +581,9 @@ impl Parser<'_> {
 					let mut last_end = end;
 
 					for interpolation_node in expression_node.named_children(&mut cursor) {
+						if interpolation_node.is_extra() {
+							continue;
+						}
 						let interpolation_start = interpolation_node.start_byte();
 						let interpolation_end = interpolation_node.end_byte();
 
@@ -680,6 +692,9 @@ impl Parser<'_> {
 				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+					if field_node.is_extra() {
+						continue;
+					}
 					let key_node = field_node.named_child(0).unwrap();
 					let key = match key_node.kind() {
 						"string" => {
@@ -711,7 +726,7 @@ impl Parser<'_> {
 				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
-					if !field.is_named() {
+					if !field.is_named() || field.is_extra() {
 						continue;
 					}
 					let field_name = self.node_symbol(&field.named_child(0).unwrap());

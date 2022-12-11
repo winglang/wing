@@ -7,3 +7,4 @@ export * from "./logger";
 export * from "./queue";
 export * from "./resource";
 export * from "./schema";
+export * from "./topic";
