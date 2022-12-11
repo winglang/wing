@@ -8,16 +8,17 @@ import { LambdaFunction } from "@cdktf/provider-aws/lib/lambda-function";
 import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { FunctionInflightMethods, FunctionProps } from "../cloud";
 import {
   Code,
   Language,
   Inflight,
   CaptureMetadata,
   InflightClient,
+  Resource,
 } from "../core";
+import { addBindConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -29,12 +30,14 @@ export class Function extends cloud.FunctionBase {
   private readonly env: Record<string, string> = {};
   private readonly role: IamRole;
   private readonly policyStatements: any[] = [];
+  /** Function ARN */
+  public readonly arn: string;
 
   constructor(
     scope: Construct,
     id: string,
     inflight: Inflight,
-    props: FunctionProps
+    props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
 
@@ -137,7 +140,7 @@ export class Function extends cloud.FunctionBase {
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: this.node.id,
+      functionName: this.sanitizeFunctionName(this.node.id),
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
@@ -148,24 +151,36 @@ export class Function extends cloud.FunctionBase {
       },
     });
 
+    this.arn = this.function.arn;
+
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
   }
 
   /**
+   * Temporary work around to use node.id in function name.
+   * Valid lambda naming: https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-FunctionName
+   *
+   * Should be deprecated by https://github.com/winglang/wing/discussions/861 (Name Generator)
+   */
+  private sanitizeFunctionName(name: string): string {
+    return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
+  }
+
+  /**
    * @internal
    */
-  public _bind(captureScope: IConstruct, metadata: CaptureMetadata): Code {
+  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
     if (!(captureScope instanceof Function)) {
       throw new Error(
         "functions can only be captured by tfaws.Function for now"
       );
     }
 
-    const env = `FUNCTION_NAME__${this.node.id}`;
+    const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
     const methods = new Set(metadata.methods ?? []);
-    if (methods.has(FunctionInflightMethods.INVOKE)) {
+    if (methods.has(cloud.FunctionInflightMethods.INVOKE)) {
       captureScope.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],
@@ -177,12 +192,17 @@ export class Function extends cloud.FunctionBase {
     // it may not be resolved until deployment time.
     captureScope.addEnvironment(env, this.function.arn);
 
+    addBindConnections(this, captureScope);
+
     return InflightClient.for(__filename, "FunctionClient", [
       `process.env["${env}"]`,
     ]);
   }
 
   public addEnvironment(name: string, value: string) {
+    if (this.env[name] !== undefined) {
+      throw new Error(`Environment variable "${name}" already set.`);
+    }
     this.env[name] = value;
   }
 

@@ -4,13 +4,13 @@ use crate::{
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
 	type_check::{type_env::StatementIdx, Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
-	utilities::{camel_case_to_snake_case},
+	utilities::camel_case_to_snake_case,
 };
 use colored::Colorize;
 use serde_json::Value;
 use wingii::jsii;
 
-const RESOURCE_CLASS_FQN: &'static str = "@winglang/wingsdk.cloud.Resource";
+const RESOURCE_CLASS_FQN: &'static str = "@winglang/wingsdk.core.Resource";
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -169,12 +169,19 @@ impl<'a> JsiiImporter<'a> {
 		self.add_members_to_class_env(&jsii_interface, false, self.namespace_env.flight, struct_env, wing_type);
 
 		// Add properties from our parents to the new structs env
-		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, struct_env);
+		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, struct_env).expect(&format!(
+			"Invalid JSII library: failed to add parent members to struct {}",
+			type_name
+		));
 
 		debug!("Adding struct type {}", type_name.green());
 		self
 			.namespace_env
-			.define(&new_type_symbol, wing_type, StatementIdx::Top);
+			.define(&new_type_symbol, wing_type, StatementIdx::Top)
+			.expect(&format!(
+				"Invalid JSII library: failed to define struct type {}",
+				type_name
+			));
 		Some(wing_type)
 	}
 
@@ -220,11 +227,16 @@ impl<'a> JsiiImporter<'a> {
 					flight,
 				}));
 				let name = camel_case_to_snake_case(&m.name);
-				class_env.define(
-					&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-					method_sig,
-					StatementIdx::Top,
-				);
+				class_env
+					.define(
+						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
+						method_sig,
+						StatementIdx::Top,
+					)
+					.expect(&format!(
+						"Invalid JSII library: failed to add method {} to class",
+						m.name
+					));
 			}
 		}
 		// Add properties to the class environment
@@ -234,11 +246,26 @@ impl<'a> JsiiImporter<'a> {
 				if flight == Phase::Inflight {
 					todo!("No support for inflight properties yet");
 				}
-				class_env.define(
-					&Self::jsii_name_to_symbol(&p.name, &p.location_in_module),
-					self.type_ref_to_wing_type(&p.type_).unwrap(),
-					StatementIdx::Top,
-				);
+				let base_wing_type = self.type_ref_to_wing_type(&p.type_).unwrap();
+				let is_optional = if let Some(true) = p.optional { true } else { false };
+
+				let wing_type = if is_optional {
+					// TODO Will this create a bunch of duplicate types?
+					self.wing_types.add_type(Type::Optional(base_wing_type))
+				} else {
+					base_wing_type
+				};
+
+				class_env
+					.define(
+						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
+						wing_type,
+						StatementIdx::Top,
+					)
+					.expect(&format!(
+						"Invalid JSII library: failed to add property {} to class",
+						p.name
+					));
 			}
 		}
 	}
@@ -340,7 +367,10 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			Type::Class(class_spec)
 		});
-		self.namespace_env.define(&new_type_symbol, new_type, StatementIdx::Top);
+		self
+			.namespace_env
+			.define(&new_type_symbol, new_type, StatementIdx::Top)
+			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
 		// Create class's actual environment before we add properties and methods to it
 		let mut class_env = TypeEnv::new(base_class_env, None, true, self.namespace_env.flight, 0);
 
@@ -369,11 +399,16 @@ impl<'a> JsiiImporter<'a> {
 				return_type: Some(new_type),
 				flight: class_env.flight,
 			}));
-			class_env.define(
-				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
-				method_sig,
-				StatementIdx::Top,
-			);
+			class_env
+				.define(
+					&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
+					method_sig,
+					StatementIdx::Top,
+				)
+				.expect(&format!(
+					"Invalid JSII library: type {} should have single constructor",
+					type_name
+				));
 		}
 
 		// Add methods and properties to the class environment
@@ -412,11 +447,13 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn optional_type_to_wing_type(&mut self, jsii_optional_type: &jsii::OptionalValue) -> Option<TypeRef> {
+		let base_type = self.type_ref_to_wing_type(&jsii_optional_type.type_);
 		if let Some(true) = jsii_optional_type.optional {
 			// TODO: we assume Some(false) and None are both non-optional - verify!!
-			panic!("TODO: handle optional types");
+			Some(self.wing_types.add_type(Type::Optional(base_type.unwrap())))
+		} else {
+			base_type
 		}
-		self.type_ref_to_wing_type(&jsii_optional_type.type_)
 	}
 
 	fn parameter_to_wing_type(&mut self, parameter: &jsii::Parameter) -> TypeRef {

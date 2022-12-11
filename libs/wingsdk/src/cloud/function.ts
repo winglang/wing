@@ -1,7 +1,6 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Inflight } from "../core";
-import { Resource } from "./resource";
+import { CaptureMetadata, Code, Inflight, Resource } from "../core";
 
 /**
  * Global identifier for `Function`.
@@ -48,7 +47,7 @@ export abstract class FunctionBase extends Resource {
 }
 
 /**
- * Represents a serverless function.
+ * Represents a function.
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
@@ -72,7 +71,7 @@ export class Function extends FunctionBase {
   /**
    * @internal
    */
-  public _bind(_captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
     throw new Error("Method not implemented.");
   }
 

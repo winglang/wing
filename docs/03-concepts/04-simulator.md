@@ -13,7 +13,7 @@ simulator works with any Wing application made with the SDK's `cloud` APIs.
 ### Create a Wing simulator file
 
 To use the simulator, you will need to provide a Wing simulator file -- this is
-a file with a `.wx` extension that is output when you compile your Wing program
+a file with a `.wsim` extension that is output when you compile your Wing program
 with the `--target sim` option. Check out the [Wing Getting Started
 Guide](/getting-started) for more information on how to write your
 first Wing program.
@@ -27,7 +27,7 @@ first Wing program.
 Now, let's try starting the simulator and creating some resource clients to
 interact with the resources.
 
-First, create an empty directory and add your `.wx` file.
+First, create an empty directory and add your `.wsim` file.
 Next, run `npm install @winglang/wingsdk`.
 
 Let's create a file in the directory named `main.ts`:
@@ -36,7 +36,7 @@ Let's create a file in the directory named `main.ts`:
 import { testing } from '@winglang/wingsdk';
 
 async function main() {
-  const mySim = new testing.Simulator({ simfile: "hello.wx" });
+  const mySim = new testing.Simulator({ simfile: "hello.wsim" });
   await mySim.start();
 
   // (1)

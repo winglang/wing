@@ -1,7 +1,8 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code } from "../core";
-import { IResource } from "./resource";
+import { CaptureMetadata, Code, Resource } from "../core";
+import { ISimulatorResource } from "./resource";
+import { BaseResourceSchema } from "./schema";
 import { CounterSchema } from "./schema-resources";
 import { bindSimulatorResource } from "./util";
 
@@ -10,35 +11,28 @@ import { bindSimulatorResource } from "./util";
  *
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
-export class Counter extends cloud.CounterBase implements IResource {
-  private readonly inbound = new Array<string>();
-  private readonly outbound = new Array<string>();
-  public readonly initialValue: number;
+export class Counter extends cloud.CounterBase implements ISimulatorResource {
+  public readonly initial: number;
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
 
-    this.initialValue = props.initialValue ?? 0;
+    this.initial = props.initial ?? 0;
   }
 
-  /** @internal */
-  public _toResourceSchema(): CounterSchema {
-    return {
+  public toSimulator(): BaseResourceSchema {
+    const schema: CounterSchema = {
       type: cloud.COUNTER_TYPE,
+      path: this.node.path,
       props: {
-        initialValue: this.initialValue,
+        initial: this.initial,
       },
-      inbound: this.inbound,
-      outbound: this.outbound,
+      attrs: {} as any,
     };
+    return schema;
   }
 
   /** @internal */
-  public _addInbound(...resources: string[]) {
-    this.inbound.push(...resources);
-  }
-
-  /** @internal */
-  public _bind(captureScope: IConstruct, _metadata: CaptureMetadata): Code {
+  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
     return bindSimulatorResource("counter", this, captureScope);
   }
 }

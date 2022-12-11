@@ -66,59 +66,61 @@ return 1;
 )
 
 ====================
-Inflight Function definition
+Inflight closure
 ====================
 
-inflight hi(a: num, b: str?, c: bool) {}
+(a: num, b: str?, c: bool) ~> {};
 
 ---
 
 (source
-    (inflight_function_definition
-        name: (identifier)
-        parameter_list: (parameter_list
-            (parameter_definition
-                name: (identifier)
-                type: (builtin_type)
-            )
-            (parameter_definition
-                name: (identifier)
-                type: (optional
-                    (builtin_type)
+    (expression_statement
+        (inflight_closure
+            parameter_list: (parameter_list
+                (parameter_definition
+                    name: (identifier)
+                    type: (builtin_type)
+                )
+                (parameter_definition
+                    name: (identifier)
+                    type: (optional
+                        (builtin_type)
+                    )
+                )
+                (parameter_definition
+                    name: (identifier)
+                    type: (builtin_type)
                 )
             )
-            (parameter_definition
-                name: (identifier)
-                type: (builtin_type)
-            )
+            block: (block)
         )
-        block: (block)
     )
 )
 
 ==================================
-Inflight Function with function parameter
+Inflight closure with function parameter
 ==================================
 
-~ f(callback: (num,num):bool) {}
+(callback: (num,num):bool) ~> {};
 
 ---
 (source
-    (inflight_function_definition
-        name: (identifier)
-        parameter_list: (parameter_list
-                (parameter_definition
-                    name: (identifier)
-                    type: (function_type
-                        parameter_types: (parameter_type_list
-                            (builtin_type)
-                            (builtin_type)
+    (expression_statement
+        (inflight_closure
+            parameter_list: (parameter_list
+                    (parameter_definition
+                        name: (identifier)
+                        type: (function_type
+                            parameter_types: (parameter_type_list
+                                (builtin_type)
+                                (builtin_type)
+                            )
+                            return_type: (builtin_type)
                         )
-                        return_type: (builtin_type)
                     )
                 )
-            )
-        block: (block)
+            block: (block)
+        )
     )
 )
 

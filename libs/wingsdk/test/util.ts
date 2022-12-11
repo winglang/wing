@@ -1,9 +1,22 @@
-import { readdirSync, readFileSync, statSync } from "fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "fs";
 import { extname, join } from "path";
+import * as tar from "tar";
 import { IApp } from "../src/core";
+import { mkdtemp } from "../src/util";
+
+export function treeJsonOf(outdir: string): any {
+  return JSON.parse(readFileSync(join(outdir, "tree.json"), "utf8"));
+}
 
 export function tfResourcesOf(templateStr: string): string[] {
   return Object.keys(JSON.parse(templateStr).resource).sort();
+}
+
+export function tfResourcesOfCount(
+  templateStr: string,
+  resourceId: string
+): number {
+  return Object.values(JSON.parse(templateStr).resource[resourceId]).length;
 }
 
 export function tfSanitize(templateStr: string): string {
@@ -45,11 +58,25 @@ export function directorySnapshot(root: string) {
       if (statSync(abspath).isDirectory()) {
         visit(relpath);
       } else {
-        const data = readFileSync(abspath, "utf-8");
         if (extname(f) === ".json") {
+          const data = readFileSync(abspath, "utf-8");
           snapshot[relpath] = JSON.parse(data);
+        } else if (extname(f) === ".wsim") {
+          const workdir = mkdtemp();
+          tar.extract({
+            cwd: workdir,
+            sync: true,
+            file: abspath,
+          });
+          const simJson = join(workdir, "simulator.json");
+          if (!existsSync(simJson)) {
+            throw new Error(
+              `Invalid simulator file (${f}) - simulator.json not found.`
+            );
+          }
+          snapshot[relpath] = JSON.parse(readFileSync(simJson, "utf-8"));
         } else {
-          snapshot[relpath] = data;
+          snapshot[relpath] = readFileSync(abspath, "utf-8");
         }
       }
     }

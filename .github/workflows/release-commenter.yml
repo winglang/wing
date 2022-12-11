@@ -1,0 +1,14 @@
+on:
+  release:
+    types: [published]
+
+jobs:
+  release:
+    name: "Post release comments"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: apexskier/github-release-commenter@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          comment-template: |
+            Congrats! :rocket: This was released in {release_link}.

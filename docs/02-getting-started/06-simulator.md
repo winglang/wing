@@ -33,7 +33,7 @@ Now, we import the Wing SDK library:
 
 ```js
 const sdk = require("@winglang/wingsdk"); // import the wing sdk library
-const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wx"}); // create an instance of the Simulator
+const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wsim"}); // create an instance of the Simulator
 await simulator.start(); // start the simulator 
 ```
 
@@ -44,14 +44,14 @@ Now that our app is running, lets trigger a message on the queue
 For example, we can list all the resources in the app:
 
 ```js
- const queue = simulator.getResourceByPath("root/cloud.Queue"); // retrieve the queue resource
+ const queue = simulator.getResource("root/cloud.Queue"); // retrieve the queue resource
  await queue.push("Wing")
 ```
 
 ## Viewing generated file
 
 ```js
-const bucket = simulator.getResourceByPath("root/cloud.Bucket"); // retrieve the bucket resource
+const bucket = simulator.getResource("root/cloud.Bucket"); // retrieve the bucket resource
 await bucket.list() // will show available files
 await bucket.get("wing.txt") // will show the file content
 ```

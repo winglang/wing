@@ -45,6 +45,7 @@ const project = new TypeScriptAppProject({
     "octokit",
     "node-fetch",
     "vscode-languageclient",
+    "@winglang/wingsdk",
   ],
   devDeps: ["@types/node", "esbuild", "vsce"],
 });
@@ -71,7 +72,7 @@ const contributes: VSCodeExtensionContributions = {
     {
       id: "wing",
       aliases: ["Wing", "wing"],
-      extensions: [".w"],
+      extensions: [".w", ".wsim"],
       configuration: "./language-configuration.json",
       icon: {
         light: "resources/icon-light.png",
@@ -137,7 +138,7 @@ project.addFields({
 });
 
 const esbuildComment =
-  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle";
+  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:@winglang/wingsdk --format=cjs --platform=node --bundle";
 project.compileTask.reset();
 project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);

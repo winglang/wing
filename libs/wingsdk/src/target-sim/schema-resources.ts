@@ -4,6 +4,7 @@ import {
   FUNCTION_TYPE,
   LOGGER_TYPE,
   QUEUE_TYPE,
+  TOPIC_TYPE,
 } from "../cloud";
 import { BaseResourceSchema } from "./schema";
 
@@ -43,6 +44,19 @@ export interface QueueSubscriber {
   readonly batchSize: number;
 }
 
+/** Schema for cloud.Topic */
+export interface TopicSchema extends BaseResourceSchema {
+  readonly type: typeof TOPIC_TYPE;
+  readonly props: {
+    readonly subscribers: TopicSubscriber[];
+  };
+}
+
+export interface TopicSubscriber {
+  /** Function that should be called */
+  readonly functionHandle: FunctionHandle;
+}
+
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: typeof BUCKET_TYPE;
@@ -55,15 +69,11 @@ export interface LoggerSchema extends BaseResourceSchema {
   readonly props: {};
 }
 
+/** Schema for cloud.Counter */
 export interface CounterSchema extends BaseResourceSchema {
   readonly type: typeof COUNTER_TYPE;
   readonly props: {
     /** The initial value of the counter. */
-    readonly initialValue: number;
+    readonly initial: number;
   };
-}
-
-/** Schema for ordinary constructs */
-export interface ConstructSchema extends BaseResourceSchema {
-  readonly type: "constructs.Construct";
 }

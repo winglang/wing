@@ -4,7 +4,7 @@ id: index
 slug: /getting-started
 ---
 
-In the next ~30 minutes you'll go through your first-time experience with Wing.
+**You are about to go through your first-time experience with Wing!**
 
 Going through a first-time experience with a shiny new tool is a very exciting
 event. It's a discovery of a new world of ideas, concepts and technology.

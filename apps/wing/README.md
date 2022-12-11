@@ -33,10 +33,10 @@ To see scoped debug logs, use specific namespaces, e.g. `wing:commands:compile`.
 
 > ```sh
 > $ wing run --help
-> Usage: wing run [options] <entrypoint>.wx
+> Usage: wing run [options] <entrypoint>.wsim
 > 
-> Runs a Wing executable in the Wing Console
+> Runs a Wing simulator file in the Wing Console
 > 
 > Arguments:
->   executable  executable .wx file
+>   simfile  .wsim simulator file
 > ```

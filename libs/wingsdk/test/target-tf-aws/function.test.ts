@@ -3,7 +3,7 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
-import { tfResourcesOf, tfSanitize } from "../util";
+import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("basic function", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
@@ -25,6 +25,7 @@ test("basic function", () => {
     "aws_s3_object", // S3 object for code
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("basic function with environment variables", () => {
@@ -54,4 +55,5 @@ test("basic function with environment variables", () => {
     })
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

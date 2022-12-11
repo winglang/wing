@@ -11,6 +11,7 @@ import {
   commands,
   window,
   workspace,
+  ConfigurationTarget,
 } from "vscode";
 import {
   Executable,
@@ -18,6 +19,7 @@ import {
   LanguageClientOptions,
   ServerOptions,
 } from "vscode-languageclient/node";
+import { dirname } from "path";
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
@@ -59,7 +61,7 @@ async function addCommands(context: ExtensionContext) {
       if (token) {
         await workspace
           .getConfiguration(EXTENSION_NAME)
-          .update(CFG_UPDATES_GITHUB_TOKEN, token);
+          .update(CFG_UPDATES_GITHUB_TOKEN, token, ConfigurationTarget.Global);
         await checkForUpdates(context, true);
       }
     })
@@ -110,12 +112,14 @@ async function startLanguageServer(context: ExtensionContext) {
     execSync(`chmod +x ${serverPath}`);
   }
 
+  const wingsdkManifestRoot = dirname(require.resolve("@winglang/wingsdk/.jsii"));
+
   const run: Executable = {
     command: serverPath,
     options: {
       env: {
         ...process.env,
-        WINGC_SKIP_JSII: "1",
+        WINGSDK_MANIFEST_ROOT: wingsdkManifestRoot,
         RUST_LOG: "debug",
       },
     },

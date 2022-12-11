@@ -15,7 +15,7 @@ The toolchain includes three tools:
 
 To install Wing, you will need the following setup:
 
-* [Node.js](https://nodejs.org/en/) version 18.x or above (we recommend [nvm](https://github.com/nvm-sh/nvm)).
+* [Node.js](https://nodejs.org/en/) version 18.x (we recommend [volta](https://volta.sh)).
 * [VSCode] (recommended).
 
 In order to deploy to AWS, you will also need:
@@ -28,7 +28,9 @@ In order to deploy to AWS, you will also need:
 :::info
 
 During the private alpha period, Wing is distributed through a private npm
-repository. You will need to obtain a [personal access token] from GitHub with a
+repository. To request access, [sign up here](https://t.winglang.io/alpha).
+
+You will need to obtain a [personal access token] from GitHub with a
 **packages:read** scope and then login your npm client like this:
 
 ```sh

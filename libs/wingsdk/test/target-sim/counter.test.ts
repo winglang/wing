@@ -6,33 +6,37 @@ test("create a counter", async () => {
   // GIVEN
   const app = new SimApp();
   const c = new cloud.Counter(app, "my_counter", {
-    initialValue: 123,
+    initial: 123,
   });
 
-  expect(c.initialValue).toBe(123);
+  expect(c.initial).toBe(123);
 
   const s = await app.startSimulator();
-  expect(s.getAttributes("root/my_counter")).toEqual({
-    handle: expect.any(String),
-  });
-  expect(s.getProps("root/my_counter")).toEqual({
-    initialValue: 123,
+  expect(s.getResourceConfig("/my_counter")).toEqual({
+    attrs: {
+      handle: expect.any(String),
+    },
+    path: "root/my_counter",
+    props: {
+      initial: 123,
+    },
+    type: "wingsdk.cloud.Counter",
   });
   await s.stop();
 
-  expect(s.tree).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 test("inc", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Counter(app, "my_counter", {
-    initialValue: 123,
+    initial: 123,
   });
 
   const s = await app.startSimulator();
 
-  const client = s.getResourceByPath("root/my_counter") as ICounterClient;
+  const client = s.getResource("/my_counter") as ICounterClient;
 
   const value0 = await client.inc();
   expect(value0).toEqual(123); // always returns the value before inc (like "i++");
@@ -47,8 +51,6 @@ test("inc", async () => {
   expect(value3).toEqual(123 + 1 + 1 + 10);
   await s.stop();
 
-  expect(s.tree).toMatchSnapshot();
-
   expect(listMessages(s)).toEqual([
     "wingsdk.cloud.Counter created.",
     "Inc (amount=1).",
@@ -57,6 +59,7 @@ test("inc", async () => {
     "Inc (amount=10).",
     "wingsdk.cloud.Counter deleted.",
   ]);
+  expect(app.snapshot()).toMatchSnapshot();
 });
 
 function listMessages(s: Simulator) {

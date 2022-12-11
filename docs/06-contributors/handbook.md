@@ -57,7 +57,7 @@ Nx will be installed alongside the rest of the project's dependencies after you 
 
 Here is a list of minimal tools you should install to build the Wing repo in your development environment:
 
-* [Node.js] version 18.x or above (we recommend [nvm])
+* [Node.js] version 18.x or above (we recommend [volta])
 * [Rust]
 * [AWS CLI] (only needed for integration tests - make sure to do the setup part to create credentials)
 * [Terraform CLI] (only needed for integration tests)
@@ -65,7 +65,6 @@ Here is a list of minimal tools you should install to build the Wing repo in you
 To build the repo locally:
 
 ```sh
-sudo bash scripts/setup_wasi.sh # one-time setup
 npm install
 npm run build
 ```
@@ -73,7 +72,6 @@ npm run build
 To run all tests:
 
 ```sh
-cargo install cargo-insta # one-time setup
 npm run test
 ```
 
@@ -82,7 +80,7 @@ npm run test
 [Rust]: https://www.rust-lang.org/tools/install
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
-[nvm]: https://github.com/nvm-sh/nvm
+[volta]: https://volta.sh
 
 ## 🔨 How do I build just the SDK?
 
@@ -108,6 +106,8 @@ The VSCode extension is located in `apps/vscode`. Most of the logic is in the la
 Running `nx build` from `apps/vscode` will ensure the language server is built first and the binary is available. This creates an installable VSIX file.
 
 A VSCode launch configuration is available to open a VSCode with a development version of the extension.
+
+To modify the package.json, please edit .projenrc.ts and run `npx projen`.
 
 ## 🧱 How do I add a dependency to the SDK?
 
@@ -205,7 +205,7 @@ Add a `.env` file to `tools/hangar` with the following:
 NPM_TOKEN=<GitHub PAT with access to @winglang packages>
 ```
 
-This allows spun-up registry to pull down @winglang/polycons from the private github registry.
+This allows the spun-up registry to pull down @winglang packages from the private github registry.
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
@@ -295,3 +295,28 @@ Please review it before contributing issues, pull requests, or joining the [Wing
 Come on down and hang out in the [Wing Slack]! We're a friendly bunch and we'd love to help you out. There are no stupid questions, so don't be afraid to ask! Don't forget to introduce yourself in the [#intro](https://winglang.slack.com/archives/C048QDSMC7L) channel.
 
 [Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+
+## 📕 How do I update documentation
+
+Our documentation lives under the [`docs`](https://github.com/winglang/wing/tree/main/docs) directory 
+of the Wing GitHub repository. 
+
+To propose an update to the docs, simply submit a pull request against the
+relevant markdown file.
+
+## 📕 Can I view the local documentation website on my machine?
+
+Yes, you can! We use the awesome [Docusaurus](https://docusaurus.io/) project
+for our docs.
+
+To start the documentation website, run the following command from the root of
+the repo:
+
+```sh
+npm run docs
+```
+
+This magical script will clone the
+[winglang/docsite](https://github.com/winglang/docsite) repository into
+`~/.winglang-docsite`, symlink your local copy into it and start a browser with
+the site.

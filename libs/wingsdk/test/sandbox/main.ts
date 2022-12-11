@@ -9,7 +9,7 @@ class HelloWorld extends Construct {
     super(scope, id);
 
     const counter = new cloud.Counter(this, "Counter", {
-      initialValue: 1000,
+      initial: 1000,
     });
     const bucket = new cloud.Bucket(this, "Bucket");
     const queue = new cloud.Queue(this, "Queue");
@@ -34,6 +34,26 @@ class HelloWorld extends Construct {
       },
     });
     queue.onMessage(processor);
+
+    // Subscribing & publishing to Topics
+    const topic = new cloud.Topic(this, "Topic");
+    const otherTopic = new cloud.Topic(this, "OtherTopic");
+
+    const subscriber = new core.Inflight({
+      code: core.NodeJsCode.fromInline(
+        `async function $proc($cap, event) {
+          await $cap.topic.publish("Forwarding On Message: " + event.Message);
+        }`
+      ),
+      entrypoint: "$proc",
+      captures: {
+        topic: {
+          resource: otherTopic,
+          methods: [cloud.TopicInflightMethods.PUBLISH],
+        },
+      },
+    });
+    topic.onMessage(subscriber);
   }
 }
 
