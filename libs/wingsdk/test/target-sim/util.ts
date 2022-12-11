@@ -2,6 +2,7 @@ import { existsSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import * as tar from "tar";
+import { Simulator } from "../../src/testing";
 import { mkdtemp, readJsonSync } from "../../src/util";
 
 export function simulatorJsonOf(simfile: string) {
@@ -25,4 +26,8 @@ export function simulatorJsonOf(simfile: string) {
 
 export interface IScopeCallback {
   (scope: Construct): void;
+}
+
+export function listMessages(s: Simulator) {
+  return s.listTraces().map((trace) => trace.data.message);
 }
