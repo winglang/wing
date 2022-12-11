@@ -126,3 +126,15 @@ new cloud.Function((s: str): str ~> {
   }
 }) as "test: deleting an unexisting task should throw an exception";
 ```
+
+## Wing Console
+During the development process of the TODO app, the developer uses the Wing Console to test the application locally.
+
+After creating the application .w file he starts the Console by running the following command:
+```wing run ./todo.w``` and continues to develop the application side by side with the Console.
+
+While Wing Console is running in the background, it watches the .w file src dir for changes, recompile the application and updates the Console view in real time.
+
+In the Console, the developer can see his composed Construct with the Bucket, Queue and Function.
+
+He can invoke the function and see the message sent to the Queue and data added to the Bucket.
