@@ -327,7 +327,7 @@ impl JSifier {
 			}
       ExprKind::ArrayLiteral { items, .. } => {
         format!(
-          "[{}]",
+          "Object.freeze([{}])",
           items
             .iter()
             .map(|expr| self.jsify_expression(expr))
