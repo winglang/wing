@@ -56,7 +56,7 @@ export class Bucket extends BucketBase {
 export interface BucketDeleteOptions {
   /**
    * Check failures on the method and retrieve errors if any
-   * @Throws if the file is not found or any other error-related.
+   * @Throws if this is `true`, an error is thrown if the file is not found (or any error case).
    * @default false
    */
   readonly mustExist?: boolean;
