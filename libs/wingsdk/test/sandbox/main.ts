@@ -34,6 +34,26 @@ class HelloWorld extends Construct {
       },
     });
     queue.onMessage(processor);
+
+    // Subscribing & publishing to Topics
+    const topic = new cloud.Topic(this, "Topic");
+    const otherTopic = new cloud.Topic(this, "OtherTopic");
+
+    const subscriber = new core.Inflight({
+      code: core.NodeJsCode.fromInline(
+        `async function $proc($cap, event) {
+          await $cap.topic.publish("Forwarding On Message: " + event.Message);
+        }`
+      ),
+      entrypoint: "$proc",
+      captures: {
+        topic: {
+          resource: otherTopic,
+          methods: [cloud.TopicInflightMethods.PUBLISH],
+        },
+      },
+    });
+    topic.onMessage(subscriber);
   }
 }
 
