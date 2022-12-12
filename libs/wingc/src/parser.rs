@@ -750,7 +750,7 @@ impl Parser<'_> {
 				if expression_node.has_error() {
 					self.add_error(format!("Expected expression"), expression_node)
 				} else {
-					panic!("Unexpected expression {} || {:#?}", other, expression_node);
+					self.add_error(format!("Unexpected expression {}", other), expression_node)
 				}
 			}
 		}
