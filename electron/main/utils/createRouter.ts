@@ -1,6 +1,6 @@
 import * as trpc from "@trpc/server";
 
-import { LogEntry } from "../../../src/components/NodeLogs.js";
+import { LogEntry } from "../consoleLogger.js";
 import { Simulator } from "../wingsdk.js";
 
 import { ConstructTree } from "./createSimulator.js";

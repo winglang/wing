@@ -47,7 +47,8 @@ export interface ConstructInfo {
 
 export interface CreateSimulatorProps {
   simulator: SimulatorProps;
-  onError?: (error: unknown) => void;
+  onError: (error: unknown) => void;
+  onLoading: (isLoading: boolean) => void;
 }
 
 // Creates a helper around the simulator that only returns the simulator instance
@@ -57,9 +58,13 @@ export function createSimulator(props: CreateSimulatorProps) {
   const reportPromise = <T>(callback: () => Promise<T>) => {
     return async () => {
       try {
-        return await callback();
+        props.onLoading(true);
+        const res = await callback();
+        props.onLoading(false);
+        return res;
       } catch (error) {
         props.onError?.(error);
+        props.onLoading(false);
         throw error;
       }
     };
@@ -85,10 +90,13 @@ export function createSimulator(props: CreateSimulatorProps) {
     await currentProcess;
     return simulator;
   });
-  const get = reportPromise(async () => {
+  const get = async () => {
     await currentProcess;
     return simulator;
-  });
+  };
+  const getSimFile = () => {
+    return props.simulator.simfile;
+  };
 
   const treeJsonFilename = path.resolve(
     path.dirname(props.simulator.simfile),
@@ -106,6 +114,7 @@ export function createSimulator(props: CreateSimulatorProps) {
     stop,
     reload,
     get,
+    getSimFile,
     tree,
   };
 }

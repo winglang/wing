@@ -208,6 +208,10 @@
       "type": "build"
     },
     {
+      "name": "fix-path",
+      "type": "build"
+    },
+    {
       "name": "get-port",
       "type": "build"
     },
@@ -246,6 +250,10 @@
     },
     {
       "name": "react-draggable",
+      "type": "build"
+    },
+    {
+      "name": "react-lottie-player",
       "type": "build"
     },
     {

@@ -1,11 +1,7 @@
 import classNames from "classnames";
 import { Fragment } from "react";
 
-export interface LogEntry {
-  timestamp: number;
-  type: "info" | "warn" | "error";
-  message: string;
-}
+import { LogEntry } from "../../electron/main/consoleLogger.js";
 
 export interface NodeLogsProps {
   logs: LogEntry[];

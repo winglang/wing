@@ -8,11 +8,11 @@ import { autoUpdater } from "electron-updater";
 import express from "express";
 import getPort from "get-port";
 
-import { LogEntry } from "../../src/components/NodeLogs.js";
-
+import { ConsoleLogger, LogEntry } from "./consoleLogger.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeRouters } from "./router/index.js";
-import { createSimulator } from "./utils/createSimulator.js";
+import { createWingApp } from "./utils/createWingApp.js";
+import { watchSimulatorFile } from "./utils/watchSimulatorFile.js";
 
 // Chokidar is a CJS-only module and doesn't play well with ESM imports.
 // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -89,7 +89,7 @@ function createWindowManager() {
       }
 
       let newWindow: BrowserWindow | undefined;
-      const console = {
+      const consoleLogger: ConsoleLogger = {
         messages: new Array<LogEntry>(),
         log(message: string) {
           log.info(message);
@@ -112,19 +112,31 @@ function createWindowManager() {
         },
       };
 
-      console.log("Starting the simulator...");
-      const simulator = createSimulator({
-        simulator: {
-          simfile,
-        },
-        onError(error) {
-          console.error(error);
-        },
+      const onLoading = (isLoading: boolean) => {
+        log.info("onLoading", isLoading);
+        newWindow?.webContents.send("app.isLoading", isLoading);
+      };
+
+      const onError = (error: unknown) => {
+        log.info("onError", { error });
+        newWindow?.webContents.send("app.isError", true);
+      };
+
+      const notifyChange = () => {
+        log.info("notifyChange");
+        newWindow?.webContents.send("trpc.invalidate", []);
+      };
+
+      const simulatorPromise = createWingApp({
+        inputFile: simfile,
+        onLoading,
+        onError,
+        consoleLogger,
       });
 
       // Create the express server and router for the simulator. Start
       // listening but don't wait for it, yet.
-      console.log("Starting the dev server...");
+      consoleLogger.log("Starting the dev server...");
       const server = await (async () => {
         const app = express();
         app.use(cors());
@@ -136,26 +148,28 @@ function createWindowManager() {
             createContext() {
               return {
                 async simulator() {
-                  return simulator.get();
+                  const sim = await simulatorPromise;
+                  return sim.get();
                 },
                 async tree() {
-                  return simulator.tree();
+                  const sim = await simulatorPromise;
+                  return sim.tree();
                 },
                 logs() {
-                  return console.messages;
+                  return consoleLogger.messages;
                 },
               };
             },
           }),
         );
 
-        console.log("Looking for an open port...");
+        consoleLogger.log("Looking for an open port");
         const port = await getPort();
         const server = app.listen(port);
         await new Promise<void>((resolve) => {
           server.on("listening", resolve);
         });
-        console.log(`Listening to the port ${port}`);
+        consoleLogger.log(`Server is listening on port ${port}`);
         return { port, server };
       })();
 
@@ -163,9 +177,21 @@ function createWindowManager() {
         title: path.basename(simfile),
         port: server.port,
       });
-      newWindow.setRepresentedFilename(simfile);
 
+      newWindow.setRepresentedFilename(simfile);
       windows.set(simfile, newWindow);
+
+      const simulatorPromiseResolved = await simulatorPromise;
+      const simulatorInstance = await simulatorPromiseResolved.get();
+
+      const simulatorFileWatcher = watchSimulatorFile({
+        simulator: simulatorInstance,
+        simulatorFile: simulatorPromiseResolved.getSimFile(),
+        onError,
+        onLoading,
+        consoleLogger,
+        notifyChange,
+      });
 
       // The renderer process will send a message asking
       // for the server port and the name of the file.
@@ -179,45 +205,16 @@ function createWindowManager() {
         },
       );
 
-      // Watch for changes in the simfile.
-      const watcher = chokidar
-        .watch(simfile, {
-          persistent: true,
-          awaitWriteFinish: {
-            stabilityThreshold: 2000,
-            pollInterval: 100,
-          },
-        })
-        .on("change", async () => {
-          console.log(`File ${simfile} has been changed`);
-          try {
-            await simulator.reload();
-          } catch (error) {
-            console.error(error);
-            dialog.showErrorBox(
-              "Error reloading the simulation",
-              error instanceof Error ? error.message : "Unknown error",
-            );
-          }
-          console.log("Reloaded");
-          newWindow?.webContents.send("trpc.invalidate", "app.tree");
-        })
-        .on("unlink", async () => {
-          console.log(`File ${simfile} has been removed`);
-          await simulator.stop();
-          // TODO: handle file deletion
-        });
-
       newWindow.on("closed", async () => {
         windows.delete(simfile);
         try {
           await Promise.all([
-            watcher.close(),
+            simulatorFileWatcher?.close(),
             server.server.close(),
-            simulator.stop(),
+            simulatorInstance.stop(),
           ]);
         } catch (error) {
-          console.error(error);
+          consoleLogger.error(error);
         }
       });
 
@@ -227,7 +224,7 @@ function createWindowManager() {
       await app.whenReady();
       const { canceled, filePaths } = await dialog.showOpenDialog({
         properties: ["openFile"],
-        filters: [{ name: "Wing Sim File", extensions: ["wsim"] }],
+        filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
       });
       if (canceled) {
         return;
@@ -316,7 +313,7 @@ async function main() {
               async click() {
                 const { canceled, filePaths } = await dialog.showOpenDialog({
                   properties: ["openFile"],
-                  filters: [{ name: "Wing Sim File", extensions: ["wsim"] }],
+                  filters: [{ name: "Wing File", extensions: ["wsim", "w"] }],
                 });
                 if (canceled) {
                   return;
@@ -347,7 +344,7 @@ async function main() {
     const installExtension = await import("electron-devtools-installer");
     await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
 
-    await windowManager.open(`${__dirname}/../../../../demo/target/index.wsim`);
+    await windowManager.open(`${__dirname}/../../../../demo/index.w`);
   } else {
     new AppUpdater();
 

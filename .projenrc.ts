@@ -60,6 +60,8 @@ const project = new TypeScriptProject({
     "get-port",
     "@aws-sdk/client-s3",
     "tsx",
+    "fix-path",
+    "react-lottie-player",
     // Peer deps:
     "webpack",
     "require-from-string",

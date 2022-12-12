@@ -1,5 +1,3 @@
-import { Simulator } from "../wingsdk.js";
-
 import { ConstructInfo, ConstructTreeNode } from "./createSimulator.js";
 
 export interface Node {

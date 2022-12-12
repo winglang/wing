@@ -36,13 +36,13 @@ npm run storybook
 # Build
 npm run release
 npm exec vite-node scripts/builderElectronApp.mts
-# Open the included demo/index.wx
-open demo/target/index.wx -a $(pwd)/release/mac-arm64/Wing\ Console.app
+# Open the included demo/target/index.wsim
+open demo/target/index.wsim -a $(pwd)/release/mac-arm64/Wing\ Console.app
 ```
 
 ## Deeplinks
 
-Once installed, the Wing Console will be able to process deeplinks with the `wing-console://` protocol. It expects an absolute path to a `.wx` file, as follows: `wing-console:///Users/winglang/app.wx`
+Once installed, the Wing Console will be able to process deeplinks with the `wing-console://` protocol. It expects an absolute path to a `.wsim` file, as follows: `wing-console:///Users/winglang/app.wx`
 
 ## Build the Wing demo file
 

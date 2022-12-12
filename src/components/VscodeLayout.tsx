@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ExplorerItem } from "../../electron/main/router/app.js";
-import { WingSimulatorSchema } from "../../electron/main/wingsdk.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
-import { SpinnerIcon } from "../design-system/icons/SpinnerIcon.js";
+import { Error } from "../design-system/Error.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
+import { Loader } from "../design-system/Loader.js";
 import { RightResizableWidget } from "../design-system/RightResizableWidget.js";
 import { ScrollableArea } from "../design-system/ScrollableArea.js";
 import { TopResizableWidget } from "../design-system/TopResizableWidget.js";
@@ -31,11 +31,17 @@ export interface VscodeLayoutProps {
         message: string;
       }[]
     | undefined;
+  isLoading?: boolean;
+  isError?: boolean;
 }
 
 const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
-export const VscodeLayout = ({ logs }: VscodeLayoutProps) => {
+export const VscodeLayout = ({
+  logs,
+  isError,
+  isLoading,
+}: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
 
   const treeMenu = useTreeMenuItems();
@@ -108,6 +114,12 @@ export const VscodeLayout = ({ logs }: VscodeLayoutProps) => {
       )}
 
       <div className="flex-1 flex relative">
+        {(isLoading || explorerTree.isLoading) && !isError && (
+          <Loader text={"Compiling..."} />
+        )}
+        {(isError || explorerTree.isError) && (
+          <Error text={"Oooops :( Compiler error..."} />
+        )}
         <RightResizableWidget className="h-full flex flex-col w-60 min-w-[20rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu
             title="Explorer"
@@ -159,7 +171,7 @@ export const VscodeLayout = ({ logs }: VscodeLayoutProps) => {
                 {currentNode.data?.type === "constructs.Construct" &&
                   childRelationships.data && (
                     <div className="flex-1 bg-white min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
-                      {childRelationships.data.map((child) => (
+                      {childRelationships.data.map((child, index) => (
                         <NewNodeRelationshipsView
                           key={child.node.id}
                           node={{
@@ -227,12 +239,6 @@ export const VscodeLayout = ({ logs }: VscodeLayoutProps) => {
             </LeftResizableWidget>
           </div>
         </div>
-
-        {explorerTree.isLoading && (
-          <div className="absolute inset-0 bg-white/75 z-10 flex justify-around items-center">
-            <SpinnerIcon className="w-8 h-8 text-slate-200 animate-spin dark:text-slate-600 fill-sky-600" />
-          </div>
-        )}
       </div>
 
       <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] flex flex-col gap-2 px-4 py-2">
