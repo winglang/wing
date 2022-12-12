@@ -148,7 +148,6 @@ pub fn scan_for_inflights_in_expression(expr: &Expr) {
 			}
 		}
 		ExprKind::FunctionClosure(func_def) => {
-			// TODO: Phase::Independent
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
@@ -239,7 +238,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 							.filter(|(_, sig)| {
 								matches!(
 									sig.as_function_sig().unwrap().flight,
-									Phase::Inflight | Phase::Independent
+									Phase::Inflight
 								)
 							})
 							.map(|(name, _)| Capture {
@@ -288,7 +287,6 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 		ExprKind::FunctionClosure(func_def) => {
 			// Can't define preflight stuff in inflight context
 			assert!(func_def.signature.flight != Phase::Preflight);
-			// TODO: Phase::Independent
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());

@@ -29,7 +29,8 @@ a queue with a dead-letter-queue associated with it:
 resource SafeQueue extends cloud.Queue {
   init() {
     let dlq = new cloud.Queue();
-    dlq.on_message((m: str) ~> {
+
+    dlq.on_message(inflight (m: str) => {
       log.error("dead-letter: ${m}");
     });
 

@@ -460,10 +460,10 @@ app's architecture (and not the code that runs within a specific machine within
 this system).
 
 To support this, wing has a language primitive called "inflight functions" (in
-short "inflights" or "~") which represents an isolated computation unit that can
-be packaged and executed later on various compute platforms. Inflights are able
-to naturally interact with resources which are defined outside of the inflight,
-and invoke runtime operations on them.
+short "inflights") which represents an isolated computation unit that can be
+packaged and executed later on various compute platforms. Inflights are able to
+naturally interact with resources which are defined outside of the inflight, and
+invoke runtime operations on them.
 
 > Reqtag: `w:inflight`
 <span id="w:inflight"/>
@@ -474,7 +474,7 @@ Let's look at an example `upload.w`:
 let bucket = cloud.Bucket();
 let topic = cloud.Topic();
 let message_count = 4;
-let fn = cloud.Function((e: cloud.BucketUploadEvent) ~> {
+let fn = cloud.Function(inflight (e: cloud.BucketUploadEvent) => {
   for i in 0..message_count {
     topic.publish("new file uploaded to our bucket: ${e.name} - ${i}");
   }
@@ -565,7 +565,7 @@ let bucket_per_region = {
   EU: Bucket(region: 'eu-west-2'),
 };
 
-let handler = (event) ~> {
+let handler = inflight (event) => {
   let bucket = bucket_per_region.get(event.region);
   await bucket.upload('boom', 'bam');
 };
@@ -584,7 +584,7 @@ If the compiler fails to determine the nature of the capture, it needs to
 emit an error:
 
 ```ts
-let handler = event ~> {
+let handler = inflight event => {
   let bucket = bucket_per_region.get(event.region);
                      ^--------- ERROR: map elements must be captured explicitly
   await bucket.upload('boom', 'bam');
@@ -594,7 +594,7 @@ let handler = event ~> {
 And here's proposed syntax for these explicit captures:
 
 ```ts
-let handler = event ~> {
+let handler = inflight (event) => {
   let bucket = bucket_per_region.get(event.region);
   await bucket.upload('boom', 'bam');
 } captures [
@@ -615,23 +615,23 @@ Consider this example:
 resource DenyList {
   _bucket: cloud.Bucket;
 
-  new() {
+  init() {
     this._bucket = cloud.Bucket();
   }
 
-  ~ _map: any;
+  inflight _map: any;
 
-  ~ new() {
+  inflight init() {
     this._map = this._bucket.download_json("deny-list.json");
   }
 
-  ~ is_blocked(name: str, version: str): bool {
+  inflight is_blocked(name: str, version: str): bool {
     return this._map[name] ?? this._map["${name}/v${version}"];
   }
 }
 
 let deny_list = DenyList();
-let handler = (event: any) ~> {
+let handler = inflight (event: any) => {
   if deny_list.is_blocked(event.name, event.version) {
     print("${event.name}@${event.version} is blocked");
   }
@@ -766,15 +766,15 @@ resource Users {
     this._table := awscdk.dynamodb.Table(partition_key: "id");
   }
 
-  ~ _client: awssdk.DynamoDB;
+  inflight _client: awssdk.DynamoDB;
 
   // inflight initializer
-  ~ init() {
+  inflight init() {
     this._client := aws.DynamoDB();
   }
 
   // inflight "client"
-  ~ add_user(id: string, name: string, last: string) {
+  inflight add_user(id: string, name: string, last: string) {
     await this._client.put_item(
       TableName: this.table.table_name,
       Item: {
@@ -788,7 +788,7 @@ resource Users {
 
 let users = Users();
 let new_users = cloud.Queue();
-new_users.add_consumer(cloud.Function((e) ~> {
+new_users.add_consumer(cloud.Function(inflight (e) => {
   users.add_user(e.user_id, e.name, e.last);
 }));
 ```
@@ -798,7 +798,7 @@ new_users.add_consumer(cloud.Function((e) ~> {
 
 ## Observability
 
-Observability is a fundemntal aspect of any application that runs on the cloud.
+Observability is a fundamental aspect of any application that runs on the cloud.
 wing (and its standard library) have out of the box support for various
 observability features:
 
