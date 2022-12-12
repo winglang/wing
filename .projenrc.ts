@@ -146,7 +146,7 @@ project.release?.addJobs({
       },
       {
         name: "install gh on M1 image",
-        run: 'brew install gh',
+        run: "brew install gh",
       },
       {
         name: "Release to GitHub",
