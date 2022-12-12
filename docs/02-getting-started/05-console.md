@@ -18,22 +18,13 @@ this step, jump over to the [testing programmatically](./simulator) page.
 
 :::
 
-We can use the Wing CLI to start the console in two different ways:
-1. with our newly created app file
+We can use the Wing CLI to start the console with our newly created Wing source file:
 
-```sh
-wing run target/hello.wsim
-```
-
-In this way, Wing Console will watch the file for changes and automatically reload the app.
-
-2. with the Wing source file
-    
 ```sh
 wing run hello.w
 ```
 
-In this case, Wing Console will compile the source file, run the app and hot reload it on each change in the source file parent directory.
+Wing Console will compile the source file, run the app and hot reload it on each change in the source file parent directory.
 
 Wing Console desktop application will show the following view:
 
