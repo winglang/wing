@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
@@ -193,11 +193,11 @@ pub enum ExprKind {
 	},
 	StructLiteral {
 		type_: Type,
-		fields: HashMap<Symbol, Expr>,
+		fields: BTreeMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<Type>,
-		fields: HashMap<String, Expr>,
+		fields: BTreeMap<String, Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }
