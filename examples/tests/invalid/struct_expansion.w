@@ -3,7 +3,7 @@ bring cloud;
 let bucket1 = new cloud.Bucket(bublic: false, public: true);
 let bucket2 = new cloud.Bucket(2, public: true);
 
-let handler = (event: str): str ~> {
+let handler = inflight (event: str): str => {
   bucket1.put(file: "file.txt", "data");
 };
 
