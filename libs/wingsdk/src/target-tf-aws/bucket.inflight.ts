@@ -1,13 +1,14 @@
 import { Readable } from "stream";
 import * as consumers from "stream/consumers";
 import {
+  DeleteObjectCommand,
   GetObjectCommand,
   ListObjectsCommand,
   ListObjectsCommandOutput,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
-import { IBucketClient } from "../cloud";
+import { BucketDeleteOptions, IBucketClient } from "../cloud";
 
 export class BucketClient implements IBucketClient {
   constructor(
@@ -60,5 +61,30 @@ export class BucketClient implements IBucketClient {
       marker = list.length > 0 ? list.at(-1) : undefined;
     }
     return list;
+  }
+
+  /**
+   * Delete an existing object using a key from the bucket
+   * @param key Key of the object.
+   * @param opts Option object supporting additional strategies to delete an item from a bucket
+   */
+  public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
+    const mustExist = opts?.mustExist ?? false;
+
+    const command = new DeleteObjectCommand({
+      Key: key,
+      Bucket: this.bucketName,
+    });
+
+    try {
+      await this.s3Client.send(command);
+    } catch (er) {
+      const error = er as any;
+      if (!mustExist && error.name === "NoSuchKey") {
+        return;
+      }
+
+      throw Error(`unable to delete "${key}": ${error.message}`);
+    }
   }
 }

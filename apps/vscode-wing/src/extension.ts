@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { writeFile } from "fs/promises";
 import { platform, tmpdir } from "os";
+import { dirname } from "path";
 import fetch, { HeadersInit } from "node-fetch";
 import { Octokit } from "octokit";
 import {
@@ -19,7 +20,6 @@ import {
   LanguageClientOptions,
   ServerOptions,
 } from "vscode-languageclient/node";
-import { dirname } from "path";
 
 const EXTENSION_NAME = "wing";
 const EXTENSION_FILENAME = "vscode-wing.vsix";
@@ -112,7 +112,9 @@ async function startLanguageServer(context: ExtensionContext) {
     execSync(`chmod +x ${serverPath}`);
   }
 
-  const wingsdkManifestRoot = dirname(require.resolve("@winglang/wingsdk/.jsii"));
+  const wingsdkManifestRoot = dirname(
+    require.resolve("@winglang/wingsdk/.jsii")
+  );
 
   const run: Executable = {
     command: serverPath,
