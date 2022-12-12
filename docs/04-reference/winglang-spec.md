@@ -1904,7 +1904,9 @@ resource DenyList {
     let filepath = "${tmpdir}/${filename}";
     let map = MutMap<DenyListRule>(); 
     for rule in list {
-      DenyList._append_rule(map, rule);
+      let suffix = DenyList._maybe_suffix(rule.version);
+      let path = "${rule.package_name}${suffix}";
+      map[path] = rule;
     }
     fs.write_json(filepath, map);
     return tmpdir;
@@ -1917,19 +1919,8 @@ resource DenyList {
     this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>(); 
   }
 
-  inflight lookup(name: str, version: str): DenyListRule? {
+  public inflight lookup(name: str, version: str): DenyListRule? {
     return this.rules[name] ?? this.rules["${name}/v${version}"];
-  }
-
-  inflight add_rule(rule: DenyListRule) {
-    DenyList._append_rule(this.rules, rule);
-    this._bucket.set(this._object_key, this.rules);
-  }
-
-  static _append_rule(map: MutMap<DenyListRule>, rule: DenyListRule) {
-    let suffix = DenyList._maybe_suffix(rule.version);
-    let path = "${rule.package_name}${suffix}";
-    map[path] = rule;
   }
 
   static _maybe_suffix(version: str?): str {
