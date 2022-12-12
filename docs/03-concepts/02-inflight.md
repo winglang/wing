@@ -16,9 +16,10 @@ and puts an object inside a bucket:
 
 ```js
 bring cloud;
+
 let bucket = new cloud.Bucket();
 
-new cloud.Function((_: str): str ~> {
+new cloud.Function(inflight (_: str): str => {
   bucket.put("hello.txt", "world");
 });
 ```

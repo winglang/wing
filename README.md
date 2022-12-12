@@ -20,7 +20,7 @@
 
 # Welcome! :wave:
 
-**Wing** is a [cloud~oriented programming language]. It is a modern,
+**Wing** is a [cloud-oriented programming language]. It is a modern,
 object-oriented, and strongly-typed language. Most programming languages think
 about computers as machines. In Wing, ***the cloud is the computer***.
 
@@ -28,18 +28,16 @@ Wing applications compile to Terraform and JavaScript that are ready to deploy
 to your favorite cloud provider, and can also be tested in your local
 environment using the [Wing Console](https://docs.winglang.io/getting-started/console).
 
-[cloud~oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
+[cloud-oriented programming language]: https://docs.winglang.io/#what-is-a-cloud-oriented-language
 
 ```js
 bring cloud;
 
 let bucket = new cloud.Bucket();
 
-inflight handler(_: str): str {
+new cloud.Function(inflight (event: str): str => {
   bucket.put("greeting.txt", "hello, world!");
-}
-
-new cloud.Function(handler);
+});
 ```
 
 ## This is Alpha
