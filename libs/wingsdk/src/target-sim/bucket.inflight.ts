@@ -1,10 +1,11 @@
 import * as fs from "fs";
 import * as os from "os";
 import { join } from "path";
-import { IBucketClient } from "../cloud";
+import { BucketDeleteOptions, IBucketClient } from "../cloud";
 import { ISimulatorContext } from "../testing/simulator";
 import { ISimulatorResourceInstance } from "./resource";
 import { BucketSchema } from "./schema-resources";
+import { exists } from "./util";
 
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly fileDir: string;
@@ -54,6 +55,29 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
         return prefix
           ? fileNames.filter((fileName) => fileName.startsWith(prefix))
           : fileNames;
+      },
+    });
+  }
+
+  public async delete(key: string, opts?: BucketDeleteOptions): Promise<void> {
+    return this.context.withTrace({
+      message: `Delete (key=${key}).`,
+      activity: async () => {
+        const mustExist = opts?.mustExist ?? false;
+        const filePath = join(this.fileDir, key);
+
+        if (!mustExist) {
+          // check if the file exists
+          const fileExists = await exists(filePath);
+
+          if (!fileExists) {
+            // nothing to delete, return without throwing
+            return;
+          }
+        }
+
+        // unlink file from the filesystem
+        return fs.promises.unlink(filePath);
       },
     });
   }
