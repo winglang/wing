@@ -5,13 +5,6 @@ import { listMessages } from "./util";
 
 jest.setTimeout(5_000);
 
-const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
-async function $proc($cap, message) {
-    if (message === "BAD MESSAGE") {
-        throw new Error("ERROR");
-    }
-}`);
-
 test("create a topic", async () => {
   // GIVEN
   const app = new testing.SimApp();
@@ -34,13 +27,14 @@ test("create a topic", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("topic publishes messages as they are recieved", async () => {
+test("topic publishes messages as they are received", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  cloud.Logger.register(app);
+  const handler = makeInflight(
+    `async function $proc($cap, message) { $cap.logger.print("Received " + message); }`,
+    app
+  );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
 
@@ -54,35 +48,35 @@ test("topic publishes messages as they are recieved", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Topic created.",
     "Publish (message=Alpha).",
-    'Sending message (message="Alpha", subscriber=sim-0).',
+    'Sending message (message="Alpha", subscriber=sim-1).',
+    "Received Alpha",
     'Invoke (payload="{"message":"Alpha"}").',
     "Publish (message=Beta).",
-    'Sending message (message="Beta", subscriber=sim-0).',
+    'Sending message (message="Beta", subscriber=sim-1).',
+    "Received Beta",
     'Invoke (payload="{"message":"Beta"}").',
     "wingsdk.cloud.Topic deleted.",
     "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
 });
 
 test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
-  const otherHandler = new core.Inflight({
-    code: core.NodeJsCode.fromInline(`
-    async function $proc($cap, message) {
-        if (message === "Super Bad MESSAGE") {
-            throw new Error("ERROR");
-        }
-    }`),
-    entrypoint: "$proc",
-  });
+  cloud.Logger.register(app);
+  const handler = makeInflight(
+    `async function $proc($cap, message) { $cap.logger.print("Received " + message); }`,
+    app
+  );
+  const otherHandler = makeInflight(
+    `async function $proc($cap, message) { $cap.logger.print("Also received " + message); }`,
+    app
+  );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
   topic.onMessage(otherHandler);
@@ -96,16 +90,33 @@ test("topic publishes messages to multiple subscribers", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Topic created.",
     "Publish (message=Alpha).",
-    'Sending message (message="Alpha", subscriber=sim-0).',
-    'Invoke (payload="{"message":"Alpha"}").',
     'Sending message (message="Alpha", subscriber=sim-1).',
+    "Received Alpha",
+    'Invoke (payload="{"message":"Alpha"}").',
+    'Sending message (message="Alpha", subscriber=sim-2).',
+    "Also received Alpha",
     'Invoke (payload="{"message":"Alpha"}").',
     "wingsdk.cloud.Topic deleted.",
     "wingsdk.cloud.Function deleted.",
     "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
 });
+
+function makeInflight(code: string, app: core.IApp) {
+  return new core.Inflight({
+    code: core.NodeJsCode.fromInline(code),
+    entrypoint: "$proc",
+    captures: {
+      logger: {
+        resource: cloud.Logger.of(app),
+        methods: [cloud.LoggerInflightMethods.PRINT],
+      },
+    },
+  });
+}
