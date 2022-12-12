@@ -145,6 +145,10 @@ project.release?.addJobs({
         },
       },
       {
+        name: "install gh on M1 image",
+        run: 'brew install gh',
+      },
+      {
         name: "Release to GitHub",
         run: 'errout=$(mktemp); gh release create $(cat dist/releasetag.txt) -R $GITHUB_REPOSITORY -F dist/changelog.md -t $(cat dist/releasetag.txt) --target $GITHUB_REF release/Wing\\ Console-* release/latest-mac.yml 2> $errout && true; exitcode=$?; if [ $exitcode -ne 0 ] && ! grep -q "Release.tag_name already exists" $errout; then cat $errout; exit $exitcode; fi',
         env: {
