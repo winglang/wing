@@ -52,17 +52,30 @@ export class Bucket extends BucketBase {
   }
 }
 
+/** Interface for delete method inside `Bucket` */
+export interface BucketDeleteOptions {
+  /**
+   * Check failures on the method and retrieve errors if any
+   * @Throws if this is `true`, an error is thrown if the file is not found (or any error case).
+   * @default false
+   */
+  readonly mustExist?: boolean;
+}
+
 /**
  * Inflight interface for `Bucket`.
  */
 export interface IBucketClient {
   /**
    * Put an object in the bucket.
+   * @param key Key of the object.
+   * @param body Content of the object we want to store into the bucket.
    */
   put(key: string, body: string): Promise<void>;
 
   /**
    * Retrieve an object from the bucket.
+   * @param key Key of the object.
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
    */
@@ -70,10 +83,17 @@ export interface IBucketClient {
 
   /**
    * Retrieve existing objects keys from the bucket.
-   * @param prefix Limits the response to keys that begin with the specified prefix
+   * @param prefix Limits the response to keys that begin with the specified prefix.
    * @returns a list of keys or an empty array if the bucket is empty.
    */
   list(prefix?: string): Promise<string[]>;
+
+  /**
+   * Delete an existing object using a key from the bucket
+   * @param key Key of the object.
+   * @param opts Options available for delete an item from a bucket.
+   */
+  delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 }
 
 /**
@@ -86,4 +106,6 @@ export enum BucketInflightMethods {
   GET = "get",
   /** `Bucket.list` */
   LIST = "list",
+  /** `Bucket.delete` */
+  DELETE = "delete",
 }
