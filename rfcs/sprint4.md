@@ -108,7 +108,7 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message((message) ~> {
+queue.on_message(inflight (message) => {
   print("Hello, ${message}!");
 });
 ```

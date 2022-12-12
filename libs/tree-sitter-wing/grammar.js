@@ -61,7 +61,7 @@ module.exports = grammar({
         field("property", $.identifier)
       ),
 
-    _inflight_specifier: ($) => choice("inflight", "~"),
+    _inflight_specifier: ($) => "inflight",
 
     _statement: ($) =>
       choice(
@@ -204,7 +204,6 @@ module.exports = grammar({
         $.call,
         $.preflight_closure,
         $.inflight_closure,
-        $.pure_closure,
         $.await_expression,
         $._collection_literal,
         $.parenthesized_expression,
@@ -396,7 +395,7 @@ module.exports = grammar({
         ["+", PREC.UNARY],
         ["-", PREC.UNARY],
         ["!", PREC.UNARY],
-        //['~', PREC.UNARY],
+        ['~', PREC.UNARY],
       ];
 
       return choice(
@@ -448,9 +447,20 @@ module.exports = grammar({
       );
     },
 
-    preflight_closure: ($) => anonymousClosure($, "->"),
-    inflight_closure: ($) => anonymousClosure($, "~>"),
-    pure_closure: ($) => anonymousClosure($, "=>"),
+    preflight_closure: ($) => seq(
+      field("parameter_list", $.parameter_list),
+      optional(field("return_type", $._type_annotation)),
+      "=>",
+      field("block", $.block)
+    ),
+    
+    inflight_closure: ($) => seq(
+      "inflight",
+      field("parameter_list", $.parameter_list),
+      optional(field("return_type", $._type_annotation)),
+      "=>",
+      field("block", $.block)
+    ),
 
     await_expression: ($) => prec.right(seq("await", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
@@ -476,20 +486,6 @@ module.exports = grammar({
       prec.right(seq($.expression, "[", $.expression, "]")),
   },
 });
-
-/**
- * @param {GrammarSymbols<"parameter_list" | "_type_annotation" | "block">} $
- * @param {string} arrow
- */
- function anonymousClosure($, arrow) {
-  return seq(
-    optional("async"),
-    field("parameter_list", $.parameter_list),
-    optional(field("return_type", $._type_annotation)),
-    arrow,
-    field("block", $.block)
-  );
-}
 
 /**
  * @param {Rule} rule
