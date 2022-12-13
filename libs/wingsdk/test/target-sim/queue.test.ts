@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
-import * as testing from "../../src/testing";
 import { SimApp } from "../../src/testing";
+import { listMessages } from "./util";
 
 jest.setTimeout(5_000); // 5 seconds
 
@@ -145,7 +145,3 @@ test("messages are requeued if the function fails", async () => {
   ]);
   expect(app.snapshot()).toMatchSnapshot();
 });
-
-function listMessages(s: testing.Simulator) {
-  return s.listTraces().map((trace) => trace.data.message);
-}
