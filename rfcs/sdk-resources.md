@@ -4,6 +4,11 @@
 
 When designing APIs for Wing, we try to follow these tenets (unless you know better ones):
 
+- **Focused on functional behavior**: our APIs are designed around the functional aspects that developers care about for building and testing their applications.
+Implementations of resources in the SDK are assumed to be scalable, highly-available, and fault tolerant by default, so that developers do not need to customize security policies or scaling configuration within their application code.
+Operational aspects of resources should not leak into the core API surface area, except when they are essential to the functional behavior of the resource and the user's mental model.
+For example, while the timeout of a serverless function can be considered an operational detail, it is essential to the user's mental model of functions as an ephemeral, stateless resource that should not be used for long-running or stateful workloads.
+
 - **Meet developers where they are**: our APIs are based on the mental model of the user, and not the mental model of cloud service APIs, which are frequently designed against the constraints of the backend system and the fact that these APIs are used through network requests.
 It's okay to enable multiple ways to achieve the same thing, in order to make it more natural for users who come from different mental models.
 APIs should have sensible defaults, and should be easy to use correctly.
@@ -14,10 +19,6 @@ When possible, prefer mental models and terminology that are natural for operati
 Avoid APIs and options that may only be available on one or two major cloud providers.
 In the case that an essential option or method is not available on a given cloud provider, then the resource's concrete implementation should throw when the option or method is used.
 
-- **Focused on functional behavior**: our APIs are designed around the functional aspects that developers care about for building and testing their applications.
-Implementations of resources in the SDK are assumed to be scalable, highly-available, and fault tolerant by default, so that developers do not need to customize security policies or scaling configuration within their application code.
-Operational aspects of resources should not leak into the core API surface area.
-
 - **Open**: The Wing SDK is an extensible framework.
 It is also open source.
 It heavily relies on interfaces to allow developers to extend its behavior and provide their own custom implementations targeting new cloud providers, or allow more customized behavior.
@@ -26,7 +27,11 @@ It heavily relies on interfaces to allow developers to extend its behavior and p
 Any non-determinism should be minimized and scoped to sources provided by the user (e.g. by letting the user specify input files or environment variables).
 Non-determistic information should also ideally be managed by the provisioning engine's (for example, random IDs can be generated and managed with Terraform state).
 
-## Concepts used throughout the RFC
+- **Built with jsii**: The Wing SDK is designed first and foremost for the Wing language, but it is compiled with jsii to allow the resources to be created as CDK constructs in all jsii-supported programming languages. 
+jsii poses restrictions on language features that cannot be idiomatically represented in target languages, and encourages good practices for object-oriented design.
+Features that are specific to Wing (such as inflight functions) may not be available in other jsii languages.
+
+## Concepts used throughout the SDK
 
 ### Serializable
 
@@ -42,28 +47,31 @@ The `Iterator` object also implements the [async iterator protocol in JavaScript
 
 ## Planned resources
 
-Resources planned for MVP:
+* Bucket (P1) - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
+* Queue (P1) - a message queue, similar to AWS SQS, Azure Storage Queues, GCP Pub/Sub
+* Function (P1) - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
+* Topic (P1) - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
+* Logger (P1) - a log aggregator
+* Counter (P1) - an atomic counter
+* Schedule (P1) - a cron job / scheduled task trigger
+* Website (P1) - a CDN-backed static website
+* Api (P1) - a REST API
+* Metric (P1) - a metric for monitoring system performance
+* Alarm (P1) - an alarm that triggers when a metric crosses a threshold
+* Service (P1) - a long-running service, similar to AWS ECS, Azure Container Instances, GCP Cloud Run
+* Table (P2) - a relational database table
+* Key-value store (P2) - a lightweight key-value store, similar to Redis or Memcached
+* Job (P2) - a long-running compute workload that can be run on demand
+* Workflow (P2) - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
+* Secret (P2) - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
+* Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
 
-* Bucket
-* Queue
-* Function
-* Logger
-* Counter
-* Schedule
-* Topic
-* Website
-* Api
-* Table
+### Resources planned as third party libraries
 
-Future resources planned for post-MVP:
-
-* Key-value store
-* Job
-* Service
-* Workflow
-* Repo
-* Secret
-* Stream
+* DynamoDBTable
+* Redis
+* MongoDB
+* GithubRepo
 
 ## Bucket
 
