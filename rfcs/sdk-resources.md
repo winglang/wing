@@ -94,26 +94,31 @@ struct BucketProps {
   public: bool?;
 }
 
+struct BucketOnUploadProps { /* elided */ }
+struct BucketOnDeleteProps { /* elided */ }
+struct BucketOnUpdateProps { /* elided */ }
+struct BucketOnEventProps { /* elided */ }
+
 interface IBucket {
   /**
    * Run a function whenever a file is uploaded to the bucket.
    */
-  on_upload(fn: inflight (key: str) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_upload(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): cloud.Function;
 
   /**
    * Run a function whenever a file is deleted from the bucket.
    */
-  on_delete(fn: inflight (key: str) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_delete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): cloud.Function;
 
   /**
    * Run a function whenever a file is updated in the bucket.
    */
-  on_update(fn: inflight (key: str) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_update(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): cloud.Function;
 
   /**
    * Run a function whenever a file is created, uploaded, or deleted from the bucket.
    */
-  on_event(fn: inflight (event: BucketEvent) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_event(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): cloud.Function;
 }
 
 interface IBucketClient {
@@ -163,7 +168,15 @@ If a consumer function does not acknowledge a message, the message will be
 re-delivered to another consumer function.
 
 ```ts
-struct QueueProps {}
+struct QueueProps {
+  /**
+   * How long a message is available for consumption before it's made available
+   * for other consumers.
+   */
+  timeout: duration?;
+}
+
+struct QueueOnMessageProps { /* elided */ }
 
 interface IQueue {
   /**
@@ -174,7 +187,7 @@ interface IQueue {
    * same as the function's timeout, which is 1 minute by default. If the function
    * returns successfully, the message is deleted from the queue.
    */
-  on_message(fn: inflight (message: Serializable) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_message(fn: inflight (message: Serializable) => void, opts: QueueOnMessageProps?): cloud.Function;
 }
 
 interface IQueueClient {
@@ -214,6 +227,12 @@ struct FunctionProps {
    * @default 1min
    */
   timeout: duration?;
+
+  /**
+   * The amount of memory to allocate to the function, in MB.
+   * @default 128
+   */
+  memory: num?;
 
   /**
    * The maximum number of concurrent invocations of the function.
@@ -285,13 +304,15 @@ interface ICounter {}
 interface ICounterClient {
   /**
    * Increment the counter, returning the previous value.
+   * @default 1
    */
-  inc(): Promise<void>;
+  inc(value: num?): Promise<void>;
 
   /**
    * Decrement the counter, returning the previous value.
+   * @default 1
    */
-  dec(): Promise<void>;
+  dec(value: num?): Promise<void>;
 
   /**
    * Get the current value of the counter. Using this API is prone to race
@@ -302,16 +323,21 @@ interface ICounterClient {
 }
 ```
 
+Future extensions:
+- `on_change(fn: inflight (delta: num, new_value: num) => void): cloud.Function`
+
 ## Topic
 
 ```ts
 interface TopicProps {}
 
+struct TopicOnPublishProps { /* elided */ }
+
 interface ITopic {
   /**
    * Run a function whenever a message is published to the topic.
    */
-  on_message(fn: inflight (message: Serializable) => void): cloud.Function;
+  on_publish(fn: inflight (message: Serializable) => void, opts: TopicOnPublishProps?): cloud.Function;
 }
 
 interface ITopicClient {
@@ -345,11 +371,13 @@ struct ScheduleProps {
   rate: duration?;
 }
 
+struct ScheduleOnTickProps { /* elided */ }
+
 interface ISchedule {
   /**
    * Register a worker to run on the schedule.
    */
-  on_tick(handler: inflight () => void, opts: cloud.FunctionProps): cloud.Function;
+  on_tick(handler: inflight () => void, opts: ScheduleOnTickProps?): cloud.Function;
 }
 
 interface IScheduleClient {}
@@ -378,9 +406,9 @@ interface IWebsite {
 
 interface IWebsiteClient {
   /**
-   * Make a GET request to the website, and verify it returns a 200 status code.
+   * Make a GET request to given path, and verify it returns a 200 status code.
    */
-  ping(): Promise<bool>;
+  get(path: str): Promise<bool>;
 }
 ```
 
@@ -390,6 +418,13 @@ Future extensions: domain and certificate props? support for edge functions?
 
 ```ts
 struct ApiProps {}
+
+struct ApiOnGetProps { /* elided */ }
+struct ApiOnPostProps { /* elided */ }
+struct ApiOnPutProps { /* elided */ }
+struct ApiOnDeleteProps { /* elided */ }
+struct ApiOnPatchProps { /* elided */ }
+struct ApiOnRequestProps { /* elided */ }
 
 interface IApi {
   /**
@@ -436,9 +471,17 @@ interface IApiClient {
 }
 
 struct ApiRequest {
+  /** The request's path. */
   path: str;
+  /** The request's query string. */
+  query: str;
+  /** The path variables. */
+  vars: Map<str, str>;
+  /** The request's HTTP method. */
   method: HttpMethod;
+  /** The request's payload. */
   payload: Serializable;
+  /** The request's headers. */
   headers: Map<str, str>;
 }
 
