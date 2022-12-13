@@ -86,12 +86,12 @@ All code snippets should be in Wing - it just says "ts" for syntax highlighting
 -->
 
 ```ts
-interface BucketProps {
+struct BucketProps {
   /**
    * Whether the bucket is public.
    * @default false
    */
-  public?: bool;
+  public: bool?;
 }
 
 interface IBucket {
@@ -135,7 +135,7 @@ interface IBucketClient {
   /**
    * List all files in the bucket with the given prefix.
    */
-  list(prefix?: str): Promise<Iterator<str>>;
+  list(prefix: str?): Promise<Iterator<str>>;
 
   /**
    * Get the URL for a file in the bucket.
@@ -163,7 +163,7 @@ If a consumer function does not acknowledge a message, the message will be
 re-delivered to another consumer function.
 
 ```ts
-interface QueueProps {}
+struct QueueProps {}
 
 interface IQueue {
   /**
@@ -208,24 +208,24 @@ Functions are guaranteed to be invoked at least once, but may be invoked more
 than once (and some cloud providers may automatically retry failed invocations).
 
 ```ts
-interface FunctionProps {
+struct FunctionProps {
   /**
    * The maximum amount of time the function can run, in seconds.
    * @default 1min
    */
-  timeout?: duration;
+  timeout: duration?;
 
   /**
    * The maximum number of concurrent invocations of the function.
    * @default 10
    */
-  concurrency?: num;
+  concurrency: num?;
 
   /**
    * The environment variables to pass to the function.
    * @default {}
    */
-  env?: Map<str, str>;
+  env: Map<str, str>?;
 }
 
 interface IFunction {
@@ -250,6 +250,8 @@ Future extensions:
 ## Logger
 
 ```ts
+struct LoggerProps {}
+
 interface ILogger {
   /**
    * Log a message.
@@ -270,12 +272,12 @@ Future extensions: log severity options?
 ## Counter
 
 ```ts
-interface CounterProps {
+struct CounterProps {
   /**
    * The initial value of the counter.
    * @default 0
    */
-  initial?: num;
+  initial: num?;
 }
 
 interface ICounter {}
@@ -300,41 +302,6 @@ interface ICounterClient {
 }
 ```
 
-## Schedule
-
-```ts
-interface ScheduleProps {
-  /**
-   * Trigger events according to a cron schedule.
-   * 
-   * Only one of `cron` or `rate` can be specified.
-   * 
-   * @default "0 0 * * *" - midnight every day
-   */
-  cron?: str;
-
-  /**
-   * Trigger events at a fixed interval.
-   * 
-   * Only one of `cron` or `rate` can be specified.
-   * 
-   * @default 1 day
-   */
-  rate?: duration;
-}
-
-interface ISchedule {
-  /**
-   * Register a worker to run on the schedule.
-   */
-  on_tick(handler: inflight () => void, opts: cloud.FunctionProps): cloud.Function;
-}
-
-interface IScheduleClient {}
-```
-
-Future extensions: inflight `next_tick(): Duration` method?
-
 ## Topic
 
 ```ts
@@ -355,14 +322,47 @@ interface ITopicClient {
 }
 ```
 
-> Alternative names: `PubSub`, `EventBus`
+## Schedule
+
+```ts
+struct ScheduleProps {
+  /**
+   * Trigger events according to a cron schedule.
+   * 
+   * Only one of `cron` or `rate` can be specified.
+   * 
+   * @default "0 0 * * *" - midnight every day
+   */
+  cron: str?;
+
+  /**
+   * Trigger events at a fixed interval.
+   * 
+   * Only one of `cron` or `rate` can be specified.
+   * 
+   * @default 1 day
+   */
+  rate: duration?;
+}
+
+interface ISchedule {
+  /**
+   * Register a worker to run on the schedule.
+   */
+  on_tick(handler: inflight () => void, opts: cloud.FunctionProps): cloud.Function;
+}
+
+interface IScheduleClient {}
+```
+
+Future extensions: inflight `next_tick(): Duration` method?
 
 ## Website
 
 A CDN-backed website.
 
 ```ts
-interface WebsiteProps {
+struct WebsiteProps {
   /**
    * Path to the website's static files.
    */
@@ -389,7 +389,7 @@ Future extensions: domain and certificate props? support for edge functions?
 ## Api
 
 ```ts
-interface ApiProps {}
+struct ApiProps {}
 
 interface IApi {
   /**
@@ -435,7 +435,7 @@ interface IApiClient {
   invoke(route: str, method: HttpMethod, payload: Serializable): Promise<Serializable>;
 }
 
-interface ApiRequest {
+struct ApiRequest {
   path: str;
   method: HttpMethod;
   payload: Serializable;
@@ -459,12 +459,12 @@ Future extensions: support endpoint authorization? cors?
 ## Table
 
 ```ts
-interface TableProps {
+struct TableProps {
   /**
    * The table's primary key. No two rows can have the same primary key.
    * @default "id"
    */
-  primary_key?: str;
+  primary_key: str?;
 }
 
 interface ITable {
