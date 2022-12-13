@@ -1,4 +1,4 @@
-# Wing SDK resources
+# Wing SDK
 
 ## Design Guidelines
 
@@ -33,18 +33,6 @@ Non-determistic information should also ideally be managed by the provisioning e
 A `Serializable` is any immutable value that can be serialized and sent over the wire.
 This includes all primitive types, as well as any immutable collection types of `Serializable`s (such as `List`s and `Map`s).
 The Wing language spec does not yet support `Serializable` as a type, but until it is supported we will rely on the `str` type and provide a set of utility methods for casting to `str`.
-
-<!-- ### IEventObserver
-
-An `IEventObserver` represents a resource that can listen for distributed events. In code, an `IEventObserver` is any resource that implements an `inflight update(event: Serializable)` method.
-
-> In the future, if/when Wing supports generics, we can replace `Serializable` with a generic type parameter.
-> For example, `IEventObserver<T>` represents a resource that can listen for events of type `T`. 
-> This would allow us to type-check the `update` method, ensuring that e.g. a `cloud.Function` whose inflight code accepts `BucketEvent` in its first parameter can only be registered as a worker for a `cloud.Bucket` or some other source of `BucketEvent` notifications.
-
-Examples:
-- `cloud.Function` implements `IEventObserver`, so it is possible to register a function to be invoked when messages are available on a `cloud.Queue`, or whenever a notification is published to a `cloud.Topic`.
-- `cloud.Queue` implements `IEventObserver`, so it is possible for events to be automatically pushed to a queue. -->
 
 ### Paginated APIs
 
