@@ -196,6 +196,9 @@ container that is spun up on demand. The container is then destroyed after the
 function finishes executing. This allows functions to be highly-distributed
 and stateless, which makes them easy to scale and fault-tolerant.
 
+Functions are guaranteed to be invoked at least once, but may be invoked more
+than once (and some cloud providers may automatically retry failed invocations).
+
 ```ts
 interface FunctionProps {
   /**
@@ -209,12 +212,6 @@ interface FunctionProps {
    * @default 10
    */
   concurrency?: num;
-
-  /**
-   * The maximum number of times the function can be retried if it fails.
-   * @default 0
-   */
-  retries?: num;
 
   /**
    * The environment variables to pass to the function.
