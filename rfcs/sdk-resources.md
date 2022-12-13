@@ -390,41 +390,41 @@ interface IApi {
   url: str;
 
   /**
-   * Run a function whenever a GET request is made to the specified path.
+   * Run a function whenever a GET request is made to the specified route.
    */
-  on_get(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_get(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
-   * Run a function whenever a POST request is made to the specified path.
+   * Run a function whenever a POST request is made to the specified route.
    */
-  on_post(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_post(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
-   * Run a function whenever a PUT request is made to the specified path.
+   * Run a function whenever a PUT request is made to the specified route.
    */
-  on_put(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_put(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
-   * Run a function whenever a DELETE request is made to the specified path.
+   * Run a function whenever a DELETE request is made to the specified route.
    */
-  on_delete(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_delete(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
-   * Run a function whenever a PATCH request is made to the specified path.
+   * Run a function whenever a PATCH request is made to the specified route.
    */
-  on_patch(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_patch(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
-   * Run a function whenever any request is made to the specified path.
+   * Run a function whenever any request is made to the specified route.
    */
-  on_request(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_request(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 }
 
 interface IApiClient {
   /**
-   * Make a request to the specified path.
+   * Make a request to the specified route.
    */
-  invoke(path: str, method: HttpMethod, payload: Serializable): Promise<Serializable>;
+  invoke(route: str, method: HttpMethod, payload: Serializable): Promise<Serializable>;
 }
 
 interface ApiRequest {
@@ -446,7 +446,7 @@ enum HttpMethod {
 }
 ```
 
-Future extensions: support endpoint authorization?
+Future extensions: support endpoint authorization? cors?
 
 ## Table
 
