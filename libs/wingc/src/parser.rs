@@ -333,17 +333,12 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node) -> DiagnosticResult<FunctionDefinition> {
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let mut cur = anon_closure_node.walk();
 		let block_node_idx = anon_closure_node
 			.children(&mut cur)
 			.position(|c| c.kind() == "block")
 			.unwrap();
-		let flight = match self.node_text(&anon_closure_node.child(block_node_idx - 1).unwrap()) {
-			"->" => Phase::Preflight,
-			"~>" => Phase::Inflight,
-			other => self.report_unimplemented_grammar(other, "closure phase specifier", anon_closure_node)?,
-		};
 
 		self.build_function_definition(anon_closure_node, flight)
 	}
@@ -649,11 +644,11 @@ impl Parser<'_> {
 			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Preflight)?),
 				expression_span,
 			)),
 			"inflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
 			"pure_closure" => self.add_error(
