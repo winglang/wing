@@ -499,12 +499,25 @@ enum HttpMethod {
 
 Future extensions: support endpoint authorization? cors?
 
+## Metric
+
+TODO
+
+## Alarm
+
+TODO
+
+## Service
+
+TODO
+
 ## Table
 
 ```ts
 struct TableProps {
   /**
-   * The table's primary key. No two rows can have the same primary key.
+   * The table's primary key. No two rows can have the same value for the
+   * primary key.
    * @default "id"
    */
   primary_key: str?;
