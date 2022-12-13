@@ -32,7 +32,7 @@ Non-determistic information should also ideally be managed by the provisioning e
 
 A `Serializable` is any immutable value that can be serialized and sent over the wire.
 This includes all primitive types, as well as any immutable collection types of `Serializable`s (such as `List`s and `Map`s).
-The Wing language spec does not yet support `Serializable` as a type, but until it is supported we will rely on the `str` type and provide a set of utility methods for casting to `str`.
+The Wing language spec does not yet support `Serializable` as a type, but until it is supported we will rely on the `str` type and provide a set of utility methods for casting to and from `str`.
 
 ### Paginated APIs
 
