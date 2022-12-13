@@ -6,7 +6,7 @@ import {
   NodeJsCode,
   Inflight,
   Resource,
-  Policies,
+  Policy,
 } from "../core";
 import { TextFile } from "../fs";
 import { ISimulatorResource } from "./resource";
@@ -79,7 +79,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: Resource, _policies: Policies): Code {
+  public _bind(host: Resource, _policy: Policy): Code {
     return bindSimulatorResource("function", this, host);
   }
 }

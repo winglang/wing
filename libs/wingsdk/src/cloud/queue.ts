@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Duration, Inflight, Policies, Resource } from "../core";
+import { Code, Duration, Inflight, Policy, Resource } from "../core";
 import { Function, FunctionProps } from "./function";
 
 /**
@@ -73,7 +73,7 @@ export class Queue extends QueueBase {
   /**
    * @internal
    */
-  public _bind(_host: Resource, _policies: Policies): Code {
+  public _bind(_host: Resource, _policy: Policy): Code {
     throw new Error("Method not implemented.");
   }
 

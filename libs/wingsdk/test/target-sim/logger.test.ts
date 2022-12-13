@@ -19,8 +19,10 @@ test("inflight uses a logger", async () => {
     code: INFLIGHT_CODE,
     entrypoint: "$proc",
     bindings: {
+      logger: cloud.Logger.of(app),
+    },
+    policies: {
       logger: {
-        resource: cloud.Logger.of(app),
         methods: [cloud.LoggerInflightMethods.PRINT],
       },
     },

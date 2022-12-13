@@ -16,7 +16,7 @@ import {
   Inflight,
   InflightClient,
   Resource,
-  Policies,
+  Policy,
 } from "../core";
 import { addBindConnections } from "./util";
 
@@ -160,14 +160,13 @@ export class Function extends cloud.FunctionBase {
   /**
    * @internal
    */
-  public _bind(host: Resource, policies: Policies): Code {
+  public _bind(host: Resource, policy: Policy): Code {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
     const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
-    const policy = policies.find(this);
     if (policy.calls(cloud.FunctionInflightMethods.INVOKE)) {
       host.addPolicyStatements({
         effect: "Allow",

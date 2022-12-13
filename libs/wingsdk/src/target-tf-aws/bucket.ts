@@ -5,7 +5,7 @@ import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
-import { Code, InflightClient, Policies, Resource } from "../core";
+import { Code, InflightClient, Policy, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -67,14 +67,13 @@ export class Bucket extends cloud.BucketBase {
   /**
    * @internal
    */
-  public _bind(host: Resource, policies: Policies): Code {
+  public _bind(host: Resource, policy: Policy): Code {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
-    const policy = policies.find(this);
     if (policy.calls(BucketInflightMethods.PUT)) {
       host.addPolicyStatements({
         effect: "Allow",

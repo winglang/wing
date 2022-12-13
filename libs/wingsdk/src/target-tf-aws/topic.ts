@@ -4,7 +4,7 @@ import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscrip
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Direction, Policies, Resource } from "../core";
+import { Direction, Policy, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -92,14 +92,13 @@ export class Topic extends cloud.TopicBase {
   /**
    * @internal
    */
-  public _bind(host: Resource, policies: Policies): core.Code {
+  public _bind(host: Resource, policy: Policy): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
     const env = `TOPIC_ARN_${this.node.addr.slice(-8)}`;
 
-    const policy = policies.find(this);
     if (policy.calls(cloud.TopicInflightMethods.PUBLISH)) {
       host.addPolicyStatements({
         effect: "Allow",

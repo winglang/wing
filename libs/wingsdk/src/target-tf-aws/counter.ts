@@ -29,14 +29,13 @@ export class Counter extends cloud.CounterBase {
   /**
    * @internal
    */
-  public _bind(host: core.Resource, policies: core.Policies): core.Code {
+  public _bind(host: core.Resource, policy: core.Policy): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
     const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
 
-    const policy = policies.find(this);
     if (policy.calls(cloud.CounterInflightMethods.INC)) {
       host.addPolicyStatements({
         effect: "Allow",

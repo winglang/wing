@@ -3,7 +3,7 @@ import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
 } from "./attributes";
-import { Code, ICapturable, Policies } from "./inflight";
+import { Code, ICapturable, Policy } from "./inflight";
 import { IInspectable, TreeInspector } from "./tree";
 
 /**
@@ -28,7 +28,7 @@ export abstract class Resource
   /**
    * @internal
    */
-  public abstract _bind(host: Resource, policies: Policies): Code;
+  public abstract _bind(host: Resource, policy: Policy): Code;
 
   /**
    * Adds a connection to this resource. A connection is a piece of metadata

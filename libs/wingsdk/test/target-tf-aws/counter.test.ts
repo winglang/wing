@@ -36,9 +36,11 @@ test("function with a counter binding", () => {
         }`
     ),
     bindings: {
+      my_counter: counter,
+    },
+    policies: {
       my_counter: {
-        resource: counter,
-        methods: ["inc"],
+        methods: [cloud.CounterInflightMethods.INC],
       },
     },
     entrypoint: "$proc",

@@ -23,8 +23,10 @@ test("function with a bucket binding", () => {
     ),
     entrypoint: "$proc",
     bindings: {
+      bucket: bucket,
+    },
+    policies: {
       bucket: {
-        resource: bucket,
         methods: [BucketInflightMethods.PUT],
       },
     },
@@ -71,8 +73,10 @@ test("function with a function binding", () => {
     ),
     entrypoint: "$proc",
     bindings: {
+      function: fn1,
+    },
+    policies: {
       function: {
-        resource: fn1,
         methods: [FunctionInflightMethods.INVOKE],
       },
     },
@@ -108,8 +112,10 @@ test("two functions reusing the same inflight", () => {
     ),
     entrypoint: "$proc",
     bindings: {
+      bucket: bucket,
+    },
+    policies: {
       bucket: {
-        resource: bucket,
         methods: [BucketInflightMethods.PUT],
       },
     },
@@ -147,8 +153,10 @@ test("function with a queue binding", () => {
     ),
     entrypoint: "$proc",
     bindings: {
+      queue: queue,
+    },
+    policies: {
       queue: {
-        resource: queue,
         methods: [QueueInflightMethods.PUSH],
       },
     },

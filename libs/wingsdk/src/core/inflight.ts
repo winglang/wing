@@ -8,51 +8,81 @@ import { PREBUNDLE_SYMBOL } from "./internal";
 import { Resource } from "./resource";
 
 /**
- * Represents a collection of resource policies, each specifying a resource and
- * the methods that are allowed to be called on them.
+ * Represents a policy containing information about a set of resources and the
+ * methods that can be called on them.
  */
-export class Policies {
-  private readonly _map: Map<string, Policy>;
-  constructor() {
-    this._map = new Map();
-  }
-  /**
-   * Find the policy for a resource, and construct it if it doesn't exist.
-   */
-  public find(resource: IConstruct): Policy {
-    let policy = this._map.get(resource.node.path);
-    if (!policy) {
-      policy = new Policy();
-      this._map.set(resource.node.path, policy);
+export class Policy {
+  private _policy: PolicyFragment | undefined;
+  private readonly _children: Map<string, Policy>;
+
+  constructor(fragments: { [path: string]: PolicyFragment } = {}) {
+    this._children = new Map();
+    for (const [path, fragment] of Object.entries(fragments)) {
+      this.add(path, fragment);
     }
-    return policy;
+  }
+
+  /**
+   * Find the policy relevant for a named resource, or return an
+   * empty policy instance if there is no policy for it.
+   */
+  public lookup(path: string): Policy {
+    if (path.startsWith("this.")) {
+      path = path.substring(5);
+    }
+    const parts = path.split(".");
+    let curr: Policy = this;
+    for (const part of parts) {
+      if (!curr._children.has(part)) {
+        return new Policy();
+      }
+      curr = curr._children.get(part)!;
+    }
+    return curr;
+  }
+
+  public calls(method: string): boolean {
+    if (this._policy?.methods?.includes(method)) {
+      return true;
+    }
+    return false;
+  }
+
+  private add(path: string, fragment: PolicyFragment) {
+    const parts = path.split(".");
+    let curr: Policy = this;
+    for (const part of parts) {
+      if (!curr._children.has(part)) {
+        const policies = new Policy();
+        curr._children.set(part, policies);
+      }
+      curr = curr._children.get(part)!;
+    }
+    if (curr._policy) {
+      throw new Error(
+        `A policy fragment for ${path} already exists, found ${JSON.stringify(
+          curr._policy
+        )}`
+      );
+    }
+    curr._policy = fragment;
+  }
+
+  public toJSON() {
+    return {
+      policy: this._policy,
+      children: Object.fromEntries(
+        Array.from(this._children.entries()).map(([k, v]): any => [
+          k,
+          v.toJSON(),
+        ])
+      ),
+    };
   }
 }
 
-/**
- * Represents a policy for a resource, specifying the methods that are allowed
- * to be called on it.
- */
-export class Policy {
-  private readonly methods: string[];
-
-  constructor() {
-    this.methods = [];
-  }
-
-  /**
-   * Returns true if the policy allows the given method to be called.
-   */
-  public calls(method: string): boolean {
-    return this.methods.includes(method);
-  }
-
-  /**
-   * Adds a method to the policy.
-   */
-  public addCall(method: string) {
-    this.methods.push(method);
-  }
+export interface PolicyFragment {
+  readonly methods?: string[];
 }
 
 /**
@@ -66,7 +96,7 @@ export interface ICapturable {
    *
    * @internal
    */
-  _bind(host: Resource, policies: Policies): Code;
+  _bind(host: Resource, policies: Policy): Code;
 }
 
 /**
@@ -184,7 +214,9 @@ export interface InflightProps {
    *
    * @default - no bindings
    */
-  readonly bindings?: { [name: string]: InflightBinding };
+  readonly bindings?: { [name: string]: ICapturableConstruct };
+
+  readonly policies?: { [name: string]: PolicyFragment };
 }
 
 /**
@@ -208,23 +240,15 @@ export class Inflight {
    *
    * Each key here will be the key for the final value in the map.
    */
-  public readonly bindings: { [name: string]: InflightBinding };
+  public readonly bindings: { [name: string]: ICapturableConstruct };
 
-  private readonly policies: Policies;
+  private readonly policies: Policy;
 
   constructor(props: InflightProps) {
     this.code = props.code;
     this.entrypoint = props.entrypoint;
     this.bindings = props.bindings ?? {};
-
-    const policies = new Policies();
-    for (const binding of Object.values(this.bindings)) {
-      const policy = policies.find(binding.resource);
-      for (const method of binding.methods) {
-        policy.addCall(method);
-      }
-    }
-    this.policies = policies;
+    this.policies = new Policy(props.policies ?? {});
   }
 
   /**
@@ -297,7 +321,7 @@ export class Inflight {
   public makeClients(host: Resource): Record<string, Code> {
     const clients: Record<string, Code> = {};
     for (const [name, binding] of Object.entries(this.bindings)) {
-      clients[name] = binding.resource._bind(host, this.policies);
+      clients[name] = binding._bind(host, this.policies.lookup(name));
     }
     return clients;
   }

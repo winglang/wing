@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Policies, Resource } from "../core";
+import { Code, Policy, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.
@@ -54,7 +54,7 @@ export class Counter extends CounterBase {
   /**
    * @internal
    */
-  public _bind(_host: Resource, _policies: Policies): Code {
+  public _bind(_host: Resource, _policy: Policy): Code {
     throw new Error("Method not implemented.");
   }
 }

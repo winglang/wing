@@ -21,12 +21,14 @@ test("pushing messages through a queue", async () => {
         ),
         entrypoint: "$proc",
         bindings: {
+          logger: cloud.Logger.of(this),
+          queue: queue,
+        },
+        policies: {
           logger: {
-            resource: cloud.Logger.of(this),
             methods: [cloud.LoggerInflightMethods.PRINT],
           },
           queue: {
-            resource: queue,
             methods: [cloud.QueueInflightMethods.PUSH],
           },
         },
@@ -40,8 +42,10 @@ test("pushing messages through a queue", async () => {
           }`
         ),
         bindings: {
+          logger: cloud.Logger.of(this),
+        },
+        policies: {
           logger: {
-            resource: cloud.Logger.of(this),
             methods: [cloud.LoggerInflightMethods.PRINT],
           },
         },

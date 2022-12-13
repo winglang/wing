@@ -3,7 +3,7 @@ import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Direction, Policies, Resource } from "../core";
+import { Direction, Policy, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -92,14 +92,13 @@ export class Queue extends cloud.QueueBase {
   /**
    * @internal
    */
-  public _bind(host: Resource, policies: Policies): core.Code {
+  public _bind(host: Resource, policy: Policy): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
 
     const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
 
-    const policy = policies.find(this);
     if (policy.calls(cloud.QueueInflightMethods.PUSH)) {
       host.addPolicyStatements({
         effect: "Allow",
