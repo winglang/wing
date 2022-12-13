@@ -80,8 +80,6 @@ interface BucketProps {
   public?: bool;
 }
 
-interface BucketOnUp
-
 interface IBucket {
   /**
    * Run a function whenever a file is uploaded to the bucket.
@@ -148,7 +146,7 @@ interface IQueue {
   /**
    * Run a function whenever a message is pushed to the queue.
    */
-  on_message(fn: inflight (message: Serializable) => void): cloud.Function;
+  on_message(fn: inflight (message: Serializable) => void, opts: cloud.FunctionProps): cloud.Function;
 }
 
 interface IQueueClient {
@@ -293,7 +291,7 @@ interface ISchedule {
   /**
    * Register a worker to run on the schedule.
    */
-  on_tick(handler: inflight () => void): cloud.Function;
+  on_tick(handler: inflight () => void, opts: cloud.FunctionProps): cloud.Function;
 }
 
 interface IScheduleClient {}
@@ -366,42 +364,32 @@ interface IApi {
   /**
    * Run a function whenever a GET request is made to the specified path.
    */
-  on_get(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
-
-  /**
-   * Run a function whenever a HEAD request is made to the specified path.
-   */
-  on_head(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
+  on_get(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
    * Run a function whenever a POST request is made to the specified path.
    */
-  on_post(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
+  on_post(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
    * Run a function whenever a PUT request is made to the specified path.
    */
-  on_put(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
+  on_put(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
    * Run a function whenever a DELETE request is made to the specified path.
    */
-  on_delete(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
-
-  /**
-   * Run a function whenever an OPTIONS request is made to the specified path.
-   */
-  on_options(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
+  on_delete(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
    * Run a function whenever a PATCH request is made to the specified path.
    */
-  on_patch(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
+  on_patch(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
    * Run a function whenever any request is made to the specified path.
    */
-  on_request(path: str, fn: inflight (req: ApiRequest) => void): cloud.Function;
+  on_request(path: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
 }
 
 interface IApiClient {
@@ -447,17 +435,17 @@ interface ITable {
   /**
    * Run a function whenever a row is inserted into the table.
    */
-  on_insert(fn: inflight (row: Map<str, Serializable>) => void): cloud.Function;
+  on_insert(fn: inflight (row: Map<str, Serializable>) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
    * Run a function whenever a row is updated in the table.
    */
-  on_update(fn: inflight (row: Map<str, Serializable>) => void): cloud.Function;
+  on_update(fn: inflight (row: Map<str, Serializable>) => void, opts: cloud.FunctionProps): cloud.Function;
 
   /**
    * Run a function whenever a row is deleted from the table.
    */
-  on_delete(fn: inflight (row: Map<str, Serializable>) => void): cloud.Function;
+  on_delete(fn: inflight (row: Map<str, Serializable>) => void, opts: cloud.FunctionProps): cloud.Function;
 }
 
 interface ITableClient {
