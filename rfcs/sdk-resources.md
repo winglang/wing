@@ -67,6 +67,12 @@ Future resources planned for post-MVP:
 
 ## Bucket
 
+The bucket resource represents an object store that can be used to store and
+retrieve arbitrary data. A bucket can be used to store text files, images,
+videos, and any other type of data. You can think of a bucket as a file system
+or hash map in the cloud whose data is usually distributed across multiple
+machines for high availability.
+
 <!--
 All code snippets should be in Wing - it just says "ts" for syntax highlighting
 -->
@@ -136,8 +142,17 @@ Future extensions:
 
 ## Queue
 
-> Note: AWS SQS imposes a (configurable) visibility timeout on all messages received from a queue.
-> To abstract this away from the user, the implementation in Wing will automatically extend the visibility timeout of a message whenever a worker is processing it for an extended period of time, up to the 12 hour maximum.
+The queue resource represents a buffer for messages which can help create more
+predictable load between a set of producers and a set of consumers. Using a
+queue, you can send, store, and receive messages between software components at
+any volume, without losing messages or requiring other services to be available.
+
+Any number of producers can push messages to the queue, and any number of consumers
+can pop messages from the queue. When a consumer function receives a batch of
+messages, it is responsible for processing each message in the batch and
+acknowledging that the message has been processed by deleting it from the queue.
+If a consumer function does not acknowledge a message, the message will be
+re-delivered to another consumer function.
 
 ```ts
 interface QueueProps {}
@@ -145,6 +160,11 @@ interface QueueProps {}
 interface IQueue {
   /**
    * Run a function whenever a message is pushed to the queue.
+   *
+   * The visibility timeout for messages (amount of time a consumer is given to
+   * process a message before it's made available for other consumers) is the
+   * same as the function's timeout, which is 1 minute by default. If the function
+   * returns successfully, the message is deleted from the queue.
    */
   on_message(fn: inflight (message: Serializable) => void, opts: cloud.FunctionProps): cloud.Function;
 }
@@ -161,7 +181,20 @@ interface IQueueClient {
 }
 ```
 
+Future extensions:
+- automatic dead-letter queue configuration
+
 ## Function
+
+The function resource represents a highly-distributed, stateless function that
+can be used to run code only when needed. Functions are typically used to
+process data in response to events, such as a file being uploaded to a bucket,
+a message being pushed to a queue, or a timer expiring.
+
+When a function is invoked on a cloud provider, it is typically executed in a
+container that is spun up on demand. The container is then destroyed after the
+function finishes executing. This allows functions to be highly-distributed
+and stateless, which makes them easy to scale and fault-tolerant.
 
 ```ts
 interface FunctionProps {
