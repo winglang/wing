@@ -13,9 +13,10 @@ let arr5 = [bucket1, bucket2, bucket3];
 //let arr6: Array<cloud.Bucket> = [bucket1, bucket2, bucket3];
 
 //Map tests
-let m1 = {"a":1, "b":2, "c":3};
+/* let m1 = {"a":1, "b":2, "c":3};
 let m2: Map<num> = {"a":1, "b":2, "c":3};
 let m3 = Map<num> {"a":1, "b":2, "c":3};
 let m4: Map<num> = Map<num> {"a":1, "b":2, "c":3};
 let m5 = {"a":bucket1, "b":bucket2, "c":bucket3};
+*/
 //let m6: Map<cloud.Bucket> = {"a":bucket1, "b":bucket2, "c":bucket3};

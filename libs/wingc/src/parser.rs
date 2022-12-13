@@ -1,6 +1,6 @@
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{HashMap};
 use std::{str, vec};
 use tree_sitter::Node;
 
@@ -684,7 +684,7 @@ impl Parser<'_> {
 					None
 				};
 
-				let mut fields = BTreeMap::new();
+				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {
@@ -718,7 +718,7 @@ impl Parser<'_> {
 			}
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = BTreeMap::new();
+				let mut fields = HashMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
