@@ -1,6 +1,6 @@
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{HashMap};
+use std::collections::HashMap;
 use std::{str, vec};
 use tree_sitter::Node;
 
