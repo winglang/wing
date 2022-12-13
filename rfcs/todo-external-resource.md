@@ -24,12 +24,17 @@ As suggested in the doc, start with an example and ask for our help and comments
 <enter code here>
 ```
 
+## Sim implementation 
+
+Dave didn't implement a perfect module, his sim implementation requires a running dynamodb instance on the machine at port 8000, if a dynamodb is not running and listening on port 8000, localhost sim app that uses this module will not work
+
+## Prolog 
+
 This story is completed when we have an example custom resource + all the assets and tutorials in order for a contributor to have create one
 
 ## TODO section
 
 ```js
-// TODO - add Dave localhost implementation idea for using dyanmodb localhost image (requires docker / JRE) 
 // TODO - add the wing code with dyanmodb instead of the bucket and the counter 
 // TODO - break down to tasks and to task that we should not do 
 ```
