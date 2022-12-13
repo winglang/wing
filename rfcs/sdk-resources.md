@@ -294,8 +294,6 @@ interface ICounterClient {
 
 ## Schedule
 
-> Alternative names: `Timer`, `Cron`, `Schedule`
-
 ```ts
 interface ScheduleProps {
   /**
