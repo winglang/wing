@@ -1,5 +1,31 @@
 # Wing SDK resources
 
+## Design Guidelines
+
+When designing APIs for Wing, we try to follow these tenets (unless you know better ones):
+
+- **Meet developers where they are**: our APIs are based on the mental model of the user, and not the mental model of cloud service APIs, which are frequently designed against the constraints of the backend system and the fact that these APIs are used through network requests.
+It's okay to enable multiple ways to achieve the same thing, in order to make it more natural for users who come from different mental models.
+APIs should have sensible defaults, and should be easy to use correctly.
+It's okay to make it possible to do the wrong thing, but it should be hard to do the wrong thing.
+
+- **Cloud and target agnostic**: our APIs and their documentation should not have any assumptions about where resources are being deployed.
+When possible, prefer mental models and terminology that are natural for operating with data structures for code running on your own machine (eg., choose "push" and "pop" over "send" and "receive").
+Avoid APIs and options that may only be available on one or two major cloud providers.
+In the case that an essential option or method is not available on a given cloud provider, then the resource's concrete implementation should throw when the option or method is used.
+
+- **Focused on functional behavior**: our APIs are designed around the functional aspects that developers care about for building and testing their applications.
+Implementations of resources in the SDK are assumed to be scalable, highly-available, and fault tolerant by default, so that developers do not need to customize security policies or scaling configuration within their application code.
+Operational aspects of resources should not leak into the core API surface area.
+
+- **Open**: The Wing SDK is an extensible framework.
+It is also open source.
+It heavily relies on interfaces to allow developers to extend its behavior and provide their own custom implementations targeting new cloud providers, or allow more customized behavior.
+
+- **Deterministic**: The same code should always produce the same result.
+Any non-determinism should be minimized and scoped to sources provided by the user (e.g. by letting the user specify input files or environment variables).
+Non-determistic information should also ideally be managed by the provisioning engine's (for example, random IDs can be generated and managed with Terraform state).
+
 ## Concepts used throughout the RFC
 
 ### Serializable
