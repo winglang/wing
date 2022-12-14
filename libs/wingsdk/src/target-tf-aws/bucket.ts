@@ -15,6 +15,31 @@ import { addBindConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
+  /** @internal */
+  public readonly _policies = {
+    [BucketInflightMethods.PUT]: {
+      // "self" is a special policy that means "this resource"
+      self: {
+        methods: [BucketInflightMethods.PUT],
+      },
+    },
+    [BucketInflightMethods.GET]: {
+      self: {
+        methods: [BucketInflightMethods.GET],
+      },
+    },
+    [BucketInflightMethods.LIST]: {
+      self: {
+        methods: [BucketInflightMethods.LIST],
+      },
+    },
+    [BucketInflightMethods.DELETE]: {
+      self: {
+        methods: [BucketInflightMethods.DELETE],
+      },
+    },
+  };
+
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
 

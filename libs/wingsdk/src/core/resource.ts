@@ -28,6 +28,11 @@ export abstract class Resource
   /**
    * @internal
    */
+  public abstract _policies: ResourcePolicy;
+
+  /**
+   * @internal
+   */
   public abstract _bind(host: Resource, policy: Policy): Code;
 
   /**
@@ -94,4 +99,33 @@ export interface Connection {
    * The direction of the connection.
    */
   readonly direction: Direction;
+}
+
+/**
+ * A policy containing all of the policies for each of the methods and
+ * properties of a resource.
+ *
+ * @example
+ * The following policy says that the resource has a method named "handle"
+ * that may call "put" on a resource named "inner", or it may call "get" on a
+ * resource passed as an argument named "other".
+ * { "handle": { "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } } }
+ */
+export interface ResourcePolicy {
+  [operation: string]: OperationPolicy;
+}
+
+/**
+ * A policy specifying what resources an operation may access.
+ *
+ * @example
+ * The following policy says that the operation may call "put" on a resource
+ * named "inner", or it may call "get" on a resource passed as an argument
+ * named "other".
+ * { "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } }
+ */
+export interface OperationPolicy {
+  [resource: string]: {
+    methods: string[];
+  };
 }

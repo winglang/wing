@@ -5,9 +5,20 @@ import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as tfaws from "../../src/target-tf-aws";
 
-class MyBucket extends Construct {
+class MyBucket extends core.Resource {
+  public readonly stateful = true;
   private inner: cloud.Bucket;
   private thing: string;
+
+  /** @internal */
+  public readonly _policies = {
+    put_something: {
+      inner: {
+        methods: ["put"],
+      },
+    },
+  };
+
   constructor(scope: Construct, id: string, message: string) {
     super(scope, id);
     this.inner = new cloud.Bucket(this, "Bucket");
@@ -25,8 +36,19 @@ class MyBucket extends Construct {
   }
 }
 
-class Handler extends Construct {
+class Handler extends core.Resource {
+  public readonly stateful = true;
   private b: MyBucket;
+
+  /** @internal */
+  public readonly _policies = {
+    handle: {
+      b: {
+        methods: ["put_something"],
+      },
+    },
+  };
+
   constructor(scope: Construct, id: string, b: MyBucket) {
     super(scope, id);
     this.b = b;
