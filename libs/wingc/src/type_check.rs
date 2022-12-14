@@ -233,8 +233,6 @@ impl Display for Type {
 	}
 }
 
-//type TypeRef = *const Type;
-
 #[derive(Clone, Copy)]
 pub struct TypeRef(*const Type);
 
@@ -261,6 +259,18 @@ impl From<TypeRef> for &mut Type {
 }
 
 impl TypeRef {
+	// In many places we want to get the type of the instance, not the instance itself
+	// this is a helper function for getting the type of an instance (class, struct, resource, ...)
+	// if the type is not an instance (either a custom type or a built-in), it will return the type itself
+	fn get_type_of_instance(&self) -> TypeRef {
+		match (*self).into() {
+			&Type::ClassInstance(class_instance) => class_instance,
+			&Type::StructInstance(struct_instance) => struct_instance,
+			&Type::ResourceObject(resource) => resource,
+			_ => *self,
+		}
+	}
+
 	pub fn as_class_or_resource_object(&self) -> Option<&Class> {
 		self.as_class_object().or_else(|| self.as_resource_object())
 	}
@@ -775,13 +785,13 @@ impl<'a> TypeChecker<'a> {
 					let some_val_type = self
 						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
 						.unwrap();
-					self.types.add_type(Type::Array(some_val_type))
+					self.types.add_type(Type::Array(some_val_type.get_type_of_instance()))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
 					self.types.add_type(Type::Array(self.types.anything()))
 				};
 
-				let value_type = match container_type.into() {
+				let element_type = match container_type.into() {
 					&Type::Array(t) => t,
 					_ => panic!("Expected array type, found {}", container_type),
 				};
@@ -789,7 +799,7 @@ impl<'a> TypeChecker<'a> {
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
 					let t = self.type_check_exp(v, env, statement_idx).unwrap();
-					self.validate_type(t, value_type, v);
+					self.validate_type(t.get_type_of_instance(), element_type, v);
 				}
 
 				Some(container_type)
