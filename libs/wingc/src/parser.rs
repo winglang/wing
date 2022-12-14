@@ -26,7 +26,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
 	"Set" => "see https://github.com/winglang/wing/issues/530",
-	"Array" => "see https://github.com/winglang/wing/issues/246",
+	"set_literal" => "see https://github.com/winglang/wing/issues/530",
 	"MutSet" => "see https://github.com/winglang/wing/issues/98",
 	"MutArray" => "see https://github.com/winglang/wing/issues/663",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
@@ -742,11 +742,7 @@ impl Parser<'_> {
 				))
 			}
 			other => {
-				if expression_node.has_error() {
-					self.add_error(format!("Expected expression"), expression_node)
-				} else {
-					self.add_error(format!("Unexpected expression {}", other), expression_node)
-				}
+				self.report_unimplemented_grammar(other, "expression", expression_node)
 			}
 		}
 	}
