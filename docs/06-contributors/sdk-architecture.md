@@ -59,7 +59,7 @@ For example, given the following Wing code:
 ```wing
 let queue = new cloud.Queue();
 let greeting = "Hello, world!";
-new cloud.Function((event: str) ~> {
+new cloud.Function(inflight (event: str) => {
     print(greeting);
     queue.push(event);
 });

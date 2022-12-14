@@ -149,7 +149,7 @@ new A() as "b" in c;
 preflight anonymous closure
 ================================
 
-(a: num): num -> { return a; };
+(a: num): num => { return a; };
 
 ---
 
@@ -178,7 +178,7 @@ preflight anonymous closure
 inflight anonymous closure
 ================================
 
-(): num ~> { return 1; };
+inflight (): num => { return 1; };
 
 ---
 
@@ -321,15 +321,22 @@ Array Literal
 ================================
 
 [1, 2, 3,];
-
+Array<str>[];
 ---
 
 (source
     (expression_statement
         (array_literal
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
+        )
+    )
+    (expression_statement
+       (array_literal
+            type: (immutable_container_type
+                type_parameter: (builtin_type)
+            )
         )
     )
 )
@@ -344,11 +351,11 @@ let a: Array<num> = [];
 
 (source
     (variable_definition_statement
-        (identifier)
-        (immutable_container_type
-            (builtin_type)
+        name: (identifier)
+        type: (immutable_container_type
+            type_parameter: (builtin_type)
         )
-        (array_literal)
+        value: (array_literal)
     )
 )
 

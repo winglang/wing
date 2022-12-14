@@ -140,7 +140,7 @@ export class Function extends cloud.FunctionBase {
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: this.node.id,
+      functionName: this.sanitizeFunctionName(this.node.id),
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
@@ -155,6 +155,16 @@ export class Function extends cloud.FunctionBase {
 
     // terraform rejects templates with zero environment variables
     this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
+  }
+
+  /**
+   * Temporary work around to use node.id in function name.
+   * Valid lambda naming: https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-FunctionName
+   *
+   * Should be deprecated by https://github.com/winglang/wing/discussions/861 (Name Generator)
+   */
+  private sanitizeFunctionName(name: string): string {
+    return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
   }
 
   /**

@@ -31,9 +31,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
     code.push(
       `   if (!event.message) throw new Error('No "message" field in event.');`
     );
-    code.push(` for (const $message of event.message) {`);
-    code.push(` await ${inflight.entrypoint}($cap, $message);`);
-    code.push(` }`);
+    code.push(` await ${inflight.entrypoint}($cap, event.message);`);
     code.push(`}`);
 
     const newInflight = new core.Inflight({

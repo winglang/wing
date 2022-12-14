@@ -26,7 +26,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
 	"Set" => "see https://github.com/winglang/wing/issues/530",
-	"Array" => "see https://github.com/winglang/wing/issues/246",
+	"set_literal" => "see https://github.com/winglang/wing/issues/530",
 	"MutSet" => "see https://github.com/winglang/wing/issues/98",
 	"MutArray" => "see https://github.com/winglang/wing/issues/663",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
@@ -333,18 +333,7 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node) -> DiagnosticResult<FunctionDefinition> {
-		let mut cur = anon_closure_node.walk();
-		let block_node_idx = anon_closure_node
-			.children(&mut cur)
-			.position(|c| c.kind() == "block")
-			.unwrap();
-		let flight = match self.node_text(&anon_closure_node.child(block_node_idx - 1).unwrap()) {
-			"->" => Phase::Preflight,
-			"~>" => Phase::Inflight,
-			other => self.report_unimplemented_grammar(other, "closure phase specifier", anon_closure_node)?,
-		};
-
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		self.build_function_definition(anon_closure_node, flight)
 	}
 
@@ -420,6 +409,7 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
+					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
 					other => self.report_unimplemented_grammar(other, "bultin container type", type_node),
 				}
@@ -649,17 +639,38 @@ impl Parser<'_> {
 			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Preflight)?),
 				expression_span,
 			)),
 			"inflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
 			"pure_closure" => self.add_error(
 				format!("Pure phased anonymous closures not implemented yet"),
 				expression_node,
 			),
+			"array_literal" => {
+				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut items = Vec::new();
+				let mut cursor = expression_node.walk();
+				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+					items.push(self.build_expression(&element_node)?);
+				}
+
+				Ok(Expr::new(
+					ExprKind::ArrayLiteral {
+						items,
+						type_: array_type,
+					},
+					expression_span,
+				))
+			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)
@@ -724,13 +735,7 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
-			other => {
-				if expression_node.has_error() {
-					self.add_error(format!("Expected expression"), expression_node)
-				} else {
-					panic!("Unexpected expression {} || {:#?}", other, expression_node);
-				}
-			}
+			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
 	}
 }

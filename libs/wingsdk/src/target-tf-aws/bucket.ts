@@ -95,6 +95,17 @@ export class Bucket extends cloud.BucketBase {
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
+    if (methods.has(BucketInflightMethods.DELETE)) {
+      captureScope.addPolicyStatements({
+        effect: "Allow",
+        action: [
+          "s3:DeleteObject*",
+          "s3:DeleteObjectVersion*",
+          "s3:PutLifecycleConfiguration*",
+        ],
+        resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
+      });
+    }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.bucket.bucket);

@@ -934,6 +934,39 @@ statefile is not specified, we won't be able to remove extrenous files.
 
 ---
 
+### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/wingsdk.cloud.BucketDeleteOptions"></a>
+
+Interface for delete method inside `Bucket`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.BucketDeleteOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let bucket_delete_options = cloud.BucketDeleteOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExist">must_exist</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
+
+---
+
+##### `must_exist`<sup>Optional</sup> <a name="must_exist" id="@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExist"></a>
+
+```wing
+must_exist: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Check failures on the method and retrieve errors if any.
+
+---
+
 ### BucketProps <a name="BucketProps" id="@winglang/wingsdk.cloud.BucketProps"></a>
 
 Properties for `Bucket`.
@@ -2616,9 +2649,34 @@ Inflight interface for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
+
+---
+
+##### `delete` <a name="delete" id="@winglang/wingsdk.cloud.IBucketClient.delete"></a>
+
+```wing
+delete(key: str, opts?: BucketDeleteOptions): void
+```
+
+Delete an existing object using a key from the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.opts"></a>
+
+- *Type:* cloud.BucketDeleteOptions
+
+Options available for delete an item from a bucket.
 
 ---
 
@@ -2633,6 +2691,8 @@ Retrieve an object from the bucket.
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
 - *Type:* str
+
+Key of the object.
 
 ---
 
@@ -2664,11 +2724,15 @@ Put an object in the bucket.
 
 - *Type:* str
 
+Key of the object.
+
 ---
 
 ###### `body`<sup>Required</sup> <a name="body" id="@winglang/wingsdk.cloud.IBucketClient.put.parameter.body"></a>
 
 - *Type:* str
+
+Content of the object we want to store into the bucket.
 
 ---
 
@@ -2887,6 +2951,7 @@ List of inflight operations available for `Bucket`.
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.DELETE">DELETE</a></code> | `Bucket.delete`. |
 
 ---
 
@@ -2907,6 +2972,13 @@ List of inflight operations available for `Bucket`.
 ##### `LIST` <a name="LIST" id="@winglang/wingsdk.cloud.BucketInflightMethods.LIST"></a>
 
 `Bucket.list`.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/wingsdk.cloud.BucketInflightMethods.DELETE"></a>
+
+`Bucket.delete`.
 
 ---
 
