@@ -208,6 +208,10 @@ impl Parser<'_> {
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			},
+			"while_statement" => StmtKind::While {
+				condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			},
 			"return_statement" => StmtKind::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 					Some(self.build_expression(&return_expression_node)?)

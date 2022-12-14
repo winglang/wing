@@ -235,12 +235,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 					res.extend(
 						resource
 							.methods()
-							.filter(|(_, sig)| {
-								matches!(
-									sig.as_function_sig().unwrap().flight,
-									Phase::Inflight
-								)
-							})
+							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
 								def: CaptureDef { method: name.clone() },
@@ -318,6 +313,10 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				statements,
 			} => {
 				res.extend(scan_captures_in_expression(iterable, env, s.idx));
+				res.extend(scan_captures_in_inflight_scope(statements));
+			}
+			StmtKind::While { condition, statements } => {
+				res.extend(scan_captures_in_expression(condition, env, s.idx));
 				res.extend(scan_captures_in_inflight_scope(statements));
 			}
 			StmtKind::If {

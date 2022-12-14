@@ -394,6 +394,13 @@ impl JSifier {
 				self.jsify_expression(iterable),
 				self.jsify_scope(statements)
 			),
+			StmtKind::While { condition, statements } => {
+				format!(
+					"while ({}) {}",
+					self.jsify_expression(condition),
+					self.jsify_scope(statements),
+				)
+			}
 			StmtKind::If {
 				condition,
 				statements,
