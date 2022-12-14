@@ -1,3 +1,4 @@
+use indexmap::IndexSet;
 use phf::phf_map;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -221,6 +222,7 @@ impl Parser<'_> {
 			),
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
+			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -230,6 +232,50 @@ impl Parser<'_> {
 			span: self.node_span(statement_node),
 			idx,
 		})
+	}
+
+	fn build_enum_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let mut has_errors = false;
+
+		let name = self.node_symbol(&statement_node.child_by_field_name("enum_name").unwrap());
+		if name.is_err() {
+			self
+				.add_error::<Node>(String::from("Invalid enum name"), &statement_node)
+				.err();
+			has_errors = true;
+		}
+
+		let mut cursor = statement_node.walk();
+		let mut values = IndexSet::<Symbol>::new();
+		for node in statement_node.named_children(&mut cursor) {
+			if node.kind() != "enum_field" {
+				continue;
+			}
+
+			let diagnostic = self.node_symbol(&node);
+			if diagnostic.is_err() {
+				self.add_error::<Node>(String::from("Invalid enum value"), &node).err();
+				has_errors = true;
+				continue;
+			}
+
+			let symbol = diagnostic.unwrap();
+			let success = values.insert(symbol.clone());
+			if !success {
+				self
+					.add_error::<Node>(format!("Duplicated enum value {}", symbol.name), &node)
+					.err();
+			}
+		}
+
+		if has_errors {
+			Err(())
+		} else {
+			Ok(StmtKind::Enum {
+				name: name.unwrap(),
+				values,
+			})
+		}
 	}
 
 	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> DiagnosticResult<StmtKind> {

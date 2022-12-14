@@ -17,6 +17,7 @@ globset = "0.4.9"
 itertools = "0.10"
 inflections = "1.1.1"
 phf = { version = "0.11", features = ["macros"] }
+indexmap = "1.9.1"
 
 [lib]
 path = "src/lib.rs"

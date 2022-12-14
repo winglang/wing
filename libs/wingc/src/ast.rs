@@ -4,6 +4,7 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
+use indexmap::IndexSet;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -156,6 +157,10 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<Symbol>,
 		members: Vec<ClassMember>,
+	},
+	Enum {
+		name: Symbol,
+		values: IndexSet<Symbol>,
 	},
 }
 

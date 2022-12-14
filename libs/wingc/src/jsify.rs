@@ -325,17 +325,17 @@ impl JSifier {
 					self.jsify_expression(rexp)
 				)
 			}
-      ExprKind::ArrayLiteral { items, .. } => {
-        format!(
-          "Object.freeze([{}])",
-          items
-            .iter()
-            .map(|expr| self.jsify_expression(expr))
-            .collect::<Vec<String>>()
-            .join(", ")
-        )
-      }
-      ExprKind::StructLiteral { fields, .. } => {
+			ExprKind::ArrayLiteral { items, .. } => {
+				format!(
+					"Object.freeze([{}])",
+					items
+						.iter()
+						.map(|expr| self.jsify_expression(expr))
+						.collect::<Vec<String>>()
+						.join(", ")
+				)
+			}
+			ExprKind::StructLiteral { fields, .. } => {
 				format!(
 					"{{\n{}}}\n",
 					fields
@@ -505,6 +505,28 @@ impl JSifier {
 						.map(|m| self.jsify_class_member(m))
 						.collect::<Vec<String>>()
 						.join("\n")
+				)
+			}
+			StmtKind::Enum { name, values } => {
+				let name = self.jsify_symbol(name);
+				let mut value_index = 0;
+				format!(
+					"const {} = Object.freeze((function ({}) {{\n{}\n  return {};\n}})({{}}));",
+					name,
+					name,
+					values
+						.iter()
+						.map(|value| {
+							let text = format!(
+								"  {}[{}[\"{}\"] = {}] = \"{}\";",
+								name, name, value.name, value_index, value.name
+							);
+							value_index = value_index + 1;
+							text
+						})
+						.collect::<Vec<String>>()
+						.join("\n"),
+					name,
 				)
 			}
 		}
