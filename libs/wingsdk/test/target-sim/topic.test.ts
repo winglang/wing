@@ -112,9 +112,11 @@ function makeInflight(code: string, app: core.IApp) {
   return new core.Inflight({
     code: core.NodeJsCode.fromInline(code),
     entrypoint: "$proc",
-    captures: {
+    bindings: {
+      logger: cloud.Logger.of(app),
+    },
+    policies: {
       logger: {
-        resource: cloud.Logger.of(app),
         methods: [cloud.LoggerInflightMethods.PRINT],
       },
     },

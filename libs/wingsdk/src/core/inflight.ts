@@ -68,7 +68,7 @@ export class Policy {
     curr._policy = fragment;
   }
 
-  public toJSON() {
+  public toJSON(): any {
     return {
       policy: this._policy,
       children: Object.fromEntries(

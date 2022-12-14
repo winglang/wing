@@ -95,8 +95,8 @@ export class Bucket extends cloud.BucketBase {
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.has(BucketInflightMethods.DELETE)) {
-      captureScope.addPolicyStatements({
+    if (policy.calls(BucketInflightMethods.DELETE)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: [
           "s3:DeleteObject*",
