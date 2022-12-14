@@ -19,6 +19,7 @@ const project = new cdk.JsiiProject({
   deps: [...JSII_DEPS],
   bundledDeps: [
     // preflight dependencies
+    "debug",
     "esbuild-wasm",
     "safe-stable-stringify",
     // aws client dependencies
@@ -39,6 +40,7 @@ const project = new cdk.JsiiProject({
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
+    "@types/debug",
     "@types/fs-extra",
     "@types/tar",
     "aws-sdk-client-mock",

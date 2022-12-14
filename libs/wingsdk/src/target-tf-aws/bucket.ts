@@ -72,10 +72,7 @@ export class Bucket extends cloud.BucketBase {
     }
   }
 
-  /**
-   * @internal
-   */
-  public _bind(host: Resource, policy: OperationPolicy): Code {
+  protected _bind_impl(host: Resource, policy: OperationPolicy): Code {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }

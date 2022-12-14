@@ -3,7 +3,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
-import { Code, NodeJsCode, OperationPolicy, Resource } from "../core";
+import * as core from "../core";
 import { TextFile } from "../fs";
 import { mkdtemp } from "../util";
 import { ISimulatorResource } from "./resource";
@@ -28,7 +28,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   };
 
   private readonly env: Record<string, string> = {};
-  private readonly code: Code;
+  private readonly code: core.Code;
 
   constructor(
     scope: Construct,
@@ -67,7 +67,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     new TextFile(this, "Code", assetPath, {
       lines: [readFileSync(outfile, "utf-8")],
     });
-    this.code = NodeJsCode.fromFile(assetPath);
+    this.code = core.NodeJsCode.fromFile(assetPath);
 
     for (const [name, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(name, value);
@@ -95,8 +95,10 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: Resource, _policy: OperationPolicy): Code {
+  protected _bind_impl(
+    host: core.Resource,
+    _policy: core.OperationPolicy
+  ): core.Code {
     return bindSimulatorResource("function", this, host);
   }
 }

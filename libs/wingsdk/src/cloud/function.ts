@@ -79,10 +79,7 @@ export class Function extends FunctionBase {
     ) as Function;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_host: Resource, _policy: OperationPolicy): Code {
+  protected _bind_impl(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 

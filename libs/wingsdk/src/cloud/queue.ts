@@ -73,10 +73,7 @@ export class Queue extends QueueBase {
     return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_host: Resource, _policy: OperationPolicy): Code {
+  protected _bind_impl(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 

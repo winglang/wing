@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { Code, OperationPolicy, Resource } from "../core";
+import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { CounterSchema } from "./schema-resources";
@@ -36,8 +36,10 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
     return schema;
   }
 
-  /** @internal */
-  public _bind(host: Resource, _policy: OperationPolicy): Code {
+  protected _bind_impl(
+    host: core.Resource,
+    _policy: core.OperationPolicy
+  ): core.Code {
     return bindSimulatorResource("counter", this, host);
   }
 }

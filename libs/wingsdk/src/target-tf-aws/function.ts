@@ -185,10 +185,7 @@ export class Function extends cloud.FunctionBase {
     return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
   }
 
-  /**
-   * @internal
-   */
-  public _bind(host: Resource, policy: OperationPolicy): Code {
+  protected _bind_impl(host: Resource, policy: OperationPolicy): Code {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }

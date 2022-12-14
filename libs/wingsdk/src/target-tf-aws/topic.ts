@@ -94,10 +94,10 @@ export class Topic extends cloud.TopicBase {
     // return fn;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(host: core.Resource, policy: core.OperationPolicy): core.Code {
+  protected _bind_impl(
+    host: core.Resource,
+    policy: core.OperationPolicy
+  ): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }

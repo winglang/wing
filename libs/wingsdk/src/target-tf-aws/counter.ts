@@ -31,10 +31,10 @@ export class Counter extends cloud.CounterBase {
     });
   }
 
-  /**
-   * @internal
-   */
-  public _bind(host: core.Resource, policy: core.OperationPolicy): core.Code {
+  protected _bind_impl(
+    host: core.Resource,
+    policy: core.OperationPolicy
+  ): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }

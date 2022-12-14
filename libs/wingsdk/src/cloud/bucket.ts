@@ -47,10 +47,7 @@ export class Bucket extends BucketBase {
     return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_host: Resource, _policy: OperationPolicy): Code {
+  protected _bind_impl(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 }

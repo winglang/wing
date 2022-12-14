@@ -54,10 +54,7 @@ export class Counter extends CounterBase {
     return Polycons.newInstance(COUNTER_TYPE, scope, id, props) as Counter;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_host: Resource, _policy: OperationPolicy): Code {
+  protected _bind_impl(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 }

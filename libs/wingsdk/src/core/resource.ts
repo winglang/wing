@@ -1,4 +1,5 @@
 import { Construct, IConstruct } from "constructs";
+import { log } from "../util";
 import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
@@ -39,7 +40,16 @@ export abstract class Resource
   /**
    * @internal
    */
-  public abstract _bind(host: Resource, policy: OperationPolicy): Code;
+  public _bind(host: Resource, policy: OperationPolicy): Code {
+    log(
+      `A resource (${this.node.path}) is being bound to a host (${
+        host.node.path
+      }) with policy ${JSON.stringify(policy)}`
+    );
+    return this._bind_impl(host, policy);
+  }
+
+  protected abstract _bind_impl(host: Resource, policy: OperationPolicy): Code;
 
   /**
    * Adds a connection to this resource. A connection is a piece of metadata
