@@ -78,7 +78,7 @@ environment variables and produce the code bundles needed for this to work.
 
 Here's a diagram that shows the architecture produced by this code:
 
-![Architecture diagram produced by wing](./arch.png 'Architecture diagram')
+![Architecture diagram produced by Wing](./arch.png 'Architecture diagram')
 
 In addition to targeting cloud providers, Wing applications can also be compiled
 to run inside a local **Cloud Simulator**. This means that you can now iterate
