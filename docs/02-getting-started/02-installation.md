@@ -39,8 +39,6 @@ Username: "lowercase-github-username"
 Password: "the just created Github token"
 Email: "your github email"
 ```
-
-This token can also be used to keep the VSCode extension up to date with additional `repo` permissions.
 :::
 
 Install the Wing CLI through npm:
@@ -58,16 +56,7 @@ wing --version
 ## Wing IDE Extension
 
 This extension adds support for the Wing language to [VSCode]. You don't *have*
-to use it, but it's great.
-
-1. [Download](https://github.com/winglang/wing/releases/latest/download/vscode-wing.vsix) the extension package from the GitHub releases page.
-2. In your terminal, run:
-    ```sh 
-    code --install-extension ~/Downloads/vscode-wing.vsix
-    ```
-3. To enable automatic updates, add your GitHub [personal access token] to the
-   extension's settings under **Wing** => **Updates** (highly recommended given
-   Wing's fast pace of development).
+to use it, but it's great. It's available on the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing)
 
 ## Wing Console
 
