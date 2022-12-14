@@ -269,6 +269,11 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 			scan_captures_in_expression(rexp, env, statement_idx);
 		}
 		ExprKind::Literal(_) => {}
+		ExprKind::ArrayLiteral { items, .. } => {
+			for v in items {
+				res.extend(scan_captures_in_expression(&v, env, statement_idx));
+			}
+		}
 		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {
 				res.extend(scan_captures_in_expression(&v, env, statement_idx));

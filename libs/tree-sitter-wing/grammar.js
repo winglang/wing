@@ -471,7 +471,10 @@ module.exports = grammar({
 
     _collection_literal: ($) =>
       choice($.array_literal, $.set_literal, $.map_literal),
-    array_literal: ($) => seq("[", commaSep($.expression), "]"),
+    array_literal: ($) => seq(
+      optional(field("type", $._builtin_container_type)),
+      "[", commaSep(field("element", $.expression)), "]"
+    ),
     set_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
       "{", commaSep($.expression), "}"
