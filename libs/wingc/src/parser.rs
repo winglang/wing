@@ -235,14 +235,11 @@ impl Parser<'_> {
 	}
 
 	fn build_enum_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
-		let mut has_errors = false;
-
 		let name = self.node_symbol(&statement_node.child_by_field_name("enum_name").unwrap());
 		if name.is_err() {
 			self
 				.add_error::<Node>(String::from("Invalid enum name"), &statement_node)
 				.err();
-			has_errors = true;
 		}
 
 		let mut cursor = statement_node.walk();
@@ -255,7 +252,6 @@ impl Parser<'_> {
 			let diagnostic = self.node_symbol(&node);
 			if diagnostic.is_err() {
 				self.add_error::<Node>(String::from("Invalid enum value"), &node).err();
-				has_errors = true;
 				continue;
 			}
 
@@ -268,14 +264,10 @@ impl Parser<'_> {
 			}
 		}
 
-		if has_errors {
-			Err(())
-		} else {
-			Ok(StmtKind::Enum {
-				name: name.unwrap(),
-				values,
-			})
-		}
+		Ok(StmtKind::Enum {
+			name: name.unwrap(),
+			values,
+		})
 	}
 
 	fn build_class_statement(&self, statement_node: &Node, is_resource: bool) -> DiagnosticResult<StmtKind> {
