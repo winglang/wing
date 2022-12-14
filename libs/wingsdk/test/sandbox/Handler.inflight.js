@@ -4,6 +4,6 @@ export class Handler__Inflight {
   }
 
   async handle() {
-    this.b.put_something();
+    await this.b.put_something();
   }
 }
