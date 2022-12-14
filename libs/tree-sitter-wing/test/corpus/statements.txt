@@ -69,7 +69,7 @@ return 1;
 Inflight closure
 ====================
 
-(a: num, b: str?, c: bool) ~> {};
+inflight (a: num, b: str?, c: bool) => {};
 
 ---
 
@@ -101,7 +101,7 @@ Inflight closure
 Inflight closure with function parameter
 ==================================
 
-(callback: (num,num):bool) ~> {};
+inflight (callback: (num,num):bool) => {};
 
 ---
 (source
@@ -130,7 +130,7 @@ Class definition
 
 class A {
     init() {}
-    ~do_something() {}
+    inflight do_something() {}
     a_member: str;
 }
 

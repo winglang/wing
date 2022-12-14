@@ -149,7 +149,7 @@ new A() as "b" in c;
 preflight anonymous closure
 ================================
 
-(a: num): num -> { return a; };
+(a: num): num => { return a; };
 
 ---
 
@@ -178,7 +178,7 @@ preflight anonymous closure
 inflight anonymous closure
 ================================
 
-(): num ~> { return 1; };
+inflight (): num => { return 1; };
 
 ---
 
