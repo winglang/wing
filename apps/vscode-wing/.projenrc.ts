@@ -42,8 +42,6 @@ const project = new TypeScriptAppProject({
 
   deps: [
     `@types/vscode@^${VSCODE_BASE_VERSION}`,
-    "octokit",
-    "node-fetch",
     "vscode-languageclient",
     "@winglang/wingsdk",
   ],
@@ -96,27 +94,6 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
-  configuration: {
-    title: "Wing",
-    properties: {
-      "wing.updates.githubToken": {
-        type: "string",
-        default: "",
-        description:
-          "PAT to check for and download new versions of this extension from the winglang repo. Leave empty to disable automatic updates.\nNOTE: PAT must have private repo permission.",
-      },
-    },
-  },
-  commands: [
-    {
-      command: "wing.checkUpdates",
-      title: "[Wing] Check for updates",
-    },
-    {
-      command: "wing.addToken",
-      title: "[Wing] Set update token",
-    },
-  ],
 };
 
 project.addFields({
@@ -129,11 +106,7 @@ project.addFields({
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
   categories: ["Programming Languages"],
-  activationEvents: [
-    "onLanguage:wing",
-    "onCommand:wing.addToken",
-    "onCommand:wing.checkUpdates",
-  ],
+  activationEvents: ["onLanguage:wing"],
   contributes,
 });
 
