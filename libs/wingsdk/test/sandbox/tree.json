@@ -43,6 +43,10 @@
                 }
               }
             },
+            "attributes": {
+              "wing:resource:stateful": true,
+              "wing:resource:connections": []
+            },
             "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.0.25"
@@ -51,6 +55,10 @@
           "Handler": {
             "id": "Handler",
             "path": "root/HelloWorld/Handler",
+            "attributes": {
+              "wing:resource:stateful": true,
+              "wing:resource:connections": []
+            },
             "constructInfo": {
               "fqn": "constructs.Construct",
               "version": "10.0.25"

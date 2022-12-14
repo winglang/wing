@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Policy, Resource } from "../core";
+import { Code, OperationPolicy, Resource } from "../core";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
@@ -62,13 +62,16 @@ export class Logger extends LoggerBase {
     });
   }
 
+  /** @internal */
+  public readonly _policies = {};
+
   private constructor(scope: Construct, id: string) {
     super(null as any, id);
     return Polycons.newInstance(LOGGER_TYPE, scope, id) as Logger;
   }
 
   /** @internal */
-  public _bind(_host: Resource, _policy: Policy): Code {
+  public _bind(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 }

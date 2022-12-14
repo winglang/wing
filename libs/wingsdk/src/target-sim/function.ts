@@ -1,14 +1,11 @@
+import { readFileSync } from "fs";
+import { join } from "path";
 import { Construct } from "constructs";
+import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
-import {
-  Code,
-  Language,
-  NodeJsCode,
-  Inflight,
-  Resource,
-  Policy,
-} from "../core";
+import { Code, NodeJsCode, OperationPolicy, Resource } from "../core";
 import { TextFile } from "../fs";
+import { mkdtemp } from "../util";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
@@ -25,30 +22,50 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements ISimulatorResource {
+  /** @internal */
+  public readonly _policies = {
+    [cloud.FunctionInflightMethods.INVOKE]: {},
+  };
+
   private readonly env: Record<string, string> = {};
   private readonly code: Code;
 
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: cloud.IFunctionHandler,
     props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
 
-    if (inflight.code.language !== Language.NODE_JS) {
-      throw new Error("Only Node.js code is currently supported.");
-    }
+    const code = inflight._bind(this, inflight._policies.handle);
 
-    const resourceClients = inflight.makeClients(this);
-    const bundledCode = inflight.bundle({
-      host: this,
-      resourceClients,
+    const lines = new Array<string>();
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await ${code.text}.handle(event);`);
+    lines.push("};");
+
+    const tempdir = mkdtemp();
+    const outfile = join(tempdir, "index.js");
+
+    esbuild.buildSync({
+      bundle: true,
+      stdin: {
+        contents: lines.join("\n"),
+        resolveDir: tempdir,
+        sourcefile: "inflight.js",
+      },
+      target: "node16",
+      platform: "node",
+      absWorkingDir: tempdir,
+      outfile,
+      minify: false,
+      external: ["aws-sdk"],
     });
 
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
-      lines: [bundledCode.text],
+      lines: [readFileSync(outfile, "utf-8")],
     });
     this.code = NodeJsCode.fromFile(assetPath);
 
@@ -79,7 +96,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: Resource, _policy: Policy): Code {
+  public _bind(host: Resource, _policy: OperationPolicy): Code {
     return bindSimulatorResource("function", this, host);
   }
 }

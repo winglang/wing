@@ -1,10 +1,16 @@
-import { Construct } from "constructs";
+import { Construct, IConstruct } from "constructs";
 import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
 } from "./attributes";
-import { Code, ICapturable, Policy } from "./inflight";
+import { Code, ICapturable } from "./inflight";
+import { OperationPolicy, ResourcePolicy } from "./policies";
 import { IInspectable, TreeInspector } from "./tree";
+
+export interface IResource extends ICapturable, IInspectable, IConstruct {
+  /** @internal */
+  readonly _policies: ResourcePolicy;
+}
 
 /**
  * Shared behavior between all Wing SDK resources.
@@ -33,7 +39,7 @@ export abstract class Resource
   /**
    * @internal
    */
-  public abstract _bind(host: Resource, policy: Policy): Code;
+  public abstract _bind(host: Resource, policy: OperationPolicy): Code;
 
   /**
    * Adds a connection to this resource. A connection is a piece of metadata
@@ -99,33 +105,4 @@ export interface Connection {
    * The direction of the connection.
    */
   readonly direction: Direction;
-}
-
-/**
- * A policy containing all of the policies for each of the methods and
- * properties of a resource.
- *
- * @example
- * The following policy says that the resource has a method named "handle"
- * that may call "put" on a resource named "inner", or it may call "get" on a
- * resource passed as an argument named "other".
- * { "handle": { "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } } }
- */
-export interface ResourcePolicy {
-  [operation: string]: OperationPolicy;
-}
-
-/**
- * A policy specifying what resources an operation may access.
- *
- * @example
- * The following policy says that the operation may call "put" on a resource
- * named "inner", or it may call "get" on a resource passed as an argument
- * named "other".
- * { "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } }
- */
-export interface OperationPolicy {
-  [resource: string]: {
-    methods: string[];
-  };
 }

@@ -5,7 +5,7 @@ import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
-import { Code, InflightClient, Policy, Resource } from "../core";
+import { Code, InflightClient, OperationPolicy, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -17,27 +17,10 @@ import { addBindConnections } from "./util";
 export class Bucket extends cloud.BucketBase {
   /** @internal */
   public readonly _policies = {
-    [BucketInflightMethods.PUT]: {
-      // "self" is a special policy that means "this resource"
-      self: {
-        methods: [BucketInflightMethods.PUT],
-      },
-    },
-    [BucketInflightMethods.GET]: {
-      self: {
-        methods: [BucketInflightMethods.GET],
-      },
-    },
-    [BucketInflightMethods.LIST]: {
-      self: {
-        methods: [BucketInflightMethods.LIST],
-      },
-    },
-    [BucketInflightMethods.DELETE]: {
-      self: {
-        methods: [BucketInflightMethods.DELETE],
-      },
-    },
+    [BucketInflightMethods.PUT]: {},
+    [BucketInflightMethods.GET]: {},
+    [BucketInflightMethods.LIST]: {},
+    [BucketInflightMethods.DELETE]: {},
   };
 
   private readonly bucket: S3Bucket;
@@ -92,35 +75,35 @@ export class Bucket extends cloud.BucketBase {
   /**
    * @internal
    */
-  public _bind(host: Resource, policy: Policy): Code {
+  public _bind(host: Resource, policy: OperationPolicy): Code {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
-    if (policy.calls(BucketInflightMethods.PUT)) {
+    if (policy.$self.methods.includes(BucketInflightMethods.PUT)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (policy.calls(BucketInflightMethods.GET)) {
+    if (policy.$self.methods.includes(BucketInflightMethods.GET)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (policy.calls(BucketInflightMethods.LIST)) {
+    if (policy.$self.methods.includes(BucketInflightMethods.LIST)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (policy.calls(BucketInflightMethods.DELETE)) {
+    if (policy.$self.methods.includes(BucketInflightMethods.DELETE)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: [

@@ -5,85 +5,8 @@ import { basename, dirname, join, resolve } from "path";
 import { IConstruct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import { PREBUNDLE_SYMBOL } from "./internal";
+import { OperationPolicy } from "./policies";
 import { Resource } from "./resource";
-
-/**
- * Represents a policy containing information about a set of resources and the
- * methods that can be called on them.
- */
-export class Policy {
-  private _policy: PolicyFragment | undefined;
-  private readonly _children: Map<string, Policy>;
-
-  constructor(fragments: { [path: string]: PolicyFragment } = {}) {
-    this._children = new Map();
-    for (const [path, fragment] of Object.entries(fragments)) {
-      this.add(path, fragment);
-    }
-  }
-
-  /**
-   * Find the policy relevant for a named resource, or return an
-   * empty policy instance if there is no policy for it.
-   */
-  public lookup(path: string): Policy {
-    if (path.startsWith("this.")) {
-      path = path.substring(5);
-    }
-    const parts = path.split(".");
-    let curr: Policy = this;
-    for (const part of parts) {
-      if (!curr._children.has(part)) {
-        return new Policy();
-      }
-      curr = curr._children.get(part)!;
-    }
-    return curr;
-  }
-
-  public calls(method: string): boolean {
-    if (this._policy?.methods?.includes(method)) {
-      return true;
-    }
-    return false;
-  }
-
-  private add(path: string, fragment: PolicyFragment) {
-    const parts = path.split(".");
-    let curr: Policy = this;
-    for (const part of parts) {
-      if (!curr._children.has(part)) {
-        const policies = new Policy();
-        curr._children.set(part, policies);
-      }
-      curr = curr._children.get(part)!;
-    }
-    if (curr._policy) {
-      throw new Error(
-        `A policy fragment for ${path} already exists, found ${JSON.stringify(
-          curr._policy
-        )}`
-      );
-    }
-    curr._policy = fragment;
-  }
-
-  public toJSON(): any {
-    return {
-      policy: this._policy,
-      children: Object.fromEntries(
-        Array.from(this._children.entries()).map(([k, v]): any => [
-          k,
-          v.toJSON(),
-        ])
-      ),
-    };
-  }
-}
-
-export interface PolicyFragment {
-  readonly methods?: string[];
-}
 
 /**
  * Represents something that is capturable by an Inflight.
@@ -96,7 +19,7 @@ export interface ICapturable {
    *
    * @internal
    */
-  _bind(host: Resource, policies: Policy): Code;
+  _bind(host: Resource, policies: OperationPolicy): Code;
 }
 
 /**
@@ -216,7 +139,7 @@ export interface InflightProps {
    */
   readonly bindings?: { [name: string]: ICapturableConstruct };
 
-  readonly policies?: { [name: string]: PolicyFragment };
+  readonly policy?: OperationPolicy;
 }
 
 /**
@@ -242,13 +165,10 @@ export class Inflight {
    */
   public readonly bindings: { [name: string]: ICapturableConstruct };
 
-  private readonly policies: Policy;
-
   constructor(props: InflightProps) {
     this.code = props.code;
     this.entrypoint = props.entrypoint;
     this.bindings = props.bindings ?? {};
-    this.policies = new Policy(props.policies ?? {});
   }
 
   /**
@@ -283,7 +203,7 @@ export class Inflight {
     lines.push(originalCode.text);
     lines.push();
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${this.entrypoint}($cap, event);`);
+    lines.push(`  return await ${this.entrypoint}(event);`);
     lines.push("};");
 
     const contents = lines.join("\n");
@@ -315,16 +235,16 @@ export class Inflight {
     return NodeJsCode.fromFile(outfile);
   }
 
-  /**
-   * Resolve this Inflight's bindings into a map of resource clients.
-   */
-  public makeClients(host: Resource): Record<string, Code> {
-    const clients: Record<string, Code> = {};
-    for (const [name, binding] of Object.entries(this.bindings)) {
-      clients[name] = binding._bind(host, this.policies.lookup(name));
-    }
-    return clients;
-  }
+  // /**
+  //  * Resolve this Inflight's bindings into a map of resource clients.
+  //  */
+  // public makeClients(host: Resource): Record<string, Code> {
+  //   const clients: Record<string, Code> = {};
+  //   for (const [name, binding] of Object.entries(this.bindings)) {
+  //     clients[name] = binding._bind(host, this.policy.lookup(name));
+  //   }
+  //   return clients;
+  // }
 }
 
 /**

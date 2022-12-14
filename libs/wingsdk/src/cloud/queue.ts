@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Duration, Inflight, Policy, Resource } from "../core";
+import { Code, Duration, Inflight, OperationPolicy, Resource } from "../core";
 import { Function, FunctionProps } from "./function";
 
 /**
@@ -65,6 +65,9 @@ export interface QueueOnMessageProps extends FunctionProps {
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends QueueBase {
+  /** @internal */
+  public readonly _policies = {};
+
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
@@ -73,7 +76,7 @@ export class Queue extends QueueBase {
   /**
    * @internal
    */
-  public _bind(_host: Resource, _policy: Policy): Code {
+  public _bind(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 

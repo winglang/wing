@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Policy, Resource } from "../core";
+import { Code, OperationPolicy, Resource } from "../core";
 
 /**
  * Global identifier for `Bucket`.
@@ -39,6 +39,9 @@ export abstract class BucketBase extends Resource {
  * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends BucketBase {
+  /** @internal */
+  public readonly _policies = {};
+
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;
@@ -47,7 +50,7 @@ export class Bucket extends BucketBase {
   /**
    * @internal
    */
-  public _bind(_host: Resource, _policy: Policy): Code {
+  public _bind(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 }

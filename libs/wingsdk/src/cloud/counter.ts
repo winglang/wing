@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Policy, Resource } from "../core";
+import { Code, OperationPolicy, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.
@@ -46,6 +46,9 @@ export abstract class CounterBase extends Resource {
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends CounterBase {
+  /** @internal */
+  public readonly _policies = {};
+
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(COUNTER_TYPE, scope, id, props) as Counter;
@@ -54,7 +57,7 @@ export class Counter extends CounterBase {
   /**
    * @internal
    */
-  public _bind(_host: Resource, _policy: Policy): Code {
+  public _bind(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 }

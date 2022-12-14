@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { Code, Policy, Resource } from "../core";
+import { Code, OperationPolicy, Resource } from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { LoggerSchema } from "./schema-resources";
@@ -12,6 +12,11 @@ import { bindSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase implements ISimulatorResource {
+  /** @internal */
+  public readonly _policies = {
+    [cloud.LoggerInflightMethods.PRINT]: {},
+  };
+
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
@@ -27,7 +32,7 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: Resource, _policy: Policy): Code {
+  public _bind(host: Resource, _policy: OperationPolicy): Code {
     return bindSimulatorResource("logger", this, host);
   }
 }

@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Inflight, Policy, Resource } from "../core";
+import { Code, Inflight, OperationPolicy, Resource } from "../core";
 import { Function } from "./function";
 
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
@@ -44,6 +44,9 @@ export interface TopicOnMessageProps {}
  * @inflight `@winglang/wingsdk.cloud.ITopicClient`
  */
 export class Topic extends TopicBase {
+  /** @internal */
+  public readonly _policies = {};
+
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(TOPIC_TYPE, scope, id, props) as Topic;
@@ -52,7 +55,7 @@ export class Topic extends TopicBase {
   /**
    * @internal
    */
-  public _bind(_host: Resource, _policy: Policy): Code {
+  public _bind(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented");
   }
 

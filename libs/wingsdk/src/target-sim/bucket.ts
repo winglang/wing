@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { Code, Policy, Resource } from "../core";
+import { Code, OperationPolicy, Resource } from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { BucketSchema } from "./schema-resources";
@@ -12,6 +12,11 @@ import { bindSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase implements ISimulatorResource {
+  /** @internal */
+  public readonly _policies = {
+    [cloud.FunctionInflightMethods.INVOKE]: {},
+  };
+
   private readonly public: boolean;
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
@@ -32,7 +37,7 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: Resource, _policy: Policy): Code {
+  public _bind(host: Resource, _policy: OperationPolicy): Code {
     return bindSimulatorResource("bucket", this, host);
   }
 }

@@ -13,6 +13,11 @@ export const HASH_KEY = "id";
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase {
+  /** @internal */
+  public readonly _policies = {
+    [cloud.CounterInflightMethods.INC]: {},
+  };
+
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -29,14 +34,14 @@ export class Counter extends cloud.CounterBase {
   /**
    * @internal
    */
-  public _bind(host: core.Resource, policy: core.Policy): core.Code {
+  public _bind(host: core.Resource, policy: core.OperationPolicy): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
     const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
 
-    if (policy.calls(cloud.CounterInflightMethods.INC)) {
+    if (policy.$self.methods.includes(cloud.CounterInflightMethods.INC)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:UpdateItem"],

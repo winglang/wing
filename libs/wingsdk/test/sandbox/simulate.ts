@@ -1,8 +1,8 @@
 import { join } from "path";
-import * as sdk from "../../src";
+import { testing, cloud } from "../../src";
 
 async function main() {
-  const mySim = new sdk.testing.Simulator({
+  const mySim = new testing.Simulator({
     simfile: join(__dirname, "app.wsim"),
   });
   await mySim.start();
@@ -11,14 +11,12 @@ async function main() {
 
   const fn = mySim.getResource(
     "root/HelloWorld/Function"
-  ) as sdk.cloud.IFunctionClient;
-  const response = await fn.invoke("hello!");
-
-  console.log(response);
-
-  console.log(mySim.listTraces());
+  ) as cloud.IFunctionClient;
+  await fn.invoke("hello!");
 
   await mySim.stop();
+
+  console.log(mySim.listTraces());
 }
 
 void main();

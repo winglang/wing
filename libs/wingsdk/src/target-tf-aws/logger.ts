@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { Code, InflightClient, Policy, Resource } from "../core";
+import { Code, InflightClient, OperationPolicy, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -10,12 +10,17 @@ import { addBindConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase {
+  /** @internal */
+  public readonly _policies = {
+    [cloud.LoggerInflightMethods.PRINT]: {},
+  };
+
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
 
   /** @internal */
-  public _bind(host: Resource, _policy: Policy): Code {
+  public _bind(host: Resource, _policy: OperationPolicy): Code {
     if (!(host instanceof Function)) {
       throw new Error("loggers can only be bound by tfaws.Function for now");
     }

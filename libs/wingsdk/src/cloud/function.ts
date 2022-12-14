@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Inflight, Policy, Resource } from "../core";
+import { Code, IResource, OperationPolicy, Resource } from "../core";
 
 /**
  * Global identifier for `Function`.
@@ -21,6 +21,14 @@ export interface FunctionProps {
 }
 
 /**
+ * Represents a resource with an inflight "handle" method that can be used to
+ * create a `cloud.Function`.
+ */
+export interface IFunctionHandler extends IResource {
+  /** contains inflight "handle" method */
+}
+
+/**
  * Functionality shared between all `Function` implementations.
  */
 export abstract class FunctionBase extends Resource {
@@ -28,7 +36,7 @@ export abstract class FunctionBase extends Resource {
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: IFunctionHandler,
     props: FunctionProps
   ) {
     super(scope, id);
@@ -52,10 +60,13 @@ export abstract class FunctionBase extends Resource {
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends FunctionBase {
+  /** @internal */
+  public readonly _policies = {};
+
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: IFunctionHandler,
     props: FunctionProps = {}
   ) {
     super(null as any, id, inflight, props);
@@ -71,7 +82,7 @@ export class Function extends FunctionBase {
   /**
    * @internal
    */
-  public _bind(_host: Resource, _policy: Policy): Code {
+  public _bind(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 

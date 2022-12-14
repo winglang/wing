@@ -25,8 +25,8 @@ class MyBucket extends core.Resource {
     this.thing = message;
   }
 
-  _bind(host: core.Resource, policy: core.Policy) {
-    const inner_client_policy = policy.lookup("this.inner");
+  _bind(host: core.Resource, policy: core.OperationPolicy) {
+    const inner_client_policy = core.Policies.make(policy, this.inner, "inner");
     const inner_client = this.inner._bind(host, inner_client_policy);
     const thing_client = JSON.stringify(this.thing);
     const my_bucket_client_path = join(__dirname, "MyBucket.inflight.js");
@@ -36,7 +36,7 @@ class MyBucket extends core.Resource {
   }
 }
 
-class Handler extends core.Resource {
+class Handler extends core.Resource implements cloud.IFunctionHandler {
   public readonly stateful = true;
   private b: MyBucket;
 
@@ -54,8 +54,8 @@ class Handler extends core.Resource {
     this.b = b;
   }
 
-  _bind(host: core.Resource, policy: core.Policy) {
-    const b_client_policy = policy.lookup("this.b"); // or just "b"
+  _bind(host: core.Resource, policy: core.OperationPolicy) {
+    const b_client_policy = core.Policies.make(policy, this.b, "b");
     const b_client = this.b._bind(host, b_client_policy);
     const handler_client_path = join(__dirname, "Handler.inflight.js");
     return core.NodeJsCode.fromInline(
@@ -70,29 +70,7 @@ class HelloWorld extends Construct {
 
     const my_bucket = new MyBucket(this, "MyBucket", "Hello, World!");
     const handler = new Handler(this, "Handler", my_bucket);
-    const code = new core.Inflight({
-      code: core.NodeJsCode.fromInline(
-        `async function $proc($cap, body) {
-          await $cap.handler.handle();
-        }`
-      ),
-      entrypoint: "$proc",
-      bindings: {
-        handler: handler,
-      },
-      policies: {
-        handler: {
-          methods: ["handle"],
-        },
-        "handler.b": {
-          methods: ["put_something"],
-        },
-        "handler.b.inner": {
-          methods: ["put"],
-        },
-      },
-    });
-    new cloud.Function(this, "Function", code);
+    new cloud.Function(this, "Function", handler);
   }
 }
 

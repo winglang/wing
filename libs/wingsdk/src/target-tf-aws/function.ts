@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { readFileSync } from "fs";
-import { resolve } from "path";
+import { join, resolve } from "path";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
@@ -9,15 +9,10 @@ import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
+import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
-import {
-  Code,
-  Language,
-  Inflight,
-  InflightClient,
-  Resource,
-  Policy,
-} from "../core";
+import { Code, InflightClient, OperationPolicy, Resource } from "../core";
+import { mkdtemp } from "../util";
 import { addBindConnections } from "./util";
 
 /**
@@ -26,6 +21,11 @@ import { addBindConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
+  /** @internal */
+  public readonly _policies = {
+    [cloud.FunctionInflightMethods.INVOKE]: {},
+  };
+
   private readonly function: LambdaFunction;
   private readonly env: Record<string, string> = {};
   private readonly role: IamRole;
@@ -36,7 +36,7 @@ export class Function extends cloud.FunctionBase {
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: cloud.IFunctionHandler,
     props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
@@ -45,24 +45,42 @@ export class Function extends cloud.FunctionBase {
       this.addEnvironment(key, value);
     }
 
-    if (inflight.code.language !== Language.NODE_JS) {
-      throw new Error("Only JavaScript code is currently supported.");
+    if (!inflight._policies.handle) {
+      throw new Error("No policy found on the inflight handler.");
     }
 
-    const resourceClients = inflight.makeClients(this);
-    const code = inflight.bundle({
-      host: this,
-      resourceClients,
+    const code = inflight._bind(this, inflight._policies.handle);
+
+    const lines = new Array<string>();
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await ${code.text}.handle(event);`);
+    lines.push("};");
+
+    const tempdir = mkdtemp();
+    const outfile = join(tempdir, "index.js");
+
+    esbuild.buildSync({
+      bundle: true,
+      stdin: {
+        contents: lines.join("\n"),
+        resolveDir: tempdir,
+        sourcefile: "inflight.js",
+      },
+      target: "node16",
+      platform: "node",
+      absWorkingDir: tempdir,
+      outfile,
+      minify: false,
       external: ["aws-sdk"],
     });
 
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(code.path, "..");
+    const codeDir = resolve(outfile, "..");
 
     // calculate a md5 hash of the contents of asset.path
     const codeHash = crypto
       .createHash("md5")
-      .update(readFileSync(code.path))
+      .update(readFileSync(outfile))
       .digest("hex");
 
     // Create Lambda executable
@@ -170,14 +188,14 @@ export class Function extends cloud.FunctionBase {
   /**
    * @internal
    */
-  public _bind(host: Resource, policy: Policy): Code {
+  public _bind(host: Resource, policy: OperationPolicy): Code {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
     const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
-    if (policy.calls(cloud.FunctionInflightMethods.INVOKE)) {
+    if (policy.$self.methods.includes(cloud.FunctionInflightMethods.INVOKE)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],
