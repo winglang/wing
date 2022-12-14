@@ -3,7 +3,6 @@ id: welcome
 title: Welcome!
 slug: /
 hide_title: true
-keywords: [Wing installation, welcome, Wing language, Wing docs, Wing setup]
 ---
 
 # Howdy, and welcome! :wave: 
