@@ -1,6 +1,7 @@
 ---
 id: installation
 title: Installation
+keywords: [Wing installation, installation, Wing toolchain]
 ---
 
 In this section you will install the Wing toolchain on your system.

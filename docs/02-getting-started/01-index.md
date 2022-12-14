@@ -2,6 +2,7 @@
 title: Getting started 
 id: index
 slug: /getting-started
+keywords: [Wing getting started, getting started]
 ---
 
 **You are about to go through your first-time experience with Wing!**

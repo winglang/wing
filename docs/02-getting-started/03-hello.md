@@ -1,6 +1,7 @@
 ---
 id: hello
 title: Hello, Wing!
+keywords: [Hello World, first Wing program, Wing example]
 ---
 
 OK, we are ready for our first Wing program!

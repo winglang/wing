@@ -1,6 +1,7 @@
 ---
 title: Summary
 id: summary
+keywords: [Wing summary, first Wing application]
 ---
 
 Congratulations on building your very first Wing application. We hope that this guide was helpful

@@ -1,6 +1,7 @@
 ---
 title: Testing using the Wing Console
 id: console
+keywords: [Wing testing, Wing Console installation, Wing Console usage, Wing Console setup]
 ---
 
 The Wing Console is a graphical user interface that can be used to interact with
