@@ -76,7 +76,7 @@ Wing applications running locally on the cloud simulator.
 1. Download the latest version of the **Wing Console** for [macOS](https://wing-console.s3.amazonaws.com/wing-console.dmg) or [macOS arm64](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg).
 2. Accept the license agreement and drag the Wing Console app into **Applications**:
 
-![](./console-install.png)
+![Drag the Wing Console app into Applications](./console-install.png 'Wing Console app installation')
 
 
 [AWS account]: portal.aws.amazon.com/billing/signup
