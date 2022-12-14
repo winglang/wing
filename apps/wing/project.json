@@ -41,6 +41,14 @@
         "cwd": "apps/wing",
         "parallel": false
       }
+    },
+    "dev": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./bin/wing",
+        "cwd": "apps/wing"
+      }
     }
   }
 }
