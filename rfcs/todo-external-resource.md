@@ -20,11 +20,118 @@ Dave notice a bunch of missing parts, both publishing and testing are not covere
 
 As suggested in the doc, Dave starts with an example on how the resource should be used. Dave implements the same TODO app, but this time with dynamodb instead of the Bucket Counter tuple 
 
-```js (wing)
-<enter code here>
+```js
+bring cloud;
+bring os;
+bring tfaws;
+bring "@cdktf/provider-aws" as aws;
+bring untyped "@aws-sdk/client-dynamodb" as ddb_sdk;
+
+resource TaskList {
+  _table: aws.dynamodb_table.DynamodbTable;
+  _counter: cloud.Counter;
+    
+  init() {
+    this._counter = new cloud.Counter();
+    
+    // define a DynamoDB through a CDKtf L1 construct.
+#ifdef target == "sim"
+    this._table = { arn: "DUMMY" };
+#else
+    this._table = new aws.dynamodb_table.DynamodbTable(
+      name: "GameScores",
+      billing_mode: "PAY_PER_REQUEST",
+      hash_key: "TaskId",
+      attribute: [{ name: "TaskId", type: "S" }],
+      lifecycle: {
+        preventDestroy: true
+      }
+    );    
+#endif
+  }
+  
+  inflight _client: ddb.DynamoDBClient;
+  
+  inflight init() {
+    // the inflight initializer creates an instance of the DynamoDBClient object when it is first loaded.
+    this._client = new ddb_sdk.DynamoDBClient({});
+  }
+    
+  /** 
+   * Adds a task to the task list.
+   * @returns The ID of the new task.
+   */
+  inflight add_task(title: str): str {
+    let id = "${this._counter.inc()}";
+    print("adding task ${id} with title: ${title}");
+
+    // we capture "this._table.arn" which is a CDKtf attribute here
+    let command = new ddb_sdk.PutItemCommand(
+      TableName: this._table.arn, // !! interesting !!
+      Item: {
+        TaskId: { S: id },
+        Title: { S: title },
+      },
+    );
+
+    // there's an implicit "await" here because send is async.
+    this._client.send(command);
+    return id;
+  }
+
+  // TODO: this requires a design because _bind is currently hidden
+  // and implemented implicitly by the compiler for inflight methods.
+  override _bind(host: Construct, methods: string[]) {
+    // TODO: if "sim" then return;
+    
+    
+    if (!(host instanceof tfaws.Function)) {
+      throw new Error("can only bind to tfaws.Function");
+    }
+    
+    if (methods.has("add_task")) {
+      host.add_policy_statement(effect: "Allow", method: ["dynamodb:PutItem"], resource: [this._table.arn]);
+    }
+    
+    return super._bind(host, methods);
+  }
+  
+  //
+  // additional methods...
+  //
+}
 ```
 
-## Sim implementation 
+As you can see, Dave is able to naturally bring the `DynamodbTable` resource/construct from 
+[@cdktf/provider-aws](https://www.npmjs.com/package/@cdktf/provider-aws) (which is a standard CDK JSII library)
+and use it in preflight like any other Wing resource.
+
+He was also able to bring the AWS SDK JavaScript library (`aws-sdk`) as "untyped" (because Wing still doesn't
+support reading `.d.ts` files).
+
+He rewrote the `TaskList` resource accordingly (see some annotations in the code for details on what's going on).
+
+## Simulator Implementation 
+
+But when Dave compiles his code to `sim`, he gets the following error:
+
+```sh
+$ wing compile -t sim task-list.w
+ERROR: unable to resolve "@cdktf/provider-aws.dynamodb_table.DynamodbTable" for the "sim" target.
+You can implement a JavaScript resolver using `--resolve @cdktf/provider-aws.dynamodb_table.DynamodbTable:sim=dynamo-table-sim.js`
+```
+
+`dynamo-table-sim.js`:
+
+```js
+module.exports = {
+  '@cdktf/provider-aws.dynamodb_table.DynamodbTable': (scope, id, props) => ({ arn: 'DUMMY_ARN' });
+  'ddb_sdk.DynamoDBClient': () => {
+    docker.run("-p 8000:8000 amazon/dynamodb-local");
+    return new ddb_sdk.DynamoDBClient({ url: "http://localhost:8000" });
+  }
+};
+```
 
 Dave didn't implement a perfect module, his sim implementation requires a running dynamodb instance on the machine at port 8000, if a dynamodb is not running and listening on port 8000, localhost sim app that uses this module will not work
 
