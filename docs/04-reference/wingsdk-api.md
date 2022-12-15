@@ -2698,7 +2698,7 @@ The tree node.
 
 - *Implemented By:* cloud.IQueueOnMessageHandlerClient
 
-Inflight client for `IOnMessageHandler`.
+Inflight client for `IQueueOnMessageHandler`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 
@@ -2818,7 +2818,7 @@ The tree node.
 
 - *Implemented By:* cloud.ITopicOnMessageHandlerClient
 
-Inflight client for `IOnMessageHandler`.
+Inflight client for `ITopicOnMessageHandler`.
 
 #### Methods <a name="Methods" id="Methods"></a>
 

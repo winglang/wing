@@ -107,7 +107,7 @@ export interface IQueueClient {
 export interface IQueueOnMessageHandler extends IResource {}
 
 /**
- * Inflight client for `IOnMessageHandler`.
+ * Inflight client for `IQueueOnMessageHandler`.
  */
 export interface IQueueOnMessageHandlerClient {
   /**

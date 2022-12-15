@@ -86,7 +86,7 @@ export interface ITopicClient {
 export interface ITopicOnMessageHandler extends IResource {}
 
 /**
- * Inflight client for `IOnMessageHandler`.
+ * Inflight client for `ITopicOnMessageHandler`.
  */
 export interface ITopicOnMessageHandlerClient {
   /**
