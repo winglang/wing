@@ -3,4 +3,3 @@ enum SomeEnum {
 }
 
 let one = SomeEnum.ONE;
-let two = SomeEnum.TWO;
