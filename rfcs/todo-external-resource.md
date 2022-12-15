@@ -35,9 +35,6 @@ resource TaskList {
     this._counter = new cloud.Counter();
     
     // define a DynamoDB through a CDKtf L1 construct.
-#ifdef target == "sim"
-    this._table = { arn: "DUMMY" };
-#else
     this._table = new aws.dynamodb_table.DynamodbTable(
       name: "GameScores",
       billing_mode: "PAY_PER_REQUEST",
@@ -47,7 +44,6 @@ resource TaskList {
         preventDestroy: true
       }
     );    
-#endif
   }
   
   inflight _client: ddb.DynamoDBClient;
@@ -79,7 +75,7 @@ resource TaskList {
     return id;
   }
 
-  // TODO: this requires a design because _bind is currently hidden
+  // TODO: this requires a design because _bind() is currently hidden
   // and implemented implicitly by the compiler for inflight methods.
   override _bind(host: Construct, methods: string[]) {
     // TODO: if "sim" then return;
@@ -125,7 +121,9 @@ You can implement a JavaScript resolver using `--resolve @cdktf/provider-aws.dyn
 
 ```js
 module.exports = {
-  '@cdktf/provider-aws.dynamodb_table.DynamodbTable': (scope, id, props) => ({ arn: 'DUMMY_ARN' });
+  '@cdktf/provider-aws.dynamodb_table.DynamodbTable': (scope, id, props) => {
+    return { arn: 'DUMMY_ARN' };
+  },
   'ddb_sdk.DynamoDBClient': () => {
     docker.run("-p 8000:8000 amazon/dynamodb-local");
     return new ddb_sdk.DynamoDBClient({ url: "http://localhost:8000" });
@@ -134,7 +132,6 @@ module.exports = {
 ```
 
 Dave didn't implement a perfect module, his sim implementation requires a running dynamodb instance on the machine at port 8000, if a dynamodb is not running and listening on port 8000, localhost sim app that uses this module will not work
-
 
 ## Prolog 
 
