@@ -83,14 +83,6 @@
       "type": "runtime"
     },
     {
-      "name": "node-fetch",
-      "type": "runtime"
-    },
-    {
-      "name": "octokit",
-      "type": "runtime"
-    },
-    {
       "name": "vscode-languageclient",
       "type": "runtime"
     }

@@ -334,12 +334,6 @@ impl Parser<'_> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
-		let mut cur = anon_closure_node.walk();
-		let block_node_idx = anon_closure_node
-			.children(&mut cur)
-			.position(|c| c.kind() == "block")
-			.unwrap();
-
 		self.build_function_definition(anon_closure_node, flight)
 	}
 
@@ -741,9 +735,7 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
-			other => {
-				self.report_unimplemented_grammar(other, "expression", expression_node)
-			}
+			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
 	}
 }
