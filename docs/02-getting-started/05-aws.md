@@ -3,8 +3,17 @@ title: Deploying to AWS using Terraform
 id: aws
 ---
 
-So far we've tested our program locally. Next we'll see how you can deploy your
+So far we've tested our program locally using our Wing Console. Next we'll see how you can deploy your
 program to AWS using Terraform.
+
+## Wing compiler supports multiple targets
+
+The Wing compiler supports multiple compilation targets. Each resource in the
+Wing ecosystem can support any number of *backends*. For example, the
+`cloud.Queue` resource we used in our app can be backed by [Amazon
+SQS](https://aws.amazon.com/sqs/) by [Azure Queue
+Storage](https://azure.microsoft.com/en-us/products/storage/queues/) or by
+[RabbitMQ by CloudAMQP](https://www.cloudamqp.com/).
 
 :::info Under Construction
 

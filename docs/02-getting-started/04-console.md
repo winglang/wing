@@ -14,19 +14,23 @@ Make sure you have [installed](./installation#wing-console) the Wing Console on 
 before getting started with this step.
 
 If you are unable to install the Console (e.g. you are running on Windows) or wish to skip
-this step, jump over to the [testing programmatically](./simulator) page.
+this step, jump over to the [Deploying to AWS](./aws) page.
 
 :::
 
-We can use the Wing CLI to start the console with our newly created app file:
+We can use the Wing CLI to start the console with our newly created Wing source file:
 
 ```sh
-wing run target/hello.wsim
+wing run hello.w
 ```
 
-This will start the Wing Console desktop application with the following view:
+The Wing Console will now compile hello.w source file to [The Simulator target.](./simulator#the-simulator-target-sim) Run the application and hot reload it on each change in the source file parent directory.
+
+Wing Console desktop application will show the following view of you application:
 
 ![](./console-app.png)
+
+You are now able to run your IDE and the Wing Console side by side and watch how changes in your code update your application in the Console.
 
 ## The console view
 
@@ -64,5 +68,4 @@ You have just written and tested your first Wing program!
 
 ---
 
-Next we'll see how you can interact with the same simulated cloud application
-directly through the Simulator API.
+Now, after you have tested your application, lets deploy it to AWS.

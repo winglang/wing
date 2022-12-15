@@ -73,7 +73,7 @@ are looking for Linux support.
 The Wing Console is a desktop application that allows you to interact with your
 Wing applications running locally on the cloud simulator.
 
-1. [Download](https://wing-console.s3.amazonaws.com/wing-console.dmg)  the latest version of the **Wing Console**.
+1. Download the latest version of the **Wing Console** for [macOS](https://wing-console.s3.amazonaws.com/wing-console.dmg) or [macOS arm64](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg).
 2. Accept the license agreement and drag the Wing Console app into **Applications**:
 
 ![](./console-install.png)
