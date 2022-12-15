@@ -15,7 +15,7 @@ import * as tar from "tar";
  */
 export const SIMULATOR_FILE_PATH = "simulator.json";
 
-export const log = debug("wingsdk");
+export const log = debug("wing:sdk");
 
 export function mkdtemp() {
   return mkdtempSync(join(tmpdir(), "wingsdk."));

@@ -103,7 +103,7 @@
                     "id": "FunctionHandler",
                     "path": "root/HelloWorld/Handler/FunctionHandler",
                     "attributes": {
-                      "wing:resource:stateful": true,
+                      "wing:resource:stateful": false,
                       "wing:resource:connections": []
                     },
                     "constructInfo": {
