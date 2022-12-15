@@ -4,7 +4,6 @@ use crate::ast::{Type as AstType, *};
 use crate::debug;
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use derivative::Derivative;
-use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -32,7 +31,7 @@ pub enum Type {
 	ResourceObject(TypeRef), // Reference to a Resource type
 	ClassInstance(TypeRef),  // Reference to a Class type
 	StructInstance(TypeRef), // Reference to a Struct type
-	EnumInstance(TypeRef),   // Reference to an Enum type
+	EnumInstance(EnumInstance),
 	Namespace(Namespace),
 }
 
@@ -82,7 +81,14 @@ pub struct Struct {
 #[derivative(Debug)]
 pub struct Enum {
 	pub name: Symbol,
-	pub values: IndexSet<Symbol>,
+	pub values: HashMap<Symbol, TypeRef>,
+}
+
+#[derive(Derivative)]
+#[derivative(Debug)]
+pub struct EnumInstance {
+	pub enum_name: Symbol,
+	pub enum_value: Symbol,
 }
 
 impl PartialEq for Type {
@@ -241,8 +247,7 @@ impl Display for Type {
 			Type::Set(v) => write!(f, "Set<{}>", v),
 			Type::Enum(s) => write!(f, "{}", s.name),
 			Type::EnumInstance(e) => {
-				let enum_type = e.as_enum().expect("Enum instance must reference to an enum");
-				write!(f, "instance of {}", enum_type.name)
+				write!(f, "enum value {}.{}", e.enum_name, e.enum_value)
 			}
 		}
 	}
@@ -1394,14 +1399,21 @@ impl<'a> TypeChecker<'a> {
 				};
 			}
 			StmtKind::Enum { name, values } => {
-				match env.define(
-					name,
-					self.types.add_type(Type::Enum(Enum {
-						name: name.clone(),
-						values: values.clone(),
-					})),
-					StatementIdx::Top,
-				) {
+				let mut enum_types = HashMap::new();
+				values.iter().for_each(|value| {
+					let enum_type = self.types.add_type(Type::EnumInstance(EnumInstance {
+						enum_name: name.clone(),
+						enum_value: value.clone(),
+					}));
+					enum_types.insert(value.clone(), enum_type);
+				});
+
+				let enum_type = self.types.add_type(Type::Enum(Enum {
+					name: name.clone(),
+					values: enum_types,
+				}));
+
+				match env.define(name, enum_type, StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1524,8 +1536,8 @@ impl<'a> TypeChecker<'a> {
 						_ => return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", instance)),
 					},
 					&Type::Enum(ref t) => {
-						if t.values.contains(property) {
-							instance
+						if t.values.contains_key(property) {
+							*t.values.get(property).unwrap()
 						} else {
 							self.general_type_error(format!("Enum {} does not contain value {}", instance, property.name))
 						}

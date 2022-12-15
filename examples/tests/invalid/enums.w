@@ -4,3 +4,6 @@ enum SomeEnum {
 
 let four = SomeEnum.FOUR;
 // ERR              ^^^^ enum value does not exist
+
+let two = SomeEnum.TWO.TWO;
+// ERR                 ^^^
