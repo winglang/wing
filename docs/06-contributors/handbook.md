@@ -1,6 +1,7 @@
 ---
 title: Contributor's Handbook
 id: handbook
+keywords: [Wing contributors, contributors]
 ---
 
 Thank you for your interest in contributing to Wing!  ❤️
@@ -81,6 +82,64 @@ npm run test
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
 [volta]: https://volta.sh
+
+## 🔨 Common development workflows
+
+Several projects have some tools to aid with development. If you're iterating on any of these project, they may be useful to try out!
+
+### Wing CLI
+
+> cd apps/wing
+
+```sh
+npx nx dev -- <wing cli arguments>
+```
+
+Runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
+
+### wingc
+
+> cd libs/wingc
+
+```sh
+npx nx test
+```
+
+Run the cargo tests, currently just ensure the valid examples compile and the invalid ones do not.
+
+```sh
+npx nx dev -- <path to .w file>
+```
+
+Run `wingc` on a file. This do all compilation steps except running the generated intermediate generated preflight javascript.
+
+### tree-sitter grammar
+
+> libs/tree-sitter-wing
+
+```sh
+npx tree-sitter-cli generate
+```
+
+After making changes to grammar.js
+
+```sh
+npx tree-sitter-cli test
+```
+
+To run the grammar tests (in the `test` folder)
+
+```sh
+npx tree-sitter-cli build-wasm --docker
+```
+
+Builds the grammar as WASM for the web-based playground. Leave off `--docker` if you have emscripten setup locally.
+
+```sh
+npx tree-sitter-cli playground
+```
+
+Uses the wasm grammar to run a web-based playground where you can explore the AST and test out highlight queries. Make sure to also run `build-wasm` before each time the grammar changes.
 
 ## 🔨 How do I build just the SDK?
 

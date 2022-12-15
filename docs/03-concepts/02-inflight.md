@@ -2,6 +2,7 @@
 id: inflights
 title: Inflights
 description: Inflight functions are code blocks that are executed on the cloud
+keywords: [Inflights, Inflight functions]
 ---
 
 Inflights (or "inflight functions") are Wing's distributed computing primitive.

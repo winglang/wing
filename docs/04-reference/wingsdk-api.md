@@ -2,6 +2,7 @@
 title: SDK
 id: sdk
 description: Wing SDK API Reference
+keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 
 # API Reference <a name="API Reference" id="api-reference"></a>
