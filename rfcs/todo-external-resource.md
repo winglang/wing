@@ -98,6 +98,8 @@ resource TaskList {
 }
 ```
 
+
+
 As you can see, Dave is able to naturally bring the `DynamodbTable` resource/construct from 
 [@cdktf/provider-aws](https://www.npmjs.com/package/@cdktf/provider-aws) (which is a standard CDK JSII library)
 and use it in preflight like any other Wing resource.
@@ -106,6 +108,28 @@ He was also able to bring the AWS SDK JavaScript library (`aws-sdk`) as "untyped
 support reading `.d.ts` files).
 
 He rewrote the `TaskList` resource accordingly (see some annotations in the code for details on what's going on).
+
+Alternatively:
+
+```ts
+resource TaskList {
+  //...
+  pub grant_write(fn: tfaws.Function) {
+    fn.add_policy_statement(
+      effect: "Allow", 
+      method: ["dynamodb:PutItem"], 
+      resource: [this._table.arn]
+    );
+  }
+}
+
+let task_list = new TaskList();
+let fn = new tfaws.Function(inflight () => {
+  task_list.add_task(...);
+});
+
+task_list.grant_write(fn);
+```
 
 ## Simulator Implementation 
 
