@@ -1,5 +1,7 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -29,57 +31,44 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
   }
 
   public onMessage(
-    _inflight: core.Inflight,
-    _props: cloud.QueueOnMessageProps = {}
+    inflight: cloud.IQueueOnMessageHandler,
+    props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    throw new Error("unimplemented");
-    // const code: string[] = [];
-    // code.push(inflight.code.text);
-    // code.push(`async function $queueEventWrapper($cap, event) {`);
-    // code.push(`  event = JSON.parse(event);`);
-    // code.push(
-    //   `  if (!event.messages) throw new Error('No "messages" field in event.');`
-    // );
-    // code.push(`  for (const $message of event.messages) {`);
-    // code.push(`    await ${inflight.entrypoint}($cap, $message);`);
-    // code.push(`  }`);
-    // code.push(`}`);
+    const functionHandler: cloud.IFunctionHandler = convertBetweenHandlers(
+      inflight,
+      join(__dirname, "queue.onmessage.inflight.js"),
+      "QueueOnMessageHandlerClient"
+    );
 
-    // const newInflight = new core.Inflight({
-    //   entrypoint: `$queueEventWrapper`,
-    //   code: core.NodeJsCode.fromInline(code.join("\n")),
-    //   bindings: inflight.bindings,
-    // });
+    const fn = new cloud.Function(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${functionHandler.node.addr.slice(-8)}`,
+      functionHandler,
+      props
+    );
 
-    // const fn = new cloud.Function(
-    //   this.node.scope!, // ok since we're not a tree root
-    //   `${this.node.id}-OnMessage-${inflight.code.hash.slice(0, 16)}`,
-    //   newInflight,
-    //   props
-    // );
+    // At the time the queue is created in the simulator, it needs to be able to
+    // call subscribed functions.
+    this.node.addDependency(fn);
 
-    // // At the time the queue is created in the simulator, it needs to be able to
-    // // call subscribed functions.
-    // this.node.addDependency(fn);
+    const functionHandle = `\${${fn.node.path}#attrs.handle}`; // TODO: proper token mechanism
+    this.subscribers.push({
+      functionHandle,
+      batchSize: props.batchSize ?? 1,
+    });
 
-    // const functionHandle = `\${${fn.node.path}#attrs.handle}`; // TODO: proper token mechanism
-    // this.subscribers.push({
-    //   functionHandle,
-    //   batchSize: props.batchSize ?? 1,
-    // });
+    this.addConnection({
+      direction: core.Direction.OUTBOUND,
+      relationship: "on_message",
+      resource: fn,
+    });
+    fn.addConnection({
+      direction: core.Direction.INBOUND,
+      relationship: "on_message",
+      resource: this,
+    });
 
-    // this.addConnection({
-    //   direction: Direction.OUTBOUND,
-    //   relationship: "on_message",
-    //   resource: fn,
-    // });
-    // fn.addConnection({
-    //   direction: Direction.INBOUND,
-    //   relationship: "on_message",
-    //   resource: this,
-    // });
-
-    // return fn;
+    return fn;
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -96,7 +85,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     return schema;
   }
 
-  protected _bind_impl(
+  protected bindImpl(
     host: core.Resource,
     _policy: core.OperationPolicy
   ): core.Code {

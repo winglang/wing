@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Inflight, OperationPolicy, Resource } from "../core";
+import { Code, IResource, OperationPolicy, Resource } from "../core";
 import { Function } from "./function";
 
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
@@ -28,7 +28,7 @@ export abstract class TopicBase extends Resource {
    * Creates function to send messages when published
    */
   public abstract onMessage(
-    inflight: Inflight,
+    inflight: ITopicOnMessageHandler,
     props?: TopicOnMessageProps
   ): Function;
 }
@@ -52,12 +52,12 @@ export class Topic extends TopicBase {
     return Polycons.newInstance(TOPIC_TYPE, scope, id, props) as Topic;
   }
 
-  protected _bind_impl(_host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented");
   }
 
   public onMessage(
-    inflight: Inflight,
+    inflight: ITopicOnMessageHandler,
     props: TopicOnMessageProps = {}
   ): Function {
     inflight;
@@ -75,6 +75,21 @@ export interface ITopicClient {
    * @param message Payload to publish to Topic
    */
   publish(message: string): Promise<void>;
+}
+
+/**
+ * Represents a resource with an inflight "handle" method that can be passed to
+ * `Topic.on_message`.
+ *
+ * @inflight `wingsdk.cloud.ITopicOnMessageHandlerClient`
+ */
+export interface ITopicOnMessageHandler extends IResource {}
+
+/**
+ * Inflight client for `IOnMessageHandler`.
+ */
+export interface ITopicOnMessageHandlerClient {
+  handle(event: string): Promise<void>;
 }
 
 /**

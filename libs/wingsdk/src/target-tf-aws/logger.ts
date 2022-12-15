@@ -19,7 +19,7 @@ export class Logger extends cloud.LoggerBase {
     super(scope, id);
   }
 
-  protected _bind_impl(host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(host: Resource, _policy: OperationPolicy): Code {
     if (!(host instanceof Function)) {
       throw new Error("loggers can only be bound by tfaws.Function for now");
     }

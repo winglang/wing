@@ -1,8 +1,10 @@
-// import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
+import { join } from "path";
+import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
-// import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
+import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
@@ -26,75 +28,65 @@ export class Topic extends cloud.TopicBase {
   }
 
   public onMessage(
-    _inflight: core.Inflight,
-    _props: cloud.TopicOnMessageProps = {}
+    inflight: cloud.ITopicOnMessageHandler,
+    props: cloud.TopicOnMessageProps = {}
   ): cloud.Function {
-    throw new Error("unimplemeneted");
-    // const code: string[] = [];
-    // const entrypoint = `$snsEventWrapper`;
-    // code.push(inflight.code.text);
-    // code.push(`async function ${entrypoint}($cap, event) {`);
-    // code.push(` for (const record of event.Records ?? []) {`);
-    // code.push(`   await ${inflight.entrypoint}($cap, record.Sns);`);
-    // code.push(` }`);
-    // code.push(`}`);
-    // const newInflight = new core.Inflight({
-    //   entrypoint,
-    //   code: core.NodeJsCode.fromInline(code.join("\n")),
-    //   bindings: inflight.bindings,
-    // });
+    const functionHandler: cloud.IFunctionHandler = convertBetweenHandlers(
+      inflight,
+      join(__dirname, "topic.onmessage.inflight.js"),
+      "TopicOnMessageHandlerClient"
+    );
 
-    // const newInflightHash = newInflight.code.hash.slice(0, 16);
+    const hash = functionHandler.node.addr.slice(-8);
+    const fn = new cloud.Function(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${hash}`,
+      functionHandler,
+      props
+    );
 
-    // const fn = new cloud.Function(
-    //   this.node.scope!,
-    //   `${this.node.id}-OnMessage-${newInflightHash}`,
-    //   newInflight,
-    //   props
-    // );
+    // TODO: remove this constraint by adding geric permission APIs to cloud.Function
+    if (!(fn instanceof Function)) {
+      throw new Error("Topic only supports creating tfaws.Function right now");
+    }
 
-    // // TODO: remove this constraint by adding geric permission APIs to cloud.Function
-    // if (!(fn instanceof Function)) {
-    //   throw new Error("Topic only supports creating tfaws.Function right now");
-    // }
+    new SnsTopicSubscription(
+      this,
+      `${this.node.id}-TopicSubscription-${hash}`,
+      {
+        topicArn: this.topic.arn,
+        protocol: "lambda",
+        endpoint: fn.arn,
+      }
+    );
 
-    // new SnsTopicSubscription(
-    //   this,
-    //   `${this.node.id}-TopicSubsription-${newInflightHash}`,
-    //   {
-    //     topicArn: this.topic.arn,
-    //     protocol: "lambda",
-    //     endpoint: fn.arn,
-    //   }
-    // );
+    new LambdaPermission(
+      this,
+      `${this.node.id}-TopicInvokePermission-${hash}`,
+      {
+        action: "lambda:InvokeFunction",
+        functionName: fn._functionName,
+        principal: "sns.amazonaws.com",
+        sourceArn: this.topic.arn,
+      }
+    );
 
-    // new LambdaPermission(
-    //   this,
-    //   `${this.node.id}-TopicInvokePermission-${newInflightHash}`,
-    //   {
-    //     action: "lambda:InvokeFunction",
-    //     functionName: fn._functionName,
-    //     principal: "sns.amazonaws.com",
-    //     sourceArn: this.topic.arn,
-    //   }
-    // );
+    this.addConnection({
+      direction: core.Direction.OUTBOUND,
+      relationship: "on_message",
+      resource: fn,
+    });
 
-    // this.addConnection({
-    //   direction: core.Direction.OUTBOUND,
-    //   relationship: "on_message",
-    //   resource: fn,
-    // });
+    this.addConnection({
+      direction: core.Direction.INBOUND,
+      relationship: "on_message",
+      resource: this,
+    });
 
-    // this.addConnection({
-    //   direction: core.Direction.INBOUND,
-    //   relationship: "on_message",
-    //   resource: this,
-    // });
-
-    // return fn;
+    return fn;
   }
 
-  protected _bind_impl(
+  protected bindImpl(
     host: core.Resource,
     policy: core.OperationPolicy
   ): core.Code {

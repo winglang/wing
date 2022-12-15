@@ -21,14 +21,6 @@ export interface FunctionProps {
 }
 
 /**
- * Represents a resource with an inflight "handle" method that can be used to
- * create a `cloud.Function`.
- */
-export interface IFunctionHandler extends IResource {
-  /** contains inflight "handle" method */
-}
-
-/**
  * Functionality shared between all `Function` implementations.
  */
 export abstract class FunctionBase extends Resource {
@@ -79,7 +71,7 @@ export class Function extends FunctionBase {
     ) as Function;
   }
 
-  protected _bind_impl(_host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(_host: Resource, _policy: OperationPolicy): Code {
     throw new Error("Method not implemented.");
   }
 
@@ -96,6 +88,21 @@ export interface IFunctionClient {
    * Invoke the function asynchronously with a given payload.
    */
   invoke(payload: string): Promise<string>;
+}
+
+/**
+ * Represents a resource with an inflight "handle" method that can be used to
+ * create a `cloud.Function`.
+ *
+ * @inflight `wingsdk.cloud.IFunctionHandlerClient`
+ */
+export interface IFunctionHandler extends IResource {}
+
+/**
+ * Inflight client for `IFunctionHandler`.
+ */
+export interface IFunctionHandlerClient {
+  handle(event: string): Promise<void>;
 }
 
 /**

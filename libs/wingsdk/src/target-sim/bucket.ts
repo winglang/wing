@@ -14,7 +14,10 @@ import { bindSimulatorResource } from "./util";
 export class Bucket extends cloud.BucketBase implements ISimulatorResource {
   /** @internal */
   public readonly _policies = {
-    [cloud.FunctionInflightMethods.INVOKE]: {},
+    [cloud.BucketInflightMethods.PUT]: {},
+    [cloud.BucketInflightMethods.GET]: {},
+    [cloud.BucketInflightMethods.LIST]: {},
+    [cloud.BucketInflightMethods.DELETE]: {},
   };
 
   private readonly public: boolean;
@@ -36,7 +39,7 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
     return schema;
   }
 
-  protected _bind_impl(
+  protected bindImpl(
     host: core.Resource,
     _policy: core.OperationPolicy
   ): core.Code {

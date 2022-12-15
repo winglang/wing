@@ -25,56 +25,41 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
   }
 
   public onMessage(
-    _inflight: core.Inflight,
-    _props: cloud.TopicOnMessageProps = {}
+    inflight: cloud.ITopicOnMessageHandler,
+    props: cloud.TopicOnMessageProps = {}
   ): cloud.Function {
-    throw new Error("unimplemented");
-    // const code: string[] = [];
-    // code.push(inflight.code.text);
-    // code.push(`async function $topicEventWrapper($cap, event) {`);
-    // code.push(` event = JSON.parse(event);`);
-    // code.push(
-    //   `   if (!event.message) throw new Error('No "message" field in event.');`
-    // );
-    // code.push(` await ${inflight.entrypoint}($cap, event.message);`);
-    // code.push(`}`);
+    const fn = new cloud.Function(
+      this.node.scope!,
+      `${this.node.id}-OnMessage-${inflight.node.addr.slice(-8)}`,
+      // ITopicOnMessageHandler has the same inflight signature as IFunctionHandler
+      // so its safe to reuse the inflight directly
+      inflight,
+      props
+    );
 
-    // const newInflight = new core.Inflight({
-    //   entrypoint: `$topicEventWrapper`,
-    //   code: core.NodeJsCode.fromInline(code.join("\n")),
-    //   bindings: inflight.bindings,
-    // });
+    this.node.addDependency(fn);
 
-    // const fn = new cloud.Function(
-    //   this.node.scope!,
-    //   `${this.node.id}-OnMessage-${inflight.code.hash.slice(0, 16)}`,
-    //   newInflight,
-    //   props
-    // );
+    const functionHandle = `\${${fn.node.path}#attrs.handle}`;
+    this.subscribers.push({
+      functionHandle,
+    });
 
-    // this.node.addDependency(fn);
+    this.addConnection({
+      direction: core.Direction.OUTBOUND,
+      relationship: "on_message",
+      resource: fn,
+    });
 
-    // const functionHandle = `\${${fn.node.path}#attrs.handle}`;
-    // this.subscribers.push({
-    //   functionHandle,
-    // });
+    fn.addConnection({
+      direction: core.Direction.INBOUND,
+      relationship: "on_message",
+      resource: this,
+    });
 
-    // this.addConnection({
-    //   direction: Direction.OUTBOUND,
-    //   relationship: "on_message",
-    //   resource: fn,
-    // });
-
-    // fn.addConnection({
-    //   direction: Direction.INBOUND,
-    //   relationship: "on_message",
-    //   resource: this,
-    // });
-
-    // return fn;
+    return fn;
   }
 
-  protected _bind_impl(
+  protected bindImpl(
     host: core.Resource,
     _policy: core.OperationPolicy
   ): core.Code {

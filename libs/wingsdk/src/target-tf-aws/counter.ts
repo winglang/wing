@@ -31,7 +31,7 @@ export class Counter extends cloud.CounterBase {
     });
   }
 
-  protected _bind_impl(
+  protected bindImpl(
     host: core.Resource,
     policy: core.OperationPolicy
   ): core.Code {

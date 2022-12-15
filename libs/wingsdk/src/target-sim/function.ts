@@ -38,7 +38,11 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   ) {
     super(scope, id, inflight, props);
 
-    const code = inflight._bind(this, inflight._policies.handle);
+    const policy: core.OperationPolicy = { inflight: { methods: ["handle"] } };
+    const code = inflight._bind(
+      this,
+      core.Policies.make(policy, inflight, "inflight")
+    );
 
     const lines = new Array<string>();
     lines.push("exports.handler = async function(event) {");
@@ -95,7 +99,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     return schema;
   }
 
-  protected _bind_impl(
+  protected bindImpl(
     host: core.Resource,
     _policy: core.OperationPolicy
   ): core.Code {

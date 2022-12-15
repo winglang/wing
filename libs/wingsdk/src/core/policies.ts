@@ -5,10 +5,12 @@ import { IResource } from "./resource";
  */
 export class Policies {
   /**
-   * Generates the transitive policy needed for `resource` given the current
-   * parent policy. That is, given a policy that says "call `handle` on
-   * `resource`", this function will return a policy that says "call
-   * `put_something` on `resource.inner`" using the information in
+   * Generates the policy for `resource` given the methods that `policy` wants
+   * to use on it.
+   *
+   * For example, given a policy that says "call `handle` on `resource`" and an
+   * actual reference to `resource`, this function will return a new policy that
+   * says "call `put_something` on `resource.inner`" using the information in
    * `resource._policies`.
    *
    * @param policy The policy containing a reference to `resourceName` and the methods that may be called on it
@@ -27,26 +29,33 @@ export class Policies {
     for (const method of policy[resourceName].methods ?? []) {
       // Get the resource's policy for the method (e.g. any sub-resources it needs to call)
       const subpolicy = resource._policies[method];
+      if (!subpolicy) {
+        throw new Error(
+          `Resource ${resourceName} (${resource.node.path}) does not have a policy for method "${method}"`
+        );
+      }
+
       // Merge the policy with the current policy we've built up
-      mergeOperationPolicies(newPolicy, subpolicy);
+      Policies.merge(newPolicy, subpolicy);
       // Add a special annotation that says the method was called on `resource`
-      mergeOperationPolicies(newPolicy, { $self: { methods: [method] } });
+      Policies.merge(newPolicy, { $self: { methods: [method] } });
     }
 
     return newPolicy;
   }
-}
 
-function mergeOperationPolicies(
-  policy1: OperationPolicy,
-  policy2: OperationPolicy
-) {
-  for (const resource in policy2) {
-    if (Object.keys(policy1).includes(resource)) {
-      policy1[resource].methods.push(...policy2[resource].methods);
-    } else {
-      policy1[resource] = policy2[resource];
+  /**
+   * Merge policy2 into the policy1 object.
+   */
+  public static merge(policy1: OperationPolicy, policy2: OperationPolicy) {
+    for (const resource in policy2) {
+      if (Object.keys(policy1).includes(resource)) {
+        policy1[resource].methods.push(...policy2[resource].methods);
+      } else {
+        policy1[resource] = policy2[resource];
+      }
     }
+    return policy1;
   }
 }
 

@@ -36,7 +36,7 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
     return schema;
   }
 
-  protected _bind_impl(
+  protected bindImpl(
     host: core.Resource,
     _policy: core.OperationPolicy
   ): core.Code {

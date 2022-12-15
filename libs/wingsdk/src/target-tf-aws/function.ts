@@ -11,7 +11,13 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
-import { Code, InflightClient, OperationPolicy, Resource } from "../core";
+import {
+  Code,
+  InflightClient,
+  OperationPolicy,
+  Policies,
+  Resource,
+} from "../core";
 import { mkdtemp } from "../util";
 import { addBindConnections } from "./util";
 
@@ -49,7 +55,11 @@ export class Function extends cloud.FunctionBase {
       throw new Error("No policy found on the inflight handler.");
     }
 
-    const code = inflight._bind(this, inflight._policies.handle);
+    const policy: OperationPolicy = { inflight: { methods: ["handle"] } };
+    const code = inflight._bind(
+      this,
+      Policies.make(policy, inflight, "inflight")
+    );
 
     const lines = new Array<string>();
     lines.push("exports.handler = async function(event) {");
@@ -185,7 +195,7 @@ export class Function extends cloud.FunctionBase {
     return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
   }
 
-  protected _bind_impl(host: Resource, policy: OperationPolicy): Code {
+  protected bindImpl(host: Resource, policy: OperationPolicy): Code {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }

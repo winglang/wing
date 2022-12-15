@@ -42,14 +42,14 @@ export abstract class Resource
    */
   public _bind(host: Resource, policy: OperationPolicy): Code {
     log(
-      `A resource (${this.node.path}) is being bound to a host (${
+      `Binding a resource (${this.node.path}) to a host (${
         host.node.path
       }) with policy ${JSON.stringify(policy)}`
     );
-    return this._bind_impl(host, policy);
+    return this.bindImpl(host, policy);
   }
 
-  protected abstract _bind_impl(host: Resource, policy: OperationPolicy): Code;
+  protected abstract bindImpl(host: Resource, policy: OperationPolicy): Code;
 
   /**
    * Adds a connection to this resource. A connection is a piece of metadata

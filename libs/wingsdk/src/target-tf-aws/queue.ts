@@ -1,7 +1,9 @@
-// import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
+import { join } from "path";
+import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
 import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { OperationPolicy, Resource } from "../core";
 import { Function } from "./function";
@@ -34,68 +36,48 @@ export class Queue extends cloud.QueueBase {
   }
 
   public onMessage(
-    _inflight: core.Inflight,
-    _props: cloud.QueueOnMessageProps = {}
+    inflight: cloud.IQueueOnMessageHandler,
+    props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    throw new Error("unimplemented");
-    // const code: string[] = [];
-    // code.push(inflight.code.text);
-    // code.push(`async function $sqsEventWrapper($cap, event) {`);
-    // code.push(`  for (const record of event.Records ?? []) {`);
-    // code.push(`    await ${inflight.entrypoint}($cap, record.body);`);
-    // code.push(`  }`);
-    // code.push(`}`);
-    // const newInflight = new core.Inflight({
-    //   entrypoint: `$sqsEventWrapper`,
-    //   code: core.NodeJsCode.fromInline(code.join("\n")),
-    //   bindings: inflight.bindings,
-    // });
+    const functionHandler: cloud.IFunctionHandler = convertBetweenHandlers(
+      inflight,
+      join(__dirname, "queue.onmessage.inflight.js"),
+      "QueueOnMessageHandlerClient"
+    );
 
-    // const fn = new cloud.Function(
-    //   this.node.scope!, // ok since we're not a tree root
-    //   `${this.node.id}-OnMessage-${newInflight.code.hash.slice(0, 16)}`,
-    //   newInflight,
-    //   props
-    // );
+    const fn = new cloud.Function(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${functionHandler.node.addr.slice(-8)}`,
+      functionHandler,
+      props
+    );
 
-    // // TODO: remove this constraint by adding generic permission APIs to cloud.Function
-    // if (!(fn instanceof Function)) {
-    //   throw new Error("Queue only supports creating tfaws.Function right now");
-    // }
+    // TODO: remove this constraint by adding generic permission APIs to cloud.Function
+    if (!(fn instanceof Function)) {
+      throw new Error("Queue only supports creating tfaws.Function right now");
+    }
 
-    // fn.addPolicyStatements({
-    //   effect: "Allow",
-    //   action: [
-    //     "sqs:ReceiveMessage",
-    //     "sqs:ChangeMessageVisibility",
-    //     "sqs:GetQueueUrl",
-    //     "sqs:DeleteMessage",
-    //     "sqs:GetQueueAttributes",
-    //   ],
-    //   resource: this.queue.arn,
-    // });
+    new LambdaEventSourceMapping(this, "EventSourceMapping", {
+      functionName: fn._functionName,
+      eventSourceArn: this.queue.arn,
+      batchSize: props.batchSize ?? 1,
+    });
 
-    // new LambdaEventSourceMapping(this, "EventSourceMapping", {
-    //   functionName: fn._functionName,
-    //   eventSourceArn: this.queue.arn,
-    //   batchSize: props.batchSize ?? 1,
-    // });
+    this.addConnection({
+      direction: core.Direction.OUTBOUND,
+      relationship: "on_message",
+      resource: fn,
+    });
+    fn.addConnection({
+      direction: core.Direction.INBOUND,
+      relationship: "on_message",
+      resource: this,
+    });
 
-    // this.addConnection({
-    //   direction: Direction.OUTBOUND,
-    //   relationship: "on_message",
-    //   resource: fn,
-    // });
-    // fn.addConnection({
-    //   direction: Direction.INBOUND,
-    //   relationship: "on_message",
-    //   resource: this,
-    // });
-
-    // return fn;
+    return fn;
   }
 
-  protected _bind_impl(host: Resource, policy: OperationPolicy): core.Code {
+  protected bindImpl(host: Resource, policy: OperationPolicy): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
