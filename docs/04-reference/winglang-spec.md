@@ -150,6 +150,8 @@ the difference that body is replaced with return type annotation.
 * The `async` modifier indicates that a function is an async function.
 * The `inflight` modifier indicates that a function is an inflight function.
 
+"inflight"ness in Wing implies "async"ness as well.
+
 ```pre
 (arg1: <type1>, arg2: <type2>, ...) => <type>
 async (arg1: <type1>, arg2: <type2>, ...) => <type>
@@ -157,7 +159,7 @@ inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 ```
 
 > ```TS
-> // type annotation in wing: (num) -> num
+> // type annotation in wing: (num) => num
 > let f1 = (x: num): num => { return x + 1; };
 > // type annotation in wing: inflight (num, str) => void
 > let f2 = inflight (x: num, s: str) => { /* no-op */ };
@@ -169,21 +171,16 @@ inflight (arg1: <type1>, arg2: <type2>, ...) => <type>
 
 ---
 
-#### 1.1.4 Struct type
+#### 1.1.4 Frozen Type
 
-A special data type is available in Wing called `Struct`. Not to be confused
-with definable structs which are outlined in their own section below. This type
-represents an arbitrary JSON value. This type can currently by assigned to and
-from `any`. During the assignment, the compiler internally knows about the
-length of this type and attempts to read it as either a JSON string or buffer.
+A special data type is available in Wing called `Frozen`. This type represents
+an immutable JSON object, obtained from "any" type. "Frozen" assignments must be
+all assignment by values and not references to guarantee immutability.
 
-Since casting is not allowed in Wing, `Struct` data type is `any`'s interface
-with the outside world. `Struct` can be casted back to `any` at any time.  
-All structs can be casted to `Struct` and back to `any` at any time as well.  
-`Struct` cannot be casted to any other type.
-
-"Struct" is immutable by design. Meaning that once parsed from its `any` buffer,
-it cannot be modified anymore.
+Since casting is not allowed in Wing, `Frozen` data type is `any`'s interface
+with the outside world. `Frozen` can be casted back to `any` at any time.  
+All structs can be casted to `Frozen` and back to `any` at any time as well.  
+`Frozen` cannot be casted to any other type.
 
 > ```TS
 > // assuming fetch_some_data_with_jsii() returns "any":
@@ -191,14 +188,14 @@ it cannot be modified anymore.
 > print(data[0]["prop-1"].id);
 > print(data.name);
 > ```
-
   
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> const data: any = Object.freeze(await (async () -> {
+> const data: any = Object.freeze(await (async () => {
 >   try {
->     return JSON.parse(await fetch_some_data_with_jsii());
+>     // deep copy all enumerable properties of the host object
+>     return JSON.parse(JSON.stringify(await fetch_some_data_with_jsii()));
 >   } catch(err) {
 >     throw new Error(`Failed to parse JSON from any: ${err.message}`);
 >   }
@@ -246,14 +243,14 @@ communicating errors to the user.
 > // throws
 > throw new Error("a recoverable error occurred");
 > // calling panic in wing is fatal
-> (() -> {
+> (() => {
 >   console.error("Something went wrong", [1,2]);
 >   // generate core dump
 >   // show stack trace
 >   process.exit(1);
 > })();
 > // multiple assertions
-> (() -> { assert.ok(x > 0); assert.ok(x < 10); })();
+> (() => { assert.ok(x > 0); assert.ok(x < 10); })();
 > ```
 
 </details>
@@ -295,8 +292,7 @@ Inflight members can only be accessed from an **inflight context** (an inflight
 method or an inflight closure) and preflight members can only be accessed from a
 **preflight context** (a preflight method or a preflight closure).
 
-It is also possible to use the `inflight` modifier when defining a function
-closure:
+The `inflight` modifier when defining a function closure is allowed:
 
 ```TS
 let handler = inflight () => {
@@ -342,7 +338,7 @@ let handler2 = inflight() => {
 ```
 
 Bridge between preflight and inflight is crossed with the help of immutable data
-structures, "structs", and the capture mechanism.
+structures, "structs", Frozen objects and the capture mechanism.
 
 Preflight resource methods and initializers can receive an inflight function as
 an argument. This enables resources to define code that will be executed on the
@@ -624,6 +620,61 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
+### 1.14 Asynchronous Model
+
+Wing builds upon the asynchronous model of JavaScript currently and expands upon
+it with new keywords and concepts.
+
+Apart from the `async` keyword, the `inflight` keyword also changes synchronous
+model of a definition in Wing.
+
+These are the dominant concepts to understand:
+
+1. `preflight`ness implies synchronous execution of a definition.
+2. `inflight`ness implies `async`ness, but not the other way around.
+3. `async`ness implies `await`ing calls in the body of its following definition.
+
+Contrary to JavaScript, `await` in Wing is a rarely used keyword, since its use
+is implied by the `async` keyword. `await` is only used when you want to take a
+reference to a promise and resolve it later with the `defer` keyword.
+
+Wing compiler emits `await`s when encountering `Promise<T>` types as r-values in
+expressions. Use `defer` keyword to defer the resolution of a promise and obtain
+a `Promise<T>` type instead (a.k.a un`await` what the compiler does).
+
+Combination of:  
+- `async` and `preflight` is allowed only in Resource finalizers.  
+- `async` and `inflight` is allowed, self-documenting, but redundant.
+
+### 1.15 Promise Safety Model
+
+`await` is rarely used in Wing, since it is implied by the `async` keyword. As a
+result, almost all cases where `Promise<T>`s are used as r-values in expressions
+are `await`ed and serialized by the compiler automatically.
+
+In order to extend this safety model to the `defer` keyword, Wing compiler emits
+errors in the following scenarios:
+
+- `Promise<T>` is obtained through `defer` and it's not `await`ed before scope's
+  end (leading to unhandled and dangling promises laying around).
+- A function or method signature accepts `Promise<T>` as argument, but it is not
+  `await`ed before its definition scope's end.
+
+In other words, Promises in Wing have ownership beyond their lifetime. And the
+compiler guarantees this ownership is never exceeded by the lifetime. Lifetime
+of a Promise begins the moment it's instantiated and ends once it's `await`ed.
+
+This safety model also adds another benefit: it is not possible to return an un-
+fulfilled Promise from a function or method. This is because the compiler will
+always `await` the Promise before returning it, and if it's not `await`ed before
+the function/method scope's end, the compiler will emit an error. This means the
+`Promise<T>` decoration is redundant and `async` and `inflight` return types are
+no longer needed to be wrapped in `Promise<T>`.
+
+[`▲ top`][top]
+
+---
+
 ## 2. Statements
 
 ### 2.1 bring
@@ -729,21 +780,25 @@ includes for and while loops currently.
 
 ---
 
-### 2.5 await
+### 2.5 defer/await
 
-**await** statement allows to wait for a promise and grab its execution result.
-"await" and "promise" are semantically similar to JavaScript's promises.  
-"await" statement is only valid in `async` function declarations.  
+> Read [Asynchronous Model](#1-14-asynchronous-model) section as a prerequisite.
+
+You mostly do not need to use `defer` and `await` keywords in Wing.  
+"defer" prevents the compiler from `await`ing a promise and grabs a reference.  
+"await" and "Promise" are semantically similar to JavaScript's promises.  
+"await" statement is only valid in `async` and `inflight` function declarations.  
 awaiting non promises in Wing is a no-op just like in JavaScript.
 
 > ```TS
 > // Wing program:
 > class MyClass {
 >   async foo(): num {
->     let x = await some_promise();
+>     let w = defer some_promise();
+>     let x = await w;
 >     return x;
 >   }
->   boo(): Promise<num> {
+>   async boo(): num {
 >     let x = some_promise();
 >     return x;
 >   }
@@ -754,12 +809,13 @@ awaiting non promises in Wing is a no-op just like in JavaScript.
 
 > ```TS
 > class MyClass {
->   async foo(): number {
->     let x = await some_promise();
+>   async foo(): Promise<number> {
+>     const w = some_promise();
+>     const x = Object.freeze(await w);
 >     return x;
 >   }
->   boo(): Promise<number> {
->     let x = some_promise();
+>   async boo(): Promise<number> {
+>     const x = Object.freeze(await some_promise());
 >     return x;
 >   }
 > }
@@ -955,6 +1011,9 @@ Structs can inherit from multiple other structs.
 
 ### 3.2 Classes
 
+> Defining and using Classes are only allowed in the `inflight` phase.
+> Read more about the phases [here](#13-phase-modifiers).
+
 Classes consist of fields and methods in any order.  
 The class system is single-dispatch class based object orientated system.  
 Classes are instantiated with the `new` keyword.
@@ -1095,6 +1154,9 @@ In methods if return type is missing, `: void` is assumed.
 
 ### 3.3 Resources
 
+> Defining and using Resources are only allowed in the `preflight` phase.
+> Read more about the phases [here](#13-phase-modifiers).
+
 Resources provide first class composite pattern support in Wing. They are
 modeled after and leverage the [constructs](https://github.com/aws/constructs)
 programming model and as such are fully interoperable with CDK constructs.  
@@ -1182,6 +1244,9 @@ but declaration of methods with different phases is allowed.
 ---
 
 ### 3.4 Interfaces
+
+> Defining and using Interfaces are allowed in `preflight` and `inflight` phase.
+> Read more about the phases [here](#13-phase-modifiers).
 
 Interfaces represent a contract that a class or resource must fulfill.  
 Interfaces are defined with the `interface` keyword.  
@@ -1312,16 +1377,10 @@ However, it is possible to create anonymous closures and assign to variables
 #### 3.6.2 Promises
 
 Promises in Wing are defined with `Promise<T>` syntax.  
-Functions that use the keyword "await" in their body must return a promise.
 
 > ```TS
-> let number = (): Promise<num> -> {
->   return 23;
-> }
-> // handler returns Promise<void>
-> let handler = async (): void -> {
->   let t = await number();
->   print(t);
+> let number = (): Promise<num> => {
+>   return Promise.resolve(9464);
 > }
 > ```
 
@@ -1362,7 +1421,7 @@ struct MyStruct {
   field1: num;
   field2: num;
 };
-let f = (x: num, y: num, z: MyStruct) -> {
+let f = (x: num, y: num, z: MyStruct) => {
   print(x + y + z.field1 + z.field2);
 }
 // last arguments are expanded into their struct
@@ -1382,7 +1441,7 @@ variadic arguments is not supported currently and the container of variadic
 arguments is accessible with the `args` key like a normal array instance.
 
 ```TS
-let f = (x: num, ...args: Array<num>) -> {
+let f = (x: num, ...args: Array<num>) => {
   print(x + y + sizeof(args));
 }
 // last arguments are expanded into their struct
@@ -1669,29 +1728,33 @@ Processing unicode escape sequences happens in these strings.
 If string is enclosed with backticks, the contents of that string will be
 interpreted as a shell command and its output will be used as a string. `` `echo
 "Hello"` `` is equal to `"Hello"`.  
-The string inside the backtick is evaluated in shell at compile time and its
-stdout is returned as a string. If command exits with non-zero, this throws with
-an exception containing the stderr of the command and its return code.
-
-The string is evaluated at compile time as a escape hatch for ops workflows.
 
 Substitution is not allowed in shell strings.  
-Shell strings are invalid in the bring expression.  
-Not all targets support shell execution. Backticks throw in absence of a shell.
-This is specifically geared towards WebAssembly builds of Wing.
-
-Internally compiler calls the host environment's command processor (e.g.
-`/bin/sh`, `cmd.exe`, `command.com`) with the enclosed command.
+Shell strings are invalid in the bring expression.
 
 > ```TS
 > let name = `echo "World"`;
 > let s = "Hello, ${name}!";
 > ```
 
+Shell strings behave differently during preflight and inflight:
+
+- During preflight, The string inside the backtick is evaluated in native shell
+  at compile time and its stdout is returned as a string.
+- During inflight, the command is executed in an instance of BusyBox shell, made
+  to target WebAssembly to guarantee portability, in runtime.
+
+In either phases, if command exits with non-zero, this throws with an exception
+containing the stderr of the command and its return code.
+
+In preflight, internally compiler calls the host environment's command processor
+(e.g. `/bin/sh`, `cmd.exe`, `command.com`) with the enclosed command. Absence of
+a shell during preflight, falls back to the same BusyBox shell used in inflight.
+
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> const name = (() -> {
+> const name = (() => {
 >   let _stdout = "";
 >   try {
 >     const { stdout, stderr, status } = spawnSync('echo', ['hello'], {
