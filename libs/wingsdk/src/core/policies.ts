@@ -11,7 +11,7 @@ export class Policies {
    * For example, given a policy that says "call `handle` on `resource`" and an
    * actual reference to `resource`, this function will return a new policy that
    * says "call `put_something` on `resource.inner`" using the information in
-   * `resource._policies`.
+   * `resource._policies`. This policy can then be passed to resource._bind().
    *
    * @param policy The policy containing a reference to `resourceName` and the methods that may be called on it
    * @param resource The resource that `resourceName` refers to

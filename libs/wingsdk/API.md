@@ -2149,7 +2149,7 @@ Generates the policy for `resource` given the methods that `policy` wants to use
 For example, given a policy that says "call `handle` on `resource`" and an
 actual reference to `resource`, this function will return a new policy that
 says "call `put_something` on `resource.inner`" using the information in
-`resource._policies`.
+`resource._policies`. This policy can then be passed to resource._bind().
 
 ###### `policy`<sup>Required</sup> <a name="policy" id="@winglang/wingsdk.core.Policies.make.parameter.policy"></a>
 
@@ -2609,7 +2609,7 @@ Inflight client for `IFunctionHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.IFunctionHandlerClient.handle">handle</a></code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.IFunctionHandlerClient.handle">handle</a></code> | Entrypoint function that will be called when the cloud function is invoked. |
 
 ---
 
@@ -2618,6 +2618,8 @@ Inflight client for `IFunctionHandler`.
 ```wing
 handle(event: str): void
 ```
+
+Entrypoint function that will be called when the cloud function is invoked.
 
 ###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.IFunctionHandlerClient.handle.parameter.event"></a>
 
@@ -2740,7 +2742,7 @@ Inflight client for `IOnMessageHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle">handle</a></code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the queue. |
 
 ---
 
@@ -2749,6 +2751,8 @@ Inflight client for `IOnMessageHandler`.
 ```wing
 handle(event: str): void
 ```
+
+Function that will be called when a message is received from the queue.
 
 ###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle.parameter.event"></a>
 
@@ -2762,6 +2766,8 @@ handle(event: str): void
 - *Extends:* core.ICapturable, core.IInspectable, constructs.IConstruct
 
 - *Implemented By:* cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IResource
+
+Abstract interface for `Resource`.
 
 
 #### Properties <a name="Properties" id="Properties"></a>
@@ -2856,7 +2862,7 @@ Inflight client for `IOnMessageHandler`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.ITopicOnMessageHandlerClient.handle">handle</a></code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.ITopicOnMessageHandlerClient.handle">handle</a></code> | Function that will be called when a message is received from the topic. |
 
 ---
 
@@ -2865,6 +2871,8 @@ Inflight client for `IOnMessageHandler`.
 ```wing
 handle(event: str): void
 ```
+
+Function that will be called when a message is received from the topic.
 
 ###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.ITopicOnMessageHandlerClient.handle.parameter.event"></a>
 

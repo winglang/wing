@@ -89,6 +89,9 @@ export interface ITopicOnMessageHandler extends IResource {}
  * Inflight client for `IOnMessageHandler`.
  */
 export interface ITopicOnMessageHandlerClient {
+  /**
+   * Function that will be called when a message is received from the topic.
+   */
   handle(event: string): Promise<void>;
 }
 

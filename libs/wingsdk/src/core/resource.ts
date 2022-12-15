@@ -8,6 +8,9 @@ import { Code, ICapturable } from "./inflight";
 import { OperationPolicy, ResourcePolicy } from "./policies";
 import { IInspectable, TreeInspector } from "./tree";
 
+/**
+ * Abstract interface for `Resource`.
+ */
 export interface IResource extends ICapturable, IInspectable, IConstruct {
   /** @internal */
   readonly _policies: ResourcePolicy;
@@ -38,6 +41,11 @@ export abstract class Resource
   public abstract _policies: ResourcePolicy;
 
   /**
+   * Set up any permissions required for this resource to be used by the host,
+   * and return a code snippet that can be used to reference this resource
+   * inflight.
+   *
+   * Do not override this method, instead override `bindImpl`.
    * @internal
    */
   public _bind(host: Resource, policy: OperationPolicy): Code {
@@ -49,6 +57,9 @@ export abstract class Resource
     return this.bindImpl(host, policy);
   }
 
+  /**
+   * Private implementation of the bind method.
+   */
   protected abstract bindImpl(host: Resource, policy: OperationPolicy): Code;
 
   /**

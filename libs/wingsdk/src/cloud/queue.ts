@@ -110,6 +110,9 @@ export interface IQueueOnMessageHandler extends IResource {}
  * Inflight client for `IOnMessageHandler`.
  */
 export interface IQueueOnMessageHandlerClient {
+  /**
+   * Function that will be called when a message is received from the queue.
+   */
   handle(event: string): Promise<void>;
 }
 

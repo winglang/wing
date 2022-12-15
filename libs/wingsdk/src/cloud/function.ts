@@ -102,6 +102,9 @@ export interface IFunctionHandler extends IResource {}
  * Inflight client for `IFunctionHandler`.
  */
 export interface IFunctionHandlerClient {
+  /**
+   * Entrypoint function that will be called when the cloud function is invoked.
+   */
   handle(event: string): Promise<void>;
 }
 
