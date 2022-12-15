@@ -9,6 +9,7 @@ use type_check::{FunctionSignature, Type};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
+use std::collections::HashSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -54,6 +55,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let wing_parser = Parser {
 		source: &source[..],
 		source_name: source_file.to_string(),
+		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
 	};
 

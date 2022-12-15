@@ -74,7 +74,7 @@ hello(1,a);
 (source
     (expression_statement
         (call
-            call_name: (reference (identifier))
+            caller: (reference (identifier))
             args: (argument_list
                 (positional_argument
                     (number)
@@ -98,7 +98,7 @@ obj.method();
 (source
     (expression_statement
         (call
-            call_name: (reference
+            caller: (reference
                 (nested_identifier
                     object: (reference (identifier))
                     property: (identifier)
