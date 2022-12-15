@@ -17,7 +17,7 @@ export interface ICapturable {
    *
    * @internal
    */
-  _bind(host: Resource, policies: OperationPolicy): Code;
+  _bind(host: Resource, policy: OperationPolicy): Code;
 }
 
 /**
