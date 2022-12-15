@@ -274,19 +274,19 @@ Represents a function.
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
+new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>core.Inflight</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>cloud.IFunctionHandler</code> | *No description.* |
 | <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>cloud.FunctionProps</code> | *No description.* |
 
 ---
 
 ##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* core.Inflight
+- *Type:* cloud.IFunctionHandler
 
 ---
 
@@ -622,14 +622,14 @@ describing how this resource is related to another resource.
 ##### `on_message` <a name="on_message" id="@winglang/wingsdk.cloud.Queue.onMessage"></a>
 
 ```wing
-on_message(inflight: ~Inflight, props?: QueueOnMessageProps): Function
+on_message(inflight: IQueueOnMessageHandler, props?: QueueOnMessageProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Queue.onMessage.parameter.inflight"></a>
 
-- *Type:* core.Inflight
+- *Type:* cloud.IQueueOnMessageHandler
 
 ---
 
@@ -767,14 +767,14 @@ describing how this resource is related to another resource.
 ##### `on_message` <a name="on_message" id="@winglang/wingsdk.cloud.Topic.onMessage"></a>
 
 ```wing
-on_message(inflight: ~Inflight, props?: TopicOnMessageProps): Function
+on_message(inflight: ITopicOnMessageHandler, props?: TopicOnMessageProps): Function
 ```
 
 Creates function to send messages when published.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Topic.onMessage.parameter.inflight"></a>
 
-- *Type:* core.Inflight
+- *Type:* cloud.ITopicOnMessageHandler
 
 ---
 
@@ -1345,180 +1345,6 @@ Environment variables to pass to the function.
 
 ---
 
-### InflightBinding <a name="InflightBinding" id="@winglang/wingsdk.core.InflightBinding"></a>
-
-A resource that is used by an Inflight and the methods that are called on it.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBinding.Initializer"></a>
-
-```wing
-bring core;
-
-let inflight_binding = core.InflightBinding{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.methods">methods</a></code> | <code>MutArray&lt;str&gt;</code> | The methods that are called on the resource. |
-| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.resource">resource</a></code> | <code>core.ICapturableConstruct</code> | The resource that is used by the Inflight. |
-
----
-
-##### `methods`<sup>Required</sup> <a name="methods" id="@winglang/wingsdk.core.InflightBinding.property.methods"></a>
-
-```wing
-methods: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-
-The methods that are called on the resource.
-
----
-
-##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightBinding.property.resource"></a>
-
-```wing
-resource: ICapturableConstruct;
-```
-
-- *Type:* core.ICapturableConstruct
-
-The resource that is used by the Inflight.
-
----
-
-### InflightBundleOptions <a name="InflightBundleOptions" id="@winglang/wingsdk.core.InflightBundleOptions"></a>
-
-Options for `Inflight.bundle`.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBundleOptions.Initializer"></a>
-
-```wing
-bring core;
-
-let inflight_bundle_options = core.InflightBundleOptions{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.resourceClients">resource_clients</a></code> | <code>MutMap&lt;core.Code&gt;</code> | A map of resource clients that can be bundled with the Inflight's code. |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.external">external</a></code> | <code>MutArray&lt;str&gt;</code> | List of dependencies to exclude from the bundle. |
-| <code><a href="#@winglang/wingsdk.core.InflightBundleOptions.property.host">host</a></code> | <code>constructs.IConstruct</code> | Associate the inflight bundle with a given host resource. |
-
----
-
-##### `resource_clients`<sup>Required</sup> <a name="resource_clients" id="@winglang/wingsdk.core.InflightBundleOptions.property.resourceClients"></a>
-
-```wing
-resource_clients: MutMap<Code>;
-```
-
-- *Type:* MutMap&lt;core.Code&gt;
-
-A map of resource clients that can be bundled with the Inflight's code.
-
----
-
-##### `external`<sup>Optional</sup> <a name="external" id="@winglang/wingsdk.core.InflightBundleOptions.property.external"></a>
-
-```wing
-external: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-
-List of dependencies to exclude from the bundle.
-
----
-
-##### `host`<sup>Optional</sup> <a name="host" id="@winglang/wingsdk.core.InflightBundleOptions.property.host"></a>
-
-```wing
-host: IConstruct;
-```
-
-- *Type:* constructs.IConstruct
-
-Associate the inflight bundle with a given host resource.
-
----
-
-### InflightProps <a name="InflightProps" id="@winglang/wingsdk.core.InflightProps"></a>
-
-Options for `Inflight`.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightProps.Initializer"></a>
-
-```wing
-bring core;
-
-let inflight_props = core.InflightProps{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function to run. |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Binding information. |
-
----
-
-##### `code`<sup>Required</sup> <a name="code" id="@winglang/wingsdk.core.InflightProps.property.code"></a>
-
-```wing
-code: Code;
-```
-
-- *Type:* core.Code
-
-Reference to code containing the entrypoint function.
-
----
-
-##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@winglang/wingsdk.core.InflightProps.property.entrypoint"></a>
-
-```wing
-entrypoint: str;
-```
-
-- *Type:* str
-
-Name of the exported function to run.
-
----
-
-*Example*
-
-```wing
-"exports.handler"
-```
-
-
-##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/wingsdk.core.InflightProps.property.bindings"></a>
-
-```wing
-bindings: MutMap<InflightBinding>;
-```
-
-- *Type:* MutMap&lt;core.InflightBinding&gt;
-- *Default:* no bindings
-
-Binding information.
-
-During runtime, a map containing all bound resources
-will be passed as the first argument of the entrypoint function.
-
-Each key here will be the key for the final value in the map.
-
----
-
 ### JsonFileProps <a name="JsonFileProps" id="@winglang/wingsdk.fs.JsonFileProps"></a>
 
 Props for `JsonFile`.
@@ -1550,6 +1376,30 @@ obj: any;
 The object that will be serialized into the file during synthesis.
 
 ---
+
+### OperationPolicy <a name="OperationPolicy" id="@winglang/wingsdk.core.OperationPolicy"></a>
+
+A policy specifying what resources an operation may access.
+
+The following example policy says that the operation may call "put" on a
+resource named "inner", or it may call "get" on a resource passed as an
+argument named "other".
+
+*Example*
+
+```wing
+{ "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } }
+```
+
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.OperationPolicy.Initializer"></a>
+
+```wing
+bring core;
+
+let operation_policy = core.OperationPolicy{ ... }
+```
+
 
 ### QueueOnMessageProps <a name="QueueOnMessageProps" id="@winglang/wingsdk.cloud.QueueOnMessageProps"></a>
 
@@ -1644,6 +1494,32 @@ timeout: Duration;
 How long a queue's consumers have to process a message.
 
 ---
+
+### ResourcePolicy <a name="ResourcePolicy" id="@winglang/wingsdk.core.ResourcePolicy"></a>
+
+A resource's policy.
+
+It specifies what operations may be called on the
+resource, and what sub-resources those operations may access.
+
+*Example*
+
+```wing
+The following policy says that the resource has a method named "handle"
+that may call "put" on a resource named "inner", or it may call "get" on a
+resource passed as an argument named "other".
+{ "handle": { "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } } }
+```
+
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ResourcePolicy.Initializer"></a>
+
+```wing
+bring core;
+
+let resource_policy = core.ResourcePolicy{ ... }
+```
+
 
 ### TextFileProps <a name="TextFileProps" id="@winglang/wingsdk.fs.TextFileProps"></a>
 
@@ -2084,133 +1960,6 @@ The path to a state file which will track all synthesized files.
 ---
 
 
-### Inflight <a name="Inflight" id="@winglang/wingsdk.core.Inflight"></a>
-
-Represents a unit of application code that can be executed by a cloud resource.
-
-#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Inflight.Initializer"></a>
-
-```wing
-bring core;
-
-new core.Inflight(props: InflightProps)
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Inflight.Initializer.parameter.props">props</a></code> | <code>core.InflightProps</code> | *No description.* |
-
----
-
-##### `props`<sup>Required</sup> <a name="props" id="@winglang/wingsdk.core.Inflight.Initializer.parameter.props"></a>
-
-- *Type:* core.InflightProps
-
----
-
-#### Methods <a name="Methods" id="Methods"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Inflight.bundle">bundle</a></code> | Bundle this inflight process so that it can be used in the inflight host. |
-| <code><a href="#@winglang/wingsdk.core.Inflight.makeClients">make_clients</a></code> | Resolve this Inflight's bindings into a map of resource clients. |
-
----
-
-##### `bundle` <a name="bundle" id="@winglang/wingsdk.core.Inflight.bundle"></a>
-
-```wing
-bundle(options: InflightBundleOptions): Code
-```
-
-Bundle this inflight process so that it can be used in the inflight host.
-
-Returns the path to a JavaScript file that has been rewritten to include
-all dependencies and bound resources. The file is isolated in its own
-directory so that it can be zipped up and uploaded to cloud providers.
-
-High level implementation:
-1. Read the file (let's say its path is path/to/foo.js)
-2. Create a new javascript file named path/to/foo.prebundle.js, including a
-    map of all resource clients, a new handler that calls the original
-    handler with the clients passed in, and a copy of the user's code from
-    path/to/foo.js.
-3. Use esbuild to bundle all dependencies, outputting the result to
-    path/to/foo.js.bundle/index.js.
-
-###### `options`<sup>Required</sup> <a name="options" id="@winglang/wingsdk.core.Inflight.bundle.parameter.options"></a>
-
-- *Type:* core.InflightBundleOptions
-
----
-
-##### `make_clients` <a name="make_clients" id="@winglang/wingsdk.core.Inflight.makeClients"></a>
-
-```wing
-make_clients(host: Resource): MutMap<Code>
-```
-
-Resolve this Inflight's bindings into a map of resource clients.
-
-###### `host`<sup>Required</sup> <a name="host" id="@winglang/wingsdk.core.Inflight.makeClients.parameter.host"></a>
-
-- *Type:* core.Resource
-
----
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Inflight.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Binding information. |
-| <code><a href="#@winglang/wingsdk.core.Inflight.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
-| <code><a href="#@winglang/wingsdk.core.Inflight.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function which will be run. |
-
----
-
-##### `bindings`<sup>Required</sup> <a name="bindings" id="@winglang/wingsdk.core.Inflight.property.bindings"></a>
-
-```wing
-bindings: MutMap<InflightBinding>;
-```
-
-- *Type:* MutMap&lt;core.InflightBinding&gt;
-
-Binding information.
-
-During runtime, a map containing all bound values
-will be passed as the first argument of the entrypoint function.
-
-Each key here will be the key for the final value in the map.
-
----
-
-##### `code`<sup>Required</sup> <a name="code" id="@winglang/wingsdk.core.Inflight.property.code"></a>
-
-```wing
-code: Code;
-```
-
-- *Type:* core.Code
-
-Reference to code containing the entrypoint function.
-
----
-
-##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@winglang/wingsdk.core.Inflight.property.entrypoint"></a>
-
-```wing
-entrypoint: str;
-```
-
-- *Type:* str
-
-Name of the exported function which will be run.
-
----
-
-
 ### InflightClient <a name="InflightClient" id="@winglang/wingsdk.core.InflightClient"></a>
 
 Utility class with functions about inflight clients.
@@ -2362,7 +2111,7 @@ The code contents.
 
 ### Policies <a name="Policies" id="@winglang/wingsdk.core.Policies"></a>
 
-Represents a collection of resource policies, each specifying a resource and the methods that are allowed to be called on them.
+Utility methods for working with policies.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Policies.Initializer"></a>
 
@@ -2377,85 +2126,76 @@ new core.Policies()
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Policies.find">find</a></code> | Find the policy for a resource, and construct it if it doesn't exist. |
+| <code><a href="#@winglang/wingsdk.core.Policies.make">make</a></code> | Generates the policy for `resource` given the methods that `policy` wants to use on it. |
+| <code><a href="#@winglang/wingsdk.core.Policies.merge">merge</a></code> | Merge policy2 into the policy1 object. |
 
 ---
 
-##### `find` <a name="find" id="@winglang/wingsdk.core.Policies.find"></a>
-
-```wing
-find(resource: IConstruct): Policy
-```
-
-Find the policy for a resource, and construct it if it doesn't exist.
-
-###### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.Policies.find.parameter.resource"></a>
-
-- *Type:* constructs.IConstruct
-
----
-
-
-
-
-### Policy <a name="Policy" id="@winglang/wingsdk.core.Policy"></a>
-
-Represents a policy for a resource, specifying the methods that are allowed to be called on it.
-
-#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Policy.Initializer"></a>
+##### `make` <a name="make" id="@winglang/wingsdk.core.Policies.make"></a>
 
 ```wing
 bring core;
 
-new core.Policy()
+core.Policies.make(policy: OperationPolicy, resource: IResource, resource_name: str)
 ```
 
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
+Generates the policy for `resource` given the methods that `policy` wants to use on it.
+
+For example, given a policy that says "call `handle` on `resource`" and an
+actual reference to `resource`, this function will return a new policy that
+says "call `put_something` on `resource.inner`" using the information in
+`resource._policies`.
+
+###### `policy`<sup>Required</sup> <a name="policy" id="@winglang/wingsdk.core.Policies.make.parameter.policy"></a>
+
+- *Type:* core.OperationPolicy
+
+The policy containing a reference to `resourceName` and the methods that may be called on it.
 
 ---
 
-#### Methods <a name="Methods" id="Methods"></a>
+###### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.Policies.make.parameter.resource"></a>
 
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Policy.addCall">add_call</a></code> | Adds a method to the policy. |
-| <code><a href="#@winglang/wingsdk.core.Policy.calls">calls</a></code> | Returns true if the policy allows the given method to be called. |
+- *Type:* core.IResource
+
+The resource that `resourceName` refers to.
 
 ---
 
-##### `add_call` <a name="add_call" id="@winglang/wingsdk.core.Policy.addCall"></a>
-
-```wing
-add_call(method: str): void
-```
-
-Adds a method to the policy.
-
-###### `method`<sup>Required</sup> <a name="method" id="@winglang/wingsdk.core.Policy.addCall.parameter.method"></a>
+###### `resource_name`<sup>Required</sup> <a name="resource_name" id="@winglang/wingsdk.core.Policies.make.parameter.resourceName"></a>
 
 - *Type:* str
 
+The name of the resource in `policy`.
+
 ---
 
-##### `calls` <a name="calls" id="@winglang/wingsdk.core.Policy.calls"></a>
+##### `merge` <a name="merge" id="@winglang/wingsdk.core.Policies.merge"></a>
 
 ```wing
-calls(method: str): bool
+bring core;
+
+core.Policies.merge(policy1: OperationPolicy, policy2: OperationPolicy)
 ```
 
-Returns true if the policy allows the given method to be called.
+Merge policy2 into the policy1 object.
 
-###### `method`<sup>Required</sup> <a name="method" id="@winglang/wingsdk.core.Policy.calls.parameter.method"></a>
+###### `policy1`<sup>Required</sup> <a name="policy1" id="@winglang/wingsdk.core.Policies.merge.parameter.policy1"></a>
 
-- *Type:* str
+- *Type:* core.OperationPolicy
 
 ---
 
+###### `policy2`<sup>Required</sup> <a name="policy2" id="@winglang/wingsdk.core.Policies.merge.parameter.policy2"></a>
+
+- *Type:* core.OperationPolicy
+
+---
 
 
 
@@ -2733,7 +2473,7 @@ Content of the object we want to store into the bucket.
 
 ### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.ICapturable, core.ICapturableConstruct
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.ICapturable, core.ICapturableConstruct, core.IResource
 
 Represents something that is capturable by an Inflight.
 
@@ -2828,9 +2568,67 @@ Invoke the function asynchronously with a given payload.
 ---
 
 
+### IFunctionHandler <a name="IFunctionHandler" id="@winglang/wingsdk.cloud.IFunctionHandler"></a>
+
+- *Extends:* core.IResource
+
+- *Implemented By:* cloud.IFunctionHandler
+
+**Inflight client:** [wingsdk.cloud.IFunctionHandlerClient](#wingsdk.cloud.IFunctionHandlerClient)
+
+Represents a resource with an inflight "handle" method that can be used to create a `cloud.Function`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IFunctionHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.IFunctionHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+### IFunctionHandlerClient <a name="IFunctionHandlerClient" id="@winglang/wingsdk.cloud.IFunctionHandlerClient"></a>
+
+- *Implemented By:* cloud.IFunctionHandlerClient
+
+Inflight client for `IFunctionHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IFunctionHandlerClient.handle">handle</a></code> | *No description.* |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/wingsdk.cloud.IFunctionHandlerClient.handle"></a>
+
+```wing
+handle(event: str): void
+```
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.IFunctionHandlerClient.handle.parameter.event"></a>
+
+- *Type:* str
+
+---
+
+
 ### IInspectable <a name="IInspectable" id="@winglang/wingsdk.core.IInspectable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, core.IInspectable
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -2901,6 +2699,91 @@ Payload to send to the queue.
 ---
 
 
+### IQueueOnMessageHandler <a name="IQueueOnMessageHandler" id="@winglang/wingsdk.cloud.IQueueOnMessageHandler"></a>
+
+- *Extends:* core.IResource
+
+- *Implemented By:* cloud.IQueueOnMessageHandler
+
+**Inflight client:** [wingsdk.cloud.IQueueOnMessageHandlerClient](#wingsdk.cloud.IQueueOnMessageHandlerClient)
+
+Represents a resource with an inflight "handle" method that can be passed to `Queue.on_message`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.IQueueOnMessageHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+### IQueueOnMessageHandlerClient <a name="IQueueOnMessageHandlerClient" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient"></a>
+
+- *Implemented By:* cloud.IQueueOnMessageHandlerClient
+
+Inflight client for `IOnMessageHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle">handle</a></code> | *No description.* |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle"></a>
+
+```wing
+handle(event: str): void
+```
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle.parameter.event"></a>
+
+- *Type:* str
+
+---
+
+
+### IResource <a name="IResource" id="@winglang/wingsdk.core.IResource"></a>
+
+- *Extends:* core.ICapturable, core.IInspectable, constructs.IConstruct
+
+- *Implemented By:* cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IResource
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.IResource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.core.IResource.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
 ### ITopicClient <a name="ITopicClient" id="@winglang/wingsdk.cloud.ITopicClient"></a>
 
 - *Implemented By:* cloud.ITopicClient
@@ -2928,6 +2811,64 @@ Publish message to topic.
 - *Type:* str
 
 Payload to publish to Topic.
+
+---
+
+
+### ITopicOnMessageHandler <a name="ITopicOnMessageHandler" id="@winglang/wingsdk.cloud.ITopicOnMessageHandler"></a>
+
+- *Extends:* core.IResource
+
+- *Implemented By:* cloud.ITopicOnMessageHandler
+
+**Inflight client:** [wingsdk.cloud.ITopicOnMessageHandlerClient](#wingsdk.cloud.ITopicOnMessageHandlerClient)
+
+Represents a resource with an inflight "handle" method that can be passed to `Topic.on_message`.
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.ITopicOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.ITopicOnMessageHandler.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+### ITopicOnMessageHandlerClient <a name="ITopicOnMessageHandlerClient" id="@winglang/wingsdk.cloud.ITopicOnMessageHandlerClient"></a>
+
+- *Implemented By:* cloud.ITopicOnMessageHandlerClient
+
+Inflight client for `IOnMessageHandler`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.ITopicOnMessageHandlerClient.handle">handle</a></code> | *No description.* |
+
+---
+
+##### `handle` <a name="handle" id="@winglang/wingsdk.cloud.ITopicOnMessageHandlerClient.handle"></a>
+
+```wing
+handle(event: str): void
+```
+
+###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.ITopicOnMessageHandlerClient.handle.parameter.event"></a>
+
+- *Type:* str
 
 ---
 

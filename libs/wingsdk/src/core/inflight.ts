@@ -97,21 +97,6 @@ export class NodeJsCode extends Code {
 }
 
 /**
- * A resource that is used by an Inflight and the methods that are called on it.
- */
-export interface InflightBinding {
-  /**
-   * The resource that is used by the Inflight.
-   */
-  readonly resource: ICapturableConstruct;
-
-  /**
-   * The methods that are called on the resource.
-   */
-  readonly methods: string[];
-}
-
-/**
  * Utility class with functions about inflight clients.
  */
 export class InflightClient {
