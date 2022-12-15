@@ -2199,50 +2199,6 @@ Merge policy2 into the policy1 object.
 
 
 
-### Testing <a name="Testing" id="@winglang/wingsdk.core.Testing"></a>
-
-Testing utilities.
-
-#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Testing.Initializer"></a>
-
-```wing
-bring core;
-
-new core.Testing()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Testing.inspectPrebundledCode">inspect_prebundled_code</a></code> | Obtain a reference to the prebundled Code for a given host resource. |
-
----
-
-##### `inspect_prebundled_code` <a name="inspect_prebundled_code" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode"></a>
-
-```wing
-bring core;
-
-core.Testing.inspect_prebundled_code(host: Resource)
-```
-
-Obtain a reference to the prebundled Code for a given host resource.
-
-###### `host`<sup>Required</sup> <a name="host" id="@winglang/wingsdk.core.Testing.inspectPrebundledCode.parameter.host"></a>
-
-- *Type:* core.Resource
-
----
-
-
-
 ### TreeInspector <a name="TreeInspector" id="@winglang/wingsdk.core.TreeInspector"></a>
 
 Inspector that maintains an attribute bag.

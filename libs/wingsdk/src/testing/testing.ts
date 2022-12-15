@@ -88,7 +88,17 @@ export class Testing {
   }
 }
 
-interface ResourceBinding {
+/**
+ * A resource binding.
+ */
+export interface ResourceBinding {
+  /**
+   * The resource.
+   */
   readonly resource: IResource;
+
+  /**
+   * The list of methods used on the resource.
+   */
   readonly methods: string[];
 }
