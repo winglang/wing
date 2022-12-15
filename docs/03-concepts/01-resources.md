@@ -2,6 +2,7 @@
 title: Resources
 id: resources
 description: Resources are cloud services used by the application
+keywords: [Wing Concepts, Wing Resources]
 ---
 
 Resources represent cloud services that are part of the application. They expose

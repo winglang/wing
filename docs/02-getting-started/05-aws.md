@@ -1,6 +1,7 @@
 ---
 title: Deploying to AWS using Terraform
 id: aws
+keywords: [Wing deploy, Wing deployment, deploy to AWS, deploy using Terraform]
 ---
 
 So far we've tested our program locally using our Wing Console. Next we'll see how you can deploy your

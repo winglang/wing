@@ -1,6 +1,7 @@
 ---
 title: Testing using the Wing Console
 id: console
+keywords: [Wing testing, Wing Console installation, Wing Console usage, Wing Console setup]
 ---
 
 The Wing Console is a graphical user interface that can be used to interact with
@@ -28,7 +29,7 @@ The Wing Console will now compile hello.w source file to [The Simulator target.]
 
 Wing Console desktop application will show the following view of you application:
 
-![](./console-app.png)
+![Wing Console desktop application view](./console-app.png 'Wing Console')
 
 You are now able to run your IDE and the Wing Console side by side and watch how changes in your code update your application in the Console.
 
@@ -43,7 +44,7 @@ resource. The inspector pane on the right will show information about your
 queue, as well as any relationships (in our case, an outbound relationship to
 the function that handles messages).
 
-![](./console-queue.png)
+![Queue resource view in Wing Console](./console-queue.png 'Queue resource')
 
 ## Sending a message to the queue
 
@@ -54,11 +55,11 @@ Type `Wing` and hit **Send Message**.
 
 On the left sidebar click on the Bucket, you will see the following view:
 
-![](./console-bucket-1.png)
+![Bucket resource view in Wing Console](./console-bucket-1.png 'Bucket resource')
 
 Now, check the `wing.txt` file and download it, using the download button
 
-![](./console-bucket-2.png)
+![Download bucket files in Wing Console](./console-bucket-2.png 'Download bucket files')
 
 The downloaded file should contain `Hello, Wing` text
 

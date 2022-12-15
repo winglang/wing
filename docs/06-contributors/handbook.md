@@ -1,6 +1,7 @@
 ---
 title: Contributor's Handbook
 id: handbook
+keywords: [Wing contributors, contributors]
 ---
 
 Thank you for your interest in contributing to Wing!  ❤️

@@ -1,6 +1,7 @@
 ---
 title: Testing programmatically
 id: simulator
+keywords: [Wing testing programmatically, Wing simulator]
 ---
 
 ## The Simulator target (`sim`)
