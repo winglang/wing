@@ -87,7 +87,7 @@ pub struct Enum {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct EnumInstance {
-	pub enum_name: Symbol,
+	pub enum_name: TypeRef,
 	pub enum_value: Symbol,
 }
 
@@ -329,6 +329,14 @@ impl TypeRef {
 
 	fn as_enum(&self) -> Option<&Enum> {
 		if let &Type::Enum(ref e) = (*self).into() {
+			Some(e)
+		} else {
+			None
+		}
+	}
+
+	fn as_mut_enum(&self) -> Option<&mut Enum> {
+		if let &mut Type::Enum(ref mut e) = (*self).into() {
 			Some(e)
 		} else {
 			None
@@ -1399,21 +1407,23 @@ impl<'a> TypeChecker<'a> {
 				};
 			}
 			StmtKind::Enum { name, values } => {
-				let mut enum_types = HashMap::new();
-				values.iter().for_each(|value| {
-					let enum_type = self.types.add_type(Type::EnumInstance(EnumInstance {
-						enum_name: name.clone(),
-						enum_value: value.clone(),
-					}));
-					enum_types.insert(value.clone(), enum_type);
-				});
-
-				let enum_type = self.types.add_type(Type::Enum(Enum {
+				let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 					name: name.clone(),
-					values: enum_types,
+					values: HashMap::new(),
 				}));
 
-				match env.define(name, enum_type, StatementIdx::Top) {
+				let enum_type = enum_type_ref.as_mut_enum().unwrap();
+				values.iter().for_each(|value| {
+					enum_type.values.insert(
+						value.clone(),
+						self.types.add_type(Type::EnumInstance(EnumInstance {
+							enum_name: enum_type_ref,
+							enum_value: value.clone(),
+						})),
+					);
+				});
+
+				match env.define(name, enum_type_ref, StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
