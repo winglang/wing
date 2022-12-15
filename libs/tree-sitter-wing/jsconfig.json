@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "checkJs": true,
-    "module": "CommonJS"
+    "module": "CommonJS",
+    "lib": ["ES2020"]
   },
   "include": ["**/*.js", "node_modules/tree-sitter-cli/dsl.d.ts"]
 }

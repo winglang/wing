@@ -1667,3 +1667,70 @@ constructor() {
 }
 new MyApp().synth();"
 `;
+
+exports[`wing compile while.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile while.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing compile while.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"while\\" });
+  
+  while (false) {
+    const x = 1;
+  }
+  const y = 123;
+  while ((y < 0)) {
+    const x = 1;
+  }
+}
+}
+new MyApp().synth();"
+`;
