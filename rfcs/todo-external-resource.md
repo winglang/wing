@@ -1,4 +1,4 @@
-# Epic - Developing an External typescript based Resource locally
+# Epic - Authoring an External wing resource with typescript
 
 Dave, a full stack developer, wakes up in the middle of the night, last evening he was watching a smart, educating and funny twitch show called, "The Wingly update, name TBD" where he learned about winglang latest accomplishment -  building a simple TODO app. That TODO app hunted him, he can't get over the fact that it just ain't right to implement a TODO app only with a bucket, it is not the proper DB to be used. He sets his mind to fix this and implement the app using dynamodb. But wait, you can't just `bring cloud.dynamodb` in wing, hmm... that makes sense most cloud providers don't have dynamodb. Maybe there are external resources for this in Wing, he looks for an existing external resource for dynamodb, he can't find it. He made his mind, he opens his computer and embarks the journey of adding a new external resource to winglang, he wants to `bring dave_dynamodb`
 
