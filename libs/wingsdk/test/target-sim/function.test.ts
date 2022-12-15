@@ -1,9 +1,9 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
-import { SimApp, Simulator } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
+import { listMessages } from "./util";
 
-const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
-async function $proc($cap, event) {
+const INFLIGHT_CODE = `
+async handle(event) {
   event = JSON.parse(event);
   let msg;
   if (event.name[0] !== event.name[0].toUpperCase()) {
@@ -15,15 +15,12 @@ async function $proc($cap, event) {
     msg = "Hello, " + event.name + "!";
   }
   return JSON.stringify({ msg });
-}`);
+}`;
 
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler, {
     env: {
       ENV_VAR1: "true",
@@ -54,10 +51,7 @@ test("create a function", async () => {
 test("invoke function succeeds", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
 
   const s = await app.startSimulator();
@@ -83,10 +77,7 @@ test("invoke function succeeds", async () => {
 test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler, {
     env: {
       PIG_LATIN: "true",
@@ -120,10 +111,7 @@ test("invoke function with environment variables", async () => {
 test("invoke function fails", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
 
@@ -148,7 +136,3 @@ test("invoke function fails", async () => {
   });
   expect(app.snapshot()).toMatchSnapshot();
 });
-
-function listMessages(s: Simulator) {
-  return s.listTraces().map((event) => event.data.message);
-}

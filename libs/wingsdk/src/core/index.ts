@@ -6,5 +6,4 @@ export * from "./files";
 export * from "./inflight";
 export * from "./policies";
 export * from "./resource";
-export * from "./testing";
 export * from "./tree";

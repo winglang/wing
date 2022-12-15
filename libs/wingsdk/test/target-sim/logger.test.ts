@@ -1,30 +1,23 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
-import * as testing from "../../src/testing";
-import { SimApp } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
+import { listMessages } from "./util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
-async function $proc($cap, event) {
-  $cap.logger.print("Hello, " + event);
-  $cap.logger.print("Wahoo!");
-}`);
+const INFLIGHT_CODE = `
+async handle(event) {
+  this.clients.logger.print("Hello, " + event);
+  this.clients.logger.print("Wahoo!");
+}`;
 
 test("inflight uses a logger", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Logger.register(app);
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-    bindings: {
-      logger: cloud.Logger.of(app),
-    },
-    policies: {
-      logger: {
-        methods: [cloud.LoggerInflightMethods.PRINT],
-      },
+  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE, {
+    logger: {
+      resource: cloud.Logger.of(app),
+      methods: [cloud.LoggerInflightMethods.PRINT],
     },
   });
   new cloud.Function(app, "my_function", handler);
@@ -53,7 +46,3 @@ test("inflight uses a logger", async () => {
   ]);
   expect(app.snapshot()).toMatchSnapshot();
 });
-
-function listMessages(s: testing.Simulator) {
-  return s.listTraces().map((event) => event.data.message);
-}

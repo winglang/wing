@@ -28,13 +28,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+        "path": "root/HelloWorld/Queue-OnMessage-15c599ef",
         "props": Object {
           "environmentVariables": Object {
             "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Queue-OnMessage-b9553f7cc235c8e4/index.js",
+          "sourceCodeFile": "assets/Queue-OnMessage-15c599ef/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
@@ -47,7 +47,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4#attrs.handle}",
+              "functionHandle": "\${root/HelloWorld/Queue-OnMessage-15c599ef#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -68,7 +68,7 @@ Object {
                   Object {
                     "direction": "inbound",
                     "relationship": "inflight-reference",
-                    "resource": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+                    "resource": "root/HelloWorld/Queue-OnMessage-15c599ef",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -86,7 +86,7 @@ Object {
                   Object {
                     "direction": "inbound",
                     "relationship": "inflight-reference",
-                    "resource": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+                    "resource": "root/HelloWorld/Queue-OnMessage-15c599ef",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -98,13 +98,39 @@ Object {
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
             },
+            "Processor": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [],
+                "wing:resource:stateful": false,
+              },
+              "children": Object {
+                "FunctionHandler": Object {
+                  "attributes": Object {
+                    "wing:resource:connections": Array [],
+                    "wing:resource:stateful": false,
+                  },
+                  "constructInfo": Object {
+                    "fqn": "constructs.Construct",
+                    "version": "10.0.25",
+                  },
+                  "id": "FunctionHandler",
+                  "path": "root/HelloWorld/Processor/FunctionHandler",
+                },
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Processor",
+              "path": "root/HelloWorld/Processor",
+            },
             "Queue": Object {
               "attributes": Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
                     "relationship": "on_message",
-                    "resource": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+                    "resource": "root/HelloWorld/Queue-OnMessage-15c599ef",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -116,7 +142,7 @@ Object {
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
             },
-            "Queue-OnMessage-b9553f7cc235c8e4": Object {
+            "Queue-OnMessage-15c599ef": Object {
               "attributes": Object {
                 "wing:resource:connections": Array [
                   Object {
@@ -144,15 +170,15 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4/Code",
+                  "path": "root/HelloWorld/Queue-OnMessage-15c599ef/Code",
                 },
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
               },
-              "id": "Queue-OnMessage-b9553f7cc235c8e4",
-              "path": "root/HelloWorld/Queue-OnMessage-b9553f7cc235c8e4",
+              "id": "Queue-OnMessage-15c599ef",
+              "path": "root/HelloWorld/Queue-OnMessage-15c599ef",
             },
           },
           "constructInfo": Object {

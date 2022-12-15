@@ -17,7 +17,7 @@ export function convertBetweenHandlers(
   newHandlerClientClassName: string
 ): Resource {
   class NewHandler extends Resource {
-    public readonly stateful = true;
+    public readonly stateful = false;
     private readonly handler: IResource;
 
     /** @internal */
