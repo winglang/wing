@@ -14,8 +14,8 @@ Wing applications on the local machine.
 Make sure you have [installed](./installation#wing-console) the Wing Console on your system
 before getting started with this step.
 
-If you are unable to install the Console (e.g. you are running on Windows) or wish to skip
-this step, jump over to the [Deploying to AWS](./aws) page.
+If you are unable to install the Wing Console (e.g. you are running on Windows), you can
+also test your application [programmatically](./simulator) or [deploy it to AWS](./aws).
 
 :::
 
@@ -25,13 +25,16 @@ We can use the Wing CLI to start the console with our newly created Wing source 
 wing run hello.w
 ```
 
-The Wing Console will now compile hello.w source file to [The Simulator target.](./simulator#the-simulator-target-sim) Run the application and hot reload it on each change in the source file parent directory.
+The Wing Console will now compile hello.w source file to [the simulator target](./simulator#the-simulator-target-sim)
+and load the application. 
+
+> The console will "hot reload" your app on each change in the source file parent directory.
 
 Wing Console desktop application will show the following view of you application:
 
 ![Wing Console desktop application view](./console-app.png 'Wing Console')
 
-You are now able to run your IDE and the Wing Console side by side and watch how changes in your code update your application in the Console.
+You are now able to run your IDE and the Wing Console side-by-side and watch how changes to your code update your application.
 
 ## The console view
 
