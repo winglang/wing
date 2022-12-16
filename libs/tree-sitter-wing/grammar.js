@@ -220,7 +220,7 @@ module.exports = grammar({
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
     number: ($) => choice($._integer, $._float),
-    _integer: ($) => /[1-9]\d*/,
+    _integer: ($) => choice( "0", /[1-9]\d*/),
     _float: ($) => choice( /0\.\d+/, /[1-9]+\.\d+/),
 
 

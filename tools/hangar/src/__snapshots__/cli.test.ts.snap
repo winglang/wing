@@ -58,7 +58,7 @@ constructor() {
   const myfunc = (x) => {
     console.log(\`\${x}\`);
     x = (x + 1);
-    if ((x > 3)) {
+    if ((x > 3.14)) {
       return;
     }
     myfunc(x);
