@@ -204,7 +204,7 @@ impl Display for Type {
 							.iter()
 							.map(|a| format!("{}", a))
 							.collect::<Vec<String>>()
-							.join(",")
+							.join(", ")
 					)
 				}
 			}
@@ -594,10 +594,7 @@ impl<'a> TypeChecker<'a> {
 					&Type::Class(ref class) => (&class.env, &class.name),
 					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
 					&Type::Anything => return Some(self.types.anything()),
-					_ => panic!(
-						"Expected {:?} to be a resource or class type but it's a {}",
-						class, type_
-					),
+					_ => panic!("Expected {} to be a resource or class type but it's a {}", class, type_),
 				};
 
 				// Type check args against constructor
@@ -682,8 +679,8 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope {:?} to be a resource object, instead found \"{}\"",
-									obj_scope, obj_scope_type
+									"Expected scope to be a resource object, instead found \"{}\"",
+									obj_scope_type
 								),
 							);
 						}
@@ -713,7 +710,7 @@ impl<'a> TypeChecker<'a> {
 				// Make sure this is a function signature type
 				let func_sig = func_type
 					.as_function_sig()
-					.expect(&format!("{:?} should be a function or method", function));
+					.expect(&format!("{} should be a function or method", function));
 
 				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
@@ -1476,7 +1473,7 @@ impl<'a> TypeChecker<'a> {
 						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
 						&Type::Anything => return instance,
 						_ => self.general_type_error(format!(
-							"\"{}\" in {:?} does not resolve to a class instance or resource object",
+							"\"{}\" in {} does not resolve to a class instance or resource object",
 							instance, reference
 						)),
 					};

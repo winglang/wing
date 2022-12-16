@@ -81,6 +81,49 @@ pub enum Type {
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
 
+impl Display for Type {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Type::Number => write!(f, "number"),
+			Type::String => write!(f, "str"),
+			Type::Bool => write!(f, "bool"),
+			Type::Duration => write!(f, "duration"),
+			Type::Optional(t) => write!(f, "{}?", t),
+			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::FunctionSignature(sig) => {
+				if let Some(ret_val) = &sig.return_type {
+					write!(
+						f,
+						"fn({}): {}",
+						sig
+							.parameters
+							.iter()
+							.map(|a| format!("{}", a))
+							.collect::<Vec<String>>()
+							.join(", "),
+						format!("{}", ret_val)
+					)
+				} else {
+					write!(
+						f,
+						"fn({})",
+						sig
+							.parameters
+							.iter()
+							.map(|a| format!("{}", a))
+							.collect::<Vec<String>>()
+							.join(", ")
+					)
+				}
+			}
+			Type::CustomType { root, fields: _ } => {
+				write!(f, "{}", root)
+			}
+		}
+	}
+}
+
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
 	pub parameters: Vec<Type>,
