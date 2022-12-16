@@ -34,6 +34,17 @@
         "cwd": "apps/wing-playground",
         "script": "build"
       }
+    },
+    "dev": {
+      "executor": "nx:run-script",
+      "dependsOn": [
+        "copy",
+        "^build"
+      ],
+      "options": {
+        "cwd": "apps/wing-playground",
+        "script": "dev"
+      }
     }
   }
 }
