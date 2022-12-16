@@ -1069,6 +1069,14 @@ impl<'a> TypeChecker<'a> {
 
 				self.inner_scopes.push(statements);
 			}
+			StmtKind::While { condition, statements } => {
+				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
+				self.validate_type(cond_type, self.types.bool(), condition);
+
+				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+
+				self.inner_scopes.push(statements);
+			}
 			StmtKind::If {
 				condition,
 				statements,

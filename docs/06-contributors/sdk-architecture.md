@@ -1,3 +1,8 @@
+---
+title: SDK Architecture
+id: sdk-architecture
+keywords: [SDK architecture, sdk]
+---
 # SDK Architecture
 
 The Wing SDK is the standard library for the Wing language.

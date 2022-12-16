@@ -1,6 +1,7 @@
 ---
 title: Project Status
 id: status
+keywords: [Wing project status, wing status, project status]
 ---
 
 :::caution Maturity: Alpha

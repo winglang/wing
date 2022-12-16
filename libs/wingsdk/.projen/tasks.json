@@ -127,7 +127,7 @@
           "exec": "jsii-docgen -o API.md -l wing"
         },
         {
-          "exec": "echo '---\ntitle: SDK\nid: sdk\ndescription: Wing SDK API Reference\n---\n' > ../../docs/04-reference/wingsdk-api.md"
+          "exec": "echo '---\ntitle: SDK\nid: sdk\ndescription: Wing SDK API Reference\nkeywords: [Wing sdk, sdk, Wing API Reference]\n---\n' > ../../docs/04-reference/wingsdk-api.md"
         },
         {
           "exec": "cat API.md >> ../../docs/04-reference/wingsdk-api.md"
