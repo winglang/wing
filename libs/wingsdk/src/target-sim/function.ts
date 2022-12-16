@@ -38,11 +38,12 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   ) {
     super(scope, id, inflight, props);
 
-    const code = inflight._bind(this, ["handle"]);
+    inflight._bind(this, ["handle"]);
 
+    const inflightClient = inflight._inflightJsClient();
     const lines = new Array<string>();
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${code.text}.handle(event);`);
+    lines.push(`  return await ${inflightClient.text}.handle(event);`);
     lines.push("};");
 
     const tempdir = mkdtemp();
@@ -95,7 +96,18 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     return schema;
   }
 
-  protected bindImpl(host: core.Resource, _ops: string[]): core.Code {
-    return bindSimulatorResource("function", this, host);
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
+    bindSimulatorResource("function", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `FUNCTION_HANDLE_${this.node.addr.slice(-8)}`;
+    return core.NodeJsCode.fromInline(
+      `$simulator.findInstance(process.env["${env}"])`
+    );
   }
 }

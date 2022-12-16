@@ -11,9 +11,9 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
-import { Code, InflightClient, Resource } from "../core";
+import * as core from "../core";
 import { mkdtemp } from "../util";
-import { addBindConnections } from "./util";
+import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -49,11 +49,12 @@ export class Function extends cloud.FunctionBase {
       throw new Error("No policy found on the inflight handler.");
     }
 
-    const code = inflight._bind(this, ["handle"]);
+    inflight._bind(this, ["handle"]);
+    const inflightClient = inflight._inflightJsClient();
 
     const lines = new Array<string>();
     lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${code.text}.handle(event);`);
+    lines.push(`  return await ${inflightClient.text}.handle(event);`);
     lines.push("};");
 
     const tempdir = mkdtemp();
@@ -185,7 +186,8 @@ export class Function extends cloud.FunctionBase {
     return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
   }
 
-  protected bindImpl(host: Resource, ops: string[]): Code {
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
@@ -204,9 +206,15 @@ export class Function extends cloud.FunctionBase {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.function.arn);
 
-    addBindConnections(this, host);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
-    return InflightClient.for(__filename, "FunctionClient", [
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+    return core.InflightClient.for(__filename, "FunctionClient", [
       `process.env["${env}"]`,
     ]);
   }

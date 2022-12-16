@@ -36,7 +36,18 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
     return schema;
   }
 
-  protected bindImpl(host: core.Resource, _ops: string[]): core.Code {
-    return bindSimulatorResource("counter", this, host);
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
+    bindSimulatorResource("counter", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `COUNTER_HANDLE_${this.node.addr.slice(-8)}`;
+    return core.NodeJsCode.fromInline(
+      `$simulator.findInstance(process.env["${env}"])`
+    );
   }
 }

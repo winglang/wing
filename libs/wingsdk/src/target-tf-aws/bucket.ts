@@ -4,10 +4,9 @@ import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-pub
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { BucketInflightMethods } from "../cloud";
-import { Code, InflightClient, Resource } from "../core";
+import * as core from "../core";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
+import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -17,10 +16,10 @@ import { addBindConnections } from "./util";
 export class Bucket extends cloud.BucketBase {
   /** @internal */
   public readonly _policies = {
-    [BucketInflightMethods.PUT]: {},
-    [BucketInflightMethods.GET]: {},
-    [BucketInflightMethods.LIST]: {},
-    [BucketInflightMethods.DELETE]: {},
+    [cloud.BucketInflightMethods.PUT]: {},
+    [cloud.BucketInflightMethods.GET]: {},
+    [cloud.BucketInflightMethods.LIST]: {},
+    [cloud.BucketInflightMethods.DELETE]: {},
   };
 
   private readonly bucket: S3Bucket;
@@ -72,35 +71,36 @@ export class Bucket extends cloud.BucketBase {
     }
   }
 
-  protected bindImpl(host: Resource, ops: string[]): Code {
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
-    if (ops.includes(BucketInflightMethods.PUT)) {
+    if (ops.includes(cloud.BucketInflightMethods.PUT)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (ops.includes(BucketInflightMethods.GET)) {
+    if (ops.includes(cloud.BucketInflightMethods.GET)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (ops.includes(BucketInflightMethods.LIST)) {
+    if (ops.includes(cloud.BucketInflightMethods.LIST)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (ops.includes(BucketInflightMethods.DELETE)) {
+    if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: [
@@ -115,9 +115,15 @@ export class Bucket extends cloud.BucketBase {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.bucket.bucket);
 
-    addBindConnections(this, host);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
-    return InflightClient.for(__filename, "BucketClient", [
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
+    return core.InflightClient.for(__filename, "BucketClient", [
       `process.env["${env}"]`,
     ]);
   }

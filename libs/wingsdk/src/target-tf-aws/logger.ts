@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { Code, InflightClient, Resource } from "../core";
+import * as core from "../core";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
+import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Logger`.
@@ -19,15 +19,18 @@ export class Logger extends cloud.LoggerBase {
     super(scope, id);
   }
 
-  protected bindImpl(host: Resource, _ops: string[]): Code {
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("loggers can only be bound by tfaws.Function for now");
     }
 
-    addBindConnections(this, host);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
-    return InflightClient.for(__filename, "LoggerClient", [
-      `"/aws/lambda/${host.node.id}"`,
-    ]);
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    return core.InflightClient.for(__filename, "LoggerClient", []);
   }
 }

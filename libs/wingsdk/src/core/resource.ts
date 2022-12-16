@@ -4,25 +4,34 @@ import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
 } from "./attributes";
-import { Code, ICapturable } from "./inflight";
+import { Code } from "./inflight";
 import { ResourcePolicy } from "./policies";
 import { IInspectable, TreeInspector } from "./tree";
 
 /**
  * Abstract interface for `Resource`.
  */
-export interface IResource extends ICapturable, IInspectable, IConstruct {
+export interface IResource extends IInspectable, IConstruct {
   /** @internal */
   readonly _policies: ResourcePolicy;
+
+  /**
+   * Binds the resource to the host so that it can be used by inflight code.
+   * @internal
+   */
+  _bind(host: Resource, ops: string[]): void;
+
+  /**
+   * Return a code snippet that can be used to reference this resource inflight.
+   * @internal
+   */
+  _inflightJsClient(): Code;
 }
 
 /**
  * Shared behavior between all Wing SDK resources.
  */
-export abstract class Resource
-  extends Construct
-  implements ICapturable, IInspectable
-{
+export abstract class Resource extends Construct implements IInspectable {
   private readonly connections: Connection[] = [];
 
   /**
@@ -41,26 +50,22 @@ export abstract class Resource
   public abstract _policies: ResourcePolicy;
 
   /**
-   * Set up any permissions required for this resource to be used by the host,
-   * and return a code snippet that can be used to reference this resource
-   * inflight.
-   *
-   * Do not override this method, instead override `bindImpl`.
+   * Set up any permissions required for this resource to be used by the host.
    * @internal
    */
-  public _bind(host: Resource, ops: string[]): Code {
+  public _bind(host: Resource, ops: string[]): void {
     log(
       `Binding a resource (${this.node.path}) to a host (${
         host.node.path
       }) with ops: ${JSON.stringify(ops)}`
     );
-    return this.bindImpl(host, ops);
   }
 
   /**
-   * Private implementation of the bind method.
+   * Return a code snippet that can be used to reference this resource inflight.
+   * @internal
    */
-  protected abstract bindImpl(host: Resource, ops: string[]): Code;
+  public abstract _inflightJsClient(): Code;
 
   /**
    * Adds a connection to this resource. A connection is a piece of metadata

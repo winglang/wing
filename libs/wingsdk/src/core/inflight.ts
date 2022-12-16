@@ -2,27 +2,6 @@ import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
-import { IConstruct } from "constructs";
-import { Resource } from "./resource";
-
-/**
- * Represents something that is capturable by an Inflight.
- */
-export interface ICapturable {
-  /**
-   * Binds the resource to the host so that it can be used by inflight code.
-   * Returns a reference to the code that can be used to instantiate the
-   * resource in the inflight code.
-   *
-   * @internal
-   */
-  _bind(host: Resource, ops: string[]): Code;
-}
-
-/**
- * Represents a construct that is capturable by an Inflight.
- */
-export interface ICapturableConstruct extends ICapturable, IConstruct {}
 
 /**
  * Reference to a piece of code.

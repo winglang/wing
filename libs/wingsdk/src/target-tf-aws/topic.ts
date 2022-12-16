@@ -1,13 +1,11 @@
-import { join } from "path";
 import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
 import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
+import { addConnections } from "./util";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -31,17 +29,14 @@ export class Topic extends cloud.TopicBase {
     inflight: cloud.ITopicOnMessageHandler,
     props: cloud.TopicOnMessageProps = {}
   ): cloud.Function {
-    const functionHandler: cloud.IFunctionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "topic.onmessage.inflight.js"),
-      "TopicOnMessageHandlerClient"
-    );
-
-    const hash = functionHandler.node.addr.slice(-8);
+    const hash = inflight.node.addr.slice(-8);
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
-      functionHandler,
+      // ITopicOnMessageHandler has the same signature as IFunctionHandler
+      // (both have an inflight "handle" method that accepts a string)
+      // so it's okay to pass it here
+      inflight,
       props
     );
 
@@ -86,7 +81,8 @@ export class Topic extends cloud.TopicBase {
     return fn;
   }
 
-  protected bindImpl(host: core.Resource, ops: string[]): core.Code {
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
@@ -103,8 +99,14 @@ export class Topic extends cloud.TopicBase {
 
     host.addEnvironment(env, this.topic.arn);
 
-    addBindConnections(this, host);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `TOPIC_ARN_${this.node.addr.slice(-8)}`;
     return core.InflightClient.for(__filename, "TopicClient", [
       `process.env["${env}"]`,
     ]);

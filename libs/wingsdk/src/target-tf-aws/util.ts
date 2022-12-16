@@ -1,6 +1,6 @@
 import { Direction, Resource } from "../core";
 
-export function addBindConnections(resource: Resource, host: Resource) {
+export function addConnections(resource: Resource, host: Resource) {
   resource.addConnection({
     direction: Direction.INBOUND,
     relationship: `inflight-reference`,

@@ -71,11 +71,17 @@ export class Function extends FunctionBase {
     ) as Function;
   }
 
-  protected bindImpl(_host: Resource, _ops: string[]): Code {
+  public addEnvironment(_key: string, _value: string): void {
     throw new Error("Method not implemented.");
   }
 
-  public addEnvironment(_key: string, _value: string): void {
+  /** @internal */
+  public _bind(_host: Resource, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _inflightJsClient(): Code {
     throw new Error("Method not implemented.");
   }
 }

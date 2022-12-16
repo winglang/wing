@@ -25,13 +25,18 @@ class MyBucket extends core.Resource {
     this.thing = message;
   }
 
-  bindImpl(host: core.Resource, ops: string[]) {
+  _bind(host: core.Resource, ops: string[]) {
     const inner_client_policy = core.Policies.make(
       ops,
       this._policies,
       "inner"
     );
-    const inner_client = this.inner._bind(host, inner_client_policy);
+    this.inner._bind(host, inner_client_policy);
+    super._bind(host, ops);
+  }
+
+  _inflightJsClient(): core.Code {
+    const inner_client = this.inner._inflightJsClient();
     const thing_client = JSON.stringify(this.thing);
     const my_bucket_client_path = join(__dirname, "MyBucket.inflight.js");
     return core.NodeJsCode.fromInline(
@@ -58,9 +63,14 @@ class Handler extends core.Resource implements cloud.IFunctionHandler {
     this.b = b;
   }
 
-  bindImpl(host: core.Resource, ops: string[]) {
+  _bind(host: core.Resource, ops: string[]) {
     const b_client_policy = core.Policies.make(ops, this._policies, "b");
-    const b_client = this.b._bind(host, b_client_policy);
+    this.b._bind(host, b_client_policy);
+    super._bind(host, ops);
+  }
+
+  _inflightJsClient(): core.Code {
+    const b_client = this.b._inflightJsClient();
     const handler_client_path = join(__dirname, "Handler.inflight.js");
     return core.NodeJsCode.fromInline(
       `new (require("${handler_client_path}")).Handler__Inflight({ b: ${b_client.text} })`
@@ -81,7 +91,7 @@ class HelloWorld extends Construct {
   }
 }
 
-const app = new tfaws.App({ outdir: __dirname });
+const app = new sim.App({ outdir: __dirname });
 cloud.Logger.register(app);
 new HelloWorld(app, "HelloWorld");
 app.synth();

@@ -1,13 +1,10 @@
-import { join } from "path";
 import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
 import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { Resource } from "../core";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
+import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -39,16 +36,13 @@ export class Queue extends cloud.QueueBase {
     inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    const functionHandler: cloud.IFunctionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "queue.onmessage.inflight.js"),
-      "QueueOnMessageHandlerClient"
-    );
-
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${functionHandler.node.addr.slice(-8)}`,
-      functionHandler,
+      `${this.node.id}-OnMessage-${inflight.node.addr.slice(-8)}`,
+      // IQueueOnMessageHandler has the same signature as IFunctionHandler
+      // (both have an inflight "handle" method that accepts a string)
+      // so it's okay to pass it here
+      inflight,
       props
     );
 
@@ -77,7 +71,8 @@ export class Queue extends cloud.QueueBase {
     return fn;
   }
 
-  protected bindImpl(host: Resource, ops: string[]): core.Code {
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
@@ -100,8 +95,14 @@ export class Queue extends cloud.QueueBase {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    addBindConnections(this, host);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
     return core.InflightClient.for(__filename, "QueueClient", [
       `process.env["${env}"]`,
     ]);

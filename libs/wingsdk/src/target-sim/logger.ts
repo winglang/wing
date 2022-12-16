@@ -31,7 +31,18 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
     return schema;
   }
 
-  protected bindImpl(host: core.Resource, _ops: string[]): core.Code {
-    return bindSimulatorResource("logger", this, host);
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
+    bindSimulatorResource("logger", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `LOGGER_HANDLE_${this.node.addr.slice(-8)}`;
+    return core.NodeJsCode.fromInline(
+      `$simulator.findInstance(process.env["${env}"])`
+    );
   }
 }

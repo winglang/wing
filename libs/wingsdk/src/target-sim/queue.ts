@@ -1,7 +1,5 @@
-import { join } from "path";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -34,16 +32,13 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    const functionHandler: cloud.IFunctionHandler = convertBetweenHandlers(
-      inflight,
-      join(__dirname, "queue.onmessage.inflight.js"),
-      "QueueOnMessageHandlerClient"
-    );
-
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${functionHandler.node.addr.slice(-8)}`,
-      functionHandler,
+      `${this.node.id}-OnMessage-${inflight.node.addr.slice(-8)}`,
+      // IQueueOnMessageHandler has the same signature as IFunctionHandler
+      // (both have an inflight "handle" method that accepts a string)
+      // so it's okay to pass it here
+      inflight,
       props
     );
 
@@ -85,7 +80,18 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     return schema;
   }
 
-  protected bindImpl(host: core.Resource, _ops: string[]): core.Code {
-    return bindSimulatorResource("queue", this, host);
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
+    bindSimulatorResource("queue", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `QUEUE_HANDLE_${this.node.addr.slice(-8)}`;
+    return core.NodeJsCode.fromInline(
+      `$simulator.findInstance(process.env["${env}"])`
+    );
   }
 }

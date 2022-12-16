@@ -70,7 +70,13 @@ export class Logger extends LoggerBase {
     return Polycons.newInstance(LOGGER_TYPE, scope, id) as Logger;
   }
 
-  protected bindImpl(_host: Resource, _ops: string[]): Code {
+  /** @internal */
+  public _bind(_host: Resource, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _inflightJsClient(): Code {
     throw new Error("Method not implemented.");
   }
 }

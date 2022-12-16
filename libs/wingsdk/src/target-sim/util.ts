@@ -1,6 +1,6 @@
 import { access, constants } from "fs";
 import { promisify } from "util";
-import { Direction, NodeJsCode, Resource } from "../core";
+import { Direction, Resource } from "../core";
 import { Function } from "./function";
 import { ISimulatorResource } from "./resource";
 
@@ -48,7 +48,4 @@ export function bindSimulatorResource(
     relationship: `inflight-reference`,
     resource: resource,
   });
-  return NodeJsCode.fromInline(
-    `$simulator.findInstance(process.env["${env}"])`
-  );
 }

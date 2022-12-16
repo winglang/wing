@@ -52,16 +52,22 @@ export class Topic extends TopicBase {
     return Polycons.newInstance(TOPIC_TYPE, scope, id, props) as Topic;
   }
 
-  protected bindImpl(_host: Resource, _ops: string[]): Code {
-    throw new Error("Method not implemented");
-  }
-
   public onMessage(
     inflight: ITopicOnMessageHandler,
     props: TopicOnMessageProps = {}
   ): Function {
     inflight;
     props;
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _bind(_host: Resource, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _inflightJsClient(): Code {
     throw new Error("Method not implemented.");
   }
 }

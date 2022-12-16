@@ -31,8 +31,9 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
     const fn = new cloud.Function(
       this.node.scope!,
       `${this.node.id}-OnMessage-${inflight.node.addr.slice(-8)}`,
-      // ITopicOnMessageHandler has the same inflight signature as IFunctionHandler
-      // so its safe to reuse the inflight directly
+      // ITopicOnMessageHandler has the same signature as IFunctionHandler
+      // (both have an inflight "handle" method that accepts a string)
+      // so it's okay to pass it here
       inflight,
       props
     );
@@ -59,11 +60,22 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
     return fn;
   }
 
-  protected bindImpl(host: core.Resource, _ops: string[]): core.Code {
-    return bindSimulatorResource("topic", this, host);
+  /** @internal */
+  public _bind(host: core.Resource, ops: string[]): void {
+    bindSimulatorResource("topic", this, host);
+    super._bind(host, ops);
   }
 
-  toSimulator(): BaseResourceSchema {
+  /** @internal */
+  public _inflightJsClient(): core.Code {
+    // TODO: assert that `env` is added to the `host` resource
+    const env = `TOPIC_HANDLE_${this.node.addr.slice(-8)}`;
+    return core.NodeJsCode.fromInline(
+      `$simulator.findInstance(process.env["${env}"])`
+    );
+  }
+
+  public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
       type: cloud.TOPIC_TYPE,
       path: this.node.path,

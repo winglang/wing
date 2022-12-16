@@ -54,14 +54,19 @@ export class Testing {
         this.resources = resources;
       }
 
-      bindImpl(host: Resource, ops: string[]) {
-        const clients: Record<string, Code> = {};
+      public _bind(host: Resource, ops: string[]): void {
         for (const [name, resource] of Object.entries(this.resources)) {
           const resourcePolicy = Policies.make(ops, this._policies, name);
-          const resourceClient = resource._bind(host, resourcePolicy);
-          clients[name] = resourceClient;
+          resource._bind(host, resourcePolicy);
         }
-        const newCode = NodeJsCode.fromInline(
+      }
+
+      public _inflightJsClient(): NodeJsCode {
+        const clients: Record<string, Code> = {};
+        for (const [name, resource] of Object.entries(this.resources)) {
+          clients[name] = resource._inflightJsClient();
+        }
+        return NodeJsCode.fromInline(
           `new ((function(){
             return class Handler {
               constructor(clients) {
@@ -73,7 +78,6 @@ export class Testing {
             .map(([name, client]) => `${name}: ${client.text}`)
             .join(", ")} })`
         );
-        return newCode;
       }
     }
 

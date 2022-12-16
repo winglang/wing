@@ -73,16 +73,22 @@ export class Queue extends QueueBase {
     return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
   }
 
-  protected bindImpl(_host: Resource, _ops: string[]): Code {
-    throw new Error("Method not implemented.");
-  }
-
   public onMessage(
     inflight: IQueueOnMessageHandler,
     props: QueueOnMessageProps = {}
   ): Function {
     inflight;
     props;
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _bind(_host: Resource, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _inflightJsClient(): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -113,7 +119,7 @@ export interface IQueueOnMessageHandlerClient {
   /**
    * Function that will be called when a message is received from the queue.
    */
-  handle(event: string): Promise<void>;
+  handle(message: string): Promise<void>;
 }
 
 /**
