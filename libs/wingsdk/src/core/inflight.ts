@@ -3,7 +3,6 @@ import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
 import { IConstruct } from "constructs";
-import { OperationPolicy } from "./policies";
 import { Resource } from "./resource";
 
 /**
@@ -17,7 +16,7 @@ export interface ICapturable {
    *
    * @internal
    */
-  _bind(host: Resource, policy: OperationPolicy): Code;
+  _bind(host: Resource, ops: string[]): Code;
 }
 
 /**

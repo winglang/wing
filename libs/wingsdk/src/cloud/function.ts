@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, IResource, OperationPolicy, Resource } from "../core";
+import { Code, IResource, Resource } from "../core";
 
 /**
  * Global identifier for `Function`.
@@ -71,7 +71,7 @@ export class Function extends FunctionBase {
     ) as Function;
   }
 
-  protected bindImpl(_host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(_host: Resource, _ops: string[]): Code {
     throw new Error("Method not implemented.");
   }
 

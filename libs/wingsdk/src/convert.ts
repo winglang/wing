@@ -1,11 +1,5 @@
 import { Construct } from "constructs";
-import {
-  IResource,
-  NodeJsCode,
-  OperationPolicy,
-  Policies,
-  Resource,
-} from "./core";
+import { IResource, NodeJsCode, Policies, Resource } from "./core";
 
 /**
  * Both the input and return values of this function are expected to be
@@ -24,7 +18,7 @@ export function convertBetweenHandlers(
     public readonly _policies = {
       handle: {
         handler: {
-          methods: ["handle"],
+          ops: ["handle"],
         },
       },
     };
@@ -34,8 +28,8 @@ export function convertBetweenHandlers(
       this.handler = handler;
     }
 
-    bindImpl(host: Resource, policy: OperationPolicy) {
-      const baseHandlerPolicy = Policies.make(policy, this.handler, "handler");
+    bindImpl(host: Resource, ops: string[]) {
+      const baseHandlerPolicy = Policies.make(ops, this._policies, "handler");
       const baseHandlerClient = this.handler._bind(host, baseHandlerPolicy);
       return NodeJsCode.fromInline(
         `new (require("${newHandlerClientPath}")).${newHandlerClientClassName}({ handler: ${baseHandlerClient.text} })`

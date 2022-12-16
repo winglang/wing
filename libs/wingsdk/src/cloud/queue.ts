@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Duration, IResource, OperationPolicy, Resource } from "../core";
+import { Code, Duration, IResource, Resource } from "../core";
 import { Function, FunctionProps } from "./function";
 
 /**
@@ -73,7 +73,7 @@ export class Queue extends QueueBase {
     return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
   }
 
-  protected bindImpl(_host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(_host: Resource, _ops: string[]): Code {
     throw new Error("Method not implemented.");
   }
 

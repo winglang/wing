@@ -1,61 +1,46 @@
-import { IResource } from "./resource";
-
 /**
  * Utility methods for working with policies.
  */
 export class Policies {
   /**
-   * Generates the policy for `resource` given the methods that `policy` wants
-   * to use on it.
+   * Given a list of operations to call on `ops` called on `policy`, calculate a
+   * list of corresponding operations to call on `resource`.
    *
-   * For example, given a policy that says "call `handle` on `resource`" and an
-   * actual reference to `resource`, this function will return a new policy that
-   * says "call `put_something` on `resource.inner`" using the information in
-   * `resource._policies`. This policy can then be passed to resource._bind().
-   *
-   * @param policy The policy containing a reference to `resourceName` and the methods that may be called on it
-   * @param resource The resource that `resourceName` refers to
-   * @param resourceName The name of the resource in `policy`
-   * @returns The transitive policy for `resource`
+   * @param ops The operations to call from `policy`
+   * @param policy The policy of the original resource
+   * @param target The name of the resource we want a list of operations for
+   * @returns A list of operations for `target`
    */
   public static make(
-    policy: OperationPolicy,
-    resource: IResource,
-    resourceName: string
-  ): OperationPolicy {
-    const newPolicy: OperationPolicy = {};
+    ops: string[],
+    policy: ResourcePolicy,
+    target: string
+  ): string[] {
+    const targetOps = new Set<string>();
 
-    // Iterate over the methods the given policy wants to call on `resource`
-    for (const method of policy[resourceName].methods ?? []) {
-      // Get the resource's policy for the method (e.g. any sub-resources it needs to call)
-      const subpolicy = resource._policies[method];
+    // Iterate over the operations we want to call from `policy`
+    for (const op of ops) {
+      // Get the resource's policy for the operation (e.g. any sub-resources it needs to call)
+      const subpolicy = policy[op];
       if (!subpolicy) {
         throw new Error(
-          `Resource ${resourceName} (${resource.node.path}) does not have a policy for method "${method}"`
+          `Resource does not have a policy for operation "${op}"`
         );
       }
 
-      // Merge the policy with the current policy we've built up
-      Policies.merge(newPolicy, subpolicy);
-      // Add a special annotation that says the method was called on `resource`
-      Policies.merge(newPolicy, { $self: { methods: [method] } });
-    }
+      // If the original resource does not perform any operations on `target` when
+      // calling `op`, skip it
+      if (!subpolicy[target]) {
+        continue;
+      }
 
-    return newPolicy;
-  }
-
-  /**
-   * Merge policy2 into the policy1 object.
-   */
-  public static merge(policy1: OperationPolicy, policy2: OperationPolicy) {
-    for (const resource in policy2) {
-      if (Object.keys(policy1).includes(resource)) {
-        policy1[resource].methods.push(...policy2[resource].methods);
-      } else {
-        policy1[resource] = policy2[resource];
+      // Add the operations that the original resource performs on `target`
+      for (const subOp of subpolicy[target].ops ?? []) {
+        targetOps.add(subOp);
       }
     }
-    return policy1;
+
+    return Array.from(targetOps);
   }
 }
 
@@ -84,6 +69,6 @@ export interface ResourcePolicy {
  */
 export interface OperationPolicy {
   [resource: string]: {
-    methods: string[];
+    ops: string[];
   };
 }

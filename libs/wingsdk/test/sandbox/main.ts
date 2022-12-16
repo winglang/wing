@@ -14,7 +14,7 @@ class MyBucket extends core.Resource {
   public readonly _policies = {
     put_something: {
       inner: {
-        methods: ["put"],
+        ops: ["put"],
       },
     },
   };
@@ -25,8 +25,12 @@ class MyBucket extends core.Resource {
     this.thing = message;
   }
 
-  bindImpl(host: core.Resource, policy: core.OperationPolicy) {
-    const inner_client_policy = core.Policies.make(policy, this.inner, "inner");
+  bindImpl(host: core.Resource, ops: string[]) {
+    const inner_client_policy = core.Policies.make(
+      ops,
+      this._policies,
+      "inner"
+    );
     const inner_client = this.inner._bind(host, inner_client_policy);
     const thing_client = JSON.stringify(this.thing);
     const my_bucket_client_path = join(__dirname, "MyBucket.inflight.js");
@@ -44,7 +48,7 @@ class Handler extends core.Resource implements cloud.IFunctionHandler {
   public readonly _policies = {
     handle: {
       b: {
-        methods: ["put_something"],
+        ops: ["put_something"],
       },
     },
   };
@@ -54,8 +58,8 @@ class Handler extends core.Resource implements cloud.IFunctionHandler {
     this.b = b;
   }
 
-  bindImpl(host: core.Resource, policy: core.OperationPolicy) {
-    const b_client_policy = core.Policies.make(policy, this.b, "b");
+  bindImpl(host: core.Resource, ops: string[]) {
+    const b_client_policy = core.Policies.make(ops, this._policies, "b");
     const b_client = this.b._bind(host, b_client_policy);
     const handler_client_path = join(__dirname, "Handler.inflight.js");
     return core.NodeJsCode.fromInline(

@@ -5,7 +5,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { OperationPolicy, Resource } from "../core";
+import { Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -77,14 +77,14 @@ export class Queue extends cloud.QueueBase {
     return fn;
   }
 
-  protected bindImpl(host: Resource, policy: OperationPolicy): core.Code {
+  protected bindImpl(host: Resource, ops: string[]): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
 
     const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
 
-    if (policy.$self.methods.includes(cloud.QueueInflightMethods.PUSH)) {
+    if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: [

@@ -31,10 +31,7 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
     return schema;
   }
 
-  protected bindImpl(
-    host: core.Resource,
-    _policy: core.OperationPolicy
-  ): core.Code {
+  protected bindImpl(host: core.Resource, _ops: string[]): core.Code {
     return bindSimulatorResource("logger", this, host);
   }
 }

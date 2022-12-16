@@ -1,13 +1,6 @@
 import { IConstruct } from "constructs";
 import { IFunctionHandler } from "../cloud";
-import {
-  Code,
-  IResource,
-  NodeJsCode,
-  OperationPolicy,
-  Policies,
-  Resource,
-} from "../core";
+import { Code, IResource, NodeJsCode, Policies, Resource } from "../core";
 
 /**
  * Test utilities.
@@ -36,7 +29,7 @@ export class Testing {
       handle: Object.fromEntries(
         Object.entries(bindings ?? {}).map(([name, binding]) => [
           name,
-          { methods: binding.methods },
+          { ops: binding.methods },
         ])
       ),
     };
@@ -61,10 +54,10 @@ export class Testing {
         this.resources = resources;
       }
 
-      bindImpl(host: Resource, policy: OperationPolicy) {
+      bindImpl(host: Resource, ops: string[]) {
         const clients: Record<string, Code> = {};
         for (const [name, resource] of Object.entries(this.resources)) {
-          const resourcePolicy = Policies.make(policy, resource, name);
+          const resourcePolicy = Policies.make(ops, this._policies, name);
           const resourceClient = resource._bind(host, resourcePolicy);
           clients[name] = resourceClient;
         }

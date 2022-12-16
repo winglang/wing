@@ -31,17 +31,14 @@ export class Counter extends cloud.CounterBase {
     });
   }
 
-  protected bindImpl(
-    host: core.Resource,
-    policy: core.OperationPolicy
-  ): core.Code {
+  protected bindImpl(host: core.Resource, ops: string[]): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
     const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
 
-    if (policy.$self.methods.includes(cloud.CounterInflightMethods.INC)) {
+    if (ops.includes(cloud.CounterInflightMethods.INC)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:UpdateItem"],

@@ -11,13 +11,7 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
-import {
-  Code,
-  InflightClient,
-  OperationPolicy,
-  Policies,
-  Resource,
-} from "../core";
+import { Code, InflightClient, Resource } from "../core";
 import { mkdtemp } from "../util";
 import { addBindConnections } from "./util";
 
@@ -55,11 +49,7 @@ export class Function extends cloud.FunctionBase {
       throw new Error("No policy found on the inflight handler.");
     }
 
-    const policy: OperationPolicy = { inflight: { methods: ["handle"] } };
-    const code = inflight._bind(
-      this,
-      Policies.make(policy, inflight, "inflight")
-    );
+    const code = inflight._bind(this, ["handle"]);
 
     const lines = new Array<string>();
     lines.push("exports.handler = async function(event) {");
@@ -195,14 +185,14 @@ export class Function extends cloud.FunctionBase {
     return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
   }
 
-  protected bindImpl(host: Resource, policy: OperationPolicy): Code {
+  protected bindImpl(host: Resource, ops: string[]): Code {
     if (!(host instanceof Function)) {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
     const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
 
-    if (policy.$self.methods.includes(cloud.FunctionInflightMethods.INVOKE)) {
+    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],

@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, OperationPolicy, Resource } from "../core";
+import { Code, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.
@@ -54,7 +54,7 @@ export class Counter extends CounterBase {
     return Polycons.newInstance(COUNTER_TYPE, scope, id, props) as Counter;
   }
 
-  protected bindImpl(_host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(_host: Resource, _ops: string[]): Code {
     throw new Error("Method not implemented.");
   }
 }

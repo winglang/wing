@@ -5,7 +5,7 @@ import {
   WING_ATTRIBUTE_RESOURCE_STATEFUL,
 } from "./attributes";
 import { Code, ICapturable } from "./inflight";
-import { OperationPolicy, ResourcePolicy } from "./policies";
+import { ResourcePolicy } from "./policies";
 import { IInspectable, TreeInspector } from "./tree";
 
 /**
@@ -48,19 +48,19 @@ export abstract class Resource
    * Do not override this method, instead override `bindImpl`.
    * @internal
    */
-  public _bind(host: Resource, policy: OperationPolicy): Code {
+  public _bind(host: Resource, ops: string[]): Code {
     log(
       `Binding a resource (${this.node.path}) to a host (${
         host.node.path
-      }) with policy ${JSON.stringify(policy)}`
+      }) with ops: ${JSON.stringify(ops)}`
     );
-    return this.bindImpl(host, policy);
+    return this.bindImpl(host, ops);
   }
 
   /**
    * Private implementation of the bind method.
    */
-  protected abstract bindImpl(host: Resource, policy: OperationPolicy): Code;
+  protected abstract bindImpl(host: Resource, ops: string[]): Code;
 
   /**
    * Adds a connection to this resource. A connection is a piece of metadata

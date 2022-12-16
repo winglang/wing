@@ -86,17 +86,14 @@ export class Topic extends cloud.TopicBase {
     return fn;
   }
 
-  protected bindImpl(
-    host: core.Resource,
-    policy: core.OperationPolicy
-  ): core.Code {
+  protected bindImpl(host: core.Resource, ops: string[]): core.Code {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
     const env = `TOPIC_ARN_${this.node.addr.slice(-8)}`;
 
-    if (policy.$self.methods.includes(cloud.TopicInflightMethods.PUBLISH)) {
+    if (ops.includes(cloud.TopicInflightMethods.PUBLISH)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["sns:Publish"],

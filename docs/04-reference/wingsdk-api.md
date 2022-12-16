@@ -2138,8 +2138,7 @@ new core.Policies()
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Policies.make">make</a></code> | Generates the policy for `resource` given the methods that `policy` wants to use on it. |
-| <code><a href="#@winglang/wingsdk.core.Policies.merge">merge</a></code> | Merge policy2 into the policy1 object. |
+| <code><a href="#@winglang/wingsdk.core.Policies.make">make</a></code> | Given a list of operations to call on `ops` called on `policy`, calculate a list of corresponding operations to call on `resource`. |
 
 ---
 
@@ -2148,59 +2147,32 @@ new core.Policies()
 ```wing
 bring core;
 
-core.Policies.make(policy: OperationPolicy, resource: IResource, resource_name: str)
+core.Policies.make(ops: MutArray<str>, policy: ResourcePolicy, target: str)
 ```
 
-Generates the policy for `resource` given the methods that `policy` wants to use on it.
+Given a list of operations to call on `ops` called on `policy`, calculate a list of corresponding operations to call on `resource`.
 
-For example, given a policy that says "call `handle` on `resource`" and an
-actual reference to `resource`, this function will return a new policy that
-says "call `put_something` on `resource.inner`" using the information in
-`resource._policies`. This policy can then be passed to resource._bind().
+###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/wingsdk.core.Policies.make.parameter.ops"></a>
+
+- *Type:* MutArray&lt;str&gt;
+
+The operations to call from `policy`.
+
+---
 
 ###### `policy`<sup>Required</sup> <a name="policy" id="@winglang/wingsdk.core.Policies.make.parameter.policy"></a>
 
-- *Type:* core.OperationPolicy
+- *Type:* core.ResourcePolicy
 
-The policy containing a reference to `resourceName` and the methods that may be called on it.
-
----
-
-###### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.Policies.make.parameter.resource"></a>
-
-- *Type:* core.IResource
-
-The resource that `resourceName` refers to.
+The policy of the original resource.
 
 ---
 
-###### `resource_name`<sup>Required</sup> <a name="resource_name" id="@winglang/wingsdk.core.Policies.make.parameter.resourceName"></a>
+###### `target`<sup>Required</sup> <a name="target" id="@winglang/wingsdk.core.Policies.make.parameter.target"></a>
 
 - *Type:* str
 
-The name of the resource in `policy`.
-
----
-
-##### `merge` <a name="merge" id="@winglang/wingsdk.core.Policies.merge"></a>
-
-```wing
-bring core;
-
-core.Policies.merge(policy1: OperationPolicy, policy2: OperationPolicy)
-```
-
-Merge policy2 into the policy1 object.
-
-###### `policy1`<sup>Required</sup> <a name="policy1" id="@winglang/wingsdk.core.Policies.merge.parameter.policy1"></a>
-
-- *Type:* core.OperationPolicy
-
----
-
-###### `policy2`<sup>Required</sup> <a name="policy2" id="@winglang/wingsdk.core.Policies.merge.parameter.policy2"></a>
-
-- *Type:* core.OperationPolicy
+The name of the resource we want a list of operations for.
 
 ---
 

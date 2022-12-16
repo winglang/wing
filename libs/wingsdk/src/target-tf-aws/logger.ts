@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { Code, InflightClient, OperationPolicy, Resource } from "../core";
+import { Code, InflightClient, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -19,7 +19,7 @@ export class Logger extends cloud.LoggerBase {
     super(scope, id);
   }
 
-  protected bindImpl(host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(host: Resource, _ops: string[]): Code {
     if (!(host instanceof Function)) {
       throw new Error("loggers can only be bound by tfaws.Function for now");
     }

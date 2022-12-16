@@ -1,6 +1,6 @@
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, OperationPolicy, Resource } from "../core";
+import { Code, Resource } from "../core";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
@@ -70,7 +70,7 @@ export class Logger extends LoggerBase {
     return Polycons.newInstance(LOGGER_TYPE, scope, id) as Logger;
   }
 
-  protected bindImpl(_host: Resource, _policy: OperationPolicy): Code {
+  protected bindImpl(_host: Resource, _ops: string[]): Code {
     throw new Error("Method not implemented.");
   }
 }

@@ -5,7 +5,7 @@ import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { BucketInflightMethods } from "../cloud";
-import { Code, InflightClient, OperationPolicy, Resource } from "../core";
+import { Code, InflightClient, Resource } from "../core";
 import { Function } from "./function";
 import { addBindConnections } from "./util";
 
@@ -72,35 +72,35 @@ export class Bucket extends cloud.BucketBase {
     }
   }
 
-  protected bindImpl(host: Resource, policy: OperationPolicy): Code {
+  protected bindImpl(host: Resource, ops: string[]): Code {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
     const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
 
-    if (policy.$self.methods.includes(BucketInflightMethods.PUT)) {
+    if (ops.includes(BucketInflightMethods.PUT)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (policy.$self.methods.includes(BucketInflightMethods.GET)) {
+    if (ops.includes(BucketInflightMethods.GET)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (policy.$self.methods.includes(BucketInflightMethods.LIST)) {
+    if (ops.includes(BucketInflightMethods.LIST)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (policy.$self.methods.includes(BucketInflightMethods.DELETE)) {
+    if (ops.includes(BucketInflightMethods.DELETE)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: [
