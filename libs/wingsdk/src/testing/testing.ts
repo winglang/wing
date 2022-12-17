@@ -68,13 +68,13 @@ export class Testing {
       }
     }
 
-    const policy = Object.fromEntries(
+    const annotation = Object.fromEntries(
       Object.entries(bindings ?? {}).map(([name, binding]) => [
         "this." + name,
         { ops: binding.ops },
       ])
     );
-    Handler._annotateInflight("handle", policy);
+    Handler._annotateInflight("handle", annotation);
 
     return new Handler();
   }

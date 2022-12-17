@@ -47,9 +47,9 @@ export abstract class Resource extends Construct implements IInspectable {
    *
    * @internal
    */
-  public static _annotateInflight(op: string, policy: OperationPolicy) {
+  public static _annotateInflight(op: string, annotation: OperationAnnotation) {
     Object.defineProperty(this.prototype, BIND_METADATA_PREFIX + op, {
-      value: policy,
+      value: annotation,
       enumerable: false,
       writable: false,
     });
@@ -86,7 +86,9 @@ export abstract class Resource extends Construct implements IInspectable {
 
     const resources: Record<string, string[]> = {};
     for (let op of ops) {
-      const bindMap: OperationPolicy = (this as any)[BIND_METADATA_PREFIX + op];
+      const bindMap: OperationAnnotation = (this as any)[
+        BIND_METADATA_PREFIX + op
+      ];
       if (!bindMap) {
         throw new Error(
           `Resource ${this.node.path} does not support operation ${op}`
@@ -198,15 +200,15 @@ export interface Connection {
 }
 
 /**
- * A policy specifying what resources an operation may access.
+ * Annotations about what resources an inflight operation may access.
  *
- * The following example policy says that the operation may call "put" on a
- * resource named "inner", or it may call "get" on a resource passed as an
- * argument named "other".
+ * The following example says that the operation may call "put" on a resource
+ * named "inner", or it may call "get" on a resource passed as an argument named
+ * "other".
  * @example
  * { "inner": { ops: ["put"] }, "$arg:other": { ops: ["get"] } }
  */
-export interface OperationPolicy {
+export interface OperationAnnotation {
   [resource: string]: {
     ops: string[];
   };

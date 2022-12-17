@@ -1377,13 +1377,13 @@ The object that will be serialized into the file during synthesis.
 
 ---
 
-### OperationPolicy <a name="OperationPolicy" id="@winglang/wingsdk.core.OperationPolicy"></a>
+### OperationAnnotation <a name="OperationAnnotation" id="@winglang/wingsdk.core.OperationAnnotation"></a>
 
-A policy specifying what resources an operation may access.
+Annotations about what resources an inflight operation may access.
 
-The following example policy says that the operation may call "put" on a
-resource named "inner", or it may call "get" on a resource passed as an
-argument named "other".
+The following example says that the operation may call "put" on a resource
+named "inner", or it may call "get" on a resource passed as an argument named
+"other".
 
 *Example*
 
@@ -1392,12 +1392,12 @@ argument named "other".
 ```
 
 
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.OperationPolicy.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.OperationAnnotation.Initializer"></a>
 
 ```wing
 bring core;
 
-let operation_policy = core.OperationPolicy{ ... }
+let operation_annotation = core.OperationAnnotation{ ... }
 ```
 
 
