@@ -71,7 +71,7 @@ export class Testing {
     const policy = Object.fromEntries(
       Object.entries(bindings ?? {}).map(([name, binding]) => [
         "this." + name,
-        { ops: binding.methods },
+        { ops: binding.ops },
       ])
     );
     Resource._annotateInflight(Handler, "handle", policy);
@@ -90,7 +90,7 @@ export interface ResourceBinding {
   readonly resource: IResource;
 
   /**
-   * The list of methods used on the resource.
+   * The list of operations used on the resource.
    */
-  readonly methods: string[];
+  readonly ops: string[];
 }

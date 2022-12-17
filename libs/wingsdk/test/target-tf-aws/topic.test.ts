@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import {
   tfResourcesOf,
@@ -25,22 +25,17 @@ test("topic with subscriber function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const topic = new cloud.Topic(app, "Topic");
-  const subscriber = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-        console.log("Received: ", event);
-      }`
-    ),
-    entrypoint: "$proc",
-  });
+  const subscriber = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) { console.log("Received: ", event); }`
+  );
 
-  const subscriberFn = topic.onMessage(subscriber);
+  topic.onMessage(subscriber);
   const output = app.synth();
 
   // THEN
-  expect(
-    core.Testing.inspectPrebundledCode(subscriberFn).text
-  ).toMatchSnapshot();
+  expect(subscriber._inflightJsClient().sanitizedText).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for subscriber function
     "aws_iam_role_policy", // policy for subscriber function role
@@ -60,22 +55,16 @@ test("topic with multiple subscribers", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const topic = new cloud.Topic(app, "Topic");
-  const subOne = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-        console.log("Got Event: ", event);
-      }`
-    ),
-    entrypoint: "$proc",
-  });
-  const subTwo = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-        console.log("Ohh yea!!", event);
-      }`
-    ),
-    entrypoint: "$proc",
-  });
+  const subOne = Testing.makeHandler(
+    app,
+    "Handler1",
+    `async handle(event) { console.log("Got Event: ", event); }`
+  );
+  const subTwo = Testing.makeHandler(
+    app,
+    "Handler2",
+    `async handle(event) { console.log("Ohh yea!! ", event); }`
+  );
 
   // WHEN
   topic.onMessage(subOne);

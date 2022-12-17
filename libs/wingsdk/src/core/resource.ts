@@ -188,7 +188,7 @@ export interface Connection {
  * resource named "inner", or it may call "get" on a resource passed as an
  * argument named "other".
  * @example
- * { "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } }
+ * { "inner": { ops: ["put"] }, "$arg:other": { ops: ["get"] } }
  */
 export interface OperationPolicy {
   [resource: string]: {

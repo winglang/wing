@@ -38,7 +38,7 @@ test("function with a counter binding", () => {
     {
       my_counter: {
         resource: counter,
-        methods: [cloud.CounterInflightMethods.INC],
+        ops: [cloud.CounterInflightMethods.INC],
       },
     }
   );

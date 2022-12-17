@@ -1,16 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`function with a bucket binding 1`] = `
-"const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"]);
-async function $proc($cap, event) {
-        console.log(\\"Hello, \\" + event.name);
-        // TODO: fix this
-        await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
       }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
+    }
+    async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
+  };
+})())({
+  bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"])
+})"
 `;
 
 exports[`function with a bucket binding 2`] = `
@@ -86,27 +88,36 @@ exports[`function with a bucket binding 2`] = `
 `;
 
 exports[`function with a function binding 1`] = `
-"const $cap = {};
-async function $proc($cap, event) {
-          console.log(\\"Event: \\" + JSON.stringify(event));
-          return { greeting: \\"Hello, \\" + event.name + \\"!\\" };
-        }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) { console.log(event); }
+  };
+})())({
+  
+})"
 `;
 
 exports[`function with a function binding 2`] = `
-"const $cap = {};
-$cap[\\"function\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"]);
-async function $proc($cap, event) {
-          console.log(\\"Event: \\" + JSON.stringify(event));
-          const data = await $cap.function.invoke(JSON.stringify({ name: \\"world\\" }));
-          console.log(\\"Greeting: \\" + data.value().greeting);
-        }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) {
+      console.log(\\"Event: \\" + event);
+      await this.function.invoke(JSON.stringify({ hello: \\"world\\" }));
+    }
+  };
+})())({
+  function: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"])
+})"
 `;
 
 exports[`function with a function binding 3`] = `
@@ -190,29 +201,33 @@ exports[`function with a function binding 3`] = `
 `;
 
 exports[`function with a queue binding 1`] = `
-"const $cap = {};
-$cap[\\"queue\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"]);
-async function $proc($cap) {
-          await $cap.queue.push(JSON.stringify({ name: \\"Alice\\" }));
-        }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) { await this.queue.push(\\"info\\"); }
+  };
+})())({
+  queue: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"])
+})"
 `;
 
 exports[`function with a queue binding 2`] = `
-"const $cap = {};
-async function $proc($cap, event) {
-          console.log(\\"Received \\" + event.name);
-        }
-async function $sqsEventWrapper($cap, event) {
-  for (const record of event.Records ?? []) {
-    await $proc($cap, record.body);
-  }
-}
-exports.handler = async function(event) {
-  return await $sqsEventWrapper($cap, event);
-};"
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) { console.log(\\"Received\\" + event); }
+  };
+})())({
+  
+})"
 `;
 
 exports[`function with a queue binding 3`] = `
@@ -222,7 +237,7 @@ exports[`function with a queue binding 3`] = `
       \\"root_Function_IamRole_88AD864C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       },
-      \\"root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E\\": {
+      \\"root_QueueOnMessage5cb7e554_IamRole_6907C7E4\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
@@ -231,9 +246,9 @@ exports[`function with a queue binding 3`] = `
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:SendMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       },
-      \\"root_QueueOnMessagecbf6dee05a035c28_IamRolePolicy_113E5CE8\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E.name}\\"
+      \\"root_QueueOnMessage5cb7e554_IamRolePolicy_B26620BF\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessage5cb7e554_IamRole_6907C7E4.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
@@ -241,16 +256,16 @@ exports[`function with a queue binding 3`] = `
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       },
-      \\"root_QueueOnMessagecbf6dee05a035c28_IamRolePolicyAttachment_0594DFB1\\": {
+      \\"root_QueueOnMessage5cb7e554_IamRolePolicyAttachment_D60F3F41\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessage5cb7e554_IamRole_6907C7E4.name}\\"
       }
     },
     \\"aws_lambda_event_source_mapping\\": {
       \\"root_Queue_EventSourceMapping_A20C741D\\": {
         \\"batch_size\\": 1,
         \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_QueueOnMessagecbf6dee05a035c28_DB212311.function_name}\\"
+        \\"function_name\\": \\"\${aws_lambda_function.root_QueueOnMessage5cb7e554_EEFD94BA.function_name}\\"
       }
     },
     \\"aws_lambda_function\\": {
@@ -268,23 +283,23 @@ exports[`function with a queue binding 3`] = `
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       },
-      \\"root_QueueOnMessagecbf6dee05a035c28_DB212311\\": {
+      \\"root_QueueOnMessage5cb7e554_EEFD94BA\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-cbf6dee05a035c28\\"
+            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-5cb7e554\\"
           }
         },
-        \\"function_name\\": \\"Queue-OnMessage-cbf6dee05a035c28\\",
+        \\"function_name\\": \\"Queue-OnMessage-5cb7e554\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagecbf6dee05a035c28_IamRole_131CB11E.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessage5cb7e554_IamRole_6907C7E4.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagecbf6dee05a035c28_Bucket_A66E23DF.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagecbf6dee05a035c28_S3Object_B088705D.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Bucket_31731D7F.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessage5cb7e554_S3Object_24400915.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
       \\"root_Function_Bucket_8CDD903C\\": {},
-      \\"root_QueueOnMessagecbf6dee05a035c28_Bucket_A66E23DF\\": {}
+      \\"root_QueueOnMessage5cb7e554_Bucket_31731D7F\\": {}
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
@@ -292,8 +307,8 @@ exports[`function with a queue binding 3`] = `
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
-      \\"root_QueueOnMessagecbf6dee05a035c28_S3Object_B088705D\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagecbf6dee05a035c28_Bucket_A66E23DF.bucket}\\",
+      \\"root_QueueOnMessage5cb7e554_S3Object_24400915\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Bucket_31731D7F.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -305,31 +320,7 @@ exports[`function with a queue binding 3`] = `
 }"
 `;
 
-exports[`two functions reusing the same inflight 1`] = `
-"const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"]);
-async function $proc($cap, event) {
-          console.log(\\"Hello, \\" + event.name);
-          await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
-        }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
-`;
-
-exports[`two functions reusing the same inflight 2`] = `
-"const $cap = {};
-$cap[\\"bucket\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"]);
-async function $proc($cap, event) {
-          console.log(\\"Hello, \\" + event.name);
-          await $cap.bucket.put(\\"hello.txt\\", JSON.stringify(event));
-        }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
-`;
-
-exports[`two functions reusing the same inflight 3`] = `
+exports[`two functions reusing the same IFunctionHandler 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
@@ -342,11 +333,11 @@ exports[`two functions reusing the same inflight 3`] = `
     },
     \\"aws_iam_role_policy\\": {
       \\"root_Function1_IamRolePolicy_2AD9115C\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"s3:PutObject*\\\\\\",\\\\\\"s3:Abort*\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}\\\\\\",\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}/*\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.name}\\"
       },
       \\"root_Function2_IamRolePolicy_66C89FF5\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"s3:PutObject*\\\\\\",\\\\\\"s3:Abort*\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}\\\\\\",\\\\\\"\${aws_s3_bucket.root_Bucket_966015A6.arn}/*\\\\\\"],\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.name}\\"
       }
     },
@@ -364,7 +355,6 @@ exports[`two functions reusing the same inflight 3`] = `
       \\"root_Function1_F6563EFC\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"BUCKET_NAME_1357ca3a\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function1\\"
           }
         },
@@ -378,7 +368,6 @@ exports[`two functions reusing the same inflight 3`] = `
       \\"root_Function2_A135D90B\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"BUCKET_NAME_1357ca3a\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
             \\"WING_FUNCTION_NAME\\": \\"Function2\\"
           }
         },
@@ -391,30 +380,8 @@ exports[`two functions reusing the same inflight 3`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Bucket_966015A6\\": {},
       \\"root_Function1_Bucket_8268CF06\\": {},
       \\"root_Function2_Bucket_EE4FCA23\\": {}
-    },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"root_Bucket_PublicAccessBlock_B0AF4CE5\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
-      }
-    },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_Bucket_Encryption_BE486177\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
-      }
     },
     \\"aws_s3_object\\": {
       \\"root_Function1_S3Object_AA76C357\\": {

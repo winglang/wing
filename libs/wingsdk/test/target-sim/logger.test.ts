@@ -17,7 +17,7 @@ test("inflight uses a logger", async () => {
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE, {
     logger: {
       resource: cloud.Logger.of(app),
-      methods: [cloud.LoggerInflightMethods.PRINT],
+      ops: [cloud.LoggerInflightMethods.PRINT],
     },
   });
   new cloud.Function(app, "my_function", handler);

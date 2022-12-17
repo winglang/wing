@@ -1,11 +1,6 @@
 import * as cloud from "../../src/cloud";
-import {
-  BucketInflightMethods,
-  FunctionInflightMethods,
-  QueueInflightMethods,
-} from "../../src/cloud";
-import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
@@ -13,29 +8,22 @@ test("function with a bucket binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = new cloud.Bucket(app, "Bucket");
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-        console.log("Hello, " + event.name);
-        // TODO: fix this
-        await $cap.bucket.put("hello.txt", JSON.stringify(event));
-      }`
-    ),
-    entrypoint: "$proc",
-    bindings: {
-      bucket: bucket,
-    },
-    policies: {
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) { await this.bucket.put("hello.txt", event); }`,
+    {
       bucket: {
-        methods: [BucketInflightMethods.PUT],
+        resource: bucket,
+        ops: [cloud.BucketInflightMethods.PUT],
       },
-    },
-  });
-  const fn = new cloud.Function(app, "Function", inflight);
+    }
+  );
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
   // THEN
-  expect(core.Testing.inspectPrebundledCode(fn).text).toMatchSnapshot();
+  expect(inflight._inflightJsClient().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -53,40 +41,32 @@ test("function with a bucket binding", () => {
 test("function with a function binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight1 = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          console.log("Event: " + JSON.stringify(event));
-          return { greeting: "Hello, " + event.name + "!" };
-        }`
-    ),
-    entrypoint: "$proc",
-  });
+  const inflight1 = Testing.makeHandler(
+    app,
+    "Handler1",
+    `async handle(event) { console.log(event); }`
+  );
   const fn1 = new cloud.Function(app, "Function1", inflight1);
-  const inflight2 = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          console.log("Event: " + JSON.stringify(event));
-          const data = await $cap.function.invoke(JSON.stringify({ name: "world" }));
-          console.log("Greeting: " + data.value().greeting);
-        }`
-    ),
-    entrypoint: "$proc",
-    bindings: {
-      function: fn1,
-    },
-    policies: {
+  const inflight2 = Testing.makeHandler(
+    app,
+    "Handler2",
+    `async handle(event) {
+      console.log("Event: " + event);
+      await this.function.invoke(JSON.stringify({ hello: "world" }));
+    }`,
+    {
       function: {
-        methods: [FunctionInflightMethods.INVOKE],
+        resource: fn1,
+        ops: [cloud.FunctionInflightMethods.INVOKE],
       },
-    },
-  });
-  const fn2 = new cloud.Function(app, "Function2", inflight2);
+    }
+  );
+  new cloud.Function(app, "Function2", inflight2);
   const output = app.synth();
 
   // THEN
-  expect(core.Testing.inspectPrebundledCode(fn1).text).toMatchSnapshot();
-  expect(core.Testing.inspectPrebundledCode(fn2).text).toMatchSnapshot();
+  expect(inflight1._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(inflight2._inflightJsClient().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -99,33 +79,18 @@ test("function with a function binding", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
 });
 
-test("two functions reusing the same inflight", () => {
+test("two functions reusing the same IFunctionHandler", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = new cloud.Bucket(app, "Bucket");
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          console.log("Hello, " + event.name);
-          await $cap.bucket.put("hello.txt", JSON.stringify(event));
-        }`
-    ),
-    entrypoint: "$proc",
-    bindings: {
-      bucket: bucket,
-    },
-    policies: {
-      bucket: {
-        methods: [BucketInflightMethods.PUT],
-      },
-    },
-  });
-  const fn1 = new cloud.Function(app, "Function1", inflight);
-  const fn2 = new cloud.Function(app, "Function2", inflight);
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler1",
+    `async handle(event) { console.log(event); }`
+  );
+  new cloud.Function(app, "Function1", inflight);
+  new cloud.Function(app, "Function2", inflight);
 
   // THEN
-  expect(core.Testing.inspectPrebundledCode(fn1).text).toMatchSnapshot();
-  expect(core.Testing.inspectPrebundledCode(fn2).text).toMatchSnapshot();
   const output = app.synth();
 
   expect(tfResourcesOf(output)).toEqual([
@@ -134,8 +99,6 @@ test("two functions reusing the same inflight", () => {
     "aws_iam_role_policy_attachment",
     "aws_lambda_function",
     "aws_s3_bucket",
-    "aws_s3_bucket_public_access_block",
-    "aws_s3_bucket_server_side_encryption_configuration",
     "aws_s3_object",
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
@@ -145,40 +108,30 @@ test("function with a queue binding", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const queue = new cloud.Queue(app, "Queue");
-  const pusher = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap) {
-          await $cap.queue.push(JSON.stringify({ name: "Alice" }));
-        }`
-    ),
-    entrypoint: "$proc",
-    bindings: {
-      queue: queue,
-    },
-    policies: {
+  const pusher = Testing.makeHandler(
+    app,
+    "Pusher",
+    `async handle(event) { await this.queue.push("info"); }`,
+    {
       queue: {
-        methods: [QueueInflightMethods.PUSH],
+        resource: queue,
+        ops: [cloud.QueueInflightMethods.PUSH],
       },
-    },
-  });
-  const pusherFn = new cloud.Function(app, "Function", pusher);
+    }
+  );
+  new cloud.Function(app, "Function", pusher);
 
-  const processor = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          console.log("Received " + event.name);
-        }`
-    ),
-    entrypoint: "$proc",
-  });
-  const processorFn = queue.onMessage(processor);
+  const processor = Testing.makeHandler(
+    app,
+    "Processor",
+    `async handle(event) { console.log("Received" + event); }`
+  );
+  queue.onMessage(processor);
   const output = app.synth();
 
   // THEN
-  expect(core.Testing.inspectPrebundledCode(pusherFn).text).toMatchSnapshot();
-  expect(
-    core.Testing.inspectPrebundledCode(processorFn).text
-  ).toMatchSnapshot();
+  expect(pusher._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(processor._inflightJsClient().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",

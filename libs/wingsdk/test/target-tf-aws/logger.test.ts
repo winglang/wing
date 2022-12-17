@@ -20,7 +20,7 @@ test("inflight function uses a logger", () => {
       {
         logger: {
           resource: cloud.Logger.of(scope),
-          methods: [cloud.LoggerInflightMethods.PRINT],
+          ops: [cloud.LoggerInflightMethods.PRINT],
         },
       }
     );

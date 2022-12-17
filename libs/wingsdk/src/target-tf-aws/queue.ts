@@ -77,7 +77,6 @@ export class Queue extends cloud.QueueBase {
 
   /** @internal */
   public _bind(host: core.Resource, ops: string[]): void {
-    console.error("tfaws.Queue._bind called");
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
