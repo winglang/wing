@@ -31,6 +31,20 @@ const BIND_METADATA_PREFIX = "$bind__";
  */
 export abstract class Resource extends Construct implements IInspectable {
   /**
+   * Annotate a class with with metadata about what operations it supports
+   * inflight, and what sub-resources each operation requires access to.
+   *
+   * For example if `MyBucket` has a `fancy_get` method that calls `get` on an
+   * underlying `cloud.Bucket`, then it would be annotated as follows:
+   *
+   * ```ts
+   * Resource._annotateInflight(MyBucket, "fancy_get", {
+   *  "this.bucket": { ops: ["get"] }
+   * });
+   *
+   * The Wing compiler will automatically generate classes with this metadata
+   * by scanning the source code, but in the Wing SDK we have to do it manually.
+   *
    * @internal
    */
   public static _annotateInflight(
