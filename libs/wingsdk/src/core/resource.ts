@@ -72,7 +72,13 @@ export abstract class Resource extends Construct implements IInspectable {
   public abstract readonly stateful: boolean;
 
   /**
-   * Set up any permissions required for this resource to be used by the host.
+   * Binds the resource to the host so that it can be used by inflight code.
+   *
+   * You can override this method to add perform additional logic like granting
+   * IAM permissions to the host based on what methods are being called. But
+   * you must call `super._bind(host, ops)` to ensure that the resource is
+   * actually bound.
+   *
    * @internal
    */
   public _bind(host: Resource, ops: string[]): void {
