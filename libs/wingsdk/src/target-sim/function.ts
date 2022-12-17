@@ -9,7 +9,7 @@ import { mkdtemp } from "../util";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
   "WING_SIM_INFLIGHT_RESOURCE_PATH";
@@ -99,11 +99,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `FUNCTION_HANDLE_${this.node.addr.slice(-8)}`;
-    return core.NodeJsCode.fromInline(
-      `$simulator.findInstance(process.env["${env}"])`
-    );
+    return makeSimulatorJsClient("function", this);
   }
 }
 

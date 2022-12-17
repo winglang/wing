@@ -4,7 +4,7 @@ import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { LoggerSchema } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 /**
  * Simulator implementation of `cloud.Logger`.
@@ -34,11 +34,7 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `LOGGER_HANDLE_${this.node.addr.slice(-8)}`;
-    return core.NodeJsCode.fromInline(
-      `$simulator.findInstance(process.env["${env}"])`
-    );
+    return makeSimulatorJsClient("logger", this);
   }
 }
 

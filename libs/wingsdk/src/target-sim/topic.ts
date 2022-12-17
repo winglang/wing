@@ -6,7 +6,7 @@ import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TopicSchema, TopicSubscriber } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 /**
  * Simulator implementation of `cloud.Topic`
@@ -71,11 +71,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `TOPIC_HANDLE_${this.node.addr.slice(-8)}`;
-    return core.NodeJsCode.fromInline(
-      `$simulator.findInstance(process.env["${env}"])`
-    );
+    return makeSimulatorJsClient("topic", this);
   }
 
   public toSimulator(): BaseResourceSchema {

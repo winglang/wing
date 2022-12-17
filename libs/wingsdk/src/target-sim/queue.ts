@@ -6,7 +6,7 @@ import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -114,11 +114,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `QUEUE_HANDLE_${this.node.addr.slice(-8)}`;
-    return core.NodeJsCode.fromInline(
-      `$simulator.findInstance(process.env["${env}"])`
-    );
+    return makeSimulatorJsClient("queue", this);
   }
 }
 

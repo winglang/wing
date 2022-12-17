@@ -1,8 +1,8 @@
 import { access, constants } from "fs";
 import { promisify } from "util";
-import { Direction, Resource } from "../core";
+import { IConstruct } from "constructs";
+import { Direction, NodeJsCode, Resource } from "../core";
 import { Function } from "./function";
-import { ISimulatorResource } from "./resource";
 
 /**
  * Check if a file exists for an specific path
@@ -21,9 +21,15 @@ export async function exists(filePath: string): Promise<boolean> {
   }
 }
 
+function makeEnvVarName(type: string, resource: IConstruct): string {
+  return `${type
+    .toUpperCase()
+    .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
+}
+
 export function bindSimulatorResource(
   type: string,
-  resource: Resource & ISimulatorResource,
+  resource: Resource,
   host: Resource
 ) {
   if (!(host instanceof Function)) {
@@ -32,9 +38,7 @@ export function bindSimulatorResource(
     );
   }
 
-  const env = `${type
-    .toUpperCase()
-    .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
+  const env = makeEnvVarName(type, resource);
   const handle = `\${${resource.node.path}#attrs.handle}`; // TODO: proper token mechanism
   host.addEnvironment(env, handle);
   host.node.addDependency(resource);
@@ -48,4 +52,11 @@ export function bindSimulatorResource(
     relationship: `inflight-reference`,
     resource: resource,
   });
+}
+
+export function makeSimulatorJsClient(type: string, resource: Resource) {
+  const env = makeEnvVarName(type, resource);
+  return NodeJsCode.fromInline(
+    `$simulator.findInstance(process.env["${env}"])`
+  );
 }
