@@ -32,10 +32,10 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     const hash = inflight.node.addr.slice(-8);
 
     /**
-     * IQueueOnMessageHandler needs to wrap the function that the user provided
-     * so that it will be called one for each message in the batch.
-     * `convertBetweenHandlers` is creates a dummy resource that looks like
-     * this so that it can be passed to `cloud.Function`:
+     * The handle method the user provided (via the `inflight` parameter) needs
+     * to be wrapped in some extra logic to handle batching.
+     * `convertBetweenHandlers` creates a dummy resource that provides the
+     * wrapper code. In Wing psuedocode, this looks like:
      *
      * resource Handler {
      *   init(handler: cloud.IFunctionHandler) {
@@ -49,7 +49,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
      * }
      *
      * It's possible we could optimize this and create one less construct in the
-     * user's tree by creating a single `Handler` resource that extends from
+     * user's tree by creating a single `Handler` resource that subclasses from
      * `cloud.Function` and overrides the `invoke` inflight method with the
      * wrapper code directly.
      */
@@ -63,7 +63,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
 
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${inflight.node.addr.slice(-8)}`,
+      `${this.node.id}-OnMessage-${hash}`,
       functionHandler,
       props
     );
