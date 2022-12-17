@@ -44,3 +44,6 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
 }
 
 Bucket._annotateInflight("put", {});
+Bucket._annotateInflight("get", {});
+Bucket._annotateInflight("delete", {});
+Bucket._annotateInflight("list", {});
