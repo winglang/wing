@@ -26,7 +26,7 @@ class MyBucket extends core.Resource {
   }
 }
 
-core.Resource._annotateInflight(MyBucket, "put_something", {
+MyBucket._annotateInflight("put_something", {
   "this.inner": { ops: ["put"] },
 });
 
@@ -48,7 +48,7 @@ class Handler extends core.Resource implements cloud.IFunctionHandler {
   }
 }
 
-core.Resource._annotateInflight(Handler, "handle", {
+Handler._annotateInflight("handle", {
   "this.b": { ops: ["put_something"] },
 });
 

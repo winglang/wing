@@ -115,6 +115,18 @@
               "version": "10.0.25"
             }
           },
+          "Queue-OnMessageHandler-800bca2a": {
+            "id": "Queue-OnMessageHandler-800bca2a",
+            "path": "root/HelloWorld/Queue-OnMessageHandler-800bca2a",
+            "attributes": {
+              "wing:resource:stateful": false,
+              "wing:resource:connections": []
+            },
+            "constructInfo": {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25"
+            }
+          },
           "Queue-OnMessage-800bca2a": {
             "id": "Queue-OnMessage-800bca2a",
             "path": "root/HelloWorld/Queue-OnMessage-800bca2a",
