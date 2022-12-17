@@ -32,8 +32,6 @@ export class Counter extends cloud.CounterBase {
       throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
-
     if (ops.includes(cloud.CounterInflightMethods.INC)) {
       host.addPolicyStatements({
         effect: "Allow",
@@ -42,7 +40,7 @@ export class Counter extends cloud.CounterBase {
       });
     }
 
-    host.addEnvironment(env, this.table.name);
+    host.addEnvironment(this.envName(), this.table.name);
 
     addConnections(this, host);
     super._bind(host, ops);
@@ -50,12 +48,14 @@ export class Counter extends cloud.CounterBase {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
     return core.InflightClient.for(__filename, "CounterClient", [
-      `process.env["${env}"]`,
+      `process.env["${this.envName()}"]`,
       `${this.initial}`,
     ]);
+  }
+
+  private envName(): string {
+    return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
   }
 }
 

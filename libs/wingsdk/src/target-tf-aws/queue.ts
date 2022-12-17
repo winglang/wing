@@ -81,7 +81,7 @@ export class Queue extends cloud.QueueBase {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
 
-    const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
+    const env = this.envName();
 
     if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
       host.addPolicyStatements({
@@ -105,11 +105,13 @@ export class Queue extends cloud.QueueBase {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
     return core.InflightClient.for(__filename, "QueueClient", [
-      `process.env["${env}"]`,
+      `process.env["${this.envName()}"]`,
     ]);
+  }
+
+  private envName(): string {
+    return `QUEUE_URL_${this.node.addr.slice(-8)}`;
   }
 }
 

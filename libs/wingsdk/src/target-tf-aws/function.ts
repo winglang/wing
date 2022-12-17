@@ -183,8 +183,6 @@ export class Function extends cloud.FunctionBase {
       throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
-    const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
-
     if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
       host.addPolicyStatements({
         effect: "Allow",
@@ -195,7 +193,7 @@ export class Function extends cloud.FunctionBase {
 
     // The function name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    host.addEnvironment(env, this.function.arn);
+    host.addEnvironment(this.envName(), this.function.arn);
 
     addConnections(this, host);
     super._bind(host, ops);
@@ -203,10 +201,8 @@ export class Function extends cloud.FunctionBase {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
     return core.InflightClient.for(__filename, "FunctionClient", [
-      `process.env["${env}"]`,
+      `process.env["${this.envName()}"]`,
     ]);
   }
 
@@ -233,6 +229,10 @@ export class Function extends cloud.FunctionBase {
   /** @internal */
   public get _functionName(): string {
     return this.function.functionName;
+  }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
 

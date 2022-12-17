@@ -69,8 +69,6 @@ export class Bucket extends cloud.BucketBase {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
-
     if (ops.includes(cloud.BucketInflightMethods.PUT)) {
       host.addPolicyStatements({
         effect: "Allow",
@@ -105,7 +103,7 @@ export class Bucket extends cloud.BucketBase {
     }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    host.addEnvironment(env, this.bucket.bucket);
+    host.addEnvironment(this.envName(), this.bucket.bucket);
 
     addConnections(this, host);
     super._bind(host, ops);
@@ -113,11 +111,13 @@ export class Bucket extends cloud.BucketBase {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
     return core.InflightClient.for(__filename, "BucketClient", [
-      `process.env["${env}"]`,
+      `process.env["${this.envName()}"]`,
     ]);
+  }
+
+  private envName(): string {
+    return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
   }
 }
 

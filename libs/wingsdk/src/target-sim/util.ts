@@ -57,6 +57,12 @@ export function bindSimulatorResource(
 export function makeSimulatorJsClient(type: string, resource: Resource) {
   const env = makeEnvVarName(type, resource);
   return NodeJsCode.fromInline(
-    `$simulator.findInstance(process.env["${env}"])`
+    `(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error("Missing environment variable: " + env);
+        }
+        return $simulator.findInstance(handle);
+      })("${env}")`
   );
 }

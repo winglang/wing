@@ -90,8 +90,6 @@ export class Topic extends cloud.TopicBase {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }
 
-    const env = `TOPIC_ARN_${this.node.addr.slice(-8)}`;
-
     if (ops.includes(cloud.TopicInflightMethods.PUBLISH)) {
       host.addPolicyStatements({
         effect: "Allow",
@@ -100,7 +98,7 @@ export class Topic extends cloud.TopicBase {
       });
     }
 
-    host.addEnvironment(env, this.topic.arn);
+    host.addEnvironment(this.envName(), this.topic.arn);
 
     addConnections(this, host);
     super._bind(host, ops);
@@ -108,11 +106,13 @@ export class Topic extends cloud.TopicBase {
 
   /** @internal */
   public _inflightJsClient(): core.Code {
-    // TODO: assert that `env` is added to the `host` resource
-    const env = `TOPIC_ARN_${this.node.addr.slice(-8)}`;
     return core.InflightClient.for(__filename, "TopicClient", [
-      `process.env["${env}"]`,
+      `process.env["${this.envName()}"]`,
     ]);
+  }
+
+  private envName(): string {
+    return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
   }
 }
 
