@@ -44,9 +44,6 @@ export interface TopicOnMessageProps {}
  * @inflight `@winglang/wingsdk.cloud.ITopicClient`
  */
 export class Topic extends TopicBase {
-  /** @internal */
-  public readonly _policies = {};
-
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(TOPIC_TYPE, scope, id, props) as Topic;

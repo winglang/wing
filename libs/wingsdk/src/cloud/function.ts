@@ -52,9 +52,6 @@ export abstract class FunctionBase extends Resource {
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends FunctionBase {
-  /** @internal */
-  public readonly _policies = {};
-
   constructor(
     scope: Construct,
     id: string,

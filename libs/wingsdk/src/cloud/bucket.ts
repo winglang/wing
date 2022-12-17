@@ -39,9 +39,6 @@ export abstract class BucketBase extends Resource {
  * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends BucketBase {
-  /** @internal */
-  public readonly _policies = {};
-
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;

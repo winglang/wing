@@ -65,9 +65,6 @@ export interface QueueOnMessageProps extends FunctionProps {
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends QueueBase {
-  /** @internal */
-  public readonly _policies = {};
-
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;

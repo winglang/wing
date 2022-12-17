@@ -62,9 +62,6 @@ export class Logger extends LoggerBase {
     });
   }
 
-  /** @internal */
-  public readonly _policies = {};
-
   private constructor(scope: Construct, id: string) {
     super(null as any, id);
     return Polycons.newInstance(LOGGER_TYPE, scope, id) as Logger;

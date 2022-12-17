@@ -46,9 +46,6 @@ export abstract class CounterBase extends Resource {
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends CounterBase {
-  /** @internal */
-  public readonly _policies = {};
-
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(COUNTER_TYPE, scope, id, props) as Counter;
