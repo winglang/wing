@@ -1395,7 +1395,7 @@ argument named "other".
 *Example*
 
 ```wing
-{ "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } }
+{ "inner": { ops: ["put"] }, "$arg:other": { ops: ["get"] } }
 ```
 
 
@@ -1501,32 +1501,6 @@ timeout: Duration;
 How long a queue's consumers have to process a message.
 
 ---
-
-### ResourcePolicy <a name="ResourcePolicy" id="@winglang/wingsdk.core.ResourcePolicy"></a>
-
-A resource's policy.
-
-It specifies what operations may be called on the
-resource, and what sub-resources those operations may access.
-
-*Example*
-
-```wing
-The following policy says that the resource has a method named "handle"
-that may call "put" on a resource named "inner", or it may call "get" on a
-resource passed as an argument named "other".
-{ "handle": { "inner": { methods: ["put"] }, "$arg:other": { methods: ["get"] } } }
-```
-
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ResourcePolicy.Initializer"></a>
-
-```wing
-bring core;
-
-let resource_policy = core.ResourcePolicy{ ... }
-```
-
 
 ### TextFileProps <a name="TextFileProps" id="@winglang/wingsdk.fs.TextFileProps"></a>
 
@@ -2063,6 +2037,7 @@ Reference code directly from a string.
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>str</code> | Generate a hash of the code contents. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>core.Language</code> | The language of the code. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>str</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.sanitizedText">sanitized_text</a></code> | <code>str</code> | The code contents, sanitized for unit testing. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>str</code> | The code contents. |
 
 ---
@@ -2103,6 +2078,18 @@ A path to the code in the user's file system that can be referenced for bundling
 
 ---
 
+##### `sanitized_text`<sup>Required</sup> <a name="sanitized_text" id="@winglang/wingsdk.core.NodeJsCode.property.sanitizedText"></a>
+
+```wing
+sanitized_text: str;
+```
+
+- *Type:* str
+
+The code contents, sanitized for unit testing.
+
+---
+
 ##### `text`<sup>Required</sup> <a name="text" id="@winglang/wingsdk.core.NodeJsCode.property.text"></a>
 
 ```wing
@@ -2114,68 +2101,6 @@ text: str;
 The code contents.
 
 ---
-
-
-### Policies <a name="Policies" id="@winglang/wingsdk.core.Policies"></a>
-
-Utility methods for working with policies.
-
-#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Policies.Initializer"></a>
-
-```wing
-bring core;
-
-new core.Policies()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Policies.make">make</a></code> | Given a list of operations to call on `ops` called on `policy`, calculate a list of corresponding operations to call on `resource`. |
-
----
-
-##### `make` <a name="make" id="@winglang/wingsdk.core.Policies.make"></a>
-
-```wing
-bring core;
-
-core.Policies.make(ops: MutArray<str>, policy: ResourcePolicy, target: str)
-```
-
-Given a list of operations to call on `ops` called on `policy`, calculate a list of corresponding operations to call on `resource`.
-
-###### `ops`<sup>Required</sup> <a name="ops" id="@winglang/wingsdk.core.Policies.make.parameter.ops"></a>
-
-- *Type:* MutArray&lt;str&gt;
-
-The operations to call from `policy`.
-
----
-
-###### `policy`<sup>Required</sup> <a name="policy" id="@winglang/wingsdk.core.Policies.make.parameter.policy"></a>
-
-- *Type:* core.ResourcePolicy
-
-The policy of the original resource.
-
----
-
-###### `target`<sup>Required</sup> <a name="target" id="@winglang/wingsdk.core.Policies.make.parameter.target"></a>
-
-- *Type:* str
-
-The name of the resource we want a list of operations for.
-
----
-
 
 
 ### TreeInspector <a name="TreeInspector" id="@winglang/wingsdk.core.TreeInspector"></a>
@@ -2405,43 +2330,6 @@ Content of the object we want to store into the bucket.
 
 ---
 
-
-### ICapturable <a name="ICapturable" id="@winglang/wingsdk.core.ICapturable"></a>
-
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.ICapturable, core.ICapturableConstruct, core.IResource
-
-Represents something that is capturable by an Inflight.
-
-
-
-### ICapturableConstruct <a name="ICapturableConstruct" id="@winglang/wingsdk.core.ICapturableConstruct"></a>
-
-- *Extends:* core.ICapturable, constructs.IConstruct
-
-- *Implemented By:* core.ICapturableConstruct
-
-Represents a construct that is capturable by an Inflight.
-
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.ICapturableConstruct.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-
----
-
-##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.core.ICapturableConstruct.property.node"></a>
-
-```wing
-node: Node;
-```
-
-- *Type:* constructs.Node
-
-The tree node.
-
----
 
 ### ICounterClient <a name="ICounterClient" id="@winglang/wingsdk.cloud.ICounterClient"></a>
 
@@ -2684,12 +2572,12 @@ Inflight client for `IQueueOnMessageHandler`.
 ##### `handle` <a name="handle" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle"></a>
 
 ```wing
-handle(event: str): void
+handle(message: str): void
 ```
 
 Function that will be called when a message is received from the queue.
 
-###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle.parameter.event"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle.parameter.message"></a>
 
 - *Type:* str
 
@@ -2698,7 +2586,7 @@ Function that will be called when a message is received from the queue.
 
 ### IResource <a name="IResource" id="@winglang/wingsdk.core.IResource"></a>
 
-- *Extends:* core.ICapturable, core.IInspectable, constructs.IConstruct
+- *Extends:* core.IInspectable, constructs.IConstruct
 
 - *Implemented By:* cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IResource
 
