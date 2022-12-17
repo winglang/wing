@@ -92,6 +92,7 @@ export interface IQueueClient {
   /**
    * Push a message to the queue.
    * @param message Payload to send to the queue.
+   * @inflight
    */
   push(message: string): Promise<void>;
 }
@@ -110,6 +111,7 @@ export interface IQueueOnMessageHandler extends IResource {}
 export interface IQueueOnMessageHandlerClient {
   /**
    * Function that will be called when a message is received from the queue.
+   * @inflight
    */
   handle(message: string): Promise<void>;
 }

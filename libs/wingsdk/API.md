@@ -2249,6 +2249,8 @@ Inflight interface for `Bucket`.
 delete(key: str, opts?: BucketDeleteOptions): void
 ```
 
+**Inflight client:** [true](#true)
+
 Delete an existing object using a key from the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.key"></a>
@@ -2273,6 +2275,8 @@ Options available for delete an item from a bucket.
 get(key: str): str
 ```
 
+**Inflight client:** [true](#true)
+
 Retrieve an object from the bucket.
 
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
@@ -2289,6 +2293,8 @@ Key of the object.
 list(prefix?: str): MutArray<str>
 ```
 
+**Inflight client:** [true](#true)
+
 Retrieve existing objects keys from the bucket.
 
 ###### `prefix`<sup>Optional</sup> <a name="prefix" id="@winglang/wingsdk.cloud.IBucketClient.list.parameter.prefix"></a>
@@ -2304,6 +2310,8 @@ Limits the response to keys that begin with the specified prefix.
 ```wing
 put(key: str, body: str): void
 ```
+
+**Inflight client:** [true](#true)
 
 Put an object in the bucket.
 
@@ -2344,6 +2352,8 @@ Inflight interface for `Queue`.
 inc(amount?: num): num
 ```
 
+**Inflight client:** [true](#true)
+
 Increments the counter atomically by a certain amount and returns the previous value.
 
 ###### `amount`<sup>Optional</sup> <a name="amount" id="@winglang/wingsdk.cloud.ICounterClient.inc.parameter.amount"></a>
@@ -2374,6 +2384,8 @@ Inflight interface for `Function`.
 ```wing
 invoke(payload: str): str
 ```
+
+**Inflight client:** [true](#true)
 
 Invoke the function asynchronously with a given payload.
 
@@ -2435,6 +2447,8 @@ Inflight client for `IFunctionHandler`.
 handle(event: str): void
 ```
 
+**Inflight client:** [true](#true)
+
 Entrypoint function that will be called when the cloud function is invoked.
 
 ###### `event`<sup>Required</sup> <a name="event" id="@winglang/wingsdk.cloud.IFunctionHandlerClient.handle.parameter.event"></a>
@@ -2472,6 +2486,8 @@ Inflight interface for `Logger`.
 print(message: str): void
 ```
 
+**Inflight client:** [true](#true)
+
 Logs a message.
 
 The log will be associated with whichever resource is
@@ -2505,6 +2521,8 @@ Inflight interface for `Queue`.
 ```wing
 push(message: str): void
 ```
+
+**Inflight client:** [true](#true)
 
 Push a message to the queue.
 
@@ -2568,6 +2586,8 @@ Inflight client for `IQueueOnMessageHandler`.
 handle(message: str): void
 ```
 
+**Inflight client:** [true](#true)
+
 Function that will be called when a message is received from the queue.
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.IQueueOnMessageHandlerClient.handle.parameter.message"></a>
@@ -2625,6 +2645,8 @@ Inflight interface for `Topic`.
 ```wing
 publish(message: str): void
 ```
+
+**Inflight client:** [true](#true)
 
 Publish message to topic.
 
@@ -2687,6 +2709,8 @@ Inflight client for `ITopicOnMessageHandler`.
 ```wing
 handle(event: str): void
 ```
+
+**Inflight client:** [true](#true)
 
 Function that will be called when a message is received from the topic.
 

@@ -68,6 +68,7 @@ export interface IBucketClient {
    * Put an object in the bucket.
    * @param key Key of the object.
    * @param body Content of the object we want to store into the bucket.
+   * @inflight
    */
   put(key: string, body: string): Promise<void>;
 
@@ -76,6 +77,7 @@ export interface IBucketClient {
    * @param key Key of the object.
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
+   * @inflight
    */
   get(key: string): Promise<string>;
 
@@ -83,6 +85,7 @@ export interface IBucketClient {
    * Retrieve existing objects keys from the bucket.
    * @param prefix Limits the response to keys that begin with the specified prefix.
    * @returns a list of keys or an empty array if the bucket is empty.
+   * @inflight
    */
   list(prefix?: string): Promise<string[]>;
 
@@ -90,6 +93,7 @@ export interface IBucketClient {
    * Delete an existing object using a key from the bucket
    * @param key Key of the object.
    * @param opts Options available for delete an item from a bucket.
+   * @inflight
    */
   delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 }

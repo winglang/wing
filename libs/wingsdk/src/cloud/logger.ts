@@ -82,6 +82,7 @@ export interface ILoggerClient {
    * running the inflight code.
    *
    * @param message The message to print
+   * @inflight
    */
   print(message: string): Promise<void>;
 }

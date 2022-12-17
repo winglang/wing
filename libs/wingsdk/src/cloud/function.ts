@@ -84,6 +84,7 @@ export class Function extends FunctionBase {
 export interface IFunctionClient {
   /**
    * Invoke the function asynchronously with a given payload.
+   * @inflight
    */
   invoke(payload: string): Promise<string>;
 }
@@ -102,6 +103,7 @@ export interface IFunctionHandler extends IResource {}
 export interface IFunctionHandlerClient {
   /**
    * Entrypoint function that will be called when the cloud function is invoked.
+   * @inflight
    */
   handle(event: string): Promise<void>;
 }

@@ -65,6 +65,7 @@ export interface ICounterClient {
    * Increments the counter atomically by a certain amount and returns the previous value.
    * @param amount amount to increment (default is 1).
    * @returns the previous value of the counter.
+   * @inflight
    */
   inc(amount?: number): Promise<number>;
 }

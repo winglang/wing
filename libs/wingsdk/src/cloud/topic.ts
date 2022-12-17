@@ -71,6 +71,7 @@ export interface ITopicClient {
   /**
    * Publish message to topic
    * @param message Payload to publish to Topic
+   * @inflight
    */
   publish(message: string): Promise<void>;
 }
@@ -89,6 +90,7 @@ export interface ITopicOnMessageHandler extends IResource {}
 export interface ITopicOnMessageHandlerClient {
   /**
    * Function that will be called when a message is received from the topic.
+   * @inflight
    */
   handle(event: string): Promise<void>;
 }
