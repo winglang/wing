@@ -12,14 +12,6 @@ import { bindSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase implements ISimulatorResource {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.BucketInflightMethods.PUT]: {},
-    [cloud.BucketInflightMethods.GET]: {},
-    [cloud.BucketInflightMethods.LIST]: {},
-    [cloud.BucketInflightMethods.DELETE]: {},
-  };
-
   private readonly public: boolean;
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
     super(scope, id, props);
@@ -54,3 +46,5 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
     );
   }
 }
+
+core.Resource._annotateInflight(Bucket, "put", {});

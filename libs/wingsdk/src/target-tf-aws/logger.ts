@@ -10,11 +10,6 @@ import { addConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.LoggerInflightMethods.PRINT]: {},
-  };
-
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
@@ -34,3 +29,5 @@ export class Logger extends cloud.LoggerBase {
     return core.InflightClient.for(__filename, "LoggerClient", []);
   }
 }
+
+core.Resource._annotateInflight(Logger, "print", {});

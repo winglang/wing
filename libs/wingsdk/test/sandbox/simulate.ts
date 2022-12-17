@@ -16,6 +16,8 @@ async function main() {
   ) as cloud.IFunctionClient;
   await fn.invoke("hello!");
 
+  console.log(mySim.listTraces());
+
   const bucket = mySim.getResource(
     "root/HelloWorld/MyBucket/Bucket"
   ) as cloud.IBucketClient;

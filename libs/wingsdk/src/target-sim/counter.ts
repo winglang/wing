@@ -12,11 +12,6 @@ import { bindSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase implements ISimulatorResource {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.CounterInflightMethods.INC]: {},
-  };
-
   public readonly initial: number;
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
@@ -51,3 +46,5 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
     );
   }
 }
+
+core.Resource._annotateInflight(Counter, "inc", {});

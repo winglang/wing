@@ -1,5 +1,7 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
@@ -12,11 +14,6 @@ import { bindSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements ISimulatorResource {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.QueueInflightMethods.PUSH]: {},
-  };
-
   private readonly timeout: core.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
@@ -32,13 +29,42 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
+    const hash = inflight.node.addr.slice(-8);
+
+    /**
+     * IQueueOnMessageHandler needs to wrap the function that the user provided
+     * so that it will be called one for each message in the batch.
+     * `convertBetweenHandlers` is creates a dummy resource that looks like
+     * this so that it can be passed to `cloud.Function`:
+     *
+     * resource Handler {
+     *   init(handler: cloud.IFunctionHandler) {
+     *     this.handler = handler;
+     *   }
+     *   inflight handle(event: string) {
+     *     for (const message of JSON.parse(event).messages) {
+     *       this.handler.handle(message);
+     *     }
+     *   }
+     * }
+     *
+     * It's possible we could optimize this and create one less construct in the
+     * user's tree by creating a single `Handler` resource that extends from
+     * `cloud.Function` and overrides the `invoke` inflight method with the
+     * wrapper code directly.
+     */
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessageHandler-${hash}`,
+      inflight,
+      join(__dirname, "queue.onmessage.inflight.js"),
+      "QueueOnMessageHandlerClient"
+    );
+
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${inflight.node.addr.slice(-8)}`,
-      // IQueueOnMessageHandler has the same signature as IFunctionHandler
-      // (both have an inflight "handle" method that accepts a string)
-      // so it's okay to pass it here
-      inflight,
+      functionHandler,
       props
     );
 
@@ -95,3 +121,5 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     );
   }
 }
+
+core.Resource._annotateInflight(Queue, "push", {});

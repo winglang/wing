@@ -14,14 +14,6 @@ import { addConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.BucketInflightMethods.PUT]: {},
-    [cloud.BucketInflightMethods.GET]: {},
-    [cloud.BucketInflightMethods.LIST]: {},
-    [cloud.BucketInflightMethods.DELETE]: {},
-  };
-
   private readonly bucket: S3Bucket;
   private readonly public: boolean;
 
@@ -128,3 +120,8 @@ export class Bucket extends cloud.BucketBase {
     ]);
   }
 }
+
+core.Resource._annotateInflight(Bucket, "put", {});
+core.Resource._annotateInflight(Bucket, "get", {});
+core.Resource._annotateInflight(Bucket, "delete", {});
+core.Resource._annotateInflight(Bucket, "list", {});

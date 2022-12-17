@@ -22,11 +22,6 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements ISimulatorResource {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.FunctionInflightMethods.INVOKE]: {},
-  };
-
   private readonly env: Record<string, string> = {};
   private readonly code: core.Code;
 
@@ -111,3 +106,5 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
     );
   }
 }
+
+core.Resource._annotateInflight(Function, "invoke", {});

@@ -10,29 +10,10 @@ class MyBucket extends core.Resource {
   private inner: cloud.Bucket;
   private thing: string;
 
-  /** @internal */
-  public readonly _policies = {
-    put_something: {
-      inner: {
-        ops: ["put"],
-      },
-    },
-  };
-
   constructor(scope: Construct, id: string, message: string) {
     super(scope, id);
     this.inner = new cloud.Bucket(this, "Bucket");
     this.thing = message;
-  }
-
-  _bind(host: core.Resource, ops: string[]) {
-    const inner_client_policy = core.Policies.make(
-      ops,
-      this._policies,
-      "inner"
-    );
-    this.inner._bind(host, inner_client_policy);
-    super._bind(host, ops);
   }
 
   _inflightJsClient(): core.Code {
@@ -45,28 +26,17 @@ class MyBucket extends core.Resource {
   }
 }
 
+core.Resource._annotateInflight(MyBucket, "put_something", {
+  "this.inner": { ops: ["put"] },
+});
+
 class Handler extends core.Resource implements cloud.IFunctionHandler {
   public readonly stateful = true;
   private b: MyBucket;
 
-  /** @internal */
-  public readonly _policies = {
-    handle: {
-      b: {
-        ops: ["put_something"],
-      },
-    },
-  };
-
   constructor(scope: Construct, id: string, b: MyBucket) {
     super(scope, id);
     this.b = b;
-  }
-
-  _bind(host: core.Resource, ops: string[]) {
-    const b_client_policy = core.Policies.make(ops, this._policies, "b");
-    this.b._bind(host, b_client_policy);
-    super._bind(host, ops);
   }
 
   _inflightJsClient(): core.Code {
@@ -77,6 +47,10 @@ class Handler extends core.Resource implements cloud.IFunctionHandler {
     );
   }
 }
+
+core.Resource._annotateInflight(Handler, "handle", {
+  "this.b": { ops: ["put_something"] },
+});
 
 class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {

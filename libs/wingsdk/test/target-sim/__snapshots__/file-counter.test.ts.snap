@@ -28,13 +28,13 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "root/HelloWorld/Queue-OnMessage-15c599ef",
+        "path": "root/HelloWorld/Queue-OnMessage-401ee792",
         "props": Object {
           "environmentVariables": Object {
             "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
           },
-          "sourceCodeFile": "assets/Queue-OnMessage-15c599ef/index.js",
+          "sourceCodeFile": "assets/Queue-OnMessage-401ee792/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
@@ -47,7 +47,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${root/HelloWorld/Queue-OnMessage-15c599ef#attrs.handle}",
+              "functionHandle": "\${root/HelloWorld/Queue-OnMessage-401ee792#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -68,7 +68,7 @@ Object {
                   Object {
                     "direction": "inbound",
                     "relationship": "inflight-reference",
-                    "resource": "root/HelloWorld/Queue-OnMessage-15c599ef",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -86,7 +86,7 @@ Object {
                   Object {
                     "direction": "inbound",
                     "relationship": "inflight-reference",
-                    "resource": "root/HelloWorld/Queue-OnMessage-15c599ef",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -103,20 +103,6 @@ Object {
                 "wing:resource:connections": Array [],
                 "wing:resource:stateful": false,
               },
-              "children": Object {
-                "FunctionHandler": Object {
-                  "attributes": Object {
-                    "wing:resource:connections": Array [],
-                    "wing:resource:stateful": false,
-                  },
-                  "constructInfo": Object {
-                    "fqn": "constructs.Construct",
-                    "version": "10.0.25",
-                  },
-                  "id": "FunctionHandler",
-                  "path": "root/HelloWorld/Processor/FunctionHandler",
-                },
-              },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
@@ -130,7 +116,7 @@ Object {
                   Object {
                     "direction": "outbound",
                     "relationship": "on_message",
-                    "resource": "root/HelloWorld/Queue-OnMessage-15c599ef",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
                 "wing:resource:stateful": true,
@@ -142,7 +128,7 @@ Object {
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
             },
-            "Queue-OnMessage-15c599ef": Object {
+            "Queue-OnMessage-401ee792": Object {
               "attributes": Object {
                 "wing:resource:connections": Array [
                   Object {
@@ -170,15 +156,27 @@ Object {
                     "version": "10.0.25",
                   },
                   "id": "Code",
-                  "path": "root/HelloWorld/Queue-OnMessage-15c599ef/Code",
+                  "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
                 },
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.25",
               },
-              "id": "Queue-OnMessage-15c599ef",
-              "path": "root/HelloWorld/Queue-OnMessage-15c599ef",
+              "id": "Queue-OnMessage-401ee792",
+              "path": "root/HelloWorld/Queue-OnMessage-401ee792",
+            },
+            "Queue-OnMessageHandler-401ee792": Object {
+              "attributes": Object {
+                "wing:resource:connections": Array [],
+                "wing:resource:stateful": false,
+              },
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.25",
+              },
+              "id": "Queue-OnMessageHandler-401ee792",
+              "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
             },
           },
           "constructInfo": Object {

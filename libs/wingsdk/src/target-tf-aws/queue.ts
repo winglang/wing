@@ -1,7 +1,9 @@
+import { join } from "path";
 import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
 import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { Function } from "./function";
 import { addConnections } from "./util";
@@ -12,12 +14,8 @@ import { addConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.QueueInflightMethods.PUSH]: {},
-  };
-
   private readonly queue: SqsQueue;
+
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
@@ -36,13 +34,19 @@ export class Queue extends cloud.QueueBase {
     inflight: cloud.IQueueOnMessageHandler,
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
+    const hash = inflight.node.addr.slice(-8);
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessageHandler-${hash}`,
+      inflight,
+      join(__dirname, "/queue.onmessage.inflight.js"),
+      "QueueOnMessageHandlerClient"
+    );
+
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${inflight.node.addr.slice(-8)}`,
-      // IQueueOnMessageHandler has the same signature as IFunctionHandler
-      // (both have an inflight "handle" method that accepts a string)
-      // so it's okay to pass it here
-      inflight,
+      `${this.node.id}-OnMessage-${hash}`,
+      functionHandler,
       props
     );
 
@@ -108,3 +112,5 @@ export class Queue extends cloud.QueueBase {
     ]);
   }
 }
+
+core.Resource._annotateInflight(Queue, "push", {});

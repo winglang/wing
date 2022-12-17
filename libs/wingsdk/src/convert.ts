@@ -1,5 +1,5 @@
 import { Construct, IConstruct } from "constructs";
-import { IResource, NodeJsCode, Policies, Resource } from "./core";
+import { IResource, NodeJsCode, Resource } from "./core";
 
 /**
  * Convert a resource with a single method into a resource with a different
@@ -20,24 +20,9 @@ export function convertBetweenHandlers(
     public readonly stateful = false;
     private readonly handler: IResource;
 
-    /** @internal */
-    public readonly _policies = {
-      handle: {
-        handler: {
-          ops: ["handle"],
-        },
-      },
-    };
-
     constructor(theScope: Construct, theId: string, handler: IResource) {
       super(theScope, theId);
       this.handler = handler;
-    }
-
-    public _bind(host: Resource, ops: string[]): void {
-      const baseHandlerPolicy = Policies.make(ops, this._policies, "handler");
-      this.handler._bind(host, baseHandlerPolicy);
-      super._bind(host, ops);
     }
 
     public _inflightJsClient(): NodeJsCode {
@@ -47,6 +32,10 @@ export function convertBetweenHandlers(
       );
     }
   }
+
+  Resource._annotateInflight(NewHandler, "handle", {
+    "this.handler": { ops: ["handle"] },
+  });
 
   return new NewHandler(scope, id, baseHandler);
 }

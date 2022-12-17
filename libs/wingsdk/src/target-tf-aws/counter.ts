@@ -13,11 +13,6 @@ export const HASH_KEY = "id";
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.CounterInflightMethods.INC]: {},
-  };
-
   private readonly table: DynamodbTable;
 
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
@@ -63,3 +58,5 @@ export class Counter extends cloud.CounterBase {
     ]);
   }
 }
+
+core.Resource._annotateInflight(Counter, "inc", {});

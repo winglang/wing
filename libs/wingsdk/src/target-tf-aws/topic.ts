@@ -1,8 +1,10 @@
+import { join } from "path";
 import { LambdaPermission } from "@cdktf/provider-aws/lib/lambda-permission";
 import { SnsTopic } from "@cdktf/provider-aws/lib/sns-topic";
 import { SnsTopicSubscription } from "@cdktf/provider-aws/lib/sns-topic-subscription";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { Function } from "./function";
 import { addConnections } from "./util";
@@ -13,12 +15,8 @@ import { addConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.TopicBase {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.TopicInflightMethods.PUBLISH]: {},
-  };
-
   private readonly topic: SnsTopic;
+
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
 
@@ -30,13 +28,18 @@ export class Topic extends cloud.TopicBase {
     props: cloud.TopicOnMessageProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessageHandler-${hash}`,
+      inflight,
+      join(__dirname, "/topic.onmessage.inflight.js"),
+      "TopicOnMessageHandlerClient"
+    );
+
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessage-${hash}`,
-      // ITopicOnMessageHandler has the same signature as IFunctionHandler
-      // (both have an inflight "handle" method that accepts a string)
-      // so it's okay to pass it here
-      inflight,
+      functionHandler,
       props
     );
 
@@ -112,3 +115,5 @@ export class Topic extends cloud.TopicBase {
     ]);
   }
 }
+
+core.Resource._annotateInflight(Topic, "publish", {});

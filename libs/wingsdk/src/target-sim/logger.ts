@@ -12,11 +12,6 @@ import { bindSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase implements ISimulatorResource {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.LoggerInflightMethods.PRINT]: {},
-  };
-
   constructor(scope: Construct, id: string) {
     super(scope, id);
   }
@@ -46,3 +41,5 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
     );
   }
 }
+
+core.Resource._annotateInflight(Logger, "print", {});

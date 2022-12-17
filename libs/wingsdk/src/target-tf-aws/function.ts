@@ -21,11 +21,6 @@ import { addConnections } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
-  /** @internal */
-  public readonly _policies = {
-    [cloud.FunctionInflightMethods.INVOKE]: {},
-  };
-
   private readonly function: LambdaFunction;
   private readonly env: Record<string, string> = {};
   private readonly role: IamRole;
@@ -43,10 +38,6 @@ export class Function extends cloud.FunctionBase {
 
     for (const [key, value] of Object.entries(props.env ?? {})) {
       this.addEnvironment(key, value);
-    }
-
-    if (!inflight._policies.handle) {
-      throw new Error("No policy found on the inflight handler.");
     }
 
     inflight._bind(this, ["handle"]);
@@ -256,3 +247,5 @@ export interface PolicyStatement {
   /** Effect ("Allow" or "Deny") */
   readonly effect?: string;
 }
+
+core.Resource._annotateInflight(Function, "invoke", {});

@@ -83,11 +83,6 @@ export class Queue extends QueueBase {
   }
 
   /** @internal */
-  public _bind(_host: Resource, _ops: string[]): void {
-    throw new Error("Method not implemented.");
-  }
-
-  /** @internal */
   public _inflightJsClient(): Code {
     throw new Error("Method not implemented.");
   }

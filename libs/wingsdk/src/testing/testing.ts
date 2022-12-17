@@ -1,6 +1,6 @@
 import { IConstruct } from "constructs";
 import { IFunctionHandler } from "../cloud";
-import { Code, IResource, NodeJsCode, Policies, Resource } from "../core";
+import { Code, IResource, NodeJsCode, Resource } from "../core";
 
 /**
  * Test utilities.
@@ -12,7 +12,7 @@ export class Testing {
    *
    * The JavaScript code passed to the handler must be in the form of
    * `async handle(event) { ... }`, and all references to resources must be
-   * made through `this.clients.<resource>`.
+   * made through `this.<resource>`.
    *
    * @param scope The scope to create the handler in.
    * @param id The ID of the handler.
@@ -25,15 +25,6 @@ export class Testing {
     code: string,
     bindings?: { [key: string]: ResourceBinding }
   ): IResource {
-    const policies = {
-      handle: Object.fromEntries(
-        Object.entries(bindings ?? {}).map(([name, binding]) => [
-          name,
-          { ops: binding.methods },
-        ])
-      ),
-    };
-
     const resources = Object.fromEntries(
       Object.entries(bindings ?? {}).map(([name, binding]) => [
         name,
@@ -44,33 +35,27 @@ export class Testing {
     class Handler extends Resource implements IFunctionHandler {
       public readonly stateful = false;
 
-      /** @internal */
-      public readonly _policies = policies;
-
-      private readonly resources: { [key: string]: IResource };
+      public readonly $resourceNames = Object.keys(bindings ?? {});
 
       constructor() {
         super(scope, id);
-        this.resources = resources;
-      }
-
-      public _bind(host: Resource, ops: string[]): void {
-        for (const [name, resource] of Object.entries(this.resources)) {
-          const resourcePolicy = Policies.make(ops, this._policies, name);
-          resource._bind(host, resourcePolicy);
+        for (const [name, resource] of Object.entries(resources)) {
+          (this as any)[name] = resource;
         }
       }
 
       public _inflightJsClient(): NodeJsCode {
         const clients: Record<string, Code> = {};
-        for (const [name, resource] of Object.entries(this.resources)) {
-          clients[name] = resource._inflightJsClient();
+        for (const resource of this.$resourceNames) {
+          clients[resource] = (this as any)[resource]._inflightJsClient();
         }
         return NodeJsCode.fromInline(
           `new ((function(){
             return class Handler {
               constructor(clients) {
-                this.clients = clients;
+                for (const [name, client] of Object.entries(clients)) {
+                  this[name] = client;
+                }
               }
               ${code}
             };
@@ -80,6 +65,14 @@ export class Testing {
         );
       }
     }
+
+    const policy = Object.fromEntries(
+      Object.entries(bindings ?? {}).map(([name, binding]) => [
+        "this." + name,
+        { ops: binding.methods },
+      ])
+    );
+    Resource._annotateInflight(Handler, "handle", policy);
 
     return new Handler();
   }
