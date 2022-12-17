@@ -105,15 +105,21 @@ exports[`default counter behavior 1`] = `
 `;
 
 exports[`function with a counter binding 1`] = `
-"const $cap = {};
-$cap[\\"my_counter\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0);
-async function $proc($cap, event) {
-          const val = await $cap.my_counter.inc(2);
-          console.log(val);
-        }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) {
+  const val = await this.my_counter.inc(2);
+  console.log(val);
+}
+  };
+})())({
+  my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
+})"
 `;
 
 exports[`function with a counter binding 2`] = `
@@ -288,6 +294,18 @@ Object {
             },
             "id": "Function",
             "path": "root/Function",
+          },
+          "Handler": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": false,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Handler",
+            "path": "root/Handler",
           },
           "aws": Object {
             "constructInfo": Object {

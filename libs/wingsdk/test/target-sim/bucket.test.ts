@@ -1,5 +1,5 @@
 import * as cloud from "../../src/cloud";
-import { SimApp, Simulator } from "../../src/testing";
+import { SimApp } from "../../src/testing";
 import { listMessages } from "./util";
 
 test("create a bucket", async () => {

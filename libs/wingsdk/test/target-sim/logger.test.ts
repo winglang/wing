@@ -6,15 +6,15 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const INFLIGHT_CODE = `
 async handle(event) {
-  this.clients.logger.print("Hello, " + event);
-  this.clients.logger.print("Wahoo!");
+  this.logger.print("Hello, " + event);
+  this.logger.print("Wahoo!");
 }`;
 
 test("inflight uses a logger", async () => {
   // GIVEN
   const app = new SimApp();
   cloud.Logger.register(app);
-  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE, {
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE, {
     logger: {
       resource: cloud.Logger.of(app),
       methods: [cloud.LoggerInflightMethods.PRINT],

@@ -19,7 +19,7 @@ export class Testing {
    * @param code The code of the handler.
    * @param bindings The bindings of the handler.
    */
-  public static makeFunctionHandler(
+  public static makeHandler(
     scope: IConstruct,
     id: string,
     code: string,
@@ -51,17 +51,19 @@ export class Testing {
         }
         return NodeJsCode.fromInline(
           `new ((function(){
-            return class Handler {
-              constructor(clients) {
-                for (const [name, client] of Object.entries(clients)) {
-                  this[name] = client;
-                }
-              }
-              ${code}
-            };
-          })())({ ${Object.entries(clients)
-            .map(([name, client]) => `${name}: ${client.text}`)
-            .join(", ")} })`
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    ${code}
+  };
+})())({
+  ${Object.entries(clients)
+    .map(([name, client]) => `${name}: ${client.text}`)
+    .join(",\n")}
+})`
         );
       }
     }

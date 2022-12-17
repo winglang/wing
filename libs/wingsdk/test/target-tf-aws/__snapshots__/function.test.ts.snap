@@ -125,6 +125,18 @@ Object {
             "id": "Function",
             "path": "root/Function",
           },
+          "Handler": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": false,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Handler",
+            "path": "root/Handler",
+          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -287,6 +299,18 @@ Object {
             },
             "id": "Function",
             "path": "root/Function",
+          },
+          "Handler": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": false,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "Handler",
+            "path": "root/Handler",
           },
           "aws": Object {
             "constructInfo": Object {

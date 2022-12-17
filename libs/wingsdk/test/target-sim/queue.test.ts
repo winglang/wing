@@ -1,18 +1,17 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
-import { SimApp } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
 import { listMessages } from "./util";
 
 jest.setTimeout(5_000); // 5 seconds
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
-async function $proc($cap, message) {
+const INFLIGHT_CODE = `
+async handle(message) {
     if (message === "BAD MESSAGE") {
         throw new Error("ERROR");
     }
-}`);
+}`;
 
 test("create a queue", async () => {
   // GIVEN
@@ -41,10 +40,7 @@ test("create a queue", async () => {
 test("queue with one subscriber, default batch size of 1", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue");
   queue.onMessage(handler);
   const s = await app.startSimulator();
@@ -79,10 +75,7 @@ test("queue with one subscriber, default batch size of 1", async () => {
 test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue", {
     initialMessages: ["A", "B", "C", "D", "E", "F"],
   });
@@ -111,10 +104,7 @@ test("queue with one subscriber, batch size of 5", async () => {
 test("messages are requeued if the function fails", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-  });
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const queue = new cloud.Queue(app, "my_queue");
   queue.onMessage(handler);
   const s = await app.startSimulator();

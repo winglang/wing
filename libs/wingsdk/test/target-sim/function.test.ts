@@ -20,7 +20,7 @@ async handle(event) {
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler, {
     env: {
       ENV_VAR1: "true",
@@ -51,7 +51,7 @@ test("create a function", async () => {
 test("invoke function succeeds", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
 
   const s = await app.startSimulator();
@@ -77,7 +77,7 @@ test("invoke function succeeds", async () => {
 test("invoke function with environment variables", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler, {
     env: {
       PIG_LATIN: "true",
@@ -111,7 +111,7 @@ test("invoke function with environment variables", async () => {
 test("invoke function fails", async () => {
   // GIVEN
   const app = new SimApp();
-  const handler = Testing.makeFunctionHandler(app, "Handler", INFLIGHT_CODE);
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "my_function", handler);
   const s = await app.startSimulator();
 

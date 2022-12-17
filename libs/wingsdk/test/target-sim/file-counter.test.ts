@@ -15,7 +15,7 @@ test("can create sequential files in a bucket", async () => {
       });
       const bucket = new cloud.Bucket(this, "Bucket");
       const queue = new cloud.Queue(this, "Queue");
-      const processor = Testing.makeFunctionHandler(
+      const processor = Testing.makeHandler(
         this,
         "Processor",
         `async handle(event) {

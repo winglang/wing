@@ -15,7 +15,7 @@ export function convertBetweenHandlers(
   baseHandler: IResource,
   newHandlerClientPath: string,
   newHandlerClientClassName: string
-): Resource {
+): IResource {
   class NewHandler extends Resource {
     public readonly stateful = false;
     private readonly handler: IResource;

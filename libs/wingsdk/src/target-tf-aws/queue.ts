@@ -39,7 +39,7 @@ export class Queue extends cloud.QueueBase {
       this.node.scope!, // ok since we're not a tree root
       `${this.node.id}-OnMessageHandler-${hash}`,
       inflight,
-      join(__dirname, "/queue.onmessage.inflight.js"),
+      join(__dirname, "queue.onmessage.inflight.js"),
       "QueueOnMessageHandlerClient"
     );
 
@@ -77,6 +77,7 @@ export class Queue extends cloud.QueueBase {
 
   /** @internal */
   public _bind(host: core.Resource, ops: string[]): void {
+    console.error("tfaws.Queue._bind called");
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }

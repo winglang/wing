@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
@@ -28,27 +28,24 @@ test("counter with initial value", () => {
 test("function with a counter binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          const val = await $cap.my_counter.inc(2);
-          console.log(val);
-        }`
-    ),
-    bindings: {
-      my_counter: counter,
-    },
-    policies: {
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) {
+  const val = await this.my_counter.inc(2);
+  console.log(val);
+}`,
+    {
       my_counter: {
+        resource: counter,
         methods: [cloud.CounterInflightMethods.INC],
       },
-    },
-    entrypoint: "$proc",
-  });
-  const fn = new cloud.Function(app, "Function", inflight);
+    }
+  );
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
-  expect(core.Testing.inspectPrebundledCode(fn).text).toMatchSnapshot();
+  expect(inflight._inflightJsClient().sanitizedText).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "aws_dynamodb_table", // table for the counter
     "aws_iam_role", // role for function
