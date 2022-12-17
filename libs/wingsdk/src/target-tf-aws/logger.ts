@@ -30,4 +30,4 @@ export class Logger extends cloud.LoggerBase {
   }
 }
 
-core.Resource._annotateInflight(Logger, "print", {});
+Logger._annotateInflight("print", {});

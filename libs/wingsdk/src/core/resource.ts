@@ -47,12 +47,8 @@ export abstract class Resource extends Construct implements IInspectable {
    *
    * @internal
    */
-  public static _annotateInflight(
-    cls: any,
-    op: string,
-    policy: OperationPolicy
-  ) {
-    Object.defineProperty(cls.prototype, BIND_METADATA_PREFIX + op, {
+  public static _annotateInflight(op: string, policy: OperationPolicy) {
+    Object.defineProperty(this.prototype, BIND_METADATA_PREFIX + op, {
       value: policy,
       enumerable: false,
       writable: false,

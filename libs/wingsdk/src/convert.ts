@@ -33,7 +33,7 @@ export function convertBetweenHandlers(
     }
   }
 
-  Resource._annotateInflight(NewHandler, "handle", {
+  NewHandler._annotateInflight("handle", {
     "this.handler": { ops: ["handle"] },
   });
 

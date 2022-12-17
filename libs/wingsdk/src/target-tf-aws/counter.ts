@@ -59,4 +59,4 @@ export class Counter extends cloud.CounterBase {
   }
 }
 
-core.Resource._annotateInflight(Counter, "inc", {});
+Counter._annotateInflight("inc", {});

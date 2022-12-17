@@ -107,4 +107,4 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 }
 
-core.Resource._annotateInflight(Function, "invoke", {});
+Function._annotateInflight("invoke", {});

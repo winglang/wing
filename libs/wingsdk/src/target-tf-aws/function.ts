@@ -248,4 +248,4 @@ export interface PolicyStatement {
   readonly effect?: string;
 }
 
-core.Resource._annotateInflight(Function, "invoke", {});
+Function._annotateInflight("invoke", {});

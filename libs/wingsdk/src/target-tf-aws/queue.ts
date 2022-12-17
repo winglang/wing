@@ -113,4 +113,4 @@ export class Queue extends cloud.QueueBase {
   }
 }
 
-core.Resource._annotateInflight(Queue, "push", {});
+Queue._annotateInflight("push", {});

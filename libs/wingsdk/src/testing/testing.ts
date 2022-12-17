@@ -74,7 +74,7 @@ export class Testing {
         { ops: binding.ops },
       ])
     );
-    Resource._annotateInflight(Handler, "handle", policy);
+    Handler._annotateInflight("handle", policy);
 
     return new Handler();
   }

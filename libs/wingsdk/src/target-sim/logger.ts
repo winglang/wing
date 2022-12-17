@@ -42,4 +42,4 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
   }
 }
 
-core.Resource._annotateInflight(Logger, "print", {});
+Logger._annotateInflight("print", {});

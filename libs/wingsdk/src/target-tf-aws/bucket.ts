@@ -121,7 +121,7 @@ export class Bucket extends cloud.BucketBase {
   }
 }
 
-core.Resource._annotateInflight(Bucket, "put", {});
-core.Resource._annotateInflight(Bucket, "get", {});
-core.Resource._annotateInflight(Bucket, "delete", {});
-core.Resource._annotateInflight(Bucket, "list", {});
+Bucket._annotateInflight("put", {});
+Bucket._annotateInflight("get", {});
+Bucket._annotateInflight("delete", {});
+Bucket._annotateInflight("list", {});

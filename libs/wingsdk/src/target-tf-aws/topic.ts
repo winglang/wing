@@ -116,4 +116,4 @@ export class Topic extends cloud.TopicBase {
   }
 }
 
-core.Resource._annotateInflight(Topic, "publish", {});
+Topic._annotateInflight("publish", {});
