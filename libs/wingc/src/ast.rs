@@ -84,7 +84,7 @@ pub enum Type {
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			Type::Number => write!(f, "number"),
+			Type::Number => write!(f, "num"),
 			Type::String => write!(f, "str"),
 			Type::Bool => write!(f, "bool"),
 			Type::Duration => write!(f, "duration"),
@@ -92,30 +92,21 @@ impl Display for Type {
 			Type::Array(t) => write!(f, "Array<{}>", t),
 			Type::Map(t) => write!(f, "Map<{}>", t),
 			Type::FunctionSignature(sig) => {
-				if let Some(ret_val) = &sig.return_type {
-					write!(
-						f,
-						"fn({}): {}",
-						sig
-							.parameters
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(", "),
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.parameters
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
 						format!("{}", ret_val)
-					)
-				} else {
-					write!(
-						f,
-						"fn({})",
-						sig
-							.parameters
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(", ")
-					)
-				}
+					} else {
+						"void".to_string()
+					}
+				)
 			}
 			Type::CustomType { root, fields: _ } => {
 				write!(f, "{}", root)

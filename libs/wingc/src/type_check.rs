@@ -182,31 +182,22 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Optional(v) => write!(f, "{}?", v),
-			Type::Function(func_sig) => {
-				if let Some(ret_val) = &func_sig.return_type {
-					write!(
-						f,
-						"fn({}):{}",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(", "),
+			Type::Function(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.args
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
 						format!("{}", ret_val)
-					)
-				} else {
-					write!(
-						f,
-						"fn({})",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(", ")
-					)
-				}
+					} else {
+						"void".to_string()
+					}
+				)
 			}
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
