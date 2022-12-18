@@ -2,12 +2,12 @@
 title: Language
 id: spec
 description: The Wing Language Specification
+keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
 :::tip Feedback?
 
-📝 Do you want to leave comments directly on this doc? Submit comments
-[here](https://github.com/winglang/wing/pull/497/files#diff-46a5d9ee8e0085d047c39f03dfda67a39f5087ce50f9b16a8103e0073a0d3d78).
+📝 You're more than welcome to [open a new discussion](https://github.com/winglang/wing/discussions/new) or just go ahead and submit a PR against [this doc](https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md).
  
 :::
 

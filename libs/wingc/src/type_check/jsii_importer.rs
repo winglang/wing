@@ -274,11 +274,11 @@ impl<'a> JsiiImporter<'a> {
 		let span = if let Some(jsii_source_location) = jsii_source_location {
 			WingSpan {
 				start: CharacterLocation {
-					row: jsii_source_location.line as usize,
+					row: (jsii_source_location.line - 1.0) as usize,
 					column: 0,
 				},
 				end: CharacterLocation {
-					row: jsii_source_location.line as usize,
+					row: (jsii_source_location.line - 1.0) as usize,
 					column: 0,
 				},
 				start_byte: 0,

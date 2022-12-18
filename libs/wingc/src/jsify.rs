@@ -325,7 +325,17 @@ impl JSifier {
 					self.jsify_expression(rexp)
 				)
 			}
-			ExprKind::StructLiteral { fields, .. } => {
+      ExprKind::ArrayLiteral { items, .. } => {
+        format!(
+          "Object.freeze([{}])",
+          items
+            .iter()
+            .map(|expr| self.jsify_expression(expr))
+            .collect::<Vec<String>>()
+            .join(", ")
+        )
+      }
+      ExprKind::StructLiteral { fields, .. } => {
 				format!(
 					"{{\n{}}}\n",
 					fields
@@ -337,12 +347,12 @@ impl JSifier {
 			}
 			ExprKind::MapLiteral { fields, .. } => {
 				format!(
-					"{{\n{}\n}}",
+					"Object.freeze({{{}}})",
 					fields
 						.iter()
-						.map(|(key, expr)| format!("\"{}\": {},", key, self.jsify_expression(expr)))
+						.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr)))
 						.collect::<Vec<String>>()
-						.join("\n")
+						.join(", ")
 				)
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
@@ -394,6 +404,13 @@ impl JSifier {
 				self.jsify_expression(iterable),
 				self.jsify_scope(statements)
 			),
+			StmtKind::While { condition, statements } => {
+				format!(
+					"while ({}) {}",
+					self.jsify_expression(condition),
+					self.jsify_scope(statements),
+				)
+			}
 			StmtKind::If {
 				condition,
 				statements,

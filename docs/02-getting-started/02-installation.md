@@ -1,6 +1,7 @@
 ---
 id: installation
 title: Installation
+keywords: [Wing installation, installation, Wing toolchain]
 ---
 
 In this section you will install the Wing toolchain on your system.
@@ -39,8 +40,6 @@ Username: "lowercase-github-username"
 Password: "the just created Github token"
 Email: "your github email"
 ```
-
-This token can also be used to keep the VSCode extension up to date with additional `repo` permissions.
 :::
 
 Install the Wing CLI through npm:
@@ -58,16 +57,7 @@ wing --version
 ## Wing IDE Extension
 
 This extension adds support for the Wing language to [VSCode]. You don't *have*
-to use it, but it's great.
-
-1. [Download](https://github.com/winglang/wing/releases/latest/download/vscode-wing.vsix) the extension package from the GitHub releases page.
-2. In your terminal, run:
-    ```sh 
-    code --install-extension ~/Downloads/vscode-wing.vsix
-    ```
-3. To enable automatic updates, add your GitHub [personal access token] to the
-   extension's settings under **Wing** => **Updates** (highly recommended given
-   Wing's fast pace of development).
+to use it, but it's great. It's available on the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=Monada.vscode-wing)
 
 ## Wing Console
 
@@ -84,10 +74,10 @@ are looking for Linux support.
 The Wing Console is a desktop application that allows you to interact with your
 Wing applications running locally on the cloud simulator.
 
-1. [Download](https://wing-console.s3.amazonaws.com/wing-console.dmg)  the latest version of the **Wing Console**.
+1. Download the latest version of the **Wing Console** for [macOS](https://wing-console.s3.amazonaws.com/wing-console.dmg) or [macOS arm64](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg).
 2. Accept the license agreement and drag the Wing Console app into **Applications**:
 
-![](./console-install.png)
+![Drag the Wing Console app into Applications](./console-install.png 'Wing Console app installation')
 
 
 [AWS account]: portal.aws.amazon.com/billing/signup

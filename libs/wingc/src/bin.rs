@@ -1,4 +1,4 @@
-use std::env;
+use std::{env, process};
 use wingc::compile;
 
 pub fn main() {
@@ -13,10 +13,11 @@ pub fn main() {
 
 	let results = compile(source, outdir);
 	if let Err(err) = results {
-		panic!(
+		eprintln!(
 			"Compilation failed with {} errors\n{}",
 			err.len(),
 			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
 		);
+		process::exit(1);
 	}
 }

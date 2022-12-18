@@ -73,6 +73,7 @@ module.exports = grammar({
         $.class_definition,
         $.resource_definition,
         $.for_in_loop,
+        $.while_statement,
         $.if_statement,
         $.struct_definition,
       ),
@@ -186,6 +187,9 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
+    while_statement: ($) =>
+      seq("while", field("condition", $.expression), field("block", $.block)),
+
     if_statement: ($) =>
       seq(
         "if",
@@ -255,7 +259,7 @@ module.exports = grammar({
       ),
 
     call: ($) =>
-      seq(field("call_name", $.reference), field("args", $.argument_list)),
+      seq(field("caller", $.reference), field("args", $.argument_list)),
 
     argument_list: ($) =>
       seq(
@@ -467,7 +471,10 @@ module.exports = grammar({
 
     _collection_literal: ($) =>
       choice($.array_literal, $.set_literal, $.map_literal),
-    array_literal: ($) => seq("[", commaSep($.expression), "]"),
+    array_literal: ($) => seq(
+      optional(field("type", $._builtin_container_type)),
+      "[", commaSep(field("element", $.expression)), "]"
+    ),
     set_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
       "{", commaSep($.expression), "}"
