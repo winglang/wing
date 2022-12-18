@@ -1,6 +1,6 @@
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::{str, vec};
 use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
@@ -83,7 +83,7 @@ impl Parser<'_> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.add_error(
 				format!(
-					"{} '{}' is not yet supported {}",
+					"{} '{}' is not supported yet {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
@@ -692,7 +692,7 @@ impl Parser<'_> {
 					None
 				};
 
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {
@@ -726,7 +726,7 @@ impl Parser<'_> {
 			}
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
