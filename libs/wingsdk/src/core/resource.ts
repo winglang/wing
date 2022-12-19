@@ -24,7 +24,7 @@ export interface IResource extends IInspectable, IConstruct {
   _toInflight(): Code;
 }
 
-const BIND_METADATA_PREFIX = "$bind__";
+const BIND_METADATA_PREFIX = "$bindings__";
 
 /**
  * Shared behavior between all Wing SDK resources.
@@ -48,7 +48,8 @@ export abstract class Resource extends Construct implements IInspectable {
    * @internal
    */
   public static _annotateInflight(op: string, annotation: OperationAnnotation) {
-    Object.defineProperty(this.prototype, BIND_METADATA_PREFIX + op, {
+    const sym = Symbol.for(BIND_METADATA_PREFIX + op);
+    Object.defineProperty(this.prototype, sym, {
       value: annotation,
       enumerable: false,
       writable: false,
@@ -86,9 +87,8 @@ export abstract class Resource extends Construct implements IInspectable {
 
     const resources: Record<string, string[]> = {};
     for (let op of ops) {
-      const bindMap: OperationAnnotation = (this as any)[
-        BIND_METADATA_PREFIX + op
-      ];
+      const sym = Symbol.for(BIND_METADATA_PREFIX + op);
+      const bindMap: OperationAnnotation = (this as any)[sym];
       if (!bindMap) {
         throw new Error(
           `Resource ${this.node.path} does not support operation ${op}`
