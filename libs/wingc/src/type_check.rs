@@ -77,8 +77,7 @@ pub struct Struct {
 	pub env: TypeEnv,
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
 	pub values: HashMap<Symbol, TypeRef>,
