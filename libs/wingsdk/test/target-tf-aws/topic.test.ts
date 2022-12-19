@@ -35,7 +35,7 @@ test("topic with subscriber function", () => {
   const output = app.synth();
 
   // THEN
-  expect(subscriber._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(subscriber._toInflight().sanitizedText).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for subscriber function
     "aws_iam_role_policy", // policy for subscriber function role

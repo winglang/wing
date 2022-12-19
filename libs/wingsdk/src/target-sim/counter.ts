@@ -38,7 +38,7 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return makeSimulatorJsClient("counter", this);
   }
 }

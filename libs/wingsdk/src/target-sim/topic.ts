@@ -70,7 +70,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return makeSimulatorJsClient("topic", this);
   }
 

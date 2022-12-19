@@ -33,7 +33,7 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return makeSimulatorJsClient("logger", this);
   }
 }

@@ -35,7 +35,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
 
     inflight._bind(this, ["handle"]);
 
-    const inflightClient = inflight._inflightJsClient();
+    const inflightClient = inflight._toInflight();
     const lines = new Array<string>();
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await ${inflightClient.text}.handle(event);`);
@@ -98,7 +98,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return makeSimulatorJsClient("function", this);
   }
 }

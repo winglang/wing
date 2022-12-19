@@ -41,7 +41,7 @@ export class Function extends cloud.FunctionBase {
     }
 
     inflight._bind(this, ["handle"]);
-    const inflightClient = inflight._inflightJsClient();
+    const inflightClient = inflight._toInflight();
 
     const lines = new Array<string>();
     lines.push("exports.handler = async function(event) {");
@@ -200,7 +200,7 @@ export class Function extends cloud.FunctionBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "FunctionClient", [
       `process.env["${this.envName()}"]`,
     ]);

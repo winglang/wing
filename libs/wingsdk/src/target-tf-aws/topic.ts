@@ -105,7 +105,7 @@ export class Topic extends cloud.TopicBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "TopicClient", [
       `process.env["${this.envName()}"]`,
     ]);

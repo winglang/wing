@@ -48,7 +48,7 @@ test("queue with a consumer function", () => {
   const output = app.synth();
 
   // THEN
-  expect(processorFn._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(processorFn._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for function

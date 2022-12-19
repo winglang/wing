@@ -25,8 +25,8 @@ export function convertBetweenHandlers(
       this.handler = handler;
     }
 
-    public _inflightJsClient(): NodeJsCode {
-      const handlerClient = this.handler._inflightJsClient();
+    public _toInflight(): NodeJsCode {
+      const handlerClient = this.handler._toInflight();
       return NodeJsCode.fromInline(
         `new (require("${newHandlerClientPath}")).${newHandlerClientClassName}({ handler: ${handlerClient.text} })`
       );

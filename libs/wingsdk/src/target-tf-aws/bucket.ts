@@ -110,7 +110,7 @@ export class Bucket extends cloud.BucketBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "BucketClient", [
       `process.env["${this.envName()}"]`,
     ]);

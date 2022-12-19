@@ -45,7 +45,7 @@ test("function with a counter binding", () => {
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
-  expect(inflight._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "aws_dynamodb_table", // table for the counter
     "aws_iam_role", // role for function

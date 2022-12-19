@@ -25,7 +25,7 @@ export class Logger extends cloud.LoggerBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "LoggerClient", []);
   }
 }

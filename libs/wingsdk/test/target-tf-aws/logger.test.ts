@@ -26,7 +26,7 @@ test("inflight function uses a logger", () => {
     );
     new cloud.Function(scope, "Function", inflight);
 
-    expect(inflight._inflightJsClient().sanitizedText).toMatchSnapshot();
+    expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([

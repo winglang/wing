@@ -21,7 +21,7 @@ export interface IResource extends IInspectable, IConstruct {
    * Return a code snippet that can be used to reference this resource inflight.
    * @internal
    */
-  _inflightJsClient(): Code;
+  _toInflight(): Code;
 }
 
 const BIND_METADATA_PREFIX = "$bind__";
@@ -129,9 +129,13 @@ export abstract class Resource extends Construct implements IInspectable {
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
+   *
+   * TODO: support passing an InflightRuntime enum to indicate which language
+   * runtime we're targeting.
+   *
    * @internal
    */
-  public abstract _inflightJsClient(): Code;
+  public abstract _toInflight(): Code;
 
   /**
    * Adds a connection to this resource. A connection is a piece of metadata

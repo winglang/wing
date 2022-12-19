@@ -59,7 +59,7 @@ export class Topic extends TopicBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): Code {
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }

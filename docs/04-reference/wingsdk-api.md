@@ -1389,13 +1389,13 @@ The object that will be serialized into the file during synthesis.
 Annotations about what resources an inflight operation may access.
 
 The following example says that the operation may call "put" on a resource
-named "inner", or it may call "get" on a resource passed as an argument named
+at "this.inner", or it may call "get" on a resource passed as an argument named
 "other".
 
 *Example*
 
 ```wing
-{ "inner": { ops: ["put"] }, "$arg:other": { ops: ["get"] } }
+{ "this.inner": { ops: ["put"] }, "other": { ops: ["get"] } }
 ```
 
 

@@ -44,10 +44,10 @@ export class Testing {
         }
       }
 
-      public _inflightJsClient(): NodeJsCode {
+      public _toInflight(): NodeJsCode {
         const clients: Record<string, Code> = {};
         for (const resource of this.$resourceNames) {
-          clients[resource] = (this as any)[resource]._inflightJsClient();
+          clients[resource] = (this as any)[resource]._toInflight();
         }
         return NodeJsCode.fromInline(
           `new ((function(){

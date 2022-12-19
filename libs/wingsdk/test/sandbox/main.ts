@@ -16,8 +16,8 @@ class MyBucket extends core.Resource {
     this.thing = message;
   }
 
-  _inflightJsClient(): core.Code {
-    const inner_client = this.inner._inflightJsClient();
+  _toInflight(): core.Code {
+    const inner_client = this.inner._toInflight();
     const thing_client = JSON.stringify(this.thing);
     const my_bucket_client_path = join(__dirname, "MyBucket.inflight.js");
     return core.NodeJsCode.fromInline(
@@ -39,8 +39,8 @@ class Handler extends core.Resource implements cloud.IFunctionHandler {
     this.b = b;
   }
 
-  _inflightJsClient(): core.Code {
-    const b_client = this.b._inflightJsClient();
+  _toInflight(): core.Code {
+    const b_client = this.b._toInflight();
     const handler_client_path = join(__dirname, "Handler.inflight.js");
     return core.NodeJsCode.fromInline(
       `new (require("${handler_client_path}")).Handler__Inflight({ b: ${b_client.text} })`

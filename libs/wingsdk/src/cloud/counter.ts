@@ -52,7 +52,7 @@ export class Counter extends CounterBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): Code {
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }

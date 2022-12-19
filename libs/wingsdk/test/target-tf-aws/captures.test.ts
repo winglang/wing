@@ -23,7 +23,7 @@ test("function with a bucket binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(inflight._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -65,8 +65,8 @@ test("function with a function binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(inflight1._inflightJsClient().sanitizedText).toMatchSnapshot();
-  expect(inflight2._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(inflight1._toInflight().sanitizedText).toMatchSnapshot();
+  expect(inflight2._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -130,8 +130,8 @@ test("function with a queue binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(pusher._inflightJsClient().sanitizedText).toMatchSnapshot();
-  expect(processor._inflightJsClient().sanitizedText).toMatchSnapshot();
+  expect(pusher._toInflight().sanitizedText).toMatchSnapshot();
+  expect(processor._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",

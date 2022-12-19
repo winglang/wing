@@ -113,7 +113,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _inflightJsClient(): core.Code {
+  public _toInflight(): core.Code {
     return makeSimulatorJsClient("queue", this);
   }
 }

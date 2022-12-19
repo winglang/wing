@@ -80,7 +80,7 @@ export class Queue extends QueueBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): Code {
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }

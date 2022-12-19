@@ -45,7 +45,7 @@ export class Bucket extends BucketBase {
   }
 
   /** @internal */
-  public _inflightJsClient(): Code {
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }
