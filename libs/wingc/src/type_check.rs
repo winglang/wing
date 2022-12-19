@@ -84,8 +84,7 @@ pub struct Enum {
 	pub values: HashMap<Symbol, TypeRef>,
 }
 
-#[derive(Derivative)]
-#[derivative(Debug)]
+#[derive(Debug)]
 pub struct EnumInstance {
 	pub enum_name: TypeRef,
 	pub enum_value: Symbol,
