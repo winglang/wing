@@ -1,5 +1,5 @@
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
@@ -202,11 +202,13 @@ pub enum ExprKind {
 	},
 	StructLiteral {
 		type_: Type,
-		fields: HashMap<Symbol, Expr>,
+		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: BTreeMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<Type>,
-		fields: HashMap<String, Expr>,
+		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: BTreeMap<String, Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }

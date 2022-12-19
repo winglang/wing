@@ -1,9 +1,10 @@
 use indexmap::IndexSet;
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::{str, vec};
 use tree_sitter::Node;
+use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
@@ -15,6 +16,7 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnosti
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
+	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
@@ -43,12 +45,16 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 
 impl Parser<'_> {
 	pub fn wingit(&self, root: &Node) -> Scope {
-		match root.kind() {
-			"source" => self.build_scope(root),
+		let scope = match root.kind() {
+			"source" => self.build_scope(&root),
 			other => {
 				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
 			}
-		}
+		};
+
+		self.report_unhandled_errors(&root);
+
+		scope
 	}
 
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
@@ -59,6 +65,10 @@ impl Parser<'_> {
 		};
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
+
+		// Track that we have produced a diagnostic for this node
+		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
+		self.error_nodes.borrow_mut().insert(node.id());
 
 		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
 		// the error and continue parsing.
@@ -74,7 +84,7 @@ impl Parser<'_> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.add_error(
 				format!(
-					"{} '{}' is not yet supported {}",
+					"{} '{}' is not supported yet {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
@@ -674,7 +684,7 @@ impl Parser<'_> {
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
-					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
+					function: self.build_reference(&expression_node.child_by_field_name("caller").unwrap())?,
 					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
@@ -720,7 +730,7 @@ impl Parser<'_> {
 					None
 				};
 
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {
@@ -754,7 +764,7 @@ impl Parser<'_> {
 			}
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
@@ -778,6 +788,15 @@ impl Parser<'_> {
 				))
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
+		}
+	}
+
+	fn report_unhandled_errors(&self, root: &Node) {
+		let iter = traverse(root.walk(), Order::Pre);
+		for node in iter {
+			if node.is_error() && !self.error_nodes.borrow().contains(&node.id()) {
+				_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+			}
 		}
 	}
 }

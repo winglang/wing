@@ -1817,6 +1817,7 @@ dependencies = [
  "serde_json",
  "sha2",
  "tree-sitter",
+ "tree-sitter-traversal",
  "tree-sitter-wing",
  "wingii",
 ]

@@ -270,7 +270,7 @@ module.exports = grammar({
       ),
 
     call: ($) =>
-      seq(field("call_name", $.reference), field("args", $.argument_list)),
+      seq(field("caller", $.reference), field("args", $.argument_list)),
 
     argument_list: ($) =>
       seq(
