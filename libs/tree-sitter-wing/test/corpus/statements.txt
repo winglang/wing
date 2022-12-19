@@ -282,7 +282,7 @@ enum SomeEnum {
 ---
 (source
     (enum_definition
-        (identifier)
+        enum_name: (identifier)
         (enum_field)
         (enum_field)
         (enum_field)
