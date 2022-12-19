@@ -98,16 +98,13 @@ export class NodeJsCode extends Code {
  */
 export interface InflightProps {
   /**
-   * Reference to code containing the entrypoint function.
+   * Reference to the inflight code. Only JavaScript code is currently
+   * supported.
+   *
+   * The JavaScript code needs be in the form `async handle(event) { ... }`, and
+   * all references to resources must be made through `this.<resource>`.
    */
   readonly code: Code;
-
-  /**
-   * Name of the exported function to run.
-   *
-   * @example "exports.handler"
-   */
-  readonly entrypoint: string;
 
   /**
    * Resource binding information.
@@ -127,6 +124,10 @@ export interface InflightProps {
 export class Inflight extends Construct implements IResource {
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away
+
+    if (props.code.language !== Language.NODE_JS) {
+      throw new Error("Only Node.js code is supported");
+    }
 
     return makeHandler(scope, id, props.code.text, props.bindings ?? {});
   }

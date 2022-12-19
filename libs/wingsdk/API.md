@@ -1406,8 +1406,7 @@ let inflight_props = core.InflightProps{ ... }
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function to run. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to the inflight code. Only JavaScript code is currently supported. |
 | <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Resource binding information. |
 
 ---
@@ -1420,28 +1419,12 @@ code: Code;
 
 - *Type:* core.Code
 
-Reference to code containing the entrypoint function.
+Reference to the inflight code. Only JavaScript code is currently supported.
+
+The JavaScript code needs be in the form `async handle(event) { ... }`, and
+all references to resources must be made through `this.<resource>`.
 
 ---
-
-##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@winglang/wingsdk.core.InflightProps.property.entrypoint"></a>
-
-```wing
-entrypoint: str;
-```
-
-- *Type:* str
-
-Name of the exported function to run.
-
----
-
-*Example*
-
-```wing
-"exports.handler"
-```
-
 
 ##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/wingsdk.core.InflightProps.property.bindings"></a>
 
