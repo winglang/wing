@@ -37,8 +37,8 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
      * `convertBetweenHandlers` creates a dummy resource that provides the
      * wrapper code. In Wing psuedocode, this looks like:
      *
-     * resource Handler {
-     *   init(handler: cloud.IFunctionHandler) {
+     * resource Handler impl cloud.IFunctionHandler {
+     *   init(handler: cloud.IQueueOnMessageHandler) {
      *     this.handler = handler;
      *   }
      *   inflight handle(event: string) {
