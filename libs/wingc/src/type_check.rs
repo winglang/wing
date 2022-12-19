@@ -183,31 +183,22 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Optional(v) => write!(f, "{}?", v),
-			Type::Function(func_sig) => {
-				if let Some(ret_val) = &func_sig.return_type {
-					write!(
-						f,
-						"fn({}):{}",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(", "),
+			Type::Function(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.args
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
 						format!("{}", ret_val)
-					)
-				} else {
-					write!(
-						f,
-						"fn({})",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(",")
-					)
-				}
+					} else {
+						"void".to_string()
+					}
+				)
 			}
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
@@ -607,10 +598,7 @@ impl<'a> TypeChecker<'a> {
 					&Type::Class(ref class) => (&class.env, &class.name),
 					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
 					&Type::Anything => return Some(self.types.anything()),
-					_ => panic!(
-						"Expected {:?} to be a resource or class type but it's a {}",
-						class, type_
-					),
+					_ => panic!("Expected {} to be a resource or class type but it's a {}", class, type_),
 				};
 
 				// Type check args against constructor
@@ -695,8 +683,8 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope {:?} to be a resource object, instead found \"{}\"",
-									obj_scope, obj_scope_type
+									"Expected scope to be a resource object, instead found \"{}\"",
+									obj_scope_type
 								),
 							);
 						}
@@ -726,7 +714,7 @@ impl<'a> TypeChecker<'a> {
 				// Make sure this is a function signature type
 				let func_sig = func_type
 					.as_function_sig()
-					.expect(&format!("{:?} should be a function or method", function));
+					.expect(&format!("{} should be a function or method", function));
 
 				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
@@ -1501,9 +1489,14 @@ impl<'a> TypeChecker<'a> {
 					let instance = self.type_check_exp(object, env, statement_idx).unwrap();
 					let instance_type = match instance.into() {
 						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
+
 						// get "std" primitives
 						&Type::Duration => std_namespace.try_lookup("Duration", None).unwrap(),
-						t => self.general_type_error(format!("Expected an instance, got \"{}\"", t)),
+
+						_ => self.general_type_error(format!(
+							"\"{}\" in {} does not resolve to a class instance or resource object",
+							instance, reference
+						)),
 					};
 
 					match instance_type.into() {
