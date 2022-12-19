@@ -58,7 +58,7 @@ constructor() {
   const myfunc = (x) => {
     console.log(\`\${x}\`);
     x = (x + 1);
-    if ((x > 3)) {
+    if ((x > 3.14)) {
       return;
     }
     myfunc(x);
@@ -743,10 +743,13 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"expressions_binary_operators\\" });
   
-  const x = 1;
+  const x = (-1);
   const y = (2 * x);
   const z = ((x + y) - 1);
   const xyz = (((y * y) / (x * x)) * z);
+  const xf = 1;
+  const yf = ((-20.22) * xf);
+  const zf = ((xf + yf) - (-0.01));
 }
 }
 new MyApp().synth();"
