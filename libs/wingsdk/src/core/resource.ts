@@ -36,14 +36,14 @@ export abstract class Resource extends Construct implements IInspectable {
    *
    * For example if `MyBucket` has a `fancy_get` method that calls `get` on an
    * underlying `cloud.Bucket`, then it would be annotated as follows:
-   *
-   * ```ts
+   * ```
    * Resource._annotateInflight(MyBucket, "fancy_get", {
    *  "this.bucket": { ops: ["get"] }
    * });
+   * ```
    *
-   * The Wing compiler will automatically generate classes with this metadata
-   * by scanning the source code, but in the Wing SDK we have to do it manually.
+   * The Wing compiler will automatically generate the correct annotations by
+   * scanning the source code, but in the Wing SDK we have to add them manually.
    *
    * @internal
    */
