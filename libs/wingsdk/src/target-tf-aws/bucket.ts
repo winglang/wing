@@ -64,7 +64,7 @@ export class Bucket extends cloud.BucketBase {
   }
 
   /** @internal */
-  public _bind(host: core.Resource, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("buckets can only be bound by tfaws.Function for now");
     }

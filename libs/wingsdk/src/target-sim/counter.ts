@@ -32,7 +32,7 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.Resource, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     bindSimulatorResource("counter", this, host);
     super._bind(host, ops);
   }

@@ -92,7 +92,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.Resource, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     bindSimulatorResource("function", this, host);
     super._bind(host, ops);
   }

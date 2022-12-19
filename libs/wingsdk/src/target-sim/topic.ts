@@ -64,7 +64,7 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.Resource, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     bindSimulatorResource("topic", this, host);
     super._bind(host, ops);
   }

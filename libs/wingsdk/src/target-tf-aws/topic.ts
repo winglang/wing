@@ -85,7 +85,7 @@ export class Topic extends cloud.TopicBase {
   }
 
   /** @internal */
-  public _bind(host: core.Resource, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("topics can only be bound by tfaws.Function for now");
     }

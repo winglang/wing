@@ -8,6 +8,11 @@ import { Code } from "./inflight";
 import { IInspectable, TreeInspector } from "./tree";
 
 /**
+ * A resource that can run inflight code.
+ */
+export interface IInflightHost extends IResource {}
+
+/**
  * Abstract interface for `Resource`.
  */
 export interface IResource extends IInspectable, IConstruct {
@@ -15,7 +20,7 @@ export interface IResource extends IInspectable, IConstruct {
    * Binds the resource to the host so that it can be used by inflight code.
    * @internal
    */
-  _bind(host: Resource, ops: string[]): void;
+  _bind(host: IInflightHost, ops: string[]): void;
 
   /**
    * Return a code snippet that can be used to reference this resource inflight.
@@ -78,7 +83,7 @@ export abstract class Resource extends Construct implements IInspectable {
    *
    * @internal
    */
-  public _bind(host: Resource, ops: string[]): void {
+  public _bind(host: IInflightHost, ops: string[]): void {
     log(
       `Binding a resource (${this.node.path}) to a host (${
         host.node.path

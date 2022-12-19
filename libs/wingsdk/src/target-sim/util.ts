@@ -1,7 +1,7 @@
 import { access, constants } from "fs";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
-import { Direction, NodeJsCode, Resource } from "../core";
+import { Direction, IInflightHost, NodeJsCode, Resource } from "../core";
 import { Function } from "./function";
 
 /**
@@ -30,7 +30,7 @@ function makeEnvVarName(type: string, resource: IConstruct): string {
 export function bindSimulatorResource(
   type: string,
   resource: Resource,
-  host: Resource
+  host: IInflightHost
 ) {
   if (!(host instanceof Function)) {
     throw new Error(

@@ -27,7 +27,7 @@ export class Logger extends cloud.LoggerBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(host: core.Resource, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     bindSimulatorResource("logger", this, host);
     super._bind(host, ops);
   }

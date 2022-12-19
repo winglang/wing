@@ -1,6 +1,9 @@
-import { Direction, Resource } from "../core";
+import { Direction, IInflightHost, Resource } from "../core";
 
-export function addConnections(resource: Resource, host: Resource) {
+export function addConnections(resource: Resource, host: IInflightHost) {
+  if (!(host instanceof Resource)) {
+    throw new Error(`Expected host to be an instanceof Resource`);
+  }
   resource.addConnection({
     direction: Direction.INBOUND,
     relationship: `inflight-reference`,

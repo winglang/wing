@@ -76,7 +76,7 @@ export class Queue extends cloud.QueueBase {
   }
 
   /** @internal */
-  public _bind(host: core.Resource, ops: string[]): void {
+  public _bind(host: core.IInflightHost, ops: string[]): void {
     if (!(host instanceof Function)) {
       throw new Error("queues can only be bound by tfaws.Function for now");
     }
