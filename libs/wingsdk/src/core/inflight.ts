@@ -2,6 +2,10 @@ import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
+import { Construct } from "constructs";
+import { makeHandler } from "./internal";
+import { IInflightHost, IResource } from "./resource";
+import { TreeInspector } from "./tree";
 
 /**
  * Reference to a piece of code.
@@ -87,6 +91,72 @@ export class NodeJsCode extends Code {
     super();
     this.path = path;
   }
+}
+
+/**
+ * Props for `Inflight`.
+ */
+export interface InflightProps {
+  /**
+   * Reference to code containing the entrypoint function.
+   */
+  readonly code: Code;
+
+  /**
+   * Name of the exported function to run.
+   *
+   * @example "exports.handler"
+   */
+  readonly entrypoint: string;
+
+  /**
+   * Resource binding information.
+   * @default - no bindings
+   */
+  readonly bindings?: { [name: string]: InflightBinding };
+}
+
+/**
+ * Represents a unit of application code that can be executed by a cloud
+ * resource. In practice, it's a resource with one inflight method named
+ * "handle".
+ *
+ * @deprecated use an interface modeling the specific inflight behavior
+ * such as `cloud.IFunctionHandler`
+ */
+export class Inflight extends Construct implements IResource {
+  constructor(scope: Construct, id: string, props: InflightProps) {
+    super(null as any, ""); // thrown away
+
+    return makeHandler(scope, id, props.code.text, props.bindings ?? {});
+  }
+  /** @internal */
+  public _bind(_host: IInflightHost, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
+  public _toInflight(): Code {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
+  public _inspect(_inspector: TreeInspector): void {
+    throw new Error("Method not implemented.");
+  }
+}
+
+/**
+ * A resource binding.
+ */
+export interface InflightBinding {
+  /**
+   * The resource.
+   */
+  readonly resource: IResource;
+
+  /**
+   * The list of operations used on the resource.
+   */
+  readonly ops: string[];
 }
 
 /**

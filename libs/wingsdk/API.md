@@ -274,19 +274,19 @@ Represents a function.
 ```wing
 bring cloud;
 
-new cloud.Function(inflight: IFunctionHandler, props?: FunctionProps)
+new cloud.Function(inflight: ~Inflight, props?: FunctionProps)
 ```
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>cloud.IFunctionHandler</code> | *No description.* |
+| <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight">inflight</a></code> | <code>core.Inflight</code> | *No description.* |
 | <code><a href="#@winglang/wingsdk.cloud.Function.Initializer.parameter.props">props</a></code> | <code>cloud.FunctionProps</code> | *No description.* |
 
 ---
 
 ##### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Function.Initializer.parameter.inflight"></a>
 
-- *Type:* cloud.IFunctionHandler
+- *Type:* core.Inflight
 
 ---
 
@@ -622,14 +622,14 @@ describing how this resource is related to another resource.
 ##### `on_message` <a name="on_message" id="@winglang/wingsdk.cloud.Queue.onMessage"></a>
 
 ```wing
-on_message(inflight: IQueueOnMessageHandler, props?: QueueOnMessageProps): Function
+on_message(inflight: ~Inflight, props?: QueueOnMessageProps): Function
 ```
 
 Create a function to consume messages from this queue.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Queue.onMessage.parameter.inflight"></a>
 
-- *Type:* cloud.IQueueOnMessageHandler
+- *Type:* core.Inflight
 
 ---
 
@@ -767,14 +767,14 @@ describing how this resource is related to another resource.
 ##### `on_message` <a name="on_message" id="@winglang/wingsdk.cloud.Topic.onMessage"></a>
 
 ```wing
-on_message(inflight: ITopicOnMessageHandler, props?: TopicOnMessageProps): Function
+on_message(inflight: ~Inflight, props?: TopicOnMessageProps): Function
 ```
 
 Creates function to send messages when published.
 
 ###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Topic.onMessage.parameter.inflight"></a>
 
-- *Type:* cloud.ITopicOnMessageHandler
+- *Type:* core.Inflight
 
 ---
 
@@ -1342,6 +1342,117 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+### InflightBinding <a name="InflightBinding" id="@winglang/wingsdk.core.InflightBinding"></a>
+
+A resource binding.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBinding.Initializer"></a>
+
+```wing
+bring core;
+
+let inflight_binding = core.InflightBinding{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
+| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
+
+---
+
+##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/wingsdk.core.InflightBinding.property.ops"></a>
+
+```wing
+ops: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+The list of operations used on the resource.
+
+---
+
+##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightBinding.property.resource"></a>
+
+```wing
+resource: IResource;
+```
+
+- *Type:* core.IResource
+
+The resource.
+
+---
+
+### InflightProps <a name="InflightProps" id="@winglang/wingsdk.core.InflightProps"></a>
+
+Props for `Inflight`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightProps.Initializer"></a>
+
+```wing
+bring core;
+
+let inflight_props = core.InflightProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to code containing the entrypoint function. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.entrypoint">entrypoint</a></code> | <code>str</code> | Name of the exported function to run. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Resource binding information. |
+
+---
+
+##### `code`<sup>Required</sup> <a name="code" id="@winglang/wingsdk.core.InflightProps.property.code"></a>
+
+```wing
+code: Code;
+```
+
+- *Type:* core.Code
+
+Reference to code containing the entrypoint function.
+
+---
+
+##### `entrypoint`<sup>Required</sup> <a name="entrypoint" id="@winglang/wingsdk.core.InflightProps.property.entrypoint"></a>
+
+```wing
+entrypoint: str;
+```
+
+- *Type:* str
+
+Name of the exported function to run.
+
+---
+
+*Example*
+
+```wing
+"exports.handler"
+```
+
+
+##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/wingsdk.core.InflightProps.property.bindings"></a>
+
+```wing
+bindings: MutMap<InflightBinding>;
+```
+
+- *Type:* MutMap&lt;core.InflightBinding&gt;
+- *Default:* no bindings
+
+Resource binding information.
 
 ---
 
@@ -2489,7 +2600,7 @@ The tree node.
 
 ### IInspectable <a name="IInspectable" id="@winglang/wingsdk.core.IInspectable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -2630,7 +2741,7 @@ Function that will be called when a message is received from the queue.
 
 - *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
+- *Implemented By:* core.Inflight, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
 Abstract interface for `Resource`.
 

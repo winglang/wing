@@ -1,6 +1,6 @@
 import { IConstruct } from "constructs";
-import { IFunctionHandler } from "../cloud";
-import { Code, IResource, NodeJsCode, Resource } from "../core";
+import { InflightBinding, Resource } from "../core";
+import { makeHandler } from "../core/internal";
 
 /**
  * Test utilities.
@@ -8,7 +8,7 @@ import { Code, IResource, NodeJsCode, Resource } from "../core";
 export class Testing {
   /**
    * Make an `IFunctionHandler`, `IQueueOnMessageHandler` or any other handler
-   * on the fly.
+   * on the fly. The resource will have a single method named "handle".
    *
    * The JavaScript code passed to the handler must be in the form of
    * `async handle(event) { ... }`, and all references to resources must be
@@ -23,74 +23,8 @@ export class Testing {
     scope: IConstruct,
     id: string,
     code: string,
-    bindings?: { [key: string]: ResourceBinding }
-  ): IResource {
-    const resources = Object.fromEntries(
-      Object.entries(bindings ?? {}).map(([name, binding]) => [
-        name,
-        binding.resource,
-      ])
-    );
-
-    class Handler extends Resource implements IFunctionHandler {
-      public readonly stateful = false;
-
-      public readonly $resourceNames = Object.keys(bindings ?? {});
-
-      constructor() {
-        super(scope, id);
-        for (const [name, resource] of Object.entries(resources)) {
-          (this as any)[name] = resource;
-        }
-      }
-
-      public _toInflight(): NodeJsCode {
-        const clients: Record<string, Code> = {};
-        for (const resource of this.$resourceNames) {
-          clients[resource] = (this as any)[resource]._toInflight();
-        }
-        return NodeJsCode.fromInline(
-          `new ((function(){
-  return class Handler {
-    constructor(clients) {
-      for (const [name, client] of Object.entries(clients)) {
-        this[name] = client;
-      }
-    }
-    ${code}
-  };
-})())({
-  ${Object.entries(clients)
-    .map(([name, client]) => `${name}: ${client.text}`)
-    .join(",\n")}
-})`
-        );
-      }
-    }
-
-    const annotation = Object.fromEntries(
-      Object.entries(bindings ?? {}).map(([name, binding]) => [
-        "this." + name,
-        { ops: binding.ops },
-      ])
-    );
-    Handler._annotateInflight("handle", annotation);
-
-    return new Handler();
+    bindings?: { [key: string]: InflightBinding }
+  ): Resource {
+    return makeHandler(scope, id, code, bindings);
   }
-}
-
-/**
- * A resource binding.
- */
-export interface ResourceBinding {
-  /**
-   * The resource.
-   */
-  readonly resource: IResource;
-
-  /**
-   * The list of operations used on the resource.
-   */
-  readonly ops: string[];
 }

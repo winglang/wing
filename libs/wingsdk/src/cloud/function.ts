@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, IResource, Resource } from "../core";
+import { Code, Inflight, IResource, Resource } from "../core";
 
 /**
  * Global identifier for `Function`.
@@ -28,7 +28,7 @@ export abstract class FunctionBase extends Resource {
   constructor(
     scope: Construct,
     id: string,
-    inflight: IFunctionHandler,
+    inflight: Inflight,
     props: FunctionProps
   ) {
     super(scope, id);
@@ -55,7 +55,7 @@ export class Function extends FunctionBase {
   constructor(
     scope: Construct,
     id: string,
-    inflight: IFunctionHandler,
+    inflight: Inflight,
     props: FunctionProps = {}
   ) {
     super(null as any, id, inflight, props);

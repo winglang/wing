@@ -26,7 +26,7 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
   }
 
   public onMessage(
-    inflight: cloud.IQueueOnMessageHandler,
+    inflight: core.Inflight, // cloud.IQueueOnMessageHandler
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
     const hash = inflight.node.addr.slice(-8);

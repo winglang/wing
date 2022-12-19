@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Duration, IResource, Resource } from "../core";
+import { Code, Duration, Inflight, IResource, Resource } from "../core";
 import { Function, FunctionProps } from "./function";
 
 /**
@@ -43,7 +43,7 @@ export abstract class QueueBase extends Resource {
    * Create a function to consume messages from this queue.
    */
   public abstract onMessage(
-    inflight: IQueueOnMessageHandler,
+    inflight: Inflight,
     props?: QueueOnMessageProps
   ): Function;
 }
@@ -71,7 +71,7 @@ export class Queue extends QueueBase {
   }
 
   public onMessage(
-    inflight: IQueueOnMessageHandler,
+    inflight: Inflight,
     props: QueueOnMessageProps = {}
   ): Function {
     inflight;

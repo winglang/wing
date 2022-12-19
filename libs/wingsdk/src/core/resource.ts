@@ -18,6 +18,10 @@ export interface IInflightHost extends IResource {}
 export interface IResource extends IInspectable, IConstruct {
   /**
    * Binds the resource to the host so that it can be used by inflight code.
+   *
+   * If the resource does not support any of the operations, it should throw an
+   * error.
+   *
    * @internal
    */
   _bind(host: IInflightHost, ops: string[]): void;

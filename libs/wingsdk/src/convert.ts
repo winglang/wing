@@ -1,4 +1,4 @@
-import { Construct, IConstruct } from "constructs";
+import { Construct } from "constructs";
 import { IResource, NodeJsCode, Resource } from "./core";
 
 /**
@@ -10,7 +10,7 @@ import { IResource, NodeJsCode, Resource } from "./core";
  * resources with a single method named "handle".
  */
 export function convertBetweenHandlers(
-  scope: IConstruct,
+  scope: Construct,
   id: string,
   baseHandler: IResource,
   newHandlerClientPath: string,
