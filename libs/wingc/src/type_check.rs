@@ -1553,7 +1553,7 @@ impl<'a> TypeChecker<'a> {
 						}
 					}
 					_ => self.general_type_error(format!(
-						"\"{}\" in {:?} does not resolve to a class instance or resource object",
+						"\"{}\" in {:?} does not resolve to a class instance, resource object or enum type",
 						instance, reference
 					)),
 				}
