@@ -303,7 +303,13 @@ async function main() {
     const defaultMenuItems = Menu.getApplicationMenu()?.items!;
     Menu.setApplicationMenu(
       Menu.buildFromTemplate([
-        defaultMenuItems[0]!,
+        {
+          ...defaultMenuItems[0]!,
+          submenu: defaultMenuItems[0]!.submenu!.items.map((item) => ({
+            ...item,
+            label: item.label.replace("wing-console", "Wing Console"),
+          })) as any,
+        },
         {
           label: "File",
           submenu: [
