@@ -2,6 +2,7 @@
 title: Backends
 id: backends
 description: Built-in dependency injection mechanism within the language
+keywords: [Wing backends, backends]
 ---
 
 Wing allows writing code that defines complete architectures without having to

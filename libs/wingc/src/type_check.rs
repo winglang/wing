@@ -20,6 +20,7 @@ pub enum Type {
 	Duration,
 	Boolean,
 	Optional(TypeRef),
+	Array(TypeRef),
 	Map(TypeRef),
 	Set(TypeRef),
 	Function(FunctionSignature),
@@ -130,6 +131,12 @@ impl PartialEq for Type {
 				let r: &Type = (*r0).into();
 				l == r
 			}
+			(Self::Array(l0), Self::Array(r0)) => {
+				// Arrays are of the same type if they have the same value type
+				let l: &Type = (*l0).into();
+				let r: &Type = (*r0).into();
+				l == r
+			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// Maps are of the same type if they have the same value type
 				let l: &Type = (*l0).into();
@@ -169,9 +176,9 @@ pub struct FunctionSignature {
 impl Display for Type {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			Type::Anything => write!(f, "anything"),
-			Type::Number => write!(f, "number"),
-			Type::String => write!(f, "string"),
+			Type::Anything => write!(f, "any"),
+			Type::Number => write!(f, "num"),
+			Type::String => write!(f, "str"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Optional(v) => write!(f, "{}?", v),
@@ -219,6 +226,7 @@ impl Display for Type {
 				let struct_type = s.as_struct().expect("Struct instance must reference to a struct");
 				write!(f, "instance of {}", struct_type.name.name)
 			}
+			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
 		}
@@ -466,7 +474,8 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	#[deprecated = "Remember to implement this!"]
+	// TODO: All calls to this should be removed and we should make sure type checks are done
+	// for unimplemented types
 	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
 		self.diagnostics.borrow_mut().push(Diagnostic {
 			level: DiagnosticLevel::Warning,
@@ -758,6 +767,33 @@ impl<'a> TypeChecker<'a> {
 
 				func_sig.return_type
 			}
+			ExprKind::ArrayLiteral { type_, items } => {
+				// Infer type based on either the explicit type or the value in one of the items
+				let container_type = if let Some(type_) = type_ {
+					self.resolve_type(type_, env, statement_idx)
+				} else if !items.is_empty() {
+					let some_val_type = self
+						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
+						.unwrap();
+					self.types.add_type(Type::Array(some_val_type))
+				} else {
+					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
+					self.types.add_type(Type::Array(self.types.anything()))
+				};
+
+				let value_type = match container_type.into() {
+					&Type::Array(t) => t,
+					_ => panic!("Expected array type, found {}", container_type),
+				};
+
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					self.validate_type(t, value_type, v);
+				}
+
+				Some(container_type)
+			}
 			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type(type_, env, statement_idx);
@@ -766,7 +802,7 @@ impl<'a> TypeChecker<'a> {
 					return Some(struct_type);
 				}
 
-				// Make it really is a a struct type
+				// Make sure it really is a struct type
 				let st = struct_type
 					.as_struct()
 					.expect(&format!("Expected \"{}\" to be a struct type", struct_type));
@@ -975,6 +1011,11 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 			}
+			AstType::Array(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each array resolution
+				self.types.add_type(Type::Array(value_type))
+			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
@@ -1025,6 +1066,14 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				};
 				statements.set_env(scope_env);
+
+				self.inner_scopes.push(statements);
+			}
+			StmtKind::While { condition, statements } => {
+				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
+				self.validate_type(cond_type, self.types.bool(), condition);
+
+				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
 
 				self.inner_scopes.push(statements);
 			}
@@ -1303,7 +1352,9 @@ impl<'a> TypeChecker<'a> {
 					})
 					.collect::<Vec<_>>();
 
-				add_parent_members_to_struct_env(&extends_types, name, &mut struct_env);
+				if let Err(e) = add_parent_members_to_struct_env(&extends_types, name, &mut struct_env) {
+					self.type_error(&e);
+				}
 				match env.define(
 					name,
 					self.types.add_type(Type::Struct(Struct {
@@ -1461,25 +1512,36 @@ fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
 	}
 }
 
-fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol, struct_env: &mut TypeEnv) {
+fn add_parent_members_to_struct_env(
+	extends_types: &Vec<TypeRef>,
+	name: &Symbol,
+	struct_env: &mut TypeEnv,
+) -> Result<(), TypeError> {
 	for parent_type in extends_types.iter() {
-		let parent_struct = parent_type.as_struct().expect(
-			format!(
-				"Type \"{}\" extends \"{}\" which should be a struct",
-				name.name, parent_type
-			)
-			.as_str(),
-		);
+		let parent_struct = if let Some(parent_struct) = parent_type.as_struct() {
+			parent_struct
+		} else {
+			return Err(TypeError {
+				message: format!(
+					"Type \"{}\" extends \"{}\" which should be a struct",
+					name.name, parent_type
+				),
+				span: name.span.clone(),
+			});
+		};
 		for (parent_member_name, member_type) in parent_struct.env.iter() {
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
 				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
 				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
 				//   when we want to check for subtypes and use equality for strict comparisons.
 				if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
-					panic!(
-						"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
-						name, parent_type, parent_member_name, existing_type, member_type
-					);
+					return Err(TypeError {
+						span: name.span.clone(),
+						message: format!(
+							"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
+							name, parent_type, parent_member_name, existing_type, member_type
+						),
+					});
 				}
 			} else {
 				struct_env.define(
@@ -1489,8 +1551,9 @@ fn add_parent_members_to_struct_env(extends_types: &Vec<TypeRef>, name: &Symbol,
 					},
 					member_type,
 					StatementIdx::Top,
-				);
+				)?;
 			}
 		}
 	}
+	Ok(())
 }

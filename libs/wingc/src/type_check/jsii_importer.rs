@@ -169,12 +169,19 @@ impl<'a> JsiiImporter<'a> {
 		self.add_members_to_class_env(&jsii_interface, false, self.namespace_env.flight, struct_env, wing_type);
 
 		// Add properties from our parents to the new structs env
-		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, struct_env);
+		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, struct_env).expect(&format!(
+			"Invalid JSII library: failed to add parent members to struct {}",
+			type_name
+		));
 
 		debug!("Adding struct type {}", type_name.green());
 		self
 			.namespace_env
-			.define(&new_type_symbol, wing_type, StatementIdx::Top);
+			.define(&new_type_symbol, wing_type, StatementIdx::Top)
+			.expect(&format!(
+				"Invalid JSII library: failed to define struct type {}",
+				type_name
+			));
 		Some(wing_type)
 	}
 
@@ -220,11 +227,16 @@ impl<'a> JsiiImporter<'a> {
 					flight,
 				}));
 				let name = camel_case_to_snake_case(&m.name);
-				class_env.define(
-					&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-					method_sig,
-					StatementIdx::Top,
-				);
+				class_env
+					.define(
+						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
+						method_sig,
+						StatementIdx::Top,
+					)
+					.expect(&format!(
+						"Invalid JSII library: failed to add method {} to class",
+						m.name
+					));
 			}
 		}
 		// Add properties to the class environment
@@ -244,11 +256,16 @@ impl<'a> JsiiImporter<'a> {
 					base_wing_type
 				};
 
-				class_env.define(
-					&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-					wing_type,
-					StatementIdx::Top,
-				);
+				class_env
+					.define(
+						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
+						wing_type,
+						StatementIdx::Top,
+					)
+					.expect(&format!(
+						"Invalid JSII library: failed to add property {} to class",
+						p.name
+					));
 			}
 		}
 	}
@@ -257,11 +274,11 @@ impl<'a> JsiiImporter<'a> {
 		let span = if let Some(jsii_source_location) = jsii_source_location {
 			WingSpan {
 				start: CharacterLocation {
-					row: jsii_source_location.line as usize,
+					row: (jsii_source_location.line - 1.0) as usize,
 					column: 0,
 				},
 				end: CharacterLocation {
-					row: jsii_source_location.line as usize,
+					row: (jsii_source_location.line - 1.0) as usize,
 					column: 0,
 				},
 				start_byte: 0,
@@ -350,7 +367,10 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			Type::Class(class_spec)
 		});
-		self.namespace_env.define(&new_type_symbol, new_type, StatementIdx::Top);
+		self
+			.namespace_env
+			.define(&new_type_symbol, new_type, StatementIdx::Top)
+			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
 		// Create class's actual environment before we add properties and methods to it
 		let mut class_env = TypeEnv::new(base_class_env, None, true, self.namespace_env.flight, 0);
 
@@ -379,11 +399,16 @@ impl<'a> JsiiImporter<'a> {
 				return_type: Some(new_type),
 				flight: class_env.flight,
 			}));
-			class_env.define(
-				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
-				method_sig,
-				StatementIdx::Top,
-			);
+			class_env
+				.define(
+					&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
+					method_sig,
+					StatementIdx::Top,
+				)
+				.expect(&format!(
+					"Invalid JSII library: type {} should have single constructor",
+					type_name
+				));
 		}
 
 		// Add methods and properties to the class environment

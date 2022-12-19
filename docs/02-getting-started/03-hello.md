@@ -1,6 +1,7 @@
 ---
 id: hello
 title: Hello, Wing!
+keywords: [Hello World, first Wing program, Wing example]
 ---
 
 OK, we are ready for our first Wing program!
@@ -25,13 +26,13 @@ bring cloud;
 let bucket = new cloud.Bucket();
 let queue = new cloud.Queue();
 
-queue.on_message((message: str): str ~> {
-    bucket.put("wing.txt", "Hello, ${message}");
+queue.on_message(inflight (message: str): str => {
+  bucket.put("wing.txt", "Hello, ${message}");
 });
 ```
 
 This code should be mostly self explanatory. We define a queue, and every time a
 message is added to the queue, a handler is triggered and creates a file named `wing.txt` with `"Hello, ${message}!"` content .
 
-Now that we've written this program, let's compile and test it.
+Now that we've written this program, let's run and test it using the Wing Console.
 

@@ -60,7 +60,7 @@ export interface QueueOnMessageProps extends FunctionProps {
 }
 
 /**
- * Represents a serverless queue.
+ * Represents a queue.
  *
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */

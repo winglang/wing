@@ -29,6 +29,7 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/client-lambda@3.215.0",
     "@aws-sdk/client-s3@3.215.0",
     "@aws-sdk/client-sqs@3.215.0",
+    "@aws-sdk/client-sns@3.215.0",
     "@aws-sdk/types@3.215.0",
     "@aws-sdk/util-stream-node@3.215.0",
     "@aws-sdk/util-utf8-node@3.208.0",
@@ -41,6 +42,7 @@ const project = new cdk.JsiiProject({
     "@types/fs-extra",
     "@types/tar",
     "aws-sdk-client-mock",
+    "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
     "patch-package",
   ],
@@ -209,6 +211,7 @@ const docsFrontMatter = `---
 title: SDK
 id: sdk
 description: Wing SDK API Reference
+keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 `;
 

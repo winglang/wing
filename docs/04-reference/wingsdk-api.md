@@ -2,6 +2,7 @@
 title: SDK
 id: sdk
 description: Wing SDK API Reference
+keywords: [Wing sdk, sdk, Wing API Reference]
 ---
 
 # API Reference <a name="API Reference" id="api-reference"></a>
@@ -273,7 +274,7 @@ The initial value of the counter.
 
 **Inflight client:** [@winglang/wingsdk.cloud.IFunctionClient](#@winglang/wingsdk.cloud.IFunctionClient)
 
-Represents a serverless function.
+Represents a function.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Function.Initializer"></a>
 
@@ -568,7 +569,7 @@ with a fresh copy without any consequences.
 
 **Inflight client:** [@winglang/wingsdk.cloud.IQueueClient](#@winglang/wingsdk.cloud.IQueueClient)
 
-Represents a serverless queue.
+Represents a queue.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Queue.Initializer"></a>
 
@@ -709,6 +710,151 @@ with a fresh copy without any consequences.
 ---
 
 
+### Topic <a name="Topic" id="@winglang/wingsdk.cloud.Topic"></a>
+
+**Inflight client:** [@winglang/wingsdk.cloud.ITopicClient](#@winglang/wingsdk.cloud.ITopicClient)
+
+Represents a topic.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Topic.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.Topic(props?: TopicProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.Initializer.parameter.props">props</a></code> | <code>cloud.TopicProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.Topic.Initializer.parameter.props"></a>
+
+- *Type:* cloud.TopicProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.toString">to_string</a></code> | Returns a string representation of this construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.addConnection">add_connection</a></code> | Adds a connection to this resource. |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.onMessage">on_message</a></code> | Creates function to send messages when published. |
+
+---
+
+##### `to_string` <a name="to_string" id="@winglang/wingsdk.cloud.Topic.toString"></a>
+
+```wing
+to_string(): str
+```
+
+Returns a string representation of this construct.
+
+##### `add_connection` <a name="add_connection" id="@winglang/wingsdk.cloud.Topic.addConnection"></a>
+
+```wing
+add_connection(connections: Connection): void
+```
+
+Adds a connection to this resource.
+
+A connection is a piece of metadata
+describing how this resource is related to another resource.
+
+###### `connections`<sup>Required</sup> <a name="connections" id="@winglang/wingsdk.cloud.Topic.addConnection.parameter.connections"></a>
+
+- *Type:* core.Connection
+
+---
+
+##### `on_message` <a name="on_message" id="@winglang/wingsdk.cloud.Topic.onMessage"></a>
+
+```wing
+on_message(inflight: ~Inflight, props?: TopicOnMessageProps): Function
+```
+
+Creates function to send messages when published.
+
+###### `inflight`<sup>Required</sup> <a name="inflight" id="@winglang/wingsdk.cloud.Topic.onMessage.parameter.inflight"></a>
+
+- *Type:* core.Inflight
+
+---
+
+###### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.cloud.Topic.onMessage.parameter.props"></a>
+
+- *Type:* cloud.TopicOnMessageProps
+
+---
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.isConstruct">is_construct</a></code> | Checks if `x` is a construct. |
+
+---
+
+##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Topic.isConstruct"></a>
+
+```wing
+bring cloud;
+
+cloud.Topic.is_construct(x: any)
+```
+
+Checks if `x` is a construct.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Topic.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/wingsdk.cloud.Topic.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/wingsdk.cloud.Topic.property.stateful"></a>
+
+```wing
+stateful: bool;
+```
+
+- *Type:* bool
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### AppProps <a name="AppProps" id="@winglang/wingsdk.core.AppProps"></a>
@@ -786,6 +932,39 @@ The path to a state file which will track all synthesized files.
 
 If a
 statefile is not specified, we won't be able to remove extrenous files.
+
+---
+
+### BucketDeleteOptions <a name="BucketDeleteOptions" id="@winglang/wingsdk.cloud.BucketDeleteOptions"></a>
+
+Interface for delete method inside `Bucket`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.BucketDeleteOptions.Initializer"></a>
+
+```wing
+bring cloud;
+
+let bucket_delete_options = cloud.BucketDeleteOptions{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExist">must_exist</a></code> | <code>bool</code> | Check failures on the method and retrieve errors if any. |
+
+---
+
+##### `must_exist`<sup>Optional</sup> <a name="must_exist" id="@winglang/wingsdk.cloud.BucketDeleteOptions.property.mustExist"></a>
+
+```wing
+must_exist: bool;
+```
+
+- *Type:* bool
+- *Default:* false
+
+Check failures on the method and retrieve errors if any.
 
 ---
 
@@ -971,6 +1150,182 @@ resource: Resource;
 - *Type:* core.Resource
 
 The resource this connection is to.
+
+---
+
+### ConstructInfo <a name="ConstructInfo" id="@winglang/wingsdk.core.ConstructInfo"></a>
+
+Source information on a construct (class fqn and version).
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructInfo.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_info = core.ConstructInfo{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.fqn">fqn</a></code> | <code>str</code> | Fully qualified class name. |
+| <code><a href="#@winglang/wingsdk.core.ConstructInfo.property.version">version</a></code> | <code>str</code> | Version of the module. |
+
+---
+
+##### `fqn`<sup>Required</sup> <a name="fqn" id="@winglang/wingsdk.core.ConstructInfo.property.fqn"></a>
+
+```wing
+fqn: str;
+```
+
+- *Type:* str
+
+Fully qualified class name.
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="@winglang/wingsdk.core.ConstructInfo.property.version"></a>
+
+```wing
+version: str;
+```
+
+- *Type:* str
+
+Version of the module.
+
+---
+
+### ConstructTree <a name="ConstructTree" id="@winglang/wingsdk.core.ConstructTree"></a>
+
+The construct tree.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructTree.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_tree = core.ConstructTree{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructTree.property.tree">tree</a></code> | <code>core.ConstructTreeNode</code> | The root node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTree.property.version">version</a></code> | <code>str</code> | The construct tree version. |
+
+---
+
+##### `tree`<sup>Required</sup> <a name="tree" id="@winglang/wingsdk.core.ConstructTree.property.tree"></a>
+
+```wing
+tree: ConstructTreeNode;
+```
+
+- *Type:* core.ConstructTreeNode
+
+The root node.
+
+---
+
+##### `version`<sup>Required</sup> <a name="version" id="@winglang/wingsdk.core.ConstructTree.property.version"></a>
+
+```wing
+version: str;
+```
+
+- *Type:* str
+
+The construct tree version.
+
+---
+
+### ConstructTreeNode <a name="ConstructTreeNode" id="@winglang/wingsdk.core.ConstructTreeNode"></a>
+
+A node in the construct tree.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.ConstructTreeNode.Initializer"></a>
+
+```wing
+bring core;
+
+let construct_tree_node = core.ConstructTreeNode{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.id">id</a></code> | <code>str</code> | The ID of the node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.path">path</a></code> | <code>str</code> | The path of the node. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | The node attributes. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.children">children</a></code> | <code>MutMap&lt;core.ConstructTreeNode&gt;</code> | The child nodes. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.constructInfo">construct_info</a></code> | <code>core.ConstructInfo</code> | Information on the construct class that led to this node, if available. |
+
+---
+
+##### `id`<sup>Required</sup> <a name="id" id="@winglang/wingsdk.core.ConstructTreeNode.property.id"></a>
+
+```wing
+id: str;
+```
+
+- *Type:* str
+
+The ID of the node.
+
+Is part of the `path`.
+
+---
+
+##### `path`<sup>Required</sup> <a name="path" id="@winglang/wingsdk.core.ConstructTreeNode.property.path"></a>
+
+```wing
+path: str;
+```
+
+- *Type:* str
+
+The path of the node.
+
+---
+
+##### `attributes`<sup>Optional</sup> <a name="attributes" id="@winglang/wingsdk.core.ConstructTreeNode.property.attributes"></a>
+
+```wing
+attributes: MutMap<any>;
+```
+
+- *Type:* MutMap&lt;any&gt;
+
+The node attributes.
+
+---
+
+##### `children`<sup>Optional</sup> <a name="children" id="@winglang/wingsdk.core.ConstructTreeNode.property.children"></a>
+
+```wing
+children: MutMap<ConstructTreeNode>;
+```
+
+- *Type:* MutMap&lt;core.ConstructTreeNode&gt;
+
+The child nodes.
+
+---
+
+##### `construct_info`<sup>Optional</sup> <a name="construct_info" id="@winglang/wingsdk.core.ConstructTreeNode.property.constructInfo"></a>
+
+```wing
+construct_info: ConstructInfo;
+```
+
+- *Type:* core.ConstructInfo
+
+Information on the construct class that led to this node, if available.
 
 ---
 
@@ -1380,6 +1735,32 @@ The lines of text that will be serialized into the file during synthesis.
 They will be joined with newline characters.
 
 ---
+
+### TopicOnMessageProps <a name="TopicOnMessageProps" id="@winglang/wingsdk.cloud.TopicOnMessageProps"></a>
+
+Options for Topic.onMessage.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.TopicOnMessageProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let topic_on_message_props = cloud.TopicOnMessageProps{ ... }
+```
+
+
+### TopicProps <a name="TopicProps" id="@winglang/wingsdk.cloud.TopicProps"></a>
+
+Properties for `Topic`.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.cloud.TopicProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let topic_props = cloud.TopicProps{ ... }
+```
+
 
 ## Classes <a name="Classes" id="Classes"></a>
 
@@ -2220,9 +2601,34 @@ Inflight interface for `Bucket`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IBucketClient.delete">delete</a></code> | Delete an existing object using a key from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.get">get</a></code> | Retrieve an object from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.list">list</a></code> | Retrieve existing objects keys from the bucket. |
 | <code><a href="#@winglang/wingsdk.cloud.IBucketClient.put">put</a></code> | Put an object in the bucket. |
+
+---
+
+##### `delete` <a name="delete" id="@winglang/wingsdk.cloud.IBucketClient.delete"></a>
+
+```wing
+delete(key: str, opts?: BucketDeleteOptions): void
+```
+
+Delete an existing object using a key from the bucket.
+
+###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.key"></a>
+
+- *Type:* str
+
+Key of the object.
+
+---
+
+###### `opts`<sup>Optional</sup> <a name="opts" id="@winglang/wingsdk.cloud.IBucketClient.delete.parameter.opts"></a>
+
+- *Type:* cloud.BucketDeleteOptions
+
+Options available for delete an item from a bucket.
 
 ---
 
@@ -2237,6 +2643,8 @@ Retrieve an object from the bucket.
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/wingsdk.cloud.IBucketClient.get.parameter.key"></a>
 
 - *Type:* str
+
+Key of the object.
 
 ---
 
@@ -2268,11 +2676,15 @@ Put an object in the bucket.
 
 - *Type:* str
 
+Key of the object.
+
 ---
 
 ###### `body`<sup>Required</sup> <a name="body" id="@winglang/wingsdk.cloud.IBucketClient.put.parameter.body"></a>
 
 - *Type:* str
+
+Content of the object we want to store into the bucket.
 
 ---
 
@@ -2447,6 +2859,37 @@ Payload to send to the queue.
 ---
 
 
+### ITopicClient <a name="ITopicClient" id="@winglang/wingsdk.cloud.ITopicClient"></a>
+
+- *Implemented By:* cloud.ITopicClient
+
+Inflight interface for `Topic`.
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.ITopicClient.publish">publish</a></code> | Publish message to topic. |
+
+---
+
+##### `publish` <a name="publish" id="@winglang/wingsdk.cloud.ITopicClient.publish"></a>
+
+```wing
+publish(message: str): void
+```
+
+Publish message to topic.
+
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.ITopicClient.publish.parameter.message"></a>
+
+- *Type:* str
+
+Payload to publish to Topic.
+
+---
+
+
 ## Enums <a name="Enums" id="Enums"></a>
 
 ### BucketInflightMethods <a name="BucketInflightMethods" id="@winglang/wingsdk.cloud.BucketInflightMethods"></a>
@@ -2460,6 +2903,7 @@ List of inflight operations available for `Bucket`.
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
 | <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
+| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.DELETE">DELETE</a></code> | `Bucket.delete`. |
 
 ---
 
@@ -2480,6 +2924,13 @@ List of inflight operations available for `Bucket`.
 ##### `LIST` <a name="LIST" id="@winglang/wingsdk.cloud.BucketInflightMethods.LIST"></a>
 
 `Bucket.list`.
+
+---
+
+
+##### `DELETE` <a name="DELETE" id="@winglang/wingsdk.cloud.BucketInflightMethods.DELETE"></a>
+
+`Bucket.delete`.
 
 ---
 
@@ -2605,6 +3056,25 @@ List of inflight operations available for `Queue`.
 ##### `PUSH` <a name="PUSH" id="@winglang/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
 
 `Queue.push`.
+
+---
+
+
+### TopicInflightMethods <a name="TopicInflightMethods" id="@winglang/wingsdk.cloud.TopicInflightMethods"></a>
+
+List of inflight operations available for `Topic`.
+
+#### Members <a name="Members" id="Members"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.TopicInflightMethods.PUBLISH">PUBLISH</a></code> | `Topic.publish`. |
+
+---
+
+##### `PUBLISH` <a name="PUBLISH" id="@winglang/wingsdk.cloud.TopicInflightMethods.PUBLISH"></a>
+
+`Topic.publish`.
 
 ---
 

@@ -1,3 +1,8 @@
+---
+title: SDK Architecture
+id: sdk-architecture
+keywords: [SDK architecture, sdk]
+---
 # SDK Architecture
 
 The Wing SDK is the standard library for the Wing language.
@@ -59,7 +64,7 @@ For example, given the following Wing code:
 ```wing
 let queue = new cloud.Queue();
 let greeting = "Hello, world!";
-new cloud.Function((event: str) ~> {
+new cloud.Function(inflight (event: str) => {
     print(greeting);
     queue.push(event);
 });

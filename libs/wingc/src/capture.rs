@@ -1,7 +1,4 @@
-use std::{
-	cell::Ref,
-	collections::{BTreeMap, BTreeSet},
-};
+use std::collections::{BTreeMap, BTreeSet};
 
 use crate::{
 	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
@@ -151,7 +148,6 @@ pub fn scan_for_inflights_in_expression(expr: &Expr) {
 			}
 		}
 		ExprKind::FunctionClosure(func_def) => {
-			// TODO: Phase::Independent
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
@@ -239,12 +235,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 					res.extend(
 						resource
 							.methods()
-							.filter(|(_, sig)| {
-								matches!(
-									sig.as_function_sig().unwrap().flight,
-									Phase::Inflight | Phase::Independent
-								)
-							})
+							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
 								def: CaptureDef { method: name.clone() },
@@ -278,6 +269,11 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 			scan_captures_in_expression(rexp, env, statement_idx);
 		}
 		ExprKind::Literal(_) => {}
+		ExprKind::ArrayLiteral { items, .. } => {
+			for v in items {
+				res.extend(scan_captures_in_expression(&v, env, statement_idx));
+			}
+		}
 		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {
 				res.extend(scan_captures_in_expression(&v, env, statement_idx));
@@ -291,7 +287,6 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 		ExprKind::FunctionClosure(func_def) => {
 			// Can't define preflight stuff in inflight context
 			assert!(func_def.signature.flight != Phase::Preflight);
-			// TODO: Phase::Independent
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
@@ -323,6 +318,10 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				statements,
 			} => {
 				res.extend(scan_captures_in_expression(iterable, env, s.idx));
+				res.extend(scan_captures_in_inflight_scope(statements));
+			}
+			StmtKind::While { condition, statements } => {
+				res.extend(scan_captures_in_expression(condition, env, s.idx));
 				res.extend(scan_captures_in_inflight_scope(statements));
 			}
 			StmtKind::If {

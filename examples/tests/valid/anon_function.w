@@ -1,5 +1,5 @@
 // Define a function and assign it to a variable
-let myfunc = (x: num) -> {
+let myfunc = (x: num) => {
   print("${x}");
   x = x + 1;
   if (x > 3) {

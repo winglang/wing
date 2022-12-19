@@ -41,6 +41,20 @@
           "command": "cargo wasi build --release"
         }
       }
+    },
+    "dev": {
+      "dependsOn": ["build-native"],
+      "executor": "nx:run-commands",
+      "options": {
+
+        "command": "cargo run",
+        "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo run --release"
+        }
+      }
     }
   }
 }

@@ -48,7 +48,7 @@ let queue = new cloud.Queue(timeout: 2m);
 let bucket = new cloud.Bucket();
 let counter = new cloud.Counter(initial: 100);
 
-queue.on_message((body: str): str ~> {
+queue.on_message(inflight (body: str): str => {
   let next = counter.inc();
   let key = "myfile-${next}.txt";
   bucket.put(key, body);
@@ -78,7 +78,7 @@ environment variables and produce the code bundles needed for this to work.
 
 Here's a diagram that shows the architecture produced by this code:
 
-![](./arch.png)
+![Architecture diagram produced by Wing](./arch.png 'Architecture diagram')
 
 In addition to targeting cloud providers, Wing applications can also be compiled
 to run inside a local **Cloud Simulator**. This means that you can now iterate
