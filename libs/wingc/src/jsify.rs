@@ -271,7 +271,7 @@ impl JSifier {
 						.join("")
 				),
 				Literal::Number(n) => format!("{}", n),
-				Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
+				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None),
@@ -325,17 +325,17 @@ impl JSifier {
 					self.jsify_expression(rexp)
 				)
 			}
-      ExprKind::ArrayLiteral { items, .. } => {
-        format!(
-          "Object.freeze([{}])",
-          items
-            .iter()
-            .map(|expr| self.jsify_expression(expr))
-            .collect::<Vec<String>>()
-            .join(", ")
-        )
-      }
-      ExprKind::StructLiteral { fields, .. } => {
+			ExprKind::ArrayLiteral { items, .. } => {
+				format!(
+					"Object.freeze([{}])",
+					items
+						.iter()
+						.map(|expr| self.jsify_expression(expr))
+						.collect::<Vec<String>>()
+						.join(", ")
+				)
+			}
+			ExprKind::StructLiteral { fields, .. } => {
 				format!(
 					"{{\n{}}}\n",
 					fields

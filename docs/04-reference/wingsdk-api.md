@@ -1671,7 +1671,7 @@ let queue_props = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>core.Duration</code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | How long a queue's consumers have to process a message. |
 
 ---
 
@@ -1694,7 +1694,7 @@ Initialize the queue with a set of messages.
 timeout: Duration;
 ```
 
-- *Type:* core.Duration
+- *Type:* std.Duration
 - *Default:* Duration.fromSeconds(10)
 
 How long a queue's consumers have to process a message.
@@ -1947,122 +1947,6 @@ value: IConstruct;
 Returns the IConstruct this graph vertex represents.
 
 `null` in case this is the root of the graph.
-
----
-
-
-### Duration <a name="Duration" id="@winglang/wingsdk.core.Duration"></a>
-
-Represents a length of time.
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Duration.fromHours">from_hours</a></code> | Create a Duration representing an amount of hours. |
-| <code><a href="#@winglang/wingsdk.core.Duration.fromMinutes">from_minutes</a></code> | Create a Duration representing an amount of minutes. |
-| <code><a href="#@winglang/wingsdk.core.Duration.fromSeconds">from_seconds</a></code> | Create a Duration representing an amount of seconds. |
-
----
-
-##### `from_hours` <a name="from_hours" id="@winglang/wingsdk.core.Duration.fromHours"></a>
-
-```wing
-bring core;
-
-core.Duration.from_hours(amount: num)
-```
-
-Create a Duration representing an amount of hours.
-
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromHours.parameter.amount"></a>
-
-- *Type:* num
-
-the amount of Hours the `Duration` will represent.
-
----
-
-##### `from_minutes` <a name="from_minutes" id="@winglang/wingsdk.core.Duration.fromMinutes"></a>
-
-```wing
-bring core;
-
-core.Duration.from_minutes(amount: num)
-```
-
-Create a Duration representing an amount of minutes.
-
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromMinutes.parameter.amount"></a>
-
-- *Type:* num
-
-the amount of Minutes the `Duration` will represent.
-
----
-
-##### `from_seconds` <a name="from_seconds" id="@winglang/wingsdk.core.Duration.fromSeconds"></a>
-
-```wing
-bring core;
-
-core.Duration.from_seconds(amount: num)
-```
-
-Create a Duration representing an amount of seconds.
-
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromSeconds.parameter.amount"></a>
-
-- *Type:* num
-
-the amount of Seconds the `Duration` will represent.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Duration.property.hours">hours</a></code> | <code>num</code> | Return the total number of hours in this Duration. |
-| <code><a href="#@winglang/wingsdk.core.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
-| <code><a href="#@winglang/wingsdk.core.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
-
----
-
-##### `hours`<sup>Required</sup> <a name="hours" id="@winglang/wingsdk.core.Duration.property.hours"></a>
-
-```wing
-hours: num;
-```
-
-- *Type:* num
-
-Return the total number of hours in this Duration.
-
----
-
-##### `minutes`<sup>Required</sup> <a name="minutes" id="@winglang/wingsdk.core.Duration.property.minutes"></a>
-
-```wing
-minutes: num;
-```
-
-- *Type:* num
-
-Return the total number of minutes in this Duration.
-
----
-
-##### `seconds`<sup>Required</sup> <a name="seconds" id="@winglang/wingsdk.core.Duration.property.seconds"></a>
-
-```wing
-seconds: num;
-```
-
-- *Type:* num
-
-Return the total number of seconds in this Duration.
 
 ---
 

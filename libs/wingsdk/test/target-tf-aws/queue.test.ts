@@ -1,5 +1,6 @@
 import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
+import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
@@ -20,7 +21,7 @@ test("queue with custom timeout", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   new cloud.Queue(app, "Queue", {
-    timeout: core.Duration.fromSeconds(30),
+    timeout: std.Duration.fromSeconds(30),
   });
   const output = app.synth();
 
@@ -34,7 +35,7 @@ test("queue with a consumer function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const queue = new cloud.Queue(app, "Queue", {
-    timeout: core.Duration.fromSeconds(30),
+    timeout: std.Duration.fromSeconds(30),
   });
   const processor = new core.Inflight({
     code: core.NodeJsCode.fromInline(
