@@ -22,8 +22,30 @@
       const intermediateJS = document.getElementById("intermediateJS");
       const stdout = document.getElementById("stdout");
       const example = document.getElementById("example");
+      const lineCounter = document.getElementById("lineCounter")
 
       code.addEventListener("input", () => sendCodeToWorker(code.value));
+
+      code.addEventListener('scroll', () => {
+          lineCounter.scrollTop = code.scrollTop;
+          lineCounter.scrollLeft = code.scrollLeft;
+      });
+
+      var lineCountCache = 0;
+      function line_counter() {
+            var lineCount = code.value.split('\n').length;
+            var outarr = new Array();
+            if (lineCountCache != lineCount) {
+              for (var x = 0; x < lineCount; x++) {
+                  outarr[x] = (x + 1) + '.';
+              }
+              lineCounter.value = outarr.join('\n');
+            }
+            lineCountCache = lineCount;
+      }
+      code.addEventListener('input', () => {
+          line_counter();
+      });
 
       for (const path of Object.keys(examples)) {
         const option = document.createElement("option");
@@ -59,6 +81,7 @@
     <select id="example"></select>
     <main>
       <section id="wing-side">
+        <textarea name="lineCount" id="lineCounter" wrap="off" readonly></textarea>
         <textarea id="code"></textarea>
       </section>
       <section id="js-side">
@@ -93,6 +116,7 @@
     }
 
     #wing-side {
+      display: inline-flex;
       flex-grow: 1;
       padding: 2rem;
       height: 80vh;
@@ -107,5 +131,14 @@
     #intermediateJS {
       height: 98%;
     }
+
+    #lineCounter {
+      border-color: transparent;
+      outline: none;
+      overflow-y: hidden;
+      text-align: right;
+      box-shadow: none;
+      width: 4rem;
+}
   </style>
 </html>
