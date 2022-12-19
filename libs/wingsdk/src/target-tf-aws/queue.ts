@@ -55,6 +55,18 @@ export class Queue extends cloud.QueueBase {
       throw new Error("Queue only supports creating tfaws.Function right now");
     }
 
+    fn.addPolicyStatements({
+      effect: "Allow",
+      action: [
+        "sqs:ReceiveMessage",
+        "sqs:ChangeMessageVisibility",
+        "sqs:GetQueueUrl",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+      ],
+      resource: this.queue.arn,
+    });
+
     new LambdaEventSourceMapping(this, "EventSourceMapping", {
       functionName: fn._functionName,
       eventSourceArn: this.queue.arn,
