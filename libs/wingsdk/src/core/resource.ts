@@ -37,7 +37,7 @@ export abstract class Resource extends Construct implements IInspectable {
    * For example if `MyBucket` has a `fancy_get` method that calls `get` on an
    * underlying `cloud.Bucket`, then it would be annotated as follows:
    * ```
-   * Resource._annotateInflight(MyBucket, "fancy_get", {
+   * MyBucket._annotateInflight("fancy_get", {
    *  "this.bucket": { ops: ["get"] }
    * });
    * ```
@@ -70,7 +70,7 @@ export abstract class Resource extends Construct implements IInspectable {
   /**
    * Binds the resource to the host so that it can be used by inflight code.
    *
-   * You can override this method to add perform additional logic like granting
+   * You can override this method to perform additional logic like granting
    * IAM permissions to the host based on what methods are being called. But
    * you must call `super._bind(host, ops)` to ensure that the resource is
    * actually bound.
