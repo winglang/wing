@@ -256,7 +256,7 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 ## 🧪 How do I run E2E tests?
 
-Our end-to-end tests are hosted under `./tools/hanger`. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
 
 Add a `.env` file to `tools/hangar` with the following:
 
