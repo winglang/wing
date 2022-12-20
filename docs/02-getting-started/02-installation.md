@@ -80,7 +80,7 @@ Wing applications running locally on the cloud simulator.
 ![Drag the Wing Console app into Applications](./console-install.png 'Wing Console app installation')
 
 
-[AWS account]: portal.aws.amazon.com/billing/signup
+[AWS account]: https://portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 [AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
 [personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages

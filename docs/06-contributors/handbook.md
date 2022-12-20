@@ -212,7 +212,7 @@ For more information about designing resources, check out the Wing SDK design gu
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
 You can also join us on our [Wing Slack] to ask questions (or just say hi)!
 
-[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+[Wing Slack]: https://t.winglang.io/slack
 
 ## 🎨 How do I design the API for a SDK resource?
 
@@ -256,7 +256,7 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 ## 🧪 How do I run E2E tests?
 
-The [Hangar](./tools/hangar) project hosts our E2E tests. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
 
 Add a `.env` file to `tools/hangar` with the following:
 
