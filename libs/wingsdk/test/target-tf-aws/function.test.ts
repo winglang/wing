@@ -1,18 +1,15 @@
 import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
+const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
+
 test("basic function", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `exports.greeter = async (name) => { console.log("Hello, " + name); } `
-    ),
-    entrypoint: "exports.greeter",
-  });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
@@ -30,12 +27,7 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `exports.greeter = async (name) => { console.log("Hello, " + name); } `
-    ),
-    entrypoint: "exports.greeter",
-  });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "Function", inflight, {
     env: {
       FOO: "BAR",
