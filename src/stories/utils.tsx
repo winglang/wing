@@ -1,10 +1,11 @@
 import {
   ArchiveBoxIcon,
   BoltIcon,
-  CubeTransparentIcon,
-  QueueListIcon,
+  CalculatorIcon,
   CubeIcon,
+  CubeTransparentIcon,
   GlobeAltIcon,
+  QueueListIcon,
 } from "@heroicons/react/24/outline";
 import classNames from "classnames";
 import React from "react";
@@ -85,6 +86,9 @@ const getResourceIconComponent = (
     case "wingsdk.cloud.Endpoint": {
       return GlobeAltIcon;
     }
+    case "wingsdk.cloud.Counter": {
+      return CalculatorIcon;
+    }
     case "wingsdk.constructs.Construct": {
       return CubeTransparentExIcon;
     }
@@ -130,6 +134,14 @@ const getResourceIconColors = (options: {
         options.darkenOnGroupHover &&
           "group-hover:text-sky-600 dark:group-hover:text-sky-300",
         options.forceDarken && "text-sky-600 dark:text-sky-300",
+      ];
+    }
+    case "wingsdk.cloud.Counter": {
+      return [
+        "text-lime-500 dark:text-lime-400",
+        options.darkenOnGroupHover &&
+          "group-hover:text-lime-600 dark:group-hover:text-lime-300",
+        options.forceDarken && "text-lime-600 dark:text-lime-300",
       ];
     }
     default: {

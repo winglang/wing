@@ -1,4 +1,5 @@
 import { BucketExploreView } from "./BucketExploreView.js";
+import { CounterExploreView } from "./CounterExploreView.js";
 import { FunctionExploreView } from "./FunctionExploreView.js";
 import { QueueExploreView } from "./QueueExploreView.js";
 
@@ -21,6 +22,9 @@ export const ResourceExploreView = ({
       )}
       {resourceType === "wingsdk.cloud.Bucket" && (
         <BucketExploreView resourcePath={resourcePath} />
+      )}
+      {resourceType === "wingsdk.cloud.Counter" && (
+        <CounterExploreView resourcePath={resourcePath} />
       )}
     </div>
   );

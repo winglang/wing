@@ -22,7 +22,13 @@ const main = ({
   schema?: WingSimulatorSchema;
 }) => {
   const url = `http://localhost:${port}`;
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
   const trpcClient = createTRPCClient<Router>({
     url,
     links: [httpLink({ url })],

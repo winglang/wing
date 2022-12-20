@@ -41,7 +41,7 @@ export const Button = ({
       disabled={disabled}
       onClick={onClick}
     >
-      {Icon && <Icon className="-ml-0.5 h-4 w-4" />}
+      {Icon && <Icon className={classNames(label && "-ml-0.5", "h-4 w-4")} />}
       {label}
       {children}
     </button>

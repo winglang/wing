@@ -9,3 +9,9 @@ let handler = inflight (message: str): str => {
 };
 
 queue.on_message(handler);
+
+let counter = new cloud.Counter(initial: 0);
+new cloud.Function(inflight (message: str): str => {
+  counter.inc();
+  return message;
+}) as "IncrementCounter";
