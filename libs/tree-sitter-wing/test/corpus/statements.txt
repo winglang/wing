@@ -270,3 +270,21 @@ while false {}
         block: (block)
     )
 )
+
+==================================
+Enum definition
+==================================
+
+enum SomeEnum {
+    ONE, TWO, THREE
+}
+
+---
+(source
+    (enum_definition
+        enum_name: (identifier)
+        (enum_field)
+        (enum_field)
+        (enum_field)
+    )
+)
