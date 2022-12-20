@@ -147,24 +147,29 @@ function MenuItem({
 
   return (
     <>
-      <button
-        type="button"
+      <div
         className={classNames(
-          "w-full cursor-pointer group hover:bg-slate-200/50",
+          "w-full flex cursor-pointer group hover:bg-slate-200/50",
           selectedItem === item.id && "bg-slate-200",
           selectedItem === item.id && SELECTED_TREE_ITEM_CSS_ID,
         )}
-        tabIndex={-1}
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           onItemClick?.(item);
         }}
-        onDoubleClick={() => {
+        onDoubleClick={(e) => {
+          e.stopPropagation();
           onItemToggle?.(item);
         }}
       >
-        <div
-          className="px-4 py-0.5 flex items-center"
+        <button
+          type={"button"}
+          className="pl-4 py-0.5 flex items-center"
           style={{ marginLeft: `${8 * indentationLevel}px` }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onItemToggle?.(item);
+          }}
         >
           {open ? (
             <ChevronDownIcon
@@ -189,6 +194,19 @@ function MenuItem({
               aria-hidden="true"
             />
           )}
+        </button>
+        <button
+          type={"button"}
+          className="py-0.5 flex items-center truncate"
+          onClick={(e) => {
+            e.stopPropagation();
+            onItemClick?.(item);
+          }}
+          onDoubleClick={(e) => {
+            e.stopPropagation();
+            onItemToggle?.(item);
+          }}
+        >
           {item.icon && <div className="mr-1.5 flex-shrink-0">{item.icon}</div>}
           <span
             title={item.label}
@@ -201,8 +219,8 @@ function MenuItem({
           >
             {item.label}
           </span>
-        </div>
-      </button>
+        </button>
+      </div>
       {open && (
         <MenuItems
           items={item.children ?? []}
