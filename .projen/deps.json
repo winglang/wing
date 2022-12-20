@@ -21,6 +21,10 @@
       "type": "build"
     },
     {
+      "name": "@popperjs/core",
+      "type": "build"
+    },
+    {
       "name": "@storybook/addon-actions",
       "type": "build"
     },
@@ -77,6 +81,10 @@
     },
     {
       "name": "@types/express",
+      "type": "build"
+    },
+    {
+      "name": "@types/lodash.throttle",
       "type": "build"
     },
     {
@@ -220,6 +228,10 @@
       "type": "build"
     },
     {
+      "name": "lodash.throttle",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^16",
       "type": "build"
@@ -254,6 +266,10 @@
     },
     {
       "name": "react-lottie-player",
+      "type": "build"
+    },
+    {
+      "name": "react-popper",
       "type": "build"
     },
     {

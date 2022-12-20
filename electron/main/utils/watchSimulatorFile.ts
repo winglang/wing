@@ -28,7 +28,7 @@ export const watchSimulatorFile = ({
       persistent: true,
     })
     .on("change", async () => {
-      consoleLogger.log(`File ${simulatorFile} has been changed`);
+      consoleLogger.verbose(`File ${simulatorFile} has been changed`);
       try {
         onLoading(true);
         await simulator.reload();
@@ -38,7 +38,7 @@ export const watchSimulatorFile = ({
         onLoading(false);
         return;
       }
-      consoleLogger.log("Simulator was Reloaded");
+      consoleLogger.verbose("Simulator was reloaded");
       notifyChange();
       onLoading(false);
     })

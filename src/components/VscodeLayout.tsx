@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
+import { LogEntry, LogType } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { Error } from "../design-system/Error.js";
@@ -21,27 +22,17 @@ import { HeaderBanner } from "./HeaderBanner.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { NewNodeRelationshipsView } from "./NewNodeRelationshipsView.js";
 import { NodeLogs } from "./NodeLogs.js";
+import NodeLogsFilters from "./NodeLogsFilters.js";
 import { ResourceExploreView } from "./ResourceExploreView.js";
 
 export interface VscodeLayoutProps {
-  logs?:
-    | {
-        timestamp: number;
-        type: "info" | "warn" | "error";
-        message: string;
-      }[]
-    | undefined;
   isLoading?: boolean;
   isError?: boolean;
 }
 
 const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
-export const VscodeLayout = ({
-  logs,
-  isError,
-  isLoading,
-}: VscodeLayoutProps) => {
+export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
 
   const treeMenu = useTreeMenuItems();
@@ -85,13 +76,34 @@ export const VscodeLayout = ({
     { path: treeMenu.currentItemId },
   ]);
 
+  const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
+    LogType[]
+  >(["info", "warn", "error"]);
+  const logs = trpc.useQuery([
+    "app.logs",
+    {
+      filters: {
+        type: {
+          verbose: selectedLogTypeFilters.includes("verbose"),
+          info: selectedLogTypeFilters.includes("info"),
+          warn: selectedLogTypeFilters.includes("warn"),
+          error: selectedLogTypeFilters.includes("error"),
+        },
+        source: {
+          compiler: true,
+          console: true,
+          simulator: true,
+        },
+      },
+    },
+  ]);
   const logsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const div = logsRef.current;
     if (div) {
       div.scrollTo({ top: div.scrollHeight });
     }
-  }, [logs]);
+  }, [logs.data]);
 
   const metadata = trpc.useQuery([
     "app.nodeMetadata",
@@ -241,16 +253,20 @@ export const VscodeLayout = ({
         </div>
       </div>
 
-      <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] flex flex-col gap-2 px-4 py-2">
-        <div className="flex gap-2">
-          <div className="uppercase text-sm border-b border-slate-600">
-            Logs
+      <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
+        <div className="relative h-full flex flex-col gap-2">
+          <div className="flex px-4">
+            <NodeLogsFilters
+              selected={selectedLogTypeFilters}
+              onChange={(types) => setSelectedLogTypeFilters(types)}
+            />
           </div>
-        </div>
-        <div className="flex-1 relative">
-          <ScrollableArea ref={logsRef} overflowY>
-            <NodeLogs logs={logs ?? []} />
-          </ScrollableArea>
+
+          <div className="relative h-full">
+            <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
+              <NodeLogs logs={logs.data ?? []} />
+            </ScrollableArea>
+          </div>
         </div>
       </TopResizableWidget>
     </div>

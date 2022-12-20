@@ -91,39 +91,51 @@ function createWindowManager() {
       let newWindow: BrowserWindow | undefined;
       const consoleLogger: ConsoleLogger = {
         messages: new Array<LogEntry>(),
-        log(message: string) {
+        verbose(message, source) {
+          log.info(message);
+          this.messages.push({
+            timestamp: Date.now(),
+            type: "verbose",
+            message,
+            source: source ?? "console",
+          });
+          newWindow?.webContents.send("trpc.invalidate", "app.logs");
+        },
+        log(message, source) {
           log.info(message);
           this.messages.push({
             timestamp: Date.now(),
             type: "info",
             message,
+            source: source ?? "console",
           });
           newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
-        error(error: unknown) {
+        error(error, source) {
           log.error(error);
           this.messages.push({
             timestamp: Date.now(),
             type: "error",
             message:
               error instanceof Error ? error.message : JSON.stringify(error),
+            source: source ?? "console",
           });
           newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
       };
 
       const onLoading = (isLoading: boolean) => {
-        log.info("onLoading", isLoading);
+        log.verbose("onLoading", isLoading);
         newWindow?.webContents.send("app.isLoading", isLoading);
       };
 
       const onError = (error: unknown) => {
-        log.info("onError", { error });
+        log.verbose("onError", { error });
         newWindow?.webContents.send("app.isError", true);
       };
 
       const notifyChange = () => {
-        log.info("notifyChange");
+        log.verbose("notifyChange");
         newWindow?.webContents.send("trpc.invalidate", []);
       };
 
@@ -136,7 +148,7 @@ function createWindowManager() {
 
       // Create the express server and router for the simulator. Start
       // listening but don't wait for it, yet.
-      consoleLogger.log("Starting the dev server...");
+      consoleLogger.verbose("Starting the dev server...");
       const server = await (async () => {
         const app = express();
         app.use(cors());
@@ -163,13 +175,13 @@ function createWindowManager() {
           }),
         );
 
-        consoleLogger.log("Looking for an open port");
+        consoleLogger.verbose("Looking for an open port");
         const port = await getPort();
         const server = app.listen(port);
         await new Promise<void>((resolve) => {
           server.on("listening", resolve);
         });
-        consoleLogger.log(`Server is listening on port ${port}`);
+        consoleLogger.verbose(`Server is listening on port ${port}`);
         return { port, server };
       })();
 
@@ -183,6 +195,18 @@ function createWindowManager() {
 
       const simulatorPromiseResolved = await simulatorPromise;
       const simulatorInstance = await simulatorPromiseResolved.get();
+
+      simulatorInstance.onTrace({
+        callback(event) {
+          // TODO: Refactor the whole logs and events so we support all of the fields that the simulator uses.
+          consoleLogger.log(
+            `[${event.sourceType}] ${
+              event.data.message ?? JSON.stringify(event.data, undefined, 2)
+            }`,
+            "simulator",
+          );
+        },
+      });
 
       const simulatorFileWatcher = watchSimulatorFile({
         simulator: simulatorInstance,

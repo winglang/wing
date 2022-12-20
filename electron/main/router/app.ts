@@ -19,8 +19,29 @@ export interface ExplorerItem {
 export const createAppRouter = () => {
   return createRouter()
     .query("app.logs", {
-      async resolve({ ctx }) {
-        return ctx.logs();
+      input: z.object({
+        filters: z.object({
+          type: z.object({
+            verbose: z.boolean(),
+            info: z.boolean(),
+            warn: z.boolean(),
+            error: z.boolean(),
+          }),
+          source: z.object({
+            compiler: z.boolean(),
+            console: z.boolean(),
+            simulator: z.boolean(),
+          }),
+        }),
+      }),
+      async resolve({ ctx, input }) {
+        return ctx
+          .logs()
+          .filter(
+            (entry) =>
+              input.filters.type[entry.type] &&
+              input.filters.source[entry.source],
+          );
       },
     })
     .query("app.explorerTree", {

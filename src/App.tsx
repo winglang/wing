@@ -9,7 +9,6 @@ import { useIpcEventListener } from "./utils/useIpcEventListener.js";
 export interface AppProps {}
 
 export const App = ({}: AppProps) => {
-  const logs = trpc.useQuery(["app.logs"]);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
@@ -37,7 +36,7 @@ export const App = ({}: AppProps) => {
 
   return (
     <NotificationsProvider>
-      <VscodeLayout logs={logs.data} isLoading={isLoading} isError={isError} />
+      <VscodeLayout isLoading={isLoading} isError={isError} />
     </NotificationsProvider>
   );
 };

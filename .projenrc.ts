@@ -62,6 +62,10 @@ const project = new TypeScriptProject({
     "tsx",
     "fix-path",
     "react-lottie-player",
+    "lodash.throttle",
+    "@types/lodash.throttle",
+    "react-popper",
+    "@popperjs/core",
     // Peer deps:
     "webpack",
     "require-from-string",

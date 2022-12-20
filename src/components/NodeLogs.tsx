@@ -1,52 +1,145 @@
+import { ChevronDownIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import classNames from "classnames";
-import { Fragment } from "react";
+import throttle from "lodash.throttle";
+import { Fragment, useEffect, useRef, useState } from "react";
 
 import { LogEntry } from "../../electron/main/consoleLogger.js";
 
-export interface NodeLogsProps {
-  logs: LogEntry[];
-}
-
 const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
   hour: "2-digit",
   minute: "2-digit",
   second: "2-digit",
   fractionalSecondDigits: 3,
 });
 
+interface NodeLogEntryProps {
+  log: LogEntry;
+}
+
+const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
+  const [expanded, setExpanded] = useState(false);
+  const expandableRef = useRef<HTMLElement>(null);
+  const [overflows, setOverflows] = useState(false);
+  useEffect(() => {
+    const computeOverflows = throttle(() => {
+      const element = expandableRef.current;
+      if (!element) {
+        return;
+      }
+      setOverflows(element.offsetWidth < element.scrollWidth);
+    }, 500);
+
+    computeOverflows();
+
+    window.addEventListener("resize", computeOverflows);
+    return () => {
+      window.removeEventListener("resize", computeOverflows);
+    };
+  }, []);
+  const [canBeExpanded, setCanBeExpanded] = useState(false);
+  useEffect(() => {
+    setCanBeExpanded(overflows || expanded);
+  }, [expanded, overflows]);
+
+  const ChevronIcon = expanded ? ChevronDownIcon : ChevronRightIcon;
+
+  return (
+    <Fragment>
+      <div className="flex text-slate-400 text-xs">
+        {dateTimeFormat.format(log.timestamp)}
+      </div>
+
+      <div className="pl-2">
+        <div
+          className={classNames(
+            "px-2 rounded-lg text-xs inline-flex uppercase",
+            {
+              "bg-slate-400 text-white": true,
+            },
+          )}
+        >
+          {log.source}
+        </div>
+      </div>
+
+      <div>
+        <div
+          className={classNames(
+            "px-2 rounded-lg text-xs inline-flex uppercase",
+            {
+              "bg-slate-50 text-slate-500": log.type === "verbose",
+              "bg-slate-400 text-white": log.type === "info",
+              "bg-yellow-400 text-white": log.type === "warn",
+              "bg-red-400 text-white": log.type === "error",
+            },
+          )}
+        >
+          {log.type}
+        </div>
+      </div>
+
+      <button
+        className={classNames(
+          "text-left text-xs px-1.5 py-0.5 group",
+          "flex min-w-0",
+          {
+            "hover:bg-slate-100": canBeExpanded,
+            "cursor-default": !canBeExpanded,
+            "text-slate-700": log.type !== "verbose",
+            "hover:text-slate-800": log.type !== "verbose" && canBeExpanded,
+            "text-slate-400": log.type === "verbose",
+            "hover:text-slate-500": log.type === "verbose" && canBeExpanded,
+          },
+        )}
+        onClick={() => {
+          if (canBeExpanded) {
+            setExpanded((expanded) => !expanded);
+          }
+        }}
+      >
+        <div
+          className={classNames(
+            "flex-shrink-0 pr-1.5",
+            canBeExpanded && "group-hover:bg-slate-100",
+          )}
+        >
+          <ChevronIcon
+            className={classNames("w-3.5 h-3.5 inline-block", {
+              invisible: !canBeExpanded,
+            })}
+          />
+        </div>
+
+        <span
+          ref={expandableRef}
+          className={classNames({
+            truncate: !expanded,
+          })}
+        >
+          {log.message}
+        </span>
+      </button>
+    </Fragment>
+  );
+};
+
+export interface NodeLogsProps {
+  logs: LogEntry[];
+}
+
 export const NodeLogs = ({ logs }: NodeLogsProps) => {
   return (
-    <div
-      className="grid grid-cols-3 gap-x-4 text-sm"
-      style={{ gridTemplateColumns: "max-content max-content 1fr" }}
-    >
-      {logs.map((log, logIndex) => (
-        <Fragment key={logIndex}>
-          <div className="flex items-center text-slate-500 font-mono text-xs">
-            {dateTimeFormat.format(log.timestamp)}
-          </div>
-
-          <div>
-            <div
-              className={classNames(
-                "px-2 rounded-lg text-xs inline-flex items-center uppercase",
-                {
-                  "bg-slate-400 text-white": log.type === "info",
-                  "bg-yellow-400 text-white": log.type === "warn",
-                  "bg-red-400 text-white": log.type === "error",
-                },
-              )}
-            >
-              {log.type}
-            </div>
-          </div>
-
-          <div>{log.message}</div>
-        </Fragment>
-      ))}
-    </div>
+    <>
+      <div
+        className="grid gap-x-2 text-sm font-mono"
+        style={{
+          gridTemplateColumns: "max-content max-content max-content 1fr",
+        }}
+      >
+        {logs.map((log, logIndex) => (
+          <NodeLogEntry key={logIndex} log={log} />
+        ))}
+      </div>
+    </>
   );
 };

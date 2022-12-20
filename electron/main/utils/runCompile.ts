@@ -28,7 +28,7 @@ export const runCompile = ({
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-app-target-dir-"));
   const fileName = path.basename(wingSrcFile, ".w");
   const compiledSimFile = path.join(tmpDir, fileName + ".wsim");
-  consoleLogger.log(`compiling ${wingSrcFile} into ${tmpDir}`);
+  consoleLogger.verbose(`compiling ${wingSrcFile} into ${tmpDir}`, "compiler");
 
   const runCompile = async () => {
     try {
@@ -39,7 +39,7 @@ export const runCompile = ({
         consoleLogger,
       });
       if (status === "error") {
-        onError("compilation failed");
+        onError("Compilation failed");
       } else {
         try {
           await access(compiledSimFile);
@@ -48,19 +48,21 @@ export const runCompile = ({
             `file ${compiledSimFile} doesn't exist ${
               typeof error === "string" ? error : JSON.stringify(error)
             }`,
+            "compiler",
           );
-          onError("compilation failed");
+          onError("Compilation failed");
           return;
         }
         onSuccess(compiledSimFile);
       }
     } catch (error) {
-      consoleLogger.log(
+      consoleLogger.error(
         `failed to recompile Wing application. wFile: ${wingSrcFile}, outDir: ${tmpDir}\n ${
           typeof error === "string" ? error : JSON.stringify(error)
         }`,
+        "compiler",
       );
-      onError("compilation failed");
+      onError("Compilation failed");
     }
   };
 
@@ -75,14 +77,16 @@ export const runCompile = ({
       persistent: true,
     })
     .on("change", () => {
-      consoleLogger.log(
+      consoleLogger.verbose(
         `Wing application src directory content has been changed`,
+        "compiler",
       );
       void runCompile();
     })
     .on("unlink", async () => {
       consoleLogger.error(
         `Wing application src directory has been deleted ${wingSrcDir}`,
+        "compiler",
       );
       onError("Wing application src directory has been deleted");
       // todo [sa] what should we do here?
