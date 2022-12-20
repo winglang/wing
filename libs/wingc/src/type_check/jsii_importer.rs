@@ -62,7 +62,7 @@ impl<'a> JsiiImporter<'a> {
 						return_type: Some(self.wing_types.anything()),
 						flight: Phase::Inflight,
 					})))
-				} else if type_fqn == "@winglang/wingsdk.core.Duration" {
+				} else if type_fqn == "@winglang/wingsdk.std.Duration" {
 					Some(self.wing_types.duration())
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
@@ -99,14 +99,14 @@ impl<'a> JsiiImporter<'a> {
 		let assembly_name = parts[0];
 		let namespace_name = parts[1];
 		// Make sure this type is part of our assembly and in our namespace
-		if assembly_name != self.assembly_name || namespace_name != self.namespace_name {
+		if assembly_name != self.assembly_name {
 			panic!(
-				"Encountered JSII type {} which isn't part of imported JSII namespace {}.{}",
-				fqn, self.assembly_name, self.namespace_name
+				"Encountered JSII type {} which isn't part of imported JSII module {}",
+				fqn, self.assembly_name
 			);
 		}
 		fqn
-			.strip_prefix(format!("{}.{}.", self.assembly_name, self.namespace_name).as_str())
+			.strip_prefix(format!("{}.{}.", assembly_name, namespace_name).as_str())
 			.unwrap()
 			.to_string()
 	}

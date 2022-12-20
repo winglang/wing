@@ -1041,7 +1041,7 @@ constructor() {
   
   const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
   const counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial: 100 });
-  const queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.core.Duration.fromSeconds(10) });
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
   const handler = new $stdlib.core.Inflight({
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.3d92ae400542548600c5fd9f369eb043032b16ea0cd84abf633b08be0b8ece10/index.js\\")),
     entrypoint: \\"$proc\\",
@@ -1351,6 +1351,68 @@ constructor() {
     }
   });
   queue.onMessage(handler);
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile primitive_methods.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile primitive_methods.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing compile primitive_methods.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"primitive_methods\\" });
+  
+  const dur = $stdlib.std.Duration.fromSeconds(60);
+  console.log(\`\${dur.seconds}\`);
 }
 }
 new MyApp().synth();"
