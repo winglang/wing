@@ -24,4 +24,4 @@ If you run into issues, please submit a [new
 issue](https://github.com/winglang/wing/issues/new/choose) on GitHub and let us
 know as soon as possible.
 
-So without further ado, let' get this party started!
+So without further ado, let's get this party started!
