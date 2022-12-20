@@ -362,11 +362,8 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 			} => {
 				todo!()
 			}
-			StmtKind::Struct {
-				name: _,
-				extends: _,
-				members: _,
-			} => {}
+			// Type definitions with no expressions in them can't capture anything
+			StmtKind::Struct { .. } | StmtKind::Enum { .. } => {}
 		}
 	}
 	res
