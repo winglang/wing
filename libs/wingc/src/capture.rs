@@ -4,7 +4,7 @@ use crate::{
 	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
 	type_check::type_env::TypeEnv,
-	type_check::Type,
+	type_check::IdentKind,
 };
 
 /* This is a definition of how a resource is captured. The most basic way to capture a resource
@@ -173,7 +173,7 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, s
 		res.extend(scan_captures_in_expression(&object, env, statement_idx));
 
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
-		if let &Type::ResourceObject(resource) = object.evaluated_type.borrow().unwrap().into() {
+		if let &IdentKind::ResourceObject(resource) = object.evaluated_type.borrow().unwrap().into() {
 			let resource = resource.as_resource().unwrap();
 			let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
 				Ok(_type) => _type,
@@ -235,12 +235,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 					res.extend(
 						resource
 							.methods()
-							.filter(|(_, sig)| {
-								matches!(
-									sig.as_function_sig().unwrap().flight,
-									Phase::Inflight
-								)
-							})
+							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
 								def: CaptureDef { method: name.clone() },

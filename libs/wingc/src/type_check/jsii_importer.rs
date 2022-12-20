@@ -3,7 +3,9 @@ use crate::{
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, type_env::TypeEnv},
-	type_check::{type_env::StatementIdx, Class, FunctionSignature, Struct, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME},
+	type_check::{
+		type_env::StatementIdx, Class, FunctionSignature, IdentKind, Struct, TypeRef, Types, WING_CONSTRUCTOR_NAME,
+	},
 	utilities::camel_case_to_snake_case,
 };
 use colored::Colorize;
@@ -57,7 +59,7 @@ impl<'a> JsiiImporter<'a> {
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
 				if type_fqn == "@winglang/wingsdk.core.Inflight" {
-					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
+					Some(self.wing_types.add_type(IdentKind::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
 						flight: Phase::Inflight,
@@ -160,7 +162,7 @@ impl<'a> JsiiImporter<'a> {
 
 		let struct_env = TypeEnv::new(None, None, true, self.namespace_env.flight, self.import_statement_idx);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
-		let wing_type = self.wing_types.add_type(Type::Struct(Struct {
+		let wing_type = self.wing_types.add_type(IdentKind::Struct(Struct {
 			name: new_type_symbol.clone(),
 			extends: extends.clone(),
 			env: struct_env,
@@ -221,7 +223,7 @@ impl<'a> JsiiImporter<'a> {
 						arg_types.push(self.parameter_to_wing_type(&param));
 					}
 				}
-				let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
+				let method_sig = self.wing_types.add_type(IdentKind::Function(FunctionSignature {
 					args: arg_types,
 					return_type,
 					flight,
@@ -251,7 +253,7 @@ impl<'a> JsiiImporter<'a> {
 
 				let wing_type = if is_optional {
 					// TODO Will this create a bunch of duplicate types?
-					self.wing_types.add_type(Type::Optional(base_wing_type))
+					self.wing_types.add_type(IdentKind::Optional(base_wing_type))
 				} else {
 					base_wing_type
 				};
@@ -338,8 +340,8 @@ impl<'a> JsiiImporter<'a> {
 		// Get env of base class/resource
 		let base_class_env = if let Some(base_class) = base_class {
 			match base_class.into() {
-				&Type::Class(ref c) => Some(&c.env as *const TypeEnv),
-				&Type::Resource(ref c) => {
+				&IdentKind::Class(ref c) => Some(&c.env as *const TypeEnv),
+				&IdentKind::Resource(ref c) => {
 					// If our base class is a resource then we are a resource
 					is_resource = true;
 					Some(&c.env as *const TypeEnv)
@@ -363,9 +365,9 @@ impl<'a> JsiiImporter<'a> {
 			parent: base_class,
 		};
 		let new_type = self.wing_types.add_type(if is_resource {
-			Type::Resource(class_spec)
+			IdentKind::Resource(class_spec)
 		} else {
-			Type::Class(class_spec)
+			IdentKind::Class(class_spec)
 		});
 		self
 			.namespace_env
@@ -394,7 +396,7 @@ impl<'a> JsiiImporter<'a> {
 					arg_types.push(self.parameter_to_wing_type(&param));
 				}
 			}
-			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
+			let method_sig = self.wing_types.add_type(IdentKind::Function(FunctionSignature {
 				args: arg_types,
 				return_type: Some(new_type),
 				flight: class_env.flight,
@@ -438,7 +440,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 		// Replace the dummy class environment with the real one before type checking the methods
 		match new_type.into() {
-			&mut Type::Class(ref mut class) | &mut Type::Resource(ref mut class) => {
+			&mut IdentKind::Class(ref mut class) | &mut IdentKind::Resource(ref mut class) => {
 				class.env = class_env;
 			}
 			_ => panic!("Expected {} to be a class or resource ", type_name),
@@ -450,7 +452,7 @@ impl<'a> JsiiImporter<'a> {
 		let base_type = self.type_ref_to_wing_type(&jsii_optional_type.type_);
 		if let Some(true) = jsii_optional_type.optional {
 			// TODO: we assume Some(false) and None are both non-optional - verify!!
-			Some(self.wing_types.add_type(Type::Optional(base_type.unwrap())))
+			Some(self.wing_types.add_type(IdentKind::Optional(base_type.unwrap())))
 		} else {
 			base_type
 		}
@@ -463,7 +465,7 @@ impl<'a> JsiiImporter<'a> {
 
 		let param_type = self.type_ref_to_wing_type(&parameter.type_).unwrap();
 		if parameter.optional.unwrap_or(false) {
-			self.wing_types.add_type(Type::Optional(param_type))
+			self.wing_types.add_type(IdentKind::Optional(param_type))
 		} else {
 			param_type
 		}

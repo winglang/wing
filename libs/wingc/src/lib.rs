@@ -5,7 +5,7 @@ use ast::{Scope, Symbol};
 use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::type_env::StatementIdx;
-use type_check::{FunctionSignature, Type};
+use type_check::{FunctionSignature, IdentKind};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -67,7 +67,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 
 	add_builtin(
 		"print",
-		Type::Function(FunctionSignature {
+		IdentKind::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
 			flight: Phase::Independent,
@@ -83,7 +83,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
-fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
+fn add_builtin(name: &str, typ: IdentKind, scope: &mut Scope, types: &mut Types) {
 	let sym = Symbol {
 		name: name.to_string(),
 		span: WingSpan {
