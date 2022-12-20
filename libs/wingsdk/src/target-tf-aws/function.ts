@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { readFileSync } from "fs";
-import { resolve } from "path";
+import { join, resolve } from "path";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
@@ -9,16 +9,11 @@ import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
+import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
-import {
-  Code,
-  Language,
-  Inflight,
-  CaptureMetadata,
-  InflightClient,
-  Resource,
-} from "../core";
-import { addBindConnections } from "./util";
+import * as core from "../core";
+import { mkdtemp } from "../util";
+import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -36,7 +31,7 @@ export class Function extends cloud.FunctionBase {
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: cloud.IFunctionHandler,
     props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
@@ -45,24 +40,39 @@ export class Function extends cloud.FunctionBase {
       this.addEnvironment(key, value);
     }
 
-    if (inflight.code.language !== Language.NODE_JS) {
-      throw new Error("Only JavaScript code is currently supported.");
-    }
+    inflight._bind(this, ["handle"]);
+    const inflightClient = inflight._toInflight();
 
-    const captureClients = inflight.makeClients(this);
-    const code = inflight.bundle({
-      captureScope: this,
-      captureClients,
+    const lines = new Array<string>();
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await ${inflightClient.text}.handle(event);`);
+    lines.push("};");
+
+    const tempdir = mkdtemp();
+    const outfile = join(tempdir, "index.js");
+
+    esbuild.buildSync({
+      bundle: true,
+      stdin: {
+        contents: lines.join("\n"),
+        resolveDir: tempdir,
+        sourcefile: "inflight.js",
+      },
+      target: "node16",
+      platform: "node",
+      absWorkingDir: tempdir,
+      outfile,
+      minify: false,
       external: ["aws-sdk"],
     });
 
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(code.path, "..");
+    const codeDir = resolve(outfile, "..");
 
     // calculate a md5 hash of the contents of asset.path
     const codeHash = crypto
       .createHash("md5")
-      .update(readFileSync(code.path))
+      .update(readFileSync(outfile))
       .digest("hex");
 
     // Create Lambda executable
@@ -104,7 +114,7 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Add policy to Lambda role for any custom policy statements, such as
-    // those needed by captures
+    // those needed by bound resources
     new IamRolePolicy(this, "IamRolePolicy", {
       role: this.role.name,
       policy: Lazy.stringValue({
@@ -167,21 +177,14 @@ export class Function extends cloud.FunctionBase {
     return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
   }
 
-  /**
-   * @internal
-   */
-  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error(
-        "functions can only be captured by tfaws.Function for now"
-      );
+  /** @internal */
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
-    const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
-
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.FunctionInflightMethods.INVOKE)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],
         resource: [`${this.function.arn}`],
@@ -190,12 +193,16 @@ export class Function extends cloud.FunctionBase {
 
     // The function name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(env, this.function.arn);
+    host.addEnvironment(this.envName(), this.function.arn);
 
-    addBindConnections(this, captureScope);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
-    return InflightClient.for(__filename, "FunctionClient", [
-      `process.env["${env}"]`,
+  /** @internal */
+  public _toInflight(): core.Code {
+    return core.InflightClient.for(__filename, "FunctionClient", [
+      `process.env["${this.envName()}"]`,
     ]);
   }
 
@@ -223,6 +230,10 @@ export class Function extends cloud.FunctionBase {
   public get _functionName(): string {
     return this.function.functionName;
   }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+  }
 }
 
 /**
@@ -236,3 +247,5 @@ export interface PolicyStatement {
   /** Effect ("Allow" or "Deny") */
   readonly effect?: string;
 }
+
+Function._annotateInflight("invoke", {});

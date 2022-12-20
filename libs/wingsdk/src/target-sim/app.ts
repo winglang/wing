@@ -4,40 +4,29 @@ import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import * as tar from "tar";
 import { SDK_VERSION } from "../constants";
-import {
-  AppProps,
-  DependencyGraph,
-  Files,
-  IApp,
-  synthesizeTree,
-} from "../core";
-import { mkdtemp } from "../util";
+import * as core from "../core";
+import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
 import { PolyconFactory } from "./factory";
 import { isSimulatorResource } from "./resource";
 import { WingSimulatorSchema } from "./schema";
 
 /**
- * Path of the simulator configuration file in every .wsim tarball.
- */
-export const SIMULATOR_FILE_PATH = "simulator.json";
-
-/**
  * A construct that knows how to synthesize simulator resources into a
  * Wing simulator (.wsim) file.
  */
-export class App extends Construct implements IApp {
+export class App extends Construct implements core.IApp {
   /**
    * Directory where artifacts are synthesized to.
    */
   public readonly outdir: string;
-  private readonly files: Files;
+  private readonly files: core.Files;
   private readonly name: string;
 
-  constructor(props: AppProps) {
+  constructor(props: core.AppProps) {
     super(undefined as any, "root");
     this.name = props.name ?? "app";
     this.outdir = props.outdir ?? ".";
-    this.files = new Files({ app: this, stateFile: props.stateFile });
+    this.files = new core.Files({ app: this, stateFile: props.stateFile });
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
   }
 
@@ -68,13 +57,13 @@ export class App extends Construct implements IApp {
     );
 
     // write tree.json file to the outdir
-    synthesizeTree(this);
+    core.synthesizeTree(this);
 
     return simfile;
   }
 
   private synthSimulatorFile(outdir: string) {
-    const resources = new DependencyGraph(this.node)
+    const resources = new core.DependencyGraph(this.node)
       .topology()
       .filter(isSimulatorResource)
       .map((res) => res.toSimulator());

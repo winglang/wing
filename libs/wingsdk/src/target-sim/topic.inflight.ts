@@ -27,16 +27,14 @@ export class Topic implements ITopicClient, ISimulatorResourceInstance {
       this.context.addTrace({
         type: TraceType.RESOURCE,
         data: {
-          message: `Sending message (message=${JSON.stringify(
-            message
-          )}, subscriber=${subscriber.functionHandle}).`,
+          message: `Sending message (message=${message}, subscriber=${subscriber.functionHandle}).`,
         },
         sourcePath: this.context.resourcePath,
         sourceType: TOPIC_TYPE,
         timestamp: new Date().toISOString(),
       });
 
-      void (await fnClient.invoke(JSON.stringify({ message })).catch((err) => {
+      void (await fnClient.invoke(message).catch((err) => {
         this.context.addTrace({
           data: {
             message: `Subscriber error: ${err}`,

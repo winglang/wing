@@ -1,8 +1,8 @@
 import * as cdktf from "cdktf";
 import { Polycons } from "polycons";
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
@@ -11,23 +11,22 @@ test("inflight function uses a logger", () => {
     Polycons.register(scope, factory);
 
     cloud.Logger.register(scope);
-    const inflight = new core.Inflight({
-      code: core.NodeJsCode.fromInline(
-        `async function $proc($cap) {
-          await $cap.logger.print("hello world!");
-        }`
-      ),
-      entrypoint: "$proc",
-      captures: {
+    const inflight = Testing.makeHandler(
+      scope,
+      "Handler",
+      `async handle() {
+  await this.logger.print("hello world!");
+}`,
+      {
         logger: {
           resource: cloud.Logger.of(scope),
-          methods: [cloud.LoggerInflightMethods.PRINT],
+          ops: [cloud.LoggerInflightMethods.PRINT],
         },
-      },
-    });
-    const fn = new cloud.Function(scope, "Function", inflight);
+      }
+    );
+    new cloud.Function(scope, "Function", inflight);
 
-    expect(core.Testing.inspectPrebundledCode(fn).text).toMatchSnapshot();
+    expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([
