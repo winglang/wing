@@ -509,6 +509,28 @@ impl JSifier {
 						.join("\n")
 				)
 			}
+			StmtKind::Enum { name, values } => {
+				let name = self.jsify_symbol(name);
+				let mut value_index = 0;
+				format!(
+					"const {} = Object.freeze((function ({}) {{\n{}\n  return {};\n}})({{}}));",
+					name,
+					name,
+					values
+						.iter()
+						.map(|value| {
+							let text = format!(
+								"  {}[{}[\"{}\"] = {}] = \"{}\";",
+								name, name, value.name, value_index, value.name
+							);
+							value_index = value_index + 1;
+							text
+						})
+						.collect::<Vec<String>>()
+						.join("\n"),
+					name,
+				)
+			}
 		}
 	}
 
