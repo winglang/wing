@@ -54,7 +54,7 @@ They are isolated code blocks which can be packaged and executed on compute plat
 
 When a resource wants to use an inflight in an API, it is represented in the SDK through a resource with a single inflight method named `handle`.
 
-Currently, the SDK provides a utility class named `Inflight` that can be used to quickly create a resource with an implementation of the `handle` method.
+Currently, the SDK provides a utility class named `Inflight` that can be used to quickly create an in-memory resource that implements the `handle` method.
 
 For example, given the following Wing code:
 
@@ -94,7 +94,7 @@ new sdk.cloud.Function(this, "Function", handler);
 ```
 
 Every resource added to the `bindings` field is implicitly added as a dependency of the inflight, and is made available to the inflight code through a field with the same name.
-(Hence the API calls to `this.message_count.print` and `this.my_queue.push` in the inflight code.)
+(Hence the API calls to `this.message_count.print` and `this.my_queue.push` passed in the `code` field above.)
 
 The `bindings` field requires a `resource` field with a reference to the original resource object, and an `ops` field that specifies the operations that the inflight code will use on the resource.
 
