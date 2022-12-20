@@ -5,6 +5,10 @@
       "type": "build"
     },
     {
+      "name": "@types/debug",
+      "type": "build"
+    },
+    {
       "name": "@types/fs-extra",
       "type": "build"
     },
@@ -200,6 +204,10 @@
     {
       "name": "@aws-sdk/util-utf8-node",
       "version": "3.208.0",
+      "type": "bundled"
+    },
+    {
+      "name": "debug",
       "type": "bundled"
     },
     {

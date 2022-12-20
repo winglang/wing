@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Resource } from "../core";
+import { Code, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.
@@ -51,10 +51,8 @@ export class Counter extends CounterBase {
     return Polycons.newInstance(COUNTER_TYPE, scope, id, props) as Counter;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  /** @internal */
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -67,6 +65,7 @@ export interface ICounterClient {
    * Increments the counter atomically by a certain amount and returns the previous value.
    * @param amount amount to increment (default is 1).
    * @returns the previous value of the counter.
+   * @inflight
    */
   inc(amount?: number): Promise<number>;
 }

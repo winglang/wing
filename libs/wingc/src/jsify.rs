@@ -30,6 +30,8 @@ const $App = __app(process.env.WING_TARGET);
 "#;
 const TARGET_APP: &str = "$App";
 
+const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
+
 pub struct JSifier {
 	pub out_dir: PathBuf,
 	shim: bool,
@@ -549,7 +551,7 @@ impl JSifier {
 				Self::render_block([
 					format!("resource: {},", obj),
 					format!(
-						"methods: [{}]",
+						"ops: [{}]",
 						cap_def
 							.iter()
 							.map(|x| format!("\"{}\"", x.method))
@@ -560,12 +562,8 @@ impl JSifier {
 			));
 		}
 		let mut proc_source = vec![];
-		proc_source.push(format!(
-			"async function $proc({{ {} }}, {}) {};",
-			capture_names.join(", "),
-			parameter_list.join(", "),
-			block
-		));
+		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
+		proc_source.push(format!("async handle({}) {};", parameter_list.join(", "), body,));
 		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 		let file_path = format!("{}/index.js", proc_dir);
@@ -576,14 +574,18 @@ impl JSifier {
 				"code: {}.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \"{}\")),",
 				STDLIB, &relative_file_path
 			),
-			format!("entrypoint: \"$proc\","),
 			if !bindings.is_empty() {
-				format!("captures: {}", Self::render_block(&bindings))
+				format!("bindings: {}", Self::render_block(&bindings))
 			} else {
 				"".to_string()
 			},
 		]);
-		format!("new {}.core.Inflight({})", STDLIB, props_block)
+		let short_hash = procid.clone().split_off(procid.len() - 8);
+		let inflight_obj_id = format!("{}{}", INFLIGHT_OBJ_PREFIX, short_hash);
+		format!(
+			"new {}.core.Inflight(this, \"{}\", {})",
+			STDLIB, inflight_obj_id, props_block
+		)
 	}
 
 	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope) -> String {

@@ -1,10 +1,10 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, Resource } from "../core";
+import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { BucketSchema } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 /**
  * Simulator implementation of `cloud.Bucket`.
@@ -32,7 +32,18 @@ export class Bucket extends cloud.BucketBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
-    return bindSimulatorResource("bucket", this, captureScope);
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    bindSimulatorResource("bucket", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _toInflight(): core.Code {
+    return makeSimulatorJsClient("bucket", this);
   }
 }
+
+Bucket._annotateInflight("put", {});
+Bucket._annotateInflight("get", {});
+Bucket._annotateInflight("delete", {});
+Bucket._annotateInflight("list", {});

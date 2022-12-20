@@ -230,8 +230,10 @@ module.exports = grammar({
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
-    // TODO: Handle leading zeros
-    number: ($) => /\d+/,
+    number: ($) => choice($._integer, $._decimal),
+    _integer: ($) => choice( "0", /[1-9]\d*/),
+    _decimal: ($) => choice( /0\.\d+/, /[1-9]\d*\.\d+/),
+
 
     bool: ($) => choice("true", "false"),
 
