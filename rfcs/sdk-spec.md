@@ -2,14 +2,14 @@
 
 ## Design Guidelines
 
-When designing APIs for Wing, we try to follow these tenets (unless you know better ones):
+When designing APIs for Wing, we try to follow these tenets:
 
 - **Focused on functional behavior**: our APIs are designed around the functional aspects that developers care about for building and testing their applications.
-Implementations of resources in the SDK are assumed to be scalable, highly-available, and fault tolerant by default, so that developers do not need to customize security policies or scaling configuration within their application code.
+Implementations of resources in the SDK are guaranteed to be scalable, highly-available, and fault tolerant by default, so that developers do not need to customize security policies or scaling configuration within their application code.
 Operational aspects of resources should not leak into the core API surface area, except when they are essential to the functional behavior of the resource and the user's mental model.
 For example, while the timeout of a serverless function can be considered an operational detail, it is essential to the user's mental model of functions as an ephemeral, stateless resource that should not be used for long-running or stateful workloads.
 
-- **Meet developers where they are**: our APIs are based on the mental model of the user, and not the mental model of cloud service APIs, which are frequently designed against the constraints of the backend system and the fact that these APIs are used through network requests.
+- **Easy to understand**: our APIs are based on the mental model of the user, and not the mental model of cloud service APIs, which are frequently designed against the constraints of the backend system and the fact that these APIs are used through network requests.
 It's okay to enable multiple ways to achieve the same thing, in order to make it more natural for users who come from different mental models.
 APIs should have sensible defaults, and should be easy to use correctly.
 It's okay to make it possible to do the wrong thing, but it should be hard to do the wrong thing.
@@ -65,6 +65,7 @@ The `Iterator` object also implements the [async iterator protocol in JavaScript
 * Workflow (P2) - a task orchestration engine, similar to AWS Step Functions, Azure Logic Apps, GCP Workflows
 * Secret (P2) - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
 * Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
+* OnDeploy (P2) - a variation of Function that runs every time the app is deployed
 
 ### Resources planned as third party libraries
 
@@ -75,11 +76,9 @@ The `Iterator` object also implements the [async iterator protocol in JavaScript
 
 ## Bucket
 
-The bucket resource represents an object store that can be used to store and
-retrieve arbitrary data. A bucket can be used to store text files, images,
-videos, and any other type of data. You can think of a bucket as a file system
-or hash map in the cloud whose data is usually distributed across multiple
-machines for high availability.
+The bucket resource represents an object store that can be used to store and retrieve arbitrary data.
+A bucket can be used to store text files, images, videos, and any other type of data.
+You can think of a bucket like hash map in the cloud whose data is typically distributed across multiple machines for high availability.
 
 <!--
 All code snippets should be in Wing - it just says "ts" for syntax highlighting
@@ -155,17 +154,16 @@ Future extensions:
 
 ## Queue
 
-The queue resource represents a buffer for messages which can help create more
-predictable load between a set of producers and a set of consumers. Using a
-queue, you can send, store, and receive messages between software components at
-any volume, without losing messages or requiring other services to be available.
+<!-- WIP -->
 
-Any number of producers can push messages to the queue, and any number of consumers
-can pop messages from the queue. When a consumer function receives a batch of
-messages, it is responsible for processing each message in the batch and
-acknowledging that the message has been processed by deleting it from the queue.
-If a consumer function does not acknowledge a message, the message will be
-re-delivered to another consumer function.
+The queue resource represents a message buffer that can be used to decouple workloads between a set of producers and a set of consumers.
+Using a queue, you can send, store, and receive messages between software components at any volume, without losing messages or requiring other services to be available.
+
+Any number of producers can push messages to the queue, and any number of consumers can pop messages from the queue.
+When a consumer function receives a batch of messages, it is responsible for processing each message in the batch and acknowledging that the message has been processed by deleting it from the queue.
+If a consumer function does not acknowledge a message, the message will be re-delivered to another consumer function.
+
+A queue is not FIFO (first-in-first-out), so messages may be delivered out of order.
 
 ```ts
 struct QueueProps {
@@ -182,10 +180,8 @@ interface IQueue {
   /**
    * Run a function whenever a message is pushed to the queue.
    *
-   * The visibility timeout for messages (amount of time a consumer is given to
-   * process a message before it's made available for other consumers) is the
-   * same as the function's timeout, which is 1 minute by default. If the function
-   * returns successfully, the message is deleted from the queue.
+   * TODO: should we throw / warn the user if the function's timeout is greater than
+   * the queue's timeout?
    */
   on_message(fn: inflight (message: Serializable) => void, opts: QueueOnMessageProps?): cloud.Function;
 }
@@ -207,18 +203,16 @@ Future extensions:
 
 ## Function
 
-The function resource represents a highly-distributed, stateless function that
-can be used to run code only when needed. Functions are typically used to
-process data in response to events, such as a file being uploaded to a bucket,
-a message being pushed to a queue, or a timer expiring.
+The function resource represents a stateless function that can run a snippet of code whenever invoked (and any number of times in parallel).
+Functions are typically used to process data in response to events, such as a file being uploaded to a bucket, a message being pushed to a queue, or a timer expiring.
 
-When a function is invoked on a cloud provider, it is typically executed in a
-container that is spun up on demand. The container is then destroyed after the
-function finishes executing. This allows functions to be highly-distributed
-and stateless, which makes them easy to scale and fault-tolerant.
+When a function is invoked on a cloud provider, it is typically executed in a container that is spun up on demand.
+The container is then destroyed after the function finishes executing.
+This makes them easy to scale and fault-tolerant.
 
-Functions are guaranteed to be invoked at least once, but may be invoked more
-than once (and some cloud providers may automatically retry failed invocations).
+Functions may be invoked more than once, and some cloud providers may automatically retry failed invocations.
+In addition, it is possible for functions to be partially invoked (e.g. if a container is destroyed mid-execution).
+For performance reasons, most cloud providers impose a timeout on functions, after which the function is automatically terminated.
 
 ```ts
 struct FunctionProps {
@@ -268,6 +262,8 @@ Future extensions:
 
 ## Logger
 
+The logger resource represents a service that can be used to log messages to a central location.
+
 ```ts
 struct LoggerProps {}
 
@@ -286,9 +282,14 @@ interface ILoggerClient {
 }
 ```
 
-Future extensions: log severity options?
+Future extensions:
+- log severity options?
+- APIs for scanning/filtering logs?
 
 ## Counter
+
+The counter resource represents a service that stores an integer value that can be (atomically) incremented or decremented.
+Counters are useful for tracking the number of times a particular event has occurred.
 
 ```ts
 struct CounterProps {
@@ -328,6 +329,9 @@ Future extensions:
 
 ## Topic
 
+The topic resource represents a service that can be used to publish and subscribe to messages.
+A topic is similar to a queue, but messages are not persisted and all subscribers receive a copy of each message.
+
 ```ts
 interface TopicProps {}
 
@@ -349,6 +353,9 @@ interface ITopicClient {
 ```
 
 ## Schedule
+
+The schedule resource represents a service that can trigger events at a regular interval.
+Schedules are useful for periodic tasks, such as running a backup or sending a daily report.
 
 ```ts
 struct ScheduleProps {
@@ -387,7 +394,8 @@ Future extensions: inflight `next_tick(): Duration` method?
 
 ## Website
 
-A CDN-backed website.
+The website resource represents a CDN-backed website.
+It is useful for hosting static content, such as a blog or a single-page application.
 
 ```ts
 struct WebsiteProps {
@@ -415,6 +423,8 @@ interface IWebsiteClient {
 Future extensions: domain and certificate props? support for edge functions?
 
 ## Api
+
+The Api resource represents an API Gateway that can be used to manage HTTP routes and run functions in response to requests.
 
 ```ts
 struct ApiProps {}
@@ -471,14 +481,14 @@ interface IApiClient {
 }
 
 struct ApiRequest {
+  /** The request's HTTP method. */
+  method: HttpMethod;
   /** The request's path. */
   path: str;
   /** The request's query string. */
   query: str;
   /** The path variables. */
   vars: Map<str, str>;
-  /** The request's HTTP method. */
-  method: HttpMethod;
   /** The request's payload. */
   payload: Serializable;
   /** The request's headers. */
@@ -513,8 +523,25 @@ TODO
 
 ## Table
 
+The table resource represents a database table that can be used to store and query data.
+Tables are useful for storing application state, like user profiles or blog posts.
+
+Each table has a primary key that uniquely identifies each row.
+The primary key can be any column, but it is recommended to use a `String` column named `id`.
+
 ```ts
 struct TableProps {
+  /**
+   * The table's name.
+   * @default "table"
+   */
+  name: str?;
+
+  /**
+   * The table's columns.
+   */
+  columns: Map<str, ColumnType>;
+
   /**
    * The table's primary key. No two rows can have the same value for the
    * primary key.
@@ -523,21 +550,29 @@ struct TableProps {
   primary_key: str?;
 }
 
+enum ColumnType {
+  String,
+  Number,
+  Boolean,
+  Date,
+  Json,
+}
+
 interface ITable {
   /**
-   * Run a function whenever a row is inserted into the table.
+   * The table's name.
    */
-  on_insert(fn: inflight (row: Map<str, Serializable>) => void, opts: cloud.FunctionProps): cloud.Function;
+  name: str;
 
   /**
-   * Run a function whenever a row is updated in the table.
+   * The table's columns.
    */
-  on_update(fn: inflight (row: Map<str, Serializable>) => void, opts: cloud.FunctionProps): cloud.Function;
+  columns: Map<str, ColumnType>;
 
   /**
-   * Run a function whenever a row is deleted from the table.
+   * The table's primary key.
    */
-  on_delete(fn: inflight (row: Map<str, Serializable>) => void, opts: cloud.FunctionProps): cloud.Function;
+  primary_key: str;
 }
 
 interface ITableClient {
@@ -567,3 +602,8 @@ interface ITableClient {
   list(): Promise<Iterator<Map<str, Serializable>>>;
 }
 ```
+
+Future extensions:
+- `on_insert(fn: inflight (row: Map<str, Serializable>) => void): cloud.Function;`
+- `on_update(fn: inflight (row: Map<str, Serializable>) => void): cloud.Function;`
+- `on_delete(fn: inflight (row: Map<str, Serializable>) => void): cloud.Function;`
