@@ -142,10 +142,16 @@ interface IBucketClient {
   list(prefix: str?): Promise<Iterator<str>>;
 
   /**
-   * Get the URL for a file in the bucket.
-   * @throws Will throw if the bucket is not public.
+   * Returns a url to the given object.
+   * @throws Will throw if the public is not public.
    */
-  download_url(key: str): Promise<str>;
+  public_url(key: str): Promise<str>;
+
+  /**
+   * Returns a presigned url to the given object. This URL can be used to access
+   * the object by anyone until it expires (defaults to 24 hours).
+   */
+  presigned_url(key: str, duration: duration): Promise<str>;
 }
 ```
 
