@@ -1477,6 +1477,7 @@ constructor() {
   
   const dur = $stdlib.std.Duration.fromSeconds(60);
   console.log(\`\${dur.seconds}\`);
+  console.log(\`\${dur.minutes}\`);
 }
 }
 new MyApp().synth();"
