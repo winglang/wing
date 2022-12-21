@@ -583,7 +583,144 @@ interface IMetricClient {
 
 ## Service
 
-TODO
+The service resource represents a containerized workload that can run indefinitely.
+Services are useful for long-running processes, like web servers and background workers.
+
+A service is created from a buildpack, an open-source technology that makes it
+fast and easy for you to create secure, production-ready container images from
+source code and without a Dockerfile.
+
+<!--
+Implementation:
+
+On AWS, this could be implemented using AWS AppRunner. Buildpack would be used
+to generate an image at compile time, which would be uploaded to ECR during
+Terraform deployment, and then AppRunner would be used to create a service.
+
+(Why not ECS? ECS is a great service, but it introduces a lot of complexity and
+isn't really necessary for the most common use cases (writing HTTP services
+Using ECS with Fargate would require possibly creating a VPC, subnets,
+routing table, internet gateway, security groups, load balancer, target group,
+cluster, task definition, service, and scaling policy. That's a lot of
+complexity to maintain in the SDK.)
+
+On GCP, this could be implemented using Cloud Run. Buildpack would be used to
+generate an image, which would be uploaded to GCR, and then Cloud Run would be
+used to create a service.
+
+On Azure, this could be implemented using Azure App Service. Buildpack would be
+used to generate an image, which would be uploaded to ACR, and then App Service
+would be used to create a service.
+
+Links:
+https://aws.amazon.com/blogs/containers/creating-container-images-with-cloud-native-buildpacks-using-aws-codebuild-and-aws-codepipeline/
+https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/apprunner_service#image-repository
+https://github.com/buildpacks/community/blob/main/ADOPTERS.md
+https://cloud.google.com/blog/products/containers-kubernetes/google-cloud-now-supports-buildpacks
+-->
+
+```ts
+struct ServiceProps {
+  /**
+   * The directory containing the service's source code to package with
+   * buildpack.
+   */
+  path: str;
+
+  /**
+   * The service's environment variables.
+   * @default {}
+   */
+  env: Map<str, str>;
+
+  /**
+   * The service's command.
+   * @default "start"
+   */
+  command: str?;
+
+  /**
+   * The service's port.
+   * @default 8080
+   */
+  port: number?;
+
+  /**
+   * The service's memory limit.
+   * @default 512
+   */
+  memory: number?;
+
+  /**
+   * The service's CPU limit.
+   * @default 0.5
+   */
+  cpu: number?;
+
+  /**
+   * The service's number of replicas.
+   * @default 1
+   */
+  replicas: number?;
+}
+
+interface IService {
+  /**
+   * The service's URL.
+   */
+  url: str;
+}
+
+interface IServiceClient {
+  /**
+   * Send a request to the service.
+   */
+  request(opts: ServiceRequestOptions): Promise<ServiceResponse>;
+}
+
+struct ServiceRequestOptions {
+  /**
+   * The request's method.
+   * @default "GET"
+   */
+  method: str?;
+
+  /**
+   * The request's path.
+   * @default "/"
+   */
+  path: str?;
+
+  /**
+   * The request's headers.
+   * @default {}
+   */
+  headers: Map<str, str>;
+
+  /**
+   * The request's body.
+   * @default ""
+   */
+  body: str?;
+}
+
+struct ServiceResponse {
+  /**
+   * The response's status code.
+   */
+  status_code: number;
+
+  /**
+   * The response's headers.
+   */
+  headers: Map<str, str>;
+
+  /**
+   * The response's body.
+   */
+  body: str;
+}
+```
 
 ## Table
 
