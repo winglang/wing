@@ -286,13 +286,7 @@ impl<'a> JsiiImporter<'a> {
 				file_id: (&jsii_source_location.filename).into(),
 			}
 		} else {
-			WingSpan {
-				start: CharacterLocation { row: 0, column: 0 },
-				end: CharacterLocation { row: 0, column: 0 },
-				start_byte: 0,
-				end_byte: 0,
-				file_id: "".into(),
-			}
+			WingSpan::global()
 		};
 		Symbol {
 			name: name.to_string(),
