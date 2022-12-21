@@ -1145,8 +1145,7 @@ impl<'a> TypeChecker<'a> {
 					let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
 					if namespace_name.name == WINGSDK_GLOBAL_MODULE {
-						// redundant import of std
-						// TODO Show error
+						self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_GLOBAL_MODULE));
 						return;
 					}
 
