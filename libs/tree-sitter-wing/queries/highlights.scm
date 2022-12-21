@@ -26,7 +26,7 @@
 
 (keyword_argument_key) @variable.parameter
 (call 
-  call_name: (reference) @function.method
+  caller: (reference) @function.method
 )
 
 ; Primitives

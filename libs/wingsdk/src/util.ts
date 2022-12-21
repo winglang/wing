@@ -7,8 +7,15 @@ import {
 } from "fs";
 import { tmpdir } from "os";
 import { extname, join } from "path";
+import { debug } from "debug";
 import * as tar from "tar";
-import { SIMULATOR_FILE_PATH } from "./target-sim/app";
+
+/**
+ * Path of the simulator configuration file in every .wsim tarball.
+ */
+export const SIMULATOR_FILE_PATH = "simulator.json";
+
+export const log = debug("wing:sdk");
 
 export function mkdtemp() {
   return mkdtempSync(join(tmpdir(), "wingsdk."));

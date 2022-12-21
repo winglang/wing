@@ -2,6 +2,7 @@
 title: Simulator
 id: simulator
 description: A facility for executing Wing applications on the local machine for development and testing
+keywords: [Wing simulator, simulator]
 ---
 
 The simulator is a set of APIs in the SDK that can be used to test Wing

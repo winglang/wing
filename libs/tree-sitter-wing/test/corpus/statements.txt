@@ -256,3 +256,35 @@ struct Test {
         )
     )
 )
+
+==================================
+While statement
+==================================
+
+while false {}
+
+---
+(source
+    (while_statement
+        condition: (bool)
+        block: (block)
+    )
+)
+
+==================================
+Enum definition
+==================================
+
+enum SomeEnum {
+    ONE, TWO, THREE
+}
+
+---
+(source
+    (enum_definition
+        enum_name: (identifier)
+        (enum_field)
+        (enum_field)
+        (enum_field)
+    )
+)

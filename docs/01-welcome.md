@@ -9,10 +9,10 @@ hide_title: true
 
 :::caution This is Alpha
 
-Wing is in very early stages of development and not recommended for production
-use. Many features are still missing, and APIs will dramatically evolve in the
-coming months. We are excited for anyone to take part in influencing the
-direction of every part of this project.
+Wing is in its very early stages of development and not recommended for
+production use. Many features are still missing, and APIs will dramatically
+evolve in the coming months. We are excited for anyone to take part in
+influencing the direction of every part of this project.
 
 Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
 more information about stability and roadmap 👷‍♀️ 
@@ -78,7 +78,7 @@ environment variables and produce the code bundles needed for this to work.
 
 Here's a diagram that shows the architecture produced by this code:
 
-![](./arch.png)
+![Architecture diagram produced by Wing](./arch.png 'Architecture diagram')
 
 In addition to targeting cloud providers, Wing applications can also be compiled
 to run inside a local **Cloud Simulator**. This means that you can now iterate
@@ -112,11 +112,11 @@ Wing is designed to address these challenges in the following ways:
   effects of incremental changes at milliseconds latency.
 * **High-level cloud primitives** - Wing allows developers to leverage the cloud
   to its full extent through a set of rich, high-level and cloud-independent
-  resources. This allows developers build complete cloud applications without
+  resources. This allows developers to build complete cloud applications without
   having to be infrastructure experts.
-* **Cloud unit tests** - Wing allows developers to use the cloud simulator as
-  a library inside unit tests, and test complete architectures without requiring
-  deployments or heavy mocking.
+* **Cloud unit tests** - Wing allows developers to use the cloud simulator as a
+  library inside unit tests, and to test complete architectures without
+  requiring deployments or heavy mocking.
 * **Infrastructure as policy** - infrastructure concerns such as deployment,
   networking, security and observability can be applied horizontally through
   policies instead of inside the application code.

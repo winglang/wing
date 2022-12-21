@@ -1,8 +1,10 @@
+use indexmap::IndexSet;
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::{str, vec};
 use tree_sitter::Node;
+use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
@@ -14,6 +16,7 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnosti
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
+	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
@@ -26,7 +29,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
 	"Set" => "see https://github.com/winglang/wing/issues/530",
-	"Array" => "see https://github.com/winglang/wing/issues/246",
+	"set_literal" => "see https://github.com/winglang/wing/issues/530",
 	"MutSet" => "see https://github.com/winglang/wing/issues/98",
 	"MutArray" => "see https://github.com/winglang/wing/issues/663",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
@@ -42,12 +45,16 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 
 impl Parser<'_> {
 	pub fn wingit(&self, root: &Node) -> Scope {
-		match root.kind() {
-			"source" => self.build_scope(root),
+		let scope = match root.kind() {
+			"source" => self.build_scope(&root),
 			other => {
 				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
 			}
-		}
+		};
+
+		self.report_unhandled_errors(&root);
+
+		scope
 	}
 
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
@@ -58,6 +65,10 @@ impl Parser<'_> {
 		};
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
+
+		// Track that we have produced a diagnostic for this node
+		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
+		self.error_nodes.borrow_mut().insert(node.id());
 
 		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
 		// the error and continue parsing.
@@ -73,7 +84,7 @@ impl Parser<'_> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.add_error(
 				format!(
-					"{} '{}' is not yet supported {}",
+					"{} '{}' is not supported yet {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
@@ -208,6 +219,10 @@ impl Parser<'_> {
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			},
+			"while_statement" => StmtKind::While {
+				condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			},
 			"return_statement" => StmtKind::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 					Some(self.build_expression(&return_expression_node)?)
@@ -217,6 +232,7 @@ impl Parser<'_> {
 			),
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
+			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -225,6 +241,42 @@ impl Parser<'_> {
 			kind: stmt_kind,
 			span: self.node_span(statement_node),
 			idx,
+		})
+	}
+
+	fn build_enum_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let name = self.node_symbol(&statement_node.child_by_field_name("enum_name").unwrap());
+		if name.is_err() {
+			self
+				.add_error::<Node>(String::from("Invalid enum name"), &statement_node)
+				.err();
+		}
+
+		let mut cursor = statement_node.walk();
+		let mut values = IndexSet::<Symbol>::new();
+		for node in statement_node.named_children(&mut cursor) {
+			if node.kind() != "enum_field" {
+				continue;
+			}
+
+			let diagnostic = self.node_symbol(&node);
+			if diagnostic.is_err() {
+				self.add_error::<Node>(String::from("Invalid enum value"), &node).err();
+				continue;
+			}
+
+			let symbol = diagnostic.unwrap();
+			let success = values.insert(symbol.clone());
+			if !success {
+				self
+					.add_error::<Node>(format!("Duplicated enum value {}", symbol.name), &node)
+					.err();
+			}
+		}
+
+		Ok(StmtKind::Enum {
+			name: name.unwrap(),
+			values,
 		})
 	}
 
@@ -334,12 +386,6 @@ impl Parser<'_> {
 	}
 
 	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
-		let mut cur = anon_closure_node.walk();
-		let block_node_idx = anon_closure_node
-			.children(&mut cur)
-			.position(|c| c.kind() == "block")
-			.unwrap();
-
 		self.build_function_definition(anon_closure_node, flight)
 	}
 
@@ -415,6 +461,7 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
+					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
 					other => self.report_unimplemented_grammar(other, "bultin container type", type_node),
 				}
@@ -637,7 +684,7 @@ impl Parser<'_> {
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
-					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
+					function: self.build_reference(&expression_node.child_by_field_name("caller").unwrap())?,
 					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
@@ -655,6 +702,27 @@ impl Parser<'_> {
 				format!("Pure phased anonymous closures not implemented yet"),
 				expression_node,
 			),
+			"array_literal" => {
+				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut items = Vec::new();
+				let mut cursor = expression_node.walk();
+				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+					items.push(self.build_expression(&element_node)?);
+				}
+
+				Ok(Expr::new(
+					ExprKind::ArrayLiteral {
+						items,
+						type_: array_type,
+					},
+					expression_span,
+				))
+			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)
@@ -662,7 +730,7 @@ impl Parser<'_> {
 					None
 				};
 
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
 					if field_node.is_extra() {
@@ -696,7 +764,7 @@ impl Parser<'_> {
 			}
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
 					if !field.is_named() || field.is_extra() {
@@ -719,12 +787,15 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
-			other => {
-				if expression_node.has_error() {
-					self.add_error(format!("Expected expression"), expression_node)
-				} else {
-					panic!("Unexpected expression {} || {:#?}", other, expression_node);
-				}
+			other => self.report_unimplemented_grammar(other, "expression", expression_node),
+		}
+	}
+
+	fn report_unhandled_errors(&self, root: &Node) {
+		let iter = traverse(root.walk(), Order::Pre);
+		for node in iter {
+			if node.is_error() && !self.error_nodes.borrow().contains(&node.id()) {
+				_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
 			}
 		}
 	}

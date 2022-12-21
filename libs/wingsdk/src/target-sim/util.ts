@@ -1,8 +1,8 @@
 import { access, constants } from "fs";
 import { promisify } from "util";
-import { Direction, NodeJsCode, Resource } from "../core";
+import { IConstruct } from "constructs";
+import { Direction, IInflightHost, NodeJsCode, Resource } from "../core";
 import { Function } from "./function";
-import { ISimulatorResource } from "./resource";
 
 /**
  * Check if a file exists for an specific path
@@ -21,34 +21,48 @@ export async function exists(filePath: string): Promise<boolean> {
   }
 }
 
+function makeEnvVarName(type: string, resource: IConstruct): string {
+  return `${type
+    .toUpperCase()
+    .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
+}
+
 export function bindSimulatorResource(
   type: string,
-  resource: Resource & ISimulatorResource,
-  captureScope: Resource
+  resource: Resource,
+  host: IInflightHost
 ) {
-  if (!(captureScope instanceof Function)) {
+  if (!(host instanceof Function)) {
     throw new Error(
-      `Resources of ${type} can only be captured by a sim.Function for now`
+      `Resources of ${type} can only be bound by a sim.Function for now`
     );
   }
 
-  const env = `${type
-    .toUpperCase()
-    .replace(/\./g, "_")}_HANDLE_${resource.node.addr.slice(-8)}`;
+  const env = makeEnvVarName(type, resource);
   const handle = `\${${resource.node.path}#attrs.handle}`; // TODO: proper token mechanism
-  captureScope.addEnvironment(env, handle);
-  captureScope.node.addDependency(resource);
+  host.addEnvironment(env, handle);
+  host.node.addDependency(resource);
   resource.addConnection({
     direction: Direction.INBOUND,
     relationship: `inflight-reference`,
-    resource: captureScope,
+    resource: host,
   });
-  captureScope.addConnection({
+  host.addConnection({
     direction: Direction.OUTBOUND,
     relationship: `inflight-reference`,
     resource: resource,
   });
+}
+
+export function makeSimulatorJsClient(type: string, resource: Resource) {
+  const env = makeEnvVarName(type, resource);
   return NodeJsCode.fromInline(
-    `$simulator.findInstance(process.env["${env}"])`
+    `(function(env) {
+        let handle = process.env[env];
+        if (!handle) {
+          throw new Error("Missing environment variable: " + env);
+        }
+        return $simulator.findInstance(handle);
+      })("${env}")`
   );
 }

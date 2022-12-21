@@ -319,7 +319,7 @@ jobs:
       - name: Upload extension
         uses: actions/upload-artifact@v2
         with:
-          name: vscode-wing.vsix
+          name: vscode-wing
           path: apps/vscode-wing/vscode-wing.vsix
 
   build:
@@ -361,6 +361,13 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
         run: npm publish *.tgz
+
+      - name: Publish Extension to Visual Studio Marketplace
+        uses: "HaaLeo/publish-vscode-extension@v1"
+        with:
+          pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
+          registryUrl: "https://marketplace.visualstudio.com"
+          extensionFile: "vscode-wing/vscode-wing.vsix"
 
       - name: Rename Docs
         run: mv docs "docs-${{ needs.prepare.outputs.version }}.tgz"

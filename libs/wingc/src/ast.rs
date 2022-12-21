@@ -1,9 +1,10 @@
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
+use indexmap::IndexSet;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -75,9 +76,44 @@ pub enum Type {
 	Bool,
 	Duration,
 	Optional(Box<Type>),
+	Array(Box<Type>),
 	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
+}
+
+impl Display for Type {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Type::Number => write!(f, "num"),
+			Type::String => write!(f, "str"),
+			Type::Bool => write!(f, "bool"),
+			Type::Duration => write!(f, "duration"),
+			Type::Optional(t) => write!(f, "{}?", t),
+			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::FunctionSignature(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.parameters
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
+						format!("{}", ret_val)
+					} else {
+						"void".to_string()
+					}
+				)
+			}
+			Type::CustomType { root, fields: _ } => {
+				write!(f, "{}", root)
+			}
+		}
+	}
 }
 
 #[derive(Debug, Clone)]
@@ -127,6 +163,10 @@ pub enum StmtKind {
 		iterable: Expr,
 		statements: Scope,
 	},
+	While {
+		condition: Expr,
+		statements: Scope,
+	},
 	If {
 		condition: Expr,
 		statements: Scope,
@@ -151,6 +191,10 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<Symbol>,
 		members: Vec<ClassMember>,
+	},
+	Enum {
+		name: Symbol,
+		values: IndexSet<Symbol>,
 	},
 }
 
@@ -186,13 +230,19 @@ pub enum ExprKind {
 		lexp: Box<Expr>,
 		rexp: Box<Expr>,
 	},
+	ArrayLiteral {
+		type_: Option<Type>,
+		items: Vec<Expr>,
+	},
 	StructLiteral {
 		type_: Type,
-		fields: HashMap<Symbol, Expr>,
+		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: BTreeMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<Type>,
-		fields: HashMap<String, Expr>,
+		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: BTreeMap<String, Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }
