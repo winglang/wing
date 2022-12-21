@@ -445,32 +445,32 @@ interface IApi {
   /**
    * Run a function whenever a GET request is made to the specified route.
    */
-  on_get(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_get(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnGetProps?): cloud.Function;
 
   /**
    * Run a function whenever a POST request is made to the specified route.
    */
-  on_post(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_post(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnPostProps?): cloud.Function;
 
   /**
    * Run a function whenever a PUT request is made to the specified route.
    */
-  on_put(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_put(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnPutProps?): cloud.Function;
 
   /**
    * Run a function whenever a DELETE request is made to the specified route.
    */
-  on_delete(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_delete(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnDeleteProps?): cloud.Function;
 
   /**
    * Run a function whenever a PATCH request is made to the specified route.
    */
-  on_patch(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_patch(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnPatchProps?): cloud.Function;
 
   /**
    * Run a function whenever any request is made to the specified route.
    */
-  on_request(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.FunctionProps): cloud.Function;
+  on_request(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnRequestProps?): cloud.Function;
 }
 
 interface IApiClient {
@@ -511,11 +511,75 @@ Future extensions: support endpoint authorization? cors?
 
 ## Metric
 
-TODO
+The metric resource represents a metric that can be used to trigger events when a threshold is exceeded.
 
-## Alarm
+```ts
+struct MetricProps {
+  /**
+   * The metric's name.
+   * @example "bytes_uploaded"
+   */
+  name: str;
 
-TODO
+  /**
+   * The metric's unit.
+   * @example "bytes"
+   */
+  unit: str;
+
+  /**
+   * The metric's description.
+   * @example "The number of bytes uploaded to the website."
+   */
+  description: str;
+}
+
+struct MetricOnThresholdProps {
+  /**
+   * The threshold to trigger the event at.
+   */
+  threshold: number;
+
+  /**
+   * The number of consecutive periods the threshold must be exceeded for.
+   * @default 1
+   */
+  periods: number?;
+
+  /**
+   * The comparison operator to use.
+   * @default ComparisonOperator.GreaterThanThreshold
+   */
+  comparison_operator: ComparisonOperator;
+}
+
+// operators available on AWS: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudwatch-alarm.html#aws-resource-cloudwatch-alarm-properties
+// derived metrics can be used to achieve "equal" or "not equal"
+// operators available on Azure: https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/monitor_metric_alert#operator
+// operators available on GCP: https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/monitoring_alert_policy#comparison
+enum ComparisonOperator {
+  GreaterThan,
+  GreaterThanOrEqual,
+  LessThan,
+  LessThanOrEqual,
+  Equal,
+  NotEqual,
+}
+
+interface IMetric {
+  /**
+   * Trigger an event whenever the metric exceeds the specified threshold.
+   */
+  on_threshold(handler: inflight () => void, opts: MetricOnThresholdProps): cloud.Function;
+}
+
+interface IMetricClient {
+  /**
+   * Record a value for the metric.
+   */
+  record(value: number): Promise<void>;
+}
+```
 
 ## Service
 
