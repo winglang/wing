@@ -1115,7 +1115,7 @@ In methods if return type is missing, `: void` is assumed.
 
 ### 3.3 Resources
 
-> Resources cannot be defined and instantiated in preflight contexts.
+> Resources cannot be defined and instantiated in inflight contexts.
 
 Resources provide first class composite pattern support in Wing. They are
 modeled after and leverage the [constructs](https://github.com/aws/constructs)
