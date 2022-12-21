@@ -1,5 +1,4 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";

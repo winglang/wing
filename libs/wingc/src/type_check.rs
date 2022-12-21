@@ -1528,19 +1528,12 @@ impl<'a> TypeChecker<'a> {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
 				Ok(_type) => _type,
 				Err(type_error) => {
-					// check if it's a std
-					let std_lookup = env.try_lookup("std", None).unwrap();
-					let std_namespace = &std_lookup.as_namespace().unwrap().env;
-					if let Some(lookup) = std_namespace.try_lookup(&symbol.name, None) {
-						return lookup;
-					} else {
-						self.type_error(&type_error);
-						self.types.anything()
-					}
+					self.type_error(&type_error);
+					self.types.anything()
 				}
 			},
 			Reference::NestedIdentifier { object, property } => {
-				let std_lookup = env.try_lookup(WINGSDK_GLOBAL_MODULE, None).unwrap();
+				let std_lookup = env.try_lookup("std", None).unwrap();
 				let std_namespace = &std_lookup.as_namespace().unwrap().env;
 				let instance = self.type_check_exp(object, env, statement_idx).unwrap();
 				match instance.into() {
@@ -1551,8 +1544,6 @@ impl<'a> TypeChecker<'a> {
 						},
 						_ => return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", t)),
 					},
-					// get "std" primitives
-					&Type::Duration => std_namespace.try_lookup("Duration", None).unwrap(),
 					&Type::Anything => match instance.into() {
 						&Type::Class(ref class) | &Type::Resource(ref class) => match class.env.lookup(property, None) {
 							Ok(_type) => _type,
@@ -1567,6 +1558,17 @@ impl<'a> TypeChecker<'a> {
 							self.general_type_error(format!("Enum {} does not contain value {}", instance, property.name))
 						}
 					}
+
+					// get "std" primitives
+					&Type::Duration => std_namespace
+						.try_lookup("Duration", None)
+						.unwrap()
+						.as_class()
+						.unwrap()
+						.env
+						.lookup(property, None)
+						.unwrap(),
+
 					_ => self.general_type_error(format!(
 						"\"{}\" in {} does not resolve to a class instance, resource object or enum type",
 						instance, reference
