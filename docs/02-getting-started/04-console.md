@@ -22,7 +22,7 @@ also test your application [programmatically](./simulator) or [deploy it to AWS]
 We can use the Wing CLI to start the console with our newly created Wing source file:
 
 ```sh
-wing run hello.w
+wing it hello.w
 ```
 
 The Wing Console will now compile hello.w source file to [the simulator target](./simulator#the-simulator-target-sim)
