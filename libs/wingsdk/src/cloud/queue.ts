@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Inflight, Resource } from "../core";
 import { Duration } from "../std";
+import { Code, Inflight, IResource, Resource } from "../core";
 import { Function, FunctionProps } from "./function";
 
 /**
@@ -71,19 +71,17 @@ export class Queue extends QueueBase {
     return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
-    throw new Error("Method not implemented.");
-  }
-
   public onMessage(
     inflight: Inflight,
     props: QueueOnMessageProps = {}
   ): Function {
     inflight;
     props;
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -95,8 +93,28 @@ export interface IQueueClient {
   /**
    * Push a message to the queue.
    * @param message Payload to send to the queue.
+   * @inflight
    */
   push(message: string): Promise<void>;
+}
+
+/**
+ * Represents a resource with an inflight "handle" method that can be passed to
+ * `Queue.on_message`.
+ *
+ * @inflight `wingsdk.cloud.IQueueOnMessageHandlerClient`
+ */
+export interface IQueueOnMessageHandler extends IResource {}
+
+/**
+ * Inflight client for `IQueueOnMessageHandler`.
+ */
+export interface IQueueOnMessageHandlerClient {
+  /**
+   * Function that will be called when a message is received from the queue.
+   * @inflight
+   */
+  handle(message: string): Promise<void>;
 }
 
 /**

@@ -42,10 +42,10 @@ new cloud.Function(inflight (event: str): str => {
 
 ## This is Alpha
 
-Wing is in very early stages of development and not recommended for production
-use. Many features are still missing, and APIs will dramatically evolve in the
-coming months. We are excited for anyone to take part in influencing the
-direction of every part of this project.
+Wing is in its very early stages of development and not recommended for
+production use. Many features are still missing, and APIs will dramatically
+evolve in the coming months. We are excited for anyone to take part in
+influencing the direction of every part of this project.
 
 Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
 more information about stability and roadmap 👷‍♀️ 
