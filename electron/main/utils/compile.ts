@@ -19,7 +19,7 @@ export const compile = async ({
   outDir,
 }: ICompileOptions): Promise<CompileStatusTypes> => {
   consoleLogger.verbose(
-    `exec child process for compiling ${wingSrcFile} into ${outDir}`,
+    `exec child process: wing compile ${wingSrcFile} -t sim -o ${outDir}`,
     "compiler",
   );
   try {
@@ -28,29 +28,16 @@ export const compile = async ({
       `wing compile ${wingSrcFile} -t sim -o ${outDir}`,
     );
     if (stdout) {
-      consoleLogger.verbose(`Compiler info: ${stdout}`, "compiler");
+      consoleLogger.verbose(stdout, "compiler");
     }
     if (stderr) {
-      consoleLogger.error(
-        `Compilation failed for ${wingSrcFile} into ${outDir}\n ${
-          typeof stderr === "string" ? stderr : JSON.stringify(stderr)
-        }`,
-        "compiler",
-      );
+      consoleLogger.error(stderr, "compiler");
       return "error";
     }
-    consoleLogger.verbose(
-      `Compilation succeeded for ${wingSrcFile} into ${outDir}`,
-      "compiler",
-    );
+    consoleLogger.verbose(`Compilation succeeded`, "compiler");
     return "success";
   } catch (error) {
-    consoleLogger.error(
-      `Compilation failed for ${wingSrcFile} into ${outDir}\n: ${
-        typeof error === "string" ? error : JSON.stringify(error)
-      }`,
-      "compiler",
-    );
+    consoleLogger.error(error, "compiler");
     return "error";
   }
 };

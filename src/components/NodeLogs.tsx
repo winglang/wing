@@ -43,6 +43,21 @@ const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
 
   const ChevronIcon = expanded ? ChevronDownIcon : ChevronRightIcon;
 
+  useEffect(() => {
+    if (expandableRef.current === null) {
+      return;
+    }
+    const html = log.message
+      .replace(
+        /((?:[a-z]:)?[/\\]\S+):(\d+):(\d+)/gi,
+        (match, path, line, column) => {
+          return `<a class="text-sky-500 underline hover:text-sky-800" onclick="event.stopPropagation()" href="vscode://file/${path}:${line}:${column}">${match}</a>`;
+        },
+      )
+      .replace(/(\r\n|\n|\r)/gm, expanded ? "<br />" : "\n");
+    expandableRef.current.innerHTML = html;
+  }, [log.message, expanded]);
+
   return (
     <Fragment>
       <div className="flex text-slate-400 text-xs">
@@ -109,15 +124,12 @@ const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
             })}
           />
         </div>
-
         <span
           ref={expandableRef}
           className={classNames({
             truncate: !expanded,
           })}
-        >
-          {log.message}
-        </span>
+        ></span>
       </button>
     </Fragment>
   );
