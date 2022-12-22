@@ -76,6 +76,7 @@ module.exports = grammar({
         $.while_statement,
         $.if_statement,
         $.struct_definition,
+        $.enum_definition,
       ),
 
     short_import_statement: ($) =>
@@ -97,6 +98,16 @@ module.exports = grammar({
       ),
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
+
+    
+    enum_definition: ($) => 
+      seq(
+        "enum", 
+        field("enum_name", $.identifier), 
+        "{",
+        commaSep(alias($.identifier, $.enum_field)),
+        "}"
+      ),
 
     return_statement: ($) =>
       seq("return", optional(field("expression", $.expression)), ";"),
@@ -219,8 +230,10 @@ module.exports = grammar({
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
-    // TODO: Handle leading zeros
-    number: ($) => /\d+/,
+    number: ($) => choice($._integer, $._decimal),
+    _integer: ($) => choice( "0", /[1-9]\d*/),
+    _decimal: ($) => choice( /0\.\d+/, /[1-9]\d*\.\d+/),
+
 
     bool: ($) => choice("true", "false"),
 

@@ -27,9 +27,11 @@ pub enum Type {
 	Class(Class),
 	Resource(Class),
 	Struct(Struct),
+	Enum(Enum),
 	ResourceObject(TypeRef), // Reference to a Resource type
 	ClassInstance(TypeRef),  // Reference to a Class type
 	StructInstance(TypeRef), // Reference to a Struct type
+	EnumInstance(EnumInstance),
 	Namespace(Namespace),
 }
 
@@ -73,6 +75,18 @@ pub struct Struct {
 	extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: TypeEnv,
+}
+
+#[derive(Debug)]
+pub struct Enum {
+	pub name: Symbol,
+	pub values: HashMap<Symbol, TypeRef>,
+}
+
+#[derive(Debug)]
+pub struct EnumInstance {
+	pub enum_name: TypeRef,
+	pub enum_value: Symbol,
 }
 
 impl PartialEq for Type {
@@ -182,31 +196,22 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Optional(v) => write!(f, "{}?", v),
-			Type::Function(func_sig) => {
-				if let Some(ret_val) = &func_sig.return_type {
-					write!(
-						f,
-						"fn({}):{}",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(", "),
+			Type::Function(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.args
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
 						format!("{}", ret_val)
-					)
-				} else {
-					write!(
-						f,
-						"fn({})",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(",")
-					)
-				}
+					} else {
+						"void".to_string()
+					}
+				)
 			}
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
@@ -229,6 +234,10 @@ impl Display for Type {
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
+			Type::Enum(s) => write!(f, "{}", s.name),
+			Type::EnumInstance(e) => {
+				write!(f, "enum value {}.{}", e.enum_name, e.enum_value)
+			}
 		}
 	}
 }
@@ -302,6 +311,22 @@ impl TypeRef {
 	fn as_struct(&self) -> Option<&Struct> {
 		if let &Type::Struct(ref s) = (*self).into() {
 			Some(s)
+		} else {
+			None
+		}
+	}
+
+	fn as_enum(&self) -> Option<&Enum> {
+		if let &Type::Enum(ref e) = (*self).into() {
+			Some(e)
+		} else {
+			None
+		}
+	}
+
+	fn as_mut_enum(&self) -> Option<&mut Enum> {
+		if let &mut Type::Enum(ref mut e) = (*self).into() {
+			Some(e)
 		} else {
 			None
 		}
@@ -594,10 +619,7 @@ impl<'a> TypeChecker<'a> {
 					&Type::Class(ref class) => (&class.env, &class.name),
 					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
 					&Type::Anything => return Some(self.types.anything()),
-					_ => panic!(
-						"Expected {:?} to be a resource or class type but it's a {}",
-						class, type_
-					),
+					_ => panic!("Expected {} to be a resource or class type but it's a {}", class, type_),
 				};
 
 				// Type check args against constructor
@@ -682,8 +704,8 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope {:?} to be a resource object, instead found \"{}\"",
-									obj_scope, obj_scope_type
+									"Expected scope to be a resource object, instead found \"{}\"",
+									obj_scope_type
 								),
 							);
 						}
@@ -713,7 +735,7 @@ impl<'a> TypeChecker<'a> {
 				// Make sure this is a function signature type
 				let func_sig = func_type
 					.as_function_sig()
-					.expect(&format!("{:?} should be a function or method", function));
+					.expect(&format!("{} should be a function or method", function));
 
 				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
@@ -1370,6 +1392,30 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				};
 			}
+			StmtKind::Enum { name, values } => {
+				let enum_type_ref = self.types.add_type(Type::Enum(Enum {
+					name: name.clone(),
+					values: HashMap::new(),
+				}));
+
+				let enum_type = enum_type_ref.as_mut_enum().unwrap();
+				values.iter().for_each(|value| {
+					enum_type.values.insert(
+						value.clone(),
+						self.types.add_type(Type::EnumInstance(EnumInstance {
+							enum_name: enum_type_ref,
+							enum_value: value.clone(),
+						})),
+					);
+				});
+
+				match env.define(name, enum_type_ref, StatementIdx::Top) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
+			}
 		}
 	}
 
@@ -1468,31 +1514,33 @@ impl<'a> TypeChecker<'a> {
 				}
 			},
 			Reference::NestedIdentifier { object, property } => {
-				// Get class
-				let class = {
-					let instance = self.type_check_exp(object, env, statement_idx).unwrap();
-					let instance_type = match instance.into() {
-						&Type::ClassInstance(t) | &Type::ResourceObject(t) => t,
-						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
-						&Type::Anything => return instance,
-						_ => self.general_type_error(format!(
-							"\"{}\" in {:?} does not resolve to a class instance or resource object",
-							instance, reference
-						)),
-					};
-
-					match instance_type.into() {
-						&Type::Class(ref class) | &Type::Resource(ref class) => class,
-						_ => {
-							return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", instance_type))
+				let instance = self.type_check_exp(object, env, statement_idx).unwrap();
+				match instance.into() {
+					&Type::ClassInstance(t) | &Type::ResourceObject(t) => match t.into() {
+						&Type::Class(ref class) | &Type::Resource(ref class) => match class.env.lookup(property, None) {
+							Ok(_type) => _type,
+							Err(type_error) => self.type_error(&type_error),
+						},
+						_ => return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", t)),
+					},
+					&Type::Anything => match instance.into() {
+						&Type::Class(ref class) | &Type::Resource(ref class) => match class.env.lookup(property, None) {
+							Ok(_type) => _type,
+							Err(type_error) => self.type_error(&type_error),
+						},
+						_ => return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", instance)),
+					},
+					&Type::Enum(ref t) => {
+						if t.values.contains_key(property) {
+							*t.values.get(property).unwrap()
+						} else {
+							self.general_type_error(format!("Enum {} does not contain value {}", instance, property.name))
 						}
 					}
-				};
-
-				// Find property in class's environment
-				match class.env.lookup(property, None) {
-					Ok(_type) => _type,
-					Err(type_error) => self.type_error(&type_error),
+					_ => self.general_type_error(format!(
+						"\"{}\" in {} does not resolve to a class instance, resource object or enum type",
+						instance, reference
+					)),
 				}
 			}
 		}

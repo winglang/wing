@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Inflight, Resource } from "../core";
+import { Code, Inflight, IResource, Resource } from "../core";
 
 /**
  * Global identifier for `Function`.
@@ -68,14 +68,12 @@ export class Function extends FunctionBase {
     ) as Function;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  public addEnvironment(_key: string, _value: string): void {
     throw new Error("Method not implemented.");
   }
 
-  public addEnvironment(_key: string, _value: string): void {
+  /** @internal */
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -86,8 +84,28 @@ export class Function extends FunctionBase {
 export interface IFunctionClient {
   /**
    * Invoke the function asynchronously with a given payload.
+   * @inflight
    */
   invoke(payload: string): Promise<string>;
+}
+
+/**
+ * Represents a resource with an inflight "handle" method that can be used to
+ * create a `cloud.Function`.
+ *
+ * @inflight `wingsdk.cloud.IFunctionHandlerClient`
+ */
+export interface IFunctionHandler extends IResource {}
+
+/**
+ * Inflight client for `IFunctionHandler`.
+ */
+export interface IFunctionHandlerClient {
+  /**
+   * Entrypoint function that will be called when the cloud function is invoked.
+   * @inflight
+   */
+  handle(event: string): Promise<void>;
 }
 
 /**

@@ -4,6 +4,7 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
+use indexmap::IndexSet;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
@@ -81,6 +82,40 @@ pub enum Type {
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
 
+impl Display for Type {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Type::Number => write!(f, "num"),
+			Type::String => write!(f, "str"),
+			Type::Bool => write!(f, "bool"),
+			Type::Duration => write!(f, "duration"),
+			Type::Optional(t) => write!(f, "{}?", t),
+			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::FunctionSignature(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.parameters
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
+						format!("{}", ret_val)
+					} else {
+						"void".to_string()
+					}
+				)
+			}
+			Type::CustomType { root, fields: _ } => {
+				write!(f, "{}", root)
+			}
+		}
+	}
+}
+
 #[derive(Debug, Clone)]
 pub struct FunctionSignature {
 	pub parameters: Vec<Type>,
@@ -156,6 +191,10 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<Symbol>,
 		members: Vec<ClassMember>,
+	},
+	Enum {
+		name: Symbol,
+		values: IndexSet<Symbol>,
 	},
 }
 

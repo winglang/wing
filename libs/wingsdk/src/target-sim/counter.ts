@@ -1,10 +1,10 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, Resource } from "../core";
+import * as core from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { CounterSchema } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 /**
  * Simulator implementation of `cloud.Counter`.
@@ -32,7 +32,15 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
-    return bindSimulatorResource("counter", this, captureScope);
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    bindSimulatorResource("counter", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _toInflight(): core.Code {
+    return makeSimulatorJsClient("counter", this);
   }
 }
+
+Counter._annotateInflight("inc", {});

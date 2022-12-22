@@ -51,10 +51,10 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+        "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
           "environmentVariables": Object {},
-          "sourceCodeFile": "assets/my_queue-OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
@@ -67,7 +67,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -80,13 +80,25 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
                 "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+                "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -98,7 +110,7 @@ Object {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-236ff3d72ad0ae46": Object {
+        "my_queue-OnMessage-e645076f": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
@@ -116,15 +128,27 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Code",
-              "path": "root/my_queue-OnMessage-236ff3d72ad0ae46/Code",
+              "path": "root/my_queue-OnMessage-e645076f/Code",
             },
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
           },
-          "id": "my_queue-OnMessage-236ff3d72ad0ae46",
-          "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+          "id": "my_queue-OnMessage-e645076f",
+          "path": "root/my_queue-OnMessage-e645076f",
+        },
+        "my_queue-OnMessageHandler-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue-OnMessageHandler-e645076f",
+          "path": "root/my_queue-OnMessageHandler-e645076f",
         },
       },
       "constructInfo": Object {
@@ -145,10 +169,10 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+        "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
           "environmentVariables": Object {},
-          "sourceCodeFile": "assets/my_queue-OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
@@ -168,7 +192,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 5,
-              "functionHandle": "\${root/my_queue-OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -181,13 +205,25 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
                 "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+                "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -199,7 +235,7 @@ Object {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-236ff3d72ad0ae46": Object {
+        "my_queue-OnMessage-e645076f": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
@@ -217,15 +253,27 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Code",
-              "path": "root/my_queue-OnMessage-236ff3d72ad0ae46/Code",
+              "path": "root/my_queue-OnMessage-e645076f/Code",
             },
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
           },
-          "id": "my_queue-OnMessage-236ff3d72ad0ae46",
-          "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+          "id": "my_queue-OnMessage-e645076f",
+          "path": "root/my_queue-OnMessage-e645076f",
+        },
+        "my_queue-OnMessageHandler-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue-OnMessageHandler-e645076f",
+          "path": "root/my_queue-OnMessageHandler-e645076f",
         },
       },
       "constructInfo": Object {
@@ -246,10 +294,10 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+        "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
           "environmentVariables": Object {},
-          "sourceCodeFile": "assets/my_queue-OnMessage-236ff3d72ad0ae46/index.js",
+          "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
         "type": "wingsdk.cloud.Function",
@@ -262,7 +310,7 @@ Object {
           "subscribers": Array [
             Object {
               "batchSize": 1,
-              "functionHandle": "\${root/my_queue-OnMessage-236ff3d72ad0ae46#attrs.handle}",
+              "functionHandle": "\${root/my_queue-OnMessage-e645076f#attrs.handle}",
             },
           ],
           "timeout": 30,
@@ -275,13 +323,25 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
                 "relationship": "on_message",
-                "resource": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+                "resource": "root/my_queue-OnMessage-e645076f",
               },
             ],
             "wing:resource:stateful": true,
@@ -293,7 +353,7 @@ Object {
           "id": "my_queue",
           "path": "root/my_queue",
         },
-        "my_queue-OnMessage-236ff3d72ad0ae46": Object {
+        "my_queue-OnMessage-e645076f": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
@@ -311,15 +371,27 @@ Object {
                 "version": "10.0.25",
               },
               "id": "Code",
-              "path": "root/my_queue-OnMessage-236ff3d72ad0ae46/Code",
+              "path": "root/my_queue-OnMessage-e645076f/Code",
             },
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.25",
           },
-          "id": "my_queue-OnMessage-236ff3d72ad0ae46",
-          "path": "root/my_queue-OnMessage-236ff3d72ad0ae46",
+          "id": "my_queue-OnMessage-e645076f",
+          "path": "root/my_queue-OnMessage-e645076f",
+        },
+        "my_queue-OnMessageHandler-e645076f": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue-OnMessageHandler-e645076f",
+          "path": "root/my_queue-OnMessageHandler-e645076f",
         },
       },
       "constructInfo": Object {

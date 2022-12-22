@@ -2,9 +2,8 @@ import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { Resource } from "../core";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
+import { addConnections } from "./util";
 
 export const HASH_KEY = "id";
 
@@ -27,37 +26,37 @@ export class Counter extends cloud.CounterBase {
     });
   }
 
-  /**
-   * @internal
-   */
-  public _bind(
-    captureScope: Resource,
-    metadata: core.CaptureMetadata
-  ): core.Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error(
-        "counters can only be captured by tfaws.Function for now"
-      );
+  /** @internal */
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("counters can only be bound by tfaws.Function for now");
     }
 
-    const env = `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
-
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.CounterInflightMethods.INC)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.CounterInflightMethods.INC)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:UpdateItem"],
         resource: this.table.arn,
       });
     }
 
-    captureScope.addEnvironment(env, this.table.name);
+    host.addEnvironment(this.envName(), this.table.name);
 
-    addBindConnections(this, captureScope);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
+  /** @internal */
+  public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "CounterClient", [
-      `process.env["${env}"]`,
+      `process.env["${this.envName()}"]`,
       `${this.initial}`,
     ]);
   }
+
+  private envName(): string {
+    return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
+  }
 }
+
+Counter._annotateInflight("inc", {});
