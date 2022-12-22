@@ -70,7 +70,7 @@ cloud.
 
 When deployed to the cloud, this application can handle an infinite amount of
 traffic, with no need for you to explicitly take care of scaling, load
-balancing, security policies or any other infrastructure-related concerns. For
+balancing, security policies, or any other infrastructure-related concerns. For
 example, when targeting AWS, Wing will use Amazon S3 for the bucket, Amazon SQS
 for the queue, Amazon DynamoDB for the atomic counter, and AWS Lambda for the
 handler. It will also render least privilege IAM security policies, wire up
@@ -89,7 +89,7 @@ environment.
 This is what we call **cloud-oriented programming**. It's a programming paradigm
 which treats the cloud as a computer, and heavily relies on managed services and
 distributed programming to build and deliver systems that are intrinsically
-scalable, highly-available and robust.
+scalable, highly-available, and robust.
 
 ## Why you should consider Wing?
 
@@ -118,7 +118,7 @@ Wing is designed to address these challenges in the following ways:
   library inside unit tests, and to test complete architectures without
   requiring deployments or heavy mocking.
 * **Infrastructure as policy** - infrastructure concerns such as deployment,
-  networking, security and observability can be applied horizontally through
+  networking, security, and observability can be applied horizontally through
   policies instead of inside the application code.
 
 
