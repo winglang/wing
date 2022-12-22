@@ -418,12 +418,7 @@ interface IWebsite {
   url: str;
 }
 
-interface IWebsiteClient {
-  /**
-   * Make a GET request to given path, and verify it returns a 200 status code.
-   */
-  get(path: str): Promise<bool>;
-}
+interface IWebsiteClient {}
 ```
 
 Future extensions: domain and certificate props? support for edge functions?
@@ -451,32 +446,32 @@ interface IApi {
   /**
    * Run a function whenever a GET request is made to the specified route.
    */
-  on_get(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnGetProps?): cloud.Function;
+  on_get(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): cloud.Function;
 
   /**
    * Run a function whenever a POST request is made to the specified route.
    */
-  on_post(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnPostProps?): cloud.Function;
+  on_post(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): cloud.Function;
 
   /**
    * Run a function whenever a PUT request is made to the specified route.
    */
-  on_put(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnPutProps?): cloud.Function;
+  on_put(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): cloud.Function;
 
   /**
    * Run a function whenever a DELETE request is made to the specified route.
    */
-  on_delete(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnDeleteProps?): cloud.Function;
+  on_delete(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): cloud.Function;
 
   /**
    * Run a function whenever a PATCH request is made to the specified route.
    */
-  on_patch(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnPatchProps?): cloud.Function;
+  on_patch(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): cloud.Function;
 
   /**
    * Run a function whenever any request is made to the specified route.
    */
-  on_request(route: str, fn: inflight (req: ApiRequest) => void, opts: cloud.ApiOnRequestProps?): cloud.Function;
+  on_request(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnRequestProps?): cloud.Function;
 }
 
 interface IApiClient {
@@ -498,6 +493,15 @@ struct ApiRequest {
   /** The request's payload. */
   payload: Serializable;
   /** The request's headers. */
+  headers: Map<str, str>;
+}
+
+struct ApiResponse {
+  /** The response's status code. */
+  status: number;
+  /** The response's payload. */
+  payload: Serializable;
+  /** The response's headers. */
   headers: Map<str, str>;
 }
 
