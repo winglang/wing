@@ -149,7 +149,7 @@ export const NodeLogs = ({ logs }: NodeLogsProps) => {
         }}
       >
         {logs.map((log, logIndex) => (
-          <NodeLogEntry key={logIndex} log={log} />
+          <NodeLogEntry key={`${logIndex}-${log.timestamp}`} log={log} />
         ))}
       </div>
     </>
