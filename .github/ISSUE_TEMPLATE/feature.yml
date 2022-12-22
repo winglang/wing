@@ -6,13 +6,6 @@ body:
   attributes:
     value: |
       Thanks for taking the time to fill out this enhancement request 
-- type: input
-  id: one-sentence-enhancement-description
-  attributes:
-    label: Summary
-    description: One sentence description of the enhancement you'd like to see in winglang 
-  validations:
-    required: true
 - type: textarea
   id: spec
   attributes:
