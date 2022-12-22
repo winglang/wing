@@ -124,3 +124,4 @@ Wing is designed to address these challenges in the following ways:
 
 
 [Terraform]: https://www.terraform.io/
+[JavaScript]: https://developer.mozilla.org/en-US/docs/Web/JavaScript
