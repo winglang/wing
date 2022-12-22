@@ -10,7 +10,9 @@ use colored::Colorize;
 use serde_json::Value;
 use wingii::jsii;
 
-const RESOURCE_CLASS_FQN: &'static str = "@winglang/wingsdk.core.Resource";
+const WINGSDK_DURATION_FQN: &'static str = "@winglang/wingsdk.std.Duration";
+const WINGSDK_RESOURCE_FQN: &'static str = "@winglang/wingsdk.core.Resource";
+const WINGSDK_INFLIGHT_FQN: &'static str = "@winglang/wingsdk.core.Inflight";
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -56,13 +58,13 @@ impl<'a> JsiiImporter<'a> {
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
-				if type_fqn == "@winglang/wingsdk.core.Inflight" {
+				if type_fqn == WINGSDK_INFLIGHT_FQN {
 					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
 						flight: Phase::Inflight,
 					})))
-				} else if type_fqn == "@winglang/wingsdk.std.Duration" {
+				} else if type_fqn == WINGSDK_DURATION_FQN {
 					Some(self.wing_types.duration())
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
@@ -113,7 +115,7 @@ impl<'a> JsiiImporter<'a> {
 
 	pub fn import_type(&mut self, type_fqn: &str) -> Option<TypeRef> {
 		// Hack: if the class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
-		if type_fqn == RESOURCE_CLASS_FQN {
+		if type_fqn == WINGSDK_RESOURCE_FQN {
 			return None;
 		}
 
@@ -301,7 +303,7 @@ impl<'a> JsiiImporter<'a> {
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class = if let Some(base_class_fqn) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
-			if base_class_fqn == RESOURCE_CLASS_FQN {
+			if base_class_fqn == WINGSDK_RESOURCE_FQN {
 				is_resource = true;
 				None
 			} else {

@@ -36,7 +36,7 @@ pub enum Type {
 }
 
 const WING_CONSTRUCTOR_NAME: &'static str = "init";
-const WINGSDK_GLOBAL_MODULE: &'static str = "std";
+const WINGSDK_STD_MODULE: &'static str = "std";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -503,9 +503,9 @@ impl<'a> TypeChecker<'a> {
 	pub fn add_globals(&mut self, scope: &Scope) {
 		self.add_module_to_env(
 			scope.env.borrow_mut().as_mut().unwrap(),
-			WINGSDK_GLOBAL_MODULE.to_string(),
+			WINGSDK_STD_MODULE.to_string(),
 			&Symbol {
-				name: WINGSDK_GLOBAL_MODULE.to_string(),
+				name: WINGSDK_STD_MODULE.to_string(),
 				span: WingSpan::global(),
 			},
 			0,
@@ -1144,8 +1144,8 @@ impl<'a> TypeChecker<'a> {
 					// If provided use alias identifier as the namespace name
 					let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
-					if namespace_name.name == WINGSDK_GLOBAL_MODULE {
-						self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_GLOBAL_MODULE));
+					if namespace_name.name == WINGSDK_STD_MODULE {
+						self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
 						return;
 					}
 
@@ -1447,7 +1447,7 @@ impl<'a> TypeChecker<'a> {
 		// Create a new env for the imported module's namespace
 		let mut namespace_env = TypeEnv::new(None, None, false, env.flight, statement_idx);
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-		if module_name == "cloud" || module_name == WINGSDK_GLOBAL_MODULE {
+		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
