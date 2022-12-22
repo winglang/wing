@@ -141,7 +141,7 @@ impl TypeEnv {
 			type_ref
 		} else {
 			return Err(TypeError {
-				message: format!("Unknown symbol \"{}\"", symb),
+				message: format!("Unknown symbol \"{}\"", symb.name),
 				span: symb.span.clone(),
 			});
 		};
@@ -160,7 +160,7 @@ impl TypeEnv {
 				t = type_ref;
 			} else {
 				return Err(TypeError {
-					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb, ns.name),
+					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb.name, ns.name),
 					span: next_symb.span.clone(),
 				});
 			}
