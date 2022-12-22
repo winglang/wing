@@ -420,7 +420,7 @@ It is useful for hosting static content, such as a blog or a single-page applica
 ```ts
 struct WebsiteProps {
   /**
-   * Path to the website's static files.
+   * Local path to the website's static files.
    */
   path: str;
 }
