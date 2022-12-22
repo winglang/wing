@@ -17,6 +17,18 @@ pub struct WingSpan {
 	pub file_id: FileId,
 }
 
+impl WingSpan {
+	pub fn global() -> Self {
+		Self {
+			start: Point { row: 0, column: 0 },
+			end: Point { row: 0, column: 0 },
+			start_byte: 0,
+			end_byte: 0,
+			file_id: String::from(""),
+		}
+	}
+}
+
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{}:{}:{}", self.file_id, self.start.row + 1, self.start.column + 1)

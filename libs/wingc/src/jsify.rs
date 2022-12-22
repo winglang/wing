@@ -273,7 +273,7 @@ impl JSifier {
 						.join("")
 				),
 				Literal::Number(n) => format!("{}", n),
-				Literal::Duration(sec) => format!("{}.core.Duration.fromSeconds({})", STDLIB, sec),
+				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None),
