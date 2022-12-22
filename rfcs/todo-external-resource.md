@@ -41,29 +41,25 @@ resource TaskList {
       hash_key: "TaskId",
       attribute: [{ name: "TaskId", type: "S" }],
       lifecycle: {
-        preventDestroy: true
+        prevent_destroy: true
       }
     );    
   }
   
-  inflight _client: ddb.DynamoDBClient;
+  inflight _client: untyped; // ddb.DynamoDBClient;
   
   inflight init() {
     // the inflight initializer creates an instance of the DynamoDBClient object when it is first loaded.
     this._client = new ddb_sdk.DynamoDBClient({});
   }
     
-  /** 
-   * Adds a task to the task list.
-   * @returns The ID of the new task.
-   */
   inflight add_task(title: str): str {
     let id = "${this._counter.inc()}";
     print("adding task ${id} with title: ${title}");
 
     // we capture "this._table.arn" which is a CDKtf attribute here
-    let command = new ddb_sdk.PutItemCommand(
-      TableName: this._table.arn, // !! interesting !!
+    let command = new ddb_sdk.PutItemCommand(  // <-- keyword expansion
+      TableName: this._table.arn,              // !! interesting because arn is deploy-time substitution !!
       Item: {
         TaskId: { S: id },
         Title: { S: title },
@@ -79,7 +75,6 @@ resource TaskList {
   // and implemented implicitly by the compiler for inflight methods.
   override _bind(host: Construct, methods: string[]) {
     // TODO: if "sim" then return;
-    
     
     if (!(host instanceof tfaws.Function)) {
       throw new Error("can only bind to tfaws.Function");
@@ -98,7 +93,60 @@ resource TaskList {
 }
 ```
 
+There is One More Thing to take care of before Dave can call this done - IAM permissions.
 
+This can be done in one of two ways:
+
+1. By overriding the `bind` method for the resource:
+
+    ```ts
+    resource TaskList {
+      // ...
+
+      override bind(host: IInflightHost, ops: string[]): void {
+        if (!(host instanceof tfaws.Function)) {
+          throw new Error("can only bind to tfaws.Function");
+        }
+
+        if (ops.includes("add_task")) {
+          host.add_policy_statement(effect: "Allow", method: ["dynamodb:PutItem"], resource: [this._table.arn]);
+        }
+
+        super.bind(host, ops);
+      }
+    }
+    
+    let task_list = new TaskList();
+    let fn = new cloud.Function(inflight () => {
+      task_list.add_task(...);
+    });
+    ```
+    
+    The benefit of this approach is that it is implicit. Whenever some inflight calls `add_task()`, the permission
+    will automatically be added to the policy.
+
+2. By adding a method that must be called explicitly. Notice that the method takes a `tfaws.Function`:
+
+    ```ts
+    resource TaskList {
+      //...
+      grant_write(fn: tfaws.Function) {
+        fn.add_policy_statement(
+          effect: "Allow", 
+          method: ["dynamodb:PutItem"], 
+          resource: [this._table.arn]
+        );
+      }
+    }
+
+    let task_list = new TaskList();
+    let fn = new tfaws.Function(inflight () => {
+      task_list.add_task(...);
+    });
+
+    // this is required by all consumers
+    task_list.grant_write(fn);
+    ```
 
 As you can see, Dave is able to naturally bring the `DynamodbTable` resource/construct from 
 [@cdktf/provider-aws](https://www.npmjs.com/package/@cdktf/provider-aws) (which is a standard CDK JSII library)
@@ -110,26 +158,6 @@ support reading `.d.ts` files).
 He rewrote the `TaskList` resource accordingly (see some annotations in the code for details on what's going on).
 
 Alternatively:
-
-```ts
-resource TaskList {
-  //...
-  pub grant_write(fn: tfaws.Function) {
-    fn.add_policy_statement(
-      effect: "Allow", 
-      method: ["dynamodb:PutItem"], 
-      resource: [this._table.arn]
-    );
-  }
-}
-
-let task_list = new TaskList();
-let fn = new tfaws.Function(inflight () => {
-  task_list.add_task(...);
-});
-
-task_list.grant_write(fn);
-```
 
 ## Simulator Implementation 
 
