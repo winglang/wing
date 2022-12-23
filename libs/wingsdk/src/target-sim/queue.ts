@@ -3,6 +3,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import * as std from "../std";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
@@ -14,13 +15,13 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements ISimulatorResource {
-  private readonly timeout: core.Duration;
+  private readonly timeout: std.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? core.Duration.fromSeconds(30);
+    this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
     this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }

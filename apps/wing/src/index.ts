@@ -28,6 +28,7 @@ async function main() {
 
   program
     .command("run")
+    .alias("it")
     .description("Runs a Wing simulator file in the Wing Console")
     .argument("<simfile>", ".wsim simulator file")
     .action(async (simfile: string) => {
