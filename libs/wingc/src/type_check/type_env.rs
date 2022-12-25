@@ -21,6 +21,7 @@ unsafe impl Send for TypeEnv {}
 // The index (position) of the statement where a certain symbol was defined
 // this is useful to determine if a symbol can be used in a certain
 // expression or whether it is being used before it's defined.
+#[derive(Debug)]
 pub enum StatementIdx {
 	Index(usize),
 	Top, // Special value meaning the symbol should be treated as if it was defined at the top of the scope
@@ -141,7 +142,7 @@ impl TypeEnv {
 			type_ref
 		} else {
 			return Err(TypeError {
-				message: format!("Unknown symbol \"{}\"", symb),
+				message: format!("Unknown symbol \"{}\"", symb.name),
 				span: symb.span.clone(),
 			});
 		};
@@ -160,7 +161,7 @@ impl TypeEnv {
 				t = type_ref;
 			} else {
 				return Err(TypeError {
-					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb, ns.name),
+					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb.name, ns.name),
 					span: next_symb.span.clone(),
 				});
 			}

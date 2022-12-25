@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod type_env;
 use crate::ast::{Type as AstType, *};
 use crate::debug;
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -36,6 +36,7 @@ pub enum Type {
 }
 
 const WING_CONSTRUCTOR_NAME: &'static str = "init";
+const WINGSDK_STD_MODULE: &'static str = "std";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -497,6 +498,18 @@ impl<'a> TypeChecker<'a> {
 			inner_scopes: vec![],
 			diagnostics: RefCell::new(Diagnostics::new()),
 		}
+	}
+
+	pub fn add_globals(&mut self, scope: &Scope) {
+		self.add_module_to_env(
+			scope.env.borrow_mut().as_mut().unwrap(),
+			WINGSDK_STD_MODULE.to_string(),
+			&Symbol {
+				name: WINGSDK_STD_MODULE.to_string(),
+				span: WingSpan::global(),
+			},
+			0,
+		);
 	}
 
 	// TODO: All calls to this should be removed and we should make sure type checks are done
@@ -1131,7 +1144,12 @@ impl<'a> TypeChecker<'a> {
 					// If provided use alias identifier as the namespace name
 					let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
-					self.add_module_to_env(env, module_name, namespace_name, stmt.idx);
+					if namespace_name.name == WINGSDK_STD_MODULE {
+						self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
+						return;
+					}
+
+					self.add_module_to_env(env, module_name.name.clone(), namespace_name, stmt.idx);
 				}
 			}
 			StmtKind::Scope(scope) => {
@@ -1422,14 +1440,14 @@ impl<'a> TypeChecker<'a> {
 	fn add_module_to_env(
 		&mut self,
 		env: &mut TypeEnv,
-		module_name: &Symbol,
-		namespace_name: &Symbol,
+		module_name: String,
+		namespace_symbol: &Symbol,
 		statement_idx: usize,
 	) {
 		// Create a new env for the imported module's namespace
 		let mut namespace_env = TypeEnv::new(None, None, false, env.flight, statement_idx);
-		// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
-		if module_name.name == "cloud" {
+		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
+		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
@@ -1440,7 +1458,7 @@ impl<'a> TypeChecker<'a> {
 			let name = wingii_types
 				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
 				.unwrap();
-			let prefix = format!("{}.{}.", name, module_name.name);
+			let prefix = format!("{}.{}.", name, module_name);
 			debug!("Loaded JSII assembly {}", name);
 			let assembly = wingii_types.find_assembly(&name).unwrap();
 
@@ -1448,7 +1466,7 @@ impl<'a> TypeChecker<'a> {
 				jsii_types: &wingii_types,
 				assembly_name: name,
 				namespace_env: &mut namespace_env,
-				namespace_name: module_name.name.clone(),
+				namespace_name: module_name.clone(),
 				wing_types: self.types,
 				import_statement_idx: statement_idx,
 			};
@@ -1470,11 +1488,11 @@ impl<'a> TypeChecker<'a> {
 
 			// Create a namespace for the imported module
 			let namespace = self.types.add_type(Type::Namespace(Namespace {
-				name: namespace_name.name.clone(),
+				name: namespace_symbol.name.clone(),
 				env: namespace_env,
 			}));
 			// TODO: are namespaces at the Top statement level (known by everyone in the scope) regardless of where they are defined?
-			match env.define(namespace_name, namespace, StatementIdx::Top) {
+			match env.define(namespace_symbol, namespace, StatementIdx::Top) {
 				Err(type_error) => {
 					self.type_error(&type_error);
 				}
@@ -1514,6 +1532,8 @@ impl<'a> TypeChecker<'a> {
 				}
 			},
 			Reference::NestedIdentifier { object, property } => {
+				let std_lookup = env.try_lookup("std", None).unwrap();
+				let std_namespace = &std_lookup.as_namespace().unwrap().env;
 				let instance = self.type_check_exp(object, env, statement_idx).unwrap();
 				match instance.into() {
 					&Type::ClassInstance(t) | &Type::ResourceObject(t) => match t.into() {
@@ -1537,6 +1557,17 @@ impl<'a> TypeChecker<'a> {
 							self.general_type_error(format!("Enum {} does not contain value {}", instance, property.name))
 						}
 					}
+
+					// get "std" primitives
+					&Type::Duration => std_namespace
+						.try_lookup("Duration", None)
+						.unwrap()
+						.as_class()
+						.unwrap()
+						.env
+						.lookup(property, None)
+						.unwrap(),
+
 					_ => self.general_type_error(format!(
 						"\"{}\" in {} does not resolve to a class instance, resource object or enum type",
 						instance, reference
