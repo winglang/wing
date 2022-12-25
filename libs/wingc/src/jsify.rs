@@ -371,10 +371,6 @@ impl JSifier {
 	}
 
 	fn jsify_statement(&self, statement: &Stmt, phase: Phase) -> String {
-		let auto_await = match phase {
-			Phase::Inflight => "await ",
-			_ => "",
-		};
 		match &statement.kind {
 			StmtKind::Use {
 				module_name,
@@ -403,23 +399,21 @@ impl JSifier {
 			} => {
 				let initial_value = self.jsify_expression(initial_value, phase);
 				// TODO: decide on `const` vs `let` once we have mutables
-				format!("const {} = {}({});", self.jsify_symbol(var_name), auto_await, initial_value)
+				format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
 			}
 			StmtKind::ForLoop {
 				iterator,
 				iterable,
 				statements,
 			} => format!(
-				"for {}(const {} of {}) {}",
-				auto_await,
+				"for (const {} of {}) {}",
 				self.jsify_symbol(iterator),
 				self.jsify_expression(iterable, phase),
 				self.jsify_scope(statements, phase)
 			),
 			StmtKind::While { condition, statements } => {
 				format!(
-					"while ({}({})) {}",
-					auto_await,
+					"while ({}) {}",
 					self.jsify_expression(condition, phase),
 					self.jsify_scope(statements, phase),
 				)
@@ -431,16 +425,14 @@ impl JSifier {
 			} => {
 				if let Some(else_scope) = else_statements {
 					format!(
-						"if ({}({})) {} else {}",
-						auto_await,
+						"if ({}) {} else {}",
 						self.jsify_expression(condition, phase),
 						self.jsify_scope(statements, phase),
 						self.jsify_scope(else_scope, phase)
 					)
 				} else {
 					format!(
-						"if ({}({})) {}",
-						auto_await,
+						"if ({}) {}",
 						self.jsify_expression(condition, phase),
 						self.jsify_scope(statements, phase)
 					)
@@ -449,16 +441,15 @@ impl JSifier {
 			StmtKind::Expression(e) => format!("{};", self.jsify_expression(e, phase)),
 			StmtKind::Assignment { variable, value } => {
 				format!(
-					"{} = {}({});",
+					"{} = {};",
 					self.jsify_reference(&variable, None, phase),
-					auto_await,
 					self.jsify_expression(value, phase)
 				)
 			}
 			StmtKind::Scope(scope) => self.jsify_scope(scope, phase),
 			StmtKind::Return(exp) => {
 				if let Some(exp) = exp {
-					format!("return {}({});", auto_await, self.jsify_expression(exp, phase))
+					format!("return {};", self.jsify_expression(exp, phase))
 				} else {
 					"return;".into()
 				}
