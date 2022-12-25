@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Duration, Inflight, IResource, Resource } from "../core";
+import { Code, Inflight, IResource, Resource } from "../core";
+import { Duration } from "../std";
 import { Function, FunctionProps } from "./function";
 
 /**
