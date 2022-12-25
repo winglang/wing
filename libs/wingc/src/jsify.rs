@@ -577,7 +577,7 @@ impl JSifier {
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
-		proc_source.push(format!("async function handle({}) {};", parameter_list.join(", "), body));
+		proc_source.push(format!("async handle({}) {};", parameter_list.join(", "), body));
 		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 		let file_path = format!("{}/index.js", proc_dir);
