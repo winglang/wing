@@ -74,7 +74,7 @@ impl JSifier {
 			(_, StmtKind::Class { .. }) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let line = self.jsify_statement(statement, Phase::Preflight); // top level statements are always preflight
+			let line = self.jsify_statement(statement);
 			if line.is_empty() {
 				continue;
 			}
@@ -116,12 +116,12 @@ impl JSifier {
 		output.join("\n")
 	}
 
-	fn jsify_scope(&self, scope: &Scope, phase: Phase) -> String {
+	fn jsify_scope(&self, scope: &Scope) -> String {
 		let mut lines = vec![];
 		lines.push("{".to_string());
 
 		for statement in scope.statements.iter() {
-			let statement_str = format!("{}", self.jsify_statement(statement, phase));
+			let statement_str = format!("{}", self.jsify_statement(statement));
 			let result = statement_str.split("\n");
 			for l in result {
 				lines.push(format!("  {}", l));
@@ -132,7 +132,7 @@ impl JSifier {
 		lines.join("\n")
 	}
 
-	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>, phase: Phase) -> String {
+	fn jsify_reference(&self, reference: &Reference, case_convert: Option<bool>) -> String {
 		let symbolize = if case_convert.unwrap_or(false) {
 			Self::jsify_symbol_case_converted
 		} else {
@@ -141,7 +141,7 @@ impl JSifier {
 		match reference {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
 			Reference::NestedIdentifier { object, property } => {
-				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
+				self.jsify_expression(object) + "." + &symbolize(self, property)
 			}
 		}
 	}
@@ -169,7 +169,7 @@ impl JSifier {
 		}
 
 		for arg in arg_list.pos_args.iter() {
-			args.push(self.jsify_expression(arg, Phase::Independent));
+			args.push(self.jsify_expression(arg));
 		}
 
 		for arg in arg_list.named_args.iter() {
@@ -181,7 +181,7 @@ impl JSifier {
 				} else {
 					arg.0.name.clone()
 				},
-				self.jsify_expression(arg.1, Phase::Independent)
+				self.jsify_expression(arg.1)
 			));
 		}
 
@@ -217,11 +217,7 @@ impl JSifier {
 		}
 	}
 
-	fn jsify_expression(&self, expression: &Expr, phase: Phase) -> String {
-		let auto_await = match phase {
-			Phase::Inflight => "await ",
-			_ => "",
-		};
+	fn jsify_expression(&self, expression: &Expr) -> String {
 		match &expression.kind {
 			ExprKind::New {
 				class,
@@ -271,7 +267,7 @@ impl JSifier {
 						.iter()
 						.map(|p| match p {
 							InterpolatedStringPart::Static(l) => format!("{}", l),
-							InterpolatedStringPart::Expr(e) => format!("${{{}}}", self.jsify_expression(e, phase)),
+							InterpolatedStringPart::Expr(e) => format!("${{{}}}", self.jsify_expression(e)),
 						})
 						.collect::<Vec<String>>()
 						.join("")
@@ -280,7 +276,7 @@ impl JSifier {
 				Literal::Duration(sec) => format!("{}.std.Duration.fromSeconds({})", STDLIB, sec),
 				Literal::Boolean(b) => format!("{}", if *b { "true" } else { "false" }),
 			},
-			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
+			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None),
 			ExprKind::Call { function, args } => {
 				// TODO: implement "print" to use Logger resource
 				// see: https://github.com/winglang/wing/issues/50
@@ -295,9 +291,8 @@ impl JSifier {
 						.should_case_convert_jsii;
 				}
 				format!(
-					"({}{}({}))",
-					auto_await,
-					self.jsify_reference(&function, Some(needs_case_conversion), phase),
+					"{}({})",
+					self.jsify_reference(&function, Some(needs_case_conversion)),
 					self.jsify_arg_list(&args, None, None, needs_case_conversion)
 				)
 			}
@@ -307,7 +302,7 @@ impl JSifier {
 					UnaryOperator::Minus => "-",
 					UnaryOperator::Not => "!",
 				};
-				format!("({}{})", op, self.jsify_expression(exp, phase))
+				format!("({}{})", op, self.jsify_expression(exp))
 			}
 			ExprKind::Binary { op, lexp, rexp } => {
 				let op = match op {
@@ -327,9 +322,9 @@ impl JSifier {
 				};
 				format!(
 					"({} {} {})",
-					self.jsify_expression(lexp, phase),
+					self.jsify_expression(lexp),
 					op,
-					self.jsify_expression(rexp, phase)
+					self.jsify_expression(rexp)
 				)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
@@ -337,7 +332,7 @@ impl JSifier {
 					"Object.freeze([{}])",
 					items
 						.iter()
-						.map(|expr| self.jsify_expression(expr, phase))
+						.map(|expr| self.jsify_expression(expr))
 						.collect::<Vec<String>>()
 						.join(", ")
 				)
@@ -347,7 +342,7 @@ impl JSifier {
 					"{{\n{}}}\n",
 					fields
 						.iter()
-						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr, phase)))
+						.map(|(name, expr)| format!("\"{}\": {},", name.name, self.jsify_expression(expr)))
 						.collect::<Vec<String>>()
 						.join("\n")
 				)
@@ -357,7 +352,7 @@ impl JSifier {
 					"Object.freeze({{{}}})",
 					fields
 						.iter()
-						.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr, phase)))
+						.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr)))
 						.collect::<Vec<String>>()
 						.join(", ")
 				)
@@ -365,12 +360,12 @@ impl JSifier {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, &func_def.parameter_names, &func_def.statements, phase),
+				Phase::Preflight => self.jsify_function(None, &func_def.parameter_names, &func_def.statements),
 			},
 		}
 	}
 
-	fn jsify_statement(&self, statement: &Stmt, phase: Phase) -> String {
+	fn jsify_statement(&self, statement: &Stmt) -> String {
 		match &statement.kind {
 			StmtKind::Use {
 				module_name,
@@ -397,7 +392,7 @@ impl JSifier {
 				initial_value,
 				type_: _,
 			} => {
-				let initial_value = self.jsify_expression(initial_value, phase);
+				let initial_value = self.jsify_expression(initial_value);
 				// TODO: decide on `const` vs `let` once we have mutables
 				format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
 			}
@@ -406,16 +401,16 @@ impl JSifier {
 				iterable,
 				statements,
 			} => format!(
-				"for (const {} of {}) {}",
+				"for(const {} of {}) {}",
 				self.jsify_symbol(iterator),
-				self.jsify_expression(iterable, phase),
-				self.jsify_scope(statements, phase)
+				self.jsify_expression(iterable),
+				self.jsify_scope(statements)
 			),
 			StmtKind::While { condition, statements } => {
 				format!(
 					"while ({}) {}",
-					self.jsify_expression(condition, phase),
-					self.jsify_scope(statements, phase),
+					self.jsify_expression(condition),
+					self.jsify_scope(statements),
 				)
 			}
 			StmtKind::If {
@@ -426,30 +421,30 @@ impl JSifier {
 				if let Some(else_scope) = else_statements {
 					format!(
 						"if ({}) {} else {}",
-						self.jsify_expression(condition, phase),
-						self.jsify_scope(statements, phase),
-						self.jsify_scope(else_scope, phase)
+						self.jsify_expression(condition),
+						self.jsify_scope(statements),
+						self.jsify_scope(else_scope)
 					)
 				} else {
 					format!(
 						"if ({}) {}",
-						self.jsify_expression(condition, phase),
-						self.jsify_scope(statements, phase)
+						self.jsify_expression(condition),
+						self.jsify_scope(statements)
 					)
 				}
 			}
-			StmtKind::Expression(e) => format!("{};", self.jsify_expression(e, phase)),
+			StmtKind::Expression(e) => format!("{};", self.jsify_expression(e)),
 			StmtKind::Assignment { variable, value } => {
 				format!(
 					"{} = {};",
-					self.jsify_reference(&variable, None, phase),
-					self.jsify_expression(value, phase)
+					self.jsify_reference(&variable, None),
+					self.jsify_expression(value)
 				)
 			}
-			StmtKind::Scope(scope) => self.jsify_scope(scope, phase),
+			StmtKind::Scope(scope) => self.jsify_scope(scope),
 			StmtKind::Return(exp) => {
 				if let Some(exp) = exp {
-					format!("return {};", self.jsify_expression(exp, phase))
+					format!("return {};", self.jsify_expression(exp))
 				} else {
 					"return;".into()
 				}
@@ -474,7 +469,7 @@ impl JSifier {
 					} else {
 						"".to_string()
 					},
-					self.jsify_function(Some("constructor"), &constructor.parameters, &constructor.statements, phase),
+					self.jsify_function(Some("constructor"), &constructor.parameters, &constructor.statements),
 					members
 						.iter()
 						.map(|m| self.jsify_class_member(m))
@@ -485,7 +480,7 @@ impl JSifier {
 						.map(|(n, m)| format!(
 							"{} = {}",
 							n.name,
-							self.jsify_function(None, &m.parameter_names, &m.statements, phase)
+							self.jsify_function(None, &m.parameter_names, &m.statements)
 						))
 						.collect::<Vec<String>>()
 						.join("\n")
@@ -544,7 +539,7 @@ impl JSifier {
 		for p in func_def.parameter_names.iter() {
 			parameter_list.push(p.name.clone());
 		}
-		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
+		let block = self.jsify_scope(&func_def.statements);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
@@ -568,7 +563,7 @@ impl JSifier {
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
-		proc_source.push(format!("async handle({}) {};", parameter_list.join(", "), body));
+		proc_source.push(format!("async handle({}) {};", parameter_list.join(", "), body,));
 		let proc_dir = format!("{}/proc.{}", self.out_dir.to_string_lossy(), procid);
 		fs::create_dir_all(&proc_dir).expect("Creating inflight proc dir");
 		let file_path = format!("{}/index.js", proc_dir);
@@ -593,7 +588,7 @@ impl JSifier {
 		)
 	}
 
-	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope, phase: Phase) -> String {
+	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
 			parameter_list.push(self.jsify_symbol(p));
@@ -604,16 +599,12 @@ impl JSifier {
 			None => ("", "=> "),
 		};
 
-		let async_prefix = match phase {
-			Phase::Inflight => "async ",
-			_ => "",
-		};
 		format!(
 			"{}({}) {}{}",
 			name,
 			parameter_list.iter().map(|x| x.as_str()).collect::<Vec<_>>().join(", "),
 			arrow,
-			self.jsify_scope(body, phase)
+			self.jsify_scope(body)
 		)
 	}
 
