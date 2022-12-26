@@ -85,7 +85,7 @@ let find_tasks_with = inflight (term: str): Set<str> => {
   }
 
   print("found ${output.len} tasks which match term '${term}'");
-  return output.to_set();
+  return output.freeze();
 };
 
 // --------------------------------------------
