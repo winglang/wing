@@ -10,6 +10,12 @@ The examples in `proposed` are examples that may not yet work in the current ver
 
 _Add yours here!_
 
+## Simple search engine
+
+**Source code:** [./proposed/in-memory-search.w](./proposed/in-memory-search.w)
+**Description:** This is a silly idea for a Wing app where cloud functions are used to create a search engine where the entire search index exists in-memory, spread across many lambda functions.
+**Author:** [@Chriscbr](https://github.com/Chriscbr)
+
 <!--
 
 ## Tweet queue
