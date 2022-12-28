@@ -12,7 +12,9 @@ pub fn main() {
 	let outdir = args.get(2).map(|s| s.as_str());
 
 	let results = compile(source, outdir);
-	if let Err(err) = results {
+	if let Err(mut err) = results {
+		// Sort error messages by line number (ascending)
+		err.sort_by(|a, b| a.cmp(&b));
 		eprintln!(
 			"Compilation failed with {} errors\n{}",
 			err.len(),
