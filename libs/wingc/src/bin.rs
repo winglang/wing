@@ -14,7 +14,7 @@ pub fn main() {
 	let results = compile(source, outdir);
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
-		err.sort_by(|a, b| a.span.as_ref().unwrap().start.cmp(&b.span.as_ref().unwrap().start));
+		err.sort_by(|a, b| a.cmp(&b));
 		eprintln!(
 			"Compilation failed with {} errors\n{}",
 			err.len(),
