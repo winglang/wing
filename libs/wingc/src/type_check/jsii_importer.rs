@@ -354,9 +354,9 @@ impl<'a> JsiiImporter<'a> {
 
 		// Get env of base class/resource
 		let base_class_env = if let Some(base_class) = base_class {
-			match base_class.into() {
-				&Type::Class(ref c) => Some(&c.env as *const TypeEnv),
-				&Type::Resource(ref c) => {
+			match *base_class {
+				Type::Class(ref c) => Some(&c.env as *const TypeEnv),
+				Type::Resource(ref c) => {
 					// If our base class is a resource then we are a resource
 					is_resource = true;
 					Some(&c.env as *const TypeEnv)

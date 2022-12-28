@@ -1,7 +1,7 @@
 use crate::{
 	ast::{Phase, Symbol},
 	diagnostic::TypeError,
-	type_check::{IdentKind, IdentKindRef, Type, TypeRef},
+	type_check::{IdentKind, Type, TypeRef},
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
@@ -26,9 +26,9 @@ pub enum StatementIdx {
 }
 
 // Possible results for a symbol lookup in the environment
-enum LookupResult {
+enum LookupResult<'a> {
 	// The type of the symbol and its flight phase
-	Found((IdentKindRef, Phase)),
+	Found((&'a IdentKind, Phase)),
 	// The symbol was not found in the environment
 	NotFound,
 	// The symbol exists in the environment but it's not defined yet (based on the statement
@@ -94,7 +94,7 @@ impl TypeEnv {
 		Ok(())
 	}
 
-	pub fn try_lookup(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<IdentKindRef> {
+	pub fn try_lookup(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<&IdentKind> {
 		match self.try_lookup_ext(symbol_name, not_after_stmt_idx) {
 			LookupResult::Found((type_, _)) => Some(type_),
 			LookupResult::NotFound | LookupResult::DefinedLater => None,
@@ -119,7 +119,7 @@ impl TypeEnv {
 		}
 	}
 
-	pub fn lookup(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<IdentKindRef, TypeError> {
+	pub fn lookup(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<&IdentKind, TypeError> {
 		Ok(self.lookup_ext(symbol, not_after_stmt_idx)?.0)
 	}
 
@@ -127,7 +127,7 @@ impl TypeEnv {
 		&self,
 		symbol: &Symbol,
 		not_after_stmt_idx: Option<usize>,
-	) -> Result<(IdentKindRef, Phase), TypeError> {
+	) -> Result<(&IdentKind, Phase), TypeError> {
 		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
 
 		match lookup_result {
@@ -143,7 +143,7 @@ impl TypeEnv {
 		}
 	}
 
-	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<IdentKindRef, TypeError> {
+	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&IdentKind, TypeError> {
 		let mut it = nested_vec.iter();
 
 		let mut symb = *it.next().unwrap();
@@ -208,7 +208,7 @@ impl<'a> TypeEnvIter<'a> {
 }
 
 impl<'a> Iterator for TypeEnvIter<'a> {
-	type Item = (String, IdentKindRef);
+	type Item = (String, &'a IdentKind);
 
 	fn next(&mut self) -> Option<Self::Item> {
 		if let Some((name, (_, kind))) = self.curr_pos.next() {

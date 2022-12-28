@@ -12,13 +12,6 @@ use type_env::TypeEnv;
 
 use self::type_env::StatementIdx;
 
-#[derive(Debug)]
-pub enum IdentKind {
-	Type(TypeRef),
-	Variable(TypeRef),
-	Namespace(Namespace),
-}
-
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
 	fn clone(&self) -> Self {
@@ -41,12 +34,6 @@ impl<T> std::ops::DerefMut for UnsafeRef<T> {
 	}
 }
 
-impl<T> From<&T> for UnsafeRef<T> {
-	fn from(t: &T) -> Self {
-		Self(t as *const T)
-	}
-}
-
 impl<T> Display for UnsafeRef<T>
 where
 	T: Display,
@@ -57,8 +44,37 @@ where
 	}
 }
 
-type IdentKindRef = UnsafeRef<IdentKind>; // TODO: do we really need this? Try using normal refs for IdentKind
 pub type TypeRef = UnsafeRef<Type>;
+
+#[derive(Debug)]
+pub enum IdentKind {
+	Type(TypeRef),
+	Variable(TypeRef),
+	Namespace(Namespace),
+}
+
+impl IdentKind {
+	pub fn as_variable(&self) -> Option<TypeRef> {
+		match &self {
+			IdentKind::Variable(t) => Some(t.clone()),
+			_ => None,
+		}
+	}
+
+	fn as_namespace(&self) -> Option<&Namespace> {
+		match &self {
+			IdentKind::Namespace(ns) => Some(ns),
+			_ => None,
+		}
+	}
+
+	fn as_type(&self) -> Option<TypeRef> {
+		match &self {
+			IdentKind::Type(t) => Some(t.clone()),
+			_ => None,
+		}
+	}
+}
 
 pub enum Type {
 	Anything,
@@ -260,47 +276,6 @@ impl Display for Type {
 // TODO either avoid shared memory or use Arc<Mutex<...>> instead
 unsafe impl Send for TypeRef {}
 
-impl From<&Box<Type>> for TypeRef {
-	fn from(t: &Box<Type>) -> Self {
-		Self(&**t as *const Type)
-	}
-}
-
-impl From<TypeRef> for &Type {
-	fn from(t: TypeRef) -> Self {
-		unsafe { &*t.0 }
-	}
-}
-
-impl From<TypeRef> for &mut Type {
-	fn from(t: TypeRef) -> Self {
-		unsafe { &mut *(t.0 as *mut Type) }
-	}
-}
-
-impl IdentKindRef {
-	pub fn as_variable(&self) -> Option<TypeRef> {
-		match &**self {
-			IdentKind::Variable(t) => Some(t.clone()),
-			_ => None,
-		}
-	}
-
-	fn as_namespace(&self) -> Option<&Namespace> {
-		match &**self {
-			IdentKind::Namespace(ns) => Some(ns),
-			_ => None,
-		}
-	}
-
-	fn as_type(&self) -> Option<TypeRef> {
-		match &**self {
-			IdentKind::Type(t) => Some(t.clone()),
-			_ => None,
-		}
-	}
-}
-
 impl TypeRef {
 	// In many places we want to get the type of the instance, not the instance itself
 	// this is a helper function for getting the type of an instance (class, struct, resource, ...)
@@ -389,7 +364,7 @@ impl TypeRef {
 	}
 
 	pub fn is_anything(&self) -> bool {
-		if let &Type::Anything = (*self).into() {
+		if let Type::Anything = **self {
 			true
 		} else {
 			false
@@ -397,7 +372,7 @@ impl TypeRef {
 	}
 
 	pub fn is_option(&self) -> bool {
-		if let &Type::Optional(_) = (*self).into() {
+		if let Type::Optional(_) = **self {
 			true
 		} else {
 			false
@@ -420,8 +395,8 @@ impl PartialEq for TypeRef {
 			true
 		} else {
 			// If the self and other aren't the the same, we need to use the specific types equality function
-			let t1: &Type = (*self).into();
-			let t2: &Type = (*other).into();
+			let t1: &Type = &**self;
+			let t2: &Type = &**other;
 			t1.eq(t2) // Same as `t1 == t2`, used eq for verbosity
 		}
 	}
@@ -469,34 +444,39 @@ impl Types {
 	}
 
 	pub fn number(&self) -> TypeRef {
-		(&self.types[self.numeric_idx]).into()
+		self.get_typeref(self.numeric_idx)
 	}
 
 	pub fn string(&self) -> TypeRef {
-		(&self.types[self.string_idx]).into()
+		self.get_typeref(self.string_idx)
 	}
 
 	pub fn bool(&self) -> TypeRef {
-		(&self.types[self.bool_idx]).into()
+		self.get_typeref(self.bool_idx)
 	}
 
 	pub fn duration(&self) -> TypeRef {
-		(&self.types[self.duration_idx]).into()
+		self.get_typeref(self.duration_idx)
 	}
 
 	pub fn anything(&self) -> TypeRef {
-		(&self.types[self.anything_idx]).into()
+		self.get_typeref(self.anything_idx)
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
 		self.types.push(Box::new(t));
-		(&self.types[self.types.len() - 1]).into()
+		self.get_typeref(self.types.len() - 1)
 	}
 
 	pub fn stringables(&self) -> Vec<TypeRef> {
 		// TODO: This should be more complex and return all types that have some stringification facility
 		// see: https://github.com/winglang/wing/issues/741
 		vec![self.string(), self.number()]
+	}
+
+	fn get_typeref(&self, idx: usize) -> TypeRef {
+		let t = &self.types[idx];
+		UnsafeRef::<Type>(&**t as *const Type)
 	}
 }
 
@@ -640,10 +620,10 @@ impl<'a> TypeChecker<'a> {
 
 				// Lookup the type in the env
 				let type_ = self.resolve_type(class, env, statement_idx);
-				let (class_env, class_symbol) = match type_.into() {
-					&Type::Class(ref class) => (&class.env, &class.name),
-					&Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
-					&Type::Anything => return Some(self.types.anything()),
+				let (class_env, class_symbol) = match *type_ {
+					Type::Class(ref class) => (&class.env, &class.name),
+					Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
+					Type::Anything => return Some(self.types.anything()),
 					_ => panic!(
 						"Expected {:?} to be a resource or class type but it's a {}",
 						class, type_
@@ -749,7 +729,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
-				if matches!(func_type.into(), &Type::Anything) {
+				if matches!(*func_type, Type::Anything) {
 					return Some(self.types.anything());
 				}
 
@@ -824,8 +804,8 @@ impl<'a> TypeChecker<'a> {
 					self.types.add_type(Type::Array(self.types.anything()))
 				};
 
-				let element_type = match container_type.into() {
-					&Type::Array(t) => t,
+				let element_type = match *container_type {
+					Type::Array(t) => t,
 					_ => panic!("Expected array type, found {}", container_type),
 				};
 
@@ -886,8 +866,8 @@ impl<'a> TypeChecker<'a> {
 					self.types.add_type(Type::Map(self.types.anything()))
 				};
 
-				let value_type = match container_type.into() {
-					&Type::Map(t) => t,
+				let value_type = match *container_type {
+					Type::Map(t) => t,
 					_ => panic!("Expected map type, found {}", container_type),
 				};
 
@@ -1216,13 +1196,13 @@ impl<'a> TypeChecker<'a> {
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
 					let t = self.resolve_type(parent_type, env, stmt.idx);
 					if *is_resource {
-						if let &Type::Resource(ref class) = t.into() {
+						if let Type::Resource(ref class) = *t {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
 							panic!("Resource {}'s parent {} is not a resource", name, t);
 						}
 					} else {
-						if let &Type::Class(ref class) = t.into() {
+						if let Type::Class(ref class) = *t {
 							(Some(t), Some(&class.env as *const TypeEnv))
 						} else {
 							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
@@ -1243,7 +1223,7 @@ impl<'a> TypeChecker<'a> {
 					env: dummy_env,
 					parent: parent_class,
 				};
-				let class_type = self.types.add_type(if *is_resource {
+				let mut class_type = self.types.add_type(if *is_resource {
 					Type::Resource(class_spec)
 				} else {
 					Type::Class(class_spec)
@@ -1311,8 +1291,8 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
-				let class_env = match class_type.into() {
-					&mut Type::Class(ref mut class) | &mut Type::Resource(ref mut class) => {
+				let class_env = match *class_type {
+					Type::Class(ref mut class) | Type::Resource(ref mut class) => {
 						class.env = class_env;
 						&class.env
 					}
@@ -1322,7 +1302,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check constructor
-				let constructor_sig = if let &Type::Function(ref s) = constructor_type.into() {
+				let constructor_sig = if let Type::Function(ref s) = *constructor_type {
 					s
 				} else {
 					panic!(
