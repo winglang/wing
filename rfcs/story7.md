@@ -1,4 +1,4 @@
-# User Story 7
+# User Story 7 - Request Alpha Access
 
 This sprint goal is to make sure the system is ready for anyone to go into our winglang.io website,
  register for wing preview program, consume the docs and guides and engage with the community. 
