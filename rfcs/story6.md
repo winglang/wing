@@ -1,4 +1,4 @@
-# User Story 6
+# User Story 6 - Ready for Contribution
 
 This is the story of Monada Sprint 6.
 
