@@ -1,4 +1,4 @@
-# Sprint 4 User Story
+# User Story 4
 
 This is the story of Monada Sprint 4. It is told from the perspective of Mona
 Lisa, a 28-year-old programmer who works at a successful startup in San
