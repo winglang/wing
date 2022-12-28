@@ -5,7 +5,7 @@ use ast::{Scope, Symbol};
 use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::type_env::StatementIdx;
-use type_check::{FunctionSignature, IdentKind};
+use type_check::{FunctionSignature, IdentKind, Type};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -67,7 +67,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 
 	add_builtin(
 		"print",
-		IdentKind::Function(FunctionSignature {
+		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
 			flight: Phase::Independent,
@@ -83,7 +83,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 }
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
-fn add_builtin(name: &str, typ: IdentKind, scope: &mut Scope, types: &mut Types) {
+fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 	let sym = Symbol {
 		name: name.to_string(),
 		span: WingSpan {
@@ -99,7 +99,7 @@ fn add_builtin(name: &str, typ: IdentKind, scope: &mut Scope, types: &mut Types)
 		.borrow_mut()
 		.as_mut()
 		.unwrap()
-		.define(&sym, types.add_type(typ), StatementIdx::Top)
+		.define(&sym, IdentKind::Variable(types.add_type(typ)), StatementIdx::Top)
 		.expect("Failed to add builtin");
 }
 
@@ -185,7 +185,11 @@ mod sanity {
 			let result = compile(test_file, Some(out_dir.as_str()));
 
 			if result.is_err() {
-				assert!(expect_failure, "Expected compilation success, but failed");
+				assert!(
+					expect_failure,
+					"Expected compilation success, but failed: {:#?}",
+					result.err().unwrap()
+				);
 			} else {
 				assert!(!expect_failure, "Expected compilation failure, but succeeded");
 			}

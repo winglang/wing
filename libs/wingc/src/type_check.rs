@@ -19,33 +19,35 @@ pub enum IdentKind {
 	Namespace(Namespace),
 }
 
-struct CircleRef<T>(*const T);
-impl<T> Clone for CircleRef<T> {
+pub struct UnsafeRef<T>(*const T);
+impl<T> Clone for UnsafeRef<T> {
 	fn clone(&self) -> Self {
 		Self(self.0)
 	}
 }
 
-impl<T> std::ops::Deref for CircleRef<T> {
+impl<T> Copy for UnsafeRef<T> {}
+
+impl<T> std::ops::Deref for UnsafeRef<T> {
 	type Target = T;
 	fn deref(&self) -> &Self::Target {
 		unsafe { &*self.0 }
 	}
 }
 
-impl<T> From<&T> for CircleRef<T> {
+impl<T> std::ops::DerefMut for UnsafeRef<T> {
+	fn deref_mut(&mut self) -> &mut Self::Target {
+		unsafe { &mut *(self.0 as *mut T) }
+	}
+}
+
+impl<T> From<&T> for UnsafeRef<T> {
 	fn from(t: &T) -> Self {
 		Self(t as *const T)
 	}
 }
 
-impl<T> CircleRef<T> {
-	fn new(t: Box<T>) -> Self {
-		Self(&*t as *const T)
-	}
-}
-
-impl<T> Display for CircleRef<T>
+impl<T> Display for UnsafeRef<T>
 where
 	T: Display,
 {
@@ -55,8 +57,8 @@ where
 	}
 }
 
-type IdentKindRef = CircleRef<IdentKind>;
-pub type TypeRef = CircleRef<Type>;
+type IdentKindRef = UnsafeRef<IdentKind>; // TODO: do we really need this? Try using normal refs for IdentKind
+pub type TypeRef = UnsafeRef<Type>;
 
 pub enum Type {
 	Anything,
@@ -130,16 +132,16 @@ impl PartialEq for Type {
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
 				// If our parent is equal to `other` then treat both classes as equal (inheritance)
-				if let Some(parent) = l0.parent {
-					let parent_type: &Type = parent.into();
+				if let Some(parent) = l0.parent.as_ref() {
+					let parent_type: &Type = &*parent;
 					return parent_type.eq(other);
 				}
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
 				// If our parent is equal to `other` then treat both resources as equal (inheritance)
-				if let Some(parent) = l0.parent {
-					let parent_type: &Type = parent.into();
+				if let Some(parent) = l0.parent.as_ref() {
+					let parent_type: &Type = &*parent;
 					return parent_type.eq(other);
 				}
 				false
@@ -147,59 +149,41 @@ impl PartialEq for Type {
 			(Self::Struct(l0), Self::Struct(_)) => {
 				// If we extend from `other` then treat both structs as equal (inheritance)
 				for parent in l0.extends.iter() {
-					let parent_type: &Type = (*parent).into();
+					let parent_type: &Type = &*parent;
 					if parent_type.eq(other) {
 						return true;
 					}
 				}
 				false
 			}
-			// (Self::ClassInstance(l0), Self::ClassInstance(r0)) => {
-			// 	// Class instances are of the same type if they are instances of the same Class
-			// 	let l: &IdentKind = (*l0).into();
-			// 	let r: &IdentKind = (*r0).into();
-			// 	l == r
-			// }
-			// (Self::ResourceObject(l0), Self::ResourceObject(r0)) => {
-			// 	// Resource objects are of the same type if they are objects of the same Resource
-			// 	let l: &IdentKind = (*l0).into();
-			// 	let r: &IdentKind = (*r0).into();
-			// 	l == r
-			// }
-			// (Self::StructInstance(l0), Self::StructInstance(r0)) => {
-			// 	// Struct instances are of the same type if they are instances of the same Struct
-			// 	let l: &IdentKind = (*l0).into();
-			// 	let r: &IdentKind = (*r0).into();
-			// 	l == r
-			// }
 			(Self::Array(l0), Self::Array(r0)) => {
 				// Arrays are of the same type if they have the same value type
-				let l: &Type = (*l0).into();
-				let r: &Type = (*r0).into();
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
 				l == r
 			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// Maps are of the same type if they have the same value type
-				let l: &Type = (*l0).into();
-				let r: &Type = (*r0).into();
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
 				l == r
 			}
 			(Self::Set(l0), Self::Set(r0)) => {
 				// Sets are of the same type if they have the same value type
-				let l: &Type = (*l0).into();
-				let r: &Type = (*r0).into();
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
 				l == r
 			}
 			(Self::Optional(l0), Self::Optional(r0)) => {
 				// Optionals are of the same type if they have the same value type
-				let l: &Type = (*l0).into();
-				let r: &Type = (*r0).into();
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
 				l == r
 			}
-			(_, Self::Optional(r0)) => {
+			(Self::Optional(l0), _) => {
 				// If we are not an optional, then we must be the same type as the optional's inner type
-				let r: &Type = (*r0).into();
-				self == r
+				let l: &Type = &*l0;
+				l == other
 			}
 			// For all other types (built-ins) we compare the enum value
 			_ => core::mem::discriminant(self) == core::mem::discriminant(other),
@@ -295,9 +279,9 @@ impl From<TypeRef> for &mut Type {
 }
 
 impl IdentKindRef {
-	fn as_variable(&self) -> Option<TypeRef> {
-		match **self {
-			IdentKind::Variable(t) => Some(t),
+	pub fn as_variable(&self) -> Option<TypeRef> {
+		match &**self {
+			IdentKind::Variable(t) => Some(t.clone()),
 			_ => None,
 		}
 	}
@@ -311,7 +295,7 @@ impl IdentKindRef {
 
 	fn as_type(&self) -> Option<TypeRef> {
 		match &**self {
-			IdentKind::Type(t) => Some((*t).into()),
+			IdentKind::Type(t) => Some(t.clone()),
 			_ => None,
 		}
 	}
@@ -353,23 +337,27 @@ impl TypeRef {
 	// }
 
 	pub fn as_resource(&self) -> Option<&Class> {
-		if let &Type::Resource(ref res) = (*self).into() {
+		if let Type::Resource(ref res) = **self {
 			Some(res)
 		} else {
 			None
 		}
 	}
 
-	// fn as_class(&self) -> Option<&Class> {
-	// 	if let &IdentKind::Class(ref class) = (*self).into() {
-	// 		Some(class)
-	// 	} else {
-	// 		None
-	// 	}
-	// }
+	pub fn as_class_or_resource(&self) -> Option<&Class> {
+		self.as_class().or_else(|| self.as_resource())
+	}
+
+	fn as_class(&self) -> Option<&Class> {
+		if let Type::Class(ref class) = **self {
+			Some(class)
+		} else {
+			None
+		}
+	}
 
 	fn as_struct(&self) -> Option<&Struct> {
-		if let &Type::Struct(ref s) = (*self).into() {
+		if let Type::Struct(ref s) = **self {
 			Some(s)
 		} else {
 			None
@@ -377,15 +365,15 @@ impl TypeRef {
 	}
 
 	fn maybe_unwrap_option(&self) -> TypeRef {
-		if let &Type::Optional(ref t) = (*self).into() {
-			*t
+		if let Type::Optional(ref t) = **self {
+			t.clone()
 		} else {
 			*self
 		}
 	}
 
-	// fn as_mut_struct(&self) -> Option<&mut Struct> {
-	// 	if let &mut IdentKind::Struct(ref mut s) = (*self).into() {
+	// fn as_mut_struct(&mut self) -> Option<&mut Struct> {
+	// 	if let Type::Struct(ref mut s) = **self {
 	// 		Some(s)
 	// 	} else {
 	// 		None
@@ -663,23 +651,22 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Type check args against constructor
-				let constructor_sig = match class_env.lookup(
+				let constructor_type = match class_env.lookup(
 					&Symbol {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: class_symbol.span.clone(),
 					},
 					None,
 				) {
-					Ok(v) => v
-						.as_variable()
-						.expect("Expected constructor to be a variable")
-						.as_function_sig()
-						.expect("Expected constructor to be a function signature"),
+					Ok(v) => v.as_variable().expect("Expected constructor to be a variable"),
 					Err(type_error) => {
 						self.type_error(&type_error);
 						return Some(self.types.anything());
 					}
 				};
+				let constructor_sig = constructor_type
+					.as_function_sig()
+					.expect("Expected constructor to be a function signature");
 
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
 				self.validate_type(constructor_sig.return_type.unwrap(), type_, exp);
@@ -868,11 +855,6 @@ impl<'a> TypeChecker<'a> {
 					panic!("Not all fields of {} are initialized.", struct_type);
 				}
 				for (k, v) in fields.iter() {
-					let field_type = st
-						.env
-						.try_lookup(&k.name, None)
-						.expect(&format!("\"{}\" is not a field of \"{}\"", k.name, struct_type));
-
 					let field = st.env.try_lookup(&k.name, None);
 					if let Some(field) = field {
 						let t = self.type_check_exp(v, env, statement_idx).unwrap();
@@ -1278,7 +1260,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Add members to the class env
 				for member in members.iter() {
-					let mut member_type = self.resolve_type(&member.member_type, env, stmt.idx);
+					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
 					match class_env.define(&member.name, IdentKind::Variable(member_type), StatementIdx::Top) {
 						Err(type_error) => {
 							self.type_error(&type_error);
@@ -1407,9 +1389,9 @@ impl<'a> TypeChecker<'a> {
 				let extends_types = extends
 					.iter()
 					.filter_map(|parent| match env.lookup(&parent, Some(stmt.idx)) {
-						Ok(kind) => match *kind {
-							IdentKind::Type(_type) => Some(_type),
-							other => {
+						Ok(kind) => match &*kind {
+							IdentKind::Type(_type) => Some(*_type),
+							_ => {
 								self.type_error(&TypeError {
 									message: format!("Expected {} to be a type", parent),
 									span: parent.span.clone(),
@@ -1527,7 +1509,7 @@ impl<'a> TypeChecker<'a> {
 	fn resolve_reference(&mut self, reference: &Reference, env: &TypeEnv, statement_idx: usize) -> TypeRef {
 		match reference {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
-				Ok(_type) => _type,
+				Ok(var) => var.as_variable().expect("Expected identifier to be a variable"),
 				Err(type_error) => {
 					self.type_error(&type_error);
 					self.types.anything()
@@ -1535,29 +1517,24 @@ impl<'a> TypeChecker<'a> {
 			},
 			Reference::NestedIdentifier { object, property } => {
 				// Get class
+				let instance_type = self.type_check_exp(object, env, statement_idx).unwrap();
 				let class = {
-					let instance = self.type_check_exp(object, env, statement_idx).unwrap();
-					let instance_type = match instance.into() {
-						&IdentKind::ClassInstance(t) | &IdentKind::ResourceObject(t) => t,
-						// TODO: hack, we accept a nested reference's object to be `anything` to support mock imports for now (basically cloud.Bucket)
-						&IdentKind::Anything => return instance,
-						_ => self.general_type_error(format!(
-							"\"{}\" in {:?} does not resolve to a class instance or resource object",
-							instance, reference
-						)),
-					};
-
-					match instance_type.into() {
-						&IdentKind::Class(ref class) | &IdentKind::Resource(ref class) => class,
+					// Make sure the object is a class or resource (with an exception for `Anything`, TODO: why?)
+					match *instance_type {
+						Type::Class(ref class) | Type::Resource(ref class) => class,
+						Type::Anything => return instance_type,
 						_ => {
-							return self.general_type_error(format!("Expected a class or resource type, got \"{}\"", instance_type))
+							return self.general_type_error(format!(
+								"\"{:?}\" in {:?} does not resolve to a class instance or resource object",
+								object, reference
+							));
 						}
 					}
 				};
 
 				// Find property in class's environment
 				match class.env.lookup(property, None) {
-					Ok(_type) => _type,
+					Ok(field) => field.as_variable().expect("Expected property to be a variable"),
 					Err(type_error) => self.type_error(&type_error),
 				}
 			}
@@ -1583,6 +1560,7 @@ fn add_parent_members_to_struct_env(
 	name: &Symbol,
 	struct_env: &mut TypeEnv,
 ) -> Result<(), TypeError> {
+	// Add members of all parents to the struct's environment
 	for parent_type in extends_types.iter() {
 		let parent_struct = if let Some(parent_struct) = parent_type.as_struct() {
 			parent_struct
@@ -1595,17 +1573,24 @@ fn add_parent_members_to_struct_env(
 				span: name.span.clone(),
 			});
 		};
-		for (parent_member_name, member_type) in parent_struct.env.iter() {
+		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
+		for (parent_member_name, parent_member) in parent_struct.env.iter() {
+			let member_type = parent_member
+				.as_variable()
+				.expect("Expected struct member to be a variable");
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
 				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
 				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
 				//   when we want to check for subtypes and use equality for strict comparisons.
-				if existing_type.ne(&member_type) && member_type.ne(&existing_type) {
+				let existing_type = existing_type
+					.as_variable()
+					.expect("Expected struct member to be a variable");
+				if existing_type.ne(&member_type) && member_type.ne(&member_type) {
 					return Err(TypeError {
 						span: name.span.clone(),
 						message: format!(
 							"Struct \"{}\" extends \"{}\" but has a conflicting member \"{}\" ({} != {})",
-							name, parent_type, parent_member_name, existing_type, member_type
+							name, parent_type, parent_member_name, member_type, member_type
 						),
 					});
 				}
@@ -1615,7 +1600,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					member_type,
+					IdentKind::Variable(member_type),
 					StatementIdx::Top,
 				)?;
 			}

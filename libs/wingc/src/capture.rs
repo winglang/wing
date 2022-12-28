@@ -4,7 +4,7 @@ use crate::{
 	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
 	type_check::type_env::TypeEnv,
-	type_check::IdentKind,
+	type_check::Type,
 };
 
 /* This is a definition of how a resource is captured. The most basic way to capture a resource
@@ -173,12 +173,16 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, s
 		res.extend(scan_captures_in_expression(&object, env, statement_idx));
 
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
-		if let &IdentKind::ResourceObject(resource) = object.evaluated_type.borrow().unwrap().into() {
-			let resource = resource.as_resource().unwrap();
+		if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
 			let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
-				Ok(_type) => _type,
+				Ok((prop_type, phase)) => (
+					prop_type
+						.as_variable()
+						.expect("Expected resource property to be a variable"),
+					phase,
+				),
 				Err(type_error) => {
-					panic!("Type error: {}", type_error);
+					panic!("{}", type_error);
 				}
 			};
 
@@ -222,13 +226,13 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
 				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
-					Ok(_type) => _type,
+					Ok((var, phase)) => (var.as_variable().expect("Expected identifier to be a variable"), phase),
 					Err(type_error) => {
 						panic!("Type error: {}", type_error);
 					}
 				};
 
-				if let (Some(resource), Phase::Preflight) = (t.as_resource_object(), f) {
+				if let (Some(resource), Phase::Preflight) = (t.as_resource(), f) {
 					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
 					//   1. explicit capture definitions
 					//   2. analyzing inflight code and figuring out what methods are being used on the object

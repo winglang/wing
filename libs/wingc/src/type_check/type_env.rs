@@ -71,12 +71,12 @@ impl TypeEnv {
 		if let Some(_parent_env) = self.parent {
 			if let Some(parent_kind) = self.try_lookup(&symbol.name, None) {
 				// If we're a class we allow "symbol shadowing" for methods
-				let is_function = if let IdentKind::Type(t) = kind {
+				let is_function = if let IdentKind::Variable(t) = kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
 				};
-				let is_parent_function = if let IdentKind::Type(t) = *parent_kind {
+				let is_parent_function = if let IdentKind::Variable(t) = *parent_kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
@@ -102,7 +102,7 @@ impl TypeEnv {
 	}
 
 	fn try_lookup_ext(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResult {
-		if let Some((definition_idx, _type)) = self.ident_map.get(symbol_name) {
+		if let Some((definition_idx, kind)) = self.ident_map.get(symbol_name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
 				if let StatementIdx::Index(definition_idx) = definition_idx {
 					if *definition_idx > not_after_stmt_idx {
@@ -110,7 +110,7 @@ impl TypeEnv {
 					}
 				}
 			}
-			LookupResult::Found(((&_type).into(), self.flight))
+			LookupResult::Found((kind.into(), self.flight))
 		} else if let Some(parent_env) = self.parent {
 			let parent_env = unsafe { &*parent_env };
 			parent_env.try_lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
@@ -194,7 +194,7 @@ impl TypeEnv {
 pub struct TypeEnvIter<'a> {
 	seen_keys: HashSet<String>,
 	curr_env: &'a TypeEnv,
-	curr_pos: hash_map::Iter<'a, String, (StatementIdx, IdentKindRef)>,
+	curr_pos: hash_map::Iter<'a, String, (StatementIdx, IdentKind)>,
 }
 
 impl<'a> TypeEnvIter<'a> {
@@ -216,7 +216,7 @@ impl<'a> Iterator for TypeEnvIter<'a> {
 				self.next()
 			} else {
 				self.seen_keys.insert(name.clone());
-				Some((name.clone(), *kind))
+				Some((name.clone(), kind.into()))
 			}
 		} else if let Some(parent_env) = self.curr_env.parent {
 			unsafe { self.curr_env = &*parent_env };

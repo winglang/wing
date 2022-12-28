@@ -225,12 +225,12 @@ impl JSifier {
 			} => {
 				let expression_type = expression.evaluated_type.borrow();
 				let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-					evaluated_type.as_resource_object().is_some()
+					evaluated_type.as_resource().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
 					true
 				};
-				let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource_object() {
+				let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource() {
 					cls.should_case_convert_jsii
 				} else {
 					// This should only happen in the case of `any`, which are almost certainly JSII imports.
@@ -283,10 +283,7 @@ impl JSifier {
 					return format!("console.log({})", self.jsify_arg_list(args, None, None, false));
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
-					needs_case_conversion = object_type
-						.as_class_or_resource_object()
-						.unwrap()
-						.should_case_convert_jsii;
+					needs_case_conversion = object_type.as_class_or_resource().unwrap().should_case_convert_jsii;
 				}
 				format!(
 					"{}({})",
@@ -325,17 +322,17 @@ impl JSifier {
 					self.jsify_expression(rexp)
 				)
 			}
-      ExprKind::ArrayLiteral { items, .. } => {
-        format!(
-          "Object.freeze([{}])",
-          items
-            .iter()
-            .map(|expr| self.jsify_expression(expr))
-            .collect::<Vec<String>>()
-            .join(", ")
-        )
-      }
-      ExprKind::StructLiteral { fields, .. } => {
+			ExprKind::ArrayLiteral { items, .. } => {
+				format!(
+					"Object.freeze([{}])",
+					items
+						.iter()
+						.map(|expr| self.jsify_expression(expr))
+						.collect::<Vec<String>>()
+						.join(", ")
+				)
+			}
+			ExprKind::StructLiteral { fields, .. } => {
 				format!(
 					"{{\n{}}}\n",
 					fields
