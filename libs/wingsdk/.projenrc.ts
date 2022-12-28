@@ -5,6 +5,7 @@ const JSII_DEPS = [
   "polycons",
   "cdktf",
   "@cdktf/provider-aws",
+  "@cdktf/provider-azurerm@3.0.16",
 ];
 
 const project = new cdk.JsiiProject({
@@ -34,6 +35,9 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.215.0",
     "@aws-sdk/util-stream-node@3.215.0",
     "@aws-sdk/util-utf8-node@3.208.0",
+    // azure client dependencies
+    "@azure/storage-blob@12.12.0",
+    "@azure/identity@3.1.2",
     // simulator dependencies
     "tar",
   ],

@@ -198,6 +198,16 @@
       "type": "bundled"
     },
     {
+      "name": "@azure/identity",
+      "version": "3.1.2",
+      "type": "bundled"
+    },
+    {
+      "name": "@azure/storage-blob",
+      "version": "12.12.0",
+      "type": "bundled"
+    },
+    {
       "name": "debug",
       "type": "bundled"
     },
@@ -233,6 +243,11 @@
       "type": "peer"
     },
     {
+      "name": "@cdktf/provider-azurerm",
+      "version": "3.0.16",
+      "type": "peer"
+    },
+    {
       "name": "cdktf",
       "type": "peer"
     },
@@ -247,6 +262,11 @@
     },
     {
       "name": "@cdktf/provider-aws",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/provider-azurerm",
+      "version": "3.0.16",
       "type": "runtime"
     },
     {
