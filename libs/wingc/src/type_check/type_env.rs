@@ -5,9 +5,11 @@ use crate::{
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
+use super::UnsafeRef;
+
 pub struct TypeEnv {
 	pub(crate) ident_map: HashMap<String, (StatementIdx, IdentKind)>,
-	parent: Option<*const TypeEnv>,
+	parent: Option<UnsafeRef<TypeEnv>>,
 	pub return_type: Option<TypeRef>,
 	is_class: bool,
 	pub flight: Phase,
@@ -47,7 +49,7 @@ impl TypeEnv {
 		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
 		Self {
 			ident_map: HashMap::new(),
-			parent,
+			parent: parent.map(|e| UnsafeRef::<TypeEnv>(e)),
 			return_type,
 			is_class,
 			flight,
@@ -111,8 +113,7 @@ impl TypeEnv {
 				}
 			}
 			LookupResult::Found((kind.into(), self.flight))
-		} else if let Some(parent_env) = self.parent {
-			let parent_env = unsafe { &*parent_env };
+		} else if let Some(ref parent_env) = self.parent {
 			parent_env.try_lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
 			LookupResult::NotFound
@@ -218,8 +219,8 @@ impl<'a> Iterator for TypeEnvIter<'a> {
 				self.seen_keys.insert(name.clone());
 				Some((name.clone(), kind.into()))
 			}
-		} else if let Some(parent_env) = self.curr_env.parent {
-			unsafe { self.curr_env = &*parent_env };
+		} else if let Some(ref parent_env) = self.curr_env.parent {
+			self.curr_env = parent_env;
 			self.curr_pos = self.curr_env.ident_map.iter();
 			self.next()
 		} else {
