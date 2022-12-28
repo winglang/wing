@@ -1,14 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inflight function uses a logger 1`] = `
-"const $cap = {};
-$cap[\\"logger\\"] = new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient(\\"/aws/lambda/Function\\");
-async function $proc($cap) {
-          await $cap.logger.print(\\"hello world!\\");
-        }
-exports.handler = async function(event) {
-  return await $proc($cap, event);
-};"
+"new ((function(){
+return class Handler {
+  constructor(clients) {
+    for (const [name, client] of Object.entries(clients)) {
+      this[name] = client;
+    }
+  }
+  async handle() {
+  await this.logger.print(\\"hello world!\\");
+}
+};
+})())({
+logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()
+})"
 `;
 
 exports[`inflight function uses a logger 2`] = `

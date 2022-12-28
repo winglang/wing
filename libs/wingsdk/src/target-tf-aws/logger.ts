@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { CaptureMetadata, Code, InflightClient, Resource } from "../core";
+import * as core from "../core";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
+import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Logger`.
@@ -15,15 +15,19 @@ export class Logger extends cloud.LoggerBase {
   }
 
   /** @internal */
-  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("loggers can only be captured by tfaws.Function for now");
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("loggers can only be bound by tfaws.Function for now");
     }
 
-    addBindConnections(this, captureScope);
+    addConnections(this, host);
+    super._bind(host, ops);
+  }
 
-    return InflightClient.for(__filename, "LoggerClient", [
-      `"/aws/lambda/${captureScope.node.id}"`,
-    ]);
+  /** @internal */
+  public _toInflight(): core.Code {
+    return core.InflightClient.for(__filename, "LoggerClient", []);
   }
 }
+
+Logger._annotateInflight("print", {});

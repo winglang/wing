@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 tree-sitter = "0.20.9"
+tree-sitter-traversal = "0.1.2"
 sha2 = "0.10.6"
 base16ct = { version = "0.1.1", features = ["alloc"] }
 derivative = "2.2.0"
@@ -17,6 +18,7 @@ globset = "0.4.9"
 itertools = "0.10"
 inflections = "1.1.1"
 phf = { version = "0.11", features = ["macros"] }
+indexmap = "1.9.1"
 
 [lib]
 path = "src/lib.rs"

@@ -2,13 +2,14 @@
 extern crate lazy_static;
 
 use ast::{Scope, Symbol};
-use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
+use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::type_env::StatementIdx;
 use type_check::{FunctionSignature, IdentKind, Type};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
+use std::collections::HashSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
@@ -54,6 +55,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let wing_parser = Parser {
 		source: &source[..],
 		source_name: source_file.to_string(),
+		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
 	};
 
@@ -63,7 +65,8 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	scope.set_env(TypeEnv::new(None, None, false, Phase::Preflight, 0));
+	let env = TypeEnv::new(None, None, false, Phase::Preflight, 0);
+	scope.set_env(env);
 
 	add_builtin(
 		"print",
@@ -77,6 +80,8 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	);
 
 	let mut tc = TypeChecker::new(types);
+	tc.add_globals(scope);
+
 	tc.type_check_scope(scope);
 
 	tc.diagnostics.into_inner()
@@ -86,13 +91,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 	let sym = Symbol {
 		name: name.to_string(),
-		span: WingSpan {
-			start: CharacterLocation { row: 0, column: 0 },
-			end: CharacterLocation { row: 0, column: 0 },
-			start_byte: 0,
-			end_byte: 0,
-			file_id: "".into(),
-		},
+		span: WingSpan::global(),
 	};
 	scope
 		.env

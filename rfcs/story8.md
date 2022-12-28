@@ -1,4 +1,4 @@
-# Epic: Task List Wing Resource
+# User Story 8 - Task List Resource
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
@@ -159,7 +159,7 @@ After creating the `task-list.w` file he starts Wing Console by running the foll
 develop the application side by side with the console:
 
 ```sh
-wing run ./task-list.w
+wing it ./task-list.w
 ``` 
 
 While **Wing Console** is running in the background, it watches the .w file src dir for changes, 

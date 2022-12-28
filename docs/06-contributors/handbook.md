@@ -1,6 +1,7 @@
 ---
 title: Contributor's Handbook
 id: handbook
+keywords: [Wing contributors, contributors]
 ---
 
 Thank you for your interest in contributing to Wing!  ❤️
@@ -82,6 +83,64 @@ npm run test
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
 [volta]: https://volta.sh
 
+## 🔨 Common development workflows
+
+Several projects have some tools to aid with development. If you're iterating on any of these project, they may be useful to try out!
+
+### Wing CLI
+
+> cd apps/wing
+
+```sh
+npx nx dev -- <wing cli arguments>
+```
+
+Runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
+
+### wingc
+
+> cd libs/wingc
+
+```sh
+npx nx test
+```
+
+Run the cargo tests, currently just ensure the valid examples compile and the invalid ones do not.
+
+```sh
+npx nx dev -- <path to .w file>
+```
+
+Run `wingc` on a file. This do all compilation steps except running the generated intermediate generated preflight javascript.
+
+### tree-sitter grammar
+
+> libs/tree-sitter-wing
+
+```sh
+npx tree-sitter-cli generate
+```
+
+After making changes to grammar.js
+
+```sh
+npx tree-sitter-cli test
+```
+
+To run the grammar tests (in the `test` folder)
+
+```sh
+npx tree-sitter-cli build-wasm --docker
+```
+
+Builds the grammar as WASM for the web-based playground. Leave off `--docker` if you have emscripten setup locally.
+
+```sh
+npx tree-sitter-cli playground
+```
+
+Uses the wasm grammar to run a web-based playground where you can explore the AST and test out highlight queries. Make sure to also run `build-wasm` before each time the grammar changes.
+
 ## 🔨 How do I build just the SDK?
 
 The SDK resides in `libs/wingsdk` and it's where Wing's standard library of resources lives. It's written in TypeScript, and is published to npm.
@@ -143,7 +202,7 @@ A resource in the SDK has several parts:
 * An implementation for each target cloud (currently just AWS). This includes:
   * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.ts).
   * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/tf-aws/bucket.inflight.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts).
-  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/bucket.test.ts) and [`test/tf-aws/capture.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/captures.test.ts).
+  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/bucket.test.ts).
   * (TODO) Integration tests for the cloud infrastructure.
 
 If you are implementing a new resource, or implementing an existing resource for a new cloud provider, try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
@@ -153,7 +212,7 @@ For more information about designing resources, check out the Wing SDK design gu
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
 You can also join us on our [Wing Slack] to ask questions (or just say hi)!
 
-[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+[Wing Slack]: https://t.winglang.io/slack
 
 ## 🎨 How do I design the API for a SDK resource?
 
@@ -197,7 +256,7 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 ## 🧪 How do I run E2E tests?
 
-The [Hangar](./tools/hangar) project hosts our E2E tests. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
 
 Add a `.env` file to `tools/hangar` with the following:
 

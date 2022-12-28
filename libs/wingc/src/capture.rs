@@ -324,6 +324,10 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				res.extend(scan_captures_in_expression(iterable, env, s.idx));
 				res.extend(scan_captures_in_inflight_scope(statements));
 			}
+			StmtKind::While { condition, statements } => {
+				res.extend(scan_captures_in_expression(condition, env, s.idx));
+				res.extend(scan_captures_in_inflight_scope(statements));
+			}
 			StmtKind::If {
 				condition,
 				statements,
@@ -362,11 +366,8 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 			} => {
 				todo!()
 			}
-			StmtKind::Struct {
-				name: _,
-				extends: _,
-				members: _,
-			} => {}
+			// Type definitions with no expressions in them can't capture anything
+			StmtKind::Struct { .. } | StmtKind::Enum { .. } => {}
 		}
 	}
 	res

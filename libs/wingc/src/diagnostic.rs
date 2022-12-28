@@ -17,6 +17,18 @@ pub struct WingSpan {
 	pub file_id: FileId,
 }
 
+impl WingSpan {
+	pub fn global() -> Self {
+		Self {
+			start: Point { row: 0, column: 0 },
+			end: Point { row: 0, column: 0 },
+			start_byte: 0,
+			end_byte: 0,
+			file_id: String::from(""),
+		}
+	}
+}
+
 impl std::fmt::Display for WingSpan {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		write!(f, "{}:{}:{}", self.file_id, self.start.row + 1, self.start.column + 1)
@@ -48,14 +60,14 @@ impl PartialOrd for WingSpan {
 	}
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DiagnosticLevel {
 	Error,
 	Warning,
 	Note,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,
@@ -70,6 +82,20 @@ impl std::fmt::Display for Diagnostic {
 		} else {
 			write!(f, "{:?} | {}", self.level, self.message)
 		}
+	}
+}
+
+impl Ord for Diagnostic {
+	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+		self
+			.span
+			.cmp(&other.span)
+	}
+}
+
+impl PartialOrd for Diagnostic {
+	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+		self.span.partial_cmp(&other.span)
 	}
 }
 

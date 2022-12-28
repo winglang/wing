@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod type_env;
 use crate::ast::{Type as AstType, *};
 use crate::debug;
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use derivative::Derivative;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -90,9 +90,11 @@ pub enum Type {
 	Class(Class),
 	Resource(Class),
 	Struct(Struct),
+	Enum(Enum),
 }
 
 const WING_CONSTRUCTOR_NAME: &'static str = "init";
+const WINGSDK_STD_MODULE: &'static str = "std";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -132,6 +134,18 @@ pub struct Struct {
 	extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
 	pub env: TypeEnv,
+}
+
+#[derive(Debug)]
+pub struct Enum {
+	pub name: Symbol,
+	pub values: HashMap<Symbol, TypeRef>,
+}
+
+#[derive(Debug)]
+pub struct EnumInstance {
+	pub enum_name: TypeRef,
+	pub enum_value: Symbol,
 }
 
 impl PartialEq for Type {
@@ -233,31 +247,22 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
 			Type::Optional(v) => write!(f, "{}?", v),
-			Type::Function(func_sig) => {
-				if let Some(ret_val) = &func_sig.return_type {
-					write!(
-						f,
-						"fn({}):{}",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(", "),
+			Type::Function(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.args
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
 						format!("{}", ret_val)
-					)
-				} else {
-					write!(
-						f,
-						"fn({})",
-						func_sig
-							.args
-							.iter()
-							.map(|a| format!("{}", a))
-							.collect::<Vec<String>>()
-							.join(",")
-					)
-				}
+					} else {
+						"void".to_string()
+					}
+				)
 			}
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
@@ -265,6 +270,10 @@ impl Display for Type {
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
+			Type::Enum(s) => write!(f, "{}", s.name),
+			Type::EnumInstance(e) => {
+				write!(f, "enum value {}.{}", e.enum_name, e.enum_value)
+			}
 		}
 	}
 }
@@ -334,6 +343,22 @@ impl TypeRef {
 	fn as_struct(&self) -> Option<&Struct> {
 		if let Type::Struct(ref s) = **self {
 			Some(s)
+		} else {
+			None
+		}
+	}
+
+	fn as_enum(&self) -> Option<&Enum> {
+		if let &Type::Enum(ref e) = (*self).into() {
+			Some(e)
+		} else {
+			None
+		}
+	}
+
+	fn as_mut_enum(&self) -> Option<&mut Enum> {
+		if let &mut Type::Enum(ref mut e) = (*self).into() {
+			Some(e)
 		} else {
 			None
 		}
@@ -504,6 +529,18 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	pub fn add_globals(&mut self, scope: &Scope) {
+		self.add_module_to_env(
+			scope.env.borrow_mut().as_mut().unwrap(),
+			WINGSDK_STD_MODULE.to_string(),
+			&Symbol {
+				name: WINGSDK_STD_MODULE.to_string(),
+				span: WingSpan::global(),
+			},
+			0,
+		);
+	}
+
 	// TODO: All calls to this should be removed and we should make sure type checks are done
 	// for unimplemented types
 	pub fn unimplemented_type(&self, type_name: &str) -> Option<Type> {
@@ -624,10 +661,7 @@ impl<'a> TypeChecker<'a> {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
 					Type::Anything => return Some(self.types.anything()),
-					_ => panic!(
-						"Expected {:?} to be a resource or class type but it's a {}",
-						class, type_
-					),
+					_ => panic!("Expected {} to be a resource or class type but it's a {}", class, type_),
 				};
 
 				// Type check args against constructor
@@ -708,8 +742,8 @@ impl<'a> TypeChecker<'a> {
 							self.expr_error(
 								exp,
 								format!(
-									"Expected scope {:?} to be a resource object, instead found \"{}\"",
-									obj_scope, obj_scope_type
+									"Expected scope to be a resource object, instead found \"{}\"",
+									obj_scope_type
 								),
 							);
 						}
@@ -736,7 +770,7 @@ impl<'a> TypeChecker<'a> {
 				// Make sure this is a function signature type
 				let func_sig = func_type
 					.as_function_sig()
-					.expect(&format!("{:?} should be a function or method", function));
+					.expect(&format!("{} should be a function or method", function));
 
 				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
@@ -1114,6 +1148,14 @@ impl<'a> TypeChecker<'a> {
 
 				self.inner_scopes.push(statements);
 			}
+			StmtKind::While { condition, statements } => {
+				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
+				self.validate_type(cond_type, self.types.bool(), condition);
+
+				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+
+				self.inner_scopes.push(statements);
+			}
 			StmtKind::If {
 				condition,
 				statements,
@@ -1146,7 +1188,12 @@ impl<'a> TypeChecker<'a> {
 					// If provided use alias identifier as the namespace name
 					let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
-					self.add_module_to_env(env, module_name, namespace_name, stmt.idx);
+					if namespace_name.name == WINGSDK_STD_MODULE {
+						self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
+						return;
+					}
+
+					self.add_module_to_env(env, module_name.name.clone(), namespace_name, stmt.idx);
 				}
 			}
 			StmtKind::Scope(scope) => {
@@ -1404,20 +1451,44 @@ impl<'a> TypeChecker<'a> {
 					_ => {}
 				};
 			}
+			StmtKind::Enum { name, values } => {
+				let enum_type_ref = self.types.add_type(Type::Enum(Enum {
+					name: name.clone(),
+					values: HashMap::new(),
+				}));
+
+				let enum_type = enum_type_ref.as_mut_enum().unwrap();
+				values.iter().for_each(|value| {
+					enum_type.values.insert(
+						value.clone(),
+						self.types.add_type(Type::EnumInstance(EnumInstance {
+							enum_name: enum_type_ref,
+							enum_value: value.clone(),
+						})),
+					);
+				});
+
+				match env.define(name, enum_type_ref, StatementIdx::Top) {
+					Err(type_error) => {
+						self.type_error(&type_error);
+					}
+					_ => {}
+				};
+			}
 		}
 	}
 
 	fn add_module_to_env(
 		&mut self,
 		env: &mut TypeEnv,
-		module_name: &Symbol,
-		namespace_name: &Symbol,
+		module_name: String,
+		namespace_symbol: &Symbol,
 		statement_idx: usize,
 	) {
 		// Create a new env for the imported module's namespace
 		let mut namespace_env = TypeEnv::new(None, None, false, env.flight, statement_idx);
-		// TODO Hack: treat "cloud" as "cloud in wingsdk" until I figure out the path issue
-		if module_name.name == "cloud" {
+		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
+		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
@@ -1428,7 +1499,7 @@ impl<'a> TypeChecker<'a> {
 			let name = wingii_types
 				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
 				.unwrap();
-			let prefix = format!("{}.{}.", name, module_name.name);
+			let prefix = format!("{}.{}.", name, module_name);
 			debug!("Loaded JSII assembly {}", name);
 			let assembly = wingii_types.find_assembly(&name).unwrap();
 
@@ -1436,7 +1507,7 @@ impl<'a> TypeChecker<'a> {
 				jsii_types: &wingii_types,
 				assembly_name: name,
 				namespace_env: &mut namespace_env,
-				namespace_name: module_name.name.clone(),
+				namespace_name: module_name.clone(),
 				wing_types: self.types,
 				import_statement_idx: statement_idx,
 			};
@@ -1459,9 +1530,9 @@ impl<'a> TypeChecker<'a> {
 			// Create a namespace for the imported module
 			// TODO: are namespaces at the Top statement level (known by everyone in the scope) regardless of where they are defined?
 			match env.define(
-				namespace_name,
+				namespace_symbol,
 				IdentKind::Namespace(Namespace {
-					name: namespace_name.name.clone(),
+					name: namespace_symbol.name.clone(),
 					env: namespace_env,
 				}),
 				StatementIdx::Top,
@@ -1496,26 +1567,41 @@ impl<'a> TypeChecker<'a> {
 				}
 			},
 			Reference::NestedIdentifier { object, property } => {
-				// Get class
+				let std_lookup = env.try_lookup("std", None).unwrap();
+				let std_namespace = &std_lookup.as_namespace().unwrap().env;
 				let instance_type = self.type_check_exp(object, env, statement_idx).unwrap();
-				let class = {
-					// Make sure the object is a class or resource (with an exception for `Anything`, TODO: why?)
-					match *instance_type {
-						Type::Class(ref class) | Type::Resource(ref class) => class,
-						Type::Anything => return instance_type,
-						_ => {
-							return self.general_type_error(format!(
-								"\"{:?}\" in {:?} does not resolve to a class instance or resource object",
-								object, reference
-							));
+				match *instance_type {
+					Type::Class(ref class) | Type::Resource(ref class) => match class.env.lookup(property, None) {
+						Ok(field) => field.as_variable().expect("Expected property to be a variable"),
+						Err(type_error) => self.type_error(&type_error),
+					},
+					Type::Anything => instance_type,
+					Type::Enum(ref t) => {
+						if t.values.contains_key(property) {
+							instance_type
+						} else {
+							self.general_type_error(format!("Enum {} does not contain value {}", instance_type, property.name))
 						}
 					}
-				};
 
-				// Find property in class's environment
-				match class.env.lookup(property, None) {
-					Ok(field) => field.as_variable().expect("Expected property to be a variable"),
-					Err(type_error) => self.type_error(&type_error),
+					// get "std" primitives
+					Type::Duration => std_namespace
+						.try_lookup("Duration", None)
+						.unwrap()
+						.as_type()
+						.unwrap()
+						.as_class()
+						.unwrap()
+						.env
+						.lookup(property, None)
+						.unwrap()
+						.as_variable()
+						.unwrap(),
+
+					_ => self.general_type_error(format!(
+						"\"{}\" in {} does not resolve to a class, resource or enum type",
+						instance, reference
+					)),
 				}
 			}
 		}

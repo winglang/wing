@@ -73,8 +73,10 @@ module.exports = grammar({
         $.class_definition,
         $.resource_definition,
         $.for_in_loop,
+        $.while_statement,
         $.if_statement,
         $.struct_definition,
+        $.enum_definition,
       ),
 
     short_import_statement: ($) =>
@@ -96,6 +98,16 @@ module.exports = grammar({
       ),
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
+
+    
+    enum_definition: ($) => 
+      seq(
+        "enum", 
+        field("enum_name", $.identifier), 
+        "{",
+        commaSep(alias($.identifier, $.enum_field)),
+        "}"
+      ),
 
     return_statement: ($) =>
       seq("return", optional(field("expression", $.expression)), ";"),
@@ -186,6 +198,9 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
+    while_statement: ($) =>
+      seq("while", field("condition", $.expression), field("block", $.block)),
+
     if_statement: ($) =>
       seq(
         "if",
@@ -215,8 +230,10 @@ module.exports = grammar({
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
-    // TODO: Handle leading zeros
-    number: ($) => /\d+/,
+    number: ($) => choice($._integer, $._decimal),
+    _integer: ($) => choice( "0", /[1-9]\d*/),
+    _decimal: ($) => choice( /0\.\d+/, /[1-9]\d*\.\d+/),
+
 
     bool: ($) => choice("true", "false"),
 
@@ -255,7 +272,7 @@ module.exports = grammar({
       ),
 
     call: ($) =>
-      seq(field("call_name", $.reference), field("args", $.argument_list)),
+      seq(field("caller", $.reference), field("args", $.argument_list)),
 
     argument_list: ($) =>
       seq(

@@ -1,6 +1,7 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
+import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
@@ -20,7 +21,7 @@ test("queue with custom timeout", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   new cloud.Queue(app, "Queue", {
-    timeout: core.Duration.fromSeconds(30),
+    timeout: std.Duration.fromSeconds(30),
   });
   const output = app.synth();
 
@@ -34,23 +35,20 @@ test("queue with a consumer function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const queue = new cloud.Queue(app, "Queue", {
-    timeout: core.Duration.fromSeconds(30),
+    timeout: std.Duration.fromSeconds(30),
   });
-  const processor = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          console.log("Received " + event.name);
-        }`
-    ),
-    entrypoint: "$proc",
-  });
+  const processor = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) {
+  cconsole.log("Received " + event.name);
+}`
+  );
   const processorFn = queue.onMessage(processor);
   const output = app.synth();
 
   // THEN
-  expect(
-    core.Testing.inspectPrebundledCode(processorFn).text
-  ).toMatchSnapshot();
+  expect(processorFn._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for function

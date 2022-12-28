@@ -1,6 +1,7 @@
 ---
 id: installation
 title: Installation
+keywords: [Wing installation, installation, Wing toolchain]
 ---
 
 In this section you will install the Wing toolchain on your system.
@@ -31,7 +32,7 @@ During the private alpha period, Wing is distributed through a private npm
 repository. To request access, [sign up here](https://t.winglang.io/alpha).
 
 You will need to obtain a [personal access token] from GitHub with a
-**packages:read** scope and then login your npm client like this:
+**read:packages** scope and then login to your npm client like this:
 
 ```sh
 npm login --scope=@winglang --registry=https://npm.pkg.github.com
@@ -73,14 +74,14 @@ are looking for Linux support.
 The Wing Console is a desktop application that allows you to interact with your
 Wing applications running locally on the cloud simulator.
 
-1. [Download](https://wing-console.s3.amazonaws.com/wing-console.dmg)  the latest version of the **Wing Console**.
+1. Download the latest version of the **Wing Console** for [macOS](https://wing-console.s3.amazonaws.com/wing-console.dmg) or [macOS arm64](https://wing-console.s3.amazonaws.com/wing-console-arm64.dmg).
 2. Accept the license agreement and drag the Wing Console app into **Applications**:
 
-![](./console-install.png)
+![Drag the Wing Console app into Applications](./console-install.png 'Wing Console app installation')
 
 
-[AWS account]: portal.aws.amazon.com/billing/signup
+[AWS account]: https://portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 [AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages
+[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=read:packages
 [VSCode]: https://code.visualstudio.com/

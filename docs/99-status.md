@@ -1,6 +1,7 @@
 ---
 title: Project Status
 id: status
+keywords: [Wing project status, wing status, project status]
 ---
 
 :::caution Maturity: Alpha
@@ -23,10 +24,8 @@ sufficient surface area across the various components.
 
 ## Roadmap
 
-We manage our project roadmap through GitHub project, which should offer an
-up-to-date view on what we've completed, what we are working on and our backlog:
+We manage our project roadmap through GitHub projects, which should offer an
+up-to-date view on what we've completed, what we are working on and our backlog.
 
-- [Wing Compiler](https://github.com/orgs/winglang/projects/1)
-- [Wing SDK](https://github.com/orgs/winglang/projects/3)
-
+You will need to [sign up](https://t.winglang.io/alpha) for repository access to view.
 
