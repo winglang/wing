@@ -113,15 +113,15 @@ let add_tasks = new cloud.Function(inflight (s: str): str => {
 
 new cloud.Function(inflight (s: str): str => {
   clear_tasks.invoke("");
-  add_tasks.invoke();
+  add_tasks.invoke("");
   let result = find_tasks_with("clean the dish");
   assert(result.len == 1);
   assert("clean the dishes".equals(get_task(result.at(0))));
 }) as "test:get and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
-  add_tasks.invoke();
+  clear_tasks.invoke("");
+  add_tasks.invoke("");
   remove_tasks(find_tasks_with("clean the dish").at(0))
   let result = find_tasks_with("clean the dish");
   assert(result.len == 0);
