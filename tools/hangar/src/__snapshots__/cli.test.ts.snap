@@ -1984,17 +1984,17 @@ exports[`wing compile while_loop_await.w > cdk.tf.json 1`] = `
 `;
 
 exports[`wing compile while_loop_await.w > index.js 1`] = `
+"async handle(j) { const {  } = this; {
+  return (j + 1);
+} };"
+`;
+
+exports[`wing compile while_loop_await.w > index.js 2`] = `
 "async handle(body) { const {  } = this; {
   const i = 0;
   while (((await iterator(i)) < 3)) {
     console.log(\`\${i}\`);
   }
-} };"
-`;
-
-exports[`wing compile while_loop_await.w > index.js 2`] = `
-"async handle(j) { const {  } = this; {
-  return (j + 1);
 } };"
 `;
 
