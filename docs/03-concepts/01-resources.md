@@ -8,7 +8,7 @@ keywords: [Wing Concepts, Wing Resources]
 Resources represent cloud services that are part of the application. They expose
 both a *preflight API* used to define their deployment configuration and an
 *inflight API* used to interact with them at runtime. Resources are an extension
-of the [construct programming model] and as such any [CDK construct] can be
+of the [Construct Programming Model] and as such any [AWS Constructs] can be
 natively used in Wing applications.
 
 The following code defines a bucket resource:
@@ -39,3 +39,6 @@ resource SafeQueue extends cloud.Queue {
   }
 }
 ```
+
+[Construct Programming Model]: https://docs.aws.amazon.com/cdk/v2/guide/constructs.html
+[AWS Constructs]: https://github.com/aws/constructs
