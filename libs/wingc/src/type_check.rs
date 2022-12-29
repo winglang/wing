@@ -276,9 +276,6 @@ impl Display for Type {
 	}
 }
 
-//#[derive(Clone, Copy)]
-//pub struct TypeRef(*const Type);
-
 // TODO Allows for use in async runtime
 // TODO either avoid shared memory or use Arc<Mutex<...>> instead
 unsafe impl Send for TypeRef {}
@@ -343,14 +340,6 @@ impl TypeRef {
 			false
 		}
 	}
-
-	// pub fn as_namespace(&self) -> Option<&Namespace> {
-	// 	if let &IdentKind::Namespace(ref ns) = (*self).into() {
-	// 		Some(ns)
-	// 	} else {
-	// 		None
-	// 	}
-	// }
 }
 
 impl PartialEq for TypeRef {
