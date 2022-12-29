@@ -112,7 +112,7 @@ let add_tasks = new cloud.Function(inflight (s: str): str => {
 }) as "utility:add tasks";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
+  clear_tasks.invoke("");
   add_tasks.invoke();
   let result = find_tasks_with("clean the dish");
   assert(result.len == 1);
