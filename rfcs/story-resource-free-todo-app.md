@@ -99,7 +99,7 @@ let clear_tasks = new cloud.Function(inflight (s: str): str => {
   // I hate this code, but wanted to use while here
   while (i < results.len) {
     remove_task(results.at(i));
-    i += 1;
+    i = i + 1;
   }
 }) as "utility:clear tasks";
 
