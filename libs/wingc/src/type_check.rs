@@ -1,5 +1,5 @@
 mod jsii_importer;
-pub mod type_env;
+pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::debug;
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
@@ -9,9 +9,9 @@ use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
-use type_env::TypeEnv;
+use symbol_env::SymbolEnv;
 
-use self::type_env::StatementIdx;
+use self::symbol_env::StatementIdx;
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -48,30 +48,30 @@ where
 pub type TypeRef = UnsafeRef<Type>;
 
 #[derive(Debug)]
-pub enum IdentKind {
+pub enum SymbolKind {
 	Type(TypeRef),
 	Variable(TypeRef),
 	Namespace(Namespace),
 }
 
-impl IdentKind {
+impl SymbolKind {
 	pub fn as_variable(&self) -> Option<TypeRef> {
 		match &self {
-			IdentKind::Variable(t) => Some(t.clone()),
+			SymbolKind::Variable(t) => Some(t.clone()),
 			_ => None,
 		}
 	}
 
 	fn as_namespace(&self) -> Option<&Namespace> {
 		match &self {
-			IdentKind::Namespace(ns) => Some(ns),
+			SymbolKind::Namespace(ns) => Some(ns),
 			_ => None,
 		}
 	}
 
 	fn as_type(&self) -> Option<TypeRef> {
 		match &self {
-			IdentKind::Type(t) => Some(t.clone()),
+			SymbolKind::Type(t) => Some(t.clone()),
 			_ => None,
 		}
 	}
@@ -102,11 +102,11 @@ const WINGSDK_STD_MODULE: &'static str = "std";
 pub struct Namespace {
 	pub name: String,
 	#[derivative(Debug = "ignore")]
-	pub env: TypeEnv,
+	pub env: SymbolEnv,
 }
 
 // TODO See TypeRef for why this is necessary
-unsafe impl Send for IdentKind {}
+unsafe impl Send for SymbolKind {}
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -114,7 +114,7 @@ pub struct Class {
 	pub name: Symbol,
 	parent: Option<TypeRef>, // Must be a Type::Class type
 	#[derivative(Debug = "ignore")]
-	pub env: TypeEnv,
+	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
 }
 
@@ -134,7 +134,7 @@ pub struct Struct {
 	pub name: Symbol,
 	extends: Vec<TypeRef>, // Must be a Type::Struct type
 	#[derivative(Debug = "ignore")]
-	pub env: TypeEnv,
+	pub env: SymbolEnv,
 }
 
 #[derive(Debug)]
@@ -229,12 +229,12 @@ pub struct FunctionSignature {
 	pub flight: Phase,
 }
 
-impl Display for IdentKind {
+impl Display for SymbolKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			IdentKind::Type(_) => write!(f, "type"),
-			IdentKind::Variable(_) => write!(f, "variable"),
-			IdentKind::Namespace(_) => write!(f, "namespace"),
+			SymbolKind::Type(_) => write!(f, "type"),
+			SymbolKind::Variable(_) => write!(f, "variable"),
+			SymbolKind::Namespace(_) => write!(f, "namespace"),
 		}
 	}
 }
@@ -531,7 +531,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	// Validates types in the expression make sense and returns the expression's inferred type
-	fn type_check_exp(&mut self, exp: &Expr, env: &TypeEnv, statement_idx: usize) -> Option<TypeRef> {
+	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<TypeRef> {
 		let t = match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => Some(self.types.string()),
@@ -588,7 +588,16 @@ impl<'a> TypeChecker<'a> {
 				let type_ = self.resolve_type(class, env, statement_idx);
 				let (class_env, class_symbol) = match *type_ {
 					Type::Class(ref class) => (&class.env, &class.name),
-					Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
+					Type::Resource(ref class) => {
+						if matches!(env.flight, Phase::Preflight) {
+							(&class.env, &class.name)
+						} else {
+							return Some(self.general_type_error(format!(
+								"Cannot create the resource \"{}\" in inflight phase",
+								class.name.to_string()
+							)));
+						}
+					}
 					Type::Anything => return Some(self.types.anything()),
 					_ => {
 						return Some(self.general_type_error(format!(
@@ -863,7 +872,7 @@ impl<'a> TypeChecker<'a> {
 				let sig = function_type.as_function_sig().unwrap();
 
 				// Create an environment for the function
-				let mut function_env = TypeEnv::new(
+				let mut function_env = SymbolEnv::new(
 					Some(env),
 					sig.return_type,
 					false,
@@ -888,7 +897,7 @@ impl<'a> TypeChecker<'a> {
 		object: &HashMap<Symbol, Expr>,
 		expected_type: &TypeRef,
 		value: &Expr,
-		env: &TypeEnv,
+		env: &SymbolEnv,
 		statement_idx: usize,
 	) {
 		let expected_struct = if let Some(expected_struct) = expected_type.as_struct() {
@@ -970,7 +979,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn resolve_type(&mut self, ast_type: &AstType, env: &TypeEnv, statement_idx: usize) -> TypeRef {
+	fn resolve_type(&mut self, ast_type: &AstType, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
 		match ast_type {
 			AstType::Number => self.types.number(),
 			AstType::String => self.types.string(),
@@ -1003,7 +1012,7 @@ impl<'a> TypeChecker<'a> {
 
 				match env.lookup_nested(&nested_name, Some(statement_idx)) {
 					Ok(_type) => {
-						if let IdentKind::Type(t) = *_type {
+						if let SymbolKind::Type(t) = *_type {
 							t
 						} else {
 							let symb = nested_name.last().unwrap();
@@ -1029,7 +1038,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut TypeEnv) {
+	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
 		match &stmt.kind {
 			StmtKind::VariableDef {
 				var_name,
@@ -1042,7 +1051,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						IdentKind::Variable(explicit_type),
+						SymbolKind::Variable(explicit_type),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1053,7 +1062,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						IdentKind::Variable(inferred_type),
+						SymbolKind::Variable(inferred_type),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1071,8 +1080,8 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx).unwrap();
 
-				let mut scope_env = TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx);
-				match scope_env.define(&iterator, IdentKind::Variable(exp_type), StatementIdx::Top) {
+				let mut scope_env = SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx);
+				match scope_env.define(&iterator, SymbolKind::Variable(exp_type), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1086,7 +1095,7 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
 
 				self.inner_scopes.push(statements);
 			}
@@ -1098,11 +1107,11 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
 				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
-					else_scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+					else_scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -1131,7 +1140,7 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			StmtKind::Scope(scope) => {
-				scope.set_env(TypeEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
@@ -1178,13 +1187,13 @@ impl<'a> TypeChecker<'a> {
 					let t = self.resolve_type(parent_type, env, stmt.idx);
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
-							(Some(t), Some(&class.env as *const TypeEnv))
+							(Some(t), Some(&class.env as *const SymbolEnv))
 						} else {
 							panic!("Resource {}'s parent {} is not a resource", name, t);
 						}
 					} else {
 						if let Type::Class(ref class) = *t {
-							(Some(t), Some(&class.env as *const TypeEnv))
+							(Some(t), Some(&class.env as *const SymbolEnv))
 						} else {
 							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
@@ -1195,7 +1204,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = TypeEnv::new(None, None, true, env_flight, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, None, true, env_flight, stmt.idx);
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -1209,7 +1218,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					Type::Class(class_spec)
 				});
-				match env.define(name, IdentKind::Type(class_type), StatementIdx::Top) {
+				match env.define(name, SymbolKind::Type(class_type), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1217,12 +1226,12 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = TypeEnv::new(parent_class_env, None, true, env_flight, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, None, true, env_flight, stmt.idx);
 
 				// Add members to the class env
 				for member in members.iter() {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
-					match class_env.define(&member.name, IdentKind::Variable(member_type), StatementIdx::Top) {
+					match class_env.define(&member.name, SymbolKind::Variable(member_type), StatementIdx::Top) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -1243,7 +1252,7 @@ impl<'a> TypeChecker<'a> {
 					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
-					match class_env.define(method_name, IdentKind::Variable(method_type), StatementIdx::Top) {
+					match class_env.define(method_name, SymbolKind::Variable(method_type), StatementIdx::Top) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -1262,7 +1271,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					IdentKind::Variable(constructor_type),
+					SymbolKind::Variable(constructor_type),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1293,7 +1302,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create constructor environment and prime it with args
-				let mut constructor_env = TypeEnv::new(Some(env), constructor_sig.return_type, false, env_flight, stmt.idx);
+				let mut constructor_env = SymbolEnv::new(Some(env), constructor_sig.return_type, false, env_flight, stmt.idx);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 				constructor.statements.set_env(constructor_env);
 				// Check function scope
@@ -1315,7 +1324,7 @@ impl<'a> TypeChecker<'a> {
 						.expect("Expected method type to be a function signature");
 
 					// Create method environment and prime it with args
-					let mut method_env = TypeEnv::new(Some(env), method_sig.return_type, false, method_sig.flight, stmt.idx);
+					let mut method_env = SymbolEnv::new(Some(env), method_sig.return_type, false, method_sig.flight, stmt.idx);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
@@ -1333,12 +1342,12 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = TypeEnv::new(None, None, true, env.flight, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, None, true, env.flight, stmt.idx);
 
 				// Add members to the struct env
 				for member in members.iter() {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
-					match struct_env.define(&member.name, IdentKind::Variable(member_type), StatementIdx::Top) {
+					match struct_env.define(&member.name, SymbolKind::Variable(member_type), StatementIdx::Top) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -1351,7 +1360,7 @@ impl<'a> TypeChecker<'a> {
 					.iter()
 					.filter_map(|parent| match env.lookup(&parent, Some(stmt.idx)) {
 						Ok(kind) => match &*kind {
-							IdentKind::Type(_type) => Some(*_type),
+							SymbolKind::Type(_type) => Some(*_type),
 							_ => {
 								self.type_error(&TypeError {
 									message: format!("Expected {} to be a type", parent),
@@ -1372,7 +1381,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				match env.define(
 					name,
-					IdentKind::Type(self.types.add_type(Type::Struct(Struct {
+					SymbolKind::Type(self.types.add_type(Type::Struct(Struct {
 						name: name.clone(),
 						extends: extends_types,
 						env: struct_env,
@@ -1391,7 +1400,7 @@ impl<'a> TypeChecker<'a> {
 					values: values.clone(),
 				}));
 
-				match env.define(name, IdentKind::Type(enum_type_ref), StatementIdx::Top) {
+				match env.define(name, SymbolKind::Type(enum_type_ref), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1403,13 +1412,13 @@ impl<'a> TypeChecker<'a> {
 
 	fn add_module_to_env(
 		&mut self,
-		env: &mut TypeEnv,
+		env: &mut SymbolEnv,
 		module_name: String,
 		namespace_symbol: &Symbol,
 		statement_idx: usize,
 	) {
 		// Create a new env for the imported module's namespace
-		let mut namespace_env = TypeEnv::new(None, None, false, env.flight, statement_idx);
+		let mut namespace_env = SymbolEnv::new(None, None, false, env.flight, statement_idx);
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
 		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
@@ -1454,7 +1463,7 @@ impl<'a> TypeChecker<'a> {
 			// TODO: are namespaces at the Top statement level (known by everyone in the scope) regardless of where they are defined?
 			match env.define(
 				namespace_symbol,
-				IdentKind::Namespace(Namespace {
+				SymbolKind::Namespace(Namespace {
 					name: namespace_symbol.name.clone(),
 					env: namespace_env,
 				}),
@@ -1468,10 +1477,10 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_arguments_to_env(&mut self, arg_names: &Vec<Symbol>, sig: &FunctionSignature, env: &mut TypeEnv) {
+	fn add_arguments_to_env(&mut self, arg_names: &Vec<Symbol>, sig: &FunctionSignature, env: &mut SymbolEnv) {
 		assert!(arg_names.len() == sig.args.len());
 		for (arg, arg_type) in arg_names.iter().zip(sig.args.iter()) {
-			match env.define(&arg, IdentKind::Variable(*arg_type), StatementIdx::Top) {
+			match env.define(&arg, SymbolKind::Variable(*arg_type), StatementIdx::Top) {
 				Err(type_error) => {
 					self.type_error(&type_error);
 				}
@@ -1480,7 +1489,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn expr_maybe_type(&mut self, expr: &Expr, env: &TypeEnv, statement_idx: usize) -> Option<TypeRef> {
+	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<TypeRef> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
 		let mut path = vec![];
 		let mut curr_expr = expr;
@@ -1501,12 +1510,12 @@ impl<'a> TypeChecker<'a> {
 		}
 		path.reverse();
 		match env.lookup_nested(&path, Some(statement_idx)) {
-			Ok(IdentKind::Type(type_ref)) => Some(*type_ref),
+			Ok(SymbolKind::Type(type_ref)) => Some(*type_ref),
 			_ => None,
 		}
 	}
 
-	fn resolve_reference(&mut self, reference: &Reference, env: &TypeEnv, statement_idx: usize) -> TypeRef {
+	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
 		match reference {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
 				Ok(var) => {
@@ -1591,7 +1600,7 @@ fn can_call_flight(fn_flight: Phase, scope_flight: Phase) -> bool {
 fn add_parent_members_to_struct_env(
 	extends_types: &Vec<TypeRef>,
 	name: &Symbol,
-	struct_env: &mut TypeEnv,
+	struct_env: &mut SymbolEnv,
 ) -> Result<(), TypeError> {
 	// Add members of all parents to the struct's environment
 	for parent_type in extends_types.iter() {
@@ -1633,7 +1642,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					IdentKind::Variable(member_type),
+					SymbolKind::Variable(member_type),
 					StatementIdx::Top,
 				)?;
 			}

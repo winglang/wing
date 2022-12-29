@@ -1,15 +1,15 @@
 use crate::{
 	ast::{Phase, Symbol},
 	diagnostic::TypeError,
-	type_check::{IdentKind, Type, TypeRef},
+	type_check::{SymbolKind, Type, TypeRef},
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
 use super::UnsafeRef;
 
-pub struct TypeEnv {
-	pub(crate) ident_map: HashMap<String, (StatementIdx, IdentKind)>,
-	parent: Option<UnsafeRef<TypeEnv>>,
+pub struct SymbolEnv {
+	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
+	parent: Option<UnsafeRef<SymbolEnv>>,
 	pub return_type: Option<TypeRef>,
 	is_class: bool,
 	pub flight: Phase,
@@ -17,7 +17,7 @@ pub struct TypeEnv {
 }
 
 // TODO See TypeRef for why this is necessary
-unsafe impl Send for TypeEnv {}
+unsafe impl Send for SymbolEnv {}
 
 // The index (position) of the statement where a certain symbol was defined
 // this is useful to determine if a symbol can be used in a certain
@@ -31,7 +31,7 @@ pub enum StatementIdx {
 // Possible results for a symbol lookup in the environment
 enum LookupResult<'a> {
 	// The type of the symbol and its flight phase
-	Found((&'a IdentKind, Phase)),
+	Found((&'a SymbolKind, Phase)),
 	// The symbol was not found in the environment
 	NotFound,
 	// The symbol exists in the environment but it's not defined yet (based on the statement
@@ -39,9 +39,9 @@ enum LookupResult<'a> {
 	DefinedLater,
 }
 
-impl TypeEnv {
+impl SymbolEnv {
 	pub fn new(
-		parent: Option<*const TypeEnv>,
+		parent: Option<*const SymbolEnv>,
 		return_type: Option<TypeRef>,
 		is_class: bool,
 		flight: Phase,
@@ -50,7 +50,7 @@ impl TypeEnv {
 		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
 		Self {
 			ident_map: HashMap::new(),
-			parent: parent.map(|e| UnsafeRef::<TypeEnv>(e)),
+			parent: parent.map(|e| UnsafeRef::<SymbolEnv>(e)),
 			return_type,
 			is_class,
 			flight,
@@ -62,7 +62,7 @@ impl TypeEnv {
 		self.parent.is_none()
 	}
 
-	pub fn define(&mut self, symbol: &Symbol, kind: IdentKind, pos: StatementIdx) -> Result<(), TypeError> {
+	pub fn define(&mut self, symbol: &Symbol, kind: SymbolKind, pos: StatementIdx) -> Result<(), TypeError> {
 		if self.ident_map.contains_key(&symbol.name) {
 			return Err(TypeError {
 				span: symbol.span.clone(),
@@ -74,12 +74,12 @@ impl TypeEnv {
 		if let Some(_parent_env) = self.parent {
 			if let Some(parent_kind) = self.try_lookup(&symbol.name, None) {
 				// If we're a class we allow "symbol shadowing" for methods
-				let is_function = if let IdentKind::Variable(t) = kind {
+				let is_function = if let SymbolKind::Variable(t) = kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
 				};
-				let is_parent_function = if let IdentKind::Variable(t) = *parent_kind {
+				let is_parent_function = if let SymbolKind::Variable(t) = *parent_kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
@@ -97,7 +97,7 @@ impl TypeEnv {
 		Ok(())
 	}
 
-	pub fn try_lookup(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<&IdentKind> {
+	pub fn try_lookup(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<&SymbolKind> {
 		match self.try_lookup_ext(symbol_name, not_after_stmt_idx) {
 			LookupResult::Found((type_, _)) => Some(type_),
 			LookupResult::NotFound | LookupResult::DefinedLater => None,
@@ -121,7 +121,7 @@ impl TypeEnv {
 		}
 	}
 
-	pub fn lookup(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<&IdentKind, TypeError> {
+	pub fn lookup(&self, symbol: &Symbol, not_after_stmt_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
 		Ok(self.lookup_ext(symbol, not_after_stmt_idx)?.0)
 	}
 
@@ -129,7 +129,7 @@ impl TypeEnv {
 		&self,
 		symbol: &Symbol,
 		not_after_stmt_idx: Option<usize>,
-	) -> Result<(&IdentKind, Phase), TypeError> {
+	) -> Result<(&SymbolKind, Phase), TypeError> {
 		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
 
 		match lookup_result {
@@ -145,7 +145,7 @@ impl TypeEnv {
 		}
 	}
 
-	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&IdentKind, TypeError> {
+	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
 
 		let mut symb = *it.next().unwrap();
@@ -163,7 +163,7 @@ impl TypeEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let IdentKind::Variable(t) = *t {
+			if let SymbolKind::Variable(t) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}
@@ -200,12 +200,12 @@ impl TypeEnv {
 
 pub struct TypeEnvIter<'a> {
 	seen_keys: HashSet<String>,
-	curr_env: &'a TypeEnv,
-	curr_pos: hash_map::Iter<'a, String, (StatementIdx, IdentKind)>,
+	curr_env: &'a SymbolEnv,
+	curr_pos: hash_map::Iter<'a, String, (StatementIdx, SymbolKind)>,
 }
 
 impl<'a> TypeEnvIter<'a> {
-	fn new(env: &'a TypeEnv) -> Self {
+	fn new(env: &'a SymbolEnv) -> Self {
 		TypeEnvIter {
 			seen_keys: HashSet::new(),
 			curr_env: env,
@@ -215,7 +215,7 @@ impl<'a> TypeEnvIter<'a> {
 }
 
 impl<'a> Iterator for TypeEnvIter<'a> {
-	type Item = (String, &'a IdentKind);
+	type Item = (String, &'a SymbolKind);
 
 	fn next(&mut self) -> Option<Self::Item> {
 		if let Some((name, (_, kind))) = self.curr_pos.next() {

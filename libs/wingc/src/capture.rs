@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::{
 	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
-	type_check::type_env::TypeEnv,
+	type_check::symbol_env::SymbolEnv,
 	type_check::Type,
 };
 
@@ -167,7 +167,7 @@ fn scan_for_inflights_in_arglist(args: &ArgList) {
 	}
 }
 
-fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, statement_idx: usize) -> Vec<Capture> {
+fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &SymbolEnv, statement_idx: usize) -> Vec<Capture> {
 	let mut res = vec![];
 	if let Reference::NestedIdentifier { object, property } = reference {
 		res.extend(scan_captures_in_expression(&object, env, statement_idx));
@@ -206,7 +206,7 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, s
 	res
 }
 
-fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) -> Vec<Capture> {
+fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> Vec<Capture> {
 	let mut res = vec![];
 	match &exp.kind {
 		ExprKind::New {
