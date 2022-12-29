@@ -60,14 +60,14 @@ const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
 
   return (
     <Fragment>
-      <div className="flex text-slate-400 text-xs">
+      <div className="flex text-slate-400 text-2xs">
         {dateTimeFormat.format(log.timestamp)}
       </div>
 
       <div className="pl-2">
         <div
           className={classNames(
-            "px-2 rounded-lg text-xs inline-flex uppercase",
+            "px-2 rounded-lg text-2xs inline-flex uppercase",
             {
               "bg-slate-400 text-white": true,
             },
@@ -80,7 +80,7 @@ const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
       <div>
         <div
           className={classNames(
-            "px-2 rounded-lg text-xs inline-flex uppercase",
+            "px-2 rounded-lg text-2xs inline-flex uppercase",
             {
               "bg-slate-50 text-slate-500": log.type === "verbose",
               "bg-slate-400 text-white": log.type === "info",
@@ -95,7 +95,7 @@ const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
 
       <button
         className={classNames(
-          "text-left text-xs px-1.5 py-0.5 group",
+          "text-left text-2xs px-1.5 py-0.5 group",
           "flex min-w-0",
           {
             "hover:bg-slate-100": canBeExpanded,
@@ -143,7 +143,7 @@ export const NodeLogs = ({ logs }: NodeLogsProps) => {
   return (
     <>
       <div
-        className="grid gap-x-2 text-sm font-mono"
+        className="grid gap-x-2 text-2xs font-mono"
         style={{
           gridTemplateColumns: "max-content max-content max-content 1fr",
         }}

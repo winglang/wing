@@ -5,7 +5,6 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { FolderIcon } from "@heroicons/react/24/solid";
-import prettyBytes from "pretty-bytes";
 import {
   FormEventHandler,
   useCallback,
@@ -17,7 +16,6 @@ import {
 import { Button } from "../design-system/Button.js";
 import { Checkbox } from "../design-system/Checkbox.js";
 import { Input } from "../design-system/Input.js";
-import { dateFormatter } from "../utils/dateUtils.js";
 import { trpc } from "../utils/trpc.js";
 import { useDownloadFile } from "../utils/useDownloadFile.js";
 
@@ -46,21 +44,13 @@ export const BucketExploreView = ({
   const { download } = useDownloadFile();
 
   const addNewEntries: FormEventHandler<HTMLInputElement> = async (event) => {
-    const newEntries = new Array<FileExplorerEntry>();
     for (const file of event.currentTarget.files ?? []) {
       await putFile.mutateAsync({
         resourcePath,
         fileName: file.name,
         filePath: file.path,
       });
-      newEntries.push({
-        type: "file",
-        name: file.name,
-        fileSize: file.size,
-        updatedAt: file.lastModified,
-      });
     }
-    setEntries((prev) => [...prev, ...newEntries]);
   };
 
   // todo [sa] make it work better with actual file objects and not only keys
@@ -69,8 +59,6 @@ export const BucketExploreView = ({
       bucketList.data?.map((file) => ({
         type: "file",
         name: file,
-        fileSize: 0,
-        updatedAt: 0,
       })) ?? [],
     );
   }, [bucketList.data]);
@@ -155,12 +143,6 @@ export const BucketExploreView = ({
               <th className="px-2 border-b border-slate-200 font-semibold">
                 Name
               </th>
-              <th className="px-2 border-b border-slate-200 font-semibold">
-                Size
-              </th>
-              <th className="px-2 border-b border-slate-200 font-semibold">
-                Last Modified
-              </th>
             </tr>
           </thead>
 
@@ -196,14 +178,6 @@ export const BucketExploreView = ({
                       )}
                       <span className="text-slate-900">{entry.name}</span>
                     </div>
-                  </td>
-
-                  <td className="px-2 text-slate-500">
-                    {entry.fileSize ? prettyBytes(entry.fileSize) : ""}
-                  </td>
-
-                  <td className="px-2 text-slate-500">
-                    {dateFormatter.format(entry.updatedAt)}
                   </td>
                 </tr>
               );

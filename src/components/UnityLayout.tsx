@@ -1,17 +1,11 @@
 import {
-  ChevronDownIcon,
-  ChevronRightIcon,
   ArrowLeftOnRectangleIcon,
   ArrowRightOnRectangleIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/20/solid";
 import classNames from "classnames";
-import {
-  PropsWithChildren,
-  useCallback,
-  useEffect,
-  useId,
-  useState,
-} from "react";
+import { PropsWithChildren, useEffect } from "react";
 
 import {
   BaseResourceSchema,

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { LogEntry, LogType } from "../../electron/main/consoleLogger.js";
+import { LogType } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { Error } from "../design-system/Error.js";
@@ -18,9 +18,9 @@ import { ResourceIcon } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
+import { ExpandedNode } from "./ExpandedNode.js";
 import { HeaderBanner } from "./HeaderBanner.js";
 import { MetadataPanel } from "./MetadataPanel.js";
-import { NewNodeRelationshipsView } from "./NewNodeRelationshipsView.js";
 import { NodeLogs } from "./NodeLogs.js";
 import NodeLogsFilters from "./NodeLogsFilters.js";
 import { ResourceExploreView } from "./ResourceExploreView.js";
@@ -39,9 +39,12 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
   const explorerTree = trpc.useQuery(["app.explorerTree"], {
     onSuccess(rootItem) {
       treeMenu.setItems([createTreeMenuItemFromExplorerTreeItem(rootItem)]);
-      treeMenu.setCurrent("root");
     },
   });
+
+  useEffect(() => {
+    treeMenu.setCurrent("root");
+  }, [explorerTree.data]);
 
   useEffect(() => {
     treeMenu.expandAll();
@@ -113,7 +116,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
   ]);
 
   return (
-    <div className="h-full flex flex-col bg-slate-100 select-none">
+    <div className="h-full flex flex-col bg-slate-50 select-none">
       {showBanner && (
         <HeaderBanner
           title={
@@ -132,7 +135,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
         {(isError || explorerTree.isError) && (
           <Error text={"Oooops :( Compiler error..."} />
         )}
-        <RightResizableWidget className="h-full flex flex-col w-60 min-w-[20rem] min-h-[15rem] border-r border-slate-200">
+        <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu
             title="Explorer"
             items={treeMenu.items}
@@ -179,16 +182,18 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
 
           <div className="flex-1 flex">
             <div className="flex-1 relative">
-              <ScrollableArea overflowX className="flex flex-col bg-white">
+              <ScrollableArea overflowX className="flex flex-col">
                 {currentNode.data?.type === "constructs.Construct" &&
                   childRelationships.data && (
-                    <div className="flex-1 bg-white min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
+                    <div className="flex-1 bg-slate-50 min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
                       {childRelationships.data.map((child, index) => (
-                        <NewNodeRelationshipsView
+                        <ExpandedNode
                           key={child.node.id}
                           node={{
                             id: child.node.id,
                             path: child.node.path,
+                            type: child.node.type,
+                            title: "",
                             icon: (
                               <ResourceIcon
                                 resourceType={child.node.type}
@@ -236,7 +241,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
               </ScrollableArea>
             </div>
 
-            <LeftResizableWidget className="bg-white flex-shrink min-w-[20rem] border-l z-10">
+            <LeftResizableWidget className="bg-white flex-shrink w-80 min-w-[10rem] border-l z-10">
               {metadata.data && (
                 <MetadataPanel
                   node={metadata.data.node}

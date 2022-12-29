@@ -9,7 +9,7 @@ interface ButtonProps {
   disabled?: boolean;
   className?: string;
   icon?: (props: React.ComponentProps<"svg">) => JSX.Element;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 export const Button = ({

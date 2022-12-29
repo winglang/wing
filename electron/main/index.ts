@@ -205,6 +205,7 @@ function createWindowManager() {
             }`,
             "simulator",
           );
+          newWindow?.webContents.send("trpc.invalidate", []);
         },
       });
 

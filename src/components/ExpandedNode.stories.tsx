@@ -1,16 +1,16 @@
 import { CubeIcon } from "@heroicons/react/24/outline";
-import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { ComponentMeta, ComponentStory } from "@storybook/react";
 
-import { NewNodeRelationshipsView } from "./NewNodeRelationshipsView.js";
+import { ExpandedNode } from "./ExpandedNode.js";
 
 export default {
-  title: "Components/NewNodeRelationshipsView",
-  component: NewNodeRelationshipsView,
-} as ComponentMeta<typeof NewNodeRelationshipsView>;
+  title: "Components/ExpandedNode",
+  component: ExpandedNode,
+} as ComponentMeta<typeof ExpandedNode>;
 
-const Template: ComponentStory<typeof NewNodeRelationshipsView> = (args) => (
+const Template: ComponentStory<typeof ExpandedNode> = (args) => (
   <div className="max-w-4xl">
-    <NewNodeRelationshipsView {...args} />
+    <ExpandedNode {...args} />
   </div>
 );
 

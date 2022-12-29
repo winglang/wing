@@ -1,7 +1,7 @@
-import { ICounterClient } from "@winglang/wingsdk/lib/cloud/counter.js";
 import { z } from "zod";
 
 import { createRouter } from "../utils/createRouter.js";
+import { ICounterClient } from "../wingsdk.js";
 
 export const createCounterRouter = () => {
   return createRouter()

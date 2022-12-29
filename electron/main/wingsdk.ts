@@ -9,4 +9,5 @@ export type {
   IBucketClient,
   IFunctionClient,
   IQueueClient,
+  ICounterClient,
 } from "@winglang/wingsdk/lib/cloud/index.js";
