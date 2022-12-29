@@ -168,9 +168,14 @@ impl TypeEnv {
 					break;
 				}
 			}
-			let ns = t
-				.as_namespace()
-				.expect(&format!("Symbol \"{}\" should be a namespace", symb));
+			let ns = if let Some(ns) = t.as_namespace() {
+				ns
+			} else {
+				return Err(TypeError {
+					message: format!("Symbol \"{}\" is not a namespace", symb.name),
+					span: symb.span.clone(),
+				});
+			};
 
 			let lookup_result = ns.env.try_lookup(&(*next_symb).name, statement_idx);
 

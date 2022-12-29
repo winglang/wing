@@ -232,9 +232,9 @@ pub struct FunctionSignature {
 impl Display for IdentKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			IdentKind::Type(t) => write!(f, "{}", t),
-			IdentKind::Variable(t) => write!(f, "{}", t),
-			IdentKind::Namespace(ns) => write!(f, "{}", ns.name),
+			IdentKind::Type(_) => write!(f, "type"),
+			IdentKind::Variable(_) => write!(f, "variable"),
+			IdentKind::Namespace(_) => write!(f, "namespace"),
 		}
 	}
 }
@@ -601,7 +601,12 @@ impl<'a> TypeChecker<'a> {
 					Type::Class(ref class) => (&class.env, &class.name),
 					Type::Resource(ref class) => (&class.env, &class.name), // TODO: don't allow resource instantiation inflight
 					Type::Anything => return Some(self.types.anything()),
-					_ => panic!("Expected {} to be a resource or class type but it's a {}", class, type_),
+					_ => {
+						return Some(self.general_type_error(format!(
+							"Cannot instantiate type \"{}\" because it is not a class or resource",
+							type_.to_string()
+						)))
+					}
 				};
 
 				// Type check args against constructor
@@ -1486,22 +1491,71 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	fn expr_maybe_type(&mut self, expr: &Expr, env: &TypeEnv, statement_idx: usize) -> Option<TypeRef> {
+		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
+		let mut path = vec![];
+		let mut curr_expr = expr;
+		loop {
+			match &curr_expr.kind {
+				ExprKind::Reference(reference) => match reference {
+					Reference::Identifier(symbol) => {
+						path.push(symbol);
+						break;
+					}
+					Reference::NestedIdentifier { object, property } => {
+						path.push(property);
+						curr_expr = &object;
+					}
+				},
+				_ => return None,
+			}
+		}
+		path.reverse();
+		println!(
+			"path: {:?}",
+			path.iter().map(|s| s.name.as_str()).collect::<Vec<&str>>()
+		);
+		match env.lookup_nested(&path, Some(statement_idx)) {
+			Ok(IdentKind::Type(type_ref)) => Some(*type_ref),
+			_ => None,
+		}
+	}
+
 	fn resolve_reference(&mut self, reference: &Reference, env: &TypeEnv, statement_idx: usize) -> TypeRef {
 		match reference {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
-				Ok(var) => var.as_variable().expect(
-					format!(
-						"Expected identifier {}, to be a variable, but it was a {:?}",
-						symbol, var
-					)
-					.as_str(),
-				),
-				Err(type_error) => {
-					self.type_error(&type_error);
-					self.types.anything()
+				Ok(var) => {
+					if let Some(var) = var.as_variable() {
+						var
+					} else {
+						self.type_error(&TypeError {
+							message: format!("Expected identifier {}, to be a variable, but it's a {}", symbol, var),
+							span: symbol.span.clone(),
+						})
+					}
 				}
+				Err(type_error) => self.type_error(&type_error),
 			},
 			Reference::NestedIdentifier { object, property } => {
+				// There's a special case where the object is actually a type and the property is either a static method or an enum variant.
+				// In this case the type might even be namespaced (recursive nested reference). We need to detect this and treat the entire
+				// object as a single reference to the type
+				if let Some(_type) = self.expr_maybe_type(object, env, statement_idx) {
+					// Currently we only support enum field access (no static methods)
+					match *_type {
+						Type::Enum(ref e) => {
+							if e.values.contains(property) {
+								return _type;
+							} else {
+								return self.general_type_error(format!("Enum {} does not contain value {}", _type, property.name));
+							}
+						}
+						_ => {
+							return self.general_type_error(format!("Type {} not valid in expression", _type));
+						}
+					}
+				}
+
 				let std_lookup = env.try_lookup("std", None).unwrap();
 				let std_namespace = &std_lookup.as_namespace().unwrap().env;
 				let instance_type = self.type_check_exp(object, env, statement_idx).unwrap();
@@ -1511,35 +1565,23 @@ impl<'a> TypeChecker<'a> {
 						Err(type_error) => self.type_error(&type_error),
 					},
 					Type::Anything => instance_type,
-					Type::Enum(ref t) => {
-						if t.values.contains(property) {
-							instance_type
-						} else {
-							self.general_type_error(format!(
-								"Enum {} does not contain value {}",
-								instance_type, property.name
-							))
-						}
-					}
 
 					// get "std" primitives
-					Type::Duration => {
-						std_namespace
-							.try_lookup("Duration", None)
-							.unwrap()
-							.as_type()
-							.unwrap()
-							.as_class()
-							.unwrap()
-							.env
-							.lookup(property, None)
-							.unwrap()
-							.as_variable()
-							.unwrap()
-					}
+					Type::Duration => std_namespace
+						.try_lookup("Duration", None)
+						.unwrap()
+						.as_type()
+						.unwrap()
+						.as_class()
+						.unwrap()
+						.env
+						.lookup(property, None)
+						.unwrap()
+						.as_variable()
+						.unwrap(),
 
 					_ => self.general_type_error(format!(
-						"\"{}\" in {} does not resolve to a class, resource or enum type",
+						"\"{}\" in {} does not resolve to a class or resource instance",
 						instance_type, reference
 					)),
 				}
