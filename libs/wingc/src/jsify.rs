@@ -606,10 +606,6 @@ impl JSifier {
 			None => ("", "=> "),
 		};
 
-		// let async_prefix = match phase {
-		// 	Phase::Inflight => "async ",
-		// 	_ => "",
-		// };
 		format!(
 			"{}({}) {}{}",
 			name,
