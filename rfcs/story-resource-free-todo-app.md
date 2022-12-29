@@ -129,7 +129,7 @@ new cloud.Function(inflight (s: str): str => {
 }) as "test:get, remove and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
+  clear_tasks.invoke("");
   try {
     remove_task("fake-id"); // should throw an exception
     assert(false); // this code should not be reachable 
