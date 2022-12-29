@@ -311,7 +311,7 @@ impl TypeRef {
 
 	fn maybe_unwrap_option(&self) -> TypeRef {
 		if let Type::Optional(ref t) = **self {
-			t.clone()
+			*t
 		} else {
 			*self
 		}
