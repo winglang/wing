@@ -153,9 +153,7 @@ wing it ./task-list.w
 While **Wing Console** is running in the background, it watches the .w file src dir for changes, 
 recompile the application and updates the view in real time.
 
-In the Console, the developer can see the `TaskList` resource as a box. If he clicks through into
-this resource, he can see that it includes a Bucket and a Counter. He can see a number
-that represents the current value of the counter (initially 0).
+In the Console, the developer can see the  bucket, the counter and the functions as resources. The developer can activate the functions and see the how the bucket files are created and the counter is incremented, the console also presents the logs
 
 Next to the `TaskList` resource (at the root of the app), we can see the testing `cloud.Function` and
 by clicking on the functions, tests are executed and logs and events appear in the event view.
