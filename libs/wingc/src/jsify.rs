@@ -471,7 +471,12 @@ impl JSifier {
 					} else {
 						"".to_string()
 					},
-					self.jsify_function(Some("constructor"), &constructor.parameters, &constructor.statements, phase),
+					self.jsify_function(
+						Some("constructor"),
+						&constructor.parameters,
+						&constructor.statements,
+						phase
+					),
 					members
 						.iter()
 						.map(|m| self.jsify_class_member(m))
@@ -601,10 +606,10 @@ impl JSifier {
 			None => ("", "=> "),
 		};
 
-		let async_prefix = match phase {
-			Phase::Inflight => "async ",
-			_ => "",
-		};
+		// let async_prefix = match phase {
+		// 	Phase::Inflight => "async ",
+		// 	_ => "",
+		// };
 		format!(
 			"{}({}) {}{}",
 			name,

@@ -4,6 +4,7 @@ use crate::ast::{Type as AstType, *};
 use crate::debug;
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use derivative::Derivative;
+use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::HashMap;
@@ -139,7 +140,7 @@ pub struct Struct {
 #[derive(Debug)]
 pub struct Enum {
 	pub name: Symbol,
-	pub values: HashMap<Symbol, TypeRef>,
+	pub values: IndexSet<Symbol>,
 }
 
 #[derive(Debug)]
@@ -271,9 +272,6 @@ impl Display for Type {
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
 			Type::Enum(s) => write!(f, "{}", s.name),
-			Type::EnumInstance(e) => {
-				write!(f, "enum value {}.{}", e.enum_name, e.enum_value)
-			}
 		}
 	}
 }
@@ -286,40 +284,6 @@ impl Display for Type {
 unsafe impl Send for TypeRef {}
 
 impl TypeRef {
-	// In many places we want to get the type of the instance, not the instance itself
-	// this is a helper function for getting the type of an instance (class, struct, resource, ...)
-	// if the type is not an instance (either a custom type or a built-in), it will return the type itself
-	// fn get_type_of_instance(&self) -> TypeRef {
-	// 	match (*self).into() {
-	// 		&IdentKind::ClassInstance(class_instance) => class_instance,
-	// 		&IdentKind::StructInstance(struct_instance) => struct_instance,
-	// 		&IdentKind::ResourceObject(resource) => resource,
-	// 		_ => *self,
-	// 	}
-	// }
-
-	// pub fn as_class_or_resource_object(&self) -> Option<&Class> {
-	// 	self.as_class_object().or_else(|| self.as_resource_object())
-	// }
-
-	// pub fn as_class_object(&self) -> Option<&Class> {
-	// 	if let &IdentKind::ClassInstance(ref class_instance) = (*self).into() {
-	// 		let class = class_instance.as_class().unwrap();
-	// 		Some(class)
-	// 	} else {
-	// 		None
-	// 	}
-	// }
-
-	// pub fn as_resource_object(&self) -> Option<&Class> {
-	// 	if let &IdentKind::ResourceObject(ref res_obj) = (*self).into() {
-	// 		let res = res_obj.as_resource().unwrap();
-	// 		Some(res)
-	// 	} else {
-	// 		None
-	// 	}
-	// }
-
 	pub fn as_resource(&self) -> Option<&Class> {
 		if let Type::Resource(ref res) = **self {
 			Some(res)
@@ -348,22 +312,6 @@ impl TypeRef {
 		}
 	}
 
-	fn as_enum(&self) -> Option<&Enum> {
-		if let &Type::Enum(ref e) = (*self).into() {
-			Some(e)
-		} else {
-			None
-		}
-	}
-
-	fn as_mut_enum(&self) -> Option<&mut Enum> {
-		if let &mut Type::Enum(ref mut e) = (*self).into() {
-			Some(e)
-		} else {
-			None
-		}
-	}
-
 	fn maybe_unwrap_option(&self) -> TypeRef {
 		if let Type::Optional(ref t) = **self {
 			t.clone()
@@ -371,14 +319,6 @@ impl TypeRef {
 			*self
 		}
 	}
-
-	// fn as_mut_struct(&mut self) -> Option<&mut Struct> {
-	// 	if let Type::Struct(ref mut s) = **self {
-	// 		Some(s)
-	// 	} else {
-	// 		None
-	// 	}
-	// }
 
 	pub fn as_function_sig(&self) -> Option<&FunctionSignature> {
 		if let Type::Function(ref sig) = **self {
@@ -1454,21 +1394,10 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Enum { name, values } => {
 				let enum_type_ref = self.types.add_type(Type::Enum(Enum {
 					name: name.clone(),
-					values: HashMap::new(),
+					values: values.clone(),
 				}));
 
-				let enum_type = enum_type_ref.as_mut_enum().unwrap();
-				values.iter().for_each(|value| {
-					enum_type.values.insert(
-						value.clone(),
-						self.types.add_type(Type::EnumInstance(EnumInstance {
-							enum_name: enum_type_ref,
-							enum_value: value.clone(),
-						})),
-					);
-				});
-
-				match env.define(name, enum_type_ref, StatementIdx::Top) {
+				match env.define(name, IdentKind::Type(enum_type_ref), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1560,7 +1489,13 @@ impl<'a> TypeChecker<'a> {
 	fn resolve_reference(&mut self, reference: &Reference, env: &TypeEnv, statement_idx: usize) -> TypeRef {
 		match reference {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
-				Ok(var) => var.as_variable().expect("Expected identifier to be a variable"),
+				Ok(var) => var.as_variable().expect(
+					format!(
+						"Expected identifier {}, to be a variable, but it was a {:?}",
+						symbol, var
+					)
+					.as_str(),
+				),
 				Err(type_error) => {
 					self.type_error(&type_error);
 					self.types.anything()
@@ -1577,30 +1512,35 @@ impl<'a> TypeChecker<'a> {
 					},
 					Type::Anything => instance_type,
 					Type::Enum(ref t) => {
-						if t.values.contains_key(property) {
+						if t.values.contains(property) {
 							instance_type
 						} else {
-							self.general_type_error(format!("Enum {} does not contain value {}", instance_type, property.name))
+							self.general_type_error(format!(
+								"Enum {} does not contain value {}",
+								instance_type, property.name
+							))
 						}
 					}
 
 					// get "std" primitives
-					Type::Duration => std_namespace
-						.try_lookup("Duration", None)
-						.unwrap()
-						.as_type()
-						.unwrap()
-						.as_class()
-						.unwrap()
-						.env
-						.lookup(property, None)
-						.unwrap()
-						.as_variable()
-						.unwrap(),
+					Type::Duration => {
+						std_namespace
+							.try_lookup("Duration", None)
+							.unwrap()
+							.as_type()
+							.unwrap()
+							.as_class()
+							.unwrap()
+							.env
+							.lookup(property, None)
+							.unwrap()
+							.as_variable()
+							.unwrap()
+					}
 
 					_ => self.general_type_error(format!(
 						"\"{}\" in {} does not resolve to a class, resource or enum type",
-						instance, reference
+						instance_type, reference
 					)),
 				}
 			}
