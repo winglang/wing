@@ -1500,10 +1500,6 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 		path.reverse();
-		println!(
-			"path: {:?}",
-			path.iter().map(|s| s.name.as_str()).collect::<Vec<&str>>()
-		);
 		match env.lookup_nested(&path, Some(statement_idx)) {
 			Ok(IdentKind::Type(type_ref)) => Some(*type_ref),
 			_ => None,
