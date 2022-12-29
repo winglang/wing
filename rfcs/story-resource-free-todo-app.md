@@ -131,7 +131,7 @@ new cloud.Function(inflight (s: str): str => {
 new cloud.Function(inflight (s: str): str => {
   clear_tasks.invoke();
   try {
-    remove_tasks("fake-id"); // should throw an exception
+    remove_task("fake-id"); // should throw an exception
     assert(false); // this code should not be reachable 
   } catch (e) {
     assert(true); // redundant, keeping it here to show the intent of the code
