@@ -1743,6 +1743,8 @@ constructor() {
   name;
   
   }
+  const res = new R(this,\\"R\\",\\"Arr\\");
+  console.log(res.name);
 }
 }
 new MyApp().synth();"

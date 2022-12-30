@@ -7,4 +7,4 @@ resource R {
 }
 
 let res = new R("Arr");
-print(resource.name);
+print(res.name);
