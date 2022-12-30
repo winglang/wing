@@ -5,3 +5,6 @@ resource R {
     this.name = name;
   }
 }
+
+let res = new R("Arr");
+print(resource.name);
