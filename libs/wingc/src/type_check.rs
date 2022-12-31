@@ -293,6 +293,14 @@ impl TypeRef {
 		self.as_class().or_else(|| self.as_resource())
 	}
 
+	pub fn as_mut_class_or_resource(&mut self) -> Option<&mut Class> {
+		match **self {
+			Type::Class(ref mut class) => Some(class),
+			Type::Resource(ref mut class) => Some(class),
+			_ => None,
+		}
+	}
+
 	fn as_class(&self) -> Option<&Class> {
 		if let Type::Class(ref class) = **self {
 			Some(class)
@@ -1281,15 +1289,8 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Replace the dummy class environment with the real one before type checking the methods
-				let class_env = match *class_type {
-					Type::Class(ref mut class) | Type::Resource(ref mut class) => {
-						class.env = class_env;
-						&class.env
-					}
-					_ => {
-						panic!("Expected {} to be a class or resource ", name);
-					}
-				};
+				class_type.as_mut_class_or_resource().unwrap().env = class_env;
+				let class_env = &class_type.as_class_or_resource().unwrap().env;
 
 				// Type check constructor
 				let constructor_sig = if let Type::Function(ref s) = *constructor_type {
@@ -1304,6 +1305,17 @@ impl<'a> TypeChecker<'a> {
 				// Create constructor environment and prime it with args
 				let mut constructor_env = SymbolEnv::new(Some(env), constructor_sig.return_type, false, env_flight, stmt.idx);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
+				// Prime the constructor environment with `this`
+				constructor_env
+					.define(
+						&Symbol {
+							name: "this".into(),
+							span: name.span.clone(),
+						},
+						SymbolKind::Variable(class_type),
+						StatementIdx::Top,
+					)
+					.expect("Expected `this` to be added to constructor env");
 				constructor.statements.set_env(constructor_env);
 				// Check function scope
 				self.inner_scopes.push(&constructor.statements);
