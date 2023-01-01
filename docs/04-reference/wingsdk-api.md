@@ -428,19 +428,6 @@ with a fresh copy without any consequences.
 
 A cloud logging facility.
 
-#### Initializers <a name="Initializers" id="@winglang/wingsdk.cloud.Logger.Initializer"></a>
-
-```wing
-bring cloud;
-
-new cloud.Logger()
-```
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-
----
-
 #### Methods <a name="Methods" id="Methods"></a>
 
 | **Name** | **Description** |
@@ -497,6 +484,8 @@ The message to log.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.isConstruct">is_construct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.of">of</a></code> | Returns the logger registered to the given scope, throwing an error if there is none. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.register">register</a></code> | Create a logger and register it to the given scope. |
 
 ---
 
@@ -517,6 +506,26 @@ Checks if `x` is a construct.
 Any object.
 
 ---
+
+##### `of` <a name="of" id="@winglang/wingsdk.cloud.Logger.of"></a>
+
+```wing
+bring cloud;
+
+cloud.Logger.of()
+```
+
+Returns the logger registered to the given scope, throwing an error if there is none.
+
+##### `register` <a name="register" id="@winglang/wingsdk.cloud.Logger.register"></a>
+
+```wing
+bring cloud;
+
+cloud.Logger.register()
+```
+
+Create a logger and register it to the given scope.
 
 #### Properties <a name="Properties" id="Properties"></a>
 
@@ -2174,7 +2183,6 @@ Synthesize the app into an artifact.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.IApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/wingsdk.core.IApp.property.logger">logger</a></code> | <code>cloud.Logger</code> | Returns a logger instance that can be used to emit traces and logs throughout the system. |
 | <code><a href="#@winglang/wingsdk.core.IApp.property.outdir">outdir</a></code> | <code>str</code> | Directory where artifacts are synthesized to. |
 
 ---
@@ -2188,18 +2196,6 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
-
----
-
-##### `logger`<sup>Required</sup> <a name="logger" id="@winglang/wingsdk.core.IApp.property.logger"></a>
-
-```wing
-logger: Logger;
-```
-
-- *Type:* cloud.Logger
-
-Returns a logger instance that can be used to emit traces and logs throughout the system.
 
 ---
 
@@ -2494,7 +2490,7 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
+| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. The log will be associated with whichever resource is running the inflight code. |
 
 ---
 
@@ -2506,10 +2502,9 @@ print(message: str): void
 
 **Inflight client:** [true](#true)
 
-Logs a message.
+Logs a message. The log will be associated with whichever resource is running the inflight code.
 
-The log will be associated with whichever resource is
-running the inflight code.
+NOTICE: this is not an async function because it is wrapped by `console.log()`.
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
 

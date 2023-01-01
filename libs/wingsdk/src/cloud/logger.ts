@@ -1,4 +1,3 @@
-import * as util from "util";
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
 import { Code } from "../core/inflight";
@@ -16,9 +15,9 @@ export abstract class LoggerBase extends Resource {
    * Logs a message.
    * @param message The message to log.
    */
-  public print(...args: any[]): void {
+  public print(message: string): void {
     // default implementation, can be overridden
-    console.log(util.format(...args));
+    console.log(message);
   }
 }
 
@@ -88,7 +87,7 @@ export interface ILoggerClient {
    * @param message The message to print
    * @inflight
    */
-  print(...args: any[]): void;
+  print(message: string): void;
 }
 
 /**
