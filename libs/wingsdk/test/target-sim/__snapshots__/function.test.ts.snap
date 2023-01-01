@@ -22,6 +22,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
         "my_function": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -81,6 +93,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
         "my_function": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -140,6 +164,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
         "my_function": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -201,6 +237,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
         "my_function": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],

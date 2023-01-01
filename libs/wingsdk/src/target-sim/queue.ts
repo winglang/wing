@@ -1,11 +1,13 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { Direction, Resource } from "../core";
+import * as std from "../std";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { QueueSchema, QueueSubscriber } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 /**
  * Simulator implementation of `cloud.Queue`.
@@ -13,43 +15,57 @@ import { bindSimulatorResource } from "./util";
  * @inflight `@winglang/wingsdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements ISimulatorResource {
-  private readonly timeout: core.Duration;
+  private readonly timeout: std.Duration;
   private readonly subscribers: QueueSubscriber[];
   private readonly initialMessages: string[] = [];
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    this.timeout = props.timeout ?? core.Duration.fromSeconds(30);
+    this.timeout = props.timeout ?? std.Duration.fromSeconds(30);
     this.subscribers = [];
     this.initialMessages.push(...(props.initialMessages ?? []));
   }
 
   public onMessage(
-    inflight: core.Inflight,
+    inflight: core.Inflight, // cloud.IQueueOnMessageHandler
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    const code: string[] = [];
-    code.push(inflight.code.text);
-    code.push(`async function $queueEventWrapper($cap, event) {`);
-    code.push(`  event = JSON.parse(event);`);
-    code.push(
-      `  if (!event.messages) throw new Error('No "messages" field in event.');`
-    );
-    code.push(`  for (const $message of event.messages) {`);
-    code.push(`    await ${inflight.entrypoint}($cap, $message);`);
-    code.push(`  }`);
-    code.push(`}`);
+    const hash = inflight.node.addr.slice(-8);
 
-    const newInflight = new core.Inflight({
-      entrypoint: `$queueEventWrapper`,
-      code: core.NodeJsCode.fromInline(code.join("\n")),
-      captures: inflight.captures,
-    });
+    /**
+     * The handle method the user provided (via the `inflight` parameter) needs
+     * to be wrapped in some extra logic to handle batching.
+     * `convertBetweenHandlers` creates a dummy resource that provides the
+     * wrapper code. In Wing psuedocode, this looks like:
+     *
+     * resource Handler impl cloud.IFunctionHandler {
+     *   init(handler: cloud.IQueueOnMessageHandler) {
+     *     this.handler = handler;
+     *   }
+     *   inflight handle(event: string) {
+     *     for (const message of JSON.parse(event).messages) {
+     *       this.handler.handle(message);
+     *     }
+     *   }
+     * }
+     *
+     * It's possible we could optimize this and create one less construct in the
+     * user's tree by creating a single `Handler` resource that subclasses from
+     * `cloud.Function` and overrides the `invoke` inflight method with the
+     * wrapper code directly.
+     */
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessageHandler-${hash}`,
+      inflight,
+      join(__dirname, "queue.onmessage.inflight.js"),
+      "QueueOnMessageHandlerClient"
+    );
 
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${inflight.code.hash.slice(0, 16)}`,
-      newInflight,
+      `${this.node.id}-OnMessage-${hash}`,
+      functionHandler,
       props
     );
 
@@ -64,12 +80,12 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
     });
 
     this.addConnection({
-      direction: Direction.OUTBOUND,
+      direction: core.Direction.OUTBOUND,
       relationship: "on_message",
       resource: fn,
     });
     fn.addConnection({
-      direction: Direction.INBOUND,
+      direction: core.Direction.INBOUND,
       relationship: "on_message",
       resource: this,
     });
@@ -92,10 +108,15 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(
-    captureScope: Resource,
-    _metadata: core.CaptureMetadata
-  ): core.Code {
-    return bindSimulatorResource("queue", this, captureScope);
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    bindSimulatorResource("queue", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _toInflight(): core.Code {
+    return makeSimulatorJsClient("queue", this);
   }
 }
+
+Queue._annotateInflight("push", {});

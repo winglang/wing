@@ -4,10 +4,11 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
+use indexmap::IndexSet;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
-use crate::type_check::type_env::TypeEnv;
+use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
 
 #[derive(Debug, Eq, Clone)]
@@ -79,6 +80,40 @@ pub enum Type {
 	Map(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
+}
+
+impl Display for Type {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Type::Number => write!(f, "num"),
+			Type::String => write!(f, "str"),
+			Type::Bool => write!(f, "bool"),
+			Type::Duration => write!(f, "duration"),
+			Type::Optional(t) => write!(f, "{}?", t),
+			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::FunctionSignature(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.parameters
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
+						format!("{}", ret_val)
+					} else {
+						"void".to_string()
+					}
+				)
+			}
+			Type::CustomType { root, fields: _ } => {
+				write!(f, "{}", root)
+			}
+		}
+	}
 }
 
 #[derive(Debug, Clone)]
@@ -156,6 +191,10 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<Symbol>,
 		members: Vec<ClassMember>,
+	},
+	Enum {
+		name: Symbol,
+		values: IndexSet<Symbol>,
 	},
 }
 
@@ -265,11 +304,11 @@ pub enum InterpolatedStringPart {
 pub struct Scope {
 	pub statements: Vec<Stmt>,
 	#[derivative(Debug = "ignore")]
-	pub env: RefCell<Option<TypeEnv>>, // None after parsing, set to Some during type checking phase
+	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
-	pub fn set_env(&self, new_env: TypeEnv) {
+	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
 		*env = Some(new_env);
