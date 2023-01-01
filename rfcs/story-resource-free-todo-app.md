@@ -50,7 +50,9 @@ let get_task = inflight (id: str): str => {
  */
 let remove_task = inflight (id: str) => {
   let content = bucket.get(id)
-  if !content {
+  if content {
+    print("Found task with id ${id}, with content '${content}'");
+  } else {
     throw("Task with id ${id} doesn't exist");
   }
 
