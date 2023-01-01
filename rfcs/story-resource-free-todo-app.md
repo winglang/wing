@@ -65,7 +65,7 @@ let remove_task = inflight (id: str) => {
 * @returns set of task id
 */
 let list_task_ids = inflight (): Set<str> => {
-  return bucket.list();
+  return bucket.list(); // Might need to do new Set(bucket.list())
 };
 
 /** 
