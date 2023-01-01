@@ -1,4 +1,4 @@
-# Epic: Task List with Inflight Closures
+# User Story 10 - Task List using Inflight Closures
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
