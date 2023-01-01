@@ -459,14 +459,16 @@ describing how this resource is related to another resource.
 ##### `print` <a name="print" id="@winglang/wingsdk.cloud.Logger.print"></a>
 
 ```wing
-print(args: any): void
+print(message: str): void
 ```
 
 Logs a message.
 
-###### `args`<sup>Required</sup> <a name="args" id="@winglang/wingsdk.cloud.Logger.print.parameter.args"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.Logger.print.parameter.message"></a>
 
-- *Type:* any
+- *Type:* str
+
+The message to log.
 
 ---
 
@@ -2488,7 +2490,7 @@ Inflight interface for `Logger`.
 ##### `print` <a name="print" id="@winglang/wingsdk.cloud.ILoggerClient.print"></a>
 
 ```wing
-print(args: any): void
+print(message: str): void
 ```
 
 **Inflight client:** [true](#true)
@@ -2497,9 +2499,11 @@ Logs a message. The log will be associated with whichever resource is running th
 
 NOTICE: this is not an async function because it is wrapped by `console.log()`.
 
-###### `args`<sup>Required</sup> <a name="args" id="@winglang/wingsdk.cloud.ILoggerClient.print.parameter.args"></a>
+###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
 
-- *Type:* any
+- *Type:* str
+
+The message to print.
 
 ---
 
