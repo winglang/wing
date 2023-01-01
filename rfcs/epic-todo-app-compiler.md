@@ -57,7 +57,7 @@ resource TaskList {
    * @throws Will throw an error if taks with id doesn't exist
    * @param id - the id of the task to be removed
    */
-  inflight remove_task(id: str) {
+  inflight remove_tasks(id: str) {
     let content = this._bucket.get(id)
     if !content {
       throw("Task with id ${id} doesn't exist");
@@ -110,8 +110,8 @@ let clear_tasks = new cloud.Function(inflight (s: str): str => {
   
   // I hate this code, but wanted to use while here
   while (i < results.len) {
-    tasks.remove_task(results.at(i));
-    i += 1;
+    tasks.remove_tasks(results.at(i));
+    i = i + 1;
   }
 }) as "utility:clear tasks";
 
@@ -124,16 +124,16 @@ let add_tasks = new cloud.Function(inflight (s: str): str => {
 }) as "utility:add tasks";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
-  add_tasks.invoke();
+  clear_tasks.invoke("");
+  add_tasks.invoke("");
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 1);
   assert("clean the dishes".equals(tasks.get_task(result.at(0))));
 }) as "test:get and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
-  add_tasks.invoke();
+  clear_tasks.invoke("");
+  add_tasks.invoke("");
   tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0))
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
@@ -141,7 +141,7 @@ new cloud.Function(inflight (s: str): str => {
 }) as "test:get, remove and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
+  clear_tasks.invoke("");
   try {
     tasks.remove_tasks("fake-id"); // should throw an exception
     assert(false); // this code should not be reachable 

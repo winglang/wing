@@ -1,4 +1,4 @@
-# Epic: Task List Wing Resource
+# Epic: Task List with Inflight Closures
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
@@ -85,7 +85,7 @@ let find_tasks_with = inflight (term: str): Set<str> => {
   }
 
   print("found ${output.len} tasks which match term '${term}'");
-  return output.to_set();
+  return output.freeze();
 };
 
 // --------------------------------------------
@@ -99,7 +99,7 @@ let clear_tasks = new cloud.Function(inflight (s: str): str => {
   // I hate this code, but wanted to use while here
   while (i < results.len) {
     remove_task(results.at(i));
-    i += 1;
+    i = i + 1;
   }
 }) as "utility:clear tasks";
 
@@ -112,26 +112,26 @@ let add_tasks = new cloud.Function(inflight (s: str): str => {
 }) as "utility:add tasks";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
-  add_tasks.invoke();
+  clear_tasks.invoke("");
+  add_tasks.invoke("");
   let result = find_tasks_with("clean the dish");
   assert(result.len == 1);
   assert("clean the dishes".equals(get_task(result.at(0))));
 }) as "test:get and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
-  add_tasks.invoke();
-  remove_tasks(find_tasks_with("clean the dish").at(0))
+  clear_tasks.invoke("");
+  add_tasks.invoke("");
+  remove_task(find_tasks_with("clean the dish").at(0))
   let result = find_tasks_with("clean the dish");
   assert(result.len == 0);
   assert("clean the dishes".equals(get_task()));
 }) as "test:get, remove and find task";
 
 new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke();
+  clear_tasks.invoke("");
   try {
-    remove_tasks("fake-id"); // should throw an exception
+    remove_task("fake-id"); // should throw an exception
     assert(false); // this code should not be reachable 
   } catch (e) {
     assert(true); // redundant, keeping it here to show the intent of the code
@@ -153,9 +153,7 @@ wing it ./task-list.w
 While **Wing Console** is running in the background, it watches the .w file src dir for changes, 
 recompile the application and updates the view in real time.
 
-In the Console, the developer can see the `TaskList` resource as a box. If he clicks through into
-this resource, he can see that it includes a Bucket and a Counter. He can see a number
-that represents the current value of the counter (initially 0).
+In the Console, the developer can see the  bucket, the counter and the functions as resources. The developer can activate the functions and see the how the bucket files are created and the counter is incremented, the console also presents the logs
 
 Next to the `TaskList` resource (at the root of the app), we can see the testing `cloud.Function` and
 by clicking on the functions, tests are executed and logs and events appear in the event view.
