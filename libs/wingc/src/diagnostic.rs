@@ -60,14 +60,14 @@ impl PartialOrd for WingSpan {
 	}
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub enum DiagnosticLevel {
 	Error,
 	Warning,
 	Note,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Diagnostic {
 	pub message: String,
 	pub span: Option<WingSpan>,
@@ -82,6 +82,20 @@ impl std::fmt::Display for Diagnostic {
 		} else {
 			write!(f, "{:?} | {}", self.level, self.message)
 		}
+	}
+}
+
+impl Ord for Diagnostic {
+	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+		self
+			.span
+			.cmp(&other.span)
+	}
+}
+
+impl PartialOrd for Diagnostic {
+	fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+		self.span.partial_cmp(&other.span)
 	}
 }
 

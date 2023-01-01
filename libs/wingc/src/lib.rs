@@ -4,8 +4,8 @@ extern crate lazy_static;
 use ast::{Scope, Symbol};
 use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
-use type_check::type_env::StatementIdx;
-use type_check::{FunctionSignature, Type};
+use type_check::symbol_env::StatementIdx;
+use type_check::{FunctionSignature, SymbolKind, Type};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -15,7 +15,7 @@ use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
 use crate::capture::scan_for_inflights_in_scope;
-use crate::type_check::type_env::TypeEnv;
+use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
@@ -65,7 +65,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	let env = TypeEnv::new(None, None, false, Phase::Preflight, 0);
+	let env = SymbolEnv::new(None, None, false, Phase::Preflight, 0);
 	scope.set_env(env);
 
 	add_builtin(
@@ -98,7 +98,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.borrow_mut()
 		.as_mut()
 		.unwrap()
-		.define(&sym, types.add_type(typ), StatementIdx::Top)
+		.define(&sym, SymbolKind::Variable(types.add_type(typ)), StatementIdx::Top)
 		.expect("Failed to add builtin");
 }
 
@@ -184,7 +184,11 @@ mod sanity {
 			let result = compile(test_file, Some(out_dir.as_str()));
 
 			if result.is_err() {
-				assert!(expect_failure, "Expected compilation success, but failed");
+				assert!(
+					expect_failure,
+					"Expected compilation success, but failed: {:#?}",
+					result.err().unwrap()
+				);
 			} else {
 				assert!(!expect_failure, "Expected compilation failure, but succeeded");
 			}

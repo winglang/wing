@@ -677,11 +677,13 @@ constructor() {
   const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
   const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
   const arr5 = Object.freeze([bucket1, bucket2, bucket3]);
+  const arr6 = Object.freeze([bucket1, bucket2, bucket3]);
   const m1 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m2 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m3 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m4 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m5 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
+  const m6 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
 }
 }
 new MyApp().synth();"
@@ -749,6 +751,7 @@ constructor() {
     return SomeEnum;
   })({}));
   const one = SomeEnum.ONE;
+  const two = SomeEnum.TWO;
 }
 }
 new MyApp().synth();"
@@ -1672,6 +1675,76 @@ constructor() {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js\\")),
     
   }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile resource.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile resource.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing compile resource.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"resource\\" });
+  
+  class R
+  {
+  constructor(name) {
+    this.name = name;
+  }
+  name;
+  
+  }
+  const res = new R(this,\\"R\\",\\"Arr\\");
+  console.log(res.name);
 }
 }
 new MyApp().synth();"

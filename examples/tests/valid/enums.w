@@ -3,3 +3,4 @@ enum SomeEnum {
 }
 
 let one = SomeEnum.ONE;
+let two: SomeEnum = SomeEnum.TWO; // Try with explicit type annotation

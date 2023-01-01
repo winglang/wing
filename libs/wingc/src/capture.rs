@@ -3,7 +3,7 @@ use std::collections::{BTreeMap, BTreeSet};
 use crate::{
 	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
-	type_check::type_env::TypeEnv,
+	type_check::symbol_env::SymbolEnv,
 	type_check::Type,
 };
 
@@ -167,18 +167,22 @@ fn scan_for_inflights_in_arglist(args: &ArgList) {
 	}
 }
 
-fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, statement_idx: usize) -> Vec<Capture> {
+fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &SymbolEnv, statement_idx: usize) -> Vec<Capture> {
 	let mut res = vec![];
 	if let Reference::NestedIdentifier { object, property } = reference {
 		res.extend(scan_captures_in_expression(&object, env, statement_idx));
 
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
-		if let &Type::ResourceObject(resource) = object.evaluated_type.borrow().unwrap().into() {
-			let resource = resource.as_resource().unwrap();
+		if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
 			let (prop_type, _flight) = match resource.env.lookup_ext(property, None) {
-				Ok(_type) => _type,
+				Ok((prop_type, phase)) => (
+					prop_type
+						.as_variable()
+						.expect("Expected resource property to be a variable"),
+					phase,
+				),
 				Err(type_error) => {
-					panic!("Type error: {}", type_error);
+					panic!("{}", type_error);
 				}
 			};
 
@@ -202,7 +206,7 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &TypeEnv, s
 	res
 }
 
-fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) -> Vec<Capture> {
+fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> Vec<Capture> {
 	let mut res = vec![];
 	match &exp.kind {
 		ExprKind::New {
@@ -222,13 +226,13 @@ fn scan_captures_in_expression(exp: &Expr, env: &TypeEnv, statement_idx: usize) 
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
 				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
-					Ok(_type) => _type,
+					Ok((var, phase)) => (var.as_variable().expect("Expected identifier to be a variable"), phase),
 					Err(type_error) => {
 						panic!("Type error: {}", type_error);
 					}
 				};
 
-				if let (Some(resource), Phase::Preflight) = (t.as_resource_object(), f) {
+				if let (Some(resource), Phase::Preflight) = (t.as_resource(), f) {
 					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
 					//   1. explicit capture definitions
 					//   2. analyzing inflight code and figuring out what methods are being used on the object
