@@ -1,5 +1,4 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as testing from "../../src/testing";
 import { Testing } from "../../src/testing";
 import { listMessages } from "./util";
@@ -31,11 +30,10 @@ test("create a topic", async () => {
 test("topic publishes messages as they are received", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  cloud.Logger.register(app);
-  const handler = makeInflight(
+  const handler = Testing.makeHandler(
+    app,
     "Handler",
-    `async handle(message) { this.logger.print("Received " + message); }`,
-    app
+    `async handle(message) { this.$logger.print("Received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -70,16 +68,15 @@ test("topic publishes messages as they are received", async () => {
 test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  cloud.Logger.register(app);
-  const handler = makeInflight(
+  const handler = Testing.makeHandler(
+    app,
     "Handler1",
-    `async handle(message) { this.logger.print("Received " + message); }`,
-    app
+    `async handle(message) { this.$logger.print("Received " + message); }`
   );
-  const otherHandler = makeInflight(
+  const otherHandler = Testing.makeHandler(
+    app,
     "Handler2",
-    `async handle(message) { this.logger.print("Also received " + message); }`,
-    app
+    `async handle(message) { this.$logger.print("Also received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -111,12 +108,3 @@ test("topic publishes messages to multiple subscribers", async () => {
     "wingsdk.cloud.Logger deleted.",
   ]);
 });
-
-function makeInflight(id: string, code: string, app: core.IApp) {
-  return Testing.makeHandler(app, id, code, {
-    logger: {
-      resource: cloud.Logger.of(app),
-      ops: [cloud.LoggerInflightMethods.PRINT],
-    },
-  });
-}

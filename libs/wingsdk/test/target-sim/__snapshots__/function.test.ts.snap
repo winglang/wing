@@ -6,10 +6,17 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
           "environmentVariables": Object {
             "ENV_VAR1": "true",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
@@ -34,9 +41,33 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {
@@ -75,9 +106,17 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -101,9 +140,33 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {
@@ -142,9 +205,17 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -168,9 +239,33 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {
@@ -209,9 +304,16 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
           "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
             "PIG_LATIN": "true",
           },
           "sourceCodeFile": "assets/my_function/index.js",
@@ -237,9 +339,33 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {

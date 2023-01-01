@@ -1,6 +1,8 @@
+import * as util from "util";
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Resource } from "../core";
+import { Code } from "../core/inflight";
+import { Resource } from "../core/resource";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
@@ -14,9 +16,9 @@ export abstract class LoggerBase extends Resource {
    * Logs a message.
    * @param message The message to log.
    */
-  public print(message: string): void {
+  public print(...args: any[]): void {
     // default implementation, can be overridden
-    console.log(message);
+    console.log(util.format(...args));
   }
 }
 
@@ -81,10 +83,12 @@ export interface ILoggerClient {
    * Logs a message. The log will be associated with whichever resource is
    * running the inflight code.
    *
+   * NOTICE: this is not an async function because it is wrapped by `console.log()`.
+   *
    * @param message The message to print
    * @inflight
    */
-  print(message: string): Promise<void>;
+  print(...args: any[]): void;
 }
 
 /**

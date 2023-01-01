@@ -52,15 +52,17 @@ test("publishing messages to topic", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Topic created.",
     "wingsdk.cloud.Function created.",
     "Publish (message=ABC).",
-    `Sending message (message=ABC, subscriber=sim-0).`,
+    `Sending message (message=ABC, subscriber=sim-1).`,
     `Invoke (payload="ABC").`,
     `Invoke (payload="ABC").`,
     `wingsdk.cloud.Function deleted.`,
     `wingsdk.cloud.Topic deleted.`,
     `wingsdk.cloud.Function deleted.`,
+    `wingsdk.cloud.Logger deleted.`,
   ]);
 });

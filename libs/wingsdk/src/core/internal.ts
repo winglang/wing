@@ -1,4 +1,5 @@
 import { IConstruct } from "constructs";
+import { Logger, LoggerInflightMethods } from "../cloud/logger";
 import { Code, InflightBinding, NodeJsCode } from "./inflight";
 import { Resource } from "./resource";
 
@@ -6,20 +7,25 @@ export function makeHandler(
   scope: IConstruct,
   id: string,
   code: string,
-  bindings?: { [key: string]: InflightBinding }
+  userBindings?: { [key: string]: InflightBinding }
 ): Resource {
+  const logger = Logger.of(scope);
+  const bindings = {
+    ...userBindings,
+    $logger: {
+      resource: logger,
+      ops: [LoggerInflightMethods.PRINT],
+    },
+  };
+
   const resources = Object.fromEntries(
-    Object.entries(bindings ?? {}).map(([name, binding]) => [
-      name,
-      binding.resource,
-    ])
+    Object.entries(bindings).map(([name, binding]) => [name, binding.resource])
   );
 
   // implements IFunctionHandler
   class Handler extends Resource {
     public readonly stateful = false;
-
-    public readonly $resourceNames = Object.keys(bindings ?? {});
+    public readonly $resourceNames = Object.keys(bindings);
 
     constructor() {
       super(scope, id);
@@ -33,22 +39,27 @@ export function makeHandler(
       for (const resource of this.$resourceNames) {
         clients[resource] = (this as any)[resource]._toInflight();
       }
-      return NodeJsCode.fromInline(
-        `new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  ${code}
-};
-})())({
-${Object.entries(clients)
-  .map(([name, client]) => `${name}: ${client.text}`)
-  .join(",\n")}
-})`
-      );
+
+      const clientMap = Object.entries(clients)
+        .map(([name, client]) => `${name}: ${client.text}`)
+        .join(",\n");
+
+      return NodeJsCode.fromInline(`
+      (function(clients) {
+        console.log = (...args) => clients.$logger.print(...args);
+
+        class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }            
+          }
+
+          ${code}
+        }
+
+        return new Handler(clients);
+      })({${clientMap}})`);
     }
   }
 

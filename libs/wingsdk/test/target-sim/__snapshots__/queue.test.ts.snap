@@ -6,6 +6,12 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue",
         "props": Object {
           "initialMessages": Array [],
@@ -20,6 +26,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -51,9 +69,17 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -92,6 +118,24 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
@@ -113,6 +157,11 @@ Object {
         "my_queue-OnMessage-e645076f": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
               Object {
                 "direction": "inbound",
                 "relationship": "on_message",
@@ -169,9 +218,17 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -217,6 +274,24 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
@@ -238,6 +313,11 @@ Object {
         "my_queue-OnMessage-e645076f": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
               Object {
                 "direction": "inbound",
                 "relationship": "on_message",
@@ -294,9 +374,17 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -335,6 +423,24 @@ Object {
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "relationship": "inflight-reference",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
@@ -356,6 +462,11 @@ Object {
         "my_queue-OnMessage-e645076f": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "relationship": "inflight-reference",
+                "resource": "root/WingLogger",
+              },
               Object {
                 "direction": "inbound",
                 "relationship": "on_message",

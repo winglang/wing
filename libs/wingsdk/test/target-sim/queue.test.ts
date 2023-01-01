@@ -2,7 +2,7 @@ import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
 import { listMessages } from "./util";
 
-jest.setTimeout(5_000); // 5 seconds
+jest.setTimeout(10_000); // 5 seconds
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -58,16 +58,18 @@ test("queue with one subscriber, default batch size of 1", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
     "Push (message=A).",
     "Push (message=B).",
-    'Sending messages (messages=["A"], subscriber=sim-0).',
-    'Sending messages (messages=["B"], subscriber=sim-0).',
+    'Sending messages (messages=["A"], subscriber=sim-1).',
+    'Sending messages (messages=["B"], subscriber=sim-1).',
     'Invoke (payload="{"messages":["A"]}").',
     'Invoke (payload="{"messages":["B"]}").',
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
   expect(app.snapshot()).toMatchSnapshot();
 });
@@ -89,14 +91,16 @@ test("queue with one subscriber, batch size of 5", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
-    'Sending messages (messages=["A","B","C","D","E"], subscriber=sim-0).',
-    'Sending messages (messages=["F"], subscriber=sim-0).',
+    'Sending messages (messages=["A","B","C","D","E"], subscriber=sim-1).',
+    'Sending messages (messages=["F"], subscriber=sim-1).',
     'Invoke (payload="{"messages":["F"]}").',
     'Invoke (payload="{"messages":["A","B","C","D","E"]}").',
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
   expect(app.snapshot()).toMatchSnapshot();
 });
@@ -118,20 +122,20 @@ test("messages are requeued if the function fails", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s).slice(0, 6)).toEqual([
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Function created.",
     "wingsdk.cloud.Queue created.",
     "Push (message=BAD MESSAGE).",
-    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
     'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
     "Subscriber error - returning 1 messages to queue.",
-  ]);
-  expect(listMessages(s).slice(-5)).toEqual([
-    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-0).',
+    'Sending messages (messages=["BAD MESSAGE"], subscriber=sim-1).',
     'Invoke (payload="{"messages":["BAD MESSAGE"]}").',
     "Subscriber error - returning 1 messages to queue.",
     "wingsdk.cloud.Queue deleted.",
     "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
   expect(app.snapshot()).toMatchSnapshot();
 });

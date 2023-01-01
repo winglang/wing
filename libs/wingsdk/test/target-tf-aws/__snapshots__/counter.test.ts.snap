@@ -48,6 +48,18 @@ Object {
             "id": "Counter",
             "path": "root/Counter",
           },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -105,21 +117,26 @@ exports[`default counter behavior 1`] = `
 `;
 
 exports[`function with a counter binding 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) {
+"
+      (function(clients) {
+        console.log = (...args) => clients.$logger.print(...args);
+
+        class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }            
+          }
+
+          async handle(event) {
   const val = await this.my_counter.inc(2);
   console.log(val);
 }
-};
-})())({
-my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0)
-})"
+        }
+
+        return new Handler(clients);
+      })({my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0),
+$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
 `;
 
 exports[`function with a counter binding 2`] = `
@@ -227,6 +244,11 @@ Object {
                   "relationship": "inflight-reference",
                   "resource": "root/Counter",
                 },
+                Object {
+                  "direction": "outbound",
+                  "relationship": "inflight-reference",
+                  "resource": "root/WingLogger",
+                },
               ],
               "wing:resource:stateful": false,
             },
@@ -306,6 +328,24 @@ Object {
             },
             "id": "Handler",
             "path": "root/Handler",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "relationship": "inflight-reference",
+                  "resource": "root/Function",
+                },
+              ],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {

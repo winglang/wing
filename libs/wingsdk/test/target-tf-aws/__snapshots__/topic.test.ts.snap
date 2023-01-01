@@ -38,6 +38,18 @@ Object {
             "id": "Topic",
             "path": "root/Topic",
           },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -75,18 +87,22 @@ Object {
 `;
 
 exports[`topic with subscriber function 1`] = `
-"new ((function(){
-return class Handler {
-  constructor(clients) {
-    for (const [name, client] of Object.entries(clients)) {
-      this[name] = client;
-    }
-  }
-  async handle(event) { console.log(\\"Received: \\", event); }
-};
-})())({
+"
+      (function(clients) {
+        console.log = (...args) => clients.$logger.print(...args);
 
-})"
+        class Handler {
+          constructor(clients) {
+            for (const [name, client] of Object.entries(clients)) {
+              this[name] = client;
+            }            
+          }
+
+          async handle(event) { console.log(\\"Received: \\", event); }
+        }
+
+        return new Handler(clients);
+      })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
 `;
 
 exports[`topic with subscriber function 2`] = `
@@ -225,7 +241,13 @@ Object {
           },
           "Topic-OnMessage-c5395e41": Object {
             "attributes": Object {
-              "wing:resource:connections": Array [],
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "outbound",
+                  "relationship": "inflight-reference",
+                  "resource": "root/WingLogger",
+                },
+              ],
               "wing:resource:stateful": false,
             },
             "children": Object {
@@ -304,6 +326,24 @@ Object {
             },
             "id": "Topic-OnMessageHandler-c5395e41",
             "path": "root/Topic-OnMessageHandler-c5395e41",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "relationship": "inflight-reference",
+                  "resource": "root/Topic-OnMessage-c5395e41",
+                },
+              ],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.25",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {
