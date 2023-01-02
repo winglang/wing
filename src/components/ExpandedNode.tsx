@@ -65,10 +65,6 @@ const ResourceButton = ({
       <div className="rounded-md bg-slate-50 px-2 py-2 sm:flex sm:items-start sm:justify-between flex-1 w-full">
         <dl className="mt-3 sm:mt-0 text-xs text-left w-full">
           <div className="grid grid-cols-5 gap-1 w-full">
-            <dt className="truncate text-slate-500">Path</dt>
-            <dd className="truncate col-span-4" title={node.path}>
-              {node.path}
-            </dd>
             <dt className="truncate text-slate-500">Type</dt>
             <dd className="truncate col-span-4" title={node.type}>
               {node.type}
