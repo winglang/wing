@@ -1584,10 +1584,13 @@ impl<'a> TypeChecker<'a> {
 						.as_variable()
 						.unwrap(),
 
-					_ => self.general_type_error(format!(
-						"\"{}\" in {} does not resolve to a class or resource instance",
-						instance_type, reference
-					)),
+					_ => self.expr_error(
+						object,
+						format!(
+							"Expression must be a class or resource instance to access property \"{}\", instead found type \"{}\"",
+							property.name, instance_type
+						),
+					),
 				}
 			}
 		}

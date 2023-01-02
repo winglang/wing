@@ -84,16 +84,13 @@ impl Parser<'_> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.add_error(
 				format!(
-					"{} '{}' is not supported yet {}",
+					"{} \"{}\" is not supported yet {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
 			)?
 		} else {
-			self.add_error(
-				format!("Unexpected {} '{}' || {:#?}", grammar_context, grammar_element, node),
-				node,
-			)?
+			self.add_error(format!("Unexpected {} \"{}\"", grammar_context, grammar_element), node)?
 		}
 	}
 
