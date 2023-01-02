@@ -36,6 +36,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "eladb",
+      "name": "Elad Ben-Israel",
+      "avatar_url": "https://avatars.githubusercontent.com/u/598796?v=4",
+      "profile": "https://github.com/eladb",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
