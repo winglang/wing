@@ -234,6 +234,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "singledigit",
+      "name": "Eric Johnson",
+      "avatar_url": "https://avatars.githubusercontent.com/u/897170?v=4",
+      "profile": "http://linkedin.com/singledigit",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
