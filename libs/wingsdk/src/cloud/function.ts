@@ -54,14 +54,22 @@ export abstract class FunctionBase extends Resource {
       this.addEnvironment(key, value);
     }
 
+    const logger = Logger.of(this);
+
     // indicates that we are calling "handle" on the handler resource
+    // and that we are calling "print" on the logger.
     inflight._bind(this, ["handle"]);
+    logger._bind(this, ["print"]);
 
     const inflightClient = inflight._toInflight();
-    const loggerClientCode = Logger.of(this)._toInflight();
+    const loggerClientCode = logger._toInflight();
     const lines = new Array<string>();
-    lines.push(`const $wing_logger = ${loggerClientCode.text};`);
-    lines.push(`console.log = (...args) => $wing_logger.print(...args);`);
+
+    // create a logger inflight client and attach it to `console.log`.
+    // TODO: attach console.error, console.warn, once our logger supports log levels.
+    lines.push(`const $logger = ${loggerClientCode.text};`);
+    lines.push(`console.log = (...args) => $logger.print(...args);`);
+
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await ${inflightClient.text}.handle(event);`);
     lines.push("};");

@@ -548,7 +548,6 @@ impl JSifier {
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
-		
 		for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
 			capture_names.push(obj.clone());
 			bindings.push(format!(
