@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-30-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -138,6 +138,7 @@ We are also actively tracking planned features in our roadmap:
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://rjourdan.com/"><img src="https://avatars.githubusercontent.com/u/23378066?v=4?s=100" width="100px;" alt="Romain Jourdan"/><br /><sub><b>Romain Jourdan</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=rjourdan" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/VictorEB"><img src="https://avatars.githubusercontent.com/u/45363415?v=4?s=100" width="100px;" alt="Victor"/><br /><sub><b>Victor</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=VictorEB" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
