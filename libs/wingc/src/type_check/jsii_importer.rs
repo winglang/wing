@@ -7,13 +7,11 @@ use crate::{
 		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
 use wingii::jsii;
-
-const WINGSDK_ASSEMBLY: &'static str = "@winglang/wingsdk";
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -59,13 +57,13 @@ impl<'a> JsiiImporter<'a> {
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
-				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY, WINGSDK_INFLIGHT) {
+				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_INFLIGHT) {
 					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
 						return_type: Some(self.wing_types.anything()),
 						flight: Phase::Inflight,
 					})))
-				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY, WINGSDK_DURATION) {
+				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
 					Some(self.wing_types.duration())
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
@@ -116,7 +114,7 @@ impl<'a> JsiiImporter<'a> {
 
 	pub fn import_type(&mut self, type_fqn: &str) -> Option<TypeRef> {
 		// Hack: if the class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
-		if type_fqn == format!("{}.{}", WINGSDK_ASSEMBLY, WINGSDK_RESOURCE) {
+		if type_fqn == format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) {
 			return None;
 		}
 
@@ -315,7 +313,7 @@ impl<'a> JsiiImporter<'a> {
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class = if let Some(base_class_fqn) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
-			if base_class_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY, WINGSDK_RESOURCE) {
+			if base_class_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) {
 				is_resource = true;
 				None
 			} else {
