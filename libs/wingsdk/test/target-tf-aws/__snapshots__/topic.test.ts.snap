@@ -38,18 +38,6 @@ Object {
             "id": "Topic",
             "path": "root/Topic",
           },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -237,13 +225,7 @@ Object {
           },
           "Topic-OnMessage-c5395e41": Object {
             "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/WingLogger",
-                },
-              ],
+              "wing:resource:connections": Array [],
               "wing:resource:stateful": false,
             },
             "children": Object {
@@ -322,24 +304,6 @@ Object {
             },
             "id": "Topic-OnMessageHandler-c5395e41",
             "path": "root/Topic-OnMessageHandler-c5395e41",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/Topic-OnMessage-c5395e41",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {

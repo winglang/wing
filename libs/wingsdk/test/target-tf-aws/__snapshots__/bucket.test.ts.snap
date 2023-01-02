@@ -34,18 +34,6 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -157,18 +145,6 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",

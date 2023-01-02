@@ -1,4 +1,5 @@
 import * as cloud from "../../src/cloud";
+import * as core from "../../src/core";
 import * as testing from "../../src/testing";
 import { Testing } from "../../src/testing";
 import { listMessages } from "./util";
@@ -30,10 +31,11 @@ test("create a topic", async () => {
 test("topic publishes messages as they are received", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  const handler = Testing.makeHandler(
-    app,
+  cloud.Logger.register(app);
+  const handler = makeInflight(
     "Handler",
-    `async handle(message) { console.log("Received " + message); }`
+    `async handle(message) { this.logger.print("Received " + message); }`,
+    app
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -47,21 +49,37 @@ test("topic publishes messages as they are received", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
+    "wingsdk.cloud.Function created.",
+    "wingsdk.cloud.Topic created.",
+    "Publish (message=Alpha).",
+    "Sending message (message=Alpha, subscriber=sim-1).",
+    "Received Alpha",
+    'Invoke (payload="Alpha").',
+    "Publish (message=Beta).",
+    "Sending message (message=Beta, subscriber=sim-1).",
+    "Received Beta",
+    'Invoke (payload="Beta").',
+    "wingsdk.cloud.Topic deleted.",
+    "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
+  ]);
 });
 
 test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  const handler = Testing.makeHandler(
-    app,
+  cloud.Logger.register(app);
+  const handler = makeInflight(
     "Handler1",
-    `async handle(message) { console.log("Received " + message); }`
+    `async handle(message) { this.logger.print("Received " + message); }`,
+    app
   );
-  const otherHandler = Testing.makeHandler(
-    app,
+  const otherHandler = makeInflight(
     "Handler2",
-    `async handle(message) { console.log("Also received " + message); }`
+    `async handle(message) { this.logger.print("Also received " + message); }`,
+    app
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -75,5 +93,30 @@ test("topic publishes messages to multiple subscribers", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
+    "wingsdk.cloud.Function created.",
+    "wingsdk.cloud.Function created.",
+    "wingsdk.cloud.Topic created.",
+    "Publish (message=Alpha).",
+    "Sending message (message=Alpha, subscriber=sim-1).",
+    "Received Alpha",
+    'Invoke (payload="Alpha").',
+    "Sending message (message=Alpha, subscriber=sim-2).",
+    "Also received Alpha",
+    'Invoke (payload="Alpha").',
+    "wingsdk.cloud.Topic deleted.",
+    "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Function deleted.",
+    "wingsdk.cloud.Logger deleted.",
+  ]);
 });
+
+function makeInflight(id: string, code: string, app: core.IApp) {
+  return Testing.makeHandler(app, id, code, {
+    logger: {
+      resource: cloud.Logger.of(app),
+      ops: [cloud.LoggerInflightMethods.PRINT],
+    },
+  });
+}

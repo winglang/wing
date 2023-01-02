@@ -57,13 +57,7 @@ Object {
         "children": Object {
           "Function": Object {
             "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/WingLogger",
-                },
-              ],
+              "wing:resource:connections": Array [],
               "wing:resource:stateful": false,
             },
             "children": Object {
@@ -142,24 +136,6 @@ Object {
             },
             "id": "Handler",
             "path": "root/Handler",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/Function",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {
@@ -256,13 +232,7 @@ Object {
         "children": Object {
           "Function": Object {
             "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "outbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/WingLogger",
-                },
-              ],
+              "wing:resource:connections": Array [],
               "wing:resource:stateful": false,
             },
             "children": Object {
@@ -341,24 +311,6 @@ Object {
             },
             "id": "Handler",
             "path": "root/Handler",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/Function",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {

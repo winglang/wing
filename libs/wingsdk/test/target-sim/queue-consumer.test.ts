@@ -2,7 +2,6 @@ import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing, TraceType } from "../../src/testing";
 
-jest.setTimeout(30_1000);
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("pushing messages through a queue", async () => {
@@ -16,10 +15,14 @@ test("pushing messages through a queue", async () => {
         app,
         "Pusher",
         `async handle(event) {
-          console.log("Hello, world!");
+          await this.logger.print("Hello, world!");
           await this.queue.push(event);
         }`,
         {
+          logger: {
+            resource: cloud.Logger.of(this),
+            ops: [cloud.LoggerInflightMethods.PRINT],
+          },
           queue: {
             resource: queue,
             ops: [cloud.QueueInflightMethods.PUSH],
@@ -32,14 +35,21 @@ test("pushing messages through a queue", async () => {
         app,
         "Processor",
         `async handle(event) {
-          console.log("Received " + event);
-        }`
+          await this.logger.print("Received " + event);
+        }`,
+        {
+          logger: {
+            resource: cloud.Logger.of(this),
+            ops: [cloud.LoggerInflightMethods.PRINT],
+          },
+        }
       );
       queue.onMessage(processor);
     }
   }
 
   const app = new SimApp();
+  cloud.Logger.register(app);
   new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();

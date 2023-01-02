@@ -39,7 +39,6 @@ test("create a function", async () => {
       sourceCodeLanguage: "javascript",
       environmentVariables: {
         ENV_VAR1: "true",
-        LOGGER_HANDLE_76f7e65b: "${root/WingLogger#attrs.handle}",
       },
     },
     type: "wingsdk.cloud.Function",
@@ -67,7 +66,11 @@ test("invoke function succeeds", async () => {
   expect(response).toEqual(JSON.stringify({ msg: `Hello, ${PAYLOAD.name}!` }));
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Function created.",
+    'Invoke (payload="{"name":"Alice"}").',
+    "wingsdk.cloud.Function deleted.",
+  ]);
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -97,7 +100,11 @@ test("invoke function with environment variables", async () => {
   );
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Function created.",
+    'Invoke (payload="{"name":"Alice"}").',
+    "wingsdk.cloud.Function deleted.",
+  ]);
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -119,8 +126,12 @@ test("invoke function fails", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toMatchSnapshot();
-  expect(s.listTraces()[2].data.error).toMatchObject({
+  expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Function created.",
+    'Invoke (payload="{"name":"alice"}").',
+    "wingsdk.cloud.Function deleted.",
+  ]);
+  expect(s.listTraces()[1].data.error).toMatchObject({
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
