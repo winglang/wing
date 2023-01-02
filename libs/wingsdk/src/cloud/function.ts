@@ -2,7 +2,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import { Polycons } from "polycons";
-import { Code, Inflight, IResource, Resource } from "../core";
+import { Code, IInflightHost, Inflight, IResource, Resource } from "../core";
 import { mkdtemp } from "../util";
 import { Logger } from "./logger";
 
@@ -27,7 +27,7 @@ export interface FunctionProps {
 /**
  * Functionality shared between all `Function` implementations.
  */
-export abstract class FunctionBase extends Resource {
+export abstract class FunctionBase extends Resource implements IInflightHost {
   private readonly _env: Record<string, string> = {};
 
   public readonly stateful = false;
