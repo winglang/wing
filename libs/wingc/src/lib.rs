@@ -27,6 +27,10 @@ pub mod parser;
 pub mod type_check;
 pub mod utilities;
 
+const WINGSDK_DURATION: &'static str = "std.Duration";
+const WINGSDK_RESOURCE: &'static str = "core.Resource";
+const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
+
 pub struct CompilerOutput {
 	pub preflight: String,
 	// pub inflights: BTreeMap<String, String>,
