@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-33-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -142,6 +142,7 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://godspeed.run/"><img src="https://avatars.githubusercontent.com/u/97474956?v=4?s=100" width="100px;" alt="perpil"/><br /><sub><b>perpil</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=perpil" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://blog.sebbel.net/"><img src="https://avatars.githubusercontent.com/u/1940568?v=4?s=100" width="100px;" alt="sebbel"/><br /><sub><b>sebbel</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=sebbel" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tsuf239"><img src="https://avatars.githubusercontent.com/u/39455181?v=4?s=100" width="100px;" alt="tsuf239"/><br /><sub><b>tsuf239</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=tsuf239" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Warkanlock"><img src="https://avatars.githubusercontent.com/u/13340320?v=4?s=100" width="100px;" alt="txxnano"/><br /><sub><b>txxnano</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Warkanlock" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
