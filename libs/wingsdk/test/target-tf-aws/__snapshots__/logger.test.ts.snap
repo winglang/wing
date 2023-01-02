@@ -9,11 +9,11 @@ return class Handler {
     }
   }
   async handle() {
-        console.log(\\"hello world!\\");
-      }
+  await this.logger.print(\\"hello world!\\");
+}
 };
 })())({
-
+logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()
 })"
 `;
 

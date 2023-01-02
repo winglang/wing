@@ -6,6 +6,12 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/HelloWorld/Counter",
         "props": Object {
           "initial": 1000,
@@ -22,18 +28,11 @@ Object {
       },
       Object {
         "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
         "path": "root/HelloWorld/Queue-OnMessage-401ee792",
         "props": Object {
           "environmentVariables": Object {
             "BUCKET_HANDLE_5f2a41c8": "\${root/HelloWorld/Bucket#attrs.handle}",
             "COUNTER_HANDLE_4ecd8d46": "\${root/HelloWorld/Counter#attrs.handle}",
-            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/Queue-OnMessage-401ee792/index.js",
           "sourceCodeLanguage": "javascript",
@@ -143,11 +142,6 @@ Object {
                     "resource": "root/HelloWorld/Bucket",
                   },
                   Object {
-                    "direction": "outbound",
-                    "relationship": "inflight-reference",
-                    "resource": "root/WingLogger",
-                  },
-                  Object {
                     "direction": "inbound",
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue",
@@ -194,13 +188,7 @@ Object {
         },
         "WingLogger": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [
-              Object {
-                "direction": "inbound",
-                "relationship": "inflight-reference",
-                "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
-              },
-            ],
+            "wing:resource:connections": Array [],
             "wing:resource:stateful": true,
           },
           "constructInfo": Object {

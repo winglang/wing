@@ -1,9 +1,8 @@
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
-import { IPolyconFactory, Polycons } from "polycons";
+import { IPolyconFactory } from "polycons";
 import stringify from "safe-stable-stringify";
-import { Logger } from "../cloud/logger";
 import { Files } from "./files";
 import { synthesizeTree } from "./tree";
 
@@ -70,7 +69,6 @@ export class CdktfApp extends Construct implements IApp {
 
     class InnerApp extends cdktf.TerraformStack {
       public readonly outdir: string;
-
       private readonly cdktfApp: cdktf.App;
       private readonly files: Files;
 
@@ -80,21 +78,12 @@ export class CdktfApp extends Construct implements IApp {
 
         super(root, "root");
 
-        if (!props.customFactory) {
-          throw new Error("A polycons factory is required for a cdktf app.");
-        }
-
-        Polycons.register(this, props.customFactory);
-
         this.outdir = outdir;
         this.cdktfApp = root;
         this.files = new Files({
           app: this,
           stateFile: props.stateFile,
         });
-
-        // register a logger for this app.
-        Logger.register(this);
       }
 
       public synth(): string {

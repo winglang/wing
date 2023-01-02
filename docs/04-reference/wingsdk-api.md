@@ -390,7 +390,6 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
-| <code><a href="#@winglang/wingsdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
 
@@ -422,18 +421,6 @@ with a fresh copy without any consequences.
 
 ---
 
-##### `env`<sup>Required</sup> <a name="env" id="@winglang/wingsdk.cloud.Function.property.env"></a>
-
-```wing
-env: MutMap<str>;
-```
-
-- *Type:* MutMap&lt;str&gt;
-
-Returns the set of environment variables for this function.
-
----
-
 
 ### Logger <a name="Logger" id="@winglang/wingsdk.cloud.Logger"></a>
 
@@ -447,7 +434,7 @@ A cloud logging facility.
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.toString">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.addConnection">add_connection</a></code> | Adds a connection to this resource. |
-| <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message (preflight). |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
 
 ---
 
@@ -482,7 +469,7 @@ describing how this resource is related to another resource.
 print(message: str): void
 ```
 
-Logs a message (preflight).
+Logs a message.
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.Logger.print.parameter.message"></a>
 
@@ -2503,7 +2490,7 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. The log will be associated with whichever resource is running the inflight code. |
+| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
 
 ---
 
@@ -2515,9 +2502,10 @@ print(message: str): void
 
 **Inflight client:** [true](#true)
 
-Logs a message. The log will be associated with whichever resource is running the inflight code.
+Logs a message.
 
-NOTICE: this is not an async function because it is wrapped by `console.log()`.
+The log will be associated with whichever resource is
+running the inflight code.
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
 

@@ -1,5 +1,6 @@
 import { IConstruct } from "constructs";
-import { Inflight, InflightBinding, IResource, NodeJsCode } from "../core";
+import { InflightBinding, Resource } from "../core";
+import { makeHandler } from "../core/internal";
 
 /**
  * Test utilities.
@@ -23,10 +24,7 @@ export class Testing {
     id: string,
     code: string,
     bindings?: { [key: string]: InflightBinding }
-  ): IResource {
-    return new Inflight(scope, id, {
-      code: NodeJsCode.fromInline(code),
-      bindings,
-    });
+  ): Resource {
+    return makeHandler(scope, id, code, bindings);
   }
 }

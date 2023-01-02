@@ -1,4 +1,5 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
+import { Polycons } from "polycons";
 import { IApp, CdktfApp, AppProps } from "../core";
 import { PolyconFactory } from "./factory";
 
@@ -8,10 +9,8 @@ import { PolyconFactory } from "./factory";
  */
 export class App extends CdktfApp implements IApp {
   constructor(props: AppProps = {}) {
-    super({
-      ...props,
-      customFactory: props.customFactory ?? new PolyconFactory(),
-    });
+    super(props);
+    Polycons.register(this, props.customFactory ?? new PolyconFactory());
     new AwsProvider(this, "aws", {});
   }
 }

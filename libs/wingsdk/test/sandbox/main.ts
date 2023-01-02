@@ -66,5 +66,6 @@ class HelloWorld extends Construct {
 }
 
 const app = new sim.App({ outdir: __dirname });
+cloud.Logger.register(app);
 new HelloWorld(app, "HelloWorld");
 app.synth();

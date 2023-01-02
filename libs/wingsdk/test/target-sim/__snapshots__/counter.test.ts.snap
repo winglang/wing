@@ -6,12 +6,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
         "path": "root/my_counter",
         "props": Object {
           "initial": 123,
@@ -24,18 +18,6 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.0.25",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "my_counter": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -67,12 +49,6 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
-        "path": "root/WingLogger",
-        "props": Object {},
-        "type": "wingsdk.cloud.Logger",
-      },
-      Object {
-        "attrs": Object {},
         "path": "root/my_counter",
         "props": Object {
           "initial": 123,
@@ -85,18 +61,6 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
-        "WingLogger": Object {
-          "attributes": Object {
-            "wing:resource:connections": Array [],
-            "wing:resource:stateful": true,
-          },
-          "constructInfo": Object {
-            "fqn": "constructs.Construct",
-            "version": "10.0.25",
-          },
-          "id": "WingLogger",
-          "path": "root/WingLogger",
-        },
         "my_counter": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],

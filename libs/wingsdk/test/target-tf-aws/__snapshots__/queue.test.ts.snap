@@ -38,18 +38,6 @@ Object {
             "id": "Queue",
             "path": "root/Queue",
           },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -207,11 +195,6 @@ Object {
             "attributes": Object {
               "wing:resource:connections": Array [
                 Object {
-                  "direction": "outbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/WingLogger",
-                },
-                Object {
                   "direction": "inbound",
                   "relationship": "on_message",
                   "resource": "root/Queue",
@@ -296,24 +279,6 @@ Object {
             "id": "Queue-OnMessageHandler-c5395e41",
             "path": "root/Queue-OnMessageHandler-c5395e41",
           },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [
-                Object {
-                  "direction": "inbound",
-                  "relationship": "inflight-reference",
-                  "resource": "root/Queue-OnMessage-c5395e41",
-                },
-              ],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
@@ -389,18 +354,6 @@ Object {
             },
             "id": "Queue",
             "path": "root/Queue",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.25",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {
