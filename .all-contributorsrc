@@ -207,6 +207,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "schosterbarak",
+      "name": "Barak Schoster Goihman",
+      "avatar_url": "https://avatars.githubusercontent.com/u/6033501?v=4",
+      "profile": "https://github.com/schosterbarak",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
