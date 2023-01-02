@@ -7,7 +7,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const INFLIGHT_CODE = `
 async handle(event) {
   console.log("Hello, " + event);
-  console.log("Wahoo!");
+  this.$logger.print("Wahoo!");
 }`;
 
 test("inflight uses a logger", async () => {
