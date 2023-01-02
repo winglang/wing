@@ -1,7 +1,9 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-34-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -22,6 +24,7 @@
   ▪︎
   <a href="https://docs.winglang.io/contributors/handbook">Contribute</a>
 </p>
+
 # Welcome! :wave:
 
 **Wing** is a [cloud-oriented programming language]. It is a modern,
