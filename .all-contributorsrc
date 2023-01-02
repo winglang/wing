@@ -81,6 +81,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "skyrpex",
+      "name": "Cristian Pallarés",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1077520?v=4",
+      "profile": "https://pallares.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
