@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -108,6 +108,9 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/staycoolcall911"><img src="https://avatars.githubusercontent.com/u/106860404?v=4?s=100" width="100px;" alt="Uri Bar"/><br /><sub><b>Uri Bar</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=staycoolcall911" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/yoav-steinberg"><img src="https://avatars.githubusercontent.com/u/1160578?v=4?s=100" width="100px;" alt="yoav-steinberg"/><br /><sub><b>yoav-steinberg</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=yoav-steinberg" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://sepehrlaal.com/"><img src="https://avatars.githubusercontent.com/u/5657848?v=4?s=100" width="100px;" alt="Sepehr Laal"/><br /><sub><b>Sepehr Laal</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=3p3r" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://winglang.io/"><img src="https://avatars.githubusercontent.com/u/1727147?v=4?s=100" width="100px;" alt="Eyal Keren"/><br /><sub><b>Eyal Keren</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ekeren" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
