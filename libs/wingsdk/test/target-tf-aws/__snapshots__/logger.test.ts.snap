@@ -2,23 +2,24 @@
 
 exports[`inflight function uses a logger 1`] = `
 "
-      (function(clients) {
-        console.log = (...args) => clients.$logger.print(...args);
+        (function(clients) {
+          console.log = (...args) => clients.$logger.print(...args);
 
-        class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }            
-          }
+          class Handler {
+            constructor() {
+              for (const [name, client] of Object.entries(clients)) {
+                this[name] = client;
+              }            
+            }
 
-          async handle() {
+            async handle() {
         console.log(\\"hello world!\\");
       }
-        }
+          }
 
-        return new Handler(clients);
-      })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
+          return new Handler();
+        })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
+      "
 `;
 
 exports[`inflight function uses a logger 2`] = `

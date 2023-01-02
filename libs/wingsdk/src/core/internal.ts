@@ -46,21 +46,22 @@ export function makeHandler(
         .join(",\n");
 
       return NodeJsCode.fromInline(`
-      (function(clients) {
-        console.log = (...args) => clients.$logger.print(...args);
+        (function(clients) {
+          console.log = (...args) => clients.$logger.print(...args);
 
-        class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }            
+          class Handler {
+            constructor() {
+              for (const [name, client] of Object.entries(clients)) {
+                this[name] = client;
+              }            
+            }
+
+            ${code}
           }
 
-          ${code}
-        }
-
-        return new Handler(clients);
-      })({${clientMap}})`);
+          return new Handler();
+        })({${clientMap}})
+      `);
     }
   }
 

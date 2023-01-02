@@ -2,22 +2,23 @@
 
 exports[`function with a bucket binding 1`] = `
 "
-      (function(clients) {
-        console.log = (...args) => clients.$logger.print(...args);
+        (function(clients) {
+          console.log = (...args) => clients.$logger.print(...args);
 
-        class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }            
+          class Handler {
+            constructor() {
+              for (const [name, client] of Object.entries(clients)) {
+                this[name] = client;
+              }            
+            }
+
+            async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
           }
 
-          async handle(event) { await this.bucket.put(\\"hello.txt\\", event); }
-        }
-
-        return new Handler(clients);
-      })({bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"]),
-$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
+          return new Handler();
+        })({bucket: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/bucket.inflight.ts\\")).BucketClient(process.env[\\"BUCKET_NAME_1357ca3a\\"]),
+$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
+      "
 `;
 
 exports[`function with a bucket binding 2`] = `
@@ -94,44 +95,46 @@ exports[`function with a bucket binding 2`] = `
 
 exports[`function with a function binding 1`] = `
 "
-      (function(clients) {
-        console.log = (...args) => clients.$logger.print(...args);
+        (function(clients) {
+          console.log = (...args) => clients.$logger.print(...args);
 
-        class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }            
+          class Handler {
+            constructor() {
+              for (const [name, client] of Object.entries(clients)) {
+                this[name] = client;
+              }            
+            }
+
+            async handle(event) { console.log(event); }
           }
 
-          async handle(event) { console.log(event); }
-        }
-
-        return new Handler(clients);
-      })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
+          return new Handler();
+        })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
+      "
 `;
 
 exports[`function with a function binding 2`] = `
 "
-      (function(clients) {
-        console.log = (...args) => clients.$logger.print(...args);
+        (function(clients) {
+          console.log = (...args) => clients.$logger.print(...args);
 
-        class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }            
-          }
+          class Handler {
+            constructor() {
+              for (const [name, client] of Object.entries(clients)) {
+                this[name] = client;
+              }            
+            }
 
-          async handle(event) {
+            async handle(event) {
       console.log(\\"Event: \\" + event);
       await this.function.invoke(JSON.stringify({ hello: \\"world\\" }));
     }
-        }
+          }
 
-        return new Handler(clients);
-      })({function: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"]),
-$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
+          return new Handler();
+        })({function: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_50735b21\\"]),
+$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
+      "
 `;
 
 exports[`function with a function binding 3`] = `
@@ -216,41 +219,43 @@ exports[`function with a function binding 3`] = `
 
 exports[`function with a queue binding 1`] = `
 "
-      (function(clients) {
-        console.log = (...args) => clients.$logger.print(...args);
+        (function(clients) {
+          console.log = (...args) => clients.$logger.print(...args);
 
-        class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }            
+          class Handler {
+            constructor() {
+              for (const [name, client] of Object.entries(clients)) {
+                this[name] = client;
+              }            
+            }
+
+            async handle(event) { await this.queue.push(\\"info\\"); }
           }
 
-          async handle(event) { await this.queue.push(\\"info\\"); }
-        }
-
-        return new Handler(clients);
-      })({queue: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"]),
-$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
+          return new Handler();
+        })({queue: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/queue.inflight.ts\\")).QueueClient(process.env[\\"QUEUE_URL_1cfcc997\\"]),
+$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
+      "
 `;
 
 exports[`function with a queue binding 2`] = `
 "
-      (function(clients) {
-        console.log = (...args) => clients.$logger.print(...args);
+        (function(clients) {
+          console.log = (...args) => clients.$logger.print(...args);
 
-        class Handler {
-          constructor(clients) {
-            for (const [name, client] of Object.entries(clients)) {
-              this[name] = client;
-            }            
+          class Handler {
+            constructor() {
+              for (const [name, client] of Object.entries(clients)) {
+                this[name] = client;
+              }            
+            }
+
+            async handle(event) { console.log(\\"Received\\" + event); }
           }
 
-          async handle(event) { console.log(\\"Received\\" + event); }
-        }
-
-        return new Handler(clients);
-      })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})"
+          return new Handler();
+        })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
+      "
 `;
 
 exports[`function with a queue binding 3`] = `
