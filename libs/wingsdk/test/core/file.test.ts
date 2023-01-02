@@ -67,7 +67,7 @@ describe("state file", () => {
     });
   });
 
-  test("files are deleted if they were in the state file but no in the new app", () => {
+  test("files are deleted if they were in the state file but not in the new app", () => {
     const workdir = mkdtemp();
     const stateFileName = "state.file";
     writeFileSync(join(workdir, "delete-me.txt"), "hello");
