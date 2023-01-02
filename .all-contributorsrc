@@ -252,6 +252,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "raywonkari",
+      "name": "Raywon Kari",
+      "avatar_url": "https://avatars.githubusercontent.com/u/47321885?v=4",
+      "profile": "https://github.com/raywonkari",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
