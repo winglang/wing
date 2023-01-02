@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-10-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -112,6 +112,7 @@ We are also actively tracking planned features in our roadmap:
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://winglang.io/"><img src="https://avatars.githubusercontent.com/u/1727147?v=4?s=100" width="100px;" alt="Eyal Keren"/><br /><sub><b>Eyal Keren</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ekeren" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://pallares.io/"><img src="https://avatars.githubusercontent.com/u/1077520?v=4?s=100" width="100px;" alt="Cristian Pallarés"/><br /><sub><b>Cristian Pallarés</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=skyrpex" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/ainvoner"><img src="https://avatars.githubusercontent.com/u/2538825?v=4?s=100" width="100px;" alt="Ainvoner"/><br /><sub><b>Ainvoner</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=ainvoner" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
