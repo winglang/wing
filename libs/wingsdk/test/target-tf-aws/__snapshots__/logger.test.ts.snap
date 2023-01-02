@@ -1,25 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`inflight function uses a logger 1`] = `
-"
-        (function(clients) {
-          console.log = (...args) => clients.$logger.print(...args);
-
-          class Handler {
-            constructor() {
-              for (const [name, client] of Object.entries(clients)) {
-                this[name] = client;
-              }            
-            }
-
-            async handle() {
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle() {
         console.log(\\"hello world!\\");
       }
-          }
-
-          return new Handler();
-        })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
-      "
+  };
+  })())({
+  $logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()
+  })"
 `;
 
 exports[`inflight function uses a logger 2`] = `

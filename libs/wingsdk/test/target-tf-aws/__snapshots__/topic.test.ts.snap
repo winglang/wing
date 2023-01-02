@@ -87,23 +87,18 @@ Object {
 `;
 
 exports[`topic with subscriber function 1`] = `
-"
-        (function(clients) {
-          console.log = (...args) => clients.$logger.print(...args);
-
-          class Handler {
-            constructor() {
-              for (const [name, client] of Object.entries(clients)) {
-                this[name] = client;
-              }            
-            }
-
-            async handle(event) { console.log(\\"Received: \\", event); }
-          }
-
-          return new Handler();
-        })({$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
-      "
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) { console.log(\\"Received: \\", event); }
+  };
+  })())({
+  $logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()
+  })"
 `;
 
 exports[`topic with subscriber function 2`] = `

@@ -1,6 +1,10 @@
+import { join } from "path";
 import { Construct } from "constructs";
+import * as esbuild from "esbuild-wasm";
 import { Polycons } from "polycons";
 import { Code, Inflight, IResource, Resource } from "../core";
+import { mkdtemp } from "../util";
+import { Logger } from "./logger";
 
 /**
  * Global identifier for `Function`.
@@ -24,26 +28,78 @@ export interface FunctionProps {
  * Functionality shared between all `Function` implementations.
  */
 export abstract class FunctionBase extends Resource {
+  private readonly _env: Record<string, string> = {};
+
   public readonly stateful = false;
+
+  protected readonly handlerFileAsset: string;
+
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: IFunctionHandler,
     props: FunctionProps
   ) {
     super(scope, id);
+
     if (!scope) {
+      this.handlerFileAsset = undefined as any;
       return;
     }
 
-    inflight;
-    props;
+    for (const [key, value] of Object.entries(props.env ?? {})) {
+      this.addEnvironment(key, value);
+    }
+
+    // indicates that we are calling "handle" on the handler resource
+    inflight._bind(this, ["handle"]);
+
+    const inflightClient = inflight._toInflight();
+    const loggerClientCode = Logger.of(this)._toInflight();
+    const lines = new Array<string>();
+    lines.push(`const __$logger = ${loggerClientCode.text};`);
+    lines.push(`console.log = (...args) => __$logger.print(...args);`);
+    lines.push("exports.handler = async function(event) {");
+    lines.push(`  return await ${inflightClient.text}.handle(event);`);
+    lines.push("};");
+
+    const tempdir = mkdtemp();
+    const outfile = join(tempdir, "index.js");
+
+    esbuild.buildSync({
+      bundle: true,
+      stdin: {
+        contents: lines.join("\n"),
+        resolveDir: tempdir,
+        sourcefile: "inflight.js",
+      },
+      target: "node16",
+      platform: "node",
+      absWorkingDir: tempdir,
+      outfile,
+      minify: false,
+      external: ["aws-sdk"],
+    });
+
+    this.handlerFileAsset = outfile;
   }
 
   /**
    * Add an environment variable to the function.
    */
-  public abstract addEnvironment(key: string, value: string): void;
+  public addEnvironment(name: string, value: string) {
+    if (this._env[name] !== undefined) {
+      throw new Error(`Environment variable "${name}" already set.`);
+    }
+    this._env[name] = value;
+  }
+
+  /**
+   * Returns the set of environment variables for this function.
+   */
+  public get env() {
+    return { ...this._env };
+  }
 }
 
 /**

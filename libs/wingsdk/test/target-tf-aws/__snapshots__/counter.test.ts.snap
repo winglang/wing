@@ -117,27 +117,22 @@ exports[`default counter behavior 1`] = `
 `;
 
 exports[`function with a counter binding 1`] = `
-"
-        (function(clients) {
-          console.log = (...args) => clients.$logger.print(...args);
-
-          class Handler {
-            constructor() {
-              for (const [name, client] of Object.entries(clients)) {
-                this[name] = client;
-              }            
-            }
-
-            async handle(event) {
+"new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    async handle(event) {
   const val = await this.my_counter.inc(2);
   console.log(val);
 }
-          }
-
-          return new Handler();
-        })({my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0),
-$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()})
-      "
+  };
+  })())({
+  my_counter: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/counter.inflight.ts\\")).CounterClient(process.env[\\"DYNAMODB_TABLE_NAME_6cb5a3a4\\"], 0),
+$logger: new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/logger.inflight.ts\\")).LoggerClient()
+  })"
 `;
 
 exports[`function with a counter binding 2`] = `

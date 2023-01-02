@@ -41,27 +41,22 @@ export function makeHandler(
         clients[resource] = (this as any)[resource]._toInflight();
       }
 
-      const clientMap = Object.entries(clients)
-        .map(([name, client]) => `${name}: ${client.text}`)
-        .join(",\n");
-
-      return NodeJsCode.fromInline(`
-        (function(clients) {
-          console.log = (...args) => clients.$logger.print(...args);
-
-          class Handler {
-            constructor() {
-              for (const [name, client] of Object.entries(clients)) {
-                this[name] = client;
-              }            
-            }
-
-            ${code}
-          }
-
-          return new Handler();
-        })({${clientMap}})
-      `);
+      return NodeJsCode.fromInline(
+        `new ((function(){
+  return class Handler {
+    constructor(clients) {
+      for (const [name, client] of Object.entries(clients)) {
+        this[name] = client;
+      }
+    }
+    ${code}
+  };
+  })())({
+  ${Object.entries(clients)
+    .map(([name, client]) => `${name}: ${client.text}`)
+    .join(",\n")}
+  })`
+      );
     }
   }
 
