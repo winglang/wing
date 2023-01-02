@@ -153,6 +153,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "polamoros",
+      "name": "polamoros",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5547636?v=4",
+      "profile": "https://github.com/polamoros",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
