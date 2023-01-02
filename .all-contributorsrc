@@ -261,6 +261,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "rjourdan",
+      "name": "Romain Jourdan",
+      "avatar_url": "https://avatars.githubusercontent.com/u/23378066?v=4",
+      "profile": "https://rjourdan.com/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,

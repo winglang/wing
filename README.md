@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-28-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-29-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -135,6 +135,9 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="http://linkedin.com/singledigit"><img src="https://avatars.githubusercontent.com/u/897170?v=4?s=100" width="100px;" alt="Eric Johnson"/><br /><sub><b>Eric Johnson</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=singledigit" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jogold"><img src="https://avatars.githubusercontent.com/u/12623249?v=4?s=100" width="100px;" alt="Jonathan Goldwasser"/><br /><sub><b>Jonathan Goldwasser</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=jogold" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/raywonkari"><img src="https://avatars.githubusercontent.com/u/47321885?v=4?s=100" width="100px;" alt="Raywon Kari"/><br /><sub><b>Raywon Kari</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=raywonkari" title="Code">💻</a></td>
+    </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="https://rjourdan.com/"><img src="https://avatars.githubusercontent.com/u/23378066?v=4?s=100" width="100px;" alt="Romain Jourdan"/><br /><sub><b>Romain Jourdan</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=rjourdan" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
