@@ -17,12 +17,15 @@
   ▪︎
   <a href="https://docs.winglang.io/contributors/handbook">Contribute</a>
 </p>
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat-square)](#contributors)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 # Welcome! :wave:
 
 **Wing** is a [cloud-oriented programming language]. It is a modern,
 object-oriented, and strongly-typed language. Most programming languages think
-about computers as machines. In Wing, ***the cloud is the computer***.
+about computers as machines. In Wing, **_the cloud is the computer_**.
 
 Wing applications compile to Terraform and JavaScript that are ready to deploy
 to your favorite cloud provider, and can also be tested in your local
@@ -48,14 +51,14 @@ evolve in the coming months. We are excited for anyone to take part in
 influencing the direction of every part of this project.
 
 Our <a href="https://docs.winglang.io/status">Project Status</a> page includes
-more information about stability and roadmap 👷‍♀️ 
+more information about stability and roadmap 👷‍♀️
 
 ## Installation
 
-* [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites)
-* [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli)
-* [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension)
-* [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console)
+- [Prerequisites](https://docs.winglang.io/getting-started/installation#prerequisites)
+- [Wing CLI](https://docs.winglang.io/getting-started/installation#wing-cli)
+- [Wing IDE Extension](https://docs.winglang.io/getting-started/installation#wing-ide-extension)
+- [Wing Console](https://docs.winglang.io/getting-started/installation#wing-console)
 
 ## Getting Started
 
@@ -89,8 +92,19 @@ We are also actively tracking planned features in our roadmap:
 - [Wing Language Roadmap](https://github.com/orgs/winglang/projects/1/views/1)
 - [Wing SDK Roadmap](https://github.com/orgs/winglang/projects/3/views/1)
 
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## License
 
 This project is licensed under the [MIT License](./LICENSE.md). Contributions are made under our [contribution license](https://docs.winglang.io/terms-and-policies/contribution-license.html).
 
-[Wing Slack]: https://t.winglang.io/slack
+[wing slack]: https://t.winglang.io/slack
