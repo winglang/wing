@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -106,6 +106,7 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://rybicki.io/"><img src="https://avatars.githubusercontent.com/u/5008987?v=4?s=100" width="100px;" alt="Chris Rybicki"/><br /><sub><b>Chris Rybicki</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Chriscbr" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/eladb"><img src="https://avatars.githubusercontent.com/u/598796?v=4?s=100" width="100px;" alt="Elad Ben-Israel"/><br /><sub><b>Elad Ben-Israel</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=eladb" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/staycoolcall911"><img src="https://avatars.githubusercontent.com/u/106860404?v=4?s=100" width="100px;" alt="Uri Bar"/><br /><sub><b>Uri Bar</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=staycoolcall911" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/yoav-steinberg"><img src="https://avatars.githubusercontent.com/u/1160578?v=4?s=100" width="100px;" alt="yoav-steinberg"/><br /><sub><b>yoav-steinberg</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=yoav-steinberg" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>

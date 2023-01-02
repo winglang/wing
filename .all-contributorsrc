@@ -54,6 +54,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "yoav-steinberg",
+      "name": "yoav-steinberg",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1160578?v=4",
+      "profile": "https://github.com/yoav-steinberg",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
