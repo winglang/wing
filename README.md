@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-24-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-25-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -131,6 +131,7 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Oreoxmt"><img src="https://avatars.githubusercontent.com/u/60599231?v=4?s=100" width="100px;" alt="Aolin"/><br /><sub><b>Aolin</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Oreoxmt" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/schosterbarak"><img src="https://avatars.githubusercontent.com/u/6033501?v=4?s=100" width="100px;" alt="Barak Schoster Goihman"/><br /><sub><b>Barak Schoster Goihman</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=schosterbarak" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/flyingImer"><img src="https://avatars.githubusercontent.com/u/1973868?v=4?s=100" width="100px;" alt="EJ Wang"/><br /><sub><b>EJ Wang</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=flyingImer" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/Eitansl"><img src="https://avatars.githubusercontent.com/u/83213808?v=4?s=100" width="100px;" alt="Eitan Segel-Lion"/><br /><sub><b>Eitan Segel-Lion</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Eitansl" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>
