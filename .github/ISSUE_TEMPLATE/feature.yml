@@ -5,36 +5,44 @@ body:
 - type: markdown
   attributes:
     value: |
-      Thanks for taking the time to fill out this enhancement request 
+       :pray: Thanks for taking the time to fill out this enhancement request! Feel free to ping us on [Wing Slack](https://t.winglang.io/slack) if you have any questions or need help.
+- type: textarea
+  attributes:
+    label: Community Note
+    description: "Please keep this note for the community:"
+    value: |
+      > Please vote by adding a 👍 reaction to the issue to help us prioritize.
+      > If you are interested to work on this issue, please leave a comment.
 - type: textarea
   id: spec
   attributes:
     label: Feature Spec
-    description: Describe the feature docs
-    placeholder: hypothetical readme/changelog/contributing guide section for this new enhancement, code snippets and all
+    description: "Describe the feature as if it was already released:"
+    placeholder: |
+      Write a hypothetical doc/readme/changelog/contributing section for this new enhancement, code snippets and all.
   validations:
     required: true
 - type: textarea
   id: use-cases
   attributes:
     label: Use Cases
-    description: What problems does this solves?
-    placeholder: list of use cases for this enhancement
+    description: "What problems does this solves?"
+    placeholder: |
+      List of use cases this feature or enhancement is designed to address.
   validations:
     required: true
 - type: textarea
   id: implementation-notes
   attributes:
     label: Implementation Notes
-    description: Any thoughts regarding how this should be implemented
-    placeholder: ideas, references, pointers, thoughts
-  validations:
-    required: false
+    description: "Any thoughts regarding how this should be implemented?"
+    placeholder: |
+      Ideas, references, pointers, thoughts...
 - type: dropdown
   id: Component
   attributes:
     label: Component
-    description: Which component is this related to? (one or more)
+    description: "Which component is this related to? (one or more)"
     multiple: true
     options:
     - Language Design
@@ -46,4 +54,4 @@ body:
     - Development Environment
     - Contributor Experience
   validations:
-    required: true
+    required: false
