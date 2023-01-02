@@ -30,14 +30,6 @@ test("inflight uses a logger", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Function created.",
-    "Hello, Alice",
-    "Wahoo!",
-    'Invoke (payload="Alice").',
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });

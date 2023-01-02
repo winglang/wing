@@ -47,22 +47,7 @@ test("topic publishes messages as they are received", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Topic created.",
-    "Publish (message=Alpha).",
-    "Sending message (message=Alpha, subscriber=sim-1).",
-    "Received Alpha",
-    'Invoke (payload="Alpha").',
-    "Publish (message=Beta).",
-    "Sending message (message=Beta, subscriber=sim-1).",
-    "Received Beta",
-    'Invoke (payload="Beta").',
-    "wingsdk.cloud.Topic deleted.",
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
 });
 
 test("topic publishes messages to multiple subscribers", async () => {
@@ -90,21 +75,5 @@ test("topic publishes messages to multiple subscribers", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Topic created.",
-    "Publish (message=Alpha).",
-    "Sending message (message=Alpha, subscriber=sim-1).",
-    "Received Alpha",
-    'Invoke (payload="Alpha").',
-    "Sending message (message=Alpha, subscriber=sim-2).",
-    "Also received Alpha",
-    'Invoke (payload="Alpha").',
-    "wingsdk.cloud.Topic deleted.",
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
 });
