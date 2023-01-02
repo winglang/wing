@@ -15,7 +15,7 @@ export const QueueExploreView = ({
   resourcePath,
 }: QueueInteractionViewProps) => {
   const { appMode } = useContext(AppContext);
-  const pushMessage = trpc.useMutation(["queue.push"]);
+  const pushMessage = trpc["queue.push"].useMutation();
   const [message, setMessage] = useState("");
   const { showNotification } = useNotifications();
 

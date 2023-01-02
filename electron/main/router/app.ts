@@ -1,11 +1,11 @@
-import console from "electron-log";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import {
-  buildConstructTreeNodeMap,
   Node,
+  buildConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
-import { createRouter } from "../utils/createRouter.js";
+import { publicProcedure, router } from "../utils/createRouter.js";
 import { ConstructTreeNode } from "../utils/createSimulator.js";
 import { BaseResourceSchema, Simulator } from "../wingsdk.js";
 
@@ -17,24 +17,26 @@ export interface ExplorerItem {
 }
 
 export const createAppRouter = () => {
-  return createRouter()
-    .query("app.logs", {
-      input: z.object({
-        filters: z.object({
-          type: z.object({
-            verbose: z.boolean(),
-            info: z.boolean(),
-            warn: z.boolean(),
-            error: z.boolean(),
-          }),
-          source: z.object({
-            compiler: z.boolean(),
-            console: z.boolean(),
-            simulator: z.boolean(),
+  return router({
+    "app.logs": publicProcedure
+      .input(
+        z.object({
+          filters: z.object({
+            type: z.object({
+              verbose: z.boolean(),
+              info: z.boolean(),
+              warn: z.boolean(),
+              error: z.boolean(),
+            }),
+            source: z.object({
+              compiler: z.boolean(),
+              console: z.boolean(),
+              simulator: z.boolean(),
+            }),
           }),
         }),
-      }),
-      async resolve({ ctx, input }) {
+      )
+      .query(async ({ ctx, input }) => {
         return ctx
           .logs()
           .filter(
@@ -42,20 +44,19 @@ export const createAppRouter = () => {
               input.filters.type[entry.type] &&
               input.filters.source[entry.source],
           );
-      },
-    })
-    .query("app.explorerTree", {
-      async resolve({ ctx }) {
-        const simulator = await ctx.simulator();
-        const { tree } = await ctx.tree();
-        return createExplorerItemFromConstructTreeNode(tree, simulator);
-      },
-    })
-    .query("app.childRelationships", {
-      input: z.object({
-        path: z.string().optional(),
       }),
-      async resolve({ input, ctx }) {
+    "app.explorerTree": publicProcedure.query(async ({ ctx }) => {
+      const simulator = await ctx.simulator();
+      const { tree } = await ctx.tree();
+      return createExplorerItemFromConstructTreeNode(tree, simulator);
+    }),
+    "app.childRelationships": publicProcedure
+      .input(
+        z.object({
+          path: z.string().optional(),
+        }),
+      )
+      .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = await ctx.tree();
         const nodeMap = buildConstructTreeNodeMap(tree);
@@ -97,13 +98,14 @@ export const createAppRouter = () => {
                 };
               }) ?? [],
         }));
-      },
-    })
-    .query("app.nodeBreadcrumbs", {
-      input: z.object({
-        path: z.string().optional(),
       }),
-      async resolve({ input, ctx }) {
+    "app.nodeBreadcrumbs": publicProcedure
+      .input(
+        z.object({
+          path: z.string().optional(),
+        }),
+      )
+      .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = await ctx.tree();
         const nodeMap = buildConstructTreeNodeMap(tree);
@@ -124,19 +126,23 @@ export const createAppRouter = () => {
           ];
         });
         return breadcrumbs;
-      },
-    })
-    .query("app.node", {
-      input: z.object({
-        path: z.string().optional(),
       }),
-      async resolve({ input, ctx }) {
+    "app.node": publicProcedure
+      .input(
+        z.object({
+          path: z.string().optional(),
+        }),
+      )
+      .query(async ({ ctx, input }) => {
         const simulator = await ctx.simulator();
         const { tree } = await ctx.tree();
         const nodeMap = buildConstructTreeNodeMap(tree);
         const node = nodeMap.get(input.path);
         if (!node) {
-          return;
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Node was not found.",
+          });
         }
 
         const config = getResourceConfig(node.path, simulator);
@@ -148,16 +154,20 @@ export const createAppRouter = () => {
           attributes: config?.attrs,
           props: config?.props,
         };
-      },
-    })
-    .query("app.nodeMetadata", {
-      input: z.object({
-        path: z.string().optional(),
       }),
-      async resolve({ input, ctx }) {
+    "app.nodeMetadata": publicProcedure
+      .input(
+        z.object({
+          path: z.string().optional(),
+        }),
+      )
+      .query(async ({ ctx, input }) => {
         const { path } = input;
         if (!path) {
-          return;
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Path was not found.",
+          });
         }
 
         const simulator = await ctx.simulator();
@@ -165,7 +175,10 @@ export const createAppRouter = () => {
         const nodeMap = buildConstructTreeNodeMap(tree);
         const node = nodeMap.get(path);
         if (!node) {
-          return;
+          throw new TRPCError({
+            code: "NOT_FOUND",
+            message: "Node was not found.",
+          });
         }
 
         const config = getResourceConfig(path, simulator);
@@ -200,8 +213,8 @@ export const createAppRouter = () => {
                 };
               }) ?? [],
         };
-      },
-    });
+      }),
+  });
 };
 
 function createExplorerItemFromConstructTreeNode(

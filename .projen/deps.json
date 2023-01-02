@@ -62,17 +62,16 @@
     },
     {
       "name": "@trpc/client",
-      "version": "^9",
+      "version": "^10",
       "type": "build"
     },
     {
-      "name": "@trpc/react",
-      "version": "^9",
+      "name": "@trpc/react-query",
       "type": "build"
     },
     {
       "name": "@trpc/server",
-      "version": "^9",
+      "version": "^10",
       "type": "build"
     },
     {

@@ -1,9 +1,9 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { IpcRendererEvent } from "electron";
 import { useState } from "react";
 
 import { VscodeLayout } from "./components/VscodeLayout.js";
 import { NotificationsProvider } from "./design-system/Notification.js";
-import { trpc } from "./utils/trpc.js";
 import { useIpcEventListener } from "./utils/useIpcEventListener.js";
 
 export interface AppProps {}
@@ -11,12 +11,14 @@ export interface AppProps {}
 export const App = ({}: AppProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+  const queryClient = useQueryClient();
 
-  const { invalidateQueries } = trpc.useContext();
   useIpcEventListener(
     "trpc.invalidate",
     async (e: IpcRendererEvent, pathAndInput: any) => {
-      await invalidateQueries(pathAndInput);
+      await queryClient.invalidateQueries({
+        queryKey: [pathAndInput],
+      });
     },
   );
 

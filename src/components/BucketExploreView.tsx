@@ -34,9 +34,9 @@ export const BucketExploreView = ({
   resourcePath,
 }: BucketInteractionViewProps) => {
   const [path] = useState("/");
-  const bucketList = trpc.useQuery(["bucket.list", { resourcePath }]);
-  const putFile = trpc.useMutation(["bucket.put"]);
-  const getFile = trpc.useMutation(["bucket.get"]);
+  const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
+  const putFile = trpc["bucket.put"].useMutation();
+  const getFile = trpc["bucket.get"].useMutation();
   const [entries, setEntries] = useState<FileExplorerEntry[]>([]);
   const [selectedEntries, setSelectedEntries] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);

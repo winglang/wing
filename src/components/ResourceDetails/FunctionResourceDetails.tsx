@@ -10,7 +10,7 @@ export const FunctionResourceDetails = ({
   resource,
 }: FunctionResourceDetailsProps) => {
   const resourcePath = resource.path;
-  const invoke = trpc.useMutation(["function.invoke"]);
+  const invoke = trpc["function.invoke"].useMutation();
 
   return (
     <>

@@ -1,4 +1,4 @@
-import { createRouter } from "../utils/createRouter.js";
+import { mergeRouters } from "../utils/createRouter.js";
 
 import { createAppRouter } from "./app.js";
 import { createBucketRouter } from "./bucket.js";
@@ -6,13 +6,14 @@ import { createCounterRouter } from "./counter.js";
 import { createFunctionRouter } from "./function.js";
 import { createQueueRouter } from "./queue.js";
 
-export const mergeRouters = () => {
-  return createRouter()
-    .merge(createBucketRouter())
-    .merge(createAppRouter())
-    .merge(createQueueRouter())
-    .merge(createFunctionRouter())
-    .merge(createCounterRouter());
+export const mergeAppRouters = () => {
+  return mergeRouters(
+    createAppRouter(),
+    createBucketRouter(),
+    createQueueRouter(),
+    createFunctionRouter(),
+    createCounterRouter(),
+  );
 };
 
-export type Router = ReturnType<typeof mergeRouters>;
+export type Router = ReturnType<typeof mergeAppRouters>;

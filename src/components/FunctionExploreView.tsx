@@ -13,7 +13,7 @@ export const FunctionExploreView = ({
   resourcePath,
 }: FunctionInteractionViewProps) => {
   const { appMode } = useContext(AppContext);
-  const invoke = trpc.useMutation("function.invoke");
+  const invoke = trpc["function.invoke"].useMutation();
   const [input, setInput] = useState("");
   const id = useId();
   return (

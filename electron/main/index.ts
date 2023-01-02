@@ -10,7 +10,7 @@ import getPort from "get-port";
 
 import { ConsoleLogger, LogEntry } from "./consoleLogger.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
-import { mergeRouters } from "./router/index.js";
+import { mergeAppRouters } from "./router/index.js";
 import { createWingApp } from "./utils/createWingApp.js";
 import { watchSimulatorFile } from "./utils/watchSimulatorFile.js";
 
@@ -155,7 +155,7 @@ function createWindowManager() {
         app.use(
           "/",
           trpcExpress.createExpressMiddleware({
-            router: mergeRouters(),
+            router: mergeAppRouters(),
             batching: { enabled: false },
             createContext() {
               return {
@@ -205,7 +205,6 @@ function createWindowManager() {
             }`,
             "simulator",
           );
-          newWindow?.webContents.send("trpc.invalidate", []);
         },
       });
 

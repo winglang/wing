@@ -12,12 +12,12 @@ export const CounterResourceDetails = ({
   resource,
 }: CounterResourceDetailsProps) => {
   const resourcePath = resource.path;
-  const incrementCounter = trpc.useMutation("counter.inc");
-  const counterValue = trpc.useQuery(["counter.get", { resourcePath }]);
+  const incrementCounter = trpc["counter.inc"].useMutation();
+  const counterValue = trpc["counter.get"].useQuery({ resourcePath });
 
   return (
     <>
-      <dt className="truncate text-slate-500">Value</dt>
+      <dt className="truncate text-slate-500 flex items-center">Value</dt>
       <dd className="col-span-4 flex space-x-2 items-center">
         <div>{counterValue.data}</div>
         <div className="flex grow">

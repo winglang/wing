@@ -36,13 +36,15 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
 
   const treeMenu = useTreeMenuItems();
-  const explorerTree = trpc.useQuery(["app.explorerTree"], {
-    onSuccess(rootItem) {
-      treeMenu.setItems([createTreeMenuItemFromExplorerTreeItem(rootItem)]);
-    },
-  });
+
+  const explorerTree = trpc["app.explorerTree"].useQuery();
 
   useEffect(() => {
+    if (explorerTree.data) {
+      treeMenu.setItems([
+        createTreeMenuItemFromExplorerTreeItem(explorerTree.data),
+      ]);
+    }
     treeMenu.setCurrent("root");
   }, [explorerTree.data]);
 
@@ -56,10 +58,9 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     }
   };
 
-  const childRelationships = trpc.useQuery([
-    "app.childRelationships",
-    { path: treeMenu.currentItemId },
-  ]);
+  const childRelationships = trpc["app.childRelationships"].useQuery({
+    path: treeMenu.currentItemId,
+  });
 
   useEffect(() => {
     document.querySelector(`.${SELECTED_TREE_ITEM_CSS_ID}`)?.scrollIntoView({
@@ -69,37 +70,32 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     });
   }, [treeMenu.currentItemId]);
 
-  const breadcrumbs = trpc.useQuery([
-    "app.nodeBreadcrumbs",
-    { path: treeMenu.currentItemId },
-  ]);
+  const breadcrumbs = trpc["app.nodeBreadcrumbs"].useQuery({
+    path: treeMenu.currentItemId,
+  });
 
-  const currentNode = trpc.useQuery([
-    "app.node",
-    { path: treeMenu.currentItemId },
-  ]);
+  const currentNode = trpc["app.node"].useQuery({
+    path: treeMenu.currentItemId,
+  });
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogType[]
   >(["info", "warn", "error"]);
-  const logs = trpc.useQuery([
-    "app.logs",
-    {
-      filters: {
-        type: {
-          verbose: selectedLogTypeFilters.includes("verbose"),
-          info: selectedLogTypeFilters.includes("info"),
-          warn: selectedLogTypeFilters.includes("warn"),
-          error: selectedLogTypeFilters.includes("error"),
-        },
-        source: {
-          compiler: true,
-          console: true,
-          simulator: true,
-        },
+  const logs = trpc["app.logs"].useQuery({
+    filters: {
+      type: {
+        verbose: selectedLogTypeFilters.includes("verbose"),
+        info: selectedLogTypeFilters.includes("info"),
+        warn: selectedLogTypeFilters.includes("warn"),
+        error: selectedLogTypeFilters.includes("error"),
+      },
+      source: {
+        compiler: true,
+        console: true,
+        simulator: true,
       },
     },
-  ]);
+  });
   const logsRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const div = logsRef.current;
@@ -108,12 +104,9 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     }
   }, [logs.data]);
 
-  const metadata = trpc.useQuery([
-    "app.nodeMetadata",
-    {
-      path: treeMenu.currentItemId,
-    },
-  ]);
+  const metadata = trpc["app.nodeMetadata"].useQuery({
+    path: treeMenu.currentItemId,
+  });
 
   return (
     <div className="h-full flex flex-col bg-slate-50 select-none">

@@ -1,4 +1,4 @@
-import * as trpc from "@trpc/server";
+import { initTRPC } from "@trpc/server";
 
 import { LogEntry } from "../consoleLogger.js";
 import { Simulator } from "../wingsdk.js";
@@ -11,6 +11,7 @@ export interface RouterContext {
   logs: () => LogEntry[];
 }
 
-export function createRouter() {
-  return trpc.router<RouterContext>();
-}
+const t = initTRPC.context<RouterContext>().create({});
+export const router = t.router;
+export const mergeRouters = t.mergeRouters;
+export const publicProcedure = t.procedure;

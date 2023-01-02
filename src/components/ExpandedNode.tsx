@@ -49,8 +49,8 @@ const ResourceButton = ({
   children?: React.ReactNode;
 }) => {
   return (
-    <button
-      className="h-full w-full p-1 rounded bg-white shadow sm:rounded-lg hover:shadow-md group flex flex-col gap-2"
+    <div
+      className="h-full w-full p-1 rounded bg-white shadow sm:rounded-lg hover:shadow-md group flex flex-col gap-2 cursor-pointer"
       title={node.path}
       onClick={() => onClick?.(node.path)}
     >
@@ -73,7 +73,7 @@ const ResourceButton = ({
           </div>
         </dl>
       </div>
-    </button>
+    </div>
   );
 };
 

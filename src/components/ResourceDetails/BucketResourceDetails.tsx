@@ -9,7 +9,7 @@ export const BucketResourceDetails = ({
   resource,
 }: BucketResourceDetailsProps) => {
   const resourcePath = resource.path;
-  const bucketList = trpc.useQuery(["bucket.list", { resourcePath }]);
+  const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
 
   return (
     <>

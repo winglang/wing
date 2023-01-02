@@ -1,10 +1,8 @@
-import { createTRPCClient } from "@trpc/client";
-import { httpLink } from "@trpc/client/links/httpLink";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpLink } from "@trpc/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "react-query";
 
-import { Router } from "../electron/main/router/index.js";
 import { WingSimulatorSchema } from "../electron/main/wingsdk.js";
 
 import { App } from "./App.js";
@@ -29,9 +27,12 @@ const main = ({
       },
     },
   });
-  const trpcClient = createTRPCClient<Router>({
-    url,
-    links: [httpLink({ url })],
+  const trpcClient = trpc.createClient({
+    links: [
+      httpLink({
+        url,
+      }),
+    ],
   });
 
   ReactDOM.createRoot(document.querySelector("#root")!).render(

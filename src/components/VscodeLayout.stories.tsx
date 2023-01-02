@@ -1,7 +1,7 @@
 import { ComponentMeta } from "@storybook/react";
-import { createTRPCClient } from "@trpc/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { httpLink } from "@trpc/client";
 import { PropsWithChildren, useState } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
 
 import { NotificationsProvider } from "../design-system/Notification.js";
 import { trpc } from "../utils/trpc.js";
@@ -19,8 +19,12 @@ const Container = ({ children }: PropsWithChildren) => {
 export const Default = () => {
   const [queryClient] = useState(() => new QueryClient());
   const [trpcClient] = useState(() =>
-    createTRPCClient({
-      url: `http://localhost:3000`,
+    trpc.createClient({
+      links: [
+        httpLink({
+          url: `http://localhost:3000`,
+        }),
+      ],
     }),
   );
 

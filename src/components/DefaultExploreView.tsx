@@ -7,8 +7,8 @@ export interface DefaultExploreViewProps {
 export const DefaultExploreView = ({
   resourcePath,
 }: DefaultExploreViewProps) => {
-  const incrementCounter = trpc.useMutation("counter.inc");
-  const counterValue = trpc.useQuery(["counter.get", { resourcePath }]);
+  const incrementCounter = trpc["counter.inc"].useMutation();
+  const counterValue = trpc["counter.get"].useQuery({ resourcePath });
 
   return (
     <div className="h-full w-full flex flex-col gap-4 p-4">
