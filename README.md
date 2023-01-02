@@ -1,7 +1,7 @@
 ![](./logo/banner-dark.png#gh-dark-mode-only)
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ![](./logo/banner-light.png#gh-light-mode-only)
@@ -103,6 +103,7 @@ We are also actively tracking planned features in our roadmap:
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Joshswooft"><img src="https://avatars.githubusercontent.com/u/60711758?v=4?s=100" width="100px;" alt="Josh"/><br /><sub><b>Josh</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Joshswooft" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/mark-mcculloh/"><img src="https://avatars.githubusercontent.com/u/1237390?v=4?s=100" width="100px;" alt="Mark McCulloh"/><br /><sub><b>Mark McCulloh</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=MarkMcCulloh" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://rybicki.io/"><img src="https://avatars.githubusercontent.com/u/5008987?v=4?s=100" width="100px;" alt="Chris Rybicki"/><br /><sub><b>Chris Rybicki</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Chriscbr" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>

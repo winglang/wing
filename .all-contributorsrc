@@ -27,6 +27,15 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "Chriscbr",
+      "name": "Chris Rybicki",
+      "avatar_url": "https://avatars.githubusercontent.com/u/5008987?v=4",
+      "profile": "https://rybicki.io/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
