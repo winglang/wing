@@ -18,6 +18,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "MarkMcCulloh",
+      "name": "Mark McCulloh",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1237390?v=4",
+      "profile": "https://www.linkedin.com/in/mark-mcculloh/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
