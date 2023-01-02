@@ -33,7 +33,7 @@ test("topic publishes messages as they are received", async () => {
   const handler = Testing.makeHandler(
     app,
     "Handler",
-    `async handle(message) { this.$logger.print("Received " + message); }`
+    `async handle(message) { console.log("Received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -56,12 +56,12 @@ test("topic publishes messages to multiple subscribers", async () => {
   const handler = Testing.makeHandler(
     app,
     "Handler1",
-    `async handle(message) { this.$logger.print("Received " + message); }`
+    `async handle(message) { console.log("Received " + message); }`
   );
   const otherHandler = Testing.makeHandler(
     app,
     "Handler2",
-    `async handle(message) { this.$logger.print("Also received " + message); }`
+    `async handle(message) { console.log("Also received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);

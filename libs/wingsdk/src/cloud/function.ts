@@ -60,8 +60,8 @@ export abstract class FunctionBase extends Resource {
     const inflightClient = inflight._toInflight();
     const loggerClientCode = Logger.of(this)._toInflight();
     const lines = new Array<string>();
-    lines.push(`const __$logger = ${loggerClientCode.text};`);
-    lines.push(`console.log = (...args) => __$logger.print(...args);`);
+    lines.push(`const $wing_logger = ${loggerClientCode.text};`);
+    lines.push(`console.log = (...args) => $wing_logger.print(...args);`);
     lines.push("exports.handler = async function(event) {");
     lines.push(`  return await ${inflightClient.text}.handle(event);`);
     lines.push("};");

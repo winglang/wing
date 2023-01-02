@@ -1,5 +1,4 @@
 import { IConstruct } from "constructs";
-import { Logger, LoggerInflightMethods } from "../cloud/logger";
 import { Code, InflightBinding, NodeJsCode } from "./inflight";
 import { Resource } from "./resource";
 
@@ -7,18 +6,8 @@ export function makeHandler(
   scope: IConstruct,
   id: string,
   code: string,
-  userBindings?: { [key: string]: InflightBinding }
+  bindings: { [key: string]: InflightBinding } = {}
 ): Resource {
-  const bindings = {
-    ...userBindings,
-
-    // implicit binding between `$logger` and the logger registered for this scope
-    $logger: {
-      resource: Logger.of(scope),
-      ops: [LoggerInflightMethods.PRINT],
-    },
-  };
-
   const resources = Object.fromEntries(
     Object.entries(bindings).map(([name, binding]) => [name, binding.resource])
   );

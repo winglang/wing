@@ -284,14 +284,7 @@ impl JSifier {
 			ExprKind::Call { function, args } => {
 				let mut needs_case_conversion = false;
 				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
-					match phase {
-						Phase::Inflight => {
-							return format!("$logger.print({})", self.jsify_arg_list(args, None, None, false));
-						}
-						_ => {
-							return format!("console.log({})", self.jsify_arg_list(args, None, None, false));
-						}
-					}
+					return format!("console.log({})", self.jsify_arg_list(args, None, None, false));
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
 					needs_case_conversion = object_type.as_class_or_resource().unwrap().should_case_convert_jsii;
@@ -556,9 +549,6 @@ impl JSifier {
 		let mut bindings = vec![];
 		let mut capture_names = vec![];
 		
-		// always capture the application logger via $logger
-		capture_names.push("$logger".into());
-
 		for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
 			capture_names.push(obj.clone());
 			bindings.push(format!(
