@@ -5,11 +5,13 @@ body:
 - type: markdown
   attributes:
     value: |
-      Thanks for taking the time to fill out this bug report!
+       :pray: Thanks for taking the time to fill out this bug report!
+       We will to our best to review and respond as quickly as possible. 
+       Feel free to ping us on [Wing Slack](https://t.winglang.io/slack) if you have any questions or need help.
 - type: textarea
   id: i-tried-this
   attributes:
-    label: I tried this
+    label: I tried this:
     description: What did you try to do?
     placeholder: Code/explanation to reproduce bug
   validations:
@@ -17,7 +19,7 @@ body:
 - type: textarea
   id: what-did-you-expect
   attributes:
-    label: Expected
+    label: Expected:
     description: What did you expect to happen?
     placeholder: Tell us what you expected to see!
   validations:
@@ -25,7 +27,7 @@ body:
 - type: textarea
   id: instead-what-happened
   attributes:
-    label: Instead, this happened
+    label: Instead, this happened:
     description: What happend instead of what you've expected?
     placeholder: Tell us what did you see!
   validations:
