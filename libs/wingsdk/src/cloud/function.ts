@@ -40,7 +40,7 @@ export abstract class FunctionBase extends Resource {
   constructor(
     scope: Construct,
     id: string,
-    inflight: IFunctionHandler,
+    inflight: Inflight,
     props: FunctionProps
   ) {
     super(scope, id);
