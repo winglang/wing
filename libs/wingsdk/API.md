@@ -427,7 +427,7 @@ A cloud logging facility.
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.toString">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.addConnection">add_connection</a></code> | Adds a connection to this resource. |
-| <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message (preflight). |
 
 ---
 
@@ -462,7 +462,7 @@ describing how this resource is related to another resource.
 print(message: str): void
 ```
 
-Logs a message.
+Logs a message (preflight).
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.Logger.print.parameter.message"></a>
 
