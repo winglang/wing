@@ -11,8 +11,9 @@ export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
  */
 export abstract class LoggerBase extends Resource {
   public readonly stateful = true;
+
   /**
-   * Logs a message.
+   * Logs a message (preflight).
    * @param message The message to log.
    */
   public print(message: string): void {

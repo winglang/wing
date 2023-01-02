@@ -9,11 +9,12 @@ export function makeHandler(
   code: string,
   userBindings?: { [key: string]: InflightBinding }
 ): Resource {
-  const logger = Logger.of(scope);
   const bindings = {
     ...userBindings,
+
+    // implicit binding between `$logger` and the logger registered for this scope
     $logger: {
-      resource: logger,
+      resource: Logger.of(scope),
       ops: [LoggerInflightMethods.PRINT],
     },
   };
