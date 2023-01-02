@@ -34,12 +34,12 @@ export class Function extends cloud.FunctionBase {
     super(scope, id, inflight, props);
 
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(this.handlerFileAsset, "..");
+    const codeDir = resolve(this.assetPath, "..");
 
     // calculate a md5 hash of the contents of asset.path
     const codeHash = crypto
       .createHash("md5")
-      .update(readFileSync(this.handlerFileAsset))
+      .update(readFileSync(this.assetPath))
       .digest("hex");
 
     // Create Lambda executable

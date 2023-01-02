@@ -31,7 +31,7 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
 
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
-      lines: [readFileSync(this.handlerFileAsset, "utf-8")],
+      lines: [readFileSync(this.assetPath, "utf-8")],
     });
     this.code = core.NodeJsCode.fromFile(assetPath);
   }

@@ -32,7 +32,10 @@ export abstract class FunctionBase extends Resource {
 
   public readonly stateful = false;
 
-  protected readonly handlerFileAsset: string;
+  /**
+   * The path to the file asset that contains the handler code.
+   */
+  protected readonly assetPath: string;
 
   constructor(
     scope: Construct,
@@ -43,7 +46,7 @@ export abstract class FunctionBase extends Resource {
     super(scope, id);
 
     if (!scope) {
-      this.handlerFileAsset = undefined as any;
+      this.assetPath = undefined as any;
       return;
     }
 
@@ -81,7 +84,7 @@ export abstract class FunctionBase extends Resource {
       external: ["aws-sdk"],
     });
 
-    this.handlerFileAsset = outfile;
+    this.assetPath = outfile;
   }
 
   /**
@@ -97,7 +100,7 @@ export abstract class FunctionBase extends Resource {
   /**
    * Returns the set of environment variables for this function.
    */
-  public get env() {
+  public get env(): Record<string, string> {
     return { ...this._env };
   }
 }

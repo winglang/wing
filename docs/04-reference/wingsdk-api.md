@@ -390,6 +390,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
 
@@ -418,6 +419,18 @@ Whether a resource is stateful, i.e. it stores information that is not defined b
 A non-stateful resource does not remember information about past
 transactions or events, and can typically be replaced by a cloud provider
 with a fresh copy without any consequences.
+
+---
+
+##### `env`<sup>Required</sup> <a name="env" id="@winglang/wingsdk.cloud.Function.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Returns the set of environment variables for this function.
 
 ---
 
