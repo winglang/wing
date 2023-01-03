@@ -34,7 +34,7 @@ struct WebsiteSummary {
   description: str;
 }
 
-let lookup_website = inflight (url: str): WebsiteSummary {
+let lookup_website = inflight (url: str): WebsiteSummary => {
   // pseudocode:
   // - fetch url
   // - extract title from <title> tag
@@ -45,8 +45,10 @@ let make_worker = (chunk: Map<Array<str>>): cloud.Function => {
   return new cloud.Function(inflight (terms: Array<str>): Array<str> => {
     let website_urls = new MutSet<str>();
     for term in terms {
-      if term in partial_index {
-        website_urls.add(...partial_index[term]);
+      if chunk.has(term) {
+        for url in chunk[term] {
+          website_urls.add(url);
+        }
       }
     }
     return website_urls.to_arr(); // converts MutSet<str> to Array<str>
@@ -66,7 +68,7 @@ api.on_post("/search", inflight (request: cloud.ApiRequest): cloud.ApiResponse =
 
   // wait for all promises in the array to resolve
   // `worker_results` is inferred as Array<Array<str>>
-  let worker_results = await_all worker_calls;
+  let worker_results = Promise.all(worker_calls);
   let website_urls = new Set<str>(worker_results.flatten());
   let summaries = new MutArray<WebsiteSummary>();
   for url in website_urls {
