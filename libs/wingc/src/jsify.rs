@@ -283,8 +283,25 @@ impl JSifier {
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
 			ExprKind::Call { function, args } => {
 				let mut needs_case_conversion = false;
+				// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
+				// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
-					return format!("console.log({})", self.jsify_arg_list(args, None, None, false));
+					return format!("{{console.log({})}}", self.jsify_arg_list(args, None, None, false));
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "assert") {
+					return format!(
+						"{{((cond) => {{if (!cond) throw new Error(`Runtime Assertion Failed For Condition: '{0}'`)}})({0})}}",
+						self.jsify_arg_list(args, None, None, false)
+					);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "panic") {
+					return format!(
+						"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
+						self.jsify_arg_list(args, None, None, false)
+					);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "throw") {
+					return format!(
+						"{{((msg) => {{throw new Error(msg)}})({})}}",
+						self.jsify_arg_list(args, None, None, false)
+					);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
 					needs_case_conversion = object_type.as_class_or_resource().unwrap().should_case_convert_jsii;

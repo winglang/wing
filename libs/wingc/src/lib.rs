@@ -84,6 +84,36 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		scope,
 		types,
 	);
+	add_builtin(
+		"assert",
+		Type::Function(FunctionSignature {
+			args: vec![types.bool()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		"throw",
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		"panic",
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
 
 	let mut tc = TypeChecker::new(types);
 	tc.add_globals(scope);
