@@ -1,6 +1,4 @@
-![](./logo/banner-dark.png#gh-dark-mode-only)
-
-![](./logo/banner-light.png#gh-light-mode-only)
+![](./logo/banner.png)
 
 <p align="center">
   &nbsp;
