@@ -53,12 +53,14 @@ test("inc", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Counter created.",
     "Inc (amount=1).",
     "Inc (amount=1).",
     "Inc (amount=10).",
     "Inc (amount=10).",
     "wingsdk.cloud.Counter deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
   expect(app.snapshot()).toMatchSnapshot();
 });

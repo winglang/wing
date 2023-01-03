@@ -84,16 +84,13 @@ impl Parser<'_> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.add_error(
 				format!(
-					"{} '{}' is not supported yet {}",
+					"{} \"{}\" is not supported yet {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
 			)?
 		} else {
-			self.add_error(
-				format!("Unexpected {} '{}' || {:#?}", grammar_context, grammar_element, node),
-				node,
-			)?
+			self.add_error(format!("Unexpected {} \"{}\"", grammar_context, grammar_element), node)?
 		}
 	}
 
@@ -396,9 +393,11 @@ impl Parser<'_> {
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-				return_type: func_def_node
-					.child_by_field_name("type")
-					.map(|rt| Box::new(self.build_type(&rt).unwrap())),
+				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
+					Some(Box::new(self.build_type(&rt)?))
+				} else {
+					None
+				},
 				flight,
 			},
 			captures: RefCell::new(None),
@@ -463,7 +462,7 @@ impl Parser<'_> {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
 					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
-					other => self.report_unimplemented_grammar(other, "bultin container type", type_node),
+					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
 			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),

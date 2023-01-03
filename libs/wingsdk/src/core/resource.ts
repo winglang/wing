@@ -38,7 +38,10 @@ const BIND_METADATA_PREFIX = "$bindings__";
 /**
  * Shared behavior between all Wing SDK resources.
  */
-export abstract class Resource extends Construct implements IInspectable {
+export abstract class Resource
+  extends Construct
+  implements IInspectable, IResource
+{
   /**
    * Annotate a class with with metadata about what operations it supports
    * inflight, and what sub-resources each operation requires access to.

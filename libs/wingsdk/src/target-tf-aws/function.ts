@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 import { readFileSync } from "fs";
-import { join, resolve } from "path";
+import { resolve } from "path";
 import { IamRole } from "@cdktf/provider-aws/lib/iam-role";
 import { IamRolePolicy } from "@cdktf/provider-aws/lib/iam-role-policy";
 import { IamRolePolicyAttachment } from "@cdktf/provider-aws/lib/iam-role-policy-attachment";
@@ -9,10 +9,8 @@ import { S3Bucket } from "@cdktf/provider-aws/lib/s3-bucket";
 import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
-import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { mkdtemp } from "../util";
 import { addConnections } from "./util";
 
 /**
@@ -22,9 +20,8 @@ import { addConnections } from "./util";
  */
 export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;
-  private readonly env: Record<string, string> = {};
   private readonly role: IamRole;
-  private readonly policyStatements: any[] = [];
+  private policyStatements?: any[];
   /** Function ARN */
   public readonly arn: string;
 
@@ -36,43 +33,13 @@ export class Function extends cloud.FunctionBase {
   ) {
     super(scope, id, inflight, props);
 
-    for (const [key, value] of Object.entries(props.env ?? {})) {
-      this.addEnvironment(key, value);
-    }
-
-    inflight._bind(this, ["handle"]);
-    const inflightClient = inflight._toInflight();
-
-    const lines = new Array<string>();
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${inflightClient.text}.handle(event);`);
-    lines.push("};");
-
-    const tempdir = mkdtemp();
-    const outfile = join(tempdir, "index.js");
-
-    esbuild.buildSync({
-      bundle: true,
-      stdin: {
-        contents: lines.join("\n"),
-        resolveDir: tempdir,
-        sourcefile: "inflight.js",
-      },
-      target: "node16",
-      platform: "node",
-      absWorkingDir: tempdir,
-      outfile,
-      minify: false,
-      external: ["aws-sdk"],
-    });
-
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(outfile, "..");
+    const codeDir = resolve(this.assetPath, "..");
 
     // calculate a md5 hash of the contents of asset.path
     const codeHash = crypto
       .createHash("md5")
-      .update(readFileSync(outfile))
+      .update(readFileSync(this.assetPath))
       .digest("hex");
 
     // Create Lambda executable
@@ -119,7 +86,7 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
-          if (this.policyStatements.length > 0) {
+          if ((this.policyStatements ?? []).length > 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
@@ -157,7 +124,7 @@ export class Function extends cloud.FunctionBase {
       runtime: "nodejs16.x",
       role: this.role.arn,
       environment: {
-        variables: this.env,
+        variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
     });
 
@@ -206,17 +173,17 @@ export class Function extends cloud.FunctionBase {
     ]);
   }
 
-  public addEnvironment(name: string, value: string) {
-    if (this.env[name] !== undefined) {
-      throw new Error(`Environment variable "${name}" already set.`);
-    }
-    this.env[name] = value;
-  }
-
   /**
    * Add a policy statement to the Lambda role.
    */
   public addPolicyStatements(...statements: PolicyStatement[]) {
+    // we do lazy initialization here because addPolicyStatements() might be called through the
+    // constructor chain of the Function base class which means that our constructor might not have
+    // been called yet... yes, ugly.
+    if (!this.policyStatements) {
+      this.policyStatements = [];
+    }
+
     this.policyStatements.push(
       ...statements.map((s) => ({
         Action: s.action,
