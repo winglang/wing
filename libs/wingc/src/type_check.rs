@@ -724,7 +724,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					self.expr_error(
 						exp,
-						format!("\"{}\" should be a function or method",function
+						format!("\"{}\" should be a function or method", function
 						)
 					);
 					return None;
