@@ -18,12 +18,12 @@ import { ResourceIcon } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
-import { ExpandedNode } from "./ExpandedNode.js";
+import { DetailedNode } from "./DetailedNode.js";
 import { HeaderBanner } from "./HeaderBanner.js";
 import { MetadataPanel } from "./MetadataPanel.js";
 import { NodeLogs } from "./NodeLogs.js";
 import NodeLogsFilters from "./NodeLogsFilters.js";
-import { ResourceExploreView } from "./ResourceExploreView.js";
+import { ResourceView } from "./resource-views/ResourceView.js";
 
 export interface VscodeLayoutProps {
   isLoading?: boolean;
@@ -180,7 +180,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
                   childRelationships.data && (
                     <div className="flex-1 bg-slate-50 min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
                       {childRelationships.data.map((child, index) => (
-                        <ExpandedNode
+                        <DetailedNode
                           key={child.node.id}
                           node={{
                             id: child.node.id,
@@ -226,7 +226,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
                   )}
 
                 {currentNode.data?.type?.startsWith("wingsdk.cloud") && (
-                  <ResourceExploreView
+                  <ResourceView
                     resourceType={currentNode.data.type}
                     resourcePath={currentNode.data.path}
                   />

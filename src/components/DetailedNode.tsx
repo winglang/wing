@@ -7,9 +7,7 @@ import {
 } from "../design-system/icons/index.js";
 import { ResourceIcon } from "../stories/utils.js";
 
-import { BucketResourceDetails } from "./ResourceDetails/BucketResourceDetails.js";
-import { CounterResourceDetails } from "./ResourceDetails/CounterResourceDetails.js";
-import { FunctionResourceDetails } from "./ResourceDetails/FunctionResourceDetails.js";
+import { ResourceValue } from "./map-resource-value/ResourceValue.js";
 
 const RelationshipButton = ({
   node,
@@ -92,19 +90,19 @@ export interface ResourceNode {
   title?: string;
 }
 
-export interface ExpandedNodeProps {
+export interface DetailedNodeProps {
   node: ResourceNode;
   inbound: NewRelationship[];
   outbound: NewRelationship[];
   onClick?: (path: string) => void;
 }
 
-export const ExpandedNode = ({
+export const DetailedNode = ({
   node,
   inbound,
   outbound,
   onClick,
-}: ExpandedNodeProps) => {
+}: DetailedNodeProps) => {
   const inboundCount = inbound.length;
   const relationshipCount = inboundCount + outbound.length;
   return (
@@ -117,15 +115,7 @@ export const ExpandedNode = ({
         }}
       >
         <ResourceButton node={node} onClick={() => onClick?.(node.path)}>
-          {node.type === "wingsdk.cloud.Counter" && (
-            <CounterResourceDetails resource={node} />
-          )}
-          {node.type === "wingsdk.cloud.Bucket" && (
-            <BucketResourceDetails resource={node} />
-          )}
-          {node.type === "wingsdk.cloud.Function" && (
-            <FunctionResourceDetails resource={node} />
-          )}
+          <ResourceValue node={node} />
         </ResourceButton>
       </div>
 

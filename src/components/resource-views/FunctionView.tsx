@@ -1,17 +1,15 @@
 import { useContext, useId, useState } from "react";
 
-import { AppContext } from "../AppContext.js";
-import { Button } from "../design-system/Button.js";
-import { TextArea } from "../design-system/TextArea.js";
-import { trpc } from "../utils/trpc.js";
+import { AppContext } from "../../AppContext.js";
+import { Button } from "../../design-system/Button.js";
+import { TextArea } from "../../design-system/TextArea.js";
+import { trpc } from "../../utils/trpc.js";
 
-export interface FunctionInteractionViewProps {
+export interface FunctionViewProps {
   resourcePath: string;
 }
 
-export const FunctionExploreView = ({
-  resourcePath,
-}: FunctionInteractionViewProps) => {
+export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
   const { appMode } = useContext(AppContext);
   const invoke = trpc["function.invoke"].useMutation();
   const [input, setInput] = useState("");

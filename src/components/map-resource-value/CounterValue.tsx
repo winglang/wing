@@ -2,15 +2,13 @@ import { PlusIcon } from "@heroicons/react/20/solid";
 
 import { Button } from "../../design-system/Button.js";
 import { trpc } from "../../utils/trpc.js";
-import { ResourceNode } from "../ExpandedNode.js";
+import { ResourceNode } from "../DetailedNode.js";
 
 export interface CounterResourceDetailsProps {
   resource: ResourceNode;
 }
 
-export const CounterResourceDetails = ({
-  resource,
-}: CounterResourceDetailsProps) => {
+export const CounterValue = ({ resource }: CounterResourceDetailsProps) => {
   const resourcePath = resource.path;
   const incrementCounter = trpc["counter.inc"].useMutation();
   const counterValue = trpc["counter.get"].useQuery({ resourcePath });

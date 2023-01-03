@@ -1,13 +1,11 @@
 import { trpc } from "../../utils/trpc.js";
-import { ResourceNode } from "../ExpandedNode.js";
+import { ResourceNode } from "../DetailedNode.js";
 
 export interface BucketResourceDetailsProps {
   resource: ResourceNode;
 }
 
-export const BucketResourceDetails = ({
-  resource,
-}: BucketResourceDetailsProps) => {
+export const BucketValue = ({ resource }: BucketResourceDetailsProps) => {
   const resourcePath = resource.path;
   const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
 

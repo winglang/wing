@@ -1,14 +1,12 @@
 import { Button } from "../../design-system/Button.js";
 import { trpc } from "../../utils/trpc.js";
-import { ResourceNode } from "../ExpandedNode.js";
+import { ResourceNode } from "../DetailedNode.js";
 
 export interface FunctionResourceDetailsProps {
   resource: ResourceNode;
 }
 
-export const FunctionResourceDetails = ({
-  resource,
-}: FunctionResourceDetailsProps) => {
+export const FunctionValue = ({ resource }: FunctionResourceDetailsProps) => {
   const resourcePath = resource.path;
   const invoke = trpc["function.invoke"].useMutation();
 

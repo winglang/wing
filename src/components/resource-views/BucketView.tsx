@@ -13,13 +13,13 @@ import {
   useState,
 } from "react";
 
-import { Button } from "../design-system/Button.js";
-import { Checkbox } from "../design-system/Checkbox.js";
-import { Input } from "../design-system/Input.js";
-import { trpc } from "../utils/trpc.js";
-import { useDownloadFile } from "../utils/useDownloadFile.js";
+import { Button } from "../../design-system/Button.js";
+import { Checkbox } from "../../design-system/Checkbox.js";
+import { Input } from "../../design-system/Input.js";
+import { trpc } from "../../utils/trpc.js";
+import { useDownloadFile } from "../../utils/useDownloadFile.js";
 
-export interface BucketInteractionViewProps {
+export interface BucketViewProps {
   resourcePath: string;
 }
 
@@ -30,9 +30,7 @@ export interface FileExplorerEntry {
   fileSize?: number;
 }
 
-export const BucketExploreView = ({
-  resourcePath,
-}: BucketInteractionViewProps) => {
+export const BucketView = ({ resourcePath }: BucketViewProps) => {
   const [path] = useState("/");
   const bucketList = trpc["bucket.list"].useQuery({ resourcePath });
   const putFile = trpc["bucket.put"].useMutation();

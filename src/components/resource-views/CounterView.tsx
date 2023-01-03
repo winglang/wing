@@ -1,12 +1,13 @@
-import { trpc } from "../utils/trpc.js";
+import { PlusIcon } from "@heroicons/react/20/solid";
 
-export interface DefaultExploreViewProps {
+import { Button } from "../../design-system/Button.js";
+import { trpc } from "../../utils/trpc.js";
+
+export interface CounterViewProps {
   resourcePath: string;
 }
 
-export const DefaultExploreView = ({
-  resourcePath,
-}: DefaultExploreViewProps) => {
+export const CounterView = ({ resourcePath }: CounterViewProps) => {
   const incrementCounter = trpc["counter.inc"].useMutation();
   const counterValue = trpc["counter.get"].useQuery({ resourcePath });
 
@@ -15,12 +16,18 @@ export const DefaultExploreView = ({
       <div className="space-y-4 text-center mx-auto">
         <div className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
           <dt className="truncate text-sm font-medium text-gray-500">
-            Default View
+            Counter value
           </dt>
           <dd className="mt-1 text-3xl font-semibold tracking-tight text-gray-900 space-x-2">
-            <span></span>
+            <span>{counterValue.data}</span>
           </dd>
         </div>
+
+        <Button
+          icon={PlusIcon}
+          label="Increment"
+          onClick={() => incrementCounter.mutate({ amount: 1, resourcePath })}
+        />
       </div>
     </div>
   );

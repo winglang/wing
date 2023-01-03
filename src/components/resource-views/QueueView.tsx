@@ -1,19 +1,17 @@
 import { PaperAirplaneIcon } from "@heroicons/react/20/solid";
 import { useCallback, useContext, useId, useState } from "react";
 
-import { AppContext } from "../AppContext.js";
-import { Button } from "../design-system/Button.js";
-import { useNotifications } from "../design-system/Notification.js";
-import { TextArea } from "../design-system/TextArea.js";
-import { trpc } from "../utils/trpc.js";
+import { AppContext } from "../../AppContext.js";
+import { Button } from "../../design-system/Button.js";
+import { useNotifications } from "../../design-system/Notification.js";
+import { TextArea } from "../../design-system/TextArea.js";
+import { trpc } from "../../utils/trpc.js";
 
-export interface QueueInteractionViewProps {
+export interface QueueViewProps {
   resourcePath: string;
 }
 
-export const QueueExploreView = ({
-  resourcePath,
-}: QueueInteractionViewProps) => {
+export const QueueView = ({ resourcePath }: QueueViewProps) => {
   const { appMode } = useContext(AppContext);
   const pushMessage = trpc["queue.push"].useMutation();
   const [message, setMessage] = useState("");
