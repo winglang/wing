@@ -724,7 +724,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					self.expr_error(
 						exp,
-						format!("{} should be a function or method",function
+						format!("\"{}\" should be a function or method",function
 						)
 					);
 					return None;
@@ -1560,7 +1560,7 @@ impl<'a> TypeChecker<'a> {
 							if e.values.contains(property) {
 								return _type;
 							} else {
-								return self.general_type_error(format!("Enum {} does not contain value `{}`", _type, property.name));
+								return self.general_type_error(format!("Enum \"{}\" does not contain value \"{}\"", _type, property.name));
 							}
 						}
 						_ => {
