@@ -17,7 +17,7 @@ describe("wing", () => {
   });
 
   test("package with submodules", async () => {
-    const docs = await Documentation.forPackage("cdk8s-plus-25@2.3.12");
+    const docs = await Documentation.forPackage("aws-cdk-lib@2.12.0");
     try {
       const json = await docs.toJson({ language: Language.WING });
       const markdown = await docs.toMarkdown({ language: Language.WING });
