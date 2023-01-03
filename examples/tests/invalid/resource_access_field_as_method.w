@@ -1,8 +1,8 @@
-resource ff {
+resource SomeResource {
     name: str;
     init() {
     }
 }
 
-let y = new ff();
-y.name();
+let x = new SomeResource();
+x.name();
