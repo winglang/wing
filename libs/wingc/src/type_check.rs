@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
-use crate::debug;
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
+use crate::{debug, WINGSDK_DURATION};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -1562,8 +1562,6 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				let std_lookup = env.try_lookup("std", None).unwrap();
-				let std_namespace = &std_lookup.as_namespace().unwrap().env;
 				let instance_type = self.type_check_exp(object, env, statement_idx).unwrap();
 				match *instance_type {
 					Type::Class(ref class) | Type::Resource(ref class) => match class.env.lookup(property, None) {
@@ -1573,8 +1571,8 @@ impl<'a> TypeChecker<'a> {
 					Type::Anything => instance_type,
 
 					// get "std" primitives
-					Type::Duration => std_namespace
-						.try_lookup("Duration", None)
+					Type::Duration => env
+						.lookup_nested_str(WINGSDK_DURATION, None)
 						.unwrap()
 						.as_type()
 						.unwrap()
@@ -1586,10 +1584,13 @@ impl<'a> TypeChecker<'a> {
 						.as_variable()
 						.unwrap(),
 
-					_ => self.general_type_error(format!(
-						"\"{}\" in {} does not resolve to a class or resource instance",
-						instance_type, reference
-					)),
+					_ => self.expr_error(
+						object,
+						format!(
+							"Expression must be a class or resource instance to access property \"{}\", instead found type \"{}\"",
+							property.name, instance_type
+						),
+					),
 				}
 			}
 		}
