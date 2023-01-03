@@ -56,12 +56,4 @@ project.tasks.addEnvironment("NODE_OPTIONS", "--max-old-space-size=7168");
 // Avoid a non JSII compatible package (see https://github.com/projen/projen/issues/2264)
 project.package.addPackageResolutions("@types/babel__traverse@7.18.2");
 
-// only run a minimal set of tests in CI
-project.testTask.reset(
-  'jest --passWithNoTests --coverageProvider=v8 --updateSnapshot --testPathIgnorePatterns=".full.test.ts"'
-);
-project.addTask("test:full", {
-  exec: "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot",
-});
-
 project.synth();

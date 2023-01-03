@@ -173,15 +173,11 @@
       "description": "Run tests",
       "steps": [
         {
-          "exec": "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot --testPathIgnorePatterns=\".full.test.ts\""
-        }
-      ]
-    },
-    "test:full": {
-      "name": "test:full",
-      "steps": [
+          "exec": "jest --passWithNoTests --updateSnapshot",
+          "receiveArgs": true
+        },
         {
-          "exec": "jest --passWithNoTests --coverageProvider=v8 --updateSnapshot"
+          "spawn": "eslint"
         }
       ]
     },

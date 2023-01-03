@@ -10,7 +10,6 @@ import * as reflect from "jsii-reflect";
  */
 export class Assemblies {
   public static readonly AWSCDK_1_106_0 = `${__dirname}/../__fixtures__/assemblies`;
-  public static readonly AWSCDK_1_126_0 = `${__dirname}/../__fixtures__/assemblies-1.126.0`;
 
   private static _instance: Assemblies;
 
