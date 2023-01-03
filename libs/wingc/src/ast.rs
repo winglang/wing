@@ -48,7 +48,7 @@ impl PartialEq for Symbol {
 
 impl std::fmt::Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "`{}` (at {})", self.name, self.span)
+		write!(f, "{} (at {})", self.name, self.span)
 	}
 }
 
