@@ -719,9 +719,16 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				// Make sure this is a function signature type
-				let func_sig = func_type
-					.as_function_sig()
-					.expect(&format!("{} should be a function or method", function));
+				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
+					func_sig
+				} else {
+					self.expr_error(
+						exp,
+						format!("{} should be a function or method",function
+						)
+					);
+					return None;
+				};
 
 				if !can_call_flight(func_sig.flight, env.flight) {
 					self.expr_error(
@@ -1553,7 +1560,7 @@ impl<'a> TypeChecker<'a> {
 							if e.values.contains(property) {
 								return _type;
 							} else {
-								return self.general_type_error(format!("Enum {} does not contain value {}", _type, property.name));
+								return self.general_type_error(format!("Enum {} does not contain value `{}`", _type, property.name));
 							}
 						}
 						_ => {
@@ -1587,7 +1594,7 @@ impl<'a> TypeChecker<'a> {
 						.unwrap(),
 
 					_ => self.general_type_error(format!(
-						"\"{}\" in {} does not resolve to a class or resource instance",
+						"{} in `{}` does not resolve to a class or resource instance",
 						instance_type, reference
 					)),
 				}
