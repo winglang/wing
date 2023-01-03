@@ -1,0 +1,3413 @@
+{
+  "author": {
+    "name": "Amazon Web Services",
+    "organization": true,
+    "roles": [
+      "author"
+    ],
+    "url": "https://aws.amazon.com"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-cloudwatch": "1.126.0",
+    "@aws-cdk/aws-iam": "1.126.0",
+    "@aws-cdk/aws-kms": "1.126.0",
+    "@aws-cdk/core": "1.126.0",
+    "constructs": "^3.3.69"
+  },
+  "dependencyClosure": {
+    "@aws-cdk/aws-cloudwatch": {
+      "targets": {
+        "dotnet": {
+          "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+          "namespace": "Amazon.CDK.AWS.CloudWatch",
+          "packageId": "Amazon.CDK.AWS.CloudWatch"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "cloudwatch",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.services.cloudwatch"
+        },
+        "js": {
+          "npm": "@aws-cdk/aws-cloudwatch"
+        },
+        "python": {
+          "classifiers": [
+            "Framework :: AWS CDK",
+            "Framework :: AWS CDK :: 1"
+          ],
+          "distName": "aws-cdk.aws-cloudwatch",
+          "module": "aws_cdk.aws_cloudwatch"
+        }
+      }
+    },
+    "@aws-cdk/aws-iam": {
+      "targets": {
+        "dotnet": {
+          "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+          "namespace": "Amazon.CDK.AWS.IAM",
+          "packageId": "Amazon.CDK.AWS.IAM"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "iam",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.services.iam"
+        },
+        "js": {
+          "npm": "@aws-cdk/aws-iam"
+        },
+        "python": {
+          "classifiers": [
+            "Framework :: AWS CDK",
+            "Framework :: AWS CDK :: 1"
+          ],
+          "distName": "aws-cdk.aws-iam",
+          "module": "aws_cdk.aws_iam"
+        }
+      }
+    },
+    "@aws-cdk/aws-kms": {
+      "targets": {
+        "dotnet": {
+          "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+          "namespace": "Amazon.CDK.AWS.KMS",
+          "packageId": "Amazon.CDK.AWS.KMS"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "kms",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.services.kms"
+        },
+        "js": {
+          "npm": "@aws-cdk/aws-kms"
+        },
+        "python": {
+          "classifiers": [
+            "Framework :: AWS CDK",
+            "Framework :: AWS CDK :: 1"
+          ],
+          "distName": "aws-cdk.aws-kms",
+          "module": "aws_cdk.aws_kms"
+        }
+      }
+    },
+    "@aws-cdk/cloud-assembly-schema": {
+      "targets": {
+        "dotnet": {
+          "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+          "namespace": "Amazon.CDK.CloudAssembly.Schema",
+          "packageId": "Amazon.CDK.CloudAssembly.Schema"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "cdk-cloud-assembly-schema",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.cloudassembly.schema"
+        },
+        "js": {
+          "npm": "@aws-cdk/cloud-assembly-schema"
+        },
+        "python": {
+          "classifiers": [
+            "Framework :: AWS CDK",
+            "Framework :: AWS CDK :: 1"
+          ],
+          "distName": "aws-cdk.cloud-assembly-schema",
+          "module": "aws_cdk.cloud_assembly_schema"
+        }
+      }
+    },
+    "@aws-cdk/core": {
+      "targets": {
+        "dotnet": {
+          "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+          "namespace": "Amazon.CDK",
+          "packageId": "Amazon.CDK"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "core",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.core"
+        },
+        "js": {
+          "npm": "@aws-cdk/core"
+        },
+        "python": {
+          "classifiers": [
+            "Framework :: AWS CDK",
+            "Framework :: AWS CDK :: 1"
+          ],
+          "distName": "aws-cdk.core",
+          "module": "aws_cdk.core"
+        }
+      }
+    },
+    "@aws-cdk/cx-api": {
+      "targets": {
+        "dotnet": {
+          "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+          "namespace": "Amazon.CDK.CXAPI",
+          "packageId": "Amazon.CDK.CXAPI"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "cdk-cx-api",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.cxapi"
+        },
+        "js": {
+          "npm": "@aws-cdk/cx-api"
+        },
+        "python": {
+          "classifiers": [
+            "Framework :: AWS CDK",
+            "Framework :: AWS CDK :: 1"
+          ],
+          "distName": "aws-cdk.cx-api",
+          "module": "aws_cdk.cx_api"
+        }
+      }
+    },
+    "@aws-cdk/region-info": {
+      "targets": {
+        "dotnet": {
+          "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+          "namespace": "Amazon.CDK.RegionInfo",
+          "packageId": "Amazon.CDK.RegionInfo"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "cdk-region-info",
+            "groupId": "software.amazon.awscdk"
+          },
+          "package": "software.amazon.awscdk.regioninfo"
+        },
+        "js": {
+          "npm": "@aws-cdk/region-info"
+        },
+        "python": {
+          "classifiers": [
+            "Framework :: AWS CDK",
+            "Framework :: AWS CDK :: 1"
+          ],
+          "distName": "aws-cdk.region-info",
+          "module": "aws_cdk.region_info"
+        }
+      }
+    },
+    "constructs": {
+      "targets": {
+        "dotnet": {
+          "namespace": "Constructs",
+          "packageId": "Constructs"
+        },
+        "go": {
+          "moduleName": "github.com/aws/constructs-go"
+        },
+        "java": {
+          "maven": {
+            "artifactId": "constructs",
+            "groupId": "software.constructs"
+          },
+          "package": "software.constructs"
+        },
+        "js": {
+          "npm": "constructs"
+        },
+        "python": {
+          "distName": "constructs",
+          "module": "constructs"
+        }
+      }
+    }
+  },
+  "description": "The CDK Construct Library for AWS::SQS",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/aws/aws-cdk",
+  "jsiiVersion": "1.35.0 (build 6ebef96)",
+  "keywords": [
+    "aws",
+    "cdk",
+    "constructs",
+    "sqs"
+  ],
+  "license": "Apache-2.0",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    }
+  },
+  "name": "@aws-cdk/aws-sqs",
+  "readme": {
+    "markdown": "# Amazon Simple Queue Service Construct Library\n<!--BEGIN STABILITY BANNER-->\n\n---\n\n![cfn-resources: Stable](https://img.shields.io/badge/cfn--resources-stable-success.svg?style=for-the-badge)\n\n![cdk-constructs: Stable](https://img.shields.io/badge/cdk--constructs-stable-success.svg?style=for-the-badge)\n\n---\n\n<!--END STABILITY BANNER-->\n\nAmazon Simple Queue Service (SQS) is a fully managed message queuing service that\nenables you to decouple and scale microservices, distributed systems, and serverless\napplications. SQS eliminates the complexity and overhead associated with managing and\noperating message oriented middleware, and empowers developers to focus on differentiating work.\nUsing SQS, you can send, store, and receive messages between software components at any volume,\nwithout losing messages or requiring other services to be available.\n\n## Installation\n\nImport to your project:\n\n```ts\nimport * as sqs from '@aws-cdk/aws-sqs';\n```\n\n## Basic usage\n\n\nHere's how to add a basic queue to your application:\n\n```ts\nnew sqs.Queue(this, 'Queue');\n```\n\n## Encryption\n\nIf you want to encrypt the queue contents, set the `encryption` property. You can have\nthe messages encrypted with a key that SQS manages for you, or a key that you\ncan manage yourself.\n\n```ts\n// Use managed key\nnew sqs.Queue(this, 'Queue', {\n    encryption: QueueEncryption.KMS_MANAGED,\n});\n\n// Use custom key\nconst myKey = new kms.Key(this, 'Key');\n\nnew sqs.Queue(this, 'Queue', {\n    encryption: QueueEncryption.KMS,\n    encryptionMasterKey: myKey\n});\n```\n\n## First-In-First-Out (FIFO) queues\n\nFIFO queues give guarantees on the order in which messages are dequeued, and have additional\nfeatures in order to help guarantee exactly-once processing. For more information, see\nthe SQS manual. Note that FIFO queues are not available in all AWS regions.\n\nA queue can be made a FIFO queue by either setting `fifo: true`, giving it a name which ends\nin `\".fifo\"`, or by enabling a FIFO specific feature such as: content-based deduplication,\ndeduplication scope or fifo throughput limit.\n"
+  },
+  "repository": {
+    "directory": "packages/@aws-cdk/aws-sqs",
+    "type": "git",
+    "url": "https://github.com/aws/aws-cdk.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "dotnet": {
+      "iconUrl": "https://raw.githubusercontent.com/aws/aws-cdk/master/logo/default-256-dark.png",
+      "namespace": "Amazon.CDK.AWS.SQS",
+      "packageId": "Amazon.CDK.AWS.SQS"
+    },
+    "java": {
+      "maven": {
+        "artifactId": "sqs",
+        "groupId": "software.amazon.awscdk"
+      },
+      "package": "software.amazon.awscdk.services.sqs"
+    },
+    "js": {
+      "npm": "@aws-cdk/aws-sqs"
+    },
+    "python": {
+      "classifiers": [
+        "Framework :: AWS CDK",
+        "Framework :: AWS CDK :: 1"
+      ],
+      "distName": "aws-cdk.aws-sqs",
+      "module": "aws_cdk.aws_sqs"
+    }
+  },
+  "types": {
+    "@aws-cdk/aws-sqs.CfnQueue": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "base": "@aws-cdk/core.CfnResource",
+      "docs": {
+        "custom": {
+          "cloudformationResource": "AWS::SQS::Queue",
+          "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html"
+        },
+        "stability": "external",
+        "summary": "A CloudFormation `AWS::SQS::Queue`."
+      },
+      "fqn": "@aws-cdk/aws-sqs.CfnQueue",
+      "initializer": {
+        "docs": {
+          "stability": "external",
+          "summary": "Create a new `AWS::SQS::Queue`."
+        },
+        "locationInModule": {
+          "filename": "lib/sqs.generated.ts",
+          "line": 336
+        },
+        "parameters": [
+          {
+            "docs": {
+              "summary": "- scope in which this resource is defined."
+            },
+            "name": "scope",
+            "type": {
+              "fqn": "@aws-cdk/core.Construct"
+            }
+          },
+          {
+            "docs": {
+              "summary": "- scoped id of the resource."
+            },
+            "name": "id",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "docs": {
+              "summary": "- resource properties."
+            },
+            "name": "props",
+            "optional": true,
+            "type": {
+              "fqn": "@aws-cdk/aws-sqs.CfnQueueProps"
+            }
+          }
+        ]
+      },
+      "interfaces": [
+        "@aws-cdk/core.IInspectable"
+      ],
+      "kind": "class",
+      "locationInModule": {
+        "filename": "lib/sqs.generated.ts",
+        "line": 204
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "external",
+            "summary": "Examines the CloudFormation resource and discloses attributes."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 369
+          },
+          "name": "inspect",
+          "overrides": "@aws-cdk/core.IInspectable",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "- tree inspector to collect and process attributes."
+              },
+              "name": "inspector",
+              "type": {
+                "fqn": "@aws-cdk/core.TreeInspector"
+              }
+            }
+          ]
+        },
+        {
+          "docs": {
+            "stability": "external"
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 394
+          },
+          "name": "renderProperties",
+          "overrides": "@aws-cdk/core.CfnResource",
+          "parameters": [
+            {
+              "name": "props",
+              "type": {
+                "collection": {
+                  "elementtype": {
+                    "primitive": "any"
+                  },
+                  "kind": "map"
+                }
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "any"
+                },
+                "kind": "map"
+              }
+            }
+          }
+        }
+      ],
+      "name": "CfnQueue",
+      "properties": [
+        {
+          "const": true,
+          "docs": {
+            "stability": "external",
+            "summary": "The CloudFormation resource type name for this resource class."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 208
+          },
+          "name": "CFN_RESOURCE_TYPE_NAME",
+          "static": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "cloudformationAttribute": "Arn"
+            },
+            "stability": "external"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 232
+          },
+          "name": "attrArn",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "cloudformationAttribute": "QueueName"
+            },
+            "stability": "external"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 237
+          },
+          "name": "attrQueueName",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "external"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 374
+          },
+          "name": "cfnProperties",
+          "overrides": "@aws-cdk/core.CfnResource",
+          "protected": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "any"
+              },
+              "kind": "map"
+            }
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#cfn-sqs-queue-tags"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.Tags`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 321
+          },
+          "name": "tags",
+          "type": {
+            "fqn": "@aws-cdk/core.TagManager"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-redriveallowpolicy"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.RedriveAllowPolicy`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 309
+          },
+          "name": "redriveAllowPolicy",
+          "type": {
+            "primitive": "any"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-redrive"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.RedrivePolicy`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 315
+          },
+          "name": "redrivePolicy",
+          "type": {
+            "primitive": "any"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-contentbaseddeduplication"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.ContentBasedDeduplication`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 243
+          },
+          "name": "contentBasedDeduplication",
+          "optional": true,
+          "type": {
+            "union": {
+              "types": [
+                {
+                  "primitive": "boolean"
+                },
+                {
+                  "fqn": "@aws-cdk/core.IResolvable"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-deduplicationscope"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.DeduplicationScope`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 249
+          },
+          "name": "deduplicationScope",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-delayseconds"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.DelaySeconds`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 255
+          },
+          "name": "delaySeconds",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-fifoqueue"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.FifoQueue`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 261
+          },
+          "name": "fifoQueue",
+          "optional": true,
+          "type": {
+            "union": {
+              "types": [
+                {
+                  "primitive": "boolean"
+                },
+                {
+                  "fqn": "@aws-cdk/core.IResolvable"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-fifothroughputlimit"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.FifoThroughputLimit`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 267
+          },
+          "name": "fifoThroughputLimit",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-kmsdatakeyreuseperiodseconds"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.KmsDataKeyReusePeriodSeconds`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 273
+          },
+          "name": "kmsDataKeyReusePeriodSeconds",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-kmsmasterkeyid"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.KmsMasterKeyId`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 279
+          },
+          "name": "kmsMasterKeyId",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-maxmesgsize"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.MaximumMessageSize`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 285
+          },
+          "name": "maximumMessageSize",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-msgretentionperiod"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.MessageRetentionPeriod`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 291
+          },
+          "name": "messageRetentionPeriod",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-name"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.QueueName`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 297
+          },
+          "name": "queueName",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-receivemsgwaittime"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.ReceiveMessageWaitTimeSeconds`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 303
+          },
+          "name": "receiveMessageWaitTimeSeconds",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-visiblitytimeout"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.VisibilityTimeout`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 327
+          },
+          "name": "visibilityTimeout",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.CfnQueuePolicy": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "base": "@aws-cdk/core.CfnResource",
+      "docs": {
+        "custom": {
+          "cloudformationResource": "AWS::SQS::QueuePolicy",
+          "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html"
+        },
+        "stability": "external",
+        "summary": "A CloudFormation `AWS::SQS::QueuePolicy`."
+      },
+      "fqn": "@aws-cdk/aws-sqs.CfnQueuePolicy",
+      "initializer": {
+        "docs": {
+          "stability": "external",
+          "summary": "Create a new `AWS::SQS::QueuePolicy`."
+        },
+        "locationInModule": {
+          "filename": "lib/sqs.generated.ts",
+          "line": 521
+        },
+        "parameters": [
+          {
+            "docs": {
+              "summary": "- scope in which this resource is defined."
+            },
+            "name": "scope",
+            "type": {
+              "fqn": "@aws-cdk/core.Construct"
+            }
+          },
+          {
+            "docs": {
+              "summary": "- scoped id of the resource."
+            },
+            "name": "id",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "docs": {
+              "summary": "- resource properties."
+            },
+            "name": "props",
+            "type": {
+              "fqn": "@aws-cdk/aws-sqs.CfnQueuePolicyProps"
+            }
+          }
+        ]
+      },
+      "interfaces": [
+        "@aws-cdk/core.IInspectable"
+      ],
+      "kind": "class",
+      "locationInModule": {
+        "filename": "lib/sqs.generated.ts",
+        "line": 477
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "external",
+            "summary": "Examines the CloudFormation resource and discloses attributes."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 536
+          },
+          "name": "inspect",
+          "overrides": "@aws-cdk/core.IInspectable",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "- tree inspector to collect and process attributes."
+              },
+              "name": "inspector",
+              "type": {
+                "fqn": "@aws-cdk/core.TreeInspector"
+              }
+            }
+          ]
+        },
+        {
+          "docs": {
+            "stability": "external"
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 548
+          },
+          "name": "renderProperties",
+          "overrides": "@aws-cdk/core.CfnResource",
+          "parameters": [
+            {
+              "name": "props",
+              "type": {
+                "collection": {
+                  "elementtype": {
+                    "primitive": "any"
+                  },
+                  "kind": "map"
+                }
+              }
+            }
+          ],
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "any"
+                },
+                "kind": "map"
+              }
+            }
+          }
+        }
+      ],
+      "name": "CfnQueuePolicy",
+      "properties": [
+        {
+          "const": true,
+          "docs": {
+            "stability": "external",
+            "summary": "The CloudFormation resource type name for this resource class."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 481
+          },
+          "name": "CFN_RESOURCE_TYPE_NAME",
+          "static": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "external"
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 541
+          },
+          "name": "cfnProperties",
+          "overrides": "@aws-cdk/core.CfnResource",
+          "protected": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "any"
+              },
+              "kind": "map"
+            }
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html#cfn-sqs-queuepolicy-policydoc"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::QueuePolicy.PolicyDocument`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 506
+          },
+          "name": "policyDocument",
+          "type": {
+            "primitive": "any"
+          }
+        },
+        {
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html#cfn-sqs-queuepolicy-queues"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::QueuePolicy.Queues`."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 512
+          },
+          "name": "queues",
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "array"
+            }
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.CfnQueuePolicyProps": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "datatype": true,
+      "docs": {
+        "custom": {
+          "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html"
+        },
+        "stability": "external",
+        "summary": "Properties for defining a `AWS::SQS::QueuePolicy`."
+      },
+      "fqn": "@aws-cdk/aws-sqs.CfnQueuePolicyProps",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/sqs.generated.ts",
+        "line": 405
+      },
+      "name": "CfnQueuePolicyProps",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html#cfn-sqs-queuepolicy-policydoc"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::QueuePolicy.PolicyDocument`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 411
+          },
+          "name": "policyDocument",
+          "type": {
+            "primitive": "any"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html#cfn-sqs-queuepolicy-queues"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::QueuePolicy.Queues`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 417
+          },
+          "name": "queues",
+          "type": {
+            "collection": {
+              "elementtype": {
+                "primitive": "string"
+              },
+              "kind": "array"
+            }
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.CfnQueueProps": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "datatype": true,
+      "docs": {
+        "custom": {
+          "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html"
+        },
+        "stability": "external",
+        "summary": "Properties for defining a `AWS::SQS::Queue`."
+      },
+      "fqn": "@aws-cdk/aws-sqs.CfnQueueProps",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/sqs.generated.ts",
+        "line": 17
+      },
+      "name": "CfnQueueProps",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-contentbaseddeduplication"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.ContentBasedDeduplication`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 23
+          },
+          "name": "contentBasedDeduplication",
+          "optional": true,
+          "type": {
+            "union": {
+              "types": [
+                {
+                  "primitive": "boolean"
+                },
+                {
+                  "fqn": "@aws-cdk/core.IResolvable"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-deduplicationscope"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.DeduplicationScope`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 29
+          },
+          "name": "deduplicationScope",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-delayseconds"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.DelaySeconds`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 35
+          },
+          "name": "delaySeconds",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-fifoqueue"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.FifoQueue`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 41
+          },
+          "name": "fifoQueue",
+          "optional": true,
+          "type": {
+            "union": {
+              "types": [
+                {
+                  "primitive": "boolean"
+                },
+                {
+                  "fqn": "@aws-cdk/core.IResolvable"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-fifothroughputlimit"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.FifoThroughputLimit`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 47
+          },
+          "name": "fifoThroughputLimit",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-kmsdatakeyreuseperiodseconds"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.KmsDataKeyReusePeriodSeconds`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 53
+          },
+          "name": "kmsDataKeyReusePeriodSeconds",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-kmsmasterkeyid"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.KmsMasterKeyId`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 59
+          },
+          "name": "kmsMasterKeyId",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-maxmesgsize"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.MaximumMessageSize`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 65
+          },
+          "name": "maximumMessageSize",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-msgretentionperiod"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.MessageRetentionPeriod`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 71
+          },
+          "name": "messageRetentionPeriod",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-name"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.QueueName`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 77
+          },
+          "name": "queueName",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-receivemsgwaittime"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.ReceiveMessageWaitTimeSeconds`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 83
+          },
+          "name": "receiveMessageWaitTimeSeconds",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-redriveallowpolicy"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.RedriveAllowPolicy`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 89
+          },
+          "name": "redriveAllowPolicy",
+          "optional": true,
+          "type": {
+            "primitive": "any"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-redrive"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.RedrivePolicy`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 95
+          },
+          "name": "redrivePolicy",
+          "optional": true,
+          "type": {
+            "primitive": "any"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#cfn-sqs-queue-tags"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.Tags`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 101
+          },
+          "name": "tags",
+          "optional": true,
+          "type": {
+            "collection": {
+              "elementtype": {
+                "fqn": "@aws-cdk/core.CfnTag"
+              },
+              "kind": "array"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "link": "http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-queues.html#aws-sqs-queue-visiblitytimeout"
+            },
+            "stability": "external",
+            "summary": "`AWS::SQS::Queue.VisibilityTimeout`."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/sqs.generated.ts",
+            "line": 107
+          },
+          "name": "visibilityTimeout",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.DeadLetterQueue": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "datatype": true,
+      "docs": {
+        "stability": "stable",
+        "summary": "Dead letter queue settings."
+      },
+      "fqn": "@aws-cdk/aws-sqs.DeadLetterQueue",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/queue.ts",
+        "line": 177
+      },
+      "name": "DeadLetterQueue",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "The number of times a message can be unsuccesfully dequeued before being moved to the dead-letter queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 186
+          },
+          "name": "maxReceiveCount",
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "The dead-letter queue to which Amazon SQS moves messages after the value of maxReceiveCount is exceeded."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 181
+          },
+          "name": "queue",
+          "type": {
+            "fqn": "@aws-cdk/aws-sqs.IQueue"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.DeduplicationScope": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "docs": {
+        "stability": "stable",
+        "summary": "What kind of deduplication scope to apply."
+      },
+      "fqn": "@aws-cdk/aws-sqs.DeduplicationScope",
+      "kind": "enum",
+      "locationInModule": {
+        "filename": "lib/queue.ts",
+        "line": 214
+      },
+      "members": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Deduplication occurs at the message group level."
+          },
+          "name": "MESSAGE_GROUP"
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Deduplication occurs at the message queue level."
+          },
+          "name": "QUEUE"
+        }
+      ],
+      "name": "DeduplicationScope"
+    },
+    "@aws-cdk/aws-sqs.FifoThroughputLimit": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "docs": {
+        "stability": "stable",
+        "summary": "Whether the FIFO queue throughput quota applies to the entire queue or per message group."
+      },
+      "fqn": "@aws-cdk/aws-sqs.FifoThroughputLimit",
+      "kind": "enum",
+      "locationInModule": {
+        "filename": "lib/queue.ts",
+        "line": 228
+      },
+      "members": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Throughput quota applies per queue."
+          },
+          "name": "PER_QUEUE"
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Throughput quota applies per message group id."
+          },
+          "name": "PER_MESSAGE_GROUP_ID"
+        }
+      ],
+      "name": "FifoThroughputLimit"
+    },
+    "@aws-cdk/aws-sqs.IQueue": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "docs": {
+        "stability": "stable",
+        "summary": "Represents an SQS queue."
+      },
+      "fqn": "@aws-cdk/aws-sqs.IQueue",
+      "interfaces": [
+        "@aws-cdk/core.IResource"
+      ],
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/queue-base.ts",
+        "line": 9
+      },
+      "methods": [
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "If this queue was created in this stack (`new Queue`), a queue policy\nwill be automatically created upon the first call to `addToPolicy`. If\nthe queue is imported (`Queue.import`), then this is a no-op.",
+            "stability": "stable",
+            "summary": "Adds a statement to the IAM resource policy associated with this queue."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 45
+          },
+          "name": "addToResourcePolicy",
+          "parameters": [
+            {
+              "name": "statement",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.PolicyStatement"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.AddToResourcePolicyResult"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "Grant the actions defined in queueActions to the identity Principal given on this SQS queue resource."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 95
+          },
+          "name": "grant",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant right to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            },
+            {
+              "docs": {
+                "summary": "The actions to grant."
+              },
+              "name": "queueActions",
+              "type": {
+                "primitive": "string"
+              },
+              "variadic": true
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          },
+          "variadic": true
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "This will grant the following permissions:\n\n   - sqs:ChangeMessageVisibility\n   - sqs:DeleteMessage\n   - sqs:ReceiveMessage\n   - sqs:GetQueueAttributes\n   - sqs:GetQueueUrl",
+            "stability": "stable",
+            "summary": "Grant permissions to consume messages from a queue."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 60
+          },
+          "name": "grantConsumeMessages",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant consume rights to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "This will grant the following permissions:\n\n  - sqs:PurgeQueue\n  - sqs:GetQueueAttributes\n  - sqs:GetQueueUrl",
+            "stability": "stable",
+            "summary": "Grant an IAM principal permissions to purge all messages from the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 86
+          },
+          "name": "grantPurge",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant send rights to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "This will grant the following permissions:\n\n  - sqs:SendMessage\n  - sqs:GetQueueAttributes\n  - sqs:GetQueueUrl",
+            "stability": "stable",
+            "summary": "Grant access to send messages to a queue to the given identity."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 73
+          },
+          "name": "grantSendMessages",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant send rights to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "Return the given named metric for this Queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 11
+          },
+          "name": "metric",
+          "parameters": [
+            {
+              "name": "metricName",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The approximate age of the oldest non-deleted message in the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 17
+          },
+          "name": "metricApproximateAgeOfOldestMessage",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages in the queue that are delayed and not available for reading immediately."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 23
+          },
+          "name": "metricApproximateNumberOfMessagesDelayed",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages that are in flight."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 29
+          },
+          "name": "metricApproximateNumberOfMessagesNotVisible",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages available for retrieval from the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 35
+          },
+          "name": "metricApproximateNumberOfMessagesVisible",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of ReceiveMessage API calls that did not return a message."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 41
+          },
+          "name": "metricNumberOfEmptyReceives",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages deleted from the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 47
+          },
+          "name": "metricNumberOfMessagesDeleted",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages returned by calls to the ReceiveMessage action."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 53
+          },
+          "name": "metricNumberOfMessagesReceived",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages added to a queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 59
+          },
+          "name": "metricNumberOfMessagesSent",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Average over 5 minutes",
+            "stability": "stable",
+            "summary": "The size of messages added to a queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 65
+          },
+          "name": "metricSentMessageSize",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        }
+      ],
+      "name": "IQueue",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "If false, this is a standard queue.",
+            "stability": "stable",
+            "summary": "Whether this queue is an Amazon SQS FIFO queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 36
+          },
+          "name": "fifo",
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "attribute": "true"
+            },
+            "stability": "stable",
+            "summary": "The ARN of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 14
+          },
+          "name": "queueArn",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "attribute": "true"
+            },
+            "stability": "stable",
+            "summary": "The name of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 26
+          },
+          "name": "queueName",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "custom": {
+              "attribute": "true"
+            },
+            "stability": "stable",
+            "summary": "The URL of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 20
+          },
+          "name": "queueUrl",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "If this queue is server-side encrypted, this is the KMS encryption key."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 31
+          },
+          "name": "encryptionMasterKey",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/aws-kms.IKey"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.Queue": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "base": "@aws-cdk/aws-sqs.QueueBase",
+      "docs": {
+        "stability": "stable",
+        "summary": "A new Amazon SQS queue."
+      },
+      "fqn": "@aws-cdk/aws-sqs.Queue",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "lib/queue.ts",
+          "line": 325
+        },
+        "parameters": [
+          {
+            "name": "scope",
+            "type": {
+              "fqn": "constructs.Construct"
+            }
+          },
+          {
+            "name": "id",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "props",
+            "optional": true,
+            "type": {
+              "fqn": "@aws-cdk/aws-sqs.QueueProps"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "lib/queue.ts",
+        "line": 242
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Import an existing SQS queue provided an ARN."
+          },
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 251
+          },
+          "name": "fromQueueArn",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "The parent creating construct."
+              },
+              "name": "scope",
+              "type": {
+                "fqn": "constructs.Construct"
+              }
+            },
+            {
+              "docs": {
+                "summary": "The construct's name."
+              },
+              "name": "id",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "queue ARN (i.e. arn:aws:sqs:us-east-2:444455556666:queue1)."
+              },
+              "name": "queueArn",
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-sqs.IQueue"
+            }
+          },
+          "static": true
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Import an existing queue."
+          },
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 258
+          },
+          "name": "fromQueueAttributes",
+          "parameters": [
+            {
+              "name": "scope",
+              "type": {
+                "fqn": "constructs.Construct"
+              }
+            },
+            {
+              "name": "id",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "attrs",
+              "type": {
+                "fqn": "@aws-cdk/aws-sqs.QueueAttributes"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-sqs.IQueue"
+            }
+          },
+          "static": true
+        }
+      ],
+      "name": "Queue",
+      "properties": [
+        {
+          "docs": {
+            "remarks": "Set by subclasses.",
+            "stability": "stable",
+            "summary": "Controls automatic creation of policy objects."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 323
+          },
+          "name": "autoCreatePolicy",
+          "overrides": "@aws-cdk/aws-sqs.QueueBase",
+          "protected": true,
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "docs": {
+            "remarks": "If false, this is a standard queue.",
+            "stability": "stable",
+            "summary": "Whether this queue is an Amazon SQS FIFO queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 321
+          },
+          "name": "fifo",
+          "overrides": "@aws-cdk/aws-sqs.QueueBase",
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "The ARN of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 301
+          },
+          "name": "queueArn",
+          "overrides": "@aws-cdk/aws-sqs.QueueBase",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "The name of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 306
+          },
+          "name": "queueName",
+          "overrides": "@aws-cdk/aws-sqs.QueueBase",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "The URL of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 311
+          },
+          "name": "queueUrl",
+          "overrides": "@aws-cdk/aws-sqs.QueueBase",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "If this queue is encrypted, this is the KMS key."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 316
+          },
+          "name": "encryptionMasterKey",
+          "optional": true,
+          "overrides": "@aws-cdk/aws-sqs.QueueBase",
+          "type": {
+            "fqn": "@aws-cdk/aws-kms.IKey"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.QueueAttributes": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "datatype": true,
+      "docs": {
+        "stability": "stable",
+        "summary": "Reference to a queue."
+      },
+      "fqn": "@aws-cdk/aws-sqs.QueueAttributes",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/queue-base.ts",
+        "line": 252
+      },
+      "name": "QueueAttributes",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "The ARN of the queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 256
+          },
+          "name": "queueArn",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "- if fifo is not specified, the property will be determined based on the queue name (not possible for FIFO queues imported from a token)",
+            "remarks": "In case of a FIFO queue which is imported from a token, this value has to be explicitly set to true.",
+            "stability": "stable",
+            "summary": "Whether this queue is an Amazon SQS FIFO queue. If false, this is a standard queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 286
+          },
+          "name": "fifo",
+          "optional": true,
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "- None",
+            "stability": "stable",
+            "summary": "KMS encryption key, if this queue is server-side encrypted by a KMS key."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 277
+          },
+          "name": "keyArn",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "if queue name is not specified, the name will be derived from the queue ARN",
+            "stability": "stable",
+            "summary": "The name of the queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 270
+          },
+          "name": "queueName",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "- 'https://sqs.<region-endpoint>/<account-ID>/<queue-name>'",
+            "see": "https://docs.aws.amazon.com/sdk-for-net/v2/developer-guide/QueueURL.html",
+            "stability": "stable",
+            "summary": "The URL of the queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 264
+          },
+          "name": "queueUrl",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.QueueBase": {
+      "abstract": true,
+      "assembly": "@aws-cdk/aws-sqs",
+      "base": "@aws-cdk/core.Resource",
+      "docs": {
+        "stability": "stable",
+        "summary": "Reference to a new or existing Amazon SQS queue."
+      },
+      "fqn": "@aws-cdk/aws-sqs.QueueBase",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "lib/resource.ts",
+          "line": 137
+        },
+        "parameters": [
+          {
+            "name": "scope",
+            "type": {
+              "fqn": "constructs.Construct"
+            }
+          },
+          {
+            "name": "id",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "props",
+            "optional": true,
+            "type": {
+              "fqn": "@aws-cdk/core.ResourceProps"
+            }
+          }
+        ]
+      },
+      "interfaces": [
+        "@aws-cdk/aws-sqs.IQueue"
+      ],
+      "kind": "class",
+      "locationInModule": {
+        "filename": "lib/queue-base.ts",
+        "line": 101
+      },
+      "methods": [
+        {
+          "docs": {
+            "remarks": "If this queue was created in this stack (`new Queue`), a queue policy\nwill be automatically created upon the first call to `addToPolicy`. If\nthe queue is imported (`Queue.import`), then this is a no-op.",
+            "stability": "stable",
+            "summary": "Adds a statement to the IAM resource policy associated with this queue."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 144
+          },
+          "name": "addToResourcePolicy",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "statement",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.PolicyStatement"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.AddToResourcePolicyResult"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Grant the actions defined in queueActions to the identity Principal given on this SQS queue resource."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 240
+          },
+          "name": "grant",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant right to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            },
+            {
+              "docs": {
+                "summary": "The actions to grant."
+              },
+              "name": "actions",
+              "type": {
+                "primitive": "string"
+              },
+              "variadic": true
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          },
+          "variadic": true
+        },
+        {
+          "docs": {
+            "remarks": "This will grant the following permissions:\n\n   - sqs:ChangeMessageVisibility\n   - sqs:DeleteMessage\n   - sqs:ReceiveMessage\n   - sqs:GetQueueAttributes\n   - sqs:GetQueueUrl",
+            "stability": "stable",
+            "summary": "Grant permissions to consume messages from a queue."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 176
+          },
+          "name": "grantConsumeMessages",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant consume rights to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "This will grant the following permissions:\n\n  - sqs:PurgeQueue\n  - sqs:GetQueueAttributes\n  - sqs:GetQueueUrl",
+            "stability": "stable",
+            "summary": "Grant an IAM principal permissions to purge all messages from the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 226
+          },
+          "name": "grantPurge",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant send rights to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "This will grant the following permissions:\n\n  - sqs:SendMessage\n  - sqs:GetQueueAttributes\n  - sqs:GetQueueUrl",
+            "stability": "stable",
+            "summary": "Grant access to send messages to a queue to the given identity."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 202
+          },
+          "name": "grantSendMessages",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "Principal to grant send rights to."
+              },
+              "name": "grantee",
+              "type": {
+                "fqn": "@aws-cdk/aws-iam.IGrantable"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-iam.Grant"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Return the given named metric for this Queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 71
+          },
+          "name": "metric",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "metricName",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The approximate age of the oldest non-deleted message in the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 77
+          },
+          "name": "metricApproximateAgeOfOldestMessage",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages in the queue that are delayed and not available for reading immediately."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 83
+          },
+          "name": "metricApproximateNumberOfMessagesDelayed",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages that are in flight."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 89
+          },
+          "name": "metricApproximateNumberOfMessagesNotVisible",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Maximum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages available for retrieval from the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 95
+          },
+          "name": "metricApproximateNumberOfMessagesVisible",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of ReceiveMessage API calls that did not return a message."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 101
+          },
+          "name": "metricNumberOfEmptyReceives",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages deleted from the queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 107
+          },
+          "name": "metricNumberOfMessagesDeleted",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages returned by calls to the ReceiveMessage action."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 113
+          },
+          "name": "metricNumberOfMessagesReceived",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Sum over 5 minutes",
+            "stability": "stable",
+            "summary": "The number of messages added to a queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 119
+          },
+          "name": "metricNumberOfMessagesSent",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "Average over 5 minutes",
+            "stability": "stable",
+            "summary": "The size of messages added to a queue."
+          },
+          "locationInModule": {
+            "filename": "lib/sqs-augmentations.generated.ts",
+            "line": 125
+          },
+          "name": "metricSentMessageSize",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "parameters": [
+            {
+              "name": "props",
+              "optional": true,
+              "type": {
+                "fqn": "@aws-cdk/aws-cloudwatch.MetricOptions"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "fqn": "@aws-cdk/aws-cloudwatch.Metric"
+            }
+          }
+        },
+        {
+          "docs": {
+            "remarks": "This method can be implemented by derived constructs in order to perform\nvalidation logic. It is called on all constructs before synthesis.",
+            "stability": "stable",
+            "summary": "Validate the current construct."
+          },
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 157
+          },
+          "name": "validate",
+          "overrides": "@aws-cdk/core.Construct",
+          "protected": true,
+          "returns": {
+            "type": {
+              "collection": {
+                "elementtype": {
+                  "primitive": "string"
+                },
+                "kind": "array"
+              }
+            }
+          }
+        }
+      ],
+      "name": "QueueBase",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "Set by subclasses.",
+            "stability": "stable",
+            "summary": "Controls automatic creation of policy objects."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 133
+          },
+          "name": "autoCreatePolicy",
+          "protected": true,
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "remarks": "If false, this is a standard queue.",
+            "stability": "stable",
+            "summary": "Whether this queue is an Amazon SQS FIFO queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 126
+          },
+          "name": "fifo",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "The ARN of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 106
+          },
+          "name": "queueArn",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "The name of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 116
+          },
+          "name": "queueName",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "The URL of this queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 111
+          },
+          "name": "queueUrl",
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "If this queue is server-side encrypted, this is the KMS encryption key."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue-base.ts",
+            "line": 121
+          },
+          "name": "encryptionMasterKey",
+          "optional": true,
+          "overrides": "@aws-cdk/aws-sqs.IQueue",
+          "type": {
+            "fqn": "@aws-cdk/aws-kms.IKey"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.QueueEncryption": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "docs": {
+        "stability": "stable",
+        "summary": "What kind of encryption to apply to this queue."
+      },
+      "fqn": "@aws-cdk/aws-sqs.QueueEncryption",
+      "kind": "enum",
+      "locationInModule": {
+        "filename": "lib/queue.ts",
+        "line": 192
+      },
+      "members": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Messages in the queue are not encrypted."
+          },
+          "name": "UNENCRYPTED"
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Server-side KMS encryption with a master key managed by SQS."
+          },
+          "name": "KMS_MANAGED"
+        },
+        {
+          "docs": {
+            "remarks": "If `encryptionKey` is specified, this key will be used, otherwise, one will be defined.",
+            "stability": "stable",
+            "summary": "Server-side encryption with a KMS key managed by the user."
+          },
+          "name": "KMS"
+        }
+      ],
+      "name": "QueueEncryption"
+    },
+    "@aws-cdk/aws-sqs.QueuePolicy": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "base": "@aws-cdk/core.Resource",
+      "docs": {
+        "stability": "stable",
+        "summary": "Applies a policy to SQS queues."
+      },
+      "fqn": "@aws-cdk/aws-sqs.QueuePolicy",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "lib/policy.ts",
+          "line": 26
+        },
+        "parameters": [
+          {
+            "name": "scope",
+            "type": {
+              "fqn": "constructs.Construct"
+            }
+          },
+          {
+            "name": "id",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "props",
+            "type": {
+              "fqn": "@aws-cdk/aws-sqs.QueuePolicyProps"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "lib/policy.ts",
+        "line": 20
+      },
+      "name": "QueuePolicy",
+      "properties": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "The IAM policy document for this policy."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/policy.ts",
+            "line": 24
+          },
+          "name": "document",
+          "type": {
+            "fqn": "@aws-cdk/aws-iam.PolicyDocument"
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.QueuePolicyProps": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "datatype": true,
+      "docs": {
+        "stability": "stable",
+        "summary": "Properties to associate SQS queues with a policy."
+      },
+      "fqn": "@aws-cdk/aws-sqs.QueuePolicyProps",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/policy.ts",
+        "line": 10
+      },
+      "name": "QueuePolicyProps",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "stability": "stable",
+            "summary": "The set of queues this policy applies to."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/policy.ts",
+            "line": 14
+          },
+          "name": "queues",
+          "type": {
+            "collection": {
+              "elementtype": {
+                "fqn": "@aws-cdk/aws-sqs.IQueue"
+              },
+              "kind": "array"
+            }
+          }
+        }
+      ]
+    },
+    "@aws-cdk/aws-sqs.QueueProps": {
+      "assembly": "@aws-cdk/aws-sqs",
+      "datatype": true,
+      "docs": {
+        "stability": "stable",
+        "summary": "Properties for creating a new Queue."
+      },
+      "fqn": "@aws-cdk/aws-sqs.QueueProps",
+      "kind": "interface",
+      "locationInModule": {
+        "filename": "lib/queue.ts",
+        "line": 11
+      },
+      "name": "QueueProps",
+      "properties": [
+        {
+          "abstract": true,
+          "docs": {
+            "default": "false",
+            "remarks": "During the deduplication interval (5 minutes), Amazon SQS treats\nmessages that are sent with identical content (excluding attributes) as\nduplicates and delivers only one copy of the message.\n\nIf you don't enable content-based deduplication and you want to deduplicate\nmessages, provide an explicit deduplication ID in your SendMessage() call.\n\n(Only applies to FIFO queues.)",
+            "stability": "stable",
+            "summary": "Specifies whether to enable content-based deduplication."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 139
+          },
+          "name": "contentBasedDeduplication",
+          "optional": true,
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "Duration.minutes(5)",
+            "remarks": "The value must be an integer between 60 (1 minute) and 86,400 (24\nhours). The default is 300 (5 minutes).",
+            "stability": "stable",
+            "summary": "The length of time that Amazon SQS reuses a data key before calling KMS again."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 116
+          },
+          "name": "dataKeyReuse",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/core.Duration"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "no dead-letter queue",
+            "stability": "stable",
+            "summary": "Send messages to this queue if they were unsuccessfully dequeued a number of times."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 82
+          },
+          "name": "deadLetterQueue",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/aws-sqs.DeadLetterQueue"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "DeduplicationScope.QUEUE",
+            "remarks": "(Only applies to FIFO queues.)",
+            "stability": "stable",
+            "summary": "For high throughput for FIFO queues, specifies whether message deduplication occurs at the message group or queue level."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 149
+          },
+          "name": "deduplicationScope",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/aws-sqs.DeduplicationScope"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "0",
+            "remarks": "You can specify an integer value of 0 to 900 (15 minutes). The default\nvalue is 0.",
+            "stability": "stable",
+            "summary": "The time in seconds that the delivery of all messages in the queue is delayed."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 39
+          },
+          "name": "deliveryDelay",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/core.Duration"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "Unencrypted",
+            "remarks": "Be aware that encryption is not available in all regions, please see the docs\nfor current availability details.",
+            "stability": "stable",
+            "summary": "Whether the contents of the queue are encrypted, and by what type of key."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 92
+          },
+          "name": "encryption",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/aws-sqs.QueueEncryption"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "If encryption is set to KMS and not specified, a key will be created.",
+            "remarks": "Individual messages will be encrypted using data keys. The data keys in\nturn will be encrypted using this key, and reused for a maximum of\n`dataKeyReuseSecs` seconds.\n\nIf the 'encryptionMasterKey' property is set, 'encryption' type will be\nimplicitly set to \"KMS\".",
+            "stability": "stable",
+            "summary": "External KMS master key to use for queue encryption."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 106
+          },
+          "name": "encryptionMasterKey",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/aws-kms.IKey"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "false, unless queueName ends in '.fifo' or 'contentBasedDeduplication' is true.",
+            "stability": "stable",
+            "summary": "Whether this a first-in-first-out (FIFO) queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 123
+          },
+          "name": "fifo",
+          "optional": true,
+          "type": {
+            "primitive": "boolean"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "FifoThroughputLimit.PER_QUEUE",
+            "remarks": "(Only applies to FIFO queues.)",
+            "stability": "stable",
+            "summary": "For high throughput for FIFO queues, specifies whether the FIFO queue throughput quota applies to the entire queue or per message group."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 159
+          },
+          "name": "fifoThroughputLimit",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/aws-sqs.FifoThroughputLimit"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "256KiB",
+            "remarks": "You can specify an integer value from 1024 bytes (1 KiB) to 262144 bytes\n(256 KiB). The default value is 262144 (256 KiB).",
+            "stability": "stable",
+            "summary": "The limit of how many bytes that a message can contain before Amazon SQS rejects it."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 49
+          },
+          "name": "maxMessageSizeBytes",
+          "optional": true,
+          "type": {
+            "primitive": "number"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "CloudFormation-generated name",
+            "remarks": "If specified and this is a FIFO queue, must end in the string '.fifo'.",
+            "stability": "stable",
+            "summary": "A name for the queue."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 19
+          },
+          "name": "queueName",
+          "optional": true,
+          "type": {
+            "primitive": "string"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "0",
+            "remarks": "Does not wait if set to 0, otherwise waits this amount of seconds\nby default for messages to arrive.\n\nFor more information, see Amazon SQS Long Poll.",
+            "stability": "stable",
+            "summary": "Default wait time for ReceiveMessage calls."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 61
+          },
+          "name": "receiveMessageWaitTime",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/core.Duration"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "RemovalPolicy.DESTROY",
+            "remarks": "Even though queues are technically stateful, their contents are transient and it\nis common to add and remove Queues while rearchitecting your application. The\ndefault is therefore `DESTROY`. Change it to `RETAIN` if the messages are so\nvaluable that accidentally losing them would be unacceptable.",
+            "stability": "stable",
+            "summary": "Policy to apply when the user pool is removed from the stack."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 171
+          },
+          "name": "removalPolicy",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/core.RemovalPolicy"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "Duration.days(4)",
+            "remarks": "You can specify an integer value from 60 seconds (1 minute) to 1209600\nseconds (14 days). The default value is 345600 seconds (4 days).",
+            "stability": "stable",
+            "summary": "The number of seconds that Amazon SQS retains a message."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 29
+          },
+          "name": "retentionPeriod",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/core.Duration"
+          }
+        },
+        {
+          "abstract": true,
+          "docs": {
+            "default": "Duration.seconds(30)",
+            "remarks": "After dequeuing, the processor has this much time to handle the message\nand delete it from the queue before it becomes visible again for dequeueing\nby another processor.\n\nValues must be from 0 to 43200 seconds (12 hours). If you don't specify\na value, AWS CloudFormation uses the default value of 30 seconds.",
+            "stability": "stable",
+            "summary": "Timeout of processing a single message."
+          },
+          "immutable": true,
+          "locationInModule": {
+            "filename": "lib/queue.ts",
+            "line": 75
+          },
+          "name": "visibilityTimeout",
+          "optional": true,
+          "type": {
+            "fqn": "@aws-cdk/core.Duration"
+          }
+        }
+      ]
+    }
+  },
+  "version": "1.126.0",
+  "fingerprint": "iScXKpOArHpZDB9FI3K1GuORmWRHesmkJt+PahFkg94="
+}
