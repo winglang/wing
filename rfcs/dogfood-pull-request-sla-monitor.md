@@ -1,4 +1,4 @@
-# Dogfooding Wing applicaiton 
+# Dogfooding Wing - Pull Request SLA 
 
 - **Author(s):**: @ekeren
 - **Submission Date**: {2023-01-04}
