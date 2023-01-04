@@ -7,9 +7,11 @@ use std::collections::{hash_map, HashMap, HashSet};
 
 use super::UnsafeRef;
 
+pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
+
 pub struct SymbolEnv {
 	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
-	parent: Option<UnsafeRef<SymbolEnv>>,
+	parent: Option<SymbolEnvRef>,
 	pub return_type: Option<TypeRef>,
 	is_class: bool,
 	pub flight: Phase,
@@ -41,7 +43,7 @@ enum LookupResult<'a> {
 
 impl SymbolEnv {
 	pub fn new(
-		parent: Option<*const SymbolEnv>,
+		parent: Option<SymbolEnvRef>,
 		return_type: Option<TypeRef>,
 		is_class: bool,
 		flight: Phase,
@@ -50,12 +52,18 @@ impl SymbolEnv {
 		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
 		Self {
 			ident_map: HashMap::new(),
-			parent: parent.map(|e| UnsafeRef::<SymbolEnv>(e)),
+			parent,
 			return_type,
 			is_class,
 			flight,
 			statement_idx,
 		}
+	}
+
+	// Used to get an unsafe reference to this symbol environment so it be referenced by
+	// other types or environments (e.g. as a parent class or parent scope)
+	pub fn get_ref(&self) -> SymbolEnvRef {
+		UnsafeRef::<Self>(self)
 	}
 
 	pub fn is_root(&self) -> bool {

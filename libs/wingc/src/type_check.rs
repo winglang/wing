@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_DURATION};
+use crate::{debug, WINGSDK_DURATION, WINGSDK_RESOURCE};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -722,11 +722,7 @@ impl<'a> TypeChecker<'a> {
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig
 				} else {
-					self.expr_error(
-						exp,
-						format!("\"{}\" should be a function or method", function
-						)
-					);
+					self.expr_error(exp, format!("\"{}\" should be a function or method", function));
 					return None;
 				};
 
@@ -888,7 +884,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create an environment for the function
 				let mut function_env = SymbolEnv::new(
-					Some(env),
+					Some(env.get_ref()),
 					sig.return_type,
 					false,
 					func_def.signature.flight,
@@ -1095,7 +1091,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx).unwrap();
 
-				let mut scope_env = SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.flight, stmt.idx);
 				match scope_env.define(&iterator, SymbolKind::Variable(exp_type), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
@@ -1110,7 +1106,13 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 
 				self.inner_scopes.push(statements);
 			}
@@ -1122,11 +1124,23 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
-					else_scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+					else_scope.set_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						env.flight,
+						stmt.idx,
+					));
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -1155,7 +1169,13 @@ impl<'a> TypeChecker<'a> {
 				}
 			}
 			StmtKind::Scope(scope) => {
-				scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				scope.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
@@ -1186,34 +1206,42 @@ impl<'a> TypeChecker<'a> {
 				constructor,
 				is_resource,
 			} => {
-				// TODO: if is_resource then....
-				if *is_resource {
-					self.unimplemented_type("Resource class");
-				}
-
 				let env_flight = if *is_resource {
 					Phase::Preflight
 				} else {
 					Phase::Inflight
 				};
 
+				if *is_resource {
+					// TODO
+				}
+
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
 					let t = self.resolve_type(parent_type, env, stmt.idx);
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
-							(Some(t), Some(&class.env as *const SymbolEnv))
+							(Some(t), Some(class.env.get_ref()))
 						} else {
 							panic!("Resource {}'s parent {} is not a resource", name, t);
 						}
 					} else {
 						if let Type::Class(ref class) = *t {
-							(Some(t), Some(&class.env as *const SymbolEnv))
+							(Some(t), Some(class.env.get_ref()))
 						} else {
 							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
 						}
 					}
+				} else if *is_resource {
+					// If we're a resource and we have no parent we implicitly inherit from wingsdk's resource base class
+					let wingsdk_resource_type = env
+						.lookup_nested_str(WINGSDK_RESOURCE, Some(stmt.idx))
+						.expect("Expected wingsdk resource base to be defined")
+						.as_type()
+						.unwrap();
+					let wingsdk_resource_class = wingsdk_resource_type.as_resource().unwrap();
+					(Some(wingsdk_resource_type), Some(wingsdk_resource_class.env.get_ref()))
 				} else {
 					(None, None)
 				};
@@ -1310,7 +1338,13 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create constructor environment and prime it with args
-				let mut constructor_env = SymbolEnv::new(Some(env), constructor_sig.return_type, false, env_flight, stmt.idx);
+				let mut constructor_env = SymbolEnv::new(
+					Some(env.get_ref()),
+					constructor_sig.return_type,
+					false,
+					env_flight,
+					stmt.idx,
+				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 				// Prime the constructor environment with `this`
 				constructor_env
@@ -1343,7 +1377,13 @@ impl<'a> TypeChecker<'a> {
 						.expect("Expected method type to be a function signature");
 
 					// Create method environment and prime it with args
-					let mut method_env = SymbolEnv::new(Some(env), method_sig.return_type, false, method_sig.flight, stmt.idx);
+					let mut method_env = SymbolEnv::new(
+						Some(env.get_ref()),
+						method_sig.return_type,
+						false,
+						method_sig.flight,
+						stmt.idx,
+					);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
@@ -1560,7 +1600,10 @@ impl<'a> TypeChecker<'a> {
 							if e.values.contains(property) {
 								return _type;
 							} else {
-								return self.general_type_error(format!("Enum \"{}\" does not contain value \"{}\"", _type, property.name));
+								return self.general_type_error(format!(
+									"Enum \"{}\" does not contain value \"{}\"",
+									_type, property.name
+								));
 							}
 						}
 						_ => {

@@ -311,7 +311,7 @@ impl<'a> JsiiImporter<'a> {
 		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
-		let base_class = if let Some(base_class_fqn) = &jsii_class.base {
+		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
 			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
 			if base_class_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) {
 				is_resource = true;
@@ -346,16 +346,13 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// Get env of base class/resource
-		let base_class_env = if let Some(base_class) = base_class {
-			match *base_class {
-				Type::Class(ref c) => Some(&c.env as *const SymbolEnv),
-				Type::Resource(ref c) => {
-					// If our base class is a resource then we are a resource
-					is_resource = true;
-					Some(&c.env as *const SymbolEnv)
-				}
-				_ => panic!("Base class {} of {} is not a class or resource", base_class, type_name),
-			}
+		let base_class_env = if let Some(base_class_type) = base_class_type {
+			let base_class = base_class_type.as_class_or_resource().expect(&format!(
+				"Base class {} of {} is not a class or resource",
+				base_class_type, type_name
+			));
+			is_resource = base_class_type.as_resource().is_some();
+			Some(base_class.env.get_ref())
 		} else {
 			None
 		};
@@ -370,7 +367,7 @@ impl<'a> JsiiImporter<'a> {
 			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
-			parent: base_class,
+			parent: base_class_type,
 		};
 		let mut new_type = self.wing_types.add_type(if is_resource {
 			Type::Resource(class_spec)
