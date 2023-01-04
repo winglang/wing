@@ -97,22 +97,25 @@ let determine_sla = inflight (github_username: str) : num => {
 };
 
 api.on_post("/pull-request-created",  inflight (req: ApiRequest): ApiResponse => {
-  let orbit_data = Struct.from_json(req.payload);
+  // I kinda expected to see req.body here and not req.payload
+  // Also it kinda made me think about express.js body json parser middleware idea that we can "borrow"
+  let orbit_data = Struct.from_json(req.payload); 
+  // I assume we have a nicer API for this comparison, but I haven't checked yet
   if (orbit_data.source != 'github' || orbit_data.entity != 'pull-request' || orbit_data.action != 'created' ){
     log.error("Wrong data '${orbit_data}' sent to ${req.path}"); 
     return;
   }
+  
   let sla = determine_sla(orbit_data.github_user);
-
-  future_invoker.invoke_in(sla, inflight ():void => {
+  future_invoker.invoke_in(sla, inflight (): void => {
     let comments = await octokit.rest.pulls.listReviewComments({
       owner: orbit_data.payload.github_repo.owner,
       name: orbit_data.payload.github_repo.name,
       pull_number: orbit_data.payload.pull_number,
-    });
-    if (comments.data.length() == 0) {
+    }); // comments is still an any object from untyped bring
+    if (comments.data.length() == 0) { // length is the javascript method
         slack.post("#community-monitor", 
-        "Pull Request https://github.com/${orbit_data.payload.github_repo.owner}/${orbit_data.payload.github_repo.name}/pull/${orbit_data.payload.pull_number} requires some :love"
+          "Pull Request https://github.com/${orbit_data.payload.github_repo.owner}/${orbit_data.payload.github_repo.name}/pull/${orbit_data.payload.pull_number} requires some :love"
         );
     }
   });
