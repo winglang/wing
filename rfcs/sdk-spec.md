@@ -99,7 +99,9 @@ struct BucketOnDeleteProps { /* elided */ }
 struct BucketOnUpdateProps { /* elided */ }
 struct BucketOnEventProps { /* elided */ }
 
-interface IBucket {
+resource Bucket {
+  init(props: BucketProps = {});
+
   /**
    * Run a function whenever a file is uploaded to the bucket.
    */
@@ -119,40 +121,38 @@ interface IBucket {
    * Run a function whenever a file is created, uploaded, or deleted from the bucket.
    */
   on_event(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): cloud.Function;
-}
 
-interface IBucketClient {
   /**
    * Upload a file to the bucket.
    */
-  put(key: str, value: Serializable): Promise<void>;
+  inflight put(key: str, value: Serializable): Promise<void>;
 
   /**
    * Get a file from the bucket.
    */
-  get(key: str): Promise<Serializable>;
+  inflight get(key: str): Promise<Serializable>;
 
   /**
    * Delete a file from the bucket.
    */
-  delete(key: str): Promise<void>;
+  inflight delete(key: str): Promise<void>;
 
   /**
    * List all files in the bucket with the given prefix.
    */
-  list(prefix: str?): Promise<Iterator<str>>;
+  inflight list(prefix: str?): Promise<Iterator<str>>;
 
   /**
    * Returns a url to the given object.
    * @throws Will throw if the public is not public.
    */
-  public_url(key: str): Promise<str>;
+  inflight public_url(key: str): Promise<str>;
 
   /**
    * Returns a presigned url to the given object. This URL can be used to access
    * the object by anyone until it expires (defaults to 24 hours).
    */
-  presigned_url(key: str, duration: duration): Promise<str>;
+  inflight presigned_url(key: str, duration: duration): Promise<str>;
 }
 ```
 
@@ -183,7 +183,9 @@ struct QueueProps {
 
 struct QueueOnMessageProps { /* elided */ }
 
-interface IQueue {
+resource Queue {
+  init(props: QueueProps = {});
+
   /**
    * Run a function whenever a message is pushed to the queue.
    *
@@ -191,17 +193,15 @@ interface IQueue {
    * the queue's timeout?
    */
   on_message(fn: inflight (message: Serializable) => void, opts: QueueOnMessageProps?): cloud.Function;
-}
 
-interface IQueueClient {
   /**
    * Push a message to the queue.
    */
-  push(message: Serializable): Promise<void>;
+  inflight push(message: Serializable): Promise<void>;
   /**
    * Pops (deletes and returns) a message from the queue.
    */
-  pop(): Promise<Serializable>;
+  inflight pop(): Promise<Serializable>;
 }
 ```
 
@@ -248,18 +248,18 @@ struct FunctionProps {
   env: Map<str, str>?;
 }
 
-interface IFunction {
+resource Function {
+  init(handler: inflight (input: any): any, props: FunctionProps = {});
+
   /**
    * Add an environment variable to the function.
    */
   add_env(key: str, value: str): void;
-}
 
-interface IFunctionClient {
   /**
    * Invoke the function.
    */
-  invoke(payload: Serializable): Promise<Serializable>;
+  inflight invoke(payload: Serializable): Promise<Serializable>;
 }
 ```
 
@@ -274,37 +274,72 @@ The logger resource represents a service that can be used to log messages to a c
 ```ts
 struct LoggerProps {}
 
-interface ILogger {
+resource Logger {
+  init(props: LoggerProps = {});
+
   /**
-   * Log a message.
+   * Log a message at the given level. The default level is "info".
    */
-  log(message: str): void;
+  log(message: str, level?: LogLevel): void;
+
+  /**
+   * Log a message at the trace level.
+   */
+  trace(message: str): void;
+
+  /**
+   * Log a message at the info level.
+   */
+  info(message: str): void;
+
+  /**
+   * Log a message at the warn level.
+   */
+  warn(message: str): void;
+
+  /**
+   * Log a message at the error level.
+   */
+  error(message: str): void;
+
+  /**
+   * Log a message at the given level. The default level is "info".
+   */
+  inflight log(message: str, level?: LogLevel): void;
+
+  /**
+   * Log a message at the trace level.
+   */
+  inflight trace(message: str): void;
+
+  /**
+   * Log a message at the info level.
+   */
+  inflight info(message: str): void;
+
+  /**
+   * Log a message at the warn level.
+   */
+  inflight warn(message: str): void;
+
+  /**
+   * Log a message at the error level.
+   */
+  inflight error(message: str): void;
 }
 
-interface ILoggerClient {
-  /**
-   * Log a message.
-   */
-  log(message: str): Promise<void>;
+enum LogLevel {
+  TRACE,
+  INFO,
+  WARN,
+  ERROR,
 }
 ```
 
 Future extensions:
 - log severity options?
 - APIs for scanning/filtering logs?
-
-## Tracer
-
-TODO
-
-<!--
-Does this need to be a separate resource? Can we just use a logger?
-
-Should this automatically hook into existing cloud tracing services like AWS
-X-Ray, Azure Application Insights, or GCP Stackdriver Trace? Or should we
-provide our own instrumentation with OpenTelemetry and use that across
-all clouds? Or should/can we do both?
--->
+- tracing options
 
 ## Counter
 
@@ -320,27 +355,27 @@ struct CounterProps {
   initial: num?;
 }
 
-interface ICounter {}
+resource Counter {
+  init(props: CounterProps = {});
 
-interface ICounterClient {
   /**
    * Increment the counter, returning the previous value.
    * @default 1
    */
-  inc(value: num?): Promise<void>;
+  inflight inc(value: num?): Promise<void>;
 
   /**
    * Decrement the counter, returning the previous value.
    * @default 1
    */
-  dec(value: num?): Promise<void>;
+  inflight dec(value: num?): Promise<void>;
 
   /**
    * Get the current value of the counter. Using this API is prone to race
    * conditions since the value can change between the time it is read and the
    * time it is used in your code.
    */
-  peek(): Promise<number>;
+  inflight peek(): Promise<number>;
 }
 ```
 
@@ -353,22 +388,22 @@ The topic resource represents a service that can be used to publish and subscrib
 A topic is similar to a queue, but messages are not persisted and all subscribers receive a copy of each message.
 
 ```ts
-interface TopicProps {}
+struct TopicProps {}
 
 struct TopicOnPublishProps { /* elided */ }
 
-interface ITopic {
+resource Topic {
+  init(props: TopicProps = {});
+
   /**
    * Run a function whenever a message is published to the topic.
    */
   on_publish(fn: inflight (message: Serializable) => void, opts: TopicOnPublishProps?): cloud.Function;
-}
 
-interface ITopicClient {
   /**
    * Publish a message to the topic.
    */
-  publish(message: Serializable): Promise<void>;
+  inflight publish(message: Serializable): Promise<void>;
 }
 ```
 
@@ -400,14 +435,22 @@ struct ScheduleProps {
 
 struct ScheduleOnTickProps { /* elided */ }
 
-interface ISchedule {
+resource Schedule {
+  /**
+   * Trigger events according to a cron schedule.
+   */
+  static fromCron(cron: str): Schedule;
+
+  /**
+   * Trigger events at a periodic rate.
+   */
+  static fromRate(rate: duration): Schedule;
+
   /**
    * Register a worker to run on the schedule.
    */
   on_tick(handler: inflight () => void, opts: ScheduleOnTickProps?): cloud.Function;
 }
-
-interface IScheduleClient {}
 ```
 
 Future extensions: inflight `next_tick(): Duration` method?
@@ -425,14 +468,14 @@ struct WebsiteProps {
   path: str;
 }
 
-interface IWebsite {
+resource Website {
+  init(props: WebsiteProps);
+
   /**
    * The website's url.
    */
   url: str;
 }
-
-interface IWebsiteClient {}
 ```
 
 Future extensions: domain and certificate props? support for edge functions?
@@ -451,7 +494,9 @@ struct ApiOnDeleteProps { /* elided */ }
 struct ApiOnPatchProps { /* elided */ }
 struct ApiOnRequestProps { /* elided */ }
 
-interface IApi {
+resource Api {
+  init(props: ApiProps = {});
+
   /**
    * The api's base url.
    */
@@ -486,13 +531,12 @@ interface IApi {
    * Run a function whenever any request is made to the specified route.
    */
   on_request(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnRequestProps?): cloud.Function;
-}
 
-interface IApiClient {
   /**
-   * Make a request to the specified route.
+   * Make a request to the specified route. Throws if the route hasn't been
+   * defined.
    */
-  invoke(route: str, method: HttpMethod, payload: Serializable): Promise<Serializable>;
+  inflight request(route: str, method: HttpMethod, payload: Serializable): Promise<Serializable>;
 }
 
 struct ApiRequest {
@@ -554,8 +598,9 @@ struct MetricProps {
   /**
    * The metric's description.
    * @example "The number of bytes uploaded to the website."
+   * @default - no description
    */
-  description: str;
+  description?: str;
 }
 
 struct MetricOnThresholdProps {
@@ -590,18 +635,18 @@ enum ComparisonOperator {
   NotEqual,
 }
 
-interface IMetric {
+resource Metric {
+  init(props: MetricProps);
+
   /**
    * Trigger an event whenever the metric exceeds the specified threshold.
    */
   on_threshold(handler: inflight () => void, opts: MetricOnThresholdProps): cloud.Function;
-}
 
-interface IMetricClient {
   /**
-   * Record a value for the metric.
+   * Record a value for the metric at the current point in time.
    */
-  record(value: number): Promise<void>;
+  inflight record(value: number): Promise<void>;
 }
 ```
 
@@ -623,7 +668,7 @@ Terraform deployment, and then AppRunner would be used to create a service.
 
 (Why not ECS? ECS is a great service, but it introduces a lot of complexity and
 isn't really necessary for the most common use cases (writing HTTP services
-Using ECS with Fargate would require possibly creating a VPC, subnets,
+using ECS with Fargate would require possibly creating a VPC, subnets,
 routing table, internet gateway, security groups, load balancer, target group,
 cluster, task definition, service, and scaling policy. That's a lot of
 complexity to maintain in the SDK.)
@@ -649,7 +694,7 @@ struct ServiceProps {
    * The directory containing the service's source code to package with
    * buildpack.
    */
-  path: str;
+  buildpack_path: str;
 
   /**
    * The service's environment variables.
@@ -688,32 +733,30 @@ struct ServiceProps {
   replicas: number?;
 }
 
-interface IService {
+resource Service {
+  init(props: ServiceProps);
+
   /**
    * The service's URL.
    */
   url: str;
-}
 
-interface IServiceClient {
   /**
    * Send a request to the service.
    */
-  request(opts: ServiceRequestOptions): Promise<ServiceResponse>;
+  inflight request(opts: ServiceRequestOptions): Promise<ServiceResponse>;
 }
 
 struct ServiceRequestOptions {
   /**
    * The request's method.
-   * @default "GET"
    */
-  method: str?;
+  method: HttpMethod;
 
   /**
    * The request's path.
-   * @default "/"
    */
-  path: str?;
+  path: str;
 
   /**
    * The request's headers.
@@ -722,10 +765,10 @@ struct ServiceRequestOptions {
   headers: Map<str, str>;
 
   /**
-   * The request's body.
+   * The request's payload.
    * @default ""
    */
-  body: str?;
+  payload: Serializable?;
 }
 
 struct ServiceResponse {
@@ -742,7 +785,7 @@ struct ServiceResponse {
   /**
    * The response's body.
    */
-  body: str;
+  body: Serializable;
 }
 ```
 
@@ -758,9 +801,8 @@ The primary key can be any column, but it is recommended to use a `String` colum
 struct TableProps {
   /**
    * The table's name.
-   * @default "table"
    */
-  name: str?;
+  name: str;
 
   /**
    * The table's columns.
@@ -770,9 +812,8 @@ struct TableProps {
   /**
    * The table's primary key. No two rows can have the same value for the
    * primary key.
-   * @default "id"
    */
-  primary_key: str?;
+  primary_key: str;
 }
 
 enum ColumnType {
@@ -783,7 +824,9 @@ enum ColumnType {
   Json,
 }
 
-interface ITable {
+resource Table {
+  init(props: TableProps);
+
   /**
    * The table's name.
    */
@@ -798,33 +841,31 @@ interface ITable {
    * The table's primary key.
    */
   primary_key: str;
-}
 
-interface ITableClient {
   /**
    * Insert a row into the table.
    */
-  insert(row: Map<str, Serializable>): Promise<void>;
+  inflight insert(row: Map<str, Serializable>): Promise<void>;
 
   /**
    * Update a row in the table.
    */
-  update(row: Map<str, Serializable>): Promise<void>;
+  inflight update(row: Map<str, Serializable>): Promise<void>;
 
   /**
    * Delete a row from the table.
    */
-  delete(row: Map<str, Serializable>): Promise<void>;
+  inflight delete(row: Map<str, Serializable>): Promise<void>;
 
   /**
    * Get a row from the table, by primary key.
    */
-  get(key: str): Promise<Map<str, Serializable>>;
+  inflight get(key: str): Promise<Map<str, Serializable>>;
 
   /**
    * List all rows in the table.
    */
-  list(): Promise<Iterator<Map<str, Serializable>>>;
+  inflight list(): Promise<Iterator<Map<str, Serializable>>>;
 }
 ```
 
