@@ -2,7 +2,7 @@ import path from "node:path";
 
 import * as trpcExpress from "@trpc/server/adapters/express";
 import cors from "cors";
-import { app, BrowserWindow, dialog, Menu, shell } from "electron";
+import { app, BrowserWindow, dialog, Menu, shell, screen } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import express from "express";
@@ -47,10 +47,8 @@ async function createWindow(options: { title?: string; port: number }) {
   const window = new BrowserWindow({
     title: options.title ?? "Get Started",
     icon: path.join(ROOT_PATH.public, "icon.ico"),
-    minWidth: 640,
-    minHeight: 480,
-    width: 1280,
-    height: 720,
+    width: Math.round(screen.getPrimaryDisplay().workAreaSize.width * 0.9),
+    height: Math.round(screen.getPrimaryDisplay().workAreaSize.height * 0.9),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.js"),
     },
