@@ -258,18 +258,16 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
 
-Add a `.env` file to `tools/hangar` with the following:
-
-```env
-NPM_TOKEN=<GitHub PAT with access to @winglang packages>
-```
-
-This allows the spun-up registry to pull down @winglang packages from the private github registry.
-
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
 ```sh
 npx nx test
+```
+
+Or, you can run the following command from the root of the monorepo:
+
+```sh
+npx nx run hangar:test
 ```
 
 ## 🧬 What is an RFC?
