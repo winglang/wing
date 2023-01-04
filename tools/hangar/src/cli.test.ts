@@ -102,9 +102,9 @@ async function enterTestDir(testDir: string) {
 async function runWingCompile(wingBinPrefix: string, wingFile: string) {
 	const isError = path.dirname(wingFile).endsWith("error");
 	if (isError) {
-		await expect(() => $`${wingBinPrefix}/wing compile ${wingFile}`).rejects.toThrow();
+		await expect($`${wingBinPrefix}/wing compile ${wingFile}`).rejects.toThrow();
 	} else {
-		await expect(() => $`${wingBinPrefix}/wing compile ${wingFile}`).resolves.toBeDefined();
+		await expect($`${wingBinPrefix}/wing compile ${wingFile}`).resolves.toBeDefined();
 	}
 }
 
