@@ -57,16 +57,16 @@ resource FutureCloudFunctionInvoker {
 }
 
 /**
-* A dumb down Slack Resource that abstract posting to channel as a single user
-* In a non Sim implementation this Resouce should handle secrets of the single user
+* A dumb down Slack Resource that abstracts posting to channel as a single user
+* In a non Sim implementation this Resouce should handle secrets of that single user (or we should use Secret?) 
 * In the sim implementation we can just print the posting, for easy localhost debugging
 */
 resource Slack {
   /** 
   * Post a message of the auth users into a slack channel
   * Notice that this resource is a very degenerate version of what a 
-  * real Slack resource should look like, in this case the posting of the message
-  * Is always done by a specific user
+  * real slack resource should look like, in this case the posting of the message
+  * is always done by a specific user.
   */ 
   inflight post(channel: str, message: str){
     // TODO implement:
