@@ -19,9 +19,10 @@ that will be extended in the future for a community companion tool that can moni
 and respond to issues/pull requests/slack posts, etc... 
 
 The specific code presented here is just the initial work, it is not completed but I still believe I can 
-get valuable feedback from the team before I move forward.
+get valuable feedback from the team before I move forward. 
 
-Following the 
+There is also an emphasis here on not future proofing anything, or creating future abstractions.
+For example the slack is basicaly an alerting mechanism, but right now it is just plain old slack 
 
 ```ts (wing)
 bring cloud;
