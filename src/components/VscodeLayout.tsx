@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { LogType } from "../../electron/main/consoleLogger.js";
+import { LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
 import { Error } from "../design-system/Error.js";
@@ -18,11 +18,11 @@ import { ResourceIcon } from "../stories/utils.js";
 import { trpc } from "../utils/trpc.js";
 import { useTreeMenuItems } from "../utils/useTreeMenuItems.js";
 
+import { ConsoleLogs } from "./ConsoleLogs.js";
 import { DetailedNode } from "./DetailedNode.js";
 import { HeaderBanner } from "./HeaderBanner.js";
+import LogsFilters from "./LogsFilters.js";
 import { MetadataPanel } from "./MetadataPanel.js";
-import { NodeLogs } from "./NodeLogs.js";
-import NodeLogsFilters from "./NodeLogsFilters.js";
 import { ResourceView } from "./resource-views/ResourceView.js";
 
 export interface VscodeLayoutProps {
@@ -79,11 +79,11 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
   });
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
-    LogType[]
+    LogLevel[]
   >(["info", "warn", "error"]);
   const logs = trpc["app.logs"].useQuery({
     filters: {
-      type: {
+      level: {
         verbose: selectedLogTypeFilters.includes("verbose"),
         info: selectedLogTypeFilters.includes("info"),
         warn: selectedLogTypeFilters.includes("warn"),
@@ -254,7 +254,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
       <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
         <div className="relative h-full flex flex-col gap-2">
           <div className="flex px-4">
-            <NodeLogsFilters
+            <LogsFilters
               selected={selectedLogTypeFilters}
               onChange={(types) => setSelectedLogTypeFilters(types)}
             />
@@ -262,7 +262,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
 
           <div className="relative h-full">
             <ScrollableArea ref={logsRef} overflowY className="px-4 pb-1.5">
-              <NodeLogs logs={logs.data ?? []} />
+              <ConsoleLogs logs={logs.data ?? []} />
             </ScrollableArea>
           </div>
         </div>

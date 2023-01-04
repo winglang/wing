@@ -95,7 +95,7 @@ function createWindowManager() {
           log.info(message);
           this.messages.push({
             timestamp: Date.now(),
-            type: "verbose",
+            level: "verbose",
             message,
             source: source ?? "console",
           });
@@ -105,7 +105,7 @@ function createWindowManager() {
           log.info(message);
           this.messages.push({
             timestamp: Date.now(),
-            type: "info",
+            level: "info",
             message,
             source: source ?? "console",
           });
@@ -115,7 +115,7 @@ function createWindowManager() {
           log.error(error);
           this.messages.push({
             timestamp: Date.now(),
-            type: "error",
+            level: "error",
             message:
               error instanceof Error ? error.message : JSON.stringify(error),
             source: source ?? "console",

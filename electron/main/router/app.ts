@@ -22,7 +22,7 @@ export const createAppRouter = () => {
       .input(
         z.object({
           filters: z.object({
-            type: z.object({
+            level: z.object({
               verbose: z.boolean(),
               info: z.boolean(),
               warn: z.boolean(),
@@ -41,7 +41,7 @@ export const createAppRouter = () => {
           .logs()
           .filter(
             (entry) =>
-              input.filters.type[entry.type] &&
+              input.filters.level[entry.level] &&
               input.filters.source[entry.source],
           );
       }),

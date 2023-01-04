@@ -1,10 +1,10 @@
-export type LogType = "verbose" | "info" | "warn" | "error";
+export type LogLevel = "verbose" | "info" | "warn" | "error";
 
 export type LogSource = "compiler" | "console" | "simulator";
 
 export interface LogEntry {
   timestamp: number;
-  type: LogType;
+  level: LogLevel;
   message: string;
   source: LogSource;
 }

@@ -4,26 +4,23 @@ import { Fragment, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 
-import { LogType } from "../../electron/main/consoleLogger.js";
+import { LogLevel } from "../../electron/main/consoleLogger.js";
 import { Button } from "../design-system/Button.js";
 
-const logTypes = ["verbose", "info", "warn", "error"] as const;
-const logTypeNames: Record<typeof logTypes[number], string> = {
+const logLevels = ["verbose", "info", "warn", "error"] as const;
+const logLevelNames: Record<typeof logLevels[number], string> = {
   verbose: "Verbose",
   info: "Info",
   warn: "Warnings",
   error: "Errors",
 };
 
-export interface NodeLogsFiltersProps {
-  selected: LogType[];
-  onChange?: (selected: LogType[]) => void;
+export interface LogsFiltersProps {
+  selected: LogLevel[];
+  onChange?: (selected: LogLevel[]) => void;
 }
 
-export default function NodeLogsFilters({
-  selected,
-  onChange,
-}: NodeLogsFiltersProps) {
+export default function LogsFilters({ selected, onChange }: LogsFiltersProps) {
   const [combinationName, setCombinationName] = useState<string>();
   useEffect(() => {
     if (selected.length === 4) {
@@ -36,7 +33,7 @@ export default function NodeLogsFilters({
     } else if (selected.length === 0) {
       setCombinationName("Hide all");
     } else if (selected.length === 1) {
-      setCombinationName(`${logTypeNames[selected[0]!]} only`);
+      setCombinationName(`${logLevelNames[selected[0]!]} only`);
     } else {
       setCombinationName("Custom levels");
     }
@@ -105,7 +102,7 @@ export default function NodeLogsFilters({
                   </div>
                 </div>
 
-                {logTypes.map((logType, logTypeIndex) => (
+                {logLevels.map((logType, logTypeIndex) => (
                   <Listbox.Option
                     key={logTypeIndex}
                     className={({ active }) =>
@@ -124,7 +121,7 @@ export default function NodeLogsFilters({
                             selected ? "font-medium" : "font-normal"
                           }`}
                         >
-                          {logTypeNames[logType]}
+                          {logLevelNames[logType]}
                         </span>
                         {selected ? (
                           <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-indigo-600">

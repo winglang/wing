@@ -12,14 +12,21 @@ const dateTimeFormat = new Intl.DateTimeFormat(undefined, {
   fractionalSecondDigits: 3,
 });
 
-interface NodeLogEntryProps {
+interface LogEntryProps {
   log: LogEntry;
+  onMouseDownHandler: (log: LogEntry) => void;
+  isSelected: boolean;
 }
 
-const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
+const LogEntryRow = ({
+  log,
+  isSelected,
+  onMouseDownHandler,
+}: LogEntryProps) => {
   const [expanded, setExpanded] = useState(false);
   const expandableRef = useRef<HTMLElement>(null);
   const [overflows, setOverflows] = useState(false);
+
   useEffect(() => {
     const computeOverflows = throttle(() => {
       const element = expandableRef.current;
@@ -82,30 +89,32 @@ const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
           className={classNames(
             "px-2 rounded-lg text-2xs inline-flex uppercase",
             {
-              "bg-slate-50 text-slate-500": log.type === "verbose",
-              "bg-slate-400 text-white": log.type === "info",
-              "bg-yellow-400 text-white": log.type === "warn",
-              "bg-red-400 text-white": log.type === "error",
+              "bg-slate-50 text-slate-500": log.level === "verbose",
+              "bg-slate-400 text-white": log.level === "info",
+              "bg-yellow-400 text-white": log.level === "warn",
+              "bg-red-400 text-white": log.level === "error",
             },
           )}
         >
-          {log.type}
+          {log.level}
         </div>
       </div>
 
       <button
         className={classNames(
-          "text-left text-2xs px-1.5 py-0.5 group",
+          "text-left text-2xs px-1.5 py-0.5 group select-text",
           "flex min-w-0",
           {
             "hover:bg-slate-100": canBeExpanded,
             "cursor-default": !canBeExpanded,
-            "text-slate-700": log.type !== "verbose",
-            "hover:text-slate-800": log.type !== "verbose" && canBeExpanded,
-            "text-slate-400": log.type === "verbose",
-            "hover:text-slate-500": log.type === "verbose" && canBeExpanded,
+            "text-slate-700": log.level !== "verbose",
+            "hover:text-slate-800": log.level !== "verbose" && canBeExpanded,
+            "text-slate-400": log.level === "verbose",
+            "hover:text-slate-500": log.level === "verbose" && canBeExpanded,
+            "bg-slate-100": isSelected,
           },
         )}
+        onMouseDown={() => onMouseDownHandler(log)}
         onClick={() => {
           if (canBeExpanded) {
             setExpanded((expanded) => !expanded);
@@ -135,11 +144,17 @@ const NodeLogEntry = ({ log }: NodeLogEntryProps) => {
   );
 };
 
-export interface NodeLogsProps {
+export interface ConsoleLogsProps {
   logs: LogEntry[];
 }
 
-export const NodeLogs = ({ logs }: NodeLogsProps) => {
+export const ConsoleLogs = ({ logs }: ConsoleLogsProps) => {
+  const [selectedLog, setSelectedLog] = useState<LogEntry | undefined>(
+    undefined,
+  );
+  const handleMouseDown = (log: LogEntry) => {
+    setSelectedLog(log);
+  };
   return (
     <>
       <div
@@ -149,7 +164,12 @@ export const NodeLogs = ({ logs }: NodeLogsProps) => {
         }}
       >
         {logs.map((log, logIndex) => (
-          <NodeLogEntry key={`${logIndex}-${log.timestamp}`} log={log} />
+          <LogEntryRow
+            key={`${logIndex}-${log.timestamp}`}
+            log={log}
+            isSelected={selectedLog === log}
+            onMouseDownHandler={handleMouseDown}
+          />
         ))}
       </div>
     </>
