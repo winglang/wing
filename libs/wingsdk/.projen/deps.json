@@ -18,11 +18,6 @@
       "type": "build"
     },
     {
-      "name": "@types/minipass",
-      "version": "3.1.2",
-      "type": "build"
-    },
-    {
       "name": "@types/node",
       "version": "^16",
       "type": "build"
@@ -116,11 +111,6 @@
     },
     {
       "name": "json-schema",
-      "type": "build"
-    },
-    {
-      "name": "minipass",
-      "version": "3.1.6",
       "type": "build"
     },
     {
@@ -222,6 +212,21 @@
     {
       "name": "tar",
       "type": "bundled"
+    },
+    {
+      "name": "@types/prettier",
+      "version": "2.6.0",
+      "type": "override"
+    },
+    {
+      "name": "@types/responselike",
+      "version": "1.0.0",
+      "type": "override"
+    },
+    {
+      "name": "got",
+      "version": "12.3.1",
+      "type": "override"
     },
     {
       "name": "@cdktf/provider-aws",

@@ -70,10 +70,6 @@ project.eslint?.addOverride({
 project.deps.removeDependency("jsii-docgen");
 project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
 
-// fix typing issues with "tar" dependency
-project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
-project.package.addPackageResolutions("minipass@3.1.6");
-
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");
 project.addDevDeps("cdktf-cli");
