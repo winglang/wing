@@ -43,6 +43,7 @@
     },
     {
       "name": "@winglang/jsii-docgen",
+      "version": "file:../../apps/jsii-docgen",
       "type": "build"
     },
     {

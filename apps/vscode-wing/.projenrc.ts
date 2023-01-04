@@ -43,7 +43,7 @@ const project = new TypeScriptAppProject({
   deps: [
     `@types/vscode@^${VSCODE_BASE_VERSION}`,
     "vscode-languageclient",
-    "@winglang/wingsdk",
+    "@winglang/wingsdk@file:../../libs/wingsdk",
   ],
   devDeps: ["@types/node", "esbuild", "vsce"],
 });

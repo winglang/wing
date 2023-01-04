@@ -48,7 +48,7 @@
   },
   "dependencies": {
     "@types/vscode": "^1.70.0",
-    "@winglang/wingsdk": "^0.3.16",
+    "@winglang/wingsdk": "file:../../libs/wingsdk",
     "vscode-languageclient": "^8.0.2"
   },
   "keywords": [

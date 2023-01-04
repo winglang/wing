@@ -80,6 +80,7 @@
     },
     {
       "name": "@winglang/wingsdk",
+      "version": "file:../../libs/wingsdk",
       "type": "runtime"
     },
     {
