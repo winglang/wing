@@ -9,7 +9,21 @@
 ## Feature Spec
 
 Wing has great interoperability with the TypeScript ecosystem. You can bring any TypeScript library
-and use it Wing.
+and use it in Wing.
+
+### How does Wing bring typescript libraries?
+
+When the Wing compiler sees something like this:
+
+```js
+bring colors;
+```
+
+It will use node's standard module resolution algorithm to lookup for `colors`. When found, it will
+check if there's a `.jsii` manifest in the module. Since there isn't, it will check if the directory `vendor/colors.wlib`
+exists.
+
+This directory is expected to include a `.jsii` file and an `index.js` file.
 
 ### ts2wing
 
@@ -24,21 +38,26 @@ $ ts2wing --version
 0.1.2
 ```
 
-Let's say I want to use the [colors](https://www.npmjs.com/package/colors) library, first, let's
-import it using the `ts2wing` command:
+Let's say I want to use the [colors](https://www.npmjs.com/package/colors) library in my Wing code.
+
+First, I am going to install it via npm/yarm/pnpm or whatever:
+
+```sh
+npm i colors
+```
+
+Now, I am going to generate bindings for it using `ts2wing`:
 
 ```sh
 $ ts2wing colors
-Installing colors@1.4.0 from npm and all dependencies into vendor/colors.wlib.src...
-Processing type definitions (index.d.ts)...
-Generating Wing wrapper classes...
-Compiling with JSII...
-Generating API.md...
-Packaging Wing Library to vendor/colors.wlib
-Cleaning vendor/colors.wlib.src
+Found colors@1.4.0 under node_modules/colors...
+Reading definitions from index.d.ts...
+Generating Wing wrapper classes under vendor/colors/index.ts...
+Compiling JSII to vendor/colors/.jsii...
+Generating vendor/colors/API.md...
 ```
 
-### The .wlib File
+### The .wlib Directory
 
 This command created a Wing Library file under `vendor/colors.wlib`.
 
