@@ -117,14 +117,14 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
       console.log();
       console.log("  " + chalk.bold.white("note:") + " " + chalk.white("intermediate javascript code:"));
-      const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]);
+      const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
       const lines = artifact.split("\n");
-      let startLine = Math.max(lineNumber - 3, 0);
-      let finishLine = Math.min(lineNumber + 3, lines.length - 1);
+      let startLine = Math.max(lineNumber - 2, 0);
+      let finishLine = Math.min(lineNumber + 2, lines.length);
 
       // print line and its three surrounding lines
       for (let i = startLine; i < finishLine; i++) {
-        if (i === lineNumber - 1) {
+        if (i === lineNumber) {
           console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
         } else {
           console.log("   " + chalk.dim(lines[i]));
