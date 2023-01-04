@@ -2,11 +2,13 @@ import {
   ArchiveBoxIcon,
   BoltIcon,
   CalculatorIcon,
+  ClockIcon,
   CubeIcon,
   CubeTransparentIcon,
   GlobeAltIcon,
   QueueListIcon,
 } from "@heroicons/react/24/outline";
+import { Cog6ToothIcon } from "@heroicons/react/24/solid";
 import classNames from "classnames";
 import React from "react";
 
@@ -70,6 +72,22 @@ const CubeTransparentExIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
+const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
+  return (
+    <div className="relative">
+      <CubeIcon {...props} />
+
+      <div
+        className={classNames(
+          "bg-slate-100 absolute inset-0 scale-[55%] origin-bottom-right",
+        )}
+      >
+        <Cog6ToothIcon className={props.className} />
+      </div>
+    </div>
+  );
+};
+
 const getResourceIconComponent = (
   resourceType: BaseResourceSchema["type"] | undefined,
 ) => {
@@ -89,11 +107,14 @@ const getResourceIconComponent = (
     case "wingsdk.cloud.Counter": {
       return CalculatorIcon;
     }
-    case "wingsdk.constructs.Construct": {
-      return CubeTransparentExIcon;
+    case "wingsdk.cloud.Cron": {
+      return ClockIcon;
+    }
+    case "constructs.Construct": {
+      return CubeIcon;
     }
     default: {
-      return CubeIcon;
+      return CustomResourceIcon;
     }
   }
 };

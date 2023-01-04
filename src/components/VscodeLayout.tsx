@@ -176,7 +176,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
           <div className="flex-1 flex">
             <div className="flex-1 relative">
               <ScrollableArea overflowX className="flex flex-col">
-                {currentNode.data?.type === "constructs.Construct" &&
+                {!currentNode.data?.type?.startsWith("wingsdk.") &&
                   childRelationships.data && (
                     <div className="flex-1 bg-slate-50 min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
                       {childRelationships.data.map((child, index) => (

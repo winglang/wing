@@ -122,29 +122,29 @@ export const MetadataPanel = ({
           break;
         }
       }
+    }
 
-      if (inbound && inbound.length > 0) {
-        connectionsGroupsArray.push({
-          groupName: "Inbound",
-          type: "inbound",
-          connections: inbound.map((node) => ({
-            id: node.id,
-            path: node.path,
-            icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
-          })),
-        });
-      }
-      if (outbound && outbound.length > 0) {
-        connectionsGroupsArray.push({
-          groupName: "Outbound",
-          type: "outbound",
-          connections: outbound.map((node) => ({
-            id: node.id,
-            path: node.path,
-            icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
-          })),
-        });
-      }
+    if (inbound && inbound.length > 0) {
+      connectionsGroupsArray.push({
+        groupName: "Inbound",
+        type: "inbound",
+        connections: inbound.map((node) => ({
+          id: node.id,
+          path: node.path,
+          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
+        })),
+      });
+    }
+    if (outbound && outbound.length > 0) {
+      connectionsGroupsArray.push({
+        groupName: "Outbound",
+        type: "outbound",
+        connections: outbound.map((node) => ({
+          id: node.id,
+          path: node.path,
+          icon: <ResourceIcon resourceType={node.type} className="w-4 h-4" />,
+        })),
+      });
     }
     setAttributeGroups(attrGroups);
     setConnectionsGroups(connectionsGroupsArray);

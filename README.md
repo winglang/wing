@@ -41,10 +41,13 @@ npm exec vite-node scripts/builderElectronApp.mts
 # Open the included demo/target/index.wsim
 open demo/target/index.wsim -a $(pwd)/release/mac-arm64/Wing\ Console.app
 ```
+
 OR run:
+
 ```sh
 wing run demo/index.w
 ```
+
 The Console with auto compile on each change you make
 
 ## Deeplinks
@@ -59,4 +62,10 @@ wing compile -t sim index.w
 # Extract the wsim, for debugging purposes
 cd target
 tar -xf index.wsim
+```
+
+## Build the Construct Hub demo file
+
+```sh
+npx vite-node scripts/generateConstructHubWsim.mts
 ```

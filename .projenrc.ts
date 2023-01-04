@@ -271,9 +271,9 @@ if (project.eslint) {
     "unicorn/prevent-abbreviations": "off",
   });
 
-  // Do not error on shadow
+  // Do not error on shadow.
   project.eslint.addRules({
-    "@typescript-eslint/no-shadow": "warn",
+    "@typescript-eslint/no-shadow": "off",
   });
 
   // Enforce import order.

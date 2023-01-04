@@ -1,0 +1,1083 @@
+{
+  "version": "tree-0.1",
+  "tree": {
+    "id": "root",
+    "path": "root",
+    "attributes": {
+      "wing:console:type": "constructs.Construct",
+      "wing:resource:stateful": false,
+      "wing:resource:connections": []
+    },
+    "children": {
+      "ConstructHub": {
+        "id": "ConstructHub",
+        "path": "root/ConstructHub",
+        "attributes": {
+          "wing:console:type": "ConstructHub",
+          "wing:resource:stateful": false,
+          "wing:resource:connections": []
+        },
+        "children": {
+          "PackageData": {
+            "id": "PackageData",
+            "path": "root/ConstructHub/PackageData",
+            "attributes": {
+              "wing:console:type": "FailsafeBucket",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": [
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                  "relationship": "getFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                  "relationship": "listFiles"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                  "relationship": "deleteFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Ingestion/Handler",
+                  "relationship": "putFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Ingestion/ReprocessWorkflow/Handler",
+                  "relationship": "listFiles"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Ingestion/ReprocessWorkflow/Handler",
+                  "relationship": "getFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Ingestion/ReprocessWorkflow/Handler",
+                  "relationship": "putFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/PackageStats/Handler",
+                  "relationship": "putFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/PackageStats/Handler",
+                  "relationship": "deleteFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/PackageStats/Handler",
+                  "relationship": "getFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/PackageStats/Handler",
+                  "relationship": "listFiles"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/VersionTracker/Handler",
+                  "relationship": "putFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/VersionTracker/Handler",
+                  "relationship": "getFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/FeedBuilder/Handler",
+                  "relationship": "putFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/FeedBuilder/Handler",
+                  "relationship": "getFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Orchestration/Handler",
+                  "relationship": "putFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Orchestration/Handler",
+                  "relationship": "getFile"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Orchestration/CatalogBuilder/Handler",
+                  "relationship": "getFile"
+                }
+              ]
+            },
+            "children": {
+              "Primary": {
+                "id": "Primary",
+                "path": "root/ConstructHub/PackageData/Primary",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Bucket",
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": []
+                },
+                "children": {}
+              },
+              "Failover": {
+                "id": "Failover",
+                "path": "root/ConstructHub/PackageData/Failover",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Bucket",
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": []
+                },
+                "children": {}
+              }
+            }
+          },
+          "CodeArtifact": {
+            "id": "CodeArtifact",
+            "path": "root/ConstructHub/CodeArtifact",
+            "attributes": {
+              "wing:console:type": "Repository",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": [
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Ingestion/Handler",
+                  "relationship": "publish"
+                }
+              ]
+            },
+            "children": {}
+          },
+          "DenyList": {
+            "id": "DenyList",
+            "path": "root/ConstructHub/DenyList",
+            "attributes": {
+              "wing:console:type": "DenyList",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": [
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/Orchestration/CatalogBuilder/Handler",
+                  "relationship": "lookup"
+                },
+                {
+                  "direction": "outbound",
+                  "resource": "root/ConstructHub/Orchestration",
+                  "relationship": "buildCatalog"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/NpmJs/Stager",
+                  "relationship": "lookup"
+                },
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/NpmJs/Follower",
+                  "relationship": "lookup"
+                }
+              ]
+            },
+            "children": {
+              "Bucket": {
+                "id": "Bucket",
+                "path": "root/ConstructHub/DenyList/Bucket",
+                "attributes": {
+                  "wing:console:type": "FailsafeBucket",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/DenyList/BucketDeployment",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                      "relationship": "getFile"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                      "relationship": "listFiles"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                      "relationship": "invoke (onObjectCreated)"
+                    }
+                  ]
+                },
+                "children": {
+                  "Primary": {
+                    "id": "Primary",
+                    "path": "root/ConstructHub/DenyList/Bucket/Primary",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Bucket",
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "children": {}
+                  },
+                  "Failover": {
+                    "id": "Failover",
+                    "path": "root/ConstructHub/DenyList/Bucket/Failover",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Bucket",
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "children": {}
+                  }
+                }
+              },
+              "BucketDeployment": {
+                "id": "BucketDeployment",
+                "path": "root/ConstructHub/DenyList/BucketDeployment",
+                "attributes": {
+                  "wing:console:type": "BucketDeployment",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/DenyList/Bucket",
+                      "relationship": "putFile"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Prune": {
+                "id": "Prune",
+                "path": "root/ConstructHub/DenyList/Prune",
+                "attributes": {
+                  "wing:console:type": "Prune",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "children": {
+                  "DeleteQueue": {
+                    "id": "DeleteQueue",
+                    "path": "root/ConstructHub/DenyList/Prune/DeleteQueue",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Queue",
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                          "relationship": "sendMessage"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/DenyList/Prune/DeleteHandler",
+                          "relationship": "invoke (onMessageAdded)"
+                        }
+                      ]
+                    },
+                    "children": {}
+                  },
+                  "PruneHandler": {
+                    "id": "PruneHandler",
+                    "path": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Function",
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/DenyList/Prune/DeleteQueue",
+                          "relationship": "sendMessage"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/PackageData",
+                          "relationship": "getFile"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/PackageData",
+                          "relationship": "listFiles"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/PackageData",
+                          "relationship": "deleteFile"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/DenyList/Bucket",
+                          "relationship": "getFile"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/DenyList/Bucket",
+                          "relationship": "listFiles"
+                        },
+                        {
+                          "direction": "inbound",
+                          "resource": "root/ConstructHub/DenyList/Bucket",
+                          "relationship": "invoke (onObjectCreated)"
+                        },
+                        {
+                          "direction": "inbound",
+                          "resource": "root/ConstructHub/DenyList/PruneCron",
+                          "relationship": "invoke (periodically)"
+                        }
+                      ]
+                    },
+                    "children": {}
+                  },
+                  "DeleteHandler": {
+                    "id": "DeleteHandler",
+                    "path": "root/ConstructHub/DenyList/Prune/DeleteHandler",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Function",
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "resource": "root/ConstructHub/DenyList/Prune/DeleteQueue",
+                          "relationship": "invoke (onMessageAdded)"
+                        }
+                      ]
+                    },
+                    "children": {}
+                  }
+                }
+              },
+              "PruneCron": {
+                "id": "PruneCron",
+                "path": "root/ConstructHub/DenyList/PruneCron",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Cron",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/DenyList/Prune/PruneHandler",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              }
+            }
+          },
+          "Ingestion": {
+            "id": "Ingestion",
+            "path": "root/ConstructHub/Ingestion",
+            "attributes": {
+              "wing:console:type": "Ingestion",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": []
+            },
+            "children": {
+              "ConfigBucket": {
+                "id": "ConfigBucket",
+                "path": "root/ConstructHub/Ingestion/ConfigBucket",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Bucket",
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/Ingestion/DeployIngestionConfiguration",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/Ingestion/Handler",
+                      "relationship": "getFile"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "DeployIngestionConfiguration": {
+                "id": "DeployIngestionConfiguration",
+                "path": "root/ConstructHub/Ingestion/DeployIngestionConfiguration",
+                "attributes": {
+                  "wing:console:type": "BucketDeployment",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/Ingestion/ConfigBucket",
+                      "relationship": "putFile"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Handler": {
+                "id": "Handler",
+                "path": "root/ConstructHub/Ingestion/Handler",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Function",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/Ingestion/ConfigBucket",
+                      "relationship": "getFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/CodeArtifact",
+                      "relationship": "publish"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/Ingestion/Queue",
+                      "relationship": "invoke (onMessageReceived)"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/Ingestion/ReprocessQueue",
+                      "relationship": "invoke (onMessageReceived)"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/StagingBucket",
+                      "relationship": "getFile"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Queue": {
+                "id": "Queue",
+                "path": "root/ConstructHub/Ingestion/Queue",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Queue",
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/Ingestion/Handler",
+                      "relationship": "invoke (onMessageReceived)"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Stager",
+                      "relationship": "sendMessage"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "ReprocessQueue": {
+                "id": "ReprocessQueue",
+                "path": "root/ConstructHub/Ingestion/ReprocessQueue",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Queue",
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/Ingestion/Handler",
+                      "relationship": "invoke (onMessageReceived)"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/Ingestion/ReprocessWorkflow/Handler",
+                      "relationship": "sendMessage"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "ReprocessWorkflow": {
+                "id": "ReprocessWorkflow",
+                "path": "root/ConstructHub/Ingestion/ReprocessWorkflow",
+                "attributes": {
+                  "wing:console:type": "ReprocessIngestionWorkflow",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "children": {
+                  "Handler": {
+                    "id": "Handler",
+                    "path": "root/ConstructHub/Ingestion/ReprocessWorkflow/Handler",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Function",
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/Ingestion/ReprocessQueue",
+                          "relationship": "sendMessage"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/PackageData",
+                          "relationship": "listFiles"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/PackageData",
+                          "relationship": "getFile"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/PackageData",
+                          "relationship": "putFile"
+                        },
+                        {
+                          "direction": "inbound",
+                          "resource": "root/ConstructHub/Ingestion/ReprocessCron",
+                          "relationship": "invoke (periodically)"
+                        }
+                      ]
+                    },
+                    "children": {}
+                  }
+                }
+              },
+              "ReprocessCron": {
+                "id": "ReprocessCron",
+                "path": "root/ConstructHub/Ingestion/ReprocessCron",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Cron",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/Ingestion/ReprocessWorkflow/Handler",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              }
+            }
+          },
+          "PackageStats": {
+            "id": "PackageStats",
+            "path": "root/ConstructHub/PackageStats",
+            "attributes": {
+              "wing:console:type": "PackageStats",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": []
+            },
+            "children": {
+              "Handler": {
+                "id": "Handler",
+                "path": "root/ConstructHub/PackageStats/Handler",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Function",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "deleteFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "getFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "listFiles"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/PackageStats/Cron",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Cron": {
+                "id": "Cron",
+                "path": "root/ConstructHub/PackageStats/Cron",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Cron",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageStats/Handler",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              }
+            }
+          },
+          "VersionTracker": {
+            "id": "VersionTracker",
+            "path": "root/ConstructHub/VersionTracker",
+            "attributes": {
+              "wing:console:type": "VersionTracker",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": []
+            },
+            "children": {
+              "Handler": {
+                "id": "Handler",
+                "path": "root/ConstructHub/VersionTracker/Handler",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Function",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "getFile"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/VersionTracker/Cron",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Cron": {
+                "id": "Cron",
+                "path": "root/ConstructHub/VersionTracker/Cron",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Cron",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/VersionTracker/Handler",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              }
+            }
+          },
+          "FeedBuilder": {
+            "id": "FeedBuilder",
+            "path": "root/ConstructHub/FeedBuilder",
+            "attributes": {
+              "wing:console:type": "FeedBuilder",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": []
+            },
+            "children": {
+              "Handler": {
+                "id": "Handler",
+                "path": "root/ConstructHub/FeedBuilder/Handler",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Function",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "getFile"
+                    }
+                  ]
+                },
+                "children": {}
+              }
+            }
+          },
+          "Orchestration": {
+            "id": "Orchestration",
+            "path": "root/ConstructHub/Orchestration",
+            "attributes": {
+              "wing:console:type": "Orchestration",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": [
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/DenyList",
+                  "relationship": "buildCatalog"
+                }
+              ]
+            },
+            "children": {
+              "Handler": {
+                "id": "Handler",
+                "path": "root/ConstructHub/Orchestration/Handler",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Function",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/PackageData",
+                      "relationship": "getFile"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "CatalogBuilder": {
+                "id": "CatalogBuilder",
+                "path": "root/ConstructHub/Orchestration/CatalogBuilder",
+                "attributes": {
+                  "wing:console:type": "CatalogBuilder",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "children": {
+                  "Handler": {
+                    "id": "Handler",
+                    "path": "root/ConstructHub/Orchestration/CatalogBuilder/Handler",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Function",
+                      "wing:resource:stateful": false,
+                      "wing:resource:connections": [
+                        {
+                          "direction": "inbound",
+                          "resource": "root/ConstructHub/Orchestration/CatalogBuilder/Handler",
+                          "relationship": "invoke"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/Orchestration/CatalogBuilder/Handler",
+                          "relationship": "invoke"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/DenyList",
+                          "relationship": "lookup"
+                        },
+                        {
+                          "direction": "outbound",
+                          "resource": "root/ConstructHub/PackageData",
+                          "relationship": "getFile"
+                        }
+                      ]
+                    },
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "LicenseList": {
+            "id": "LicenseList",
+            "path": "root/ConstructHub/LicenseList",
+            "attributes": {
+              "wing:console:type": "LicenseList",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": [
+                {
+                  "direction": "inbound",
+                  "resource": "root/ConstructHub/NpmJs/Follower",
+                  "relationship": "lookup"
+                }
+              ]
+            },
+            "children": {
+              "Bucket": {
+                "id": "Bucket",
+                "path": "root/ConstructHub/LicenseList/Bucket",
+                "attributes": {
+                  "wing:console:type": "FailsafeBucket",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/LicenseList/Deployment",
+                      "relationship": "putFile"
+                    }
+                  ]
+                },
+                "children": {
+                  "Primary": {
+                    "id": "Primary",
+                    "path": "root/ConstructHub/LicenseList/Bucket/Primary",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Bucket",
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "children": {}
+                  },
+                  "Failover": {
+                    "id": "Failover",
+                    "path": "root/ConstructHub/LicenseList/Bucket/Failover",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Bucket",
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "children": {}
+                  }
+                }
+              },
+              "Deployment": {
+                "id": "Deployment",
+                "path": "root/ConstructHub/LicenseList/Deployment",
+                "attributes": {
+                  "wing:console:type": "BucketDeployment",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/LicenseList/Bucket",
+                      "relationship": "putFile"
+                    }
+                  ]
+                },
+                "children": {}
+              }
+            }
+          },
+          "WebApp": {
+            "id": "WebApp",
+            "path": "root/ConstructHub/WebApp",
+            "attributes": {
+              "wing:console:type": "WebApp",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": []
+            },
+            "children": {
+              "Bucket": {
+                "id": "Bucket",
+                "path": "root/ConstructHub/WebApp/Bucket",
+                "attributes": {
+                  "wing:console:type": "FailsafeBucket",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": []
+                },
+                "children": {
+                  "Primary": {
+                    "id": "Primary",
+                    "path": "root/ConstructHub/WebApp/Bucket/Primary",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Bucket",
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "children": {}
+                  },
+                  "Failover": {
+                    "id": "Failover",
+                    "path": "root/ConstructHub/WebApp/Bucket/Failover",
+                    "attributes": {
+                      "wing:console:type": "wingsdk.cloud.Bucket",
+                      "wing:resource:stateful": true,
+                      "wing:resource:connections": []
+                    },
+                    "children": {}
+                  }
+                }
+              }
+            }
+          },
+          "NpmJs": {
+            "id": "NpmJs",
+            "path": "root/ConstructHub/NpmJs",
+            "attributes": {
+              "wing:console:type": "NpmJs",
+              "wing:resource:stateful": false,
+              "wing:resource:connections": []
+            },
+            "children": {
+              "StagingBucket": {
+                "id": "StagingBucket",
+                "path": "root/ConstructHub/NpmJs/StagingBucket",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Bucket",
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/Ingestion/Handler",
+                      "relationship": "getFile"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Stager",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Stager",
+                      "relationship": "getFile"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Follower",
+                      "relationship": "getFile (path=couchdb-last-transaction-id.2)"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Follower",
+                      "relationship": "putFile (path=couchdb-last-transaction-id.2)"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Stager": {
+                "id": "Stager",
+                "path": "root/ConstructHub/NpmJs/Stager",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Function",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/StagingBucket",
+                      "relationship": "putFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/StagingBucket",
+                      "relationship": "getFile"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/DenyList",
+                      "relationship": "lookup"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/Ingestion/Queue",
+                      "relationship": "sendMessage"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/StagerDlq",
+                      "relationship": "sendMessage (onInvokeError)"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/StagerDlq",
+                      "relationship": "invoke (onMessageReceived)"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Follower",
+                      "relationship": "invoke"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "StagerDlq": {
+                "id": "StagerDlq",
+                "path": "root/ConstructHub/NpmJs/StagerDlq",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Queue",
+                  "wing:resource:stateful": true,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Stager",
+                      "relationship": "sendMessage (onInvokeError)"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/Stager",
+                      "relationship": "invoke (onMessageReceived)"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Follower": {
+                "id": "Follower",
+                "path": "root/ConstructHub/NpmJs/Follower",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Function",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/StagingBucket",
+                      "relationship": "getFile (path=couchdb-last-transaction-id.2)"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/StagingBucket",
+                      "relationship": "putFile (path=couchdb-last-transaction-id.2)"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/DenyList",
+                      "relationship": "lookup"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/LicenseList",
+                      "relationship": "lookup"
+                    },
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/Stager",
+                      "relationship": "invoke"
+                    },
+                    {
+                      "direction": "inbound",
+                      "resource": "root/ConstructHub/NpmJs/Cron",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              },
+              "Cron": {
+                "id": "Cron",
+                "path": "root/ConstructHub/NpmJs/Cron",
+                "attributes": {
+                  "wing:console:type": "wingsdk.cloud.Cron",
+                  "wing:resource:stateful": false,
+                  "wing:resource:connections": [
+                    {
+                      "direction": "outbound",
+                      "resource": "root/ConstructHub/NpmJs/Follower",
+                      "relationship": "invoke (periodically)"
+                    }
+                  ]
+                },
+                "children": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

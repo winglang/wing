@@ -55,10 +55,7 @@ Primary.args = {
       id: "3",
       name: "Construct",
       icon: (
-        <ResourceIcon
-          resourceType="wingsdk.constructs.Construct"
-          className="w-4 h-4"
-        />
+        <ResourceIcon resourceType="constructs.Construct" className="w-4 h-4" />
       ),
     },
     {

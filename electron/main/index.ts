@@ -374,7 +374,13 @@ async function main() {
     const installExtension = await import("electron-devtools-installer");
     await installExtension.default(installExtension.REACT_DEVELOPER_TOOLS.id);
 
-    await windowManager.open(`${__dirname}/../../../../demo/index.w`);
+    // Open the demo Wing file (includes compiling).
+    // await windowManager.open(`${__dirname}/../../../../demo/index.w`);
+
+    // Open the Construct Hub.
+    await windowManager.open(
+      `${__dirname}/../../../../demo/constructHub/index.wsim`,
+    );
   } else {
     new AppUpdater();
 

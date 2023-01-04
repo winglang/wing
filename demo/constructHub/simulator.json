@@ -1,0 +1,199 @@
+{
+  "resources": [
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/PackageData/Primary",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/PackageData/Failover",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/DenyList/Bucket/Primary",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/DenyList/Bucket/Failover",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Queue",
+      "path": "root/ConstructHub/DenyList/Prune/DeleteQueue",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/DenyList/Prune/PruneHandler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/DenyList/Prune/DeleteHandler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/Ingestion/ConfigBucket",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/Ingestion/Handler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Queue",
+      "path": "root/ConstructHub/Ingestion/Queue",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Queue",
+      "path": "root/ConstructHub/Ingestion/ReprocessQueue",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/Ingestion/ReprocessWorkflow/Handler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/PackageStats/Handler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/VersionTracker/Handler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/FeedBuilder/Handler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/Orchestration/Handler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/Orchestration/CatalogBuilder/Handler",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/LicenseList/Bucket/Primary",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/LicenseList/Bucket/Failover",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/WebApp/Bucket/Primary",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/WebApp/Bucket/Failover",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Bucket",
+      "path": "root/ConstructHub/NpmJs/StagingBucket",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/NpmJs/Stager",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Queue",
+      "path": "root/ConstructHub/NpmJs/StagerDlq",
+      "props": {},
+      "attrs": {}
+    },
+    {
+      "type": "wingsdk.cloud.Function",
+      "path": "root/ConstructHub/NpmJs/Follower",
+      "props": {
+        "sourceCodeFile": "assets/index.js",
+        "sourceCodeLanguage": "javascript",
+        "environmentVariables": {}
+      },
+      "attrs": {}
+    }
+  ],
+  "sdkVersion": "0.4.26"
+}

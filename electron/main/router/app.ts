@@ -260,6 +260,11 @@ function getResourceType(
   simulator: Simulator,
 ): string {
   return (
+    // WARNING: This is for test purposes only.
+    // There's no way to reflect custom resource types in the simulator, so
+    // we use a fake wing:console:type attribute. We should remove it at some
+    // point.
+    node.attributes?.["wing:console:type"] ??
     getResourceConfig(node.path, simulator)?.type ??
     node.constructInfo?.fqn ??
     "constructs.Construct"
