@@ -39,9 +39,9 @@ bring untyped octokit as octokit; // syntax TBD
 * This is an initial, quick and dirty API of 
 * wing's equivilant to javascript setTimeout api
 * There are many options how the API for capability can look like
-* for Example, It might be a capability of the cloud.Function object
-* But I decided to focus on a designated Resource for this capability.
-* So we can implement this as a custom resource and not an sdk resource (to begin with) 
+* for example, It might be a capability of the cloud.Function object.
+* But I decided to focus on a designated Resource for this capability, 
+* so we can implement this as a custom resource and not an sdk resource (to begin with) 
 */ 
 resource FutureCloudFunctionInvoker { 
   /**
