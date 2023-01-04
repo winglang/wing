@@ -148,20 +148,20 @@ pub struct Stmt {
 }
 
 #[derive(Debug)]
-pub enum UtilityFunctionKind {
+pub enum UtilityFunctions {
 	Print,
 	Panic,
 	Throw,
 	Assert,
 }
 
-impl Display for UtilityFunctionKind {
+impl Display for UtilityFunctions {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
-			UtilityFunctionKind::Print => write!(f, "print"),
-			UtilityFunctionKind::Panic => write!(f, "panic"),
-			UtilityFunctionKind::Throw => write!(f, "throw"),
-			UtilityFunctionKind::Assert => write!(f, "assert"),
+			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Panic => write!(f, "panic"),
+			UtilityFunctions::Throw => write!(f, "throw"),
+			UtilityFunctions::Assert => write!(f, "assert"),
 		}
 	}
 }

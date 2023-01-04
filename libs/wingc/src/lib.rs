@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol};
+use ast::{Scope, Symbol, UtilityFunctions};
 use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -75,7 +75,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	scope.set_env(env);
 
 	add_builtin(
-		"print",
+		UtilityFunctions::Print.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
@@ -85,7 +85,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		types,
 	);
 	add_builtin(
-		"assert",
+		UtilityFunctions::Assert.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.bool()],
 			return_type: None,
@@ -95,7 +95,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		types,
 	);
 	add_builtin(
-		"throw",
+		UtilityFunctions::Throw.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
@@ -105,7 +105,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		types,
 	);
 	add_builtin(
-		"panic",
+		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
