@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctionKind,
 	},
 	utilities::snake_case_to_camel_case,
 };
@@ -142,6 +142,33 @@ impl JSifier {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
 			Reference::NestedIdentifier { object, property } => {
 				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
+			}
+		}
+	}
+	// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
+	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
+	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctionKind) -> String {
+		match function_type {
+			UtilityFunctionKind::Assert => {
+				return format!(
+					"{{((cond) => {{if (!cond) throw new Error(`preflight assertion failed: '{0}'`)}})({0})}}",
+					self.jsify_arg_list(args, None, None, false)
+				);
+			}
+			UtilityFunctionKind::Print => {
+				return format!("{{console.log({})}}", self.jsify_arg_list(args, None, None, false));
+			}
+			UtilityFunctionKind::Throw => {
+				return format!(
+					"{{((msg) => {{throw new Error(msg)}})({})}}",
+					self.jsify_arg_list(args, None, None, false)
+				);
+			}
+			UtilityFunctionKind::Panic => {
+				return format!(
+					"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
+					self.jsify_arg_list(args, None, None, false)
+				);
 			}
 		}
 	}
@@ -283,25 +310,14 @@ impl JSifier {
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
 			ExprKind::Call { function, args } => {
 				let mut needs_case_conversion = false;
-				// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
-				// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
 				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
-					return format!("{{console.log({})}}", self.jsify_arg_list(args, None, None, false));
+					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Print);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "assert") {
-					return format!(
-						"{{((cond) => {{if (!cond) throw new Error(`Runtime Assertion Failed For Condition: '{0}'`)}})({0})}}",
-						self.jsify_arg_list(args, None, None, false)
-					);
+					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Assert);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "panic") {
-					return format!(
-						"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
-						self.jsify_arg_list(args, None, None, false)
-					);
+					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Panic);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "throw") {
-					return format!(
-						"{{((msg) => {{throw new Error(msg)}})({})}}",
-						self.jsify_arg_list(args, None, None, false)
-					);
+					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Throw);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
 					needs_case_conversion = object_type.as_class_or_resource().unwrap().should_case_convert_jsii;

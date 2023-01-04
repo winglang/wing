@@ -148,6 +148,14 @@ pub struct Stmt {
 }
 
 #[derive(Debug)]
+pub enum UtilityFunctionKind {
+	Print,
+	Panic,
+	Throw,
+	Assert,
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
