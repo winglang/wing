@@ -99,6 +99,15 @@ async function enterTestDir(testDir: string) {
   $.cwd = testDir;
 }
 
+async function runWingCompile(wingBinDir: string, wingFile: string) {
+	const isError = path.dirname(wingFile).endsWith("error");
+	if (isError) {
+		await expect(() => $`${wingBinDir}/wing compile ${wingFile}`).rejects.toThrow();
+	} else {
+		await expect(() => $`${wingBinDir}/wing compile ${wingFile}`).resolves.toBeDefined();
+	}
+}
+
 test.each(validWingFiles)(
   "wing compile %s",
   async (wingFile) => {
@@ -110,10 +119,7 @@ test.each(validWingFiles)(
 
       await enterTestDir(test_dir);
 
-      await $`${npxBin} @winglang/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile(`${npxBin} @winglang/`, path.join(validTestDir, wingFile));
       const npx_tfManifest = sanitize_json_paths(tf_manifest);
       const npx_tfJson = sanitize_json_paths(tf_json);
 
@@ -132,10 +138,7 @@ test.each(validWingFiles)(
         }
       }
 
-      await $`../node_modules/.bin/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile('../node_modules/.bin/', path.join(validTestDir, wingFile));
 
       expect(sanitize_json_paths(tf_manifest)).toStrictEqual(npx_tfManifest);
       expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
@@ -153,15 +156,9 @@ test.each(validWingFiles)(
       const test_dir = path.join(tmpDir, `${wingFile}_sim`);
       await enterTestDir(test_dir);
 
-      await $`${npxBin} @winglang/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile(`${npxBin} @winglang/`, path.join(validTestDir, wingFile));
 
-      await $`../node_modules/.bin/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile('../node_modules/.bin/', path.join(validTestDir, wingFile));
 
       // TODO snapshot .wsim contents
     });

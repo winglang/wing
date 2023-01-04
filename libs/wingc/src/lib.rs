@@ -237,6 +237,11 @@ mod sanity {
 	}
 
 	#[test]
+	fn can_compile_error_files() {
+		compile_test("../../examples/tests/error", false);
+	}
+
+	#[test]
 	fn cannot_compile_invalid_files() {
 		compile_test("../../examples/tests/invalid", true);
 	}
