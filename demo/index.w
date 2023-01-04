@@ -15,3 +15,5 @@ new cloud.Function(inflight (message: str): str => {
   counter.inc();
   return message;
 }) as "IncrementCounter";
+
+let topic = new cloud.Topic() as "Topic";

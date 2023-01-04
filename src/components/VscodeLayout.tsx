@@ -23,6 +23,7 @@ import { DetailedNode } from "./DetailedNode.js";
 import { HeaderBanner } from "./HeaderBanner.js";
 import LogsFilters from "./LogsFilters.js";
 import { MetadataPanel } from "./MetadataPanel.js";
+import { EmptyConstructView } from "./resource-views/EmptyConstructView.jsx";
 import { ResourceView } from "./resource-views/ResourceView.js";
 
 export interface VscodeLayoutProps {
@@ -176,6 +177,15 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
           <div className="flex-1 flex">
             <div className="flex-1 relative">
               <ScrollableArea overflowX className="flex flex-col">
+                {currentNode.data &&
+                  !currentNode.data?.type?.startsWith("wingsdk.") &&
+                  childRelationships.data &&
+                  childRelationships.data.length === 0 && (
+                    <EmptyConstructView
+                      resourceType={currentNode.data.type}
+                      resourcePath={currentNode.data.path}
+                    />
+                  )}
                 {!currentNode.data?.type?.startsWith("wingsdk.") &&
                   childRelationships.data && (
                     <div className="flex-1 bg-slate-50 min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">

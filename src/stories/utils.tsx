@@ -72,7 +72,7 @@ const CubeTransparentExIcon = (props: React.SVGProps<SVGSVGElement>) => {
   );
 };
 
-const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
+export const CustomResourceIcon = (props: React.SVGProps<SVGSVGElement>) => {
   return (
     <div className="relative">
       <CubeIcon {...props} />
@@ -107,7 +107,7 @@ const getResourceIconComponent = (
     case "wingsdk.cloud.Counter": {
       return CalculatorIcon;
     }
-    case "wingsdk.cloud.Cron": {
+    case "cloud.Cron": {
       return ClockIcon;
     }
     case "constructs.Construct": {
