@@ -9,6 +9,7 @@ import { mkdir, readFile } from "fs/promises";
 import { WASI } from "wasi";
 import { argv } from "process";
 import debug from "debug";
+import * as chalk from "chalk";
 
 const log = debug("wing:compile");
 
@@ -107,5 +108,35 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     __filename: artifactPath,
   });
   log("evaluating artifact in context: %o", context);
-  vm.runInContext(artifact, context);
+
+  try {
+    vm.runInContext(artifact, context);
+  } catch (e) {
+    console.error(chalk.bold.red("preflight error:") + " " + (e as any).message);
+
+    if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
+      console.log();
+      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("intermediate javascript code:"));
+      const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]);
+      const lines = artifact.split("\n");
+      let startLine = Math.max(lineNumber - 3, 0);
+      let finishLine = Math.min(lineNumber + 3, lines.length - 1);
+
+      // print line and its three surrounding lines
+      for (let i = startLine; i < finishLine; i++) {
+        if (i === lineNumber - 1) {
+          console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
+        } else {
+          console.log("   " + chalk.dim(lines[i]));
+        }
+      }
+    }
+
+    if (process.env.NODE_STACKTRACE) {
+      console.error("--------------------------------- STACK TRACE ---------------------------------")
+      console.error((e as any).stack);
+    } else {
+      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("run with `NODE_STACKTRACE=1` environment variable to display a stack trace"));
+    }
+  }
 }
