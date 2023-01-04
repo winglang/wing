@@ -21,6 +21,7 @@
     "install:wasi": "if [ \"$CI\" != \"true\" ]; then bash scripts/setup_wasi.sh; fi",
     "install:vscode-wing": "npm --prefix apps/vscode-wing install",
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
+    "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
     "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:wing": "npm --prefix apps/wing install",
     "install:wingsdk": "npm --prefix libs/wingsdk install",
