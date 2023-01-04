@@ -101,10 +101,14 @@ async function enterTestDir(testDir: string) {
 
 async function runWingCompile(wingBinPrefix: string, wingFile: string) {
 	const isError = path.dirname(wingFile).endsWith("error");
+  const work = async () => {
+    const out = await $`${path.join(wingBinPrefix, 'wing')} compile ${wingFile}`
+    return out.exitCode;
+  };
 	if (isError) {
-		await expect($`${path.join(wingBinPrefix, 'wing')} compile ${wingFile}`).rejects.toThrow();
+		await expect(work()).rejects.toThrow();
 	} else {
-		await expect($`${path.join(wingBinPrefix, 'wing')} compile ${wingFile}`).resolves.toBeDefined();
+		await expect(work()).resolves.toBe(0);
 	}
 }
 
