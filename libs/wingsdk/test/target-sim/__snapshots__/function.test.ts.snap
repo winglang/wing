@@ -71,6 +71,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -89,6 +94,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -118,6 +128,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -215,6 +230,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -233,6 +253,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -262,6 +287,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -359,6 +389,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -377,6 +412,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -406,6 +446,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -504,6 +549,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -522,6 +572,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -551,6 +606,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "",
+            "hidden": false,
+            "title": "",
           },
           "id": "my_function",
           "path": "root/my_function",

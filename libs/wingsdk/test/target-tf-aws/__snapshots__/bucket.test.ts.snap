@@ -43,6 +43,11 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "",
+              "hidden": false,
+              "title": "",
+            },
             "id": "WingLogger",
             "path": "root/WingLogger",
           },
@@ -96,6 +101,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "",
+              "hidden": false,
+              "title": "",
             },
             "id": "my_bucket",
             "path": "root/my_bucket",
@@ -166,6 +176,11 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "",
+              "hidden": false,
+              "title": "",
+            },
             "id": "WingLogger",
             "path": "root/WingLogger",
           },
@@ -219,6 +234,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "",
+              "hidden": false,
+              "title": "",
             },
             "id": "my_bucket",
             "path": "root/my_bucket",

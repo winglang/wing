@@ -2,6 +2,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
 import { IApp } from "./app";
+import { Resource } from "./resource";
 
 const TREE_FILE_PATH = "tree.json";
 
@@ -33,6 +34,31 @@ export interface ConstructTreeNode {
    * Information on the construct class that led to this node, if available.
    */
   readonly constructInfo?: ConstructInfo;
+
+  /**
+   * Information on how to display this node in the UI.
+   */
+  readonly display?: DisplayInfo;
+}
+
+/**
+ * Information on how to display a construct in the UI.
+ */
+export interface DisplayInfo {
+  /**
+   * Title of the resource.
+   */
+  readonly title: string;
+
+  /**
+   * Description of the resource.
+   */
+  readonly description: string;
+
+  /**
+   * Whether the resource should be hidden from the UI.
+   */
+  readonly hidden: boolean;
 }
 
 /**
@@ -99,6 +125,7 @@ export function synthesizeTree(app: IApp) {
       children: Object.keys(childrenMap).length === 0 ? undefined : childrenMap,
       attributes: synthAttributes(construct),
       constructInfo: constructInfoFromConstruct(construct),
+      display: synthDisplay(construct),
     };
 
     return node;
@@ -130,6 +157,17 @@ function synthAttributes(
   if (canInspect(construct)) {
     construct._inspect(inspector);
     return inspector.attributes;
+  }
+  return undefined;
+}
+
+function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
+  if (construct instanceof Resource) {
+    return {
+      title: construct.display.title,
+      description: construct.display.description,
+      hidden: construct.display.hidden,
+    };
   }
   return undefined;
 }

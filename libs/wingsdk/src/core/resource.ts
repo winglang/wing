@@ -103,6 +103,11 @@ export abstract class Resource
   public readonly _connections: Connection[] = [];
 
   /**
+   * Information on how to display a resource in the UI.
+   */
+  public readonly display: Display = new Display();
+
+  /**
    * Whether a resource is stateful, i.e. it stores information that is not
    * defined by your application.
    *
@@ -293,4 +298,34 @@ export interface OperationAnnotation {
   [resource: string]: {
     ops: string[];
   };
+}
+
+/**
+ * Information on how to display a resource in the UI.
+ */
+export class Display {
+  /**
+   * Title of the resource.
+   */
+  public title: string;
+
+  /**
+   * Description of the resource.
+   */
+  public description: string;
+
+  /**
+   * Whether the resource should be hidden from the UI.
+   */
+  public hidden: boolean;
+
+  public constructor(
+    title: string = "",
+    description: string = "",
+    hidden: boolean = false
+  ) {
+    this.title = title;
+    this.description = description;
+    this.hidden = hidden;
+  }
 }
