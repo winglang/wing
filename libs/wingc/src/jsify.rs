@@ -151,7 +151,7 @@ impl JSifier {
 		match function_type {
 			UtilityFunctionKind::Assert => {
 				return format!(
-					"{{((cond) => {{if (!cond) throw new Error(`preflight assertion failed: '{0}'`)}})({0})}}",
+					"{{((cond) => {{if (!cond) throw new Error(`assertion failed: '{0}'`)}})({0})}}",
 					self.jsify_arg_list(args, None, None, false)
 				);
 			}
