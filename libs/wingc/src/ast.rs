@@ -155,6 +155,17 @@ pub enum UtilityFunctionKind {
 	Assert,
 }
 
+impl Display for UtilityFunctionKind {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctionKind::Print => write!(f, "print"),
+			UtilityFunctionKind::Panic => write!(f, "panic"),
+			UtilityFunctionKind::Throw => write!(f, "throw"),
+			UtilityFunctionKind::Assert => write!(f, "assert"),
+		}
+	}
+}
+
 #[derive(Debug)]
 pub enum StmtKind {
 	Use {

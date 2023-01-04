@@ -310,13 +310,17 @@ impl JSifier {
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
 			ExprKind::Call { function, args } => {
 				let mut needs_case_conversion = false;
-				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
+				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctionKind::Print.to_string().as_str())
+				{
 					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Print);
-				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "assert") {
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctionKind::Assert.to_string().as_str())
+				{
 					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Assert);
-				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "panic") {
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctionKind::Panic.to_string().as_str())
+				{
 					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Panic);
-				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "throw") {
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctionKind::Throw.to_string().as_str())
+				{
 					return self.jsify_global_utility_function(&args, UtilityFunctionKind::Throw);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
