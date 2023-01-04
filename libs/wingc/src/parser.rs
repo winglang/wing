@@ -628,11 +628,10 @@ impl Parser<'_> {
 						let interpolation_end = interpolation_node.end_byte();
 
 						if interpolation_start != last_start {
-							parts.push(InterpolatedStringPart::Static(
-								str::from_utf8(&self.source[last_start..interpolation_start])
-									.unwrap()
-									.into(),
-							));
+							let previous_string = str::from_utf8(&self.source[last_start..last_end]).unwrap();
+							let current_string = str::from_utf8(&self.source[last_start..interpolation_start]).unwrap();
+							let removing_duplication = current_string.replace(previous_string, "");
+							parts.push(InterpolatedStringPart::Static(removing_duplication,));
 						}
 
 						parts.push(InterpolatedStringPart::Expr(
