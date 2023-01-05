@@ -323,6 +323,9 @@ jobs:
           projects: "vscode-wing"
           args: "--configuration=release --output-style=stream --verbose"
 
+      - name: TEST
+        run: ls -al apps/vscode-wing/node_modules/@winglang/wingsdk
+
       - name: Upload extension
         uses: actions/upload-artifact@v2
         with:
