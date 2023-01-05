@@ -794,7 +794,7 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Array(t) => t,
-					_ => panic!("Expected array type, found {}", container_type),
+					_ => self.expr_error(exp, format!("Expected array type, found {}", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
@@ -856,7 +856,7 @@ impl<'a> TypeChecker<'a> {
 
 				let value_type = match *container_type {
 					Type::Map(t) => t,
-					_ => panic!("Expected map type, found {}", container_type),
+					_ => self.expr_error(exp, format!("Expected map type, found {}", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
@@ -883,7 +883,7 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Set(t) => t,
-					_ => panic!("Expected set type, found {}", container_type),
+					_ => self.expr_error(exp, format!("Expected set type, found {}", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
