@@ -134,7 +134,7 @@ function createWindowManager() {
 
       const notifyChange = () => {
         log.verbose("notifyChange");
-        newWindow?.webContents.send("trpc.invalidate", []);
+        newWindow?.webContents.send("trpc.invalidate");
       };
 
       const simulatorPromise = createWingApp({
