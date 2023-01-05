@@ -5,7 +5,7 @@
 /**
  * Immutable Array
  */
-export class Array {
+export class ImmutableArray {
   /**
    * The length of the array
    * @returns the length of the array
@@ -28,7 +28,7 @@ export class Array {
 /**
  * Mutable Array
  */
-export class MutArray extends Array {
+export class MutableArray extends ImmutableArray {
   /**
    * Add value to end of array
    * @param value value to add

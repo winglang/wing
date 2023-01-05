@@ -5,7 +5,7 @@
 /**
  * Immutable Set
  */
-export class Set {
+export class ImmutableSet {
   /**
    * The length of the set
    * @returns the length of the set
@@ -18,13 +18,13 @@ export class Set {
 /**
  * Mutable Set
  */
-export class MutSet extends Set {
+export class MutableSet extends ImmutableSet {
   /**
    * Add value to set
    * @param value value to add
    * @returns true if the value was added, false if it was already in the set
    */
-  public add(value: any): MutSet {
+  public add(value: any): MutableSet {
     value;
     throw new Error("Abstract");
   }
