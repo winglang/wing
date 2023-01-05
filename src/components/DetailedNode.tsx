@@ -120,7 +120,7 @@ export const DetailedNode = ({
       </div>
 
       {inbound.map((node, nodeIndex) => (
-        <Fragment key={node.path}>
+        <Fragment key={`${node.path}_${node.relationshipName}`}>
           <div
             className="flex justify-end"
             style={{ gridColumnStart: "1", gridRowStart: `${1 + nodeIndex}` }}
@@ -155,7 +155,7 @@ export const DetailedNode = ({
       ))}
 
       {outbound.map((node, nodeIndex) => (
-        <Fragment key={node.path}>
+        <Fragment key={`${node.path}_${node.relationshipName}`}>
           <div
             className="flex items-center relative"
             style={{

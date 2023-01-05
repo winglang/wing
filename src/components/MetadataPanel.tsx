@@ -205,8 +205,9 @@ export const MetadataPanel = ({
                 {connectionsGroups.map((connectionGroup) => (
                   <div key={connectionGroup.groupName}>
                     <div className="relative bg-slate-100">
-                      {connectionGroup.connections.map((connection) => (
+                      {connectionGroup.connections.map((connection, index) => (
                         <button
+                          key={`${connection.path}_${index}`}
                           className={classNames(
                             "w-full flex-shrink-0 max-w-full truncate bg-slate-100 hover:bg-slate-200/50 shadow-sm text-sm px-4 py-1 flex items-center gap-1 min-w-0 text-slate-700",
                           )}

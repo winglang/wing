@@ -75,9 +75,14 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     path: treeMenu.currentItemId,
   });
 
-  const currentNode = trpc["app.node"].useQuery({
-    path: treeMenu.currentItemId,
-  });
+  const currentNode = trpc["app.node"].useQuery(
+    {
+      path: treeMenu.currentItemId,
+    },
+    {
+      enabled: !!treeMenu.currentItemId,
+    },
+  );
 
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
@@ -105,9 +110,14 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     }
   }, [logs.data]);
 
-  const metadata = trpc["app.nodeMetadata"].useQuery({
-    path: treeMenu.currentItemId,
-  });
+  const metadata = trpc["app.nodeMetadata"].useQuery(
+    {
+      path: treeMenu.currentItemId,
+    },
+    {
+      enabled: !!treeMenu.currentItemId,
+    },
+  );
 
   return (
     <div className="h-full flex flex-col bg-slate-50 select-none">
@@ -191,7 +201,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
                     <div className="flex-1 bg-slate-50 min-w-[40rem] p-4 mx-auto flex flex-col gap-y-2">
                       {childRelationships.data.map((child, index) => (
                         <DetailedNode
-                          key={child.node.id}
+                          key={`${child.node.path}_${index}`}
                           node={{
                             id: child.node.id,
                             path: child.node.path,
