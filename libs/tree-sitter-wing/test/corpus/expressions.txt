@@ -240,37 +240,26 @@ maybeVal ?? 2;
 Set Literal
 ================================
 
-{ 1, 2, 3 };
-
+{1, 2, 3};
+Set<num> { 1, 2, 3 };
 ---
 
 (source
     (expression_statement
         (set_literal
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
         )
     )
-)
-
-================================
-Typed Set Literal
-================================
-
-Set<num> { 1, 2, 3 };
-
----
-
-(source
     (expression_statement
         (set_literal
-            (immutable_container_type
-                (builtin_type)
+            type: (immutable_container_type
+                type_parameter: (builtin_type)
             )
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
         )
     )
 )

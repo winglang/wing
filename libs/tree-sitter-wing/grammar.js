@@ -490,7 +490,7 @@ module.exports = grammar({
     ),
     set_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSep($.expression), "}"
+      "{", commaSep(field("element", $.expression)), "}"
     ),
     map_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),

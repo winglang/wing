@@ -795,7 +795,7 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Array(t) => t,
-					_ => panic!("Expected array type, found {}", container_type),
+					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
@@ -857,13 +857,40 @@ impl<'a> TypeChecker<'a> {
 
 				let value_type = match *container_type {
 					Type::Map(t) => t,
-					_ => panic!("Expected map type, found {}", container_type),
+					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
 				for (_, v) in fields.iter() {
 					let t = self.type_check_exp(v, env, statement_idx).unwrap();
 					self.validate_type(t, value_type, v);
+				}
+
+				Some(container_type)
+			}
+			ExprKind::SetLiteral { type_, items } => {
+				// Infer type based on either the explicit type or the value in one of the items
+				let container_type = if let Some(type_) = type_ {
+					self.resolve_type(type_, env, statement_idx)
+				} else if !items.is_empty() {
+					let some_val_type = self
+						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
+						.unwrap();
+					self.types.add_type(Type::Set(some_val_type))
+				} else {
+					self.expr_error(exp, "Cannot infer type of empty set".to_owned());
+					self.types.add_type(Type::Set(self.types.anything()))
+				};
+
+				let element_type = match *container_type {
+					Type::Set(t) => t,
+					_ => self.expr_error(exp, format!("Expected \"Set\" type, found \"{}\"", container_type)),
+				};
+
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					self.validate_type(t, element_type, v);
 				}
 
 				Some(container_type)
@@ -1041,6 +1068,11 @@ impl<'a> TypeChecker<'a> {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
+			}
+			AstType::Set(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each set resolution
+				self.types.add_type(Type::Set(value_type))
 			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);

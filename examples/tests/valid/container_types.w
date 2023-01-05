@@ -19,3 +19,9 @@ let m3 = Map<num> {"a":1, "b":2, "c":3};
 let m4: Map<num> = Map<num> {"a":1, "b":2, "c":3};
 let m5 = {"a":bucket1, "b":bucket2, "c":bucket3};
 let m6: Map<cloud.Bucket> = {"a":bucket1, "b":bucket2, "c":bucket3};
+
+//Set tests
+let s2: Set<num> = {1, 2, 3};
+let s3 = Set<num> {1, 2, 3};
+let s4: Set<num> = Set<num> {1, 2, 3};
+let s6: Set<cloud.Bucket> = {bucket1, bucket2, bucket3};
