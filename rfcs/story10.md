@@ -49,13 +49,6 @@ let get_task = inflight (id: str): str => {
  * @param id - the id of the task to be removed
  */
 let remove_task = inflight (id: str) => {
-  let content = bucket.get(id)
-  if content {
-    print("Found task with id ${id}, with content '${content}'");
-  } else {
-    throw("Task with id ${id} doesn't exist");
-  }
-
   print("removing task ${id}");
   bucket.delete(id);
 };
@@ -95,13 +88,11 @@ let find_tasks_with = inflight (term: str): Set<str> => {
 // --------------------------------------------
 
 let clear_tasks = new cloud.Function(inflight (s: str): str => {
-  let results = list_task_ids();
-  let i = 0;
+ let results = new MutArray<str>(list_task_ids());
   
-  // I hate this code, but wanted to use while here
-  while (i < results.len) {
-    remove_task(results.at(i));
-    i = i + 1;
+  while (results.len > 0) {
+    let t = results.pop();
+    remove_task(t);
   }
 }) as "utility:clear tasks";
 
