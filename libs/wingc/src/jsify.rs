@@ -396,7 +396,7 @@ impl JSifier {
 			}
 			ExprKind::SetLiteral { items, .. } => {
 				format!(
-					"Object.freeze({{{}}})",
+					"Object.freeze(new Set([{}]))",
 					items
 						.iter()
 						.map(|expr| self.jsify_expression(expr, phase))
