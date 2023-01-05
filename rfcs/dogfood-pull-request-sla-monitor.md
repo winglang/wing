@@ -14,7 +14,7 @@ AKA as dogfooding, it is believed that without it:
 
 ## This RFC scope
 
-This request for review is focusing on a specific application **pull request SLA monitor**,
+This request for comments is focusing on a specific application **pull request SLA monitor**,
 that will be extended in the future for a community companion tool that can monitor 
 and respond to issues/pull requests/slack posts, etc... 
 
@@ -49,7 +49,7 @@ resource FutureCloudFunctionInvoker {
   * @praram delay - when to lauch this 
   * @param fn - which function to invoke
   */
-  invoke(delay: time, fn: inflight () => void) : void {
+  inflight invoke(delay: duration, fn: inflight () => void): void {
     // TODO implement for different targets:
     //  - Sim: setTimeout (hours -> seconds :shrug) 
     //  - AWS: StepFunctions
@@ -61,7 +61,7 @@ resource FutureCloudFunctionInvoker {
 * In a non Sim implementation this Resouce should handle secrets of that single user (or we should use Secret?) 
 * In the sim implementation we can just print the posting, for easy localhost debugging
 */
-resource Slack {
+resource SlackWorkspace {
   /** 
   * Post a message of the auth users into a slack channel
   * Notice that this resource is a very degenerate version of what a 
@@ -87,7 +87,7 @@ struct SLA {
 let future_invoker = new FutureCloudFunctionInvoker();
 let api = new cloud.Api();
 let slack = new Slack();
-let contributors_counter = new cloud.CounterMap(); // str => int map
+let contributors_counter = new cloud.Counter(); // str => int map
 
 let determine_sla = inflight (github_username: str) : num => {
   let username_contributions = contributors_counter.inc(github_username, 1);
@@ -102,10 +102,12 @@ api.on_post("/pull-request-created",  inflight (req: ApiRequest): ApiResponse =>
   // Also it kinda made me think about express.js body json parser middleware idea that we can "borrow"
   let orbit_data = Struct.from_json(req.payload); 
   // I assume we have a nicer API for this comparison, but I haven't checked yet
-  if (orbit_data.source != 'github' || orbit_data.entity != 'pull-request' || orbit_data.action != 'created' ){
-    log.error("Wrong data '${orbit_data}' sent to ${req.path}"); 
-    return;
-  }
+  assert(
+    orbit_data.source == 'github' 
+    && orbit_data.entity == 'pull-request' 
+    && orbit_data.action == 'created',
+    "Wrong data '${orbit_data}' sent to ${req.path}"
+  );
   
   let sla = determine_sla(orbit_data.github_user);
   future_invoker.invoke_in(sla, inflight (): void => {
