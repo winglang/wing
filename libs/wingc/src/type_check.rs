@@ -1531,7 +1531,7 @@ impl<'a> TypeChecker<'a> {
 		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
 
 		// Add symbols from original type to new type
-		// Note: this is currently limited to function signatures and getters
+		// Note: this is currently limited to top-level function signatures and fields
 		for (name, symbol) in original_type_class.env.iter() {
 			match symbol {
 				SymbolKind::Variable(v) => {
@@ -1560,6 +1560,22 @@ impl<'a> TypeChecker<'a> {
 								span: WingSpan::global(),
 							},
 							SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(&type_error);
+							}
+							_ => {}
+						}
+					} else if let Some(var) = symbol.as_variable() {
+						let new_var_type = if var.is_anything() { type_param } else { var };
+						match new_type_class.env.define(
+							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+							&Symbol {
+								name: name.clone(),
+								span: WingSpan::global(),
+							},
+							SymbolKind::Variable(new_var_type),
 							StatementIdx::Top,
 						) {
 							Err(type_error) => {
@@ -1642,43 +1658,28 @@ impl<'a> TypeChecker<'a> {
 
 				let instance_type = self.type_check_exp(object, env, statement_idx).unwrap();
 				match *instance_type {
-					Type::Class(ref class) | Type::Resource(ref class) => match class.env.lookup(property, None) {
-						Ok(field) => field.as_variable().expect("Expected property to be a variable"),
-						Err(type_error) => self.type_error(&type_error),
-					},
+					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
 					Type::Anything => instance_type,
 
 					// Lookup wingsdk std types, hydrating generics if necessary
-					Type::Array(t) => self
-						.hydrate_class_type_arguments(env, WINGSDK_ARRAY, t)
-						.as_class()
-						.unwrap()
-						.env
-						.lookup(property, None)
-						.unwrap()
-						.as_variable()
-						.unwrap(),
-					Type::Set(t) => self
-						.hydrate_class_type_arguments(env, WINGSDK_SET, t)
-						.as_class()
-						.unwrap()
-						.env
-						.lookup(property, None)
-						.unwrap()
-						.as_variable()
-						.unwrap(),
-					Type::Duration => env
-						.lookup_nested_str(WINGSDK_DURATION, None)
-						.unwrap()
-						.as_type()
-						.unwrap()
-						.as_class()
-						.unwrap()
-						.env
-						.lookup(property, None)
-						.unwrap()
-						.as_variable()
-						.unwrap(),
+					Type::Array(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::Set(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::Duration => self.get_property_from_class(
+						env
+							.lookup_nested_str(WINGSDK_DURATION, None)
+							.unwrap()
+							.as_type()
+							.unwrap()
+							.as_class()
+							.unwrap(),
+						property,
+					),
 
 					_ => self.expr_error(
 						object,
@@ -1689,6 +1690,13 @@ impl<'a> TypeChecker<'a> {
 					),
 				}
 			}
+		}
+	}
+
+	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> TypeRef {
+		match class.env.lookup(property, None) {
+			Ok(field) => field.as_variable().expect("Expected property to be a variable"),
+			Err(type_error) => self.type_error(&type_error),
 		}
 	}
 }

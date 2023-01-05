@@ -10,13 +10,13 @@ export class MutSet {
    * The length of the set
    * @returns the length of the set
    */
-  get length(): number {
+  public get length(): number {
     throw new Error("Abstract");
   }
 
   /**
    * Add value to set
-   * @param _value value to add
+   * @param value value to add
    * @returns true if the value was added, false if it was already in the set
    */
   public add(value: any): Set {
@@ -33,7 +33,7 @@ export class Set {
    * The length of the set
    * @returns the length of the set
    */
-  get length(): number {
+  public get length(): number {
     throw new Error("Abstract");
   }
 }

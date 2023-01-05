@@ -9,13 +9,13 @@ export class MutArray {
   /**
    * The length of the array
    */
-  get length(): number {
+  public get length(): number {
     throw new Error("Abstract");
   }
 
   /**
    * Get the value at the given index
-   * @param _index index of the value to get
+   * @param index index of the value to get
    * @returns the value at the given index
    */
   public at(index: number): any {
@@ -25,7 +25,7 @@ export class MutArray {
 
   /**
    * Add value to end of array
-   * @param _value value to add
+   * @param value value to add
    */
   public push(value: any): void {
     value;
@@ -49,13 +49,13 @@ export class Array {
    * The length of the array
    * @returns the length of the array
    */
-  get length(): number {
+  public get length(): number {
     throw new Error("Abstract");
   }
 
   /**
    * Get the value at the given index
-   * @param _index index of the value to get
+   * @param index index of the value to get
    * @returns the value at the given index
    */
   public at(index: number): any {
