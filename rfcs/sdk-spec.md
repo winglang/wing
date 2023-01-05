@@ -407,49 +407,45 @@ resource Topic {
 }
 ```
 
-## Schedule
+## Scheduler
 
-The schedule resource represents a service that can trigger events at a regular interval.
-Schedules are useful for periodic tasks, such as running a backup or sending a daily report.
+The scheduler resource represents a service that can trigger events at a regular interval.
+Schedulers are useful for periodic tasks, such as running a backup or sending a daily report, or for specifying an action that should happen in the future.
 
 ```ts
-struct ScheduleProps {
+struct SchedulerOnScheduleProps {
   /**
    * Trigger events according to a cron schedule.
    * 
    * Only one of `cron` or `rate` can be specified.
-   * 
-   * @default "0 0 * * *" - midnight every day
    */
   cron: str?;
 
   /**
-   * Trigger events at a fixed interval.
+   * Trigger events periodically at a fixed rate.
    * 
    * Only one of `cron` or `rate` can be specified.
-   * 
-   * @default 1 day
    */
   rate: duration?;
 }
 
-struct ScheduleOnTickProps { /* elided */ }
-
-resource Schedule {
+struct SchedulerOnTimeoutProps {
   /**
-   * Trigger events according to a cron schedule.
+   * The time at which to run the function.
    */
-  static fromCron(cron: str): Schedule;
+  time: Time;
+}
+
+resource Scheduler {
+  /**
+   * Register a worker to run on a periodic schedule.
+   */
+  on_schedule(fn: inflight () => void, opts: SchedulerOnScheduleProps?): cloud.Function;
 
   /**
-   * Trigger events at a periodic rate.
+   * Register a worker to run at a specific time in the future.
    */
-  static fromRate(rate: duration): Schedule;
-
-  /**
-   * Register a worker to run on the schedule.
-   */
-  on_tick(handler: inflight () => void, opts: ScheduleOnTickProps?): cloud.Function;
+  on_timeout(fn: inflight () => void, opts: SchedulerOnTimeoutProps?): cloud.Function;
 }
 ```
 
