@@ -629,10 +629,11 @@ impl Parser<'_> {
 						let interpolation_start = interpolation_node.start_byte();
 						let interpolation_end = interpolation_node.end_byte();
 
+						if start == last_start && interpolation_start < last_end {
+							start_from = last_start;
+						}
+
 						if interpolation_start != last_start {							
-							if start == last_start && interpolation_start < last_end {
-								start_from = last_start;
-							}
 							parts.push(InterpolatedStringPart::Static(
 								str::from_utf8(&self.source[start_from..interpolation_start])
 								.unwrap()
