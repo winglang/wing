@@ -684,6 +684,10 @@ constructor() {
   const m4 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m5 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
   const m6 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
+  const s2 = Object.freeze(new Set([1, 2, 3]));
+  const s3 = Object.freeze(new Set([1, 2, 3]));
+  const s4 = Object.freeze(new Set([1, 2, 3]));
+  const s6 = Object.freeze(new Set([bucket1, bucket2, bucket3]));
 }
 }
 new MyApp().synth();"
