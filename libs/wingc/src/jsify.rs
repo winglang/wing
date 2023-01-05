@@ -324,10 +324,14 @@ impl JSifier {
 					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
+
 					needs_case_conversion = if let Some(obj) = object_type.as_class_or_resource() {
 						obj.should_case_convert_jsii
 					} else {
-						// This should only happen in the case of `any`, which are almost certainly JSII imports.
+						// There are two reasons this could happen:
+						// 1. The object is a `any` type, which is either something unimplemented or an explicit `any` from JSII.
+						// 2. The object is a builtin type (e.g. Array) but the call reference intentionally resolves to a JSII class.
+						// In either case, it's probably safe to assume that case conversion is required.
 						true
 					};
 				}

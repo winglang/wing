@@ -7,7 +7,7 @@ print(y[0]);
 
 let arr = [1, 2, 3];
 let join = arr.join(",");
-          //^ join is not a valid method
+             //^ join is not a valid method
 arr.push(4);
   //^ push is not a valid method (array is immutable)
 let n: str = arr.at(0);
