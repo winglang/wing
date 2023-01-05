@@ -30,6 +30,10 @@ pub mod utilities;
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/wingsdk";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
+const WINGSDK_ARRAY: &'static str = "std.Array";
+// const WINGSDK_MUTARRAY: &'static str = "std.MutArray";
+const WINGSDK_SET: &'static str = "std.Set";
+// const WINGSDK_MUTSET: &'static str = "std.MutSet";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 

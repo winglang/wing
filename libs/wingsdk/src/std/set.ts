@@ -1,3 +1,7 @@
+// These classes are used by Wing to provide JSII subsets of the JS Set class.
+// They should not be consumed directly by users.
+// TODO: These should be interfaces, currently Wing does not support interface JSII imports
+
 /**
  * Mutable Set
  */
@@ -7,7 +11,17 @@ export class MutSet {
    * @returns the length of the set
    */
   get length(): number {
-    return 0 as any;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Add value to set
+   * @param _value value to add
+   * @returns true if the value was added, false if it was already in the set
+   */
+  public add(value: any): Set {
+    value;
+    throw new Error("Abstract");
   }
 }
 
@@ -20,15 +34,6 @@ export class Set {
    * @returns the length of the set
    */
   get length(): number {
-    return 0 as any;
-  }
-
-  /**
-   * Add value to set
-   * @param _value value to add
-   * @returns true if the value was added, false if it was already in the set
-   */
-  public add(_value: any): Set {
-    return 0 as any;
+    throw new Error("Abstract");
   }
 }

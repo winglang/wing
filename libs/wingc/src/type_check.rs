@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_DURATION};
+use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -1505,23 +1505,22 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn pseudo_reify_std_class(&mut self, env: &SymbolEnv, original_type_name: &str, type_param: TypeRef) -> TypeRef {
-		let std_lookup = env.try_lookup("std", None).unwrap();
-		let std_namespace = &std_lookup.as_namespace().unwrap().env;
-		let original_type = std_namespace
-			.try_lookup(original_type_name, None)
-			.unwrap()
-			.as_type()
-			.unwrap();
+	/// Hydrate `any`s in a type reference with a single type argument
+	///
+	/// # Arguments
+	///
+	/// * `env` - The environment to use for looking up the original type
+	/// * `original_fqn` - The fully qualified name of the original type
+	/// * `type_param` - The type argument to use for the `any`
+	///
+	/// # Returns
+	/// The hydrated type reference
+	///
+	fn hydrate_class_type_arguments(&mut self, env: &SymbolEnv, original_fqn: &str, type_param: TypeRef) -> TypeRef {
+		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
 		let original_type_class = original_type.as_class().unwrap();
 
-		let new_env = SymbolEnv::new(
-			Some(std_namespace),
-			original_type_class.env.return_type,
-			true,
-			env.flight,
-			0,
-		);
+		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, true, Phase::Independent, 0);
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
 			env: new_env,
@@ -1531,44 +1530,34 @@ impl<'a> TypeChecker<'a> {
 		let mut new_type = self.types.add_type(tt);
 		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
 
-		// add stuff from env into new class
+		// Add symbols from original type to new type
+		// Note: this is currently limited to function signatures and getters
 		for (name, symbol) in original_type_class.env.iter() {
 			match symbol {
 				SymbolKind::Variable(v) => {
+					// Replace `any` in function signatures
 					if let Some(sig) = v.as_function_sig() {
-						let return_type = if let Some(ret) = sig.return_type {
-							if ret == self.types.anything() {
-								Some(type_param)
-							} else {
-								Some(ret)
-							}
-						} else {
-							None
-						};
+						let new_return_type = sig
+							.return_type
+							.map(|ret| if ret.is_anything() { type_param } else { ret });
 
-						// create new args, replace any
 						let new_args: Vec<UnsafeRef<Type>> = sig
 							.args
 							.iter()
-							.map(|arg| {
-								if *arg == self.types.anything() {
-									type_param
-								} else {
-									*arg
-								}
-							})
+							.map(|arg| if arg.is_anything() { type_param } else { *arg })
 							.collect();
 
 						let new_sig = FunctionSignature {
 							args: new_args,
-							return_type,
-							flight: sig.flight,
+							return_type: new_return_type,
+							flight: Phase::Independent,
 						};
 
 						match new_type_class.env.define(
+							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
 							&Symbol {
 								name: name.clone(),
-								span: WingSpan::global(), // TODO: this is wrong
+								span: WingSpan::global(),
 							},
 							SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
 							StatementIdx::Top,
@@ -1659,9 +1648,9 @@ impl<'a> TypeChecker<'a> {
 					},
 					Type::Anything => instance_type,
 
-					// get "std" primitives
+					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => self
-						.pseudo_reify_std_class(env, "Array", t)
+						.hydrate_class_type_arguments(env, WINGSDK_ARRAY, t)
 						.as_class()
 						.unwrap()
 						.env
@@ -1670,7 +1659,7 @@ impl<'a> TypeChecker<'a> {
 						.as_variable()
 						.unwrap(),
 					Type::Set(t) => self
-						.pseudo_reify_std_class(env, "Set", t)
+						.hydrate_class_type_arguments(env, WINGSDK_SET, t)
 						.as_class()
 						.unwrap()
 						.env

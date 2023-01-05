@@ -1,3 +1,7 @@
+// These classes are used by Wing to provide JSII subsets of the JS Array class.
+// They should not be consumed directly by users.
+// TODO: These should be interfaces, currently Wing does not support interface JSII imports
+
 /**
  * Mutable Array
  */
@@ -6,7 +10,7 @@ export class MutArray {
    * The length of the array
    */
   get length(): number {
-    return 0 as any;
+    throw new Error("Abstract");
   }
 
   /**
@@ -14,16 +18,18 @@ export class MutArray {
    * @param _index index of the value to get
    * @returns the value at the given index
    */
-  public at(_index: number): any {
-    return 0 as any;
+  public at(index: number): any {
+    index;
+    throw new Error("Abstract");
   }
 
   /**
    * Add value to end of array
    * @param _value value to add
    */
-  public push(_value: any): void {
-    return 0 as any;
+  public push(value: any): void {
+    value;
+    throw new Error("Abstract");
   }
 
   /**
@@ -31,7 +37,7 @@ export class MutArray {
    * @returns the value removed
    */
   public pop(): any {
-    return 0 as any;
+    throw new Error("Abstract");
   }
 }
 
@@ -44,7 +50,7 @@ export class Array {
    * @returns the length of the array
    */
   get length(): number {
-    return 0 as any;
+    throw new Error("Abstract");
   }
 
   /**
@@ -52,7 +58,8 @@ export class Array {
    * @param _index index of the value to get
    * @returns the value at the given index
    */
-  public at(_index: number): any {
-    return 0 as any;
+  public at(index: number): any {
+    index;
+    throw new Error("Abstract");
   }
 }
