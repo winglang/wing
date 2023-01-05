@@ -78,6 +78,7 @@ pub enum Type {
 	Optional(Box<Type>),
 	Array(Box<Type>),
 	Map(Box<Type>),
+	Set(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
@@ -92,6 +93,7 @@ impl Display for Type {
 			Type::Optional(t) => write!(f, "{}?", t),
 			Type::Array(t) => write!(f, "Array<{}>", t),
 			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::Set(t) => write!(f, "Set<{}>", t),
 			Type::FunctionSignature(sig) => {
 				write!(
 					f,
@@ -262,6 +264,10 @@ pub enum ExprKind {
 		type_: Option<Type>,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: BTreeMap<String, Expr>,
+	},
+	SetLiteral {
+		type_: Option<Type>,
+		items: Vec<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }

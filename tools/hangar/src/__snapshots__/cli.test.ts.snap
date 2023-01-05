@@ -684,6 +684,10 @@ constructor() {
   const m4 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m5 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
   const m6 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
+  const s2 = Object.freeze(new Set([1, 2, 3]));
+  const s3 = Object.freeze(new Set([1, 2, 3]));
+  const s4 = Object.freeze(new Set([1, 2, 3]));
+  const s6 = Object.freeze(new Set([bucket1, bucket2, bucket3]));
 }
 }
 new MyApp().synth();"
@@ -883,7 +887,9 @@ constructor() {
   const empty_string = \\"\\";
   const number = 1;
   const cool_string = \`cool \\\\\\"\\\\\${\${regular_string}}\\\\\\" test\`;
-  const really_cool_string = \`\${number}\${number}\${empty_string}\${empty_string}\\\\n\${cool_string}\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
+  const really_cool_string = \`\${number}\${empty_string}\\\\n\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
+  const begining_with_cool_strings = \`\${regular_string} \${number} <- cool\`;
+  const ending_with_cool_strings = \`cool -> \${regular_string} \${number}\`;
 }
 }
 new MyApp().synth();"
@@ -1870,6 +1876,79 @@ constructor() {
   
   const x = 2;
   const y = x;
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile std_containers.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile std_containers.w > index.js 1`] = `
+"async handle(body) { const {  } = this; {
+  const ss = (await s_array.at(1));
+  {console.log(\`\${s_array.length}\`)};
+} };"
+`;
+
+exports[`wing compile std_containers.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing compile std_containers.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"std_containers\\" });
+  
+  const s_array = Object.freeze([\\"one\\", \\"two\\", \\"three\\", \\"four\\"]);
+  const s = (s_array.at(2));
+  const handler = new $stdlib.core.Inflight(this, \\"$Inflightf3c444b6\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.31322868ffd7254f5a6339da1c6b1905571a70379d564da2abf4c176f3c444b6/index.js\\")),
+    
+  });
 }
 }
 new MyApp().synth();"
