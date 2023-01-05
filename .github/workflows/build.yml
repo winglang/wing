@@ -301,8 +301,9 @@ jobs:
       - name: Prepare WingSDK .jsii
         run: |
           tar -xzf wingsdk/*.tgz package/.jsii
-          mv wingsdk/package/.jsii libs/wingsdk
-          ls -al libs/wingsdk
+          ls -al wingsdk
+          ls -al .
+          mv .jsii libs/wingsdk
 
       - name: Setup Node
         uses: actions/setup-node@v3
