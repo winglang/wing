@@ -2425,7 +2425,7 @@ Inflight interface for `Queue`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
-| <code><a href="#@winglang/wingsdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter. |
+| <code><a href="#@winglang/wingsdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter, Using this API may introduce race conditions since the value can change between the time it is read and the time it is used in your code. |
 
 ---
 
@@ -2455,7 +2455,7 @@ peek(): num
 
 **Inflight client:** [true](#true)
 
-Get the current value of the counter.
+Get the current value of the counter, Using this API may introduce race conditions since the value can change between the time it is read and the time it is used in your code.
 
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.cloud.IFunctionClient"></a>
@@ -2889,7 +2889,7 @@ List of inflight operations available for `Bucket`.
 
 ### CounterInflightMethods <a name="CounterInflightMethods" id="@winglang/wingsdk.cloud.CounterInflightMethods"></a>
 
-List of inflight operations available for `Counter`, Using this API may introduce race conditions since the value can change between the time it is read and the time it is used in your code.
+List of inflight operations available for `Counter`.
 
 #### Members <a name="Members" id="Members"></a>
 

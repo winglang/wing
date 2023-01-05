@@ -70,7 +70,9 @@ export interface ICounterClient {
   inc(amount?: number): Promise<number>;
 
   /**
-   * Get the current value of the counter
+   * Get the current value of the counter,
+   * Using this API may introduce race conditions since the value can change between
+   * the time it is read and the time it is used in your code.
    * @returns current value
    * @inflight
    */
@@ -78,9 +80,7 @@ export interface ICounterClient {
 }
 
 /**
- * List of inflight operations available for `Counter`,
- * Using this API may introduce race conditions since the value can change between
- * the time it is read and the time it is used in your code.
+ * List of inflight operations available for `Counter`
  */
 export enum CounterInflightMethods {
   /** `Counter.inc` */
