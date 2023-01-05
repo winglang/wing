@@ -284,6 +284,7 @@ jobs:
     needs:
       - prepare
       - build-native
+      - build-wasm
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
     runs-on: ubuntu-latest
