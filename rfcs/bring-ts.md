@@ -11,13 +11,72 @@
 Wing has great interoperability with the TypeScript ecosystem. You can bring any TypeScript library
 and use it in Wing.
 
-### How does Wing bring typescript libraries?
+### TypeScript adapters
 
-When the Wing compiler sees something like this:
+In order to be able to `bring` a TypeScript library into your Wing code, you will need
+a **TypeScript adapter** for this library. Adapters can be hand-written or can be automatically
+generated from `.d.ts` files using `ts2wing`.
+
+> At the moment, there will be type definitions that are not supported by `ts2wing`,
+> which means that you might need to manually add adapter code for those libraries. More on that later.
+
+### Manually creating an TypeScript adapter
+
+We will first start by demonstrating what it takes to manually create
+an adapter for a TypeScript library, and then we will show how to use `ts2wing` in order
+to generate the adapter automatically.
+
+Let's say I want to use the [colors](https://www.npmjs.com/package/colors) library in my Wing code.
+
+Like this:
 
 ```js
+// hello-colors.w
 bring colors;
 ```
+
+First, simply install this library through npm (or any other node-compatible package manager):
+
+```sh
+$ npm i colors
+```
+
+If you try to compile your code now, you'll get the following error:
+
+```sh
+$ wing compile hello-colors.w
+ERROR: unable to find type information (.jsii) for "colors" (looked under "node_modules/colors" and under "wing_modules/colors").
+```
+
+As the error suggests, Wing needs [jsii](https://github.com/aws/jsii) type information
+in order to load the library's type system. It starts by looking under the `node_modules`
+directory (which is how e.g. the Wing SDK is loaded or any other CDK library)
+and then it looks under `vendor/colors` (name TBD), which is where adapters
+should go.
+
+So let's create an adapter for this library based on its [.d.ts file](https://github.com/Marak/colors.js/blob/master/index.d.ts).
+
+First, we need to create a file `vendor/colors/index.ts`:
+
+```ts
+import * as colors from 'colors/safe';
+
+export class Colors {
+  strip(text: string) { return colors.strip(text); }
+  black(text: string) { return colors.black(text); }
+  red(text: string)   { return colors.red(text);   }
+  green(text: string) { return colors.green(text); }
+  red(test: string)   { return colors.red(text);   }
+
+  // ...
+}
+```
+
+Since Wing doesn't have support for global functions (at the moment), and the API
+is basically a bunch of global functions, we need to wrap them in a class with a set
+of static method. Simple enough.
+
+
 
 It will use node's standard module resolution algorithm to lookup for `colors`. When found, it will
 check if there's a `.jsii` manifest in the module. Since there isn't, it will check if the directory `vendor/colors.wlib`
@@ -38,7 +97,6 @@ $ ts2wing --version
 0.1.2
 ```
 
-Let's say I want to use the [colors](https://www.npmjs.com/package/colors) library in my Wing code.
 
 First, I am going to install it via npm/yarm/pnpm or whatever:
 
@@ -265,3 +323,59 @@ difference between "public dependencies" and "private dependencies" and we need 
 in order to avoid some horrible fitfalls that TypeScript fell into (e.g. it is impossible to use
 `instanceof`). Ask me and I'll tell you some war stories about this from the CDK (one of the primary
 motivations for releasing CDK v2).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+struct Goo {
+  foo: {
+    a: num,
+  }
+}
+
+let json: Json = {
+  foo: {
+    a: [123,1,2]
+  }
+};
+
+json["foo"]["a"]
+json.foo.a
+
+json.get("foo").get("a").at(2);
+json.jq("/foo/a/2");
+
+let json_schema = schemaof(Goo);
+assert(json_schema.validate(json));
+
+let goo: Goo = json;
+let gooj = goo.as_json();
+
+trait IFunctionHandler<T> extends IHandler {
+  handle(e: T): void;
+}
+
