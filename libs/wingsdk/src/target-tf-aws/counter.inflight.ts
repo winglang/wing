@@ -1,4 +1,8 @@
-import { UpdateItemCommand, DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import {
+  UpdateItemCommand,
+  GetItemCommand,
+  DynamoDBClient,
+} from "@aws-sdk/client-dynamodb";
 import { ICounterClient } from "../cloud";
 import { HASH_KEY } from "./counter";
 
@@ -34,5 +38,20 @@ export class CounterClient implements ICounterClient {
 
     // return the old value
     return parseInt(newValue) - amount;
+  }
+
+  public async peek(): Promise<number> {
+    const command = new GetItemCommand({
+      TableName: this.tableName,
+      Key: { [HASH_KEY]: { S: COUNTER_ID } },
+    });
+
+    const result = await this.client.send(command);
+    let currentValue = result.Item?.[VALUE_ATTRIBUTE].N;
+    if (!currentValue) {
+      throw new Error(`${VALUE_ATTRIBUTE} attribute not found on table.`);
+    }
+
+    return parseInt(currentValue);
   }
 }

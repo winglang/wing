@@ -68,6 +68,13 @@ export interface ICounterClient {
    * @inflight
    */
   inc(amount?: number): Promise<number>;
+
+  /**
+   * Get the current value of the counter
+   * @returns current value
+   * @inflight
+   */
+  peek(): Promise<number>;
 }
 
 /**
@@ -76,4 +83,6 @@ export interface ICounterClient {
 export enum CounterInflightMethods {
   /** `Counter.inc` */
   INC = "inc",
+  /** `Counter.peek` */
+  PEEK = "peek",
 }

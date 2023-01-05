@@ -35,7 +35,7 @@ export class Counter extends cloud.CounterBase {
     if (ops.includes(cloud.CounterInflightMethods.INC)) {
       host.addPolicyStatements({
         effect: "Allow",
-        action: ["dynamodb:UpdateItem"],
+        action: ["dynamodb:UpdateItem", "dynamodb:GetItem"],
         resource: this.table.arn,
       });
     }
@@ -60,3 +60,4 @@ export class Counter extends cloud.CounterBase {
 }
 
 Counter._annotateInflight("inc", {});
+Counter._annotateInflight("peek", {});
