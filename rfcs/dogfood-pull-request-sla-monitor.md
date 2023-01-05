@@ -116,7 +116,7 @@ api.on_post("/pull-request-created",  inflight (req: ApiRequest): ApiResponse =>
       name: orbit_data.payload.github_repo.name,
       pull_number: orbit_data.payload.pull_number,
     }); // comments is still an any object from untyped bring
-    if (comments.data.length() == 0) { // length is the javascript method
+    if comments.data.length() == 0 { // length is the javascript method
         slack.post("#community-monitor", 
           "Pull Request https://github.com/${orbit_data.payload.github_repo.owner}/${orbit_data.payload.github_repo.name}/pull/${orbit_data.payload.pull_number} requires some :love"
         );
