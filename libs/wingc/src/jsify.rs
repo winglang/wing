@@ -357,6 +357,16 @@ impl JSifier {
 						.join(", ")
 				)
 			}
+			ExprKind::SetLiteral { items, .. } => {
+				format!(
+					"Object.freeze({{{}}})",
+					items
+						.iter()
+						.map(|expr| self.jsify_expression(expr, phase))
+						.collect::<Vec<String>>()
+						.join(", ")
+				)
+			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),

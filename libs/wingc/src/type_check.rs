@@ -722,11 +722,7 @@ impl<'a> TypeChecker<'a> {
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig
 				} else {
-					self.expr_error(
-						exp,
-						format!("\"{}\" should be a function or method", function
-						)
-					);
+					self.expr_error(exp, format!("\"{}\" should be a function or method", function));
 					return None;
 				};
 
@@ -867,6 +863,33 @@ impl<'a> TypeChecker<'a> {
 				for (_, v) in fields.iter() {
 					let t = self.type_check_exp(v, env, statement_idx).unwrap();
 					self.validate_type(t, value_type, v);
+				}
+
+				Some(container_type)
+			}
+			ExprKind::SetLiteral { type_, items } => {
+				// Infer type based on either the explicit type or the value in one of the items
+				let container_type = if let Some(type_) = type_ {
+					self.resolve_type(type_, env, statement_idx)
+				} else if !items.is_empty() {
+					let some_val_type = self
+						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
+						.unwrap();
+					self.types.add_type(Type::Set(some_val_type))
+				} else {
+					self.expr_error(exp, "Cannot infer type of empty set".to_owned());
+					self.types.add_type(Type::Set(self.types.anything()))
+				};
+
+				let element_type = match *container_type {
+					Type::Set(t) => t,
+					_ => panic!("Expected set type, found {}", container_type),
+				};
+
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					self.validate_type(t, element_type, v);
 				}
 
 				Some(container_type)
@@ -1044,6 +1067,11 @@ impl<'a> TypeChecker<'a> {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
+			}
+			AstType::Set(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each set resolution
+				self.types.add_type(Type::Set(value_type))
 			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
@@ -1560,7 +1588,10 @@ impl<'a> TypeChecker<'a> {
 							if e.values.contains(property) {
 								return _type;
 							} else {
-								return self.general_type_error(format!("Enum \"{}\" does not contain value \"{}\"", _type, property.name));
+								return self.general_type_error(format!(
+									"Enum \"{}\" does not contain value \"{}\"",
+									_type, property.name
+								));
 							}
 						}
 						_ => {
