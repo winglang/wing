@@ -16,9 +16,10 @@ in-memory array of items.
 
 ## Compiling your program
 
-So now, we will compile our app and target the cloud simulator using the following command:
+So now, we return to the root of the project and compile our app and target the cloud simulator using the following command:
 
 ```sh
+cd ../../../../
 wing compile -t sim hello.w
 ```
 

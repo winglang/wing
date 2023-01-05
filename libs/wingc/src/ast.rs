@@ -8,7 +8,7 @@ use indexmap::IndexSet;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
-use crate::type_check::type_env::TypeEnv;
+use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
 
 #[derive(Debug, Eq, Clone)]
@@ -48,7 +48,7 @@ impl PartialEq for Symbol {
 
 impl std::fmt::Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{} {}", self.name, self.span)
+		write!(f, "{} (at {})", self.name, self.span)
 	}
 }
 
@@ -145,6 +145,25 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
+}
+
+#[derive(Debug)]
+pub enum UtilityFunctions {
+	Print,
+	Panic,
+	Throw,
+	Assert,
+}
+
+impl Display for UtilityFunctions {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Panic => write!(f, "panic"),
+			UtilityFunctions::Throw => write!(f, "throw"),
+			UtilityFunctions::Assert => write!(f, "assert"),
+		}
+	}
 }
 
 #[derive(Debug)]
@@ -304,11 +323,11 @@ pub enum InterpolatedStringPart {
 pub struct Scope {
 	pub statements: Vec<Stmt>,
 	#[derivative(Debug = "ignore")]
-	pub env: RefCell<Option<TypeEnv>>, // None after parsing, set to Some during type checking phase
+	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
-	pub fn set_env(&self, new_env: TypeEnv) {
+	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
 		*env = Some(new_env);

@@ -43,12 +43,7 @@ test("put and get objects from bucket", async () => {
   await s.stop();
 
   expect(response).toEqual(VALUE);
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    "Put (key=greeting.txt).",
-    "Get (key=greeting.txt).",
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -77,14 +72,7 @@ test("put multiple objects and list all from bucket", async () => {
   await s.stop();
 
   expect(response).toEqual([KEY1, KEY2, KEY3]);
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    "Put (key=greeting1.txt).",
-    "Put (key=greeting2.txt).",
-    "Put (key=greeting3.txt).",
-    "List (prefix=null).",
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -101,12 +89,8 @@ test("get invalid object throws an error", async () => {
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    "Get (key=unknown.txt).",
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
-  expect(s.listTraces()[1].data.status).toEqual("failure");
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()[2].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -133,12 +117,7 @@ test("remove object from a bucket with mustExist as option", async () => {
   await s.stop();
 
   expect(response).toEqual(undefined);
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    `Put (key=${fileName}).`,
-    `Delete (key=${fileName}).`,
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -165,12 +144,7 @@ test("remove object from a bucket", async () => {
   await s.stop();
 
   expect(response).toEqual(undefined);
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    `Put (key=${fileName}).`,
-    `Delete (key=${fileName}).`,
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 

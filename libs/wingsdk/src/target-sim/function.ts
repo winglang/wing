@@ -1,11 +1,8 @@
 import { readFileSync } from "fs";
-import { join } from "path";
 import { Construct } from "constructs";
-import * as esbuild from "esbuild-wasm";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { TextFile } from "../fs";
-import { mkdtemp } from "../util";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
@@ -22,7 +19,6 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements ISimulatorResource {
-  private readonly env: Record<string, string> = {};
   private readonly code: core.Code;
 
   constructor(
@@ -33,48 +29,11 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   ) {
     super(scope, id, inflight, props);
 
-    inflight._bind(this, ["handle"]);
-
-    const inflightClient = inflight._toInflight();
-    const lines = new Array<string>();
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${inflightClient.text}.handle(event);`);
-    lines.push("};");
-
-    const tempdir = mkdtemp();
-    const outfile = join(tempdir, "index.js");
-
-    esbuild.buildSync({
-      bundle: true,
-      stdin: {
-        contents: lines.join("\n"),
-        resolveDir: tempdir,
-        sourcefile: "inflight.js",
-      },
-      target: "node16",
-      platform: "node",
-      absWorkingDir: tempdir,
-      outfile,
-      minify: false,
-      external: ["aws-sdk"],
-    });
-
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
-      lines: [readFileSync(outfile, "utf-8")],
+      lines: [readFileSync(this.assetPath, "utf-8")],
     });
     this.code = core.NodeJsCode.fromFile(assetPath);
-
-    for (const [name, value] of Object.entries(props.env ?? {})) {
-      this.addEnvironment(name, value);
-    }
-  }
-
-  public addEnvironment(name: string, value: string) {
-    if (this.env[name] !== undefined) {
-      throw new Error(`Environment variable "${name}" already set.`);
-    }
-    this.env[name] = value;
   }
 
   public toSimulator(): BaseResourceSchema {

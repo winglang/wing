@@ -1,11 +1,11 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol};
-use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
+use ast::{Scope, Symbol, UtilityFunctions};
+use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
-use type_check::type_env::StatementIdx;
-use type_check::{FunctionSignature, Type};
+use type_check::symbol_env::StatementIdx;
+use type_check::{FunctionSignature, SymbolKind, Type};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -15,7 +15,7 @@ use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
 use crate::capture::scan_for_inflights_in_scope;
-use crate::type_check::type_env::TypeEnv;
+use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
@@ -26,6 +26,12 @@ pub mod jsify;
 pub mod parser;
 pub mod type_check;
 pub mod utilities;
+
+const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/wingsdk";
+
+const WINGSDK_DURATION: &'static str = "std.Duration";
+const WINGSDK_RESOURCE: &'static str = "core.Resource";
+const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
 pub struct CompilerOutput {
 	pub preflight: String,
@@ -65,10 +71,41 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	scope.set_env(TypeEnv::new(None, None, false, Phase::Preflight, 0));
+	let env = SymbolEnv::new(None, None, false, Phase::Preflight, 0);
+	scope.set_env(env);
 
 	add_builtin(
-		"print",
+		UtilityFunctions::Print.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Assert.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.bool()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Throw.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
@@ -79,6 +116,8 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	);
 
 	let mut tc = TypeChecker::new(types);
+	tc.add_globals(scope);
+
 	tc.type_check_scope(scope);
 
 	tc.diagnostics.into_inner()
@@ -88,20 +127,14 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 	let sym = Symbol {
 		name: name.to_string(),
-		span: WingSpan {
-			start: CharacterLocation { row: 0, column: 0 },
-			end: CharacterLocation { row: 0, column: 0 },
-			start_byte: 0,
-			end_byte: 0,
-			file_id: "".into(),
-		},
+		span: WingSpan::global(),
 	};
 	scope
 		.env
 		.borrow_mut()
 		.as_mut()
 		.unwrap()
-		.define(&sym, types.add_type(typ), StatementIdx::Top)
+		.define(&sym, SymbolKind::Variable(types.add_type(typ)), StatementIdx::Top)
 		.expect("Failed to add builtin");
 }
 
@@ -187,7 +220,11 @@ mod sanity {
 			let result = compile(test_file, Some(out_dir.as_str()));
 
 			if result.is_err() {
-				assert!(expect_failure, "Expected compilation success, but failed");
+				assert!(
+					expect_failure,
+					"Expected compilation success, but failed: {:#?}",
+					result.err().unwrap()
+				);
 			} else {
 				assert!(!expect_failure, "Expected compilation failure, but succeeded");
 			}
@@ -197,6 +234,11 @@ mod sanity {
 	#[test]
 	fn can_compile_valid_files() {
 		compile_test("../../examples/tests/valid", false);
+	}
+
+	#[test]
+	fn can_compile_error_files() {
+		compile_test("../../examples/tests/error", false);
 	}
 
 	#[test]

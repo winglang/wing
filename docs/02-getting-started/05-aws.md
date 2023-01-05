@@ -107,6 +107,8 @@ through the AWS Management Console.
 3. You should be able to see that you have a queue there
 4. Click **Send and receive messages**.
 5. In the **Message Body** box type `cloud` and hit **Send message**.
-6. Jump over to the [CloudWatch Console](https://console.aws.amazon.com/cloudwatch) 
-7. Under **Log groups** you should see a log group called `/aws/lambda/...`. 
-8. Click on it and you should see the log message `Hello, cloud!`.
+6. Jump over to the [S3 Console](https://s3.console.aws.amazon.com/s3/buckets) 
+7. There should be some buckets prefixed with `terraform-202`. 
+8. Cycle through the buckets until you find one that contains `wing.txt`.
+9. Click `wing.txt` then click the `Open` button.
+10. The file should contain `Hello, cloud`.

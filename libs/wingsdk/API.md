@@ -383,6 +383,7 @@ Any object.
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
 ---
 
@@ -414,6 +415,18 @@ with a fresh copy without any consequences.
 
 ---
 
+##### `env`<sup>Required</sup> <a name="env" id="@winglang/wingsdk.cloud.Function.property.env"></a>
+
+```wing
+env: MutMap<str>;
+```
+
+- *Type:* MutMap&lt;str&gt;
+
+Returns the set of environment variables for this function.
+
+---
+
 
 ### Logger <a name="Logger" id="@winglang/wingsdk.cloud.Logger"></a>
 
@@ -427,7 +440,7 @@ A cloud logging facility.
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.toString">to_string</a></code> | Returns a string representation of this construct. |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.addConnection">add_connection</a></code> | Adds a connection to this resource. |
-| <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.print">print</a></code> | Logs a message (preflight). |
 
 ---
 
@@ -462,7 +475,7 @@ describing how this resource is related to another resource.
 print(message: str): void
 ```
 
-Logs a message.
+Logs a message (preflight).
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.Logger.print.parameter.message"></a>
 
@@ -1559,7 +1572,7 @@ let queue_props = cloud.QueueProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.initialMessages">initial_messages</a></code> | <code>MutArray&lt;str&gt;</code> | Initialize the queue with a set of messages. |
-| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>core.Duration</code> | How long a queue's consumers have to process a message. |
+| <code><a href="#@winglang/wingsdk.cloud.QueueProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | How long a queue's consumers have to process a message. |
 
 ---
 
@@ -1582,7 +1595,7 @@ Initialize the queue with a set of messages.
 timeout: Duration;
 ```
 
-- *Type:* core.Duration
+- *Type:* std.Duration
 - *Default:* Duration.fromSeconds(10)
 
 How long a queue's consumers have to process a message.
@@ -1835,122 +1848,6 @@ value: IConstruct;
 Returns the IConstruct this graph vertex represents.
 
 `null` in case this is the root of the graph.
-
----
-
-
-### Duration <a name="Duration" id="@winglang/wingsdk.core.Duration"></a>
-
-Represents a length of time.
-
-
-#### Static Functions <a name="Static Functions" id="Static Functions"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Duration.fromHours">from_hours</a></code> | Create a Duration representing an amount of hours. |
-| <code><a href="#@winglang/wingsdk.core.Duration.fromMinutes">from_minutes</a></code> | Create a Duration representing an amount of minutes. |
-| <code><a href="#@winglang/wingsdk.core.Duration.fromSeconds">from_seconds</a></code> | Create a Duration representing an amount of seconds. |
-
----
-
-##### `from_hours` <a name="from_hours" id="@winglang/wingsdk.core.Duration.fromHours"></a>
-
-```wing
-bring core;
-
-core.Duration.from_hours(amount: num)
-```
-
-Create a Duration representing an amount of hours.
-
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromHours.parameter.amount"></a>
-
-- *Type:* num
-
-the amount of Hours the `Duration` will represent.
-
----
-
-##### `from_minutes` <a name="from_minutes" id="@winglang/wingsdk.core.Duration.fromMinutes"></a>
-
-```wing
-bring core;
-
-core.Duration.from_minutes(amount: num)
-```
-
-Create a Duration representing an amount of minutes.
-
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromMinutes.parameter.amount"></a>
-
-- *Type:* num
-
-the amount of Minutes the `Duration` will represent.
-
----
-
-##### `from_seconds` <a name="from_seconds" id="@winglang/wingsdk.core.Duration.fromSeconds"></a>
-
-```wing
-bring core;
-
-core.Duration.from_seconds(amount: num)
-```
-
-Create a Duration representing an amount of seconds.
-
-###### `amount`<sup>Required</sup> <a name="amount" id="@winglang/wingsdk.core.Duration.fromSeconds.parameter.amount"></a>
-
-- *Type:* num
-
-the amount of Seconds the `Duration` will represent.
-
----
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Duration.property.hours">hours</a></code> | <code>num</code> | Return the total number of hours in this Duration. |
-| <code><a href="#@winglang/wingsdk.core.Duration.property.minutes">minutes</a></code> | <code>num</code> | Return the total number of minutes in this Duration. |
-| <code><a href="#@winglang/wingsdk.core.Duration.property.seconds">seconds</a></code> | <code>num</code> | Return the total number of seconds in this Duration. |
-
----
-
-##### `hours`<sup>Required</sup> <a name="hours" id="@winglang/wingsdk.core.Duration.property.hours"></a>
-
-```wing
-hours: num;
-```
-
-- *Type:* num
-
-Return the total number of hours in this Duration.
-
----
-
-##### `minutes`<sup>Required</sup> <a name="minutes" id="@winglang/wingsdk.core.Duration.property.minutes"></a>
-
-```wing
-minutes: num;
-```
-
-- *Type:* num
-
-Return the total number of minutes in this Duration.
-
----
-
-##### `seconds`<sup>Required</sup> <a name="seconds" id="@winglang/wingsdk.core.Duration.property.seconds"></a>
-
-```wing
-seconds: num;
-```
-
-- *Type:* num
-
-Return the total number of seconds in this Duration.
 
 ---
 
@@ -2556,7 +2453,7 @@ Entrypoint function that will be called when the cloud function is invoked.
 
 - *Extends:* core.IResource
 
-- *Implemented By:* core.IInflightHost
+- *Implemented By:* cloud.Function, cloud.FunctionBase, sim.Function, tfaws.Function, core.IInflightHost
 
 A resource that can run inflight code.
 
@@ -2599,7 +2496,7 @@ Inflight interface for `Logger`.
 
 | **Name** | **Description** |
 | --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. |
+| <code><a href="#@winglang/wingsdk.cloud.ILoggerClient.print">print</a></code> | Logs a message. The log will be associated with whichever resource is running the inflight code. |
 
 ---
 
@@ -2611,10 +2508,9 @@ print(message: str): void
 
 **Inflight client:** [true](#true)
 
-Logs a message.
+Logs a message. The log will be associated with whichever resource is running the inflight code.
 
-The log will be associated with whichever resource is
-running the inflight code.
+NOTICE: this is not an async function because it is wrapped by `console.log()`.
 
 ###### `message`<sup>Required</sup> <a name="message" id="@winglang/wingsdk.cloud.ILoggerClient.print.parameter.message"></a>
 
@@ -2724,7 +2620,7 @@ Function that will be called when a message is received from the queue.
 
 - *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* core.Inflight, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
 Abstract interface for `Resource`.
 
