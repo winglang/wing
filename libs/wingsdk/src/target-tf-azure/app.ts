@@ -1,8 +1,9 @@
 import { AzurermProvider } from "@cdktf/provider-azurerm/lib/provider";
 import { IConstruct } from "constructs";
-import { Polycons } from "polycons";
+// import { Polycons } from "polycons";
 import { IApp, CdktfApp, AppProps } from "../core";
 import { PolyconFactory } from "./factory";
+import { APP_AZURE_TF_SYMBOL } from "./internal";
 
 /**
  * Azure app props
@@ -23,24 +24,34 @@ export class App extends CdktfApp implements IApp {
    * @param construct to consider as instance of App
    * @returns App
    */
-  public static of(construct?: IConstruct): App | undefined {
+  public static of(construct?: IConstruct): App {
     if (construct === undefined) {
-      return undefined;
+      throw new Error("Unable to find app in scope");
     }
-    // Consider cleaner ways to check if construct is instance of App.
-    const app = construct as App;
-    return app.appType === "TF_AZURE_APP" ? app : App.of(construct.node.scope);
+
+    return (construct as any)[APP_AZURE_TF_SYMBOL]
+      ? (construct as App)
+      : App.of(construct.node.scope);
   }
 
-  /** The app type */
-  public readonly appType = "TF_AZURE_APP";
-  /** The apps props */
-  public readonly props: AzureAppProps;
+  /**
+   * The location context of the App
+   * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
+   * */
+  public readonly location: string;
 
   constructor(props: AzureAppProps) {
-    super(props);
-    this.props = props;
-    Polycons.register(this, props.customFactory ?? new PolyconFactory());
+    super({
+      ...props,
+      customFactory: props.customFactory ?? new PolyconFactory(),
+    });
+    this.location = props.location;
     new AzurermProvider(this, "azure", { features: {} });
+
+    Object.defineProperty(this, APP_AZURE_TF_SYMBOL, {
+      value: this,
+      enumerable: false,
+      writable: false,
+    });
   }
 }

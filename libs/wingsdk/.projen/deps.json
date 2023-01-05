@@ -198,6 +198,10 @@
       "type": "bundled"
     },
     {
+      "name": "@azure/core-paging",
+      "type": "bundled"
+    },
+    {
       "name": "@azure/identity",
       "version": "3.1.2",
       "type": "bundled"

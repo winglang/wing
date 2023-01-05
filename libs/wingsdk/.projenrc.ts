@@ -38,6 +38,7 @@ const project = new cdk.JsiiProject({
     // azure client dependencies
     "@azure/storage-blob@12.12.0",
     "@azure/identity@3.1.2",
+    "@azure/core-paging",
     // simulator dependencies
     "tar",
   ],

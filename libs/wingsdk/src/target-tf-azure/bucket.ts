@@ -24,12 +24,8 @@ export class Bucket extends cloud.BucketBase {
 
     const app = App.of(this);
 
-    if (app === undefined) {
-      throw new Error("Unable to find app in scope");
-    }
-
     this.resourceGroup = new ResourceGroup(this, "ResourceGroup", {
-      location: app.props.location,
+      location: app.location,
       name: this.sanitizeName(this.node.id),
     });
 
@@ -47,7 +43,7 @@ export class Bucket extends cloud.BucketBase {
       containerAccessType: this.public ? "public" : "private",
     });
 
-    this.bucket; // TODO: hmm?
+    this.bucket;
   }
 
   /** @internal */

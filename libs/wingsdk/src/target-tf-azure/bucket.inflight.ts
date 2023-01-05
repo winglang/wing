@@ -8,12 +8,18 @@ export class BucketClient implements IBucketClient {
   private readonly defaultAzureCredential: DefaultAzureCredential =
     new DefaultAzureCredential();
 
-  constructor(bucketName: string, storageAccount: string) {
+  constructor(
+    bucketName: string,
+    storageAccount: string,
+    blobServiceClient?: BlobServiceClient
+  ) {
     this.bucketName = bucketName;
-    this.blobServiceClient = new BlobServiceClient(
-      `https://${storageAccount}.blob.core.windows.net`,
-      this.defaultAzureCredential
-    );
+    this.blobServiceClient =
+      blobServiceClient ??
+      new BlobServiceClient(
+        `https://${storageAccount}.blob.core.windows.net`,
+        this.defaultAzureCredential
+      );
   }
 
   /**
@@ -33,7 +39,7 @@ export class BucketClient implements IBucketClient {
    * Get object content from bucket
    *
    * @param key Key of the object
-   * @returns string contnet of the object as string
+   * @returns string content of the object as string
    */
   public async get(key: string): Promise<string> {
     const containerClient = this.blobServiceClient.getContainerClient(
@@ -59,7 +65,7 @@ export class BucketClient implements IBucketClient {
    * @param prefix Limits the response to keys that begin with the specified prefix
    * TODO - add pagination support
    */
-  public async list(prefix?: string | undefined): Promise<string[]> {
+  public async list(prefix?: string): Promise<string[]> {
     const list: string[] = [];
 
     const containerClient = this.blobServiceClient.getContainerClient(
@@ -81,9 +87,9 @@ export class BucketClient implements IBucketClient {
    */
   public async delete(
     key: string,
-    opts?: BucketDeleteOptions | undefined
+    opts: BucketDeleteOptions = {}
   ): Promise<void> {
-    const mustExist = opts?.mustExist ?? false;
+    const mustExist = opts.mustExist ?? false;
 
     const containerClient = this.blobServiceClient.getContainerClient(
       this.bucketName
