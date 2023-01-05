@@ -77,6 +77,7 @@ impl SymbolKind {
 	}
 }
 
+#[derive(Debug)]
 pub enum Type {
 	Anything,
 	Number,
@@ -722,11 +723,7 @@ impl<'a> TypeChecker<'a> {
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig
 				} else {
-					self.expr_error(
-						exp,
-						format!("\"{}\" should be a function or method", function
-						)
-					);
+					self.expr_error(exp, format!("\"{}\" should be a function or method", function));
 					return None;
 				};
 
@@ -1508,6 +1505,88 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	fn pseudo_reify_std_class(&mut self, env: &SymbolEnv, original_type_name: &str, type_param: TypeRef) -> TypeRef {
+		let std_lookup = env.try_lookup("std", None).unwrap();
+		let std_namespace = &std_lookup.as_namespace().unwrap().env;
+		let original_type = std_namespace
+			.try_lookup(original_type_name, None)
+			.unwrap()
+			.as_type()
+			.unwrap();
+		let original_type_class = original_type.as_class().unwrap();
+
+		let new_env = SymbolEnv::new(
+			Some(std_namespace),
+			original_type_class.env.return_type,
+			true,
+			env.flight,
+			0,
+		);
+		let tt = Type::Class(Class {
+			name: original_type_class.name.clone(),
+			env: new_env,
+			parent: original_type_class.parent,
+			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
+		});
+		let mut new_type = self.types.add_type(tt);
+		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
+
+		// add stuff from env into new class
+		for (name, symbol) in original_type_class.env.iter() {
+			match symbol {
+				SymbolKind::Variable(v) => {
+					if let Some(sig) = v.as_function_sig() {
+						let return_type = if let Some(ret) = sig.return_type {
+							if ret == self.types.anything() {
+								Some(type_param)
+							} else {
+								Some(ret)
+							}
+						} else {
+							None
+						};
+
+						// create new args, replace any
+						let new_args: Vec<UnsafeRef<Type>> = sig
+							.args
+							.iter()
+							.map(|arg| {
+								if *arg == self.types.anything() {
+									type_param
+								} else {
+									*arg
+								}
+							})
+							.collect();
+
+						let new_sig = FunctionSignature {
+							args: new_args,
+							return_type,
+							flight: sig.flight,
+						};
+
+						match new_type_class.env.define(
+							&Symbol {
+								name: name.clone(),
+								span: WingSpan::global(), // TODO: this is wrong
+							},
+							SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(&type_error);
+							}
+							_ => {}
+						}
+					}
+				}
+				_ => {}
+			}
+		}
+
+		return new_type;
+	}
+
 	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<TypeRef> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
 		let mut path = vec![];
@@ -1560,7 +1639,10 @@ impl<'a> TypeChecker<'a> {
 							if e.values.contains(property) {
 								return _type;
 							} else {
-								return self.general_type_error(format!("Enum \"{}\" does not contain value \"{}\"", _type, property.name));
+								return self.general_type_error(format!(
+									"Enum \"{}\" does not contain value \"{}\"",
+									_type, property.name
+								));
 							}
 						}
 						_ => {
@@ -1578,6 +1660,24 @@ impl<'a> TypeChecker<'a> {
 					Type::Anything => instance_type,
 
 					// get "std" primitives
+					Type::Array(t) => self
+						.pseudo_reify_std_class(env, "Array", t)
+						.as_class()
+						.unwrap()
+						.env
+						.lookup(property, None)
+						.unwrap()
+						.as_variable()
+						.unwrap(),
+					Type::Set(t) => self
+						.pseudo_reify_std_class(env, "Set", t)
+						.as_class()
+						.unwrap()
+						.env
+						.lookup(property, None)
+						.unwrap()
+						.as_variable()
+						.unwrap(),
 					Type::Duration => env
 						.lookup_nested_str(WINGSDK_DURATION, None)
 						.unwrap()

@@ -324,7 +324,12 @@ impl JSifier {
 					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
-					needs_case_conversion = object_type.as_class_or_resource().unwrap().should_case_convert_jsii;
+					needs_case_conversion = if let Some(obj) = object_type.as_class_or_resource() {
+						obj.should_case_convert_jsii
+					} else {
+						// This should only happen in the case of `any`, which are almost certainly JSII imports.
+						true
+					};
 				}
 				format!(
 					"({}{}({}))",
