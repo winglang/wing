@@ -16,6 +16,10 @@
       "type": "build"
     },
     {
+      "name": "@vscode/vsce",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "build"
     },
@@ -67,10 +71,6 @@
     },
     {
       "name": "typescript",
-      "type": "build"
-    },
-    {
-      "name": "vsce",
       "type": "build"
     },
     {

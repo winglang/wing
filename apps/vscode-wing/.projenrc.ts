@@ -45,7 +45,7 @@ const project = new TypeScriptAppProject({
     "vscode-languageclient",
     "@winglang/wingsdk@file:../../libs/wingsdk",
   ],
-  devDeps: ["@types/node", "esbuild", "vsce"],
+  devDeps: ["@types/node", "esbuild", "@vscode/vsce"],
 });
 
 project.addGitIgnore("*.vsix");
