@@ -20,7 +20,7 @@ Avoid APIs and options that may only be available on one or two major cloud prov
 In the case that an essential option or method is not available on a given cloud provider, then the resource's concrete implementation should throw when the option or method is used.
 
 - **Open**: The Wing SDK is an extensible framework.
-It is also open source.
+It is also open source, and designed to be easy to contribute to.
 It heavily relies on interfaces to allow developers to extend its behavior and provide their own custom implementations targeting new cloud providers, or allow more customized behavior.
 
 - **Deterministic**: The same code should always produce the same result.
