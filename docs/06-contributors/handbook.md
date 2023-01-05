@@ -261,7 +261,7 @@ Our end-to-end tests are hosted under `./tools/hangar`. To get started, first en
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
 ```sh
-npx nx test
+npm test
 ```
 
 Or, you can run the following command from the root of the monorepo:

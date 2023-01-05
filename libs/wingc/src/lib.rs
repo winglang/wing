@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol};
+use ast::{Scope, Symbol, UtilityFunctions};
 use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -75,7 +75,37 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	scope.set_env(env);
 
 	add_builtin(
-		"print",
+		UtilityFunctions::Print.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Assert.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.bool()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Throw.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: None,
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
 			return_type: None,
@@ -204,6 +234,11 @@ mod sanity {
 	#[test]
 	fn can_compile_valid_files() {
 		compile_test("../../examples/tests/valid", false);
+	}
+
+	#[test]
+	fn can_compile_error_files() {
+		compile_test("../../examples/tests/error", false);
 	}
 
 	#[test]

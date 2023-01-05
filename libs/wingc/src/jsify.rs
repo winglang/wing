@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
 	utilities::snake_case_to_camel_case,
 };
@@ -142,6 +142,33 @@ impl JSifier {
 			Reference::Identifier(identifier) => symbolize(self, identifier),
 			Reference::NestedIdentifier { object, property } => {
 				self.jsify_expression(object, phase) + "." + &symbolize(self, property)
+			}
+		}
+	}
+	// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
+	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
+	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctions) -> String {
+		match function_type {
+			UtilityFunctions::Assert => {
+				return format!(
+					"{{((cond) => {{if (!cond) throw new Error(`assertion failed: '{0}'`)}})({0})}}",
+					self.jsify_arg_list(args, None, None, false)
+				);
+			}
+			UtilityFunctions::Print => {
+				return format!("{{console.log({})}}", self.jsify_arg_list(args, None, None, false));
+			}
+			UtilityFunctions::Throw => {
+				return format!(
+					"{{((msg) => {{throw new Error(msg)}})({})}}",
+					self.jsify_arg_list(args, None, None, false)
+				);
+			}
+			UtilityFunctions::Panic => {
+				return format!(
+					"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
+					self.jsify_arg_list(args, None, None, false)
+				);
 			}
 		}
 	}
@@ -283,8 +310,18 @@ impl JSifier {
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
 			ExprKind::Call { function, args } => {
 				let mut needs_case_conversion = false;
-				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
-					return format!("console.log({})", self.jsify_arg_list(args, None, None, false));
+				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Print.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Print);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Assert.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Assert);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Panic.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Panic);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Throw.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
 					needs_case_conversion = object_type.as_class_or_resource().unwrap().should_case_convert_jsii;
