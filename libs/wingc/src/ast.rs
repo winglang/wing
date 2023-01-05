@@ -150,6 +150,25 @@ pub struct Stmt {
 }
 
 #[derive(Debug)]
+pub enum UtilityFunctions {
+	Print,
+	Panic,
+	Throw,
+	Assert,
+}
+
+impl Display for UtilityFunctions {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Panic => write!(f, "panic"),
+			UtilityFunctions::Throw => write!(f, "throw"),
+			UtilityFunctions::Assert => write!(f, "assert"),
+		}
+	}
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
