@@ -77,7 +77,7 @@ describing how this resource is related to another resource.
 
 ---
 
-##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Bucket.isConstruct"></a>
+##### `is_construct` <a name="is_construct" id="@winglang/wingsdk.cloud.Bucket.isConstruct"></a>
 
 ```wing
 bring cloud;
@@ -86,6 +86,20 @@ cloud.Bucket.is_construct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Bucket.isConstruct.parameter.x"></a>
 
@@ -201,7 +215,7 @@ describing how this resource is related to another resource.
 
 ---
 
-##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Counter.isConstruct"></a>
+##### `is_construct` <a name="is_construct" id="@winglang/wingsdk.cloud.Counter.isConstruct"></a>
 
 ```wing
 bring cloud;
@@ -210,6 +224,20 @@ cloud.Counter.is_construct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Counter.isConstruct.parameter.x"></a>
 
@@ -366,7 +394,7 @@ Add an environment variable to the function.
 
 ---
 
-##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Function.isConstruct"></a>
+##### `is_construct` <a name="is_construct" id="@winglang/wingsdk.cloud.Function.isConstruct"></a>
 
 ```wing
 bring cloud;
@@ -375,6 +403,20 @@ cloud.Function.is_construct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Function.isConstruct.parameter.x"></a>
 
@@ -502,7 +544,7 @@ The message to log.
 
 ---
 
-##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Logger.isConstruct"></a>
+##### `is_construct` <a name="is_construct" id="@winglang/wingsdk.cloud.Logger.isConstruct"></a>
 
 ```wing
 bring cloud;
@@ -511,6 +553,20 @@ cloud.Logger.is_construct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Logger.isConstruct.parameter.x"></a>
 
@@ -667,7 +723,7 @@ Create a function to consume messages from this queue.
 
 ---
 
-##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Queue.isConstruct"></a>
+##### `is_construct` <a name="is_construct" id="@winglang/wingsdk.cloud.Queue.isConstruct"></a>
 
 ```wing
 bring cloud;
@@ -676,6 +732,20 @@ cloud.Queue.is_construct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Queue.isConstruct.parameter.x"></a>
 
@@ -812,7 +882,7 @@ Creates function to send messages when published.
 
 ---
 
-##### ~~`is_construct`~~ <a name="is_construct" id="@winglang/wingsdk.cloud.Topic.isConstruct"></a>
+##### `is_construct` <a name="is_construct" id="@winglang/wingsdk.cloud.Topic.isConstruct"></a>
 
 ```wing
 bring cloud;
@@ -821,6 +891,20 @@ cloud.Topic.is_construct(x: any)
 ```
 
 Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
 
 ###### `x`<sup>Required</sup> <a name="x" id="@winglang/wingsdk.cloud.Topic.isConstruct.parameter.x"></a>
 
