@@ -89,7 +89,7 @@ let api = new cloud.Api();
 let slack = new Slack();
 let contributors_counter = new cloud.Counter(); // str => int map
 
-let determine_sla = inflight (github_username: str) : num => {
+let determine_sla = inflight (github_username: str): num => {
   let username_contributions = contributors_counter.inc(github_username, 1);
   if (username_contributions == 1){
     return SLA.pull_request_new_contributor;
