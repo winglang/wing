@@ -616,8 +616,10 @@ impl Parser<'_> {
 
 					// Skip first and last quote
 					let end = expression_node.end_byte() - 1;
-					let mut last_start = expression_node.start_byte() + 1;
+					let start = expression_node.start_byte() + 1;
+					let mut last_start = start;
 					let mut last_end = end;
+					let mut start_from = last_end;
 
 					for interpolation_node in expression_node.named_children(&mut cursor) {
 						if interpolation_node.is_extra() {
@@ -626,9 +628,13 @@ impl Parser<'_> {
 						let interpolation_start = interpolation_node.start_byte();
 						let interpolation_end = interpolation_node.end_byte();
 
+						if start == last_start && interpolation_start < last_end {
+							start_from = last_start;
+						}
+
 						if interpolation_start != last_start {
 							parts.push(InterpolatedStringPart::Static(
-								str::from_utf8(&self.source[last_start..interpolation_start])
+								str::from_utf8(&self.source[start_from..interpolation_start])
 									.unwrap()
 									.into(),
 							));
@@ -640,6 +646,7 @@ impl Parser<'_> {
 
 						last_start = interpolation_start;
 						last_end = interpolation_end;
+						start_from = last_end;
 					}
 
 					if last_end != end {
