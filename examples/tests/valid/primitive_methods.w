@@ -1,3 +1,7 @@
 let dur = 1m;
-print("${dur.seconds}");
-print("${dur.minutes}");
+let stringy = "${dur.minutes}:${dur.seconds}";
+print(stringy);
+
+if stringy.includes("60") && (stringy.split(":").at(0) == "60") {
+  print("${stringy.length}!")
+}
