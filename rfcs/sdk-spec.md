@@ -45,6 +45,83 @@ Some APIs return a list of results that may be too large to fit in memory.
 In these cases, the API returns an `Iterator` object with a `next()` method that returns a `Promise` for the next page of results and a `has_next()` method that returns a `Promise` for a boolean indicating whether there are more results to fetch.
 The `Iterator` object also implements the [async iterator protocol in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols), so it can be used within `for...of` loops.
 
+### Event handlers
+
+Some resources can automatically emit "events" when their state changes.
+Such events can be handled by registering an event handler with the resource.
+An event handler is any resource that implements the `EventHandler<T>` interface, which contains a single method named `handle` that accepts an event of type `T`:
+
+```ts
+// wing
+
+interface EventHandler<T> {
+  inflight handle(event: T);
+}
+```
+
+> We could also decide the should be named `handle_event` or `invoke` or `run` or `call` or something else.
+
+An inflight closure that accepts a single argument of type `T` is also considered an event handler, as the compiler will automatically convert it into a resource that implements the `EventHandler<T>` interface.
+
+As an example, a `Bucket` resource has an `on_upload` method that accepts an event handler.
+When the method is called with an event handler, cloud infrastructure is provisioned to call the resource's `handle` method whenever an object is added to the bucket.
+
+Several resources in the Wing SDK provide methods for registering event handlers.
+Users define their own observable resources by making use of the `Topic` resource.
+
+For example, suppose I want to extend `cloud.Counter` so that it triggers an event whenever a threshold is reached or exceeded:
+
+```ts
+// wing
+
+let counter = new CounterWithThreshold(threshold: 10);
+counter.on_threshold(inflight (event: ThresholdReachedEvent) => {
+  print("Threshold reached: " + event.value);
+});
+```
+
+
+I can implement this by defining a `CounterWithThreshold` resource with an `on_threshold` method, and use a `Topic` to publish events:
+
+```ts
+// wing
+
+struct CounterWithThresholdProps extends cloud.CounterProps {
+  threshold: num;
+}
+
+resource CounterWithThreshold extends cloud.Counter {
+  _threshold: num;
+  _topic: cloud.Topic;
+
+  init(props: CounterWithThresholdProps) {
+    super(props);
+    this._threshold = props.threshold;
+    this._topic = new cloud.Topic();
+  }
+
+  inflight inc(amount?: num) {
+    let new_value = super.inc(amount);
+    if new_value >= this._threshold {
+      this._topic.publish(ThresholdReachedEvent {
+        value: new_value,
+        time_reached: time.now(),
+      });
+    }
+    return value;
+  }
+
+  on_threshold(handler: (event: ThresholdReachedEvent) => void): EventSubscription {
+    return this._topic.on_event(handler);
+  }
+}
+
+struct ThresholdReachedEvent {
+  value: num;
+  time_reached: Time;
+}
+```
+
 ## Planned resources
 
 * Bucket (P1) - object storage, similar to AWS S3, Azure Blob Storage, GCP Storage
@@ -396,56 +473,60 @@ resource Topic {
   init(props: TopicProps = {});
 
   /**
-   * Run a function whenever a message is published to the topic.
+   * Run a function whenever an event is published to the topic.
    */
-  on_publish(fn: inflight (message: Serializable) => void, opts: TopicOnPublishProps?): cloud.Function;
+  on_event(fn: inflight (event: Serializable) => void, opts: TopicOnPublishProps?): cloud.Function;
 
   /**
-   * Publish a message to the topic.
+   * Publish an event to the topic.
    */
-  inflight publish(message: Serializable): Promise<void>;
+  inflight publish(event: Serializable): Promise<void>;
 }
 ```
 
-## Scheduler
+## Schedule
 
-The scheduler resource represents a service that can trigger events at a regular interval.
-Schedulers are useful for periodic tasks, such as running a backup or sending a daily report, or for specifying an action that should happen in the future.
+The schedule resource represents a service that can trigger events at a regular interval.
+Schedules are useful for periodic tasks, such as running backups or sending daily reports.
 
 ```ts
-struct SchedulerOnScheduleProps {
+struct ScheduleProps {
   /**
    * Trigger events according to a cron schedule.
    * 
-   * Only one of `cron` or `rate` can be specified.
+   * Exactly one of `cron` or `rate` must be specified.
+   *
+   * @default "0 0 * * *" - midnight every day
    */
   cron: str?;
 
   /**
-   * Trigger events periodically at a fixed rate.
+   * Trigger events at a periodic rate.
+   *
+   * Exactly one of `cron` or `rate` must be specified.
    * 
-   * Only one of `cron` or `rate` can be specified.
+   * @default 1 day
    */
   rate: duration?;
 }
 
-struct SchedulerOnTimeoutProps {
-  /**
-   * The time at which to run the function.
-   */
-  time: Time;
-}
+struct ScheduleOnTickProps { /* elided */ }
 
-resource Scheduler {
+resource Schedule {
   /**
-   * Register a worker to run on a periodic schedule.
+   * Trigger events according to a cron schedule.
    */
-  on_schedule(fn: inflight () => void, opts: SchedulerOnScheduleProps?): cloud.Function;
+  static fromCron(cron: str): Schedule;
 
   /**
-   * Register a worker to run at a specific time in the future.
+   * Trigger events at a periodic rate.
    */
-  on_timeout(fn: inflight () => void, opts: SchedulerOnTimeoutProps?): cloud.Function;
+  static fromRate(rate: duration): Schedule;
+
+  /**
+   * Register a worker to run on the schedule.
+   */
+  on_tick(handler: inflight () => void, opts: ScheduleOnTickProps?): cloud.Function;
 }
 ```
 
