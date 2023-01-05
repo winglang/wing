@@ -633,18 +633,18 @@ impl Parser<'_> {
 							start_from = last_start;
 						}
 
-						if interpolation_start != last_start {							
+						if interpolation_start != last_start {
 							parts.push(InterpolatedStringPart::Static(
 								str::from_utf8(&self.source[start_from..interpolation_start])
-								.unwrap()
-								.into(),
+									.unwrap()
+									.into(),
 							));
 						}
-						
+
 						parts.push(InterpolatedStringPart::Expr(
 							self.build_expression(&interpolation_node.named_child(0).unwrap())?,
 						));
-						
+
 						last_start = interpolation_start;
 						last_end = interpolation_end;
 						start_from = last_end;
