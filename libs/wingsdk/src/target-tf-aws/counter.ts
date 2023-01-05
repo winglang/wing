@@ -35,7 +35,15 @@ export class Counter extends cloud.CounterBase {
     if (ops.includes(cloud.CounterInflightMethods.INC)) {
       host.addPolicyStatements({
         effect: "Allow",
-        action: ["dynamodb:UpdateItem", "dynamodb:GetItem"],
+        action: ["dynamodb:UpdateItem"],
+        resource: this.table.arn,
+      });
+    }
+
+    if (ops.includes(cloud.CounterInflightMethods.INC)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["dynamodb:GetItem"],
         resource: this.table.arn,
       });
     }

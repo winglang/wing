@@ -2418,6 +2418,7 @@ Inflight interface for `Queue`.
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.ICounterClient.inc">inc</a></code> | Increments the counter atomically by a certain amount and returns the previous value. |
+| <code><a href="#@winglang/wingsdk.cloud.ICounterClient.peek">peek</a></code> | Get the current value of the counter. |
 
 ---
 
@@ -2438,6 +2439,16 @@ Increments the counter atomically by a certain amount and returns the previous v
 amount to increment (default is 1).
 
 ---
+
+##### `peek` <a name="peek" id="@winglang/wingsdk.cloud.ICounterClient.peek"></a>
+
+```wing
+peek(): num
+```
+
+**Inflight client:** [true](#true)
+
+Get the current value of the counter.
 
 
 ### IFunctionClient <a name="IFunctionClient" id="@winglang/wingsdk.cloud.IFunctionClient"></a>
@@ -2871,19 +2882,27 @@ List of inflight operations available for `Bucket`.
 
 ### CounterInflightMethods <a name="CounterInflightMethods" id="@winglang/wingsdk.cloud.CounterInflightMethods"></a>
 
-List of inflight operations available for `Counter`.
+List of inflight operations available for `Counter`, Using this API may introduce race conditions since the value can change between the time it is read and the time it is used in your code.
 
 #### Members <a name="Members" id="Members"></a>
 
 | **Name** | **Description** |
 | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.CounterInflightMethods.INC">INC</a></code> | `Counter.inc`. |
+| <code><a href="#@winglang/wingsdk.cloud.CounterInflightMethods.PEEK">PEEK</a></code> | `Counter.peek`. |
 
 ---
 
 ##### `INC` <a name="INC" id="@winglang/wingsdk.cloud.CounterInflightMethods.INC"></a>
 
 `Counter.inc`.
+
+---
+
+
+##### `PEEK` <a name="PEEK" id="@winglang/wingsdk.cloud.CounterInflightMethods.PEEK"></a>
+
+`Counter.peek`.
 
 ---
 

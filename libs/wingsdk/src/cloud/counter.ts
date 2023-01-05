@@ -78,7 +78,9 @@ export interface ICounterClient {
 }
 
 /**
- * List of inflight operations available for `Counter`.
+ * List of inflight operations available for `Counter`,
+ * Using this API may introduce race conditions since the value can change between
+ * the time it is read and the time it is used in your code.
  */
 export enum CounterInflightMethods {
   /** `Counter.inc` */

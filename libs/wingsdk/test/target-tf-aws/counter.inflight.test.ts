@@ -76,7 +76,7 @@ test("peek without initial value", async () => {
   const client = new CounterClient(MOCK_TABLE_NAME);
   const response = await client.peek();
 
-  expect(response).toEqual(123);
+  expect(response).toEqual(0);
 });
 
 interface MockOptions {
@@ -102,8 +102,8 @@ function setupIncMock(opts: MockOptions) {
     Attributes: !opts.responseValue
       ? undefined
       : {
-        counter_value: { N: `${opts.responseValue}` },
-      },
+          counter_value: { N: `${opts.responseValue}` },
+        },
   };
 
   dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
@@ -118,11 +118,11 @@ function setupPeekMock(opts: MockOptions) {
     $metadata: {},
     Item: !opts.responseValue
       ? {
-        counter_value: { N: "0" },
-      }
+          counter_value: { N: "0" },
+        }
       : {
-        counter_value: { N: `${opts.responseValue}` },
-      },
+          counter_value: { N: `${opts.responseValue}` },
+        },
   };
 
   dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
