@@ -179,6 +179,7 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "inbound",
+                  "implicit": false,
                   "relationship": "handle",
                   "resource": "root/Topic-OnMessage-c5395e41",
                 },
@@ -197,13 +198,9 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "outbound",
+                  "implicit": false,
                   "relationship": "on_message",
                   "resource": "root/Topic-OnMessage-c5395e41",
-                },
-                Object {
-                  "direction": "inbound",
-                  "relationship": "on_message",
-                  "resource": "root/Topic",
                 },
               ],
               "wing:resource:stateful": true,
@@ -246,13 +243,21 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "outbound",
+                  "implicit": false,
                   "relationship": "handle",
                   "resource": "root/Handler",
                 },
                 Object {
                   "direction": "outbound",
-                  "relationship": "print (implicit)",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/WingLogger",
+                },
+                Object {
+                  "direction": "inbound",
+                  "implicit": false,
+                  "relationship": "on_message",
+                  "resource": "root/Topic",
                 },
               ],
               "wing:resource:stateful": false,
@@ -339,7 +344,8 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "inbound",
-                  "relationship": "print (implicit)",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/Topic-OnMessage-c5395e41",
                 },
               ],

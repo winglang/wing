@@ -57,7 +57,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "print (implicit)",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/my_function",
               },
             ],
@@ -75,7 +76,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
-                "relationship": "print (implicit)",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/WingLogger",
               },
             ],

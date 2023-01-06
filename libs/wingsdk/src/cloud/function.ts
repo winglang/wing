@@ -2,14 +2,7 @@ import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import { Polycons } from "polycons";
-import {
-  Code,
-  Direction,
-  IInflightHost,
-  Inflight,
-  IResource,
-  Resource,
-} from "../core";
+import { Code, IInflightHost, Inflight, IResource, Resource } from "../core";
 import { mkdtemp } from "../util";
 import { Logger } from "./logger";
 
@@ -82,15 +75,11 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     lines.push("};");
 
     // add an annotation that the Wing logger is implicitly used
-    logger.addConnection({
-      direction: Direction.INBOUND,
-      relationship: "print (implicit)",
-      resource: this,
-    });
-    this.addConnection({
-      direction: Direction.OUTBOUND,
-      relationship: "print (implicit)",
-      resource: logger,
+    Resource.addConnection({
+      from: this,
+      to: logger,
+      relationship: "print",
+      implicit: true,
     });
 
     const tempdir = mkdtemp();

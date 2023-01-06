@@ -68,6 +68,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
+                    "implicit": false,
                     "relationship": "put",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
@@ -86,6 +87,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
+                    "implicit": false,
                     "relationship": "inc",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
@@ -104,6 +106,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
+                    "implicit": false,
                     "relationship": "handle",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
@@ -122,6 +125,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
@@ -140,26 +144,31 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
+                    "implicit": false,
                     "relationship": "inc",
                     "resource": "root/HelloWorld/Counter",
                   },
                   Object {
                     "direction": "outbound",
+                    "implicit": false,
                     "relationship": "put",
                     "resource": "root/HelloWorld/Bucket",
                   },
                   Object {
                     "direction": "outbound",
+                    "implicit": false,
                     "relationship": "handle",
                     "resource": "root/HelloWorld/Processor",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "print (implicit)",
+                    "implicit": true,
+                    "relationship": "print",
                     "resource": "root/WingLogger",
                   },
                   Object {
                     "direction": "inbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue",
                   },
@@ -208,7 +217,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "print (implicit)",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
               },
             ],

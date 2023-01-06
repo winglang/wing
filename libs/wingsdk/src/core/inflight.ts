@@ -122,6 +122,9 @@ export interface InflightProps {
  * such as `cloud.IFunctionHandler`
  */
 export class Inflight extends Construct implements IResource {
+  /** @internal */
+  public _connections: Connection[] = []; // thrown away
+
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away
 
@@ -141,9 +144,6 @@ export class Inflight extends Construct implements IResource {
   }
   /** @internal */
   public _inspect(_inspector: TreeInspector): void {
-    throw new Error("Method not implemented.");
-  }
-  public addConnection(..._connections: Connection[]): void {
     throw new Error("Method not implemented.");
   }
 }

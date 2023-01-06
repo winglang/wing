@@ -208,6 +208,7 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "inbound",
+                  "implicit": false,
                   "relationship": "inc",
                   "resource": "root/Function",
                 },
@@ -236,12 +237,14 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "outbound",
+                  "implicit": false,
                   "relationship": "inc",
                   "resource": "root/Counter",
                 },
                 Object {
                   "direction": "outbound",
-                  "relationship": "print (implicit)",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/WingLogger",
                 },
               ],
@@ -329,7 +332,8 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "inbound",
-                  "relationship": "print (implicit)",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/Function",
                 },
               ],

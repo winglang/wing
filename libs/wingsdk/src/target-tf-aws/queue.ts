@@ -72,15 +72,10 @@ export class Queue extends cloud.QueueBase {
       batchSize: props.batchSize ?? 1,
     });
 
-    this.addConnection({
-      direction: core.Direction.OUTBOUND,
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
       relationship: "on_message",
-      resource: fn,
-    });
-    fn.addConnection({
-      direction: core.Direction.INBOUND,
-      relationship: "on_message",
-      resource: this,
     });
 
     return fn;
