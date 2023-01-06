@@ -177,6 +177,7 @@ export interface IFunctionHandlerClient {
 
 /**
  * List of inflight operations available for `Function`.
+ * @internal
  */
 export enum FunctionInflightMethods {
   /** `Function.invoke` */

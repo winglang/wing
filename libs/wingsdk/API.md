@@ -2837,76 +2837,6 @@ Function that will be called when a message is received from the topic.
 
 ## Enums <a name="Enums" id="Enums"></a>
 
-### BucketInflightMethods <a name="BucketInflightMethods" id="@winglang/wingsdk.cloud.BucketInflightMethods"></a>
-
-List of inflight operations available for `Bucket`.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.PUT">PUT</a></code> | `Bucket.put`. |
-| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.GET">GET</a></code> | `Bucket.get`. |
-| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.LIST">LIST</a></code> | `Bucket.list`. |
-| <code><a href="#@winglang/wingsdk.cloud.BucketInflightMethods.DELETE">DELETE</a></code> | `Bucket.delete`. |
-
----
-
-##### `PUT` <a name="PUT" id="@winglang/wingsdk.cloud.BucketInflightMethods.PUT"></a>
-
-`Bucket.put`.
-
----
-
-
-##### `GET` <a name="GET" id="@winglang/wingsdk.cloud.BucketInflightMethods.GET"></a>
-
-`Bucket.get`.
-
----
-
-
-##### `LIST` <a name="LIST" id="@winglang/wingsdk.cloud.BucketInflightMethods.LIST"></a>
-
-`Bucket.list`.
-
----
-
-
-##### `DELETE` <a name="DELETE" id="@winglang/wingsdk.cloud.BucketInflightMethods.DELETE"></a>
-
-`Bucket.delete`.
-
----
-
-
-### CounterInflightMethods <a name="CounterInflightMethods" id="@winglang/wingsdk.cloud.CounterInflightMethods"></a>
-
-List of inflight operations available for `Counter`.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.CounterInflightMethods.INC">INC</a></code> | `Counter.inc`. |
-| <code><a href="#@winglang/wingsdk.cloud.CounterInflightMethods.PEEK">PEEK</a></code> | `Counter.peek`. |
-
----
-
-##### `INC` <a name="INC" id="@winglang/wingsdk.cloud.CounterInflightMethods.INC"></a>
-
-`Counter.inc`.
-
----
-
-
-##### `PEEK` <a name="PEEK" id="@winglang/wingsdk.cloud.CounterInflightMethods.PEEK"></a>
-
-`Counter.peek`.
-
----
-
-
 ### Direction <a name="Direction" id="@winglang/wingsdk.core.Direction"></a>
 
 The direction of a connection.
@@ -2937,25 +2867,6 @@ Indicates that this resource is called, triggered, or referenced by the resource
 ---
 
 
-### FunctionInflightMethods <a name="FunctionInflightMethods" id="@winglang/wingsdk.cloud.FunctionInflightMethods"></a>
-
-List of inflight operations available for `Function`.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.FunctionInflightMethods.INVOKE">INVOKE</a></code> | `Function.invoke`. |
-
----
-
-##### `INVOKE` <a name="INVOKE" id="@winglang/wingsdk.cloud.FunctionInflightMethods.INVOKE"></a>
-
-`Function.invoke`.
-
----
-
-
 ### Language <a name="Language" id="@winglang/wingsdk.core.Language"></a>
 
 The language of a piece of code.
@@ -2971,63 +2882,6 @@ The language of a piece of code.
 ##### `NODE_JS` <a name="NODE_JS" id="@winglang/wingsdk.core.Language.NODE_JS"></a>
 
 Node.js.
-
----
-
-
-### LoggerInflightMethods <a name="LoggerInflightMethods" id="@winglang/wingsdk.cloud.LoggerInflightMethods"></a>
-
-List of inflight operations available for `Logger`.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.LoggerInflightMethods.PRINT">PRINT</a></code> | `Logger.print`. |
-
----
-
-##### `PRINT` <a name="PRINT" id="@winglang/wingsdk.cloud.LoggerInflightMethods.PRINT"></a>
-
-`Logger.print`.
-
----
-
-
-### QueueInflightMethods <a name="QueueInflightMethods" id="@winglang/wingsdk.cloud.QueueInflightMethods"></a>
-
-List of inflight operations available for `Queue`.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.QueueInflightMethods.PUSH">PUSH</a></code> | `Queue.push`. |
-
----
-
-##### `PUSH` <a name="PUSH" id="@winglang/wingsdk.cloud.QueueInflightMethods.PUSH"></a>
-
-`Queue.push`.
-
----
-
-
-### TopicInflightMethods <a name="TopicInflightMethods" id="@winglang/wingsdk.cloud.TopicInflightMethods"></a>
-
-List of inflight operations available for `Topic`.
-
-#### Members <a name="Members" id="Members"></a>
-
-| **Name** | **Description** |
-| --- | --- |
-| <code><a href="#@winglang/wingsdk.cloud.TopicInflightMethods.PUBLISH">PUBLISH</a></code> | `Topic.publish`. |
-
----
-
-##### `PUBLISH` <a name="PUBLISH" id="@winglang/wingsdk.cloud.TopicInflightMethods.PUBLISH"></a>
-
-`Topic.publish`.
 
 ---
 
