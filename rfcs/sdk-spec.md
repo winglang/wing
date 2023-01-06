@@ -180,24 +180,24 @@ resource Bucket {
   init(props: BucketProps = {});
 
   /**
-   * Run a function whenever a file is uploaded to the bucket.
+   * Run an inflight whenever a file is uploaded to the bucket.
    */
-  on_upload(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): cloud.Function;
+  on_upload(fn: inflight (key: str) => void, opts: BucketOnUploadProps?): void;
 
   /**
-   * Run a function whenever a file is deleted from the bucket.
+   * Run an inflight whenever a file is deleted from the bucket.
    */
-  on_delete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): cloud.Function;
+  on_delete(fn: inflight (key: str) => void, opts: BucketOnDeleteProps?): void;
 
   /**
-   * Run a function whenever a file is updated in the bucket.
+   * Run an inflight whenever a file is updated in the bucket.
    */
-  on_update(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): cloud.Function;
+  on_update(fn: inflight (key: str) => void, opts: BucketOnUpdateProps?): void;
 
   /**
-   * Run a function whenever a file is created, uploaded, or deleted from the bucket.
+   * Run an inflight whenever a file is created, uploaded, or deleted from the bucket.
    */
-  on_event(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): cloud.Function;
+  on_event(fn: inflight (event: BucketEvent) => void, opts: BucketOnEventProps?): void;
 
   /**
    * Upload a file to the bucket.
@@ -266,7 +266,7 @@ resource Queue {
   /**
    * Run an inflight in a cloud function whenever a message is pushed to the queue. 
    */
-  add_consumer(fn: inflight (message: Serializable) => void, opts: QueueAddConsumerProps?): cloud.Function;
+  add_consumer(fn: inflight (message: Serializable) => void, opts: QueueAddConsumerProps?): void;
 
   /**
    * Push a message to the queue.
@@ -470,9 +470,9 @@ resource Topic {
   init(props: TopicProps = {});
 
   /**
-   * Run a function whenever an event is published to the topic.
+   * Run an inflight whenever an event is published to the topic.
    */
-  on_event(fn: inflight (event: Serializable) => void, opts: TopicOnPublishProps?): cloud.Function;
+  on_event(fn: inflight (event: Serializable) => void, opts: TopicOnPublishProps?): void;
 
   /**
    * Publish an event to the topic.
@@ -521,9 +521,9 @@ resource Schedule {
   static fromRate(rate: duration): Schedule;
 
   /**
-   * Register a worker to run on the schedule.
+   * Run an inflight according to the schedule.
    */
-  on_tick(handler: inflight () => void, opts: ScheduleOnTickProps?): cloud.Function;
+  on_tick(fn: inflight () => void, opts: ScheduleOnTickProps?): void;
 }
 ```
 
@@ -577,34 +577,34 @@ resource Api {
   url: str;
 
   /**
-   * Run a function whenever a GET request is made to the specified route.
+   * Run an inflight whenever a GET request is made to the specified route.
    */
-  on_get(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): cloud.Function;
+  on_get(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
 
   /**
-   * Run a function whenever a POST request is made to the specified route.
+   * Run an inflight whenever a POST request is made to the specified route.
    */
-  on_post(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): cloud.Function;
+  on_post(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
 
   /**
-   * Run a function whenever a PUT request is made to the specified route.
+   * Run an inflight whenever a PUT request is made to the specified route.
    */
-  on_put(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): cloud.Function;
+  on_put(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
 
   /**
-   * Run a function whenever a DELETE request is made to the specified route.
+   * Run an inflight whenever a DELETE request is made to the specified route.
    */
-  on_delete(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): cloud.Function;
+  on_delete(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
 
   /**
-   * Run a function whenever a PATCH request is made to the specified route.
+   * Run an inflight whenever a PATCH request is made to the specified route.
    */
-  on_patch(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): cloud.Function;
+  on_patch(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
 
   /**
-   * Run a function whenever any request is made to the specified route.
+   * Run an inflight whenever any request is made to the specified route.
    */
-  on_request(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnRequestProps?): cloud.Function;
+  on_request(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnRequestProps?): void;
 
   /**
    * Make a request to the specified route. Throws if the route hasn't been
@@ -713,9 +713,9 @@ resource Metric {
   init(props: MetricProps);
 
   /**
-   * Trigger an event whenever the metric exceeds the specified threshold.
+   * Run an inflight whenever the metric exceeds the specified threshold.
    */
-  on_threshold(handler: inflight () => void, opts: MetricOnThresholdProps): cloud.Function;
+  on_threshold(fn: inflight () => void, opts: MetricOnThresholdProps): void;
 
   /**
    * Record a value for the metric at the current point in time.
