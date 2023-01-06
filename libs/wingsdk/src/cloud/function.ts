@@ -74,6 +74,14 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     lines.push(`  return await ${inflightClient.text}.handle(event);`);
     lines.push("};");
 
+    // add an annotation that the Wing logger is implicitly used
+    Resource.addConnection({
+      from: this,
+      to: logger,
+      relationship: "print",
+      implicit: true,
+    });
+
     const tempdir = mkdtemp();
     const outfile = join(tempdir, "index.js");
 
@@ -177,6 +185,7 @@ export interface IFunctionHandlerClient {
 
 /**
  * List of inflight operations available for `Function`.
+ * @internal
  */
 export enum FunctionInflightMethods {
   /** `Function.invoke` */
