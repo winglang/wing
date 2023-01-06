@@ -1116,7 +1116,7 @@ let connection = core.Connection{ ... }
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.Connection.property.direction">direction</a></code> | <code>core.Direction</code> | The direction of the connection. |
 | <code><a href="#@winglang/wingsdk.core.Connection.property.relationship">relationship</a></code> | <code>str</code> | The type of relationship with the resource. |
-| <code><a href="#@winglang/wingsdk.core.Connection.property.resource">resource</a></code> | <code>core.Resource</code> | The resource this connection is to. |
+| <code><a href="#@winglang/wingsdk.core.Connection.property.resource">resource</a></code> | <code>core.IResource</code> | The resource this connection is to. |
 
 ---
 
@@ -1147,10 +1147,10 @@ The type of relationship with the resource.
 ##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.Connection.property.resource"></a>
 
 ```wing
-resource: Resource;
+resource: IResource;
 ```
 
-- *Type:* core.Resource
+- *Type:* core.IResource
 
 The resource this connection is to.
 
@@ -2726,6 +2726,30 @@ Function that will be called when a message is received from the queue.
 
 Abstract interface for `Resource`.
 
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/wingsdk.core.IResource.addConnection">add_connection</a></code> | Adds a connection to this resource. |
+
+---
+
+##### `add_connection` <a name="add_connection" id="@winglang/wingsdk.core.IResource.addConnection"></a>
+
+```wing
+add_connection(connections: Connection): void
+```
+
+Adds a connection to this resource.
+
+A connection is a piece of metadata
+describing how this resource is related to another resource.
+
+###### `connections`<sup>Required</sup> <a name="connections" id="@winglang/wingsdk.core.IResource.addConnection.parameter.connections"></a>
+
+- *Type:* core.Connection
+
+---
 
 #### Properties <a name="Properties" id="Properties"></a>
 

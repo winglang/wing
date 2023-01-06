@@ -7,7 +7,6 @@ import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { Function } from "./function";
-import { addConnections } from "./util";
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -100,7 +99,6 @@ export class Topic extends cloud.TopicBase {
 
     host.addEnvironment(this.envName(), this.topic.arn);
 
-    addConnections(this, host);
     super._bind(host, ops);
   }
 

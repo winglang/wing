@@ -157,7 +157,13 @@ Object {
         "children": Object {
           "Handler": Object {
             "attributes": Object {
-              "wing:resource:connections": Array [],
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "relationship": "handle",
+                  "resource": "root/Queue-OnMessage-c5395e41",
+                },
+              ],
               "wing:resource:stateful": false,
             },
             "constructInfo": Object {
@@ -208,7 +214,12 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "outbound",
-                  "relationship": "inflight-reference",
+                  "relationship": "handle",
+                  "resource": "root/Handler",
+                },
+                Object {
+                  "direction": "outbound",
+                  "relationship": "print (implicit)",
                   "resource": "root/WingLogger",
                 },
                 Object {
@@ -301,7 +312,7 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "inbound",
-                  "relationship": "inflight-reference",
+                  "relationship": "print (implicit)",
                   "resource": "root/Queue-OnMessage-c5395e41",
                 },
               ],

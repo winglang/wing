@@ -68,7 +68,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -86,7 +86,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -101,7 +101,13 @@ Object {
             },
             "Processor": Object {
               "attributes": Object {
-                "wing:resource:connections": Array [],
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
                 "wing:resource:stateful": false,
               },
               "constructInfo": Object {
@@ -134,17 +140,22 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Counter",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Bucket",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Processor",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "relationship": "print (implicit)",
                     "resource": "root/WingLogger",
                   },
                   Object {
@@ -197,7 +208,7 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "relationship": "print (implicit)",
                 "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
               },
             ],

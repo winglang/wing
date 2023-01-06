@@ -31,6 +31,14 @@ export interface IResource extends IInspectable, IConstruct {
    * @internal
    */
   _toInflight(): Code;
+
+  /**
+   * Adds a connection to this resource. A connection is a piece of metadata
+   * describing how this resource is related to another resource.
+   *
+   * @experimental
+   */
+  addConnection(...connections: Connection[]): void;
 }
 
 const BIND_METADATA_PREFIX = "$bindings__";
@@ -133,6 +141,20 @@ export abstract class Resource
           );
         }
         obj._bind(host, resources[field]);
+
+        // add connection metadata
+        for (const op of resources[field]) {
+          obj.addConnection({
+            direction: Direction.INBOUND,
+            relationship: op,
+            resource: host,
+          });
+          host.addConnection({
+            direction: Direction.OUTBOUND,
+            relationship: op,
+            resource: obj,
+          });
+        }
       } else {
         log(`Skipped binding ${field} since it should be bound already.`);
       }
@@ -202,7 +224,7 @@ export interface Connection {
   /**
    * The resource this connection is to.
    */
-  readonly resource: Resource;
+  readonly resource: IResource;
 
   /**
    * The type of relationship with the resource.

@@ -4,7 +4,7 @@ import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
-import { IInflightHost, IResource } from "./resource";
+import { Connection, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
 
 /**
@@ -141,6 +141,9 @@ export class Inflight extends Construct implements IResource {
   }
   /** @internal */
   public _inspect(_inspector: TreeInspector): void {
+    throw new Error("Method not implemented.");
+  }
+  public addConnection(..._connections: Connection[]): void {
     throw new Error("Method not implemented.");
   }
 }
