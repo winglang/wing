@@ -249,6 +249,7 @@ export interface AddConnectionProps {
   /**
    * Whether the relationship is implicit, i.e. it is not explicitly
    * defined by the user.
+   * @default false
    */
   readonly implicit?: boolean;
 }

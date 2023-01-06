@@ -1031,6 +1031,7 @@ implicit: bool;
 ```
 
 - *Type:* bool
+- *Default:* false
 
 Whether the relationship is implicit, i.e. it is not explicitly defined by the user.
 
