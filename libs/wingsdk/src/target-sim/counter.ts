@@ -44,3 +44,4 @@ export class Counter extends cloud.CounterBase implements ISimulatorResource {
 }
 
 Counter._annotateInflight("inc", {});
+Counter._annotateInflight("peek", {});

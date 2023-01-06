@@ -40,6 +40,14 @@ export class Counter extends cloud.CounterBase {
       });
     }
 
+    if (ops.includes(cloud.CounterInflightMethods.INC)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["dynamodb:GetItem"],
+        resource: this.table.arn,
+      });
+    }
+
     host.addEnvironment(this.envName(), this.table.name);
 
     addConnections(this, host);
@@ -60,3 +68,4 @@ export class Counter extends cloud.CounterBase {
 }
 
 Counter._annotateInflight("inc", {});
+Counter._annotateInflight("peek", {});
