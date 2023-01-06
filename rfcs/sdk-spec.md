@@ -258,18 +258,15 @@ struct QueueProps {
   timeout: duration?;
 }
 
-struct QueueOnMessageProps { /* elided */ }
+struct QueueAddConsumerProps { /* elided */ }
 
 resource Queue {
   init(props: QueueProps = {});
 
   /**
-   * Run a function whenever a message is pushed to the queue.
-   *
-   * TODO: should we throw / warn the user if the function's timeout is greater than
-   * the queue's timeout?
+   * Run an inflight in a cloud function whenever a message is pushed to the queue. 
    */
-  on_message(fn: inflight (message: Serializable) => void, opts: QueueOnMessageProps?): cloud.Function;
+  add_consumer(fn: inflight (message: Serializable) => void, opts: QueueAddConsumerProps?): cloud.Function;
 
   /**
    * Push a message to the queue.
