@@ -138,6 +138,7 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/tsuf239"><img src="https://avatars.githubusercontent.com/u/39455181?v=4?s=100" width="100px;" alt="tsuf239"/><br /><sub><b>tsuf239</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=tsuf239" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Warkanlock"><img src="https://avatars.githubusercontent.com/u/13340320?v=4?s=100" width="100px;" alt="txxnano"/><br /><sub><b>txxnano</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Warkanlock" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Joshswooft"><img src="https://avatars.githubusercontent.com/u/60711758?v=4?s=100" width="100px;" alt="Josh"/><br /><sub><b>Josh</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Joshswooft" title="Documentation">📖</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/marciocadev"><img src="https://avatars.githubusercontent.com/u/67694075?v=4?s=100" width="100px;" alt="Marcio Cruz de Almeida"/><br /><sub><b>Marcio Cruz de Almeida</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=marciocadev" title="Code">💻</a></td>
     </tr>
   </tbody>
   <tfoot>

@@ -28,4 +28,13 @@ export class Counter implements ICounterClient, ISimulatorResourceInstance {
       },
     });
   }
+
+  public async peek(): Promise<number> {
+    return this.context.withTrace({
+      message: `Peek (value=${this.value})`,
+      activity: async () => {
+        return this.value;
+      },
+    });
+  }
 }
