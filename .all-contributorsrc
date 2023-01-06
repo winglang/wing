@@ -315,6 +315,15 @@
       "contributions": [
         "doc"
       ]
+    },
+    {
+      "login": "marciocadev",
+      "name": "Marcio Cruz de Almeida",
+      "avatar_url": "https://avatars.githubusercontent.com/u/67694075?v=4",
+      "profile": "https://github.com/marciocadev",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
