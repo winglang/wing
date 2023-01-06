@@ -40,7 +40,7 @@ export class Counter extends cloud.CounterBase {
       });
     }
 
-    if (ops.includes(cloud.CounterInflightMethods.INC)) {
+    if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:GetItem"],
