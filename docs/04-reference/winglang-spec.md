@@ -1738,7 +1738,7 @@ Ternary or conditional operators are not supported.
 | Operator | Description          | Example    |
 | -------- | -------------------- | ---------- |
 | `&&`     | Logical AND operator | `a && b`   |
-| `\|\|`   | Logical OR operator  | `a \|\| b` |
+| `\|\|`   | Logical OR operator  | `a \|\| b`   |
 | `!`      | Logical NOT operator | `!a`       |
 
 [`▲ top`][top]
@@ -1767,12 +1767,12 @@ Ternary or conditional operators are not supported.
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
 | +x, -x               | Unary plus, Unary minus                           |
-| \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
+| *, /, \\, %          | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
 | ==, !=, >, >=, <, <= | Comparisons, Identity, operators                  |
 | !                    | Logical NOT                                       |
 | &&                   | Logical AND                                       |
-| \|\|                 | Logical OR                                        |
+| ||                   | Logical OR                                        |
 
 Table above is in descending order of precedence.  
 `=` operator in Wing does not return a value so you cannot do `let x = y = 1`.  
