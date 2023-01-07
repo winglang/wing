@@ -48,16 +48,10 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
       functionHandle,
     });
 
-    this.addConnection({
-      direction: core.Direction.OUTBOUND,
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
       relationship: "on_message",
-      resource: fn,
-    });
-
-    fn.addConnection({
-      direction: core.Direction.INBOUND,
-      relationship: "on_message",
-      resource: this,
     });
 
     return fn;
