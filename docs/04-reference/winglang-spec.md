@@ -302,7 +302,7 @@ The `inflight` modifier is allowed when defining a function closure:
 
 ```TS
 let handler = inflight () => {
-  print("hello, world";)
+  print("hello, world");
 };
 ```
 
