@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol, UtilityFunctions};
-use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics, WingSpan};
+use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -49,7 +49,20 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let source = match fs::read(&source_file) {
 		Ok(source) => source,
 		Err(err) => {
-			panic!("Error reading source file: {}: {:?}", &source_file, err);
+			let mut diagnostics = Diagnostics::new();
+			
+			diagnostics.push(Diagnostic {
+				message: format!("Error reading source file: {}: {:?}", &source_file, err),
+				span: None,
+				level: DiagnosticLevel::Error,
+			});
+
+			// Set up a dummy scope to return
+			let empty_scope = Scope {
+				statements: Vec::<Stmt>::new(),
+				env: RefCell::new(None),
+			};
+			return (empty_scope, diagnostics);
 		}
 	};
 
@@ -147,7 +160,12 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let (mut scope, parse_diagnostics) = parse(source_file);
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types);
+	let type_check_diagnostics = if scope.statements.len() > 0 {
+		type_check(&mut scope, &mut types)
+	} else {
+		// empty scope, no type checking needed
+		Diagnostics::new()
+	};
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
