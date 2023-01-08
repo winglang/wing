@@ -155,8 +155,12 @@ impl<'a> JsiiImporter<'a> {
 
 		// Create namespace and add it to env if it doesn't exist yet
 		if let Some(symb) = self.env.try_lookup_mut(namespace_name, None) {
-			println!("namespace {} already define, no need to create", namespace_name);
-			if !matches!(symb, SymbolKind::Namespace(_)) {
+			if let SymbolKind::Namespace(ns) = symb {
+				// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
+				if ns.hidden && namespace_name == self.module_name {
+					ns.hidden = false;
+				}
+			} else {
 				// TODO: make this a proper error
 				panic!(
 					"Tried importing {} but {} already defined as a {}",

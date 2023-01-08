@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_RESOURCE, WINGSDK_SET};
+use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -104,7 +104,6 @@ pub enum Type {
 
 const WING_CONSTRUCTOR_NAME: &'static str = "init";
 const WINGSDK_STD_MODULE: &'static str = "std";
-const WINGSDK_CORE_MODULE: &'static str = "core";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -477,7 +476,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
-		for m in [WINGSDK_STD_MODULE, WINGSDK_CORE_MODULE] {
+		for m in [WINGSDK_STD_MODULE] {
 			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), 0);
 		}
 	}
@@ -1269,7 +1268,8 @@ impl<'a> TypeChecker<'a> {
 							(None, None)
 						}
 					}
-				} else if *is_resource {
+				}
+				/*else if *is_resource {
 					// If we're a resource and we have no parent we implicitly inherit from wingsdk's resource base class
 					let wingsdk_resource_type = env
 						.lookup_nested_str(WINGSDK_RESOURCE, false, Some(stmt.idx))
@@ -1278,7 +1278,8 @@ impl<'a> TypeChecker<'a> {
 						.unwrap();
 					let wingsdk_resource_class = wingsdk_resource_type.as_resource().unwrap();
 					(Some(wingsdk_resource_type), Some(wingsdk_resource_class.env.get_ref()))
-				} else {
+				} */
+				else {
 					(None, None)
 				};
 
