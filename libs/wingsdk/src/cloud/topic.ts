@@ -97,6 +97,7 @@ export interface ITopicOnMessageHandlerClient {
 
 /**
  * List of inflight operations available for `Topic`.
+ * @internal
  */
 export enum TopicInflightMethods {
   /** `Topic.publish` */

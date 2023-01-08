@@ -53,12 +53,42 @@ test("inc", async () => {
   await s.stop();
 
   expect(listMessages(s)).toEqual([
+    "wingsdk.cloud.Logger created.",
     "wingsdk.cloud.Counter created.",
     "Inc (amount=1).",
     "Inc (amount=1).",
     "Inc (amount=10).",
     "Inc (amount=10).",
     "wingsdk.cloud.Counter deleted.",
+    "wingsdk.cloud.Logger deleted.",
   ]);
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("peek without initial value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter");
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const peek = await client.peek();
+  expect(peek).toEqual(0);
+});
+
+test("peek with initial value", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter", {
+    initial: 123,
+  });
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource("/my_counter") as ICounterClient;
+
+  const peek = await client.peek();
+  expect(peek).toEqual(123);
 });

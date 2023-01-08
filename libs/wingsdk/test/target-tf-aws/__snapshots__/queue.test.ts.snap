@@ -25,7 +25,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Queue/Default",
@@ -33,15 +33,27 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
             },
             "id": "Queue",
             "path": "root/Queue",
           },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -49,7 +61,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
+              "version": "0.13.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -57,7 +69,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.13.3",
         },
         "id": "root",
         "path": "root",
@@ -65,7 +77,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.13.3",
     },
     "id": "App",
     "path": "",
@@ -145,12 +157,19 @@ Object {
         "children": Object {
           "Handler": Object {
             "attributes": Object {
-              "wing:resource:connections": Array [],
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "implicit": false,
+                  "relationship": "handle",
+                  "resource": "root/Queue-OnMessage-c5395e41",
+                },
+              ],
               "wing:resource:stateful": false,
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -160,6 +179,7 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "outbound",
+                  "implicit": false,
                   "relationship": "on_message",
                   "resource": "root/Queue-OnMessage-c5395e41",
                 },
@@ -170,7 +190,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Queue/Default",
@@ -178,7 +198,7 @@ Object {
               "EventSourceMapping": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.lambdaEventSourceMapping.LambdaEventSourceMapping",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "EventSourceMapping",
                 "path": "root/Queue/EventSourceMapping",
@@ -186,7 +206,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
             },
             "id": "Queue",
             "path": "root/Queue",
@@ -195,7 +215,20 @@ Object {
             "attributes": Object {
               "wing:resource:connections": Array [
                 Object {
+                  "direction": "outbound",
+                  "implicit": false,
+                  "relationship": "handle",
+                  "resource": "root/Handler",
+                },
+                Object {
+                  "direction": "outbound",
+                  "implicit": true,
+                  "relationship": "print",
+                  "resource": "root/WingLogger",
+                },
+                Object {
                   "direction": "inbound",
+                  "implicit": false,
                   "relationship": "on_message",
                   "resource": "root/Queue",
                 },
@@ -206,7 +239,7 @@ Object {
               "Asset": Object {
                 "constructInfo": Object {
                   "fqn": "cdktf.TerraformAsset",
-                  "version": "0.13.2",
+                  "version": "0.13.3",
                 },
                 "id": "Asset",
                 "path": "root/Queue-OnMessage-c5395e41/Asset",
@@ -214,7 +247,7 @@ Object {
               "Bucket": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Bucket",
                 "path": "root/Queue-OnMessage-c5395e41/Bucket",
@@ -222,7 +255,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Queue-OnMessage-c5395e41/Default",
@@ -230,7 +263,7 @@ Object {
               "IamRole": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRole",
                 "path": "root/Queue-OnMessage-c5395e41/IamRole",
@@ -238,7 +271,7 @@ Object {
               "IamRolePolicy": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicy",
                 "path": "root/Queue-OnMessage-c5395e41/IamRolePolicy",
@@ -246,7 +279,7 @@ Object {
               "IamRolePolicyAttachment": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicyAttachment",
                 "path": "root/Queue-OnMessage-c5395e41/IamRolePolicyAttachment",
@@ -254,7 +287,7 @@ Object {
               "S3Object": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "S3Object",
                 "path": "root/Queue-OnMessage-c5395e41/S3Object",
@@ -262,7 +295,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
             },
             "id": "Queue-OnMessage-c5395e41",
             "path": "root/Queue-OnMessage-c5395e41",
@@ -274,15 +307,34 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
             },
             "id": "Queue-OnMessageHandler-c5395e41",
             "path": "root/Queue-OnMessageHandler-c5395e41",
           },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "implicit": true,
+                  "relationship": "print",
+                  "resource": "root/Queue-OnMessage-c5395e41",
+                },
+              ],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -290,7 +342,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
+              "version": "0.13.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -298,7 +350,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.13.3",
         },
         "id": "root",
         "path": "root",
@@ -306,7 +358,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.13.3",
     },
     "id": "App",
     "path": "",
@@ -342,7 +394,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Queue/Default",
@@ -350,15 +402,27 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
             },
             "id": "Queue",
             "path": "root/Queue",
           },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -366,7 +430,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
+              "version": "0.13.3",
             },
             "id": "backend",
             "path": "root/backend",
@@ -374,7 +438,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.13.3",
         },
         "id": "root",
         "path": "root",
@@ -382,7 +446,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.13.3",
     },
     "id": "App",
     "path": "",

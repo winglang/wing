@@ -6,6 +6,12 @@ Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue",
         "props": Object {
           "initialMessages": Array [],
@@ -20,6 +26,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -27,7 +45,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -35,7 +53,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -46,14 +64,40 @@ Object {
 `;
 
 exports[`messages are requeued if the function fails 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Queue created.",
+  "Push (message=BAD MESSAGE).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\"messages\\":[\\"BAD MESSAGE\\"]}\\").",
+  "Subscriber error - returning 1 messages to queue.",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\"messages\\":[\\"BAD MESSAGE\\"]}\\").",
+  "Subscriber error - returning 1 messages to queue.",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`messages are requeued if the function fails 2`] = `
 Object {
   "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -82,21 +126,48 @@ Object {
       "children": Object {
         "Handler": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
         },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
+                "implicit": false,
                 "relationship": "on_message",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
@@ -105,7 +176,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -114,7 +185,20 @@ Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
                 "direction": "inbound",
+                "implicit": false,
                 "relationship": "on_message",
                 "resource": "root/my_queue",
               },
@@ -125,7 +209,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -133,7 +217,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -145,7 +229,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -153,7 +237,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -164,14 +248,37 @@ Object {
 `;
 
 exports[`queue with one subscriber, batch size of 5 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Queue created.",
+  "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\"messages\\":[\\"F\\"]}\\").",
+  "Invoke (payload=\\"{\\"messages\\":[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"]}\\").",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`queue with one subscriber, batch size of 5 2`] = `
 Object {
   "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -207,21 +314,48 @@ Object {
       "children": Object {
         "Handler": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
         },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
+                "implicit": false,
                 "relationship": "on_message",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
@@ -230,7 +364,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -239,7 +373,20 @@ Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
                 "direction": "inbound",
+                "implicit": false,
                 "relationship": "on_message",
                 "resource": "root/my_queue",
               },
@@ -250,7 +397,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -258,7 +405,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -270,7 +417,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -278,7 +425,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -289,14 +436,39 @@ Object {
 `;
 
 exports[`queue with one subscriber, default batch size of 1 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Queue created.",
+  "Push (message=A).",
+  "Push (message=B).",
+  "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
+  "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\"messages\\":[\\"A\\"]}\\").",
+  "Invoke (payload=\\"{\\"messages\\":[\\"B\\"]}\\").",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`queue with one subscriber, default batch size of 1 2`] = `
 Object {
   "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
         "path": "root/my_queue-OnMessage-e645076f",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_queue-OnMessage-e645076f/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -325,21 +497,48 @@ Object {
       "children": Object {
         "Handler": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_queue-OnMessage-e645076f",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
         },
         "my_queue": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
+                "implicit": false,
                 "relationship": "on_message",
                 "resource": "root/my_queue-OnMessage-e645076f",
               },
@@ -348,7 +547,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -357,7 +556,20 @@ Object {
           "attributes": Object {
             "wing:resource:connections": Array [
               Object {
+                "direction": "outbound",
+                "implicit": false,
+                "relationship": "handle",
+                "resource": "root/Handler",
+              },
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+              Object {
                 "direction": "inbound",
+                "implicit": false,
                 "relationship": "on_message",
                 "resource": "root/my_queue",
               },
@@ -368,7 +580,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -376,7 +588,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -388,7 +600,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -396,7 +608,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

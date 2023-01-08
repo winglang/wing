@@ -99,6 +99,26 @@ async function enterTestDir(testDir: string) {
   $.cwd = testDir;
 }
 
+enum InvocationType {
+	Direct,
+	NPX,
+}
+
+async function runWingCompile(type: InvocationType, wingFile: string) {
+	const isError = path.dirname(wingFile).endsWith("error");
+	const work = async () => {
+		const out = await (type === InvocationType.Direct
+			? $`${npxBin} @winglang/wing compile ${wingFile}`
+			: $`../node_modules/.bin/wing compile ${wingFile}`);
+		return out.exitCode;
+	};
+	if (isError) {
+		await expect(work()).rejects.toThrow();
+	} else {
+		await expect(work()).resolves.toBe(0);
+	}
+}
+
 test.each(validWingFiles)(
   "wing compile %s",
   async (wingFile) => {
@@ -110,10 +130,7 @@ test.each(validWingFiles)(
 
       await enterTestDir(test_dir);
 
-      await $`${npxBin} @winglang/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile(InvocationType.NPX, path.join(validTestDir, wingFile));
       const npx_tfManifest = sanitize_json_paths(tf_manifest);
       const npx_tfJson = sanitize_json_paths(tf_json);
 
@@ -132,10 +149,7 @@ test.each(validWingFiles)(
         }
       }
 
-      await $`../node_modules/.bin/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile(InvocationType.Direct, path.join(validTestDir, wingFile));
 
       expect(sanitize_json_paths(tf_manifest)).toStrictEqual(npx_tfManifest);
       expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
@@ -153,15 +167,9 @@ test.each(validWingFiles)(
       const test_dir = path.join(tmpDir, `${wingFile}_sim`);
       await enterTestDir(test_dir);
 
-      await $`${npxBin} @winglang/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile(InvocationType.NPX, path.join(validTestDir, wingFile));
 
-      await $`../node_modules/.bin/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCompile(InvocationType.Direct, path.join(validTestDir, wingFile));
 
       // TODO snapshot .wsim contents
     });

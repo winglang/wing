@@ -122,7 +122,7 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build"
-          projects: "wing,wingsdk,wing-api-checker,wing-playground"
+          projects: "wing,wingsdk,wing-api-checker,jsii-docgen,wing-playground"
           args: "--configuration=release --output-style=stream --verbose"
 
       # wingc require wingsdk to be built first in order to run
@@ -284,6 +284,7 @@ jobs:
     needs:
       - prepare
       - build-native
+      - build-wasm
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
     runs-on: ubuntu-latest
@@ -296,6 +297,11 @@ jobs:
 
       - name: Prepare language server binaries
         run: cp -r wing-language-server-* ./apps/vscode-wing/resources
+
+      - name: Prepare WingSDK .jsii
+        run: |
+          tar -xzf wingsdk/*.tgz package/.jsii
+          mv package/.jsii libs/wingsdk
 
       - name: Setup Node
         uses: actions/setup-node@v3

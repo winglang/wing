@@ -56,7 +56,7 @@ constructor() {
   super({ outdir: $outdir, name: \\"anon_function\\" });
   
   const myfunc = (x) => {
-    console.log(\`\${x}\`);
+    {console.log(\`\${x}\`)};
     x = (x + 1);
     if ((x > 3.14)) {
       return;
@@ -684,6 +684,10 @@ constructor() {
   const m4 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m5 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
   const m6 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
+  const s2 = Object.freeze(new Set([1, 2, 3]));
+  const s3 = Object.freeze(new Set([1, 2, 3]));
+  const s4 = Object.freeze(new Set([1, 2, 3]));
+  const s6 = Object.freeze(new Set([bucket1, bucket2, bucket3]));
 }
 }
 new MyApp().synth();"
@@ -883,7 +887,9 @@ constructor() {
   const empty_string = \\"\\";
   const number = 1;
   const cool_string = \`cool \\\\\\"\\\\\${\${regular_string}}\\\\\\" test\`;
-  const really_cool_string = \`\${number}\${number}\${empty_string}\${empty_string}\\\\n\${cool_string}\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
+  const really_cool_string = \`\${number}\${empty_string}\\\\n\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
+  const begining_with_cool_strings = \`\${regular_string} \${number} <- cool\`;
+  const ending_with_cool_strings = \`cool -> \${regular_string} \${number}\`;
 }
 }
 new MyApp().synth();"
@@ -943,7 +949,7 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudQueueOnMessage781f1948_IamRolePolicy_31CEC571",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_cloudQueueOnMessage781f1948_IamRole_43750575.name}",
       },
     },
@@ -1120,7 +1126,7 @@ constructor() {
       },
       counter: {
         resource: counter,
-        ops: [\\"inc\\"]
+        ops: [\\"inc\\",\\"peek\\"]
       },
     }
   });
@@ -1192,7 +1198,7 @@ constructor() {
   f;
   method2 = () => {
     (this.method1());
-    console.log(\`\${this.f}\`);
+    {console.log(\`\${this.f}\`)};
     (this.method2());
   }
   method1 = () => {
@@ -1200,7 +1206,7 @@ constructor() {
   }
   const x = \\"hi\\";
   if (true) {
-    console.log(\`\${x}\`);
+    {console.log(\`\${x}\`)};
     const y = new R(this,\\"R\\");
   }
 }
@@ -1479,8 +1485,8 @@ constructor() {
   super({ outdir: $outdir, name: \\"primitive_methods\\" });
   
   const dur = $stdlib.std.Duration.fromSeconds(60);
-  console.log(\`\${dur.seconds}\`);
-  console.log(\`\${dur.minutes}\`);
+  {console.log(\`\${dur.seconds}\`)};
+  {console.log(\`\${dur.minutes}\`)};
 }
 }
 new MyApp().synth();"
@@ -1627,7 +1633,7 @@ exports[`wing compile print.w > cdk.tf.json 1`] = `
 
 exports[`wing compile print.w > index.js 1`] = `
 "async handle(event) { const {  } = this; {
-  console.log(event);
+  {console.log(event)};
 } };"
 `;
 
@@ -1670,9 +1676,9 @@ constructor() {
   super({ outdir: $outdir, name: \\"print\\" });
   
   const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
-  console.log(\\"Hello world!\\");
-  new cloud.Function(this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight81b7f66c\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.91c1f1c94279b3e82aa792c681ccb4640c7a071a1b60763fc83e70bf81b7f66c/index.js\\")),
+  {console.log(\\"Hello world!\\")};
+  new cloud.Function(this,\\"cloud.Function\\",new $stdlib.core.Inflight(this, \\"$Inflight437a72f2\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.eeb10908f35dd17ca239f77c5c30ce7a1bd0464d804a789596c23a5b437a72f2/index.js\\")),
     
   }));
 }
@@ -1744,7 +1750,7 @@ constructor() {
   
   }
   const res = new R(this,\\"R\\",\\"Arr\\");
-  console.log(res.name);
+  {console.log(res.name)};
 }
 }
 new MyApp().synth();"
@@ -1875,6 +1881,79 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile std_containers.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.3",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile std_containers.w > index.js 1`] = `
+"async handle(body) { const {  } = this; {
+  const ss = (await s_array.at(1));
+  {console.log(\`\${s_array.length}\`)};
+} };"
+`;
+
+exports[`wing compile std_containers.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.3",
+}
+`;
+
+exports[`wing compile std_containers.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"std_containers\\" });
+  
+  const s_array = Object.freeze([\\"one\\", \\"two\\", \\"three\\", \\"four\\"]);
+  const s = (s_array.at(2));
+  const handler = new $stdlib.core.Inflight(this, \\"$Inflightf3c444b6\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.31322868ffd7254f5a6339da1c6b1905571a70379d564da2abf4c176f3c444b6/index.js\\")),
+    
+  });
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile while.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -1959,38 +2038,38 @@ exports[`wing compile while_loop_await.w > cdk.tf.json 1`] = `
   },
   "resource": {
     "aws_iam_role": {
-      "root_cloudQueueOnMessagef4c47031_IamRole_8B17B071": {
+      "root_cloudQueueOnMessage8074b1a3_IamRole_16638C11": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-f4c47031/IamRole",
-            "uniqueId": "root_cloudQueueOnMessagef4c47031_IamRole_8B17B071",
+            "path": "root/cloud.Queue-OnMessage-8074b1a3/IamRole",
+            "uniqueId": "root_cloudQueueOnMessage8074b1a3_IamRole_16638C11",
           },
         },
         "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
       },
     },
     "aws_iam_role_policy": {
-      "root_cloudQueueOnMessagef4c47031_IamRolePolicy_DDAFC198": {
+      "root_cloudQueueOnMessage8074b1a3_IamRolePolicy_85B1E3E1": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-f4c47031/IamRolePolicy",
-            "uniqueId": "root_cloudQueueOnMessagef4c47031_IamRolePolicy_DDAFC198",
+            "path": "root/cloud.Queue-OnMessage-8074b1a3/IamRolePolicy",
+            "uniqueId": "root_cloudQueueOnMessage8074b1a3_IamRolePolicy_85B1E3E1",
           },
         },
         "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessagef4c47031_IamRole_8B17B071.name}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage8074b1a3_IamRole_16638C11.name}",
       },
     },
     "aws_iam_role_policy_attachment": {
-      "root_cloudQueueOnMessagef4c47031_IamRolePolicyAttachment_4FD119FD": {
+      "root_cloudQueueOnMessage8074b1a3_IamRolePolicyAttachment_08404984": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-f4c47031/IamRolePolicyAttachment",
-            "uniqueId": "root_cloudQueueOnMessagef4c47031_IamRolePolicyAttachment_4FD119FD",
+            "path": "root/cloud.Queue-OnMessage-8074b1a3/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueueOnMessage8074b1a3_IamRolePolicyAttachment_08404984",
           },
         },
         "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessagef4c47031_IamRole_8B17B071.name}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage8074b1a3_IamRole_16638C11.name}",
       },
     },
     "aws_lambda_event_source_mapping": {
@@ -2003,49 +2082,49 @@ exports[`wing compile while_loop_await.w > cdk.tf.json 1`] = `
         },
         "batch_size": 1,
         "event_source_arn": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
-        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessagef4c47031_CD0E768A.function_name}",
+        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessage8074b1a3_16431E48.function_name}",
       },
     },
     "aws_lambda_function": {
-      "root_cloudQueueOnMessagef4c47031_CD0E768A": {
+      "root_cloudQueueOnMessage8074b1a3_16431E48": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-f4c47031/Default",
-            "uniqueId": "root_cloudQueueOnMessagef4c47031_CD0E768A",
+            "path": "root/cloud.Queue-OnMessage-8074b1a3/Default",
+            "uniqueId": "root_cloudQueueOnMessage8074b1a3_16431E48",
           },
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-f4c47031",
+            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-8074b1a3",
           },
         },
-        "function_name": "cloud_Queue-OnMessage-f4c47031",
+        "function_name": "cloud_Queue-OnMessage-8074b1a3",
         "handler": "index.handler",
-        "role": "\${aws_iam_role.root_cloudQueueOnMessagef4c47031_IamRole_8B17B071.arn}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage8074b1a3_IamRole_16638C11.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagef4c47031_Bucket_0CA349F3.bucket}",
-        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagef4c47031_S3Object_D833ADD0.key}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessage8074b1a3_Bucket_082E383E.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessage8074b1a3_S3Object_C6571977.key}",
       },
     },
     "aws_s3_bucket": {
-      "root_cloudQueueOnMessagef4c47031_Bucket_0CA349F3": {
+      "root_cloudQueueOnMessage8074b1a3_Bucket_082E383E": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-f4c47031/Bucket",
-            "uniqueId": "root_cloudQueueOnMessagef4c47031_Bucket_0CA349F3",
+            "path": "root/cloud.Queue-OnMessage-8074b1a3/Bucket",
+            "uniqueId": "root_cloudQueueOnMessage8074b1a3_Bucket_082E383E",
           },
         },
       },
     },
     "aws_s3_object": {
-      "root_cloudQueueOnMessagef4c47031_S3Object_D833ADD0": {
+      "root_cloudQueueOnMessage8074b1a3_S3Object_C6571977": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-f4c47031/S3Object",
-            "uniqueId": "root_cloudQueueOnMessagef4c47031_S3Object_D833ADD0",
+            "path": "root/cloud.Queue-OnMessage-8074b1a3/S3Object",
+            "uniqueId": "root_cloudQueueOnMessage8074b1a3_S3Object_C6571977",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagef4c47031_Bucket_0CA349F3.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessage8074b1a3_Bucket_082E383E.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -2063,7 +2142,7 @@ exports[`wing compile while_loop_await.w > index.js 2`] = `
 "async handle(body) { const {  } = this; {
   const i = 0;
   while (((await iterator(i)) < 3)) {
-    console.log(\`\${i}\`);
+    {console.log(\`\${i}\`)};
   }
 } };"
 `;
@@ -2111,8 +2190,8 @@ constructor() {
     code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.82d0059fdbaebaab6d1be68f497052f9d5b8662f4333952a6e9ad55f564e0c97/index.js\\")),
     
   });
-  const handler = new $stdlib.core.Inflight(this, \\"$Inflightb4bafca8\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e8d90d64617a4a5aa70aa6036e97b9cfeb1aaf243d75239f62c3f16bb4bafca8/index.js\\")),
+  const handler = new $stdlib.core.Inflight(this, \\"$Inflightcf525df6\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.f259e8d1edc5d47946ec1a1f3aa23e59fe550255ec12b899cffb307ecf525df6/index.js\\")),
     
   });
   (queue.onMessage(handler));

@@ -3,6 +3,7 @@ import * as path from "path";
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
 import * as tar from "tar";
+import { Logger } from "../cloud";
 import { SDK_VERSION } from "../constants";
 import * as core from "../core";
 import { mkdtemp, SIMULATOR_FILE_PATH } from "../util";
@@ -26,8 +27,9 @@ export class App extends Construct implements core.IApp {
     super(undefined as any, "root");
     this.name = props.name ?? "app";
     this.outdir = props.outdir ?? ".";
-    this.files = new core.Files({ app: this, stateFile: props.stateFile });
     Polycons.register(this, props.customFactory ?? new PolyconFactory());
+    Logger.register(this);
+    this.files = new core.Files({ app: this, stateFile: props.stateFile });
   }
 
   /**
