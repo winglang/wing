@@ -11,31 +11,27 @@
 Wing has great interoperability with the TypeScript ecosystem. You can bring any TypeScript library
 and use it in Wing.
 
-### TypeScript adapters
+In order to be able to `bring` a TypeScript module into your Wing code, you will need
+a **Wing bindings library** for this module. Bindings can be hand-written or can be 
+automatically generated from `.d.ts` files using `ts2wing`.
 
-In order to be able to `bring` a TypeScript library into your Wing code, you will need
-a **TypeScript adapter** for this library. Adapters can be hand-written or can be automatically
-generated from `.d.ts` files using `ts2wing`.
+> There are certain type definitions that are not supported for automatic generation at the moment.
+> As this project evolves, we will add more patterns as needed.
 
-> At the moment, there will be type definitions that are not supported by `ts2wing`,
-> which means that you might need to manually add adapter code for those libraries. More on that later.
-
-### Manually creating an TypeScript adapter
+### Manual
 
 We will first start by demonstrating what it takes to manually create
-an adapter for a TypeScript library, and then we will show how to use `ts2wing` in order
-to generate the adapter automatically.
+bindings for a TypeScript library, and then we will show how to use generate
+one automatically.
 
 Let's say I want to use the [colors](https://www.npmjs.com/package/colors) library in my Wing code.
-
-Like this:
 
 ```js
 // hello-colors.w
 bring colors;
 ```
 
-First, simply install this library through npm (or any other node-compatible package manager):
+We install this library through npm (or any other node-compatible package manager):
 
 ```sh
 $ npm i colors
@@ -45,74 +41,110 @@ If you try to compile your code now, you'll get the following error:
 
 ```sh
 $ wing compile hello-colors.w
-ERROR: unable to find type information (.jsii) for "colors" (looked under "node_modules/colors" and under "wing_modules/colors").
+ERROR: Unable to bring "colors". Cannot find a module with .jsii type information.
+Search path:
+- node_modules/colors/.jsii
+- node_modules/@winglib/colors/.jsii
+- bindings/colors/.jsii
 ```
 
-As the error suggests, Wing needs [jsii](https://github.com/aws/jsii) type information
-in order to load the library's type system. It starts by looking under the `node_modules`
-directory (which is how e.g. the Wing SDK is loaded or any other CDK library)
-and then it looks under `vendor/colors` (name TBD), which is where adapters
-should go.
+As the error suggests, the compiler is looking for 
+[.jsii type information](https://github.com/aws/jsii) in order to be able to load 
+the library's type system. It starts by looking under the `node_modules`
+directory (which is how e.g. the Wing SDK is loaded or any other CDK library),
+then looks for a published module called `@winglib/colors`, which is where
+where Wing libraries can be shared and then it looks locally, under 
+the `bindings/colors` directory, which is where you can "vendor-in"
+the library as part of your project's source.
 
-So let's create an adapter for this library based on its [.d.ts file](https://github.com/Marak/colors.js/blob/master/index.d.ts).
+So let's create bindings for this library based on 
+its [.d.ts file](https://github.com/Marak/colors.js/blob/master/index.d.ts).
 
-First, we need to create a file `vendor/colors/index.ts`:
+Create a file `bindings/colors/index.ts`:
 
 ```ts
 import * as colors from 'colors/safe';
 
 export class Colors {
-  strip(text: string) { return colors.strip(text); }
   black(text: string) { return colors.black(text); }
   red(text: string)   { return colors.red(text);   }
   green(text: string) { return colors.green(text); }
-  red(test: string)   { return colors.red(text);   }
+  blue(text: string)  { return colors.blue(text); }
+  bold(text: string)  { return colors.bold(text); }
 
   // ...
 }
 ```
 
-Since Wing doesn't have support for global functions (at the moment), and the API
-is basically a bunch of global functions, we need to wrap them in a class with a set
-of static method. Simple enough.
-
-
-
-It will use node's standard module resolution algorithm to lookup for `colors`. When found, it will
-check if there's a `.jsii` manifest in the module. Since there isn't, it will check if the directory `vendor/colors.wlib`
-exists.
-
-This directory is expected to include a `.jsii` file and an `index.js` file.
-
-### ts2wing
-
-In order to use a TypeScript library, we will use the `ts2wing` command to create a Wing Library
-(`.wlib`) from it.
-
-Install `ts2wing` on your system (maybe in the future it will be included in the wing toolchain):
+Now, we are ready to build it:
 
 ```sh
-$ npm i @winglang/ts2wing
-$ ts2wing --version
-0.1.2
+$ ts2wing build bindings/colors --verbose
+Compiling bindings/colors with jsii...
+Generating API documentation under bindings/colors/API.md...
+Done. You can now `bring colors` into your Wing code and rock!
 ```
 
+> The --verbose output is used to show what the tool is doing under the hood.
 
-First, I am going to install it via npm/yarm/pnpm or whatever:
+The directory output looks like this:
 
 ```sh
-npm i colors
+$ ls -l bindings/colors
+index.ts
+index.js
+index.d.ts
+.jsii
+API.md
 ```
 
-Now, I am going to generate bindings for it using `ts2wing`:
+Now, let's use it:
+
+```js
+// hello-colors.w
+bring colors;
+
+print(colors.Colors.red("hello, world"));
+```
+
+And when we compile, everyone is happy:
+
+```sh
+wing compile hello-colors.w
+```
+
+We recommend to commit all the files under `bindings/` to your source control. If you need
+to change anything in the binding code, update and rebuild with `ts2wing build <dir>`.
+
+### Auto-generating bindings
+
+The `ts2wing` tool can also *attempt* to automatically generate the binding code for a module
+by examining its type definitions (`.d.ts`) and generating jsii-compatible wrapper
+types based on their APIs.
+
+Here's the code to generate bindings for `colors`:
+
+```sh
+$ npm i colors
+$ ts2wing generate colors --verbose
+Found colors@1.4.0 under node_modules/colors...
+Reading definitions...
+Generating Wing wrapper classes under bindings/colors/index.ts...
+Compiling bindings/colors with jsii...
+Generating API documentation under bindings/colors/API.md...
+Done. You can now `bring colors` into your Wing code and rock!
+```
+
+If the generator is unable to create bindings for certain elements in the library,
+it won't fail, but rather emit warnings to indicate which elements are not supported:
+
+```sh
+WARNING: Unable to generate bindings for `colors.
+```
+
 
 ```sh
 $ ts2wing colors
-Found colors@1.4.0 under node_modules/colors...
-Reading definitions from index.d.ts...
-Generating Wing wrapper classes under vendor/colors/index.ts...
-Compiling JSII to vendor/colors/.jsii...
-Generating vendor/colors/API.md...
 ```
 
 ### The .wlib Directory
