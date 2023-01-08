@@ -8,8 +8,6 @@
 export class String {
   /**
    * The length of the string
-   *
-   * @returns the length of the string
    */
   public get length(): number {
     throw new Error("Abstract");
