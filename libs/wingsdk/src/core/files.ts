@@ -7,8 +7,8 @@ import {
 } from "fs";
 import { isAbsolute, join } from "path";
 import { IConstruct } from "constructs";
-import { FileBase } from "../fs";
 import { IApp } from "./app";
+import { FileBase } from "./file-base";
 
 /**
  * Props for `Files`.
