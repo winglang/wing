@@ -11,7 +11,6 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -162,7 +161,6 @@ export class Function extends cloud.FunctionBase {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.function.arn);
 
-    addConnections(this, host);
     super._bind(host, ops);
   }
 

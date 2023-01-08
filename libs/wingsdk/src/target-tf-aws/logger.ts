@@ -2,7 +2,6 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
-import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Logger`.
@@ -20,7 +19,6 @@ export class Logger extends cloud.LoggerBase {
       throw new Error("loggers can only be bound by tfaws.Function for now");
     }
 
-    addConnections(this, host);
     super._bind(host, ops);
   }
 

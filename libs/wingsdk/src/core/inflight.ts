@@ -4,7 +4,7 @@ import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
-import { IInflightHost, IResource } from "./resource";
+import { Connection, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
 
 /**
@@ -122,6 +122,9 @@ export interface InflightProps {
  * such as `cloud.IFunctionHandler`
  */
 export class Inflight extends Construct implements IResource {
+  /** @internal */
+  public _connections: Connection[] = []; // thrown away
+
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away
 
