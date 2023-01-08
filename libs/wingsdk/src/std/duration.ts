@@ -64,7 +64,7 @@ export class Duration {
   /**
    * Serializes to JSON (used implicitly by `toInflight`).
    */
-  toJSON() {
+  toJSON(): any {
     return {
       seconds: this.seconds,
       minutes: this.minutes,
