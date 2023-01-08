@@ -2,7 +2,7 @@
 
 exports[`create a queue 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -83,7 +83,7 @@ Array [
 
 exports[`messages are requeued if the function fails 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -121,6 +121,76 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
+
+var queue_onmessage_inflight_exports = {};
+__export(queue_onmessage_inflight_exports, {
+  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
+});
+var QueueOnMessageHandlerClient;
+var init_queue_onmessage_inflight = __esm({
+  \\"../../../../../../../Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+    \\"use strict\\";
+    QueueOnMessageHandlerClient = class {
+      constructor({ handler }) {
+        this.handler = handler;
+      }
+      async handle(event) {
+        let parsed = JSON.parse(event);
+        if (!parsed.messages)
+          throw new Error('No \\"messages\\" field in event.');
+        for (const $message of parsed.messages) {
+          await this.handler.handle($message);
+        }
+      }
+    };
+  }
+});
+
+var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(message) {
+        if (message === \\"BAD MESSAGE\\") {
+          throw new Error(\\"ERROR\\");
+        }
+      }
+    };
+  }())({}) }).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -264,7 +334,7 @@ Array [
 
 exports[`queue with one subscriber, batch size of 5 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -309,6 +379,76 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
+
+var queue_onmessage_inflight_exports = {};
+__export(queue_onmessage_inflight_exports, {
+  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
+});
+var QueueOnMessageHandlerClient;
+var init_queue_onmessage_inflight = __esm({
+  \\"../../../../../../../Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+    \\"use strict\\";
+    QueueOnMessageHandlerClient = class {
+      constructor({ handler }) {
+        this.handler = handler;
+      }
+      async handle(event) {
+        let parsed = JSON.parse(event);
+        if (!parsed.messages)
+          throw new Error('No \\"messages\\" field in event.');
+        for (const $message of parsed.messages) {
+          await this.handler.handle($message);
+        }
+      }
+    };
+  }
+});
+
+var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(message) {
+        if (message === \\"BAD MESSAGE\\") {
+          throw new Error(\\"ERROR\\");
+        }
+      }
+    };
+  }())({}) }).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -454,7 +594,7 @@ Array [
 
 exports[`queue with one subscriber, default batch size of 1 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -492,6 +632,76 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_queue-OnMessage-e645076f/index.js": "var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
+
+var queue_onmessage_inflight_exports = {};
+__export(queue_onmessage_inflight_exports, {
+  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
+});
+var QueueOnMessageHandlerClient;
+var init_queue_onmessage_inflight = __esm({
+  \\"../../../../../../../Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+    \\"use strict\\";
+    QueueOnMessageHandlerClient = class {
+      constructor({ handler }) {
+        this.handler = handler;
+      }
+      async handle(event) {
+        let parsed = JSON.parse(event);
+        if (!parsed.messages)
+          throw new Error('No \\"messages\\" field in event.');
+        for (const $message of parsed.messages) {
+          await this.handler.handle($message);
+        }
+      }
+    };
+  }
+});
+
+var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(message) {
+        if (message === \\"BAD MESSAGE\\") {
+          throw new Error(\\"ERROR\\");
+        }
+      }
+    };
+  }())({}) }).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {

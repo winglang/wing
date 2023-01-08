@@ -1,10 +1,9 @@
-use std::collections::{BTreeMap, BTreeSet};
-
+use std::{collections::{BTreeMap, BTreeSet}};
 use crate::{
 	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
 	type_check::symbol_env::SymbolEnv,
-	type_check::Type,
+	type_check::Type, diagnostic::{Diagnostics, Diagnostic, DiagnosticLevel},
 };
 
 /* This is a definition of how a resource is captured. The most basic way to capture a resource
@@ -34,25 +33,25 @@ fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 	captures
 }
 
-pub fn scan_for_inflights_in_scope(scope: &Scope) {
+pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics) {
 	for s in scope.statements.iter() {
 		match &s.kind {
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable: _,
 				statements,
-			} => scan_for_inflights_in_scope(&statements),
+			} => scan_for_inflights_in_scope(&statements, diagnostics),
 			StmtKind::If {
 				condition: _,
 				statements,
 				else_statements,
 			} => {
-				scan_for_inflights_in_scope(statements);
+				scan_for_inflights_in_scope(statements, diagnostics);
 				if let Some(else_statements) = else_statements {
-					scan_for_inflights_in_scope(else_statements);
+					scan_for_inflights_in_scope(else_statements, diagnostics);
 				}
 			}
-			StmtKind::Scope(s) => scan_for_inflights_in_scope(s),
+			StmtKind::Scope(s) => scan_for_inflights_in_scope(s, diagnostics),
 			StmtKind::Class {
 				name: _,
 				members: _,
@@ -64,19 +63,19 @@ pub fn scan_for_inflights_in_scope(scope: &Scope) {
 				match constructor.signature.flight {
 					Phase::Inflight => {
 						// TODO: what do I do with these?
-						scan_captures_in_inflight_scope(&constructor.statements);
+						scan_captures_in_inflight_scope(&constructor.statements, diagnostics);
 					}
-					Phase::Independent => scan_for_inflights_in_scope(&constructor.statements),
-					Phase::Preflight => scan_for_inflights_in_scope(&constructor.statements),
+					Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
+					Phase::Preflight => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
 				}
 				for (_, method_def) in methods.iter() {
 					match method_def.signature.flight {
 						Phase::Inflight => {
 							// TODO: what do I do with these?
-							scan_captures_in_inflight_scope(&method_def.statements);
+							scan_captures_in_inflight_scope(&method_def.statements, diagnostics);
 						}
-						Phase::Independent => scan_for_inflights_in_scope(&constructor.statements),
-						Phase::Preflight => scan_for_inflights_in_scope(&method_def.statements),
+						Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
+						Phase::Preflight => scan_for_inflights_in_scope(&method_def.statements, diagnostics),
 					}
 				}
 			}
@@ -85,23 +84,23 @@ pub fn scan_for_inflights_in_scope(scope: &Scope) {
 				initial_value,
 				type_: _,
 			} => {
-				scan_for_inflights_in_expression(initial_value);
+				scan_for_inflights_in_expression(initial_value, diagnostics);
 			}
 			StmtKind::Expression(exp) => {
-				scan_for_inflights_in_expression(exp);
+				scan_for_inflights_in_expression(exp, diagnostics);
 			}
 			StmtKind::Assignment { variable: _, value } => {
-				scan_for_inflights_in_expression(value);
+				scan_for_inflights_in_expression(value, diagnostics);
 			}
 			StmtKind::Return(Some(exp)) => {
-				scan_for_inflights_in_expression(exp);
+				scan_for_inflights_in_expression(exp, diagnostics);
 			}
 			_ => (),
 		}
 	}
 }
 
-pub fn scan_for_inflights_in_expression(expr: &Expr) {
+pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnostics) {
 	match &expr.kind {
 		ExprKind::New {
 			class: _,
@@ -110,67 +109,67 @@ pub fn scan_for_inflights_in_expression(expr: &Expr) {
 			arg_list,
 		} => {
 			if let Some(obj_scope) = obj_scope {
-				scan_for_inflights_in_expression(obj_scope);
+				scan_for_inflights_in_expression(obj_scope, diagnostics);
 			}
-			scan_for_inflights_in_arglist(arg_list);
+			scan_for_inflights_in_arglist(arg_list, diagnostics);
 		}
 		ExprKind::Literal(Literal::InterpolatedString(istr)) => {
 			for part in istr.parts.iter() {
 				if let InterpolatedStringPart::Expr(e) = part {
-					scan_for_inflights_in_expression(e);
+					scan_for_inflights_in_expression(e, diagnostics);
 				}
 			}
 		}
 		ExprKind::Reference(Reference::NestedIdentifier { object, property: _ }) => {
-			scan_for_inflights_in_expression(object);
+			scan_for_inflights_in_expression(object, diagnostics);
 		}
 		ExprKind::Call { function, args } => {
 			if let Reference::NestedIdentifier { object, property: _ } = function {
-				scan_for_inflights_in_expression(object);
+				scan_for_inflights_in_expression(object, diagnostics);
 			}
-			scan_for_inflights_in_arglist(args);
+			scan_for_inflights_in_arglist(args, diagnostics);
 		}
 		ExprKind::Unary { op: _, exp } => {
-			scan_for_inflights_in_expression(exp);
+			scan_for_inflights_in_expression(exp, diagnostics);
 		}
 		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_for_inflights_in_expression(lexp);
-			scan_for_inflights_in_expression(rexp);
+			scan_for_inflights_in_expression(lexp, diagnostics);
+			scan_for_inflights_in_expression(rexp, diagnostics);
 		}
 		ExprKind::StructLiteral { type_: _, fields } => {
 			for (_, value) in fields.iter() {
-				scan_for_inflights_in_expression(value);
+				scan_for_inflights_in_expression(value, diagnostics);
 			}
 		}
 		ExprKind::MapLiteral { type_: _, fields } => {
 			for (_, value) in fields.iter() {
-				scan_for_inflights_in_expression(value);
+				scan_for_inflights_in_expression(value, diagnostics);
 			}
 		}
 		ExprKind::FunctionClosure(func_def) => {
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
-				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
+				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements, diagnostics)));
 			}
 		}
 		_ => (),
 	}
 }
 
-fn scan_for_inflights_in_arglist(args: &ArgList) {
+fn scan_for_inflights_in_arglist(args: &ArgList, diagnostics: &mut Diagnostics) {
 	for arg in args.pos_args.iter() {
-		scan_for_inflights_in_expression(arg);
+		scan_for_inflights_in_expression(arg, diagnostics);
 	}
 	for (_, arg_expr) in args.named_args.iter() {
-		scan_for_inflights_in_expression(arg_expr);
+		scan_for_inflights_in_expression(arg_expr, diagnostics);
 	}
 }
 
-fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &SymbolEnv, statement_idx: usize) -> Vec<Capture> {
+fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &SymbolEnv, statement_idx: usize, diagnostics: &mut Diagnostics) -> Vec<Capture> {
 	let mut res = vec![];
 	if let Reference::NestedIdentifier { object, property } = reference {
-		res.extend(scan_captures_in_expression(&object, env, statement_idx));
+		res.extend(scan_captures_in_expression(&object, env, statement_idx, diagnostics));
 
 		// If the expression evaluates to a resource we should check what method of the resource we're accessing
 		if let Type::Resource(ref resource) = **object.evaluated_type.borrow().as_ref().unwrap() {
@@ -198,15 +197,15 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &SymbolEnv,
 	}
 
 	for arg in args.pos_args.iter() {
-		res.extend(scan_captures_in_expression(&arg, env, statement_idx));
+		res.extend(scan_captures_in_expression(&arg, env, statement_idx, diagnostics));
 	}
 	for arg in args.named_args.values() {
-		res.extend(scan_captures_in_expression(arg, env, statement_idx));
+		res.extend(scan_captures_in_expression(arg, env, statement_idx, diagnostics));
 	}
 	res
 }
 
-fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> Vec<Capture> {
+fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize, diagnostics: &mut Diagnostics) -> Vec<Capture> {
 	let mut res = vec![];
 	match &exp.kind {
 		ExprKind::New {
@@ -216,13 +215,15 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 			arg_list,
 		} => {
 			for e in arg_list.pos_args.iter() {
-				res.extend(scan_captures_in_expression(e, env, statement_idx));
+				res.extend(scan_captures_in_expression(e, env, statement_idx, diagnostics));
 			}
 			for e in arg_list.named_args.values() {
-				res.extend(scan_captures_in_expression(e, env, statement_idx));
+				res.extend(scan_captures_in_expression(e, env, statement_idx, diagnostics));
 			}
 		}
 		ExprKind::Reference(r) => match r {
+
+			
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
 				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
@@ -231,6 +232,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 						panic!("Type error: {}", type_error);
 					}
 				};
+
 
 				if let (Some(resource), Phase::Preflight) = (t.as_resource(), f) {
 					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
@@ -246,10 +248,21 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 							})
 							.collect::<Vec<Capture>>(),
 					);
+				} else if t.is_immutable_collection() || t.is_primitive() {
+					res.push(Capture {
+						object: symbol.clone(),
+						def: CaptureDef { method: "*".to_owned() },
+					});
+				} else {
+					diagnostics.push(Diagnostic {
+						level: DiagnosticLevel::Error,
+						message: format!("Can't capture '{}' of type {} in preflight", symbol.name, t),
+						span: Some(symbol.span.clone()),
+					});
 				}
 			}
 			Reference::NestedIdentifier { object, property: _ } => {
-				res.extend(scan_captures_in_expression(object, env, statement_idx));
+				res.extend(scan_captures_in_expression(object, env, statement_idx, diagnostics));
 
 				// If the expression evaluates to a resource we should check if we need to capture the property as well
 				// TODO: do we really need this? I think we capture `object` above recursively and therefore don't need special handling of `property`.
@@ -266,31 +279,31 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 				// }
 			}
 		},
-		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env, statement_idx)),
-		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx)),
+		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env, statement_idx, diagnostics)),
+		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx, diagnostics)),
 		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(lexp, env, statement_idx);
-			scan_captures_in_expression(rexp, env, statement_idx);
+			scan_captures_in_expression(lexp, env, statement_idx, diagnostics);
+			scan_captures_in_expression(rexp, env, statement_idx, diagnostics);
 		}
 		ExprKind::Literal(_) => {}
 		ExprKind::ArrayLiteral { items, .. } => {
 			for v in items {
-				res.extend(scan_captures_in_expression(&v, env, statement_idx));
+				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
 			}
 		}
 		ExprKind::StructLiteral { fields, .. } => {
 			for v in fields.values() {
-				res.extend(scan_captures_in_expression(&v, env, statement_idx));
+				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
 			}
 		}
 		ExprKind::MapLiteral { fields, .. } => {
 			for v in fields.values() {
-				res.extend(scan_captures_in_expression(&v, env, statement_idx));
+				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
 			}
 		}
 		ExprKind::SetLiteral { items, .. } => {
 			for v in items {
-				res.extend(scan_captures_in_expression(&v, env, statement_idx));
+				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
 			}
 		}
 		ExprKind::FunctionClosure(func_def) => {
@@ -299,14 +312,14 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
-				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements)));
+				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements, diagnostics)));
 			}
 		}
 	}
 	res
 }
 
-fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
+fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics) -> Vec<Capture> {
 	let mut res = vec![];
 	let env_ref = scope.env.borrow();
 	let env = env_ref.as_ref().unwrap();
@@ -320,38 +333,38 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				var_name: _,
 				initial_value,
 				type_: _,
-			} => res.extend(scan_captures_in_expression(initial_value, env, s.idx)),
+			} => res.extend(scan_captures_in_expression(initial_value, env, s.idx, diagnostics)),
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable,
 				statements,
 			} => {
-				res.extend(scan_captures_in_expression(iterable, env, s.idx));
-				res.extend(scan_captures_in_inflight_scope(statements));
+				res.extend(scan_captures_in_expression(iterable, env, s.idx, diagnostics));
+				res.extend(scan_captures_in_inflight_scope(statements, diagnostics));
 			}
 			StmtKind::While { condition, statements } => {
-				res.extend(scan_captures_in_expression(condition, env, s.idx));
-				res.extend(scan_captures_in_inflight_scope(statements));
+				res.extend(scan_captures_in_expression(condition, env, s.idx, diagnostics));
+				res.extend(scan_captures_in_inflight_scope(statements, diagnostics));
 			}
 			StmtKind::If {
 				condition,
 				statements,
 				else_statements,
 			} => {
-				res.extend(scan_captures_in_expression(condition, env, s.idx));
-				res.extend(scan_captures_in_inflight_scope(statements));
+				res.extend(scan_captures_in_expression(condition, env, s.idx, diagnostics));
+				res.extend(scan_captures_in_inflight_scope(statements, diagnostics));
 				if let Some(else_statements) = else_statements {
-					res.extend(scan_captures_in_inflight_scope(else_statements));
+					res.extend(scan_captures_in_inflight_scope(else_statements, diagnostics));
 				}
 			}
-			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env, s.idx)),
-			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env, s.idx)),
+			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env, s.idx, diagnostics)),
+			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env, s.idx, diagnostics)),
 			StmtKind::Return(e) => {
 				if let Some(e) = e {
-					res.extend(scan_captures_in_expression(e, env, s.idx));
+					res.extend(scan_captures_in_expression(e, env, s.idx, diagnostics));
 				}
 			}
-			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s)),
+			StmtKind::Scope(s) => res.extend(scan_captures_in_inflight_scope(s, diagnostics)),
 			StmtKind::Class {
 				name: _,
 				members: _,
@@ -360,9 +373,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope) -> Vec<Capture> {
 				parent: _,
 				is_resource: _,
 			} => {
-				res.extend(scan_captures_in_inflight_scope(&constructor.statements));
+				res.extend(scan_captures_in_inflight_scope(&constructor.statements, diagnostics));
 				for (_, m) in methods.iter() {
-					res.extend(scan_captures_in_inflight_scope(&m.statements))
+					res.extend(scan_captures_in_inflight_scope(&m.statements, diagnostics))
 				}
 			}
 			StmtKind::Use {

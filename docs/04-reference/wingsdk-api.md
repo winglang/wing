@@ -1569,7 +1569,7 @@ let inflight_binding = core.InflightBinding{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.InflightBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
-| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
+| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.resource">resource</a></code> | <code>any</code> | The object we are binding. |
 
 ---
 
@@ -1588,12 +1588,12 @@ The list of operations used on the resource.
 ##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightBinding.property.resource"></a>
 
 ```wing
-resource: IResource;
+resource: any;
 ```
 
-- *Type:* core.IResource
+- *Type:* any
 
-The resource.
+The object we are binding.
 
 ---
 

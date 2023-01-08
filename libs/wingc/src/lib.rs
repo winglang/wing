@@ -175,6 +175,11 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
+	// Analyze inflight captures
+	let mut capture_diagnostics = Diagnostics::new();
+	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
+	diagnostics.extend(capture_diagnostics);
+	
 	let errors = diagnostics
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
@@ -184,9 +189,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	if errors.len() > 0 {
 		return Err(errors);
 	}
-
-	// Analyze inflight captures
-	scan_for_inflights_in_scope(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));

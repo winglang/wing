@@ -1,10 +1,4 @@
-import {
-  existsSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from "fs";
+import { mkdtempSync, readdirSync, readFileSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, join } from "path";
 import { debug } from "debug";
@@ -87,20 +81,21 @@ export function sanitizeValue(obj: any, options: SanitizeOptions = {}): any {
   return newObj;
 }
 
-export function directorySnapshot(root: string) {
+export function directorySnapshot(rooti: string) {
   const snapshot: Record<string, any> = {};
 
-  const visit = (subdir: string) => {
+  const visit = (root: string, subdir: string, prefix = "") => {
     const files = readdirSync(join(root, subdir));
     for (const f of files) {
       const relpath = join(subdir, f);
       const abspath = join(root, relpath);
+      const key = prefix + relpath;
       if (statSync(abspath).isDirectory()) {
-        visit(relpath);
+        visit(root, relpath);
       } else {
         if (extname(f) === ".json") {
           const data = readFileSync(abspath, "utf-8");
-          snapshot[relpath] = JSON.parse(data);
+          snapshot[key] = JSON.parse(data);
         } else if (extname(f) === ".wsim") {
           const workdir = mkdtemp();
           tar.extract({
@@ -108,21 +103,16 @@ export function directorySnapshot(root: string) {
             sync: true,
             file: abspath,
           });
-          const simJson = join(workdir, SIMULATOR_FILE_PATH);
-          if (!existsSync(simJson)) {
-            throw new Error(
-              `Invalid simulator file (${f}) - simulator.json not found.`
-            );
-          }
-          snapshot[relpath] = JSON.parse(readFileSync(simJson, "utf-8"));
+
+          visit(workdir, ".", key + "/");
         } else {
-          snapshot[relpath] = readFileSync(abspath, "utf-8");
+          snapshot[key] = readFileSync(abspath, "utf-8");
         }
       }
     }
   };
 
-  visit(".");
+  visit(rooti, ".");
 
   return snapshot;
 }
