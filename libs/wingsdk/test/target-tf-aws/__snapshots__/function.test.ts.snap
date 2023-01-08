@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`WING_FUNCTION_NAME is equal to functionName 1`] = `
+exports[`WING_FUNCTION_NAME value is the same as Lambda FunctionName 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
