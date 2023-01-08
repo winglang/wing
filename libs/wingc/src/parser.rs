@@ -28,8 +28,6 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
-	"Set" => "see https://github.com/winglang/wing/issues/530",
-	"set_literal" => "see https://github.com/winglang/wing/issues/530",
 	"MutSet" => "see https://github.com/winglang/wing/issues/98",
 	"MutArray" => "see https://github.com/winglang/wing/issues/663",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
@@ -461,6 +459,7 @@ impl Parser<'_> {
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
 					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
+					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
@@ -617,8 +616,10 @@ impl Parser<'_> {
 
 					// Skip first and last quote
 					let end = expression_node.end_byte() - 1;
-					let mut last_start = expression_node.start_byte() + 1;
+					let start = expression_node.start_byte() + 1;
+					let mut last_start = start;
 					let mut last_end = end;
+					let mut start_from = last_end;
 
 					for interpolation_node in expression_node.named_children(&mut cursor) {
 						if interpolation_node.is_extra() {
@@ -627,9 +628,13 @@ impl Parser<'_> {
 						let interpolation_start = interpolation_node.start_byte();
 						let interpolation_end = interpolation_node.end_byte();
 
+						if start == last_start && interpolation_start < last_end {
+							start_from = last_start;
+						}
+
 						if interpolation_start != last_start {
 							parts.push(InterpolatedStringPart::Static(
-								str::from_utf8(&self.source[last_start..interpolation_start])
+								str::from_utf8(&self.source[start_from..interpolation_start])
 									.unwrap()
 									.into(),
 							));
@@ -641,6 +646,7 @@ impl Parser<'_> {
 
 						last_start = interpolation_start;
 						last_end = interpolation_end;
+						start_from = last_end;
 					}
 
 					if last_end != end {
@@ -758,6 +764,24 @@ impl Parser<'_> {
 						fields,
 						type_: map_type,
 					},
+					expression_span,
+				))
+			}
+			"set_literal" => {
+				let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut items = Vec::new();
+				let mut cursor = expression_node.walk();
+				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+					items.push(self.build_expression(&element_node)?);
+				}
+
+				Ok(Expr::new(
+					ExprKind::SetLiteral { items, type_: set_type },
 					expression_span,
 				))
 			}

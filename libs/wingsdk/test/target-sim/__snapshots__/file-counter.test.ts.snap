@@ -68,7 +68,8 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -76,7 +77,7 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
@@ -86,7 +87,8 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -94,19 +96,26 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
             },
             "Processor": Object {
               "attributes": Object {
-                "wing:resource:connections": Array [],
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
                 "wing:resource:stateful": false,
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Processor",
               "path": "root/HelloWorld/Processor",
@@ -116,6 +125,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
@@ -124,7 +134,7 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -134,21 +144,31 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Counter",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Bucket",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Processor",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
                     "resource": "root/WingLogger",
                   },
                   Object {
                     "direction": "inbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue",
                   },
@@ -159,7 +179,7 @@ Object {
                 "Code": Object {
                   "constructInfo": Object {
                     "fqn": "constructs.Construct",
-                    "version": "10.0.25",
+                    "version": "10.0.130",
                   },
                   "id": "Code",
                   "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
@@ -167,7 +187,7 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Queue-OnMessage-401ee792",
               "path": "root/HelloWorld/Queue-OnMessage-401ee792",
@@ -179,7 +199,7 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Queue-OnMessageHandler-401ee792",
               "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
@@ -187,7 +207,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
@@ -197,7 +217,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
               },
             ],
@@ -205,7 +226,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -213,7 +234,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

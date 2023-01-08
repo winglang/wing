@@ -288,6 +288,11 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 				res.extend(scan_captures_in_expression(&v, env, statement_idx));
 			}
 		}
+		ExprKind::SetLiteral { items, .. } => {
+			for v in items {
+				res.extend(scan_captures_in_expression(&v, env, statement_idx));
+			}
+		}
 		ExprKind::FunctionClosure(func_def) => {
 			// Can't define preflight stuff in inflight context
 			assert!(func_def.signature.flight != Phase::Preflight);

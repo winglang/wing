@@ -119,6 +119,7 @@ export interface IQueueOnMessageHandlerClient {
 
 /**
  * List of inflight operations available for `Queue`.
+ * @internal
  */
 export enum QueueInflightMethods {
   /** `Queue.push` */

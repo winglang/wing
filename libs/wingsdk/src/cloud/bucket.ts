@@ -100,6 +100,7 @@ export interface IBucketClient {
 
 /**
  * List of inflight operations available for `Bucket`.
+ * @internal
  */
 export enum BucketInflightMethods {
   /** `Bucket.put` */
