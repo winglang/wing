@@ -35,7 +35,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Default",
                 "path": "root/Counter/Default",
@@ -43,7 +43,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "Counter",
             "path": "root/Counter",
@@ -55,7 +55,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -63,7 +63,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "version": "10.0.11",
             },
             "id": "aws",
             "path": "root/aws",
@@ -71,7 +71,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.3",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -79,7 +79,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.3",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -87,7 +87,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.3",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",
@@ -218,7 +218,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.dynamodbTable.DynamodbTable",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Default",
                 "path": "root/Counter/Default",
@@ -226,7 +226,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "Counter",
             "path": "root/Counter",
@@ -251,7 +251,7 @@ Object {
               "Asset": Object {
                 "constructInfo": Object {
                   "fqn": "cdktf.TerraformAsset",
-                  "version": "0.13.3",
+                  "version": "0.13.2",
                 },
                 "id": "Asset",
                 "path": "root/Function/Asset",
@@ -259,7 +259,7 @@ Object {
               "Bucket": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Bucket",
                 "path": "root/Function/Bucket",
@@ -267,7 +267,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Default",
                 "path": "root/Function/Default",
@@ -275,7 +275,7 @@ Object {
               "IamRole": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "IamRole",
                 "path": "root/Function/IamRole",
@@ -283,7 +283,7 @@ Object {
               "IamRolePolicy": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "IamRolePolicy",
                 "path": "root/Function/IamRolePolicy",
@@ -291,7 +291,7 @@ Object {
               "IamRolePolicyAttachment": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "IamRolePolicyAttachment",
                 "path": "root/Function/IamRolePolicyAttachment",
@@ -299,7 +299,7 @@ Object {
               "S3Object": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "S3Object",
                 "path": "root/Function/S3Object",
@@ -307,7 +307,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "Function",
             "path": "root/Function",
@@ -319,7 +319,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -337,7 +337,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -345,7 +345,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "version": "10.0.11",
             },
             "id": "aws",
             "path": "root/aws",
@@ -353,7 +353,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.3",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -361,7 +361,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.3",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -369,7 +369,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.3",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",

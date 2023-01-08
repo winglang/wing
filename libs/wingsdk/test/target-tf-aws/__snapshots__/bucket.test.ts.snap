@@ -41,7 +41,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -49,7 +49,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "version": "10.0.11",
             },
             "id": "aws",
             "path": "root/aws",
@@ -57,7 +57,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.3",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -71,7 +71,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Default",
                 "path": "root/my_bucket/Default",
@@ -79,7 +79,7 @@ Object {
               "Encryption": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Encryption",
                 "path": "root/my_bucket/Encryption",
@@ -87,7 +87,7 @@ Object {
               "PublicPolicy": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "PublicPolicy",
                 "path": "root/my_bucket/PublicPolicy",
@@ -95,7 +95,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "my_bucket",
             "path": "root/my_bucket",
@@ -103,7 +103,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.3",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -111,7 +111,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.3",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",
@@ -164,7 +164,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -172,7 +172,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "version": "10.0.11",
             },
             "id": "aws",
             "path": "root/aws",
@@ -180,7 +180,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.3",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -194,7 +194,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Default",
                 "path": "root/my_bucket/Default",
@@ -202,7 +202,7 @@ Object {
               "Encryption": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "Encryption",
                 "path": "root/my_bucket/Encryption",
@@ -210,7 +210,7 @@ Object {
               "PublicAccessBlock": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                  "version": "10.0.12",
+                  "version": "10.0.11",
                 },
                 "id": "PublicAccessBlock",
                 "path": "root/my_bucket/PublicAccessBlock",
@@ -218,7 +218,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.0.25",
             },
             "id": "my_bucket",
             "path": "root/my_bucket",
@@ -226,7 +226,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.3",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -234,7 +234,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.3",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",
