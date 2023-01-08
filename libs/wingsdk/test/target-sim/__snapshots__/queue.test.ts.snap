@@ -33,7 +33,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -45,7 +45,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -53,7 +53,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -69,6 +69,9 @@ Array [
   "wingsdk.cloud.Function created.",
   "wingsdk.cloud.Queue created.",
   "Push (message=BAD MESSAGE).",
+  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
+  "Invoke (payload=\\"{\\"messages\\":[\\"BAD MESSAGE\\"]}\\").",
+  "Subscriber error - returning 1 messages to queue.",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
   "Invoke (payload=\\"{\\"messages\\":[\\"BAD MESSAGE\\"]}\\").",
   "Subscriber error - returning 1 messages to queue.",
@@ -138,7 +141,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -157,7 +160,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -176,7 +179,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -209,7 +212,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -217,7 +220,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -229,7 +232,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -237,7 +240,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -326,7 +329,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -345,7 +348,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -364,7 +367,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -397,7 +400,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -405,7 +408,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -417,7 +420,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -425,7 +428,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -509,7 +512,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -528,7 +531,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -547,7 +550,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -580,7 +583,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_queue-OnMessage-e645076f/Code",
@@ -588,7 +591,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -600,7 +603,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -608,7 +611,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

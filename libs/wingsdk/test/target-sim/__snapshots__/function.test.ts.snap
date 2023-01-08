@@ -36,7 +36,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -55,7 +55,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -76,7 +76,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -84,7 +84,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -92,7 +92,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -147,7 +147,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -166,7 +166,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -187,7 +187,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -195,7 +195,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -203,7 +203,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -258,7 +258,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -277,7 +277,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -298,7 +298,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -306,7 +306,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -314,7 +314,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -370,7 +370,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -389,7 +389,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -410,7 +410,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -418,7 +418,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -426,7 +426,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
