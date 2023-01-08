@@ -147,26 +147,37 @@ impl JSifier {
 	}
 	// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
 	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
-	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctions) -> String {
+	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctions, phase: Phase) -> String {
+		let auto_await = match phase {
+			Phase::Inflight => "await ",
+			_ => "",
+		};
 		match function_type {
 			UtilityFunctions::Assert => {
 				return format!(
-					"{{((cond) => {{if (!cond) throw new Error(`assertion failed: '{0}'`)}})({0})}}",
+					"{{((cond) => {{if (!cond) throw new Error(`assertion failed: '{1}'`)}})({0}{1})}}",
+					auto_await,
 					self.jsify_arg_list(args, None, None, false)
 				);
 			}
 			UtilityFunctions::Print => {
-				return format!("{{console.log({})}}", self.jsify_arg_list(args, None, None, false));
+				return format!(
+					"{{console.log({}{})}}",
+					auto_await,
+					self.jsify_arg_list(args, None, None, false)
+				);
 			}
 			UtilityFunctions::Throw => {
 				return format!(
-					"{{((msg) => {{throw new Error(msg)}})({})}}",
+					"{{((msg) => {{throw new Error(msg)}})({}{})}}",
+					auto_await,
 					self.jsify_arg_list(args, None, None, false)
 				);
 			}
 			UtilityFunctions::Panic => {
 				return format!(
-					"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
+					"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({}{})}}",
+					auto_await,
 					self.jsify_arg_list(args, None, None, false)
 				);
 			}
@@ -312,16 +323,16 @@ impl JSifier {
 				let mut needs_case_conversion = false;
 				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Print.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Print);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Print, phase);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Assert.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Assert);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Assert, phase);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Panic.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Panic);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Panic, phase);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Throw.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw, phase);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
 
