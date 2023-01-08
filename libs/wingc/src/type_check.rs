@@ -1,8 +1,8 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
-use crate::{debug, WINGSDK_DURATION, WINGSDK_RESOURCE};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
+use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_RESOURCE};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -84,6 +84,7 @@ impl SymbolKind {
 	}
 }
 
+#[derive(Debug)]
 pub enum Type {
 	Anything,
 	Number,
@@ -797,7 +798,7 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Array(t) => t,
-					_ => panic!("Expected array type, found {}", container_type),
+					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
@@ -859,13 +860,40 @@ impl<'a> TypeChecker<'a> {
 
 				let value_type = match *container_type {
 					Type::Map(t) => t,
-					_ => panic!("Expected map type, found {}", container_type),
+					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
 				for (_, v) in fields.iter() {
 					let t = self.type_check_exp(v, env, statement_idx).unwrap();
 					self.validate_type(t, value_type, v);
+				}
+
+				Some(container_type)
+			}
+			ExprKind::SetLiteral { type_, items } => {
+				// Infer type based on either the explicit type or the value in one of the items
+				let container_type = if let Some(type_) = type_ {
+					self.resolve_type(type_, env, statement_idx)
+				} else if !items.is_empty() {
+					let some_val_type = self
+						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
+						.unwrap();
+					self.types.add_type(Type::Set(some_val_type))
+				} else {
+					self.expr_error(exp, "Cannot infer type of empty set".to_owned());
+					self.types.add_type(Type::Set(self.types.anything()))
+				};
+
+				let element_type = match *container_type {
+					Type::Set(t) => t,
+					_ => self.expr_error(exp, format!("Expected \"Set\" type, found \"{}\"", container_type)),
+				};
+
+				// Verify all types are the same as the inferred type
+				for v in items.iter() {
+					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					self.validate_type(t, element_type, v);
 				}
 
 				Some(container_type)
@@ -1043,6 +1071,11 @@ impl<'a> TypeChecker<'a> {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
+			}
+			AstType::Set(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each set resolution
+				self.types.add_type(Type::Set(value_type))
 			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
@@ -1505,6 +1538,93 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
+	/// Hydrate `any`s in a type reference with a single type argument
+	///
+	/// # Arguments
+	///
+	/// * `env` - The environment to use for looking up the original type
+	/// * `original_fqn` - The fully qualified name of the original type
+	/// * `type_param` - The type argument to use for the `any`
+	///
+	/// # Returns
+	/// The hydrated type reference
+	///
+	fn hydrate_class_type_arguments(&mut self, env: &SymbolEnv, original_fqn: &str, type_param: TypeRef) -> TypeRef {
+		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
+		let original_type_class = original_type.as_class().unwrap();
+
+		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, true, Phase::Independent, 0);
+		let tt = Type::Class(Class {
+			name: original_type_class.name.clone(),
+			env: new_env,
+			parent: original_type_class.parent,
+			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
+		});
+		let mut new_type = self.types.add_type(tt);
+		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
+
+		// Add symbols from original type to new type
+		// Note: this is currently limited to top-level function signatures and fields
+		for (name, symbol) in original_type_class.env.iter() {
+			match symbol {
+				SymbolKind::Variable(v) => {
+					// Replace `any` in function signatures
+					if let Some(sig) = v.as_function_sig() {
+						let new_return_type = sig
+							.return_type
+							.map(|ret| if ret.is_anything() { type_param } else { ret });
+
+						let new_args: Vec<UnsafeRef<Type>> = sig
+							.args
+							.iter()
+							.map(|arg| if arg.is_anything() { type_param } else { *arg })
+							.collect();
+
+						let new_sig = FunctionSignature {
+							args: new_args,
+							return_type: new_return_type,
+							flight: Phase::Independent,
+						};
+
+						match new_type_class.env.define(
+							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+							&Symbol {
+								name: name.clone(),
+								span: WingSpan::global(),
+							},
+							SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(&type_error);
+							}
+							_ => {}
+						}
+					} else if let Some(var) = symbol.as_variable() {
+						let new_var_type = if var.is_anything() { type_param } else { var };
+						match new_type_class.env.define(
+							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+							&Symbol {
+								name: name.clone(),
+								span: WingSpan::global(),
+							},
+							SymbolKind::Variable(new_var_type),
+							StatementIdx::Top,
+						) {
+							Err(type_error) => {
+								self.type_error(&type_error);
+							}
+							_ => {}
+						}
+					}
+				}
+				_ => {}
+			}
+		}
+
+		return new_type;
+	}
+
 	fn expr_maybe_type(&mut self, expr: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<TypeRef> {
 		// TODO: we currently don't handle parenthesized expressions correctly so something like `(MyEnum).A` or `std.(namespace.submodule).A` will return true, is this a problem?
 		let mut path = vec![];
@@ -1571,25 +1691,28 @@ impl<'a> TypeChecker<'a> {
 
 				let instance_type = self.type_check_exp(object, env, statement_idx).unwrap();
 				match *instance_type {
-					Type::Class(ref class) | Type::Resource(ref class) => match class.env.lookup(property, None) {
-						Ok(field) => field.as_variable().expect("Expected property to be a variable"),
-						Err(type_error) => self.type_error(&type_error),
-					},
+					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
 					Type::Anything => instance_type,
 
-					// get "std" primitives
-					Type::Duration => env
-						.lookup_nested_str(WINGSDK_DURATION, false, None)
-						.unwrap()
-						.as_type()
-						.unwrap()
-						.as_class()
-						.unwrap()
-						.env
-						.lookup(property, None)
-						.unwrap()
-						.as_variable()
-						.unwrap(),
+					// Lookup wingsdk std types, hydrating generics if necessary
+					Type::Array(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::Set(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::Duration => self.get_property_from_class(
+						env
+							.lookup_nested_str(WINGSDK_DURATION, false, None)
+							.unwrap()
+							.as_type()
+							.unwrap()
+							.as_class()
+							.unwrap(),
+						property,
+					),
 
 					_ => self.expr_error(
 						object,
@@ -1600,6 +1723,13 @@ impl<'a> TypeChecker<'a> {
 					),
 				}
 			}
+		}
+	}
+
+	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> TypeRef {
+		match class.env.lookup(property, None) {
+			Ok(field) => field.as_variable().expect("Expected property to be a variable"),
+			Err(type_error) => self.type_error(&type_error),
 		}
 	}
 }

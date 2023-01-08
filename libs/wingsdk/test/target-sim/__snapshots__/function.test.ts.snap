@@ -46,7 +46,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/my_function",
               },
             ],
@@ -64,7 +65,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/WingLogger",
               },
             ],
@@ -155,7 +157,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/my_function",
               },
             ],
@@ -173,7 +176,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/WingLogger",
               },
             ],
@@ -264,7 +268,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/my_function",
               },
             ],
@@ -282,7 +287,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/WingLogger",
               },
             ],
@@ -374,7 +380,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/my_function",
               },
             ],
@@ -392,7 +399,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/WingLogger",
               },
             ],
