@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_RESOURCE};
+use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_RESOURCE, WINGSDK_SET};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -1550,7 +1550,11 @@ impl<'a> TypeChecker<'a> {
 	/// The hydrated type reference
 	///
 	fn hydrate_class_type_arguments(&mut self, env: &SymbolEnv, original_fqn: &str, type_param: TypeRef) -> TypeRef {
-		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
+		let original_type = env
+			.lookup_nested_str(original_fqn, true, None)
+			.unwrap()
+			.as_type()
+			.unwrap();
 		let original_type_class = original_type.as_class().unwrap();
 
 		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, true, Phase::Independent, 0);
