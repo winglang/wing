@@ -49,3 +49,47 @@ test("basic function with environment variables", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
+
+test("aws function names must be less than 64 characters", async () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.Function(
+    app,
+    "Lorem-Ipsum-is-simply-dummy-text-of-the-printing-and-typesetting-industry",
+    inflight
+  );
+
+  const output = app.synth();
+
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      function_name:
+        "Lorem-Ipsum-is-simply-dummy-text-of-the-printing-and-typesetting",
+    })
+  ).toEqual(true);
+
+  expect(tfSanitize(output)).toMatchSnapshot();
+});
+
+test("WING_FUNCTION_NAME value is the same as Lambda FunctionName", async () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.Function(app, "Function", inflight);
+
+  const output = app.synth();
+
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      environment: {
+        variables: {
+          WING_FUNCTION_NAME: "Function",
+        },
+      },
+      functionName: "Function",
+    })
+  ).toEqual(true);
+
+  expect(tfSanitize(output)).toMatchSnapshot();
+});

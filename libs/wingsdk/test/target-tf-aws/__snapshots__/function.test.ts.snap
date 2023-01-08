@@ -1,5 +1,103 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`WING_FUNCTION_NAME is equal to functionName 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_Function_9F694E40\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+          }
+        },
+        \\"function_name\\": \\"Function\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_Function_Bucket_8CDD903C\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`aws function names must be less than 64 characters 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_iam_role\\": {
+      \\"root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_IamRole_57FF8F67\\": {
+        \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
+      }
+    },
+    \\"aws_iam_role_policy\\": {
+      \\"root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_IamRolePolicy_D1E6826E\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_IamRole_57FF8F67.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_IamRolePolicyAttachment_4EBDD4ED\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_IamRole_57FF8F67.name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_D734DB68\\": {
+        \\"environment\\": {
+          \\"variables\\": {
+            \\"WING_FUNCTION_NAME\\": \\"Lorem-Ipsum-is-simply-dummy-text-of-the-printing-and-typesetting\\"
+          }
+        },
+        \\"function_name\\": \\"Lorem-Ipsum-is-simply-dummy-text-of-the-printing-and-typesetting\\",
+        \\"handler\\": \\"index.handler\\",
+        \\"role\\": \\"\${aws_iam_role.root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_IamRole_57FF8F67.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_Bucket_9B446EC0.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_S3Object_C21F6594.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_Bucket_9B446EC0\\": {}
+    },
+    \\"aws_s3_object\\": {
+      \\"root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_S3Object_C21F6594\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_LoremIpsumissimplydummytextoftheprintingandtypesettingindustry_Bucket_9B446EC0.bucket}\\",
+        \\"key\\": \\"<key>\\",
+        \\"source\\": \\"<source>\\"
+      }
+    }
+  }
+}"
+`;
+
 exports[`basic function 1`] = `
 "{
   \\"resource\\": {

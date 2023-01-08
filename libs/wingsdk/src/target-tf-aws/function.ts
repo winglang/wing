@@ -114,9 +114,11 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
+    const functionName = this.sanitizeFunctionName(this.node.id);
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: this.sanitizeFunctionName(this.node.id),
+      functionName: functionName,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
@@ -130,7 +132,7 @@ export class Function extends cloud.FunctionBase {
     this.arn = this.function.arn;
 
     // terraform rejects templates with zero environment variables
-    this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
+    this.addEnvironment("WING_FUNCTION_NAME", functionName);
   }
 
   /**
@@ -140,7 +142,10 @@ export class Function extends cloud.FunctionBase {
    * Should be deprecated by https://github.com/winglang/wing/discussions/861 (Name Generator)
    */
   private sanitizeFunctionName(name: string): string {
-    return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
+    return name
+      .replace(/[^a-zA-Z0-9\:\-]+/g, "_")
+      .substring(0, 64)
+      .trim();
   }
 
   /** @internal */
