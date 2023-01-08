@@ -1,5 +1,6 @@
 import { Function, IFunctionClient } from "../../src/cloud/function";
 import { Inflight, NodeJsCode } from "../../src/core/inflight";
+import { Duration } from "../../src/std";
 import { SimApp } from "../../src/testing";
 
 interface CaptureTest {
@@ -76,4 +77,11 @@ makeCaptureTest({
   in: new Set(["boom", "bam", "bang"]),
   out: "{ size: this.my_capture.size, has_bang: this.my_capture.has('bang'), has_bim: this.my_capture.has('bim') }",
   expected: '{"size":3,"has_bang":true,"has_bim":false}',
+});
+
+makeCaptureTest({
+  name: "duration",
+  in: Duration.fromHours(2),
+  out: "{ min: this.my_capture.minutes, sec: this.my_capture.seconds, hours: this.my_capture.hours }",
+  expected: '{"min":120,"sec":7200,"hours":2}',
 });

@@ -60,4 +60,15 @@ export class Duration {
   public get hours() {
     return this.minutes / 60;
   }
+
+  /**
+   * Serializes to JSON (used implicitly by `toInflight`).
+   */
+  toJSON() {
+    return {
+      seconds: this.seconds,
+      minutes: this.minutes,
+      hours: this.hours,
+    };
+  }
 }
