@@ -41,6 +41,16 @@ enum LookupResult<'a> {
 	DefinedLater,
 }
 
+enum LookupMutResult<'a> {
+	// The type of the symbol and its flight phase
+	Found((&'a mut SymbolKind, Phase)),
+	// The symbol was not found in the environment
+	NotFound,
+	// The symbol exists in the environment but it's not defined yet (based on the statement
+	// index passed to the lookup)
+	DefinedLater,
+}
+
 impl SymbolEnv {
 	pub fn new(
 		parent: Option<SymbolEnvRef>,
@@ -112,6 +122,13 @@ impl SymbolEnv {
 		}
 	}
 
+	pub fn try_lookup_mut(&mut self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> Option<&mut SymbolKind> {
+		match self.try_lookup_mut_ext(symbol_name, not_after_stmt_idx) {
+			LookupMutResult::Found((type_, _)) => Some(type_),
+			LookupMutResult::NotFound | LookupMutResult::DefinedLater => None,
+		}
+	}
+
 	fn try_lookup_ext(&self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupResult {
 		if let Some((definition_idx, kind)) = self.ident_map.get(symbol_name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
@@ -126,6 +143,24 @@ impl SymbolEnv {
 			parent_env.try_lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
 			LookupResult::NotFound
+		}
+	}
+
+	// Baahh. Find a nice way to reuse the non-mut code and remove LookupMutResult
+	fn try_lookup_mut_ext(&mut self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupMutResult {
+		if let Some((definition_idx, kind)) = self.ident_map.get_mut(symbol_name) {
+			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
+				if let StatementIdx::Index(definition_idx) = definition_idx {
+					if *definition_idx > not_after_stmt_idx {
+						return LookupMutResult::DefinedLater;
+					}
+				}
+			}
+			LookupMutResult::Found((kind.into(), self.flight))
+		} else if let Some(ref mut parent_env) = self.parent {
+			parent_env.try_lookup_mut_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
+		} else {
+			LookupMutResult::NotFound
 		}
 	}
 
@@ -153,7 +188,12 @@ impl SymbolEnv {
 		}
 	}
 
-	pub fn lookup_nested_str(&self, nested_str: &str, statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
+	pub fn lookup_nested_str(
+		&self,
+		nested_str: &str,
+		ignore_hidden: bool,
+		statement_idx: Option<usize>,
+	) -> Result<&SymbolKind, TypeError> {
 		let nested_vec = nested_str
 			.split('.')
 			.map(|s| Symbol {
@@ -161,10 +201,19 @@ impl SymbolEnv {
 				span: WingSpan::global(),
 			})
 			.collect::<Vec<Symbol>>();
-		self.lookup_nested(&nested_vec.iter().collect::<Vec<&Symbol>>(), statement_idx)
+		self.lookup_nested(
+			&nested_vec.iter().collect::<Vec<&Symbol>>(),
+			ignore_hidden,
+			statement_idx,
+		)
 	}
 
-	pub fn lookup_nested(&self, nested_vec: &[&Symbol], statement_idx: Option<usize>) -> Result<&SymbolKind, TypeError> {
+	pub fn lookup_nested(
+		&self,
+		nested_vec: &[&Symbol],
+		ignore_hidden: bool,
+		statement_idx: Option<usize>,
+	) -> Result<&SymbolKind, TypeError> {
 		let mut it = nested_vec.iter();
 
 		let mut symb = *it.next().unwrap();
@@ -188,6 +237,12 @@ impl SymbolEnv {
 				}
 			}
 			let ns = if let Some(ns) = t.as_namespace() {
+				if ns.hidden && !ignore_hidden {
+					return Err(TypeError {
+						message: format!("Symbol \"{}\" is not a namespace", symb.name),
+						span: symb.span.clone(),
+					});
+				}
 				ns
 			} else {
 				return Err(TypeError {

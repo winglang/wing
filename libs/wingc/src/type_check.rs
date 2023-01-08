@@ -1,7 +1,7 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{debug, WINGSDK_DURATION, WINGSDK_RESOURCE};
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -63,8 +63,15 @@ impl SymbolKind {
 	}
 
 	fn as_namespace(&self) -> Option<&Namespace> {
-		match &self {
+		match self {
 			SymbolKind::Namespace(ns) => Some(ns),
+			_ => None,
+		}
+	}
+
+	fn as_mut_namespace(&mut self) -> Option<&mut Namespace> {
+		match self {
+			SymbolKind::Namespace(ref mut ns) => Some(ns),
 			_ => None,
 		}
 	}
@@ -96,11 +103,13 @@ pub enum Type {
 
 const WING_CONSTRUCTOR_NAME: &'static str = "init";
 const WINGSDK_STD_MODULE: &'static str = "std";
+const WINGSDK_CORE_MODULE: &'static str = "core";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct Namespace {
 	pub name: String,
+	pub hidden: bool,
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -467,15 +476,9 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
-		self.add_module_to_env(
-			scope.env.borrow_mut().as_mut().unwrap(),
-			WINGSDK_STD_MODULE.to_string(),
-			&Symbol {
-				name: WINGSDK_STD_MODULE.to_string(),
-				span: WingSpan::global(),
-			},
-			0,
-		);
+		for m in [WINGSDK_STD_MODULE, WINGSDK_CORE_MODULE] {
+			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), 0);
+		}
 	}
 
 	// TODO: All calls to this should be removed and we should make sure type checks are done
@@ -1021,7 +1024,7 @@ impl<'a> TypeChecker<'a> {
 				let mut nested_name = vec![root];
 				nested_name.extend(fields);
 
-				match env.lookup_nested(&nested_name, Some(statement_idx)) {
+				match env.lookup_nested(&nested_name, false, Some(statement_idx)) {
 					Ok(_type) => {
 						if let SymbolKind::Type(t) = *_type {
 							t
@@ -1165,7 +1168,7 @@ impl<'a> TypeChecker<'a> {
 						return;
 					}
 
-					self.add_module_to_env(env, module_name.name.clone(), namespace_name, stmt.idx);
+					self.add_module_to_env(env, module_name.name.clone(), stmt.idx);
 				}
 			}
 			StmtKind::Scope(scope) => {
@@ -1236,7 +1239,7 @@ impl<'a> TypeChecker<'a> {
 				} else if *is_resource {
 					// If we're a resource and we have no parent we implicitly inherit from wingsdk's resource base class
 					let wingsdk_resource_type = env
-						.lookup_nested_str(WINGSDK_RESOURCE, Some(stmt.idx))
+						.lookup_nested_str(WINGSDK_RESOURCE, false, Some(stmt.idx))
 						.expect("Expected wingsdk resource base to be defined")
 						.as_type()
 						.unwrap();
@@ -1469,15 +1472,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_module_to_env(
-		&mut self,
-		env: &mut SymbolEnv,
-		module_name: String,
-		namespace_symbol: &Symbol,
-		statement_idx: usize,
-	) {
-		// Create a new env for the imported module's namespace
-		let mut namespace_env = SymbolEnv::new(None, None, false, env.flight, statement_idx);
+	fn add_module_to_env(&mut self, env: &mut SymbolEnv, module_name: String, statement_idx: usize) {
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
 		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
@@ -1490,49 +1485,11 @@ impl<'a> TypeChecker<'a> {
 			let name = wingii_types
 				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
 				.unwrap();
-			let prefix = format!("{}.{}.", name, module_name);
 			debug!("Loaded JSII assembly {}", name);
 			let assembly = wingii_types.find_assembly(&name).unwrap();
 
-			let mut jsii_importer = JsiiImporter {
-				jsii_types: &wingii_types,
-				assembly_name: name,
-				namespace_env: &mut namespace_env,
-				namespace_name: module_name.clone(),
-				wing_types: self.types,
-				import_statement_idx: statement_idx,
-			};
-
-			for type_fqn in assembly.types.as_ref().unwrap().keys() {
-				// Skip types outside the imported namespace
-				if !type_fqn.starts_with(&prefix) {
-					continue;
-				}
-
-				// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
-				// and might have already defined the current type internally
-				let type_name = jsii_importer.fqn_to_type_name(type_fqn);
-				if jsii_importer.namespace_env.try_lookup(&type_name, None).is_some() {
-					continue;
-				}
-				jsii_importer.import_type(type_fqn);
-			}
-
-			// Create a namespace for the imported module
-			// TODO: are namespaces at the Top statement level (known by everyone in the scope) regardless of where they are defined?
-			match env.define(
-				namespace_symbol,
-				SymbolKind::Namespace(Namespace {
-					name: namespace_symbol.name.clone(),
-					env: namespace_env,
-				}),
-				StatementIdx::Top,
-			) {
-				Err(type_error) => {
-					self.type_error(&type_error);
-				}
-				_ => {}
-			};
+			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
+			jsii_importer.import_to_env();
 		}
 	}
 
@@ -1568,7 +1525,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 		path.reverse();
-		match env.lookup_nested(&path, Some(statement_idx)) {
+		match env.lookup_nested(&path, false, Some(statement_idx)) {
 			Ok(SymbolKind::Type(type_ref)) => Some(*type_ref),
 			_ => None,
 		}
@@ -1622,7 +1579,7 @@ impl<'a> TypeChecker<'a> {
 
 					// get "std" primitives
 					Type::Duration => env
-						.lookup_nested_str(WINGSDK_DURATION, None)
+						.lookup_nested_str(WINGSDK_DURATION, false, None)
 						.unwrap()
 						.as_type()
 						.unwrap()

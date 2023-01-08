@@ -11,7 +11,9 @@ use crate::{
 };
 use colored::Colorize;
 use serde_json::Value;
-use wingii::jsii;
+use wingii::jsii::{self, Assembly};
+
+use super::Namespace;
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -37,15 +39,33 @@ impl JsiiInterface for jsii::InterfaceType {
 }
 
 pub struct JsiiImporter<'a> {
-	pub jsii_types: &'a wingii::type_system::TypeSystem,
-	pub assembly_name: String,
-	pub namespace_env: &'a mut SymbolEnv,
-	pub namespace_name: String,
-	pub wing_types: &'a mut Types,
-	pub import_statement_idx: usize,
+	jsii_types: &'a wingii::type_system::TypeSystem,
+	assembly: &'a Assembly,
+	module_name: &'a str,
+	wing_types: &'a mut Types,
+	import_statement_idx: usize,
+	env: &'a mut SymbolEnv,
 }
 
 impl<'a> JsiiImporter<'a> {
+	pub fn new(
+		jsii_types: &'a wingii::type_system::TypeSystem,
+		assembly: &'a Assembly,
+		module_name: &'a str,
+		wing_types: &'a mut Types,
+		import_statement_idx: usize,
+		env: &'a mut SymbolEnv,
+	) -> Self {
+		Self {
+			jsii_types,
+			assembly,
+			module_name,
+			wing_types,
+			import_statement_idx,
+			env,
+		}
+	}
+
 	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &jsii::TypeReference) -> Option<TypeRef> {
 		if let serde_json::Value::Object(obj) = jsii_type_ref {
 			if let Some(Value::String(primitive_name)) = obj.get("primitive") {
@@ -86,67 +106,109 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn lookup_or_create_type(&mut self, type_fqn: &String) -> TypeRef {
-		let type_name = &self.fqn_to_type_name(type_fqn);
+		let type_name = &self.strip_assembly_from_fqn(type_fqn);
 		// Check if this type is already define in this module's namespace
-		if let Some(t) = self.namespace_env.try_lookup(type_name, None) {
+		if let Ok(t) = self.env.lookup_nested_str(type_name, true, None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_name));
 		}
 		// Define new type and return it
-		self.import_type(type_fqn).unwrap()
+		self.import_type(type_fqn);
+		self
+			.env
+			.lookup_nested_str(type_name, true, None)
+			.expect(&format!("Expected {} to be defined", type_name))
+			.as_type()
+			.unwrap()
 	}
 
-	pub fn fqn_to_type_name(&self, fqn: &str) -> String {
+	fn fqn_to_type_name(&self, fqn: &str) -> String {
 		let parts = fqn.split('.').collect::<Vec<&str>>();
 		let assembly_name = parts[0];
 		let namespace_name = parts[1];
-		// Make sure this type is part of our assembly and in our namespace
-		if assembly_name != self.assembly_name {
-			panic!(
-				"Encountered JSII type {} which isn't part of imported JSII module {}",
-				fqn, self.assembly_name
-			);
-		}
 		fqn
 			.strip_prefix(format!("{}.{}.", assembly_name, namespace_name).as_str())
 			.unwrap()
 			.to_string()
 	}
 
-	pub fn import_type(&mut self, type_fqn: &str) -> Option<TypeRef> {
+	fn strip_assembly_from_fqn(&self, fqn: &str) -> String {
+		let parts = fqn.split('.').collect::<Vec<&str>>();
+		let assembly_name = parts[0];
+		fqn
+			.strip_prefix(format!("{}.", assembly_name).as_str())
+			.unwrap()
+			.to_string()
+	}
+
+	fn import_type(&mut self, type_fqn: &str) {
 		// Hack: if the class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
 		if type_fqn == format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) {
-			return None;
+			return;
+		}
+
+		// Always expect assembly.module.type
+		let parts = type_fqn.split('.').collect::<Vec<_>>();
+		assert!(parts.len() == 3);
+		assert!(parts[0] == self.assembly.name);
+		let namespace_name = parts[1];
+		let type_name = parts[2];
+
+		// Create namespace and add it to env if it doesn't exist yet
+		if let Some(symb) = self.env.try_lookup_mut(namespace_name, None) {
+			println!("namespace {} already define, no need to create", namespace_name);
+			if !matches!(symb, SymbolKind::Namespace(_)) {
+				// TODO: make this a proper error
+				panic!(
+					"Tried importing {} but {} already defined as a {}",
+					type_name, namespace_name, symb
+				);
+			}
+		} else {
+			self
+				.env
+				.define(
+					&Symbol {
+						name: namespace_name.to_string(),
+						span: WingSpan::global(),
+					},
+					SymbolKind::Namespace(Namespace {
+						name: namespace_name.to_string(),
+						hidden: namespace_name == self.module_name,
+						env: SymbolEnv::new(None, None, false, self.env.flight, 0),
+					}),
+					StatementIdx::Top,
+				)
+				.unwrap();
 		}
 
 		// Check if this is a JSII interface and import it if it is
 		let jsii_interface = self.jsii_types.find_interface(&type_fqn);
 		if let Some(jsii_interface) = jsii_interface {
-			return self.import_interface(jsii_interface);
+			self.import_interface(jsii_interface, namespace_name);
 		} else {
 			// Check if this is a JSII class and import it if it is
 			let jsii_class = self.jsii_types.find_class(&type_fqn);
 			if let Some(jsii_class) = jsii_class {
-				return self.import_class(jsii_class);
+				self.import_class(jsii_class, namespace_name);
 			} else {
 				debug!("Type {} is unsupported, skipping", type_fqn);
-				return None;
 			}
 		}
 	}
 
-	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType) -> Option<TypeRef> {
+	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType, namespace_name: &str) {
 		let type_name = self.fqn_to_type_name(&jsii_interface.fqn);
 		match jsii_interface.datatype {
 			Some(true) => {
 				// If this datatype has methods something is unexpected in this JSII type definition, skip it.
 				if jsii_interface.methods.is_some() && !jsii_interface.methods.as_ref().unwrap().is_empty() {
 					debug!("JSII datatype interface {} has methods, skipping", type_name);
-					return None;
+					return;
 				}
 			}
 			_ => {
 				debug!("The JSII interface {} is not a \"datatype\", skipping", type_name);
-				return None;
+				return;
 			}
 		}
 
@@ -159,20 +221,14 @@ impl<'a> JsiiImporter<'a> {
 			vec![]
 		};
 
-		let mut struct_env = SymbolEnv::new(None, None, true, self.namespace_env.flight, self.import_statement_idx);
+		let mut struct_env = SymbolEnv::new(None, None, true, self.env.flight, self.import_statement_idx);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
 		let mut wing_type = self.wing_types.add_type(Type::Struct(Struct {
 			name: new_type_symbol.clone(),
 			extends: extends.clone(),
-			env: SymbolEnv::new(None, None, true, self.namespace_env.flight, self.import_statement_idx), // Dummy env, will be replaced below
+			env: SymbolEnv::new(None, None, true, struct_env.flight, self.import_statement_idx), // Dummy env, will be replaced below
 		}));
-		self.add_members_to_class_env(
-			&jsii_interface,
-			false,
-			self.namespace_env.flight,
-			&mut struct_env,
-			wing_type,
-		);
+		self.add_members_to_class_env(&jsii_interface, false, struct_env.flight, &mut struct_env, wing_type);
 
 		// Add properties from our parents to the new structs env
 		type_check::add_parent_members_to_struct_env(&extends, &new_type_symbol, &mut struct_env).expect(&format!(
@@ -186,15 +242,19 @@ impl<'a> JsiiImporter<'a> {
 			_ => panic!("Expected {} to be a struct", type_name),
 		};
 
-		debug!("Adding struct type {}", type_name.green());
-		self
-			.namespace_env
+		// TODO: don't we need to add this to the namespace earlier in case there's a self reference in the struct?
+		let ns = self
+			.env
+			.try_lookup_mut(namespace_name, None)
+			.unwrap()
+			.as_mut_namespace()
+			.unwrap();
+		ns.env
 			.define(&new_type_symbol, SymbolKind::Type(wing_type), StatementIdx::Top)
 			.expect(&format!(
 				"Invalid JSII library: failed to define struct type {}",
 				type_name
 			));
-		Some(wing_type)
 	}
 
 	fn add_members_to_class_env<T: JsiiInterface>(
@@ -306,7 +366,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType) -> Option<TypeRef> {
+	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType, namespace_name: &str) {
 		let mut is_resource = false;
 		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
 
@@ -317,29 +377,30 @@ impl<'a> JsiiImporter<'a> {
 				is_resource = true;
 				None
 			} else {
-				let base_class_name = self.fqn_to_type_name(base_class_fqn);
-				let base_class_type = if let Some(base_class_type) = self.namespace_env.try_lookup(&base_class_name, None) {
-					Some(
-						base_class_type
-							.as_type()
-							.expect("Base class name found but it's not a type"),
-					)
+				let base_class_name = self.strip_assembly_from_fqn(base_class_fqn);
+				let base_class_type = if let Ok(base_class_type) = self.env.lookup_nested_str(&base_class_name, true, None) {
+					base_class_type
+						.as_type()
+						.expect("Base class name found but it's not a type")
 				} else {
 					// If the base class isn't defined yet then define it first (recursive call)
-					let base_class_type = self.import_type(base_class_fqn);
-					if base_class_type.is_none() {
-						panic!("Failed to define base class {}", base_class_name);
-					}
-					base_class_type
+					self.import_type(base_class_fqn);
+					self
+						.env
+						.lookup_nested_str(&base_class_name, true, None)
+						.expect(&format!(
+							"Failed to define base class {} of {}",
+							base_class_name, type_name
+						))
+						.as_type()
+						.unwrap()
 				};
 
 				// Validate the base class is either a class or a resource
-				if let Some(base_class_type) = base_class_type {
-					if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
-						panic!("Base class {} of {} is not a resource", base_class_name, type_name);
-					}
+				if base_class_type.as_resource().is_none() && base_class_type.as_class().is_none() {
+					panic!("Base class {} of {} is not a resource", base_class_name, type_name);
 				}
-				base_class_type
+				Some(base_class_type)
 			}
 		} else {
 			None
@@ -358,7 +419,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, None, true, self.namespace_env.flight, 0);
+		let dummy_env = SymbolEnv::new(None, None, true, Phase::Preflight, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -374,12 +435,17 @@ impl<'a> JsiiImporter<'a> {
 		} else {
 			Type::Class(class_spec)
 		});
-		self
-			.namespace_env
+		let ns = self
+			.env
+			.try_lookup_mut(namespace_name, None)
+			.unwrap()
+			.as_mut_namespace()
+			.unwrap();
+		ns.env
 			.define(&new_type_symbol, SymbolKind::Type(new_type), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, None, true, self.namespace_env.flight, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, None, true, self.env.flight, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -447,7 +513,6 @@ impl<'a> JsiiImporter<'a> {
 			}
 			_ => panic!("Expected {} to be a class or resource ", type_name),
 		};
-		Some(new_type)
 	}
 
 	fn optional_type_to_wing_type(&mut self, jsii_optional_type: &jsii::OptionalValue) -> Option<TypeRef> {
@@ -470,6 +535,29 @@ impl<'a> JsiiImporter<'a> {
 			self.wing_types.add_type(Type::Optional(param_type))
 		} else {
 			param_type
+		}
+	}
+
+	pub fn import_to_env(&mut self) {
+		let prefix = format!("{}.{}.", self.assembly.name, self.module_name);
+		for type_fqn in self.assembly.types.as_ref().unwrap().keys() {
+			// Skip types outside the imported namespace
+			if !type_fqn.starts_with(&prefix) {
+				continue;
+			}
+
+			// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
+			// and might have already defined the current type internally
+			if self
+				.env
+				.lookup_nested_str(&self.strip_assembly_from_fqn(type_fqn), true, None)
+				.is_ok()
+			{
+				continue;
+			}
+
+			// Import type
+			self.import_type(type_fqn);
 		}
 	}
 }
