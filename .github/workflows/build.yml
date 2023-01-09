@@ -298,11 +298,6 @@ jobs:
       - name: Prepare language server binaries
         run: cp -r wing-language-server-* ./apps/vscode-wing/resources
 
-      - name: Prepare WingSDK .jsii
-        run: |
-          tar -xzf wingsdk/*.tgz package/.jsii
-          mv package/.jsii libs/wingsdk
-
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -314,6 +309,11 @@ jobs:
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
+
+      - name: Prepare WingSDK resource
+        run: |
+          tar -xzf wingsdk/*.tgz
+          mv package apps/vscode-wing/resources/wingsdk
 
       - name: Build
         uses: MansaGroup/nrwl-nx-action@v2
