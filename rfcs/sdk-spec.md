@@ -18,6 +18,7 @@ It's okay to make it possible to do the wrong thing, but it should be hard to do
 When possible, prefer mental models and terminology that are natural for operating with data structures for code running on your own machine (eg., choose "push" and "pop" over "send" and "receive").
 Avoid APIs and options that may only be supported on one or two major cloud providers.
 In the case that an essential option or method is not available on a given cloud provider, then the resource's concrete implementation should throw when the option or method is used.
+Resources that are difficult to abstract across cloud providers should be implemented as third party Wing libraries.
 
 - **Open**: The Wing SDK is an extensible framework.
 It is also open source, and designed to be easy to contribute to.
@@ -47,10 +48,25 @@ The `Iterator` object also implements the [async iterator protocol in JavaScript
 
 ### Event handlers
 
-Some resources can automatically emit "events" when their state changes.
-These events are "fire-and-forget" notifications which may not be delivered in order, and which don't expect a response to be sent back.
+Some resources can automatically emit events as a result of an action or a change to their state.
+These events are "fire-and-forget" notifications which may not always be delivered in order, and which don't expect a response to be sent back by the listener(s).
 
-Such events can be handled by registering an event handler with the resource.
+Resources that emit events in a "fire-and-forget" fashion should make their events listenable through a method named `on_<event>`.
+
+> Reqtag: `sdk:on-event`
+<span id="sdk:on-event"/>
+
+For example, a `cloud.Bucket` can emit events whenever an object is uploaded, and these events can be listened to by calling `on_upload` on the bucket:
+
+```ts
+// wing
+let bucket = new cloud.Bucket();
+bucket.on_upload((file: str) => {
+  log.info("File uploaded: " + file);
+});
+```
+
+The argument to an `on_<event>` method is called an event handler.
 An event handler is any resource that implements the `EventHandler<T>` interface, which contains a single method named `handle` that accepts an event of type `T`:
 
 ```ts
@@ -61,41 +77,42 @@ interface EventHandler<T> {
 }
 ```
 
-> We could also decide the should be named `handle_event` or `invoke` or `run` or `call` or something else.
+<!--
+We could also decide the should be named `handle_event` or `invoke` or `run` or `call` or something else.
+-->
 
-An inflight closure that accepts a single argument of type `T` is also considered an event handler, as the compiler will automatically convert it into a resource with a single inflight method that implements the `EventHandler<T>` interface.
-For example, the following two definitions are equivalent:
+An inflight closure that accepts a single argument of type `T` is also considered an event handler, since the compiler will automatically convert it into a resource that implements the `EventHandler<T>` interface.
+For example, the definitions of `x1` and `x2` are equivalent:
 
 ```ts
 // wing
 let x1 = inflight (event: MyEvent) => {
-  print("Event received: " + event);
+  log.info("Event received: " + event);
 };
 
 resource X implements EventHandler<MyEvent> {
   inflight handle(event: MyEvent) {
-    print("Event received: " + event);
+    log.info("Event received: " + event);
   }
 }
 let x2 = new X();
 ```
 
-An example of an API in the Wing SDK that accepts an event handler is `Bucket.on_upload`.
-When the method is called, cloud infrastructure is provisioned to invoke the event handler's `handle` method whenever an object is added to the bucket.
+In the example with `bucket.on_upload` from earlier this section, when the method is called, cloud infrastructure is automatically added to invoke the event handler's `handle` method whenever an object is added to the bucket.
 
 Users can define their own event-based APIs by making use of the `Topic` resource.
-For example, suppose I want to extend `cloud.Counter` so that it triggers an event whenever a threshold is reached or exceeded:
+For example, suppose you want to extend `cloud.Counter` so that it triggers an event whenever a threshold is reached or exceeded:
 
 ```ts
 // wing
 
 let counter = new MyCounter(threshold: 10);
 counter.on_threshold(inflight (event: ThresholdReachedEvent) => {
-  print("Threshold reached: " + event.value);
+  log.info("Threshold reached: " + event.value);
 });
 ```
 
-I can implement this by defining a `CounterWithThreshold` resource with an `on_threshold` method, and use a `Topic` to publish events:
+You can implement this by defining a `CounterWithThreshold` resource with an `on_threshold` method, and use a `Topic` to publish events:
 
 ```ts
 // wing
