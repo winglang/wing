@@ -93,6 +93,7 @@ export interface ILoggerClient {
 
 /**
  * List of inflight operations available for `Logger`.
+ * @internal
  */
 export enum LoggerInflightMethods {
   /** `Logger.print` */

@@ -68,7 +68,8 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -86,7 +87,8 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -101,7 +103,14 @@ Object {
             },
             "Processor": Object {
               "attributes": Object {
-                "wing:resource:connections": Array [],
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
                 "wing:resource:stateful": false,
               },
               "constructInfo": Object {
@@ -116,6 +125,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
@@ -134,21 +144,31 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Counter",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Bucket",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Processor",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
                     "resource": "root/WingLogger",
                   },
                   Object {
                     "direction": "inbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue",
                   },
@@ -197,7 +217,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
               },
             ],

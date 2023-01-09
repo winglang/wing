@@ -6,7 +6,6 @@ import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
 import { Function } from "./function";
-import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Queue`.
@@ -73,15 +72,10 @@ export class Queue extends cloud.QueueBase {
       batchSize: props.batchSize ?? 1,
     });
 
-    this.addConnection({
-      direction: core.Direction.OUTBOUND,
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
       relationship: "on_message",
-      resource: fn,
-    });
-    fn.addConnection({
-      direction: core.Direction.INBOUND,
-      relationship: "on_message",
-      resource: this,
     });
 
     return fn;
@@ -111,7 +105,6 @@ export class Queue extends cloud.QueueBase {
     // it may not be resolved until deployment time.
     host.addEnvironment(env, this.queue.url);
 
-    addConnections(this, host);
     super._bind(host, ops);
   }
 

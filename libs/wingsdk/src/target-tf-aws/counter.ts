@@ -3,7 +3,6 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
-import { addConnections } from "./util";
 
 export const HASH_KEY = "id";
 
@@ -40,7 +39,7 @@ export class Counter extends cloud.CounterBase {
       });
     }
 
-    if (ops.includes(cloud.CounterInflightMethods.INC)) {
+    if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
       host.addPolicyStatements({
         effect: "Allow",
         action: ["dynamodb:GetItem"],
@@ -50,7 +49,6 @@ export class Counter extends cloud.CounterBase {
 
     host.addEnvironment(this.envName(), this.table.name);
 
-    addConnections(this, host);
     super._bind(host, ops);
   }
 
