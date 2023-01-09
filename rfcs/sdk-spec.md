@@ -153,7 +153,8 @@ resource MyCounter extends cloud.Counter {
     return value;
   }
 
-  on_threshold(handler: (event: ThresholdReachedEvent) => void): EventSubscription {
+  // or: on_threshold(handler: EventHandler<ThresholdReachedEvent>)
+  on_threshold(handler: inflight (event: ThresholdReachedEvent) => void): void {
     return this._topic.on_event(handler);
   }
 }
