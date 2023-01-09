@@ -158,6 +158,7 @@ struct ThresholdReachedEvent {
 * Secret (P2) - a secret value, similar to AWS Secrets Manager, Azure Key Vault, GCP Secret Manager
 * Stream (P2) - a stream of events, similar to AWS Kinesis, Azure Event Hubs, GCP Pub/Sub and Dataflow
 * OnDeploy (P2) - a variation of Function that runs every time the app is deployed
+* GraphQLApi (P2) - a GraphQL API, similar to AWS AppSync
 
 ### Resources planned as third party libraries
 
