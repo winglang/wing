@@ -1699,7 +1699,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					Type::String => self.get_property_from_class(
 						env
-							.lookup_nested_str(WINGSDK_STRING, None)
+							.lookup_nested_str(WINGSDK_STRING, false, None)
 							.unwrap()
 							.as_type()
 							.unwrap()
