@@ -40,10 +40,10 @@ exports[`function with a bucket binding 2`] = `
         \\"environment\\": {
           \\"variables\\": {
             \\"BUCKET_NAME_1357ca3a\\": \\"\${aws_s3_bucket.root_Bucket_966015A6.bucket}\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6d7cbe50c86bbedd1463b05db52425574b5\\"
           }
         },
-        \\"function_name\\": \\"Function\\",
+        \\"function_name\\": \\"Function-c852aba6d7cbe50c86bbedd1463b05db52425574b5\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
@@ -52,7 +52,9 @@ exports[`function with a bucket binding 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Bucket_966015A6\\": {},
+      \\"root_Bucket_966015A6\\": {
+        \\"bucket\\": \\"bucket-c88fdc5f491a51d8438235500a4821fbc31357ca3a\\"
+      },
       \\"root_Function_Bucket_8CDD903C\\": {}
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -155,10 +157,10 @@ exports[`function with a function binding 3`] = `
       \\"root_Function1_F6563EFC\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function1\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function1-c87c16f17ac2410fd95d8265ad19ce34bf50735b21\\"
           }
         },
-        \\"function_name\\": \\"Function1\\",
+        \\"function_name\\": \\"Function1-c87c16f17ac2410fd95d8265ad19ce34bf50735b21\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
@@ -169,10 +171,10 @@ exports[`function with a function binding 3`] = `
         \\"environment\\": {
           \\"variables\\": {
             \\"FUNCTION_NAME_50735b21\\": \\"\${aws_lambda_function.root_Function1_F6563EFC.arn}\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function2\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function2-c827e998b39ec43eb64f711094891520312121954a\\"
           }
         },
-        \\"function_name\\": \\"Function2\\",
+        \\"function_name\\": \\"Function2-c827e998b39ec43eb64f711094891520312121954a\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
@@ -273,10 +275,10 @@ exports[`function with a queue binding 3`] = `
         \\"environment\\": {
           \\"variables\\": {
             \\"QUEUE_URL_1cfcc997\\": \\"\${aws_sqs_queue.root_Queue_7193B145.url}\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6d7cbe50c86bbedd1463b05db52425574b5\\"
           }
         },
-        \\"function_name\\": \\"Function\\",
+        \\"function_name\\": \\"Function-c852aba6d7cbe50c86bbedd1463b05db52425574b5\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
@@ -286,10 +288,10 @@ exports[`function with a queue binding 3`] = `
       \\"root_QueueOnMessage5cb7e554_EEFD94BA\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-5cb7e554\\"
+            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-5cb7e554-c8452af16e4b8917910c28db307340c2a1b97b0\\"
           }
         },
-        \\"function_name\\": \\"Queue-OnMessage-5cb7e554\\",
+        \\"function_name\\": \\"Queue-OnMessage-5cb7e554-c8452af16e4b8917910c28db307340c2a1b97b0\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_QueueOnMessage5cb7e554_IamRole_6907C7E4.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
@@ -314,7 +316,9 @@ exports[`function with a queue binding 3`] = `
       }
     },
     \\"aws_sqs_queue\\": {
-      \\"root_Queue_7193B145\\": {}
+      \\"root_Queue_7193B145\\": {
+        \\"name\\": \\"Queue-c822c726025a0eb047e1929d0c9eb4487b1cfcc997\\"
+      }
     }
   }
 }"
@@ -355,10 +359,10 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
       \\"root_Function1_F6563EFC\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function1\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function1-c87c16f17ac2410fd95d8265ad19ce34bf50735b21\\"
           }
         },
-        \\"function_name\\": \\"Function1\\",
+        \\"function_name\\": \\"Function1-c87c16f17ac2410fd95d8265ad19ce34bf50735b21\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
@@ -368,10 +372,10 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
       \\"root_Function2_A135D90B\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function2\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function2-c827e998b39ec43eb64f711094891520312121954a\\"
           }
         },
-        \\"function_name\\": \\"Function2\\",
+        \\"function_name\\": \\"Function2-c827e998b39ec43eb64f711094891520312121954a\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",

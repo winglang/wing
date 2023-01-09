@@ -1,3 +1,4 @@
+import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
@@ -85,4 +86,20 @@ test("topic with multiple subscribers", () => {
   expect(tfResourcesOfCount(output, "aws_s3_bucket")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_s3_object")).toEqual(2);
   expect(tfResourcesOfCount(output, "aws_sns_topic_subscription")).toEqual(2);
+});
+
+test("topic name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const topic = new cloud.Topic(app, "TheSpectacularTopic");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_sns_topic", {
+      name: `TheSpectacularTopic-${topic.node.addr}`,
+    })
+  );
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

@@ -1,3 +1,4 @@
+import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { mkdtemp } from "../../src/util";
@@ -31,6 +32,22 @@ test("bucket is public", () => {
     "aws_s3_bucket_policy", // resource policy to grant read access to anyone
     "aws_s3_bucket_server_side_encryption_configuration", // server side encryption
   ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("bucket name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = new cloud.Bucket(app, "the_uncanny_bucket");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
+      bucket: `the_uncanny_bucket-${bucket.node.addr}`,
+    })
+  );
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

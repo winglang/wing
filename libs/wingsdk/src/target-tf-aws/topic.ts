@@ -6,6 +6,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import { TopicName } from "../utils/aws/topic.name";
 import { Function } from "./function";
 
 /**
@@ -19,7 +20,11 @@ export class Topic extends cloud.TopicBase {
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
 
-    this.topic = new SnsTopic(this, "Default", {});
+    const topicName = TopicName.of(this);
+
+    this.topic = new SnsTopic(this, "Default", {
+      name: topicName,
+    });
   }
 
   public onMessage(

@@ -11,6 +11,7 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { FunctionName } from "../utils/aws/function.name";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -114,9 +115,11 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
+    const functionName = FunctionName.of(this);
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: this.sanitizeFunctionName(this.node.id),
+      functionName: functionName,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
@@ -130,17 +133,7 @@ export class Function extends cloud.FunctionBase {
     this.arn = this.function.arn;
 
     // terraform rejects templates with zero environment variables
-    this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
-  }
-
-  /**
-   * Temporary work around to use node.id in function name.
-   * Valid lambda naming: https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-FunctionName
-   *
-   * Should be deprecated by https://github.com/winglang/wing/discussions/861 (Name Generator)
-   */
-  private sanitizeFunctionName(name: string): string {
-    return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
+    this.addEnvironment("WING_FUNCTION_NAME", functionName);
   }
 
   /** @internal */

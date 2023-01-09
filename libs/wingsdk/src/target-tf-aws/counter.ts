@@ -2,6 +2,7 @@ import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { CounterName } from "../utils/aws/counter.name";
 import { Function } from "./function";
 
 export const HASH_KEY = "id";
@@ -17,8 +18,10 @@ export class Counter extends cloud.CounterBase {
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
 
+    const counterName = CounterName.of(this);
+
     this.table = new DynamodbTable(this, "Default", {
-      name: `wingsdk-counter-${this.node.addr}`,
+      name: counterName,
       attribute: [{ name: HASH_KEY, type: "S" }],
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",

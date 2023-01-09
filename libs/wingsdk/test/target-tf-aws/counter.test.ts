@@ -1,3 +1,4 @@
+import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
@@ -80,6 +81,8 @@ test("inc() policy statement", () => {
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("peek() policy statement", () => {
@@ -103,4 +106,22 @@ test("peek() policy statement", () => {
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:GetItem");
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("counter name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const counter = new cloud.Counter(app, "TheAmazingCounter");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
+      name: `wingsdk-counter-TheAmazingCounter-${counter.node.addr}`,
+    })
+  );
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

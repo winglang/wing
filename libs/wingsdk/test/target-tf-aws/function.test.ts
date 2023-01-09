@@ -49,3 +49,19 @@ test("basic function with environment variables", () => {
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
+
+test("function name", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const func = new cloud.Function(app, "TheMightyFunction", inflight);
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      function_name: `TheMightyFunction-${func.node.addr}`,
+    })
+  );
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
