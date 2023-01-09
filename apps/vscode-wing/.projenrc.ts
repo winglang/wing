@@ -63,10 +63,10 @@ vscodeIgnore.addPatterns(
   "!resources/",
   "!syntaxes/",
   "!language-configuration.json",
-  "!LICENSE",
-  "!node_modules/@winglang/wingsdk/package.json",
-  "!node_modules/@winglang/wingsdk/.jsii"
+  "!LICENSE"
 );
+project.addGitIgnore("resources/wingsdk/");
+project.addGitIgnore("resources/native/");
 
 const contributes: VSCodeExtensionContributions = {
   languages: [

@@ -67,9 +67,7 @@ async function startLanguageServer(context: ExtensionContext) {
     execSync(`chmod +x ${serverPath}`);
   }
 
-  const wingsdkManifestRoot = dirname(
-    require.resolve("@winglang/wingsdk/.jsii")
-  );
+  const wingsdkManifestRoot = context.asAbsolutePath("resources/wingsdk");
 
   const run: Executable = {
     command: serverPath,
