@@ -579,32 +579,32 @@ resource Api {
   /**
    * Run an inflight whenever a GET request is made to the specified route.
    */
-  on_get(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
+  get(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnGetProps?): void;
 
   /**
    * Run an inflight whenever a POST request is made to the specified route.
    */
-  on_post(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
+  post(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPostProps?): void;
 
   /**
    * Run an inflight whenever a PUT request is made to the specified route.
    */
-  on_put(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
+  put(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPutProps?): void;
 
   /**
    * Run an inflight whenever a DELETE request is made to the specified route.
    */
-  on_delete(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
+  delete(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnDeleteProps?): void;
 
   /**
    * Run an inflight whenever a PATCH request is made to the specified route.
    */
-  on_patch(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
+  patch(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnPatchProps?): void;
 
   /**
    * Run an inflight whenever any request is made to the specified route.
    */
-  on_request(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnRequestProps?): void;
+  add_route(route: str, fn: inflight (req: ApiRequest) => ApiResponse, opts: cloud.ApiOnRequestProps?): void;
 
   /**
    * Make a request to the specified route. Throws if the route hasn't been
