@@ -553,8 +553,15 @@ It is useful for hosting static content, such as a blog or a single-page applica
 struct WebsiteProps {
   /**
    * Local path to the website's static files.
+   * @example "./dist"
    */
   path: str;
+
+  /**
+   * The website's domain name.
+   * @example "example.com"
+   */
+  domain: str;
 }
 
 resource Website {
