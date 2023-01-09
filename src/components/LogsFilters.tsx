@@ -8,7 +8,7 @@ import { LogLevel } from "../../electron/main/consoleLogger.js";
 import { Button } from "../design-system/Button.js";
 
 const logLevels = ["verbose", "info", "warn", "error"] as const;
-const logLevelNames: Record<typeof logLevels[number], string> = {
+const logLevelNames: Record<(typeof logLevels)[number], string> = {
   verbose: "Verbose",
   info: "Info",
   warn: "Warnings",
