@@ -48,6 +48,8 @@ The `Iterator` object also implements the [async iterator protocol in JavaScript
 ### Event handlers
 
 Some resources can automatically emit "events" when their state changes.
+These events are "fire-and-forget" notifications which may not be delivered in order, and which don't expect a response to be sent back.
+
 Such events can be handled by registering an event handler with the resource.
 An event handler is any resource that implements the `EventHandler<T>` interface, which contains a single method named `handle` that accepts an event of type `T`:
 
@@ -61,36 +63,48 @@ interface EventHandler<T> {
 
 > We could also decide the should be named `handle_event` or `invoke` or `run` or `call` or something else.
 
-An inflight closure that accepts a single argument of type `T` is also considered an event handler, as the compiler will automatically convert it into a resource that implements the `EventHandler<T>` interface.
+An inflight closure that accepts a single argument of type `T` is also considered an event handler, as the compiler will automatically convert it into a resource with a single inflight method that implements the `EventHandler<T>` interface.
+For example, the following two definitions are equivalent:
 
-As an example, a `Bucket` resource has an `on_upload` method that accepts an event handler.
-When the method is called with an event handler, cloud infrastructure is provisioned to call the resource's `handle` method whenever an object is added to the bucket.
+```ts
+// wing
+let x1 = inflight (event: MyEvent) => {
+  print("Event received: " + event);
+};
 
-Several resources in the Wing SDK provide methods for registering event handlers.
-Users define their own observable resources by making use of the `Topic` resource.
+resource X implements EventHandler<MyEvent> {
+  inflight handle(event: MyEvent) {
+    print("Event received: " + event);
+  }
+}
+let x2 = new X();
+```
 
+An example of an API in the Wing SDK that accepts an event handler is `Bucket.on_upload`.
+When the method is called, cloud infrastructure is provisioned to invoke the event handler's `handle` method whenever an object is added to the bucket.
+
+Users can define their own event-based APIs by making use of the `Topic` resource.
 For example, suppose I want to extend `cloud.Counter` so that it triggers an event whenever a threshold is reached or exceeded:
 
 ```ts
 // wing
 
-let counter = new CounterWithThreshold(threshold: 10);
+let counter = new MyCounter(threshold: 10);
 counter.on_threshold(inflight (event: ThresholdReachedEvent) => {
   print("Threshold reached: " + event.value);
 });
 ```
-
 
 I can implement this by defining a `CounterWithThreshold` resource with an `on_threshold` method, and use a `Topic` to publish events:
 
 ```ts
 // wing
 
-struct CounterWithThresholdProps extends cloud.CounterProps {
+struct MyCounterProps extends cloud.CounterProps {
   threshold: num;
 }
 
-resource CounterWithThreshold extends cloud.Counter {
+resource MyCounter extends cloud.Counter {
   _threshold: num;
   _topic: cloud.Topic;
 
