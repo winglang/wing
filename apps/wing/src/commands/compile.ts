@@ -27,6 +27,7 @@ const WINGC_PREFLIGHT = "preflight.js";
  */
 export enum Target {
   TF_AWS = "tf-aws",
+  TF_AZURE = "tf-azure",
   SIM = "sim",
 }
 
