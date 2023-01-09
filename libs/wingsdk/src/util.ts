@@ -81,7 +81,7 @@ export function sanitizeValue(obj: any, options: SanitizeOptions = {}): any {
   return newObj;
 }
 
-export function directorySnapshot(rooti: string) {
+export function directorySnapshot(initialRoot: string) {
   const snapshot: Record<string, any> = {};
 
   const visit = (root: string, subdir: string, prefix = "") => {
@@ -112,7 +112,7 @@ export function directorySnapshot(rooti: string) {
     }
   };
 
-  visit(rooti, ".");
+  visit(initialRoot, ".");
 
   return snapshot;
 }
