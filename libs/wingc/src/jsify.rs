@@ -8,7 +8,7 @@ use crate::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
 		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
-	utilities::snake_case_to_camel_case,
+	utilities::snake_case_to_camel_case, capture::CaptureKind,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -602,25 +602,38 @@ impl JSifier {
 		}
 		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
-		let mut bindings = vec![];
+		let mut resource_bindings = vec![];
+		let mut data_bindings = vec![];
 		let mut capture_names = vec![];
-		for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
-			capture_names.push(obj.clone());
-			bindings.push(format!(
-				"{}: {},",
-				obj,
-				Self::render_block([
-					format!("resource: {},", obj),
-					format!(
-						"ops: [{}]",
-						cap_def
-							.iter()
-							.map(|x| format!("\"{}\"", x.method))
-							.collect::<Vec<_>>()
-							.join(",")
-					)
-				])
-			));
+
+		for (symbol, cap_kind) in func_def.captures.borrow().as_ref().unwrap().iter() {
+			capture_names.push(symbol.clone());
+			let mut methods: Vec<String> = vec![];
+
+			for kind in cap_kind.iter() {
+				match kind {
+					CaptureKind::ImmutableData => {
+						data_bindings.push(format!(
+							"{}: {},",
+							symbol,
+							symbol,
+						));
+					},
+					CaptureKind::Resource(def) => {
+						methods.push(def.method.clone());
+					}
+				}
+			}
+
+			if ! methods.is_empty() {
+				resource_bindings.push(format!(
+					"{}: {},",
+					symbol,
+					Self::render_block([
+						format!("resource: {},", symbol),
+						format!("ops: [{}]", methods.join(","))
+					])));
+			}
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
@@ -635,11 +648,19 @@ impl JSifier {
 				"code: {}.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \"{}\")),",
 				STDLIB, &relative_file_path
 			),
-			if !bindings.is_empty() {
-				format!("bindings: {}", Self::render_block(&bindings))
-			} else {
-				"".to_string()
-			},
+			format!("bindings: {}", Self::render_block([
+				if !resource_bindings.is_empty() {
+					format!("resources: {}", Self::render_block(&resource_bindings))
+				} else {
+					"".to_string()
+				},
+
+				if !data_bindings.is_empty() {
+					format!("data: {}", Self::render_block(&data_bindings))
+				} else {
+					"".to_string()
+				},
+			])),
 		]);
 		let short_hash = procid.clone().split_off(procid.len() - 8);
 		let inflight_obj_id = format!("{}{}", INFLIGHT_OBJ_PREFIX, short_hash);

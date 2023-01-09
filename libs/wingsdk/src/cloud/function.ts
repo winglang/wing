@@ -107,7 +107,6 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     const outlines = readFileSync(outfile, "utf-8").split("\n");
     const isNotLineComment = (line: string) => !line.startsWith("//");
     writeFileSync(outfile, outlines.filter(isNotLineComment).join("\n"));
-    writeFileSync(outfile, outlines.filter(isLineComment).join("\n"));
 
     this.assetPath = outfile;
   }

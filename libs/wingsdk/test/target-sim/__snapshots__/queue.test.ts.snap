@@ -148,7 +148,7 @@ __export(queue_onmessage_inflight_exports, {
 });
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
-  \\"../../home/runner/work/wing/wing/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+  \\"../../../../../../../Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
     \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
@@ -406,7 +406,7 @@ __export(queue_onmessage_inflight_exports, {
 });
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
-  \\"../../home/runner/work/wing/wing/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+  \\"../../../../../../../Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
     \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {
@@ -659,7 +659,7 @@ __export(queue_onmessage_inflight_exports, {
 });
 var QueueOnMessageHandlerClient;
 var init_queue_onmessage_inflight = __esm({
-  \\"../../home/runner/work/wing/wing/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+  \\"../../../../../../../Users/eladb/code/wing2/libs/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
     \\"use strict\\";
     QueueOnMessageHandlerClient = class {
       constructor({ handler }) {

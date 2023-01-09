@@ -21,9 +21,8 @@ function makeCaptureTest(options: CaptureTest) {
           "async handle() { return JSON.stringify(" + options.out + "); }"
         ),
         bindings: {
-          my_capture: {
-            resource: options.in,
-            ops: [],
+          data: {
+            my_capture: options.in,
           },
         },
       })

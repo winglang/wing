@@ -17,10 +17,16 @@ pub struct CaptureDef {
 
 struct Capture {
 	pub object: Symbol,
-	pub def: CaptureDef,
+	pub kind: CaptureKind,
 }
 
-pub type Captures = BTreeMap<String, BTreeSet<CaptureDef>>;
+#[derive(Debug, PartialEq, Eq, Hash, Ord, PartialOrd)]
+pub enum CaptureKind {
+	Resource(CaptureDef),
+	ImmutableData,
+}
+
+pub type Captures = BTreeMap<String, BTreeSet<CaptureKind>>;
 
 fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 	let mut captures: Captures = BTreeMap::new();
@@ -28,7 +34,7 @@ fn collect_captures(capture_list: Vec<Capture>) -> Captures {
 		captures
 			.entry(capture.object.name)
 			.or_insert(BTreeSet::new())
-			.insert(capture.def);
+			.insert(capture.kind);
 	}
 	captures
 }
@@ -233,7 +239,6 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 					}
 				};
 
-
 				if let (Some(resource), Phase::Preflight) = (t.as_resource(), f) {
 					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
 					//   1. explicit capture definitions
@@ -244,14 +249,14 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
 							.map(|(name, _)| Capture {
 								object: symbol.clone(),
-								def: CaptureDef { method: name.clone() },
+								kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
 							})
 							.collect::<Vec<Capture>>(),
 					);
 				} else if t.is_immutable_collection() || t.is_primitive() {
 					res.push(Capture {
 						object: symbol.clone(),
-						def: CaptureDef { method: "*".to_owned() },
+						kind: CaptureKind::ImmutableData,
 					});
 				} else {
 					diagnostics.push(Diagnostic {

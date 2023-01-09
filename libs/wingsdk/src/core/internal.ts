@@ -1,13 +1,23 @@
 import { IConstruct } from "constructs";
-import { Code, InflightBinding, NodeJsCode } from "./inflight";
+import { Code, InflightBindings, NodeJsCode } from "./inflight";
 import { Resource } from "./resource";
 
 export function makeHandler(
   scope: IConstruct,
   id: string,
   code: string,
-  bindings: { [key: string]: InflightBinding } = {}
+  bindings: InflightBindings = {}
 ): Resource {
+  const clients: Record<string, Code> = {};
+
+  for (const [k, v] of Object.entries(bindings.resources ?? {})) {
+    clients[k] = v.resource._toInflight();
+  }
+
+  for (const [k, v] of Object.entries(bindings.data ?? {})) {
+    clients[k] = serializeImmutableData(v);
+  }
+
   // implements IFunctionHandler
   class Handler extends Resource {
     public readonly stateful = false;
@@ -16,18 +26,18 @@ export function makeHandler(
       super(scope, id);
 
       // pretend as if we have a field for each binding
-      for (const [name, resource] of Object.entries(bindings)) {
-        (this as any)[name] = resource.resource;
+      for (const [field, resource] of Object.entries(
+        bindings.resources ?? {}
+      )) {
+        (this as any)[field] = resource.resource;
+      }
+
+      for (const [field, value] of Object.entries(bindings.data ?? {})) {
+        (this as any)[field] = value;
       }
     }
 
     public _toInflight(): NodeJsCode {
-      const clients: Record<string, Code> = {};
-
-      // get an inflight client for each resource we bind to
-      for (const [k, v] of Object.entries(bindings)) {
-        clients[k] = toInflight(v.resource);
-      }
       return NodeJsCode.fromInline(
         `new ((function(){
 return class Handler {
@@ -47,10 +57,11 @@ ${Object.entries(clients)
     }
   }
 
+  // only annotate resource bindings because there's no binding to do for data
   const annotation = Object.fromEntries(
-    Object.entries(bindings ?? {}).map(([name, binding]) => [
+    Object.entries(bindings.resources ?? {}).map(([name, def]) => [
       "this." + name,
-      { ops: binding.ops },
+      { ops: def.ops },
     ])
   );
   Handler._annotateInflight("handle", annotation);
@@ -58,19 +69,13 @@ ${Object.entries(clients)
   return new Handler();
 }
 
-function toInflight(obj: any): Code {
-  // if the object has a "_toInflight" method, use it
-  if (typeof obj === "object" && "_toInflight" in obj) {
-    return obj._toInflight();
-  }
-
+function serializeImmutableData(obj: any): Code {
   // if this is a Set, we need to convert it to an array and reconstruct on the other side
   if (typeof obj === "object" && (obj as any) instanceof Set) {
     return NodeJsCode.fromInline(`new Set(${JSON.stringify(Array.from(obj))})`);
   }
 
-  // otherwise, just JSON.stringify() it and reconstruct on the other side
-  //
   // NOTE: this won't work if `obj` is not serializable, but this is not the ownership of the sdk
+  // otherwise, just JSON.stringify() it and reconstruct on the other side
   return NodeJsCode.fromInline(JSON.stringify(obj));
 }

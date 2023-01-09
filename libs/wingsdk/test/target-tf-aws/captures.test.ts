@@ -13,9 +13,11 @@ test("function with a bucket binding", () => {
     "Handler",
     `async handle(event) { await this.bucket.put("hello.txt", event); }`,
     {
-      bucket: {
-        resource: bucket,
-        ops: [cloud.BucketInflightMethods.PUT],
+      resources: {
+        bucket: {
+          resource: bucket,
+          ops: [cloud.BucketInflightMethods.PUT],
+        },
       },
     }
   );
@@ -55,9 +57,11 @@ test("function with a function binding", () => {
       await this.function.invoke(JSON.stringify({ hello: "world" }));
     }`,
     {
-      function: {
-        resource: fn1,
-        ops: [cloud.FunctionInflightMethods.INVOKE],
+      resources: {
+        function: {
+          resource: fn1,
+          ops: [cloud.FunctionInflightMethods.INVOKE],
+        },
       },
     }
   );
@@ -113,9 +117,11 @@ test("function with a queue binding", () => {
     "Pusher",
     `async handle(event) { await this.queue.push("info"); }`,
     {
-      queue: {
-        resource: queue,
-        ops: [cloud.QueueInflightMethods.PUSH],
+      resources: {
+        queue: {
+          resource: queue,
+          ops: [cloud.QueueInflightMethods.PUSH],
+        },
       },
     }
   );
