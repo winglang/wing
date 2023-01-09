@@ -172,7 +172,6 @@ struct ThresholdReachedEvent {
 * Function (P1) - a serverless function, similar to AWS Lambda, Azure Functions, GCP Cloud Functions
 * Topic (P1) - a pub/sub topic, similar to AWS SNS, Azure Event Grid, GCP Pub/Sub
 * Logger (P1) - a log aggregator
-* Tracer (P1) - a distributed tracing system, similar to AWS X-Ray, Azure Application Insights, GCP Stackdriver Trace
 * Counter (P1) - an atomic counter
 * Schedule (P1) - a cron job / scheduled task trigger
 * Website (P1) - a CDN-backed static website
