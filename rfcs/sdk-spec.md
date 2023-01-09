@@ -16,7 +16,7 @@ It's okay to make it possible to do the wrong thing, but it should be hard to do
 
 - **Cloud and target agnostic**: our APIs and their documentation should not have any assumptions about where resources are being deployed.
 When possible, prefer mental models and terminology that are natural for operating with data structures for code running on your own machine (eg., choose "push" and "pop" over "send" and "receive").
-Avoid APIs and options that may only be available on one or two major cloud providers.
+Avoid APIs and options that may only be supported on one or two major cloud providers.
 In the case that an essential option or method is not available on a given cloud provider, then the resource's concrete implementation should throw when the option or method is used.
 
 - **Open**: The Wing SDK is an extensible framework.
@@ -24,12 +24,12 @@ It is also open source, and designed to be easy to contribute to.
 It heavily relies on interfaces to allow developers to extend its behavior and provide their own custom implementations targeting new cloud providers, or allow more customized behavior.
 
 - **Deterministic**: The same code should always produce the same result.
-Any non-determinism should be minimized and scoped to sources provided by the user (e.g. by letting the user specify input files or environment variables).
-Non-determistic information should also ideally be managed by the provisioning engine's (for example, random IDs can be generated and managed with Terraform state).
+Any non-determinism should be minimized and scoped to inputs provided by the user (e.g. by letting the user provide file sources or environment variables).
+Non-determistic information can also be managed by the provisioning engine (for example, in Terraform state) in the form of late-bound values.
 
 - **Built with jsii**: The Wing SDK is designed first and foremost for the Wing language, but it is compiled with jsii to allow the resources to be created as CDK constructs in all jsii-supported programming languages. 
 jsii poses restrictions on language features that cannot be idiomatically represented in target languages, and encourages good practices for object-oriented design.
-Features that are specific to Wing (such as inflight functions) may not be available in other jsii languages.
+Features that are specific to Wing (such as inflight functions) may not be supported in other jsii languages.
 
 ## Concepts used throughout the SDK
 
