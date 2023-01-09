@@ -166,6 +166,7 @@ struct ThresholdReachedEvent {
 * Redis
 * MongoDB
 * GithubRepo
+* Authorization/authentication related resources
 
 ## Bucket
 
