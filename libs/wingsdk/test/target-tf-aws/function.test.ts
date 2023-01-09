@@ -61,7 +61,7 @@ test("function name", () => {
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
       function_name: `TheMightyFunction-${func.node.addr}`,
     })
-  );
+  ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

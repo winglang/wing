@@ -5,7 +5,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { QueueName } from "../utils/aws/queue.name";
+import { ResourceNames, ResourceType } from "../utils/resource-names";
 import { Function } from "./function";
 
 /**
@@ -21,7 +21,7 @@ export class Queue extends cloud.QueueBase {
 
     this.queue = new SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
-      name: QueueName.of(this),
+      name: ResourceNames.of(this, ResourceType.AWS_QUEUE),
     });
 
     if ((props.initialMessages ?? []).length) {

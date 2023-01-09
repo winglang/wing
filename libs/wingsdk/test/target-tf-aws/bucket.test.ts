@@ -39,15 +39,17 @@ test("bucket is public", () => {
 test("bucket name", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = new cloud.Bucket(app, "the_uncanny_bucket");
+  const bucket = new cloud.Bucket(app, "TheUncannyBucket");
   const output = app.synth();
+
+  console.log(output);
 
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
-      bucket: `the_uncanny_bucket-${bucket.node.addr}`,
+      bucket: `theuncannybucket-${bucket.node.addr}`,
     })
-  );
+  ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

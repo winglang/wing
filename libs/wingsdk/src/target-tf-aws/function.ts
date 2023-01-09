@@ -11,7 +11,7 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { FunctionName } from "../utils/aws/function.name";
+import { ResourceNames, ResourceType } from "../utils/resource-names";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -115,7 +115,7 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
-    const functionName = FunctionName.of(this);
+    const functionName = ResourceNames.of(this, ResourceType.AWS_FUNCTION);
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {

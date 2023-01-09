@@ -6,7 +6,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { TopicName } from "../utils/aws/topic.name";
+import { ResourceNames, ResourceType } from "../utils/resource-names";
 import { Function } from "./function";
 
 /**
@@ -21,7 +21,7 @@ export class Topic extends cloud.TopicBase {
     super(scope, id, props);
 
     this.topic = new SnsTopic(this, "Default", {
-      name: TopicName.of(this),
+      name: ResourceNames.of(this, ResourceType.AWS_TOPIC),
     });
   }
 

@@ -121,7 +121,7 @@ test("counter name", () => {
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
       name: `wingsdk-counter-TheAmazingCounter-${counter.node.addr}`,
     })
-  );
+  ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

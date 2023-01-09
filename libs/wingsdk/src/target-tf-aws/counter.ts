@@ -2,7 +2,7 @@ import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { CounterName } from "../utils/aws/counter.name";
+import { ResourceNames, ResourceType } from "../utils/resource-names";
 import { Function } from "./function";
 
 export const HASH_KEY = "id";
@@ -19,7 +19,7 @@ export class Counter extends cloud.CounterBase {
     super(scope, id, props);
 
     this.table = new DynamodbTable(this, "Default", {
-      name: CounterName.of(this),
+      name: ResourceNames.of(this, ResourceType.AWS_COUNTER),
       attribute: [{ name: HASH_KEY, type: "S" }],
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",

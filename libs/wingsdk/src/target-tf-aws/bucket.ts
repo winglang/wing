@@ -5,7 +5,7 @@ import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { BucketName } from "../utils/aws/bucket.name";
+import { ResourceNames, ResourceType } from "../utils/resource-names";
 import { Function } from "./function";
 
 /**
@@ -23,7 +23,7 @@ export class Bucket extends cloud.BucketBase {
     this.public = props.public ?? false;
 
     this.bucket = new S3Bucket(this, "Default", {
-      bucket: BucketName.of(this),
+      bucket: ResourceNames.of(this, ResourceType.AWS_BUCKET),
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
