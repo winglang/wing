@@ -47,18 +47,21 @@ export interface ConstructTreeNode {
 export interface DisplayInfo {
   /**
    * Title of the resource.
+   * @default - The type and/or identifier of the resource
    */
-  readonly title: string;
+  readonly title?: string;
 
   /**
    * Description of the resource.
+   * @default - No description
    */
-  readonly description: string;
+  readonly description?: string;
 
   /**
    * Whether the resource should be hidden from the UI.
+   * @default false (visible)
    */
-  readonly hidden: boolean;
+  readonly hidden?: boolean;
 }
 
 /**
