@@ -3,25 +3,26 @@
 exports[`bucket is public 1`] = `
 "{
   \\"resource\\": {
-    \\"aws_s3_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {}
-    },
-    \\"aws_s3_bucket_policy\\": {
-      \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
+    \\"azurerm_resource_group\\": {
+      \\"root_mybucket_ResourceGroup_C1D7AF27\\": {
+        \\"location\\": \\"East US\\",
+        \\"name\\": \\"mybucket\\"
       }
     },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_mybucket_Encryption_AA43F7E8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
+    \\"azurerm_storage_account\\": {
+      \\"root_mybucket_StorageAccount_A0150B8A\\": {
+        \\"account_replication_type\\": \\"LRS\\",
+        \\"account_tier\\": \\"Standard\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.location}\\",
+        \\"name\\": \\"mybucketc8045fccc85a7ef4\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.name}\\"
+      }
+    },
+    \\"azurerm_storage_container\\": {
+      \\"root_mybucket_Bucket_10512A98\\": {
+        \\"container_access_type\\": \\"public\\",
+        \\"name\\": \\"mybucketc8045fccc85a7ef4\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\"
       }
     }
   }
@@ -46,13 +47,13 @@ Object {
             "id": "WingLogger",
             "path": "root/WingLogger",
           },
-          "aws": Object {
+          "azure": Object {
             "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
+              "version": "3.0.16",
             },
-            "id": "aws",
-            "path": "root/aws",
+            "id": "azure",
+            "path": "root/azure",
           },
           "backend": Object {
             "constructInfo": Object {
@@ -68,29 +69,29 @@ Object {
               "wing:resource:stateful": true,
             },
             "children": Object {
-              "Default": Object {
+              "Bucket": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
+                  "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
+                  "version": "3.0.16",
                 },
-                "id": "Default",
-                "path": "root/my_bucket/Default",
+                "id": "Bucket",
+                "path": "root/my_bucket/Bucket",
               },
-              "Encryption": Object {
+              "ResourceGroup": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
+                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                  "version": "3.0.16",
                 },
-                "id": "Encryption",
-                "path": "root/my_bucket/Encryption",
+                "id": "ResourceGroup",
+                "path": "root/my_bucket/ResourceGroup",
               },
-              "PublicPolicy": Object {
+              "StorageAccount": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                  "version": "10.0.12",
+                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
+                  "version": "3.0.16",
                 },
-                "id": "PublicPolicy",
-                "path": "root/my_bucket/PublicPolicy",
+                "id": "StorageAccount",
+                "path": "root/my_bucket/StorageAccount",
               },
             },
             "constructInfo": Object {
@@ -123,28 +124,26 @@ Object {
 exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
-    \\"aws_s3_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {}
-    },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
+    \\"azurerm_resource_group\\": {
+      \\"root_mybucket_ResourceGroup_C1D7AF27\\": {
+        \\"location\\": \\"East US\\",
+        \\"name\\": \\"mybucket\\"
       }
     },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_mybucket_Encryption_AA43F7E8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
+    \\"azurerm_storage_account\\": {
+      \\"root_mybucket_StorageAccount_A0150B8A\\": {
+        \\"account_replication_type\\": \\"LRS\\",
+        \\"account_tier\\": \\"Standard\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.location}\\",
+        \\"name\\": \\"mybucketc8045fccc85a7ef4\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.name}\\"
+      }
+    },
+    \\"azurerm_storage_container\\": {
+      \\"root_mybucket_Bucket_10512A98\\": {
+        \\"container_access_type\\": \\"private\\",
+        \\"name\\": \\"mybucketc8045fccc85a7ef4\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\"
       }
     }
   }
@@ -169,13 +168,13 @@ Object {
             "id": "WingLogger",
             "path": "root/WingLogger",
           },
-          "aws": Object {
+          "azure": Object {
             "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
+              "version": "3.0.16",
             },
-            "id": "aws",
-            "path": "root/aws",
+            "id": "azure",
+            "path": "root/azure",
           },
           "backend": Object {
             "constructInfo": Object {
@@ -191,29 +190,29 @@ Object {
               "wing:resource:stateful": true,
             },
             "children": Object {
-              "Default": Object {
+              "Bucket": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
+                  "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
+                  "version": "3.0.16",
                 },
-                "id": "Default",
-                "path": "root/my_bucket/Default",
+                "id": "Bucket",
+                "path": "root/my_bucket/Bucket",
               },
-              "Encryption": Object {
+              "ResourceGroup": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
+                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                  "version": "3.0.16",
                 },
-                "id": "Encryption",
-                "path": "root/my_bucket/Encryption",
+                "id": "ResourceGroup",
+                "path": "root/my_bucket/ResourceGroup",
               },
-              "PublicAccessBlock": Object {
+              "StorageAccount": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                  "version": "10.0.12",
+                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
+                  "version": "3.0.16",
                 },
-                "id": "PublicAccessBlock",
-                "path": "root/my_bucket/PublicAccessBlock",
+                "id": "StorageAccount",
+                "path": "root/my_bucket/StorageAccount",
               },
             },
             "constructInfo": Object {
