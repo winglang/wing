@@ -1,7 +1,6 @@
 import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { platform } from "os";
-import { dirname } from "path";
 import { ExtensionContext, window } from "vscode";
 import {
   Executable,
