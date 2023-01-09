@@ -66,7 +66,7 @@ export class Counter extends cloud.CounterBase {
   }
 
   /**
-   * Couter (Table) names must be between 3 and 255 characters.
+   * Counter (Table) names must be between 3 and 255 characters.
    * You can use alphanumeric characters, dot(.), dash (-), and underscores (_).
    */
   private sanitizeName(name: string): string {

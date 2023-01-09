@@ -115,11 +115,11 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
-    const functionName = this.sanitizeName(`${this.node.id}-${this.node.addr}`);
+    const name = this.sanitizeName(`${this.node.id}-${this.node.addr}`);
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: functionName,
+      functionName: name,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
@@ -133,7 +133,7 @@ export class Function extends cloud.FunctionBase {
     this.arn = this.function.arn;
 
     // terraform rejects templates with zero environment variables
-    this.addEnvironment("WING_FUNCTION_NAME", functionName);
+    this.addEnvironment("WING_FUNCTION_NAME", name);
   }
 
   /** @internal */
