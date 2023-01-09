@@ -36,11 +36,18 @@ Features that are specific to Wing (such as inflight functions) may not be suppo
 
 ### Serializable
 
+> Reqtag: `sdk:serializable`
+<span id="sdk:serializable"/>
+
 A `Serializable` is any immutable value that can be serialized and sent over the wire.
 This includes all primitive types, as well as any immutable collection types of `Serializable`s (such as `List`s and `Map`s).
-The Wing language spec does not yet support `Serializable` as a type, but until it is supported we will rely on the `str` type and provide a set of utility methods for casting to and from `str`.
+
+This RFC uses the term `Serializable` as a placeholder type in several parts of the API, but note that it may be replaced in the future with more specific types such as `Json` or `Blob` (see [this issue](https://github.com/winglang/wing/issues/185)).
 
 ### Paginated APIs
+
+> Reqtag: `sdk:pagination`
+<span id="sdk:pagination"/>
 
 Some APIs return a list of results that may be too large to fit in memory, or too large to fetch from the cloud all at once.
 In these cases, APIs can return an `Iterator` object.
@@ -54,8 +61,8 @@ These events are "fire-and-forget" notifications which may not always be deliver
 
 Resources that emit events in a "fire-and-forget" fashion should make their events listenable through a method named `on_<event>`.
 
-> Reqtag: `sdk:on-event`
-<span id="sdk:on-event"/>
+> Reqtag: `sdk:on-event-name`
+<span id="sdk:on-event-name"/>
 
 For example, a `cloud.Bucket` can emit events whenever an object is uploaded, and these events can be listened to by calling `on_upload` on the bucket:
 
@@ -98,6 +105,9 @@ resource X implements EventHandler<MyEvent> {
 }
 let x2 = new X();
 ```
+
+> Reqtag: `sdk:event-handler-conversion`
+<span id="sdk:event-handler-conversion"/>
 
 In the example with `bucket.on_upload` from earlier this section, when the method is called, cloud infrastructure is automatically added to invoke the event handler's `handle` method whenever an object is added to the bucket.
 
