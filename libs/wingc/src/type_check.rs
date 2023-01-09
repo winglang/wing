@@ -1268,18 +1268,7 @@ impl<'a> TypeChecker<'a> {
 							(None, None)
 						}
 					}
-				}
-				/*else if *is_resource {
-					// If we're a resource and we have no parent we implicitly inherit from wingsdk's resource base class
-					let wingsdk_resource_type = env
-						.lookup_nested_str(WINGSDK_RESOURCE, false, Some(stmt.idx))
-						.expect("Expected wingsdk resource base to be defined")
-						.as_type()
-						.unwrap();
-					let wingsdk_resource_class = wingsdk_resource_type.as_resource().unwrap();
-					(Some(wingsdk_resource_type), Some(wingsdk_resource_class.env.get_ref()))
-				} */
-				else {
+				} else {
 					(None, None)
 				};
 
