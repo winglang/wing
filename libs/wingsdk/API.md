@@ -110,7 +110,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/wingsdk.cloud.Bucket.property.display">display</a></code> | <code>core.Display</code> | Display information for this resource. |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -135,7 +135,7 @@ display: Display;
 
 - *Type:* core.Display
 
-Display information for this resource.
+Information on how to display a resource in the UI.
 
 ---
 
@@ -264,7 +264,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/wingsdk.cloud.Counter.property.display">display</a></code> | <code>core.Display</code> | Display information for this resource. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
@@ -290,7 +290,7 @@ display: Display;
 
 - *Type:* core.Display
 
-Display information for this resource.
+Information on how to display a resource in the UI.
 
 ---
 
@@ -459,7 +459,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/wingsdk.cloud.Function.property.display">display</a></code> | <code>core.Display</code> | Display information for this resource. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
@@ -485,7 +485,7 @@ display: Display;
 
 - *Type:* core.Display
 
-Display information for this resource.
+Information on how to display a resource in the UI.
 
 ---
 
@@ -645,7 +645,7 @@ Create a logger and register it to the given scope.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/wingsdk.cloud.Logger.property.display">display</a></code> | <code>core.Display</code> | Display information for this resource. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -670,7 +670,7 @@ display: Display;
 
 - *Type:* core.Display
 
-Display information for this resource.
+Information on how to display a resource in the UI.
 
 ---
 
@@ -820,7 +820,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/wingsdk.cloud.Queue.property.display">display</a></code> | <code>core.Display</code> | Display information for this resource. |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -845,7 +845,7 @@ display: Display;
 
 - *Type:* core.Display
 
-Display information for this resource.
+Information on how to display a resource in the UI.
 
 ---
 
@@ -995,7 +995,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
-| <code><a href="#@winglang/wingsdk.cloud.Topic.property.display">display</a></code> | <code>core.Display</code> | Display information for this resource. |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Topic.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -1020,7 +1020,7 @@ display: Display;
 
 - *Type:* core.Display
 
-Display information for this resource.
+Information on how to display a resource in the UI.
 
 ---
 
@@ -2235,7 +2235,7 @@ Returns the IConstruct this graph vertex represents.
 
 ### Display <a name="Display" id="@winglang/wingsdk.core.Display"></a>
 
-Information on how to display a construct in the UI.
+Information on how to display a resource in the UI.
 
 #### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Display.Initializer"></a>
 
