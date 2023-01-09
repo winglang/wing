@@ -42,9 +42,10 @@ The Wing language spec does not yet support `Serializable` as a type, but until 
 
 ### Paginated APIs
 
-Some APIs return a list of results that may be too large to fit in memory.
-In these cases, the API returns an `Iterator` object with a `next()` method that returns a `Promise` for the next page of results and a `has_next()` method that returns a `Promise` for a boolean indicating whether there are more results to fetch.
-The `Iterator` object also implements the [async iterator protocol in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols), so it can be used within `for...of` loops.
+Some APIs return a list of results that may be too large to fit in memory, or too large to fetch from the cloud all at once.
+In these cases, APIs can return an `Iterator` object.
+An `Iterator` is an object with a `next()` method and a `has_next()` method, which return the next page of results and whether there are more results to fetch, respectively.
+The `Iterator` object also implements the [async iterator protocol in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols#the_async_iterator_and_async_iterable_protocols), so it can be used within `for...of` loops in TypeScript or in Wing.
 
 ### Event handlers
 
