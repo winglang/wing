@@ -11,7 +11,7 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { ResourceNames, ResourceType } from "../utils/resource-names";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
  * AWS implementation of `cloud.Function`.
@@ -115,7 +115,7 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
-    const functionName = ResourceNames.of(this, ResourceType.AWS_FUNCTION);
+    const functionName = this.sanitizeName(`${this.node.id}-${this.node.addr}`);
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
@@ -191,6 +191,20 @@ export class Function extends cloud.FunctionBase {
 
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  /**
+   * Function names are limited to 64 characters.
+   * You can use alphanumeric characters, hyphens (-), and underscores (_).
+   */
+  private sanitizeName(name: string): string {
+    const nameProps: NameOptions = {
+      maxLen: 64,
+      regexMatch: /[^a-zA-Z0-9\:\-]+/g,
+      charReplacer: "-",
+    };
+
+    return ResourceNames.of(name, nameProps);
   }
 }
 

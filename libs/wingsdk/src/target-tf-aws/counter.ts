@@ -2,7 +2,7 @@ import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { ResourceNames, ResourceType } from "../utils/resource-names";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 import { Function } from "./function";
 
 export const HASH_KEY = "id";
@@ -19,7 +19,7 @@ export class Counter extends cloud.CounterBase {
     super(scope, id, props);
 
     this.table = new DynamodbTable(this, "Default", {
-      name: ResourceNames.of(this, ResourceType.AWS_COUNTER),
+      name: this.sanitizeName(`${this.node.id}-${this.node.addr}`),
       attribute: [{ name: HASH_KEY, type: "S" }],
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",
@@ -63,6 +63,21 @@ export class Counter extends cloud.CounterBase {
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  /**
+   * Couter (Table) names must be between 3 and 255 characters.
+   * You can use alphanumeric characters, dot(.), dash (-), and underscores (_).
+   */
+  private sanitizeName(name: string): string {
+    const nameProps: NameOptions = {
+      maxLen: 255,
+      regexMatch: /[^a-zA-Z0-9\_\.\-]+/g,
+      charReplacer: "-",
+      prefix: "wingsdk-counter",
+    };
+
+    return ResourceNames.of(name, nameProps);
   }
 }
 

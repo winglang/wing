@@ -5,7 +5,7 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { ResourceNames, ResourceType } from "../utils/resource-names";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 import { Function } from "./function";
 
 /**
@@ -21,7 +21,7 @@ export class Queue extends cloud.QueueBase {
 
     this.queue = new SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
-      name: ResourceNames.of(this, ResourceType.AWS_QUEUE),
+      name: this.sanitizeName(`${this.node.id}-${this.node.addr}`),
     });
 
     if ((props.initialMessages ?? []).length) {
@@ -119,6 +119,20 @@ export class Queue extends cloud.QueueBase {
 
   private envName(): string {
     return `QUEUE_URL_${this.node.addr.slice(-8)}`;
+  }
+
+  /**
+   * Queue names are limited to 80 characters.
+   * You can use alphanumeric characters, hyphens (-), and underscores (_).
+   */
+  private sanitizeName(name: string): string {
+    const nameProps: NameOptions = {
+      maxLen: 80,
+      regexMatch: /[^a-zA-Z0-9\_\-]+/g,
+      charReplacer: "-",
+    };
+
+    return ResourceNames.of(name, nameProps);
   }
 }
 

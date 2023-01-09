@@ -5,7 +5,11 @@ import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { ResourceNames, ResourceType } from "../utils/resource-names";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
 import { Function } from "./function";
 
 /**
@@ -23,7 +27,7 @@ export class Bucket extends cloud.BucketBase {
     this.public = props.public ?? false;
 
     this.bucket = new S3Bucket(this, "Default", {
-      bucket: ResourceNames.of(this, ResourceType.AWS_BUCKET),
+      bucket: this.sanitizeName(`${this.node.id}-${this.node.addr}`),
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
@@ -119,6 +123,25 @@ export class Bucket extends cloud.BucketBase {
 
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
+  }
+
+  /**
+   * AWS Bucket names must be between 3 and 63 characters.
+   * You can use lowercase alphanumeric characters, dot(.) and dash (-),
+   * must begin and end with alphanumeric character, can not begin
+   * with 'xn--' or ending with '-s3alias' and must not contain
+   * two adjacent dots.
+   */
+  private sanitizeName(name: string): string {
+    const nameProps: NameOptions = {
+      maxLen: 63,
+      case: CaseConventions.LOWERCASE,
+      regexMatch: /(([(.)\1+]+)[^a-z0-9\-]+)/g,
+      charReplacer: "-",
+      avoidStartWith: "xn--",
+    };
+
+    return ResourceNames.of(name, nameProps);
   }
 }
 
