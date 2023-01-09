@@ -265,14 +265,14 @@ resource Bucket {
   inflight list(prefix: str?): Promise<Iterator<str>>;
 
   /**
-   * Returns a url to the given object.
+   * Returns a url to the given file.
    * @throws Will throw if the public is not public.
    */
   inflight public_url(key: str): Promise<str>;
 
   /**
-   * Returns a presigned url to the given object. This URL can be used to access
-   * the object by anyone until it expires (defaults to 24 hours).
+   * Returns a presigned url to the given file. This URL can be used to access
+   * the file by anyone until it expires (defaults to 24 hours).
    */
   inflight presigned_url(key: str, duration: duration): Promise<str>;
 }
