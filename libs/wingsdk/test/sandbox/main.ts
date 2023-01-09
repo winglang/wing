@@ -59,16 +59,10 @@ class HelloWorld extends Construct {
     super(scope, id);
 
     const my_bucket = new MyBucket(this, "MyBucket", "Hello, World!");
-    // const handler = new Handler(this, "Handler", my_bucket);
-    // new cloud.Function(this, "Function", handler);
-
-    // const queue = new cloud.Queue(this, "Queue");
-    // queue.onMessage(handler);
     my_bucket;
   }
 }
 
 const app = new tfazure.App({ outdir: __dirname, location: "East US" });
-// cloud.Logger.register(app);
 new HelloWorld(app, "HelloWorld");
 app.synth();
