@@ -163,6 +163,9 @@ export interface InflightResourceBinding {
   readonly ops: string[];
 }
 
+/**
+ * Inflight bindings.
+ */
 export interface InflightBindings {
   /**
    * Resources being referenced by the inflight (key is the symbol).
