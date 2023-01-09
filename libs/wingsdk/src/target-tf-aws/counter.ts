@@ -18,10 +18,8 @@ export class Counter extends cloud.CounterBase {
   constructor(scope: Construct, id: string, props: cloud.CounterProps = {}) {
     super(scope, id, props);
 
-    const counterName = CounterName.of(this);
-
     this.table = new DynamodbTable(this, "Default", {
-      name: counterName,
+      name: CounterName.of(this),
       attribute: [{ name: HASH_KEY, type: "S" }],
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",

@@ -20,10 +20,8 @@ export class Topic extends cloud.TopicBase {
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
 
-    const topicName = TopicName.of(this);
-
     this.topic = new SnsTopic(this, "Default", {
-      name: topicName,
+      name: TopicName.of(this),
     });
   }
 

@@ -19,11 +19,9 @@ export class Queue extends cloud.QueueBase {
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
-    const queueName = QueueName.of(this);
-
     this.queue = new SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
-      name: queueName,
+      name: QueueName.of(this),
     });
 
     if ((props.initialMessages ?? []).length) {
