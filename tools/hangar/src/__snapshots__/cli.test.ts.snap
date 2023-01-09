@@ -204,10 +204,10 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "AnotherFunction",
+            "WING_FUNCTION_NAME": "AnotherFunction-c88d2a81ac10945d7eaaef20325ee68af277b4afe5",
           },
         },
-        "function_name": "AnotherFunction",
+        "function_name": "AnotherFunction-c88d2a81ac10945d7eaaef20325ee68af277b4afe5",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.arn}",
         "runtime": "nodejs16.x",
@@ -226,10 +226,10 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "cloud.Function",
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
           },
         },
-        "function_name": "cloud_Function",
+        "function_name": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",
@@ -248,10 +248,10 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
             "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-777b12cf",
+            "WING_FUNCTION_NAME": "cloud-Queue-OnMessage-777b12cf-c80937b5434c1f69762dcf7d694be5ac4",
           },
         },
-        "function_name": "cloud_Queue-OnMessage-777b12cf",
+        "function_name": "cloud-Queue-OnMessage-777b12cf-c80937b5434c1f69762dcf7d694be5ac4",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessage777b12cf_IamRole_67B98F21.arn}",
         "runtime": "nodejs16.x",
@@ -275,6 +275,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_PrivateBucket_82B4DCC5",
           },
         },
+        "bucket": "privatebucket-c8a9b08cbc5efd30bfab32124902de83a40c557d45",
       },
       "root_PublicBucket_73AE6C59": {
         "//": {
@@ -283,6 +284,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_PublicBucket_73AE6C59",
           },
         },
+        "bucket": "publicbucket-c8fea5d9ffce44e6df402dc2107927221821bd2572",
       },
       "root_cloudBucket_4F3C4F53": {
         "//": {
@@ -291,6 +293,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
+        "bucket": "cloud.bucket-c87175e7bebeddc2b07a15f76241cf54a4d755b447",
       },
       "root_cloudFunction_Bucket_245CAEB7": {
         "//": {
@@ -518,6 +521,7 @@ exports[`wing compile container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket1_3A77B9B4",
           },
         },
+        "bucket": "bucket1-c81ed215232bba83a63974deb1f15a8ae1a9c2ec90",
       },
       "root_bucket2_E39F70EE": {
         "//": {
@@ -526,6 +530,7 @@ exports[`wing compile container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket2_E39F70EE",
           },
         },
+        "bucket": "bucket2-c83a0be61aa821f7899096e223c5b9a759b3773efe",
       },
       "root_bucket3_A0C568EA": {
         "//": {
@@ -534,6 +539,7 @@ exports[`wing compile container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket3_A0C568EA",
           },
         },
+        "bucket": "bucket3-c8b6c70606b54ad9ae0d8adce42f3f29491bc1fdd4",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -927,7 +933,7 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
         ],
         "billing_mode": "PAY_PER_REQUEST",
         "hash_key": "id",
-        "name": "wingsdk-counter-c866f225dbe83e49644c661486cb428e3749baa65c",
+        "name": "wingsdk-counter-cloud.Counter-c866f225dbe83e49644c661486cb428e3749baa65c",
       },
     },
     "aws_iam_role": {
@@ -990,10 +996,10 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
             "DYNAMODB_TABLE_NAME_49baa65c": "\${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
-            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-781f1948",
+            "WING_FUNCTION_NAME": "cloud-Queue-OnMessage-781f1948-c8d61dd504602d9242212ba6fea7a9c69",
           },
         },
-        "function_name": "cloud_Queue-OnMessage-781f1948",
+        "function_name": "cloud-Queue-OnMessage-781f1948-c8d61dd504602d9242212ba6fea7a9c69",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessage781f1948_IamRole_43750575.arn}",
         "runtime": "nodejs16.x",
@@ -1009,6 +1015,7 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
+        "bucket": "cloud.bucket-c87175e7bebeddc2b07a15f76241cf54a4d755b447",
       },
       "root_cloudQueueOnMessage781f1948_Bucket_7722677D": {
         "//": {
@@ -1289,10 +1296,10 @@ exports[`wing compile hello.w > cdk.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-be11efa5",
+            "WING_FUNCTION_NAME": "cloud-Queue-OnMessage-be11efa5-c883921a01d6245bcba305243aae70b04",
           },
         },
-        "function_name": "cloud_Queue-OnMessage-be11efa5",
+        "function_name": "cloud-Queue-OnMessage-be11efa5-c883921a01d6245bcba305243aae70b04",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessagebe11efa5_IamRole_C7C74847.arn}",
         "runtime": "nodejs16.x",
@@ -1308,6 +1315,7 @@ exports[`wing compile hello.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
+        "bucket": "cloud.bucket-c87175e7bebeddc2b07a15f76241cf54a4d755b447",
       },
       "root_cloudQueueOnMessagebe11efa5_Bucket_78307385": {
         "//": {
@@ -1553,10 +1561,10 @@ exports[`wing compile print.w > cdk.tf.json 1`] = `
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud.Function",
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
           },
         },
-        "function_name": "cloud_Function",
+        "function_name": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",
@@ -1572,6 +1580,7 @@ exports[`wing compile print.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
+        "bucket": "cloud.bucket-c87175e7bebeddc2b07a15f76241cf54a4d755b447",
       },
       "root_cloudFunction_Bucket_245CAEB7": {
         "//": {
@@ -2095,10 +2104,10 @@ exports[`wing compile while_loop_await.w > cdk.tf.json 1`] = `
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-8074b1a3",
+            "WING_FUNCTION_NAME": "cloud-Queue-OnMessage-8074b1a3-c8bd25bf57d84d368148a9aac48c1639e",
           },
         },
-        "function_name": "cloud_Queue-OnMessage-8074b1a3",
+        "function_name": "cloud-Queue-OnMessage-8074b1a3-c8bd25bf57d84d368148a9aac48c1639e",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessage8074b1a3_IamRole_16638C11.arn}",
         "runtime": "nodejs16.x",
