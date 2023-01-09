@@ -105,7 +105,8 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
     // this, so we simply filter those out from the bundle.
     const outlines = readFileSync(outfile, "utf-8").split("\n");
-    const isLineComment = (line: string) => !line.startsWith("//");
+    const isNotLineComment = (line: string) => !line.startsWith("//");
+    writeFileSync(outfile, outlines.filter(isNotLineComment).join("\n"));
     writeFileSync(outfile, outlines.filter(isLineComment).join("\n"));
 
     this.assetPath = outfile;
