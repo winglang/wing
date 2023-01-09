@@ -298,6 +298,11 @@ jobs:
       - name: Prepare language server binaries
         run: cp -r wing-language-server-* ./apps/vscode-wing/resources
 
+      - name: Prepare WingSDK files
+        run: |
+          mkdir -p apps/vscode-wing/resources/wingsdk
+          tar -xzf wingsdk/*.tgz -C apps/vscode-wing/resources/wingsdk --strip-components=1 package/package.json package/.jsii
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
@@ -310,14 +315,10 @@ jobs:
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
 
-      - name: Prepare WingSDK resource
-        run: |
-          tar -xzf wingsdk/*.tgz
-          mv package apps/vscode-wing/resources/wingsdk
-
       - name: Build
         uses: MansaGroup/nrwl-nx-action@v2
         with:
+          # build-multi assumes all required resources are present
           targets: "build-multi"
           projects: "vscode-wing"
           args: "--configuration=release --output-style=stream --verbose"
