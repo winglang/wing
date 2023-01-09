@@ -1,7 +1,7 @@
 import { access, constants } from "fs";
 import { promisify } from "util";
 import { IConstruct } from "constructs";
-import { Direction, IInflightHost, NodeJsCode, Resource } from "../core";
+import { IInflightHost, NodeJsCode, Resource } from "../core";
 import { Function } from "./function";
 
 /**
@@ -42,16 +42,6 @@ export function bindSimulatorResource(
   const handle = `\${${resource.node.path}#attrs.handle}`; // TODO: proper token mechanism
   host.addEnvironment(env, handle);
   host.node.addDependency(resource);
-  resource.addConnection({
-    direction: Direction.INBOUND,
-    relationship: `inflight-reference`,
-    resource: host,
-  });
-  host.addConnection({
-    direction: Direction.OUTBOUND,
-    relationship: `inflight-reference`,
-    resource: resource,
-  });
 }
 
 export function makeSimulatorJsClient(type: string, resource: Resource) {

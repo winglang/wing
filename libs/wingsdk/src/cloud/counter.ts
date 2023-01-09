@@ -80,7 +80,8 @@ export interface ICounterClient {
 }
 
 /**
- * List of inflight operations available for `Counter`
+ * List of inflight operations available for `Counter`.
+ * @internal
  */
 export enum CounterInflightMethods {
   /** `Counter.inc` */

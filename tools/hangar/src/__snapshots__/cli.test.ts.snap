@@ -1505,8 +1505,11 @@ constructor() {
   super({ outdir: $outdir, name: \\"primitive_methods\\" });
   
   const dur = $stdlib.std.Duration.fromSeconds(60);
-  {console.log(\`\${dur.seconds}\`)};
-  {console.log(\`\${dur.minutes}\`)};
+  const stringy = \`\${dur.minutes}:\${dur.seconds}\`;
+  {console.log(stringy)};
+  if (((stringy.includes(\\"60\\")) && (((stringy.split(\\":\\")).at(0)) === \\"60\\"))) {
+    {console.log(\`\${stringy.length}!\`)};
+  }
 }
 }
 new MyApp().synth();"
