@@ -256,7 +256,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 				} else {
 					diagnostics.push(Diagnostic {
 						level: DiagnosticLevel::Error,
-						message: format!("Can't capture '{}' of type {} in preflight", symbol.name, t),
+						message: format!("Can't capture '{}' of type {} in inflight", symbol.name, t),
 						span: Some(symbol.span.clone()),
 					});
 				}
