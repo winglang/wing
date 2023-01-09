@@ -320,9 +320,9 @@ export class Display {
   public hidden: boolean;
 
   public constructor(
-    title: string = "",
-    description: string = "",
-    hidden: boolean = false
+    title?: string,
+    description?: string,
+    hidden?: boolean
   ) {
     this.title = title;
     this.description = description;
