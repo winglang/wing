@@ -97,7 +97,7 @@ impl Parser<'_> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.is_error() {
+		if node.has_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
@@ -470,6 +470,9 @@ impl Parser<'_> {
 	}
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
+		if nested_node.has_error() {
+			return self.add_error(format!("Syntax error"), &nested_node);
+		}
 		Ok(Reference::NestedIdentifier {
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
