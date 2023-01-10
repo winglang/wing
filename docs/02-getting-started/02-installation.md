@@ -40,6 +40,8 @@ Username: "lowercase-github-username"
 Password: "the just created Github token"
 Email: "your github email"
 ```
+(note: npm 9+ needs the argument '--auth-type=legacy' to fix 'ERR! Web login not supported')
+
 :::
 
 Install the Wing CLI through npm:
