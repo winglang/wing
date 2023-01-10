@@ -71,6 +71,9 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "hidden": true,
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -217,6 +220,9 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "hidden": true,
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -365,6 +371,9 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "hidden": true,
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -512,6 +521,9 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "hidden": true,
           },
           "id": "Handler",
           "path": "root/Handler",

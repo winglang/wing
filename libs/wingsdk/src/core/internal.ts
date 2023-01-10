@@ -1,12 +1,13 @@
 import { IConstruct } from "constructs";
 import { Code, InflightBindings, NodeJsCode } from "./inflight";
-import { Resource } from "./resource";
+import { DisplayProps, Resource } from "./resource";
 
 export function makeHandler(
   scope: IConstruct,
   id: string,
   code: string,
-  bindings: InflightBindings = {}
+  bindings: InflightBindings = {},
+  display?: DisplayProps
 ): Resource {
   const clients: Record<string, Code> = {};
 
@@ -35,6 +36,7 @@ export function makeHandler(
       for (const [field, value] of Object.entries(bindings.data ?? {})) {
         (this as any)[field] = value;
       }
+      this.display.hidden = display?.hidden ?? false;
     }
 
     public _toInflight(): NodeJsCode {

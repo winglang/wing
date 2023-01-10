@@ -2,7 +2,8 @@ import * as fs from "fs";
 import * as path from "path";
 import { IConstruct } from "constructs";
 import { IApp } from "./app";
-import { Resource } from "./resource";
+import { Inflight } from "./inflight";
+import { IResource, Resource } from "./resource";
 
 const TREE_FILE_PATH = "tree.json";
 
@@ -164,15 +165,19 @@ function synthAttributes(
   return undefined;
 }
 
+function isIResource(construct: IConstruct): construct is IResource {
+  return construct instanceof Resource || construct instanceof Inflight;
+}
+
 function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
-  if (
-    construct instanceof Resource &&
-    construct.display &&
-    Object.values(construct.display).some((a) => a !== undefined)
-  ) {
-    return construct.display;
+  if (!isIResource(construct)) {
+    return;
   }
-  return undefined;
+  const { display } = construct;
+  if (display.description || display.title || display.hidden) {
+    return display;
+  }
+  return;
 }
 
 /**

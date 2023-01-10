@@ -122,7 +122,9 @@ export class Inflight extends Construct implements IResource {
       throw new Error("Only Node.js code is supported");
     }
 
-    return makeHandler(scope, id, props.code.text, props.bindings ?? {});
+    return makeHandler(scope, id, props.code.text, props.bindings ?? {}, {
+      hidden: this.display.hidden,
+    });
   }
   /** @internal */
   public _bind(_host: IInflightHost, _ops: string[]): void {

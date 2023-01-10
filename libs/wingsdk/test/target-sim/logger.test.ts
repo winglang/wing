@@ -34,7 +34,7 @@ test("inflight uses a logger", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("Logger have display hidden property set to true", async () => {
+test("Logger has display hidden property set to true", async () => {
   // GIVEN
   const app = new SimApp();
 
@@ -42,13 +42,12 @@ test("Logger have display hidden property set to true", async () => {
   const treeJson = treeJsonOf(app.synth());
 
   // THEN
-  const expected = {
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
     WingLogger: {
       display: {
         hidden: true,
       },
     },
-  };
-  expect(treeJson.tree.children).toBeDefined();
-  expect(treeJson.tree.children).toMatchObject(expected);
+  });
 });
