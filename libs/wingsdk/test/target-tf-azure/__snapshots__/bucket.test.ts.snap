@@ -101,6 +101,9 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "hidden": false,
+            },
             "id": "my_bucket",
             "path": "root/my_bucket",
           },
@@ -224,6 +227,9 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "hidden": false,
             },
             "id": "my_bucket",
             "path": "root/my_bucket",
