@@ -32,6 +32,7 @@ const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/wingsdk";
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_ARRAY: &'static str = "std.ImmutableArray";
 const WINGSDK_SET: &'static str = "std.ImmutableSet";
+const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
@@ -175,6 +176,11 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
+	// Analyze inflight captures
+	let mut capture_diagnostics = Diagnostics::new();
+	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
+	diagnostics.extend(capture_diagnostics);
+	
 	let errors = diagnostics
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
@@ -184,9 +190,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	if errors.len() > 0 {
 		return Err(errors);
 	}
-
-	// Analyze inflight captures
-	scan_for_inflights_in_scope(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));

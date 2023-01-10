@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET};
+use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_STRING};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -344,6 +344,22 @@ impl TypeRef {
 
 	pub fn is_option(&self) -> bool {
 		if let Type::Optional(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_immutable_collection(&self) -> bool {
+		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_primitive(&self) -> bool {
+		if let Type::Number | Type::String | Type::Duration | Type::Boolean = **self {
 			true
 		} else {
 			false
@@ -1702,6 +1718,16 @@ impl<'a> TypeChecker<'a> {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, t);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
+					Type::String => self.get_property_from_class(
+						env
+							.lookup_nested_str(WINGSDK_STRING, None)
+							.unwrap()
+							.as_type()
+							.unwrap()
+							.as_class()
+							.unwrap(),
+						property,
+					),
 					Type::Duration => self.get_property_from_class(
 						env
 							.lookup_nested_str(WINGSDK_DURATION, None)

@@ -7,5 +7,3 @@
 !syntaxes/
 !language-configuration.json
 !LICENSE
-!node_modules/@winglang/wingsdk/package.json
-!node_modules/@winglang/wingsdk/.jsii

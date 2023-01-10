@@ -30,21 +30,6 @@ export abstract class Code {
   }
 
   /**
-   * The code contents, sanitized for unit testing.
-   * @experimental
-   */
-  public get sanitizedText(): string {
-    function removeAbsolutePaths(text: string) {
-      const regex = /"\/.+?\/libs\/wingsdk\/(.+?)"/g;
-
-      // replace first group with static text
-      return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
-    }
-
-    return removeAbsolutePaths(this.text);
-  }
-
-  /**
    * Generate a hash of the code contents.
    */
   public get hash(): string {
@@ -107,10 +92,10 @@ export interface InflightProps {
   readonly code: Code;
 
   /**
-   * Resource binding information.
+   * Data and resource binding information.
    * @default - no bindings
    */
-  readonly bindings?: { [name: string]: InflightBinding };
+  readonly bindings?: InflightBindings;
 }
 
 /**
@@ -151,7 +136,7 @@ export class Inflight extends Construct implements IResource {
 /**
  * A resource binding.
  */
-export interface InflightBinding {
+export interface InflightResourceBinding {
   /**
    * The resource.
    */
@@ -161,6 +146,21 @@ export interface InflightBinding {
    * The list of operations used on the resource.
    */
   readonly ops: string[];
+}
+
+/**
+ * Inflight bindings.
+ */
+export interface InflightBindings {
+  /**
+   * Resources being referenced by the inflight (key is the symbol).
+   */
+  readonly resources?: Record<string, InflightResourceBinding>;
+
+  /**
+   * Immutable data being referenced by the inflight (key is the symbol);
+   */
+  readonly data?: Record<string, any>;
 }
 
 /**

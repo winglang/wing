@@ -1545,48 +1545,48 @@ Environment variables to pass to the function.
 
 ---
 
-### InflightBinding <a name="InflightBinding" id="@winglang/wingsdk.core.InflightBinding"></a>
+### InflightBindings <a name="InflightBindings" id="@winglang/wingsdk.core.InflightBindings"></a>
 
-A resource binding.
+Inflight bindings.
 
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBinding.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBindings.Initializer"></a>
 
 ```wing
 bring core;
 
-let inflight_binding = core.InflightBinding{ ... }
+let inflight_bindings = core.InflightBindings{ ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
-| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
+| <code><a href="#@winglang/wingsdk.core.InflightBindings.property.data">data</a></code> | <code>MutMap&lt;any&gt;</code> | Immutable data being referenced by the inflight (key is the symbol); |
+| <code><a href="#@winglang/wingsdk.core.InflightBindings.property.resources">resources</a></code> | <code>MutMap&lt;core.InflightResourceBinding&gt;</code> | Resources being referenced by the inflight (key is the symbol). |
 
 ---
 
-##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/wingsdk.core.InflightBinding.property.ops"></a>
+##### `data`<sup>Optional</sup> <a name="data" id="@winglang/wingsdk.core.InflightBindings.property.data"></a>
 
 ```wing
-ops: MutArray<str>;
+data: MutMap<any>;
 ```
 
-- *Type:* MutArray&lt;str&gt;
+- *Type:* MutMap&lt;any&gt;
 
-The list of operations used on the resource.
+Immutable data being referenced by the inflight (key is the symbol);
 
 ---
 
-##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightBinding.property.resource"></a>
+##### `resources`<sup>Optional</sup> <a name="resources" id="@winglang/wingsdk.core.InflightBindings.property.resources"></a>
 
 ```wing
-resource: IResource;
+resources: MutMap<InflightResourceBinding>;
 ```
 
-- *Type:* core.IResource
+- *Type:* MutMap&lt;core.InflightResourceBinding&gt;
 
-The resource.
+Resources being referenced by the inflight (key is the symbol).
 
 ---
 
@@ -1607,7 +1607,7 @@ let inflight_props = core.InflightProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to the inflight code. Only JavaScript code is currently supported. |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Resource binding information. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>core.InflightBindings</code> | Data and resource binding information. |
 
 ---
 
@@ -1629,13 +1629,58 @@ all references to resources must be made through `this.<resource>`.
 ##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/wingsdk.core.InflightProps.property.bindings"></a>
 
 ```wing
-bindings: MutMap<InflightBinding>;
+bindings: InflightBindings;
 ```
 
-- *Type:* MutMap&lt;core.InflightBinding&gt;
+- *Type:* core.InflightBindings
 - *Default:* no bindings
 
-Resource binding information.
+Data and resource binding information.
+
+---
+
+### InflightResourceBinding <a name="InflightResourceBinding" id="@winglang/wingsdk.core.InflightResourceBinding"></a>
+
+A resource binding.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightResourceBinding.Initializer"></a>
+
+```wing
+bring core;
+
+let inflight_resource_binding = core.InflightResourceBinding{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.InflightResourceBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
+| <code><a href="#@winglang/wingsdk.core.InflightResourceBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
+
+---
+
+##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/wingsdk.core.InflightResourceBinding.property.ops"></a>
+
+```wing
+ops: MutArray<str>;
+```
+
+- *Type:* MutArray&lt;str&gt;
+
+The list of operations used on the resource.
+
+---
+
+##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightResourceBinding.property.resource"></a>
+
+```wing
+resource: IResource;
+```
+
+- *Type:* core.IResource
+
+The resource.
 
 ---
 
@@ -2208,7 +2253,6 @@ Reference code directly from a string.
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>str</code> | Generate a hash of the code contents. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>core.Language</code> | The language of the code. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>str</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
-| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.sanitizedText">sanitized_text</a></code> | <code>str</code> | The code contents, sanitized for unit testing. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>str</code> | The code contents. |
 
 ---
@@ -2246,18 +2290,6 @@ path: str;
 - *Type:* str
 
 A path to the code in the user's file system that can be referenced for bundling purposes.
-
----
-
-##### `sanitized_text`<sup>Required</sup> <a name="sanitized_text" id="@winglang/wingsdk.core.NodeJsCode.property.sanitizedText"></a>
-
-```wing
-sanitized_text: str;
-```
-
-- *Type:* str
-
-The code contents, sanitized for unit testing.
 
 ---
 
@@ -2351,7 +2383,7 @@ Represents the bag of attributes as key-value pairs.
 
 - *Extends:* constructs.IConstruct
 
-- *Implemented By:* core.CdktfApp, sim.App, testing.SimApp, tfaws.App, core.IApp
+- *Implemented By:* core.CdktfApp, sim.App, testing.SimApp, tfaws.App, tfazure.App, core.IApp
 
 A Wing application.
 
@@ -2681,7 +2713,7 @@ The tree node.
 
 ### IInspectable <a name="IInspectable" id="@winglang/wingsdk.core.IInspectable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -2821,7 +2853,7 @@ Function that will be called when a message is received from the queue.
 
 - *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
 Abstract interface for `Resource`.
 
