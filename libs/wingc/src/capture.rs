@@ -268,7 +268,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 						// unsupported capture
 						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
-							message: format!("Can't capture '{}' of type '{}' from preflight", symbol.name, t),
+							message: format!("Cannot reference '{}' of type '{}' from an inflight context", symbol.name, t),
 							span: Some(symbol.span.clone()),
 						});
 					}
