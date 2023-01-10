@@ -130,9 +130,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
               "hidden": false,
-              "title": "",
             },
             "id": "Function",
             "path": "root/Function",
@@ -147,9 +145,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
               "hidden": false,
-              "title": "",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -171,9 +167,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
-              "hidden": false,
-              "title": "",
+              "hidden": true,
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -346,9 +340,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
               "hidden": false,
-              "title": "",
             },
             "id": "Function",
             "path": "root/Function",
@@ -363,9 +355,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
               "hidden": false,
-              "title": "",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -387,9 +377,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
-              "hidden": false,
-              "title": "",
+              "hidden": true,
             },
             "id": "WingLogger",
             "path": "root/WingLogger",

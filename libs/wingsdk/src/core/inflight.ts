@@ -1,10 +1,10 @@
+import { Construct } from "constructs";
 import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
-import { Construct } from "constructs";
 import { makeHandler } from "./internal";
-import { Connection, IInflightHost, IResource } from "./resource";
+import { Connection, Display, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
 
 /**
@@ -109,6 +109,11 @@ export interface InflightProps {
 export class Inflight extends Construct implements IResource {
   /** @internal */
   public _connections: Connection[] = []; // thrown away
+
+  /**
+   * Information on how to display a resource in the UI.
+   */
+  public readonly display = new Display({hidden: true});
 
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away

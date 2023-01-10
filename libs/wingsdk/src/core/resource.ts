@@ -23,6 +23,11 @@ export interface IResource extends IInspectable, IConstruct {
   _connections: Connection[];
 
   /**
+   * Information on how to display a resource in the UI.
+   */
+  readonly display: Display;
+
+  /**
    * Binds the resource to the host so that it can be used by inflight code.
    *
    * If the resource does not support any of the operations, it should throw an
@@ -105,7 +110,7 @@ export abstract class Resource
   /**
    * Information on how to display a resource in the UI.
    */
-  public readonly display: Display = new Display();
+  public readonly display = new Display();
 
   /**
    * Whether a resource is stateful, i.e. it stores information that is not
@@ -301,31 +306,50 @@ export interface OperationAnnotation {
 }
 
 /**
+ * Properties for the Display class.
+ */
+export interface DisplayProps {
+  /**
+   * Title of the resource.
+   * @default - No title.
+   */
+  readonly title?: string;
+
+  /**
+   * Description of the resource.
+   * @default - No description.
+   */
+  readonly description?: string;
+
+  /**
+   * Whether the resource should be hidden from the UI.
+   * @default false
+   */
+  readonly hidden?: boolean;
+}
+
+/**
  * Information on how to display a resource in the UI.
  */
 export class Display {
   /**
    * Title of the resource.
    */
-  public title: string;
+  public title?: string;
 
   /**
    * Description of the resource.
    */
-  public description: string;
+  public description?: string;
 
   /**
    * Whether the resource should be hidden from the UI.
    */
   public hidden: boolean;
-
-  public constructor(
-    title?: string,
-    description?: string,
-    hidden?: boolean
-  ) {
-    this.title = title;
-    this.description = description;
-    this.hidden = hidden;
+  
+  public constructor( props? : DisplayProps) {
+    this.title = props?.title;
+    this.description = props?.description;
+    this.hidden = props?.hidden ?? false;
   }
 }

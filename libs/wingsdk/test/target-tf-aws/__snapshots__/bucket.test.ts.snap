@@ -44,9 +44,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
-              "hidden": false,
-              "title": "",
+              "hidden": true,
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -103,9 +101,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
               "hidden": false,
-              "title": "",
             },
             "id": "my_bucket",
             "path": "root/my_bucket",
@@ -177,9 +173,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
-              "hidden": false,
-              "title": "",
+              "hidden": true,
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -236,9 +230,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "",
               "hidden": false,
-              "title": "",
             },
             "id": "my_bucket",
             "path": "root/my_bucket",

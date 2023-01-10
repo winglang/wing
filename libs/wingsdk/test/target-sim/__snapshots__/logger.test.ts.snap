@@ -74,9 +74,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -98,9 +96,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
-            "hidden": false,
-            "title": "",
+            "hidden": true,
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -132,9 +128,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_function",
           "path": "root/my_function",

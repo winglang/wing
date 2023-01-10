@@ -165,9 +165,7 @@ exports.handler = async function(event) {
                 "version": "10.0.130",
               },
               "display": Object {
-                "description": "",
                 "hidden": false,
-                "title": "",
               },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
@@ -189,9 +187,7 @@ exports.handler = async function(event) {
                 "version": "10.0.130",
               },
               "display": Object {
-                "description": "",
                 "hidden": false,
-                "title": "",
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
@@ -213,9 +209,7 @@ exports.handler = async function(event) {
                 "version": "10.0.130",
               },
               "display": Object {
-                "description": "",
                 "hidden": false,
-                "title": "",
               },
               "id": "Processor",
               "path": "root/HelloWorld/Processor",
@@ -237,9 +231,7 @@ exports.handler = async function(event) {
                 "version": "10.0.130",
               },
               "display": Object {
-                "description": "",
                 "hidden": false,
-                "title": "",
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -295,9 +287,7 @@ exports.handler = async function(event) {
                 "version": "10.0.130",
               },
               "display": Object {
-                "description": "",
                 "hidden": false,
-                "title": "",
               },
               "id": "Queue-OnMessage-401ee792",
               "path": "root/HelloWorld/Queue-OnMessage-401ee792",
@@ -312,9 +302,7 @@ exports.handler = async function(event) {
                 "version": "10.0.130",
               },
               "display": Object {
-                "description": "",
                 "hidden": false,
-                "title": "",
               },
               "id": "Queue-OnMessageHandler-401ee792",
               "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
@@ -344,9 +332,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
-            "hidden": false,
-            "title": "",
+            "hidden": true,
           },
           "id": "WingLogger",
           "path": "root/WingLogger",

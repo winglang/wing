@@ -34,9 +34,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
-            "hidden": false,
-            "title": "",
+            "hidden": true,
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -51,9 +49,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_topic",
           "path": "root/my_topic",

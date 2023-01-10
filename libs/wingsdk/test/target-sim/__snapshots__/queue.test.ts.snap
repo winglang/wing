@@ -36,9 +36,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
-            "hidden": false,
-            "title": "",
+            "hidden": true,
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -53,9 +51,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -221,9 +217,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -245,9 +239,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
-            "hidden": false,
-            "title": "",
+            "hidden": true,
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -269,9 +261,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -315,9 +305,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -332,9 +320,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -504,9 +490,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -528,9 +512,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
-            "hidden": false,
-            "title": "",
+            "hidden": true,
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -552,9 +534,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -598,9 +578,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -615,9 +593,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -782,9 +758,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -806,9 +780,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
-            "hidden": false,
-            "title": "",
+            "hidden": true,
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -830,9 +802,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -876,9 +846,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -893,9 +861,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "",
             "hidden": false,
-            "title": "",
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
