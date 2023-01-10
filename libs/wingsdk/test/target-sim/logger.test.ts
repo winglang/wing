@@ -37,8 +37,11 @@ test("inflight uses a logger", async () => {
 test("Logger have display hidden property set to true", async () => {
   // GIVEN
   const app = new SimApp();
+
+  // WHEN
   const treeJson = treeJsonOf(app.synth());
 
+  // THEN
   const expected = {
     WingLogger: {
       display: {
