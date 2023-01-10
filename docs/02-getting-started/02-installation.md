@@ -40,6 +40,8 @@ Username: "lowercase-github-username"
 Password: "the just created Github token"
 Email: "your github email"
 ```
+(note: npm 9+ needs the argument '--auth-type=legacy' to fix 'ERR! Web login not supported')
+
 :::
 
 Install the Wing CLI through npm:
@@ -83,5 +85,5 @@ Wing applications running locally on the cloud simulator.
 [AWS account]: https://portal.aws.amazon.com/billing/signup
 [AWS CLI]: https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html
 [AWS credentials]: https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
-[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=read:packages
+[personal access token]: https://github.com/settings/tokens/new?description=Winglang%20Beta&scopes=repo,read:packages
 [VSCode]: https://code.visualstudio.com/

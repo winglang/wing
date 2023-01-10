@@ -14,7 +14,7 @@ Array [
 
 exports[`inflight uses a logger 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -37,6 +37,30 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(event2) {
+        console.log(\\"Hello, \\" + event2);
+        console.log(\\"Wahoo!\\");
+      }
+    };
+  }())({}).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {

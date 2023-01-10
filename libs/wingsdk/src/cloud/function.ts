@@ -1,3 +1,4 @@
+import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
@@ -99,6 +100,13 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
       minify: false,
       external: ["aws-sdk"],
     });
+
+    // the bundled contains line comments with file paths, which are not useful for us, especially
+    // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
+    // this, so we simply filter those out from the bundle.
+    const outlines = readFileSync(outfile, "utf-8").split("\n");
+    const isNotLineComment = (line: string) => !line.startsWith("//");
+    writeFileSync(outfile, outlines.filter(isNotLineComment).join("\n"));
 
     this.assetPath = outfile;
   }
