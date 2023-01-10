@@ -283,7 +283,13 @@ Future extensions:
 ## Queue
 
 > Note: this API is WIP, and needs more research for multi-cloud support.
-> Open questions: How do we support FIFO queues? How do we support dead-letter queues? How do we support message visibility timeouts?
+> Open questions:
+> - What is the API for FIFO queues?
+> - What is the API for dead-letter queues?
+> - What is the API for message visibility timeouts?
+> - What is the API for message retention periods?
+> - What is the API for message deduplication?
+> - Should the API use "push"/"pop" terminology or "send"/"receive" terminology?
 
 The queue resource represents a message buffer that can be used to decouple workloads between a set of producers and a set of consumers.
 Using a queue, you can send, store, and receive messages between software components at any volume, without losing messages or requiring other services to be available.
