@@ -1,5 +1,13 @@
 # Wing SDK
 
+## Overview
+
+This document describes the design of the Wing SDK, which is the set of batteries-included APIs available for developers for building applications in Wing.
+
+The primary goal of this document is to provide a high level overview of the resources we would like to support in Wing, and to provide a framework for discussing the design of these APIs and how they interact with each other.
+This document is not intended to be a complete specification of the APIs, but rather a starting point for discussion.
+In writing this, we are hoping to provide a jumping-off point for contributors looking to add new resources and capabilities to Wing, and to provide a map that can be used to understand the scope of the Wing SDK.
+
 ## Design Guidelines
 
 When designing APIs for Wing, we try to follow these tenets:
@@ -28,7 +36,7 @@ It heavily relies on interfaces to allow developers to extend its behavior and p
 Any non-determinism should be minimized and scoped to inputs provided by the user (e.g. by letting the user provide file sources or environment variables).
 Non-determistic information can also be managed by the provisioning engine (for example, in Terraform state) in the form of late-bound values.
 
-- **Built with jsii**: The Wing SDK is designed first and foremost for the Wing language, but it is compiled with jsii to allow the resources to be created as CDK constructs in all jsii-supported programming languages. 
+- **Built with jsii**: The Wing SDK is designed first and foremost for the Wing language, but it is compiled with jsii to allow the resources to be created as (preflight) CDK constructs in all jsii-supported programming languages.
 jsii poses restrictions on language features that cannot be idiomatically represented in target languages, and encourages good practices for object-oriented design.
 Features that are specific to Wing (such as inflight functions) may not be supported in other jsii languages.
 
