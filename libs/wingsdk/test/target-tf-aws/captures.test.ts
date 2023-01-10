@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("function with a bucket binding", () => {
@@ -25,7 +25,7 @@ test("function with a bucket binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -69,8 +69,8 @@ test("function with a function binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(inflight1._toInflight().sanitizedText).toMatchSnapshot();
-  expect(inflight2._toInflight().sanitizedText).toMatchSnapshot();
+  expect(sanitizeCode(inflight1._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(inflight2._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -136,8 +136,8 @@ test("function with a queue binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(pusher._toInflight().sanitizedText).toMatchSnapshot();
-  expect(processor._toInflight().sanitizedText).toMatchSnapshot();
+  expect(sanitizeCode(pusher._toInflight())).toMatchSnapshot();
+  expect(sanitizeCode(processor._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",

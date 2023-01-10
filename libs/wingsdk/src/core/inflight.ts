@@ -30,21 +30,6 @@ export abstract class Code {
   }
 
   /**
-   * The code contents, sanitized for unit testing.
-   * @experimental
-   */
-  public get sanitizedText(): string {
-    function removeAbsolutePaths(text: string) {
-      const regex = /"\/.+?\/libs\/wingsdk\/(.+?)"/g;
-
-      // replace first group with static text
-      return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
-    }
-
-    return removeAbsolutePaths(this.text);
-  }
-
-  /**
    * Generate a hash of the code contents.
    */
   public get hash(): string {

@@ -3,6 +3,7 @@ import { tmpdir } from "os";
 import { extname, join } from "path";
 import { debug } from "debug";
 import * as tar from "tar";
+import { Code } from "./core";
 
 /**
  * Path of the simulator configuration file in every .wsim tarball.
@@ -93,20 +94,31 @@ export function directorySnapshot(initialRoot: string) {
       if (statSync(abspath).isDirectory()) {
         visit(root, relpath);
       } else {
-        if (extname(f) === ".json") {
-          const data = readFileSync(abspath, "utf-8");
-          snapshot[key] = JSON.parse(data);
-        } else if (extname(f) === ".wsim") {
-          const workdir = mkdtemp();
-          tar.extract({
-            cwd: workdir,
-            sync: true,
-            file: abspath,
-          });
+        switch (extname(f)) {
+          case ".json":
+            const data = readFileSync(abspath, "utf-8");
+            snapshot[key] = JSON.parse(data);
+            break;
 
-          visit(workdir, ".", key + "/");
-        } else {
-          snapshot[key] = readFileSync(abspath, "utf-8");
+          case ".js":
+            const code = readFileSync(abspath, "utf-8");
+            snapshot[key] = sanitizeCodeText(code);
+            break;
+
+          case ".wsim":
+            const workdir = mkdtemp();
+
+            tar.extract({
+              cwd: workdir,
+              sync: true,
+              file: abspath,
+            });
+
+            visit(workdir, ".", key + "/");
+            break;
+
+          default:
+            snapshot[key] = readFileSync(abspath, "utf-8");
         }
       }
     }
@@ -115,4 +127,22 @@ export function directorySnapshot(initialRoot: string) {
   visit(initialRoot, ".");
 
   return snapshot;
+}
+
+/**
+ * Santize the text of a code bundle to remove path references that are system-specific.
+ */
+export function sanitizeCodeText(code: string): string {
+  function removeAbsolutePaths(text: string) {
+    const regex = /".+\/libs\/wingsdk\/(.+)"/g;
+
+    // replace first group with static text
+    return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
+  }
+
+  return removeAbsolutePaths(code);
+}
+
+export function sanitizeCode(code: Code): string {
+  return sanitizeCodeText(code.text);
 }

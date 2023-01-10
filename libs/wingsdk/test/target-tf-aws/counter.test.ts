@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default counter behavior", () => {
@@ -47,7 +47,7 @@ test("function with a counter binding", () => {
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
-  expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "aws_dynamodb_table", // table for the counter
     "aws_iam_role", // role for function

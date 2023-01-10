@@ -2,7 +2,7 @@ import * as cloud from "../../src/cloud";
 import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default queue behavior", () => {
@@ -48,7 +48,7 @@ test("queue with a consumer function", () => {
   const output = app.synth();
 
   // THEN
-  expect(processorFn._toInflight().sanitizedText).toMatchSnapshot();
+  expect(sanitizeCode(processorFn._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for function
