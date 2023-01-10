@@ -138,7 +138,7 @@ test.each(validWingFiles)(
       expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
 
       // get all files in .wing dir
-      const dotWingFiles = await walk.async(path.join(targetDir, ".wing"), {
+      const dotWingFiles = await walk.sync(path.join(targetDir, ".wing"), {
         return_object: true,
       });
       for (const irFile in dotWingFiles) {
