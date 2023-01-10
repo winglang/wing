@@ -1662,7 +1662,7 @@ hidden: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* Undefined
 
 Whether the resource should be hidden from the UI.
 
@@ -2334,21 +2334,9 @@ new core.Display(props?: DisplayProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Display.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
 | <code><a href="#@winglang/wingsdk.core.Display.property.description">description</a></code> | <code>str</code> | Description of the resource. |
+| <code><a href="#@winglang/wingsdk.core.Display.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
 | <code><a href="#@winglang/wingsdk.core.Display.property.title">title</a></code> | <code>str</code> | Title of the resource. |
-
----
-
-##### `hidden`<sup>Required</sup> <a name="hidden" id="@winglang/wingsdk.core.Display.property.hidden"></a>
-
-```wing
-hidden: bool;
-```
-
-- *Type:* bool
-
-Whether the resource should be hidden from the UI.
 
 ---
 
@@ -2361,6 +2349,18 @@ description: str;
 - *Type:* str
 
 Description of the resource.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/wingsdk.core.Display.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- *Type:* bool
+
+Whether the resource should be hidden from the UI.
 
 ---
 
@@ -2546,7 +2546,6 @@ Reference code directly from a string.
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>str</code> | Generate a hash of the code contents. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>core.Language</code> | The language of the code. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>str</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
-| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.sanitizedText">sanitized_text</a></code> | <code>str</code> | The code contents, sanitized for unit testing. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>str</code> | The code contents. |
 
 ---
@@ -2584,18 +2583,6 @@ path: str;
 - *Type:* str
 
 A path to the code in the user's file system that can be referenced for bundling purposes.
-
----
-
-##### `sanitized_text`<sup>Required</sup> <a name="sanitized_text" id="@winglang/wingsdk.core.NodeJsCode.property.sanitizedText"></a>
-
-```wing
-sanitized_text: str;
-```
-
-- *Type:* str
-
-The code contents, sanitized for unit testing.
 
 ---
 

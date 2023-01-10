@@ -1,8 +1,8 @@
-import { Construct } from "constructs";
 import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
+import { Construct } from "constructs";
 import { makeHandler } from "./internal";
 import { Connection, Display, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
