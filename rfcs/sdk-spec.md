@@ -576,7 +576,7 @@ It is useful for hosting static content, such as a blog or a single-page applica
 ```ts
 struct WebsiteProps {
   /**
-   * Local path to the website's static files.
+   * Local path to the website's static files, relative to the Wing source file.
    * @example "./dist"
    */
   path: str;
