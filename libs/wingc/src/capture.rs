@@ -253,7 +253,7 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 							})
 							.collect::<Vec<Capture>>(),
 					);
-				} else if t.is_immutable_collection() || t.is_primitive() {
+				} else if (t.is_immutable_collection() || t.is_primitive()) && f == Phase::Preflight {
 					res.push(Capture {
 						object: symbol.clone(),
 						kind: CaptureKind::ImmutableData,
