@@ -69,7 +69,7 @@ For example, a `cloud.Bucket` can emit events whenever an object is uploaded, an
 ```ts
 // wing
 let bucket = new cloud.Bucket();
-bucket.on_upload((file: str) => {
+bucket.on_upload(inflight (file: str) => {
   log.info("File uploaded: " + file);
 });
 ```
@@ -246,34 +246,34 @@ resource Bucket {
   /**
    * Upload a file to the bucket.
    */
-  inflight put(key: str, value: Serializable): Promise<void>;
+  inflight put(key: str, value: Serializable): void;
 
   /**
    * Get a file from the bucket.
    */
-  inflight get(key: str): Promise<Serializable>;
+  inflight get(key: str): Serializable;
 
   /**
    * Delete a file from the bucket.
    */
-  inflight delete(key: str): Promise<void>;
+  inflight delete(key: str): void;
 
   /**
    * List all files in the bucket with the given prefix.
    */
-  inflight list(prefix: str?): Promise<Iterator<str>>;
+  inflight list(prefix: str?): Iterator<str>;
 
   /**
    * Returns a url to the given file.
    * @throws Will throw if the public is not public.
    */
-  inflight public_url(key: str): Promise<str>;
+  inflight public_url(key: str): str;
 
   /**
    * Returns a presigned url to the given file. This URL can be used to access
    * the file by anyone until it expires (defaults to 24 hours).
    */
-  inflight presigned_url(key: str, duration: duration): Promise<str>;
+  inflight presigned_url(key: str, duration?: duration): str;
 }
 ```
 
@@ -315,11 +315,11 @@ resource Queue {
   /**
    * Push a message to the queue.
    */
-  inflight push(message: Serializable): Promise<void>;
+  inflight push(message: Serializable): void;
   /**
    * Pops (deletes and returns) a message from the queue.
    */
-  inflight pop(): Promise<Serializable>;
+  inflight pop(): Serializable;
 }
 ```
 
@@ -377,7 +377,7 @@ resource Function {
   /**
    * Invoke the function.
    */
-  inflight invoke(payload: Serializable): Promise<Serializable>;
+  inflight invoke(payload: Serializable): Serializable;
 }
 ```
 
@@ -480,20 +480,20 @@ resource Counter {
    * Increment the counter, returning the previous value.
    * @default 1
    */
-  inflight inc(value: num?): Promise<void>;
+  inflight inc(value: num?): void;
 
   /**
    * Decrement the counter, returning the previous value.
    * @default 1
    */
-  inflight dec(value: num?): Promise<void>;
+  inflight dec(value: num?): void;
 
   /**
    * Get the current value of the counter. Using this API is prone to race
    * conditions since the value can change between the time it is read and the
    * time it is used in your code.
    */
-  inflight peek(): Promise<number>;
+  inflight peek(): number;
 }
 ```
 
@@ -521,7 +521,7 @@ resource Topic {
   /**
    * Publish an event to the topic.
    */
-  inflight publish(event: Serializable): Promise<void>;
+  inflight publish(event: Serializable): void;
 }
 ```
 
@@ -661,7 +661,7 @@ resource Api {
    * Make a request to the specified route. Throws if the route hasn't been
    * defined.
    */
-  inflight request(route: str, method: HttpMethod, payload: Serializable): Promise<Serializable>;
+  inflight request(route: str, method: HttpMethod, payload: Serializable): Serializable;
 }
 
 struct ApiRequest {
@@ -771,7 +771,7 @@ resource Metric {
   /**
    * Record a value for the metric at the current point in time.
    */
-  inflight record(value: number): Promise<void>;
+  inflight record(value: number): void;
 }
 ```
 
@@ -869,7 +869,7 @@ resource Service {
   /**
    * Send a request to the service.
    */
-  inflight request(opts: ServiceRequestOptions): Promise<ServiceResponse>;
+  inflight request(opts: ServiceRequestOptions): ServiceResponse;
 }
 
 struct ServiceRequestOptions {
@@ -970,27 +970,27 @@ resource Table {
   /**
    * Insert a row into the table.
    */
-  inflight insert(row: Map<str, Serializable>): Promise<void>;
+  inflight insert(row: Map<str, Serializable>): void;
 
   /**
    * Update a row in the table.
    */
-  inflight update(row: Map<str, Serializable>): Promise<void>;
+  inflight update(row: Map<str, Serializable>): void;
 
   /**
    * Delete a row from the table.
    */
-  inflight delete(row: Map<str, Serializable>): Promise<void>;
+  inflight delete(row: Map<str, Serializable>): void;
 
   /**
    * Get a row from the table, by primary key.
    */
-  inflight get(key: str): Promise<Map<str, Serializable>>;
+  inflight get(key: str): Map<str, Serializable>;
 
   /**
    * List all rows in the table.
    */
-  inflight list(): Promise<Iterator<Map<str, Serializable>>>;
+  inflight list(): Iterator<Map<str, Serializable>>;
 }
 ```
 
