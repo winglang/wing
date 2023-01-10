@@ -1,5 +1,5 @@
 import { IConstruct } from "constructs";
-import { Inflight, InflightBindings, IResource, NodeJsCode } from "../core";
+import { Inflight, InflightBinding, IResource, NodeJsCode } from "../core";
 
 /**
  * Test utilities.
@@ -22,7 +22,7 @@ export class Testing {
     scope: IConstruct,
     id: string,
     code: string,
-    bindings?: InflightBindings
+    bindings?: { [key: string]: InflightBinding }
   ): IResource {
     return new Inflight(scope, id, {
       code: NodeJsCode.fromInline(code),

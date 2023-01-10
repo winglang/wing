@@ -10,7 +10,7 @@ export class ImmutableSet {
    * The length of the set
    * @returns the length of the set
    */
-  public get size(): number {
+  public get length(): number {
     throw new Error("Abstract");
   }
 }

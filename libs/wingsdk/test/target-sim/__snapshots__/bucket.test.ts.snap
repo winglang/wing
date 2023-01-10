@@ -2,7 +2,7 @@
 
 exports[`create a bucket 1`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -73,7 +73,7 @@ Array [
 
 exports[`get invalid object throws an error 2`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -145,7 +145,7 @@ Array [
 
 exports[`put and get objects from bucket 2`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -219,7 +219,7 @@ Array [
 
 exports[`put multiple objects and list all from bucket 2`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -291,7 +291,7 @@ Array [
 
 exports[`remove object from a bucket 2`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -363,7 +363,7 @@ Array [
 
 exports[`remove object from a bucket with mustExist as option 2`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},

@@ -17,11 +17,9 @@ test("publishing messages to topic", async () => {
             await this.topic.publish(event);
         }`,
         {
-          resources: {
-            topic: {
-              resource: topic,
-              ops: [cloud.TopicInflightMethods.PUBLISH],
-            },
+          topic: {
+            resource: topic,
+            ops: [cloud.TopicInflightMethods.PUBLISH],
           },
         }
       );

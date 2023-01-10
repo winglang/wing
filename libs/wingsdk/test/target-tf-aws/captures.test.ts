@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp, sanitizeCode } from "../../src/util";
+import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("function with a bucket binding", () => {
@@ -13,11 +13,9 @@ test("function with a bucket binding", () => {
     "Handler",
     `async handle(event) { await this.bucket.put("hello.txt", event); }`,
     {
-      resources: {
-        bucket: {
-          resource: bucket,
-          ops: [cloud.BucketInflightMethods.PUT],
-        },
+      bucket: {
+        resource: bucket,
+        ops: [cloud.BucketInflightMethods.PUT],
       },
     }
   );
@@ -25,7 +23,7 @@ test("function with a bucket binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
+  expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -57,11 +55,9 @@ test("function with a function binding", () => {
       await this.function.invoke(JSON.stringify({ hello: "world" }));
     }`,
     {
-      resources: {
-        function: {
-          resource: fn1,
-          ops: [cloud.FunctionInflightMethods.INVOKE],
-        },
+      function: {
+        resource: fn1,
+        ops: [cloud.FunctionInflightMethods.INVOKE],
       },
     }
   );
@@ -69,8 +65,8 @@ test("function with a function binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(sanitizeCode(inflight1._toInflight())).toMatchSnapshot();
-  expect(sanitizeCode(inflight2._toInflight())).toMatchSnapshot();
+  expect(inflight1._toInflight().sanitizedText).toMatchSnapshot();
+  expect(inflight2._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",
@@ -117,11 +113,9 @@ test("function with a queue binding", () => {
     "Pusher",
     `async handle(event) { await this.queue.push("info"); }`,
     {
-      resources: {
-        queue: {
-          resource: queue,
-          ops: [cloud.QueueInflightMethods.PUSH],
-        },
+      queue: {
+        resource: queue,
+        ops: [cloud.QueueInflightMethods.PUSH],
       },
     }
   );
@@ -136,8 +130,8 @@ test("function with a queue binding", () => {
   const output = app.synth();
 
   // THEN
-  expect(sanitizeCode(pusher._toInflight())).toMatchSnapshot();
-  expect(sanitizeCode(processor._toInflight())).toMatchSnapshot();
+  expect(pusher._toInflight().sanitizedText).toMatchSnapshot();
+  expect(processor._toInflight().sanitizedText).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role",

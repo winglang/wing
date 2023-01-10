@@ -2,7 +2,7 @@
 
 exports[`create a counter 1`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -63,7 +63,7 @@ Object {
 
 exports[`inc 1`] = `
 Object {
-  "app.wsim/simulator.json": Object {
+  "app.wsim": Object {
     "resources": Array [
       Object {
         "attrs": Object {},

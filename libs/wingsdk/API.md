@@ -1545,48 +1545,48 @@ Environment variables to pass to the function.
 
 ---
 
-### InflightBindings <a name="InflightBindings" id="@winglang/wingsdk.core.InflightBindings"></a>
+### InflightBinding <a name="InflightBinding" id="@winglang/wingsdk.core.InflightBinding"></a>
 
-Inflight bindings.
+A resource binding.
 
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBindings.Initializer"></a>
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightBinding.Initializer"></a>
 
 ```wing
 bring core;
 
-let inflight_bindings = core.InflightBindings{ ... }
+let inflight_binding = core.InflightBinding{ ... }
 ```
 
 #### Properties <a name="Properties" id="Properties"></a>
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightBindings.property.data">data</a></code> | <code>MutMap&lt;any&gt;</code> | Immutable data being referenced by the inflight (key is the symbol); |
-| <code><a href="#@winglang/wingsdk.core.InflightBindings.property.resources">resources</a></code> | <code>MutMap&lt;core.InflightResourceBinding&gt;</code> | Resources being referenced by the inflight (key is the symbol). |
+| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
+| <code><a href="#@winglang/wingsdk.core.InflightBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
 
 ---
 
-##### `data`<sup>Optional</sup> <a name="data" id="@winglang/wingsdk.core.InflightBindings.property.data"></a>
+##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/wingsdk.core.InflightBinding.property.ops"></a>
 
 ```wing
-data: MutMap<any>;
+ops: MutArray<str>;
 ```
 
-- *Type:* MutMap&lt;any&gt;
+- *Type:* MutArray&lt;str&gt;
 
-Immutable data being referenced by the inflight (key is the symbol);
+The list of operations used on the resource.
 
 ---
 
-##### `resources`<sup>Optional</sup> <a name="resources" id="@winglang/wingsdk.core.InflightBindings.property.resources"></a>
+##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightBinding.property.resource"></a>
 
 ```wing
-resources: MutMap<InflightResourceBinding>;
+resource: IResource;
 ```
 
-- *Type:* MutMap&lt;core.InflightResourceBinding&gt;
+- *Type:* core.IResource
 
-Resources being referenced by the inflight (key is the symbol).
+The resource.
 
 ---
 
@@ -1607,7 +1607,7 @@ let inflight_props = core.InflightProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.InflightProps.property.code">code</a></code> | <code>core.Code</code> | Reference to the inflight code. Only JavaScript code is currently supported. |
-| <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>core.InflightBindings</code> | Data and resource binding information. |
+| <code><a href="#@winglang/wingsdk.core.InflightProps.property.bindings">bindings</a></code> | <code>MutMap&lt;core.InflightBinding&gt;</code> | Resource binding information. |
 
 ---
 
@@ -1629,58 +1629,13 @@ all references to resources must be made through `this.<resource>`.
 ##### `bindings`<sup>Optional</sup> <a name="bindings" id="@winglang/wingsdk.core.InflightProps.property.bindings"></a>
 
 ```wing
-bindings: InflightBindings;
+bindings: MutMap<InflightBinding>;
 ```
 
-- *Type:* core.InflightBindings
+- *Type:* MutMap&lt;core.InflightBinding&gt;
 - *Default:* no bindings
 
-Data and resource binding information.
-
----
-
-### InflightResourceBinding <a name="InflightResourceBinding" id="@winglang/wingsdk.core.InflightResourceBinding"></a>
-
-A resource binding.
-
-#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.InflightResourceBinding.Initializer"></a>
-
-```wing
-bring core;
-
-let inflight_resource_binding = core.InflightResourceBinding{ ... }
-```
-
-#### Properties <a name="Properties" id="Properties"></a>
-
-| **Name** | **Type** | **Description** |
-| --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.InflightResourceBinding.property.ops">ops</a></code> | <code>MutArray&lt;str&gt;</code> | The list of operations used on the resource. |
-| <code><a href="#@winglang/wingsdk.core.InflightResourceBinding.property.resource">resource</a></code> | <code>core.IResource</code> | The resource. |
-
----
-
-##### `ops`<sup>Required</sup> <a name="ops" id="@winglang/wingsdk.core.InflightResourceBinding.property.ops"></a>
-
-```wing
-ops: MutArray<str>;
-```
-
-- *Type:* MutArray&lt;str&gt;
-
-The list of operations used on the resource.
-
----
-
-##### `resource`<sup>Required</sup> <a name="resource" id="@winglang/wingsdk.core.InflightResourceBinding.property.resource"></a>
-
-```wing
-resource: IResource;
-```
-
-- *Type:* core.IResource
-
-The resource.
+Resource binding information.
 
 ---
 
@@ -2253,6 +2208,7 @@ Reference code directly from a string.
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.hash">hash</a></code> | <code>str</code> | Generate a hash of the code contents. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.language">language</a></code> | <code>core.Language</code> | The language of the code. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.path">path</a></code> | <code>str</code> | A path to the code in the user's file system that can be referenced for bundling purposes. |
+| <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.sanitizedText">sanitized_text</a></code> | <code>str</code> | The code contents, sanitized for unit testing. |
 | <code><a href="#@winglang/wingsdk.core.NodeJsCode.property.text">text</a></code> | <code>str</code> | The code contents. |
 
 ---
@@ -2290,6 +2246,18 @@ path: str;
 - *Type:* str
 
 A path to the code in the user's file system that can be referenced for bundling purposes.
+
+---
+
+##### `sanitized_text`<sup>Required</sup> <a name="sanitized_text" id="@winglang/wingsdk.core.NodeJsCode.property.sanitizedText"></a>
+
+```wing
+sanitized_text: str;
+```
+
+- *Type:* str
+
+The code contents, sanitized for unit testing.
 
 ---
 
