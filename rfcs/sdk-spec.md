@@ -606,14 +606,9 @@ Future extensions: domain and certificate props? support for edge functions?
 The Api resource represents an API Gateway that can be used to manage HTTP routes and run functions in response to requests.
 
 ```ts
-struct ApiProps {}
-
-struct ApiOnGetProps { /* elided */ }
-struct ApiOnPostProps { /* elided */ }
-struct ApiOnPutProps { /* elided */ }
-struct ApiOnDeleteProps { /* elided */ }
-struct ApiOnPatchProps { /* elided */ }
-struct ApiOnRequestProps { /* elided */ }
+struct ApiProps {
+  cors: ApiCorsProps?;
+}
 
 resource Api {
   init(props: ApiProps = {});
@@ -658,6 +653,44 @@ resource Api {
    * defined.
    */
   inflight request(route: str, method: HttpMethod, payload: Serializable): Serializable;
+}
+
+struct ApiOnGetProps { /* elided */ }
+struct ApiOnPostProps { /* elided */ }
+struct ApiOnPutProps { /* elided */ }
+struct ApiOnDeleteProps { /* elided */ }
+struct ApiOnPatchProps { /* elided */ }
+struct ApiOnRequestProps { /* elided */ }
+
+struct ApiCorsProps {
+  /**
+   * The list of allowed origins.
+   * @example ["https://example.com"]
+   */
+  origins: Array<str>;
+
+  /**
+   * The list of allowed methods.
+   * @example [HttpMethod.GET, HttpMethod.POST]
+   */
+  methods: Array<HttpMethod>;
+
+  /**
+   * The list of allowed headers.
+   * @example ["Content-Type"]
+   */
+  headers: Array<str>;
+
+  /**
+   * The list of exposed headers.
+   * @example ["Content-Type"]
+   */
+  exposed_headers: Array<str>;
+
+  /**
+   * Whether to allow credentials.
+   */
+  allow_credentials: bool;
 }
 
 struct ApiRequest {
