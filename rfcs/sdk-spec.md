@@ -480,13 +480,13 @@ resource Counter {
    * Increment the counter, returning the previous value.
    * @default 1
    */
-  inflight inc(value: num?): void;
+  inflight inc(value: num?): num;
 
   /**
    * Decrement the counter, returning the previous value.
    * @default 1
    */
-  inflight dec(value: num?): void;
+  inflight dec(value: num?): num;
 
   /**
    * Get the current value of the counter. Using this API is prone to race
@@ -531,44 +531,39 @@ The schedule resource represents a service that can trigger events at a regular 
 Schedules are useful for periodic tasks, such as running backups or sending daily reports.
 
 ```ts
-struct ScheduleProps {
-  /**
-   * Trigger events according to a cron schedule.
-   * 
-   * Exactly one of `cron` or `rate` must be specified.
-   *
-   * @default "0 0 * * *" - midnight every day
-   */
-  cron: str?;
-
-  /**
-   * Trigger events at a periodic rate.
-   *
-   * Exactly one of `cron` or `rate` must be specified.
-   * 
-   * @default 1 day
-   */
-  rate: duration?;
-}
-
 struct ScheduleOnTickProps { /* elided */ }
 
 resource Schedule {
   /**
    * Trigger events according to a cron schedule.
+   * @example "0 0 * * *" - midnight every day
    */
   static fromCron(cron: str): Schedule;
 
   /**
    * Trigger events at a periodic rate.
+   * @example 1 hour
    */
   static fromRate(rate: duration): Schedule;
 
+  private init(/* elided */): Schedule;
+
   /**
-   * Run an inflight according to the schedule.
+   * Run an inflight whenever the schedule triggers.
    */
-  on_tick(fn: inflight () => void, opts: ScheduleOnTickProps?): void;
+  on_tick(fn: inflight () => void, opts: TimerOnTickProps?): void;
 }
+```
+
+Example:
+
+```ts
+// Run a function every hour.
+let every_hour = new cloud.Schedule.fromRate(1 hour); // implicit scope and id?
+
+every_hour.on_tick(inflight () => {
+  // ...
+});
 ```
 
 Future extensions: inflight `next_tick(): Duration` method?
