@@ -643,7 +643,7 @@ impl JSifier {
 					symbol,
 					Self::render_block([
 						format!("resource: {},", symbol),
-						format!("ops: [{}]", methods.join(","))
+						format!("ops: [{}]", methods.iter().map(|x| format!("\"{}\"", x)).join(","))
 					])
 				));
 			}

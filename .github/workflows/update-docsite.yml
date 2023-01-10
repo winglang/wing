@@ -2,7 +2,8 @@ name: Trigger Docsite Update
 
 on:
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
   update-docsite:
