@@ -156,6 +156,7 @@ pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnosti
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
+				assert!(func_def.statements.env.borrow().is_some()); // make sure env is defined
 				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements, diagnostics)));
 			}
 		}
@@ -239,32 +240,41 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 					}
 				};
 
-				if let (Some(resource), Phase::Preflight) = (t.as_resource(), f) {
-					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
-					//   1. explicit capture definitions
-					//   2. analyzing inflight code and figuring out what methods are being used on the object
-					res.extend(
-						resource
-							.methods()
-							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
-							.map(|(name, _)| Capture {
-								object: symbol.clone(),
-								kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
-							})
-							.collect::<Vec<Capture>>(),
-					);
-				} else if (t.is_immutable_collection() || t.is_primitive()) && f == Phase::Preflight {
-					res.push(Capture {
-						object: symbol.clone(),
-						kind: CaptureKind::ImmutableData,
-					});
-				} else {
-					diagnostics.push(Diagnostic {
-						level: DiagnosticLevel::Error,
-						message: format!("Can't capture '{}' of type {} in inflight", symbol.name, t),
-						span: Some(symbol.span.clone()),
-					});
+				// if the identifier represents a preflight object, then capture it
+				if f == Phase::Preflight {
+
+					// capture as a resource
+					if let Some(resource) = t.as_resource() {
+						// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
+						//   1. explicit capture definitions
+						//   2. analyzing inflight code and figuring out what methods are being used on the object
+						res.extend(
+							resource
+								.methods()
+								.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
+								.map(|(name, _)| Capture {
+									object: symbol.clone(),
+									kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
+								})
+								.collect::<Vec<Capture>>(),
+						);
+					} else if t.is_immutable_collection() || t.is_primitive() {
+						// capture as an immutable data type (primitive/collection)
+						res.push(Capture {
+							object: symbol.clone(),
+							kind: CaptureKind::ImmutableData,
+						});
+					} else {
+						// unsupported capture
+						diagnostics.push(Diagnostic {
+							level: DiagnosticLevel::Error,
+							message: format!("Can't capture '{}' of type '{}' from preflight", symbol.name, t),
+							span: Some(symbol.span.clone()),
+						});
+					}
+	
 				}
+
 			}
 			Reference::NestedIdentifier { object, property: _ } => {
 				res.extend(scan_captures_in_expression(object, env, statement_idx, diagnostics));
