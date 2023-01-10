@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages } from "./util";
+import { listMessages, treeJsonOf } from "./util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -32,4 +32,20 @@ test("inflight uses a logger", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("Logger have display hidden property set to true", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const treeJson = treeJsonOf(app.synth());
+
+  const expected = {
+    WingLogger: {
+      display: {
+        hidden: true,
+      },
+    },
+  };
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject(expected);
 });
