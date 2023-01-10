@@ -1,7 +1,13 @@
 name: Build
 
 on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
   push:
+    branches:
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -31,7 +37,7 @@ jobs:
 
       - name: Login to Private NPM registry
         if: github.ref == 'refs/heads/main'
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         if: github.ref == 'refs/heads/main'
@@ -44,7 +50,7 @@ jobs:
         id: info
         env:
           # Needed for `auto` cli
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
         run: |
           set -e
           echo "version=$(npx auto release -d | grep 'Would have created a release on GitHub for version: ' | sed 's/.*version: //')" >> $GITHUB_OUTPUT
@@ -110,7 +116,7 @@ jobs:
         run: scripts/setup_wasi.sh
 
       - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -162,7 +168,7 @@ jobs:
         if: github.ref == 'refs/heads/main'
         uses: amondnet/vercel-action@v25.1.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN_WING_PLAYGROUND }}
           vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WING_PLAYGROUND }}
@@ -209,7 +215,7 @@ jobs:
         uses: Swatinem/rust-cache@v2
 
       - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -272,7 +278,7 @@ jobs:
 
       - name: Run E2E Tests
         env:
-          NPM_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export HANGAR_WING_TGZ="$(pwd)/$(find wing/*.tgz)"
           export HANGAR_WINGSDK_TGZ="$(pwd)/$(find wingsdk/*.tgz)"
@@ -310,7 +316,7 @@ jobs:
           registry-url: https://npm.pkg.github.com
 
       - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
+        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -397,7 +403,7 @@ jobs:
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.prepare.outputs.version }}"
 
       - name: Cut Development Release
