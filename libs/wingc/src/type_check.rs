@@ -349,6 +349,22 @@ impl TypeRef {
 			false
 		}
 	}
+
+	pub fn is_immutable_collection(&self) -> bool {
+		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_primitive(&self) -> bool {
+		if let Type::Number | Type::String | Type::Duration | Type::Boolean = **self {
+			true
+		} else {
+			false
+		}
+	}
 }
 
 impl PartialEq for TypeRef {

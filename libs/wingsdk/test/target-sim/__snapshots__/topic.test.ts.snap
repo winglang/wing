@@ -2,7 +2,7 @@
 
 exports[`create a topic 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
