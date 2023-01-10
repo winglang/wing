@@ -162,10 +162,10 @@ exports[`wing compile asynchronous_model_implicit_await_in_functions.w > cdk.tf.
         "environment": {
           "variables": {
             "FUNCTION_NAME_8ca853c9": "\${aws_lambda_function.root_strtostr_05420EE8.arn}",
-            "WING_FUNCTION_NAME": "func",
+            "WING_FUNCTION_NAME": "func-c8cf78f644df7e5c27dc0f581c2c6870d5d294f731",
           },
         },
-        "function_name": "func",
+        "function_name": "func-c8cf78f644df7e5c27dc0f581c2c6870d5d294f731",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.arn}",
         "runtime": "nodejs16.x",
@@ -181,10 +181,10 @@ exports[`wing compile asynchronous_model_implicit_await_in_functions.w > cdk.tf.
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "str_to_str",
+            "WING_FUNCTION_NAME": "str-to-str-c8891c85428101a19255e06c2dad4e293e8ca853c9",
           },
         },
-        "function_name": "str_to_str",
+        "function_name": "str-to-str-c8891c85428101a19255e06c2dad4e293e8ca853c9",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_strtostr_IamRole_305ACAF8.arn}",
         "runtime": "nodejs16.x",
@@ -364,10 +364,10 @@ exports[`wing compile capture_collections.w > cdk.tf.json 1`] = `
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud.Function",
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
           },
         },
-        "function_name": "cloud_Function",
+        "function_name": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",
@@ -530,10 +530,10 @@ exports[`wing compile capture_primitives.w > cdk.tf.json 1`] = `
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "cloud.Function",
+            "WING_FUNCTION_NAME": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
           },
         },
-        "function_name": "cloud_Function",
+        "function_name": "cloud-Function-c8d2eca1a1755fb455a36371856faac1ea5bb84dfa",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",

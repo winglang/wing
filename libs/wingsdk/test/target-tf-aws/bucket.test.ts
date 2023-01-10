@@ -42,8 +42,6 @@ test("bucket name", () => {
   const bucket = new cloud.Bucket(app, "TheUncannyBucket");
   const output = app.synth();
 
-  console.log(output);
-
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
