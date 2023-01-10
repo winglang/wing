@@ -12,7 +12,6 @@ jobs:
       github.event.check_run.name != 'Build Failure Notification'
       && github.event.check_run.conclusion == 'failure' 
       && github.event.check_run.check_suite.head_branch == 'main'
-      && github.event.check_run.check_suite.status == 'completed'
     steps:
       - name: Send slack notification
         uses: ravsamhq/notify-slack-action@v2.3.0
