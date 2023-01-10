@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { SimApp } from "../../src/testing";
-import { listMessages } from "./util";
+import { listMessages, treeJsonOf } from "./util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -185,4 +185,26 @@ test("remove non-existent object from a bucket with mustExist option", async () 
   await expect(async () =>
     client.delete(fileName, { mustExist: true })
   ).rejects.toThrowError();
+});
+
+test("bucket has no display property", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const treeJson = treeJsonOf(app.synth());
+  const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
+
+  // THEN
+  expect(bucket.display.hidden).toBeUndefined();
+  expect(treeJson.tree.children).toBeDefined();
+
+  expect(treeJson.tree.children).toMatchObject({
+    my_bucket: {},
+  });
+  expect(treeJson.tree.children).not.toMatchObject({
+    my_bucket: {
+      display: {},
+    },
+  });
 });

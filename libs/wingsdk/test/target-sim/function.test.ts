@@ -1,6 +1,6 @@
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages } from "./util";
+import { listMessages, treeJsonOf } from "./util";
 
 const INFLIGHT_CODE = `
 async handle(event) {
@@ -124,4 +124,27 @@ test("invoke function fails", async () => {
     message: "Name must start with uppercase letter",
   });
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("function has no display property", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler);
+
+  const treeJson = treeJsonOf(app.synth());
+  const func = app.node.tryFindChild("my_function") as cloud.Function;
+
+  // THEN
+  expect(func.display.hidden).toBeUndefined();
+  expect(treeJson.tree.children).toBeDefined();
+
+  expect(treeJson.tree.children).toMatchObject({
+    my_function: {},
+  });
+  expect(treeJson.tree.children).not.toMatchObject({
+    my_function: {
+      display: {},
+    },
+  });
 });

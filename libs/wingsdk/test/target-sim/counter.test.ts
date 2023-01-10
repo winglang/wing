@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import { ICounterClient } from "../../src/cloud";
 import { SimApp } from "../../src/testing";
-import { listMessages } from "./util";
+import { listMessages, treeJsonOf } from "./util";
 
 test("create a counter", async () => {
   // GIVEN
@@ -91,4 +91,26 @@ test("peek with initial value", async () => {
 
   const peek = await client.peek();
   expect(peek).toEqual(123);
+});
+
+test("counter has no display property", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter");
+
+  const treeJson = treeJsonOf(app.synth());
+  const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
+
+  // THEN
+  expect(counter.display.hidden).toBeUndefined();
+  expect(treeJson.tree.children).toBeDefined();
+
+  expect(treeJson.tree.children).toMatchObject({
+    my_counter: {},
+  });
+  expect(treeJson.tree.children).not.toMatchObject({
+    my_counter: {
+      display: {},
+    },
+  });
 });

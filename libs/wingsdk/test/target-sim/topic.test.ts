@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as testing from "../../src/testing";
-import { Testing } from "../../src/testing";
-import { listMessages } from "./util";
+import { SimApp, Testing } from "../../src/testing";
+import { listMessages, treeJsonOf } from "./util";
 
 jest.setTimeout(5_000);
 
@@ -76,4 +76,26 @@ test("topic publishes messages to multiple subscribers", async () => {
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
+});
+
+test("topic has no display property", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Topic(app, "my_topic");
+
+  const treeJson = treeJsonOf(app.synth());
+  const topic = app.node.tryFindChild("my_topic") as cloud.Topic;
+
+  // THEN
+  expect(topic.display.hidden).toBeUndefined();
+  expect(treeJson.tree.children).toBeDefined();
+
+  expect(treeJson.tree.children).toMatchObject({
+    my_topic: {},
+  });
+  expect(treeJson.tree.children).not.toMatchObject({
+    my_topic: {
+      display: {},
+    },
+  });
 });
