@@ -48,7 +48,7 @@ async function main() {
     )
     .option(
       "-t, --target <target>",
-      "Target platform (options: 'tf-aws', 'sim')",
+      "Target platform (options: 'tf-aws', 'tf-azure', 'sim')",
       "tf-aws"
     )
     .action(compile);
