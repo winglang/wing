@@ -10,6 +10,18 @@ The examples in `proposed` are examples that may not yet work in the current ver
 
 _Add yours here!_
 
+## Cacheable function
+
+**Source code:** [./proposed/cacheable-function.w](./proposed/cacheable-function.w)
+**Description:** A Wing resource where a FaaS is augmented to cache input/output pairs using a object storage bucket.
+**Author:** [@Chriscbr](https://github.com/Chriscbr)
+
+## In-memory search engine
+
+**Source code:** [./proposed/in-memory-search.w](./proposed/in-memory-search.w)
+**Description:** This is a concept for a Wing app where cloud functions are used to create a search engine where the entire search index exists in-memory, spread across many lambda functions.
+**Author:** [@Chriscbr](https://github.com/Chriscbr)
+
 <!--
 
 ## Tweet queue
