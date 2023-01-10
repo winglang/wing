@@ -121,10 +121,10 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
       const lines = artifact.split("\n");
       let startLine = Math.max(lineNumber - 2, 0);
-      let finishLine = Math.min(lineNumber + 2, lines.length);
+      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
 
-      // print line and its three surrounding lines
-      for (let i = startLine; i < finishLine; i++) {
+      // print line and its surrounding lines
+      for (let i = startLine; i <= finishLine; i++) {
         if (i === lineNumber) {
           console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
         } else {

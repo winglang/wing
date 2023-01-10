@@ -51,7 +51,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 		Ok(source) => source,
 		Err(err) => {
 			let mut diagnostics = Diagnostics::new();
-			
+
 			diagnostics.push(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", &source_file, err),
 				span: None,
@@ -180,7 +180,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let mut capture_diagnostics = Diagnostics::new();
 	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
 	diagnostics.extend(capture_diagnostics);
-	
+
 	let errors = diagnostics
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
