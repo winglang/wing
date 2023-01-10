@@ -97,7 +97,7 @@ impl Parser<'_> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.is_error() {
+		if node.has_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
