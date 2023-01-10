@@ -40,8 +40,10 @@ test("Logger has display hidden property set to true", async () => {
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
+  const logger = app.node.tryFindChild("WingLogger") as cloud.Logger;
 
   // THEN
+  expect(logger.display.hidden).toEqual(true);
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).toMatchObject({
     WingLogger: {

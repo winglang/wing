@@ -1,4 +1,6 @@
+import { Inflight } from "../../src/core";
 import { SimApp, Testing } from "../../src/testing";
+import { treeJsonOf } from "./util";
 
 const INFLIGHT_CODE = `
 async handle(event) {
@@ -11,8 +13,18 @@ test("inflight has display hidden property set to true", async () => {
   const app = new SimApp();
 
   // WHEN
-  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const treeJson = treeJsonOf(app.synth());
+  const inflight = app.node.tryFindChild("Handler") as Inflight;
 
-  //THEN
-  expect(handler.display.hidden).toEqual(true);
+  // THEN
+  expect(inflight.display.hidden).toEqual(true);
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    Handler: {
+      display: {
+        hidden: true,
+      },
+    },
+  });
 });
