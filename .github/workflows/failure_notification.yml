@@ -16,9 +16,9 @@ jobs:
       - name: Send slack notification
         uses: ravsamhq/notify-slack-action@v2.3.0
         with:
-          status: ${{ github.event.check_run.conclusion }}
+          status: failure
           notification_title: "${{ github.event.check_run.name }} has failed"
-          message_format: ":x *${{ github.event.check_run.name }}* failed in <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>"
+          message_format: ":x *${{ github.event.check_run.name }}* failed on <{commit_url}|{commit_sha}>"
           footer: "<${{ github.event.check_run.details_url }}|Details>"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
