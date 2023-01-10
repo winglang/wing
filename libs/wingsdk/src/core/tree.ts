@@ -1,6 +1,6 @@
-import { IConstruct } from "constructs";
 import * as fs from "fs";
 import * as path from "path";
+import { IConstruct } from "constructs";
 import { IApp } from "./app";
 import { Resource } from "./resource";
 
@@ -168,7 +168,7 @@ function synthDisplay(construct: IConstruct): DisplayInfo | undefined {
   if (
     construct instanceof Resource &&
     construct.display &&
-    Object.values(construct.display).some(a => a !== undefined)
+    Object.values(construct.display).some((a) => a !== undefined)
   ) {
     return construct.display;
   }

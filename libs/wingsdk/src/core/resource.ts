@@ -323,7 +323,7 @@ export interface DisplayProps {
 
   /**
    * Whether the resource should be hidden from the UI.
-   * @default false
+   * @default - undefined
    */
   readonly hidden?: boolean;
 }
@@ -345,11 +345,11 @@ export class Display {
   /**
    * Whether the resource should be hidden from the UI.
    */
-  public hidden: boolean;
-  
-  public constructor( props? : DisplayProps) {
+  public hidden?: boolean;
+
+  public constructor(props?: DisplayProps) {
     this.title = props?.title;
     this.description = props?.description;
-    this.hidden = props?.hidden ?? false;
+    this.hidden = props?.hidden;
   }
 }

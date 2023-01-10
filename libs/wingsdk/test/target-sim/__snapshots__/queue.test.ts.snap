@@ -50,9 +50,6 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "my_queue",
           "path": "root/my_queue",
         },
@@ -216,9 +213,6 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -259,9 +253,6 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -304,9 +295,6 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
         },
@@ -318,9 +306,6 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -489,9 +474,6 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -532,9 +514,6 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -577,9 +556,6 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
         },
@@ -591,9 +567,6 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
@@ -757,9 +730,6 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -800,9 +770,6 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -845,9 +812,6 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
         },
@@ -859,9 +823,6 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",

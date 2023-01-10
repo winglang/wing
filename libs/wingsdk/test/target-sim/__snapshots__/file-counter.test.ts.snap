@@ -164,9 +164,6 @@ exports.handler = async function(event) {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
               },
-              "display": Object {
-                "hidden": false,
-              },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
             },
@@ -185,9 +182,6 @@ exports.handler = async function(event) {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
-              },
-              "display": Object {
-                "hidden": false,
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
@@ -208,9 +202,6 @@ exports.handler = async function(event) {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
               },
-              "display": Object {
-                "hidden": false,
-              },
               "id": "Processor",
               "path": "root/HelloWorld/Processor",
             },
@@ -229,9 +220,6 @@ exports.handler = async function(event) {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
-              },
-              "display": Object {
-                "hidden": false,
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -286,9 +274,6 @@ exports.handler = async function(event) {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
               },
-              "display": Object {
-                "hidden": false,
-              },
               "id": "Queue-OnMessage-401ee792",
               "path": "root/HelloWorld/Queue-OnMessage-401ee792",
             },
@@ -300,9 +285,6 @@ exports.handler = async function(event) {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
-              },
-              "display": Object {
-                "hidden": false,
               },
               "id": "Queue-OnMessageHandler-401ee792",
               "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",

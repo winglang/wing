@@ -35,9 +35,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Topic",
             "path": "root/Topic",
           },
@@ -196,9 +193,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Handler",
             "path": "root/Handler",
           },
@@ -243,9 +237,6 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
-            },
-            "display": Object {
-              "hidden": false,
             },
             "id": "Topic",
             "path": "root/Topic",
@@ -336,9 +327,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Topic-OnMessage-c5395e41",
             "path": "root/Topic-OnMessage-c5395e41",
           },
@@ -350,9 +338,6 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
-            },
-            "display": Object {
-              "hidden": false,
             },
             "id": "Topic-OnMessageHandler-c5395e41",
             "path": "root/Topic-OnMessageHandler-c5395e41",

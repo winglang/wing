@@ -48,9 +48,6 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "my_counter",
           "path": "root/my_counter",
         },
@@ -114,9 +111,6 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_counter",
           "path": "root/my_counter",

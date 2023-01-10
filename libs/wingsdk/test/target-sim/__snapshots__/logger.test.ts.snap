@@ -73,9 +73,6 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
-          "display": Object {
-            "hidden": false,
-          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -126,9 +123,6 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
-          },
-          "display": Object {
-            "hidden": false,
           },
           "id": "my_function",
           "path": "root/my_function",

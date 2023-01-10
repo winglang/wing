@@ -45,9 +45,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Counter",
             "path": "root/Counter",
           },
@@ -235,9 +232,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Counter",
             "path": "root/Counter",
           },
@@ -321,9 +315,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Function",
             "path": "root/Function",
           },
@@ -335,9 +326,6 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
-            },
-            "display": Object {
-              "hidden": false,
             },
             "id": "Handler",
             "path": "root/Handler",

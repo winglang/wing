@@ -113,7 +113,7 @@ export class Inflight extends Construct implements IResource {
   /**
    * Information on how to display a resource in the UI.
    */
-  public readonly display = new Display({hidden: true});
+  public readonly display = new Display({ hidden: true });
 
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away

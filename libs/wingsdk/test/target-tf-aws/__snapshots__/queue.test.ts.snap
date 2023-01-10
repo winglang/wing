@@ -35,9 +35,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Queue",
             "path": "root/Queue",
           },
@@ -177,9 +174,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Handler",
             "path": "root/Handler",
           },
@@ -216,9 +210,6 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
-            },
-            "display": Object {
-              "hidden": false,
             },
             "id": "Queue",
             "path": "root/Queue",
@@ -309,9 +300,6 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
-            "display": Object {
-              "hidden": false,
-            },
             "id": "Queue-OnMessage-c5395e41",
             "path": "root/Queue-OnMessage-c5395e41",
           },
@@ -323,9 +311,6 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
-            },
-            "display": Object {
-              "hidden": false,
             },
             "id": "Queue-OnMessageHandler-c5395e41",
             "path": "root/Queue-OnMessageHandler-c5395e41",
@@ -424,9 +409,6 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
-            },
-            "display": Object {
-              "hidden": false,
             },
             "id": "Queue",
             "path": "root/Queue",
