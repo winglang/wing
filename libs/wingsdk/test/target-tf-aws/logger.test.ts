@@ -1,32 +1,28 @@
 import * as cdktf from "cdktf";
 import { Polycons } from "polycons";
 import * as cloud from "../../src/cloud";
+import { Logger } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
+import { sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
   const output = cdktf.Testing.synthScope((scope) => {
     const factory = new tfaws.PolyconFactory();
     Polycons.register(scope, factory);
+    Logger.register(scope);
 
-    cloud.Logger.register(scope);
     const inflight = Testing.makeHandler(
       scope,
       "Handler",
       `async handle() {
-  await this.logger.print("hello world!");
-}`,
-      {
-        logger: {
-          resource: cloud.Logger.of(scope),
-          ops: [cloud.LoggerInflightMethods.PRINT],
-        },
-      }
+        console.log("hello world!");
+      }`
     );
     new cloud.Function(scope, "Function", inflight);
 
-    expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
+    expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([

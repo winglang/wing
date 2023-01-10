@@ -3,6 +3,8 @@ import { readdir, rmdir, stat } from "fs/promises";
 
 import { resolve } from "path";
 
+jest.setTimeout(1000 * 60 * 5);
+
 describe("compile command tests", () => {
   const cdktfOutDir = resolve(process.cwd(), "cdktf.out");
   beforeEach(async () => {

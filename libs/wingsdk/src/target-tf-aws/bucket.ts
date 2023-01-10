@@ -6,7 +6,6 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { Function } from "./function";
-import { addConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Bucket`.
@@ -105,7 +104,6 @@ export class Bucket extends cloud.BucketBase {
     // it may not be resolved until deployment time.
     host.addEnvironment(this.envName(), this.bucket.bucket);
 
-    addConnections(this, host);
     super._bind(host, ops);
   }
 

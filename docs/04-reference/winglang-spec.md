@@ -302,7 +302,7 @@ The `inflight` modifier is allowed when defining a function closure:
 
 ```TS
 let handler = inflight () => {
-  print("hello, world";)
+  print("hello, world");
 };
 ```
 
@@ -746,7 +746,7 @@ includes for and while loops currently.
 
 ### 2.5 defer/await
 
-> Read [Asynchronous Model](#1-14-asynchronous-model) section as a prerequisite.
+> Read [Asynchronous Model](#114-asynchronous-model) section as a prerequisite.
 
 You mostly do not need to use `defer` and `await` keywords in Wing.  
 "defer" prevents the compiler from `await`ing a promise and grabs a reference.  

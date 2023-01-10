@@ -1,8 +1,11 @@
 import {
   UpdateItemCommandInput,
   UpdateItemCommandOutput,
+  GetItemCommandInput,
+  GetItemCommandOutput,
   DynamoDBClient,
   UpdateItemCommand,
+  GetItemCommand,
 } from "@aws-sdk/client-dynamodb";
 
 import { mockClient } from "aws-sdk-client-mock";
@@ -18,7 +21,7 @@ beforeEach(() => {
 test("inc(1)", async () => {
   // GIVEN
   const prevValue = 887;
-  setupMock({
+  setupIncMock({
     expectedTableName: MOCK_TABLE_NAME,
     expectedAmount: 1,
     initial: 0,
@@ -36,7 +39,7 @@ test("inc(1)", async () => {
 test("inc(5)", async () => {
   // GIVEN
   const prevValue = 887;
-  setupMock({
+  setupIncMock({
     expectedTableName: MOCK_TABLE_NAME,
     expectedAmount: 5,
     initial: 0,
@@ -51,14 +54,39 @@ test("inc(5)", async () => {
   expect(response).toEqual(prevValue); // returns previous value
 });
 
+test("peek with initial value", async () => {
+  setupPeekMock({
+    expectedTableName: MOCK_TABLE_NAME,
+    responseValue: 123,
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.peek();
+
+  expect(response).toEqual(123);
+});
+
+test("peek without initial value", async () => {
+  setupPeekMock({
+    expectedTableName: MOCK_TABLE_NAME,
+  });
+
+  // WHEN
+  const client = new CounterClient(MOCK_TABLE_NAME);
+  const response = await client.peek();
+
+  expect(response).toEqual(0);
+});
+
 interface MockOptions {
   readonly expectedTableName: string;
-  readonly expectedAmount: number;
+  readonly expectedAmount?: number;
   readonly initial?: number;
   readonly responseValue?: number;
 }
 
-function setupMock(opts: MockOptions) {
+function setupIncMock(opts: MockOptions) {
   const expectedRequest: UpdateItemCommandInput = {
     TableName: opts.expectedTableName,
     Key: { id: { S: "counter" } },
@@ -79,4 +107,23 @@ function setupMock(opts: MockOptions) {
   };
 
   dynamoMock.on(UpdateItemCommand, expectedRequest).resolves(mockResponse);
+}
+
+function setupPeekMock(opts: MockOptions) {
+  const expectedRequest: GetItemCommandInput = {
+    TableName: opts.expectedTableName,
+    Key: { id: { S: "counter" } },
+  };
+  const mockResponse: GetItemCommandOutput = {
+    $metadata: {},
+    Item: !opts.responseValue
+      ? {
+          counter_value: { N: "0" },
+        }
+      : {
+          counter_value: { N: `${opts.responseValue}` },
+        },
+  };
+
+  dynamoMock.on(GetItemCommand, expectedRequest).resolves(mockResponse);
 }

@@ -5,6 +5,7 @@ const JSII_DEPS = [
   "polycons",
   "cdktf",
   "@cdktf/provider-aws",
+  "@cdktf/provider-azurerm@3.0.16",
 ];
 
 const project = new cdk.JsiiProject({
@@ -34,6 +35,10 @@ const project = new cdk.JsiiProject({
     "@aws-sdk/types@3.215.0",
     "@aws-sdk/util-stream-node@3.215.0",
     "@aws-sdk/util-utf8-node@3.208.0",
+    // azure client dependencies
+    "@azure/storage-blob@12.12.0",
+    "@azure/identity@3.1.2",
+    "@azure/core-paging",
     // simulator dependencies
     "tar",
   ],
@@ -68,11 +73,7 @@ project.eslint?.addOverride({
 
 // use fork of jsii-docgen with wing-ish support
 project.deps.removeDependency("jsii-docgen");
-project.addDevDeps("@winglang/jsii-docgen");
-
-// fix typing issues with "tar" dependency
-project.package.addDevDeps("minipass@3.1.6", "@types/minipass@3.1.2");
-project.package.addPackageResolutions("minipass@3.1.6");
+project.addDevDeps("@winglang/jsii-docgen@file:../../apps/jsii-docgen");
 
 // tasks for locally testing the SDK without needing wing compiler
 project.addDevDeps("tsx");

@@ -122,7 +122,7 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build"
-          projects: "wing,wingsdk,wing-api-checker,wing-playground"
+          projects: "wing,wingsdk,wing-api-checker,jsii-docgen,wing-playground"
           args: "--configuration=release --output-style=stream --verbose"
 
       # wingc require wingsdk to be built first in order to run
@@ -284,6 +284,7 @@ jobs:
     needs:
       - prepare
       - build-native
+      - build-wasm
     env:
       PROJEN_BUMP_VERSION: ${{ needs.prepare.outputs.version }}
     runs-on: ubuntu-latest
@@ -296,6 +297,11 @@ jobs:
 
       - name: Prepare language server binaries
         run: cp -r wing-language-server-* ./apps/vscode-wing/resources
+
+      - name: Prepare WingSDK files
+        run: |
+          mkdir -p apps/vscode-wing/resources/wingsdk
+          tar -xzf wingsdk/*.tgz -C apps/vscode-wing/resources/wingsdk --strip-components=1 package/package.json package/.jsii
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -312,6 +318,7 @@ jobs:
       - name: Build
         uses: MansaGroup/nrwl-nx-action@v2
         with:
+          # build-multi assumes all required resources are present
           targets: "build-multi"
           projects: "vscode-wing"
           args: "--configuration=release --output-style=stream --verbose"
@@ -401,20 +408,3 @@ jobs:
           body_path: CHANGELOG.md
           files: dist/*
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-
-  alert:
-    needs:
-      - publish
-    if: always() && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      # sets WORKFLOW_CONCLUSION variable
-      - uses: technote-space/workflow-conclusion-action@v3
-      - name: Send slack notification
-        uses: ravsamhq/notify-slack-action@v1
-        with:
-          status: ${{ env.WORKFLOW_CONCLUSION }}
-          notification_title: "{workflow} has {status_message}"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
-        if: env.WORKFLOW_CONCLUSION == 'failure'

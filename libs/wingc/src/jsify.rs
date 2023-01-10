@@ -6,9 +6,9 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
-	utilities::snake_case_to_camel_case,
+	utilities::snake_case_to_camel_case, capture::CaptureKind,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -22,6 +22,8 @@ function __app(target) {
 		case "tfaws":
 		case "tf-aws":
 			return $stdlib.tfaws.App;
+    case "tf-azure":
+      return $stdlib.tfazure.App;
 		default:
 			throw new Error(`Unknown WING_TARGET value: "${process.env.WING_TARGET ?? ""}"`);
 	}
@@ -145,6 +147,36 @@ impl JSifier {
 			}
 		}
 	}
+	// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
+	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
+	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctions, phase: Phase) -> String {
+		match function_type {
+			UtilityFunctions::Assert => {
+				return format!(
+					"{{((cond) => {{if (!cond) throw new Error(`assertion failed: '{0}'`)}})({0})}}",
+					self.jsify_arg_list(args, None, None, false, phase)
+				);
+			}
+			UtilityFunctions::Print => {
+				return format!(
+					"{{console.log({})}}",
+					self.jsify_arg_list(args, None, None, false, phase)
+				);
+			}
+			UtilityFunctions::Throw => {
+				return format!(
+					"{{((msg) => {{throw new Error(msg)}})({})}}",
+					self.jsify_arg_list(args, None, None, false, phase)
+				);
+			}
+			UtilityFunctions::Panic => {
+				return format!(
+					"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
+					self.jsify_arg_list(args, None, None, false, phase)
+				);
+			}
+		}
+	}
 
 	fn jsify_symbol_case_converted(&self, symbol: &Symbol) -> String {
 		let mut result = symbol.name.clone();
@@ -156,7 +188,14 @@ impl JSifier {
 		return format!("{}", symbol.name);
 	}
 
-	fn jsify_arg_list(&self, arg_list: &ArgList, scope: Option<&str>, id: Option<&str>, case_convert: bool) -> String {
+	fn jsify_arg_list(
+		&self,
+		arg_list: &ArgList,
+		scope: Option<&str>,
+		id: Option<&str>,
+		case_convert: bool,
+		phase: Phase,
+	) -> String {
 		let mut args = vec![];
 		let mut structure_args = vec![];
 
@@ -169,7 +208,7 @@ impl JSifier {
 		}
 
 		for arg in arg_list.pos_args.iter() {
-			args.push(self.jsify_expression(arg, Phase::Independent));
+			args.push(self.jsify_expression(arg, phase));
 		}
 
 		for arg in arg_list.named_args.iter() {
@@ -231,12 +270,12 @@ impl JSifier {
 			} => {
 				let expression_type = expression.evaluated_type.borrow();
 				let is_resource = if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-					evaluated_type.as_resource_object().is_some()
+					evaluated_type.as_resource().is_some()
 				} else {
 					// TODO Hack: This object type is not known. How can we tell if it's a resource or not?
 					true
 				};
-				let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource_object() {
+				let should_case_convert = if let Some(cls) = expression_type.unwrap().as_class_or_resource() {
 					cls.should_case_convert_jsii
 				} else {
 					// This should only happen in the case of `any`, which are almost certainly JSII imports.
@@ -252,14 +291,15 @@ impl JSifier {
 							&arg_list,
 							Some("this"),
 							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
-							should_case_convert
+							should_case_convert,
+							phase
 						)
 					)
 				} else {
 					format!(
 						"new {}({})",
 						self.jsify_type(&class),
-						self.jsify_arg_list(&arg_list, None, None, should_case_convert)
+						self.jsify_arg_list(&arg_list, None, None, should_case_convert, phase)
 					)
 				}
 			}
@@ -282,23 +322,37 @@ impl JSifier {
 			},
 			ExprKind::Reference(_ref) => self.jsify_reference(&_ref, None, phase),
 			ExprKind::Call { function, args } => {
-				// TODO: implement "print" to use Logger resource
-				// see: https://github.com/winglang/wing/issues/50
 				let mut needs_case_conversion = false;
-				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == "print") {
-					return format!("console.log({})", self.jsify_arg_list(args, None, None, false));
+				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Print.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Print, phase);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Assert.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Assert, phase);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Panic.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Panic, phase);
+				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Throw.to_string().as_str())
+				{
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw, phase);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
-					needs_case_conversion = object_type
-						.as_class_or_resource_object()
-						.unwrap()
-						.should_case_convert_jsii;
+
+					needs_case_conversion = if let Some(obj) = object_type.as_class_or_resource() {
+						obj.should_case_convert_jsii
+					} else {
+						// There are two reasons this could happen:
+						// 1. The object is a `any` type, which is either something unimplemented or an explicit `any` from JSII.
+						// 2. The object is a builtin type (e.g. Array) but the call reference intentionally resolves to a JSII class.
+						// In either case, it's probably safe to assume that case conversion is required.
+						true
+					};
 				}
 				format!(
 					"({}{}({}))",
 					auto_await,
 					self.jsify_reference(&function, Some(needs_case_conversion), phase),
-					self.jsify_arg_list(&args, None, None, needs_case_conversion)
+					self.jsify_arg_list(&args, None, None, needs_case_conversion, phase)
 				)
 			}
 			ExprKind::Unary { op, exp } => {
@@ -358,6 +412,16 @@ impl JSifier {
 					fields
 						.iter()
 						.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr, phase)))
+						.collect::<Vec<String>>()
+						.join(", ")
+				)
+			}
+			ExprKind::SetLiteral { items, .. } => {
+				format!(
+					"Object.freeze(new Set([{}]))",
+					items
+						.iter()
+						.map(|expr| self.jsify_expression(expr, phase))
 						.collect::<Vec<String>>()
 						.join(", ")
 				)
@@ -474,7 +538,12 @@ impl JSifier {
 					} else {
 						"".to_string()
 					},
-					self.jsify_function(Some("constructor"), &constructor.parameters, &constructor.statements, phase),
+					self.jsify_function(
+						Some("constructor"),
+						&constructor.parameters,
+						&constructor.statements,
+						phase
+					),
 					members
 						.iter()
 						.map(|m| self.jsify_class_member(m))
@@ -546,25 +615,38 @@ impl JSifier {
 		}
 		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
-		let mut bindings = vec![];
+		let mut resource_bindings = vec![];
+		let mut data_bindings = vec![];
 		let mut capture_names = vec![];
-		for (obj, cap_def) in func_def.captures.borrow().as_ref().unwrap().iter() {
-			capture_names.push(obj.clone());
-			bindings.push(format!(
-				"{}: {},",
-				obj,
-				Self::render_block([
-					format!("resource: {},", obj),
-					format!(
-						"ops: [{}]",
-						cap_def
-							.iter()
-							.map(|x| format!("\"{}\"", x.method))
-							.collect::<Vec<_>>()
-							.join(",")
-					)
-				])
-			));
+
+		for (symbol, cap_kind) in func_def.captures.borrow().as_ref().unwrap().iter() {
+			capture_names.push(symbol.clone());
+			let mut methods: Vec<String> = vec![];
+
+			for kind in cap_kind.iter() {
+				match kind {
+					CaptureKind::ImmutableData => {
+						data_bindings.push(format!(
+							"{}: {},",
+							symbol,
+							symbol,
+						));
+					},
+					CaptureKind::Resource(def) => {
+						methods.push(def.method.clone());
+					}
+				}
+			}
+
+			if ! methods.is_empty() {
+				resource_bindings.push(format!(
+					"{}: {},",
+					symbol,
+					Self::render_block([
+						format!("resource: {},", symbol),
+						format!("ops: [{}]", methods.join(","))
+					])));
+			}
 		}
 		let mut proc_source = vec![];
 		let body = format!("{{ const {{ {} }} = this; {} }}", capture_names.join(", "), block);
@@ -579,11 +661,19 @@ impl JSifier {
 				"code: {}.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \"{}\")),",
 				STDLIB, &relative_file_path
 			),
-			if !bindings.is_empty() {
-				format!("bindings: {}", Self::render_block(&bindings))
-			} else {
-				"".to_string()
-			},
+			format!("bindings: {}", Self::render_block([
+				if !resource_bindings.is_empty() {
+					format!("resources: {}", Self::render_block(&resource_bindings))
+				} else {
+					"".to_string()
+				},
+
+				if !data_bindings.is_empty() {
+					format!("data: {}", Self::render_block(&data_bindings))
+				} else {
+					"".to_string()
+				},
+			])),
 		]);
 		let short_hash = procid.clone().split_off(procid.len() - 8);
 		let inflight_obj_id = format!("{}{}", INFLIGHT_OBJ_PREFIX, short_hash);
@@ -604,10 +694,6 @@ impl JSifier {
 			None => ("", "=> "),
 		};
 
-		let async_prefix = match phase {
-			Phase::Inflight => "async ",
-			_ => "",
-		};
 		format!(
 			"{}({}) {}{}",
 			name,

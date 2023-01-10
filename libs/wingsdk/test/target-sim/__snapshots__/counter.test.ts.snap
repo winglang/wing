@@ -2,8 +2,14 @@
 
 exports[`create a counter 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_counter",
@@ -18,6 +24,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_counter": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -25,7 +43,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -33,7 +51,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -45,8 +63,14 @@ Object {
 
 exports[`inc 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_counter",
@@ -61,6 +85,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_counter": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -68,7 +104,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -76,7 +112,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

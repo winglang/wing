@@ -16,6 +16,15 @@
       "type": "build"
     },
     {
+      "name": "@vscode/vsce",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/wingsdk",
+      "version": "file:../../libs/wingsdk",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "build"
     },
@@ -70,16 +79,8 @@
       "type": "build"
     },
     {
-      "name": "vsce",
-      "type": "build"
-    },
-    {
       "name": "@types/vscode",
       "version": "^1.70.0",
-      "type": "runtime"
-    },
-    {
-      "name": "@winglang/wingsdk",
       "type": "runtime"
     },
     {

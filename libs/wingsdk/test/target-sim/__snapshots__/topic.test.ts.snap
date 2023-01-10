@@ -2,8 +2,14 @@
 
 exports[`create a topic 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_topic",
@@ -18,6 +24,18 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_topic": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -25,7 +43,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_topic",
           "path": "root/my_topic",
@@ -33,7 +51,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -41,4 +59,43 @@ Object {
     "version": "tree-0.1",
   },
 }
+`;
+
+exports[`topic publishes messages as they are received 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Topic created.",
+  "Publish (message=Alpha).",
+  "Sending message (message=Alpha, subscriber=sim-1).",
+  "Received Alpha",
+  "Invoke (payload=\\"Alpha\\").",
+  "Publish (message=Beta).",
+  "Sending message (message=Beta, subscriber=sim-1).",
+  "Received Beta",
+  "Invoke (payload=\\"Beta\\").",
+  "wingsdk.cloud.Topic deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`topic publishes messages to multiple subscribers 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Function created.",
+  "wingsdk.cloud.Topic created.",
+  "Publish (message=Alpha).",
+  "Sending message (message=Alpha, subscriber=sim-1).",
+  "Received Alpha",
+  "Invoke (payload=\\"Alpha\\").",
+  "Sending message (message=Alpha, subscriber=sim-2).",
+  "Also received Alpha",
+  "Invoke (payload=\\"Alpha\\").",
+  "wingsdk.cloud.Topic deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
 `;

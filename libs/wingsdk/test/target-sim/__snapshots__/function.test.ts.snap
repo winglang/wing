@@ -2,14 +2,21 @@
 
 exports[`create a function 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
           "environmentVariables": Object {
             "ENV_VAR1": "true",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
           },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
@@ -19,6 +26,39 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(event2) {
+        event2 = JSON.parse(event2);
+        let msg;
+        if (event2.name[0] !== event2.name[0].toUpperCase()) {
+          throw new Error(\\"Name must start with uppercase letter\\");
+        }
+        if (process.env.PIG_LATIN) {
+          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
+        } else {
+          msg = \\"Hello, \\" + event2.name + \\"!\\";
+        }
+        return JSON.stringify({ msg });
+      }
+    };
+  }())({}).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -29,21 +69,47 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -51,7 +117,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -59,7 +125,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -70,14 +136,32 @@ Object {
 `;
 
 exports[`invoke function fails 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "Invoke (payload=\\"{\\"name\\":\\"alice\\"}\\").",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`invoke function fails 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -86,6 +170,39 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(event2) {
+        event2 = JSON.parse(event2);
+        let msg;
+        if (event2.name[0] !== event2.name[0].toUpperCase()) {
+          throw new Error(\\"Name must start with uppercase letter\\");
+        }
+        if (process.env.PIG_LATIN) {
+          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
+        } else {
+          msg = \\"Hello, \\" + event2.name + \\"!\\";
+        }
+        return JSON.stringify({ msg });
+      }
+    };
+  }())({}).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -96,21 +213,47 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -118,7 +261,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -126,7 +269,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -137,14 +280,32 @@ Object {
 `;
 
 exports[`invoke function succeeds 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "Invoke (payload=\\"{\\"name\\":\\"Alice\\"}\\").",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`invoke function succeeds 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
-          "environmentVariables": Object {},
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
           "sourceCodeFile": "assets/my_function/index.js",
           "sourceCodeLanguage": "javascript",
         },
@@ -153,6 +314,39 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(event2) {
+        event2 = JSON.parse(event2);
+        let msg;
+        if (event2.name[0] !== event2.name[0].toUpperCase()) {
+          throw new Error(\\"Name must start with uppercase letter\\");
+        }
+        if (process.env.PIG_LATIN) {
+          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
+        } else {
+          msg = \\"Hello, \\" + event2.name + \\"!\\";
+        }
+        return JSON.stringify({ msg });
+      }
+    };
+  }())({}).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -163,21 +357,47 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -185,7 +405,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -193,7 +413,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -204,14 +424,31 @@ Object {
 `;
 
 exports[`invoke function with environment variables 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "Invoke (payload=\\"{\\"name\\":\\"Alice\\"}\\").",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`invoke function with environment variables 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_function",
         "props": Object {
           "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
             "PIG_LATIN": "true",
           },
           "sourceCodeFile": "assets/my_function/index.js",
@@ -222,6 +459,39 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(event2) {
+        event2 = JSON.parse(event2);
+        let msg;
+        if (event2.name[0] !== event2.name[0].toUpperCase()) {
+          throw new Error(\\"Name must start with uppercase letter\\");
+        }
+        if (process.env.PIG_LATIN) {
+          msg = \\"Ellohay, \\" + event2.name + \\"!\\";
+        } else {
+          msg = \\"Hello, \\" + event2.name + \\"!\\";
+        }
+        return JSON.stringify({ msg });
+      }
+    };
+  }())({}).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -232,21 +502,47 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "Handler",
           "path": "root/Handler",
         },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_function": Object {
           "attributes": Object {
-            "wing:resource:connections": Array [],
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
             "wing:resource:stateful": false,
           },
           "children": Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -254,7 +550,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -262,7 +558,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

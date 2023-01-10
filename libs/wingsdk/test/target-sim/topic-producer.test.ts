@@ -17,9 +17,11 @@ test("publishing messages to topic", async () => {
             await this.topic.publish(event);
         }`,
         {
-          topic: {
-            resource: topic,
-            ops: [cloud.TopicInflightMethods.PUBLISH],
+          resources: {
+            topic: {
+              resource: topic,
+              ops: [cloud.TopicInflightMethods.PUBLISH],
+            },
           },
         }
       );
@@ -51,16 +53,5 @@ test("publishing messages to topic", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Topic created.",
-    "wingsdk.cloud.Function created.",
-    "Publish (message=ABC).",
-    `Sending message (message=ABC, subscriber=sim-0).`,
-    `Invoke (payload="ABC").`,
-    `Invoke (payload="ABC").`,
-    `wingsdk.cloud.Function deleted.`,
-    `wingsdk.cloud.Topic deleted.`,
-    `wingsdk.cloud.Function deleted.`,
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
 });

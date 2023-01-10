@@ -2,6 +2,8 @@ import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
 
+jest.setTimeout(30_1000);
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("can create sequential files in a bucket", async () => {
@@ -24,13 +26,15 @@ test("can create sequential files in a bucket", async () => {
             await this.bucket.put(key, event);
         }`,
         {
-          counter: {
-            resource: counter,
-            ops: [cloud.CounterInflightMethods.INC],
-          },
-          bucket: {
-            resource: bucket,
-            ops: [cloud.BucketInflightMethods.PUT],
+          resources: {
+            counter: {
+              resource: counter,
+              ops: [cloud.CounterInflightMethods.INC],
+            },
+            bucket: {
+              resource: bucket,
+              ops: [cloud.BucketInflightMethods.PUT],
+            },
           },
         }
       );
@@ -39,7 +43,6 @@ test("can create sequential files in a bucket", async () => {
   }
 
   const app = new SimApp();
-  cloud.Logger.register(app);
   new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();
