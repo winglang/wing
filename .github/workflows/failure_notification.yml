@@ -19,7 +19,7 @@ jobs:
         with:
           status: ${{ github.event.check_run.conclusion }}
           notification_title: "${{ github.event.check_run.name }} has failed"
-          message_format: "{emoji} *${{ github.event.check_run.name }}* {status_message} in <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>"
+          message_format: ":x *${{ github.event.check_run.name }}* failed in <{repo_url}|{repo}@{branch}> on <{commit_url}|{commit_sha}>"
           footer: "<${{ github.event.check_run.details_url }}|Details>"
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
