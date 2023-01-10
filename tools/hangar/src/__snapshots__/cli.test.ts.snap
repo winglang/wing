@@ -71,6 +71,238 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile asynchronous_model_implicit_await_in_functions.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_func_IamRole_EE572BCE": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRole",
+            "uniqueId": "root_func_IamRole_EE572BCE",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_strtostr_IamRole_305ACAF8": {
+        "//": {
+          "metadata": {
+            "path": "root/str_to_str/IamRole",
+            "uniqueId": "root_strtostr_IamRole_305ACAF8",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_func_IamRolePolicy_3AC5101F": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicy",
+            "uniqueId": "root_func_IamRolePolicy_3AC5101F",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"lambda:InvokeFunction\\"],\\"Resource\\":[\\"\${aws_lambda_function.root_strtostr_05420EE8.arn}\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+      "root_strtostr_IamRolePolicy_B80B33C4": {
+        "//": {
+          "metadata": {
+            "path": "root/str_to_str/IamRolePolicy",
+            "uniqueId": "root_strtostr_IamRolePolicy_B80B33C4",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_strtostr_IamRole_305ACAF8.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_func_IamRolePolicyAttachment_AD2DD410": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicyAttachment",
+            "uniqueId": "root_func_IamRolePolicyAttachment_AD2DD410",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+      "root_strtostr_IamRolePolicyAttachment_C5B57BBD": {
+        "//": {
+          "metadata": {
+            "path": "root/str_to_str/IamRolePolicyAttachment",
+            "uniqueId": "root_strtostr_IamRolePolicyAttachment_C5B57BBD",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_strtostr_IamRole_305ACAF8.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_func_0444AFD0": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Default",
+            "uniqueId": "root_func_0444AFD0",
+          },
+        },
+        "environment": {
+          "variables": {
+            "FUNCTION_NAME_8ca853c9": "\${aws_lambda_function.root_strtostr_05420EE8.arn}",
+            "WING_FUNCTION_NAME": "func",
+          },
+        },
+        "function_name": "func",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_func_Bucket_3CE0562C.bucket}",
+        "s3_key": "\${aws_s3_object.root_func_S3Object_F6163647.key}",
+      },
+      "root_strtostr_05420EE8": {
+        "//": {
+          "metadata": {
+            "path": "root/str_to_str/Default",
+            "uniqueId": "root_strtostr_05420EE8",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "str_to_str",
+          },
+        },
+        "function_name": "str_to_str",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_strtostr_IamRole_305ACAF8.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_strtostr_Bucket_B3EC21FA.bucket}",
+        "s3_key": "\${aws_s3_object.root_strtostr_S3Object_C6E06A09.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_func_Bucket_3CE0562C": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Bucket",
+            "uniqueId": "root_func_Bucket_3CE0562C",
+          },
+        },
+      },
+      "root_strtostr_Bucket_B3EC21FA": {
+        "//": {
+          "metadata": {
+            "path": "root/str_to_str/Bucket",
+            "uniqueId": "root_strtostr_Bucket_B3EC21FA",
+          },
+        },
+      },
+    },
+    "aws_s3_object": {
+      "root_func_S3Object_F6163647": {
+        "//": {
+          "metadata": {
+            "path": "root/func/S3Object",
+            "uniqueId": "root_func_S3Object_F6163647",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_func_Bucket_3CE0562C.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile asynchronous_model_implicit_await_in_functions.w > index.js 1`] = `
+"async handle(s) { const { str_to_str } = this; {
+  (await str_to_str.invoke(\\"one\\"));
+  {console.log((await str_to_str.invoke(\\"two\\")))};
+} };"
+`;
+
+exports[`wing compile asynchronous_model_implicit_await_in_functions.w > index.js 2`] = `
+"async handle(s) { const {  } = this; {
+} };"
+`;
+
+exports[`wing compile asynchronous_model_implicit_await_in_functions.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile asynchronous_model_implicit_await_in_functions.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"asynchronous_model_implicit_await_in_functions\\" });
+  
+  const q = new cloud.Queue(this,\\"cloud.Queue\\");
+  const str_to_str = new cloud.Function(this,\\"str_to_str\\",new $stdlib.core.Inflight(this, \\"$Inflight96999ede\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.8eb95bcbc154530931e15fc418c8b1fe991095671409552099ea1aa596999ede/index.js\\")),
+    bindings: {
+      
+      
+    }
+  }));
+  const func = new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflightd0aac7d7\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2241fd974faa47c8b8d27f5a3e172f473ca36c6b44cb328a58655fd2d0aac7d7/index.js\\")),
+    bindings: {
+      resources: {
+        str_to_str: {
+          resource: str_to_str,
+          ops: [\\"invoke\\"]
+        },
+      }
+      
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile capture_collections.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -409,6 +641,436 @@ constructor() {
     }
   });
   new cloud.Function(this,\\"cloud.Function\\",handler);
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile captures.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_AnotherFunction_IamRole_09A4D8EF": {
+        "//": {
+          "metadata": {
+            "path": "root/AnotherFunction/IamRole",
+            "uniqueId": "root_AnotherFunction_IamRole_09A4D8EF",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_cloudFunction_IamRole_DAEC3578": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/IamRole",
+            "uniqueId": "root_cloudFunction_IamRole_DAEC3578",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_cloudQueueOnMessage777b12cf_IamRole_67B98F21": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-777b12cf/IamRole",
+            "uniqueId": "root_cloudQueueOnMessage777b12cf_IamRole_67B98F21",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_AnotherFunction_IamRolePolicy_5B37F663": {
+        "//": {
+          "metadata": {
+            "path": "root/AnotherFunction/IamRolePolicy",
+            "uniqueId": "root_AnotherFunction_IamRolePolicy_5B37F663",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.name}",
+      },
+      "root_cloudFunction_IamRolePolicy_AAE6C0C0": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/IamRolePolicy",
+            "uniqueId": "root_cloudFunction_IamRolePolicy_AAE6C0C0",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+      "root_cloudQueueOnMessage777b12cf_IamRolePolicy_9CC3522B": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-777b12cf/IamRolePolicy",
+            "uniqueId": "root_cloudQueueOnMessage777b12cf_IamRolePolicy_9CC3522B",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}\\",\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}\\",\\"\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage777b12cf_IamRole_67B98F21.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB": {
+        "//": {
+          "metadata": {
+            "path": "root/AnotherFunction/IamRolePolicyAttachment",
+            "uniqueId": "root_AnotherFunction_IamRolePolicyAttachment_8AF040CB",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.name}",
+      },
+      "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudFunction_IamRolePolicyAttachment_FC3D9E7C",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.name}",
+      },
+      "root_cloudQueueOnMessage777b12cf_IamRolePolicyAttachment_D8DBF6F5": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-777b12cf/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueueOnMessage777b12cf_IamRolePolicyAttachment_D8DBF6F5",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage777b12cf_IamRole_67B98F21.name}",
+      },
+    },
+    "aws_lambda_event_source_mapping": {
+      "root_cloudQueue_EventSourceMapping_A2041279": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/EventSourceMapping",
+            "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
+          },
+        },
+        "batch_size": 5,
+        "event_source_arn": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
+        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessage777b12cf_9126B5BE.function_name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_AnotherFunction_1D5A4455": {
+        "//": {
+          "metadata": {
+            "path": "root/AnotherFunction/Default",
+            "uniqueId": "root_AnotherFunction_1D5A4455",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+            "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "AnotherFunction",
+          },
+        },
+        "function_name": "AnotherFunction",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_AnotherFunction_Bucket_A1A8B652.bucket}",
+        "s3_key": "\${aws_s3_object.root_AnotherFunction_S3Object_5AD7E879.key}",
+      },
+      "root_cloudFunction_6A57BA0A": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/Default",
+            "uniqueId": "root_cloudFunction_6A57BA0A",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+            "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "cloud.Function",
+          },
+        },
+        "function_name": "cloud_Function",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
+      },
+      "root_cloudQueueOnMessage777b12cf_9126B5BE": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-777b12cf/Default",
+            "uniqueId": "root_cloudQueueOnMessage777b12cf_9126B5BE",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_0c557d45": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+            "BUCKET_NAME_21bd2572": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-777b12cf",
+          },
+        },
+        "function_name": "cloud_Queue-OnMessage-777b12cf",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage777b12cf_IamRole_67B98F21.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessage777b12cf_Bucket_86F7DB34.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessage777b12cf_S3Object_4EB30B84.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_AnotherFunction_Bucket_A1A8B652": {
+        "//": {
+          "metadata": {
+            "path": "root/AnotherFunction/Bucket",
+            "uniqueId": "root_AnotherFunction_Bucket_A1A8B652",
+          },
+        },
+      },
+      "root_PrivateBucket_82B4DCC5": {
+        "//": {
+          "metadata": {
+            "path": "root/PrivateBucket/Default",
+            "uniqueId": "root_PrivateBucket_82B4DCC5",
+          },
+        },
+      },
+      "root_PublicBucket_73AE6C59": {
+        "//": {
+          "metadata": {
+            "path": "root/PublicBucket/Default",
+            "uniqueId": "root_PublicBucket_73AE6C59",
+          },
+        },
+      },
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+      },
+      "root_cloudFunction_Bucket_245CAEB7": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Function/Bucket",
+            "uniqueId": "root_cloudFunction_Bucket_245CAEB7",
+          },
+        },
+      },
+      "root_cloudQueueOnMessage777b12cf_Bucket_86F7DB34": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-777b12cf/Bucket",
+            "uniqueId": "root_cloudQueueOnMessage777b12cf_Bucket_86F7DB34",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_policy": {
+      "root_PublicBucket_PublicPolicy_98DDAE96": {
+        "//": {
+          "metadata": {
+            "path": "root/PublicBucket/PublicPolicy",
+            "uniqueId": "root_PublicBucket_PublicPolicy_98DDAE96",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Principal\\":\\"*\\",\\"Action\\":[\\"s3:GetObject\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_PublicBucket_73AE6C59.arn}/*\\"]}]}",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_PrivateBucket_PublicAccessBlock_DB813250": {
+        "//": {
+          "metadata": {
+            "path": "root/PrivateBucket/PublicAccessBlock",
+            "uniqueId": "root_PrivateBucket_PublicAccessBlock_DB813250",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_PrivateBucket_Encryption_F9F2144A": {
+        "//": {
+          "metadata": {
+            "path": "root/PrivateBucket/Encryption",
+            "uniqueId": "root_PrivateBucket_Encryption_F9F2144A",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_PrivateBucket_82B4DCC5.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+      "root_PublicBucket_Encryption_FB9A8400": {
+        "//": {
+          "metadata": {
+            "path": "root/PublicBucket/Encryption",
+            "uniqueId": "root_PublicBucket_Encryption_FB9A8400",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_PublicBucket_73AE6C59.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_AnotherFunction_S3Object_5AD7E879": {
+        "//": {
+          "metadata": {
+            "path": "root/AnotherFunction/S3Object",
+            "uniqueId": "root_AnotherFunction_S3Object_5AD7E879",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_AnotherFunction_Bucket_A1A8B652.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile captures.w > index.js 1`] = `
+"async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
+  (await bucket1.put(\\"file.txt\\",\\"data\\"));
+  (await bucket2.get(\\"file.txt\\"));
+  (await bucket2.get(\\"file2.txt\\"));
+  (await bucket3.get(\\"file3.txt\\"));
+} };"
+`;
+
+exports[`wing compile captures.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile captures.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"captures\\" });
+  
+  const bucket1 = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const bucket2 = new cloud.Bucket(this,\\"PublicBucket\\",{
+  \\"public\\": true,}
+  );
+  const bucket3 = new cloud.Bucket(this,\\"PrivateBucket\\",{ public: false });
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const handler = new $stdlib.core.Inflight(this, \\"$Inflight3c32ee41\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.4e89828b4cf7eebd9aec10c177257042cdbb4196e6dd8c26e054bddf3c32ee41/index.js\\")),
+    bindings: {
+      resources: {
+        bucket1: {
+          resource: bucket1,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+        bucket2: {
+          resource: bucket2,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+        bucket3: {
+          resource: bucket3,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+      }
+      
+    }
+  });
+  (queue.onMessage(handler,{ batchSize: 5 }));
+  new cloud.Function(this,\\"cloud.Function\\",handler,{ env: Object.freeze({}) });
+  const empty_env = Object.freeze({});
+  new cloud.Function(this,\\"AnotherFunction\\",handler,{ env: empty_env });
 }
 }
 new MyApp().synth();"
@@ -823,6 +1485,252 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_dynamodb_table": {
+      "root_cloudCounter_E0AC1263": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Counter/Default",
+            "uniqueId": "root_cloudCounter_E0AC1263",
+          },
+        },
+        "attribute": [
+          {
+            "name": "id",
+            "type": "S",
+          },
+        ],
+        "billing_mode": "PAY_PER_REQUEST",
+        "hash_key": "id",
+        "name": "wingsdk-counter-c866f225dbe83e49644c661486cb428e3749baa65c",
+      },
+    },
+    "aws_iam_role": {
+      "root_cloudQueueOnMessage781f1948_IamRole_43750575": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-781f1948/IamRole",
+            "uniqueId": "root_cloudQueueOnMessage781f1948_IamRole_43750575",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_cloudQueueOnMessage781f1948_IamRolePolicy_31CEC571": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-781f1948/IamRolePolicy",
+            "uniqueId": "root_cloudQueueOnMessage781f1948_IamRolePolicy_31CEC571",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:UpdateItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"dynamodb:GetItem\\"],\\"Resource\\":\\"\${aws_dynamodb_table.root_cloudCounter_E0AC1263.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage781f1948_IamRole_43750575.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_cloudQueueOnMessage781f1948_IamRolePolicyAttachment_630C82DE": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-781f1948/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueueOnMessage781f1948_IamRolePolicyAttachment_630C82DE",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage781f1948_IamRole_43750575.name}",
+      },
+    },
+    "aws_lambda_event_source_mapping": {
+      "root_cloudQueue_EventSourceMapping_A2041279": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/EventSourceMapping",
+            "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
+          },
+        },
+        "batch_size": 1,
+        "event_source_arn": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
+        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessage781f1948_E382D7E9.function_name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_cloudQueueOnMessage781f1948_E382D7E9": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-781f1948/Default",
+            "uniqueId": "root_cloudQueueOnMessage781f1948_E382D7E9",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "DYNAMODB_TABLE_NAME_49baa65c": "\${aws_dynamodb_table.root_cloudCounter_E0AC1263.name}",
+            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-781f1948",
+          },
+        },
+        "function_name": "cloud_Queue-OnMessage-781f1948",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessage781f1948_IamRole_43750575.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessage781f1948_Bucket_7722677D.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessage781f1948_S3Object_F62C069F.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+      },
+      "root_cloudQueueOnMessage781f1948_Bucket_7722677D": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-781f1948/Bucket",
+            "uniqueId": "root_cloudQueueOnMessage781f1948_Bucket_7722677D",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_cloudQueueOnMessage781f1948_S3Object_F62C069F": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-781f1948/S3Object",
+            "uniqueId": "root_cloudQueueOnMessage781f1948_S3Object_F62C069F",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessage781f1948_Bucket_7722677D.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile file_counter.w > index.js 1`] = `
+"async handle(body) { const { bucket, counter } = this; {
+  const next = (await counter.inc());
+  const key = \`myfile-\${\\"hi\\"}.txt\`;
+  (await bucket.put(key,body));
+} };"
+`;
+
+exports[`wing compile file_counter.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile file_counter.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"file_counter\\" });
+  
+  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const counter = new cloud.Counter(this,\\"cloud.Counter\\",{ initial: 100 });
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\",{ timeout: $stdlib.std.Duration.fromSeconds(10) });
+  const handler = new $stdlib.core.Inflight(this, \\"$Inflightb0f54620\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1ece6a476239c44d64d8b687b9e4389715198c49564defb8766e8b85b0f54620/index.js\\")),
+    bindings: {
+      resources: {
+        bucket: {
+          resource: bucket,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+        counter: {
+          resource: counter,
+          ops: [\\"inc\\",\\"peek\\"]
+        },
+      }
+      
+    }
+  });
+  (queue.onMessage(handler));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile forward_decl.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -898,6 +1806,226 @@ constructor() {
     {console.log(\`\${x}\`)};
     const y = new R(this,\\"R\\");
   }
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile hello.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_cloudQueueOnMessagebe11efa5_IamRole_C7C74847": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-be11efa5/IamRole",
+            "uniqueId": "root_cloudQueueOnMessagebe11efa5_IamRole_C7C74847",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_cloudQueueOnMessagebe11efa5_IamRolePolicy_0475B6F0": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-be11efa5/IamRolePolicy",
+            "uniqueId": "root_cloudQueueOnMessagebe11efa5_IamRolePolicy_0475B6F0",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:ReceiveMessage\\",\\"sqs:ChangeMessageVisibility\\",\\"sqs:GetQueueUrl\\",\\"sqs:DeleteMessage\\",\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessagebe11efa5_IamRole_C7C74847.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_cloudQueueOnMessagebe11efa5_IamRolePolicyAttachment_7A16263B": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-be11efa5/IamRolePolicyAttachment",
+            "uniqueId": "root_cloudQueueOnMessagebe11efa5_IamRolePolicyAttachment_7A16263B",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessagebe11efa5_IamRole_C7C74847.name}",
+      },
+    },
+    "aws_lambda_event_source_mapping": {
+      "root_cloudQueue_EventSourceMapping_A2041279": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue/EventSourceMapping",
+            "uniqueId": "root_cloudQueue_EventSourceMapping_A2041279",
+          },
+        },
+        "batch_size": 1,
+        "event_source_arn": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}",
+        "function_name": "\${aws_lambda_function.root_cloudQueueOnMessagebe11efa5_0D8E9000.function_name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_cloudQueueOnMessagebe11efa5_0D8E9000": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-be11efa5/Default",
+            "uniqueId": "root_cloudQueueOnMessagebe11efa5_0D8E9000",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "cloud.Queue-OnMessage-be11efa5",
+          },
+        },
+        "function_name": "cloud_Queue-OnMessage-be11efa5",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_cloudQueueOnMessagebe11efa5_IamRole_C7C74847.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagebe11efa5_Bucket_78307385.bucket}",
+        "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagebe11efa5_S3Object_3543DF78.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+      },
+      "root_cloudQueueOnMessagebe11efa5_Bucket_78307385": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-be11efa5/Bucket",
+            "uniqueId": "root_cloudQueueOnMessagebe11efa5_Bucket_78307385",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_cloudQueueOnMessagebe11efa5_S3Object_3543DF78": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Queue-OnMessage-be11efa5/S3Object",
+            "uniqueId": "root_cloudQueueOnMessagebe11efa5_S3Object_3543DF78",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagebe11efa5_Bucket_78307385.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile hello.w > index.js 1`] = `
+"async handle(message) { const { bucket } = this; {
+  (await bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`));
+  return message;
+} };"
+`;
+
+exports[`wing compile hello.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile hello.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"hello\\" });
+  
+  const bucket = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
+  const handler = new $stdlib.core.Inflight(this, \\"$Inflight3a937f94\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.a05c4d4842809464e34a3ca630f420646c038a9d145ef67e20f3f2fd3a937f94/index.js\\")),
+    bindings: {
+      resources: {
+        bucket: {
+          resource: bucket,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+      }
+      
+    }
+  });
+  (queue.onMessage(handler));
 }
 }
 new MyApp().synth();"
