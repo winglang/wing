@@ -149,27 +149,30 @@ impl JSifier {
 	}
 	// note: Globals are emitted here and wrapped in "{{ ... }}" blocks. Wrapping makes these emissions, actual
 	// statements and not expressions. this makes the runtime panic if these are used in place of expressions.
-	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctions) -> String {
+	fn jsify_global_utility_function(&self, args: &ArgList, function_type: UtilityFunctions, phase: Phase) -> String {
 		match function_type {
 			UtilityFunctions::Assert => {
 				return format!(
 					"{{((cond) => {{if (!cond) throw new Error(`assertion failed: '{0}'`)}})({0})}}",
-					self.jsify_arg_list(args, None, None, false)
+					self.jsify_arg_list(args, None, None, false, phase)
 				);
 			}
 			UtilityFunctions::Print => {
-				return format!("{{console.log({})}}", self.jsify_arg_list(args, None, None, false));
+				return format!(
+					"{{console.log({})}}",
+					self.jsify_arg_list(args, None, None, false, phase)
+				);
 			}
 			UtilityFunctions::Throw => {
 				return format!(
 					"{{((msg) => {{throw new Error(msg)}})({})}}",
-					self.jsify_arg_list(args, None, None, false)
+					self.jsify_arg_list(args, None, None, false, phase)
 				);
 			}
 			UtilityFunctions::Panic => {
 				return format!(
 					"{{((msg) => {{console.error(msg, (new Error()).stack);process.exit(1)}})({})}}",
-					self.jsify_arg_list(args, None, None, false)
+					self.jsify_arg_list(args, None, None, false, phase)
 				);
 			}
 		}
@@ -185,7 +188,14 @@ impl JSifier {
 		return format!("{}", symbol.name);
 	}
 
-	fn jsify_arg_list(&self, arg_list: &ArgList, scope: Option<&str>, id: Option<&str>, case_convert: bool) -> String {
+	fn jsify_arg_list(
+		&self,
+		arg_list: &ArgList,
+		scope: Option<&str>,
+		id: Option<&str>,
+		case_convert: bool,
+		phase: Phase,
+	) -> String {
 		let mut args = vec![];
 		let mut structure_args = vec![];
 
@@ -198,7 +208,7 @@ impl JSifier {
 		}
 
 		for arg in arg_list.pos_args.iter() {
-			args.push(self.jsify_expression(arg, Phase::Independent));
+			args.push(self.jsify_expression(arg, phase));
 		}
 
 		for arg in arg_list.named_args.iter() {
@@ -281,14 +291,15 @@ impl JSifier {
 							&arg_list,
 							Some("this"),
 							Some(&format!("{}", obj_id.as_ref().unwrap_or(&self.jsify_type(class)))),
-							should_case_convert
+							should_case_convert,
+							phase
 						)
 					)
 				} else {
 					format!(
 						"new {}({})",
 						self.jsify_type(&class),
-						self.jsify_arg_list(&arg_list, None, None, should_case_convert)
+						self.jsify_arg_list(&arg_list, None, None, should_case_convert, phase)
 					)
 				}
 			}
@@ -314,16 +325,16 @@ impl JSifier {
 				let mut needs_case_conversion = false;
 				if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Print.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Print);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Print, phase);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Assert.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Assert);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Assert, phase);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Panic.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Panic);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Panic, phase);
 				} else if matches!(&function, Reference::Identifier(Symbol { name, .. }) if name == UtilityFunctions::Throw.to_string().as_str())
 				{
-					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw);
+					return self.jsify_global_utility_function(&args, UtilityFunctions::Throw, phase);
 				} else if let Reference::NestedIdentifier { object, .. } = function {
 					let object_type = object.evaluated_type.borrow().unwrap();
 
@@ -341,7 +352,7 @@ impl JSifier {
 					"({}{}({}))",
 					auto_await,
 					self.jsify_reference(&function, Some(needs_case_conversion), phase),
-					self.jsify_arg_list(&args, None, None, needs_case_conversion)
+					self.jsify_arg_list(&args, None, None, needs_case_conversion, phase)
 				)
 			}
 			ExprKind::Unary { op, exp } => {
