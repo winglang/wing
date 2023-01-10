@@ -347,9 +347,9 @@ export class Display {
    */
   public hidden?: boolean;
 
-  public constructor(props?: DisplayProps) {
-    this.title = props?.title;
-    this.description = props?.description;
-    this.hidden = props?.hidden;
+  public constructor(props: DisplayProps = {}) {
+    this.title = props.title;
+    this.description = props.description;
+    this.hidden = props.hidden;
   }
 }
