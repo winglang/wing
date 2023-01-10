@@ -154,30 +154,26 @@ export abstract class Resource
       if (field.startsWith("this.")) {
         const key = field.substring(5);
         const obj: Resource = (this as any)[key];
-        if (obj === undefined) {
+        if (!obj) {
           throw new Error(
             `Resource ${this.node.path} does not have field ${key}`
           );
         }
-
-        // if this is a bindable object, call `_bind()` and add a connection for each operation.
-        if (typeof obj === "object" && "_bind" in obj) {
-          const bindOps = resources[field];
-          obj._bind(host, bindOps);
-
-          // add connection metadata
-          for (const op of bindOps) {
-            Resource.addConnection({
-              from: host,
-              to: obj,
-              relationship: op,
-            });
-          }
+        if (!("_bind" in obj)) {
+          throw new Error(
+            `Resource ${this.node.path} field ${key} does not have a bind method`
+          );
         }
+        obj._bind(host, resources[field]);
 
-        // NOTE: if this object doesn't have a _bind() method, we assume it
-        // is a primitive or an immutable collection that can be bound
-        // so there's nothing special to do here.
+        // add connection metadata
+        for (const op of resources[field]) {
+          Resource.addConnection({
+            from: host,
+            to: obj,
+            relationship: op,
+          });
+        }
       } else {
         log(`Skipped binding ${field} since it should be bound already.`);
       }
