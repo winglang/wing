@@ -250,7 +250,7 @@ jobs:
         runner:
           - ubuntu-latest
           # - macos-latest
-        node: [18]
+        node: [18, 19]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout

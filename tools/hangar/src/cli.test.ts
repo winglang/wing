@@ -67,7 +67,7 @@ beforeAll(async () => {
     $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
     await $`${yarnBin} init -y`;
-    await $`${yarnBin} add @winglang/wing --no-lockfile`;
+    await $`${yarnBin} add @winglang/wing --no-lockfile --ignore-engines`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
     let npxOutput = await $`${npxBin} @winglang/wing --version`;
 
