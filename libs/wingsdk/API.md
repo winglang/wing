@@ -1655,7 +1655,7 @@ hidden: bool;
 ```
 
 - *Type:* bool
-- *Default:* false
+- *Default:* undefined
 
 Whether the resource should be hidden from the UI.
 
@@ -2327,21 +2327,9 @@ new core.Display(props?: DisplayProps)
 
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
-| <code><a href="#@winglang/wingsdk.core.Display.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
 | <code><a href="#@winglang/wingsdk.core.Display.property.description">description</a></code> | <code>str</code> | Description of the resource. |
+| <code><a href="#@winglang/wingsdk.core.Display.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
 | <code><a href="#@winglang/wingsdk.core.Display.property.title">title</a></code> | <code>str</code> | Title of the resource. |
-
----
-
-##### `hidden`<sup>Required</sup> <a name="hidden" id="@winglang/wingsdk.core.Display.property.hidden"></a>
-
-```wing
-hidden: bool;
-```
-
-- *Type:* bool
-
-Whether the resource should be hidden from the UI.
 
 ---
 
@@ -2354,6 +2342,18 @@ description: str;
 - *Type:* str
 
 Description of the resource.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/wingsdk.core.Display.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- *Type:* bool
+
+Whether the resource should be hidden from the UI.
 
 ---
 
