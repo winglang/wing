@@ -218,7 +218,6 @@ impl PartialEq for Type {
 				// Sets are of the same type if they have the same value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
-				println!("MutSet-->{} == {}", l, r);
 				l == r
 			}
 			(Self::Optional(l0), Self::Optional(r0)) => {
