@@ -390,14 +390,18 @@ impl JSifier {
 				)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
-				format!(
-					"Object.freeze([{}])",
-					items
-						.iter()
-						.map(|expr| self.jsify_expression(expr, phase))
-						.collect::<Vec<String>>()
-						.join(", ")
-				)
+
+				let item_list = items
+					.iter()
+					.map(|expr| self.jsify_expression(expr, phase))
+					.collect::<Vec<String>>()
+					.join(", ");
+
+				if is_mutable_collection(expression) {
+					format!("[{}]", item_list)
+				} else {
+					format!("Object.freeze([{}])", item_list)
+				}
 			}
 			ExprKind::StructLiteral { fields, .. } => {
 				format!(
@@ -420,14 +424,17 @@ impl JSifier {
 				)
 			}
 			ExprKind::SetLiteral { items, .. } => {
-				format!(
-					"Object.freeze(new Set([{}]))",
-					items
-						.iter()
-						.map(|expr| self.jsify_expression(expr, phase))
-						.collect::<Vec<String>>()
-						.join(", ")
-				)
+				let item_list = items
+					.iter()
+					.map(|expr| self.jsify_expression(expr, phase))
+					.collect::<Vec<String>>()
+					.join(", ");
+
+				if is_mutable_collection(expression) {
+					format!("new Set([{}])",	item_list)					
+				} else {
+					format!("Object.freeze(new Set([{}]))",	item_list)					
+				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
@@ -709,4 +716,12 @@ impl JSifier {
 	fn jsify_class_member(&self, member: &ClassMember) -> String {
 		format!("{};", self.jsify_symbol(&member.name))
 	}
+}
+
+fn is_mutable_collection(expression: &Expr) -> bool {
+    if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+			evaluated_type.is_mutable_collection()
+		} else {
+			false
+		}
 }
