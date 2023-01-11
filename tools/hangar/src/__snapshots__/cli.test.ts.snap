@@ -2151,6 +2151,7 @@ exports[`wing compile mut_container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket1_3A77B9B4",
           },
         },
+        "bucket": "bucket1-c81ed215",
       },
       "root_bucket2_E39F70EE": {
         "//": {
@@ -2159,6 +2160,7 @@ exports[`wing compile mut_container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket2_E39F70EE",
           },
         },
+        "bucket": "bucket2-c83a0be6",
       },
       "root_bucket3_A0C568EA": {
         "//": {
@@ -2167,6 +2169,7 @@ exports[`wing compile mut_container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket3_A0C568EA",
           },
         },
+        "bucket": "bucket3-c8b6c706",
       },
     },
     "aws_s3_bucket_public_access_block": {
