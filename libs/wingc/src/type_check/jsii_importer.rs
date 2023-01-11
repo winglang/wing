@@ -7,7 +7,7 @@ use crate::{
 		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
+	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -39,11 +39,24 @@ impl JsiiInterface for jsii::InterfaceType {
 }
 
 pub struct JsiiImporter<'a> {
+	// An interface to access the types in the JSII library loaded with wingii
 	jsii_types: &'a wingii::type_system::TypeSystem,
+	// The assembly to import from the the JSII library
 	assembly: &'a Assembly,
+	// The wing module name to load. This is a namespace filter on the imported JSII assembly
+	// for example "cloud" will only (publicly) import types prefixed with `cloud.` from the
+	// the assembly. Note that other types might be implicitly imported into hidden namespaces
+	// if they are referenced from a type in the specified `module_name`.
 	module_name: &'a str,
+	// The wing type system: all imported types are added to `wing_types`.
 	wing_types: &'a mut Types,
+	// The index of the import statement that triggered this import. This is required so we'll know
+	// later on if types defined by this import come before or after other statements in the code.
+	// If type definitions in wing are always location agnostic this doesn't really matter and we
+	// might be able to remove this.
 	import_statement_idx: usize,
+	// The symbol environment to add imported symbols to. Note that all symbols will be added to
+	// some `Namespace` under this `env`.
 	env: &'a mut SymbolEnv,
 }
 
@@ -141,14 +154,18 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn import_type(&mut self, type_fqn: &str) {
-		// Hack: if the class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define it
-		if type_fqn == format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) {
+		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
+		if Self::is_fqn_construct_base(type_fqn) {
 			return;
 		}
 
 		// Always expect assembly.module.type
 		let parts = type_fqn.split('.').collect::<Vec<_>>();
-		assert!(parts.len() == 3);
+		assert!(
+			parts.len() == 3,
+			"Expected type fqn to be assembly.module.type, got {}",
+			type_fqn
+		);
 		assert!(parts[0] == self.assembly.name);
 		let namespace_name = parts[1];
 		let type_name = parts[2];
@@ -177,7 +194,7 @@ impl<'a> JsiiImporter<'a> {
 					},
 					SymbolKind::Namespace(Namespace {
 						name: namespace_name.to_string(),
-						hidden: namespace_name == self.module_name,
+						hidden: namespace_name != self.module_name,
 						env: SymbolEnv::new(None, None, false, self.env.flight, 0),
 					}),
 					StatementIdx::Top,
@@ -370,14 +387,23 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
+	fn is_fqn_construct_base(fqn: &str) -> bool {
+		// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
+		// from `construct.Construct` and stuff derived `cloud.Resource` (which itself is derived from `constructs.Construct`).
+		// But since we don't support interfaces yet we can't import `cloud.Resource` so we just treat it as a base class.
+		// I'm also not sure we should ever import `cloud.Resource` because we might want to keep its internals hidden to the user:
+		// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
+		return fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn == CONSTRUCT_BASE;
+	}
+
 	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType, namespace_name: &str) {
 		let mut is_resource = false;
 		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
-			// Hack: if the base class name is RESOURCE_CLASS_FQN then we treat this class as a resource and don't need to define its parent
-			if base_class_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) {
+			// Hack: if the base class name is a resource base then we treat this class as a resource and don't need to define its parent.
+			if Self::is_fqn_construct_base(base_class_fqn) {
 				is_resource = true;
 				None
 			} else {

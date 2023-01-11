@@ -36,6 +36,8 @@ const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
 
+const CONSTRUCT_BASE: &'static str = "constructs.Construct";
+
 pub struct CompilerOutput {
 	pub preflight: String,
 	// pub inflights: BTreeMap<String, String>,
@@ -51,7 +53,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 		Ok(source) => source,
 		Err(err) => {
 			let mut diagnostics = Diagnostics::new();
-			
+
 			diagnostics.push(Diagnostic {
 				message: format!("Error reading source file: {}: {:?}", &source_file, err),
 				span: None,

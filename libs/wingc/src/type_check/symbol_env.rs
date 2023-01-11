@@ -208,6 +208,7 @@ impl SymbolEnv {
 		)
 	}
 
+	// Pass `ignore_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
 	pub fn lookup_nested(
 		&self,
 		nested_vec: &[&Symbol],
@@ -239,7 +240,7 @@ impl SymbolEnv {
 			let ns = if let Some(ns) = t.as_namespace() {
 				if ns.hidden && !ignore_hidden {
 					return Err(TypeError {
-						message: format!("Symbol \"{}\" is not a namespace", symb.name),
+						message: format!("\"{}\" was not brought", symb.name),
 						span: symb.span.clone(),
 					});
 				}

@@ -109,7 +109,12 @@ const WINGSDK_STD_MODULE: &'static str = "std";
 #[derivative(Debug)]
 pub struct Namespace {
 	pub name: String,
+
+	// When `true` this namespace contains symbols that can't be explicitly accessed from the code.
+	// While the internals of imported modules might still need these symbols (and types) to be
+	// available to them.
 	pub hidden: bool,
+
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -1513,7 +1518,7 @@ impl<'a> TypeChecker<'a> {
 
 	fn add_module_to_env(&mut self, env: &mut SymbolEnv, module_name: String, statement_idx: usize) {
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
+		if module_name == "cloud" || module_name == "fs" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
