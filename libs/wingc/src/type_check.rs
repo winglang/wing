@@ -1013,17 +1013,25 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
+		assert!(expected_types.len() > 0);
 		if actual_type.0 != &Type::Anything && !expected_types.contains(&actual_type) {
 			self.diagnostics.borrow_mut().push(Diagnostic {
-				message: format!(
-					"Expected type to be one of \"{}\", but got \"{}\" instead",
-					expected_types
+				message: if expected_types.len() > 1 {
+					let expected_types_list = expected_types
 						.iter()
 						.map(|t| format!("{}", t))
 						.collect::<Vec<String>>()
-						.join(","),
-					actual_type
-				),
+						.join(",");
+					format!(
+						"Expected type to be one of \"{}\", but got \"{}\" instead",
+						expected_types_list, actual_type
+					)
+				} else {
+					format!(
+						"Expected type to be \"{}\", but got \"{}\" instead",
+						expected_types[0], actual_type
+					)
+				},
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
 			});
