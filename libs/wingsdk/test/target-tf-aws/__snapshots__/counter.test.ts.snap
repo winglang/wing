@@ -46,7 +46,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "Represents a distributed atomic counter",
+              "description": "A distributed atomic counter",
               "title": "Counter",
             },
             "id": "Counter",
@@ -239,7 +239,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "Represents a distributed atomic counter",
+              "description": "A distributed atomic counter",
               "title": "Counter",
             },
             "id": "Counter",
@@ -326,7 +326,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "Represents a function",
+              "description": "A cloud function (FaaS)",
               "title": "Function",
             },
             "id": "Function",

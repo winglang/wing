@@ -121,3 +121,24 @@ test("queue has no display hidden property", async () => {
     },
   });
 });
+
+test("queue has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
+
+  // THEN
+  expect(queue.display.title).toBeDefined();
+  expect(queue.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_queue: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

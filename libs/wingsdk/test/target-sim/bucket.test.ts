@@ -206,3 +206,24 @@ test("bucket has no display hidden property", async () => {
     },
   });
 });
+
+test("bucket has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
+
+  // THEN
+  expect(bucket.display.title).toBeDefined();
+  expect(bucket.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_bucket: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

@@ -28,3 +28,24 @@ test("inflight has display hidden property set to true", async () => {
     },
   });
 });
+
+test("inflight has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const inflight = app.node.tryFindChild("Handler") as Inflight;
+
+  // THEN
+  expect(inflight.display.title).toBeDefined();
+  expect(inflight.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    Handler: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

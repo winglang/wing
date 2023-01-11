@@ -53,3 +53,24 @@ test("Logger has display hidden property set to true", async () => {
     },
   });
 });
+
+test("Logger has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const logger = app.node.tryFindChild("WingLogger") as cloud.Logger;
+
+  // THEN
+  expect(logger.display.title).toBeDefined();
+  expect(logger.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    WingLogger: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

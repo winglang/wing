@@ -97,3 +97,24 @@ test("topic has no display hidden property", async () => {
     },
   });
 });
+
+test("topic has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const topic = app.node.tryFindChild("my_topic") as cloud.Topic;
+
+  // THEN
+  expect(topic.display.title).toBeDefined();
+  expect(topic.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_topic: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

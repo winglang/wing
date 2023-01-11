@@ -36,7 +36,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "Represents a queue",
+              "description": "A distributed message queue",
               "title": "Queue",
             },
             "id": "Queue",
@@ -221,7 +221,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "Represents a queue",
+              "description": "A distributed message queue",
               "title": "Queue",
             },
             "id": "Queue",
@@ -314,7 +314,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "Represents a function",
+              "description": "A cloud function (FaaS)",
               "title": "Function",
             },
             "id": "Queue-OnMessage-c5395e41",
@@ -430,7 +430,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "Represents a queue",
+              "description": "A distributed message queue",
               "title": "Queue",
             },
             "id": "Queue",

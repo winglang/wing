@@ -80,7 +80,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a function",
+            "description": "A cloud function (FaaS)",
             "title": "Function",
           },
           "id": "Function",
@@ -218,7 +218,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a function",
+            "description": "A cloud function (FaaS)",
             "title": "Function",
           },
           "id": "Function",
@@ -356,7 +356,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a function",
+            "description": "A cloud function (FaaS)",
             "title": "Function",
           },
           "id": "Function",
@@ -494,7 +494,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a function",
+            "description": "A cloud function (FaaS)",
             "title": "Function",
           },
           "id": "Function",
@@ -632,7 +632,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a function",
+            "description": "A cloud function (FaaS)",
             "title": "Function",
           },
           "id": "Function",
@@ -770,7 +770,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a function",
+            "description": "A cloud function (FaaS)",
             "title": "Function",
           },
           "id": "Function",
@@ -908,7 +908,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a function",
+            "description": "A cloud function (FaaS)",
             "title": "Function",
           },
           "id": "Function",

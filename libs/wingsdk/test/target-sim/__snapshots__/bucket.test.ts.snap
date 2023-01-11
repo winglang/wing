@@ -51,7 +51,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a cloud object store",
+            "description": "A cloud object store",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -131,7 +131,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a cloud object store",
+            "description": "A cloud object store",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -212,7 +212,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a cloud object store",
+            "description": "A cloud object store",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -295,7 +295,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a cloud object store",
+            "description": "A cloud object store",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -376,7 +376,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a cloud object store",
+            "description": "A cloud object store",
             "title": "Bucket",
           },
           "id": "my_bucket",
@@ -457,7 +457,7 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "Represents a cloud object store",
+            "description": "A cloud object store",
             "title": "Bucket",
           },
           "id": "my_bucket",
