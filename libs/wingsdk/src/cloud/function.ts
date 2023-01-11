@@ -47,7 +47,7 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     super(scope, id);
 
     this.display.title = "Function";
-    this.display.description = "Represents a function";
+    this.display.description = "A cloud function (FaaS)";
 
     if (!scope) {
       this.assetPath = undefined as any;
