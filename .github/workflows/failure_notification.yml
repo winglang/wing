@@ -1,4 +1,4 @@
-name: "Build Failure Notification"
+name: Build Failure Notification
 
 on:
   check_run:
@@ -10,11 +10,11 @@ jobs:
     runs-on: ubuntu-22.04
     if: |
       github.event.check_run.name != 'Build Failure Notification'
-      && github.event.check_run.conclusion == 'failure' 
       && github.event.check_run.check_suite.head_branch == 'main'
+      && github.event.check_run.conclusion == 'failure' 
     steps:
       - name: Send slack notification
-        uses: ravsamhq/notify-slack-action@v2.3.0
+        uses: ravsamhq/notify-slack-action@2.3.0
         with:
           status: failure
           notification_title: "${{ github.event.check_run.name }} has failed"

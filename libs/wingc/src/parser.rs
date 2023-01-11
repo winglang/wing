@@ -97,7 +97,7 @@ impl Parser<'_> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.is_error() {
+		if node.has_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
@@ -459,7 +459,9 @@ impl Parser<'_> {
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
 					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
+					"MutArray" => Ok(Type::MutArray(Box::new(self.build_type(&element_type)?))),
 					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),
+					"MutSet" => Ok(Type::MutSet(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
@@ -470,6 +472,9 @@ impl Parser<'_> {
 	}
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
+		if nested_node.has_error() {
+			return self.add_error(format!("Syntax error"), &nested_node);
+		}
 		Ok(Reference::NestedIdentifier {
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,

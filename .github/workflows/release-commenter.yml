@@ -1,6 +1,9 @@
+name: Create Release Comment
+
 on:
   release:
-    types: [published]
+    types:
+      - published
 
 jobs:
   release:

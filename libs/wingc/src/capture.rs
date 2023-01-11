@@ -1,10 +1,11 @@
-use std::{collections::{BTreeMap, BTreeSet}};
 use crate::{
 	ast::{ArgList, Expr, ExprKind, InterpolatedStringPart, Literal, Phase, Reference, Scope, StmtKind, Symbol},
 	debug,
+	diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics},
 	type_check::symbol_env::SymbolEnv,
-	type_check::Type, diagnostic::{Diagnostics, Diagnostic, DiagnosticLevel},
+	type_check::Type,
 };
+use std::collections::{BTreeMap, BTreeSet};
 
 /* This is a definition of how a resource is captured. The most basic way to capture a resource
 is to use a subset of its client's methods. In that case we need to specify the name of the method
@@ -156,7 +157,11 @@ pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnosti
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
-				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements, diagnostics)));
+				assert!(func_def.statements.env.borrow().is_some()); // make sure env is defined
+				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(
+					&func_def.statements,
+					diagnostics,
+				)));
 			}
 		}
 		_ => (),
@@ -172,7 +177,13 @@ fn scan_for_inflights_in_arglist(args: &ArgList, diagnostics: &mut Diagnostics) 
 	}
 }
 
-fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &SymbolEnv, statement_idx: usize, diagnostics: &mut Diagnostics) -> Vec<Capture> {
+fn scan_captures_in_call(
+	reference: &Reference,
+	args: &ArgList,
+	env: &SymbolEnv,
+	statement_idx: usize,
+	diagnostics: &mut Diagnostics,
+) -> Vec<Capture> {
 	let mut res = vec![];
 	if let Reference::NestedIdentifier { object, property } = reference {
 		res.extend(scan_captures_in_expression(&object, env, statement_idx, diagnostics));
@@ -211,7 +222,12 @@ fn scan_captures_in_call(reference: &Reference, args: &ArgList, env: &SymbolEnv,
 	res
 }
 
-fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize, diagnostics: &mut Diagnostics) -> Vec<Capture> {
+fn scan_captures_in_expression(
+	exp: &Expr,
+	env: &SymbolEnv,
+	statement_idx: usize,
+	diagnostics: &mut Diagnostics,
+) -> Vec<Capture> {
 	let mut res = vec![];
 	match &exp.kind {
 		ExprKind::New {
@@ -228,8 +244,6 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 			}
 		}
 		ExprKind::Reference(r) => match r {
-
-			
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
 				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
@@ -239,31 +253,40 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 					}
 				};
 
-				if let (Some(resource), Phase::Preflight) = (t.as_resource(), f) {
-					// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
-					//   1. explicit capture definitions
-					//   2. analyzing inflight code and figuring out what methods are being used on the object
-					res.extend(
-						resource
-							.methods()
-							.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
-							.map(|(name, _)| Capture {
-								object: symbol.clone(),
-								kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
-							})
-							.collect::<Vec<Capture>>(),
-					);
-				} else if (t.is_immutable_collection() || t.is_primitive()) && f == Phase::Preflight {
-					res.push(Capture {
-						object: symbol.clone(),
-						kind: CaptureKind::ImmutableData,
-					});
-				} else {
-					diagnostics.push(Diagnostic {
-						level: DiagnosticLevel::Error,
-						message: format!("Can't capture '{}' of type {} in inflight", symbol.name, t),
-						span: Some(symbol.span.clone()),
-					});
+				// if the identifier represents a preflight object, then capture it
+				if f == Phase::Preflight {
+					// capture as a resource
+					if let Some(resource) = t.as_resource() {
+						// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
+						//   1. explicit capture definitions
+						//   2. analyzing inflight code and figuring out what methods are being used on the object
+						res.extend(
+							resource
+								.methods()
+								.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
+								.map(|(name, _)| Capture {
+									object: symbol.clone(),
+									kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
+								})
+								.collect::<Vec<Capture>>(),
+						);
+					} else if t.is_immutable_collection() || t.is_primitive() {
+						// capture as an immutable data type (primitive/collection)
+						res.push(Capture {
+							object: symbol.clone(),
+							kind: CaptureKind::ImmutableData,
+						});
+					} else {
+						// unsupported capture
+						diagnostics.push(Diagnostic {
+							level: DiagnosticLevel::Error,
+							message: format!(
+								"Cannot reference '{}' of type '{}' from an inflight context",
+								symbol.name, t
+							),
+							span: Some(symbol.span.clone()),
+						});
+					}
 				}
 			}
 			Reference::NestedIdentifier { object, property: _ } => {
@@ -284,7 +307,9 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 				// }
 			}
 		},
-		ExprKind::Call { function, args } => res.extend(scan_captures_in_call(&function, &args, env, statement_idx, diagnostics)),
+		ExprKind::Call { function, args } => {
+			res.extend(scan_captures_in_call(&function, &args, env, statement_idx, diagnostics))
+		}
 		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx, diagnostics)),
 		ExprKind::Binary { op: _, lexp, rexp } => {
 			scan_captures_in_expression(lexp, env, statement_idx, diagnostics);
@@ -317,7 +342,10 @@ fn scan_captures_in_expression(exp: &Expr, env: &SymbolEnv, statement_idx: usize
 			if let Phase::Inflight = func_def.signature.flight {
 				let mut func_captures = func_def.captures.borrow_mut();
 				assert!(func_captures.is_none());
-				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(&func_def.statements, diagnostics)));
+				*func_captures = Some(collect_captures(scan_captures_in_inflight_scope(
+					&func_def.statements,
+					diagnostics,
+				)));
 			}
 		}
 	}
@@ -363,7 +391,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				}
 			}
 			StmtKind::Expression(e) => res.extend(scan_captures_in_expression(e, env, s.idx, diagnostics)),
-			StmtKind::Assignment { variable: _, value } => res.extend(scan_captures_in_expression(value, env, s.idx, diagnostics)),
+			StmtKind::Assignment { variable: _, value } => {
+				res.extend(scan_captures_in_expression(value, env, s.idx, diagnostics))
+			}
 			StmtKind::Return(e) => {
 				if let Some(e) = e {
 					res.extend(scan_captures_in_expression(e, env, s.idx, diagnostics));

@@ -1,5 +1,7 @@
 # User Story 10 - Task List using Inflight Closures
 
+> **Status**: Done
+
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
 He starts his day going over his emails, slack messages, updates from github, etc... But he is struggling. There are
@@ -77,7 +79,7 @@ new cloud.Function(inflight (s: str): str => {
 }) as "test: add a new task";
 
 new cloud.Function(inflight (s: str): str => {
-    let expected = "task 42"
+    let expected = "task 42";
     let id = add_task.invoke(expected);
     print("added new task with id ${id}");
     let content = get_task.invoke(id);
