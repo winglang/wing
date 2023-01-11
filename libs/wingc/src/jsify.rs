@@ -431,9 +431,9 @@ impl JSifier {
 					.join(", ");
 
 				if is_mutable_collection(expression) {
-					format!("new Set([{}])",	item_list)					
+					format!("new Set([{}])", item_list)
 				} else {
-					format!("Object.freeze(new Set([{}]))",	item_list)					
+					format!("Object.freeze(new Set([{}]))",	item_list)
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
