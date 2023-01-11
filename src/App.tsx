@@ -13,6 +13,13 @@ export const App = ({}: AppProps) => {
   const [isError, setIsError] = useState(false);
   const trpcContext = trpc.useContext();
 
+  trpc["app.invalidateQueries"].useSubscription(undefined, {
+    async onData() {
+      await trpcContext.invalidate();
+    },
+  });
+
+  // TODO: Use TRPC directly.
   useIpcEventListener(
     "trpc.invalidate",
     async (e: IpcRendererEvent, pathAndInput: any) => {
@@ -28,10 +35,13 @@ export const App = ({}: AppProps) => {
     },
   );
 
+  // TODO: Use TRPC directly.
   useIpcEventListener("app.isError", (e: IpcRendererEvent, error) => {
     setIsError(true);
     setIsLoading(false);
   });
+
+  // TODO: Use TRPC directly.
   useIpcEventListener(
     "app.isLoading",
     (e: IpcRendererEvent, isLoading: boolean) => {

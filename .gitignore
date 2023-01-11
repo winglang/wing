@@ -51,4 +51,3 @@ jspm_packages/
 /coverage/
 *.env
 /release
-/storybook-static

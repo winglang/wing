@@ -1,22 +1,20 @@
 import path from "node:path";
 
 import * as trpcExpress from "@trpc/server/adapters/express";
+import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import cors from "cors";
 import { app, BrowserWindow, dialog, Menu, shell, screen } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import express from "express";
 import getPort from "get-port";
+import { WebSocketServer } from "ws";
 
 import { ConsoleLogger, LogEntry } from "./consoleLogger.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeAppRouters } from "./router/index.js";
 import { createWingApp } from "./utils/createWingApp.js";
 import { watchSimulatorFile } from "./utils/watchSimulatorFile.js";
-
-// Chokidar is a CJS-only module and doesn't play well with ESM imports.
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const chokidar = require("chokidar") as typeof import("chokidar");
 
 log.info("Application entrypoint");
 
@@ -51,13 +49,12 @@ async function createWindow(options: { title?: string; port: number }) {
     height: Math.round(screen.getPrimaryDisplay().workAreaSize.height * 0.9),
     webPreferences: {
       preload: path.join(__dirname, "../preload/index.js"),
+      nodeIntegration: true,
     },
   });
 
-  if (import.meta.env.DEV && process.env.VITE_DEV_SERVER_URL) {
-    void window.loadURL(
-      `${process.env.VITE_DEV_SERVER_URL}?port=${options.port}`,
-    );
+  if (import.meta.env.DEV) {
+    void window.loadURL(`${import.meta.env.BASE_URL}?port=${options.port}`);
     window.webContents.openDevTools();
   } else {
     void window.loadFile(path.join(ROOT_PATH.dist, "index.html"), {
@@ -97,6 +94,7 @@ function createWindowManager() {
             message,
             source: source ?? "console",
           });
+          // TODO: Use TRPC websockets.
           newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
         log(message, source) {
@@ -107,6 +105,7 @@ function createWindowManager() {
             message,
             source: source ?? "console",
           });
+          // TODO: Use TRPC websockets.
           newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
         error(error, source) {
@@ -118,22 +117,26 @@ function createWindowManager() {
               error instanceof Error ? error.message : JSON.stringify(error),
             source: source ?? "console",
           });
+          // TODO: Use TRPC websockets.
           newWindow?.webContents.send("trpc.invalidate", "app.logs");
         },
       };
 
       const onLoading = (isLoading: boolean) => {
         log.verbose("onLoading", isLoading);
+        // TODO: Use TRPC websockets.
         newWindow?.webContents.send("app.isLoading", isLoading);
       };
 
       const onError = (error: unknown) => {
         log.verbose("onError", { error });
+        // TODO: Use TRPC websockets.
         newWindow?.webContents.send("app.isError", true);
       };
 
       const notifyChange = () => {
         log.verbose("notifyChange");
+        // TODO: Use TRPC websockets.
         newWindow?.webContents.send("trpc.invalidate");
       };
 
@@ -150,26 +153,29 @@ function createWindowManager() {
       const server = await (async () => {
         const app = express();
         app.use(cors());
+
+        const router = mergeAppRouters();
+        const createContext = () => {
+          return {
+            async simulator() {
+              const sim = await simulatorPromise;
+              return sim.get();
+            },
+            async tree() {
+              const sim = await simulatorPromise;
+              return sim.tree();
+            },
+            logs() {
+              return consoleLogger.messages;
+            },
+          };
+        };
         app.use(
           "/",
           trpcExpress.createExpressMiddleware({
-            router: mergeAppRouters(),
+            router,
             batching: { enabled: false },
-            createContext() {
-              return {
-                async simulator() {
-                  const sim = await simulatorPromise;
-                  return sim.get();
-                },
-                async tree() {
-                  const sim = await simulatorPromise;
-                  return sim.tree();
-                },
-                logs() {
-                  return consoleLogger.messages;
-                },
-              };
-            },
+            createContext,
           }),
         );
 
@@ -180,6 +186,14 @@ function createWindowManager() {
           server.on("listening", resolve);
         });
         consoleLogger.verbose(`Server is listening on port ${port}`);
+
+        const wss = new WebSocketServer({ server });
+        applyWSSHandler({
+          wss,
+          router,
+          createContext,
+        });
+
         return { port, server };
       })();
 

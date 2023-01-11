@@ -14,9 +14,8 @@ export const UnsupportedView = ({
   const newIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
   const openExternalUrl = (url: string) => {
-    if (window.electronTRPC) {
-      window.electronTRPC.ipcRenderer.send("open-external-url", url);
-    }
+    // TODO: Use TRPC directly.
+    window.electronTRPC?.ipcRenderer.send("open-external-url", url);
   };
 
   return (

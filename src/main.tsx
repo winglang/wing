@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { httpLink } from "@trpc/client";
+import { httpLink, wsLink, splitLink, createWSClient } from "@trpc/client";
 import React from "react";
 import ReactDOM from "react-dom/client";
 
@@ -27,10 +27,21 @@ const main = ({
       },
     },
   });
+  const wsClient = createWSClient({
+    url: `ws://localhost:${port}`,
+  });
   const trpcClient = trpc.createClient({
     links: [
-      httpLink({
-        url,
+      splitLink({
+        condition(op) {
+          return op.type === "subscription";
+        },
+        true: wsLink({
+          client: wsClient,
+        }),
+        false: httpLink({
+          url,
+        }),
       }),
     ],
   });
@@ -50,27 +61,9 @@ const main = ({
 
 const query = new URLSearchParams(location.search);
 
-const getSchemaFromQueryString = () => {
-  const base64Schema = query.get("schema");
-  try {
-    const jsonSchema = atob(base64Schema ?? DemoBase64WingSchema);
-    return JSON.parse(jsonSchema) as WingSimulatorSchema;
-  } catch (error) {
-    console.error("failed to read schema from url", error);
-  }
-};
-
-if (window.electronTRPC) {
-  main({
-    appMode: "electron",
-    port: Number(query.get("port")),
-  });
-} else {
-  // Only in Vercel.
-  main({
-    appMode: "webapp",
-    schema: getSchemaFromQueryString(),
-  });
-}
+main({
+  appMode: "electron",
+  port: Number(query.get("port")),
+});
 
 document.querySelector("#loader")?.remove();

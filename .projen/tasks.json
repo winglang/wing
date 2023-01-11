@@ -24,14 +24,6 @@
         }
       ]
     },
-    "build-storybook": {
-      "name": "build-storybook",
-      "steps": [
-        {
-          "exec": "build-storybook"
-        }
-      ]
-    },
     "bump": {
       "name": "bump",
       "description": "Bumps version based on latest git tag and generates a changelog entry",
@@ -89,7 +81,7 @@
           "exec": "tsc --build"
         },
         {
-          "exec": "vite build"
+          "exec": "tsx scripts/build.mts"
         }
       ]
     },
@@ -106,7 +98,7 @@
       "name": "dev",
       "steps": [
         {
-          "exec": "vite"
+          "exec": "tsx scripts/dev.mts"
         }
       ]
     },
@@ -168,14 +160,6 @@
         },
         {
           "exec": "git diff --ignore-space-at-eol --exit-code"
-        }
-      ]
-    },
-    "storybook": {
-      "name": "storybook",
-      "steps": [
-        {
-          "exec": "start-storybook -p 6006"
         }
       ]
     },

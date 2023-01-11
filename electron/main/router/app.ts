@@ -1,4 +1,5 @@
 import { TRPCError } from "@trpc/server";
+import { observable } from "@trpc/server/observable";
 import { z } from "zod";
 
 import {
@@ -214,6 +215,17 @@ export const createAppRouter = () => {
               }) ?? [],
         };
       }),
+    // TODO: Implement and use this subscription to invalidate from the backend to the frontend.
+    "app.invalidateQueries": publicProcedure.subscription(() => {
+      return observable<{ randomNumber: number }>((emit) => {
+        // const timer = setInterval(() => {
+        //   emit.next({ randomNumber: Math.random() });
+        // }, 1000);
+        // return () => {
+        //   clearInterval(timer);
+        // };
+      });
+    }),
   });
 };
 

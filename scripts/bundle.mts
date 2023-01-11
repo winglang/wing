@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 
+import { notarize } from "@electron/notarize";
 import { build, Platform } from "electron-builder";
-import { notarize } from "electron-notarize";
 
 import { WING_PROTOCOL_SCHEME } from "../electron/main/protocol.js";
 

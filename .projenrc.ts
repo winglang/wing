@@ -15,26 +15,17 @@ const project = new TypeScriptProject({
     "@winglang/wingsdk",
     "@winglang/polycons",
     "constructs",
-    //
     "@winglang/projen",
     "@babel/core",
-    "@storybook/addon-actions",
-    "@storybook/addon-essentials",
-    "@storybook/addon-interactions",
-    "@storybook/addon-links",
-    "@storybook/builder-vite",
-    "@storybook/react",
-    "@storybook/testing-library",
     "@types/react",
     "@types/react-dom",
     "@vitejs/plugin-react",
     "autoprefixer",
-    "babel-loader",
     "electron",
     "electron-builder",
     "electron-updater",
     "electron-devtools-installer",
-    "electron-notarize",
+    "@electron/notarize",
     "postcss",
     "react",
     "react-dom",
@@ -44,7 +35,6 @@ const project = new TypeScriptProject({
     "@headlessui/react",
     "typescript",
     "vite",
-    "vite-plugin-electron",
     "vite-node",
     "@heroicons/react",
     "classnames",
@@ -66,21 +56,24 @@ const project = new TypeScriptProject({
     "@types/lodash.throttle",
     "react-popper",
     "@popperjs/core",
-    // Peer deps:
-    "webpack",
-    "require-from-string",
-    // Fonts
     "vite-plugin-webfont-dl",
+    "esbuild",
+    "ws",
+    "@types/ws",
+    "nanoid",
   ],
   // @ts-ignore
   minNodeVersion: "16.0.0",
   workflowNodeVersion: "16.x",
 });
-project.addTask("dev").exec("vite");
-project.compileTask.exec("vite build");
-project.addTask("storybook").exec("start-storybook -p 6006");
-project.addTask("build-storybook").exec("build-storybook");
+
+project.addTask("dev").exec("tsx scripts/dev.mts");
+
+project.compileTask.exec("tsx scripts/build.mts");
+
 project.tasks.tryFind("package")?.reset();
+
+project.package.addField("main", "dist/vite/electron/main/index.js");
 
 project
   .tryFindObjectFile(".github/workflows/release.yml")
@@ -141,7 +134,7 @@ project.release?.addJobs({
       },
       {
         name: "Build Electron Application",
-        run: "npm exec vite-node scripts/builderElectronApp.mts",
+        run: "npm exec vite-node scripts/bundle.mts",
         env: {
           APPLE_ID: "${{ secrets.APPLE_ID }}",
           APPLE_ID_PASSWORD: "${{ secrets.APPLE_ID_PASSWORD }}",
@@ -173,13 +166,6 @@ project.release?.addJobs({
       },
     ],
   },
-});
-
-// project.package.addField("type", "module");
-project.package.addField("main", "dist/vite/electron/main/index.js");
-project.package.addField("env", {
-  VITE_DEV_SERVER_HOST: "127.0.0.1",
-  VITE_DEV_SERVER_PORT: 7777,
 });
 
 const tsconfigFiles = [
@@ -221,7 +207,6 @@ for (const tsconfig of tsconfigFiles) {
       include.push(
         "./scripts/**/*",
         "./test/**/*",
-        "./.storybook/**/*",
         "./vite.config.ts",
         "./.projenrc.ts",
         "./tailwind.config.cjs",
@@ -234,7 +219,6 @@ for (const tsconfig of tsconfigFiles) {
 
 project.addGitIgnore("*.env");
 project.addGitIgnore("/release");
-project.addGitIgnore("/storybook-static");
 
 if (project.eslint) {
   project.tasks

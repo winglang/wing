@@ -13,6 +13,10 @@
       "type": "build"
     },
     {
+      "name": "@electron/notarize",
+      "type": "build"
+    },
+    {
       "name": "@headlessui/react",
       "type": "build"
     },
@@ -22,34 +26,6 @@
     },
     {
       "name": "@popperjs/core",
-      "type": "build"
-    },
-    {
-      "name": "@storybook/addon-actions",
-      "type": "build"
-    },
-    {
-      "name": "@storybook/addon-essentials",
-      "type": "build"
-    },
-    {
-      "name": "@storybook/addon-interactions",
-      "type": "build"
-    },
-    {
-      "name": "@storybook/addon-links",
-      "type": "build"
-    },
-    {
-      "name": "@storybook/builder-vite",
-      "type": "build"
-    },
-    {
-      "name": "@storybook/react",
-      "type": "build"
-    },
-    {
-      "name": "@storybook/testing-library",
       "type": "build"
     },
     {
@@ -100,6 +76,10 @@
       "type": "build"
     },
     {
+      "name": "@types/ws",
+      "type": "build"
+    },
+    {
       "name": "@typescript-eslint/eslint-plugin",
       "version": "^5",
       "type": "build"
@@ -131,10 +111,6 @@
     },
     {
       "name": "autoprefixer",
-      "type": "build"
-    },
-    {
-      "name": "babel-loader",
       "type": "build"
     },
     {
@@ -170,15 +146,15 @@
       "type": "build"
     },
     {
-      "name": "electron-notarize",
-      "type": "build"
-    },
-    {
       "name": "electron-trpc",
       "type": "build"
     },
     {
       "name": "electron-updater",
+      "type": "build"
+    },
+    {
+      "name": "esbuild",
       "type": "build"
     },
     {
@@ -231,6 +207,10 @@
       "type": "build"
     },
     {
+      "name": "nanoid",
+      "type": "build"
+    },
+    {
       "name": "npm-check-updates",
       "version": "^16",
       "type": "build"
@@ -276,10 +256,6 @@
       "type": "build"
     },
     {
-      "name": "require-from-string",
-      "type": "build"
-    },
-    {
       "name": "sass",
       "type": "build"
     },
@@ -309,10 +285,6 @@
       "type": "build"
     },
     {
-      "name": "vite-plugin-electron",
-      "type": "build"
-    },
-    {
       "name": "vite-plugin-webfont-dl",
       "type": "build"
     },
@@ -321,7 +293,7 @@
       "type": "build"
     },
     {
-      "name": "webpack",
+      "name": "ws",
       "type": "build"
     },
     {

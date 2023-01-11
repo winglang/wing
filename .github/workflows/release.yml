@@ -95,7 +95,7 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        run: npm exec vite-node scripts/builderElectronApp.mts
+        run: npm exec vite-node scripts/bundle.mts
       - name: install gh on M1 image
         run: brew install gh
       - name: Release to GitHub

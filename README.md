@@ -37,7 +37,7 @@ npm run storybook
 ```sh
 # Build
 npm run release
-npm exec vite-node scripts/builderElectronApp.mts
+npm exec vite-node scripts/bundle.mts
 # Open the included demo/target/index.wsim
 open demo/target/index.wsim -a $(pwd)/release/mac-arm64/Wing\ Console.app
 ```
