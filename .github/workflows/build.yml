@@ -10,7 +10,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 env:
@@ -28,29 +28,29 @@ jobs:
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         uses: actions/checkout@v3
 
       - name: Get tags
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         run: git fetch --unshallow --tags
 
       - name: Login to Private NPM registry
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         uses: bahmutov/npm-install@v1
         with:
           install-command: npm ci --ignore-scripts
 
       - name: Get Version Info
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         id: info
         env:
           # Needed for `auto` cli
-          GH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           set -e
           echo "version=$(npx auto release -d | grep 'Would have created a release on GitHub for version: ' | sed 's/.*version: //')" >> $GITHUB_OUTPUT
@@ -59,11 +59,11 @@ jobs:
 
       # newlines are easier to handle in single-line yaml
       - run: "echo '\n' >> CHANGELOG.md"
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
 
       - name: PR Version Info
         id: pr_info
-        if: github.ref != 'refs/heads/main'
+        if: github.event_name != 'push'
         run: |
           echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
           echo "Pull Request" > CHANGELOG.md
@@ -76,11 +76,11 @@ jobs:
           path: CHANGELOG.md
 
       - name: Compress Docs
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         run: tar -czvf docs.tgz docs/*
 
       - name: Upload Docs
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push'
         uses: actions/upload-artifact@v2
         with:
           name: docs
@@ -165,7 +165,7 @@ jobs:
           path: target/wasm32-wasi/release/wingc.wasm
 
       - name: "Publish Wing Playground"
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: amondnet/vercel-action@v25.1.0
         with:
           github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
@@ -348,7 +348,7 @@ jobs:
 
   publish:
     name: Publish
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.repository == 'winglang/wing'
     needs:
       - build
       - prepare

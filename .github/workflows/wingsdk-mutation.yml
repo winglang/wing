@@ -8,6 +8,10 @@ on:
     paths:
       - libs/wingsdk/**
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -16,8 +20,10 @@ defaults:
     working-directory: libs/wingsdk
 
 jobs:
-  build:
+  wingsdk-mutation:
     runs-on: ubuntu-latest
+    env:
+      CI: "true"
     outputs:
       self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     steps:
@@ -43,26 +49,13 @@ jobs:
         name: Find mutations
         run: |-
           git add .
-          git diff --staged --patch --exit-code || echo "::set-output name=self_mutation_happened::true"
-      - name: Upload patch
-        if: steps.self_mutation.outputs.self_mutation_happened
-        uses: actions/upload-artifact@v2
-        with:
-          name: .repo.patch
-          path: libs/wingsdk/.repo.patch
-      - name: Set git identity
+          git diff --staged --patch --exit-code > /dev/null || echo "::set-output name=self_mutation_happened::true"
+      - name: Push changes
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-      - name: Push changes
-        if: steps.self_mutation.outputs.self_mutation_happened
-        run: |-
-          git add .
           git commit -s -m "chore: self mutation"
           git push origin HEAD:${{ github.event.ref }}
-      - name: Fail build on mutation
-        if: steps.self_mutation.outputs.self_mutation_happened
-        run: |-
           echo "::error::Files were changed during build (see build log)."
           exit 1
