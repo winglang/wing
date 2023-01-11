@@ -5,7 +5,6 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, Win
 use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_STRING};
 use derivative::Derivative;
 use elsa::FrozenVec;
-use generational_arena::{Arena, Index};
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -16,7 +15,7 @@ use symbol_env::SymbolEnv;
 use self::symbol_env::StatementIdx;
 
 thread_local! {
-	static TYPES_ARR: RefCell<Arena<Box<Type>>> = RefCell::new(Arena::new());
+	static TYPES_ARR: RefCell<Vec<Box<Type>>> = RefCell::new(Vec::new());
 }
 
 pub struct UnsafeRef<T>(*const T);
@@ -51,7 +50,7 @@ where
 	}
 }
 
-pub struct TypeRef(Index);
+pub struct TypeRef(&'static Type);
 
 impl Clone for TypeRef {
 	fn clone(&self) -> Self {
@@ -68,16 +67,13 @@ impl Copy for TypeRef {}
 impl std::ops::Deref for TypeRef {
 	type Target = Type;
 	fn deref(&self) -> &Self::Target {
-		return TYPES_ARR.with(|types| {
-			let x = types.borrow()[self.0];
-			return type_to_static_type_ref(x);
-		});
+		return self.0;
 	}
 }
 
 impl std::ops::DerefMut for TypeRef {
 	fn deref_mut(&mut self) -> &mut Self::Target {
-		TYPES_ARR.with(|types| &mut types.borrow_mut()[self.0])
+		return self.0;
 	}
 }
 
@@ -432,70 +428,64 @@ pub struct Types {
 	// TODO: Remove the box and change TypeRef to just be an index into the types array
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	// types: Vec<Box<Type>>,
-	numeric_idx: Index,
-	string_idx: Index,
-	bool_idx: Index,
-	duration_idx: Index,
-	anything_idx: Index,
+	numeric_idx: TypeRef,
+	string_idx: TypeRef,
+	bool_idx: TypeRef,
+	duration_idx: TypeRef,
+	anything_idx: TypeRef,
+}
+
+fn alloc_type(t: Type) -> &'static mut Type {
+	TYPES_ARR.with(|types| {
+		let mut types = types.borrow_mut();
+		types.push(Box::new(t));
+		let t = &mut **types.last_mut().unwrap() as *mut Type;
+		// SAFETY: We never access the data after it has been dropped, and we are
+		// the only who access this `Box` as we access a `Box` only immediately
+		// after pushing it.
+		unsafe { &mut *t }
+	})
 }
 
 impl Types {
 	pub fn new() -> Self {
-		let (i1, i2, i3, i4, i5) = TYPES_ARR.with(|types| {
-			let mut types = types.borrow_mut();
-			let numeric_idx = types.insert(Box::new(Type::Number));
-			let string_idx = types.insert(Box::new(Type::String));
-			let bool_idx = types.insert(Box::new(Type::Boolean));
-			let duration_idx = types.insert(Box::new(Type::Duration));
-			let anything_idx = types.insert(Box::new(Type::Anything));
-			(numeric_idx, string_idx, bool_idx, duration_idx, anything_idx)
-		});
-
 		Self {
-			numeric_idx: i1,
-			string_idx: i2,
-			bool_idx: i3,
-			duration_idx: i4,
-			anything_idx: i5,
+			numeric_idx: TypeRef(alloc_type(Type::Number)),
+			string_idx: TypeRef(alloc_type(Type::String)),
+			bool_idx: TypeRef(alloc_type(Type::Boolean)),
+			duration_idx: TypeRef(alloc_type(Type::Duration)),
+			anything_idx: TypeRef(alloc_type(Type::Anything)),
 		}
 	}
 
 	pub fn number(&self) -> TypeRef {
-		self.get_typeref(self.numeric_idx)
+		self.numeric_idx
 	}
 
 	pub fn string(&self) -> TypeRef {
-		self.get_typeref(self.string_idx)
+		self.string_idx
 	}
 
 	pub fn bool(&self) -> TypeRef {
-		self.get_typeref(self.bool_idx)
+		self.bool_idx
 	}
 
 	pub fn duration(&self) -> TypeRef {
-		self.get_typeref(self.duration_idx)
+		self.duration_idx
 	}
 
 	pub fn anything(&self) -> TypeRef {
-		self.get_typeref(self.anything_idx)
+		self.anything_idx
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
-		TYPES_ARR.with(|types| {
-			let mut types = types.borrow_mut();
-			let idx = types.insert(Box::new(t));
-			self.get_typeref(idx)
-		})
+		TypeRef(alloc_type(t))
 	}
 
 	pub fn stringables(&self) -> Vec<TypeRef> {
 		// TODO: This should be more complex and return all types that have some stringification facility
 		// see: https://github.com/winglang/wing/issues/741
 		vec![self.string(), self.number()]
-	}
-
-	fn get_typeref(&self, idx: Index) -> TypeRef {
-		TypeRef(idx)
 	}
 }
 
