@@ -105,9 +105,31 @@ test("counter has no display hidden property", async () => {
   expect(counter.display.hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
   expect(treeJson.tree.children).not.toMatchObject({
-    my_bucket: {
+    my_counter: {
       display: {
         hidden: expect.any(Boolean),
+      },
+    },
+  });
+});
+
+test("counter has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Counter(app, "my_counter");
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const counter = app.node.tryFindChild("my_counter") as cloud.Counter;
+
+  // THEN
+  expect(counter.display.title).toBeDefined();
+  expect(counter.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_counter: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
       },
     },
   });

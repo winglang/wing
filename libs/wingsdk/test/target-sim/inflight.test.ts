@@ -11,9 +11,9 @@ async handle(event) {
 test("inflight has display hidden property set to true", async () => {
   // GIVEN
   const app = new SimApp();
+  Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
-  Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   const treeJson = treeJsonOf(app.synth());
   const inflight = app.node.tryFindChild("Handler") as Inflight;
 
@@ -32,6 +32,7 @@ test("inflight has display hidden property set to true", async () => {
 test("inflight has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
+  Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());

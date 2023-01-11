@@ -146,3 +146,26 @@ test("function has no display hidden property", async () => {
     },
   });
 });
+
+test("function has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.Function(app, "my_function", handler);
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const func = app.node.tryFindChild("my_function") as cloud.Function;
+
+  // THEN
+  expect(func.display.title).toBeDefined();
+  expect(func.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_function: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

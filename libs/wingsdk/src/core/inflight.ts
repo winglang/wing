@@ -113,10 +113,14 @@ export class Inflight extends Construct implements IResource {
   /**
    * Information on how to display a resource in the UI.
    */
-  public readonly display = new Display({ hidden: true });
+  public readonly display = new Display();
 
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away
+
+    this.display.hidden = true;
+    this.display.title = "Inflight";
+    this.display.description = "A inflight resource";
 
     if (props.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is supported");
@@ -124,6 +128,8 @@ export class Inflight extends Construct implements IResource {
 
     return makeHandler(scope, id, props.code.text, props.bindings ?? {}, {
       hidden: this.display.hidden,
+      title: this.display.title,
+      description: this.display.description,
     });
   }
   /** @internal */

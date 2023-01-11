@@ -200,7 +200,9 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
+              "description": "A inflight resource",
               "hidden": true,
+              "title": "Inflight",
             },
             "id": "Handler",
             "path": "root/Handler",

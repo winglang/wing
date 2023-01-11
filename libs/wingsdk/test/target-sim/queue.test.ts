@@ -125,6 +125,7 @@ test("queue has no display hidden property", async () => {
 test("queue has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
+  new cloud.Queue(app, "my_queue");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());

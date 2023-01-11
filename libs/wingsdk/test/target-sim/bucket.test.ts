@@ -210,6 +210,7 @@ test("bucket has no display hidden property", async () => {
 test("bucket has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());

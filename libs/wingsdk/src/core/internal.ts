@@ -36,7 +36,10 @@ export function makeHandler(
       for (const [field, value] of Object.entries(bindings.data ?? {})) {
         (this as any)[field] = value;
       }
-      this.display.hidden = display?.hidden ?? false;
+
+      this.display.title = display?.title;
+      this.display.description = display?.description;
+      this.display.hidden = display?.hidden;
     }
 
     public _toInflight(): NodeJsCode {

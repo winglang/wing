@@ -101,6 +101,7 @@ test("topic has no display hidden property", async () => {
 test("topic has display title and description properties", async () => {
   // GIVEN
   const app = new SimApp();
+  new cloud.Topic(app, "my_topic");
 
   // WHEN
   const treeJson = treeJsonOf(app.synth());
