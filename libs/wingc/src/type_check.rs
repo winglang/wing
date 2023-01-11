@@ -4,6 +4,8 @@ use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_STRING};
 use derivative::Derivative;
+use elsa::FrozenVec;
+use generational_arena::{Arena, Index};
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -12,6 +14,10 @@ use std::fmt::{Debug, Display};
 use symbol_env::SymbolEnv;
 
 use self::symbol_env::StatementIdx;
+
+thread_local! {
+	static TYPES_ARR: RefCell<Vec<Box<Type>>> = RefCell::new(Vec::new());
+}
 
 pub struct UnsafeRef<T>(*const T);
 impl<T> Clone for UnsafeRef<T> {
@@ -45,7 +51,42 @@ where
 	}
 }
 
-pub type TypeRef = UnsafeRef<Type>;
+pub struct TypeRef(usize);
+
+impl Clone for TypeRef {
+	fn clone(&self) -> Self {
+		Self(self.0)
+	}
+}
+
+fn type_to_static_type_ref(t: Box<Type>) -> &'static Type {
+	Box::leak(t)
+}
+
+impl Copy for TypeRef {}
+
+impl std::ops::Deref for TypeRef {
+	type Target = Type;
+	fn deref(&self) -> &Self::Target {
+		return TYPES_ARR.with(|types| {
+			let x = types.borrow()[self.0];
+			return type_to_static_type_ref(x);
+		});
+	}
+}
+
+impl std::ops::DerefMut for TypeRef {
+	fn deref_mut(&mut self) -> &mut Self::Target {
+		TYPES_ARR.with(|types| &mut types.borrow_mut()[self.0])
+	}
+}
+
+impl Display for TypeRef {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		let t: &Type = self;
+		write!(f, "{}", t)
+	}
+}
 
 #[derive(Debug)]
 pub enum SymbolKind {
@@ -390,7 +431,7 @@ impl Debug for TypeRef {
 pub struct Types {
 	// TODO: Remove the box and change TypeRef to just be an index into the types array
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
-	types: Vec<Box<Type>>,
+	// types: Vec<Box<Type>>,
 	numeric_idx: usize,
 	string_idx: usize,
 	bool_idx: usize,
@@ -400,25 +441,22 @@ pub struct Types {
 
 impl Types {
 	pub fn new() -> Self {
-		let mut types = vec![];
-		types.push(Box::new(Type::Number));
-		let numeric_idx = types.len() - 1;
-		types.push(Box::new(Type::String));
-		let string_idx = types.len() - 1;
-		types.push(Box::new(Type::Boolean));
-		let bool_idx = types.len() - 1;
-		types.push(Box::new(Type::Duration));
-		let duration_idx = types.len() - 1;
-		types.push(Box::new(Type::Anything));
-		let anything_idx = types.len() - 1;
+		let (i1, i2, i3, i4, i5) = TYPES_ARR.with(|types| {
+			let mut types = types.borrow_mut();
+			let numeric_idx = types.push(Box::new(Type::Number));
+			let string_idx = types.push(Box::new(Type::String));
+			let bool_idx = types.push(Box::new(Type::Boolean));
+			let duration_idx = types.push(Box::new(Type::Duration));
+			let anything_idx = types.push(Box::new(Type::Anything));
+			(numeric_idx, string_idx, bool_idx, duration_idx, anything_idx)
+		});
 
 		Self {
-			types,
-			numeric_idx,
-			string_idx,
-			bool_idx,
-			duration_idx,
-			anything_idx,
+			numeric_idx: 0,
+			string_idx: 0,
+			bool_idx: 0,
+			duration_idx: 0,
+			anything_idx: 0,
 		}
 	}
 
@@ -443,8 +481,11 @@ impl Types {
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
-		self.types.push(Box::new(t));
-		self.get_typeref(self.types.len() - 1)
+		TYPES_ARR.with(|types| {
+			let mut types = types.borrow_mut();
+			let idx = types.push(Box::new(t));
+			self.get_typeref(types.len() - 1)
+		})
 	}
 
 	pub fn stringables(&self) -> Vec<TypeRef> {
@@ -454,8 +495,7 @@ impl Types {
 	}
 
 	fn get_typeref(&self, idx: usize) -> TypeRef {
-		let t = &self.types[idx];
-		UnsafeRef::<Type>(&**t as *const Type)
+		TypeRef(idx)
 	}
 }
 
@@ -1006,7 +1046,8 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
-		if actual_type.0 != &Type::Anything && !expected_types.contains(&actual_type) {
+		let actual_type_ref: &Type = &actual_type;
+		if actual_type_ref != &Type::Anything && !expected_types.contains(&actual_type) {
 			self.diagnostics.borrow_mut().push(Diagnostic {
 				message: format!(
 					"Expected type to be one of \"{}\", but got \"{}\" instead",
@@ -1589,7 +1630,7 @@ impl<'a> TypeChecker<'a> {
 							.return_type
 							.map(|ret| if ret.is_anything() { type_param } else { ret });
 
-						let new_args: Vec<UnsafeRef<Type>> = sig
+						let new_args: Vec<TypeRef> = sig
 							.args
 							.iter()
 							.map(|arg| if arg.is_anything() { type_param } else { *arg })
