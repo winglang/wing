@@ -1253,25 +1253,32 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"container_types\\" });
   
-  const arr1 = Object.freeze([1, 2, 3]);
-  const arr2 = Object.freeze([1, 2, 3]);
-  const arr3 = Object.freeze([1, 2, 3]);
-  const arr4 = Object.freeze([1, 2, 3]);
   const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
   const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
   const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const arr1 = Object.freeze([1, 2, 3]);
+  const arr2 = Object.freeze([\\"1\\", \\"2\\", \\"3\\"]);
+  const arr3 = Object.freeze([1, 2, 3]);
+  const arr4 = Object.freeze([1, 2, 3]);
   const arr5 = Object.freeze([bucket1, bucket2, bucket3]);
   const arr6 = Object.freeze([bucket1, bucket2, bucket3]);
+  const arr7 = arr4;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr1.length === 3)'\`)})((arr1.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr2.at(1)) === \\"2\\")'\`)})(((arr2.at(1)) === \\"2\\"))};
   const m1 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m2 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m3 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m4 = Object.freeze({\\"a\\": 1, \\"b\\": 2, \\"c\\": 3});
   const m5 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
   const m6 = Object.freeze({\\"a\\": bucket1, \\"b\\": bucket2, \\"c\\": bucket3});
+  const m7 = m1;
   const s2 = Object.freeze(new Set([1, 2, 3]));
   const s3 = Object.freeze(new Set([1, 2, 3]));
   const s4 = Object.freeze(new Set([1, 2, 3]));
   const s6 = Object.freeze(new Set([bucket1, bucket2, bucket3]));
+  const s7 = s2;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.size === 3)'\`)})((s2.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.has(2))'\`)})((s3.has(2)))};
 }
 }
 new MyApp().synth();"
@@ -2295,15 +2302,22 @@ constructor() {
   const arr1 = [\\"a\\", \\"b\\", \\"c\\"];
   const arr2 = [1, 2, 3];
   const arr3 = [bucket1, bucket2];
+  const arr4 = arr1;
   (arr1.push(\\"a\\"));
   (arr2.push(4));
   (arr3.push(bucket3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr2.pop()) === 4)'\`)})(((arr2.pop()) === 4))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr1.length === 4)'\`)})((arr1.length === 4))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr4.at(0)) === \\"a\\")'\`)})(((arr4.at(0)) === \\"a\\"))};
   const s1 = new Set([1, 2, 3, 3]);
   const s2 = new Set([\\"hello\\", \\"world\\", \\"hello\\"]);
   const s3 = new Set([bucket1, bucket2, bucket2]);
   (s1.add(5));
   (s2.add(\\"bye\\"));
   (s3.add(bucket3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(\\"bye\\"))'\`)})((s2.has(\\"bye\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(\\"hello\\"))'\`)})((s2.has(\\"hello\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.has(bucket2))'\`)})((s3.has(bucket2)))};
 }
 }
 new MyApp().synth();"
