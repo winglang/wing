@@ -1,0 +1,29 @@
+# See https://doc.mergify.io
+queue_rules:
+  - name: default
+    conditions:
+      - status-success=build
+      - status-success=Validate PR title
+
+pull_request_rules:
+  - name: automatic merge
+    actions:
+      comment:
+        message: Thank you for contributing! Your pull request will be updated from main and then merged automatically (do not update manually, and be sure to [allow changes to be pushed to your fork](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/allowing-changes-to-a-pull-request-branch-created-from-a-fork)).
+      queue:
+        name: default
+        method: squash
+        commit_message_template: |-
+          {{ title }} (#{{ number }})
+          {{ body }}
+    conditions:
+      - -title~=(WIP|wip)
+      - -label~=(do-not-merge)
+      - -merged
+      - -closed
+      - "#approved-reviews-by>=1"
+      - "#changes-requested-reviews-by=0"
+      - "#review-threads-unresolved=0"
+      - -approved-reviews-by~=author
+      - check-success=build
+      - check-success=Validate PR title
