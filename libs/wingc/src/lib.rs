@@ -31,10 +31,14 @@ const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/wingsdk";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_ARRAY: &'static str = "std.ImmutableArray";
+const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
 const WINGSDK_SET: &'static str = "std.ImmutableSet";
+const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
+
+const CONSTRUCT_BASE: &'static str = "constructs.Construct";
 
 pub struct CompilerOutput {
 	pub preflight: String,
