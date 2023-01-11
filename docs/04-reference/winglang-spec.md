@@ -1973,6 +1973,6 @@ Inspiration:
 - <https://github.com/vlang/v>
 
 [top]: #0-preface
-[rfc]: https://github.com/winglang/wing/blob/main/rfcs/winglang-reqs.md
+[rfc]: https://github.com/winglang/wing/blob/main/docs/05-rfcs/winglang-reqs.md
 [this]: https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md
 [disco]: https://github.com/winglang/wing/discussions/new
