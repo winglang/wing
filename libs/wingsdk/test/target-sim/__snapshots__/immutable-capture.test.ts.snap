@@ -120,7 +120,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "A inflight resource",
+            "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
           },
@@ -260,7 +260,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "A inflight resource",
+            "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
           },
@@ -400,7 +400,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "A inflight resource",
+            "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
           },
@@ -540,7 +540,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "A inflight resource",
+            "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
           },
@@ -680,7 +680,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "A inflight resource",
+            "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
           },
@@ -820,7 +820,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "A inflight resource",
+            "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
           },
@@ -960,7 +960,7 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
-            "description": "A inflight resource",
+            "description": "An inflight resource",
             "hidden": true,
             "title": "Inflight",
           },

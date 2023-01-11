@@ -120,7 +120,7 @@ export class Inflight extends Construct implements IResource {
 
     this.display.hidden = true;
     this.display.title = "Inflight";
-    this.display.description = "A inflight resource";
+    this.display.description = "An inflight resource";
 
     if (props.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is supported");

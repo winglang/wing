@@ -146,7 +146,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "A inflight resource",
+              "description": "An inflight resource",
               "hidden": true,
               "title": "Inflight",
             },
@@ -361,7 +361,7 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
-              "description": "A inflight resource",
+              "description": "An inflight resource",
               "hidden": true,
               "title": "Inflight",
             },
