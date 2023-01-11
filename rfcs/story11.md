@@ -1,6 +1,6 @@
 # User Story 8 - Task List Resource
 
-> **Status**: Done
+> **Status**: Work in Progress
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
