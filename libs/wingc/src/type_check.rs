@@ -424,9 +424,6 @@ impl Debug for TypeRef {
 }
 
 pub struct Types {
-	// TODO: Remove the box and change TypeRef to just be an index into the types array
-	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
-	// types: Vec<Box<Type>>,
 	numeric_idx: TypeRef,
 	string_idx: TypeRef,
 	bool_idx: TypeRef,
