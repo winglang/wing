@@ -63,8 +63,15 @@ impl SymbolKind {
 	}
 
 	fn as_namespace(&self) -> Option<&Namespace> {
-		match &self {
+		match self {
 			SymbolKind::Namespace(ns) => Some(ns),
+			_ => None,
+		}
+	}
+
+	fn as_mut_namespace(&mut self) -> Option<&mut Namespace> {
+		match self {
+			SymbolKind::Namespace(ref mut ns) => Some(ns),
 			_ => None,
 		}
 	}
@@ -104,6 +111,12 @@ const WINGSDK_STD_MODULE: &'static str = "std";
 #[derivative(Debug)]
 pub struct Namespace {
 	pub name: String,
+
+	// When `true` this namespace contains symbols that can't be explicitly accessed from the code.
+	// While the internals of imported modules might still need these symbols (and types) to be
+	// available to them.
+	pub hidden: bool,
+
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -508,15 +521,9 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
-		self.add_module_to_env(
-			scope.env.borrow_mut().as_mut().unwrap(),
-			WINGSDK_STD_MODULE.to_string(),
-			&Symbol {
-				name: WINGSDK_STD_MODULE.to_string(),
-				span: WingSpan::global(),
-			},
-			0,
-		);
+		for m in [WINGSDK_STD_MODULE] {
+			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), 0);
+		}
 	}
 
 	// TODO: All calls to this should be removed and we should make sure type checks are done
@@ -954,7 +961,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create an environment for the function
 				let mut function_env = SymbolEnv::new(
-					Some(env),
+					Some(env.get_ref()),
 					sig.return_type,
 					false,
 					func_def.signature.flight,
@@ -1091,7 +1098,7 @@ impl<'a> TypeChecker<'a> {
 				let mut nested_name = vec![root];
 				nested_name.extend(fields);
 
-				match env.lookup_nested(&nested_name, Some(statement_idx)) {
+				match env.lookup_nested(&nested_name, false, Some(statement_idx)) {
 					Ok(_type) => {
 						if let SymbolKind::Type(t) = *_type {
 							t
@@ -1176,7 +1183,7 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx).unwrap();
 
-				let mut scope_env = SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.flight, stmt.idx);
 				match scope_env.define(&iterator, SymbolKind::Variable(exp_type), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
@@ -1191,7 +1198,13 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 
 				self.inner_scopes.push(statements);
 			}
@@ -1203,11 +1216,23 @@ impl<'a> TypeChecker<'a> {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
-					else_scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+					else_scope.set_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						env.flight,
+						stmt.idx,
+					));
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -1232,11 +1257,17 @@ impl<'a> TypeChecker<'a> {
 						return;
 					}
 
-					self.add_module_to_env(env, module_name.name.clone(), namespace_name, stmt.idx);
+					self.add_module_to_env(env, module_name.name.clone(), stmt.idx);
 				}
 			}
 			StmtKind::Scope(scope) => {
-				scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				scope.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
@@ -1267,29 +1298,28 @@ impl<'a> TypeChecker<'a> {
 				constructor,
 				is_resource,
 			} => {
-				// TODO: if is_resource then....
-				if *is_resource {
-					self.unimplemented_type("Resource class");
-				}
-
 				let env_flight = if *is_resource {
 					Phase::Preflight
 				} else {
 					Phase::Inflight
 				};
 
+				if *is_resource {
+					// TODO
+				}
+
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
 					let t = self.resolve_type(parent_type, env, stmt.idx);
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
-							(Some(t), Some(&class.env as *const SymbolEnv))
+							(Some(t), Some(class.env.get_ref()))
 						} else {
 							panic!("Resource {}'s parent {} is not a resource", name, t);
 						}
 					} else {
 						if let Type::Class(ref class) = *t {
-							(Some(t), Some(&class.env as *const SymbolEnv))
+							(Some(t), Some(class.env.get_ref()))
 						} else {
 							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
@@ -1391,7 +1421,13 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create constructor environment and prime it with args
-				let mut constructor_env = SymbolEnv::new(Some(env), constructor_sig.return_type, false, env_flight, stmt.idx);
+				let mut constructor_env = SymbolEnv::new(
+					Some(env.get_ref()),
+					constructor_sig.return_type,
+					false,
+					env_flight,
+					stmt.idx,
+				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 				// Prime the constructor environment with `this`
 				constructor_env
@@ -1424,7 +1460,13 @@ impl<'a> TypeChecker<'a> {
 						.expect("Expected method type to be a function signature");
 
 					// Create method environment and prime it with args
-					let mut method_env = SymbolEnv::new(Some(env), method_sig.return_type, false, method_sig.flight, stmt.idx);
+					let mut method_env = SymbolEnv::new(
+						Some(env.get_ref()),
+						method_sig.return_type,
+						false,
+						method_sig.flight,
+						stmt.idx,
+					);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
@@ -1510,17 +1552,9 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_module_to_env(
-		&mut self,
-		env: &mut SymbolEnv,
-		module_name: String,
-		namespace_symbol: &Symbol,
-		statement_idx: usize,
-	) {
-		// Create a new env for the imported module's namespace
-		let mut namespace_env = SymbolEnv::new(None, None, false, env.flight, statement_idx);
+	fn add_module_to_env(&mut self, env: &mut SymbolEnv, module_name: String, statement_idx: usize) {
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
+		if module_name == "cloud" || module_name == "fs" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
@@ -1531,49 +1565,11 @@ impl<'a> TypeChecker<'a> {
 			let name = wingii_types
 				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
 				.unwrap();
-			let prefix = format!("{}.{}.", name, module_name);
 			debug!("Loaded JSII assembly {}", name);
 			let assembly = wingii_types.find_assembly(&name).unwrap();
 
-			let mut jsii_importer = JsiiImporter {
-				jsii_types: &wingii_types,
-				assembly_name: name,
-				namespace_env: &mut namespace_env,
-				namespace_name: module_name.clone(),
-				wing_types: self.types,
-				import_statement_idx: statement_idx,
-			};
-
-			for type_fqn in assembly.types.as_ref().unwrap().keys() {
-				// Skip types outside the imported namespace
-				if !type_fqn.starts_with(&prefix) {
-					continue;
-				}
-
-				// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
-				// and might have already defined the current type internally
-				let type_name = jsii_importer.fqn_to_type_name(type_fqn);
-				if jsii_importer.namespace_env.try_lookup(&type_name, None).is_some() {
-					continue;
-				}
-				jsii_importer.import_type(type_fqn);
-			}
-
-			// Create a namespace for the imported module
-			// TODO: are namespaces at the Top statement level (known by everyone in the scope) regardless of where they are defined?
-			match env.define(
-				namespace_symbol,
-				SymbolKind::Namespace(Namespace {
-					name: namespace_symbol.name.clone(),
-					env: namespace_env,
-				}),
-				StatementIdx::Top,
-			) {
-				Err(type_error) => {
-					self.type_error(&type_error);
-				}
-				_ => {}
-			};
+			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
+			jsii_importer.import_to_env();
 		}
 	}
 
@@ -1601,7 +1597,11 @@ impl<'a> TypeChecker<'a> {
 	/// The hydrated type reference
 	///
 	fn hydrate_class_type_arguments(&mut self, env: &SymbolEnv, original_fqn: &str, type_param: TypeRef) -> TypeRef {
-		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
+		let original_type = env
+			.lookup_nested_str(original_fqn, true, None)
+			.unwrap()
+			.as_type()
+			.unwrap();
 		let original_type_class = original_type.as_class().unwrap();
 
 		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, true, Phase::Independent, 0);
@@ -1696,7 +1696,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 		path.reverse();
-		match env.lookup_nested(&path, Some(statement_idx)) {
+		match env.lookup_nested(&path, false, Some(statement_idx)) {
 			Ok(SymbolKind::Type(type_ref)) => Some(*type_ref),
 			_ => None,
 		}
@@ -1764,7 +1764,7 @@ impl<'a> TypeChecker<'a> {
 					}
 					Type::String => self.get_property_from_class(
 						env
-							.lookup_nested_str(WINGSDK_STRING, None)
+							.lookup_nested_str(WINGSDK_STRING, false, None)
 							.unwrap()
 							.as_type()
 							.unwrap()
@@ -1774,7 +1774,7 @@ impl<'a> TypeChecker<'a> {
 					),
 					Type::Duration => self.get_property_from_class(
 						env
-							.lookup_nested_str(WINGSDK_DURATION, None)
+							.lookup_nested_str(WINGSDK_DURATION, false, None)
 							.unwrap()
 							.as_type()
 							.unwrap()
