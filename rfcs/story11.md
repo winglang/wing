@@ -1,5 +1,7 @@
 # User Story 8 - Task List Resource
 
+> **Status**: Done
+
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
 He starts his day going over his emails, slack messages, updates from github, etc... But he is struggling. There are
