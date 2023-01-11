@@ -14,6 +14,16 @@ import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
 
 /**
+ * Function names are limited to 64 characters.
+ * You can use alphanumeric characters, hyphens (-), and underscores (_).
+ */
+const NAME_OPTS: NameOptions = {
+  maxLen: 64,
+  regexMatch: /[^a-zA-Z0-9\_\-]+/g,
+  charReplacer: "-",
+};
+
+/**
  * AWS implementation of `cloud.Function`.
  *
  * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
@@ -115,7 +125,7 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
-    const name = this.sanitizeName(`${this.node.id}-${this.node.addr}`);
+    const name = ResourceNames.of(this, NAME_OPTS);
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
@@ -191,20 +201,6 @@ export class Function extends cloud.FunctionBase {
 
   private envName(): string {
     return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
-  }
-
-  /**
-   * Function names are limited to 64 characters.
-   * You can use alphanumeric characters, hyphens (-), and underscores (_).
-   */
-  private sanitizeName(name: string): string {
-    const nameProps: NameOptions = {
-      maxLen: 64,
-      regexMatch: /[^a-zA-Z0-9\:\-]+/g,
-      charReplacer: "-",
-    };
-
-    return ResourceNames.of(name, nameProps);
   }
 }
 

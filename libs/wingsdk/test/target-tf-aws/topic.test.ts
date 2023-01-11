@@ -88,16 +88,32 @@ test("topic with multiple subscribers", () => {
   expect(tfResourcesOfCount(output, "aws_sns_topic_subscription")).toEqual(2);
 });
 
-test("topic name", () => {
+test("topic name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const topic = new cloud.Topic(app, "TheSpectacularTopic");
+  const topic = new cloud.Topic(app, "The-Spectacular_Topic-01");
   const output = app.synth();
 
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_sns_topic", {
-      name: `TheSpectacularTopic-${topic.node.addr}`,
+      name: `The-Spectacular_Topic-01-${topic.node.addr.substring(0, 8)}`,
+    })
+  );
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("replace invalid character from queue name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const topic = new cloud.Topic(app, "The%Spectacular@Topic");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_sns_topic", {
+      name: `The-Spectacular-Topic-${topic.node.addr.substring(0, 8)}`,
     })
   );
   expect(tfSanitize(output)).toMatchSnapshot();

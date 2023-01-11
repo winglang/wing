@@ -41,10 +41,10 @@ exports[`inflight function uses a logger 2`] = `
       \\"Function\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c83ba82ab737b318be3084bef5b7996129facf99b8\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function-c83ba82a\\"
           }
         },
-        \\"function_name\\": \\"Function-c83ba82ab737b318be3084bef5b7996129facf99b8\\",
+        \\"function_name\\": \\"Function-c83ba82a\\",
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.Function_IamRole_678BE84C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",

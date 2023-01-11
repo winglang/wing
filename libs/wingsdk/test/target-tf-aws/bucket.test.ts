@@ -36,16 +36,64 @@ test("bucket is public", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("bucket name", () => {
+test("bucket name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = new cloud.Bucket(app, "TheUncannyBucket");
+  const bucket = new cloud.Bucket(app, "The-Uncanny.Bucket");
   const output = app.synth();
 
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
-      bucket: `theuncannybucket-${bucket.node.addr}`,
+      bucket: `the-uncanny.bucket${bucket.node.addr.substring(0, 8)}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("removing special characters from beginning or ending of buckets name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = new cloud.Bucket(app, ".The-Uncanny-Bucket.");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
+      bucket: `the-uncanny-bucket${bucket.node.addr.substring(0, 8)}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("removing 'xn--' from begining of bucket name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = new cloud.Bucket(app, "xn--The-Uncanny-Bucket");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
+      bucket: `the-uncanny-bucket${bucket.node.addr.substring(0, 8)}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("removing '-s3alias' from ending of bucket name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = new cloud.Bucket(app, "The-Uncanny-Bucket-s3alias");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
+      bucket: `the-uncanny-bucket${bucket.node.addr.substring(0, 8)}`,
     })
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();

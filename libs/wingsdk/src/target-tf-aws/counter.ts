@@ -8,6 +8,17 @@ import { Function } from "./function";
 export const HASH_KEY = "id";
 
 /**
+ * Counter (Table) names must be between 3 and 255 characters.
+ * You can use alphanumeric characters, dot (.), dash (-), and underscores (_).
+ */
+const NAME_OPTS: NameOptions = {
+  maxLen: 255,
+  regexMatch: /[^a-zA-Z0-9\_\.\-]+/g,
+  charReplacer: "-",
+  prefix: "wingsdk-counter",
+};
+
+/**
  * AWS implementation of `cloud.Counter`.
  *
  * @inflight `@winglang/wingsdk.cloud.ICounterClient`
@@ -19,7 +30,7 @@ export class Counter extends cloud.CounterBase {
     super(scope, id, props);
 
     this.table = new DynamodbTable(this, "Default", {
-      name: this.sanitizeName(`${this.node.id}-${this.node.addr}`),
+      name: ResourceNames.of(this, NAME_OPTS),
       attribute: [{ name: HASH_KEY, type: "S" }],
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",
@@ -63,21 +74,6 @@ export class Counter extends cloud.CounterBase {
 
   private envName(): string {
     return `DYNAMODB_TABLE_NAME_${this.node.addr.slice(-8)}`;
-  }
-
-  /**
-   * Counter (Table) names must be between 3 and 255 characters.
-   * You can use alphanumeric characters, dot(.), dash (-), and underscores (_).
-   */
-  private sanitizeName(name: string): string {
-    const nameProps: NameOptions = {
-      maxLen: 255,
-      regexMatch: /[^a-zA-Z0-9\_\.\-]+/g,
-      charReplacer: "-",
-      prefix: "wingsdk-counter",
-    };
-
-    return ResourceNames.of(name, nameProps);
   }
 }
 

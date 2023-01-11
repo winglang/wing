@@ -13,6 +13,20 @@ import {
 import { Function } from "./function";
 
 /**
+ * AWS Bucket names must be between 3 and 63 characters.
+ * You can use lowercase alphanumeric characters, dot (.) and dash (-)
+ * must begin and end with alphanumeric character, can not begin
+ * with 'xn--' or ending with '-s3alias'
+ * and must not contain two adjacent dots.
+ */
+const NAME_OPTS: NameOptions = {
+  maxLen: 63,
+  case: CaseConventions.LOWERCASE,
+  regexMatch: /([^a-z0-9\.\-]+)|(^xn--|^\W)|((-s3alias|\W)$)|(\.{2,})/g,
+  charReplacer: "",
+};
+
+/**
  * AWS implementation of `cloud.Bucket`.
  *
  * @inflight `@winglang/wingsdk.cloud.IBucketClient`
@@ -27,7 +41,7 @@ export class Bucket extends cloud.BucketBase {
     this.public = props.public ?? false;
 
     this.bucket = new S3Bucket(this, "Default", {
-      bucket: this.sanitizeName(`${this.node.id}-${this.node.addr}`),
+      bucket: ResourceNames.of(this, NAME_OPTS),
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys
@@ -123,25 +137,6 @@ export class Bucket extends cloud.BucketBase {
 
   private envName(): string {
     return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
-  }
-
-  /**
-   * AWS Bucket names must be between 3 and 63 characters.
-   * You can use lowercase alphanumeric characters, dot(.) and dash (-),
-   * must begin and end with alphanumeric character, can not begin
-   * with 'xn--' or ending with '-s3alias' and must not contain
-   * two adjacent dots.
-   */
-  private sanitizeName(name: string): string {
-    const nameProps: NameOptions = {
-      maxLen: 63,
-      case: CaseConventions.LOWERCASE,
-      regexMatch: /(([(.)\1+]+)[^a-z0-9\-]+)/g,
-      charReplacer: "-",
-      avoidStartWith: "xn--",
-    };
-
-    return ResourceNames.of(name, nameProps);
   }
 }
 

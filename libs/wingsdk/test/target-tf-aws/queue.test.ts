@@ -65,16 +65,32 @@ test("queue with a consumer function", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("queue name", () => {
+test("queue name valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const queue = new cloud.Queue(app, "TheIncredibleQueue");
+  const queue = new cloud.Queue(app, "The-Incredible_Queue-01");
   const output = app.synth();
 
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_sqs_queue", {
-      name: `TheIncredibleQueue-${queue.node.addr}`,
+      name: `The-Incredible_Queue-01-${queue.node.addr.substring(0, 8)}`,
+    })
+  );
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("replace invalid character from queue name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const queue = new cloud.Queue(app, "The*Incredible$Queue");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_sqs_queue", {
+      name: `The-Incredible-Queue-${queue.node.addr.substring(0, 8)}`,
     })
   );
   expect(tfSanitize(output)).toMatchSnapshot();

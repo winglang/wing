@@ -10,6 +10,16 @@ import { NameOptions, ResourceNames } from "../utils/resource-names";
 import { Function } from "./function";
 
 /**
+ * Topic names are limited to 256 characters.
+ * You can use alphanumeric characters, hyphens (-) and underscores (_).
+ */
+const NAME_OPTS: NameOptions = {
+  maxLen: 256,
+  regexMatch: /[^a-zA-Z0-9\_\-]+/g,
+  charReplacer: "-",
+};
+
+/**
  * AWS Implementation of `cloud.Topic`.
  *
  * @inflight `@winglang/wingsdk.cloud.ITopicClient`
@@ -21,7 +31,7 @@ export class Topic extends cloud.TopicBase {
     super(scope, id, props);
 
     this.topic = new SnsTopic(this, "Default", {
-      name: this.sanitizeName(`${this.node.id}-${this.node.addr}`),
+      name: ResourceNames.of(this, NAME_OPTS),
     });
   }
 
@@ -108,20 +118,6 @@ export class Topic extends cloud.TopicBase {
 
   private envName(): string {
     return `TOPIC_ARN_${this.node.addr.slice(-8)}`;
-  }
-
-  /**
-   * Topic names are limited to 256 characters.
-   * You can use alphanumeric characters, hyphens (-) and underscores (_).
-   */
-  private sanitizeName(name: string): string {
-    const nameProps: NameOptions = {
-      maxLen: 256,
-      regexMatch: /[^a-zA-Z0-9\_\-]+/g,
-      charReplacer: "-",
-    };
-
-    return ResourceNames.of(name, nameProps);
   }
 }
 
