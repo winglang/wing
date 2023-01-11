@@ -27,7 +27,7 @@ export abstract class BucketBase extends Resource {
     super(scope, id);
 
     this.display.title = "Bucket";
-    this.display.description = "Represents a cloud object store";
+    this.display.description = "A cloud object store";
 
     if (!scope) {
       return;
