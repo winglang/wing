@@ -79,7 +79,7 @@ new cloud.Function(inflight (s: str): str => {
 }) as "test: add a new task";
 
 new cloud.Function(inflight (s: str): str => {
-    let expected = "task 42"
+    let expected = "task 42";
     let id = add_task.invoke(expected);
     print("added new task with id ${id}");
     let content = get_task.invoke(id);
