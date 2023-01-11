@@ -58,10 +58,6 @@ impl Clone for TypeRef {
 	}
 }
 
-fn type_to_static_type_ref(t: Box<Type>) -> &'static Type {
-	Box::leak(t)
-}
-
 impl Copy for TypeRef {}
 
 impl std::ops::Deref for TypeRef {
@@ -73,7 +69,11 @@ impl std::ops::Deref for TypeRef {
 
 impl std::ops::DerefMut for TypeRef {
 	fn deref_mut(&mut self) -> &mut Self::Target {
-		return self.0;
+		let x = self.0 as *const Type;
+		// SAFETY: We only access this type through a TypeRef, which is a &'static Type
+		// We promise to only mutate the internal state of a type, and not the actual
+		// Type itself.
+		unsafe { &mut *x.cast_mut() }
 	}
 }
 
