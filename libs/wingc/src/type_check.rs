@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_STRING};
+use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_STRING, WINGSDK_MUT_ARRAY, WINGSDK_MUT_SET};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -86,8 +86,10 @@ pub enum Type {
 	Boolean,
 	Optional(TypeRef),
 	Array(TypeRef),
+	MutArray(TypeRef),
 	Map(TypeRef),
 	Set(TypeRef),
+	MutSet(TypeRef),
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
@@ -194,6 +196,12 @@ impl PartialEq for Type {
 				let r: &Type = &*r0;
 				l == r
 			}
+			(Self::MutArray(l0), Self::MutArray(r0)) => {
+				// Arrays are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l == r
+			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// Maps are of the same type if they have the same value type
 				let l: &Type = &*l0;
@@ -201,6 +209,12 @@ impl PartialEq for Type {
 				l == r
 			}
 			(Self::Set(l0), Self::Set(r0)) => {
+				// Sets are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l == r
+			}
+			(Self::MutSet(l0), Self::MutSet(r0)) => {
 				// Sets are of the same type if they have the same value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
@@ -270,8 +284,10 @@ impl Display for Type {
 			Type::Resource(class) => write!(f, "{}", class.name),
 			Type::Struct(s) => write!(f, "{}", s.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
+			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
+			Type::MutSet(v) => write!(f, "MutSet<{}>", v),
 			Type::Enum(s) => write!(f, "{}", s.name),
 		}
 	}
@@ -352,6 +368,14 @@ impl TypeRef {
 
 	pub fn is_immutable_collection(&self) -> bool {
 		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_mutable_collection(&self) -> bool {
+		if let Type::MutArray(_) | Type::MutSet(_) = **self {
 			true
 		} else {
 			false
@@ -811,6 +835,7 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Array(t) => t,
+					Type::MutArray(t) => t,
 					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
@@ -900,6 +925,7 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Set(t) => t,
+					Type::MutSet(t) => t,
 					_ => self.expr_error(exp, format!("Expected \"Set\" type, found \"{}\"", container_type)),
 				};
 
@@ -1085,10 +1111,20 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
 			}
+			AstType::MutArray(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each array resolution
+				self.types.add_type(Type::MutArray(value_type))
+			}
 			AstType::Set(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::Set(value_type))
+			}
+			AstType::MutSet(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each set resolution
+				self.types.add_type(Type::MutSet(value_type))
 			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
@@ -1714,8 +1750,16 @@ impl<'a> TypeChecker<'a> {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, t);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
+					Type::MutArray(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
 					Type::Set(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::MutSet(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, t);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::String => self.get_property_from_class(
