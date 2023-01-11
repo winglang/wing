@@ -666,7 +666,7 @@ resource Api {
    * Make a request to the specified route. Throws if the route hasn't been
    * defined.
    */
-  inflight request(route: str, method: HttpMethod, payload: Serializable): Serializable;
+  inflight request(route: str, method: HttpMethod, body: Serializable): Serializable;
 }
 
 struct ApiOnGetProps { /* elided */ }
@@ -716,8 +716,8 @@ struct ApiRequest {
   query: str;
   /** The path variables. */
   vars: Map<str, str>;
-  /** The request's payload. */
-  payload: Serializable;
+  /** The request's body. */
+  body: Serializable;
   /** The request's headers. */
   headers: Map<str, str>;
 }
@@ -725,8 +725,8 @@ struct ApiRequest {
 struct ApiResponse {
   /** The response's status code. */
   status: number;
-  /** The response's payload. */
-  payload: Serializable;
+  /** The response's body. */
+  body: Serializable;
   /** The response's headers. */
   headers: Map<str, str>;
 }
@@ -933,10 +933,10 @@ struct ServiceRequestOptions {
   headers: Map<str, str>;
 
   /**
-   * The request's payload.
+   * The request's body.
    * @default ""
    */
-  payload: Serializable?;
+  body: Serializable?;
 }
 
 struct ServiceResponse {
