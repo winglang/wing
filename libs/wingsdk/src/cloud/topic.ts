@@ -19,7 +19,7 @@ export abstract class TopicBase extends Resource {
     super(scope, id);
 
     this.display.title = "Topic";
-    this.display.description = "Represents a topic";
+    this.display.description = "A pub/sub notification topic";
 
     if (!scope) {
       return;
