@@ -70,8 +70,8 @@ impl std::ops::DerefMut for TypeRef {
 	fn deref_mut(&mut self) -> &mut Self::Target {
 		let x = self.0 as *const Type;
 		// SAFETY: We only access the inner Type through a TypeRef, which is a
-		// &'static Type. We promise to only mutate the internal state of a
-		// type, and not move the actual Type itself.
+		// &'static Type. We promise to only mutate the internal fields of a
+		// type, and not the actual Type itself (through e.g. mem::swap).
 		unsafe { &mut *x.cast_mut() }
 	}
 }
