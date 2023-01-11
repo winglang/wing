@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Inflight, IResource, Resource } from "../core";
+import { Code, IResource, Inflight, Resource } from "../core";
 import { Duration } from "../std";
 import { Function, FunctionProps } from "./function";
 
@@ -33,6 +33,10 @@ export abstract class QueueBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
+
+    this.display.title = "Queue";
+    this.display.description = "Represents a queue";
+
     if (!scope) {
       return;
     }

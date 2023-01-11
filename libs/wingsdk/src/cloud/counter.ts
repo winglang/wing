@@ -31,6 +31,10 @@ export abstract class CounterBase extends Resource {
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(scope, id);
+
+    this.display.title = "Counter";
+    this.display.description = "Represents a distributed atomic counter";
+
     if (!scope) {
       this.initial = -1; // not used
       return;

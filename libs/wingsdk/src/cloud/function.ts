@@ -1,9 +1,9 @@
-import { readFileSync, writeFileSync } from "fs";
-import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
+import { readFileSync, writeFileSync } from "fs";
+import { join } from "path";
 import { Polycons } from "polycons";
-import { Code, IInflightHost, Inflight, IResource, Resource } from "../core";
+import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
 import { mkdtemp } from "../util";
 import { Logger } from "./logger";
 
@@ -45,6 +45,9 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     props: FunctionProps
   ) {
     super(scope, id);
+
+    this.display.title = "Function";
+    this.display.description = "Represents a function";
 
     if (!scope) {
       this.assetPath = undefined as any;

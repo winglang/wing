@@ -15,10 +15,9 @@ export abstract class LoggerBase extends Resource {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    /**
-     * Information on how to display a resource in the UI.
-     */
     this.display.hidden = true;
+    this.display.title = "Logger";
+    this.display.description = "A cloud logging facility";
   }
 
   /**
