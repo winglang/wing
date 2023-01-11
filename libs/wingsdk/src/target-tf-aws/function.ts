@@ -125,7 +125,7 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
-    const name = ResourceNames.of(this, NAME_OPTS);
+    const name = ResourceNames.generateName(this, NAME_OPTS);
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {

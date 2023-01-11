@@ -30,7 +30,7 @@ export class Counter extends cloud.CounterBase {
     super(scope, id, props);
 
     this.table = new DynamodbTable(this, "Default", {
-      name: ResourceNames.of(this, NAME_OPTS),
+      name: ResourceNames.generateName(this, NAME_OPTS),
       attribute: [{ name: HASH_KEY, type: "S" }],
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",

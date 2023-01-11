@@ -14,16 +14,15 @@ import { Function } from "./function";
 
 /**
  * AWS Bucket names must be between 3 and 63 characters.
- * You can use lowercase alphanumeric characters, dot (.) and dash (-)
- * must begin and end with alphanumeric character, can not begin
- * with 'xn--' or ending with '-s3alias'
+ *
+ * You can use lowercase alphanumeric characters, dot (.), dash (-)
  * and must not contain two adjacent dots.
  */
 const NAME_OPTS: NameOptions = {
   maxLen: 63,
   case: CaseConventions.LOWERCASE,
-  regexMatch: /([^a-z0-9\.\-]+)|(^xn--|^\W)|((-s3alias|\W)$)|(\.{2,})/g,
-  charReplacer: "",
+  regexMatch: /([^a-z0-9\.\-]+)|(^\W{1,})|(\W{1,}$)|(\.{2,})/g,
+  charReplacer: "-",
 };
 
 /**
@@ -40,8 +39,16 @@ export class Bucket extends cloud.BucketBase {
 
     this.public = props.public ?? false;
 
+    // names must begin and end with alphanumeric character, can not begin
+    // with 'xn--' or ending with '-s3alias'
+    if (this.node.id.match(/(^xn--|^\W{1,})|(-s3alias|\W{1,}$)/g)?.length) {
+      throw new Error(
+        "Bucket names must begin and end with alphanumeric character and can not begin with 'xn--' or ending with '-s3alias'."
+      );
+    }
+
     this.bucket = new S3Bucket(this, "Default", {
-      bucket: ResourceNames.of(this, NAME_OPTS),
+      bucket: ResourceNames.generateName(this, NAME_OPTS),
     });
 
     // best practice: (at-rest) data encryption with Amazon S3-managed keys

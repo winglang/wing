@@ -31,7 +31,7 @@ export class Topic extends cloud.TopicBase {
     super(scope, id, props);
 
     this.topic = new SnsTopic(this, "Default", {
-      name: ResourceNames.of(this, NAME_OPTS),
+      name: ResourceNames.generateName(this, NAME_OPTS),
     });
   }
 

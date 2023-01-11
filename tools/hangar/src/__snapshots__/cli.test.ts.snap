@@ -852,7 +852,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_PrivateBucket_82B4DCC5",
           },
         },
-        "bucket": "privatebucketc8a9b08c",
+        "bucket": "privatebucket-c8a9b08c",
       },
       "root_PublicBucket_73AE6C59": {
         "//": {
@@ -861,7 +861,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_PublicBucket_73AE6C59",
           },
         },
-        "bucket": "publicbucketc8fea5d9",
+        "bucket": "publicbucket-c8fea5d9",
       },
       "root_cloudBucket_4F3C4F53": {
         "//": {
@@ -870,7 +870,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucketc87175e7",
+        "bucket": "cloud.bucket-c87175e7",
       },
       "root_cloudFunction_Bucket_245CAEB7": {
         "//": {
@@ -1103,7 +1103,7 @@ exports[`wing compile container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket1_3A77B9B4",
           },
         },
-        "bucket": "bucket1c81ed215",
+        "bucket": "bucket1-c81ed215",
       },
       "root_bucket2_E39F70EE": {
         "//": {
@@ -1112,7 +1112,7 @@ exports[`wing compile container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket2_E39F70EE",
           },
         },
-        "bucket": "bucket2c83a0be6",
+        "bucket": "bucket2-c83a0be6",
       },
       "root_bucket3_A0C568EA": {
         "//": {
@@ -1121,7 +1121,7 @@ exports[`wing compile container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket3_A0C568EA",
           },
         },
-        "bucket": "bucket3c8b6c706",
+        "bucket": "bucket3-c8b6c706",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -1605,7 +1605,7 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucketc87175e7",
+        "bucket": "cloud.bucket-c87175e7",
       },
       "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F": {
         "//": {
@@ -1912,7 +1912,7 @@ exports[`wing compile hello.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucketc87175e7",
+        "bucket": "cloud.bucket-c87175e7",
       },
       "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F": {
         "//": {
@@ -2268,7 +2268,7 @@ exports[`wing compile print.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucketc87175e7",
+        "bucket": "cloud.bucket-c87175e7",
       },
       "root_cloudFunction_Bucket_245CAEB7": {
         "//": {

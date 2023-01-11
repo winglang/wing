@@ -5,7 +5,7 @@ exports[`bucket is public 1`] = `
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket\\": \\"mybucketc8045fcc\\"
+        \\"bucket\\": \\"my-bucket-c8045fcc\\"
       }
     },
     \\"aws_s3_bucket_policy\\": {
@@ -122,12 +122,12 @@ Object {
 }
 `;
 
-exports[`bucket name valid 1`] = `
+exports[`bucket name must be lowercase 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_TheUncannyBucket_9FBBB2ED\\": {
-        \\"bucket\\": \\"the-uncanny.bucketc88a0953\\"
+        \\"bucket\\": \\"the-uncanny.bucket-c88a0953\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -155,7 +155,7 @@ exports[`bucket name valid 1`] = `
 }"
 `;
 
-exports[`bucket name valid 2`] = `
+exports[`bucket name must be lowercase 2`] = `
 Object {
   "tree": Object {
     "children": Object {
@@ -247,12 +247,137 @@ Object {
 }
 `;
 
+exports[`bucket name valid 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_s3_bucket\\": {
+      \\"root_theuncannybucket_03A74E00\\": {
+        \\"bucket\\": \\"the-uncanny.bucket-c8e2755c\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_theuncannybucket_PublicAccessBlock_976A73D7\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_theuncannybucket_03A74E00.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_theuncannybucket_Encryption_1294028A\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_theuncannybucket_03A74E00.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket name valid 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "10.0.12",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.13.2",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+          "the-uncanny.bucket": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "10.0.12",
+                },
+                "id": "Default",
+                "path": "root/the-uncanny.bucket/Default",
+              },
+              "Encryption": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                  "version": "10.0.12",
+                },
+                "id": "Encryption",
+                "path": "root/the-uncanny.bucket/Encryption",
+              },
+              "PublicAccessBlock": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                  "version": "10.0.12",
+                },
+                "id": "PublicAccessBlock",
+                "path": "root/the-uncanny.bucket/PublicAccessBlock",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "id": "the-uncanny.bucket",
+            "path": "root/the-uncanny.bucket",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.13.2",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.13.2",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"bucket\\": \\"mybucketc8045fcc\\"
+        \\"bucket\\": \\"my-bucket-c8045fcc\\"
       }
     },
     \\"aws_s3_bucket_public_access_block\\": {
@@ -351,381 +476,6 @@ Object {
             },
             "id": "my_bucket",
             "path": "root/my_bucket",
-          },
-        },
-        "constructInfo": Object {
-          "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
-        },
-        "id": "root",
-        "path": "root",
-      },
-    },
-    "constructInfo": Object {
-      "fqn": "cdktf.App",
-      "version": "0.13.2",
-    },
-    "id": "App",
-    "path": "",
-  },
-  "version": "tree-0.1",
-}
-`;
-
-exports[`removing '-s3alias' from ending of bucket name 1`] = `
-"{
-  \\"resource\\": {
-    \\"aws_s3_bucket\\": {
-      \\"root_TheUncannyBuckets3alias_5EFCB252\\": {
-        \\"bucket\\": \\"the-uncanny-bucketc86e5cd5\\"
-      }
-    },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"root_TheUncannyBuckets3alias_PublicAccessBlock_B5B8E603\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.root_TheUncannyBuckets3alias_5EFCB252.bucket}\\",
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
-      }
-    },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_TheUncannyBuckets3alias_Encryption_33015777\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_TheUncannyBuckets3alias_5EFCB252.bucket}\\",
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
-      }
-    }
-  }
-}"
-`;
-
-exports[`removing '-s3alias' from ending of bucket name 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "The-Uncanny-Bucket-s3alias": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "children": Object {
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
-                },
-                "id": "Default",
-                "path": "root/The-Uncanny-Bucket-s3alias/Default",
-              },
-              "Encryption": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
-                },
-                "id": "Encryption",
-                "path": "root/The-Uncanny-Bucket-s3alias/Encryption",
-              },
-              "PublicAccessBlock": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                  "version": "10.0.12",
-                },
-                "id": "PublicAccessBlock",
-                "path": "root/The-Uncanny-Bucket-s3alias/PublicAccessBlock",
-              },
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.130",
-            },
-            "id": "The-Uncanny-Bucket-s3alias",
-            "path": "root/The-Uncanny-Bucket-s3alias",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.130",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-        },
-        "constructInfo": Object {
-          "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
-        },
-        "id": "root",
-        "path": "root",
-      },
-    },
-    "constructInfo": Object {
-      "fqn": "cdktf.App",
-      "version": "0.13.2",
-    },
-    "id": "App",
-    "path": "",
-  },
-  "version": "tree-0.1",
-}
-`;
-
-exports[`removing 'xn--' from begining of bucket name 1`] = `
-"{
-  \\"resource\\": {
-    \\"aws_s3_bucket\\": {
-      \\"root_xnTheUncannyBucket_2053EA28\\": {
-        \\"bucket\\": \\"the-uncanny-bucketc848df39\\"
-      }
-    },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"root_xnTheUncannyBucket_PublicAccessBlock_F6A46769\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.root_xnTheUncannyBucket_2053EA28.bucket}\\",
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
-      }
-    },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_xnTheUncannyBucket_Encryption_EAE62C7E\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_xnTheUncannyBucket_2053EA28.bucket}\\",
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
-      }
-    }
-  }
-}"
-`;
-
-exports[`removing 'xn--' from begining of bucket name 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.130",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "xn--The-Uncanny-Bucket": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "children": Object {
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
-                },
-                "id": "Default",
-                "path": "root/xn--The-Uncanny-Bucket/Default",
-              },
-              "Encryption": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
-                },
-                "id": "Encryption",
-                "path": "root/xn--The-Uncanny-Bucket/Encryption",
-              },
-              "PublicAccessBlock": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                  "version": "10.0.12",
-                },
-                "id": "PublicAccessBlock",
-                "path": "root/xn--The-Uncanny-Bucket/PublicAccessBlock",
-              },
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.130",
-            },
-            "id": "xn--The-Uncanny-Bucket",
-            "path": "root/xn--The-Uncanny-Bucket",
-          },
-        },
-        "constructInfo": Object {
-          "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
-        },
-        "id": "root",
-        "path": "root",
-      },
-    },
-    "constructInfo": Object {
-      "fqn": "cdktf.App",
-      "version": "0.13.2",
-    },
-    "id": "App",
-    "path": "",
-  },
-  "version": "tree-0.1",
-}
-`;
-
-exports[`removing special characters from beginning or ending of buckets name 1`] = `
-"{
-  \\"resource\\": {
-    \\"aws_s3_bucket\\": {
-      \\"root_TheUncannyBucket_FEF361F4\\": {
-        \\"bucket\\": \\"the-uncanny-bucketc8f48464\\"
-      }
-    },
-    \\"aws_s3_bucket_public_access_block\\": {
-      \\"root_TheUncannyBucket_PublicAccessBlock_ECC6ADD4\\": {
-        \\"block_public_acls\\": true,
-        \\"block_public_policy\\": true,
-        \\"bucket\\": \\"\${aws_s3_bucket.root_TheUncannyBucket_FEF361F4.bucket}\\",
-        \\"ignore_public_acls\\": true,
-        \\"restrict_public_buckets\\": true
-      }
-    },
-    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
-      \\"root_TheUncannyBucket_Encryption_46E24FD5\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_TheUncannyBucket_FEF361F4.bucket}\\",
-        \\"rule\\": [
-          {
-            \\"apply_server_side_encryption_by_default\\": {
-              \\"sse_algorithm\\": \\"AES256\\"
-            }
-          }
-        ]
-      }
-    }
-  }
-}"
-`;
-
-exports[`removing special characters from beginning or ending of buckets name 2`] = `
-Object {
-  "tree": Object {
-    "children": Object {
-      "root": Object {
-        "children": Object {
-          ".The-Uncanny-Bucket.": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "children": Object {
-              "Default": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
-                },
-                "id": "Default",
-                "path": "root/.The-Uncanny-Bucket./Default",
-              },
-              "Encryption": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
-                },
-                "id": "Encryption",
-                "path": "root/.The-Uncanny-Bucket./Encryption",
-              },
-              "PublicAccessBlock": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                  "version": "10.0.12",
-                },
-                "id": "PublicAccessBlock",
-                "path": "root/.The-Uncanny-Bucket./PublicAccessBlock",
-              },
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.130",
-            },
-            "id": ".The-Uncanny-Bucket.",
-            "path": "root/.The-Uncanny-Bucket.",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.0.130",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "aws": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
-            },
-            "id": "aws",
-            "path": "root/aws",
-          },
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
-            },
-            "id": "backend",
-            "path": "root/backend",
           },
         },
         "constructInfo": Object {

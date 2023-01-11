@@ -53,7 +53,7 @@ exports[`function with a bucket binding 2`] = `
     },
     \\"aws_s3_bucket\\": {
       \\"root_Bucket_966015A6\\": {
-        \\"bucket\\": \\"bucketc88fdc5f\\"
+        \\"bucket\\": \\"bucket-c88fdc5f\\"
       },
       \\"root_Function_Bucket_8CDD903C\\": {}
     },

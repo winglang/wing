@@ -17,7 +17,7 @@ export interface NameOptions {
 }
 
 export class ResourceNames {
-  public static of(resource: Construct, props: NameOptions): string {
+  public static generateName(resource: Construct, props: NameOptions): string {
     let hash = resource.node.addr.substring(0, 8);
     let human = props.prefix
       ? `${props.prefix}-${resource.node.id}`.substring(

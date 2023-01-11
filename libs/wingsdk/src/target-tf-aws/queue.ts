@@ -31,7 +31,7 @@ export class Queue extends cloud.QueueBase {
 
     this.queue = new SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
-      name: ResourceNames.of(this, NAME_OPTS),
+      name: ResourceNames.generateName(this, NAME_OPTS),
     });
 
     if ((props.initialMessages ?? []).length) {
