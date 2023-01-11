@@ -35,7 +35,7 @@ export abstract class QueueBase extends Resource {
     super(scope, id);
 
     this.display.title = "Queue";
-    this.display.description = "Represents a queue";
+    this.display.description = "A distributed message queue";
 
     if (!scope) {
       return;
