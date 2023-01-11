@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{cmp::Ordering, fs, path::PathBuf};
+use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf};
 
 use sha2::{Digest, Sha256};
 
@@ -8,7 +8,8 @@ use crate::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
 		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
-	utilities::snake_case_to_camel_case, capture::CaptureKind,
+	capture::CaptureKind,
+	utilities::snake_case_to_camel_case,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -38,6 +39,7 @@ pub struct JSifier {
 	pub out_dir: PathBuf,
 	shim: bool,
 	app_name: String,
+	inflight_counter: RefCell<usize>,
 }
 
 impl JSifier {
@@ -46,6 +48,7 @@ impl JSifier {
 			out_dir,
 			shim,
 			app_name: app_name.to_string(),
+			inflight_counter: RefCell::new(0),
 		}
 	}
 
@@ -387,14 +390,18 @@ impl JSifier {
 				)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
-				format!(
-					"Object.freeze([{}])",
-					items
-						.iter()
-						.map(|expr| self.jsify_expression(expr, phase))
-						.collect::<Vec<String>>()
-						.join(", ")
-				)
+
+				let item_list = items
+					.iter()
+					.map(|expr| self.jsify_expression(expr, phase))
+					.collect::<Vec<String>>()
+					.join(", ");
+
+				if is_mutable_collection(expression) {
+					format!("[{}]", item_list)
+				} else {
+					format!("Object.freeze([{}])", item_list)
+				}
 			}
 			ExprKind::StructLiteral { fields, .. } => {
 				format!(
@@ -417,14 +424,17 @@ impl JSifier {
 				)
 			}
 			ExprKind::SetLiteral { items, .. } => {
-				format!(
-					"Object.freeze(new Set([{}]))",
-					items
-						.iter()
-						.map(|expr| self.jsify_expression(expr, phase))
-						.collect::<Vec<String>>()
-						.join(", ")
-				)
+				let item_list = items
+					.iter()
+					.map(|expr| self.jsify_expression(expr, phase))
+					.collect::<Vec<String>>()
+					.join(", ");
+
+				if is_mutable_collection(expression) {
+					format!("new Set([{}])", item_list)
+				} else {
+					format!("Object.freeze(new Set([{}]))",	item_list)
+				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
@@ -627,29 +637,23 @@ impl JSifier {
 			for kind in cap_kind.iter() {
 				match kind {
 					CaptureKind::ImmutableData => {
-						data_bindings.push(format!(
-							"{}: {},",
-							symbol,
-							symbol,
-						));
-					},
+						data_bindings.push(format!("{}: {},", symbol, symbol,));
+					}
 					CaptureKind::Resource(def) => {
 						methods.push(def.method.clone());
 					}
 				}
 			}
 
-			if ! methods.is_empty() {
+			if !methods.is_empty() {
 				resource_bindings.push(format!(
 					"{}: {},",
 					symbol,
 					Self::render_block([
 						format!("resource: {},", symbol),
-						format!("ops: [{}]", methods
-							.iter()
-							.map(|x| format!("\"{}\"", x))
-							.join(","))
-					])));
+						format!("ops: [{}]", methods.iter().map(|x| format!("\"{}\"", x)).join(","))
+					])
+				));
 			}
 		}
 		let mut proc_source = vec![];
@@ -665,22 +669,25 @@ impl JSifier {
 				"code: {}.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \"{}\")),",
 				STDLIB, &relative_file_path
 			),
-			format!("bindings: {}", Self::render_block([
-				if !resource_bindings.is_empty() {
-					format!("resources: {}", Self::render_block(&resource_bindings))
-				} else {
-					"".to_string()
-				},
-
-				if !data_bindings.is_empty() {
-					format!("data: {}", Self::render_block(&data_bindings))
-				} else {
-					"".to_string()
-				},
-			])),
+			format!(
+				"bindings: {}",
+				Self::render_block([
+					if !resource_bindings.is_empty() {
+						format!("resources: {}", Self::render_block(&resource_bindings))
+					} else {
+						"".to_string()
+					},
+					if !data_bindings.is_empty() {
+						format!("data: {}", Self::render_block(&data_bindings))
+					} else {
+						"".to_string()
+					},
+				])
+			),
 		]);
-		let short_hash = procid.clone().split_off(procid.len() - 8);
-		let inflight_obj_id = format!("{}{}", INFLIGHT_OBJ_PREFIX, short_hash);
+		let mut inflight_counter = self.inflight_counter.borrow_mut();
+		*inflight_counter += 1;
+		let inflight_obj_id = format!("{}{}", INFLIGHT_OBJ_PREFIX, inflight_counter);
 		format!(
 			"new {}.core.Inflight(this, \"{}\", {})",
 			STDLIB, inflight_obj_id, props_block
@@ -710,4 +717,12 @@ impl JSifier {
 	fn jsify_class_member(&self, member: &ClassMember) -> String {
 		format!("{};", self.jsify_symbol(&member.name))
 	}
+}
+
+fn is_mutable_collection(expression: &Expr) -> bool {
+    if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+			evaluated_type.is_mutable_collection()
+		} else {
+			false
+		}
 }

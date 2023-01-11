@@ -87,9 +87,7 @@ impl std::fmt::Display for Diagnostic {
 
 impl Ord for Diagnostic {
 	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-		self
-			.span
-			.cmp(&other.span)
+		self.span.cmp(&other.span)
 	}
 }
 

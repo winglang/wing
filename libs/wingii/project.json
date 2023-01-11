@@ -4,11 +4,9 @@
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "{workspaceRoot}/rust-native"
-      ],
+      "outputs": ["{workspaceRoot}/rust-native"],
       "options": {
-        "command": "cargo build",
+        "commands": ["cargo build", "cargo fmt -- --check"],
         "cwd": "libs/wingii"
       },
       "configurations": {
@@ -22,9 +20,7 @@
     },
     "build-wasm": {
       "executor": "nx:run-commands",
-      "outputs": [
-        "{workspaceRoot}/rust-wasm"
-      ],
+      "outputs": ["{workspaceRoot}/rust-wasm"],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingii"

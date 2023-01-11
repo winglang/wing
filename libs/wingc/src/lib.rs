@@ -31,7 +31,9 @@ const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/wingsdk";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_ARRAY: &'static str = "std.ImmutableArray";
+const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
 const WINGSDK_SET: &'static str = "std.ImmutableSet";
+const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
 const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
@@ -182,7 +184,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let mut capture_diagnostics = Diagnostics::new();
 	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
 	diagnostics.extend(capture_diagnostics);
-	
+
 	let errors = diagnostics
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
