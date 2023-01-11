@@ -196,6 +196,12 @@ impl PartialEq for Type {
 				let r: &Type = &*r0;
 				l == r
 			}
+			(Self::MutArray(l0), Self::MutArray(r0)) => {
+				// Arrays are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l == r
+			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// Maps are of the same type if they have the same value type
 				let l: &Type = &*l0;
@@ -206,6 +212,13 @@ impl PartialEq for Type {
 				// Sets are of the same type if they have the same value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
+				l == r
+			}
+			(Self::MutSet(l0), Self::MutSet(r0)) => {
+				// Sets are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				println!("MutSet-->{} == {}", l, r);
 				l == r
 			}
 			(Self::Optional(l0), Self::Optional(r0)) => {
