@@ -9,7 +9,7 @@ on:
       - libs/wingsdk/**
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref }}
   cancel-in-progress: true
 
 permissions:
@@ -19,30 +19,34 @@ defaults:
   run:
     working-directory: libs/wingsdk
 
+env:
+  NODEJS_VERSION: "18.x"
+  CI: "true"
+
 jobs:
-  wingsdk-mutation:
+  build:
     runs-on: ubuntu-latest
-    env:
-      CI: "true"
-    outputs:
-      self_mutation_happened: ${{ steps.self_mutation.outputs.self_mutation_happened }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Login to private npm registry
         run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
-      - name: Setup Node.js
+      - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: 16.x
+          node-version: ${{ env.NODEJS_VERSION }}
+          registry-url: https://npm.pkg.github.com
       - name: Build transitive dependency (wing-api-checker)
-        run: npm install && npm run build
+        run: npm ci && npm run build
         working-directory: apps/wing-api-checker
       - name: Build transitive dependency (jsii-docgen)
-        run: npm install && npm run build
+        run: npm ci && npm run build
         working-directory: apps/jsii-docgen
       - name: Install dependencies
-        run: npm install
+        run: npm ci
       - name: build
         run: npx projen build
       - id: self_mutation
@@ -56,6 +60,9 @@ jobs:
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git commit -s -m "chore: self mutation"
-          git push origin HEAD:${{ github.event.ref }}
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+      - name: Fail if mutated
+        if: steps.self_mutation.outputs.self_mutation_happened
+        run: |
           echo "::error::Files were changed during build (see build log)."
           exit 1
