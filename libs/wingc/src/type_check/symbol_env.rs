@@ -10,7 +10,7 @@ use super::UnsafeRef;
 pub struct SymbolEnv {
 	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
 	parent: Option<UnsafeRef<SymbolEnv>>,
-	pub return_type: Option<TypeRef>,
+	pub return_type: TypeRef,
 	is_class: bool,
 	pub flight: Phase,
 	statement_idx: usize,
@@ -42,12 +42,14 @@ enum LookupResult<'a> {
 impl SymbolEnv {
 	pub fn new(
 		parent: Option<*const SymbolEnv>,
-		return_type: Option<TypeRef>,
+		return_type: TypeRef,
 		is_class: bool,
 		flight: Phase,
 		statement_idx: usize,
 	) -> Self {
-		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
+		// assert that if the return type is void, there is a parent
+		assert!(matches!(*return_type, Type::Void) || parent.is_some());
+
 		Self {
 			ident_map: HashMap::new(),
 			parent: parent.map(|e| UnsafeRef::<SymbolEnv>(e)),
