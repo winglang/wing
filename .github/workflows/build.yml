@@ -10,7 +10,7 @@ on:
       - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
 env:
@@ -28,25 +28,28 @@ jobs:
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Get tags
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: git fetch --unshallow --tags
 
       - name: Login to Private NPM registry
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: bahmutov/npm-install@v1
         with:
           install-command: npm ci --ignore-scripts
 
       - name: Get Version Info
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         id: info
         env:
           # Needed for `auto` cli
@@ -59,11 +62,11 @@ jobs:
 
       # newlines are easier to handle in single-line yaml
       - run: "echo '\n' >> CHANGELOG.md"
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
 
       - name: PR Version Info
         id: pr_info
-        if: github.event_name != 'push'
+        if: github.event_name != 'push' || github.repository != 'winglang/wing'
         run: |
           echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
           echo "Pull Request" > CHANGELOG.md
@@ -76,11 +79,11 @@ jobs:
           path: CHANGELOG.md
 
       - name: Compress Docs
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: tar -czvf docs.tgz docs/*
 
       - name: Upload Docs
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/upload-artifact@v2
         with:
           name: docs
@@ -96,6 +99,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -198,6 +204,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -261,6 +270,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
@@ -297,6 +309,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
