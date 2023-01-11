@@ -47,7 +47,7 @@ impl SymbolEnv {
 		flight: Phase,
 		statement_idx: usize,
 	) -> Self {
-		// assert that if the return type is void, there is a parent
+		// assert that if the return type isn't void, then there is a parent environment
 		assert!(matches!(*return_type, Type::Void) || parent.is_some());
 
 		Self {
