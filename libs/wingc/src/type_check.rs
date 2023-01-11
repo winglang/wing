@@ -4,7 +4,6 @@ use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_STRING};
 use derivative::Derivative;
-use elsa::FrozenVec;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
@@ -70,9 +69,9 @@ impl std::ops::Deref for TypeRef {
 impl std::ops::DerefMut for TypeRef {
 	fn deref_mut(&mut self) -> &mut Self::Target {
 		let x = self.0 as *const Type;
-		// SAFETY: We only access this type through a TypeRef, which is a &'static Type
-		// We promise to only mutate the internal state of a type, and not the actual
-		// Type itself.
+		// SAFETY: We only access the inner Type through a TypeRef, which is a
+		// &'static Type. We promise to only mutate the internal state of a
+		// type, and not move the actual Type itself.
 		unsafe { &mut *x.cast_mut() }
 	}
 }
@@ -1036,8 +1035,7 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
-		let actual_type_ref: &Type = &actual_type;
-		if actual_type_ref != &Type::Anything && !expected_types.contains(&actual_type) {
+		if !actual_type.is_anything() && !expected_types.contains(&actual_type) {
 			self.diagnostics.borrow_mut().push(Diagnostic {
 				message: format!(
 					"Expected type to be one of \"{}\", but got \"{}\" instead",
