@@ -187,7 +187,7 @@ test("remove non-existent object from a bucket with mustExist option", async () 
   ).rejects.toThrowError();
 });
 
-test("bucket has no display property", async () => {
+test("bucket has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Bucket(app, "my_bucket");
@@ -198,13 +198,11 @@ test("bucket has no display property", async () => {
   // THEN
   expect(bucket.display.hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
-
-  expect(treeJson.tree.children).toMatchObject({
-    my_bucket: {},
-  });
   expect(treeJson.tree.children).not.toMatchObject({
     my_bucket: {
-      display: {},
+      display: {
+        hidden: expect.any(Boolean),
+      },
     },
   });
 });

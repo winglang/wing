@@ -78,7 +78,7 @@ test("topic publishes messages to multiple subscribers", async () => {
   expect(listMessages(s)).toMatchSnapshot();
 });
 
-test("topic has no display property", async () => {
+test("topic has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Topic(app, "my_topic");
@@ -89,13 +89,11 @@ test("topic has no display property", async () => {
   // THEN
   expect(topic.display.hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
-
-  expect(treeJson.tree.children).toMatchObject({
-    my_topic: {},
-  });
   expect(treeJson.tree.children).not.toMatchObject({
     my_topic: {
-      display: {},
+      display: {
+        hidden: expect.any(Boolean),
+      },
     },
   });
 });

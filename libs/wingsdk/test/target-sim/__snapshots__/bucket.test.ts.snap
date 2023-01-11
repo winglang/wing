@@ -34,7 +34,9 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
+            "description": "A cloud logging facility",
             "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -47,6 +49,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "Represents a cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -108,7 +114,9 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
+            "description": "A cloud logging facility",
             "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -121,6 +129,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "Represents a cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -183,7 +195,9 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
+            "description": "A cloud logging facility",
             "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -196,6 +210,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "Represents a cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -260,7 +278,9 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
+            "description": "A cloud logging facility",
             "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -273,6 +293,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "Represents a cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -335,7 +359,9 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
+            "description": "A cloud logging facility",
             "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -348,6 +374,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "Represents a cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -410,7 +440,9 @@ Object {
             "version": "10.0.130",
           },
           "display": Object {
+            "description": "A cloud logging facility",
             "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -423,6 +455,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "Represents a cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",

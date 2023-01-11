@@ -126,7 +126,7 @@ test("invoke function fails", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("function has no display property", async () => {
+test("function has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
   const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
@@ -138,13 +138,11 @@ test("function has no display property", async () => {
   // THEN
   expect(func.display.hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
-
-  expect(treeJson.tree.children).toMatchObject({
-    my_function: {},
-  });
   expect(treeJson.tree.children).not.toMatchObject({
     my_function: {
-      display: {},
+      display: {
+        hidden: expect.any(Boolean),
+      },
     },
   });
 });

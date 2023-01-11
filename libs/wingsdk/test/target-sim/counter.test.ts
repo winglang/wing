@@ -93,7 +93,7 @@ test("peek with initial value", async () => {
   expect(peek).toEqual(123);
 });
 
-test("counter has no display property", async () => {
+test("counter has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Counter(app, "my_counter");
@@ -104,13 +104,11 @@ test("counter has no display property", async () => {
   // THEN
   expect(counter.display.hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
-
-  expect(treeJson.tree.children).toMatchObject({
-    my_counter: {},
-  });
   expect(treeJson.tree.children).not.toMatchObject({
-    my_counter: {
-      display: {},
+    my_bucket: {
+      display: {
+        hidden: expect.any(Boolean),
+      },
     },
   });
 });

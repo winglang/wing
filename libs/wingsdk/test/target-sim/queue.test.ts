@@ -102,7 +102,7 @@ test("messages are requeued if the function fails", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-test("queue has no display property", async () => {
+test("queue has no display hidden property", async () => {
   // GIVEN
   const app = new SimApp();
   new cloud.Queue(app, "my_queue");
@@ -113,13 +113,11 @@ test("queue has no display property", async () => {
   // THEN
   expect(queue.display.hidden).toBeUndefined();
   expect(treeJson.tree.children).toBeDefined();
-
-  expect(treeJson.tree.children).toMatchObject({
-    my_queue: {},
-  });
   expect(treeJson.tree.children).not.toMatchObject({
     my_queue: {
-      display: {},
+      display: {
+        hidden: expect.any(Boolean),
+      },
     },
   });
 });

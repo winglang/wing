@@ -164,6 +164,10 @@ exports.handler = async function(event) {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
               },
+              "display": Object {
+                "description": "Represents a cloud object store",
+                "title": "Bucket",
+              },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
             },
@@ -182,6 +186,10 @@ exports.handler = async function(event) {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
+              },
+              "display": Object {
+                "description": "Represents a distributed atomic counter",
+                "title": "Counter",
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
@@ -223,6 +231,10 @@ exports.handler = async function(event) {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
+              },
+              "display": Object {
+                "description": "Represents a queue",
+                "title": "Queue",
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -277,6 +289,10 @@ exports.handler = async function(event) {
                 "fqn": "constructs.Construct",
                 "version": "10.0.130",
               },
+              "display": Object {
+                "description": "Represents a function",
+                "title": "Function",
+              },
               "id": "Queue-OnMessage-401ee792",
               "path": "root/HelloWorld/Queue-OnMessage-401ee792",
             },
@@ -317,7 +333,9 @@ exports.handler = async function(event) {
             "version": "10.0.130",
           },
           "display": Object {
+            "description": "A cloud logging facility",
             "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",

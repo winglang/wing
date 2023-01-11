@@ -129,6 +129,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "Represents a function",
+              "title": "Function",
+            },
             "id": "Function",
             "path": "root/Function",
           },
@@ -164,7 +168,9 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
+              "description": "A cloud logging facility",
               "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -336,6 +342,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "Represents a function",
+              "title": "Function",
+            },
             "id": "Function",
             "path": "root/Function",
           },
@@ -371,7 +381,9 @@ Object {
               "version": "10.0.130",
             },
             "display": Object {
+              "description": "A cloud logging facility",
               "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
