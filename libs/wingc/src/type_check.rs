@@ -16,7 +16,7 @@ use symbol_env::SymbolEnv;
 use self::symbol_env::StatementIdx;
 
 thread_local! {
-	static TYPES_ARR: RefCell<Vec<Box<Type>>> = RefCell::new(Vec::new());
+	static TYPES_ARR: RefCell<Arena<Box<Type>>> = RefCell::new(Arena::new());
 }
 
 pub struct UnsafeRef<T>(*const T);
@@ -51,7 +51,7 @@ where
 	}
 }
 
-pub struct TypeRef(usize);
+pub struct TypeRef(Index);
 
 impl Clone for TypeRef {
 	fn clone(&self) -> Self {
@@ -432,31 +432,31 @@ pub struct Types {
 	// TODO: Remove the box and change TypeRef to just be an index into the types array
 	// Note: we need the box so reallocations of the vec while growing won't change the addresses of the types since they are referenced from the TypeRef struct
 	// types: Vec<Box<Type>>,
-	numeric_idx: usize,
-	string_idx: usize,
-	bool_idx: usize,
-	duration_idx: usize,
-	anything_idx: usize,
+	numeric_idx: Index,
+	string_idx: Index,
+	bool_idx: Index,
+	duration_idx: Index,
+	anything_idx: Index,
 }
 
 impl Types {
 	pub fn new() -> Self {
 		let (i1, i2, i3, i4, i5) = TYPES_ARR.with(|types| {
 			let mut types = types.borrow_mut();
-			let numeric_idx = types.push(Box::new(Type::Number));
-			let string_idx = types.push(Box::new(Type::String));
-			let bool_idx = types.push(Box::new(Type::Boolean));
-			let duration_idx = types.push(Box::new(Type::Duration));
-			let anything_idx = types.push(Box::new(Type::Anything));
+			let numeric_idx = types.insert(Box::new(Type::Number));
+			let string_idx = types.insert(Box::new(Type::String));
+			let bool_idx = types.insert(Box::new(Type::Boolean));
+			let duration_idx = types.insert(Box::new(Type::Duration));
+			let anything_idx = types.insert(Box::new(Type::Anything));
 			(numeric_idx, string_idx, bool_idx, duration_idx, anything_idx)
 		});
 
 		Self {
-			numeric_idx: 0,
-			string_idx: 0,
-			bool_idx: 0,
-			duration_idx: 0,
-			anything_idx: 0,
+			numeric_idx: i1,
+			string_idx: i2,
+			bool_idx: i3,
+			duration_idx: i4,
+			anything_idx: i5,
 		}
 	}
 
@@ -483,8 +483,8 @@ impl Types {
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
 		TYPES_ARR.with(|types| {
 			let mut types = types.borrow_mut();
-			let idx = types.push(Box::new(t));
-			self.get_typeref(types.len() - 1)
+			let idx = types.insert(Box::new(t));
+			self.get_typeref(idx)
 		})
 	}
 
@@ -494,7 +494,7 @@ impl Types {
 		vec![self.string(), self.number()]
 	}
 
-	fn get_typeref(&self, idx: usize) -> TypeRef {
+	fn get_typeref(&self, idx: Index) -> TypeRef {
 		TypeRef(idx)
 	}
 }
