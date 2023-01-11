@@ -9,7 +9,7 @@ export interface CounterViewProps {
 
 export const CounterView = ({ resourcePath }: CounterViewProps) => {
   const incrementCounter = trpc["counter.inc"].useMutation();
-  const counterValue = trpc["counter.get"].useQuery({ resourcePath });
+  const counterValue = trpc["counter.peek"].useQuery({ resourcePath });
 
   return (
     <div className="h-full w-full flex flex-col gap-4 p-4">

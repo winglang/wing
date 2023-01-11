@@ -11,7 +11,7 @@ export interface CounterResourceDetailsProps {
 export const CounterValue = ({ resource }: CounterResourceDetailsProps) => {
   const resourcePath = resource.path;
   const incrementCounter = trpc["counter.inc"].useMutation();
-  const counterValue = trpc["counter.get"].useQuery({ resourcePath });
+  const counterValue = trpc["counter.peek"].useQuery({ resourcePath });
 
   return (
     <>

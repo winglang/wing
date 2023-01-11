@@ -20,7 +20,7 @@ export const createCounterRouter = () => {
         const response = await client.inc(input.amount);
         return response;
       }),
-    "counter.get": publicProcedure
+    "counter.peek": publicProcedure
       .input(
         z.object({
           resourcePath: z.string(),
@@ -31,7 +31,7 @@ export const createCounterRouter = () => {
         const client = simulator.getResource(
           input.resourcePath,
         ) as ICounterClient;
-        const response = await client.inc(0);
+        const response = await client.peek();
         return response;
       }),
   });
