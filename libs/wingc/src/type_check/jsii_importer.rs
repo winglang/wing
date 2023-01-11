@@ -41,11 +41,11 @@ impl JsiiInterface for jsii::InterfaceType {
 pub struct JsiiImporter<'a> {
 	// An interface to access the types in the JSII library loaded with wingii
 	jsii_types: &'a wingii::type_system::TypeSystem,
-	// The assembly to import from the the JSII library
+	// The assembly to import from the JSII library
 	assembly: &'a Assembly,
 	// The wing module name to load. This is a namespace filter on the imported JSII assembly
 	// for example "cloud" will only (publicly) import types prefixed with `cloud.` from the
-	// the assembly. Note that other types might be implicitly imported into hidden namespaces
+	// assembly. Note that other types might be implicitly imported into hidden namespaces
 	// if they are referenced from a type in the specified `module_name`.
 	module_name: &'a str,
 	// The wing type system: all imported types are added to `wing_types`.
