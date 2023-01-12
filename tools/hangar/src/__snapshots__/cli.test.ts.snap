@@ -860,6 +860,216 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "test",
+          },
+        },
+        "function_name": "test",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+      },
+      "root_test_Bucket_2BBF14D4": {
+        "//": {
+          "metadata": {
+            "path": "root/test/Bucket",
+            "uniqueId": "root_test_Bucket_2BBF14D4",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile capture_resource_and_data.w > index.js 1`] = `
+"async handle(e) { const { data, res } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(data.size === 3)'\`)})((data.size === 3))};
+  (await res.put(\\"file.txt\\",\\"world\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await res.get(\\"file.txt\\")) === \\"world\\")'\`)})(((await res.get(\\"file.txt\\")) === \\"world\\"))};
+} };"
+`;
+
+exports[`wing compile capture_resource_and_data.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile capture_resource_and_data.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"capture_resource_and_data\\" });
+  
+  const data = Object.freeze(new Set([1, 2, 3]));
+  const res = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2b5f5a1cfc4596bb12d43c883cabea5f3fcfc40aca0c282e783a65a5e4158d10/index.js\\")),
+    bindings: {
+      resources: {
+        res: {
+          resource: res,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+      },
+      data: {
+        data: data,
+      },
+    }
+  });
+  new cloud.Function(this,\\"test\\",handler);
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile captures.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -1290,6 +1500,218 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile container_types.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "root_bucket1_3A77B9B4": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket1/Default",
+            "uniqueId": "root_bucket1_3A77B9B4",
+          },
+        },
+      },
+      "root_bucket2_E39F70EE": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket2/Default",
+            "uniqueId": "root_bucket2_E39F70EE",
+          },
+        },
+      },
+      "root_bucket3_A0C568EA": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket3/Default",
+            "uniqueId": "root_bucket3_A0C568EA",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_bucket1_PublicAccessBlock_6C5071C0": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket1/PublicAccessBlock",
+            "uniqueId": "root_bucket1_PublicAccessBlock_6C5071C0",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+      "root_bucket2_PublicAccessBlock_BC328E84": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket2/PublicAccessBlock",
+            "uniqueId": "root_bucket2_PublicAccessBlock_BC328E84",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+      "root_bucket3_PublicAccessBlock_CF2593D4": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket3/PublicAccessBlock",
+            "uniqueId": "root_bucket3_PublicAccessBlock_CF2593D4",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_bucket1_Encryption_33CABC1A": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket1/Encryption",
+            "uniqueId": "root_bucket1_Encryption_33CABC1A",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+      "root_bucket2_Encryption_A83E82F9": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket2/Encryption",
+            "uniqueId": "root_bucket2_Encryption_A83E82F9",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+      "root_bucket3_Encryption_A2A51E22": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket3/Encryption",
+            "uniqueId": "root_bucket3_Encryption_A2A51E22",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile container_types.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile container_types.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"container_types\\" });
+  
+  const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
+  const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
+  const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const arr1 = Object.freeze([1, 2, 3]);
+  const arr2 = Object.freeze([\\"1\\", \\"2\\", \\"3\\"]);
+  const arr3 = Object.freeze([1, 2, 3]);
+  const arr4 = Object.freeze([1, 2, 3]);
+  const arr5 = Object.freeze([bucket1, bucket2, bucket3]);
+  const arr6 = Object.freeze([bucket1, bucket2, bucket3]);
+  const arr7 = arr4;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr1.length === 3)'\`)})((arr1.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr2.at(1)) === \\"2\\")'\`)})(((arr2.at(1)) === \\"2\\"))};
+  const m1 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
+  const m2 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
+  const m3 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
+  const m4 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
+  const m5 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
+  const m6 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
+  const m7 = m1;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1.size === 3)'\`)})((m1.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m5.get(\\"b\\")) === bucket2)'\`)})(((m5.get(\\"b\\")) === bucket2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7.has(\\"b\\"))'\`)})((m7.has(\\"b\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4.has(\\"boom\\")) === false)'\`)})(((m4.has(\\"boom\\")) === false))};
+  const s2 = Object.freeze(new Set([1, 2, 3]));
+  const s3 = Object.freeze(new Set([1, 2, 3]));
+  const s4 = Object.freeze(new Set([1, 2, 3]));
+  const s6 = Object.freeze(new Set([bucket1, bucket2, bucket3]));
+  const s7 = s2;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.size === 3)'\`)})((s2.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.has(2))'\`)})((s3.has(2)))};
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile enums.w > cdk.tf.json 1`] = `
 {
   "//": {
@@ -1424,6 +1846,75 @@ constructor() {
   const xf = 1;
   const yf = ((-20.22) * xf);
   const zf = ((xf + yf) - (-0.01));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile expressions_string_interpolation.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"expressions_string_interpolation\\" });
+  
+  const regular_string = \\"str\\\\n\\\\\\"\\";
+  const empty_string = \\"\\";
+  const number = 1;
+  const cool_string = \`cool \\\\\\"\\\\\${\${regular_string}}\\\\\\" test\`;
+  const really_cool_string = \`\${number}\${empty_string}\\\\n\${cool_string}\\\\n\\\\\${empty_string}\${\\"string-in-string\\"}!\`;
+  const begining_with_cool_strings = \`\${regular_string} \${number} <- cool\`;
+  const ending_with_cool_strings = \`cool -> \${regular_string} \${number}\`;
 }
 }
 new MyApp().synth();"
@@ -2051,6 +2542,218 @@ constructor() {
       
     }
   });
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile mut_container_types.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_s3_bucket": {
+      "root_bucket1_3A77B9B4": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket1/Default",
+            "uniqueId": "root_bucket1_3A77B9B4",
+          },
+        },
+      },
+      "root_bucket2_E39F70EE": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket2/Default",
+            "uniqueId": "root_bucket2_E39F70EE",
+          },
+        },
+      },
+      "root_bucket3_A0C568EA": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket3/Default",
+            "uniqueId": "root_bucket3_A0C568EA",
+          },
+        },
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_bucket1_PublicAccessBlock_6C5071C0": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket1/PublicAccessBlock",
+            "uniqueId": "root_bucket1_PublicAccessBlock_6C5071C0",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+      "root_bucket2_PublicAccessBlock_BC328E84": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket2/PublicAccessBlock",
+            "uniqueId": "root_bucket2_PublicAccessBlock_BC328E84",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+      "root_bucket3_PublicAccessBlock_CF2593D4": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket3/PublicAccessBlock",
+            "uniqueId": "root_bucket3_PublicAccessBlock_CF2593D4",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_bucket1_Encryption_33CABC1A": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket1/Encryption",
+            "uniqueId": "root_bucket1_Encryption_33CABC1A",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_bucket1_3A77B9B4.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+      "root_bucket2_Encryption_A83E82F9": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket2/Encryption",
+            "uniqueId": "root_bucket2_Encryption_A83E82F9",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_bucket2_E39F70EE.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+      "root_bucket3_Encryption_A2A51E22": {
+        "//": {
+          "metadata": {
+            "path": "root/bucket3/Encryption",
+            "uniqueId": "root_bucket3_Encryption_A2A51E22",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_bucket3_A0C568EA.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile mut_container_types.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile mut_container_types.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/wingsdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/wingsdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"mut_container_types\\" });
+  
+  const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
+  const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
+  const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const arr1 = [\\"a\\", \\"b\\", \\"c\\"];
+  const arr2 = [1, 2, 3];
+  const arr3 = [bucket1, bucket2];
+  const arr4 = arr1;
+  (arr1.push(\\"a\\"));
+  (arr2.push(4));
+  (arr3.push(bucket3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr2.pop()) === 4)'\`)})(((arr2.pop()) === 4))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr1.length === 4)'\`)})((arr1.length === 4))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr4.at(0)) === \\"a\\")'\`)})(((arr4.at(0)) === \\"a\\"))};
+  const s1 = new Set([1, 2, 3, 3]);
+  const s2 = new Set([\\"hello\\", \\"world\\", \\"hello\\"]);
+  const s3 = new Set([bucket1, bucket2, bucket2]);
+  (s1.add(5));
+  (s2.add(\\"bye\\"));
+  (s3.add(bucket3));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(\\"bye\\"))'\`)})((s2.has(\\"bye\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(\\"hello\\"))'\`)})((s2.has(\\"hello\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.has(bucket2))'\`)})((s3.has(bucket2)))};
+  const m1 = Object.freeze(new Map([[ \\"hello\\", \\"world\\" ]]));
+  const m2 = Object.freeze(new Map([[ \\"hello\\", 123 ]]));
+  const m3 = Object.freeze(new Map([[ \\"b1\\", bucket1 ], [ \\"b2\\", bucket2 ]]));
+  const m4 = m1;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1.has(\\"hello\\"))'\`)})((m1.has(\\"hello\\")))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m2.size === 1)'\`)})((m2.size === 1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3.get(\\"b1\\")) === bucket1)'\`)})(((m3.get(\\"b1\\")) === bucket1))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m4.size === 1)'\`)})((m4.size === 1))};
 }
 }
 new MyApp().synth();"
