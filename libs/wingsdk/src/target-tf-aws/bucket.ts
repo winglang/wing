@@ -13,7 +13,7 @@ import {
 import { Function } from "./function";
 
 /**
- * AWS Bucket names must be between 3 and 63 characters.
+ * Bucket names must be between 3 and 63 characters.
  *
  * You can use lowercase alphanumeric characters, dot (.), dash (-)
  * and must not contain two adjacent dots.
@@ -21,7 +21,7 @@ import { Function } from "./function";
 const NAME_OPTS: NameOptions = {
   maxLen: 63,
   case: CaseConventions.LOWERCASE,
-  regexMatch: /([^a-z0-9\.\-]+)|(^\W{1,})|(\W{1,}$)|(\.{2,})/g,
+  regexMatch: /([^a-z0-9\.\-]+)|(\.{2,})/g,
   charReplacer: "-",
 };
 

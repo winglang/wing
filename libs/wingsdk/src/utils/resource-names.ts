@@ -20,11 +20,8 @@ export class ResourceNames {
   public static generateName(resource: Construct, props: NameOptions): string {
     let hash = resource.node.addr.substring(0, 8);
     let human = props.prefix
-      ? `${props.prefix}-${resource.node.id}`.substring(
-          0,
-          props.maxLen - hash.length - props.prefix.length - 2
-        )
-      : resource.node.id.substring(0, props.maxLen - hash.length - 1);
+      ? `${props.prefix}${resource.node.id}`
+      : resource.node.id;
 
     if (props.case == CaseConventions.LOWERCASE) {
       human = human.toLocaleLowerCase();
@@ -33,7 +30,9 @@ export class ResourceNames {
       human = human.toLocaleUpperCase();
     }
 
-    human = human.replace(props.regexMatch, props.charReplacer);
+    human = human
+      .replace(props.regexMatch, props.charReplacer)
+      .substring(0, props.maxLen - hash.length - props.charReplacer.length);
 
     return `${human}${props.charReplacer}${hash}`;
   }

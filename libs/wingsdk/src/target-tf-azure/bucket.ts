@@ -4,7 +4,47 @@ import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container"
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import {
+  CaseConventions,
+  NameOptions,
+  ResourceNames,
+} from "../utils/resource-names";
 import { App } from "./app";
+
+/**
+ * ResourceGroup names are limited to 90 characters.
+ * You can use alphanumeric characters, hyphens, and underscores,
+ * parentheses and periods.
+ */
+const RESOURCEGROUP_NAME_OPTS: NameOptions = {
+  maxLen: 90,
+  regexMatch: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
+  charReplacer: "-",
+};
+
+/**
+ * StorageAccount names are limited to 24 characters.
+ * You can only use alphanumeric characters.
+ */
+const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
+  maxLen: 24,
+  case: CaseConventions.LOWERCASE,
+  regexMatch: /([^a-z0-9]+)/g,
+  charReplacer: "",
+};
+
+/**
+ * Bucket names must be between 3 and 63 characters.
+ *
+ * You can use lowercase alphanumeric characters, dash (-)
+ * and two or more consecutive dash characters aren't permitted.
+ */
+const BUCKET_NAME_OPTS: NameOptions = {
+  maxLen: 63,
+  case: CaseConventions.LOWERCASE,
+  regexMatch: /([^a-z0-9\-]+)|(\-{2,})/g,
+  charReplacer: "-",
+};
 
 /**
  * Azure implementation of `cloud.Bucket`.
@@ -22,15 +62,22 @@ export class Bucket extends cloud.BucketBase {
 
     this.public = props.public ?? false;
 
+    // names must begin and end with alphanumeric character
+    if (this.node.id.match(/(^\W{1,})|(\W{1,}$)/g)?.length) {
+      throw new Error(
+        "Bucket names must begin and end with alphanumeric character."
+      );
+    }
+
     const app = App.of(this);
 
     this.resourceGroup = new ResourceGroup(this, "ResourceGroup", {
       location: app.location,
-      name: this.sanitizeName(this.node.id),
+      name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
     });
 
     this.storageAccount = new StorageAccount(this, "StorageAccount", {
-      name: this.sanitizeName(this.node.id + this.node.addr),
+      name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
       resourceGroupName: this.resourceGroup.name,
       location: this.resourceGroup.location,
       accountTier: "Standard",
@@ -38,7 +85,7 @@ export class Bucket extends cloud.BucketBase {
     });
 
     this.bucket = new StorageContainer(this, "Bucket", {
-      name: this.sanitizeName(this.node.id + this.node.addr),
+      name: ResourceNames.generateName(this, BUCKET_NAME_OPTS),
       storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
@@ -57,19 +104,6 @@ export class Bucket extends cloud.BucketBase {
   /** @internal */
   public _toInflight(): core.Code {
     throw new Error("Method not implemented.");
-  }
-
-  /**
-   * Temporary workaround to use node.id in storage resources names.
-   * Valid names must be lowercase letters and numbers only between 3-24 characters long
-   *
-   * Should be deprecated by https://github.com/winglang/wing/discussions/861 (Name Generator)
-   */
-  private sanitizeName(name: string): string {
-    return name
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "")
-      .substring(0, 24);
   }
 }
 

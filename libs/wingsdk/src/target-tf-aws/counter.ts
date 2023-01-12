@@ -15,7 +15,7 @@ const NAME_OPTS: NameOptions = {
   maxLen: 255,
   regexMatch: /[^a-zA-Z0-9\_\.\-]+/g,
   charReplacer: "-",
-  prefix: "wingsdk-counter",
+  prefix: "wingsdk-counter-",
 };
 
 /**
