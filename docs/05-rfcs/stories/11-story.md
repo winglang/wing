@@ -118,10 +118,10 @@ let add_tasks = new cloud.Function(inflight (j: Json): Json => {
 
 new cloud.Function(inflight (j: Json): Json => {
   clear_tasks.invoke("");
-  add_tasks.invoke("");
-  let result = tasks.find_tasks_with("clean the dish");
+  tasks.add_task("clean the dishes");
+  let result = tasks.find_tasks_with("clean the dishes");
   assert(result.len == 1);
-  assert("clean the dishes".equals(tasks.get_task(result.at(0))));
+  assert("clean the dishes" == tasks.get_task(result.at(0));
 }) as "test:get and find task";
 
 new cloud.Function(inflight (j: Json): Json => {
@@ -130,7 +130,6 @@ new cloud.Function(inflight (j: Json): Json => {
   tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0))
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
-  assert("clean the dishes".equals(tasks.get_task()));
 }) as "test:get, remove and find task";
 
 new cloud.Function(inflight (j: Json): Json => {
