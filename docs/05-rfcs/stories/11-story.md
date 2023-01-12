@@ -1,4 +1,4 @@
-# User Story 8 - Task List Resource
+# User Story 11 - Task List Resource
 
 > **Status**: Work in Progress
 
@@ -61,10 +61,6 @@ resource TaskList {
    */
   inflight remove_tasks(id: str) {
     let content = this._bucket.get(id)
-    if !content {
-      throw("Task with id ${id} doesn't exist");
-    }
-    
     print("removing task ${id}");
     this._bucket.delete(id);
   }
@@ -74,7 +70,7 @@ resource TaskList {
     * @returns set of task id
     */
   inflight list_task_ids(): Set<str> {
-    return this._bucket.list();
+    return new Set<str>(this._bucket.list()); // pending #116
   }
 
    /** 
@@ -85,8 +81,8 @@ resource TaskList {
   inflight find_tasks_with(term: str): Set<str> {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
-    print("found ${task_ids} tasks");
-    let output = new MutSet<str>();
+    print("found ${task_ids.size} tasks");
+    let output = MutSet<str>{};
     for id in task_ids {
       let title = this.get_task(id);
       if title.contains(term) {
@@ -106,18 +102,13 @@ resource TaskList {
 
 let tasks = new TaskList();
 
-let clear_tasks = new cloud.Function(inflight (s: str): str => {
-  let results = tasks.list_task_ids();
-  let i = 0;
-  
-  // I hate this code, but wanted to use while here
-  while (i < results.len) {
-    tasks.remove_tasks(results.at(i));
-    i = i + 1;
+let clear_tasks = new cloud.Function(inflight (s: Json): Json => {
+  for (id in tasks.list_task_ids()) {
+    tasks.remove_tasks(id);
   }
 }) as "utility:clear tasks";
 
-let add_tasks = new cloud.Function(inflight (s: str): str => {
+let add_tasks = new cloud.Function(inflight (j: Json): Json => {
   tasks.add_task("clean the dishes");
   tasks.add_task("buy dishwasher soap");
   tasks.add_task("organize the dishes");
@@ -125,7 +116,7 @@ let add_tasks = new cloud.Function(inflight (s: str): str => {
   tasks.add_task("clean the kitchen");
 }) as "utility:add tasks";
 
-new cloud.Function(inflight (s: str): str => {
+new cloud.Function(inflight (j: Json): Json => {
   clear_tasks.invoke("");
   add_tasks.invoke("");
   let result = tasks.find_tasks_with("clean the dish");
@@ -133,7 +124,7 @@ new cloud.Function(inflight (s: str): str => {
   assert("clean the dishes".equals(tasks.get_task(result.at(0))));
 }) as "test:get and find task";
 
-new cloud.Function(inflight (s: str): str => {
+new cloud.Function(inflight (j: Json): Json => {
   clear_tasks.invoke("");
   add_tasks.invoke("");
   tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0))
@@ -142,7 +133,7 @@ new cloud.Function(inflight (s: str): str => {
   assert("clean the dishes".equals(tasks.get_task()));
 }) as "test:get, remove and find task";
 
-new cloud.Function(inflight (s: str): str => {
+new cloud.Function(inflight (j: Json): Json => {
   clear_tasks.invoke("");
   try {
     tasks.remove_tasks("fake-id"); // should throw an exception
