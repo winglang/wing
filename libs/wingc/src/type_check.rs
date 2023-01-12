@@ -426,7 +426,7 @@ impl PartialEq for TypeRef {
 
 impl Debug for TypeRef {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{:?}", self.0)
+		write!(f, "{}", &**self)
 	}
 }
 
@@ -602,7 +602,7 @@ impl<'a> TypeChecker<'a> {
 
 	// Validates types in the expression make sense and returns the expression's inferred type
 	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
-		let t: TypeRef = match &exp.kind {
+		let t = match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
 				Literal::String(_) => self.types.string(),
 				Literal::InterpolatedString(s) => {
@@ -1165,6 +1165,12 @@ impl<'a> TypeChecker<'a> {
 			} => {
 				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env, stmt.idx));
 				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx);
+				if inferred_type.is_void() {
+					self.type_error(&TypeError {
+						message: format!("Cannot assign expression of type \"{}\" to a variable", inferred_type),
+						span: var_name.span.clone(),
+					});
+				}
 				if let Some(explicit_type) = explicit_type {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
