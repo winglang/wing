@@ -60,7 +60,6 @@ resource TaskList {
    * @param id - the id of the task to be removed
    */
   inflight remove_tasks(id: str) {
-    let content = this._bucket.get(id)
     print("removing task ${id}");
     this._bucket.delete(id);
   }
@@ -69,8 +68,12 @@ resource TaskList {
     * Gets the tasks ids 
     * @returns set of task id
     */
-  inflight list_task_ids(): Set<str> {
-    return new Set<str>(this._bucket.list()); // pending #116
+  inflight list_task_ids(): MutSet<str> {
+    let result = MutSet<str> {};
+    for id in this._bucket.list() {
+      result.add(id);
+    }
+    return result;
   }
 
    /** 
@@ -78,7 +81,7 @@ resource TaskList {
     * @param term - the term to search
     * @returns set of task id that matches the term
     */
-  inflight find_tasks_with(term: str): Set<str> {
+  inflight find_tasks_with(term: str): MutSet<str> {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
     print("found ${task_ids.size} tasks");
@@ -91,8 +94,8 @@ resource TaskList {
       }
     }
     
-    print("found ${output.len} tasks which match term '${term}'");
-    return output.to_set();
+    print("found ${output.size} tasks which match term '${term}'");
+    return output;
   }
 }
 
