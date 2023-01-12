@@ -536,8 +536,9 @@ impl JSifier {
 				constructor,
 				is_resource,
 			} => {
+				assert!(!*is_resource || phase == Phase::Preflight);
 				if *is_resource {
-					// TODO...
+					// TODO... jsify inflight (client)...
 				}
 
 				format!(

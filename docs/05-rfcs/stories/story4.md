@@ -1,5 +1,7 @@
 # User Story 4 - Getting Started
 
+> **Status**: Done
+
 This is the story of Monada Sprint 4. It is told from the perspective of Mona
 Lisa, a 28-year-old programmer who works at a successful startup in San
 Francisco. Mona is the lead engineer at the backend team of her company. She
