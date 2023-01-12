@@ -1,3 +1,8 @@
+---
+title: RFC Process
+description: How to create and ship a "Request For Comments"
+---
+
 # RFC Process
 
 For more information about what is an RFC, see [CONTRIBUTING.md](../06-contributors/handbook.md#what-is-an-rfc).

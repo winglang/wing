@@ -1,4 +1,9 @@
-# #41 - Wing SDK Resource Naming
+---
+title: Wing SDK Resource Naming
+description: How should the Wing SDK assign "physical names" to resources on external cloud providers?
+---
+
+# Wing SDK Resource Naming
 
 - **Author(s):**: @Chriscbr
 - **Submission Date**: {2022-08-22}
