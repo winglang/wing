@@ -1860,7 +1860,7 @@ struct DenyListRule {
 }
 
 struct DenyListProps {
-  rules: MutArray<DenyListRule >;
+  rules: MutArray<DenyListRule>[];
 }
 
 resource DenyList {
@@ -1875,10 +1875,10 @@ resource DenyList {
     this._bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
   }
 
-  _write_to_file(list: MutArray<DenyListRule>,  filename: str): str {
+  _write_to_file(list: MutArray<DenyListRule>[],  filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map = MutMap<DenyListRule>(); 
+    let map = MutMap<DenyListRule>{}; 
     for rule in list {
       let suffix = DenyList._maybe_suffix(rule.version);
       let path = "${rule.package_name}${suffix}";
@@ -1888,11 +1888,11 @@ resource DenyList {
     return tmpdir;
   }
 
-  inflight rules: MutMap<DenyListRule>?; 
+  inflight rules: MutMap<DenyListRule>{}?; 
 
   inflight init() {
     // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>(); 
+    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>{}; 
   }
 
   public inflight lookup(name: str, version: str): DenyListRule? {
