@@ -12,7 +12,7 @@ pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 pub struct SymbolEnv {
 	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
 	parent: Option<SymbolEnvRef>,
-	pub return_type: Option<TypeRef>,
+	pub return_type: TypeRef,
 	is_class: bool,
 	pub flight: Phase,
 	statement_idx: usize,
@@ -54,12 +54,14 @@ enum LookupMutResult<'a> {
 impl SymbolEnv {
 	pub fn new(
 		parent: Option<SymbolEnvRef>,
-		return_type: Option<TypeRef>,
+		return_type: TypeRef,
 		is_class: bool,
 		flight: Phase,
 		statement_idx: usize,
 	) -> Self {
-		assert!(return_type.is_none() || (return_type.is_some() && parent.is_some()));
+		// assert that if the return type isn't void, then there is a parent environment
+		assert!(matches!(*return_type, Type::Void) || parent.is_some());
+
 		Self {
 			ident_map: HashMap::new(),
 			parent,
