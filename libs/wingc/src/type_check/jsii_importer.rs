@@ -79,34 +79,34 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &jsii::TypeReference) -> Option<TypeRef> {
+	fn type_ref_to_wing_type(&mut self, jsii_type_ref: &jsii::TypeReference) -> TypeRef {
 		if let serde_json::Value::Object(obj) = jsii_type_ref {
 			if let Some(Value::String(primitive_name)) = obj.get("primitive") {
 				match primitive_name.as_str() {
-					"string" => Some(self.wing_types.string()),
-					"number" => Some(self.wing_types.number()),
-					"boolean" => Some(self.wing_types.bool()),
-					"any" => Some(self.wing_types.anything()),
+					"string" => self.wing_types.string(),
+					"number" => self.wing_types.number(),
+					"boolean" => self.wing_types.bool(),
+					"any" => self.wing_types.anything(),
 					_ => panic!("TODO: handle primitive type {}", primitive_name),
 				}
 			} else if let Some(Value::String(type_fqn)) = obj.get("fqn") {
 				if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_INFLIGHT) {
-					Some(self.wing_types.add_type(Type::Function(FunctionSignature {
+					self.wing_types.add_type(Type::Function(FunctionSignature {
 						args: vec![self.wing_types.anything()],
-						return_type: Some(self.wing_types.anything()),
+						return_type: self.wing_types.anything(),
 						flight: Phase::Inflight,
-					})))
+					}))
 				} else if type_fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION) {
-					Some(self.wing_types.duration())
+					self.wing_types.duration()
 				} else if type_fqn == "constructs.IConstruct" || type_fqn == "constructs.Construct" {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
-					Some(self.wing_types.anything())
+					self.wing_types.anything()
 				} else {
-					Some(self.lookup_or_create_type(type_fqn))
+					self.lookup_or_create_type(type_fqn)
 				}
 			} else if let Some(Value::Object(_)) = obj.get("collection") {
 				// TODO: handle JSII to Wing collection type conversion, for now return any
-				Some(self.wing_types.anything())
+				self.wing_types.anything()
 			} else {
 				panic!(
 					"Expected JSII type reference {:?} to be a collection, fqn or primitive",
@@ -195,7 +195,7 @@ impl<'a> JsiiImporter<'a> {
 					SymbolKind::Namespace(Namespace {
 						name: namespace_name.to_string(),
 						hidden: namespace_name != self.module_name,
-						env: SymbolEnv::new(None, None, false, self.env.flight, 0),
+						env: SymbolEnv::new(None, self.wing_types.void(), false, self.env.flight, 0),
 					}),
 					StatementIdx::Top,
 				)
@@ -242,12 +242,24 @@ impl<'a> JsiiImporter<'a> {
 			vec![]
 		};
 
-		let mut struct_env = SymbolEnv::new(None, None, true, self.env.flight, self.import_statement_idx);
+		let mut struct_env = SymbolEnv::new(
+			None,
+			self.wing_types.void(),
+			true,
+			self.env.flight,
+			self.import_statement_idx,
+		);
 		let new_type_symbol = Self::jsii_name_to_symbol(&type_name, &jsii_interface.location_in_module);
 		let mut wing_type = self.wing_types.add_type(Type::Struct(Struct {
 			name: new_type_symbol.clone(),
 			extends: extends.clone(),
-			env: SymbolEnv::new(None, None, true, struct_env.flight, self.import_statement_idx), // Dummy env, will be replaced below
+			env: SymbolEnv::new(
+				None,
+				self.wing_types.void(),
+				true,
+				struct_env.flight,
+				self.import_statement_idx,
+			), // Dummy env, will be replaced below
 		}));
 		self.add_members_to_class_env(&jsii_interface, false, struct_env.flight, &mut struct_env, wing_type);
 
@@ -302,7 +314,7 @@ impl<'a> JsiiImporter<'a> {
 				let return_type = if let Some(jsii_return_type) = &m.returns {
 					self.optional_type_to_wing_type(&jsii_return_type)
 				} else {
-					None
+					self.wing_types.void()
 				};
 
 				let mut arg_types = vec![];
@@ -339,7 +351,7 @@ impl<'a> JsiiImporter<'a> {
 				if flight == Phase::Inflight {
 					todo!("No support for inflight properties yet");
 				}
-				let base_wing_type = self.type_ref_to_wing_type(&p.type_).unwrap();
+				let base_wing_type = self.type_ref_to_wing_type(&p.type_);
 				let is_optional = if let Some(true) = p.optional { true } else { false };
 
 				let wing_type = if is_optional {
@@ -449,7 +461,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, None, true, self.env.flight, 0);
+		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), true, self.env.flight, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -475,7 +487,7 @@ impl<'a> JsiiImporter<'a> {
 			.define(&new_type_symbol, SymbolKind::Type(new_type), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, None, true, self.env.flight, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), true, self.env.flight, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -499,7 +511,7 @@ impl<'a> JsiiImporter<'a> {
 			}
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
 				args: arg_types,
-				return_type: Some(new_type),
+				return_type: new_type,
 				flight: class_env.flight,
 			}));
 			if let Err(e) = class_env.define(
@@ -545,11 +557,11 @@ impl<'a> JsiiImporter<'a> {
 		};
 	}
 
-	fn optional_type_to_wing_type(&mut self, jsii_optional_type: &jsii::OptionalValue) -> Option<TypeRef> {
+	fn optional_type_to_wing_type(&mut self, jsii_optional_type: &jsii::OptionalValue) -> TypeRef {
 		let base_type = self.type_ref_to_wing_type(&jsii_optional_type.type_);
 		if let Some(true) = jsii_optional_type.optional {
 			// TODO: we assume Some(false) and None are both non-optional - verify!!
-			Some(self.wing_types.add_type(Type::Optional(base_type.unwrap())))
+			self.wing_types.add_type(Type::Optional(base_type))
 		} else {
 			base_type
 		}
@@ -560,7 +572,7 @@ impl<'a> JsiiImporter<'a> {
 			panic!("TODO: variadic parameters are unsupported - Give a +1 to this issue: https://github.com/winglang/wing/issues/397");
 		}
 
-		let param_type = self.type_ref_to_wing_type(&parameter.type_).unwrap();
+		let param_type = self.type_ref_to_wing_type(&parameter.type_);
 		if parameter.optional.unwrap_or(false) {
 			self.wing_types.add_type(Type::Optional(param_type))
 		} else {
