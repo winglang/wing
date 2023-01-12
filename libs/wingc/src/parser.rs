@@ -459,7 +459,9 @@ impl Parser<'_> {
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
 					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
+					"MutArray" => Ok(Type::MutArray(Box::new(self.build_type(&element_type)?))),
 					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),
+					"MutSet" => Ok(Type::MutSet(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
 					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}

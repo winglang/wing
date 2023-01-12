@@ -77,8 +77,10 @@ pub enum Type {
 	Duration,
 	Optional(Box<Type>),
 	Array(Box<Type>),
+	MutArray(Box<Type>),
 	Map(Box<Type>),
 	Set(Box<Type>),
+	MutSet(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
@@ -92,8 +94,10 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Optional(t) => write!(f, "{}?", t),
 			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::MutArray(t) => write!(f, "MutArray<{}>", t),
 			Type::Map(t) => write!(f, "Map<{}>", t),
 			Type::Set(t) => write!(f, "Set<{}>", t),
+			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
 			Type::FunctionSignature(sig) => {
 				write!(
 					f,
