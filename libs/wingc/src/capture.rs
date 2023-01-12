@@ -122,7 +122,6 @@ pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnosti
 		}
 		ExprKind::Literal(Literal::InterpolatedString(istr)) => {
 			for part in istr.parts.iter() {
-				println!("part: {:?}", part);
 				if let InterpolatedStringPart::Expr(e) = part {
 					scan_for_inflights_in_expression(e, diagnostics);
 				}
