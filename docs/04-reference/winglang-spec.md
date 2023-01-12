@@ -462,8 +462,8 @@ type is inferred iff a default value is provided.
 > ```TS
 > let i = 5;
 > let m = i;
-> let arr_opt? = new MutArray<num>();
-> let arr: Array<num> = [];
+> let arr_opt? = MutArray<num>[];
+> let arr = Array<num>[];
 > let copy = arr;
 > let i1? = nil;
 > let i2: num? = i;
@@ -1409,7 +1409,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > ```TS
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
-> let arr3 = Array<str>(arr2);
+> let arr3 = MutArray<str>["a1", "b2", "c3"];
 > let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
 > ```
 
