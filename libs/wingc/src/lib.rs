@@ -91,14 +91,14 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	let env = SymbolEnv::new(None, None, false, Phase::Preflight, 0);
+	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
 	add_builtin(
 		UtilityFunctions::Print.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
-			return_type: None,
+			return_type: types.void(),
 			flight: Phase::Independent,
 		}),
 		scope,
@@ -108,7 +108,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		UtilityFunctions::Assert.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.bool()],
-			return_type: None,
+			return_type: types.void(),
 			flight: Phase::Independent,
 		}),
 		scope,
@@ -118,7 +118,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		UtilityFunctions::Throw.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
-			return_type: None,
+			return_type: types.void(),
 			flight: Phase::Independent,
 		}),
 		scope,
@@ -128,7 +128,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		UtilityFunctions::Panic.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
-			return_type: None,
+			return_type: types.void(),
 			flight: Phase::Independent,
 		}),
 		scope,
