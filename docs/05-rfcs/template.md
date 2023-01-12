@@ -1,3 +1,8 @@
+---
+title: RFC Template
+description: Template for creating a new RFC
+---
+
 # #{RFC Number} - {RFC_TITLE}
 
 * **Author(s):**: @{AUTHOR}, @{AUTHOR}

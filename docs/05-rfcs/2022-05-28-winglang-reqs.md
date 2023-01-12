@@ -1,3 +1,8 @@
+---
+title: The Wing Programming Language - Requirements
+description: The original requirements documents for the wing language experience
+---
+
 # The Wing Programming Language - Requirements
 
 - **Author(s):**: @eladb
@@ -1003,7 +1008,6 @@ This is a list of features we will consider for wing as it evolves:-
 ## References
 
 * [Erlang](https://erlang.org/download/armstrong_thesis_2003.pdf)
-* [Ocmal]()
 * [Grasshopper 3D](https://en.m.wikipedia.org/wiki/Grasshopper_3D) - a visual programming language
 * [A brief survey of programming paradigms](https://medium.com/@jingchenjc2019/a-brief-survey-of-programming-paradigms-207543a84e2b)
 * [Bytecode Alliance](https://bytecodealliance.org/) - WebAssembly
