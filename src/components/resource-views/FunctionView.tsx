@@ -25,7 +25,6 @@ export const FunctionView = ({ resourcePath }: FunctionViewProps) => {
           resourcePath,
           message: input,
         });
-        setInput("");
       }}
     >
       <div className="space-y-2">

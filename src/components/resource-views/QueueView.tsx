@@ -29,7 +29,6 @@ export const QueueView = ({ resourcePath }: QueueViewProps) => {
       message: message,
     });
     showNotification("message sent", { body: message, type: "success" });
-    setMessage("");
   }, [message, pushMessage]);
 
   const id = useId();
