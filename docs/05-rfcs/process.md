@@ -1,6 +1,6 @@
 ---
 title: RFC Process
-description: How to create a ship a "Request For Comment"
+description: How to create and ship a "Request For Comments"
 ---
 
 # RFC Process
