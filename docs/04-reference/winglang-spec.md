@@ -121,13 +121,13 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > `Promise<T>` is only available to JSII imported modules.
 
 > ```TS
-> let z = {1, 2, 3};            // immutable set
-> let zm = new MutSet<num>();   // mutable set
-> let y = {"a": 1, "b": 2};     // immutable map
-> let ym = new MutMap<num>();   // mutable map
-> let x = [1, 2, 3];            // immutable array
-> let xm = new MutArray<num>(); // mutable array
-> let w = new SampleClass();    // class instance (mutability unknown)
+> let z = {1, 2, 3};               // immutable set, Set<Num> is inferred
+> let zm = MutSet<num>{};          // mutable set
+> let y = {"a": 1, "b": 2};        // immutable map, Map<num> is inferred
+> let ym = MutMap<num>{};          // mutable map
+> let x = [1, 2, 3];               // immutable array, Array<num> is inferred
+> let xm = MutArray<num>[];        // mutable array
+> let w = new SampleClass();       // class instance (mutability unknown)
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
