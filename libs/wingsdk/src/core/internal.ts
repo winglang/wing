@@ -1,5 +1,5 @@
 import { IConstruct } from "constructs";
-import { Code, InflightBindings, NodeJsCode } from "./inflight";
+import { InflightBindings, NodeJsCode } from "./inflight";
 import { Resource } from "./resource";
 
 export function makeHandler(
@@ -8,10 +8,10 @@ export function makeHandler(
   code: string,
   bindings: InflightBindings = {}
 ): Resource {
-  const clients: Record<string, Code> = {};
+  const clients: Record<string, string> = {};
 
   for (const [k, v] of Object.entries(bindings.resources ?? {})) {
-    clients[k] = v.resource._toInflight();
+    clients[k] = v.resource._toInflight().text;
   }
 
   for (const [k, v] of Object.entries(bindings.data ?? {})) {
@@ -50,7 +50,7 @@ return class Handler {
 };
 })())({
 ${Object.entries(clients)
-  .map(([name, client]) => `${name}: ${client.text}`)
+  .map(([name, client]) => `${name}: ${client}`)
   .join(",\n")}
 })`
       );
@@ -69,13 +69,38 @@ ${Object.entries(clients)
   return new Handler();
 }
 
-function serializeImmutableData(obj: any): Code {
-  // if this is a Set, we need to convert it to an array and reconstruct on the other side
-  if (typeof obj === "object" && (obj as any) instanceof Set) {
-    return NodeJsCode.fromInline(`new Set(${JSON.stringify(Array.from(obj))})`);
+function serializeImmutableData(obj: any): string {
+  switch (typeof obj) {
+    case "string":
+    case "boolean":
+    case "number":
+      return JSON.stringify(obj);
+
+    case "object":
+      if (Array.isArray(obj)) {
+        return JSON.stringify(obj);
+      }
+
+      // if there's an explicit toJSON method, use it
+      if ("toJSON" in obj) {
+        return JSON.stringify(obj);
+      }
+
+      if (obj instanceof Set) {
+        return `new Set(${JSON.stringify(Array.from(obj))})`;
+      }
+
+      if (obj instanceof Map) {
+        return `new Map(${JSON.stringify(Array.from(obj))})`;
+      }
+
+      // structs are just objects
+      if (obj instanceof Object) {
+        return JSON.stringify(obj);
+      }
   }
 
-  // NOTE: this won't work if `obj` is not serializable, but this is not the ownership of the sdk
-  // otherwise, just JSON.stringify() it and reconstruct on the other side
-  return NodeJsCode.fromInline(JSON.stringify(obj));
+  throw new Error(
+    `unable to serialize immutable data object of type ${obj.constructor?.name}`
+  );
 }

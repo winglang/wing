@@ -65,7 +65,7 @@ makeCaptureTest({
 });
 
 makeCaptureTest({
-  name: "map",
+  name: "struct",
   in: { hello: "dude", world: "cup", foo: "bar" },
   out: "{ hello: this.my_capture.hello, world: this.my_capture.world, foo: this.my_capture.foo, len: Object.keys(this.my_capture).length }",
   expected: '{"hello":"dude","world":"cup","foo":"bar","len":3}',
@@ -83,4 +83,16 @@ makeCaptureTest({
   in: Duration.fromHours(2),
   out: "{ min: this.my_capture.minutes, sec: this.my_capture.seconds, hours: this.my_capture.hours }",
   expected: '{"min":120,"sec":7200,"hours":2}',
+});
+
+makeCaptureTest({
+  name: "map",
+  in: Object.freeze(
+    new Map([
+      ["foo", 123],
+      ["bar", 456],
+    ])
+  ),
+  out: "{ has_foo: this.my_capture.has('foo'), size: this.my_capture.size, get_bar: this.my_capture.get('bar') }",
+  expected: '{"has_foo":true,"size":2,"get_bar":456}',
 });

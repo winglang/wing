@@ -2,15 +2,18 @@ bring cloud;
 
 let arr = ["hello", "world"];
 let my_set = {"my", "my", "set"};
+let my_map = {"hello": 123, "world": 999};
 
 let handler = inflight (s: str): str => {
-  print(arr.at(0));
-  print(arr.at(1));
-  print("size=${arr.length}");
+  assert(arr.at(0) == "hello");
+  assert(arr.at(1) == "world");
+  assert(arr.length == 2);
 
-  let set_size = my_set.size;
-  print("set size=${set_size}");
+  assert(my_set.has("my"));
+  assert(my_set.size == 2);
+
+  assert(my_map.has("world"));
+  assert(my_map.size == 2);
 };
 
-new cloud.Function(handler);
-
+new cloud.Function(handler) as "test";
