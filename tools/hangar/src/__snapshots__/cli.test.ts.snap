@@ -2721,6 +2721,11 @@ constructor() {
   
   if (true) {
     const x = 2;
+    if ((true && ((x + 2) === 4))) {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+    } else {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+    }
   }
 }
 }
