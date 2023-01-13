@@ -11,6 +11,7 @@ const PREC = {
   MULTIPLY: 10,
   UNARY: 11,
   NIL_COALESCING: 12,
+  MEMBER: 13,
 };
 
 module.exports = grammar({
@@ -43,8 +44,7 @@ module.exports = grammar({
 
     // Identifiers
     reference: ($) =>
-//      prec.right(choice($.identifier, $.nested_identifier)),
-      choice($.identifier, $.nested_identifier),
+     choice($.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -55,11 +55,11 @@ module.exports = grammar({
       ),
     
     nested_identifier: ($) =>
-      seq(
+      prec(PREC.MEMBER, seq(
         field("object", $.expression),
         choice(".", "?."),
         field("property", $.identifier)
-      ),
+      )),
 
     _inflight_specifier: ($) => "inflight",
 
