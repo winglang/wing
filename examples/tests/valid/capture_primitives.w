@@ -3,15 +3,16 @@ bring cloud;
 let my_str = "hello, string";
 let my_num = 1234;
 let my_bool = true;
+let my_second_bool = false;
 let my_dur = 10m;
-
-
 
 let handler = inflight (s: str): str => {
   print(my_str);
 
   let n = my_num;
   print("${n}");
+
+  assert(my_second_bool == false);
 
   if my_bool {
     print("bool=true");
