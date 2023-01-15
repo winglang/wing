@@ -312,8 +312,8 @@ fn scan_captures_in_expression(
 		}
 		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx, diagnostics)),
 		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(lexp, env, statement_idx, diagnostics);
-			scan_captures_in_expression(rexp, env, statement_idx, diagnostics);
+			res.extend(scan_captures_in_expression(lexp, env, statement_idx, diagnostics));
+			res.extend(scan_captures_in_expression(rexp, env, statement_idx, diagnostics));
 		}
 		ExprKind::Literal(_) => {}
 		ExprKind::ArrayLiteral { items, .. } => {

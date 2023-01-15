@@ -568,10 +568,11 @@ exports[`wing compile capture_primitives.w > cdk.tf.json 1`] = `
 `;
 
 exports[`wing compile capture_primitives.w > index.js 1`] = `
-"async handle(s) { const { my_bool, my_dur, my_num, my_str } = this; {
+"async handle(s) { const { my_bool, my_dur, my_num, my_second_bool, my_str } = this; {
   {console.log(my_str)};
   const n = my_num;
   {console.log(\`\${n}\`)};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_second_bool === false)'\`)})((my_second_bool === false))};
   if (my_bool) {
     {console.log(\\"bool=true\\")};
   } else {
@@ -627,15 +628,17 @@ constructor() {
   const my_str = \\"hello, string\\";
   const my_num = 1234;
   const my_bool = true;
+  const my_second_bool = false;
   const my_dur = $stdlib.std.Duration.fromSeconds(600);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d9ddbe4c4cbf9fe35913f167f048b8fb4658daf8913df6cd090e389353cb7ab2/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d955931de8c38b474195db3e46aee7a5b8ebcec2ff30a9220867c6c410d901fa/index.js\\")),
     bindings: {
       
       data: {
         my_bool: my_bool,
         my_dur: my_dur,
         my_num: my_num,
+        my_second_bool: my_second_bool,
         my_str: my_str,
       }
     }
@@ -2721,6 +2724,11 @@ constructor() {
   
   if (true) {
     const x = 2;
+    if ((true && ((x + 2) === 4))) {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+    } else {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+    }
   }
 }
 }
