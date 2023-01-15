@@ -18,7 +18,6 @@ export class ImmutableSet {
    * Returns a boolean indicating whether an element with the specified value exists in the set.
    * @param value The value to test for presence in the Set object.
    * @returns Returns `true` if an element with the specified value exists in the set; otherwise `false`.
-   * @macro "this.has(value)"
    */
   public has(value: any): boolean {
     value;
