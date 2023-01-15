@@ -44,10 +44,7 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
     return this.context.withTrace({
       message: `Purge ().`,
       activity: async () => {
-        // TODO: which one is better?
         this.messages.length = 0;
-        //this.messages.slice(0);
-        //this.messages = new Array<string>();
       },
     });
   }
