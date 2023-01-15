@@ -2,8 +2,12 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { T1 } from "./util";
+
 /**
  * Immutable Array
+ *
+ * @typeparam T1
  */
 export class ImmutableArray {
   /**
@@ -19,7 +23,7 @@ export class ImmutableArray {
    * @param index index of the value to get
    * @returns the value at the given index
    */
-  public at(index: number): any {
+  public at(index: number): T1 {
     index;
     throw new Error("Abstract");
   }
@@ -27,13 +31,15 @@ export class ImmutableArray {
 
 /**
  * Mutable Array
+ * 
+ * @typeparam T1
  */
 export class MutableArray extends ImmutableArray {
   /**
    * Add value to end of array
    * @param value value to add
    */
-  public push(value: any): void {
+  public push(value: T1): void {
     value;
     throw new Error("Abstract");
   }
@@ -42,7 +48,7 @@ export class MutableArray extends ImmutableArray {
    * Remove value from end of array
    * @returns the value removed
    */
-  public pop(): any {
+  public pop(): T1 {
     throw new Error("Abstract");
   }
 }

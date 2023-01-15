@@ -466,11 +466,26 @@ impl<'a> JsiiImporter<'a> {
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
 		debug!("Adding type {} to namespace", type_name.green());
+		let type_params = jsii_class.docs.as_ref().and_then(|docs| {
+			// get "@typeparam" from doc custom map
+			docs.custom.as_ref().and_then(|c| {
+				c.get("typeparam").and_then(|type_param_name| {
+					let args = type_param_name.split(",").map(|s| s.trim()).collect::<Vec<&str>>();
+					Some(
+						args
+							.iter()
+							.map(|a| self.lookup_or_create_type(&format!("{}.{}.{}", self.assembly.name, namespace_name, a)))
+							.collect::<Vec<_>>(),
+					)
+				})
+			})
+		});
 		let class_spec = Class {
 			should_case_convert_jsii: true,
 			name: new_type_symbol.clone(),
 			env: dummy_env,
 			parent: base_class_type,
+			type_parameters: type_params,
 		};
 		let mut new_type = self.wing_types.add_type(if is_resource {
 			Type::Resource(class_spec)
@@ -527,20 +542,24 @@ impl<'a> JsiiImporter<'a> {
 		self.add_members_to_class_env(&jsii_class, is_resource, Phase::Preflight, &mut class_env, new_type);
 		if is_resource {
 			// Look for a client interface for this resource
-			let client_interface = jsii_class.docs.and_then(|docs| docs.custom).and_then(|custom| {
-				custom
-					.get("inflight")
-					.map(|fqn| {
-						// Some fully qualified package names include "@" characters,
-						// so they have to be escaped in the original docstring.
-						if fqn.starts_with("`") && fqn.ends_with("`") {
-							&fqn[1..fqn.len() - 1]
-						} else {
-							fqn
-						}
-					})
-					.and_then(|fqn| self.jsii_types.find_interface(fqn))
-			});
+			let client_interface = jsii_class
+				.docs
+				.as_ref()
+				.and_then(|docs| docs.custom.as_ref())
+				.and_then(|custom| {
+					custom
+						.get("inflight")
+						.map(|fqn| {
+							// Some fully qualified package names include "@" characters,
+							// so they have to be escaped in the original docstring.
+							if fqn.starts_with("`") && fqn.ends_with("`") {
+								&fqn[1..fqn.len() - 1]
+							} else {
+								fqn
+							}
+						})
+						.and_then(|fqn| self.jsii_types.find_interface(fqn))
+				});
 			if let Some(client_interface) = client_interface {
 				// Add client interface's methods to the class environment
 				self.add_members_to_class_env(&client_interface, false, Phase::Inflight, &mut class_env, new_type);
