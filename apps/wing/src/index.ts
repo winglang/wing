@@ -1,7 +1,7 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, upgrade } from "./commands";
+import { compile, upgrade, test } from "./commands";
 import { join, resolve } from "path";
 import { satisfies } from 'compare-versions';
 
@@ -52,6 +52,12 @@ async function main() {
       "tf-aws"
     )
     .action(compile);
+
+  program
+    .command("test")
+    .description("Compiles a Wing program and runs all functions with the word 'test' in their IDs")
+    .argument("<entrypoint>", "program .w entrypoint")
+    .action(test);
 
   program
     .command("upgrade")

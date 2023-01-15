@@ -18,6 +18,7 @@
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
     "build": "tsc",
+    "watch": "tsc --watch",
     "test": "node --experimental-wasi-unstable-preview1 --no-warnings node_modules/.bin/jest --no-cache",
     "dev": "npm run build && ./bin/wing",
     "bump": "node version.js",
