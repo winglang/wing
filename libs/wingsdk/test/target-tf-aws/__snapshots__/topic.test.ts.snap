@@ -134,6 +134,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A pub/sub notification topic",
+              "title": "Topic",
+            },
             "id": "The%Spectacular@Topic",
             "path": "root/The%Spectacular@Topic",
           },
@@ -145,6 +149,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -222,6 +231,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A pub/sub notification topic",
+              "title": "Topic",
+            },
             "id": "The-Spectacular_Topic-01",
             "path": "root/The-Spectacular_Topic-01",
           },
@@ -233,6 +246,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",

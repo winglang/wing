@@ -364,10 +364,10 @@ exports[`wing compile capture_containers.w > cdk.tf.json 1`] = `
         },
         "environment": {
           "variables": {
-            "WING_FUNCTION_NAME": "test",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
           },
         },
-        "function_name": "test",
+        "function_name": "test-c8b6eece",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
         "runtime": "nodejs16.x",
@@ -538,10 +538,10 @@ exports[`wing compile capture_in_binary.w > cdk.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "test",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
           },
         },
-        "function_name": "test",
+        "function_name": "test-c8b6eece",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
         "runtime": "nodejs16.x",
@@ -557,6 +557,7 @@ exports[`wing compile capture_in_binary.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
+        "bucket": "cloud.bucket-c87175e7",
       },
       "root_test_Bucket_2BBF14D4": {
         "//": {
@@ -928,10 +929,10 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "test",
+            "WING_FUNCTION_NAME": "test-c8b6eece",
           },
         },
-        "function_name": "test",
+        "function_name": "test-c8b6eece",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
         "runtime": "nodejs16.x",
@@ -947,6 +948,7 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
+        "bucket": "cloud.bucket-c87175e7",
       },
       "root_test_Bucket_2BBF14D4": {
         "//": {
