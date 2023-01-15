@@ -24,6 +24,16 @@ export function simulatorJsonOf(simfile: string) {
   return readJsonSync(simJson);
 }
 
+export function treeJsonOf(simfile: string) {
+  // returns the tree.json content
+  const treeJsonFile =
+    simfile.substring(0, simfile.lastIndexOf("/")) + "/tree.json";
+  if (!existsSync(treeJsonFile)) {
+    throw new Error(`Invalid path (${simfile}) - tree.json not found.`);
+  }
+  return readJsonSync(treeJsonFile);
+}
+
 export interface IScopeCallback {
   (scope: Construct): void;
 }

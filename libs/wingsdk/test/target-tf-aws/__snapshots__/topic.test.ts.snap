@@ -35,6 +35,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A pub/sub notification topic",
+              "title": "Topic",
+            },
             "id": "Topic",
             "path": "root/Topic",
           },
@@ -46,6 +50,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -190,6 +199,11 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "An inflight resource",
+              "hidden": true,
+              "title": "Inflight",
+            },
             "id": "Handler",
             "path": "root/Handler",
           },
@@ -234,6 +248,10 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A pub/sub notification topic",
+              "title": "Topic",
             },
             "id": "Topic",
             "path": "root/Topic",
@@ -324,6 +342,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
+            },
             "id": "Topic-OnMessage-c5395e41",
             "path": "root/Topic-OnMessage-c5395e41",
           },
@@ -354,6 +376,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",

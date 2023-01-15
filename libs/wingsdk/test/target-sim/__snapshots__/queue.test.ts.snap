@@ -35,6 +35,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -46,6 +51,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -213,6 +222,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -232,6 +246,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -250,6 +269,10 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -292,6 +315,10 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
         },
@@ -306,6 +333,92 @@ exports.handler = async function(event) {
           },
           "id": "my_queue-OnMessageHandler-e645076f",
           "path": "root/my_queue-OnMessageHandler-e645076f",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.130",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`queue batch size of 2, purge the queue 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Queue created.",
+  "Push (message=A).",
+  "Push (message=B).",
+  "ApproxSize ().",
+  "Purge ().",
+  "ApproxSize ().",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`queue batch size of 2, purge the queue 2`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/my_queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
         },
       },
       "constructInfo": Object {
@@ -471,6 +584,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -490,6 +608,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -508,6 +631,10 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -549,6 +676,10 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
@@ -724,6 +855,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -743,6 +879,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -761,6 +902,10 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
           },
           "id": "my_queue",
           "path": "root/my_queue",
@@ -802,6 +947,10 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
           },
           "id": "my_queue-OnMessage-e645076f",
           "path": "root/my_queue-OnMessage-e645076f",
