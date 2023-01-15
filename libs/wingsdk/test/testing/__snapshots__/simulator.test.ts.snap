@@ -36,7 +36,7 @@ Array [
       },
       Object {
         "data": Object {
-          "message": "Invoke (payload=\\"\\").",
+          "message": "Invoke (payload=\\"\\"\\"\\").",
           "result": undefined,
           "status": "success",
         },
@@ -103,7 +103,7 @@ Object {
     },
     Object {
       "data": Object {
-        "message": "Invoke (payload=\\"\\").",
+        "message": "Invoke (payload=\\"\\"\\"\\").",
         "result": undefined,
         "status": "success",
       },
@@ -141,12 +141,12 @@ Object {
     at Object.exports.handler (evalmachine.<anonymous>:24:12)
     at evalmachine.<anonymous>:27:9
     at Script.runInContext (node:vm:141:12)
-    at Object.runInContext (node:vm:297:6)
-    at Object.activity (/Users/eladb/code/wing3/libs/wingsdk/src/target-sim/function.inflight.ts:70:19)
-    at Object.withTrace (/Users/eladb/code/wing3/libs/wingsdk/src/testing/simulator.ts:242:38)
-    at Function.invoke (/Users/eladb/code/wing3/libs/wingsdk/src/target-sim/function.inflight.ts:67:25)
-    at Simulator.runTest (/Users/eladb/code/wing3/libs/wingsdk/src/testing/simulator.ts:466:16)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)",
+    at Object.runInContext (node:vm:291:6)
+    at Object.activity (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:72:19)
+    at Object.withTrace (/home/runner/work/wing/wing/libs/wingsdk/src/testing/simulator.ts:242:38)
+    at Function.invoke (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:69:25)
+    at Simulator.runTest (/home/runner/work/wing/wing/libs/wingsdk/src/testing/simulator.ts:466:16)
+    at Object.<anonymous> (/home/runner/work/wing/wing/libs/wingsdk/test/testing/simulator.test.ts:31:20)",
   "pass": false,
   "path": "root/test",
   "traces": Array [
@@ -180,7 +180,7 @@ Object {
     Object {
       "data": Object {
         "error": [Error: test failed],
-        "message": "Invoke (payload=\\"\\").",
+        "message": "Invoke (payload=\\"\\"\\"\\").",
         "status": "failure",
       },
       "sourcePath": "root/test",
