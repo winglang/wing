@@ -71,6 +71,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -89,6 +94,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -119,6 +129,10 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
           "id": "my_function",
           "path": "root/my_function",
         },
@@ -139,7 +153,7 @@ exports[`invoke function fails 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\"name\\":\\"alice\\"}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\"\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
@@ -215,6 +229,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -233,6 +252,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -263,6 +287,10 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
           "id": "my_function",
           "path": "root/my_function",
         },
@@ -283,7 +311,7 @@ exports[`invoke function succeeds 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\"name\\":\\"Alice\\"}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\"\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
@@ -359,6 +387,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -377,6 +410,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -407,6 +445,10 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
           "id": "my_function",
           "path": "root/my_function",
         },
@@ -427,7 +469,7 @@ exports[`invoke function with environment variables 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\"name\\":\\"Alice\\"}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\"\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
@@ -504,6 +546,11 @@ exports.handler = async function(event) {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
           "id": "Handler",
           "path": "root/Handler",
         },
@@ -522,6 +569,11 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -551,6 +603,10 @@ exports.handler = async function(event) {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
           },
           "id": "my_function",
           "path": "root/my_function",

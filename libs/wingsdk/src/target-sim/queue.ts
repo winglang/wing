@@ -115,3 +115,5 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
 }
 
 Queue._annotateInflight("push", {});
+Queue._annotateInflight("purge", {});
+Queue._annotateInflight("approxSize", {});

@@ -26,3 +26,13 @@ s3.add(bucket3);
 assert(s2.has("bye"));
 assert(s2.has("hello"));
 assert(s3.has(bucket2));
+
+//Map tests
+let m1 = MutMap<str>{"hello": "world"};
+let m2: MutMap<num> = MutMap<num>{"hello": 123};
+let m3 = MutMap<cloud.Bucket>{"b1": bucket1, "b2": bucket2};
+let m4: MutMap<str> = m1;
+assert(m1.has("hello"));
+assert(m2.size == 1);
+assert(m3.get("b1") == bucket1);
+assert(m4.size == 1);

@@ -2,7 +2,7 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MUT_ARRAY, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STRING};
+use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MUT_ARRAY, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STRING, WINGSDK_MUT_MAP, WINGSDK_MAP};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -96,6 +96,7 @@ pub enum Type {
 	Array(TypeRef),
 	MutArray(TypeRef),
 	Map(TypeRef),
+	MutMap(TypeRef),
 	Set(TypeRef),
 	MutSet(TypeRef),
 	Function(FunctionSignature),
@@ -222,6 +223,12 @@ impl PartialEq for Type {
 				let r: &Type = &*r0;
 				l == r
 			}
+			(Self::MutMap(l0), Self::MutMap(r0)) => {
+				// Maps are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l == r
+			}
 			(Self::Set(l0), Self::Set(r0)) => {
 				// Sets are of the same type if they have the same value type
 				let l: &Type = &*l0;
@@ -297,6 +304,7 @@ impl Display for Type {
 			Type::Array(v) => write!(f, "Array<{}>", v),
 			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
+			Type::MutMap(v) => write!(f, "MutMap<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
 			Type::MutSet(v) => write!(f, "MutSet<{}>", v),
 			Type::Enum(s) => write!(f, "{}", s.name),
@@ -914,6 +922,7 @@ impl<'a> TypeChecker<'a> {
 
 				let value_type = match *container_type {
 					Type::Map(t) => t,
+					Type::MutMap(t) => t,
 					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
@@ -1152,7 +1161,12 @@ impl<'a> TypeChecker<'a> {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
-			}
+			},
+			AstType::MutMap(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each map resolution
+				self.types.add_type(Type::MutMap(value_type))
+			},
 		}
 	}
 
@@ -1783,6 +1797,14 @@ impl<'a> TypeChecker<'a> {
 					}
 					Type::MutSet(t) => {
 						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::Map(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, t);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::MutMap(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, t);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::String => self.get_property_from_class(

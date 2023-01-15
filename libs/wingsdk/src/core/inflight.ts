@@ -4,7 +4,7 @@ import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
-import { Connection, IInflightHost, IResource } from "./resource";
+import { Connection, Display, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
 
 /**
@@ -110,14 +110,27 @@ export class Inflight extends Construct implements IResource {
   /** @internal */
   public _connections: Connection[] = []; // thrown away
 
+  /**
+   * Information on how to display a resource in the UI.
+   */
+  public readonly display = new Display();
+
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away
+
+    this.display.hidden = true;
+    this.display.title = "Inflight";
+    this.display.description = "An inflight resource";
 
     if (props.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is supported");
     }
 
-    return makeHandler(scope, id, props.code.text, props.bindings ?? {});
+    return makeHandler(scope, id, props.code.text, props.bindings ?? {}, {
+      hidden: this.display.hidden,
+      title: this.display.title,
+      description: this.display.description,
+    });
   }
   /** @internal */
   public _bind(_host: IInflightHost, _ops: string[]): void {
