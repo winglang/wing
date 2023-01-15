@@ -37,6 +37,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
             "id": "Queue",
             "path": "root/Queue",
           },
@@ -48,6 +52,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -262,6 +271,11 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "An inflight resource",
+              "hidden": true,
+              "title": "Inflight",
+            },
             "id": "Handler",
             "path": "root/Handler",
           },
@@ -298,6 +312,10 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
             },
             "id": "Queue",
             "path": "root/Queue",
@@ -388,6 +406,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
+            },
             "id": "Queue-OnMessage-c5395e41",
             "path": "root/Queue-OnMessage-c5395e41",
           },
@@ -418,6 +440,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -496,6 +523,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
             "id": "Queue",
             "path": "root/Queue",
           },
@@ -507,6 +538,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",

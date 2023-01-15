@@ -79,6 +79,7 @@ pub enum Type {
 	Array(Box<Type>),
 	MutArray(Box<Type>),
 	Map(Box<Type>),
+	MutMap(Box<Type>),
 	Set(Box<Type>),
 	MutSet(Box<Type>),
 	FunctionSignature(FunctionSignature),
@@ -96,6 +97,7 @@ impl Display for Type {
 			Type::Array(t) => write!(f, "Array<{}>", t),
 			Type::MutArray(t) => write!(f, "MutArray<{}>", t),
 			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::MutMap(t) => write!(f, "MutMap<{}>", t),
 			Type::Set(t) => write!(f, "Set<{}>", t),
 			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
 			Type::FunctionSignature(sig) => {

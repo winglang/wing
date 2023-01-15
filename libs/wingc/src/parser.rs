@@ -458,6 +458,7 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
+					"MutMap" => Ok(Type::MutMap(Box::new(self.build_type(&element_type)?))),
 					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
 					"MutArray" => Ok(Type::MutArray(Box::new(self.build_type(&element_type)?))),
 					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),

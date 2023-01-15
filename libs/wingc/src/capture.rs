@@ -246,46 +246,59 @@ fn scan_captures_in_expression(
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
-				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
-					Ok((var, phase)) => (var.as_variable().expect("Expected identifier to be a variable"), phase),
-					Err(type_error) => {
-						panic!("Type error: {}", type_error);
-					}
-				};
+				let x = env.lookup_ext(&symbol, Some(statement_idx));
+				
+				// we ignore errors here because if the lookup symbol
+				// wasn't found, a error diagnostic is already emitted
+				// the type checker.
+				
+				if x.is_ok() {
+					let (var, f) = x.unwrap();
 
-				// if the identifier represents a preflight object, then capture it
-				if f == Phase::Preflight {
-					// capture as a resource
-					if let Some(resource) = t.as_resource() {
-						// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
-						//   1. explicit capture definitions
-						//   2. analyzing inflight code and figuring out what methods are being used on the object
-						res.extend(
-							resource
-								.methods()
-								.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
-								.map(|(name, _)| Capture {
-									object: symbol.clone(),
-									kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
-								})
-								.collect::<Vec<Capture>>(),
-						);
-					} else if t.is_immutable_collection() || t.is_primitive() {
-						// capture as an immutable data type (primitive/collection)
-						res.push(Capture {
-							object: symbol.clone(),
-							kind: CaptureKind::ImmutableData,
-						});
-					} else {
-						// unsupported capture
+					if var.as_variable().is_none() {
 						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
-							message: format!(
-								"Cannot reference '{}' of type '{}' from an inflight context",
-								symbol.name, t
-							),
+							message: "Expected identifier to be a variable".to_string(),
 							span: Some(symbol.span.clone()),
 						});
+					} else {
+						let t = var.as_variable().unwrap();
+
+						// if the identifier represents a preflight object, then capture it
+						if f == Phase::Preflight {
+							// capture as a resource
+							if let Some(resource) = t.as_resource() {
+								// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
+								//   1. explicit capture definitions
+								//   2. analyzing inflight code and figuring out what methods are being used on the object
+								res.extend(
+									resource
+										.methods()
+										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
+										.map(|(name, _)| Capture {
+											object: symbol.clone(),
+											kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
+										})
+										.collect::<Vec<Capture>>(),
+								);
+							} else if t.is_immutable_collection() || t.is_primitive() {
+								// capture as an immutable data type (primitive/collection)
+								res.push(Capture {
+									object: symbol.clone(),
+									kind: CaptureKind::ImmutableData,
+								});
+							} else {
+								// unsupported capture
+								diagnostics.push(Diagnostic {
+									level: DiagnosticLevel::Error,
+									message: format!(
+										"Cannot reference '{}' of type '{}' from an inflight context",
+										symbol.name, t
+									),
+									span: Some(symbol.span.clone()),
+								});
+							}
+						}
 					}
 				}
 			}
@@ -312,8 +325,8 @@ fn scan_captures_in_expression(
 		}
 		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx, diagnostics)),
 		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(lexp, env, statement_idx, diagnostics);
-			scan_captures_in_expression(rexp, env, statement_idx, diagnostics);
+			res.extend(scan_captures_in_expression(lexp, env, statement_idx, diagnostics));
+			res.extend(scan_captures_in_expression(rexp, env, statement_idx, diagnostics));
 		}
 		ExprKind::Literal(_) => {}
 		ExprKind::ArrayLiteral { items, .. } => {

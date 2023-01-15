@@ -110,6 +110,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Bucket.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Bucket.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Bucket.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -123,6 +124,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.Bucket.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -251,6 +264,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Counter.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/wingsdk.cloud.Counter.property.initial">initial</a></code> | <code>num</code> | The initial value of the counter. |
 
@@ -265,6 +279,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.Counter.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -433,6 +459,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Function.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 | <code><a href="#@winglang/wingsdk.cloud.Function.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Returns the set of environment variables for this function. |
 
@@ -447,6 +474,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.Function.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -606,6 +645,7 @@ Create a logger and register it to the given scope.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Logger.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Logger.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -619,6 +659,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.Logger.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -768,6 +820,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Queue.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Queue.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -781,6 +834,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.Queue.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -930,6 +995,7 @@ metadata is recorded in the tree.json file.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.Topic.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.Topic.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 | <code><a href="#@winglang/wingsdk.cloud.Topic.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
 
 ---
@@ -943,6 +1009,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.Topic.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -1363,6 +1441,7 @@ let construct_tree_node = core.ConstructTreeNode{ ... }
 | <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.attributes">attributes</a></code> | <code>MutMap&lt;any&gt;</code> | The node attributes. |
 | <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.children">children</a></code> | <code>MutMap&lt;core.ConstructTreeNode&gt;</code> | The child nodes. |
 | <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.constructInfo">construct_info</a></code> | <code>core.ConstructInfo</code> | Information on the construct class that led to this node, if available. |
+| <code><a href="#@winglang/wingsdk.core.ConstructTreeNode.property.display">display</a></code> | <code>core.DisplayInfo</code> | Information on how to display this node in the UI. |
 
 ---
 
@@ -1428,6 +1507,18 @@ Information on the construct class that led to this node, if available.
 
 ---
 
+##### `display`<sup>Optional</sup> <a name="display" id="@winglang/wingsdk.core.ConstructTreeNode.property.display"></a>
+
+```wing
+display: DisplayInfo;
+```
+
+- *Type:* core.DisplayInfo
+
+Information on how to display this node in the UI.
+
+---
+
 ### CounterProps <a name="CounterProps" id="@winglang/wingsdk.cloud.CounterProps"></a>
 
 Properties for `Counter`.
@@ -1458,6 +1549,128 @@ initial: num;
 - *Default:* 0
 
 The initial value of the counter.
+
+---
+
+### DisplayInfo <a name="DisplayInfo" id="@winglang/wingsdk.core.DisplayInfo"></a>
+
+Information on how to display a construct in the UI.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.DisplayInfo.Initializer"></a>
+
+```wing
+bring core;
+
+let display_info = core.DisplayInfo{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.DisplayInfo.property.description">description</a></code> | <code>str</code> | Description of the resource. |
+| <code><a href="#@winglang/wingsdk.core.DisplayInfo.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
+| <code><a href="#@winglang/wingsdk.core.DisplayInfo.property.title">title</a></code> | <code>str</code> | Title of the resource. |
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="@winglang/wingsdk.core.DisplayInfo.property.description"></a>
+
+```wing
+description: str;
+```
+
+- *Type:* str
+- *Default:* No description
+
+Description of the resource.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/wingsdk.core.DisplayInfo.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- *Type:* bool
+- *Default:* false (visible)
+
+Whether the resource should be hidden from the UI.
+
+---
+
+##### `title`<sup>Optional</sup> <a name="title" id="@winglang/wingsdk.core.DisplayInfo.property.title"></a>
+
+```wing
+title: str;
+```
+
+- *Type:* str
+- *Default:* The type and/or identifier of the resource
+
+Title of the resource.
+
+---
+
+### DisplayProps <a name="DisplayProps" id="@winglang/wingsdk.core.DisplayProps"></a>
+
+Properties for the Display class.
+
+#### Initializer <a name="Initializer" id="@winglang/wingsdk.core.DisplayProps.Initializer"></a>
+
+```wing
+bring core;
+
+let display_props = core.DisplayProps{ ... }
+```
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.DisplayProps.property.description">description</a></code> | <code>str</code> | Description of the resource. |
+| <code><a href="#@winglang/wingsdk.core.DisplayProps.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
+| <code><a href="#@winglang/wingsdk.core.DisplayProps.property.title">title</a></code> | <code>str</code> | Title of the resource. |
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="@winglang/wingsdk.core.DisplayProps.property.description"></a>
+
+```wing
+description: str;
+```
+
+- *Type:* str
+- *Default:* No description.
+
+Description of the resource.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/wingsdk.core.DisplayProps.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- *Type:* bool
+- *Default:* Undefined
+
+Whether the resource should be hidden from the UI.
+
+---
+
+##### `title`<sup>Optional</sup> <a name="title" id="@winglang/wingsdk.core.DisplayProps.property.title"></a>
+
+```wing
+title: str;
+```
+
+- *Type:* str
+- *Default:* No title.
+
+Title of the resource.
 
 ---
 
@@ -2084,6 +2297,79 @@ Returns the IConstruct this graph vertex represents.
 ---
 
 
+### Display <a name="Display" id="@winglang/wingsdk.core.Display"></a>
+
+Information on how to display a resource in the UI.
+
+#### Initializers <a name="Initializers" id="@winglang/wingsdk.core.Display.Initializer"></a>
+
+```wing
+bring core;
+
+new core.Display(props?: DisplayProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.Display.Initializer.parameter.props">props</a></code> | <code>core.DisplayProps</code> | *No description.* |
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/wingsdk.core.Display.Initializer.parameter.props"></a>
+
+- *Type:* core.DisplayProps
+
+---
+
+
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/wingsdk.core.Display.property.description">description</a></code> | <code>str</code> | Description of the resource. |
+| <code><a href="#@winglang/wingsdk.core.Display.property.hidden">hidden</a></code> | <code>bool</code> | Whether the resource should be hidden from the UI. |
+| <code><a href="#@winglang/wingsdk.core.Display.property.title">title</a></code> | <code>str</code> | Title of the resource. |
+
+---
+
+##### `description`<sup>Optional</sup> <a name="description" id="@winglang/wingsdk.core.Display.property.description"></a>
+
+```wing
+description: str;
+```
+
+- *Type:* str
+
+Description of the resource.
+
+---
+
+##### `hidden`<sup>Optional</sup> <a name="hidden" id="@winglang/wingsdk.core.Display.property.hidden"></a>
+
+```wing
+hidden: bool;
+```
+
+- *Type:* bool
+
+Whether the resource should be hidden from the UI.
+
+---
+
+##### `title`<sup>Optional</sup> <a name="title" id="@winglang/wingsdk.core.Display.property.title"></a>
+
+```wing
+title: str;
+```
+
+- *Type:* str
+
+Title of the resource.
+
+---
+
+
 ### Files <a name="Files" id="@winglang/wingsdk.core.Files"></a>
 
 Handles the synthesis of files.
@@ -2636,6 +2922,7 @@ Represents a resource with an inflight "handle" method that can be used to creat
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.IFunctionHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.IFunctionHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -2648,6 +2935,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.IFunctionHandler.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -2696,6 +2995,7 @@ A resource that can run inflight code.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.IInflightHost.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.core.IInflightHost.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -2708,6 +3008,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.core.IInflightHost.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -2764,9 +3076,31 @@ Inflight interface for `Queue`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueClient.approxSize">approx_size</a></code> | Retrieve the approximate number of messages in the queue. |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
 | <code><a href="#@winglang/wingsdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
 
 ---
+
+##### `approx_size` <a name="approx_size" id="@winglang/wingsdk.cloud.IQueueClient.approxSize"></a>
+
+```wing
+approx_size(): num
+```
+
+**Inflight client:** [true](#true)
+
+Retrieve the approximate number of messages in the queue.
+
+##### `purge` <a name="purge" id="@winglang/wingsdk.cloud.IQueueClient.purge"></a>
+
+```wing
+purge(): void
+```
+
+**Inflight client:** [true](#true)
+
+Purge all of the messages in the queue.
 
 ##### `push` <a name="push" id="@winglang/wingsdk.cloud.IQueueClient.push"></a>
 
@@ -2803,6 +3137,7 @@ Represents a resource with an inflight "handle" method that can be passed to `Qu
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.IQueueOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueOnMessageHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -2815,6 +3150,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.IQueueOnMessageHandler.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -2863,6 +3210,7 @@ Abstract interface for `Resource`.
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.core.IResource.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.core.IResource.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -2875,6 +3223,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.core.IResource.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
@@ -2927,6 +3287,7 @@ Represents a resource with an inflight "handle" method that can be passed to `To
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/wingsdk.cloud.ITopicOnMessageHandler.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/wingsdk.cloud.ITopicOnMessageHandler.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
 
 ---
 
@@ -2939,6 +3300,18 @@ node: Node;
 - *Type:* constructs.Node
 
 The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/wingsdk.cloud.ITopicOnMessageHandler.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
 
 ---
 
