@@ -230,6 +230,83 @@ Object {
 }
 `;
 
+exports[`queue batch size of 2, purge the queue 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Queue created.",
+  "Push (message=A).",
+  "Push (message=B).",
+  "ApproxSize ().",
+  "Purge ().",
+  "ApproxSize ().",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`queue batch size of 2, purge the queue 2`] = `
+Object {
+  "app.wsim": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/my_queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.25",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.25",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`queue with one subscriber, batch size of 5 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",

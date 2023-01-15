@@ -96,6 +96,18 @@ export interface IQueueClient {
    * @inflight
    */
   push(message: string): Promise<void>;
+
+  /**
+   * Purge all of the messages in the queue.
+   * @inflight
+   */
+  purge(): Promise<void>;
+
+  /**
+   * Retrieve the approximate number of messages in the queue.
+   * @inflight
+   */
+  approxSize(): Promise<number>;
 }
 
 /**
@@ -123,4 +135,8 @@ export interface IQueueOnMessageHandlerClient {
 export enum QueueInflightMethods {
   /** `Queue.push` */
   PUSH = "push",
+  /** `Queue.purge` */
+  PURGE = "purge",
+  /** `Queue.approxSize` */
+  APPROXSIZE = "approxSize",
 }

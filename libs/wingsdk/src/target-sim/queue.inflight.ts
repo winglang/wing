@@ -40,6 +40,27 @@ export class Queue implements IQueueClient, ISimulatorResourceInstance {
     });
   }
 
+  public async purge(): Promise<void> {
+    return this.context.withTrace({
+      message: `Purge ().`,
+      activity: async () => {
+        // TODO: which one is better?
+        this.messages.length = 0;
+        //this.messages.slice(0);
+        //this.messages = new Array<string>();
+      },
+    });
+  }
+
+  public async approxSize(): Promise<number> {
+    return this.context.withTrace({
+      message: `ApproxSize ().`,
+      activity: async () => {
+        return this.messages.length;
+      },
+    });
+  }
+
   private processMessages() {
     let processedMessages = false;
     do {
