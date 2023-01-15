@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Inflight, IResource, Resource } from "../core";
+import { Code, IResource, Inflight, Resource } from "../core";
 import { Duration } from "../std";
 import { Function, FunctionProps } from "./function";
 
@@ -33,6 +33,10 @@ export abstract class QueueBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
+
+    this.display.title = "Queue";
+    this.display.description = "A distributed message queue";
+
     if (!scope) {
       return;
     }
@@ -96,6 +100,18 @@ export interface IQueueClient {
    * @inflight
    */
   push(message: string): Promise<void>;
+
+  /**
+   * Purge all of the messages in the queue.
+   * @inflight
+   */
+  purge(): Promise<void>;
+
+  /**
+   * Retrieve the approximate number of messages in the queue.
+   * @inflight
+   */
+  approxSize(): Promise<number>;
 }
 
 /**
@@ -124,4 +140,8 @@ export interface IQueueOnMessageHandlerClient {
 export enum QueueInflightMethods {
   /** `Queue.push` */
   PUSH = "push",
+  /** `Queue.purge` */
+  PURGE = "purge",
+  /** `Queue.approxSize` */
+  APPROXSIZE = "approxSize",
 }

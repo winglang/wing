@@ -12,6 +12,14 @@ export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
 export abstract class LoggerBase extends Resource {
   public readonly stateful = true;
 
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
+    this.display.hidden = true;
+    this.display.title = "Logger";
+    this.display.description = "A cloud logging facility";
+  }
+
   /**
    * Logs a message (preflight).
    * @param message The message to log.
