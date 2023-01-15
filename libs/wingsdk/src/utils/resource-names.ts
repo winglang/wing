@@ -6,18 +6,32 @@ export enum CaseConventions {
 }
 
 export interface NameOptions {
-  readonly regexMatch: RegExp;
-  readonly charReplacer: string;
+  /**
+   * Maximum name length must always be greater than the hash (>=8 characters)
+   */
   readonly maxLen: number;
-  readonly minLen?: number;
+  /**
+   * Regular expression that indicates which characters are valid
+   */
+  readonly allowedRegEx: RegExp;
+  /**
+   * Word breaker
+   *
+   * @default "-"
+   */
+  readonly sep?: string;
   readonly case?: CaseConventions;
-  readonly forbidenStartwith?: string;
-  readonly forbidenEndwith?: string;
   readonly prefix?: string;
 }
 
 export class ResourceNames {
   public static generateName(resource: Construct, props: NameOptions): string {
+    const sep = props.sep ?? "-";
+
+    if (props.maxLen < 8) {
+      throw new Error("maxLen must be at least 8");
+    }
+
     let hash = resource.node.addr.substring(0, 8);
     let human = props.prefix
       ? `${props.prefix}${resource.node.id}`
@@ -31,9 +45,9 @@ export class ResourceNames {
     }
 
     human = human
-      .replace(props.regexMatch, props.charReplacer)
-      .substring(0, props.maxLen - hash.length - props.charReplacer.length);
+      .replace(props.allowedRegEx, sep)
+      .substring(0, props.maxLen - hash.length - sep.length);
 
-    return `${human}${props.charReplacer}${hash}`;
+    return `${human}${sep}${hash}`;
   }
 }

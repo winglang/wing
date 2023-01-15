@@ -19,8 +19,7 @@ import { NameOptions, ResourceNames } from "../utils/resource-names";
  */
 const NAME_OPTS: NameOptions = {
   maxLen: 64,
-  regexMatch: /[^a-zA-Z0-9\_\-]+/g,
-  charReplacer: "-",
+  allowedRegEx: /[^a-zA-Z0-9\_\-]+/g,
 };
 
 /**

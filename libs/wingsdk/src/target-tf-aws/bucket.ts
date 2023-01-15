@@ -21,8 +21,7 @@ import { Function } from "./function";
 const NAME_OPTS: NameOptions = {
   maxLen: 63,
   case: CaseConventions.LOWERCASE,
-  regexMatch: /([^a-z0-9\.\-]+)|(\.{2,})/g,
-  charReplacer: "-",
+  allowedRegEx: /([^a-z0-9\.\-]+)|(\.{2,})/g,
 };
 
 /**

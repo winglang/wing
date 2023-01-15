@@ -13,8 +13,7 @@ export const HASH_KEY = "id";
  */
 const NAME_OPTS: NameOptions = {
   maxLen: 255,
-  regexMatch: /[^a-zA-Z0-9\_\.\-]+/g,
-  charReplacer: "-",
+  allowedRegEx: /[^a-zA-Z0-9\_\.\-]+/g,
   prefix: "wingsdk-counter-",
 };
 

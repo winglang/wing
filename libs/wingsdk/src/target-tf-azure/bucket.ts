@@ -18,8 +18,7 @@ import { App } from "./app";
  */
 const RESOURCEGROUP_NAME_OPTS: NameOptions = {
   maxLen: 90,
-  regexMatch: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
-  charReplacer: "-",
+  allowedRegEx: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
 };
 
 /**
@@ -29,8 +28,8 @@ const RESOURCEGROUP_NAME_OPTS: NameOptions = {
 const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
   maxLen: 24,
   case: CaseConventions.LOWERCASE,
-  regexMatch: /([^a-z0-9]+)/g,
-  charReplacer: "",
+  allowedRegEx: /([^a-z0-9]+)/g,
+  sep: "",
 };
 
 /**
@@ -42,8 +41,7 @@ const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
 const BUCKET_NAME_OPTS: NameOptions = {
   maxLen: 63,
   case: CaseConventions.LOWERCASE,
-  regexMatch: /([^a-z0-9\-]+)|(\-{2,})/g,
-  charReplacer: "-",
+  allowedRegEx: /([^a-z0-9\-]+)|(\-{2,})/g,
 };
 
 /**
