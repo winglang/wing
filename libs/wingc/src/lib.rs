@@ -1,8 +1,8 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol};
-use diagnostic::{print_diagnostics, DiagnosticLevel, Diagnostics, WingSpan};
+use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -30,8 +30,15 @@ pub mod utilities;
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/wingsdk";
 
 const WINGSDK_DURATION: &'static str = "std.Duration";
+const WINGSDK_ARRAY: &'static str = "std.ImmutableArray";
+const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
+const WINGSDK_SET: &'static str = "std.ImmutableSet";
+const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
+const WINGSDK_STRING: &'static str = "std.String";
 const WINGSDK_RESOURCE: &'static str = "core.Resource";
 const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
+
+const CONSTRUCT_BASE: &'static str = "constructs.Construct";
 
 pub struct CompilerOutput {
 	pub preflight: String,
@@ -47,7 +54,20 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let source = match fs::read(&source_file) {
 		Ok(source) => source,
 		Err(err) => {
-			panic!("Error reading source file: {}: {:?}", &source_file, err);
+			let mut diagnostics = Diagnostics::new();
+
+			diagnostics.push(Diagnostic {
+				message: format!("Error reading source file: {}: {:?}", &source_file, err),
+				span: None,
+				level: DiagnosticLevel::Error,
+			});
+
+			// Set up a dummy scope to return
+			let empty_scope = Scope {
+				statements: Vec::<Stmt>::new(),
+				env: RefCell::new(None),
+			};
+			return (empty_scope, diagnostics);
 		}
 	};
 
@@ -71,14 +91,44 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	let env = SymbolEnv::new(None, None, false, Phase::Preflight, 0);
+	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
 	scope.set_env(env);
 
 	add_builtin(
-		"print",
+		UtilityFunctions::Print.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
-			return_type: None,
+			return_type: types.void(),
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Assert.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.bool()],
+			return_type: types.void(),
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Throw.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: types.void(),
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Panic.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: types.void(),
 			flight: Phase::Independent,
 		}),
 		scope,
@@ -115,7 +165,12 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let (mut scope, parse_diagnostics) = parse(source_file);
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types);
+	let type_check_diagnostics = if scope.statements.len() > 0 {
+		type_check(&mut scope, &mut types)
+	} else {
+		// empty scope, no type checking needed
+		Diagnostics::new()
+	};
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
@@ -124,6 +179,11 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	// collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
+
+	// Analyze inflight captures
+	let mut capture_diagnostics = Diagnostics::new();
+	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
+	diagnostics.extend(capture_diagnostics);
 
 	let errors = diagnostics
 		.iter()
@@ -134,9 +194,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	if errors.len() > 0 {
 		return Err(errors);
 	}
-
-	// Analyze inflight captures
-	scan_for_inflights_in_scope(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
@@ -204,6 +261,11 @@ mod sanity {
 	#[test]
 	fn can_compile_valid_files() {
 		compile_test("../../examples/tests/valid", false);
+	}
+
+	#[test]
+	fn can_compile_error_files() {
+		compile_test("../../examples/tests/error", false);
 	}
 
 	#[test]

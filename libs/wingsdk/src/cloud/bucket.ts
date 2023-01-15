@@ -25,6 +25,10 @@ export abstract class BucketBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: BucketProps) {
     super(scope, id);
+
+    this.display.title = "Bucket";
+    this.display.description = "A cloud object store";
+
     if (!scope) {
       return;
     }
@@ -100,6 +104,7 @@ export interface IBucketClient {
 
 /**
  * List of inflight operations available for `Bucket`.
+ * @internal
  */
 export enum BucketInflightMethods {
   /** `Bucket.put` */

@@ -1,7 +1,6 @@
 import { execSync } from "child_process";
 import { existsSync } from "fs";
 import { platform } from "os";
-import { dirname } from "path";
 import { ExtensionContext, window } from "vscode";
 import {
   Executable,
@@ -67,9 +66,7 @@ async function startLanguageServer(context: ExtensionContext) {
     execSync(`chmod +x ${serverPath}`);
   }
 
-  const wingsdkManifestRoot = dirname(
-    require.resolve("@winglang/wingsdk/.jsii")
-  );
+  const wingsdkManifestRoot = context.asAbsolutePath("resources/wingsdk");
 
   const run: Executable = {
     command: serverPath,

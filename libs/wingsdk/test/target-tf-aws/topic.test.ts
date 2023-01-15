@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
-import { mkdtemp } from "../../src/util";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 import {
   tfResourcesOf,
   tfResourcesOfCount,
@@ -35,7 +35,7 @@ test("topic with subscriber function", () => {
   const output = app.synth();
 
   // THEN
-  expect(subscriber._toInflight().sanitizedText).toMatchSnapshot();
+  expect(sanitizeCode(subscriber._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for subscriber function
     "aws_iam_role_policy", // policy for subscriber function role

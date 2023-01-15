@@ -20,9 +20,11 @@ test("pushing messages through a queue", async () => {
           await this.queue.push(event);
         }`,
         {
-          queue: {
-            resource: queue,
-            ops: [cloud.QueueInflightMethods.PUSH],
+          resources: {
+            queue: {
+              resource: queue,
+              ops: [cloud.QueueInflightMethods.PUSH],
+            },
           },
         }
       );

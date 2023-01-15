@@ -17,6 +17,17 @@ export interface IInflightHost extends IResource {}
  */
 export interface IResource extends IInspectable, IConstruct {
   /**
+   * List of inbound and outbound connections to other resources.
+   * @internal
+   */
+  _connections: Connection[];
+
+  /**
+   * Information on how to display a resource in the UI.
+   */
+  readonly display: Display;
+
+  /**
    * Binds the resource to the host so that it can be used by inflight code.
    *
    * If the resource does not support any of the operations, it should throw an
@@ -43,6 +54,31 @@ export abstract class Resource
   implements IInspectable, IResource
 {
   /**
+   * Adds a connection between two resources. A connection is a piece of
+   * metadata describing how one resource is related to another resource. This
+   * metadata is recorded in the tree.json file.
+   *
+   * @experimental
+   */
+  public static addConnection(props: AddConnectionProps) {
+    const from = props.from;
+    const to = props.to;
+    const implicit = props.implicit ?? false;
+    from._connections.push({
+      resource: to,
+      relationship: props.relationship,
+      direction: Direction.OUTBOUND,
+      implicit,
+    });
+    to._connections.push({
+      resource: from,
+      relationship: props.relationship,
+      direction: Direction.INBOUND,
+      implicit,
+    });
+  }
+
+  /**
    * Annotate a class with with metadata about what operations it supports
    * inflight, and what sub-resources each operation requires access to.
    *
@@ -68,7 +104,13 @@ export abstract class Resource
     });
   }
 
-  private readonly connections: Connection[] = [];
+  /** @internal */
+  public readonly _connections: Connection[] = [];
+
+  /**
+   * Information on how to display a resource in the UI.
+   */
+  public readonly display = new Display();
 
   /**
    * Whether a resource is stateful, i.e. it stores information that is not
@@ -133,6 +175,15 @@ export abstract class Resource
           );
         }
         obj._bind(host, resources[field]);
+
+        // add connection metadata
+        for (const op of resources[field]) {
+          Resource.addConnection({
+            from: host,
+            to: obj,
+            relationship: op,
+          });
+        }
       } else {
         log(`Skipped binding ${field} since it should be bound already.`);
       }
@@ -150,26 +201,17 @@ export abstract class Resource
   public abstract _toInflight(): Code;
 
   /**
-   * Adds a connection to this resource. A connection is a piece of metadata
-   * describing how this resource is related to another resource.
-   *
-   * @experimental
-   */
-  public addConnection(...connections: Connection[]) {
-    this.connections.push(...connections);
-  }
-
-  /**
    * @internal
    */
   public _inspect(inspector: TreeInspector): void {
     inspector.addAttribute(WING_ATTRIBUTE_RESOURCE_STATEFUL, this.stateful);
     inspector.addAttribute(
       WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
-      this.connections.map((conn) => ({
+      this._connections.map((conn) => ({
         direction: conn.direction,
         relationship: conn.relationship,
         resource: conn.resource.node.path,
+        implicit: conn.implicit,
       }))
     );
   }
@@ -196,13 +238,40 @@ export enum Direction {
 }
 
 /**
+ * Props for `Resource.addConnection`.
+ */
+export interface AddConnectionProps {
+  /**
+   * The resource creating the connection to `to`.
+   */
+  readonly from: IResource;
+
+  /**
+   * The resource `from` is connecting to.
+   */
+  readonly to: IResource;
+
+  /**
+   * The type of relationship between the resources.
+   */
+  readonly relationship: string;
+
+  /**
+   * Whether the relationship is implicit, i.e. it is not explicitly
+   * defined by the user.
+   * @default false
+   */
+  readonly implicit?: boolean;
+}
+
+/**
  * A connection between two resources.
  */
 export interface Connection {
   /**
    * The resource this connection is to.
    */
-  readonly resource: Resource;
+  readonly resource: IResource;
 
   /**
    * The type of relationship with the resource.
@@ -213,6 +282,12 @@ export interface Connection {
    * The direction of the connection.
    */
   readonly direction: Direction;
+
+  /**
+   * Whether the relationship is implicit, i.e. it is not explicitly
+   * defined by the user.
+   */
+  readonly implicit: boolean;
 }
 
 /**
@@ -228,4 +303,53 @@ export interface OperationAnnotation {
   [resource: string]: {
     ops: string[];
   };
+}
+
+/**
+ * Properties for the Display class.
+ */
+export interface DisplayProps {
+  /**
+   * Title of the resource.
+   * @default - No title.
+   */
+  readonly title?: string;
+
+  /**
+   * Description of the resource.
+   * @default - No description.
+   */
+  readonly description?: string;
+
+  /**
+   * Whether the resource should be hidden from the UI.
+   * @default - Undefined
+   */
+  readonly hidden?: boolean;
+}
+
+/**
+ * Information on how to display a resource in the UI.
+ */
+export class Display {
+  /**
+   * Title of the resource.
+   */
+  public title?: string;
+
+  /**
+   * Description of the resource.
+   */
+  public description?: string;
+
+  /**
+   * Whether the resource should be hidden from the UI.
+   */
+  public hidden?: boolean;
+
+  public constructor(props?: DisplayProps) {
+    this.title = props?.title;
+    this.description = props?.description;
+    this.hidden = props?.hidden;
+  }
 }

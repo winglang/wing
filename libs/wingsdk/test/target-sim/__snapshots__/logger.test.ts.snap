@@ -14,7 +14,7 @@ Array [
 
 exports[`inflight uses a logger 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -37,6 +37,30 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/my_function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(event2) {
+        console.log(\\"Hello, \\" + event2);
+        console.log(\\"Wahoo!\\");
+      }
+    };
+  }())({}).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -47,7 +71,12 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
           },
           "id": "Handler",
           "path": "root/Handler",
@@ -57,7 +86,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/my_function",
               },
             ],
@@ -65,7 +95,12 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -75,7 +110,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "outbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/WingLogger",
               },
             ],
@@ -85,7 +121,7 @@ Object {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -93,7 +129,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
           },
           "id": "my_function",
           "path": "root/my_function",
@@ -101,7 +141,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

@@ -40,12 +40,13 @@ const project = new TypeScriptAppProject({
     },
   },
 
-  deps: [
-    `@types/vscode@^${VSCODE_BASE_VERSION}`,
-    "vscode-languageclient",
-    "@winglang/wingsdk",
+  deps: [`@types/vscode@^${VSCODE_BASE_VERSION}`, "vscode-languageclient"],
+  devDeps: [
+    "@types/node",
+    "esbuild",
+    "@vscode/vsce",
+    "@winglang/wingsdk@file:../../libs/wingsdk",
   ],
-  devDeps: ["@types/node", "esbuild", "vsce"],
 });
 
 project.addGitIgnore("*.vsix");
@@ -62,10 +63,10 @@ vscodeIgnore.addPatterns(
   "!resources/",
   "!syntaxes/",
   "!language-configuration.json",
-  "!LICENSE",
-  "!node_modules/@winglang/wingsdk/package.json",
-  "!node_modules/@winglang/wingsdk/.jsii"
+  "!LICENSE"
 );
+project.addGitIgnore("resources/wingsdk/");
+project.addGitIgnore("resources/native/");
 
 const contributes: VSCodeExtensionContributions = {
   languages: [

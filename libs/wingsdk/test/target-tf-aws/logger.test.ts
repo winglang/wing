@@ -4,6 +4,7 @@ import * as cloud from "../../src/cloud";
 import { Logger } from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
+import { sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize } from "../util";
 
 test("inflight function uses a logger", () => {
@@ -21,7 +22,7 @@ test("inflight function uses a logger", () => {
     );
     new cloud.Function(scope, "Function", inflight);
 
-    expect(inflight._toInflight().sanitizedText).toMatchSnapshot();
+    expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   });
 
   expect(tfResourcesOf(output)).toEqual([

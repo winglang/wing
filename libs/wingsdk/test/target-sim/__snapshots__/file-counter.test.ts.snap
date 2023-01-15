@@ -2,7 +2,7 @@
 
 exports[`can create sequential files in a bucket 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -58,6 +58,91 @@ Object {
     ],
     "sdkVersion": "0.0.0",
   },
+  "assets/Queue-OnMessage-401ee792/index.js": "var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __esm = (fn, res) => function __init() {
+  return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+};
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === \\"object\\" || typeof from === \\"function\\") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, \\"__esModule\\", { value: true }), mod);
+
+var queue_onmessage_inflight_exports = {};
+__export(queue_onmessage_inflight_exports, {
+  QueueOnMessageHandlerClient: () => QueueOnMessageHandlerClient
+});
+var QueueOnMessageHandlerClient;
+var init_queue_onmessage_inflight = __esm({
+  \\"[REDACTED]/wingsdk/src/target-sim/queue.onmessage.inflight.ts\\"() {
+    \\"use strict\\";
+    QueueOnMessageHandlerClient = class {
+      constructor({ handler }) {
+        this.handler = handler;
+      }
+      async handle(event) {
+        let parsed = JSON.parse(event);
+        if (!parsed.messages)
+          throw new Error('No \\"messages\\" field in event.');
+        for (const $message of parsed.messages) {
+          await this.handler.handle($message);
+        }
+      }
+    };
+  }
+});
+
+var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (init_queue_onmessage_inflight(), __toCommonJS(queue_onmessage_inflight_exports)).QueueOnMessageHandlerClient({ handler: new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle(event2) {
+        let next = await this.counter.inc();
+        let key = \\"file-\\" + next + \\".txt\\";
+        await this.bucket.put(key, event2);
+      }
+    };
+  }())({
+    counter: function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"COUNTER_HANDLE_4ecd8d46\\"),
+    bucket: function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_5f2a41c8\\")
+  }) }).handle(event);
+};
+",
   "tree.json": Object {
     "tree": Object {
       "children": Object {
@@ -68,7 +153,8 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -76,7 +162,11 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
+              },
+              "display": Object {
+                "description": "A cloud object store",
+                "title": "Bucket",
               },
               "id": "Bucket",
               "path": "root/HelloWorld/Bucket",
@@ -86,7 +176,8 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "inbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
                 ],
@@ -94,19 +185,35 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
+              },
+              "display": Object {
+                "description": "A distributed atomic counter",
+                "title": "Counter",
               },
               "id": "Counter",
               "path": "root/HelloWorld/Counter",
             },
             "Processor": Object {
               "attributes": Object {
-                "wing:resource:connections": Array [],
+                "wing:resource:connections": Array [
+                  Object {
+                    "direction": "inbound",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
+                  },
+                ],
                 "wing:resource:stateful": false,
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
+              },
+              "display": Object {
+                "description": "An inflight resource",
+                "hidden": true,
+                "title": "Inflight",
               },
               "id": "Processor",
               "path": "root/HelloWorld/Processor",
@@ -116,6 +223,7 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
                   },
@@ -124,7 +232,11 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
+              },
+              "display": Object {
+                "description": "A distributed message queue",
+                "title": "Queue",
               },
               "id": "Queue",
               "path": "root/HelloWorld/Queue",
@@ -134,21 +246,31 @@ Object {
                 "wing:resource:connections": Array [
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "inc",
                     "resource": "root/HelloWorld/Counter",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "put",
                     "resource": "root/HelloWorld/Bucket",
                   },
                   Object {
                     "direction": "outbound",
-                    "relationship": "inflight-reference",
+                    "implicit": false,
+                    "relationship": "handle",
+                    "resource": "root/HelloWorld/Processor",
+                  },
+                  Object {
+                    "direction": "outbound",
+                    "implicit": true,
+                    "relationship": "print",
                     "resource": "root/WingLogger",
                   },
                   Object {
                     "direction": "inbound",
+                    "implicit": false,
                     "relationship": "on_message",
                     "resource": "root/HelloWorld/Queue",
                   },
@@ -159,7 +281,7 @@ Object {
                 "Code": Object {
                   "constructInfo": Object {
                     "fqn": "constructs.Construct",
-                    "version": "10.0.25",
+                    "version": "10.0.130",
                   },
                   "id": "Code",
                   "path": "root/HelloWorld/Queue-OnMessage-401ee792/Code",
@@ -167,7 +289,11 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
+              },
+              "display": Object {
+                "description": "A cloud function (FaaS)",
+                "title": "Function",
               },
               "id": "Queue-OnMessage-401ee792",
               "path": "root/HelloWorld/Queue-OnMessage-401ee792",
@@ -179,7 +305,7 @@ Object {
               },
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.25",
+                "version": "10.0.130",
               },
               "id": "Queue-OnMessageHandler-401ee792",
               "path": "root/HelloWorld/Queue-OnMessageHandler-401ee792",
@@ -187,7 +313,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
           },
           "id": "HelloWorld",
           "path": "root/HelloWorld",
@@ -197,7 +323,8 @@ Object {
             "wing:resource:connections": Array [
               Object {
                 "direction": "inbound",
-                "relationship": "inflight-reference",
+                "implicit": true,
+                "relationship": "print",
                 "resource": "root/HelloWorld/Queue-OnMessage-401ee792",
               },
             ],
@@ -205,7 +332,12 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -213,7 +345,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

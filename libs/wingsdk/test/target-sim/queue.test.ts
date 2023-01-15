@@ -1,8 +1,8 @@
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages } from "./util";
+import { listMessages, treeJsonOf } from "./util";
 
-jest.setTimeout(10_000); // 5 seconds
+jest.setTimeout(5 * 60 * 1000); // 5 minutes
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -130,4 +130,46 @@ test("messages are requeued if the function fails", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("queue has no display hidden property", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Queue(app, "my_queue");
+
+  const treeJson = treeJsonOf(app.synth());
+  const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
+
+  // THEN
+  expect(queue.display.hidden).toBeUndefined();
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).not.toMatchObject({
+    my_queue: {
+      display: {
+        hidden: expect.any(Boolean),
+      },
+    },
+  });
+});
+
+test("queue has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Queue(app, "my_queue");
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const queue = app.node.tryFindChild("my_queue") as cloud.Queue;
+
+  // THEN
+  expect(queue.display.title).toBeDefined();
+  expect(queue.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_queue: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
 });

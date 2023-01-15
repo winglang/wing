@@ -4,7 +4,7 @@ import { tmpdir } from "os";
 import { basename, dirname, join } from "path";
 import { Construct } from "constructs";
 import { makeHandler } from "./internal";
-import { IInflightHost, IResource } from "./resource";
+import { Connection, Display, IInflightHost, IResource } from "./resource";
 import { TreeInspector } from "./tree";
 
 /**
@@ -27,21 +27,6 @@ export abstract class Code {
    */
   public get text(): string {
     return readFileSync(this.path, "utf-8");
-  }
-
-  /**
-   * The code contents, sanitized for unit testing.
-   * @experimental
-   */
-  public get sanitizedText(): string {
-    function removeAbsolutePaths(text: string) {
-      const regex = /"\/.+?\/libs\/wingsdk\/(.+?)"/g;
-
-      // replace first group with static text
-      return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
-    }
-
-    return removeAbsolutePaths(this.text);
   }
 
   /**
@@ -107,10 +92,10 @@ export interface InflightProps {
   readonly code: Code;
 
   /**
-   * Resource binding information.
+   * Data and resource binding information.
    * @default - no bindings
    */
-  readonly bindings?: { [name: string]: InflightBinding };
+  readonly bindings?: InflightBindings;
 }
 
 /**
@@ -122,14 +107,30 @@ export interface InflightProps {
  * such as `cloud.IFunctionHandler`
  */
 export class Inflight extends Construct implements IResource {
+  /** @internal */
+  public _connections: Connection[] = []; // thrown away
+
+  /**
+   * Information on how to display a resource in the UI.
+   */
+  public readonly display = new Display();
+
   constructor(scope: Construct, id: string, props: InflightProps) {
     super(null as any, ""); // thrown away
+
+    this.display.hidden = true;
+    this.display.title = "Inflight";
+    this.display.description = "An inflight resource";
 
     if (props.code.language !== Language.NODE_JS) {
       throw new Error("Only Node.js code is supported");
     }
 
-    return makeHandler(scope, id, props.code.text, props.bindings ?? {});
+    return makeHandler(scope, id, props.code.text, props.bindings ?? {}, {
+      hidden: this.display.hidden,
+      title: this.display.title,
+      description: this.display.description,
+    });
   }
   /** @internal */
   public _bind(_host: IInflightHost, _ops: string[]): void {
@@ -148,7 +149,7 @@ export class Inflight extends Construct implements IResource {
 /**
  * A resource binding.
  */
-export interface InflightBinding {
+export interface InflightResourceBinding {
   /**
    * The resource.
    */
@@ -158,6 +159,21 @@ export interface InflightBinding {
    * The list of operations used on the resource.
    */
   readonly ops: string[];
+}
+
+/**
+ * Inflight bindings.
+ */
+export interface InflightBindings {
+  /**
+   * Resources being referenced by the inflight (key is the symbol).
+   */
+  readonly resources?: Record<string, InflightResourceBinding>;
+
+  /**
+   * Immutable data being referenced by the inflight (key is the symbol);
+   */
+  readonly data?: Record<string, any>;
 }
 
 /**

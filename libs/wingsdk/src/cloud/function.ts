@@ -1,8 +1,9 @@
+import { readFileSync, writeFileSync } from "fs";
 import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import { Polycons } from "polycons";
-import { Code, IInflightHost, Inflight, IResource, Resource } from "../core";
+import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
 import { mkdtemp } from "../util";
 import { Logger } from "./logger";
 
@@ -45,6 +46,9 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
   ) {
     super(scope, id);
 
+    this.display.title = "Function";
+    this.display.description = "A cloud function (FaaS)";
+
     if (!scope) {
       this.assetPath = undefined as any;
       return;
@@ -74,6 +78,14 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
     lines.push(`  return await ${inflightClient.text}.handle(event);`);
     lines.push("};");
 
+    // add an annotation that the Wing logger is implicitly used
+    Resource.addConnection({
+      from: this,
+      to: logger,
+      relationship: "print",
+      implicit: true,
+    });
+
     const tempdir = mkdtemp();
     const outfile = join(tempdir, "index.js");
 
@@ -91,6 +103,13 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
       minify: false,
       external: ["aws-sdk"],
     });
+
+    // the bundled contains line comments with file paths, which are not useful for us, especially
+    // since they may contain system-specific paths. sadly, esbuild doesn't have a way to disable
+    // this, so we simply filter those out from the bundle.
+    const outlines = readFileSync(outfile, "utf-8").split("\n");
+    const isNotLineComment = (line: string) => !line.startsWith("//");
+    writeFileSync(outfile, outlines.filter(isNotLineComment).join("\n"));
 
     this.assetPath = outfile;
   }
@@ -177,6 +196,7 @@ export interface IFunctionHandlerClient {
 
 /**
  * List of inflight operations available for `Function`.
+ * @internal
  */
 export enum FunctionInflightMethods {
   /** `Function.invoke` */

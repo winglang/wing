@@ -77,7 +77,10 @@ pub enum Type {
 	Duration,
 	Optional(Box<Type>),
 	Array(Box<Type>),
+	MutArray(Box<Type>),
 	Map(Box<Type>),
+	Set(Box<Type>),
+	MutSet(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
 }
@@ -91,7 +94,10 @@ impl Display for Type {
 			Type::Duration => write!(f, "duration"),
 			Type::Optional(t) => write!(f, "{}?", t),
 			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::MutArray(t) => write!(f, "MutArray<{}>", t),
 			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::Set(t) => write!(f, "Set<{}>", t),
+			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
 			Type::FunctionSignature(sig) => {
 				write!(
 					f,
@@ -145,6 +151,25 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
+}
+
+#[derive(Debug)]
+pub enum UtilityFunctions {
+	Print,
+	Panic,
+	Throw,
+	Assert,
+}
+
+impl Display for UtilityFunctions {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Panic => write!(f, "panic"),
+			UtilityFunctions::Throw => write!(f, "throw"),
+			UtilityFunctions::Assert => write!(f, "assert"),
+		}
+	}
 }
 
 #[derive(Debug)]
@@ -243,6 +268,10 @@ pub enum ExprKind {
 		type_: Option<Type>,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: BTreeMap<String, Expr>,
+	},
+	SetLiteral {
+		type_: Option<Type>,
+		items: Vec<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }

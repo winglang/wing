@@ -87,7 +87,22 @@ npm run test
 
 Several projects have some tools to aid with development. If you're iterating on any of these project, they may be useful to try out!
 
-### Wing CLI
+### Stack traces
+
+We highly recommend to export these two environment variables to enable full verbosity of stack traces:
+
+```sh
+export NODE_OPTIONS=--stack-trace-limit=100
+export RUST_BACKTRACE=full
+```
+
+### End-to-end workflow through the Wing CLI
+
+The `wing` CLI is the integration point of the entire toolchain (compiler, sdk and cli). This means that if you
+are working on multiple components of the toolchain together (e.g. updating the compiler and the sdk),
+you can use this workflow to iterate on the entire stack. `nx` is supposed to take care of rebuilding any 
+components that might have changed (open an issue if that's not the case). So you should be able to simply edit
+a file anywhere across stack and run this:
 
 > cd apps/wing
 
@@ -258,18 +273,16 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
 
-Add a `.env` file to `tools/hangar` with the following:
-
-```env
-NPM_TOKEN=<GitHub PAT with access to @winglang packages>
-```
-
-This allows the spun-up registry to pull down @winglang packages from the private github registry.
-
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
 ```sh
-npx nx test
+npm test
+```
+
+Or, you can run the following command from the root of the monorepo:
+
+```sh
+npx nx run hangar:test
 ```
 
 ## 🧬 What is an RFC?

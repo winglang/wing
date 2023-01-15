@@ -4,6 +4,7 @@ import * as cloud from "../../src/cloud";
 import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as tfaws from "../../src/target-tf-aws";
+import * as tfazure from "../../src/target-tf-azure";
 
 class MyBucket extends core.Resource {
   public readonly stateful = true;
@@ -52,19 +53,16 @@ Handler._annotateInflight("handle", {
   "this.b": { ops: ["put_something"] },
 });
 
+// TODO: support multiple sandboxes
 class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
     const my_bucket = new MyBucket(this, "MyBucket", "Hello, World!");
-    const handler = new Handler(this, "Handler", my_bucket);
-    new cloud.Function(this, "Function", handler);
-
-    const queue = new cloud.Queue(this, "Queue");
-    queue.onMessage(handler);
+    my_bucket;
   }
 }
 
-const app = new sim.App({ outdir: __dirname });
+const app = new tfazure.App({ outdir: __dirname, location: "East US" });
 new HelloWorld(app, "HelloWorld");
 app.synth();

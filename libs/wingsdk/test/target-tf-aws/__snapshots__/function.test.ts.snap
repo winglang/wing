@@ -60,7 +60,8 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "outbound",
-                  "relationship": "inflight-reference",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/WingLogger",
                 },
               ],
@@ -78,7 +79,7 @@ Object {
               "Bucket": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Bucket",
                 "path": "root/Function/Bucket",
@@ -86,7 +87,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Function/Default",
@@ -94,7 +95,7 @@ Object {
               "IamRole": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRole",
                 "path": "root/Function/IamRole",
@@ -102,7 +103,7 @@ Object {
               "IamRolePolicy": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicy",
                 "path": "root/Function/IamRolePolicy",
@@ -110,7 +111,7 @@ Object {
               "IamRolePolicyAttachment": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicyAttachment",
                 "path": "root/Function/IamRolePolicyAttachment",
@@ -118,7 +119,7 @@ Object {
               "S3Object": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "S3Object",
                 "path": "root/Function/S3Object",
@@ -126,7 +127,11 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
             },
             "id": "Function",
             "path": "root/Function",
@@ -138,7 +143,12 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "An inflight resource",
+              "hidden": true,
+              "title": "Inflight",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -148,7 +158,8 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "inbound",
-                  "relationship": "inflight-reference",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/Function",
                 },
               ],
@@ -156,7 +167,12 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -164,7 +180,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -259,7 +275,8 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "outbound",
-                  "relationship": "inflight-reference",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/WingLogger",
                 },
               ],
@@ -277,7 +294,7 @@ Object {
               "Bucket": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Bucket",
                 "path": "root/Function/Bucket",
@@ -285,7 +302,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Function/Default",
@@ -293,7 +310,7 @@ Object {
               "IamRole": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRole",
                 "path": "root/Function/IamRole",
@@ -301,7 +318,7 @@ Object {
               "IamRolePolicy": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicy",
                 "path": "root/Function/IamRolePolicy",
@@ -309,7 +326,7 @@ Object {
               "IamRolePolicyAttachment": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicyAttachment",
                 "path": "root/Function/IamRolePolicyAttachment",
@@ -317,7 +334,7 @@ Object {
               "S3Object": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "10.0.11",
+                  "version": "10.0.12",
                 },
                 "id": "S3Object",
                 "path": "root/Function/S3Object",
@@ -325,7 +342,11 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
             },
             "id": "Function",
             "path": "root/Function",
@@ -337,7 +358,12 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "An inflight resource",
+              "hidden": true,
+              "title": "Inflight",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -347,7 +373,8 @@ Object {
               "wing:resource:connections": Array [
                 Object {
                   "direction": "inbound",
-                  "relationship": "inflight-reference",
+                  "implicit": true,
+                  "relationship": "print",
                   "resource": "root/Function",
                 },
               ],
@@ -355,7 +382,12 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -363,7 +395,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.11",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
