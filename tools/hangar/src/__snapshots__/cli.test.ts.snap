@@ -303,7 +303,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile capture_collections.w > cdk.tf.json 1`] = `
+exports[`wing compile capture_containers.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -401,8 +401,8 @@ exports[`wing compile capture_collections.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_collections.w > index.js 1`] = `
-"async handle(s) { const { arr, my_map, my_set } = this; {
+exports[`wing compile capture_containers.w > index.js 1`] = `
+"async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr.length === 2)'\`)})((arr.length === 2))};
@@ -410,10 +410,11 @@ exports[`wing compile capture_collections.w > index.js 1`] = `
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_set.size === 2)'\`)})((my_set.size === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await my_map.has(\\"world\\"))'\`)})((await my_map.has(\\"world\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(my_map.size === 2)'\`)})((my_map.size === 2))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(await (await arr_of_map.at(0)).has(\\"bang\\"))'\`)})((await (await arr_of_map.at(0)).has(\\"bang\\")))};
 } };"
 `;
 
-exports[`wing compile capture_collections.w > manifest.json 1`] = `
+exports[`wing compile capture_containers.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -429,7 +430,7 @@ exports[`wing compile capture_collections.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_collections.w > preflight.js 1`] = `
+exports[`wing compile capture_containers.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/wingsdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -451,17 +452,19 @@ const $App = __app(process.env.WING_TARGET);
 const cloud = require('@winglang/wingsdk').cloud;
 class MyApp extends $App {
 constructor() {
-  super({ outdir: $outdir, name: \\"capture_collections\\" });
+  super({ outdir: $outdir, name: \\"capture_containers\\" });
   
   const arr = Object.freeze([\\"hello\\", \\"world\\"]);
   const my_set = Object.freeze(new Set([\\"my\\", \\"my\\", \\"set\\"]));
   const my_map = Object.freeze(new Map([[ \\"hello\\", 123 ], [ \\"world\\", 999 ]]));
+  const arr_of_map = Object.freeze([Object.freeze(new Map([[ \\"bang\\", 123 ]]))]);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2f5f6cc953638fc9eed9d8fc6ee8937a5d347a7caa9c96d6c6d08160820e1178/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2342d82d8096c3cfa44f12187d5dd9fb250167dc7ea113fbdfa095b6a80902fa/index.js\\")),
     bindings: {
       
       data: {
         arr: arr,
+        arr_of_map: arr_of_map,
         my_map: my_map,
         my_set: my_set,
       },
