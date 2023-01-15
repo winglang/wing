@@ -19,6 +19,9 @@ export interface ExplorerItem {
 
 export const createAppRouter = () => {
   return router({
+    "app.status": publicProcedure.query(({ ctx }) => {
+      return ctx.appStatus();
+    }),
     "app.logs": publicProcedure
       .input(
         z.object({

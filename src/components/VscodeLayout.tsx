@@ -35,18 +35,16 @@ const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
 export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
-
   const treeMenu = useTreeMenuItems();
 
   const explorerTree = trpc["app.explorerTree"].useQuery();
-
   useEffect(() => {
     if (explorerTree.data) {
       treeMenu.setItems([
         createTreeMenuItemFromExplorerTreeItem(explorerTree.data),
       ]);
+      treeMenu.setCurrent("root");
     }
-    treeMenu.setCurrent("root");
   }, [explorerTree.data]);
 
   useEffect(() => {
@@ -57,9 +55,14 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     // TODO: Use TRPC directly.
   };
 
-  const childRelationships = trpc["app.childRelationships"].useQuery({
-    path: treeMenu.currentItemId,
-  });
+  const childRelationships = trpc["app.childRelationships"].useQuery(
+    {
+      path: treeMenu.currentItemId,
+    },
+    {
+      enabled: !!treeMenu.currentItemId,
+    },
+  );
 
   useEffect(() => {
     document.querySelector(`.${SELECTED_TREE_ITEM_CSS_ID}`)?.scrollIntoView({
@@ -69,9 +72,14 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     });
   }, [treeMenu.currentItemId]);
 
-  const breadcrumbs = trpc["app.nodeBreadcrumbs"].useQuery({
-    path: treeMenu.currentItemId,
-  });
+  const breadcrumbs = trpc["app.nodeBreadcrumbs"].useQuery(
+    {
+      path: treeMenu.currentItemId,
+    },
+    {
+      enabled: !!treeMenu.currentItemId,
+    },
+  );
 
   const currentNode = trpc["app.node"].useQuery(
     {

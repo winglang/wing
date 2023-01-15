@@ -3,7 +3,7 @@ import path from "node:path";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import cors from "cors";
-import { app, BrowserWindow, dialog, Menu, shell, screen } from "electron";
+import { BrowserWindow, Menu, app, dialog, screen, shell } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
 import express from "express";
@@ -84,6 +84,9 @@ function createWindowManager() {
       }
 
       let newWindow: BrowserWindow | undefined;
+      let isLoading = false;
+      let isError = false;
+
       const consoleLogger: ConsoleLogger = {
         messages: new Array<LogEntry>(),
         verbose(message, source) {
@@ -122,19 +125,23 @@ function createWindowManager() {
         },
       };
 
-      const onLoading = (isLoading: boolean) => {
-        log.verbose("onLoading", isLoading);
+      const onLoading = (loading: boolean) => {
+        isError = false;
+        isLoading = loading;
+        log.verbose("onLoading", loading);
         // TODO: Use TRPC websockets.
-        newWindow?.webContents.send("app.isLoading", isLoading);
+        newWindow?.webContents.send("app.isLoading", loading);
       };
 
       const onError = (error: unknown) => {
+        isError = true;
         log.verbose("onError", { error });
         // TODO: Use TRPC websockets.
         newWindow?.webContents.send("app.isError", true);
       };
 
       const notifyChange = () => {
+        isError = false;
         log.verbose("notifyChange");
         // TODO: Use TRPC websockets.
         newWindow?.webContents.send("trpc.invalidate");
@@ -167,6 +174,12 @@ function createWindowManager() {
             },
             logs() {
               return consoleLogger.messages;
+            },
+            appStatus() {
+              return {
+                isLoading,
+                isError,
+              };
             },
           };
         };
