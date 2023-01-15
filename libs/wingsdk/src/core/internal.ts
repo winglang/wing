@@ -1,4 +1,5 @@
 import { IConstruct } from "constructs";
+import { Duration } from "../std";
 import { InflightBindings, NodeJsCode } from "./inflight";
 import { Resource } from "./resource";
 
@@ -78,25 +79,34 @@ function serializeImmutableData(obj: any): string {
 
     case "object":
       if (Array.isArray(obj)) {
-        return JSON.stringify(obj);
+        return `[${obj.map(serializeImmutableData).join(",")}]`;
       }
 
-      // if there's an explicit toJSON method, use it
-      if ("toJSON" in obj) {
-        return JSON.stringify(obj);
+      if (obj instanceof Duration) {
+        return serializeImmutableData({
+          seconds: obj.seconds,
+          minutes: obj.minutes,
+          hours: obj.hours,
+        });
       }
 
       if (obj instanceof Set) {
-        return `new Set(${JSON.stringify(Array.from(obj))})`;
+        return `new Set(${serializeImmutableData(Array.from(obj))})`;
       }
 
       if (obj instanceof Map) {
-        return `new Map(${JSON.stringify(Array.from(obj))})`;
+        return `new Map(${serializeImmutableData(Array.from(obj))})`;
       }
 
       // structs are just objects
       if (obj instanceof Object) {
-        return JSON.stringify(obj);
+        const lines = [];
+        lines.push("{");
+        for (const [k, v] of Object.entries(obj)) {
+          lines.push(`${k}: ${serializeImmutableData(v)},`);
+        }
+        lines.push("}");
+        return lines.join("");
       }
   }
 
