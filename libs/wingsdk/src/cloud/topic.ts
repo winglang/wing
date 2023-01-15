@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { Code, Inflight, IResource, Resource } from "../core";
+import { Code, IResource, Inflight, Resource } from "../core";
 import { Function } from "./function";
 
 export const TOPIC_TYPE = "wingsdk.cloud.Topic";
@@ -17,6 +17,10 @@ export abstract class TopicBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
     super(scope, id);
+
+    this.display.title = "Topic";
+    this.display.description = "A pub/sub notification topic";
+
     if (!scope) {
       return;
     }
