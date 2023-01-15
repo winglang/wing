@@ -205,6 +205,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
+            },
             "id": "The-Uncanny.Bucket",
             "path": "root/The-Uncanny.Bucket",
           },
@@ -216,6 +220,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -304,6 +313,11 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
             "id": "WingLogger",
             "path": "root/WingLogger",
           },
@@ -357,6 +371,10 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
             },
             "id": "the-uncanny.bucket",
             "path": "root/the-uncanny.bucket",

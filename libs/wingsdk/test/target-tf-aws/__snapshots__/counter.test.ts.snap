@@ -45,6 +45,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed atomic counter",
+              "title": "Counter",
+            },
             "id": "The.Amazing-Counter_01",
             "path": "root/The.Amazing-Counter_01",
           },
@@ -56,6 +60,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -600,6 +609,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed atomic counter",
+              "title": "Counter",
+            },
             "id": "Counter",
             "path": "root/Counter",
           },
@@ -683,6 +696,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
+            },
             "id": "Function",
             "path": "root/Function",
           },
@@ -694,6 +711,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "An inflight resource",
+              "hidden": true,
+              "title": "Inflight",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -713,6 +735,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -848,6 +875,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed atomic counter",
+              "title": "Counter",
+            },
             "id": "Counter",
             "path": "root/Counter",
           },
@@ -931,6 +962,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
+            },
             "id": "Function",
             "path": "root/Function",
           },
@@ -942,6 +977,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "An inflight resource",
+              "hidden": true,
+              "title": "Inflight",
             },
             "id": "Handler",
             "path": "root/Handler",
@@ -961,6 +1001,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -1046,6 +1091,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed atomic counter",
+              "title": "Counter",
+            },
             "id": "The*Amazing%Counter@01",
             "path": "root/The*Amazing%Counter@01",
           },
@@ -1057,6 +1106,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",

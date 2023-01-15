@@ -134,6 +134,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
             "id": "The-Incredible_Queue-01",
             "path": "root/The-Incredible_Queue-01",
           },
@@ -145,6 +149,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
@@ -620,6 +629,10 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
             "id": "The*Incredible$Queue",
             "path": "root/The*Incredible$Queue",
           },
@@ -631,6 +644,11 @@ Object {
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
             },
             "id": "WingLogger",
             "path": "root/WingLogger",
