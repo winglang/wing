@@ -3076,9 +3076,31 @@ Inflight interface for `Queue`.
 
 | **Name** | **Description** |
 | --- | --- |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueClient.approxSize">approx_size</a></code> | Retrieve the approximate number of messages in the queue. |
+| <code><a href="#@winglang/wingsdk.cloud.IQueueClient.purge">purge</a></code> | Purge all of the messages in the queue. |
 | <code><a href="#@winglang/wingsdk.cloud.IQueueClient.push">push</a></code> | Push a message to the queue. |
 
 ---
+
+##### `approx_size` <a name="approx_size" id="@winglang/wingsdk.cloud.IQueueClient.approxSize"></a>
+
+```wing
+approx_size(): num
+```
+
+**Inflight client:** [true](#true)
+
+Retrieve the approximate number of messages in the queue.
+
+##### `purge` <a name="purge" id="@winglang/wingsdk.cloud.IQueueClient.purge"></a>
+
+```wing
+purge(): void
+```
+
+**Inflight client:** [true](#true)
+
+Purge all of the messages in the queue.
 
 ##### `push` <a name="push" id="@winglang/wingsdk.cloud.IQueueClient.push"></a>
 
