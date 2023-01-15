@@ -47,10 +47,12 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       // TODO: include all NodeJS globals?
       // https://nodejs.org/api/globals.html#global-objects
       // https://stackoverflow.com/questions/59049140/is-it-possible-to-make-all-of-node-js-globals-available-in-nodes-vm-context
-      console: console,
       fs: fs,
       path: path_,
       process: process,
+
+      // explicitly DO NOT propagate `console` because inflight
+      // function bind console.log to the global $logger object.
 
       $env: {
         ...this.env,
@@ -65,7 +67,7 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
     });
 
     return this.context.withTrace({
-      message: `Invoke (payload="${payload}").`,
+      message: `Invoke (payload="${JSON.stringify(payload)}").`,
       activity: async () => {
         return vm.runInContext(wrapper, context);
       },

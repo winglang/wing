@@ -413,12 +413,12 @@ impl JSifier {
 						.join("\n")
 				)
 			}
-			ExprKind::MapLiteral { fields, .. } => {
+			ExprKind::MapLiteral { fields, .. } => {				
 				format!(
-					"Object.freeze({{{}}})",
+					"Object.freeze(new Map([{}]))",
 					fields
 						.iter()
-						.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr, phase)))
+						.map(|(key, expr)| format!("[ \"{}\", {} ]", key, self.jsify_expression(expr, phase)))
 						.collect::<Vec<String>>()
 						.join(", ")
 				)
@@ -673,12 +673,12 @@ impl JSifier {
 				"bindings: {}",
 				Self::render_block([
 					if !resource_bindings.is_empty() {
-						format!("resources: {}", Self::render_block(&resource_bindings))
+						format!("resources: {},", Self::render_block(&resource_bindings))
 					} else {
 						"".to_string()
 					},
 					if !data_bindings.is_empty() {
-						format!("data: {}", Self::render_block(&data_bindings))
+						format!("data: {},", Self::render_block(&data_bindings))
 					} else {
 						"".to_string()
 					},

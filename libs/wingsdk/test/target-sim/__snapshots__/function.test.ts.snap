@@ -153,7 +153,7 @@ exports[`invoke function fails 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\"name\\":\\"alice\\"}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"alice\\\\\\"}\\"\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
@@ -311,7 +311,7 @@ exports[`invoke function succeeds 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\"name\\":\\"Alice\\"}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\"\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
@@ -469,7 +469,7 @@ exports[`invoke function with environment variables 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",
   "wingsdk.cloud.Function created.",
-  "Invoke (payload=\\"{\\"name\\":\\"Alice\\"}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"name\\\\\\":\\\\\\"Alice\\\\\\"}\\"\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]
