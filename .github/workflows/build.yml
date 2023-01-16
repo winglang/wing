@@ -17,7 +17,6 @@ env:
   NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
-  WINGLANG_REGISTRY: "https://npm.pkg.github.com"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
@@ -37,10 +36,6 @@ jobs:
       - name: Get tags
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: git fetch --unshallow --tags
-
-      - name: Login to Private NPM registry
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
@@ -107,7 +102,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -120,9 +114,6 @@ jobs:
 
       - name: Install wasi-sdk
         run: scripts/setup_wasi.sh
-
-      - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -212,7 +203,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -222,9 +212,6 @@ jobs:
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
-
-      - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -328,10 +315,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
-
-      - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -376,7 +359,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
 
       - name: Publish Extension to Visual Studio Marketplace
         uses: "HaaLeo/publish-vscode-extension@v1"

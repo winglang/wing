@@ -55,7 +55,6 @@ const project = new cdk.JsiiProject({
   ],
   prettier: true,
   minNodeVersion: "16.16.0",
-  npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",

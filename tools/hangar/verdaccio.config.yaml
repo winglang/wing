@@ -4,21 +4,13 @@ logs: { type: stdout, format: pretty, level: error }
 uplinks:
   npmjs:
     url: https://registry.npmjs.org/
-  github:
-    url: https://npm.pkg.github.com/
-    auth:
-      type: bearer
-      token_env: true
 packages:
-  "@winglang/wing":
+  "winglang":
     access: $all
     publish: $all
   "@winglang/wingsdk":
     access: $all
     publish: $all
-  "@winglang/*":
-    access: $all
-    proxy: github
   "**":
     access: $all
     proxy: npmjs
