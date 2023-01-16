@@ -135,7 +135,7 @@ export abstract class FunctionBase extends Resource implements IInflightHost {
 /**
  * Represents a function.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends FunctionBase {
   constructor(

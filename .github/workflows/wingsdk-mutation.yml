@@ -32,13 +32,10 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
-      - name: Login to private npm registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
       - name: Build transitive dependency (wing-api-checker)
         run: npm ci && npm run build
         working-directory: apps/wing-api-checker

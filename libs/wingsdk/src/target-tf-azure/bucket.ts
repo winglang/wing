@@ -9,7 +9,7 @@ import { App } from "./app";
 /**
  * Azure implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
   private readonly bucket: StorageContainer;

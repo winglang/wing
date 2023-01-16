@@ -11,7 +11,7 @@
   "author": "Monada",
   "dependencies": {
     "@wasmer/wasi": "^1.1.2",
-    "@winglang/wingsdk": "../../libs/wingsdk"
+    "@winglang/sdk": "../../libs/wingsdk"
   },
   "devDependencies": {
     "@esbuild-plugins/node-globals-polyfill": "^0.1.1",
