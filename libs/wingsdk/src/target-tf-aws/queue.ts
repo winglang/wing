@@ -92,11 +92,21 @@ export class Queue extends cloud.QueueBase {
     if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
       host.addPolicyStatements({
         effect: "Allow",
-        action: [
-          "sqs:SendMessage",
-          "sqs:GetQueueAttributes",
-          "sqs:GetQueueUrl",
-        ],
+        action: ["sqs:SendMessage"],
+        resource: this.queue.arn,
+      });
+    }
+    if (ops.includes(cloud.QueueInflightMethods.PURGE)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["sqs:PurgeQueue"],
+        resource: this.queue.arn,
+      });
+    }
+    if (ops.includes(cloud.QueueInflightMethods.APPROX_SIZE)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["sqs:GetQueueAttributes"],
         resource: this.queue.arn,
       });
     }
@@ -121,3 +131,5 @@ export class Queue extends cloud.QueueBase {
 }
 
 Queue._annotateInflight("push", {});
+Queue._annotateInflight("purge", {});
+Queue._annotateInflight("approx_size", {});
