@@ -17,7 +17,7 @@ describe("run single test", () => {
     new Test(app, "test", ["console.log('hi');"]);
     const sim = await app.startSimulator();
     const result = await sim.runTest("root/test");
-    expect(sanitizeTimestamps(result)).toMatchSnapshot();
+    expect(sanitizeResult(result)).toMatchSnapshot();
   });
 
   test("test failure", async () => {
@@ -29,7 +29,7 @@ describe("run single test", () => {
 
     const sim = await app.startSimulator();
     const result = await sim.runTest("root/test");
-    expect(sanitizeTimestamps(result)).toMatchSnapshot();
+    expect(sanitizeResult(result)).toMatchSnapshot();
   });
 
   test("not a function", async () => {
@@ -57,7 +57,7 @@ describe("run all tests", () => {
 
     const sim = await app.startSimulator();
     const results = await sim.runAllTests();
-    expect(results.map(sanitizeTimestamps)).toMatchSnapshot();
+    expect(results.map(sanitizeResult)).toMatchSnapshot();
   });
 
   test("multiple tests", async () => {
@@ -151,11 +151,23 @@ class Test extends Function {
   }
 }
 
-function sanitizeTimestamps(result: TestResult): TestResult {
+function removePathsFromTraceLine(line?: string) {
+  if (!line) {
+    return undefined;
+  }
+
+  if (line.startsWith("    at ")) {
+    return line.split("(")[0];
+  }
+
+  return line;
+}
+
+function sanitizeResult(result: TestResult): TestResult {
   return {
     path: result.path,
     pass: result.pass,
-    error: result.error,
+    error: result.error?.split("\n").map(removePathsFromTraceLine).join("\n"),
     traces: result.traces.map((trace) => ({
       ...trace,
       timestamp: "<TIMESTAMP>",

@@ -55,8 +55,7 @@ async function main() {
 
   program
     .command("test")
-    .description("Compiles a Wing program and runs all functions with the word 'test' in their IDs")
-    // allow multiple entrypoints to be specified
+    .description("Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers")
     .argument("<entrypoint...>", "all entrypoints to test")
     .action(test);
 

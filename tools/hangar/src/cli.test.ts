@@ -108,8 +108,8 @@ async function runWingCompile(type: InvocationType, wingFile: string) {
 	const isError = path.dirname(wingFile).endsWith("error");
 	const work = async () => {
 		const out = await (type === InvocationType.Direct
-			? $`${npxBin} @winglang/wing compile ${wingFile}`
-			: $`../node_modules/.bin/wing compile ${wingFile}`);
+			? $`${npxBin} @winglang/wing test ${wingFile}`
+			: $`../node_modules/.bin/wing test ${wingFile}`);
 		return out.exitCode;
 	};
 	if (isError) {

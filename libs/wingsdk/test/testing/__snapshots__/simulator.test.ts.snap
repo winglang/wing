@@ -137,16 +137,16 @@ Object {
 exports[`run single test test failure 1`] = `
 Object {
   "error": "Error: test failed
-    at Handler.handle (evalmachine.<anonymous>:21:15)
-    at Object.exports.handler (evalmachine.<anonymous>:24:12)
+    at Handler.handle 
+    at Object.exports.handler 
     at evalmachine.<anonymous>:27:9
-    at Script.runInContext (node:vm:141:12)
-    at Object.runInContext (node:vm:291:6)
-    at Object.activity (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:72:19)
-    at Object.withTrace (/home/runner/work/wing/wing/libs/wingsdk/src/testing/simulator.ts:242:38)
-    at Function.invoke (/home/runner/work/wing/wing/libs/wingsdk/src/target-sim/function.inflight.ts:69:25)
-    at Simulator.runTest (/home/runner/work/wing/wing/libs/wingsdk/src/testing/simulator.ts:466:16)
-    at Object.<anonymous> (/home/runner/work/wing/wing/libs/wingsdk/test/testing/simulator.test.ts:31:20)",
+    at Script.runInContext 
+    at Object.runInContext 
+    at Object.activity 
+    at Object.withTrace 
+    at Function.invoke 
+    at Simulator.runTest 
+    at processTicksAndRejections ",
   "pass": false,
   "path": "root/test",
   "traces": Array [

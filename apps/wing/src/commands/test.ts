@@ -2,12 +2,8 @@ import { mkdtemp, readdir } from "fs/promises";
 import { tmpdir } from "os";
 import { basename, extname, join } from "path";
 import { compile, Target } from "./compile";
+import * as chalk from "chalk";
 import * as sdk from '@winglang/wingsdk';
-
-const RED = "31";
-const GREEN = "32";
-const GRAY = "30;1";
-const WHITE = "37;1";
 
 export async function test(entrypoints: string[]) {
   for (const entrypoint of entrypoints) {
@@ -49,15 +45,15 @@ async function testOne(entrypoint: string) {
 
   for (const result of results.sort(sortTests)) {
     const status = result.pass 
-      ? color(GREEN, "pass") 
-      : color(RED, "fail");
+      ? chalk.green("pass") 
+      : chalk.red("fail");
 
-    const pathWithPadding = color(WHITE, result.path.padEnd(longestPath));
+    const pathWithPadding = chalk.whiteBright(result.path.padEnd(longestPath));
     const error = result.error 
-      ? `\n${color(RED, result.error)}`
+      ? `\n${chalk.red(result.error)}`
       : "";
 
-    const sep = color(GRAY, ' | ');
+    const sep = chalk.gray(' | ');
     const row = [
       status,
       basename(entrypoint),
@@ -84,12 +80,4 @@ function sortTests(a: sdk.testing.TestResult, b: sdk.testing.TestResult) {
     return 1;
   }
   return a.path.localeCompare(b.path);
-}
-
-function color(code: string, text: string) {
-  if (process.stdout.isTTY) {
-    return `\x1B[${code}m${text}\x1B[0m`;
-  } else {
-    return text;
-  }
 }
