@@ -10,7 +10,9 @@
   "engines": {
     "node": ">=v18.0.0"
   },
-  "bin": "bin/wing",
+  "bin": {
+    "wing": "./bin/wing"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/winglang/wing.git"
