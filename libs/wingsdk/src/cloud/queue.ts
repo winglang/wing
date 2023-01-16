@@ -143,5 +143,5 @@ export enum QueueInflightMethods {
   /** `Queue.purge` */
   PURGE = "purge",
   /** `Queue.approxSize` */
-  APPROXSIZE = "approxSize",
+  APPROX_SIZE = "approx_size",
 }

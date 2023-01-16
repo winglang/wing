@@ -901,7 +901,7 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:SendMessage\\",\\"sqs:GetQueueAttributes\\",\\"sqs:GetQueueUrl\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
       },
     },
@@ -928,6 +928,7 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "QUEUE_URL_31e95cbd": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
             "WING_FUNCTION_NAME": "test",
           },
         },
@@ -1007,10 +1008,11 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
 `;
 
 exports[`wing compile capture_resource_and_data.w > index.js 1`] = `
-"async handle(e) { const { data, res } = this; {
+"async handle(e) { const { data, queue, res } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(data.size === 3)'\`)})((data.size === 3))};
   (await res.put(\\"file.txt\\",\\"world\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await res.get(\\"file.txt\\")) === \\"world\\")'\`)})(((await res.get(\\"file.txt\\")) === \\"world\\"))};
+  (await queue.push(\\"spirulina\\"));
 } };"
 `;
 
@@ -1056,10 +1058,15 @@ constructor() {
   
   const data = Object.freeze(new Set([1, 2, 3]));
   const res = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2b5f5a1cfc4596bb12d43c883cabea5f3fcfc40aca0c282e783a65a5e4158d10/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\")),
     bindings: {
       resources: {
+        queue: {
+          resource: queue,
+          ops: [\\"approx_size\\",\\"purge\\",\\"push\\"]
+        },
         res: {
           resource: res,
           ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
