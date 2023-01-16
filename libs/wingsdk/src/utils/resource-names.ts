@@ -5,6 +5,9 @@ export enum CaseConventions {
   UPPERCASE = "uppercase",
 }
 
+/**
+ * Options for `ResourceNames.generateName`
+ */
 export interface NameOptions {
   /**
    * Maximum name length must always be greater than the hash (>=8 characters)
