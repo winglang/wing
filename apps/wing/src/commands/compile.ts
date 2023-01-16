@@ -105,6 +105,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       env: {
         WINGSDK_SYNTH_DIR: outDir,
         WING_TARGET: options.target,
+        APP_PROPS: {location: "East US", some: "thing"}
       },
     },
     __dirname: workDir,
@@ -126,6 +127,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log("evaluating artifact in context: %o", context);
 
   try {
+    console.log("running VM!");
     vm.runInContext(artifact, context);
   } catch (e) {
     console.error(chalk.bold.red("preflight error:") + " " + (e as any).message);

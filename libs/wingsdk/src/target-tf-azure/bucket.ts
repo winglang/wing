@@ -80,12 +80,14 @@ export class Bucket extends cloud.BucketBase {
     host;
     ops;
     // TODO: support functions once tfazure functions are implemented
-    throw new Error("Azure buckets have can not be bound by anything for now");
+    // throw new Error("Azure buckets have can not be bound by anything for now");
   }
 
   /** @internal */
   public _toInflight(): core.Code {
-    throw new Error("Method not implemented.");
+    return core.InflightClient.for(__filename, "BucketClient", [
+      `process.env["meh"]`,
+    ]);
   }
 }
 
