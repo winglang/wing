@@ -27,5 +27,7 @@ sufficient surface area across the various components.
 We manage our project roadmap through GitHub projects, which should offer an
 up-to-date view on what we've completed, what we are working on and our backlog.
 
-You will need to [sign up](https://t.winglang.io/alpha) for repository access to view.
+* [Compiler Roadmap](https://github.com/orgs/winglang/projects/1)
+* [SDK Roadmap](https://github.com/orgs/winglang/projects/3)
+* [Beta Roadmap](https://github.com/orgs/winglang/projects/2)
 
