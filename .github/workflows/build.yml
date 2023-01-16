@@ -370,13 +370,13 @@ jobs:
       - name: Publish Wing
         working-directory: wing
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: npm publish *.tgz
 
       - name: Publish Wing SDK
         working-directory: wingsdk
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: npm publish *.tgz
 
       - name: Rename Docs
