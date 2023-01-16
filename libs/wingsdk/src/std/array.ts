@@ -31,7 +31,7 @@ export class ImmutableArray {
 
 /**
  * Mutable Array
- * 
+ *
  * @typeparam T1
  */
 export class MutableArray extends ImmutableArray {

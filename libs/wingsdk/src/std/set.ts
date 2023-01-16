@@ -6,7 +6,7 @@ import { T1 } from "./util";
 
 /**
  * Immutable Set
- * 
+ *
  * @typeparam T1
  */
 export class ImmutableSet {
@@ -31,7 +31,7 @@ export class ImmutableSet {
 
 /**
  * Mutable Set
- * 
+ *
  * @typeparam T1
  */
 export class MutableSet extends ImmutableSet {
