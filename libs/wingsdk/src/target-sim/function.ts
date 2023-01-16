@@ -16,7 +16,7 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
 /**
  * Simulator implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements ISimulatorResource {
   private readonly code: core.Code;

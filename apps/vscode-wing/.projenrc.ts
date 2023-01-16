@@ -45,7 +45,7 @@ const project = new TypeScriptAppProject({
     "@types/node",
     "esbuild",
     "@vscode/vsce",
-    "@winglang/wingsdk@file:../../libs/wingsdk",
+    "@winglang/sdk@file:../../libs/wingsdk",
   ],
 });
 
@@ -114,7 +114,7 @@ project.addFields({
 });
 
 const esbuildComment =
-  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:@winglang/wingsdk --format=cjs --platform=node --bundle";
+  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:@winglang/sdk --format=cjs --platform=node --bundle";
 project.compileTask.reset();
 project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);

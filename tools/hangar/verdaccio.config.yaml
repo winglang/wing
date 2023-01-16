@@ -8,7 +8,7 @@ packages:
   "winglang":
     access: $all
     publish: $all
-  "@winglang/wingsdk":
+  "@winglang/sdk":
     access: $all
     publish: $all
   "**":

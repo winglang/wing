@@ -233,7 +233,7 @@ export class WingTranspile extends transpile.TranspileBase {
     }
 
     return new transpile.TranspiledType({
-      fqn: fqn.filter((s) => s !== "@winglang/wingsdk").join("."),
+      fqn: fqn.filter((s) => s !== "@winglang/sdk").join("."),
       name: typeName,
       namespace: type.namespace,
       module: moduleLike.name,

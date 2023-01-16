@@ -9,7 +9,7 @@ const JSII_DEPS = [
 ];
 
 const project = new cdk.JsiiProject({
-  name: "@winglang/wingsdk",
+  name: "@winglang/sdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",

@@ -23,8 +23,8 @@
           "rm -f resources/native/*",
           "rm -f resources/wingsdk/*",
           "cp -v ../../target/debug/wing-language-server resources/native",
-          "cp -v node_modules/@winglang/wingsdk/package.json resources/wingsdk/package.json",
-          "cp -v node_modules/@winglang/wingsdk/.jsii resources/wingsdk/.jsii"
+          "cp -v node_modules/@winglang/sdk/package.json resources/wingsdk/package.json",
+          "cp -v node_modules/@winglang/sdk/.jsii resources/wingsdk/.jsii"
         ],
         "cwd": "apps/vscode-wing",
         "parallel": false
