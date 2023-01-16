@@ -367,16 +367,17 @@ jobs:
           registryUrl: "https://marketplace.visualstudio.com"
           extensionFile: "vscode-wing/vscode-wing.vsix"
 
+      - name: Login to Private NPM registry
+        run: |
+          npm config set @winglang:registry https://registry.npmjs.org
+          npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
+
       - name: Publish Wing
         working-directory: wing
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: npm publish *.tgz
 
       - name: Publish Wing SDK
         working-directory: wingsdk
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
         run: npm publish *.tgz
 
       - name: Rename Docs
