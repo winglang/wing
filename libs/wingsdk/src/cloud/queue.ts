@@ -67,7 +67,7 @@ export interface QueueOnMessageProps extends FunctionProps {
 /**
  * Represents a queue.
  *
- * @inflight `@winglang/wingsdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends QueueBase {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {

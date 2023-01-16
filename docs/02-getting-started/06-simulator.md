@@ -40,7 +40,7 @@ If you are using the Wing CLI through a global installation, you'll need to
 install the Wing SDK library locally using:
 
 ```sh
-npm i @winglang/wingsdk
+npm i @winglang/sdk
 ```
 
 :::
@@ -58,7 +58,7 @@ node --experimental-repl-await
 Now, we import the Wing SDK library:
 
 ```js
-const sdk = require("@winglang/wingsdk"); // import the wing sdk library
+const sdk = require("@winglang/sdk"); // import the wing sdk library
 const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wsim"}); // create an instance of the Simulator
 await simulator.start(); // start the simulator 
 ```

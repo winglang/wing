@@ -9,7 +9,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 /**
  * Simulator implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase implements ISimulatorResource {
   private readonly public: boolean;

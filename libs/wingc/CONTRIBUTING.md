@@ -35,9 +35,6 @@ These tools are needed to build the library and run unit tests:
 - ???? (@sep)
 - Your favorite code editor
 
-
-To build the project, you also need to `npm login` into `@winglang` in order to install private npm packages.
-
 ## Orientation
 
 

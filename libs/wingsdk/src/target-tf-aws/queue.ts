@@ -10,7 +10,7 @@ import { Function } from "./function";
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/wingsdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase {
   private readonly queue: SqsQueue;
