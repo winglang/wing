@@ -1654,7 +1654,6 @@ impl<'a> TypeChecker<'a> {
 			return self.general_type_error(format!("\"{}\" does not have type parameters", original_fqn));
 		};
 
-		// verify that the number of type arguments matches the number of type parameters
 		if original_type_params.len() != type_params.len() {
 			return self.general_type_error(format!(
 				"Type \"{}\" has {} type parameters, but {} were provided",
@@ -1682,7 +1681,7 @@ impl<'a> TypeChecker<'a> {
 			for (name, symbol) in original_type_class.env.iter() {
 				match symbol {
 					SymbolKind::Variable(v) => {
-						// Replace `any` in function signatures
+						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
 							let new_return_type = if sig.return_type == *original_type_param {
 								new_type_arg
