@@ -1651,7 +1651,10 @@ impl<'a> TypeChecker<'a> {
 		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
 			tp
 		} else {
-			return self.general_type_error(format!("\"{}\" does not have type parameters", original_fqn));
+			panic!(
+				"\"{}\" does not have type parameters and does not need hydration",
+				original_fqn
+			);
 		};
 
 		if original_type_params.len() != type_params.len() {
