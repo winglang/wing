@@ -61,6 +61,36 @@ test("queue with one subscriber, default batch size of 1", async () => {
   expect(app.snapshot()).toMatchSnapshot();
 });
 
+test("queue batch size of 2, purge the queue", async () => {
+  // GIVEN
+  const QUEUE_SIZE = 2;
+  const QUEUE_EMPTY_SIZE = 0;
+  const app = new SimApp();
+  new cloud.Queue(app, "my_queue");
+  const s = await app.startSimulator();
+
+  const queueClient = s.getResource("/my_queue") as cloud.IQueueClient;
+
+  // WHEN
+  await queueClient.push("A");
+  await queueClient.push("B");
+
+  let approxSize = await queueClient.approxSize();
+
+  expect(approxSize).toEqual(QUEUE_SIZE);
+
+  await queueClient.purge();
+
+  approxSize = await queueClient.approxSize();
+  expect(approxSize).toEqual(QUEUE_EMPTY_SIZE);
+
+  // THEN
+  await s.stop();
+
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
 test("queue with one subscriber, batch size of 5", async () => {
   // GIVEN
   const app = new SimApp();

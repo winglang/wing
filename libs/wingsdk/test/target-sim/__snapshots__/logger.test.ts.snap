@@ -6,7 +6,7 @@ Array [
   "wingsdk.cloud.Function created.",
   "Hello, Alice",
   "Wahoo!",
-  "Invoke (payload=\\"Alice\\").",
+  "Invoke (payload=\\"\\"Alice\\"\\").",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
 ]

@@ -79,13 +79,10 @@ Array [
   "wingsdk.cloud.Queue created.",
   "Push (message=BAD MESSAGE).",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\"messages\\":[\\"BAD MESSAGE\\"]}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
   "Subscriber error - returning 1 messages to queue.",
   "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\"messages\\":[\\"BAD MESSAGE\\"]}\\").",
-  "Subscriber error - returning 1 messages to queue.",
-  "Sending messages (messages=[\\"BAD MESSAGE\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\"messages\\":[\\"BAD MESSAGE\\"]}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"BAD MESSAGE\\\\\\"]}\\"\\").",
   "Subscriber error - returning 1 messages to queue.",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
@@ -347,6 +344,92 @@ exports.handler = async function(event) {
 }
 `;
 
+exports[`queue batch size of 2, purge the queue 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Queue created.",
+  "Push (message=A).",
+  "Push (message=B).",
+  "ApproxSize ().",
+  "Purge ().",
+  "ApproxSize ().",
+  "wingsdk.cloud.Queue deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`queue batch size of 2, purge the queue 2`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/my_queue",
+        "props": Object {
+          "initialMessages": Array [],
+          "subscribers": Array [],
+          "timeout": 30,
+        },
+        "type": "wingsdk.cloud.Queue",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_queue": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed message queue",
+            "title": "Queue",
+          },
+          "id": "my_queue",
+          "path": "root/my_queue",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.130",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
 exports[`queue with one subscriber, batch size of 5 1`] = `
 Array [
   "wingsdk.cloud.Logger created.",
@@ -354,8 +437,8 @@ Array [
   "wingsdk.cloud.Queue created.",
   "Sending messages (messages=[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"F\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\"messages\\":[\\"F\\"]}\\").",
-  "Invoke (payload=\\"{\\"messages\\":[\\"A\\",\\"B\\",\\"C\\",\\"D\\",\\"E\\"]}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"F\\\\\\"]}\\"\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\",\\\\\\"B\\\\\\",\\\\\\"C\\\\\\",\\\\\\"D\\\\\\",\\\\\\"E\\\\\\"]}\\"\\").",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
@@ -632,8 +715,8 @@ Array [
   "Push (message=B).",
   "Sending messages (messages=[\\"A\\"], subscriber=sim-1).",
   "Sending messages (messages=[\\"B\\"], subscriber=sim-1).",
-  "Invoke (payload=\\"{\\"messages\\":[\\"A\\"]}\\").",
-  "Invoke (payload=\\"{\\"messages\\":[\\"B\\"]}\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"A\\\\\\"]}\\"\\").",
+  "Invoke (payload=\\"\\"{\\\\\\"messages\\\\\\":[\\\\\\"B\\\\\\"]}\\"\\").",
   "wingsdk.cloud.Queue deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",

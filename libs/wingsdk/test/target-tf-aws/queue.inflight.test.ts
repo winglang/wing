@@ -1,4 +1,9 @@
-import { SendMessageCommand, SQSClient } from "@aws-sdk/client-sqs";
+import {
+  SendMessageCommand,
+  PurgeQueueCommand,
+  GetQueueAttributesCommand,
+  SQSClient,
+} from "@aws-sdk/client-sqs";
 import { mockClient } from "aws-sdk-client-mock";
 import { QueueClient } from "../../src/target-tf-aws/queue.inflight";
 
@@ -26,4 +31,39 @@ test("push - happy path", async () => {
 
   // THEN
   expect(response).toEqual(undefined);
+});
+
+test("purge - happy path", async () => {
+  // GIVEN
+  const QUEUE_URL = "QUEUE_URL";
+  const RESPONSE = {};
+
+  sqsMock.on(PurgeQueueCommand, { QueueUrl: QUEUE_URL }).resolves(RESPONSE);
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+  const response = await client.purge();
+
+  // THEN
+  expect(response).toEqual(undefined);
+});
+
+test("approxSize - happy path", async () => {
+  // GIVEN
+  const QUEUE_SIZE = 3;
+  const QUEUE_URL = "QUEUE_URL";
+  const GET_QUEUE_ATTRIBUTES_RESPONSE = {
+    Attributes: { ApproximateNumberOfMessages: QUEUE_SIZE.toString() },
+  };
+
+  sqsMock
+    .on(GetQueueAttributesCommand, { QueueUrl: QUEUE_URL })
+    .resolves(GET_QUEUE_ATTRIBUTES_RESPONSE);
+
+  // WHEN
+  const client = new QueueClient(QUEUE_URL);
+  const response = await client.approxSize();
+
+  // THEN
+  expect(response).toEqual(QUEUE_SIZE);
 });
