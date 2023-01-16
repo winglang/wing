@@ -26,20 +26,20 @@
 
       code.addEventListener("input", () => sendCodeToWorker(code.value));
 
-      code.addEventListener('scroll', () => {
+      code.addEventListener("scroll", () => {
           lineCounter.scrollTop = code.scrollTop;
           lineCounter.scrollLeft = code.scrollLeft;
       });
 
       var lineCountCache = 0;
       function line_counter() {
-            var lineCount = code.value.split('\n').length;
+            var lineCount = code.value.split("\n").length;
             var outarr = new Array();
             if (lineCountCache != lineCount) {
               for (var x = 0; x < lineCount; x++) {
-                  outarr[x] = (x + 1) + '.';
+                  outarr[x] = x + 1;
               }
-              lineCounter.value = outarr.join('\n');
+              lineCounter.value = outarr.join("\n");
             }
             lineCountCache = lineCount;
       }
@@ -134,11 +134,12 @@
 
     #lineCounter {
       border-color: transparent;
+      resize: none;
       outline: none;
       overflow-y: hidden;
       text-align: right;
       box-shadow: none;
-      width: 4rem;
-}
+      width: 2rem;
+    }
   </style>
 </html>
