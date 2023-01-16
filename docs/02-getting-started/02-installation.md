@@ -26,10 +26,10 @@ In order to deploy to AWS, you will also need:
 
 ## Wing CLI
 
-</br>
+<br/>
 <details>
   <summary><b>!Caution If you were in our closed alpha</b></summary>
-</br>
+<br/>
 
 If you installed Wing as part of our closed alpha, please make sure to uninstall the existing version
 and clean up your `~/.npmrc` before continuing. Otherwise you will see the following error when trying
@@ -55,7 +55,7 @@ You can also just delete `~/.npmrc` if there are no other registries that you ar
 
 </details>
 
-</br>
+<br/>
 Install the Wing CLI through npm:
 
 ```sh
