@@ -467,7 +467,9 @@ impl<'a> JsiiImporter<'a> {
 		// When adding the class methods below we'll be able to reference this type.
 		debug!("Adding type {} to namespace", type_name.green());
 		let type_params = jsii_class.docs.as_ref().and_then(|docs| {
-			// get "@typeparam" from doc custom map
+			// `@typeparam` allows us to add type args to JSII types
+			// `@typeparam <types>` - where <types> is a comma separated list of type parameters, referencing a class in the same namespace
+			// e.g. `@typeparam T1, T2` - T1 and T2 are type parameters of the class and will be replaced with the actual types when the class is used
 			docs.custom.as_ref().and_then(|c| {
 				c.get("typeparam").and_then(|type_param_name| {
 					let args = type_param_name.split(",").map(|s| s.trim()).collect::<Vec<&str>>();
