@@ -863,7 +863,7 @@ The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 > }
 > // calling 0..100 does not allocate, just returns an iterator
 > function* iterator(start, end) {
->   let i = lim;
+>   let i = start;
 >   while (i < end) yield i++;
 >   while (i > end) yield i--;
 > }
