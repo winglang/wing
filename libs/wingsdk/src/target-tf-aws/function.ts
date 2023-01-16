@@ -25,7 +25,7 @@ const NAME_OPTS: NameOptions = {
 /**
  * AWS implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;

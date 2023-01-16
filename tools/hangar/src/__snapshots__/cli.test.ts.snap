@@ -35,7 +35,7 @@ exports[`wing compile anon_function.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile anon_function.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -255,7 +255,7 @@ exports[`wing compile asynchronous_model_implicit_await_in_functions.w > manifes
 `;
 
 exports[`wing compile asynchronous_model_implicit_await_in_functions.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -273,7 +273,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"asynchronous_model_implicit_await_in_functions\\" });
@@ -431,7 +431,7 @@ exports[`wing compile capture_containers.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile capture_containers.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -449,7 +449,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_containers\\" });
@@ -642,7 +642,7 @@ exports[`wing compile capture_in_binary.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile capture_in_binary.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -660,7 +660,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_in_binary\\" });
@@ -820,7 +820,7 @@ exports[`wing compile capture_primitives.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile capture_primitives.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -838,7 +838,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_primitives\\" });
@@ -902,7 +902,7 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
             "uniqueId": "root_test_IamRolePolicy_474A6820",
           },
         },
-        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"sqs:SendMessage\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:PurgeQueue\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"sqs:GetQueueAttributes\\"],\\"Resource\\":\\"\${aws_sqs_queue.root_cloudQueue_E3597F7A.arn}\\",\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
       },
     },
@@ -929,6 +929,7 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "QUEUE_URL_31e95cbd": "\${aws_sqs_queue.root_cloudQueue_E3597F7A.url}",
             "WING_FUNCTION_NAME": "test-c8b6eece",
           },
         },
@@ -1009,10 +1010,11 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
 `;
 
 exports[`wing compile capture_resource_and_data.w > index.js 1`] = `
-"async handle(e) { const { data, res } = this; {
+"async handle(e) { const { data, queue, res } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(data.size === 3)'\`)})((data.size === 3))};
   (await res.put(\\"file.txt\\",\\"world\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await res.get(\\"file.txt\\")) === \\"world\\")'\`)})(((await res.get(\\"file.txt\\")) === \\"world\\"))};
+  (await queue.push(\\"spirulina\\"));
 } };"
 `;
 
@@ -1033,7 +1035,7 @@ exports[`wing compile capture_resource_and_data.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile capture_resource_and_data.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -1051,17 +1053,22 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"capture_resource_and_data\\" });
   
   const data = Object.freeze(new Set([1, 2, 3]));
   const res = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  const queue = new cloud.Queue(this,\\"cloud.Queue\\");
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.2b5f5a1cfc4596bb12d43c883cabea5f3fcfc40aca0c282e783a65a5e4158d10/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.10149a479ee5940e90f4621a2bca78dda7429636b1f235fcd785b3e33c131537/index.js\\")),
     bindings: {
       resources: {
+        queue: {
+          resource: queue,
+          ops: [\\"approx_size\\",\\"purge\\",\\"push\\"]
+        },
         res: {
           resource: res,
           ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
@@ -1453,7 +1460,7 @@ exports[`wing compile captures.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile captures.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -1471,7 +1478,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"captures\\" });
@@ -1668,7 +1675,7 @@ exports[`wing compile container_types.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile container_types.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -1686,7 +1693,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"container_types\\" });
@@ -1761,7 +1768,7 @@ exports[`wing compile enums.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile enums.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -1831,7 +1838,7 @@ exports[`wing compile expressions_binary_operators.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile expressions_binary_operators.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -1900,7 +1907,7 @@ exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile expressions_string_interpolation.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -2133,7 +2140,7 @@ exports[`wing compile file_counter.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile file_counter.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -2151,7 +2158,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"file_counter\\" });
@@ -2216,7 +2223,7 @@ exports[`wing compile forward_decl.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile forward_decl.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -2439,7 +2446,7 @@ exports[`wing compile hello.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile hello.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -2457,7 +2464,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"hello\\" });
@@ -2522,7 +2529,7 @@ exports[`wing compile identical_inflights.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile identical_inflights.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -2720,7 +2727,7 @@ exports[`wing compile mut_container_types.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile mut_container_types.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -2738,7 +2745,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"mut_container_types\\" });
@@ -2813,7 +2820,7 @@ exports[`wing compile primitive_methods.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile primitive_methods.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3009,7 +3016,7 @@ exports[`wing compile print.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile print.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3027,7 +3034,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"print\\" });
@@ -3081,7 +3088,7 @@ exports[`wing compile resource.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile resource.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3153,7 +3160,7 @@ exports[`wing compile statements_if.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile statements_if.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3223,7 +3230,7 @@ exports[`wing compile statements_variable_declarations.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile statements_variable_declarations.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3294,7 +3301,7 @@ exports[`wing compile std_containers.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile std_containers.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3367,7 +3374,7 @@ exports[`wing compile while.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile while.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3544,7 +3551,7 @@ exports[`wing compile while_loop_await.w > manifest.json 1`] = `
 `;
 
 exports[`wing compile while_loop_await.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/wingsdk');
+"const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
 function __app(target) {
@@ -3562,7 +3569,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
-const cloud = require('@winglang/wingsdk').cloud;
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"while_loop_await\\" });

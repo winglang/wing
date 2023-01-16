@@ -32,7 +32,7 @@
     "@typescript-eslint/eslint-plugin": "^5",
     "@typescript-eslint/parser": "^5",
     "@vscode/vsce": "^2.16.0",
-    "@winglang/wingsdk": "file:../../libs/wingsdk",
+    "@winglang/sdk": "file:../../libs/wingsdk",
     "esbuild": "^0.15.6",
     "eslint": "^8",
     "eslint-config-prettier": "^8.5.0",

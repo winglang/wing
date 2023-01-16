@@ -33,7 +33,7 @@ export abstract class LoggerBase extends Resource {
 /**
  * A cloud logging facility.
  *
- * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
+ * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
 export class Logger extends LoggerBase {
   /**

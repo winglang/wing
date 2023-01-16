@@ -47,7 +47,7 @@ const BUCKET_NAME_OPTS: NameOptions = {
 /**
  * Azure implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
   private readonly bucket: StorageContainer;

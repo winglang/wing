@@ -5,7 +5,7 @@ import * as core from "../core";
 /**
  * Azure implementation of `cloud.Logger`
  *
- * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
+ * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase {
   constructor(scope: Construct, id: string) {

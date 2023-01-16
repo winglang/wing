@@ -2,7 +2,10 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MUT_ARRAY, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STRING, WINGSDK_MUT_MAP, WINGSDK_MAP};
+use crate::{
+	debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_SET, WINGSDK_STRING,
+};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -134,6 +137,7 @@ pub struct Class {
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
+	pub type_parameters: Option<Vec<TypeRef>>,
 }
 
 impl Class {
@@ -1161,12 +1165,12 @@ impl<'a> TypeChecker<'a> {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
-			},
+			}
 			AstType::MutMap(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::MutMap(value_type))
-			},
+			}
 		}
 	}
 
@@ -1373,6 +1377,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,
+					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
 				let mut class_type = self.types.add_type(if *is_resource {
 					Type::Resource(class_spec)
@@ -1620,7 +1625,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// Hydrate `any`s in a type reference with a single type argument
+	/// Hydrate `@typeparam`s in a type reference with a given type argument
 	///
 	/// # Arguments
 	///
@@ -1631,13 +1636,35 @@ impl<'a> TypeChecker<'a> {
 	/// # Returns
 	/// The hydrated type reference
 	///
-	fn hydrate_class_type_arguments(&mut self, env: &SymbolEnv, original_fqn: &str, type_param: TypeRef) -> TypeRef {
+	fn hydrate_class_type_arguments(
+		&mut self,
+		env: &SymbolEnv,
+		original_fqn: &str,
+		type_params: Vec<TypeRef>,
+	) -> TypeRef {
 		let original_type = env
 			.lookup_nested_str(original_fqn, true, None)
 			.unwrap()
 			.as_type()
 			.unwrap();
 		let original_type_class = original_type.as_class().unwrap();
+		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
+			tp
+		} else {
+			panic!(
+				"\"{}\" does not have type parameters and does not need hydration",
+				original_fqn
+			);
+		};
+
+		if original_type_params.len() != type_params.len() {
+			return self.general_type_error(format!(
+				"Type \"{}\" has {} type parameters, but {} were provided",
+				original_fqn,
+				original_type_params.len(),
+				type_params.len()
+			));
+		}
 
 		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, true, Phase::Independent, 0);
 		let tt = Type::Class(Class {
@@ -1645,68 +1672,78 @@ impl<'a> TypeChecker<'a> {
 			env: new_env,
 			parent: original_type_class.parent,
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
+			type_parameters: Some(type_params.clone()),
 		});
 		let mut new_type = self.types.add_type(tt);
 		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
-		for (name, symbol) in original_type_class.env.iter() {
-			match symbol {
-				SymbolKind::Variable(v) => {
-					// Replace `any` in function signatures
-					if let Some(sig) = v.as_function_sig() {
-						let new_return_type = if sig.return_type.is_anything() {
-							type_param
-						} else {
-							sig.return_type
-						};
+		for (type_index, original_type_param) in original_type_params.iter().enumerate() {
+			let new_type_arg = type_params[type_index];
+			for (name, symbol) in original_type_class.env.iter() {
+				match symbol {
+					SymbolKind::Variable(v) => {
+						// Replace type params in function signatures
+						if let Some(sig) = v.as_function_sig() {
+							let new_return_type = if sig.return_type == *original_type_param {
+								new_type_arg
+							} else {
+								sig.return_type
+							};
 
-						let new_args: Vec<UnsafeRef<Type>> = sig
-							.args
-							.iter()
-							.map(|arg| if arg.is_anything() { type_param } else { *arg })
-							.collect();
+							let new_args: Vec<UnsafeRef<Type>> = sig
+								.args
+								.iter()
+								.map(|arg| {
+									if *arg == *original_type_param {
+										new_type_arg
+									} else {
+										*arg
+									}
+								})
+								.collect();
 
-						let new_sig = FunctionSignature {
-							args: new_args,
-							return_type: new_return_type,
-							flight: Phase::Independent,
-						};
+							let new_sig = FunctionSignature {
+								args: new_args,
+								return_type: new_return_type,
+								flight: Phase::Independent,
+							};
 
-						match new_type_class.env.define(
-							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&Symbol {
-								name: name.clone(),
-								span: WingSpan::global(),
-							},
-							SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
-							StatementIdx::Top,
-						) {
-							Err(type_error) => {
-								self.type_error(&type_error);
+							match new_type_class.env.define(
+								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+								&Symbol {
+									name: name.clone(),
+									span: WingSpan::global(),
+								},
+								SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
+								StatementIdx::Top,
+							) {
+								Err(type_error) => {
+									self.type_error(&type_error);
+								}
+								_ => {}
 							}
-							_ => {}
-						}
-					} else if let Some(var) = symbol.as_variable() {
-						let new_var_type = if var.is_anything() { type_param } else { var };
-						match new_type_class.env.define(
-							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&Symbol {
-								name: name.clone(),
-								span: WingSpan::global(),
-							},
-							SymbolKind::Variable(new_var_type),
-							StatementIdx::Top,
-						) {
-							Err(type_error) => {
-								self.type_error(&type_error);
+						} else if let Some(var) = symbol.as_variable() {
+							let new_var_type = if var == *original_type_param { new_type_arg } else { var };
+							match new_type_class.env.define(
+								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+								&Symbol {
+									name: name.clone(),
+									span: WingSpan::global(),
+								},
+								SymbolKind::Variable(new_var_type),
+								StatementIdx::Top,
+							) {
+								Err(type_error) => {
+									self.type_error(&type_error);
+								}
+								_ => {}
 							}
-							_ => {}
 						}
 					}
+					_ => {}
 				}
-				_ => {}
 			}
 		}
 
@@ -1784,27 +1821,27 @@ impl<'a> TypeChecker<'a> {
 
 					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::MutArray(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::Set(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::MutSet(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::Map(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::MutMap(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::String => self.get_property_from_class(

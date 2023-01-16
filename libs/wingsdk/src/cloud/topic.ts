@@ -45,7 +45,7 @@ export interface TopicOnMessageProps {}
 /**
  * Represents a topic.
  *
- * @inflight `@winglang/wingsdk.cloud.ITopicClient`
+ * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends TopicBase {
   constructor(scope: Construct, id: string, props: TopicProps = {}) {
