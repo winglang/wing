@@ -4,10 +4,11 @@ use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
+use indexmap::IndexSet;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
-use crate::type_check::type_env::TypeEnv;
+use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
 
 #[derive(Debug, Eq, Clone)]
@@ -47,7 +48,7 @@ impl PartialEq for Symbol {
 
 impl std::fmt::Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{} {}", self.name, self.span)
+		write!(f, "{} (at {})", self.name, self.span)
 	}
 }
 
@@ -76,9 +77,51 @@ pub enum Type {
 	Duration,
 	Optional(Box<Type>),
 	Array(Box<Type>),
+	MutArray(Box<Type>),
 	Map(Box<Type>),
+	MutMap(Box<Type>),
+	Set(Box<Type>),
+	MutSet(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
+}
+
+impl Display for Type {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Type::Number => write!(f, "num"),
+			Type::String => write!(f, "str"),
+			Type::Bool => write!(f, "bool"),
+			Type::Duration => write!(f, "duration"),
+			Type::Optional(t) => write!(f, "{}?", t),
+			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::MutArray(t) => write!(f, "MutArray<{}>", t),
+			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::MutMap(t) => write!(f, "MutMap<{}>", t),
+			Type::Set(t) => write!(f, "Set<{}>", t),
+			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
+			Type::FunctionSignature(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.parameters
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
+						format!("{}", ret_val)
+					} else {
+						"void".to_string()
+					}
+				)
+			}
+			Type::CustomType { root, fields: _ } => {
+				write!(f, "{}", root)
+			}
+		}
+	}
 }
 
 #[derive(Debug, Clone)]
@@ -110,6 +153,25 @@ pub struct Stmt {
 	pub kind: StmtKind,
 	pub span: WingSpan,
 	pub idx: usize,
+}
+
+#[derive(Debug)]
+pub enum UtilityFunctions {
+	Print,
+	Panic,
+	Throw,
+	Assert,
+}
+
+impl Display for UtilityFunctions {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Panic => write!(f, "panic"),
+			UtilityFunctions::Throw => write!(f, "throw"),
+			UtilityFunctions::Assert => write!(f, "assert"),
+		}
+	}
 }
 
 #[derive(Debug)]
@@ -156,6 +218,10 @@ pub enum StmtKind {
 		name: Symbol,
 		extends: Vec<Symbol>,
 		members: Vec<ClassMember>,
+	},
+	Enum {
+		name: Symbol,
+		values: IndexSet<Symbol>,
 	},
 }
 
@@ -204,6 +270,10 @@ pub enum ExprKind {
 		type_: Option<Type>,
 		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
 		fields: BTreeMap<String, Expr>,
+	},
+	SetLiteral {
+		type_: Option<Type>,
+		items: Vec<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }
@@ -265,11 +335,11 @@ pub enum InterpolatedStringPart {
 pub struct Scope {
 	pub statements: Vec<Stmt>,
 	#[derivative(Debug = "ignore")]
-	pub env: RefCell<Option<TypeEnv>>, // None after parsing, set to Some during type checking phase
+	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
-	pub fn set_env(&self, new_env: TypeEnv) {
+	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
 		*env = Some(new_env);

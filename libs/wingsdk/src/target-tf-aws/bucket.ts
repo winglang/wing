@@ -4,15 +4,13 @@ import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-pub
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { BucketInflightMethods } from "../cloud";
-import { CaptureMetadata, Code, InflightClient, Resource } from "../core";
+import * as core from "../core";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
 
 /**
  * AWS implementation of `cloud.Bucket`.
  *
- * @inflight `@winglang/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
   private readonly bucket: S3Bucket;
@@ -64,40 +62,35 @@ export class Bucket extends cloud.BucketBase {
     }
   }
 
-  /**
-   * @internal
-   */
-  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("buckets can only be captured by tfaws.Function for now");
+  /** @internal */
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("buckets can only be bound by tfaws.Function for now");
     }
 
-    const env = `BUCKET_NAME_${this.node.addr.slice(-8)}`;
-
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(BucketInflightMethods.PUT)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.BucketInflightMethods.PUT)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:PutObject*", "s3:Abort*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.has(BucketInflightMethods.GET)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.BucketInflightMethods.GET)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.has(BucketInflightMethods.LIST)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.BucketInflightMethods.LIST)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["s3:GetObject*", "s3:GetBucket*", "s3:List*"],
         resource: [`${this.bucket.arn}`, `${this.bucket.arn}/*`],
       });
     }
-    if (methods.has(BucketInflightMethods.DELETE)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.BucketInflightMethods.DELETE)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: [
           "s3:DeleteObject*",
@@ -109,12 +102,24 @@ export class Bucket extends cloud.BucketBase {
     }
     // The bucket name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(env, this.bucket.bucket);
+    host.addEnvironment(this.envName(), this.bucket.bucket);
 
-    addBindConnections(this, captureScope);
+    super._bind(host, ops);
+  }
 
-    return InflightClient.for(__filename, "BucketClient", [
-      `process.env["${env}"]`,
+  /** @internal */
+  public _toInflight(): core.Code {
+    return core.InflightClient.for(__filename, "BucketClient", [
+      `process.env["${this.envName()}"]`,
     ]);
   }
+
+  private envName(): string {
+    return `BUCKET_NAME_${this.node.addr.slice(-8)}`;
+  }
 }
+
+Bucket._annotateInflight("put", {});
+Bucket._annotateInflight("get", {});
+Bucket._annotateInflight("delete", {});
+Bucket._annotateInflight("list", {});

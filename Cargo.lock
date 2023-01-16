@@ -1809,6 +1809,7 @@ dependencies = [
  "colored",
  "derivative",
  "globset",
+ "indexmap",
  "inflections",
  "itertools",
  "lazy_static",

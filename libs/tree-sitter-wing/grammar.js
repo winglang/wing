@@ -11,6 +11,7 @@ const PREC = {
   MULTIPLY: 10,
   UNARY: 11,
   NIL_COALESCING: 12,
+  MEMBER: 13,
 };
 
 module.exports = grammar({
@@ -43,8 +44,7 @@ module.exports = grammar({
 
     // Identifiers
     reference: ($) =>
-//      prec.right(choice($.identifier, $.nested_identifier)),
-      choice($.identifier, $.nested_identifier),
+     choice($.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -55,11 +55,11 @@ module.exports = grammar({
       ),
     
     nested_identifier: ($) =>
-      seq(
+      prec(PREC.MEMBER, seq(
         field("object", $.expression),
         choice(".", "?."),
         field("property", $.identifier)
-      ),
+      )),
 
     _inflight_specifier: ($) => "inflight",
 
@@ -76,6 +76,7 @@ module.exports = grammar({
         $.while_statement,
         $.if_statement,
         $.struct_definition,
+        $.enum_definition,
       ),
 
     short_import_statement: ($) =>
@@ -97,6 +98,16 @@ module.exports = grammar({
       ),
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
+
+    
+    enum_definition: ($) => 
+      seq(
+        "enum", 
+        field("enum_name", $.identifier), 
+        "{",
+        commaSep(alias($.identifier, $.enum_field)),
+        "}"
+      ),
 
     return_statement: ($) =>
       seq("return", optional(field("expression", $.expression)), ";"),
@@ -479,7 +490,7 @@ module.exports = grammar({
     ),
     set_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSep($.expression), "}"
+      "{", commaSep(field("element", $.expression)), "}"
     ),
     map_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),

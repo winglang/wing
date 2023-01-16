@@ -5,17 +5,16 @@
       "type": "build"
     },
     {
+      "name": "@types/debug",
+      "type": "build"
+    },
+    {
       "name": "@types/fs-extra",
       "type": "build"
     },
     {
       "name": "@types/jest",
       "version": "^27",
-      "type": "build"
-    },
-    {
-      "name": "@types/minipass",
-      "version": "3.1.2",
       "type": "build"
     },
     {
@@ -39,6 +38,7 @@
     },
     {
       "name": "@winglang/jsii-docgen",
+      "version": "file:../../apps/jsii-docgen",
       "type": "build"
     },
     {
@@ -111,11 +111,6 @@
     },
     {
       "name": "json-schema",
-      "type": "build"
-    },
-    {
-      "name": "minipass",
-      "version": "3.1.6",
       "type": "build"
     },
     {
@@ -203,6 +198,24 @@
       "type": "bundled"
     },
     {
+      "name": "@azure/core-paging",
+      "type": "bundled"
+    },
+    {
+      "name": "@azure/identity",
+      "version": "3.1.2",
+      "type": "bundled"
+    },
+    {
+      "name": "@azure/storage-blob",
+      "version": "12.12.0",
+      "type": "bundled"
+    },
+    {
+      "name": "debug",
+      "type": "bundled"
+    },
+    {
       "name": "esbuild-wasm",
       "type": "bundled"
     },
@@ -215,7 +228,27 @@
       "type": "bundled"
     },
     {
+      "name": "@types/prettier",
+      "version": "2.6.0",
+      "type": "override"
+    },
+    {
+      "name": "@types/responselike",
+      "version": "1.0.0",
+      "type": "override"
+    },
+    {
+      "name": "got",
+      "version": "12.3.1",
+      "type": "override"
+    },
+    {
       "name": "@cdktf/provider-aws",
+      "type": "peer"
+    },
+    {
+      "name": "@cdktf/provider-azurerm",
+      "version": "3.0.16",
       "type": "peer"
     },
     {
@@ -233,6 +266,11 @@
     },
     {
       "name": "@cdktf/provider-aws",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/provider-azurerm",
+      "version": "3.0.16",
       "type": "runtime"
     },
     {

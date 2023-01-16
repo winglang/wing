@@ -9,12 +9,13 @@ import { mkdir, readFile } from "fs/promises";
 import { WASI } from "wasi";
 import { argv } from "process";
 import debug from "debug";
+import * as chalk from "chalk";
 
 const log = debug("wing:compile");
 
 const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
 log("wasm path: %s", WINGC_WASM_PATH);
-const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/wingsdk");
+const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
@@ -26,6 +27,7 @@ const WINGC_PREFLIGHT = "preflight.js";
  */
 export enum Target {
   TF_AWS = "tf-aws",
+  TF_AZURE = "tf-azure",
   SIM = "sim",
 }
 
@@ -105,7 +107,50 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     __dirname: workDir,
     __filename: artifactPath,
+
+    // since the SDK is loaded in the outer VM, we need these to be the same class instance,
+    // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
+    // `serializeImmutableData` which has special cases for serializing these types.
+    Map,
+    Set,
+    Array,
+    Promise,
+    Object,
+    RegExp,
+    String,
+    Date,
+    Function,
   });
   log("evaluating artifact in context: %o", context);
-  vm.runInContext(artifact, context);
+
+  try {
+    vm.runInContext(artifact, context);
+  } catch (e) {
+    console.error(chalk.bold.red("preflight error:") + " " + (e as any).message);
+
+    if ((e as any).stack && (e as any).stack.includes("evalmachine.<anonymous>:")) {
+      console.log();
+      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("intermediate javascript code:"));
+      const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
+      const lines = artifact.split("\n");
+      let startLine = Math.max(lineNumber - 2, 0);
+      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
+
+      // print line and its surrounding lines
+      for (let i = startLine; i <= finishLine; i++) {
+        if (i === lineNumber) {
+          console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
+        } else {
+          console.log("   " + chalk.dim(lines[i]));
+        }
+      }
+    }
+
+    if (process.env.NODE_STACKTRACE) {
+      console.error("--------------------------------- STACK TRACE ---------------------------------")
+      console.error((e as any).stack);
+    } else {
+      console.log("  " + chalk.bold.white("note:") + " " + chalk.white("run with `NODE_STACKTRACE=1` environment variable to display a stack trace"));
+    }
+  }
 }

@@ -110,6 +110,27 @@ obj.method();
 )
 
 ====================
+Method call in binary expression
+====================
+
+x == obj.method();
+
+---
+
+(source
+  (expression_statement
+    (binary_expression
+      left: (reference
+        (identifier))
+      right: (call
+        caller: (reference
+          (nested_identifier
+            object: (reference
+              (identifier))
+            property: (identifier)))
+        args: (argument_list)))))
+
+====================
 New expression
 ====================
 
@@ -240,37 +261,26 @@ maybeVal ?? 2;
 Set Literal
 ================================
 
-{ 1, 2, 3 };
-
+{1, 2, 3};
+Set<num> { 1, 2, 3 };
 ---
 
 (source
     (expression_statement
         (set_literal
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
         )
     )
-)
-
-================================
-Typed Set Literal
-================================
-
-Set<num> { 1, 2, 3 };
-
----
-
-(source
     (expression_statement
         (set_literal
-            (immutable_container_type
-                (builtin_type)
+            type: (immutable_container_type
+                type_parameter: (builtin_type)
             )
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
         )
     )
 )

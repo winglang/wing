@@ -28,6 +28,7 @@ async function main() {
 
   program
     .command("run")
+    .alias("it")
     .description("Runs a Wing simulator file in the Wing Console")
     .argument("<simfile>", ".wsim simulator file")
     .action(async (simfile: string) => {
@@ -47,7 +48,7 @@ async function main() {
     )
     .option(
       "-t, --target <target>",
-      "Target platform (options: 'tf-aws', 'sim')",
+      "Target platform (options: 'tf-aws', 'tf-azure', 'sim')",
       "tf-aws"
     )
     .action(compile);

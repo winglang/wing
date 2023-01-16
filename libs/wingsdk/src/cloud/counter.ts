@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Resource } from "../core";
+import { Code, Resource } from "../core";
 
 /**
  * Global identifier for `Counter`.
@@ -31,6 +31,10 @@ export abstract class CounterBase extends Resource {
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(scope, id);
+
+    this.display.title = "Counter";
+    this.display.description = "A distributed atomic counter";
+
     if (!scope) {
       this.initial = -1; // not used
       return;
@@ -43,7 +47,7 @@ export abstract class CounterBase extends Resource {
 /**
  * Represents a distributed atomic counter.
  *
- * @inflight `@winglang/wingsdk.cloud.ICounterClient`
+ * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends CounterBase {
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
@@ -51,10 +55,8 @@ export class Counter extends CounterBase {
     return Polycons.newInstance(COUNTER_TYPE, scope, id, props) as Counter;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  /** @internal */
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -67,14 +69,27 @@ export interface ICounterClient {
    * Increments the counter atomically by a certain amount and returns the previous value.
    * @param amount amount to increment (default is 1).
    * @returns the previous value of the counter.
+   * @inflight
    */
   inc(amount?: number): Promise<number>;
+
+  /**
+   * Get the current value of the counter.
+   * Using this API may introduce race conditions since the value can change between
+   * the time it is read and the time it is used in your code.
+   * @returns current value
+   * @inflight
+   */
+  peek(): Promise<number>;
 }
 
 /**
  * List of inflight operations available for `Counter`.
+ * @internal
  */
 export enum CounterInflightMethods {
   /** `Counter.inc` */
   INC = "inc",
+  /** `Counter.peek` */
+  PEEK = "peek",
 }

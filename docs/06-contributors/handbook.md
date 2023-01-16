@@ -87,7 +87,22 @@ npm run test
 
 Several projects have some tools to aid with development. If you're iterating on any of these project, they may be useful to try out!
 
-### Wing CLI
+### Stack traces
+
+We highly recommend to export these two environment variables to enable full verbosity of stack traces:
+
+```sh
+export NODE_OPTIONS=--stack-trace-limit=100
+export RUST_BACKTRACE=full
+```
+
+### End-to-end workflow through the Wing CLI
+
+The `wing` CLI is the integration point of the entire toolchain (compiler, sdk and cli). This means that if you
+are working on multiple components of the toolchain together (e.g. updating the compiler and the sdk),
+you can use this workflow to iterate on the entire stack. `nx` is supposed to take care of rebuilding any 
+components that might have changed (open an issue if that's not the case). So you should be able to simply edit
+a file anywhere across stack and run this:
 
 > cd apps/wing
 
@@ -202,7 +217,7 @@ A resource in the SDK has several parts:
 * An implementation for each target cloud (currently just AWS). This includes:
   * A class that implements the polycon API and creates all of the required terraform resources. For example, [`src/tf-aws/bucket.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.ts).
   * A class that implements the inflight API that interacts with the cloud resource. For example, [`src/tf-aws/bucket.inflight.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/src/tf-aws/bucket.inflight.ts).
-  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/bucket.test.ts) and [`test/tf-aws/capture.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/captures.test.ts).
+  * Unit tests for the cloud infrastructure. For example, [`test/tf-aws/bucket.test.ts`](https://github.com/winglang/wing/tree/main/libs/wingsdk/test/tf-aws/bucket.test.ts).
   * (TODO) Integration tests for the cloud infrastructure.
 
 If you are implementing a new resource, or implementing an existing resource for a new cloud provider, try to take a look at code for existing resources (`Bucket`, `Function`, `Queue`) to see how to structure your code.
@@ -212,7 +227,7 @@ For more information about designing resources, check out the Wing SDK design gu
 Feel free to create an issue if you have questions about how to implement a resource or want to discuss the design of a resource.
 You can also join us on our [Wing Slack] to ask questions (or just say hi)!
 
-[Wing Slack]: https://join.slack.com/t/winglang/shared_invite/zt-1i7jb3pt3-lb0RKOSoLA1~pl6cBnP2tA
+[Wing Slack]: https://t.winglang.io/slack
 
 ## 🎨 How do I design the API for a SDK resource?
 
@@ -256,20 +271,18 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 
 ## 🧪 How do I run E2E tests?
 
-The [Hangar](./tools/hangar) project hosts our E2E tests. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
-
-Add a `.env` file to `tools/hangar` with the following:
-
-```env
-NPM_TOKEN=<GitHub PAT with access to @winglang packages>
-```
-
-This allows the spun-up registry to pull down @winglang packages from the private github registry.
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🔨-how-do-i-build-wing-locally).
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar project:
 
 ```sh
-npx nx test
+npm test
+```
+
+Or, you can run the following command from the root of the monorepo:
+
+```sh
+npx nx run hangar:test
 ```
 
 ## 🧬 What is an RFC?

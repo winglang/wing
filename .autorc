@@ -6,19 +6,19 @@
   "labels": [
     {
       "name": "documentation",
-      "releaseType": "patch"
+      "releaseType": "release"
     },
     {
       "name": "internal",
-      "releaseType": "patch"
+      "releaseType": "release"
     },
     {
       "name": "tests",
-      "releaseType": "patch"
+      "releaseType": "release"
     },
     {
       "name": "dependencies",
-      "releaseType": "patch"
+      "releaseType": "release"
     }
   ],
   "onlyPublishWithReleaseLabel": false,

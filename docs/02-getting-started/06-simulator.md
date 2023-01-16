@@ -16,9 +16,10 @@ in-memory array of items.
 
 ## Compiling your program
 
-So now, we will compile our app and target the cloud simulator using the following command:
+So now, we return to the root of the project and compile our app and target the cloud simulator using the following command:
 
 ```sh
+cd ../../../../
 wing compile -t sim hello.w
 ```
 
@@ -39,7 +40,7 @@ If you are using the Wing CLI through a global installation, you'll need to
 install the Wing SDK library locally using:
 
 ```sh
-npm i @winglang/wingsdk
+npm i @winglang/sdk
 ```
 
 :::
@@ -57,7 +58,7 @@ node --experimental-repl-await
 Now, we import the Wing SDK library:
 
 ```js
-const sdk = require("@winglang/wingsdk"); // import the wing sdk library
+const sdk = require("@winglang/sdk"); // import the wing sdk library
 const simulator = new sdk.testing.Simulator({ simfile : "./target/hello.wsim"}); // create an instance of the Simulator
 await simulator.start(); // start the simulator 
 ```

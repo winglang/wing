@@ -1,16 +1,17 @@
+import { join } from "path";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { Direction } from "../core";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { TopicSchema, TopicSubscriber } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 /**
  * Simulator implementation of `cloud.Topic`
  *
- * @inflight `@winglang/wingsdk.cloud.ITopicClient`
+ * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.TopicBase implements ISimulatorResource {
   private readonly subscribers: TopicSubscriber[];
@@ -21,29 +22,22 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
   }
 
   public onMessage(
-    inflight: core.Inflight,
+    inflight: core.Inflight, // cloud.ITopicOnMessageHandler
     props: cloud.TopicOnMessageProps = {}
   ): cloud.Function {
-    const code: string[] = [];
-    code.push(inflight.code.text);
-    code.push(`async function $topicEventWrapper($cap, event) {`);
-    code.push(` event = JSON.parse(event);`);
-    code.push(
-      `   if (!event.message) throw new Error('No "message" field in event.');`
+    const hash = inflight.node.addr.slice(-8);
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessageHandler-${hash}`,
+      inflight,
+      join(__dirname, "topic.onmessage.inflight.js"),
+      "TopicOnMessageHandlerClient"
     );
-    code.push(` await ${inflight.entrypoint}($cap, event.message);`);
-    code.push(`}`);
-
-    const newInflight = new core.Inflight({
-      entrypoint: `$topicEventWrapper`,
-      code: core.NodeJsCode.fromInline(code.join("\n")),
-      captures: inflight.captures,
-    });
 
     const fn = new cloud.Function(
-      this.node.scope!,
-      `${this.node.id}-OnMessage-${inflight.code.hash.slice(0, 16)}`,
-      newInflight,
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessage-${hash}`,
+      functionHandler,
       props
     );
 
@@ -54,30 +48,27 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
       functionHandle,
     });
 
-    this.addConnection({
-      direction: Direction.OUTBOUND,
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
       relationship: "on_message",
-      resource: fn,
-    });
-
-    fn.addConnection({
-      direction: Direction.INBOUND,
-      relationship: "on_message",
-      resource: this,
     });
 
     return fn;
   }
 
   /** @internal */
-  public _bind(
-    captureScope: core.Resource,
-    _metadata: core.CaptureMetadata
-  ): core.Code {
-    return bindSimulatorResource("topic", this, captureScope);
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    bindSimulatorResource("topic", this, host);
+    super._bind(host, ops);
   }
 
-  toSimulator(): BaseResourceSchema {
+  /** @internal */
+  public _toInflight(): core.Code {
+    return makeSimulatorJsClient("topic", this);
+  }
+
+  public toSimulator(): BaseResourceSchema {
     const schema: TopicSchema = {
       type: cloud.TOPIC_TYPE,
       path: this.node.path,
@@ -89,3 +80,5 @@ export class Topic extends cloud.TopicBase implements ISimulatorResource {
     return schema;
   }
 }
+
+Topic._annotateInflight("publish", {});

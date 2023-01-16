@@ -10,59 +10,35 @@ import { S3Object } from "@cdktf/provider-aws/lib/s3-object";
 import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import {
-  Code,
-  Language,
-  Inflight,
-  CaptureMetadata,
-  InflightClient,
-  Resource,
-} from "../core";
-import { addBindConnections } from "./util";
+import * as core from "../core";
 
 /**
  * AWS implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;
-  private readonly env: Record<string, string> = {};
   private readonly role: IamRole;
-  private readonly policyStatements: any[] = [];
+  private policyStatements?: any[];
   /** Function ARN */
   public readonly arn: string;
 
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: cloud.IFunctionHandler,
     props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
 
-    for (const [key, value] of Object.entries(props.env ?? {})) {
-      this.addEnvironment(key, value);
-    }
-
-    if (inflight.code.language !== Language.NODE_JS) {
-      throw new Error("Only JavaScript code is currently supported.");
-    }
-
-    const captureClients = inflight.makeClients(this);
-    const code = inflight.bundle({
-      captureScope: this,
-      captureClients,
-      external: ["aws-sdk"],
-    });
-
     // bundled code is guaranteed to be in a fresh directory
-    const codeDir = resolve(code.path, "..");
+    const codeDir = resolve(this.assetPath, "..");
 
     // calculate a md5 hash of the contents of asset.path
     const codeHash = crypto
       .createHash("md5")
-      .update(readFileSync(code.path))
+      .update(readFileSync(this.assetPath))
       .digest("hex");
 
     // Create Lambda executable
@@ -104,12 +80,12 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Add policy to Lambda role for any custom policy statements, such as
-    // those needed by captures
+    // those needed by bound resources
     new IamRolePolicy(this, "IamRolePolicy", {
       role: this.role.name,
       policy: Lazy.stringValue({
         produce: () => {
-          if (this.policyStatements.length > 0) {
+          if ((this.policyStatements ?? []).length > 0) {
             return JSON.stringify({
               Version: "2012-10-17",
               Statement: this.policyStatements,
@@ -147,7 +123,7 @@ export class Function extends cloud.FunctionBase {
       runtime: "nodejs16.x",
       role: this.role.arn,
       environment: {
-        variables: this.env,
+        variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
     });
 
@@ -167,21 +143,14 @@ export class Function extends cloud.FunctionBase {
     return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
   }
 
-  /**
-   * @internal
-   */
-  public _bind(captureScope: Resource, metadata: CaptureMetadata): Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error(
-        "functions can only be captured by tfaws.Function for now"
-      );
+  /** @internal */
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("functions can only be bound by tfaws.Function for now");
     }
 
-    const env = `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
-
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.FunctionInflightMethods.INVOKE)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.FunctionInflightMethods.INVOKE)) {
+      host.addPolicyStatements({
         effect: "Allow",
         action: ["lambda:InvokeFunction"],
         resource: [`${this.function.arn}`],
@@ -190,26 +159,29 @@ export class Function extends cloud.FunctionBase {
 
     // The function name needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(env, this.function.arn);
+    host.addEnvironment(this.envName(), this.function.arn);
 
-    addBindConnections(this, captureScope);
-
-    return InflightClient.for(__filename, "FunctionClient", [
-      `process.env["${env}"]`,
-    ]);
+    super._bind(host, ops);
   }
 
-  public addEnvironment(name: string, value: string) {
-    if (this.env[name] !== undefined) {
-      throw new Error(`Environment variable "${name}" already set.`);
-    }
-    this.env[name] = value;
+  /** @internal */
+  public _toInflight(): core.Code {
+    return core.InflightClient.for(__filename, "FunctionClient", [
+      `process.env["${this.envName()}"]`,
+    ]);
   }
 
   /**
    * Add a policy statement to the Lambda role.
    */
   public addPolicyStatements(...statements: PolicyStatement[]) {
+    // we do lazy initialization here because addPolicyStatements() might be called through the
+    // constructor chain of the Function base class which means that our constructor might not have
+    // been called yet... yes, ugly.
+    if (!this.policyStatements) {
+      this.policyStatements = [];
+    }
+
     this.policyStatements.push(
       ...statements.map((s) => ({
         Action: s.action,
@@ -222,6 +194,10 @@ export class Function extends cloud.FunctionBase {
   /** @internal */
   public get _functionName(): string {
     return this.function.functionName;
+  }
+
+  private envName(): string {
+    return `FUNCTION_NAME_${this.node.addr.slice(-8)}`;
   }
 }
 
@@ -236,3 +212,5 @@ export interface PolicyStatement {
   /** Effect ("Allow" or "Deny") */
   readonly effect?: string;
 }
+
+Function._annotateInflight("invoke", {});

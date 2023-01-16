@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as testing from "../../src/testing";
-import { listMessages } from "./util";
+import { SimApp, Testing } from "../../src/testing";
+import { listMessages, treeJsonOf } from "./util";
 
 jest.setTimeout(5_000);
 
@@ -30,10 +30,10 @@ test("create a topic", async () => {
 test("topic publishes messages as they are received", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  cloud.Logger.register(app);
-  const handler = makeInflight(
-    `async function $proc($cap, message) { $cap.logger.print("Received " + message); }`,
-    app
+  const handler = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(message) { console.log("Received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -47,35 +47,21 @@ test("topic publishes messages as they are received", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Topic created.",
-    "Publish (message=Alpha).",
-    'Sending message (message="Alpha", subscriber=sim-1).',
-    "Received Alpha",
-    'Invoke (payload="{"message":"Alpha"}").',
-    "Publish (message=Beta).",
-    'Sending message (message="Beta", subscriber=sim-1).',
-    "Received Beta",
-    'Invoke (payload="{"message":"Beta"}").',
-    "wingsdk.cloud.Topic deleted.",
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
 });
 
 test("topic publishes messages to multiple subscribers", async () => {
   // GIVEN
   const app = new testing.SimApp();
-  cloud.Logger.register(app);
-  const handler = makeInflight(
-    `async function $proc($cap, message) { $cap.logger.print("Received " + message); }`,
-    app
+  const handler = Testing.makeHandler(
+    app,
+    "Handler1",
+    `async handle(message) { console.log("Received " + message); }`
   );
-  const otherHandler = makeInflight(
-    `async function $proc($cap, message) { $cap.logger.print("Also received " + message); }`,
-    app
+  const otherHandler = Testing.makeHandler(
+    app,
+    "Handler2",
+    `async handle(message) { console.log("Also received " + message); }`
   );
   const topic = new cloud.Topic(app, "my_topic");
   topic.onMessage(handler);
@@ -89,34 +75,47 @@ test("topic publishes messages to multiple subscribers", async () => {
 
   // THEN
   await s.stop();
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Topic created.",
-    "Publish (message=Alpha).",
-    'Sending message (message="Alpha", subscriber=sim-1).',
-    "Received Alpha",
-    'Invoke (payload="{"message":"Alpha"}").',
-    'Sending message (message="Alpha", subscriber=sim-2).',
-    "Also received Alpha",
-    'Invoke (payload="{"message":"Alpha"}").',
-    "wingsdk.cloud.Topic deleted.",
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
 });
 
-function makeInflight(code: string, app: core.IApp) {
-  return new core.Inflight({
-    code: core.NodeJsCode.fromInline(code),
-    entrypoint: "$proc",
-    captures: {
-      logger: {
-        resource: cloud.Logger.of(app),
-        methods: [cloud.LoggerInflightMethods.PRINT],
+test("topic has no display hidden property", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Topic(app, "my_topic");
+
+  const treeJson = treeJsonOf(app.synth());
+  const topic = app.node.tryFindChild("my_topic") as cloud.Topic;
+
+  // THEN
+  expect(topic.display.hidden).toBeUndefined();
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).not.toMatchObject({
+    my_topic: {
+      display: {
+        hidden: expect.any(Boolean),
       },
     },
   });
-}
+});
+
+test("topic has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Topic(app, "my_topic");
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const topic = app.node.tryFindChild("my_topic") as cloud.Topic;
+
+  // THEN
+  expect(topic.display.title).toBeDefined();
+  expect(topic.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_topic: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

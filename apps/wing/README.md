@@ -3,7 +3,7 @@
 Wing CLI is the Cargo of Wing. It's currently published to npm:
 
 ```sh
-npm i -g @winglang/wing
+npm i -g winglang
 ```
 
 ## Logs
@@ -29,11 +29,11 @@ To see scoped debug logs, use specific namespaces, e.g. `wing:commands:compile`.
 >   -t, --target <target>    Target platform (options: 'tf-aws', 'sim') (default: "tf-aws")
 > ```
 
-## `wing run`
+## `wing it`
 
 > ```sh
-> $ wing run --help
-> Usage: wing run [options] <entrypoint>.wsim
+> $ wing it --help
+> Usage: wing it [options] <entrypoint>.wsim
 > 
 > Runs a Wing simulator file in the Wing Console
 > 

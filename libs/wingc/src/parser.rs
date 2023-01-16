@@ -1,3 +1,4 @@
+use indexmap::IndexSet;
 use phf::phf_map;
 use std::cell::RefCell;
 use std::collections::{BTreeMap, HashMap, HashSet};
@@ -27,8 +28,6 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
-	"Set" => "see https://github.com/winglang/wing/issues/530",
-	"set_literal" => "see https://github.com/winglang/wing/issues/530",
 	"MutSet" => "see https://github.com/winglang/wing/issues/98",
 	"MutArray" => "see https://github.com/winglang/wing/issues/663",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
@@ -83,16 +82,13 @@ impl Parser<'_> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.add_error(
 				format!(
-					"{} '{}' is not supported yet {}",
+					"{} \"{}\" is not supported yet {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
 			)?
 		} else {
-			self.add_error(
-				format!("Unexpected {} '{}' || {:#?}", grammar_context, grammar_element, node),
-				node,
-			)?
+			self.add_error(format!("Unexpected {} \"{}\"", grammar_context, grammar_element), node)?
 		}
 	}
 
@@ -101,7 +97,7 @@ impl Parser<'_> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.is_error() {
+		if node.has_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
@@ -231,6 +227,7 @@ impl Parser<'_> {
 			),
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
+			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -239,6 +236,42 @@ impl Parser<'_> {
 			kind: stmt_kind,
 			span: self.node_span(statement_node),
 			idx,
+		})
+	}
+
+	fn build_enum_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let name = self.node_symbol(&statement_node.child_by_field_name("enum_name").unwrap());
+		if name.is_err() {
+			self
+				.add_error::<Node>(String::from("Invalid enum name"), &statement_node)
+				.err();
+		}
+
+		let mut cursor = statement_node.walk();
+		let mut values = IndexSet::<Symbol>::new();
+		for node in statement_node.named_children(&mut cursor) {
+			if node.kind() != "enum_field" {
+				continue;
+			}
+
+			let diagnostic = self.node_symbol(&node);
+			if diagnostic.is_err() {
+				self.add_error::<Node>(String::from("Invalid enum value"), &node).err();
+				continue;
+			}
+
+			let symbol = diagnostic.unwrap();
+			let success = values.insert(symbol.clone());
+			if !success {
+				self
+					.add_error::<Node>(format!("Duplicated enum value {}", symbol.name), &node)
+					.err();
+			}
+		}
+
+		Ok(StmtKind::Enum {
+			name: name.unwrap(),
+			values,
 		})
 	}
 
@@ -358,9 +391,11 @@ impl Parser<'_> {
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-				return_type: func_def_node
-					.child_by_field_name("type")
-					.map(|rt| Box::new(self.build_type(&rt).unwrap())),
+				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
+					Some(Box::new(self.build_type(&rt)?))
+				} else {
+					None
+				},
 				flight,
 			},
 			captures: RefCell::new(None),
@@ -423,9 +458,13 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
+					"MutMap" => Ok(Type::MutMap(Box::new(self.build_type(&element_type)?))),
 					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
+					"MutArray" => Ok(Type::MutArray(Box::new(self.build_type(&element_type)?))),
+					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),
+					"MutSet" => Ok(Type::MutSet(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
-					other => self.report_unimplemented_grammar(other, "bultin container type", type_node),
+					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
 			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),
@@ -434,6 +473,9 @@ impl Parser<'_> {
 	}
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
+		if nested_node.has_error() {
+			return self.add_error(format!("Syntax error"), &nested_node);
+		}
 		Ok(Reference::NestedIdentifier {
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
@@ -580,8 +622,10 @@ impl Parser<'_> {
 
 					// Skip first and last quote
 					let end = expression_node.end_byte() - 1;
-					let mut last_start = expression_node.start_byte() + 1;
+					let start = expression_node.start_byte() + 1;
+					let mut last_start = start;
 					let mut last_end = end;
+					let mut start_from = last_end;
 
 					for interpolation_node in expression_node.named_children(&mut cursor) {
 						if interpolation_node.is_extra() {
@@ -590,9 +634,13 @@ impl Parser<'_> {
 						let interpolation_start = interpolation_node.start_byte();
 						let interpolation_end = interpolation_node.end_byte();
 
+						if start == last_start && interpolation_start < last_end {
+							start_from = last_start;
+						}
+
 						if interpolation_start != last_start {
 							parts.push(InterpolatedStringPart::Static(
-								str::from_utf8(&self.source[last_start..interpolation_start])
+								str::from_utf8(&self.source[start_from..interpolation_start])
 									.unwrap()
 									.into(),
 							));
@@ -604,6 +652,7 @@ impl Parser<'_> {
 
 						last_start = interpolation_start;
 						last_end = interpolation_end;
+						start_from = last_end;
 					}
 
 					if last_end != end {
@@ -721,6 +770,24 @@ impl Parser<'_> {
 						fields,
 						type_: map_type,
 					},
+					expression_span,
+				))
+			}
+			"set_literal" => {
+				let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut items = Vec::new();
+				let mut cursor = expression_node.walk();
+				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+					items.push(self.build_expression(&element_node)?);
+				}
+
+				Ok(Expr::new(
+					ExprKind::SetLiteral { items, type_: set_type },
 					expression_span,
 				))
 			}

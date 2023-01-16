@@ -1,30 +1,20 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
-import * as testing from "../../src/testing";
-import { SimApp } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
+import { listMessages, treeJsonOf } from "./util";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-const INFLIGHT_CODE = core.NodeJsCode.fromInline(`
-async function $proc($cap, event) {
-  $cap.logger.print("Hello, " + event);
-  $cap.logger.print("Wahoo!");
-}`);
+const INFLIGHT_CODE = `
+async handle(event) {
+  console.log("Hello, " + event);
+  console.log("Wahoo!");
+}`;
 
 test("inflight uses a logger", async () => {
   // GIVEN
   const app = new SimApp();
-  cloud.Logger.register(app);
-  const handler = new core.Inflight({
-    code: INFLIGHT_CODE,
-    entrypoint: "$proc",
-    captures: {
-      logger: {
-        resource: cloud.Logger.of(app),
-        methods: [cloud.LoggerInflightMethods.PRINT],
-      },
-    },
-  });
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+
   new cloud.Function(app, "my_function", handler);
 
   const s = await app.startSimulator();
@@ -40,18 +30,47 @@ test("inflight uses a logger", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Logger created.",
-    "wingsdk.cloud.Function created.",
-    "Hello, Alice",
-    "Wahoo!",
-    'Invoke (payload="Alice").',
-    "wingsdk.cloud.Function deleted.",
-    "wingsdk.cloud.Logger deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-function listMessages(s: testing.Simulator) {
-  return s.listTraces().map((event) => event.data.message);
-}
+test("Logger has display hidden property set to true", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const logger = app.node.tryFindChild("WingLogger") as cloud.Logger;
+
+  // THEN
+  expect(logger.display.hidden).toEqual(true);
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    WingLogger: {
+      display: {
+        hidden: true,
+      },
+    },
+  });
+});
+
+test("Logger has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const logger = app.node.tryFindChild("WingLogger") as cloud.Logger;
+
+  // THEN
+  expect(logger.display.title).toBeDefined();
+  expect(logger.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    WingLogger: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

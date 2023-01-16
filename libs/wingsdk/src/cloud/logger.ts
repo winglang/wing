@@ -1,6 +1,7 @@
 import { Construct, IConstruct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Resource } from "../core";
+import { Code } from "../core/inflight";
+import { Resource } from "../core/resource";
 
 export const LOGGER_TYPE = "wingsdk.cloud.Logger";
 export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
@@ -10,26 +11,29 @@ export const LOGGER_SYMBOL = Symbol.for(LOGGER_TYPE);
  */
 export abstract class LoggerBase extends Resource {
   public readonly stateful = true;
+
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
+    this.display.hidden = true;
+    this.display.title = "Logger";
+    this.display.description = "A cloud logging facility";
+  }
+
   /**
-   * Logs a message.
+   * Logs a message (preflight).
    * @param message The message to log.
    */
   public print(message: string): void {
     // default implementation, can be overridden
     console.log(message);
   }
-
-  /** @internal */
-  public abstract _bind(
-    captureScope: Resource,
-    metadata: CaptureMetadata
-  ): Code;
 }
 
 /**
  * A cloud logging facility.
  *
- * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
+ * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
 export class Logger extends LoggerBase {
   /**
@@ -74,7 +78,7 @@ export class Logger extends LoggerBase {
   }
 
   /** @internal */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -87,13 +91,17 @@ export interface ILoggerClient {
    * Logs a message. The log will be associated with whichever resource is
    * running the inflight code.
    *
+   * NOTICE: this is not an async function because it is wrapped by `console.log()`.
+   *
    * @param message The message to print
+   * @inflight
    */
-  print(message: string): Promise<void>;
+  print(message: string): void;
 }
 
 /**
  * List of inflight operations available for `Logger`.
+ * @internal
  */
 export enum LoggerInflightMethods {
   /** `Logger.print` */

@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
-import { SimApp } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
 import { listMessages } from "./util";
 
 test("publishing messages to topic", async () => {
@@ -11,30 +10,30 @@ test("publishing messages to topic", async () => {
       super(scope, id);
 
       const topic = new cloud.Topic(this, "MyTopic");
-      const publisher = new core.Inflight({
-        code: core.NodeJsCode.fromInline(
-          `async function $proc($cap, event) {
-                        await $cap.topic.publish(event);
-                    }`
-        ),
-        entrypoint: "$proc",
-        captures: {
-          topic: {
-            resource: topic,
-            methods: [cloud.TopicInflightMethods.PUBLISH],
+      const publisher = Testing.makeHandler(
+        this,
+        "Publisher",
+        `async handle(event) {
+            await this.topic.publish(event);
+        }`,
+        {
+          resources: {
+            topic: {
+              resource: topic,
+              ops: [cloud.TopicInflightMethods.PUBLISH],
+            },
           },
-        },
-      });
+        }
+      );
       new cloud.Function(this, "Function", publisher);
 
-      const processor = new core.Inflight({
-        code: core.NodeJsCode.fromInline(
-          `async function $proc($cap, event) {
-                        if (event.message === "") throw new Error("No message recieved");
-                    }`
-        ),
-        entrypoint: "$proc",
-      });
+      const processor = Testing.makeHandler(
+        this,
+        "Processor",
+        `async handle(event) {
+          if (event.message === "") throw new Error("No message recieved");
+      }`
+      );
       topic.onMessage(processor);
     }
   }
@@ -54,16 +53,5 @@ test("publishing messages to topic", async () => {
   // THEN
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Function created.",
-    "wingsdk.cloud.Topic created.",
-    "wingsdk.cloud.Function created.",
-    "Publish (message=ABC).",
-    `Sending message (message="ABC", subscriber=sim-0).`,
-    `Invoke (payload="{"message":"ABC"}").`,
-    `Invoke (payload="ABC").`,
-    `wingsdk.cloud.Function deleted.`,
-    `wingsdk.cloud.Topic deleted.`,
-    `wingsdk.cloud.Function deleted.`,
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
 });

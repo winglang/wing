@@ -1,7 +1,7 @@
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
+import { Testing } from "../../src/testing";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default counter behavior", () => {
@@ -25,28 +25,29 @@ test("counter with initial value", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("counter captured by a function", () => {
+test("function with a counter binding", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
   const counter = new cloud.Counter(app, "Counter");
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          const val = await $cap.my_counter.inc(2);
-          console.log(val);
-        }`
-    ),
-    captures: {
-      my_counter: {
-        resource: counter,
-        methods: ["inc"],
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) {
+  const val = await this.my_counter.inc(2);
+  console.log(val);
+}`,
+    {
+      resources: {
+        my_counter: {
+          resource: counter,
+          ops: [cloud.CounterInflightMethods.INC],
+        },
       },
-    },
-    entrypoint: "$proc",
-  });
-  const fn = new cloud.Function(app, "Function", inflight);
+    }
+  );
+  new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
-  expect(core.Testing.inspectPrebundledCode(fn).text).toMatchSnapshot();
+  expect(sanitizeCode(inflight._toInflight())).toMatchSnapshot();
   expect(tfResourcesOf(output)).toEqual([
     "aws_dynamodb_table", // table for the counter
     "aws_iam_role", // role for function
@@ -58,4 +59,54 @@ test("counter captured by a function", () => {
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("inc() policy statement", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) {
+  const val = await this.my_counter.inc(2);
+  console.log(val);
+}`,
+    {
+      resources: {
+        my_counter: {
+          resource: counter,
+          ops: [cloud.CounterInflightMethods.INC],
+        },
+      },
+    }
+  );
+  new cloud.Function(app, "Function", inflight);
+  const output = app.synth();
+
+  expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+});
+
+test("peek() policy statement", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const counter = new cloud.Counter(app, "Counter");
+  const inflight = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) {
+  const val = await this.my_counter.peek();
+  console.log(val);
+}`,
+    {
+      resources: {
+        my_counter: {
+          resource: counter,
+          ops: [cloud.CounterInflightMethods.PEEK],
+        },
+      },
+    }
+  );
+  new cloud.Function(app, "Function", inflight);
+  const output = app.synth();
+
+  expect(tfSanitize(output)).toContain("dynamodb:GetItem");
 });

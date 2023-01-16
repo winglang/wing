@@ -2,8 +2,14 @@
 
 exports[`create a bucket 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_bucket",
@@ -18,6 +24,23 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_bucket": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -25,7 +48,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -33,7 +60,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -44,9 +71,25 @@ Object {
 `;
 
 exports[`get invalid object throws an error 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Get (key=unknown.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`get invalid object throws an error 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_bucket",
@@ -61,6 +104,23 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_bucket": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -68,7 +128,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -76,7 +140,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -87,9 +151,26 @@ Object {
 `;
 
 exports[`put and get objects from bucket 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=greeting.txt).",
+  "Get (key=greeting.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`put and get objects from bucket 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_bucket",
@@ -104,6 +185,23 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_bucket": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -111,7 +209,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -119,7 +221,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -130,9 +232,28 @@ Object {
 `;
 
 exports[`put multiple objects and list all from bucket 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=greeting1.txt).",
+  "Put (key=greeting2.txt).",
+  "Put (key=greeting3.txt).",
+  "List (prefix=null).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`put multiple objects and list all from bucket 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_bucket",
@@ -147,6 +268,23 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_bucket": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -154,7 +292,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -162,7 +304,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -173,9 +315,26 @@ Object {
 `;
 
 exports[`remove object from a bucket 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=unknown.txt).",
+  "Delete (key=unknown.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`remove object from a bucket 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_bucket",
@@ -190,6 +349,23 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_bucket": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -197,7 +373,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -205,7 +385,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",
@@ -216,9 +396,26 @@ Object {
 `;
 
 exports[`remove object from a bucket with mustExist as option 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Bucket created.",
+  "Put (key=unknown.txt).",
+  "Delete (key=unknown.txt).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`remove object from a bucket with mustExist as option 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
       Object {
         "attrs": Object {},
         "path": "root/my_bucket",
@@ -233,6 +430,23 @@ Object {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
         "my_bucket": Object {
           "attributes": Object {
             "wing:resource:connections": Array [],
@@ -240,7 +454,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.25",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -248,7 +466,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.25",
+        "version": "10.0.130",
       },
       "id": "root",
       "path": "root",

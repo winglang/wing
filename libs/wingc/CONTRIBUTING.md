@@ -7,7 +7,6 @@ and submit pull requests to the GitHub repository.
   - [Opening Issues](#opening-issues)
   - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
-    - [Setting up GitHub private packages](#setting-up-github-private-packages)
   - [Orientation](#orientation)
     - [`src` folder](#src-folder)
   - [Setting up and building the project](#setting-up-and-building-the-project)
@@ -35,25 +34,6 @@ These tools are needed to build the library and run unit tests:
 
 - ???? (@sep)
 - Your favorite code editor
-
-
-To build the project, you also need to `npm login` into `@winglang` in order to install private npm packages.
-
-### Setting up GitHub private packages
-
-First, you need a [PAT](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token) to login to the GitHub npm registry. Follow the instructions in the [GitHub docs](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token#creating-a-token) to create a PAT. Make sure it has the `read:packages` scope.
-
-After, you should configure npm to use the @winglang package registry by default for the packages under the @winglang scope by running:
-
-```sh
-npm login --scope=@winglang --registry=https://npm.pkg.github.com
-
-# > Username: GITHUB USERNAME
-# > Password: YOUR PAT
-# > Email: PUBLIC-EMAIL-ADDRESS
-```
-
-See [Working with the npm registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry) for more information.
 
 ## Orientation
 
