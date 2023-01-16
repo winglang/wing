@@ -121,3 +121,5 @@ export class Queue extends cloud.QueueBase {
 }
 
 Queue._annotateInflight("push", {});
+Queue._annotateInflight("purge", {});
+Queue._annotateInflight("approx_size", {});
