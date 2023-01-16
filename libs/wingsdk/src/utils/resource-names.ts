@@ -23,7 +23,17 @@ export interface NameOptions {
    * @default "-"
    */
   readonly sep?: string;
+  /**
+   * Case-sensitive type
+   *
+   * @default undefined
+   */
   readonly case?: CaseConventions;
+  /**
+   * Predefined prefix of some resources
+   *
+   * @default undefined
+   */
   readonly prefix?: string;
 }
 
@@ -49,34 +59,6 @@ export class ResourceNames {
 
     human = human
       .replace(props.disallowedRegEx, sep)
-      .substring(0, props.maxLen - hash.length - sep.length);
-
-    return `${human}${sep}${hash}`;
-  }
-}
-
-export class ResourceNames2 {
-  public static generateName(resource: Construct, props: NameOptions): string {
-    const sep = props.sep ?? "-";
-
-    if (props.maxLen < 8) {
-      throw new Error("maxLen must be at least 8");
-    }
-
-    let hash = resource.node.addr.substring(0, 8);
-    let human = props.prefix
-      ? `${props.prefix}${resource.node.id}`
-      : resource.node.id;
-
-    if (props.case == CaseConventions.LOWERCASE) {
-      human = human.toLocaleLowerCase();
-    }
-    if (props.case == CaseConventions.UPPERCASE) {
-      human = human.toLocaleUpperCase();
-    }
-
-    human = human
-      .replace(props.allowedRegEx2!, sep)
       .substring(0, props.maxLen - hash.length - sep.length);
 
     return `${human}${sep}${hash}`;

@@ -125,7 +125,7 @@ test("counter name valid", () => {
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
-      name: `wingsdk-counter-The.Amazing-Counter_01-${counter.node.addr.substring(
+      name: `wing-counter-The.Amazing-Counter_01-${counter.node.addr.substring(
         0,
         8
       )}`,
@@ -144,7 +144,7 @@ test("replace invalid character from counter name", () => {
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
-      name: `wingsdk-counter-The-Amazing-Counter-01-${counter.node.addr.substring(
+      name: `wing-counter-The-Amazing-Counter-01-${counter.node.addr.substring(
         0,
         8
       )}`,

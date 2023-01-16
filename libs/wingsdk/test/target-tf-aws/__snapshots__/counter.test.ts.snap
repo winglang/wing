@@ -13,7 +13,7 @@ exports[`counter name valid 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-The.Amazing-Counter_01-c83e5bd8\\"
+        \\"name\\": \\"wing-counter-The.Amazing-Counter_01-c83e5bd8\\"
       }
     }
   }
@@ -118,7 +118,7 @@ exports[`counter with initial value 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-Counter-c824ef62\\"
+        \\"name\\": \\"wing-counter-Counter-c824ef62\\"
       }
     }
   }
@@ -223,7 +223,7 @@ exports[`default counter behavior 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-Counter-c824ef62\\"
+        \\"name\\": \\"wing-counter-Counter-c824ef62\\"
       }
     }
   }
@@ -261,7 +261,7 @@ exports[`function with a counter binding 2`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-Counter-c824ef62\\"
+        \\"name\\": \\"wing-counter-Counter-c824ef62\\"
       }
     },
     \\"aws_iam_role\\": {
@@ -527,7 +527,7 @@ exports[`inc() policy statement 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-Counter-c824ef62\\"
+        \\"name\\": \\"wing-counter-Counter-c824ef62\\"
       }
     },
     \\"aws_iam_role\\": {
@@ -793,7 +793,7 @@ exports[`peek() policy statement 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-Counter-c824ef62\\"
+        \\"name\\": \\"wing-counter-Counter-c824ef62\\"
       }
     },
     \\"aws_iam_role\\": {
@@ -1059,7 +1059,7 @@ exports[`replace invalid character from counter name 1`] = `
         ],
         \\"billing_mode\\": \\"PAY_PER_REQUEST\\",
         \\"hash_key\\": \\"id\\",
-        \\"name\\": \\"wingsdk-counter-The-Amazing-Counter-01-c848151b\\"
+        \\"name\\": \\"wing-counter-The-Amazing-Counter-01-c848151b\\"
       }
     }
   }

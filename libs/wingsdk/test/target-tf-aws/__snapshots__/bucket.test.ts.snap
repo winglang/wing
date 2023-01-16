@@ -265,7 +265,7 @@ Object {
 }
 `;
 
-exports[`bucket name must be lowercase 2 1`] = `
+exports[`bucket name must not contain two adjacent dots 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
@@ -298,7 +298,7 @@ exports[`bucket name must be lowercase 2 1`] = `
 }"
 `;
 
-exports[`bucket name must be lowercase 2 2`] = `
+exports[`bucket name must not contain two adjacent dots 2`] = `
 Object {
   "tree": Object {
     "children": Object {
