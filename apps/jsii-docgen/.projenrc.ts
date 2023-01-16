@@ -27,7 +27,6 @@ const project = new typescript.TypeScriptProject({
   ],
   compileBeforeTest: true, // we need this for the CLI test
   releaseToNpm: true,
-  npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
   github: false,
   projenrcTs: true,

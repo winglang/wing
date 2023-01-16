@@ -40,7 +40,7 @@ export abstract class BucketBase extends Resource {
 /**
  * Represents a cloud object store.
  *
- * @inflight `@winglang/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends BucketBase {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {

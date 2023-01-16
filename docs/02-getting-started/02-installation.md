@@ -26,28 +26,10 @@ In order to deploy to AWS, you will also need:
 
 ## Wing CLI
 
-:::info
-
-During the private alpha period, Wing is distributed through a private npm
-repository. To request access, [sign up here](https://t.winglang.io/alpha).
-
-You will need to obtain a [personal access token] from GitHub with a
-**read:packages** scope and then login to your npm client like this:
-
-```sh
-npm login --scope=@winglang --registry=https://npm.pkg.github.com
-Username: "lowercase-github-username"
-Password: "the just created Github token"
-Email: "your github email"
-```
-(note: npm 9+ needs the argument '--auth-type=legacy' to fix 'ERR! Web login not supported')
-
-:::
-
 Install the Wing CLI through npm:
 
 ```sh
-npm install -g @winglang/wing
+npm install -g winglang
 ```
 
 Check that the installation was successful:

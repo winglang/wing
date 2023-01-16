@@ -9,7 +9,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 /**
  * Simulator implementation of `cloud.Counter`.
  *
- * @inflight `@winglang/wingsdk.cloud.ICounterClient`
+ * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase implements ISimulatorResource {
   public readonly initial: number;
