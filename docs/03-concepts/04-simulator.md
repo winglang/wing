@@ -29,12 +29,12 @@ Now, let's try starting the simulator and creating some resource clients to
 interact with the resources.
 
 First, create an empty directory and add your `.wsim` file.
-Next, run `npm install @winglang/wingsdk`.
+Next, run `npm install @winglang/sdk`.
 
 Let's create a file in the directory named `main.ts`:
 
 ```typescript
-import { testing } from '@winglang/wingsdk';
+import { testing } from '@winglang/sdk';
 
 async function main() {
   const mySim = new testing.Simulator({ simfile: "hello.wsim" });
@@ -68,7 +68,7 @@ client, get the resource's path (from the JSON tree or elsewhere) and query the
 simulator with the `getResource` method. For example:
 
 ```typescript
-import { cloud } from '@winglang/wingsdk';
+import { cloud } from '@winglang/sdk';
 
 const fn = mySim.getResource("root/my_function") as cloud.IFunctionClient;
 const response = await fn.invoke("hello!");

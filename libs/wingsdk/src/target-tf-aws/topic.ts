@@ -11,7 +11,7 @@ import { Function } from "./function";
 /**
  * AWS Implementation of `cloud.Topic`.
  *
- * @inflight `@winglang/wingsdk.cloud.ITopicClient`
+ * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.TopicBase {
   private readonly topic: SnsTopic;

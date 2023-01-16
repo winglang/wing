@@ -67,9 +67,9 @@ beforeAll(async () => {
     $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
     await $`${yarnBin} init -y`;
-    await $`${yarnBin} add @winglang/wing --no-lockfile --ignore-engines`;
+    await $`${yarnBin} add winglang --no-lockfile --ignore-engines`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
-    let npxOutput = await $`${npxBin} @winglang/wing --version`;
+    let npxOutput = await $`${npxBin} winglang --version`;
 
     expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
     expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
@@ -108,8 +108,8 @@ async function runWingCompile(type: InvocationType, wingFile: string) {
 	const isError = path.dirname(wingFile).endsWith("error");
 	const work = async () => {
 		const out = await (type === InvocationType.Direct
-			? $`${npxBin} @winglang/wing test ${wingFile}`
-			: $`../node_modules/.bin/wing test ${wingFile}`);
+			? $`${npxBin} winglang compile ${wingFile}`
+			: $`../node_modules/.bin/wing compile ${wingFile}`);
 		return out.exitCode;
 	};
 	if (isError) {
