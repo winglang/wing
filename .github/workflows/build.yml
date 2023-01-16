@@ -368,9 +368,7 @@ jobs:
           extensionFile: "vscode-wing/vscode-wing.vsix"
 
       - name: Login to Private NPM registry
-        run: |
-          npm config set @winglang:registry https://registry.npmjs.org
-          npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
       - name: Publish Wing
         working-directory: wing
