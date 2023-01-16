@@ -47,7 +47,7 @@ const formatInvocation = (
 
 const formatImport = (type: transpile.TranspiledType) => {
   // TODO idk
-  if (type.module.endsWith("/wingsdk")) {
+  if (type.module.endsWith("/sdk")) {
     return `bring ${type.submodule};`;
   }
   if (type.submodule) {
