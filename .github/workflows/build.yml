@@ -372,11 +372,11 @@ jobs:
 
       - name: Publish Wing
         working-directory: wing
-        run: npm publish *.tgz
+        run: npm publish *.tgz --access public
 
       - name: Publish Wing SDK
         working-directory: wingsdk
-        run: npm publish *.tgz
+        run: npm publish *.tgz --access public
 
       - name: Rename Docs
         run: mv docs "docs-${{ needs.prepare.outputs.version }}.tgz"
