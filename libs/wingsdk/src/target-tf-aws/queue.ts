@@ -14,7 +14,7 @@ import { Function } from "./function";
  */
 const NAME_OPTS: NameOptions = {
   maxLen: 80,
-  allowedRegEx: /[^a-zA-Z0-9\_\-]+/g,
+  disallowedRegEx: /[^a-zA-Z0-9\_\-]+/g,
 };
 
 /**

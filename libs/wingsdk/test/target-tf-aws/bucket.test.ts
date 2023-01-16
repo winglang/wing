@@ -68,6 +68,22 @@ test("bucket name must be lowercase", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket name must not contain two adjacent dots", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const bucket = new cloud.Bucket(app, "The-Uncanny..Bucket");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
+      bucket: `the-uncanny-bucket-${bucket.node.addr.substring(0, 8)}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("bucket names must begin and end with alphanumeric character", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
