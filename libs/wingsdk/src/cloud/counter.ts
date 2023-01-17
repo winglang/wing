@@ -31,6 +31,10 @@ export abstract class CounterBase extends Resource {
 
   constructor(scope: Construct, id: string, props: CounterProps = {}) {
     super(scope, id);
+
+    this.display.title = "Counter";
+    this.display.description = "A distributed atomic counter";
+
     if (!scope) {
       this.initial = -1; // not used
       return;
@@ -43,7 +47,7 @@ export abstract class CounterBase extends Resource {
 /**
  * Represents a distributed atomic counter.
  *
- * @inflight `@winglang/wingsdk.cloud.ICounterClient`
+ * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends CounterBase {
   constructor(scope: Construct, id: string, props: CounterProps = {}) {

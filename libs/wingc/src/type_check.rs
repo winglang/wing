@@ -2,7 +2,10 @@ mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
-use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_SET, WINGSDK_STRING};
+use crate::{
+	debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
+	WINGSDK_SET, WINGSDK_STRING,
+};
 use derivative::Derivative;
 use indexmap::IndexSet;
 use jsii_importer::JsiiImporter;
@@ -63,8 +66,15 @@ impl SymbolKind {
 	}
 
 	fn as_namespace(&self) -> Option<&Namespace> {
-		match &self {
+		match self {
 			SymbolKind::Namespace(ns) => Some(ns),
+			_ => None,
+		}
+	}
+
+	fn as_mut_namespace(&mut self) -> Option<&mut Namespace> {
+		match self {
+			SymbolKind::Namespace(ref mut ns) => Some(ns),
 			_ => None,
 		}
 	}
@@ -84,10 +94,14 @@ pub enum Type {
 	String,
 	Duration,
 	Boolean,
+	Void,
 	Optional(TypeRef),
 	Array(TypeRef),
+	MutArray(TypeRef),
 	Map(TypeRef),
+	MutMap(TypeRef),
 	Set(TypeRef),
+	MutSet(TypeRef),
 	Function(FunctionSignature),
 	Class(Class),
 	Resource(Class),
@@ -102,6 +116,12 @@ const WINGSDK_STD_MODULE: &'static str = "std";
 #[derivative(Debug)]
 pub struct Namespace {
 	pub name: String,
+
+	// When `true` this namespace contains symbols that can't be explicitly accessed from the code.
+	// While the internals of imported modules might still need these symbols (and types) to be
+	// available to them.
+	pub hidden: bool,
+
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 }
@@ -117,6 +137,7 @@ pub struct Class {
 	#[derivative(Debug = "ignore")]
 	pub env: SymbolEnv,
 	pub should_case_convert_jsii: bool,
+	pub type_parameters: Option<Vec<TypeRef>>,
 }
 
 impl Class {
@@ -194,13 +215,31 @@ impl PartialEq for Type {
 				let r: &Type = &*r0;
 				l == r
 			}
+			(Self::MutArray(l0), Self::MutArray(r0)) => {
+				// Arrays are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l == r
+			}
 			(Self::Map(l0), Self::Map(r0)) => {
 				// Maps are of the same type if they have the same value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l == r
 			}
+			(Self::MutMap(l0), Self::MutMap(r0)) => {
+				// Maps are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l == r
+			}
 			(Self::Set(l0), Self::Set(r0)) => {
+				// Sets are of the same type if they have the same value type
+				let l: &Type = &*l0;
+				let r: &Type = &*r0;
+				l == r
+			}
+			(Self::MutSet(l0), Self::MutSet(r0)) => {
 				// Sets are of the same type if they have the same value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
@@ -226,7 +265,7 @@ impl PartialEq for Type {
 #[derive(PartialEq, Debug)]
 pub struct FunctionSignature {
 	pub args: Vec<TypeRef>,
-	pub return_type: Option<TypeRef>,
+	pub return_type: TypeRef,
 	pub flight: Phase,
 }
 
@@ -248,6 +287,7 @@ impl Display for Type {
 			Type::String => write!(f, "str"),
 			Type::Duration => write!(f, "duration"),
 			Type::Boolean => write!(f, "bool"),
+			Type::Void => write!(f, "void"),
 			Type::Optional(v) => write!(f, "{}?", v),
 			Type::Function(sig) => {
 				write!(
@@ -259,19 +299,18 @@ impl Display for Type {
 						.map(|a| format!("{}", a))
 						.collect::<Vec<String>>()
 						.join(", "),
-					if let Some(ret_val) = &sig.return_type {
-						format!("{}", ret_val)
-					} else {
-						"void".to_string()
-					}
+					format!("{}", sig.return_type)
 				)
 			}
 			Type::Class(class) => write!(f, "{}", class.name),
 			Type::Resource(class) => write!(f, "{}", class.name),
 			Type::Struct(s) => write!(f, "{}", s.name),
 			Type::Array(v) => write!(f, "Array<{}>", v),
+			Type::MutArray(v) => write!(f, "MutArray<{}>", v),
 			Type::Map(v) => write!(f, "Map<{}>", v),
+			Type::MutMap(v) => write!(f, "MutMap<{}>", v),
 			Type::Set(v) => write!(f, "Set<{}>", v),
+			Type::MutSet(v) => write!(f, "MutSet<{}>", v),
 			Type::Enum(s) => write!(f, "{}", s.name),
 		}
 	}
@@ -342,8 +381,40 @@ impl TypeRef {
 		}
 	}
 
+	pub fn is_void(&self) -> bool {
+		if let Type::Void = **self {
+			true
+		} else {
+			false
+		}
+	}
+
 	pub fn is_option(&self) -> bool {
 		if let Type::Optional(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_immutable_collection(&self) -> bool {
+		if let Type::Array(_) | Type::Map(_) | Type::Set(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_mutable_collection(&self) -> bool {
+		if let Type::MutArray(_) | Type::MutSet(_) = **self {
+			true
+		} else {
+			false
+		}
+	}
+
+	pub fn is_primitive(&self) -> bool {
+		if let Type::Number | Type::String | Type::Duration | Type::Boolean = **self {
 			true
 		} else {
 			false
@@ -367,7 +438,7 @@ impl PartialEq for TypeRef {
 
 impl Debug for TypeRef {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{:?}", self.0)
+		write!(f, "{}", &**self)
 	}
 }
 
@@ -380,6 +451,7 @@ pub struct Types {
 	bool_idx: usize,
 	duration_idx: usize,
 	anything_idx: usize,
+	void_idx: usize,
 }
 
 impl Types {
@@ -395,6 +467,8 @@ impl Types {
 		let duration_idx = types.len() - 1;
 		types.push(Box::new(Type::Anything));
 		let anything_idx = types.len() - 1;
+		types.push(Box::new(Type::Void));
+		let void_idx = types.len() - 1;
 
 		Self {
 			types,
@@ -403,6 +477,7 @@ impl Types {
 			bool_idx,
 			duration_idx,
 			anything_idx,
+			void_idx,
 		}
 	}
 
@@ -424,6 +499,10 @@ impl Types {
 
 	pub fn anything(&self) -> TypeRef {
 		self.get_typeref(self.anything_idx)
+	}
+
+	pub fn void(&self) -> TypeRef {
+		self.get_typeref(self.void_idx)
 	}
 
 	pub fn add_type(&mut self, t: Type) -> TypeRef {
@@ -468,15 +547,9 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
-		self.add_module_to_env(
-			scope.env.borrow_mut().as_mut().unwrap(),
-			WINGSDK_STD_MODULE.to_string(),
-			&Symbol {
-				name: WINGSDK_STD_MODULE.to_string(),
-				span: WingSpan::global(),
-			},
-			0,
-		);
+		for m in [WINGSDK_STD_MODULE] {
+			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), 0);
+		}
 	}
 
 	// TODO: All calls to this should be removed and we should make sure type checks are done
@@ -540,26 +613,26 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	// Validates types in the expression make sense and returns the expression's inferred type
-	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> Option<TypeRef> {
+	fn type_check_exp(&mut self, exp: &Expr, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
 		let t = match &exp.kind {
 			ExprKind::Literal(lit) => match lit {
-				Literal::String(_) => Some(self.types.string()),
+				Literal::String(_) => self.types.string(),
 				Literal::InterpolatedString(s) => {
 					s.parts.iter().for_each(|part| {
 						if let InterpolatedStringPart::Expr(interpolated_expr) = part {
-							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx).unwrap();
+							let exp_type = self.type_check_exp(interpolated_expr, env, statement_idx);
 							self.validate_type_in(exp_type, &self.types.stringables(), interpolated_expr);
 						}
 					});
-					Some(self.types.string())
+					self.types.string()
 				}
-				Literal::Number(_) => Some(self.types.number()),
-				Literal::Duration(_) => Some(self.types.duration()),
-				Literal::Boolean(_) => Some(self.types.bool()),
+				Literal::Number(_) => self.types.number(),
+				Literal::Duration(_) => self.types.duration(),
+				Literal::Boolean(_) => self.types.bool(),
 			},
 			ExprKind::Binary { op, lexp, rexp } => {
-				let ltype = self.type_check_exp(lexp, env, statement_idx).unwrap();
-				let rtype = self.type_check_exp(rexp, env, statement_idx).unwrap();
+				let ltype = self.type_check_exp(lexp, env, statement_idx);
+				let rtype = self.type_check_exp(rexp, env, statement_idx);
 
 				if op.boolean_args() {
 					self.validate_type(ltype, self.types.bool(), rexp);
@@ -572,19 +645,19 @@ impl<'a> TypeChecker<'a> {
 				}
 
 				if op.boolean_result() {
-					Some(self.types.bool())
+					self.types.bool()
 				} else {
 					self.validate_type(ltype, self.types.number(), rexp);
-					Some(ltype)
+					ltype
 				}
 			}
 			ExprKind::Unary { op: _, exp: unary_exp } => {
-				let _type = self.type_check_exp(unary_exp, env, statement_idx).unwrap();
+				let _type = self.type_check_exp(unary_exp, env, statement_idx);
 				// Add bool vs num support here (! => bool, +- => num)
 				self.validate_type(_type, self.types.number(), unary_exp);
-				Some(_type)
+				_type
 			}
-			ExprKind::Reference(_ref) => Some(self.resolve_reference(_ref, env, statement_idx)),
+			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx),
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
@@ -601,18 +674,18 @@ impl<'a> TypeChecker<'a> {
 						if matches!(env.flight, Phase::Preflight) {
 							(&class.env, &class.name)
 						} else {
-							return Some(self.general_type_error(format!(
+							return self.general_type_error(format!(
 								"Cannot create the resource \"{}\" in inflight phase",
 								class.name.to_string()
-							)));
+							));
 						}
 					}
-					Type::Anything => return Some(self.types.anything()),
+					Type::Anything => return self.types.anything(),
 					_ => {
-						return Some(self.general_type_error(format!(
+						return self.general_type_error(format!(
 							"Cannot instantiate type \"{}\" because it is not a class or resource",
 							type_.to_string()
-						)))
+						))
 					}
 				};
 
@@ -627,7 +700,7 @@ impl<'a> TypeChecker<'a> {
 					Ok(v) => v.as_variable().expect("Expected constructor to be a variable"),
 					Err(type_error) => {
 						self.type_error(&type_error);
-						return Some(self.types.anything());
+						return self.types.anything();
 					}
 				};
 				let constructor_sig = constructor_type
@@ -635,7 +708,7 @@ impl<'a> TypeChecker<'a> {
 					.expect("Expected constructor to be a function signature");
 
 				// Verify return type (This should never fail since we define the constructors return type during AST building)
-				self.validate_type(constructor_sig.return_type.unwrap(), type_, exp);
+				self.validate_type(constructor_sig.return_type, type_, exp);
 
 				if !arg_list.named_args.is_empty() {
 					let last_arg = constructor_sig.args.last().unwrap().maybe_unwrap_option();
@@ -672,7 +745,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Verify passed arguments match the constructor
 				for (arg_expr, arg_type) in arg_list.pos_args.iter().zip(constructor_sig.args.iter()) {
-					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx).unwrap();
+					let arg_expr_type = self.type_check_exp(arg_expr, env, statement_idx);
 					self.validate_type(arg_expr_type, *arg_type, arg_expr);
 				}
 
@@ -680,7 +753,7 @@ impl<'a> TypeChecker<'a> {
 				if type_.as_resource().is_some() {
 					// Get reference to resource object's scope
 					let obj_scope_type = if let Some(obj_scope) = obj_scope {
-						Some(self.type_check_exp(obj_scope, env, statement_idx).unwrap())
+						Some(self.type_check_exp(obj_scope, env, statement_idx))
 					} else {
 						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
 						env
@@ -703,7 +776,7 @@ impl<'a> TypeChecker<'a> {
 
 					// TODO: make sure there's no existing object with this scope/id, fail if there is! -> this can only be done in synth because I can't evaluate the scope expression here.. handle this somehow with source mapping
 				}
-				Some(type_)
+				type_
 			}
 			ExprKind::Call { function, args } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
@@ -716,15 +789,14 @@ impl<'a> TypeChecker<'a> {
 
 				// TODO: hack to support methods of stdlib object we don't know their types yet (basically stuff like cloud.Bucket().upload())
 				if matches!(*func_type, Type::Anything) {
-					return Some(self.types.anything());
+					return self.types.anything();
 				}
 
 				// Make sure this is a function signature type
 				let func_sig = if let Some(func_sig) = func_type.as_function_sig() {
 					func_sig
 				} else {
-					self.expr_error(exp, format!("\"{}\" should be a function or method", function));
-					return None;
+					return self.expr_error(exp, format!("\"{}\" should be a function or method", function));
 				};
 
 				if !can_call_flight(func_sig.flight, env.flight) {
@@ -773,7 +845,7 @@ impl<'a> TypeChecker<'a> {
 				let args = args.pos_args.iter();
 
 				for (arg_type, param_exp) in params.zip(args) {
-					let param_type = self.type_check_exp(param_exp, env, statement_idx).unwrap();
+					let param_type = self.type_check_exp(param_exp, env, statement_idx);
 					self.validate_type(param_type, *arg_type, param_exp);
 				}
 
@@ -784,9 +856,7 @@ impl<'a> TypeChecker<'a> {
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type(type_, env, statement_idx)
 				} else if !items.is_empty() {
-					let some_val_type = self
-						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
-						.unwrap();
+					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Array(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty array".to_owned());
@@ -795,23 +865,24 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Array(t) => t,
+					Type::MutArray(t) => t,
 					_ => self.expr_error(exp, format!("Expected \"Array\" type, found \"{}\"", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
-					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					let t = self.type_check_exp(v, env, statement_idx);
 					self.validate_type(t, element_type, v);
 				}
 
-				Some(container_type)
+				container_type
 			}
 			ExprKind::StructLiteral { type_, fields } => {
 				// Find this struct's type in the environment
 				let struct_type = self.resolve_type(type_, env, statement_idx);
 
 				if struct_type.is_anything() {
-					return Some(struct_type);
+					return struct_type;
 				}
 
 				// Make sure it really is a struct type
@@ -826,7 +897,7 @@ impl<'a> TypeChecker<'a> {
 				for (k, v) in fields.iter() {
 					let field = st.env.try_lookup(&k.name, None);
 					if let Some(field) = field {
-						let t = self.type_check_exp(v, env, statement_idx).unwrap();
+						let t = self.type_check_exp(v, env, statement_idx);
 						self.validate_type(
 							t,
 							field
@@ -839,16 +910,14 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				Some(struct_type)
+				struct_type
 			}
 			ExprKind::MapLiteral { fields, type_ } => {
 				// Infer type based on either the explicit type or the value in one of the fields
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type(type_, env, statement_idx)
 				} else if !fields.is_empty() {
-					let some_val_type = self
-						.type_check_exp(fields.iter().next().unwrap().1, env, statement_idx)
-						.unwrap();
+					let some_val_type = self.type_check_exp(fields.iter().next().unwrap().1, env, statement_idx);
 					self.types.add_type(Type::Map(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty map".to_owned());
@@ -857,25 +926,24 @@ impl<'a> TypeChecker<'a> {
 
 				let value_type = match *container_type {
 					Type::Map(t) => t,
+					Type::MutMap(t) => t,
 					_ => self.expr_error(exp, format!("Expected \"Map\" type, found \"{}\"", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
 				for (_, v) in fields.iter() {
-					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					let t = self.type_check_exp(v, env, statement_idx);
 					self.validate_type(t, value_type, v);
 				}
 
-				Some(container_type)
+				container_type
 			}
 			ExprKind::SetLiteral { type_, items } => {
 				// Infer type based on either the explicit type or the value in one of the items
 				let container_type = if let Some(type_) = type_ {
 					self.resolve_type(type_, env, statement_idx)
 				} else if !items.is_empty() {
-					let some_val_type = self
-						.type_check_exp(items.iter().next().unwrap(), env, statement_idx)
-						.unwrap();
+					let some_val_type = self.type_check_exp(items.iter().next().unwrap(), env, statement_idx);
 					self.types.add_type(Type::Set(some_val_type))
 				} else {
 					self.expr_error(exp, "Cannot infer type of empty set".to_owned());
@@ -884,16 +952,17 @@ impl<'a> TypeChecker<'a> {
 
 				let element_type = match *container_type {
 					Type::Set(t) => t,
+					Type::MutSet(t) => t,
 					_ => self.expr_error(exp, format!("Expected \"Set\" type, found \"{}\"", container_type)),
 				};
 
 				// Verify all types are the same as the inferred type
 				for v in items.iter() {
-					let t = self.type_check_exp(v, env, statement_idx).unwrap();
+					let t = self.type_check_exp(v, env, statement_idx);
 					self.validate_type(t, element_type, v);
 				}
 
-				Some(container_type)
+				container_type
 			}
 			ExprKind::FunctionClosure(func_def) => {
 				// TODO: make sure this function returns on all control paths when there's a return type (can be done by recursively traversing the statements and making sure there's a "return" statements in all control paths)
@@ -912,7 +981,7 @@ impl<'a> TypeChecker<'a> {
 
 				// Create an environment for the function
 				let mut function_env = SymbolEnv::new(
-					Some(env),
+					Some(env.get_ref()),
 					sig.return_type,
 					false,
 					func_def.signature.flight,
@@ -923,10 +992,10 @@ impl<'a> TypeChecker<'a> {
 
 				self.inner_scopes.push(&func_def.statements);
 
-				Some(function_type)
+				function_type
 			}
 		};
-		*exp.evaluated_type.borrow_mut() = t;
+		*exp.evaluated_type.borrow_mut() = Some(t);
 		t
 	}
 
@@ -971,7 +1040,7 @@ impl<'a> TypeChecker<'a> {
 		}) {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
 				let provided_exp = object.get(symb).unwrap();
-				let t = self.type_check_exp(provided_exp, env, statement_idx).unwrap();
+				let t = self.type_check_exp(provided_exp, env, statement_idx);
 				self.validate_type(t, *expected_field_type, provided_exp);
 			} else if !v.is_option() {
 				self.expr_error(
@@ -990,17 +1059,25 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	fn validate_type_in(&mut self, actual_type: TypeRef, expected_types: &[TypeRef], value: &Expr) {
+		assert!(expected_types.len() > 0);
 		if actual_type.0 != &Type::Anything && !expected_types.contains(&actual_type) {
 			self.diagnostics.borrow_mut().push(Diagnostic {
-				message: format!(
-					"Expected type to be one of \"{}\", but got \"{}\" instead",
-					expected_types
+				message: if expected_types.len() > 1 {
+					let expected_types_list = expected_types
 						.iter()
 						.map(|t| format!("{}", t))
 						.collect::<Vec<String>>()
-						.join(","),
-					actual_type
-				),
+						.join(",");
+					format!(
+						"Expected type to be one of \"{}\", but got \"{}\" instead",
+						expected_types_list, actual_type
+					)
+				} else {
+					format!(
+						"Expected type to be \"{}\", but got \"{}\" instead",
+						expected_types[0], actual_type
+					)
+				},
 				span: Some(value.span.clone()),
 				level: DiagnosticLevel::Error,
 			});
@@ -1038,7 +1115,7 @@ impl<'a> TypeChecker<'a> {
 					return_type: ast_sig
 						.return_type
 						.as_ref()
-						.map(|t| self.resolve_type(t, env, statement_idx)),
+						.map_or(self.types.void(), |t| self.resolve_type(t, env, statement_idx)),
 					flight: ast_sig.flight,
 				};
 				// TODO: avoid creating a new type for each function_sig resolution
@@ -1049,7 +1126,7 @@ impl<'a> TypeChecker<'a> {
 				let mut nested_name = vec![root];
 				nested_name.extend(fields);
 
-				match env.lookup_nested(&nested_name, Some(statement_idx)) {
+				match env.lookup_nested(&nested_name, false, Some(statement_idx)) {
 					Ok(_type) => {
 						if let SymbolKind::Type(t) = *_type {
 							t
@@ -1069,15 +1146,30 @@ impl<'a> TypeChecker<'a> {
 				// TODO: avoid creating a new type for each array resolution
 				self.types.add_type(Type::Array(value_type))
 			}
+			AstType::MutArray(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each array resolution
+				self.types.add_type(Type::MutArray(value_type))
+			}
 			AstType::Set(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each set resolution
 				self.types.add_type(Type::Set(value_type))
 			}
+			AstType::MutSet(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each set resolution
+				self.types.add_type(Type::MutSet(value_type))
+			}
 			AstType::Map(v) => {
 				let value_type = self.resolve_type(v, env, statement_idx);
 				// TODO: avoid creating a new type for each map resolution
 				self.types.add_type(Type::Map(value_type))
+			}
+			AstType::MutMap(v) => {
+				let value_type = self.resolve_type(v, env, statement_idx);
+				// TODO: avoid creating a new type for each map resolution
+				self.types.add_type(Type::MutMap(value_type))
 			}
 		}
 	}
@@ -1090,7 +1182,13 @@ impl<'a> TypeChecker<'a> {
 				type_,
 			} => {
 				let explicit_type = type_.as_ref().map(|t| self.resolve_type(t, env, stmt.idx));
-				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx).unwrap();
+				let inferred_type = self.type_check_exp(initial_value, env, stmt.idx);
+				if inferred_type.is_void() {
+					self.type_error(&TypeError {
+						message: format!("Cannot assign expression of type \"{}\" to a variable", inferred_type),
+						span: var_name.span.clone(),
+					});
+				}
 				if let Some(explicit_type) = explicit_type {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
@@ -1122,9 +1220,9 @@ impl<'a> TypeChecker<'a> {
 				statements,
 			} => {
 				// TODO: Expression must be iterable
-				let exp_type = self.type_check_exp(iterable, env, stmt.idx).unwrap();
+				let exp_type = self.type_check_exp(iterable, env, stmt.idx);
 
-				let mut scope_env = SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.flight, stmt.idx);
 				match scope_env.define(&iterator, SymbolKind::Variable(exp_type), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
@@ -1136,10 +1234,16 @@ impl<'a> TypeChecker<'a> {
 				self.inner_scopes.push(statements);
 			}
 			StmtKind::While { condition, statements } => {
-				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
+				let cond_type = self.type_check_exp(condition, env, stmt.idx);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 
 				self.inner_scopes.push(statements);
 			}
@@ -1148,14 +1252,26 @@ impl<'a> TypeChecker<'a> {
 				statements,
 				else_statements,
 			} => {
-				let cond_type = self.type_check_exp(condition, env, stmt.idx).unwrap();
+				let cond_type = self.type_check_exp(condition, env, stmt.idx);
 				self.validate_type(cond_type, self.types.bool(), condition);
 
-				statements.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				statements.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 				self.inner_scopes.push(statements);
 
 				if let Some(else_scope) = else_statements {
-					else_scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+					else_scope.set_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						env.flight,
+						stmt.idx,
+					));
 					self.inner_scopes.push(else_scope);
 				}
 			}
@@ -1163,7 +1279,7 @@ impl<'a> TypeChecker<'a> {
 				self.type_check_exp(e, env, stmt.idx);
 			}
 			StmtKind::Assignment { variable, value } => {
-				let exp_type = self.type_check_exp(value, env, stmt.idx).unwrap();
+				let exp_type = self.type_check_exp(value, env, stmt.idx);
 				let var_type = self.resolve_reference(variable, env, stmt.idx);
 				self.validate_type(exp_type, var_type, value);
 			}
@@ -1180,18 +1296,24 @@ impl<'a> TypeChecker<'a> {
 						return;
 					}
 
-					self.add_module_to_env(env, module_name.name.clone(), namespace_name, stmt.idx);
+					self.add_module_to_env(env, module_name.name.clone(), stmt.idx);
 				}
 			}
 			StmtKind::Scope(scope) => {
-				scope.set_env(SymbolEnv::new(Some(env), env.return_type, false, env.flight, stmt.idx));
+				scope.set_env(SymbolEnv::new(
+					Some(env.get_ref()),
+					env.return_type,
+					false,
+					env.flight,
+					stmt.idx,
+				));
 				self.inner_scopes.push(scope)
 			}
 			StmtKind::Return(exp) => {
 				if let Some(return_expression) = exp {
-					let return_type = self.type_check_exp(return_expression, env, stmt.idx).unwrap();
-					if let Some(expected_return_type) = env.return_type {
-						self.validate_type(return_type, expected_return_type, return_expression);
+					let return_type = self.type_check_exp(return_expression, env, stmt.idx);
+					if !env.return_type.is_void() {
+						self.validate_type(return_type, env.return_type, return_expression);
 					} else {
 						self.stmt_error(
 							stmt,
@@ -1199,10 +1321,10 @@ impl<'a> TypeChecker<'a> {
 						);
 					}
 				} else {
-					if let Some(expected_return_type) = env.return_type {
+					if !env.return_type.is_void() {
 						self.stmt_error(
 							stmt,
-							format!("Expected return statement to return type {}", expected_return_type),
+							format!("Expected return statement to return type {}", env.return_type),
 						);
 					}
 				}
@@ -1215,29 +1337,28 @@ impl<'a> TypeChecker<'a> {
 				constructor,
 				is_resource,
 			} => {
-				// TODO: if is_resource then....
-				if *is_resource {
-					self.unimplemented_type("Resource class");
-				}
-
 				let env_flight = if *is_resource {
 					Phase::Preflight
 				} else {
 					Phase::Inflight
 				};
 
+				if *is_resource {
+					// TODO
+				}
+
 				// Verify parent is actually a known Class/Resource and get their env
 				let (parent_class, parent_class_env) = if let Some(parent_type) = parent {
 					let t = self.resolve_type(parent_type, env, stmt.idx);
 					if *is_resource {
 						if let Type::Resource(ref class) = *t {
-							(Some(t), Some(&class.env as *const SymbolEnv))
+							(Some(t), Some(class.env.get_ref()))
 						} else {
 							panic!("Resource {}'s parent {} is not a resource", name, t);
 						}
 					} else {
 						if let Type::Class(ref class) = *t {
-							(Some(t), Some(&class.env as *const SymbolEnv))
+							(Some(t), Some(class.env.get_ref()))
 						} else {
 							self.general_type_error(format!("Class {}'s parent \"{}\" is not a class", name, t));
 							(None, None)
@@ -1248,7 +1369,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, None, true, env_flight, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), true, env_flight, stmt.idx);
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -1256,6 +1377,7 @@ impl<'a> TypeChecker<'a> {
 					name: name.clone(),
 					env: dummy_env,
 					parent: parent_class,
+					type_parameters: None, // TODO no way to have generic args in wing yet
 				};
 				let mut class_type = self.types.add_type(if *is_resource {
 					Type::Resource(class_spec)
@@ -1270,7 +1392,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, None, true, env_flight, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, env_flight, stmt.idx);
 
 				// Add members to the class env
 				for member in members.iter() {
@@ -1339,7 +1461,13 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create constructor environment and prime it with args
-				let mut constructor_env = SymbolEnv::new(Some(env), constructor_sig.return_type, false, env_flight, stmt.idx);
+				let mut constructor_env = SymbolEnv::new(
+					Some(env.get_ref()),
+					constructor_sig.return_type,
+					false,
+					env_flight,
+					stmt.idx,
+				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
 				// Prime the constructor environment with `this`
 				constructor_env
@@ -1372,7 +1500,13 @@ impl<'a> TypeChecker<'a> {
 						.expect("Expected method type to be a function signature");
 
 					// Create method environment and prime it with args
-					let mut method_env = SymbolEnv::new(Some(env), method_sig.return_type, false, method_sig.flight, stmt.idx);
+					let mut method_env = SymbolEnv::new(
+						Some(env.get_ref()),
+						method_sig.return_type,
+						false,
+						method_sig.flight,
+						stmt.idx,
+					);
 					// Add `this` as first argument
 					let mut actual_parameters = vec![Symbol {
 						name: "this".into(),
@@ -1390,7 +1524,7 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, None, true, env.flight, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, env.flight, stmt.idx);
 
 				// Add members to the struct env
 				for member in members.iter() {
@@ -1458,17 +1592,9 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_module_to_env(
-		&mut self,
-		env: &mut SymbolEnv,
-		module_name: String,
-		namespace_symbol: &Symbol,
-		statement_idx: usize,
-	) {
-		// Create a new env for the imported module's namespace
-		let mut namespace_env = SymbolEnv::new(None, None, false, env.flight, statement_idx);
+	fn add_module_to_env(&mut self, env: &mut SymbolEnv, module_name: String, statement_idx: usize) {
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-		if module_name == "cloud" || module_name == WINGSDK_STD_MODULE {
+		if module_name == "cloud" || module_name == "fs" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
@@ -1479,49 +1605,11 @@ impl<'a> TypeChecker<'a> {
 			let name = wingii_types
 				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
 				.unwrap();
-			let prefix = format!("{}.{}.", name, module_name);
 			debug!("Loaded JSII assembly {}", name);
 			let assembly = wingii_types.find_assembly(&name).unwrap();
 
-			let mut jsii_importer = JsiiImporter {
-				jsii_types: &wingii_types,
-				assembly_name: name,
-				namespace_env: &mut namespace_env,
-				namespace_name: module_name.clone(),
-				wing_types: self.types,
-				import_statement_idx: statement_idx,
-			};
-
-			for type_fqn in assembly.types.as_ref().unwrap().keys() {
-				// Skip types outside the imported namespace
-				if !type_fqn.starts_with(&prefix) {
-					continue;
-				}
-
-				// Lookup type before we attempt to import it, this is required because `import_jsii_type` is recursive
-				// and might have already defined the current type internally
-				let type_name = jsii_importer.fqn_to_type_name(type_fqn);
-				if jsii_importer.namespace_env.try_lookup(&type_name, None).is_some() {
-					continue;
-				}
-				jsii_importer.import_type(type_fqn);
-			}
-
-			// Create a namespace for the imported module
-			// TODO: are namespaces at the Top statement level (known by everyone in the scope) regardless of where they are defined?
-			match env.define(
-				namespace_symbol,
-				SymbolKind::Namespace(Namespace {
-					name: namespace_symbol.name.clone(),
-					env: namespace_env,
-				}),
-				StatementIdx::Top,
-			) {
-				Err(type_error) => {
-					self.type_error(&type_error);
-				}
-				_ => {}
-			};
+			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
+			jsii_importer.import_to_env();
 		}
 	}
 
@@ -1537,7 +1625,7 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	/// Hydrate `any`s in a type reference with a single type argument
+	/// Hydrate `@typeparam`s in a type reference with a given type argument
 	///
 	/// # Arguments
 	///
@@ -1548,9 +1636,35 @@ impl<'a> TypeChecker<'a> {
 	/// # Returns
 	/// The hydrated type reference
 	///
-	fn hydrate_class_type_arguments(&mut self, env: &SymbolEnv, original_fqn: &str, type_param: TypeRef) -> TypeRef {
-		let original_type = env.lookup_nested_str(original_fqn, None).unwrap().as_type().unwrap();
+	fn hydrate_class_type_arguments(
+		&mut self,
+		env: &SymbolEnv,
+		original_fqn: &str,
+		type_params: Vec<TypeRef>,
+	) -> TypeRef {
+		let original_type = env
+			.lookup_nested_str(original_fqn, true, None)
+			.unwrap()
+			.as_type()
+			.unwrap();
 		let original_type_class = original_type.as_class().unwrap();
+		let original_type_params = if let Some(tp) = original_type_class.type_parameters.as_ref() {
+			tp
+		} else {
+			panic!(
+				"\"{}\" does not have type parameters and does not need hydration",
+				original_fqn
+			);
+		};
+
+		if original_type_params.len() != type_params.len() {
+			return self.general_type_error(format!(
+				"Type \"{}\" has {} type parameters, but {} were provided",
+				original_fqn,
+				original_type_params.len(),
+				type_params.len()
+			));
+		}
 
 		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, true, Phase::Independent, 0);
 		let tt = Type::Class(Class {
@@ -1558,66 +1672,78 @@ impl<'a> TypeChecker<'a> {
 			env: new_env,
 			parent: original_type_class.parent,
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
+			type_parameters: Some(type_params.clone()),
 		});
 		let mut new_type = self.types.add_type(tt);
 		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
 
 		// Add symbols from original type to new type
 		// Note: this is currently limited to top-level function signatures and fields
-		for (name, symbol) in original_type_class.env.iter() {
-			match symbol {
-				SymbolKind::Variable(v) => {
-					// Replace `any` in function signatures
-					if let Some(sig) = v.as_function_sig() {
-						let new_return_type = sig
-							.return_type
-							.map(|ret| if ret.is_anything() { type_param } else { ret });
+		for (type_index, original_type_param) in original_type_params.iter().enumerate() {
+			let new_type_arg = type_params[type_index];
+			for (name, symbol) in original_type_class.env.iter() {
+				match symbol {
+					SymbolKind::Variable(v) => {
+						// Replace type params in function signatures
+						if let Some(sig) = v.as_function_sig() {
+							let new_return_type = if sig.return_type == *original_type_param {
+								new_type_arg
+							} else {
+								sig.return_type
+							};
 
-						let new_args: Vec<UnsafeRef<Type>> = sig
-							.args
-							.iter()
-							.map(|arg| if arg.is_anything() { type_param } else { *arg })
-							.collect();
+							let new_args: Vec<UnsafeRef<Type>> = sig
+								.args
+								.iter()
+								.map(|arg| {
+									if *arg == *original_type_param {
+										new_type_arg
+									} else {
+										*arg
+									}
+								})
+								.collect();
 
-						let new_sig = FunctionSignature {
-							args: new_args,
-							return_type: new_return_type,
-							flight: Phase::Independent,
-						};
+							let new_sig = FunctionSignature {
+								args: new_args,
+								return_type: new_return_type,
+								flight: Phase::Independent,
+							};
 
-						match new_type_class.env.define(
-							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&Symbol {
-								name: name.clone(),
-								span: WingSpan::global(),
-							},
-							SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
-							StatementIdx::Top,
-						) {
-							Err(type_error) => {
-								self.type_error(&type_error);
+							match new_type_class.env.define(
+								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+								&Symbol {
+									name: name.clone(),
+									span: WingSpan::global(),
+								},
+								SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
+								StatementIdx::Top,
+							) {
+								Err(type_error) => {
+									self.type_error(&type_error);
+								}
+								_ => {}
 							}
-							_ => {}
-						}
-					} else if let Some(var) = symbol.as_variable() {
-						let new_var_type = if var.is_anything() { type_param } else { var };
-						match new_type_class.env.define(
-							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&Symbol {
-								name: name.clone(),
-								span: WingSpan::global(),
-							},
-							SymbolKind::Variable(new_var_type),
-							StatementIdx::Top,
-						) {
-							Err(type_error) => {
-								self.type_error(&type_error);
+						} else if let Some(var) = symbol.as_variable() {
+							let new_var_type = if var == *original_type_param { new_type_arg } else { var };
+							match new_type_class.env.define(
+								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
+								&Symbol {
+									name: name.clone(),
+									span: WingSpan::global(),
+								},
+								SymbolKind::Variable(new_var_type),
+								StatementIdx::Top,
+							) {
+								Err(type_error) => {
+									self.type_error(&type_error);
+								}
+								_ => {}
 							}
-							_ => {}
 						}
 					}
+					_ => {}
 				}
-				_ => {}
 			}
 		}
 
@@ -1644,7 +1770,7 @@ impl<'a> TypeChecker<'a> {
 			}
 		}
 		path.reverse();
-		match env.lookup_nested(&path, Some(statement_idx)) {
+		match env.lookup_nested(&path, false, Some(statement_idx)) {
 			Ok(SymbolKind::Type(type_ref)) => Some(*type_ref),
 			_ => None,
 		}
@@ -1688,23 +1814,39 @@ impl<'a> TypeChecker<'a> {
 					}
 				}
 
-				let instance_type = self.type_check_exp(object, env, statement_idx).unwrap();
+				let instance_type = self.type_check_exp(object, env, statement_idx);
 				match *instance_type {
 					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
 					Type::Anything => instance_type,
 
 					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_ARRAY, vec![t]);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::MutArray(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_ARRAY, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::Set(t) => {
-						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, t);
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_SET, vec![t]);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::MutSet(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_SET, vec![t]);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::Map(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MAP, vec![t]);
+						self.get_property_from_class(new_class.as_class().unwrap(), property)
+					}
+					Type::MutMap(t) => {
+						let new_class = self.hydrate_class_type_arguments(env, WINGSDK_MUT_MAP, vec![t]);
 						self.get_property_from_class(new_class.as_class().unwrap(), property)
 					}
 					Type::String => self.get_property_from_class(
 						env
-							.lookup_nested_str(WINGSDK_STRING, None)
+							.lookup_nested_str(WINGSDK_STRING, false, None)
 							.unwrap()
 							.as_type()
 							.unwrap()
@@ -1714,7 +1856,7 @@ impl<'a> TypeChecker<'a> {
 					),
 					Type::Duration => self.get_property_from_class(
 						env
-							.lookup_nested_str(WINGSDK_DURATION, None)
+							.lookup_nested_str(WINGSDK_DURATION, false, None)
 							.unwrap()
 							.as_type()
 							.unwrap()

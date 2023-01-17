@@ -2,7 +2,7 @@
 
 exports[`create a topic 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -33,6 +33,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -44,6 +49,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A pub/sub notification topic",
+            "title": "Topic",
           },
           "id": "my_topic",
           "path": "root/my_topic",
@@ -69,11 +78,11 @@ Array [
   "Publish (message=Alpha).",
   "Sending message (message=Alpha, subscriber=sim-1).",
   "Received Alpha",
-  "Invoke (payload=\\"Alpha\\").",
+  "Invoke (payload=\\"\\"Alpha\\"\\").",
   "Publish (message=Beta).",
   "Sending message (message=Beta, subscriber=sim-1).",
   "Received Beta",
-  "Invoke (payload=\\"Beta\\").",
+  "Invoke (payload=\\"\\"Beta\\"\\").",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Logger deleted.",
@@ -89,10 +98,10 @@ Array [
   "Publish (message=Alpha).",
   "Sending message (message=Alpha, subscriber=sim-1).",
   "Received Alpha",
-  "Invoke (payload=\\"Alpha\\").",
+  "Invoke (payload=\\"\\"Alpha\\"\\").",
   "Sending message (message=Alpha, subscriber=sim-2).",
   "Also received Alpha",
-  "Invoke (payload=\\"Alpha\\").",
+  "Invoke (payload=\\"\\"Alpha\\"\\").",
   "wingsdk.cloud.Topic deleted.",
   "wingsdk.cloud.Function deleted.",
   "wingsdk.cloud.Function deleted.",

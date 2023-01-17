@@ -2,7 +2,7 @@
 
 exports[`create a counter 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -33,6 +33,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -44,6 +49,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -63,7 +72,7 @@ Object {
 
 exports[`inc 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -94,6 +103,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -105,6 +119,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
           },
           "id": "my_counter",
           "path": "root/my_counter",

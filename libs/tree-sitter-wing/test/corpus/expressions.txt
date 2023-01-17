@@ -110,6 +110,27 @@ obj.method();
 )
 
 ====================
+Method call in binary expression
+====================
+
+x == obj.method();
+
+---
+
+(source
+  (expression_statement
+    (binary_expression
+      left: (reference
+        (identifier))
+      right: (call
+        caller: (reference
+          (nested_identifier
+            object: (reference
+              (identifier))
+            property: (identifier)))
+        args: (argument_list)))))
+
+====================
 New expression
 ====================
 

@@ -2,21 +2,37 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { T1 } from "./util";
+
 /**
  * Immutable Set
+ *
+ * @typeparam T1
  */
 export class ImmutableSet {
   /**
    * The length of the set
    * @returns the length of the set
    */
-  public get length(): number {
+  public get size(): number {
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Returns a boolean indicating whether an element with the specified value exists in the set.
+   * @param value The value to test for presence in the Set object.
+   * @returns Returns `true` if an element with the specified value exists in the set; otherwise `false`.
+   */
+  public has(value: T1): boolean {
+    value;
     throw new Error("Abstract");
   }
 }
 
 /**
  * Mutable Set
+ *
+ * @typeparam T1
  */
 export class MutableSet extends ImmutableSet {
   /**
@@ -24,7 +40,24 @@ export class MutableSet extends ImmutableSet {
    * @param value value to add
    * @returns true if the value was added, false if it was already in the set
    */
-  public add(value: any): MutableSet {
+  public add(value: T1): MutableSet {
+    value;
+    throw new Error("Abstract");
+  }
+
+  /**
+   * The clear() method removes all elements from a set.
+   */
+  public clear(): void {
+    throw new Error("Abstract");
+  }
+
+  /**
+   * Removes a specified value from a set, if it is in the set.
+   * @param value The value to remove from the set.
+   * @returns Returns `true` if `value` was already in the set; otherwise `false`.
+   */
+  public delete(value: T1): boolean {
     value;
     throw new Error("Abstract");
   }

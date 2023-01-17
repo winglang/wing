@@ -2,7 +2,7 @@
 
 exports[`create a bucket 1`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -33,6 +33,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -44,6 +49,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -73,7 +82,7 @@ Array [
 
 exports[`get invalid object throws an error 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -104,6 +113,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -115,6 +129,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -145,7 +163,7 @@ Array [
 
 exports[`put and get objects from bucket 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -176,6 +194,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -187,6 +210,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -219,7 +246,7 @@ Array [
 
 exports[`put multiple objects and list all from bucket 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -250,6 +277,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -261,6 +293,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -291,7 +327,7 @@ Array [
 
 exports[`remove object from a bucket 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -322,6 +358,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -333,6 +374,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",
@@ -363,7 +408,7 @@ Array [
 
 exports[`remove object from a bucket with mustExist as option 2`] = `
 Object {
-  "app.wsim": Object {
+  "app.wsim/simulator.json": Object {
     "resources": Array [
       Object {
         "attrs": Object {},
@@ -394,6 +439,11 @@ Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
           },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
           "id": "WingLogger",
           "path": "root/WingLogger",
         },
@@ -405,6 +455,10 @@ Object {
           "constructInfo": Object {
             "fqn": "constructs.Construct",
             "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
           },
           "id": "my_bucket",
           "path": "root/my_bucket",

@@ -1,17 +1,22 @@
 name: Build
 
 on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
   push:
+    branches:
+      - main
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
   cancel-in-progress: true
 
 env:
   NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
-  WINGLANG_REGISTRY: "https://npm.pkg.github.com"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
@@ -22,25 +27,24 @@ jobs:
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Get tags
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: git fetch --unshallow --tags
 
-      - name: Login to Private NPM registry
-        if: github.ref == 'refs/heads/main'
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
-
       - name: Install Dependencies
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: bahmutov/npm-install@v1
         with:
           install-command: npm ci --ignore-scripts
 
       - name: Get Version Info
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         id: info
         env:
           # Needed for `auto` cli
@@ -53,11 +57,11 @@ jobs:
 
       # newlines are easier to handle in single-line yaml
       - run: "echo '\n' >> CHANGELOG.md"
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
 
       - name: PR Version Info
         id: pr_info
-        if: github.ref != 'refs/heads/main'
+        if: github.event_name != 'push' || github.repository != 'winglang/wing'
         run: |
           echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
           echo "Pull Request" > CHANGELOG.md
@@ -70,11 +74,11 @@ jobs:
           path: CHANGELOG.md
 
       - name: Compress Docs
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: tar -czvf docs.tgz docs/*
 
       - name: Upload Docs
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/upload-artifact@v2
         with:
           name: docs
@@ -90,12 +94,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -108,9 +114,6 @@ jobs:
 
       - name: Install wasi-sdk
         run: scripts/setup_wasi.sh
-
-      - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -159,10 +162,10 @@ jobs:
           path: target/wasm32-wasi/release/wingc.wasm
 
       - name: "Publish Wing Playground"
-        if: github.ref == 'refs/heads/main'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: amondnet/vercel-action@v25.1.0
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
           vercel-token: ${{ secrets.VERCEL_TOKEN_WING_PLAYGROUND }}
           vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
           vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID_WING_PLAYGROUND }}
@@ -192,12 +195,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
@@ -207,9 +212,6 @@ jobs:
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
-
-      - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -250,11 +252,14 @@ jobs:
         runner:
           - ubuntu-latest
           # - macos-latest
-        node: [18]
+        node: [18, 19]
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
@@ -272,7 +277,7 @@ jobs:
 
       - name: Run E2E Tests
         env:
-          NPM_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           export HANGAR_WING_TGZ="$(pwd)/$(find wing/*.tgz)"
           export HANGAR_WINGSDK_TGZ="$(pwd)/$(find wingsdk/*.tgz)"
@@ -291,6 +296,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Download Build Artifacts
         uses: actions/download-artifact@v2
@@ -307,10 +315,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
-
-      - name: Login to Private NPM registry
-        run: npm config set @winglang:registry https://npm.pkg.github.com && npm set //npm.pkg.github.com/:_authToken ${{ secrets.PROJEN_GITHUB_TOKEN }}
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
@@ -342,7 +346,7 @@ jobs:
 
   publish:
     name: Publish
-    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.repository == 'winglang/wing'
     needs:
       - build
       - prepare
@@ -355,19 +359,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
-          registry-url: https://npm.pkg.github.com
-
-      - name: Publish Wing
-        working-directory: wing
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-        run: npm publish *.tgz
-
-      - name: Publish Wing SDK
-        working-directory: wingsdk
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-        run: npm publish *.tgz
 
       - name: Publish Extension to Visual Studio Marketplace
         uses: "HaaLeo/publish-vscode-extension@v1"
@@ -375,6 +366,17 @@ jobs:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
           registryUrl: "https://marketplace.visualstudio.com"
           extensionFile: "vscode-wing/vscode-wing.vsix"
+
+      - name: Login to Private NPM registry
+        run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
+
+      - name: Publish Wing
+        working-directory: wing
+        run: npm publish *.tgz --access public
+
+      - name: Publish Wing SDK
+        working-directory: wingsdk
+        run: npm publish *.tgz --access public
 
       - name: Rename Docs
         run: mv docs "docs-${{ needs.prepare.outputs.version }}.tgz"
@@ -397,7 +399,7 @@ jobs:
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
         with:
-          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.prepare.outputs.version }}"
 
       - name: Cut Development Release
@@ -408,20 +410,3 @@ jobs:
           body_path: CHANGELOG.md
           files: dist/*
           token: ${{ secrets.PROJEN_GITHUB_TOKEN }}
-
-  alert:
-    needs:
-      - publish
-    if: always() && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      # sets WORKFLOW_CONCLUSION variable
-      - uses: technote-space/workflow-conclusion-action@v3
-      - name: Send slack notification
-        uses: ravsamhq/notify-slack-action@v1
-        with:
-          status: ${{ env.WORKFLOW_CONCLUSION }}
-          notification_title: "{workflow} has {status_message}"
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.ACTION_MONITORING_SLACK }}
-        if: env.WORKFLOW_CONCLUSION == 'failure'

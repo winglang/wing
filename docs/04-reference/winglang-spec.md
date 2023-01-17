@@ -121,21 +121,21 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > `Promise<T>` is only available to JSII imported modules.
 
 > ```TS
-> let z = {1, 2, 3};            // immutable set
-> let zm = new MutSet<num>();   // mutable set
-> let y = {"a": 1, "b": 2};     // immutable map
-> let ym = new MutMap<num>();   // mutable map
-> let x = [1, 2, 3];            // immutable array
-> let xm = new MutArray<num>(); // mutable array
-> let w = new SampleClass();    // class instance (mutability unknown)
+> let z = {1, 2, 3};               // immutable set, Set<Num> is inferred
+> let zm = MutSet<num>{};          // mutable set
+> let y = {"a": 1, "b": 2};        // immutable map, Map<num> is inferred
+> let ym = MutMap<num>{};          // mutable map
+> let x = [1, 2, 3];               // immutable array, Array<num> is inferred
+> let xm = MutArray<num>[];        // mutable array
+> let w = new SampleClass();       // class instance (mutability unknown)
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> const z: Set = Object.freeze(new Set([1, 2, 3]));
+> const z: Set<number> = Object.freeze(new Set([1, 2, 3]));
 > const zm: Set = new Set();
-> const y: Map = Object.freeze(new Map([["a", 1], ["b", 2]]));
+> const y: Map<string, number> = Object.freeze(new Map([["a", 1], ["b", 2]]));
 > const ym: Map = new Map();
 > const x: number[] = Object.freeze([1, 2, 3]);
 > const xm: number[] = [];
@@ -462,8 +462,8 @@ type is inferred iff a default value is provided.
 > ```TS
 > let i = 5;
 > let m = i;
-> let arr_opt? = new MutArray<num>();
-> let arr: Array<num> = [];
+> let arr_opt? = MutArray<num>[];
+> let arr = Array<num>[];
 > let copy = arr;
 > let i1? = nil;
 > let i2: num? = i;
@@ -746,7 +746,7 @@ includes for and while loops currently.
 
 ### 2.5 defer/await
 
-> Read [Asynchronous Model](#1-14-asynchronous-model) section as a prerequisite.
+> Read [Asynchronous Model](#114-asynchronous-model) section as a prerequisite.
 
 You mostly do not need to use `defer` and `await` keywords in Wing.  
 "defer" prevents the compiler from `await`ing a promise and grabs a reference.  
@@ -1409,7 +1409,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > ```TS
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
-> let arr3 = Array<str>(arr2);
+> let arr3 = MutArray<str>["a1", "b2", "c3"];
 > let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
 > ```
 
@@ -1860,7 +1860,7 @@ struct DenyListRule {
 }
 
 struct DenyListProps {
-  rules: MutArray<DenyListRule >;
+  rules: MutArray<DenyListRule>[];
 }
 
 resource DenyList {
@@ -1875,10 +1875,10 @@ resource DenyList {
     this._bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
   }
 
-  _write_to_file(list: MutArray<DenyListRule>,  filename: str): str {
+  _write_to_file(list: MutArray<DenyListRule>[],  filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map = MutMap<DenyListRule>(); 
+    let map = MutMap<DenyListRule>{}; 
     for rule in list {
       let suffix = DenyList._maybe_suffix(rule.version);
       let path = "${rule.package_name}${suffix}";
@@ -1888,11 +1888,11 @@ resource DenyList {
     return tmpdir;
   }
 
-  inflight rules: MutMap<DenyListRule>?; 
+  inflight rules: MutMap<DenyListRule>{}?; 
 
   inflight init() {
     // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>(); 
+    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>{}; 
   }
 
   public inflight lookup(name: str, version: str): DenyListRule? {
@@ -1973,6 +1973,6 @@ Inspiration:
 - <https://github.com/vlang/v>
 
 [top]: #0-preface
-[rfc]: https://github.com/winglang/wing/blob/main/rfcs/winglang-reqs.md
+[rfc]: https://github.com/winglang/wing/blob/main/docs/05-rfcs/winglang-reqs.md
 [this]: https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md
 [disco]: https://github.com/winglang/wing/discussions/new

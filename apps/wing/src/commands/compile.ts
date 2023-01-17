@@ -15,7 +15,7 @@ const log = debug("wing:compile");
 
 const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
 log("wasm path: %s", WINGC_WASM_PATH);
-const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/wingsdk");
+const WINGSDK_RESOLVED_PATH = require.resolve("@winglang/sdk");
 log("wingsdk module path: %s", WINGSDK_RESOLVED_PATH);
 const WINGSDK_MANIFEST_ROOT = resolve(WINGSDK_RESOLVED_PATH, "../..");
 log("wingsdk manifest path: %s", WINGSDK_MANIFEST_ROOT);
@@ -107,6 +107,19 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     },
     __dirname: workDir,
     __filename: artifactPath,
+
+    // since the SDK is loaded in the outer VM, we need these to be the same class instance,
+    // otherwise "instanceof" won't work between preflight code and the SDK. this is needed e.g. in
+    // `serializeImmutableData` which has special cases for serializing these types.
+    Map,
+    Set,
+    Array,
+    Promise,
+    Object,
+    RegExp,
+    String,
+    Date,
+    Function,
   });
   log("evaluating artifact in context: %o", context);
 
@@ -121,10 +134,10 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       const lineNumber = Number.parseInt((e as any).stack.split("evalmachine.<anonymous>:")[1].split(":")[0]) - 1;
       const lines = artifact.split("\n");
       let startLine = Math.max(lineNumber - 2, 0);
-      let finishLine = Math.min(lineNumber + 2, lines.length);
+      let finishLine = Math.min(lineNumber + 2, lines.length - 1);
 
-      // print line and its three surrounding lines
-      for (let i = startLine; i < finishLine; i++) {
+      // print line and its surrounding lines
+      for (let i = startLine; i <= finishLine; i++) {
         if (i === lineNumber) {
           console.log(chalk.bold.red(">> ") + chalk.red(lines[i]));
         } else {
