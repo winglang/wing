@@ -104,13 +104,23 @@ enum InvocationType {
 	NPX,
 }
 
-async function runWingCommand(type: InvocationType, command: string, wingFile: string) {
+async function runWingCommand(type: InvocationType, command: string[], wingFile: string) {
 	const isError = path.dirname(wingFile).endsWith("error");
 
+  const cmd: string[] = [];
+
+  if (type === InvocationType.Direct) {
+    cmd.push(npxBin);
+    cmd.push("winglang");
+  } else {
+    cmd.push("../node_modules/.bin/wing");
+  }
+
+  cmd.push(...command);
+  cmd.push(wingFile);
+
 	const work = async () => {
-    const out = await (type === InvocationType.Direct
-      ? $`${npxBin} winglang ${command} ${wingFile}`
-      : $`../node_modules/.bin/wing ${command} ${wingFile}`);
+    const out = await $`${cmd}`;
 		return out.exitCode;
 	};
 
@@ -125,7 +135,7 @@ test.each(validWingFiles)(
   "wing compile --target tf-aws %s",
   async (wingFile) => {
     await within(async () => {
-      const command = "compile --target tf-aws";
+      const command = ["compile", "--target", "tf-aws"];
       const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
       const targetDir = path.join(test_dir, "target");
       const tf_manifest = path.join(targetDir, "cdktf.out/manifest.json");
@@ -167,7 +177,7 @@ test.each(validWingFiles)(
   "wing test %s (--target sim)",
   async (wingFile) => {
     await within(async () => {
-      const command ="test";
+      const command = ["test"];
       const test_dir = path.join(tmpDir, `${wingFile}_sim`);
       await enterTestDir(test_dir);
 
