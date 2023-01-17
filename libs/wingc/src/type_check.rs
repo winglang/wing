@@ -65,6 +65,13 @@ impl SymbolKind {
 		}
 	}
 
+	pub fn is_reassignable(&self) -> bool {
+		match self {
+			SymbolKind::Variable(_, VariableKind::Var) => true,
+			_ => false,
+		}
+	}
+
 	fn as_namespace(&self) -> Option<&Namespace> {
 		match self {
 			SymbolKind::Namespace(ns) => Some(ns),

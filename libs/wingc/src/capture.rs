@@ -265,8 +265,17 @@ fn scan_captures_in_expression(
 					} else {
 						let t = var.as_variable().unwrap();
 
-						// if the identifier represents a preflight object, then capture it
+						// if the identifier represents a preflight value, then capture it
 						if f == Phase::Preflight {
+							if var.is_reassignable() {
+								diagnostics.push(Diagnostic {
+									level: DiagnosticLevel::Error,
+									message: format!("Cannot capture a reassignable variable \"{}\"", symbol.name),
+									span: Some(symbol.span.clone()),
+								});
+								return res;
+							}
+
 							// capture as a resource
 							if let Some(resource) = t.as_resource() {
 								// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
@@ -329,7 +338,27 @@ fn scan_captures_in_expression(
 			res.extend(scan_captures_in_expression(lexp, env, statement_idx, diagnostics));
 			res.extend(scan_captures_in_expression(rexp, env, statement_idx, diagnostics));
 		}
-		ExprKind::Literal(_) => {}
+		ExprKind::Literal(lit) => match lit {
+			Literal::String(_) => {}
+			Literal::InterpolatedString(interpolated_str) => {
+				res.extend(
+					interpolated_str
+						.parts
+						.iter()
+						.filter_map(|part| match part {
+							InterpolatedStringPart::Expr(expr) => {
+								Some(scan_captures_in_expression(expr, env, statement_idx, diagnostics))
+							}
+							InterpolatedStringPart::Static(_) => None,
+						})
+						.flatten()
+						.collect::<Vec<_>>(),
+				);
+			}
+			Literal::Number(_) => {}
+			Literal::Duration(_) => {}
+			Literal::Boolean(_) => {}
+		},
 		ExprKind::ArrayLiteral { items, .. } => {
 			for v in items {
 				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
