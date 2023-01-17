@@ -3,7 +3,7 @@ import { tmpdir } from "os";
 import { basename, extname, join } from "path";
 import { compile, Target } from "./compile";
 import * as chalk from "chalk";
-import * as sdk from '@winglang/wingsdk';
+import * as sdk from "@winglang/sdk";
 
 export async function test(entrypoints: string[]) {
   for (const entrypoint of entrypoints) {
