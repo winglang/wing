@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions, VariableKind,
 	},
 	capture::CaptureKind,
 	utilities::snake_case_to_camel_case,
@@ -466,13 +466,16 @@ impl JSifier {
 				)
 			}
 			StmtKind::VariableDef {
+				kind,
 				var_name,
 				initial_value,
 				type_: _,
 			} => {
 				let initial_value = self.jsify_expression(initial_value, phase);
-				// TODO: decide on `const` vs `let` once we have mutables
-				format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
+				return match kind {
+					VariableKind::Let => format!("const {} = {};", self.jsify_symbol(var_name), initial_value),
+					VariableKind::Var => format!("let {} = {};", self.jsify_symbol(var_name), initial_value),
+				};
 			}
 			StmtKind::ForLoop {
 				iterator,

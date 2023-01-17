@@ -117,9 +117,11 @@ module.exports = grammar({
 
     expression_statement: ($) => seq($.expression, ";"),
 
+    variable_assignment_kind: ($) => choice("let", "var"),
+
     variable_definition_statement: ($) =>
       seq(
-        "let",
+        field("kind", $.variable_assignment_kind),
         field("name", $.identifier),
         optional($._type_annotation),
         "=",

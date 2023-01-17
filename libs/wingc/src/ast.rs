@@ -181,6 +181,7 @@ pub enum StmtKind {
 		identifier: Option<Symbol>,
 	},
 	VariableDef {
+		kind: VariableKind,
 		var_name: Symbol,
 		initial_value: Expr,
 		type_: Option<Type>,
@@ -223,6 +224,12 @@ pub enum StmtKind {
 		name: Symbol,
 		values: IndexSet<Symbol>,
 	},
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum VariableKind {
+	Let,
+	Var,
 }
 
 #[derive(Debug)]

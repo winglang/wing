@@ -87,6 +87,7 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				}
 			}
 			StmtKind::VariableDef {
+				kind: _,
 				var_name: _,
 				initial_value,
 				type_: _,
@@ -247,11 +248,11 @@ fn scan_captures_in_expression(
 			Reference::Identifier(symbol) => {
 				// Lookup the symbol
 				let x = env.lookup_ext(&symbol, Some(statement_idx));
-				
+
 				// we ignore errors here because if the lookup symbol
 				// wasn't found, a error diagnostic is already emitted
 				// the type checker.
-				
+
 				if x.is_ok() {
 					let (var, f) = x.unwrap();
 
@@ -376,6 +377,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 	for s in scope.statements.iter() {
 		match &s.kind {
 			StmtKind::VariableDef {
+				kind: _,
 				var_name: _,
 				initial_value,
 				type_: _,

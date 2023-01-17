@@ -361,6 +361,7 @@ let a: Array<num> = [];
 
 (source
     (variable_definition_statement
+        kind: (variable_assignment_kind)
         name: (identifier)
         type: (immutable_container_type
             type_parameter: (builtin_type)
@@ -379,12 +380,13 @@ let a = new MutMap<num>();
 
 (source
     (variable_definition_statement
-        (identifier)
-        (new_expression
-            (mutable_container_type
-                (builtin_type)
+        kind: (variable_assignment_kind)
+        name: (identifier)
+        value: (new_expression
+            class: (mutable_container_type
+                type_parameter: (builtin_type)
             )
-            (argument_list)
+            args: (argument_list)
         )
     )
 )
@@ -399,6 +401,7 @@ let a = A { f1: 3, f2: true };
 
 (source
     (variable_definition_statement
+        kind: (variable_assignment_kind)
         name: (identifier)
         value: (struct_literal
             type: (custom_type

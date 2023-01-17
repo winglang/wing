@@ -53,14 +53,14 @@ pub type TypeRef = UnsafeRef<Type>;
 #[derive(Debug)]
 pub enum SymbolKind {
 	Type(TypeRef),
-	Variable(TypeRef),
+	Variable(TypeRef, VariableKind),
 	Namespace(Namespace),
 }
 
 impl SymbolKind {
 	pub fn as_variable(&self) -> Option<TypeRef> {
 		match &self {
-			SymbolKind::Variable(t) => Some(t.clone()),
+			SymbolKind::Variable(t, _) => Some(t.clone()),
 			_ => None,
 		}
 	}
@@ -273,7 +273,7 @@ impl Display for SymbolKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			SymbolKind::Type(_) => write!(f, "type"),
-			SymbolKind::Variable(_) => write!(f, "variable"),
+			SymbolKind::Variable(_, _) => write!(f, "variable"),
 			SymbolKind::Namespace(_) => write!(f, "namespace"),
 		}
 	}
@@ -1177,6 +1177,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
 		match &stmt.kind {
 			StmtKind::VariableDef {
+				kind,
 				var_name,
 				initial_value,
 				type_,
@@ -1193,7 +1194,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::Variable(explicit_type),
+						SymbolKind::Variable(explicit_type, *kind),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1204,7 +1205,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::Variable(inferred_type),
+						SymbolKind::Variable(inferred_type, *kind),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1223,7 +1224,11 @@ impl<'a> TypeChecker<'a> {
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx);
 
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.flight, stmt.idx);
-				match scope_env.define(&iterator, SymbolKind::Variable(exp_type), StatementIdx::Top) {
+				match scope_env.define(
+					&iterator,
+					SymbolKind::Variable(exp_type, VariableKind::Let),
+					StatementIdx::Top,
+				) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1397,7 +1402,11 @@ impl<'a> TypeChecker<'a> {
 				// Add members to the class env
 				for member in members.iter() {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
-					match class_env.define(&member.name, SymbolKind::Variable(member_type), StatementIdx::Top) {
+					match class_env.define(
+						&member.name,
+						SymbolKind::Variable(member_type, VariableKind::Let),
+						StatementIdx::Top,
+					) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -1418,7 +1427,11 @@ impl<'a> TypeChecker<'a> {
 					);
 
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
-					match class_env.define(method_name, SymbolKind::Variable(method_type), StatementIdx::Top) {
+					match class_env.define(
+						method_name,
+						SymbolKind::Variable(method_type, VariableKind::Let),
+						StatementIdx::Top,
+					) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -1437,7 +1450,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::Variable(constructor_type),
+					SymbolKind::Variable(constructor_type, VariableKind::Let),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1476,7 +1489,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::Variable(class_type),
+						SymbolKind::Variable(class_type, VariableKind::Let),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -1529,7 +1542,11 @@ impl<'a> TypeChecker<'a> {
 				// Add members to the struct env
 				for member in members.iter() {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
-					match struct_env.define(&member.name, SymbolKind::Variable(member_type), StatementIdx::Top) {
+					match struct_env.define(
+						&member.name,
+						SymbolKind::Variable(member_type, VariableKind::Let),
+						StatementIdx::Top,
+					) {
 						Err(type_error) => {
 							self.type_error(&type_error);
 						}
@@ -1616,7 +1633,11 @@ impl<'a> TypeChecker<'a> {
 	fn add_arguments_to_env(&mut self, arg_names: &Vec<Symbol>, sig: &FunctionSignature, env: &mut SymbolEnv) {
 		assert!(arg_names.len() == sig.args.len());
 		for (arg, arg_type) in arg_names.iter().zip(sig.args.iter()) {
-			match env.define(&arg, SymbolKind::Variable(*arg_type), StatementIdx::Top) {
+			match env.define(
+				&arg,
+				SymbolKind::Variable(*arg_type, VariableKind::Let),
+				StatementIdx::Top,
+			) {
 				Err(type_error) => {
 					self.type_error(&type_error);
 				}
@@ -1683,7 +1704,7 @@ impl<'a> TypeChecker<'a> {
 			let new_type_arg = type_params[type_index];
 			for (name, symbol) in original_type_class.env.iter() {
 				match symbol {
-					SymbolKind::Variable(v) => {
+					SymbolKind::Variable(v, kind) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
 							let new_return_type = if sig.return_type == *original_type_param {
@@ -1716,7 +1737,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
+								SymbolKind::Variable(self.types.add_type(Type::Function(new_sig)), VariableKind::Let),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -1732,7 +1753,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::Variable(new_var_type),
+								SymbolKind::Variable(new_var_type, *kind),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -1943,7 +1964,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::Variable(member_type),
+					SymbolKind::Variable(member_type, VariableKind::Let),
 					StatementIdx::Top,
 				)?;
 			}

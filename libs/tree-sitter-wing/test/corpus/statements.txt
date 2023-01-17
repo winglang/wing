@@ -26,6 +26,7 @@ x = 2;
 
 (source
     (variable_definition_statement
+        kind: (variable_assignment_kind)
         name: (identifier)
         type: (builtin_type)
         value: (number)
