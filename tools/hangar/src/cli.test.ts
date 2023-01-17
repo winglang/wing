@@ -23,10 +23,10 @@ const npxBin = path.join(hangarDir, "node_modules/.bin/npx");
 
 const targetWingTGZ =
   process.env.HANGAR_WING_TGZ ??
-  path.join(repoRoot, `apps/wing/winglang-wing-0.0.0.tgz`);
+  path.join(repoRoot, `apps/wing/winglang-0.0.0.tgz`);
 const targetWingSDKTGZ =
   process.env.HANGAR_WINGSDK_TGZ ??
-  path.join(repoRoot, `libs/wingsdk/winglang-wingsdk-0.0.0.tgz`);
+  path.join(repoRoot, `libs/wingsdk/winglang-sdk-0.0.0.tgz`);
 
 const validWingFiles = fs
   .readdirSync(validTestDir)

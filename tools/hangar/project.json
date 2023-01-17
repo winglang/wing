@@ -1,7 +1,7 @@
 {
   "name": "hangar",
   "implicitDependencies": [
-    "wing",
+    "winglang",
     "sdk"
   ],
   "targets": {

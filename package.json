@@ -23,8 +23,8 @@
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
     "install:wing-playground": "npm --prefix apps/wing-playground install",
-    "install:wing": "npm --prefix apps/wing install",
-    "install:wingsdk": "npm --prefix libs/wingsdk install",
+    "install:winglang": "npm --prefix apps/wing install",
+    "install:sdk": "npm --prefix libs/wingsdk install",
     "install:hangar": "npm --prefix tools/hangar install"
   },
   "volta": {
