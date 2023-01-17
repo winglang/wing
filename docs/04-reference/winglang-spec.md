@@ -402,6 +402,8 @@ Mixing `protected` and `internal` is not allowed.
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
+Variables can be reassigned to by using the `var` keyword instead of `let`.
+
 Re-assignment to class fields is allowed if field is marked with `readwrite`.
 Examples in the class section below.
 

@@ -1284,6 +1284,7 @@ impl<'a> TypeChecker<'a> {
 				self.type_check_exp(e, env, stmt.idx);
 			}
 			StmtKind::Assignment { variable, value } => {
+				// TODO: check if variable can be assigned to
 				let exp_type = self.type_check_exp(value, env, stmt.idx);
 				let var_type = self.resolve_reference(variable, env, stmt.idx);
 				self.validate_type(exp_type, var_type, value);
