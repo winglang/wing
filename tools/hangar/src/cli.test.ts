@@ -23,10 +23,10 @@ const npxBin = path.join(hangarDir, "node_modules/.bin/npx");
 
 const targetWingTGZ =
   process.env.HANGAR_WING_TGZ ??
-  path.join(repoRoot, `apps/wing/winglang-wing-0.0.0.tgz`);
+  path.join(repoRoot, `apps/wing/winglang-0.0.0.tgz`);
 const targetWingSDKTGZ =
   process.env.HANGAR_WINGSDK_TGZ ??
-  path.join(repoRoot, `libs/wingsdk/winglang-wingsdk-0.0.0.tgz`);
+  path.join(repoRoot, `libs/wingsdk/winglang-sdk-0.0.0.tgz`);
 
 const validWingFiles = fs
   .readdirSync(validTestDir)
@@ -126,7 +126,7 @@ test.each(validWingFiles)(
   "wing compile --target tf-aws %s",
   async (wingFile) => {
     await within(async () => {
-      const command = "compile tf-aws";
+      const command = "compile --target tf-aws";
       const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
       const targetDir = path.join(test_dir, "target");
       const tf_manifest = path.join(targetDir, "cdktf.out/manifest.json");
@@ -165,7 +165,7 @@ test.each(validWingFiles)(
 );
 
 test.each(validWingFiles)(
-  "wing test %s (target --sim)",
+  "wing test %s (--target sim)",
   async (wingFile) => {
     await within(async () => {
       const command ="test";

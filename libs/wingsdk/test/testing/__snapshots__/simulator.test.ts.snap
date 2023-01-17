@@ -146,7 +146,7 @@ Object {
     at Object.withTrace 
     at Function.invoke 
     at Simulator.runTest 
-    at Object.<anonymous> ",
+    at processTicksAndRejections ",
   "pass": false,
   "path": "root/test",
   "traces": Array [
