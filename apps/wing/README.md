@@ -3,7 +3,7 @@
 Wing CLI is the Cargo of Wing. It's currently published to npm:
 
 ```sh
-npm i -g @winglang/wing
+npm i -g winglang
 ```
 
 ## Logs

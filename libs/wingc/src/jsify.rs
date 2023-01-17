@@ -13,7 +13,7 @@ use crate::{
 };
 
 const STDLIB: &str = "$stdlib";
-const STDLIB_MODULE: &str = "@winglang/wingsdk";
+const STDLIB_MODULE: &str = "@winglang/sdk";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -390,7 +390,6 @@ impl JSifier {
 				)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
-
 				let item_list = items
 					.iter()
 					.map(|expr| self.jsify_expression(expr, phase))
@@ -413,7 +412,7 @@ impl JSifier {
 						.join("\n")
 				)
 			}
-			ExprKind::MapLiteral { fields, .. } => {				
+			ExprKind::MapLiteral { fields, .. } => {
 				format!(
 					"Object.freeze(new Map([{}]))",
 					fields
@@ -433,7 +432,7 @@ impl JSifier {
 				if is_mutable_collection(expression) {
 					format!("new Set([{}])", item_list)
 				} else {
-					format!("Object.freeze(new Set([{}]))",	item_list)
+					format!("Object.freeze(new Set([{}]))", item_list)
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
@@ -720,9 +719,9 @@ impl JSifier {
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
-    if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-			evaluated_type.is_mutable_collection()
-		} else {
-			false
-		}
+	if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+		evaluated_type.is_mutable_collection()
+	} else {
+		false
+	}
 }

@@ -26,28 +26,40 @@ In order to deploy to AWS, you will also need:
 
 ## Wing CLI
 
-:::info
+<br/>
+<details>
+  <summary><b>!Caution If you were in our closed alpha</b></summary>
+<br/>
 
-During the private alpha period, Wing is distributed through a private npm
-repository. To request access, [sign up here](https://t.winglang.io/alpha).
+If you installed Wing as part of our closed alpha, please make sure to uninstall the existing version
+and clean up your `~/.npmrc` before continuing. Otherwise you will see the following error when trying
+to install `winglang`:
 
-You will need to obtain a [personal access token] from GitHub with a
-**read:packages** scope and then login to your npm client like this:
+```
+Not Found - GET https://npm.pkg.github.com/@winglang%2fsdk
+```
+
+First, uninstall Wing from your system:
 
 ```sh
-npm login --scope=@winglang --registry=https://npm.pkg.github.com
-Username: "lowercase-github-username"
-Password: "the just created Github token"
-Email: "your github email"
+npm uninstall -g @winglang/wing
 ```
-(note: npm 9+ needs the argument '--auth-type=legacy' to fix 'ERR! Web login not supported')
 
-:::
+Now, edit `~/.npmrc` and remove this line:
 
+```
+@winglang:registry=https://npm.pkg.github.com/
+```
+
+You can also just delete `~/.npmrc` if there are no other registries that you are signed into.
+
+</details>
+
+<br/>
 Install the Wing CLI through npm:
 
 ```sh
-npm install -g @winglang/wing
+npm install -g winglang
 ```
 
 Check that the installation was successful:

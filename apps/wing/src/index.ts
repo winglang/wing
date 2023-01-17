@@ -1,7 +1,7 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, upgrade } from "./commands";
+import { compile, docs, upgrade } from "./commands";
 import { join, resolve } from "path";
 import { satisfies } from 'compare-versions';
 
@@ -52,6 +52,11 @@ async function main() {
       "tf-aws"
     )
     .action(compile);
+
+  program
+    .command("docs")
+    .description("Open the Wing documentation")
+    .action(docs);
 
   program
     .command("upgrade")

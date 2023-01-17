@@ -2,8 +2,12 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { T1 } from "./util";
+
 /**
  * Immutable Map
+ *
+ * @typeparam T1
  */
 export class ImmutableMap {
   /**
@@ -22,7 +26,7 @@ export class ImmutableMap {
    * @param key The key of the element to return.
    * @returns The element associated with the specified key, or undefined if the key can't be found
    */
-  public get(key: string): any {
+  public get(key: string): T1 {
     key;
     throw new Error("Abstract");
   }
@@ -40,6 +44,8 @@ export class ImmutableMap {
 
 /**
  * Mutable Map
+ *
+ * @typeparam T1
  */
 export class MutableMap extends ImmutableMap {
   /**
@@ -64,7 +70,7 @@ export class MutableMap extends ImmutableMap {
    * @param key The key of the element to add
    * @param value The value of the element to add
    */
-  public set(key: string, value: any): void {
+  public set(key: string, value: T1): void {
     key;
     value;
     throw new Error("Abstract");

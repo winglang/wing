@@ -9,7 +9,7 @@ const JSII_DEPS = [
 ];
 
 const project = new cdk.JsiiProject({
-  name: "@winglang/wingsdk",
+  name: "@winglang/sdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
@@ -55,7 +55,6 @@ const project = new cdk.JsiiProject({
   ],
   prettier: true,
   minNodeVersion: "16.16.0",
-  npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
