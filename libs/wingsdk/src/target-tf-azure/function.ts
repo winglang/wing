@@ -64,7 +64,7 @@ export class Function extends cloud.FunctionBase {
       storageAccountName: this.storageAccount.name,
       storageContainerName: c.name,
       type: "Block",
-      source: "/Users/hasan/repos/monada/samples/test-func.zip",
+      source: "/Users/hasan/repos/monada/samples/azurefunc.zip",
     });
 
     b;
@@ -99,11 +99,11 @@ export class Function extends cloud.FunctionBase {
       }
     });
     
-    const codeHash = crypto.createHash("sha256").update(readFileSync("/Users/hasan/repos/monada/samples/test-func.zip")).digest("hex");
+    const codeHash = crypto.createHash("sha256").update(readFileSync("/Users/hasan/repos/monada/samples/azurefunc.zip")).digest("hex");
 
-    console.log("HASHCODE: ", codeHash);
+    // console.log("HASHCODE: ", codeHash);
     const e = (str: string):string => Buffer.from(str, 'binary').toString('base64');
-    console.log("BASE64: ", e(codeHash));
+    // console.log("BASE64: ", e(codeHash));
 
 
     this.function = new LinuxFunctionApp(this, "Function", {
