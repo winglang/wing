@@ -107,11 +107,11 @@ enum InvocationType {
 async function runWingCommand(type: InvocationType, command: string, wingFile: string) {
 	const isError = path.dirname(wingFile).endsWith("error");
   const executable = type === InvocationType.Direct
-    ? `${npxBin} winglang`
-    : "../node_modules/.bin/wing";
+    ? $`${npxBin} winglang ${command} ${wingFile}}`
+    : $`../node_modules/.bin/wing ${command} ${wingFile}`;
 
 	const work = async () => {
-		const out = await $`${executable} ${command} ${wingFile}`;
+		const out = await executable;
 		return out.exitCode;
 	};
 
