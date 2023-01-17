@@ -3,6 +3,7 @@
   "affected": {
     "defaultBase": "main"
   },
+  "defaultProject": "wing",
   "npmScope": "winglang",
   "workspaceLayout": {
     "appsDir": "apps",

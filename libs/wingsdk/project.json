@@ -1,5 +1,5 @@
 {
-  "name": "wingsdk",
+  "name": "sdk",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": ["wing-api-checker", "jsii-docgen"],
   "targets": {
