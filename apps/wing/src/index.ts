@@ -1,7 +1,7 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, upgrade, test } from "./commands";
+import { compile, docs, test, upgrade } from "./commands";
 import { join, resolve } from "path";
 import { satisfies } from 'compare-versions';
 
@@ -58,6 +58,11 @@ async function main() {
     .description("Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers")
     .argument("<entrypoint...>", "all entrypoints to test")
     .action(test);
+
+program
+    .command("docs")
+    .description("Open the Wing documentation")
+    .action(docs);
 
   program
     .command("upgrade")
