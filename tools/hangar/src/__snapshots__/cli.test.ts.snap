@@ -3073,6 +3073,24 @@ exports[`wing compile reassignment.w > manifest.json 1`] = `
 }
 `;
 
+exports[`wing compile reassignment.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
 exports[`wing compile resource.w > manifest.json 1`] = `
 {
   "stacks": {
