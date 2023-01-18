@@ -3039,6 +3039,72 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws reassignment.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.13.2",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws reassignment.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
+exports[`wing compile --target tf-aws reassignment.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"reassignment\\" });
+  
+  let x = 5;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 5)'\`)})((x === 5))};
+  x = (x + 1);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 6)'\`)})((x === 6))};
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile --target tf-aws resource.w > cdk.tf.json 1`] = `
 {
   "//": {
