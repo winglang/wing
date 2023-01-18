@@ -15,6 +15,22 @@ if (!SUPPORTED_NODE_VERSION) {
 }
 const log = debug("wing:cli");
 
+/**
+ * Wrapper for actions that ensures that any errors are logged and the process exits with a non-zero exit code.
+ * @param action Action to wrap.
+ * @returns Promise that resolves when the action has completed.
+ */
+function actionWrapper(action: (...args: any) => Promise<void>) {
+  return async (...args: any) => {
+    try {
+      await action(...args);
+    } catch (e) {
+      console.error(e);
+      process.exit(1);
+    }
+  };
+}
+
 async function main() {
   checkNodeVersion()
 
@@ -30,6 +46,7 @@ async function main() {
     .alias("it")
     .description("Runs either a Wing file (`.s` extension) or Wing Simulator file (`.wsim` extension) in the Wing Console")
     .argument("[entrypoint]", "Either a file (`.s` or `.wsim`) or a directory (which contains a single `.s` or `.wsim` file to run)")
+    .action(actionWrapper(run));
 
   program
     .command("compile")
@@ -45,23 +62,23 @@ async function main() {
       "Target platform (options: 'tf-aws', 'tf-azure', 'sim')",
       "tf-aws"
     )
-    .action(compile);
+    .action(actionWrapper(compile));
 
   program
     .command("test")
     .description("Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers")
     .argument("<entrypoint...>", "all entrypoints to test")
-    .action(test);
+    .action(actionWrapper(test));
 
 program
     .command("docs")
     .description("Open the Wing documentation")
-    .action(docs);
+    .action(actionWrapper(docs));
 
   program
     .command("upgrade")
     .description("Upgrades the Wing toolchain to the latest version")
-    .action(() => upgrade({ force: true }));
+    .action(actionWrapper(() => upgrade({ force: true })));
 
   program.parse();
 }
