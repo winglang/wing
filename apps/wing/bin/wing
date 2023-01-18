@@ -1,4 +1,4 @@
-#!/usr/bin/env -S node --experimental-wasi-unstable-preview1 --no-warnings
+#!/usr/bin/env node
 
 // Only certain builds and versions of Node support WASI.
 // We first assume this script is loaded in the correct runtime environment, and

@@ -12,7 +12,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 /**
  * Simulator implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/wingsdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase implements ISimulatorResource {
   private readonly timeout: std.Duration;
@@ -116,4 +116,4 @@ export class Queue extends cloud.QueueBase implements ISimulatorResource {
 
 Queue._annotateInflight("push", {});
 Queue._annotateInflight("purge", {});
-Queue._annotateInflight("approxSize", {});
+Queue._annotateInflight("approx_size", {});

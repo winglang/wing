@@ -2,8 +2,12 @@
 // They should not be consumed directly by users.
 // TODO: These should be interfaces, currently Wing does not support interface JSII imports
 
+import { T1 } from "./util";
+
 /**
  * Immutable Set
+ *
+ * @typeparam T1
  */
 export class ImmutableSet {
   /**
@@ -19,7 +23,7 @@ export class ImmutableSet {
    * @param value The value to test for presence in the Set object.
    * @returns Returns `true` if an element with the specified value exists in the set; otherwise `false`.
    */
-  public has(value: any): boolean {
+  public has(value: T1): boolean {
     value;
     throw new Error("Abstract");
   }
@@ -27,6 +31,8 @@ export class ImmutableSet {
 
 /**
  * Mutable Set
+ *
+ * @typeparam T1
  */
 export class MutableSet extends ImmutableSet {
   /**
@@ -34,7 +40,7 @@ export class MutableSet extends ImmutableSet {
    * @param value value to add
    * @returns true if the value was added, false if it was already in the set
    */
-  public add(value: any): MutableSet {
+  public add(value: T1): MutableSet {
     value;
     throw new Error("Abstract");
   }
@@ -51,7 +57,7 @@ export class MutableSet extends ImmutableSet {
    * @param value The value to remove from the set.
    * @returns Returns `true` if `value` was already in the set; otherwise `false`.
    */
-  public delete(value: any): boolean {
+  public delete(value: T1): boolean {
     value;
     throw new Error("Abstract");
   }

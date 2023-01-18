@@ -11,7 +11,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 /**
  * Simulator implementation of `cloud.Topic`
  *
- * @inflight `@winglang/wingsdk.cloud.ITopicClient`
+ * @inflight `@winglang/sdk.cloud.ITopicClient`
  */
 export class Topic extends cloud.TopicBase implements ISimulatorResource {
   private readonly subscribers: TopicSubscriber[];

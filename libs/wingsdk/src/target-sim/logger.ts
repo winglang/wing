@@ -9,7 +9,7 @@ import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 /**
  * Simulator implementation of `cloud.Logger`.
  *
- * @inflight `@winglang/wingsdk.cloud.ILoggerClient`
+ * @inflight `@winglang/sdk.cloud.ILoggerClient`
  */
 export class Logger extends cloud.LoggerBase implements ISimulatorResource {
   constructor(scope: Construct, id: string) {

@@ -2,8 +2,8 @@ import wingcURL from './wingc.wasm?url'
 import { init, WASI } from '@wasmer/wasi';
 import { env } from 'process';
 
-const wingsdkJSIIContent = await import('@winglang/wingsdk/.jsii?raw').then(i => i.default);
-const wingsdkPackageJsonContent = await import('@winglang/wingsdk/package.json?raw').then(i => i.default);
+const wingsdkJSIIContent = await import('@winglang/sdk/.jsii?raw').then(i => i.default);
+const wingsdkPackageJsonContent = await import('@winglang/sdk/package.json?raw').then(i => i.default);
 
 await init();
 
