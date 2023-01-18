@@ -3057,6 +3057,22 @@ exports[`wing compile resource.w > cdk.tf.json 1`] = `
 }
 `;
 
+exports[`wing compile reassignment.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.13.2",
+}
+`;
+
 exports[`wing compile resource.w > manifest.json 1`] = `
 {
   "stacks": {
