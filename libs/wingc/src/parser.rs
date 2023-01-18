@@ -9,7 +9,7 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
 	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
-	UnaryOperator,
+	UnaryOperator, VariableKind,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -183,7 +183,14 @@ impl Parser<'_> {
 					None
 				};
 
+				let kind = if let Some(_) = statement_node.child_by_field_name("reassignable") {
+					VariableKind::Var
+				} else {
+					VariableKind::Let
+				};
+
 				StmtKind::VariableDef {
+					kind,
 					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
 					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 					type_,

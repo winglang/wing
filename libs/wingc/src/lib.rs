@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use ast::{Scope, Stmt, Symbol, UtilityFunctions, VariableKind};
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -156,7 +156,11 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.borrow_mut()
 		.as_mut()
 		.unwrap()
-		.define(&sym, SymbolKind::Variable(types.add_type(typ)), StatementIdx::Top)
+		.define(
+			&sym,
+			SymbolKind::Variable(types.add_type(typ), VariableKind::Let),
+			StatementIdx::Top,
+		)
 		.expect("Failed to add builtin");
 }
 
