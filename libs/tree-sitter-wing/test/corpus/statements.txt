@@ -160,7 +160,7 @@ class A {
                 type: (builtin_type)
             )
             (class_member
-                (reassignable)
+                reassignable: (reassignable)
                 name: (identifier)
                 type: (builtin_type)
             )
