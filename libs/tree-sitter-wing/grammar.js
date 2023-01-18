@@ -122,7 +122,7 @@ module.exports = grammar({
     variable_definition_statement: ($) =>
       seq(
         "let",
-        optional($.reassignable),
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         optional($._type_annotation),
         "=",
