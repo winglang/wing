@@ -37,7 +37,7 @@ let var y = "hello";
         value: (number)
     )
     (variable_definition_statement
-        (reassignable)
+        reassignable: (reassignable)
         name: (identifier)
         value: (string)
     )
