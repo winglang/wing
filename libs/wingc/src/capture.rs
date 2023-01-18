@@ -195,7 +195,8 @@ fn scan_captures_in_call(
 				Ok((prop_type, phase)) => (
 					prop_type
 						.as_variable()
-						.expect("Expected resource property to be a variable"),
+						.expect("Expected resource property to be a variable")
+						._type,
 					phase,
 				),
 				Err(type_error) => {
@@ -263,7 +264,7 @@ fn scan_captures_in_expression(
 							span: Some(symbol.span.clone()),
 						});
 					} else {
-						let t = var.as_variable().unwrap();
+						let t = var.as_variable().unwrap()._type;
 
 						// if the identifier represents a preflight value, then capture it
 						if f == Phase::Preflight {

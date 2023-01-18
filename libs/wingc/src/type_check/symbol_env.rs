@@ -5,7 +5,7 @@ use crate::{
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
-use super::UnsafeRef;
+use super::{UnsafeRef, VariableInfo};
 
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
@@ -94,12 +94,12 @@ impl SymbolEnv {
 		if let Some(_parent_env) = self.parent {
 			if let Some(parent_kind) = self.try_lookup(&symbol.name, None) {
 				// If we're a class we allow "symbol shadowing" for methods
-				let is_function = if let SymbolKind::Variable(t, _) = kind {
+				let is_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
 				};
-				let is_parent_function = if let SymbolKind::Variable(t, _) = *parent_kind {
+				let is_parent_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *parent_kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
@@ -234,7 +234,7 @@ impl SymbolEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(t, _) = *t {
+			if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}

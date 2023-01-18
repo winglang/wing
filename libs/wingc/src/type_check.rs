@@ -53,21 +53,30 @@ pub type TypeRef = UnsafeRef<Type>;
 #[derive(Debug)]
 pub enum SymbolKind {
 	Type(TypeRef),
-	Variable(TypeRef, VariableKind),
+	Variable(VariableInfo),
 	Namespace(Namespace),
 }
 
+#[derive(Debug, Clone)]
+pub struct VariableInfo {
+	pub _type: TypeRef,
+	pub kind: VariableKind,
+}
+
 impl SymbolKind {
-	pub fn as_variable(&self) -> Option<TypeRef> {
+	pub fn as_variable(&self) -> Option<VariableInfo> {
 		match &self {
-			SymbolKind::Variable(t, _) => Some(t.clone()),
+			SymbolKind::Variable(t) => Some(t.clone()),
 			_ => None,
 		}
 	}
 
 	pub fn is_reassignable(&self) -> bool {
 		match self {
-			SymbolKind::Variable(_, VariableKind::Var) => true,
+			SymbolKind::Variable(VariableInfo {
+				kind: VariableKind::Var,
+				..
+			}) => true,
 			_ => false,
 		}
 	}
@@ -152,8 +161,8 @@ impl Class {
 		self
 			.env
 			.iter()
-			.filter(|(_, t)| t.as_variable().unwrap().as_function_sig().is_some())
-			.map(|(s, t)| (s.clone(), t.as_variable().unwrap().clone()))
+			.filter(|(_, t)| t.as_variable().unwrap()._type.as_function_sig().is_some())
+			.map(|(s, t)| (s.clone(), t.as_variable().unwrap()._type.clone()))
 	}
 }
 
@@ -280,7 +289,7 @@ impl Display for SymbolKind {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
 		match self {
 			SymbolKind::Type(_) => write!(f, "type"),
-			SymbolKind::Variable(_, _) => write!(f, "variable"),
+			SymbolKind::Variable(_) => write!(f, "variable"),
 			SymbolKind::Namespace(_) => write!(f, "namespace"),
 		}
 	}
@@ -609,6 +618,19 @@ impl<'a> TypeChecker<'a> {
 		self.types.anything()
 	}
 
+	fn variable_error(&self, type_error: &TypeError) -> VariableInfo {
+		self.diagnostics.borrow_mut().push(Diagnostic {
+			level: DiagnosticLevel::Error,
+			message: type_error.message.clone(),
+			span: Some(type_error.span.clone()),
+		});
+
+		VariableInfo {
+			_type: self.types.anything(),
+			kind: VariableKind::Let,
+		}
+	}
+
 	pub fn get_primitive_type_by_name(&self, name: &str) -> TypeRef {
 		match name {
 			"number" => self.types.number(),
@@ -664,7 +686,7 @@ impl<'a> TypeChecker<'a> {
 				self.validate_type(_type, self.types.number(), unary_exp);
 				_type
 			}
-			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx),
+			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx)._type,
 			ExprKind::New {
 				class,
 				obj_id: _, // TODO
@@ -704,7 +726,7 @@ impl<'a> TypeChecker<'a> {
 					},
 					None,
 				) {
-					Ok(v) => v.as_variable().expect("Expected constructor to be a variable"),
+					Ok(v) => v.as_variable().expect("Expected constructor to be a variable")._type,
 					Err(type_error) => {
 						self.type_error(&type_error);
 						return self.types.anything();
@@ -765,7 +787,7 @@ impl<'a> TypeChecker<'a> {
 						// If this returns None, this means we're instantiating a resource object in the global scope, which is valid
 						env
 							.try_lookup("this".into(), Some(statement_idx))
-							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable"))
+							.map(|v| v.as_variable().expect("Expected \"this\" to be a variable")._type)
 					};
 
 					// Verify the object scope is an actually resource
@@ -787,7 +809,7 @@ impl<'a> TypeChecker<'a> {
 			}
 			ExprKind::Call { function, args } => {
 				// Resolve the function's reference (either a method in the class's env or a function in the current env)
-				let func_type = self.resolve_reference(function, env, statement_idx);
+				let func_type = self.resolve_reference(function, env, statement_idx)._type;
 				let this_args = if matches!(function, Reference::NestedIdentifier { .. }) {
 					1
 				} else {
@@ -909,7 +931,8 @@ impl<'a> TypeChecker<'a> {
 							t,
 							field
 								.as_variable()
-								.expect("Expected struct field to be a variable in the struct env"),
+								.expect("Expected struct field to be a variable in the struct env")
+								._type,
 							v,
 						);
 					} else {
@@ -1030,7 +1053,8 @@ impl<'a> TypeChecker<'a> {
 			if let Some(field) = field {
 				let field_type = field
 					.as_variable()
-					.expect("Expected struct field to be a variable in the struct env");
+					.expect("Expected struct field to be a variable in the struct env")
+					._type;
 				field_map.insert(k.name.clone(), (k, field_type));
 			} else {
 				self.expr_error(value, format!("\"{}\" is not a field of \"{}\"", k.name, expected_type));
@@ -1042,7 +1066,8 @@ impl<'a> TypeChecker<'a> {
 			(
 				k,
 				v.as_variable()
-					.expect("Expected struct field to be a variable in the struct env"),
+					.expect("Expected struct field to be a variable in the struct env")
+					._type,
 			)
 		}) {
 			if let Some((symb, expected_field_type)) = field_map.get(&k) {
@@ -1201,7 +1226,10 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::Variable(explicit_type, *kind),
+						SymbolKind::Variable(VariableInfo {
+							kind: *kind,
+							_type: explicit_type,
+						}),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1212,7 +1240,10 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::Variable(inferred_type, *kind),
+						SymbolKind::Variable(VariableInfo {
+							_type: inferred_type,
+							kind: *kind,
+						}),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1233,7 +1264,10 @@ impl<'a> TypeChecker<'a> {
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.flight, stmt.idx);
 				match scope_env.define(
 					&iterator,
-					SymbolKind::Variable(exp_type, VariableKind::Let),
+					SymbolKind::Variable(VariableInfo {
+						_type: exp_type,
+						kind: VariableKind::Let,
+					}),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1291,10 +1325,12 @@ impl<'a> TypeChecker<'a> {
 				self.type_check_exp(e, env, stmt.idx);
 			}
 			StmtKind::Assignment { variable, value } => {
-				// TODO: check if variable can be assigned to
 				let exp_type = self.type_check_exp(value, env, stmt.idx);
-				let var_type = self.resolve_reference(variable, env, stmt.idx);
-				self.validate_type(exp_type, var_type, value);
+				let var_info = self.resolve_reference(variable, env, stmt.idx);
+				if !matches!(var_info.kind, VariableKind::Var) {
+					self.stmt_error(stmt, format!("Variable {} is not reassignable ", variable));
+				}
+				self.validate_type(exp_type, var_info._type, value);
 			}
 			StmtKind::Use {
 				module_name,
@@ -1412,7 +1448,10 @@ impl<'a> TypeChecker<'a> {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
 					match class_env.define(
 						&member.name,
-						SymbolKind::Variable(member_type, VariableKind::Let),
+						SymbolKind::Variable(VariableInfo {
+							_type: member_type,
+							kind: VariableKind::Let,
+						}),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1437,7 +1476,10 @@ impl<'a> TypeChecker<'a> {
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(
 						method_name,
-						SymbolKind::Variable(method_type, VariableKind::Let),
+						SymbolKind::Variable(VariableInfo {
+							_type: method_type,
+							kind: VariableKind::Let,
+						}),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1458,7 +1500,10 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::Variable(constructor_type, VariableKind::Let),
+					SymbolKind::Variable(VariableInfo {
+						_type: constructor_type,
+						kind: VariableKind::Let,
+					}),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1497,7 +1542,10 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::Variable(class_type, VariableKind::Let),
+						SymbolKind::Variable(VariableInfo {
+							_type: class_type,
+							kind: VariableKind::Let,
+						}),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -1514,7 +1562,8 @@ impl<'a> TypeChecker<'a> {
 						.lookup(method_name, None)
 						.expect("Expected method to be in class env")
 						.as_variable()
-						.expect("Expected method to be a variable");
+						.expect("Expected method to be a variable")
+						._type;
 
 					let method_sig = method_type
 						.as_function_sig()
@@ -1552,7 +1601,10 @@ impl<'a> TypeChecker<'a> {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
 					match struct_env.define(
 						&member.name,
-						SymbolKind::Variable(member_type, VariableKind::Let),
+						SymbolKind::Variable(VariableInfo {
+							_type: member_type,
+							kind: VariableKind::Let,
+						}),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1643,7 +1695,10 @@ impl<'a> TypeChecker<'a> {
 		for (arg, arg_type) in arg_names.iter().zip(sig.args.iter()) {
 			match env.define(
 				&arg,
-				SymbolKind::Variable(*arg_type, VariableKind::Let),
+				SymbolKind::Variable(VariableInfo {
+					_type: *arg_type,
+					kind: VariableKind::Let,
+				}),
 				StatementIdx::Top,
 			) {
 				Err(type_error) => {
@@ -1712,7 +1767,7 @@ impl<'a> TypeChecker<'a> {
 			let new_type_arg = type_params[type_index];
 			for (name, symbol) in original_type_class.env.iter() {
 				match symbol {
-					SymbolKind::Variable(v, kind) => {
+					SymbolKind::Variable(VariableInfo { _type: v, .. }) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
 							let new_return_type = if sig.return_type == *original_type_param {
@@ -1745,7 +1800,10 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::Variable(self.types.add_type(Type::Function(new_sig)), VariableKind::Let),
+								SymbolKind::Variable(VariableInfo {
+									_type: self.types.add_type(Type::Function(new_sig)),
+									kind: VariableKind::Let,
+								}),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -1753,7 +1811,7 @@ impl<'a> TypeChecker<'a> {
 								}
 								_ => {}
 							}
-						} else if let Some(var) = symbol.as_variable() {
+						} else if let Some(VariableInfo { _type: var, kind }) = symbol.as_variable() {
 							let new_var_type = if var == *original_type_param { new_type_arg } else { var };
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
@@ -1761,7 +1819,10 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::Variable(new_var_type, *kind),
+								SymbolKind::Variable(VariableInfo {
+									_type: new_var_type,
+									kind,
+								}),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -1805,20 +1866,20 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv, statement_idx: usize) -> TypeRef {
+	fn resolve_reference(&mut self, reference: &Reference, env: &SymbolEnv, statement_idx: usize) -> VariableInfo {
 		match reference {
 			Reference::Identifier(symbol) => match env.lookup(symbol, Some(statement_idx)) {
 				Ok(var) => {
 					if let Some(var) = var.as_variable() {
 						var
 					} else {
-						self.type_error(&TypeError {
+						self.variable_error(&TypeError {
 							message: format!("Expected identifier {}, to be a variable, but it's a {}", symbol, var),
 							span: symbol.span.clone(),
 						})
 					}
 				}
-				Err(type_error) => self.type_error(&type_error),
+				Err(type_error) => self.variable_error(&type_error),
 			},
 			Reference::NestedIdentifier { object, property } => {
 				// There's a special case where the object is actually a type and the property is either a static method or an enum variant.
@@ -1826,27 +1887,32 @@ impl<'a> TypeChecker<'a> {
 				// object as a single reference to the type
 				if let Some(_type) = self.expr_maybe_type(object, env, statement_idx) {
 					// Currently we only support enum field access (no static methods)
-					match *_type {
+					let _type = match *_type {
 						Type::Enum(ref e) => {
 							if e.values.contains(property) {
-								return _type;
+								_type
 							} else {
-								return self.general_type_error(format!(
+								self.general_type_error(format!(
 									"Enum \"{}\" does not contain value \"{}\"",
 									_type, property.name
-								));
+								))
 							}
 						}
-						_ => {
-							return self.general_type_error(format!("Type {} not valid in expression", _type));
-						}
-					}
+						_ => self.general_type_error(format!("Type {} not valid in expression", _type)),
+					};
+					return VariableInfo {
+						_type,
+						kind: VariableKind::Let,
+					};
 				}
 
 				let instance_type = self.type_check_exp(object, env, statement_idx);
 				match *instance_type {
 					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
-					Type::Anything => instance_type,
+					Type::Anything => VariableInfo {
+						_type: instance_type,
+						kind: VariableKind::Let,
+					},
 
 					// Lookup wingsdk std types, hydrating generics if necessary
 					Type::Array(t) => {
@@ -1894,22 +1960,25 @@ impl<'a> TypeChecker<'a> {
 						property,
 					),
 
-					_ => self.expr_error(
-						object,
-						format!(
-							"Expression must be a class or resource instance to access property \"{}\", instead found type \"{}\"",
-							property.name, instance_type
+					_ => VariableInfo {
+						_type: self.expr_error(
+							object,
+							format!(
+								"Expression must be a class or resource instance to access property \"{}\", instead found type \"{}\"",
+								property.name, instance_type
+							),
 						),
-					),
+						kind: VariableKind::Let,
+					},
 				}
 			}
 		}
 	}
 
-	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> TypeRef {
+	fn get_property_from_class(&mut self, class: &Class, property: &Symbol) -> VariableInfo {
 		match class.env.lookup(property, None) {
 			Ok(field) => field.as_variable().expect("Expected property to be a variable"),
-			Err(type_error) => self.type_error(&type_error),
+			Err(type_error) => self.variable_error(&type_error),
 		}
 	}
 }
@@ -1949,14 +2018,16 @@ fn add_parent_members_to_struct_env(
 		for (parent_member_name, parent_member) in parent_struct.env.iter() {
 			let member_type = parent_member
 				.as_variable()
-				.expect("Expected struct member to be a variable");
+				.expect("Expected struct member to be a variable")
+				._type;
 			if let Some(existing_type) = struct_env.try_lookup(&parent_member_name, None) {
 				// We compare types in both directions to make sure they are exactly the same type and not inheriting from each other
 				// TODO: does this make sense? We should add an `is_a()` methdod to `Type` to check if a type is a subtype and use that
 				//   when we want to check for subtypes and use equality for strict comparisons.
 				let existing_type = existing_type
 					.as_variable()
-					.expect("Expected struct member to be a variable");
+					.expect("Expected struct member to be a variable")
+					._type;
 				if existing_type.ne(&member_type) && member_type.ne(&member_type) {
 					return Err(TypeError {
 						span: name.span.clone(),
@@ -1972,7 +2043,10 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::Variable(member_type, VariableKind::Let),
+					SymbolKind::Variable(VariableInfo {
+						_type: member_type,
+						kind: VariableKind::Let,
+					}),
 					StatementIdx::Top,
 				)?;
 			}

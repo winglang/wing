@@ -5,7 +5,7 @@ use ast::{Scope, Stmt, Symbol, UtilityFunctions, VariableKind};
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
-use type_check::{FunctionSignature, SymbolKind, Type};
+use type_check::{FunctionSignature, SymbolKind, Type, VariableInfo};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
@@ -158,7 +158,10 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::Variable(types.add_type(typ), VariableKind::Let),
+			SymbolKind::Variable(VariableInfo {
+				_type: types.add_type(typ),
+				kind: VariableKind::Let,
+			}),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");
