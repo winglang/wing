@@ -17,6 +17,15 @@ pub struct Symbol {
 	pub span: WingSpan,
 }
 
+impl Symbol {
+	pub fn global(name: &str) -> Self {
+		Self {
+			name: name.to_string(),
+			span: WingSpan::global(),
+		}
+	}
+}
+
 impl Ord for Symbol {
 	fn cmp(&self, other: &Self) -> std::cmp::Ordering {
 		self.name.cmp(&other.name).then(self.span.cmp(&other.span))

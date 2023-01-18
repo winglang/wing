@@ -1,7 +1,7 @@
 mod jsii_importer;
 pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
-use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
+use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError};
 use crate::{debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MUT_ARRAY, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STRING};
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -1319,11 +1319,8 @@ impl<'a> TypeChecker<'a> {
 				constructor,
 				is_resource,
 			} => {
-				let env_flight = if *is_resource {
-					Phase::Preflight
-				} else {
-					Phase::Inflight
-				};
+				// Resources canno't be defined inflight
+				assert!(!*is_resource || env.flight == Phase::Preflight);
 
 				if *is_resource {
 					// TODO
@@ -1351,7 +1348,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), true, env_flight, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), true, env.flight, stmt.idx);
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -1373,7 +1370,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, env_flight, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, env.flight, stmt.idx);
 
 				// Add members to the class env
 				for member in members.iter() {
@@ -1446,7 +1443,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					constructor_sig.return_type,
 					false,
-					env_flight,
+					class_env.flight,
 					stmt.idx,
 				);
 				self.add_arguments_to_env(&constructor.parameters, constructor_sig, &mut constructor_env);
@@ -1662,10 +1659,7 @@ impl<'a> TypeChecker<'a> {
 
 						match new_type_class.env.define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&Symbol {
-								name: name.clone(),
-								span: WingSpan::global(),
-							},
+							&Symbol::global(&name),
 							SymbolKind::Variable(self.types.add_type(Type::Function(new_sig))),
 							StatementIdx::Top,
 						) {
@@ -1678,10 +1672,7 @@ impl<'a> TypeChecker<'a> {
 						let new_var_type = if var.is_anything() { type_param } else { var };
 						match new_type_class.env.define(
 							// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
-							&Symbol {
-								name: name.clone(),
-								span: WingSpan::global(),
-							},
+							&&Symbol::global(&name),
 							SymbolKind::Variable(new_var_type),
 							StatementIdx::Top,
 						) {

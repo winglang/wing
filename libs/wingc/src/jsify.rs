@@ -5,11 +5,12 @@ use sha2::{Digest, Sha256};
 
 use crate::{
 	ast::{
-		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
+		ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart,
+		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
 	capture::CaptureKind,
 	utilities::snake_case_to_camel_case,
+	WINGSDK_RESOURCE,
 };
 
 const STDLIB: &str = "$stdlib";
@@ -390,7 +391,6 @@ impl JSifier {
 				)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
-
 				let item_list = items
 					.iter()
 					.map(|expr| self.jsify_expression(expr, phase))
@@ -433,7 +433,7 @@ impl JSifier {
 				if is_mutable_collection(expression) {
 					format!("new Set([{}])", item_list)
 				} else {
-					format!("Object.freeze(new Set([{}]))",	item_list)
+					format!("Object.freeze(new Set([{}]))", item_list)
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
@@ -535,42 +535,15 @@ impl JSifier {
 				parent,
 				constructor,
 				is_resource,
-			} => {
-				assert!(!*is_resource || phase == Phase::Preflight);
-				if *is_resource {
-					// TODO... jsify inflight (client)...
-				}
-
-				format!(
-					"class {}{}\n{{\n{}\n{}\n{}\n}}",
-					self.jsify_symbol(name),
-					if let Some(parent) = parent {
-						format!(" extends {}", self.jsify_type(parent))
-					} else {
-						"".to_string()
-					},
-					self.jsify_function(
-						Some("constructor"),
-						&constructor.parameters,
-						&constructor.statements,
-						phase
-					),
-					members
-						.iter()
-						.map(|m| self.jsify_class_member(m))
-						.collect::<Vec<String>>()
-						.join("\n"),
-					methods
-						.iter()
-						.map(|(n, m)| format!(
-							"{} = {}",
-							n.name,
-							self.jsify_function(None, &m.parameter_names, &m.statements, phase)
-						))
-						.collect::<Vec<String>>()
-						.join("\n")
-				)
-			}
+			} => self.jsify_class(
+				name,
+				is_resource,
+				phase,
+				parent,
+				constructor,
+				&members.iter().collect::<Vec<_>>(),
+				&methods.iter().collect::<Vec<_>>(),
+			),
 			StmtKind::Struct { name, extends, members } => {
 				format!(
 					"interface {}{} {{\n{}\n}}",
@@ -717,12 +690,157 @@ impl JSifier {
 	fn jsify_class_member(&self, member: &ClassMember) -> String {
 		format!("{};", self.jsify_symbol(&member.name))
 	}
+
+	fn jsify_resource(
+		&self,
+		name: &Symbol,
+		phase: Phase,
+		parent: &Option<Type>,
+		constructor: &Constructor,
+		members: &[&ClassMember],
+		methods: &[&(Symbol, FunctionDefinition)],
+	) -> String {
+		assert!(phase == Phase::Preflight);
+
+		// If have no parent then we simply extent the wingsdk's resource base
+		let parent = if parent.is_none() {
+			let mut parts = WINGSDK_RESOURCE.split('.');
+			Some(Type::CustomType {
+				root: Symbol::global(parts.next().unwrap()),
+				fields: parts.map(|f| Symbol::global(f)).collect(),
+			})
+		} else {
+			parent.clone()
+		};
+
+		// Jsify inflight client
+		self.jsify_resource_client(
+			name,
+			phase,
+			&parent,
+			constructor,
+			&members
+				.iter()
+				.filter(|m| m.flight == Phase::Inflight)
+				.map(|m| *m)
+				.collect::<Vec<_>>(),
+			&methods
+				.iter()
+				.filter(|(_, m)| m.signature.flight == Phase::Inflight)
+				.map(|t| *t)
+				.collect::<Vec<_>>(),
+		);
+
+		// TODO...
+		// Jsify client
+		// Add bind method
+
+		let preflight_members = members
+			.iter()
+			.filter(|m| m.flight != Phase::Inflight)
+			.map(|m| *m)
+			.collect::<Vec<_>>();
+		let preflight_methods = methods
+			.iter()
+			.filter(|(_, m)| m.signature.flight != Phase::Inflight)
+			.map(|t| *t)
+			.collect::<Vec<_>>();
+
+		// Jsify class
+		let resource_class = self.jsify_class(
+			name,
+			&false,
+			phase,
+			&parent,
+			constructor,
+			&preflight_members,
+			&preflight_methods,
+		);
+		let bind_method = self.jsify_bind_method(name, preflight_members);
+
+		return format!("{}\n{}.prototype._bind = {}", name.name, resource_class, bind_method,);
+	}
+
+	fn jsify_bind_method(name: &Symbol, preflight_members: &[&ClassMember]) {
+		for m in preflight_members {}
+	}
+
+	fn jsify_resource_client(
+		&self,
+		name: &Symbol,
+		phase: Phase,
+		parent: &Option<Type>,
+		constructor: &Constructor,
+		members: &[&ClassMember],
+		methods: &[&(Symbol, FunctionDefinition)],
+	) {
+		methods.iter().for_each(|(n, m)| {
+			let captures = m.captures.borrow();
+			println!("Inflight method: {} captures: {:?}", n, captures.as_ref().unwrap());
+		});
+		// let constructor_content = format!(
+		// 	"constructor({}) {{\n{}\n}}",
+		// 	,
+		// 	self.jsify_scope(&constructor.body, phase)
+		// );
+
+		// let content = format!(
+		// 	"class {}_Inflight {}\n{{\n{}\n{}\n{}\n}}",
+		// 	self.jsify_symbol(name),
+		// 	constructor_content
+		// );
+	}
+
+	fn jsify_class(
+		&self,
+		name: &Symbol,
+		is_resource: &bool,
+		phase: Phase,
+		parent: &Option<Type>,
+		constructor: &Constructor,
+		members: &[&ClassMember],
+		methods: &[&(Symbol, FunctionDefinition)],
+	) -> String {
+		if *is_resource {
+			return self.jsify_resource(name, phase, parent, constructor, members, methods);
+		}
+
+		format!(
+			"class {}{}\n{{\n{}\n{}\n{}\n}}",
+			self.jsify_symbol(name),
+			if let Some(parent) = parent {
+				format!(" extends {}", self.jsify_type(parent))
+			} else {
+				"".to_string()
+			},
+			self.jsify_function(
+				Some("constructor"),
+				&constructor.parameters,
+				&constructor.statements,
+				phase
+			),
+			members
+				.iter()
+				.map(|m| self.jsify_class_member(m))
+				.collect::<Vec<String>>()
+				.join("\n"),
+			methods
+				.iter()
+				.map(|(n, m)| format!(
+					"{} = {}",
+					n.name,
+					self.jsify_function(None, &m.parameter_names, &m.statements, phase)
+				))
+				.collect::<Vec<String>>()
+				.join("\n")
+		)
+	}
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
-    if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-			evaluated_type.is_mutable_collection()
-		} else {
-			false
-		}
+	if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+		evaluated_type.is_mutable_collection()
+	} else {
+		false
+	}
 }

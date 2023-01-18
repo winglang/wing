@@ -188,10 +188,7 @@ impl<'a> JsiiImporter<'a> {
 			self
 				.env
 				.define(
-					&Symbol {
-						name: namespace_name.to_string(),
-						span: WingSpan::global(),
-					},
+					&Symbol::global(namespace_name),
 					SymbolKind::Namespace(Namespace {
 						name: namespace_name.to_string(),
 						hidden: namespace_name != self.module_name,

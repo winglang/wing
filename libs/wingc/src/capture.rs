@@ -75,10 +75,11 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 					Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
 					Phase::Preflight => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
 				}
-				for (_, method_def) in methods.iter() {
+				for (n, method_def) in methods.iter() {
 					match method_def.signature.flight {
 						Phase::Inflight => {
 							// TODO: what do I do with these?
+							println!("Inflight method: {}", n);
 							scan_captures_in_inflight_scope(&method_def.statements, diagnostics);
 						}
 						Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
@@ -162,6 +163,7 @@ pub fn scan_for_inflights_in_expression(expr: &Expr, diagnostics: &mut Diagnosti
 					&func_def.statements,
 					diagnostics,
 				)));
+				println!("Collected captures: {:?}", func_captures);
 			}
 		}
 		_ => (),
@@ -245,6 +247,8 @@ fn scan_captures_in_expression(
 		}
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
+				println!("Looking up symbol {}", symbol.name);
+
 				// Lookup the symbol
 				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
 					Ok((var, phase)) => (var.as_variable().expect("Expected identifier to be a variable"), phase),
@@ -255,8 +259,10 @@ fn scan_captures_in_expression(
 
 				// if the identifier represents a preflight object, then capture it
 				if f == Phase::Preflight {
+					println!("{} is preflight!", symbol.name);
 					// capture as a resource
 					if let Some(resource) = t.as_resource() {
+						println!("{} is a resource!", symbol.name);
 						// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
 						//   1. explicit capture definitions
 						//   2. analyzing inflight code and figuring out what methods are being used on the object
@@ -287,6 +293,8 @@ fn scan_captures_in_expression(
 							span: Some(symbol.span.clone()),
 						});
 					}
+				} else {
+					println!("{} is {}", symbol.name, f);
 				}
 			}
 			Reference::NestedIdentifier { object, property: _ } => {

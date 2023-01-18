@@ -1,6 +1,6 @@
 use crate::{
 	ast::{Phase, Symbol},
-	diagnostic::{TypeError, WingSpan},
+	diagnostic::TypeError,
 	type_check::{SymbolKind, Type, TypeRef},
 };
 use std::collections::{hash_map, HashMap, HashSet};
@@ -198,10 +198,7 @@ impl SymbolEnv {
 	) -> Result<&SymbolKind, TypeError> {
 		let nested_vec = nested_str
 			.split('.')
-			.map(|s| Symbol {
-				name: s.to_string(),
-				span: WingSpan::global(),
-			})
+			.map(|s| Symbol::global(s))
 			.collect::<Vec<Symbol>>();
 		self.lookup_nested(
 			&nested_vec.iter().collect::<Vec<&Symbol>>(),

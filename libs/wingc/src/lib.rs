@@ -2,7 +2,7 @@
 extern crate lazy_static;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions};
-use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
+use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
 use type_check::{FunctionSignature, SymbolKind, Type};
@@ -145,10 +145,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 
 // TODO: refactor this (why is scope needed?) (move to separate module?)
 fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
-	let sym = Symbol {
-		name: name.to_string(),
-		span: WingSpan::global(),
-	};
+	let sym = Symbol::global(name);
 	scope
 		.env
 		.borrow_mut()
