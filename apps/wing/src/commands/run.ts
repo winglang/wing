@@ -26,7 +26,7 @@ export async function run(entrypoint: string | null = null): Promise<void> {
 			// Endpoint is a directory - check that it contains a single file.
 			const allFilesInDir = await readdir(resolvedEntrypoint);
 			const relevantFiles = allFilesInDir.filter(file => SUPPORTED_EXTENSIONS.includes(file.substring(file.lastIndexOf("."))));
-			if (relevantFiles.length !== 1) throw new Error(`Directory ${resolvedEntrypoint} contains ${relevantFiles.length} files, but must contain exactly 1.`);
+			if (relevantFiles.length !== 1) throw new Error(`Directory ${resolvedEntrypoint} contains ${relevantFiles.length} files executable by Wing Console, but must contain exactly 1.`);
 			const fileToExecute = join(resolvedEntrypoint, relevantFiles[0]);
 			const fileStats = await stat(fileToExecute);
 			if (!fileStats.isFile()) throw new Error(`Directory ${resolvedEntrypoint} must contain a single '.w' or '.wsim' file, but contains directory: ${fileToExecute}`);
@@ -41,12 +41,13 @@ export async function run(entrypoint: string | null = null): Promise<void> {
 /**
  * Runs a file in the Wing Console.
  * Assumes that the file exists, but validates that it has a supported extension.
+ * @returns Promise which resolves when the Wing Console has been opened.
  * @param filePath Path to the file to run.
  * @throws Error if the file has an extension that is not one of the accepted extensions.
  */
-function runFile(filePath: string): void {
+async function runFile(filePath: string): Promise<void> {
 	const fileExtension = filePath.substring(filePath.lastIndexOf("."));
 	if (!SUPPORTED_EXTENSIONS.includes(fileExtension)) throw new Error(`File ${filePath} has extension ${fileExtension}, but must have one of the following extensions: ${SUPPORTED_EXTENSIONS.join(", ")}`);	
 	log(`Calling Wing Console protocol: wing-console://${filePath}`);
-	open(`wing-console://${filePath}`).catch(log);
+	await open(`wing-console://${filePath}`);
 }
