@@ -6,7 +6,11 @@
   ▪︎
   <a href="http://t.winglang.io/slack">Slack</a>
   ▪︎
-  <a href="https://docs.winglang.io/">Docs</a>
+  <a href="https://docs.winglang.io">Docs</a>
+  ▪︎
+  <a https://docs.winglang.io/status#roadmap">Roadmap</a>
+  ▪︎
+  <a href="https://docs.winglang.io/getting-started">Getting Started</a>
   ▪︎
   <a href="https://github.com/winglang/wing/issues">Issues</a>
   ▪︎
