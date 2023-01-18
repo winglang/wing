@@ -1,4 +1,4 @@
-var x = 5;
+let var x = 5;
 assert(x == 5);
 
 x = x + 1;

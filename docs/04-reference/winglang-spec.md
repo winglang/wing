@@ -402,7 +402,15 @@ Mixing `protected` and `internal` is not allowed.
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
-Variables can be reassigned to by using the `var` keyword instead of `let`.
+Variables can be reassigned to by adding the `var` modifier:
+
+```ts
+// wing
+let var sum = 0;
+for item in [1,2,3] {
+  sum = sum + item;
+}
+```
 
 Re-assignment to class fields is allowed if field is marked with `var`.
 Examples in the class section below.

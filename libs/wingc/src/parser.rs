@@ -183,14 +183,10 @@ impl Parser<'_> {
 					None
 				};
 
-				let kind = if let Some(kind_node) = statement_node.child_by_field_name("kind") {
-					match self.node_text(&kind_node) {
-						"let" => VariableKind::Let,
-						"var" => VariableKind::Var,
-						other => self.report_unimplemented_grammar(other, "variable kind", &kind_node)?,
-					}
+				let kind = if let Some(_) = statement_node.child_by_field_name("reassignable") {
+					VariableKind::Var
 				} else {
-					return self.add_error(format!("Expected variable declaration"), statement_node);
+					VariableKind::Let
 				};
 
 				StmtKind::VariableDef {
