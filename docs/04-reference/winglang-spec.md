@@ -843,7 +843,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 `for..in` statement is used to iterate over a array or set.  
 Type annotation after an iteratee (left hand side of `in`) is optional.  
-The loop invariant in for loops is implicitly re-assignable (like `var`).
+The loop invariant in for loops is implicitly re-assignable (`var`).
 
 > ```TS
 > // Wing program:
