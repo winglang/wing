@@ -1,5 +1,5 @@
 {
-  "name": "winglang",
+  "name": "monowingo",
   "devDependencies": {
     "@auto-it/conventional-commits": "^10.37.6",
     "@auto-it/git-tag": "^10.37.6",
@@ -11,11 +11,11 @@
   },
   "scripts": {
     "nx": "nx",
-    "build": "nx run-many --target=build --all=true",
+    "build": "nx build winglang",
+    "test": "nx run-many --target=test --all=true",
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "contributors:check": "all-contributors check",
-    "test": "nx run-many --target=test --all=true",
     "postinstall": "run-p install:*",
     "docs": "./scripts/docsite.sh",
     "install:wasi": "if [ \"$CI\" != \"true\" ]; then bash scripts/setup_wasi.sh; fi",
@@ -23,8 +23,8 @@
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
     "install:jsii-docgen": "npm --prefix apps/jsii-docgen install",
     "install:wing-playground": "npm --prefix apps/wing-playground install",
-    "install:wing": "npm --prefix apps/wing install",
-    "install:wingsdk": "npm --prefix libs/wingsdk install",
+    "install:winglang": "npm --prefix apps/wing install",
+    "install:sdk": "npm --prefix libs/wingsdk install",
     "install:hangar": "npm --prefix tools/hangar install"
   },
   "volta": {

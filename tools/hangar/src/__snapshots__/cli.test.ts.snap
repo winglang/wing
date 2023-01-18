@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`wing compile anon_function.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws anon_function.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -18,7 +18,7 @@ exports[`wing compile anon_function.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile anon_function.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws anon_function.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -34,7 +34,7 @@ exports[`wing compile anon_function.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile anon_function.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws anon_function.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -71,7 +71,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile asynchronous_model_implicit_await_in_functions.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -226,19 +226,19 @@ exports[`wing compile asynchronous_model_implicit_await_in_functions.w > cdk.tf.
 }
 `;
 
-exports[`wing compile asynchronous_model_implicit_await_in_functions.w > index.js 1`] = `
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 1`] = `
 "async handle(s) { const { str_to_str } = this; {
   (await str_to_str.invoke(\\"one\\"));
   {console.log((await str_to_str.invoke(\\"two\\")))};
 } };"
 `;
 
-exports[`wing compile asynchronous_model_implicit_await_in_functions.w > index.js 2`] = `
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > index.js 2`] = `
 "async handle(s) { const {  } = this; {
 } };"
 `;
 
-exports[`wing compile asynchronous_model_implicit_await_in_functions.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -254,7 +254,7 @@ exports[`wing compile asynchronous_model_implicit_await_in_functions.w > manifes
 }
 `;
 
-exports[`wing compile asynchronous_model_implicit_await_in_functions.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_functions.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -303,7 +303,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile capture_containers.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -401,7 +401,7 @@ exports[`wing compile capture_containers.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_containers.w > index.js 1`] = `
+exports[`wing compile --target tf-aws capture_containers.w > index.js 1`] = `
 "async handle(s) { const { arr, arr_of_map, my_map, my_set } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(0)) === \\"hello\\")'\`)})(((await arr.at(0)) === \\"hello\\"))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await arr.at(1)) === \\"world\\")'\`)})(((await arr.at(1)) === \\"world\\"))};
@@ -414,7 +414,7 @@ exports[`wing compile capture_containers.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile capture_containers.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws capture_containers.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -430,7 +430,7 @@ exports[`wing compile capture_containers.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_containers.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws capture_containers.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -476,7 +476,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile capture_in_binary.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -616,7 +616,7 @@ exports[`wing compile capture_in_binary.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_in_binary.w > index.js 1`] = `
+exports[`wing compile --target tf-aws capture_in_binary.w > index.js 1`] = `
 "async handle(e) { const { b, x } = this; {
   (await b.put(\\"file\\",\\"foo\\"));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"file\\")) === \\"foo\\")'\`)})(((await b.get(\\"file\\")) === \\"foo\\"))};
@@ -624,7 +624,7 @@ exports[`wing compile capture_in_binary.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile capture_in_binary.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws capture_in_binary.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -640,7 +640,7 @@ exports[`wing compile capture_in_binary.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_in_binary.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws capture_in_binary.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -686,7 +686,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile capture_primitives.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -784,7 +784,7 @@ exports[`wing compile capture_primitives.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_primitives.w > index.js 1`] = `
+exports[`wing compile --target tf-aws capture_primitives.w > index.js 1`] = `
 "async handle(s) { const { my_bool, my_dur, my_num, my_second_bool, my_str } = this; {
   {console.log(my_str)};
   const n = my_num;
@@ -802,7 +802,7 @@ exports[`wing compile capture_primitives.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile capture_primitives.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws capture_primitives.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -818,7 +818,7 @@ exports[`wing compile capture_primitives.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_primitives.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws capture_primitives.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -866,7 +866,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1007,7 +1007,7 @@ exports[`wing compile capture_resource_and_data.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_resource_and_data.w > index.js 1`] = `
+exports[`wing compile --target tf-aws capture_resource_and_data.w > index.js 1`] = `
 "async handle(e) { const { data, queue, res } = this; {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(data.size === 3)'\`)})((data.size === 3))};
   (await res.put(\\"file.txt\\",\\"world\\"));
@@ -1016,7 +1016,7 @@ exports[`wing compile capture_resource_and_data.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile capture_resource_and_data.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws capture_resource_and_data.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -1032,7 +1032,7 @@ exports[`wing compile capture_resource_and_data.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile capture_resource_and_data.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws capture_resource_and_data.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1083,7 +1083,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile captures.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1429,7 +1429,7 @@ exports[`wing compile captures.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile captures.w > index.js 1`] = `
+exports[`wing compile --target tf-aws captures.w > index.js 1`] = `
 "async handle(event) { const { bucket1, bucket2, bucket3 } = this; {
   (await bucket1.put(\\"file.txt\\",\\"data\\"));
   (await bucket2.get(\\"file.txt\\"));
@@ -1438,7 +1438,7 @@ exports[`wing compile captures.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile captures.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws captures.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -1454,7 +1454,7 @@ exports[`wing compile captures.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile captures.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws captures.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1513,7 +1513,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile container_types.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1650,7 +1650,7 @@ exports[`wing compile container_types.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile container_types.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws container_types.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -1666,7 +1666,7 @@ exports[`wing compile container_types.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile container_types.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws container_types.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1725,7 +1725,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile enums.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws enums.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1743,7 +1743,7 @@ exports[`wing compile enums.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile enums.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws enums.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -1759,7 +1759,7 @@ exports[`wing compile enums.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile enums.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws enums.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1795,7 +1795,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws expressions_binary_operators.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1813,7 +1813,7 @@ exports[`wing compile expressions_binary_operators.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_binary_operators.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws expressions_binary_operators.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -1829,7 +1829,7 @@ exports[`wing compile expressions_binary_operators.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_binary_operators.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws expressions_binary_operators.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1864,7 +1864,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws expressions_string_interpolation.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -1882,7 +1882,7 @@ exports[`wing compile expressions_string_interpolation.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws expressions_string_interpolation.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -1898,7 +1898,7 @@ exports[`wing compile expressions_string_interpolation.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile expressions_string_interpolation.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws expressions_string_interpolation.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -1933,7 +1933,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2106,7 +2106,7 @@ exports[`wing compile file_counter.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile file_counter.w > index.js 1`] = `
+exports[`wing compile --target tf-aws file_counter.w > index.js 1`] = `
 "async handle(body) { const { bucket, counter } = this; {
   const next = (await counter.inc());
   const key = \`myfile-\${\\"hi\\"}.txt\`;
@@ -2114,7 +2114,7 @@ exports[`wing compile file_counter.w > index.js 1`] = `
 } };"
 `;
 
-exports[`wing compile file_counter.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws file_counter.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -2130,7 +2130,7 @@ exports[`wing compile file_counter.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile file_counter.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws file_counter.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2179,7 +2179,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile forward_decl.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2197,7 +2197,7 @@ exports[`wing compile forward_decl.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile forward_decl.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws forward_decl.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -2213,7 +2213,7 @@ exports[`wing compile forward_decl.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile forward_decl.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws forward_decl.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2259,7 +2259,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile hello.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2412,14 +2412,14 @@ exports[`wing compile hello.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile hello.w > index.js 1`] = `
+exports[`wing compile --target tf-aws hello.w > index.js 1`] = `
 "async handle(message) { const { bucket } = this; {
   (await bucket.put(\\"hello.txt\\",\`Hello, \${message}!\`));
   return message;
 } };"
 `;
 
-exports[`wing compile hello.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws hello.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -2435,7 +2435,7 @@ exports[`wing compile hello.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile hello.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws hello.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2479,7 +2479,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile identical_inflights.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws identical_inflights.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2497,12 +2497,12 @@ exports[`wing compile identical_inflights.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile identical_inflights.w > index.js 1`] = `
+exports[`wing compile --target tf-aws identical_inflights.w > index.js 1`] = `
 "async handle() { const {  } = this; {
 } };"
 `;
 
-exports[`wing compile identical_inflights.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws identical_inflights.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -2518,7 +2518,7 @@ exports[`wing compile identical_inflights.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile identical_inflights.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws identical_inflights.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2560,7 +2560,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile mut_container_types.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2697,7 +2697,7 @@ exports[`wing compile mut_container_types.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile mut_container_types.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws mut_container_types.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -2713,7 +2713,7 @@ exports[`wing compile mut_container_types.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile mut_container_types.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws mut_container_types.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2772,7 +2772,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile primitive_methods.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws primitive_methods.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2790,7 +2790,7 @@ exports[`wing compile primitive_methods.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile primitive_methods.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws primitive_methods.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -2806,7 +2806,7 @@ exports[`wing compile primitive_methods.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile primitive_methods.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws primitive_methods.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -2840,7 +2840,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile print.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -2979,13 +2979,13 @@ exports[`wing compile print.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile print.w > index.js 1`] = `
+exports[`wing compile --target tf-aws print.w > index.js 1`] = `
 "async handle(event) { const {  } = this; {
   {console.log(event)};
 } };"
 `;
 
-exports[`wing compile print.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws print.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -3001,7 +3001,7 @@ exports[`wing compile print.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile print.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws print.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3039,7 +3039,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile resource.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws resource.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3057,7 +3057,7 @@ exports[`wing compile resource.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile reassignment.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws resource.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -3073,73 +3073,7 @@ exports[`wing compile reassignment.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile reassignment.w > cdk.tf.json 1`] = `
-{
-  "//": {
-    "metadata": {
-      "backend": "local",
-      "stackName": "root",
-      "version": "0.13.2",
-    },
-    "outputs": {},
-  },
-  "provider": {
-    "aws": [
-      {},
-    ],
-  },
-}
-`;
-
-exports[`wing compile reassignment.w > preflight.js 1`] = `
-"const $stdlib = require('@winglang/sdk');
-const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
-
-function __app(target) {
-	switch (target) {
-		case \\"sim\\":
-			return $stdlib.sim.App;
-		case \\"tfaws\\":
-		case \\"tf-aws\\":
-			return $stdlib.tfaws.App;
-    case \\"tf-azure\\":
-      return $stdlib.tfazure.App;
-		default:
-			throw new Error(`Unknown WING_TARGET value: \\"${process.env.WING_TARGET ?? \\"\\"}\\"`);
-	}
-}
-const $App = __app(process.env.WING_TARGET);
-
-class MyApp extends $App {
-constructor() {
-  super({ outdir: $outdir, name: \\"reassignment\\" });
-  
-  const x = 5;
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 5)'`)})((x === 5))};
-  x = (x + 1);
-  {((cond) => {if (!cond) throw new Error(`assertion failed: '(x === 6)'`)})((x === 6))};
-}
-}
-new MyApp().synth();"
-`;
-
-exports[`wing compile resource.w > manifest.json 1`] = `
-{
-  "stacks": {
-    "root": {
-      "annotations": [],
-      "constructPath": "root",
-      "dependencies": [],
-      "name": "root",
-      "synthesizedStackPath": "stacks/root/cdk.tf.json",
-      "workingDirectory": "stacks/root",
-    },
-  },
-  "version": "0.13.2",
-}
-`;
-
-exports[`wing compile resource.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws resource.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3177,7 +3111,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile statements_if.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3195,7 +3129,7 @@ exports[`wing compile statements_if.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_if.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws statements_if.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -3211,7 +3145,7 @@ exports[`wing compile statements_if.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_if.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws statements_if.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3247,7 +3181,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws statements_variable_declarations.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3265,7 +3199,7 @@ exports[`wing compile statements_variable_declarations.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_variable_declarations.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws statements_variable_declarations.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -3281,7 +3215,7 @@ exports[`wing compile statements_variable_declarations.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile statements_variable_declarations.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws statements_variable_declarations.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3311,7 +3245,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile std_containers.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws std_containers.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3329,14 +3263,14 @@ exports[`wing compile std_containers.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile std_containers.w > index.js 1`] = `
+exports[`wing compile --target tf-aws std_containers.w > index.js 1`] = `
 "async handle(body) { const { s_array } = this; {
   const ss = (await s_array.at(1));
   {console.log(\`\${s_array.length}\`)};
 } };"
 `;
 
-exports[`wing compile std_containers.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws std_containers.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -3352,7 +3286,7 @@ exports[`wing compile std_containers.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile std_containers.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws std_containers.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3391,7 +3325,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile while.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws while.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3409,7 +3343,7 @@ exports[`wing compile while.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile while.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws while.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -3425,7 +3359,7 @@ exports[`wing compile while.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile while.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws while.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
@@ -3460,7 +3394,7 @@ constructor() {
 new MyApp().synth();"
 `;
 
-exports[`wing compile while_loop_await.w > cdk.tf.json 1`] = `
+exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
@@ -3571,13 +3505,13 @@ exports[`wing compile while_loop_await.w > cdk.tf.json 1`] = `
 }
 `;
 
-exports[`wing compile while_loop_await.w > index.js 1`] = `
+exports[`wing compile --target tf-aws while_loop_await.w > index.js 1`] = `
 "async handle(j) { const {  } = this; {
   return (j + 1);
 } };"
 `;
 
-exports[`wing compile while_loop_await.w > index.js 2`] = `
+exports[`wing compile --target tf-aws while_loop_await.w > index.js 2`] = `
 "async handle(body) { const {  } = this; {
   const i = 0;
   while (((await iterator(i)) < 3)) {
@@ -3586,7 +3520,7 @@ exports[`wing compile while_loop_await.w > index.js 2`] = `
 } };"
 `;
 
-exports[`wing compile while_loop_await.w > manifest.json 1`] = `
+exports[`wing compile --target tf-aws while_loop_await.w > manifest.json 1`] = `
 {
   "stacks": {
     "root": {
@@ -3602,7 +3536,7 @@ exports[`wing compile while_loop_await.w > manifest.json 1`] = `
 }
 `;
 
-exports[`wing compile while_loop_await.w > preflight.js 1`] = `
+exports[`wing compile --target tf-aws while_loop_await.w > preflight.js 1`] = `
 "const $stdlib = require('@winglang/sdk');
 const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
 
