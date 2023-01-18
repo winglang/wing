@@ -117,9 +117,12 @@ module.exports = grammar({
 
     expression_statement: ($) => seq($.expression, ";"),
 
+    reassignable: ($) => "var",
+
     variable_definition_statement: ($) =>
       seq(
         "let",
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         optional($._type_annotation),
         "=",
@@ -154,6 +157,7 @@ module.exports = grammar({
     class_member: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional($.reassignable),
         field("name", $.identifier),
         $._type_annotation,
         ";"
