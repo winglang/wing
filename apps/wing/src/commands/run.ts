@@ -30,12 +30,12 @@ export async function run(entrypoint: string | null = null): Promise<void> {
 			const fileToExecute = join(resolvedEntrypoint, relevantFiles[0]);
 			const fileStats = await stat(fileToExecute);
 			if (!fileStats.isFile()) throw new Error(`Directory ${resolvedEntrypoint} must contain a single '.w' or '.wsim' file, but contains directory: ${fileToExecute}`);
-			runFile(fileToExecute);
+			await runFile(fileToExecute);
 			return;
 		}
 
 		// Entrypoint is a file.
-		runFile(resolvedEntrypoint);
+		await runFile(resolvedEntrypoint);
 }
 
 /**
