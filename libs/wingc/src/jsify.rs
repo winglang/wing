@@ -438,7 +438,7 @@ impl JSifier {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, &func_def.parameter_names, &func_def.statements, phase),
+				Phase::Preflight => self.jsify_function(None, &func_def.parameters, &func_def.statements, phase),
 			},
 		}
 	}
@@ -567,7 +567,7 @@ impl JSifier {
 						.map(|(n, m)| format!(
 							"{} = {}",
 							n.name,
-							self.jsify_function(None, &m.parameter_names, &m.statements, phase)
+							self.jsify_function(None, &m.parameters, &m.statements, phase)
 						))
 						.collect::<Vec<String>>()
 						.join("\n")
@@ -623,8 +623,8 @@ impl JSifier {
 
 	fn jsify_inflight_function(&self, func_def: &FunctionDefinition) -> String {
 		let mut parameter_list = vec![];
-		for p in func_def.parameter_names.iter() {
-			parameter_list.push(p.name.clone());
+		for p in func_def.parameters.iter() {
+			parameter_list.push(p.0.name.clone());
 		}
 		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
@@ -696,10 +696,16 @@ impl JSifier {
 		)
 	}
 
-	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope, phase: Phase) -> String {
+	fn jsify_function(
+		&self,
+		name: Option<&str>,
+		parameters: &[(Symbol, VariableKind)],
+		body: &Scope,
+		phase: Phase,
+	) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
-			parameter_list.push(self.jsify_symbol(p));
+			parameter_list.push(self.jsify_symbol(&p.0));
 		}
 
 		let (name, arrow) = match name {

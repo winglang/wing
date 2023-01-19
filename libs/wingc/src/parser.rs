@@ -334,7 +334,7 @@ impl Parser<'_> {
 					}
 					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
 					constructor = Some(Constructor {
-						parameters: parameters.iter().map(|p| p.0.clone()).collect(),
+						parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
@@ -394,7 +394,7 @@ impl Parser<'_> {
 	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionDefinition {
-			parameter_names: parameters.iter().map(|p| p.0.clone()).collect(),
+			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
@@ -409,16 +409,24 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type)>> {
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type, VariableKind)>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
 			if parameter_definition_node.is_extra() {
 				continue;
 			}
+
+			let kind = if let Some(_) = parameter_definition_node.child_by_field_name("reassignable") {
+				VariableKind::Var
+			} else {
+				VariableKind::Let
+			};
+
 			res.push((
 				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
 				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+				kind,
 			))
 		}
 

@@ -1017,7 +1017,7 @@ impl<'a> TypeChecker<'a> {
 					func_def.signature.flight,
 					statement_idx,
 				);
-				self.add_arguments_to_env(&func_def.parameter_names, &sig, &mut function_env);
+				self.add_arguments_to_env(&func_def.parameters, &sig, &mut function_env);
 				func_def.statements.set_env(function_env);
 
 				self.inner_scopes.push(&func_def.statements);
@@ -1578,11 +1578,14 @@ impl<'a> TypeChecker<'a> {
 						stmt.idx,
 					);
 					// Add `this` as first argument
-					let mut actual_parameters = vec![Symbol {
-						name: "this".into(),
-						span: method_name.span.clone(),
-					}];
-					actual_parameters.extend(method_def.parameter_names.clone());
+					let mut actual_parameters = vec![(
+						Symbol {
+							name: "this".into(),
+							span: method_name.span.clone(),
+						},
+						VariableKind::Let,
+					)];
+					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
 					method_def.statements.set_env(method_env);
 					self.inner_scopes.push(&method_def.statements);
@@ -1690,14 +1693,14 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_arguments_to_env(&mut self, arg_names: &Vec<Symbol>, sig: &FunctionSignature, env: &mut SymbolEnv) {
-		assert!(arg_names.len() == sig.args.len());
-		for (arg, arg_type) in arg_names.iter().zip(sig.args.iter()) {
+	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, VariableKind)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
+		assert!(args.len() == sig.args.len());
+		for (arg, arg_type) in args.iter().zip(sig.args.iter()) {
 			match env.define(
-				&arg,
+				&arg.0,
 				SymbolKind::Variable(VariableInfo {
 					_type: *arg_type,
-					kind: VariableKind::Let,
+					kind: arg.1,
 				}),
 				StatementIdx::Top,
 			) {

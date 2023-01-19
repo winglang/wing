@@ -134,7 +134,7 @@ pub struct FunctionSignature {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	pub parameter_names: Vec<Symbol>, // TODO: move into FunctionSignature and make optional
+	pub parameters: Vec<(Symbol, VariableKind)>, // TODO: move into FunctionSignature and make optional
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 	#[derivative(Debug = "ignore")]
@@ -143,7 +143,7 @@ pub struct FunctionDefinition {
 
 #[derive(Debug)]
 pub struct Constructor {
-	pub parameters: Vec<Symbol>,
+	pub parameters: Vec<(Symbol, VariableKind)>,
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 }
