@@ -26,6 +26,36 @@ In order to deploy to AWS, you will also need:
 
 ## Wing CLI
 
+<br/>
+<details>
+  <summary><b>!Caution If you were in our closed alpha</b></summary>
+<br/>
+
+If you installed Wing as part of our closed alpha, please make sure to uninstall the existing version
+and clean up your `~/.npmrc` before continuing. Otherwise you will see the following error when trying
+to install `winglang`:
+
+```
+Not Found - GET https://npm.pkg.github.com/@winglang%2fsdk
+```
+
+First, uninstall Wing from your system:
+
+```sh
+npm uninstall -g @winglang/wing
+```
+
+Now, edit `~/.npmrc` and remove this line:
+
+```
+@winglang:registry=https://npm.pkg.github.com/
+```
+
+You can also just delete `~/.npmrc` if there are no other registries that you are signed into.
+
+</details>
+
+<br/>
 Install the Wing CLI through npm:
 
 ```sh

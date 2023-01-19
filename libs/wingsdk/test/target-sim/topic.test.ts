@@ -3,8 +3,6 @@ import * as testing from "../../src/testing";
 import { SimApp, Testing } from "../../src/testing";
 import { listMessages, treeJsonOf } from "./util";
 
-jest.setTimeout(5_000);
-
 test("create a topic", async () => {
   // GIVEN
   const app = new testing.SimApp();

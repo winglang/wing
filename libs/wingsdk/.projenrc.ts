@@ -224,4 +224,9 @@ docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
 
+// override default test timeout from 5s to 30s
+project.testTask.reset(
+  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
+);
+
 project.synth();
