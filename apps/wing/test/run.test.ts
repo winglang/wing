@@ -1,5 +1,5 @@
 import * as open from "open";
-import { run } from "./run";
+import { run } from "../src/commands/run";
 import { mkdtemp } from "fs/promises";
 import { join } from "path";
 import { tmpdir } from "os";

@@ -22,6 +22,6 @@
     "declaration": true,
     "baseUrl": "."
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "test/run.test.ts", "test/docs.test.ts", "test/compile.test.ts"],
   "exclude": ["node_modules"]
 }

@@ -1,5 +1,5 @@
 import * as open from "open";
-import { docs } from "./docs";
+import { docs } from "../src/commands/docs";
 
 jest.mock("open");
 

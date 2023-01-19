@@ -1,4 +1,4 @@
-import { Target, compile } from "./compile";
+import { Target, compile } from "../src/commands/compile";
 import { readdir, rmdir, stat } from "fs/promises";
 
 import { resolve } from "path";
@@ -13,7 +13,7 @@ describe("compile command tests", () => {
   it("should be able to compile the SDK capture test", async () => {
     const sdkCaptureExample = resolve(
       __dirname,
-      "../../../../examples/tests/valid/captures.w"
+      "../../../examples/tests/valid/captures.w"
     );
     await compile(sdkCaptureExample, {
       outDir: process.cwd(),
