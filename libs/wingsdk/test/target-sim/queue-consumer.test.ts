@@ -2,7 +2,6 @@ import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing, TraceType } from "../../src/testing";
 
-jest.setTimeout(30_1000);
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 test("pushing messages through a queue", async () => {
