@@ -1,10 +1,9 @@
 #[macro_use]
 extern crate lazy_static;
-// extern crate wee_alloc;
+extern crate wee_alloc;
 
-// Use `wee_alloc` as the global allocator.
-// #[global_allocator]
-// static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+#[global_allocator]
+static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions, VariableKind};
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
