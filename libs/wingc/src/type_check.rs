@@ -183,7 +183,7 @@ trait Subtype {
 	///
 	/// For example, `str` is a subtype of `str`, `str` is a subtype of
 	/// `anything`, `str` is a subtype of `Json`, `str` is not a subtype of
-	/// `numb`, and `str` is not a subtype of `void`.
+	/// `num`, and `str` is not a subtype of `void`.
 	///
 	/// Subtype is a partial order, so if a.is_subtype_of(b) is false, it does
 	/// not imply that b.is_subtype_of(a) is true. It is also reflexive, so
@@ -192,6 +192,10 @@ trait Subtype {
 
 	fn is_same_type_as(&self, other: &Self) -> bool {
 		self.is_subtype_of(other) && other.is_subtype_of(self)
+	}
+
+	fn is_strict_subtype_of(&self, other: &Self) -> bool {
+		self.is_subtype_of(other) && !other.is_subtype_of(self)
 	}
 }
 
@@ -208,7 +212,7 @@ impl Subtype for Type {
 			}
 			(Self::Function(l0), Self::Function(r0)) => l0 == r0,
 			(Self::Class(l0), Self::Class(_)) => {
-				// If our parent is equal to `other` then treat both classes as equal (inheritance)
+				// If we extend from `other` than I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
@@ -216,7 +220,7 @@ impl Subtype for Type {
 				false
 			}
 			(Self::Resource(l0), Self::Resource(_)) => {
-				// If our parent is equal to `other` then treat both resources as equal (inheritance)
+				// If we extend from `other` than I'm a subtype of it (inheritance)
 				if let Some(parent) = l0.parent.as_ref() {
 					let parent_type: &Type = &*parent;
 					return parent_type.is_subtype_of(other);
@@ -224,7 +228,7 @@ impl Subtype for Type {
 				false
 			}
 			(Self::Struct(l0), Self::Struct(_)) => {
-				// If we extend from `other` then treat both structs as equal (inheritance)
+				// If we extend from `other` then I'm a subtype of it (inheritance)
 				for parent in l0.extends.iter() {
 					let parent_type: &Type = &*parent;
 					if parent_type.is_subtype_of(other) {
@@ -234,53 +238,54 @@ impl Subtype for Type {
 				false
 			}
 			(Self::Array(l0), Self::Array(r0)) => {
-				// Arrays are of the same type if they have the same value type
+				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
 			(Self::MutArray(l0), Self::MutArray(r0)) => {
-				// Arrays are of the same type if they have the same value type
+				// An Array type is a subtype of another Array type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
 			(Self::Map(l0), Self::Map(r0)) => {
-				// Maps are of the same type if they have the same value type
+				// A Map type is a subtype of another Map type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
 			(Self::MutMap(l0), Self::MutMap(r0)) => {
-				// Maps are of the same type if they have the same value type
+				// A Map type is a subtype of another Map type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
 			(Self::Set(l0), Self::Set(r0)) => {
-				// Sets are of the same type if they have the same value type
+				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
 			(Self::MutSet(l0), Self::MutSet(r0)) => {
-				// Sets are of the same type if they have the same value type
+				// A Set type is a subtype of another Set type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
 			(Self::Enum(e0), Self::Enum(e1)) => {
-				// Enums are of the same type if they have the same name
+				// An enum type is a subtype of another Enum type only if they are the exact same
 				e0.name == e1.name
 			}
 			(Self::Optional(l0), Self::Optional(r0)) => {
-				// Optionals are of the same type if they have the same value type
+				// An Optional type is a subtype of another Optional type if the value type is a subtype of the other value type
 				let l: &Type = &*l0;
 				let r: &Type = &*r0;
 				l.is_subtype_of(r)
 			}
 			(_, Self::Optional(r0)) => {
-				// If we are not an optional, then we must be the same type as the optional's inner type
+				// A non-Optional type is a subtype of an Optional type if the non-optional's type is a subtype of the value type
+				// e.g. `String` is a subtype of `Optional<String>`
 				let r: &Type = &*r0;
 				self.is_subtype_of(r)
 			}
