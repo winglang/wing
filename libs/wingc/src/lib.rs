@@ -53,27 +53,32 @@ pub struct CompilerOutput {
 	pub diagnostics: Diagnostics,
 }
 
+#[cfg(target_arch = "wasm32-wasi")]
 #[no_mangle]
 // Hack needed for some WASM related reason
 pub extern "C" fn _start() {}
 
+#[cfg(target_arch = "wasm32-wasi")]
 unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
 	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
 	String::from_utf8_unchecked(slice.to_vec())
 }
 
+#[cfg(target_arch = "wasm32-wasi")]
 #[no_mangle]
 pub unsafe extern "C" fn wingc_malloc(size: u32) -> *mut u8 {
 	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
 	std::alloc::alloc(layout)
 }
 
+#[cfg(target_arch = "wasm32-wasi")]
 #[no_mangle]
 pub unsafe extern "C" fn wingc_free(ptr: u32, size: u32) {
 	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
 	std::alloc::dealloc(ptr as *mut u8, layout);
 }
 
+#[cfg(target_arch = "wasm32-wasi")]
 #[no_mangle]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 	let args = ptr_to_string(ptr, len);
