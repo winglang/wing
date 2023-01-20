@@ -1,10 +1,10 @@
 #[macro_use]
 extern crate lazy_static;
-extern crate wee_alloc;
+// extern crate wee_alloc;
 
 // Use `wee_alloc` as the global allocator.
-#[global_allocator]
-static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
+// #[global_allocator]
+// static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
 
 use ast::{Scope, Stmt, Symbol, UtilityFunctions, VariableKind};
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
@@ -53,33 +53,30 @@ pub struct CompilerOutput {
 	pub diagnostics: Diagnostics,
 }
 
-#[no_mangle]
-#[cfg(target_arch = "wasm32")]
 // Hack needed for some WASM related reason
-pub extern "C" fn _start() {}
+#[no_mangle]
+pub extern "C" fn _start() -> i32 {
+	0
+}
 
-#[cfg(target_arch = "wasm32")]
 unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
 	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
 	String::from_utf8_unchecked(slice.to_vec())
 }
 
 #[no_mangle]
-#[cfg(target_arch = "wasm32")]
 pub unsafe extern "C" fn wingc_malloc(size: u32) -> *mut u8 {
 	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
 	std::alloc::alloc(layout)
 }
 
 #[no_mangle]
-#[cfg(target_arch = "wasm32")]
 pub unsafe extern "C" fn wingc_free(ptr: u32, size: u32) {
 	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
 	std::alloc::dealloc(ptr as *mut u8, layout);
 }
 
 #[no_mangle]
-#[cfg(target_arch = "wasm32")]
 pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 	let args = ptr_to_string(ptr, len);
 

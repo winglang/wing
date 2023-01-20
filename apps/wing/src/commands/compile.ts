@@ -83,7 +83,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log("invoking wingc with importObject: %o", importObject);
   wasi.start(instance);
 
-  wingcInvoke(instance, "wingc_compile", `${wingFile};${workDir}`);
+  log(`invoking wingc_compile with: "${wingFile};${workDir}"`);
+  await wingcInvoke(instance, "wingc_compile", `${wingFile};${workDir}`);
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
