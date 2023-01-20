@@ -144,6 +144,9 @@ We are also actively tracking planned features in our roadmap:
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Joshswooft"><img src="https://avatars.githubusercontent.com/u/60711758?v=4?s=100" width="100px;" alt="Josh"/><br /><sub><b>Josh</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=Joshswooft" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/marciocadev"><img src="https://avatars.githubusercontent.com/u/67694075?v=4?s=100" width="100px;" alt="Marcio Cruz de Almeida"/><br /><sub><b>Marcio Cruz de Almeida</b></sub></a><br /><a href="https://github.com/winglang/wing/commits?author=marciocadev" title="Code">💻</a></td>
     </tr>
+    <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://itaikeren.com"><img src="https://avatars.githubusercontent.com/u/16226013?v=4?s=100" width="100px;" alt="Itai Keren"/><br /><sub><b>Itai Keren</b></sub></a><br /><a href="#tool-itaikeren" title="Tools">🔧</a></td>
+    </tr>
   </tbody>
   <tfoot>
     <tr>
