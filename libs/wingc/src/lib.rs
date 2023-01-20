@@ -49,6 +49,7 @@ pub struct CompilerOutput {
 }
 
 // Hack needed for some WASM related reason
+#[cfg(target_arch = "wasm32")]
 #[no_mangle]
 pub extern "C" fn _start() -> i32 {
 	0
