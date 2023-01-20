@@ -19,14 +19,8 @@ itertools = "0.10"
 inflections = "1.1.1"
 phf = { version = "0.11", features = ["macros"] }
 indexmap = "1.9.1"
+wee_alloc = "0.4.5"
 
 [lib]
 path = "src/lib.rs"
-
-[[bin]]
-name = "wingc"
-path = "src/bin.rs"
-
-[package.metadata]
-# Currently wasm-opt is not changing the size of the wasm file, so it's just adding unnecessary time to the build.
-wasm-opt = false
+crate-type = ["cdylib", "rlib"]

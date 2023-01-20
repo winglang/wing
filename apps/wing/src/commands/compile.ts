@@ -7,7 +7,6 @@ import { dirname, resolve } from "path";
 import { mkdir, readFile } from "fs/promises";
 
 import { WASI } from "wasi";
-import { argv } from "process";
 import debug from "debug";
 import * as chalk from "chalk";
 
@@ -60,10 +59,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
     mkdir(outDir, { recursive: true }),
   ]);
 
-  const args = [argv[0], wingFile, workDir];
-
   const wasi = new WASI({
-    args,
+    // args,
     env: {
       ...process.env,
       RUST_BACKTRACE: "full",
@@ -86,6 +83,8 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   const instance = await WebAssembly.instantiate(wasm, importObject);
   log("invoking wingc with importObject: %o", importObject);
   wasi.start(instance);
+
+  wingcInvoke(instance, "wingc_compile", `${wingFile};${workDir}`);
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
@@ -153,4 +152,33 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
       console.log("  " + chalk.bold.white("note:") + " " + chalk.white("run with `NODE_STACKTRACE=1` environment variable to display a stack trace"));
     }
   }
+}
+
+/**
+ * Assumptions:
+ * 1. The called WASM function is expecting a pointer and a length representing a string
+ * 2. The string will be UTF-8 encoded
+ * 3. The string will be less than 2^32 bytes long  (4GB)
+ * 4. the WASI instance has already been started
+ */
+async function wingcInvoke(
+  instance: WebAssembly.Instance,
+  func: string,
+  arg: string
+) {
+  const exports = instance.exports as any;
+
+  const bytes = new TextEncoder().encode(arg);
+  const argPointer = exports.wingc_malloc(bytes.byteLength);
+
+  const argMemoryBuffer = new Uint8Array(
+    exports.memory.buffer,
+    argPointer,
+    bytes.byteLength
+  );
+  argMemoryBuffer.set(bytes);
+
+  exports[func](argPointer, bytes.byteLength);
+
+  exports.wingc_free(argPointer, bytes.byteLength);
 }
