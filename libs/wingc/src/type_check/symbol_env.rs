@@ -94,12 +94,12 @@ impl SymbolEnv {
 		if let Some(_parent_env) = self.parent {
 			if let Some(parent_kind) = self.try_lookup(&symbol.name, None) {
 				// If we're a class we allow "symbol shadowing" for methods
-				let is_function = if let SymbolKind::Variable(t) = kind {
+				let is_function = if let SymbolKind::Variable(t, _) = kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
 				};
-				let is_parent_function = if let SymbolKind::Variable(t) = *parent_kind {
+				let is_parent_function = if let SymbolKind::Variable(t, _) = *parent_kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
@@ -234,7 +234,7 @@ impl SymbolEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(t) = *t {
+			if let SymbolKind::Variable(t, _) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}

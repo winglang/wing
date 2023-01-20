@@ -8,6 +8,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch: {}
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.head.ref || github.ref }}
@@ -125,7 +126,7 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "build"
-          projects: "wing,wingsdk,wing-api-checker,jsii-docgen,wing-playground"
+          projects: "winglang,sdk,wing-api-checker,jsii-docgen,wing-playground"
           args: "--configuration=release --output-style=stream --verbose"
 
       # wingc require wingsdk to be built first in order to run
@@ -140,7 +141,7 @@ jobs:
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "package"
-          projects: "wing,wingsdk"
+          projects: "winglang,sdk"
           args: "--configuration=release --output-style=stream --verbose"
 
       - name: Upload Wing CLI
