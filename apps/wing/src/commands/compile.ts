@@ -60,7 +60,6 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   ]);
 
   const wasi = new WASI({
-    // args,
     env: {
       ...process.env,
       RUST_BACKTRACE: "full",
