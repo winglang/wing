@@ -2,7 +2,7 @@ use crate::{
 	ast::{Phase, Symbol},
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
-	type_check::{self, symbol_env::SymbolEnv, VariableInfo},
+	type_check::{self, symbol_env::SymbolEnv},
 	type_check::{
 		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
@@ -337,10 +337,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-						SymbolKind::Variable(VariableInfo {
-							_type: method_sig,
-							reassignable: false,
-						}),
+						SymbolKind::make_variable(method_sig, false),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -369,10 +366,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::Variable(VariableInfo {
-							_type: wing_type,
-							reassignable: matches!(p.immutable, Some(true)),
-						}),
+						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true))),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -541,10 +535,7 @@ impl<'a> JsiiImporter<'a> {
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
-				SymbolKind::Variable(VariableInfo {
-					_type: method_sig,
-					reassignable: false,
-				}),
+				SymbolKind::make_variable(method_sig, false),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)

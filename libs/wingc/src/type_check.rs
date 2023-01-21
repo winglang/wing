@@ -64,6 +64,10 @@ pub struct VariableInfo {
 }
 
 impl SymbolKind {
+	pub fn make_variable(_type: TypeRef, reassignable: bool) -> Self {
+		SymbolKind::Variable(VariableInfo { _type, reassignable })
+	}
+
 	pub fn as_variable(&self) -> Option<VariableInfo> {
 		match &self {
 			SymbolKind::Variable(t) => Some(t.clone()),
@@ -1224,10 +1228,7 @@ impl<'a> TypeChecker<'a> {
 					self.validate_type(inferred_type, explicit_type, initial_value);
 					match env.define(
 						var_name,
-						SymbolKind::Variable(VariableInfo {
-							reassignable: *reassignable,
-							_type: explicit_type,
-						}),
+						SymbolKind::make_variable(explicit_type, *reassignable),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1238,10 +1239,7 @@ impl<'a> TypeChecker<'a> {
 				} else {
 					match env.define(
 						var_name,
-						SymbolKind::Variable(VariableInfo {
-							_type: inferred_type,
-							reassignable: *reassignable,
-						}),
+						SymbolKind::make_variable(inferred_type, *reassignable),
 						StatementIdx::Index(stmt.idx),
 					) {
 						Err(type_error) => {
@@ -1260,14 +1258,7 @@ impl<'a> TypeChecker<'a> {
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx);
 
 				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
-				match scope_env.define(
-					&iterator,
-					SymbolKind::Variable(VariableInfo {
-						_type: exp_type,
-						reassignable: false,
-					}),
-					StatementIdx::Top,
-				) {
+				match scope_env.define(&iterator, SymbolKind::make_variable(exp_type, false), StatementIdx::Top) {
 					Err(type_error) => {
 						self.type_error(&type_error);
 					}
@@ -1450,10 +1441,7 @@ impl<'a> TypeChecker<'a> {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
 					match class_env.define(
 						&member.name,
-						SymbolKind::Variable(VariableInfo {
-							_type: member_type,
-							reassignable: member.reassignable,
-						}),
+						SymbolKind::make_variable(member_type, member.reassignable),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1478,10 +1466,7 @@ impl<'a> TypeChecker<'a> {
 					let method_type = self.resolve_type(&AstType::FunctionSignature(sig), env, stmt.idx);
 					match class_env.define(
 						method_name,
-						SymbolKind::Variable(VariableInfo {
-							_type: method_type,
-							reassignable: false,
-						}),
+						SymbolKind::make_variable(method_type, false),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1502,10 +1487,7 @@ impl<'a> TypeChecker<'a> {
 						name: WING_CONSTRUCTOR_NAME.into(),
 						span: name.span.clone(),
 					},
-					SymbolKind::Variable(VariableInfo {
-						_type: constructor_type,
-						reassignable: false,
-					}),
+					SymbolKind::make_variable(constructor_type, false),
 					StatementIdx::Top,
 				) {
 					Err(type_error) => {
@@ -1545,10 +1527,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: name.span.clone(),
 						},
-						SymbolKind::Variable(VariableInfo {
-							_type: class_type,
-							reassignable: false,
-						}),
+						SymbolKind::make_variable(class_type, false),
 						StatementIdx::Top,
 					)
 					.expect("Expected `this` to be added to constructor env");
@@ -1608,10 +1587,7 @@ impl<'a> TypeChecker<'a> {
 					let member_type = self.resolve_type(&member.member_type, env, stmt.idx);
 					match struct_env.define(
 						&member.name,
-						SymbolKind::Variable(VariableInfo {
-							_type: member_type,
-							reassignable: false,
-						}),
+						SymbolKind::make_variable(member_type, false),
 						StatementIdx::Top,
 					) {
 						Err(type_error) => {
@@ -1709,14 +1685,7 @@ impl<'a> TypeChecker<'a> {
 	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, bool)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
 		assert!(args.len() == sig.args.len());
 		for (arg, arg_type) in args.iter().zip(sig.args.iter()) {
-			match env.define(
-				&arg.0,
-				SymbolKind::Variable(VariableInfo {
-					_type: *arg_type,
-					reassignable: arg.1,
-				}),
-				StatementIdx::Top,
-			) {
+			match env.define(&arg.0, SymbolKind::make_variable(*arg_type, arg.1), StatementIdx::Top) {
 				Err(type_error) => {
 					self.type_error(&type_error);
 				}
@@ -1824,10 +1793,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::Variable(VariableInfo {
-									_type: self.types.add_type(Type::Function(new_sig)),
-									reassignable: false,
-								}),
+								SymbolKind::make_variable(self.types.add_type(Type::Function(new_sig)), false),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -1847,10 +1813,7 @@ impl<'a> TypeChecker<'a> {
 									name: name.clone(),
 									span: WingSpan::global(),
 								},
-								SymbolKind::Variable(VariableInfo {
-									_type: new_var_type,
-									reassignable,
-								}),
+								SymbolKind::make_variable(new_var_type, reassignable),
 								StatementIdx::Top,
 							) {
 								Err(type_error) => {
@@ -2089,10 +2052,7 @@ fn add_parent_members_to_struct_env(
 						name: parent_member_name,
 						span: name.span.clone(),
 					},
-					SymbolKind::Variable(VariableInfo {
-						_type: member_type,
-						reassignable: false,
-					}),
+					SymbolKind::make_variable(member_type, false),
 					StatementIdx::Top,
 				)?;
 			}
