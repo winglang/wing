@@ -145,8 +145,7 @@ Object {
     at Object.activity 
     at Object.withTrace 
     at Function.invoke 
-    at Simulator.runTest 
-    at Object.<anonymous> ",
+    at Simulator.runTest ",
   "pass": false,
   "path": "root/test",
   "traces": Array [

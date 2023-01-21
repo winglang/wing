@@ -164,10 +164,25 @@ function removePathsFromTraceLine(line?: string) {
 }
 
 function sanitizeResult(result: TestResult): TestResult {
+  let error: string | undefined;
+  if (result.error) {
+    let lines = result.error.split("\n").map(removePathsFromTraceLine);
+
+    // remove all lines after "at Simulator.runTest" since they are platform-dependent
+    let lastLine = lines.findIndex((line) =>
+      line?.includes("Simulator.runTest")
+    );
+    if (lastLine !== -1) {
+      lines = lines.slice(0, lastLine + 1);
+    }
+
+    error = lines.join("\n");
+  }
+
   return {
     path: result.path,
     pass: result.pass,
-    error: result.error?.split("\n").map(removePathsFromTraceLine).join("\n"),
+    error,
     traces: result.traces.map((trace) => ({
       ...trace,
       timestamp: "<TIMESTAMP>",
