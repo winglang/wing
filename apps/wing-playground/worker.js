@@ -2,6 +2,8 @@ import wingcURL from "./wingc.wasm?url";
 import { init, WASI } from "@wasmer/wasi";
 import { env } from "process";
 
+const WINGC_COMPILE = "wingc_compile";
+
 const wingsdkJSIIContent = await import("@winglang/sdk/.jsii?raw").then(
   (i) => i.default
 );
@@ -43,7 +45,7 @@ self.onmessage = async (event) => {
     let file = wasi.fs.open("/code.w", defaultFilePerms);
     file.writeString(event.data);
 
-    await wingcInvoke(instance, "wingc_compile", "code.w");
+    await wingcInvoke(instance, WINGC_COMPILE, "code.w");
     const stdout = wasi.getStdoutString();
     let intermediateJS = "";
 
