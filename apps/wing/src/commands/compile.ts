@@ -11,6 +11,7 @@ import debug from "debug";
 import * as chalk from "chalk";
 
 const log = debug("wing:compile");
+const WINGC_COMPILE = "wingc_compile";
 
 const WINGC_WASM_PATH = resolve(__dirname, "../../wingc.wasm");
 log("wasm path: %s", WINGC_WASM_PATH);
@@ -83,8 +84,9 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log("invoking wingc with importObject: %o", importObject);
   wasi.start(instance);
 
-  log(`invoking wingc_compile with: "${wingFile};${workDir}"`);
-  await wingcInvoke(instance, "wingc_compile", `${wingFile};${workDir}`);
+  const arg = `${wingFile};${workDir}`;
+  log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
+  await wingcInvoke(instance, WINGC_COMPILE, arg);
 
   const artifactPath = resolve(workDir, WINGC_PREFLIGHT);
   log("reading artifact from %s", artifactPath);
