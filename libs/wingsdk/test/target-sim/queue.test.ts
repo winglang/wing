@@ -2,8 +2,6 @@ import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
 import { listMessages, treeJsonOf } from "./util";
 
-jest.setTimeout(5 * 60 * 1000); // 5 minutes
-
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 const INFLIGHT_CODE = `

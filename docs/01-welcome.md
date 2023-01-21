@@ -114,6 +114,7 @@ Wing is designed to address these challenges in the following ways:
   to its full extent through a set of rich, high-level and cloud-independent
   resources. This allows developers to build complete cloud applications without
   having to be infrastructure experts.
+* **Distributed computing support** - the cloud is a big distributed system while traditional languages are designed to tell a single machine what to do. Wing introduces the concept of inflight functions which are code pieces that run later on remote machines while still able to capture and interact with data and resources defined elsewhere.
 * **Cloud unit tests** - Wing allows developers to use the cloud simulator as a
   library inside unit tests, and to test complete architectures without
   requiring deployments or heavy mocking.

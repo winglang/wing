@@ -348,7 +348,7 @@ export class Simulator {
   }
 
   /**
-   * Get a list of all traces added during the most recent simulation run.
+   * Get a list of all traces from the most recent simulation run.
    */
   public listTraces(): Trace[] {
     return [...this._traces];
