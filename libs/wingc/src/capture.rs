@@ -86,12 +86,7 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 					}
 				}
 			}
-			StmtKind::VariableDef {
-				kind: _,
-				var_name: _,
-				initial_value,
-				type_: _,
-			} => {
+			StmtKind::VariableDef { initial_value, .. } => {
 				scan_for_inflights_in_expression(initial_value, diagnostics);
 			}
 			StmtKind::Expression(exp) => {
@@ -406,12 +401,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 
 	for s in scope.statements.iter() {
 		match &s.kind {
-			StmtKind::VariableDef {
-				kind: _,
-				var_name: _,
-				initial_value,
-				type_: _,
-			} => res.extend(scan_captures_in_expression(initial_value, env, s.idx, diagnostics)),
+			StmtKind::VariableDef { initial_value, .. } => {
+				res.extend(scan_captures_in_expression(initial_value, env, s.idx, diagnostics))
+			}
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable,

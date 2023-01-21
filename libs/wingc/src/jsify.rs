@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions, VariableKind,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
 	capture::CaptureKind,
 	utilities::snake_case_to_camel_case,
@@ -466,15 +466,16 @@ impl JSifier {
 				)
 			}
 			StmtKind::VariableDef {
-				kind,
+				reassignable,
 				var_name,
 				initial_value,
 				type_: _,
 			} => {
 				let initial_value = self.jsify_expression(initial_value, phase);
-				return match kind {
-					VariableKind::Let => format!("const {} = {};", self.jsify_symbol(var_name), initial_value),
-					VariableKind::Var => format!("let {} = {};", self.jsify_symbol(var_name), initial_value),
+				return if *reassignable {
+					format!("let {} = {};", self.jsify_symbol(var_name), initial_value)
+				} else {
+					format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
 				};
 			}
 			StmtKind::ForLoop {
@@ -696,13 +697,7 @@ impl JSifier {
 		)
 	}
 
-	fn jsify_function(
-		&self,
-		name: Option<&str>,
-		parameters: &[(Symbol, VariableKind)],
-		body: &Scope,
-		phase: Phase,
-	) -> String {
+	fn jsify_function(&self, name: Option<&str>, parameters: &[(Symbol, bool)], body: &Scope, phase: Phase) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
 			parameter_list.push(self.jsify_symbol(&p.0));

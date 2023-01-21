@@ -12,8 +12,13 @@ pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 pub struct SymbolEnv {
 	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
 	parent: Option<SymbolEnvRef>,
+
+	// TODO: This doesn't make much sense in the context of the "envrioment" but I needed a way to propagate the return type of a function
+	// down the scopes. Think of a nicer way to do this.
 	pub return_type: TypeRef,
+
 	is_class: bool,
+	pub is_init: bool,
 	pub flight: Phase,
 	statement_idx: usize,
 }
@@ -56,6 +61,7 @@ impl SymbolEnv {
 		parent: Option<SymbolEnvRef>,
 		return_type: TypeRef,
 		is_class: bool,
+		is_init: bool,
 		flight: Phase,
 		statement_idx: usize,
 	) -> Self {
@@ -67,6 +73,7 @@ impl SymbolEnv {
 			parent,
 			return_type,
 			is_class,
+			is_init,
 			flight,
 			statement_idx,
 		}

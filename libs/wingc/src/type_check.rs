@@ -60,7 +60,7 @@ pub enum SymbolKind {
 #[derive(Debug, Clone)]
 pub struct VariableInfo {
 	pub _type: TypeRef,
-	pub kind: VariableKind,
+	pub reassignable: bool,
 }
 
 impl SymbolKind {
@@ -73,10 +73,7 @@ impl SymbolKind {
 
 	pub fn is_reassignable(&self) -> bool {
 		match self {
-			SymbolKind::Variable(VariableInfo {
-				kind: VariableKind::Var,
-				..
-			}) => true,
+			SymbolKind::Variable(VariableInfo { reassignable: true, .. }) => true,
 			_ => false,
 		}
 	}
@@ -627,7 +624,7 @@ impl<'a> TypeChecker<'a> {
 
 		VariableInfo {
 			_type: self.types.anything(),
-			kind: VariableKind::Let,
+			reassignable: false,
 		}
 	}
 
@@ -1014,6 +1011,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					sig.return_type,
 					false,
+					false,
 					func_def.signature.flight,
 					statement_idx,
 				);
@@ -1209,7 +1207,7 @@ impl<'a> TypeChecker<'a> {
 	fn type_check_statement(&mut self, stmt: &Stmt, env: &mut SymbolEnv) {
 		match &stmt.kind {
 			StmtKind::VariableDef {
-				kind,
+				reassignable,
 				var_name,
 				initial_value,
 				type_,
@@ -1227,7 +1225,7 @@ impl<'a> TypeChecker<'a> {
 					match env.define(
 						var_name,
 						SymbolKind::Variable(VariableInfo {
-							kind: *kind,
+							reassignable: *reassignable,
 							_type: explicit_type,
 						}),
 						StatementIdx::Index(stmt.idx),
@@ -1242,7 +1240,7 @@ impl<'a> TypeChecker<'a> {
 						var_name,
 						SymbolKind::Variable(VariableInfo {
 							_type: inferred_type,
-							kind: *kind,
+							reassignable: *reassignable,
 						}),
 						StatementIdx::Index(stmt.idx),
 					) {
@@ -1261,12 +1259,12 @@ impl<'a> TypeChecker<'a> {
 				// TODO: Expression must be iterable
 				let exp_type = self.type_check_exp(iterable, env, stmt.idx);
 
-				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, env.flight, stmt.idx);
+				let mut scope_env = SymbolEnv::new(Some(env.get_ref()), env.return_type, false, false, env.flight, stmt.idx);
 				match scope_env.define(
 					&iterator,
 					SymbolKind::Variable(VariableInfo {
 						_type: exp_type,
-						kind: VariableKind::Let,
+						reassignable: false,
 					}),
 					StatementIdx::Top,
 				) {
@@ -1287,6 +1285,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
+					false,
 					env.flight,
 					stmt.idx,
 				));
@@ -1305,6 +1304,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					env.return_type,
 					false,
+					false,
 					env.flight,
 					stmt.idx,
 				));
@@ -1314,6 +1314,7 @@ impl<'a> TypeChecker<'a> {
 					else_scope.set_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
+						false,
 						false,
 						env.flight,
 						stmt.idx,
@@ -1327,7 +1328,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::Assignment { variable, value } => {
 				let exp_type = self.type_check_exp(value, env, stmt.idx);
 				let var_info = self.resolve_reference(variable, env, stmt.idx);
-				if !matches!(var_info.kind, VariableKind::Var) {
+				if !var_info.reassignable {
 					self.stmt_error(stmt, format!("Variable {} is not reassignable ", variable));
 				}
 				self.validate_type(exp_type, var_info._type, value);
@@ -1352,6 +1353,7 @@ impl<'a> TypeChecker<'a> {
 				scope.set_env(SymbolEnv::new(
 					Some(env.get_ref()),
 					env.return_type,
+					false,
 					false,
 					env.flight,
 					stmt.idx,
@@ -1418,7 +1420,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-				let dummy_env = SymbolEnv::new(None, self.types.void(), true, env_flight, stmt.idx);
+				let dummy_env = SymbolEnv::new(None, self.types.void(), true, false, env_flight, stmt.idx);
 
 				// Create the resource/class type and add it to the current environment (so class implementation can reference itself)
 				let class_spec = Class {
@@ -1441,7 +1443,7 @@ impl<'a> TypeChecker<'a> {
 				};
 
 				// Create a the real class environment to be filled with the class AST types
-				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, env_flight, stmt.idx);
+				let mut class_env = SymbolEnv::new(parent_class_env, self.types.void(), true, false, env_flight, stmt.idx);
 
 				// Add members to the class env
 				for member in members.iter() {
@@ -1450,7 +1452,7 @@ impl<'a> TypeChecker<'a> {
 						&member.name,
 						SymbolKind::Variable(VariableInfo {
 							_type: member_type,
-							kind: VariableKind::Let,
+							reassignable: member.reassignable,
 						}),
 						StatementIdx::Top,
 					) {
@@ -1478,7 +1480,7 @@ impl<'a> TypeChecker<'a> {
 						method_name,
 						SymbolKind::Variable(VariableInfo {
 							_type: method_type,
-							kind: VariableKind::Let,
+							reassignable: false,
 						}),
 						StatementIdx::Top,
 					) {
@@ -1502,7 +1504,7 @@ impl<'a> TypeChecker<'a> {
 					},
 					SymbolKind::Variable(VariableInfo {
 						_type: constructor_type,
-						kind: VariableKind::Let,
+						reassignable: false,
 					}),
 					StatementIdx::Top,
 				) {
@@ -1531,6 +1533,7 @@ impl<'a> TypeChecker<'a> {
 					Some(env.get_ref()),
 					constructor_sig.return_type,
 					false,
+					true,
 					env_flight,
 					stmt.idx,
 				);
@@ -1544,7 +1547,7 @@ impl<'a> TypeChecker<'a> {
 						},
 						SymbolKind::Variable(VariableInfo {
 							_type: class_type,
-							kind: VariableKind::Let,
+							reassignable: false,
 						}),
 						StatementIdx::Top,
 					)
@@ -1574,6 +1577,7 @@ impl<'a> TypeChecker<'a> {
 						Some(env.get_ref()),
 						method_sig.return_type,
 						false,
+						false,
 						method_sig.flight,
 						stmt.idx,
 					);
@@ -1583,7 +1587,7 @@ impl<'a> TypeChecker<'a> {
 							name: "this".into(),
 							span: method_name.span.clone(),
 						},
-						VariableKind::Let,
+						false,
 					)];
 					actual_parameters.extend(method_def.parameters.clone());
 					self.add_arguments_to_env(&actual_parameters, method_sig, &mut method_env);
@@ -1597,7 +1601,7 @@ impl<'a> TypeChecker<'a> {
 				//   fail type checking.
 
 				// Create an environment for the struct
-				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, env.flight, stmt.idx);
+				let mut struct_env = SymbolEnv::new(None, self.types.void(), true, false, env.flight, stmt.idx);
 
 				// Add members to the struct env
 				for member in members.iter() {
@@ -1606,7 +1610,7 @@ impl<'a> TypeChecker<'a> {
 						&member.name,
 						SymbolKind::Variable(VariableInfo {
 							_type: member_type,
-							kind: VariableKind::Let,
+							reassignable: false,
 						}),
 						StatementIdx::Top,
 					) {
@@ -1693,14 +1697,23 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, VariableKind)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
+	/// Add function arguments to the function's environment
+	///
+	/// #Arguments
+	///
+	/// * `args` - List of aruments to add, each element is a tuple of the arugment symbol and whether it's
+	///   reassignable arg or not. Note that the argument types are figured out from `sig`.
+	/// * `sig` - The function signature (used to figure out the type of each argument).
+	/// * `env` - The function's environment to prime with the args.
+	///
+	fn add_arguments_to_env(&mut self, args: &Vec<(Symbol, bool)>, sig: &FunctionSignature, env: &mut SymbolEnv) {
 		assert!(args.len() == sig.args.len());
 		for (arg, arg_type) in args.iter().zip(sig.args.iter()) {
 			match env.define(
 				&arg.0,
 				SymbolKind::Variable(VariableInfo {
 					_type: *arg_type,
-					kind: arg.1,
+					reassignable: arg.1,
 				}),
 				StatementIdx::Top,
 			) {
@@ -1753,7 +1766,14 @@ impl<'a> TypeChecker<'a> {
 			));
 		}
 
-		let new_env = SymbolEnv::new(None, original_type_class.env.return_type, true, Phase::Independent, 0);
+		let new_env = SymbolEnv::new(
+			None,
+			original_type_class.env.return_type,
+			true,
+			false,
+			Phase::Independent,
+			0,
+		);
 		let tt = Type::Class(Class {
 			name: original_type_class.name.clone(),
 			env: new_env,
@@ -1761,6 +1781,7 @@ impl<'a> TypeChecker<'a> {
 			should_case_convert_jsii: original_type_class.should_case_convert_jsii,
 			type_parameters: Some(type_params.clone()),
 		});
+		// TODO: here we add a new type regardless whether we already "hydrated" `original_type` with these `type_params`. Cache!
 		let mut new_type = self.types.add_type(tt);
 		let new_type_class = new_type.as_mut_class_or_resource().unwrap();
 
@@ -1805,7 +1826,7 @@ impl<'a> TypeChecker<'a> {
 								},
 								SymbolKind::Variable(VariableInfo {
 									_type: self.types.add_type(Type::Function(new_sig)),
-									kind: VariableKind::Let,
+									reassignable: false,
 								}),
 								StatementIdx::Top,
 							) {
@@ -1814,7 +1835,11 @@ impl<'a> TypeChecker<'a> {
 								}
 								_ => {}
 							}
-						} else if let Some(VariableInfo { _type: var, kind }) = symbol.as_variable() {
+						} else if let Some(VariableInfo {
+							_type: var,
+							reassignable,
+						}) = symbol.as_variable()
+						{
 							let new_var_type = if var == *original_type_param { new_type_arg } else { var };
 							match new_type_class.env.define(
 								// TODO: Original symbol is not available. SymbolKind::Variable should probably expose it
@@ -1824,7 +1849,7 @@ impl<'a> TypeChecker<'a> {
 								},
 								SymbolKind::Variable(VariableInfo {
 									_type: new_var_type,
-									kind,
+									reassignable,
 								}),
 								StatementIdx::Top,
 							) {
@@ -1905,16 +1930,25 @@ impl<'a> TypeChecker<'a> {
 					};
 					return VariableInfo {
 						_type,
-						kind: VariableKind::Let,
+						reassignable: false,
 					};
 				}
 
+				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
+				// we'll consider all properties as reassignable regardless of whether they're `var`.
+				let mut force_reassignable = false;
+				if let ExprKind::Reference(Reference::Identifier(Symbol { name, .. })) = &object.kind {
+					if name == "this" && env.is_init {
+						force_reassignable = true;
+					}
+				}
+
 				let instance_type = self.type_check_exp(object, env, statement_idx);
-				match *instance_type {
+				let res = match *instance_type {
 					Type::Class(ref class) | Type::Resource(ref class) => self.get_property_from_class(class, property),
 					Type::Anything => VariableInfo {
 						_type: instance_type,
-						kind: VariableKind::Let,
+						reassignable: false,
 					},
 
 					// Lookup wingsdk std types, hydrating generics if necessary
@@ -1971,8 +2005,17 @@ impl<'a> TypeChecker<'a> {
 								property.name, instance_type
 							),
 						),
-						kind: VariableKind::Let,
+						reassignable: false,
 					},
+				};
+
+				if force_reassignable {
+					VariableInfo {
+						_type: res._type,
+						reassignable: true,
+					}
+				} else {
+					res
 				}
 			}
 		}
@@ -2048,7 +2091,7 @@ fn add_parent_members_to_struct_env(
 					},
 					SymbolKind::Variable(VariableInfo {
 						_type: member_type,
-						kind: VariableKind::Let,
+						reassignable: false,
 					}),
 					StatementIdx::Top,
 				)?;
