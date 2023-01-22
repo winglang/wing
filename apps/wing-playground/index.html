@@ -122,18 +122,12 @@
     #wing-side {
       display: inline-flex;
       flex-grow: 1;
-      padding: 2rem;
-      height: 80vh;
+      padding: 0.5rem;
     }
 
     #js-side {
       width: 60%;
-      height: 80vh;
       font-size: 12;
-    }
-
-    #intermediateJS {
-      height: 98%;
     }
 
     #lineCounter {
@@ -143,7 +137,12 @@
       overflow-y: hidden;
       text-align: right;
       box-shadow: none;
-      width: auto;
+      width: 2.2em;
+    }
+
+    #js-side pre {
+      /* counters the adjustments made by highlight.js to line up with the wing side */
+      margin-top: -0.5em;
     }
   </style>
 </html>
