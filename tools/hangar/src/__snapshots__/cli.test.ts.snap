@@ -3099,9 +3099,13 @@ constructor() {
   class R
   {
   constructor() {
-    this.f = 1;
+    if (true) {
+      this.f = 1;
+      this.f1 = 0;
+    }
   }
   f;
+  f1;
   inc = () => {
     this.f = (this.f + 1);
   }
@@ -3117,7 +3121,9 @@ constructor() {
     arg = 0;
     return arg;
   };
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((f(1)) === 0)'\`)})(((f(1)) === 0))};
+  const y = 1;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((f(y)) === 0)'\`)})(((f(y)) === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(y === 1)'\`)})((y === 1))};
 }
 }
 new MyApp().synth();"
