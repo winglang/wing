@@ -24,4 +24,6 @@ let f = (var arg: num):num => {
   return arg;
 }
 
-assert(f(1) == 0);
+let y = 1;
+assert(f(y) == 0);
+assert(y == 1); // y is not modified, since Wing functions are pass-by-value
