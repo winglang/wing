@@ -19,6 +19,7 @@ const project = new TypeScriptProject({
     "@babel/core",
     "@types/react",
     "@types/react-dom",
+    "@types/analytics-node",
     "@vitejs/plugin-react",
     "autoprefixer",
     "electron",
@@ -47,7 +48,6 @@ const project = new TypeScriptProject({
     "electron-trpc",
     "@tanstack/react-query",
     "zod",
-    "get-port",
     "@aws-sdk/client-s3",
     "tsx",
     "fix-path",
@@ -61,6 +61,9 @@ const project = new TypeScriptProject({
     "ws",
     "@types/ws",
     "nanoid",
+    "dotenv",
+    "electron-store",
+    "analytics-node",
   ],
   // @ts-ignore
   minNodeVersion: "16.0.0",
@@ -68,6 +71,20 @@ const project = new TypeScriptProject({
 });
 
 project.addTask("dev").exec("tsx scripts/dev.mts");
+
+project
+  .tryFindObjectFile(".github/workflows/release.yml")
+  ?.addOverride(
+    "jobs.release.env.SEGMENT_WRITE_KEY",
+    "${{ secrets.SEGMENT_WRITE_KEY }}",
+  );
+
+project
+  .tryFindObjectFile(".github/workflows/build.yml")
+  ?.addOverride(
+    "jobs.build.env.SEGMENT_WRITE_KEY",
+    "${{ secrets.SEGMENT_WRITE_KEY }}",
+  );
 
 project.compileTask.exec("tsx scripts/build.mts");
 
@@ -78,6 +95,7 @@ project.package.addField("main", "dist/vite/electron/main/index.js");
 project
   .tryFindObjectFile(".github/workflows/release.yml")
   ?.addDeletionOverride("jobs.release_github");
+
 project.release?.addJobs({
   release_electron_builder: {
     name: "Publish using electron-builder",

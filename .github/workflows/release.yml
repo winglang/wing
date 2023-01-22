@@ -15,6 +15,7 @@ jobs:
       latest_commit: ${{ steps.git_remote.outputs.latest_commit }}
     env:
       CI: "true"
+      SEGMENT_WRITE_KEY: ${{ secrets.SEGMENT_WRITE_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v3

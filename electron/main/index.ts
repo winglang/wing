@@ -3,6 +3,7 @@ import path from "node:path";
 import * as trpcExpress from "@trpc/server/adapters/express";
 import { applyWSSHandler } from "@trpc/server/adapters/ws";
 import cors from "cors";
+import { config } from "dotenv";
 import { BrowserWindow, Menu, app, dialog, screen, shell } from "electron";
 import log from "electron-log";
 import { autoUpdater } from "electron-updater";
@@ -13,10 +14,19 @@ import { WebSocketServer } from "ws";
 import { ConsoleLogger, LogEntry } from "./consoleLogger.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeAppRouters } from "./router/index.js";
+import { SegmentAnalytics } from "./segmentAnalytics.js";
 import { createWingApp } from "./utils/createWingApp.js";
 import { watchSimulatorFile } from "./utils/watchSimulatorFile.js";
 
+config();
+
 log.info("Application entrypoint");
+
+const segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY || "");
+segment.analytics.track({
+  anonymousId: segment.anonymousId,
+  event: "Application started",
+});
 
 class AppUpdater {
   constructor() {

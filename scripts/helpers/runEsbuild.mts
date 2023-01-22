@@ -1,4 +1,7 @@
+import { config } from "dotenv";
 import esbuild from "esbuild";
+
+config();
 
 export interface RunEsbuildOptions {
   port?: number;
@@ -23,6 +26,9 @@ export const runEsbuild = ({ port, watch, minify }: RunEsbuildOptions) => {
         PROD: watch === undefined,
         SSR: false,
       }),
+      "process.env.SEGMENT_WRITE_KEY": JSON.stringify(
+        process.env.SEGMENT_WRITE_KEY,
+      ),
     },
     logLevel: "info",
     watch,
