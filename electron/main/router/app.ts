@@ -4,6 +4,7 @@ import { z } from "zod";
 
 import {
   Node,
+  NodeDisplay,
   buildConstructTreeNodeMap,
 } from "../utils/constructTreeNodeMap.js";
 import { publicProcedure, router } from "../utils/createRouter.js";
@@ -15,6 +16,7 @@ export interface ExplorerItem {
   label: string;
   type?: string;
   childItems?: ExplorerItem[];
+  display?: NodeDisplay;
 }
 
 export const createAppRouter = () => {
@@ -69,41 +71,58 @@ export const createAppRouter = () => {
 
         const node = nodeMap.get(input.path);
         const children = nodeMap.getAll(node?.children ?? []);
-        return children.map((node) => ({
-          node: {
-            id: node.id,
-            path: node.path,
-            type: getResourceType(node, simulator),
-          },
-          inbound:
-            node.attributes?.["wing:resource:connections"]
-              ?.filter(({ direction }) => direction === "inbound")
-              .map((connection) => {
-                const node = nodeMap.get(connection.resource)!;
-                return {
-                  relationshipType: connection.relationship,
-                  node: {
-                    id: node.id,
-                    path: node.path,
-                    type: getResourceType(node, simulator),
-                  },
-                };
-              }) ?? [],
-          outbound:
-            node.attributes?.["wing:resource:connections"]
-              ?.filter(({ direction }) => direction === "outbound")
-              .map((connection) => {
-                const node = nodeMap.get(connection.resource)!;
-                return {
-                  relationshipType: connection.relationship,
-                  node: {
-                    id: node.id,
-                    path: node.path,
-                    type: getResourceType(node, simulator),
-                  },
-                };
-              }) ?? [],
-        }));
+        return children
+          .filter((node) => {
+            return !node.display?.hidden;
+          })
+          .map((node) => ({
+            node: {
+              id: node.id,
+              path: node.path,
+              type: getResourceType(node, simulator),
+              display: node.display,
+            },
+            inbound:
+              node.attributes?.["wing:resource:connections"]
+                ?.filter(({ direction, resource }) => {
+                  if (direction !== "inbound") {
+                    return;
+                  }
+                  const node = nodeMap.get(resource)!;
+                  return !node.display?.hidden;
+                })
+                .map((connection) => {
+                  const node = nodeMap.get(connection.resource)!;
+                  return {
+                    relationshipType: connection.relationship,
+                    node: {
+                      id: node.id,
+                      path: node.path,
+                      type: getResourceType(node, simulator),
+                    },
+                  };
+                }) ?? [],
+            outbound:
+              node.attributes?.["wing:resource:connections"]
+                ?.filter(({ direction, resource }) => {
+                  if (direction !== "outbound") {
+                    return;
+                  }
+                  const node = nodeMap.get(resource)!;
+                  return !node.display?.hidden;
+                })
+                .map((connection) => {
+                  const node = nodeMap.get(connection.resource)!;
+                  return {
+                    relationshipType: connection.relationship,
+                    node: {
+                      id: node.id,
+                      path: node.path,
+                      type: getResourceType(node, simulator),
+                    },
+                  };
+                }) ?? [],
+          }));
       }),
     "app.nodeBreadcrumbs": publicProcedure
       .input(
@@ -198,7 +217,13 @@ export const createAppRouter = () => {
           },
           inbound:
             node.attributes?.["wing:resource:connections"]
-              ?.filter(({ direction }) => direction === "inbound")
+              ?.filter(({ direction, resource }) => {
+                if (direction !== "inbound") {
+                  return;
+                }
+                const node = nodeMap.get(resource)!;
+                return !node.display?.hidden;
+              })
               .map((connection) => {
                 const node = nodeMap.get(connection.resource)!;
                 return {
@@ -209,7 +234,13 @@ export const createAppRouter = () => {
               }) ?? [],
           outbound:
             node.attributes?.["wing:resource:connections"]
-              ?.filter(({ direction }) => direction === "outbound")
+              ?.filter(({ direction, resource }) => {
+                if (direction !== "outbound") {
+                  return;
+                }
+                const node = nodeMap.get(resource)!;
+                return !node.display?.hidden;
+              })
               .map((connection) => {
                 const node = nodeMap.get(connection.resource)!;
                 return {
@@ -242,10 +273,15 @@ function createExplorerItemFromConstructTreeNode(
     id: node.path,
     label: node.id,
     type: getResourceType(node, simulator),
+    display: node.display,
     childItems: node.children
-      ? Object.values(node.children).map((node) =>
-          createExplorerItemFromConstructTreeNode(node, simulator),
-        )
+      ? Object.values(node.children)
+          .filter((node) => {
+            return !node.display?.hidden;
+          })
+          .map((node) =>
+            createExplorerItemFromConstructTreeNode(node, simulator),
+          )
       : undefined,
   };
 }

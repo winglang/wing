@@ -1,5 +1,11 @@
 import { ConstructInfo, ConstructTreeNode } from "./createSimulator.js";
 
+export interface NodeDisplay {
+  title?: string;
+  description?: string;
+  hidden?: boolean;
+}
+
 export interface Node {
   id: string;
   path: string;
@@ -16,6 +22,7 @@ export interface Node {
       } & Record<string, any>)
     | undefined;
   children: string[];
+  display?: NodeDisplay;
 }
 
 export interface ConstructTreeNodeRecord {
@@ -80,6 +87,7 @@ export function buildConstructTreeNodeMap(node: ConstructTreeNode) {
       ),
       attributes: node.attributes,
       constructInfo: node.constructInfo,
+      display: node.display,
     };
 
     if (!parent) {

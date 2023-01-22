@@ -3,7 +3,7 @@ import * as path from "node:path";
 
 import { Simulator, SimulatorProps } from "@winglang/wingsdk/lib/testing";
 
-import { BaseResourceSchema } from "../wingsdk.js";
+import { NodeDisplay } from "./constructTreeNodeMap.js";
 
 const TREE_FILE_PATH = "tree.json";
 
@@ -15,6 +15,7 @@ export interface ConstructTreeNode {
   readonly path: string;
   readonly children?: { [key: string]: ConstructTreeNode };
   readonly attributes?: { [key: string]: any };
+  readonly display?: NodeDisplay;
 
   /**
    * Information on the construct class that led to this node, if available
