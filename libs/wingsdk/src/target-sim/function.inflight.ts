@@ -49,7 +49,13 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       // https://stackoverflow.com/questions/59049140/is-it-possible-to-make-all-of-node-js-globals-available-in-nodes-vm-context
       fs: fs,
       path: path_,
-      process: process,
+      process: {
+        ...process,
+        // override process.exit to throw an exception instead of exiting the process
+        exit: () => {
+            throw new Error("process.exit() was called");
+        }
+      },
 
       // explicitly DO NOT propagate `console` because inflight
       // function bind console.log to the global $logger object.
