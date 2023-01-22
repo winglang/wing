@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Phase, Symbol, VariableKind},
+	ast::{Phase, Symbol},
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, symbol_env::SymbolEnv},
@@ -195,7 +195,7 @@ impl<'a> JsiiImporter<'a> {
 					SymbolKind::Namespace(Namespace {
 						name: namespace_name.to_string(),
 						hidden: namespace_name != self.module_name,
-						env: SymbolEnv::new(None, self.wing_types.void(), false, self.env.flight, 0),
+						env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
 					}),
 					StatementIdx::Top,
 				)
@@ -246,6 +246,7 @@ impl<'a> JsiiImporter<'a> {
 			None,
 			self.wing_types.void(),
 			true,
+			false,
 			self.env.flight,
 			self.import_statement_idx,
 		);
@@ -257,6 +258,7 @@ impl<'a> JsiiImporter<'a> {
 				None,
 				self.wing_types.void(),
 				true,
+				false,
 				struct_env.flight,
 				self.import_statement_idx,
 			), // Dummy env, will be replaced below
@@ -335,7 +337,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-						SymbolKind::Variable(method_sig, VariableKind::Let),
+						SymbolKind::make_variable(method_sig, false),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -364,7 +366,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::Variable(wing_type, VariableKind::Let),
+						SymbolKind::make_variable(wing_type, matches!(p.immutable, Some(true))),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -461,7 +463,7 @@ impl<'a> JsiiImporter<'a> {
 		};
 
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), true, self.env.flight, 0);
+		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), true, false, self.env.flight, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -504,7 +506,7 @@ impl<'a> JsiiImporter<'a> {
 			.define(&new_type_symbol, SymbolKind::Type(new_type), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), true, self.env.flight, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), true, false, self.env.flight, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -533,7 +535,7 @@ impl<'a> JsiiImporter<'a> {
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
-				SymbolKind::Variable(method_sig, VariableKind::Let),
+				SymbolKind::make_variable(method_sig, false),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)

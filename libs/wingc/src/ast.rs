@@ -134,7 +134,9 @@ pub struct FunctionSignature {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	pub parameter_names: Vec<Symbol>, // TODO: move into FunctionSignature and make optional
+	// List of names of function parameters and whether they are reassignable (`var`) or not.
+	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
+
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 	#[derivative(Debug = "ignore")]
@@ -143,7 +145,9 @@ pub struct FunctionDefinition {
 
 #[derive(Debug)]
 pub struct Constructor {
-	pub parameters: Vec<Symbol>,
+	// List of names of constructor parameters and whether they are reassignable (`var`) or not.
+	pub parameters: Vec<(Symbol, bool)>,
+
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 }
@@ -181,7 +185,7 @@ pub enum StmtKind {
 		identifier: Option<Symbol>,
 	},
 	VariableDef {
-		kind: VariableKind,
+		reassignable: bool,
 		var_name: Symbol,
 		initial_value: Expr,
 		type_: Option<Type>,
@@ -226,16 +230,11 @@ pub enum StmtKind {
 	},
 }
 
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum VariableKind {
-	Let,
-	Var,
-}
-
 #[derive(Debug)]
 pub struct ClassMember {
 	pub name: Symbol,
 	pub member_type: Type,
+	pub reassignable: bool,
 	pub flight: Phase,
 }
 
