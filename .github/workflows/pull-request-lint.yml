@@ -28,6 +28,7 @@ jobs:
             build
             repo
             playground
+            vscode
           types: |-
             feat
             fix
