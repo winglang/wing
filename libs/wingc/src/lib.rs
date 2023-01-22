@@ -48,6 +48,43 @@ pub struct CompilerOutput {
 	pub diagnostics: Diagnostics,
 }
 
+unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
+	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
+	String::from_utf8_unchecked(slice.to_vec())
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_malloc(size: u32) -> *mut u8 {
+	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
+	std::alloc::alloc(layout)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_free(ptr: u32, size: u32) {
+	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
+	std::alloc::dealloc(ptr as *mut u8, layout);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
+	let args = ptr_to_string(ptr, len);
+
+	let split = args.split(";").collect::<Vec<&str>>();
+	let source_file = split[0];
+	let output_dir = split.get(1).map(|s| *s);
+
+	let results = compile(source_file, output_dir);
+	if let Err(mut err) = results {
+		// Sort error messages by line number (ascending)
+		err.sort_by(|a, b| a.cmp(&b));
+		eprintln!(
+			"Compilation failed with {} errors\n{}",
+			err.len(),
+			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
+		);
+	}
+}
+
 pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();

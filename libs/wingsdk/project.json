@@ -6,7 +6,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npm run build",
+        "command": "npm run compile",
         "cwd": "libs/wingsdk"
       }
     },
