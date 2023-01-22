@@ -1742,6 +1742,7 @@ let function_props = cloud.FunctionProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.FunctionProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.FunctionProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 
 ---
 
@@ -1755,6 +1756,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.FunctionProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* std.Duration
+- *Default:* 1m
+
+The maximum amount of time the function can run.
 
 ---
 
@@ -1970,6 +1984,7 @@ let queue_on_message_props = cloud.QueueOnMessageProps{ ... }
 | **Name** | **Type** | **Description** |
 | --- | --- | --- |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.env">env</a></code> | <code>MutMap&lt;str&gt;</code> | Environment variables to pass to the function. |
+| <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.timeout">timeout</a></code> | <code>std.Duration</code> | The maximum amount of time the function can run. |
 | <code><a href="#@winglang/sdk.cloud.QueueOnMessageProps.property.batchSize">batch_size</a></code> | <code>num</code> | The maximum number of messages to send to subscribers at once. |
 
 ---
@@ -1984,6 +1999,19 @@ env: MutMap<str>;
 - *Default:* No environment variables.
 
 Environment variables to pass to the function.
+
+---
+
+##### `timeout`<sup>Optional</sup> <a name="timeout" id="@winglang/sdk.cloud.QueueOnMessageProps.property.timeout"></a>
+
+```wing
+timeout: Duration;
+```
+
+- *Type:* std.Duration
+- *Default:* 1m
+
+The maximum amount of time the function can run.
 
 ---
 
