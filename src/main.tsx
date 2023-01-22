@@ -23,6 +23,7 @@ const main = ({
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {
+        networkMode: "offlineFirst",
         refetchOnWindowFocus: false,
       },
     },
