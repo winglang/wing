@@ -48,13 +48,6 @@ pub struct CompilerOutput {
 	pub diagnostics: Diagnostics,
 }
 
-// Hack needed for some WASM related reason
-#[cfg(target_arch = "wasm32")]
-#[no_mangle]
-pub extern "C" fn _start() -> i32 {
-	0
-}
-
 unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
 	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
 	String::from_utf8_unchecked(slice.to_vec())
