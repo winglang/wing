@@ -4,7 +4,7 @@ id: workflows
 keywords: [Wing contributors, contributors, workflows]
 ---
 
-This topic includes a description of common development workflows for thw Wing project.
+This topic includes a description of common development workflows for the Wing project.
 
 ## Environment Setup
 
