@@ -11,7 +11,8 @@ This topic includes a description of common development workflows for the Wing p
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-* [Node.js] version 18.x or above (we recommend [volta])
+* [Node.js] version 18.x (we recommend [volta]) (currently npm 9 is [not
+  supported](https://github.com/winglang/wing/issues/1103))
 * [Rust]
 * [AWS CLI] (only needed for integration tests - make sure to do the setup part to create
   credentials)
