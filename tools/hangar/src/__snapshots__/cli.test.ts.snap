@@ -169,7 +169,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_func_Bucket_3CE0562C.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
         "s3_key": "\${aws_s3_object.root_func_S3Object_F6163647.key}",
       },
       "root_strtostr_05420EE8": {
@@ -188,26 +188,28 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_strtostr_IamRole_305ACAF8.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_strtostr_Bucket_B3EC21FA.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_strtostr_Code_5BA38746.bucket}",
         "s3_key": "\${aws_s3_object.root_strtostr_S3Object_C6E06A09.key}",
       },
     },
     "aws_s3_bucket": {
-      "root_func_Bucket_3CE0562C": {
+      "root_func_Code_58BA0E0E": {
         "//": {
           "metadata": {
-            "path": "root/func/Bucket",
-            "uniqueId": "root_func_Bucket_3CE0562C",
+            "path": "root/func/Code",
+            "uniqueId": "root_func_Code_58BA0E0E",
           },
         },
+        "bucket_prefix": "code-c80d7959-",
       },
-      "root_strtostr_Bucket_B3EC21FA": {
+      "root_strtostr_Code_5BA38746": {
         "//": {
           "metadata": {
-            "path": "root/str_to_str/Bucket",
-            "uniqueId": "root_strtostr_Bucket_B3EC21FA",
+            "path": "root/str_to_str/Code",
+            "uniqueId": "root_strtostr_Code_5BA38746",
           },
         },
+        "bucket_prefix": "code-c8b8906a-",
       },
     },
     "aws_s3_object": {
@@ -218,7 +220,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
             "uniqueId": "root_func_S3Object_F6163647",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_func_Bucket_3CE0562C.bucket}",
+        "bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -371,18 +373,19 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
       },
     },
     "aws_s3_bucket": {
-      "root_test_Bucket_2BBF14D4": {
+      "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Bucket",
-            "uniqueId": "root_test_Bucket_2BBF14D4",
+            "path": "root/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
           },
         },
+        "bucket_prefix": "code-c883c33b-",
       },
     },
     "aws_s3_object": {
@@ -393,7 +396,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -545,7 +548,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
       },
     },
@@ -557,15 +560,16 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucket-c87175e7",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
-      "root_test_Bucket_2BBF14D4": {
+      "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Bucket",
-            "uniqueId": "root_test_Bucket_2BBF14D4",
+            "path": "root/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
           },
         },
+        "bucket_prefix": "code-c883c33b-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -609,7 +613,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -755,18 +759,19 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
       },
     },
     "aws_s3_bucket": {
-      "root_cloudFunction_Bucket_245CAEB7": {
+      "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Bucket",
-            "uniqueId": "root_cloudFunction_Bucket_245CAEB7",
+            "path": "root/cloud.Function/Code",
+            "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
+        "bucket_prefix": "code-c8d4206f-",
       },
     },
     "aws_s3_object": {
@@ -777,7 +782,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudFunction_S3Object_C8435368",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -937,7 +942,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
       },
     },
@@ -949,15 +954,16 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucket-c87175e7",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
-      "root_test_Bucket_2BBF14D4": {
+      "root_test_Code_2D131EC2": {
         "//": {
           "metadata": {
-            "path": "root/test/Bucket",
-            "uniqueId": "root_test_Bucket_2BBF14D4",
+            "path": "root/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
           },
         },
+        "bucket_prefix": "code-c883c33b-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -1001,7 +1007,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
             "uniqueId": "root_test_S3Object_A16CD789",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_test_Bucket_2BBF14D4.bucket}",
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -1227,7 +1233,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_AnotherFunction_IamRole_09A4D8EF.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_AnotherFunction_Bucket_A1A8B652.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_AnotherFunction_Code_B0183137.bucket}",
         "s3_key": "\${aws_s3_object.root_AnotherFunction_S3Object_5AD7E879.key}",
       },
       "root_cloudFunction_6A57BA0A": {
@@ -1249,7 +1255,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
       },
       "root_cloudQueueOnMessagee46e5cb7_C394DE2A": {
@@ -1271,18 +1277,19 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
       },
     },
     "aws_s3_bucket": {
-      "root_AnotherFunction_Bucket_A1A8B652": {
+      "root_AnotherFunction_Code_B0183137": {
         "//": {
           "metadata": {
-            "path": "root/AnotherFunction/Bucket",
-            "uniqueId": "root_AnotherFunction_Bucket_A1A8B652",
+            "path": "root/AnotherFunction/Code",
+            "uniqueId": "root_AnotherFunction_Code_B0183137",
           },
         },
+        "bucket_prefix": "code-c8326137-",
       },
       "root_PrivateBucket_82B4DCC5": {
         "//": {
@@ -1291,7 +1298,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_PrivateBucket_82B4DCC5",
           },
         },
-        "bucket": "privatebucket-c8a9b08c",
+        "bucket_prefix": "privatebucket-c8a9b08c-",
       },
       "root_PublicBucket_73AE6C59": {
         "//": {
@@ -1300,7 +1307,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_PublicBucket_73AE6C59",
           },
         },
-        "bucket": "publicbucket-c8fea5d9",
+        "bucket_prefix": "publicbucket-c8fea5d9-",
       },
       "root_cloudBucket_4F3C4F53": {
         "//": {
@@ -1309,23 +1316,25 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucket-c87175e7",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
-      "root_cloudFunction_Bucket_245CAEB7": {
+      "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Bucket",
-            "uniqueId": "root_cloudFunction_Bucket_245CAEB7",
+            "path": "root/cloud.Function/Code",
+            "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
+        "bucket_prefix": "code-c8d4206f-",
       },
-      "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F": {
+      "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Bucket",
-            "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F",
+            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Code",
+            "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0",
           },
         },
+        "bucket_prefix": "code-c8b80a9a-",
       },
     },
     "aws_s3_bucket_policy": {
@@ -1426,7 +1435,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
             "uniqueId": "root_AnotherFunction_S3Object_5AD7E879",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_AnotherFunction_Bucket_A1A8B652.bucket}",
+        "bucket": "\${aws_s3_bucket.root_AnotherFunction_Code_B0183137.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -1542,7 +1551,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket1_3A77B9B4",
           },
         },
-        "bucket": "bucket1-c81ed215",
+        "bucket_prefix": "bucket1-c81ed215-",
       },
       "root_bucket2_E39F70EE": {
         "//": {
@@ -1551,7 +1560,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket2_E39F70EE",
           },
         },
-        "bucket": "bucket2-c83a0be6",
+        "bucket_prefix": "bucket2-c83a0be6-",
       },
       "root_bucket3_A0C568EA": {
         "//": {
@@ -1560,7 +1569,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
             "uniqueId": "root_bucket3_A0C568EA",
           },
         },
-        "bucket": "bucket3-c8b6c706",
+        "bucket_prefix": "bucket3-c8b6c706-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -2043,7 +2052,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
       },
     },
@@ -2055,15 +2064,16 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucket-c87175e7",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
-      "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F": {
+      "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Bucket",
-            "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F",
+            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Code",
+            "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0",
           },
         },
+        "bucket_prefix": "code-c8b80a9a-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -2107,7 +2117,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -2350,7 +2360,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessagee46e5cb7_IamRole_D8F85094.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B.key}",
       },
     },
@@ -2362,15 +2372,16 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucket-c87175e7",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
-      "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F": {
+      "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Bucket",
-            "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F",
+            "path": "root/cloud.Queue-OnMessage-e46e5cb7/Code",
+            "uniqueId": "root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0",
           },
         },
+        "bucket_prefix": "code-c8b80a9a-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -2414,7 +2425,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudQueueOnMessagee46e5cb7_S3Object_E583CB6B",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Bucket_AA6B332F.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessagee46e5cb7_Code_A7B6C6A0.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -2594,7 +2605,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
             "uniqueId": "root_bucket1_3A77B9B4",
           },
         },
-        "bucket": "bucket1-c81ed215",
+        "bucket_prefix": "bucket1-c81ed215-",
       },
       "root_bucket2_E39F70EE": {
         "//": {
@@ -2603,7 +2614,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
             "uniqueId": "root_bucket2_E39F70EE",
           },
         },
-        "bucket": "bucket2-c83a0be6",
+        "bucket_prefix": "bucket2-c83a0be6-",
       },
       "root_bucket3_A0C568EA": {
         "//": {
@@ -2612,7 +2623,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
             "uniqueId": "root_bucket3_A0C568EA",
           },
         },
-        "bucket": "bucket3-c8b6c706",
+        "bucket_prefix": "bucket3-c8b6c706-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -2921,7 +2932,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudFunction_IamRole_DAEC3578.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudFunction_S3Object_C8435368.key}",
       },
     },
@@ -2933,15 +2944,16 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
-        "bucket": "cloud.bucket-c87175e7",
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
-      "root_cloudFunction_Bucket_245CAEB7": {
+      "root_cloudFunction_Code_2F6A7948": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Function/Bucket",
-            "uniqueId": "root_cloudFunction_Bucket_245CAEB7",
+            "path": "root/cloud.Function/Code",
+            "uniqueId": "root_cloudFunction_Code_2F6A7948",
           },
         },
+        "bucket_prefix": "code-c8d4206f-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -2985,7 +2997,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudFunction_S3Object_C8435368",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudFunction_Bucket_245CAEB7.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudFunction_Code_2F6A7948.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -3555,18 +3567,19 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_cloudQueueOnMessageb3f3d188_IamRole_2EDE9980.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Bucket_195CD3F5.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Code_4D451A84.bucket}",
         "s3_key": "\${aws_s3_object.root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0.key}",
       },
     },
     "aws_s3_bucket": {
-      "root_cloudQueueOnMessageb3f3d188_Bucket_195CD3F5": {
+      "root_cloudQueueOnMessageb3f3d188_Code_4D451A84": {
         "//": {
           "metadata": {
-            "path": "root/cloud.Queue-OnMessage-b3f3d188/Bucket",
-            "uniqueId": "root_cloudQueueOnMessageb3f3d188_Bucket_195CD3F5",
+            "path": "root/cloud.Queue-OnMessage-b3f3d188/Code",
+            "uniqueId": "root_cloudQueueOnMessageb3f3d188_Code_4D451A84",
           },
         },
+        "bucket_prefix": "code-c8b6a338-",
       },
     },
     "aws_s3_object": {
@@ -3577,7 +3590,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudQueueOnMessageb3f3d188_S3Object_18BDF7F0",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Bucket_195CD3F5.bucket}",
+        "bucket": "\${aws_s3_bucket.root_cloudQueueOnMessageb3f3d188_Code_4D451A84.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
