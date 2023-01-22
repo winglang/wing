@@ -5,6 +5,7 @@ import {
   LOGGER_TYPE,
   QUEUE_TYPE,
   TOPIC_TYPE,
+  WEBAPP_TYPE
 } from "../cloud";
 import { BaseResourceSchema } from "./schema";
 
@@ -75,5 +76,12 @@ export interface CounterSchema extends BaseResourceSchema {
   readonly props: {
     /** The initial value of the counter. */
     readonly initial: number;
+  };
+}
+
+export interface WebAppSchema extends BaseResourceSchema {
+  readonly type: typeof WEBAPP_TYPE;
+  readonly props: {
+    readonly dist: string;
   };
 }

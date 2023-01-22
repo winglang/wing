@@ -1,0 +1,116 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`foo 1`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/WebApp",
+        "props": Object {
+          "dist": "/var/folders/vm/cm444l3124j_vh_8rkhz6kqm0000gn/T/wingsdk.hqj04t/webapps/c88eb3bd7278bed1b3d88540951c1b6b5920325e5d",
+        },
+        "type": "wingsdk.cloud.WebApp",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "WebApp": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "id": "WebApp",
+          "path": "root/WebApp",
+        },
+        "WebClient": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "WebClient",
+          "path": "root/WebClient",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.130",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+  "webapps/c88eb3bd7278bed1b3d88540951c1b6b5920325e5d/client.js": "
+    const exports = {};
+
+    exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle() {
+        alert(\\"hello wing in your browser\\");
+      }
+    };
+  }())({}).handle(event);
+};
+
+
+    exports.handler().then(() => console.log(\\"done\\"));
+    ",
+  "webapps/c88eb3bd7278bed1b3d88540951c1b6b5920325e5d/index.html": "<!DOCTYPE html>
+      <html>
+        <head>
+          <title>root/WebApp</title>
+        </head>
+        <body>
+          <h1>root/WebApp</h1>
+          <script src=\\"./client.js\\"></script>
+        </body>
+      </html>
+    ",
+}
+`;

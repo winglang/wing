@@ -1048,6 +1048,180 @@ with a fresh copy without any consequences.
 ---
 
 
+### WebApp <a name="WebApp" id="@winglang/sdk.cloud.WebApp"></a>
+
+**Inflight client:** [@winglang/sdk.cloud.IWebAppClient](#@winglang/sdk.cloud.IWebAppClient)
+
+Represents a webapp.
+
+#### Initializers <a name="Initializers" id="@winglang/sdk.cloud.WebApp.Initializer"></a>
+
+```wing
+bring cloud;
+
+new cloud.WebApp(client: ~Inflight, props?: WebAppProps)
+```
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebApp.Initializer.parameter.client">client</a></code> | <code>core.Inflight</code> | *No description.* |
+| <code><a href="#@winglang/sdk.cloud.WebApp.Initializer.parameter.props">props</a></code> | <code>cloud.WebAppProps</code> | *No description.* |
+
+---
+
+##### `client`<sup>Required</sup> <a name="client" id="@winglang/sdk.cloud.WebApp.Initializer.parameter.client"></a>
+
+- *Type:* core.Inflight
+
+---
+
+##### `props`<sup>Optional</sup> <a name="props" id="@winglang/sdk.cloud.WebApp.Initializer.parameter.props"></a>
+
+- *Type:* cloud.WebAppProps
+
+---
+
+#### Methods <a name="Methods" id="Methods"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebApp.toString">to_string</a></code> | Returns a string representation of this construct. |
+
+---
+
+##### `to_string` <a name="to_string" id="@winglang/sdk.cloud.WebApp.toString"></a>
+
+```wing
+to_string(): str
+```
+
+Returns a string representation of this construct.
+
+#### Static Functions <a name="Static Functions" id="Static Functions"></a>
+
+| **Name** | **Description** |
+| --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebApp.isConstruct">is_construct</a></code> | Checks if `x` is a construct. |
+| <code><a href="#@winglang/sdk.cloud.WebApp.addConnection">add_connection</a></code> | Adds a connection between two resources. |
+
+---
+
+##### `is_construct` <a name="is_construct" id="@winglang/sdk.cloud.WebApp.isConstruct"></a>
+
+```wing
+bring cloud;
+
+cloud.WebApp.is_construct(x: any)
+```
+
+Checks if `x` is a construct.
+
+Use this method instead of `instanceof` to properly detect `Construct`
+instances, even when the construct library is symlinked.
+
+Explanation: in JavaScript, multiple copies of the `constructs` library on
+disk are seen as independent, completely different libraries. As a
+consequence, the class `Construct` in each copy of the `constructs` library
+is seen as a different class, and an instance of one class will not test as
+`instanceof` the other class. `npm install` will not create installations
+like this, but users may manually symlink construct libraries together or
+use a monorepo tool: in those cases, multiple copies of the `constructs`
+library can be accidentally installed, and `instanceof` will behave
+unpredictably. It is safest to avoid using `instanceof`, and using
+this type-testing method instead.
+
+###### `x`<sup>Required</sup> <a name="x" id="@winglang/sdk.cloud.WebApp.isConstruct.parameter.x"></a>
+
+- *Type:* any
+
+Any object.
+
+---
+
+##### `add_connection` <a name="add_connection" id="@winglang/sdk.cloud.WebApp.addConnection"></a>
+
+```wing
+bring cloud;
+
+cloud.WebApp.add_connection(props: AddConnectionProps)
+```
+
+Adds a connection between two resources.
+
+A connection is a piece of
+metadata describing how one resource is related to another resource. This
+metadata is recorded in the tree.json file.
+
+###### `props`<sup>Required</sup> <a name="props" id="@winglang/sdk.cloud.WebApp.addConnection.parameter.props"></a>
+
+- *Type:* core.AddConnectionProps
+
+---
+
+#### Properties <a name="Properties" id="Properties"></a>
+
+| **Name** | **Type** | **Description** |
+| --- | --- | --- |
+| <code><a href="#@winglang/sdk.cloud.WebApp.property.node">node</a></code> | <code>constructs.Node</code> | The tree node. |
+| <code><a href="#@winglang/sdk.cloud.WebApp.property.display">display</a></code> | <code>core.Display</code> | Information on how to display a resource in the UI. |
+| <code><a href="#@winglang/sdk.cloud.WebApp.property.stateful">stateful</a></code> | <code>bool</code> | Whether a resource is stateful, i.e. it stores information that is not defined by your application. |
+| <code><a href="#@winglang/sdk.cloud.WebApp.property.dist">dist</a></code> | <code>str</code> | The local path to the web application. |
+
+---
+
+##### `node`<sup>Required</sup> <a name="node" id="@winglang/sdk.cloud.WebApp.property.node"></a>
+
+```wing
+node: Node;
+```
+
+- *Type:* constructs.Node
+
+The tree node.
+
+---
+
+##### `display`<sup>Required</sup> <a name="display" id="@winglang/sdk.cloud.WebApp.property.display"></a>
+
+```wing
+display: Display;
+```
+
+- *Type:* core.Display
+
+Information on how to display a resource in the UI.
+
+---
+
+##### `stateful`<sup>Required</sup> <a name="stateful" id="@winglang/sdk.cloud.WebApp.property.stateful"></a>
+
+```wing
+stateful: bool;
+```
+
+- *Type:* bool
+
+Whether a resource is stateful, i.e. it stores information that is not defined by your application.
+
+A non-stateful resource does not remember information about past
+transactions or events, and can typically be replaced by a cloud provider
+with a fresh copy without any consequences.
+
+---
+
+##### `dist`<sup>Required</sup> <a name="dist" id="@winglang/sdk.cloud.WebApp.property.dist"></a>
+
+```wing
+dist: str;
+```
+
+- *Type:* str
+
+The local path to the web application.
+
+---
+
+
 ## Structs <a name="Structs" id="Structs"></a>
 
 ### AddConnectionProps <a name="AddConnectionProps" id="@winglang/sdk.core.AddConnectionProps"></a>
@@ -2115,6 +2289,19 @@ let topic_props = cloud.TopicProps{ ... }
 ```
 
 
+### WebAppProps <a name="WebAppProps" id="@winglang/sdk.cloud.WebAppProps"></a>
+
+Props for `WebApp`.
+
+#### Initializer <a name="Initializer" id="@winglang/sdk.cloud.WebAppProps.Initializer"></a>
+
+```wing
+bring cloud;
+
+let web_app_props = cloud.WebAppProps{ ... }
+```
+
+
 ## Classes <a name="Classes" id="Classes"></a>
 
 ### DependencyGraph <a name="DependencyGraph" id="@winglang/sdk.core.DependencyGraph"></a>
@@ -3032,7 +3219,7 @@ Information on how to display a resource in the UI.
 
 ### IInspectable <a name="IInspectable" id="@winglang/sdk.core.IInspectable"></a>
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, cloud.WebApp, cloud.WebAppBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IInspectable, core.IResource
 
 Interface for examining a construct and exposing metadata.
 
@@ -3207,7 +3394,7 @@ Function that will be called when a message is received from the queue.
 
 - *Extends:* core.IInspectable, constructs.IConstruct
 
-- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
+- *Implemented By:* cloud.Bucket, cloud.BucketBase, cloud.Counter, cloud.CounterBase, cloud.Function, cloud.FunctionBase, cloud.Logger, cloud.LoggerBase, cloud.Queue, cloud.QueueBase, cloud.Topic, cloud.TopicBase, cloud.WebApp, cloud.WebAppBase, core.Inflight, core.Resource, sim.Bucket, sim.Counter, sim.Function, sim.Logger, sim.Queue, sim.Topic, tfaws.Bucket, tfaws.Counter, tfaws.Function, tfaws.Queue, tfazure.Bucket, cloud.IFunctionHandler, cloud.IQueueOnMessageHandler, cloud.ITopicOnMessageHandler, core.IInflightHost, core.IResource
 
 Abstract interface for `Resource`.
 

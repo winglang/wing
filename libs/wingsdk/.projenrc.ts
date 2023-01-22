@@ -41,11 +41,13 @@ const project = new cdk.JsiiProject({
     "@azure/core-paging",
     // simulator dependencies
     "tar",
+    "http-server",
   ],
   devDeps: [
     "@winglang/wing-api-checker@file:../../apps/wing-api-checker",
     "@types/aws-lambda",
     "@types/debug",
+    "@types/http-server",
     "@types/fs-extra",
     "@types/tar",
     "aws-sdk-client-mock",

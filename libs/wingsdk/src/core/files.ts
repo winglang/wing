@@ -69,7 +69,7 @@ export class Files {
 
     this.saveStateFile(newFiles);
 
-    for (const filePath of oldFiles) {
+    for (const filePath of Array.from(oldFiles)) {
       rmSync(join(outdir, filePath));
     }
   }

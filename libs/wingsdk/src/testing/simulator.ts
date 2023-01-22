@@ -180,6 +180,13 @@ export class Simulator {
     this._traceSubscribers = new Array();
   }
 
+  /**
+   * The path to the simulator (.wsim) file.
+   */
+  public get simfile() {
+    return this._simfile;
+  }
+
   private _loadApp(simfile: string): { assetsDir: string; config: any } {
     // create a temporary directory to store extracted files
     const workdir = mkdtemp();

@@ -13,6 +13,10 @@
       "type": "build"
     },
     {
+      "name": "@types/http-server",
+      "type": "build"
+    },
+    {
       "name": "@types/jest",
       "version": "^27",
       "type": "build"
@@ -217,6 +221,10 @@
     },
     {
       "name": "esbuild-wasm",
+      "type": "bundled"
+    },
+    {
+      "name": "http-server",
       "type": "bundled"
     },
     {

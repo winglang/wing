@@ -7,6 +7,7 @@ import { Logger } from "./logger.inflight";
 import { Queue } from "./queue.inflight";
 import { ISimulatorResourceInstance } from "./resource";
 import { Topic } from "./topic.inflight";
+import { WebApp } from "./webapp.inflight";
 
 export class DefaultSimulatorFactory implements ISimulatorFactory {
   public resolve(
@@ -27,6 +28,8 @@ export class DefaultSimulatorFactory implements ISimulatorFactory {
         return new Counter(props, context);
       case cloud.TOPIC_TYPE:
         return new Topic(props, context);
+      case cloud.WEBAPP_TYPE:
+        return new WebApp(props, context);
       default:
         throw new Error(`Type ${type} not implemented.`);
     }
