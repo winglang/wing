@@ -1761,7 +1761,7 @@ impl<'a> TypeChecker<'a> {
 					SymbolKind::Variable(v, kind) => {
 						// Replace type params in function signatures
 						if let Some(sig) = v.as_function_sig() {
-							let new_return_type = if sig.return_type.is_subtype_of(original_type_param) {
+							let new_return_type = if sig.return_type.is_same_type_as(original_type_param) {
 								new_type_arg
 							} else {
 								sig.return_type
@@ -1771,7 +1771,7 @@ impl<'a> TypeChecker<'a> {
 								.args
 								.iter()
 								.map(|arg| {
-									if arg.is_subtype_of(original_type_param) {
+									if arg.is_same_type_as(original_type_param) {
 										new_type_arg
 									} else {
 										*arg
@@ -1800,7 +1800,7 @@ impl<'a> TypeChecker<'a> {
 								_ => {}
 							}
 						} else if let Some(var) = symbol.as_variable() {
-							let new_var_type = if var.is_subtype_of(original_type_param) {
+							let new_var_type = if var.is_same_type_as(original_type_param) {
 								new_type_arg
 							} else {
 								var
