@@ -6,7 +6,7 @@ exports[`wing compile --target tf-aws anon_function.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -30,7 +30,7 @@ exports[`wing compile --target tf-aws anon_function.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -77,7 +77,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -252,7 +252,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -311,7 +311,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -429,7 +429,7 @@ exports[`wing compile --target tf-aws capture_containers.w > manifest.json 1`] =
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -485,7 +485,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -641,7 +641,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > manifest.json 1`] = 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -697,7 +697,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -820,7 +820,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > manifest.json 1`] =
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -878,7 +878,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -1036,7 +1036,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > manifest.jso
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -1097,7 +1097,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -1464,7 +1464,7 @@ exports[`wing compile --target tf-aws captures.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -1533,7 +1533,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -1679,7 +1679,7 @@ exports[`wing compile --target tf-aws container_types.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -1748,7 +1748,7 @@ exports[`wing compile --target tf-aws enums.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -1772,7 +1772,7 @@ exports[`wing compile --target tf-aws enums.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -1818,7 +1818,7 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > cdk.tf.js
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -1842,7 +1842,7 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > manifest.
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -1887,7 +1887,7 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > cdk.t
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -1911,7 +1911,7 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > manif
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -1956,7 +1956,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -2145,7 +2145,7 @@ exports[`wing compile --target tf-aws file_counter.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -2204,7 +2204,7 @@ exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -2228,7 +2228,7 @@ exports[`wing compile --target tf-aws forward_decl.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -2284,7 +2284,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -2452,7 +2452,7 @@ exports[`wing compile --target tf-aws hello.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -2506,7 +2506,7 @@ exports[`wing compile --target tf-aws identical_inflights.w > cdk.tf.json 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -2535,7 +2535,7 @@ exports[`wing compile --target tf-aws identical_inflights.w > manifest.json 1`] 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -2587,7 +2587,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -2733,7 +2733,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > manifest.json 1`] 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -2802,7 +2802,7 @@ exports[`wing compile --target tf-aws primitive_methods.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -2826,7 +2826,7 @@ exports[`wing compile --target tf-aws primitive_methods.w > manifest.json 1`] = 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -2870,7 +2870,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3023,7 +3023,7 @@ exports[`wing compile --target tf-aws print.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -3071,7 +3071,7 @@ exports[`wing compile --target tf-aws reassignment.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3095,7 +3095,7 @@ exports[`wing compile --target tf-aws reassignment.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -3122,10 +3122,34 @@ class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"reassignment\\" });
   
+  class R
+  {
+  constructor() {
+    if (true) {
+      this.f = 1;
+      this.f1 = 0;
+    }
+  }
+  f;
+  f1;
+  inc = () => {
+    this.f = (this.f + 1);
+  }
+  }
   let x = 5;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 5)'\`)})((x === 5))};
   x = (x + 1);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(x === 6)'\`)})((x === 6))};
+  const r = new R(this,\\"R\\");
+  (r.inc());
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(r.f === 2)'\`)})((r.f === 2))};
+  const f = (arg) => {
+    arg = 0;
+    return arg;
+  };
+  const y = 1;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((f(y)) === 0)'\`)})(((f(y)) === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(y === 1)'\`)})((y === 1))};
 }
 }
 new MyApp().synth();"
@@ -3137,7 +3161,7 @@ exports[`wing compile --target tf-aws resource.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3161,7 +3185,7 @@ exports[`wing compile --target tf-aws resource.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -3209,7 +3233,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3233,7 +3257,7 @@ exports[`wing compile --target tf-aws statements_if.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -3279,7 +3303,7 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > cdk.t
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3303,7 +3327,7 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > manif
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -3343,7 +3367,7 @@ exports[`wing compile --target tf-aws std_containers.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3374,7 +3398,7 @@ exports[`wing compile --target tf-aws std_containers.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -3417,13 +3441,298 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.0",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_testget_IamRole_DD77F38A": {
+        "//": {
+          "metadata": {
+            "path": "root/test:get/IamRole",
+            "uniqueId": "root_testget_IamRole_DD77F38A",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+      "root_testput_IamRole_1BBF32A6": {
+        "//": {
+          "metadata": {
+            "path": "root/test:put/IamRole",
+            "uniqueId": "root_testput_IamRole_1BBF32A6",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_testget_IamRolePolicy_2CFB696B": {
+        "//": {
+          "metadata": {
+            "path": "root/test:get/IamRolePolicy",
+            "uniqueId": "root_testget_IamRolePolicy_2CFB696B",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testget_IamRole_DD77F38A.name}",
+      },
+      "root_testput_IamRolePolicy_98659F09": {
+        "//": {
+          "metadata": {
+            "path": "root/test:put/IamRolePolicy",
+            "uniqueId": "root_testput_IamRolePolicy_98659F09",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":[\\"s3:PutObject*\\",\\"s3:Abort*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:GetObject*\\",\\"s3:GetBucket*\\",\\"s3:List*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"},{\\"Action\\":[\\"s3:DeleteObject*\\",\\"s3:DeleteObjectVersion*\\",\\"s3:PutLifecycleConfiguration*\\"],\\"Resource\\":[\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}\\",\\"\${aws_s3_bucket.root_cloudBucket_4F3C4F53.arn}/*\\"],\\"Effect\\":\\"Allow\\"}]}",
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_testget_IamRolePolicyAttachment_1BD905A8": {
+        "//": {
+          "metadata": {
+            "path": "root/test:get/IamRolePolicyAttachment",
+            "uniqueId": "root_testget_IamRolePolicyAttachment_1BD905A8",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testget_IamRole_DD77F38A.name}",
+      },
+      "root_testput_IamRolePolicyAttachment_E73FB6BB": {
+        "//": {
+          "metadata": {
+            "path": "root/test:put/IamRolePolicyAttachment",
+            "uniqueId": "root_testput_IamRolePolicyAttachment_E73FB6BB",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_testget_D2443E25": {
+        "//": {
+          "metadata": {
+            "path": "root/test:get/Default",
+            "uniqueId": "root_testget_D2443E25",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "test-get-c8e58069",
+          },
+        },
+        "function_name": "test-get-c8e58069",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testget_IamRole_DD77F38A.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testget_Code_EC989716.bucket}",
+        "s3_key": "\${aws_s3_object.root_testget_S3Object_071392B9.key}",
+      },
+      "root_testput_449428F9": {
+        "//": {
+          "metadata": {
+            "path": "root/test:put/Default",
+            "uniqueId": "root_testput_449428F9",
+          },
+        },
+        "environment": {
+          "variables": {
+            "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+            "WING_FUNCTION_NAME": "test-put-c899ce9b",
+          },
+        },
+        "function_name": "test-put-c899ce9b",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
+        "s3_key": "\${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_cloudBucket_4F3C4F53": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Default",
+            "uniqueId": "root_cloudBucket_4F3C4F53",
+          },
+        },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
+      },
+      "root_testget_Code_EC989716": {
+        "//": {
+          "metadata": {
+            "path": "root/test:get/Code",
+            "uniqueId": "root_testget_Code_EC989716",
+          },
+        },
+        "bucket_prefix": "code-c8071909-",
+      },
+      "root_testput_Code_DE7653AD": {
+        "//": {
+          "metadata": {
+            "path": "root/test:put/Code",
+            "uniqueId": "root_testput_Code_DE7653AD",
+          },
+        },
+        "bucket_prefix": "code-c8ab7128-",
+      },
+    },
+    "aws_s3_bucket_public_access_block": {
+      "root_cloudBucket_PublicAccessBlock_319C1C2E": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/PublicAccessBlock",
+            "uniqueId": "root_cloudBucket_PublicAccessBlock_319C1C2E",
+          },
+        },
+        "block_public_acls": true,
+        "block_public_policy": true,
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "ignore_public_acls": true,
+        "restrict_public_buckets": true,
+      },
+    },
+    "aws_s3_bucket_server_side_encryption_configuration": {
+      "root_cloudBucket_Encryption_8ED0CD9C": {
+        "//": {
+          "metadata": {
+            "path": "root/cloud.Bucket/Encryption",
+            "uniqueId": "root_cloudBucket_Encryption_8ED0CD9C",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
+        "rule": [
+          {
+            "apply_server_side_encryption_by_default": {
+              "sse_algorithm": "AES256",
+            },
+          },
+        ],
+      },
+    },
+    "aws_s3_object": {
+      "root_testget_S3Object_071392B9": {
+        "//": {
+          "metadata": {
+            "path": "root/test:get/S3Object",
+            "uniqueId": "root_testget_S3Object_071392B9",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_testget_Code_EC989716.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws test_bucket.w > index.js 1`] = `
+"async handle(_) { const { b } = this; {
+  (await b.put(\\"hello.txt\\",\\"world\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.get(\\"hello.txt\\")) === \\"world\\")'\`)})(((await b.get(\\"hello.txt\\")) === \\"world\\"))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws test_bucket.w > index.js 2`] = `
+"async handle(_) { const { b } = this; {
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.list()).length === 0)'\`)})(((await b.list()).length === 0))};
+  (await b.put(\\"hello.txt\\",\\"world\\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((await b.list()).length === 1)'\`)})(((await b.list()).length === 1))};
+} };"
+`;
+
+exports[`wing compile --target tf-aws test_bucket.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.15.0",
+}
+`;
+
+exports[`wing compile --target tf-aws test_bucket.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"test_bucket\\" });
+  
+  const b = new cloud.Bucket(this,\\"cloud.Bucket\\");
+  new cloud.Function(this,\\"test:put\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.9f10a129b90bc1328dcb1e6194e3902931d1011d95e46825362ef5b06ec17380/index.js\\")),
+    bindings: {
+      resources: {
+        b: {
+          resource: b,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+      },
+      
+    }
+  }));
+  new cloud.Function(this,\\"test:get\\",new $stdlib.core.Inflight(this, \\"$Inflight2\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1b9abefaef8ce4230db863000273d2c12bacb97e33ac10e6c8b50341e415fdac/index.js\\")),
+    bindings: {
+      resources: {
+        b: {
+          resource: b,
+          ops: [\\"delete\\",\\"get\\",\\"list\\",\\"put\\"]
+        },
+      },
+      
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile --target tf-aws while.w > cdk.tf.json 1`] = `
 {
   "//": {
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3447,7 +3756,7 @@ exports[`wing compile --target tf-aws while.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
@@ -3492,7 +3801,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3625,7 +3934,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 

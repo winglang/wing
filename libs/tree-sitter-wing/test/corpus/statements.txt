@@ -76,7 +76,7 @@ return 1;
 Inflight closure
 ====================
 
-inflight (a: num, b: str?, c: bool) => {};
+inflight (a: num, b: str?, var c: bool) => {};
 
 ---
 
@@ -95,6 +95,7 @@ inflight (a: num, b: str?, c: bool) => {};
                     )
                 )
                 (parameter_definition
+                    reassignable: (reassignable)
                     name: (identifier)
                     type: (builtin_type)
                 )
