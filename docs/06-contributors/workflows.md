@@ -52,10 +52,11 @@ export NODE_OPTIONS=--stack-trace-limit=100
 export RUST_BACKTRACE=full
 ```
 
-Now, you can edit a source file anywhere across stack and run this:
+Now, you can edit a source file anywhere across the stack and run the compiler with arguments.
+For example:
 
 ```sh
-npx nx wing -- <wing cli arguments>
+npx nx wing -- test ../../examples/tests/valid/captures.w
 ```
 
 This runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
@@ -70,8 +71,8 @@ cd libs/wingc
 npx nx test
 ```
 
-The following command runs `wingc` on a file. This do all compilation steps except running the
-generated intermediate generated preflight javascript.
+The following command runs `wingc` on a file. This performs all the compilation steps, except th last one: running the
+generated intermediate preflight javascript. For those familiar with the CDK, it doesn't run the synth command in the end.
 
 ```sh
 npx nx dev -- <path to .w file>
