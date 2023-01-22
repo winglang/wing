@@ -6,8 +6,14 @@ assert(x == 6);
 
 resource R {
   var f: num;
+  f1: num;
   init() {
-    this.f = 1;
+    // Initialize fields in `init` but in an inner scope to make sure 
+    // we treat the special case of `this` access from init correctly at all scope levels
+    if true {
+      this.f = 1;
+      this.f1 = 0; // Access non-reassignable field from constructor is valid
+    }
   }
   
   inc() {

@@ -1900,9 +1900,13 @@ impl<'a> TypeChecker<'a> {
 				// Special case: if the object expression is a simple reference to `this` and we're inside the init function then
 				// we'll consider all properties as reassignable regardless of whether they're `var`.
 				let mut force_reassignable = false;
-				if let ExprKind::Reference(Reference::Identifier(Symbol { name, .. })) = &object.kind {
-					if name == "this" && env.is_init {
-						force_reassignable = true;
+				if let ExprKind::Reference(Reference::Identifier(symb)) = &object.kind {
+					if symb.name == "this" {
+						if let Ok((kind, info)) = env.lookup_ext(symb, Some(statement_idx)) {
+							// `this` resreved symbol should always be a variable
+							assert!(matches!(kind, SymbolKind::Variable(_)));
+							force_reassignable = info.init;
+						}
 					}
 				}
 

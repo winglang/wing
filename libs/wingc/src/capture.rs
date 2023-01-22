@@ -250,7 +250,7 @@ fn scan_captures_in_expression(
 				// the type checker.
 
 				if x.is_ok() {
-					let (var, f) = x.unwrap();
+					let (var, si) = x.unwrap();
 
 					if var.as_variable().is_none() {
 						diagnostics.push(Diagnostic {
@@ -262,7 +262,7 @@ fn scan_captures_in_expression(
 						let t = var.as_variable().unwrap()._type;
 
 						// if the identifier represents a preflight value, then capture it
-						if f == Phase::Preflight {
+						if si.flight == Phase::Preflight {
 							if var.is_reassignable() {
 								diagnostics.push(Diagnostic {
 									level: DiagnosticLevel::Error,
