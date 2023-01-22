@@ -6,7 +6,7 @@ use sha2::{Digest, Sha256};
 use crate::{
 	ast::{
 		ArgList, BinaryOperator, ClassMember, Expr, ExprKind, FunctionDefinition, InterpolatedStringPart, Literal, Phase,
-		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions, VariableKind,
+		Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
 	capture::CaptureKind,
 	utilities::snake_case_to_camel_case,
@@ -438,7 +438,7 @@ impl JSifier {
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, &func_def.parameter_names, &func_def.statements, phase),
+				Phase::Preflight => self.jsify_function(None, &func_def.parameters, &func_def.statements, phase),
 			},
 		}
 	}
@@ -466,15 +466,16 @@ impl JSifier {
 				)
 			}
 			StmtKind::VariableDef {
-				kind,
+				reassignable,
 				var_name,
 				initial_value,
 				type_: _,
 			} => {
 				let initial_value = self.jsify_expression(initial_value, phase);
-				return match kind {
-					VariableKind::Let => format!("const {} = {};", self.jsify_symbol(var_name), initial_value),
-					VariableKind::Var => format!("let {} = {};", self.jsify_symbol(var_name), initial_value),
+				return if *reassignable {
+					format!("let {} = {};", self.jsify_symbol(var_name), initial_value)
+				} else {
+					format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
 				};
 			}
 			StmtKind::ForLoop {
@@ -567,7 +568,7 @@ impl JSifier {
 						.map(|(n, m)| format!(
 							"{} = {}",
 							n.name,
-							self.jsify_function(None, &m.parameter_names, &m.statements, phase)
+							self.jsify_function(None, &m.parameters, &m.statements, phase)
 						))
 						.collect::<Vec<String>>()
 						.join("\n")
@@ -623,8 +624,8 @@ impl JSifier {
 
 	fn jsify_inflight_function(&self, func_def: &FunctionDefinition) -> String {
 		let mut parameter_list = vec![];
-		for p in func_def.parameter_names.iter() {
-			parameter_list.push(p.name.clone());
+		for p in func_def.parameters.iter() {
+			parameter_list.push(p.0.name.clone());
 		}
 		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
@@ -696,10 +697,10 @@ impl JSifier {
 		)
 	}
 
-	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope, phase: Phase) -> String {
+	fn jsify_function(&self, name: Option<&str>, parameters: &[(Symbol, bool)], body: &Scope, phase: Phase) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
-			parameter_list.push(self.jsify_symbol(p));
+			parameter_list.push(self.jsify_symbol(&p.0));
 		}
 
 		let (name, arrow) = match name {

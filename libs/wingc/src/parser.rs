@@ -9,7 +9,7 @@ use tree_sitter_traversal::{traverse, Order};
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
 	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
-	UnaryOperator, VariableKind,
+	UnaryOperator,
 };
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnostics, WingSpan};
 
@@ -183,14 +183,8 @@ impl Parser<'_> {
 					None
 				};
 
-				let kind = if let Some(_) = statement_node.child_by_field_name("reassignable") {
-					VariableKind::Var
-				} else {
-					VariableKind::Let
-				};
-
 				StmtKind::VariableDef {
-					kind,
+					reassignable: statement_node.child_by_field_name("reassignable").is_some(),
 					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
 					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 					type_,
@@ -316,11 +310,13 @@ impl Parser<'_> {
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
+					reassignable: class_element.child_by_field_name("reassignable").is_some(),
 					flight: Phase::Preflight,
 				}),
 				("inflight_class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
+					reassignable: class_element.child_by_field_name("reassignable").is_some(),
 					flight: Phase::Inflight,
 				}),
 				("constructor", _) => {
@@ -334,7 +330,7 @@ impl Parser<'_> {
 					}
 					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
 					constructor = Some(Constructor {
-						parameters: parameters.iter().map(|p| p.0.clone()).collect(),
+						parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
@@ -394,7 +390,7 @@ impl Parser<'_> {
 	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionDefinition {
-			parameter_names: parameters.iter().map(|p| p.0.clone()).collect(),
+			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
@@ -409,16 +405,23 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type)>> {
+	/// Builds a vector of all parameters defined in `parameter_list_node`.
+	///
+	/// # Returns
+	/// A vector of tuples for each parameter in the list. The tuples are the name, type and a bool letting
+	/// us know whether the parameter is reassignable or not respectively.
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type, bool)>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
 			if parameter_definition_node.is_extra() {
 				continue;
 			}
+
 			res.push((
 				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
 				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+				parameter_definition_node.child_by_field_name("reassignable").is_some(),
 			))
 		}
 

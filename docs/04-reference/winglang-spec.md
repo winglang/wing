@@ -419,6 +419,19 @@ Examples in the class section below.
 Assigning `var` to immutables of the same type is allowed. That is similar
 to assigning non `readonly`s to `readonly`s in TypeScript.
 
+By default function closure arguments are non-reassignable. By prefixing `var`
+to an argument definition you can make a re-assignable function argument:
+
+```ts
+// wing
+let f = (arg1: num, var arg2: num) => {
+  if (arg2 > 100) {
+    // We can reassign a value to arg2 since it's marked `var`
+    args2 = 100;
+  }
+}
+```
+
 [`▲ top`][top]
 
 ---
