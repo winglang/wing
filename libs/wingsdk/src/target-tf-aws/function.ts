@@ -140,6 +140,7 @@ export class Function extends cloud.FunctionBase {
       environment: {
         variables: Lazy.anyValue({ produce: () => this.env }) as any,
       },
+      timeout: props.timeout?.seconds,
     });
 
     this.arn = this.function.arn;
