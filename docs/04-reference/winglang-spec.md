@@ -885,8 +885,12 @@ The loop invariant in for loops is implicitly re-assignable (`var`).
 >   console.log(item);
 > }
 > // calling 0..100 does not allocate, just returns an iterator
-> function* iterator(lim) { let i = lim; while (i--) yield i; }
-> const iter = iterator(100);
+> function* iterator(start, end) {
+>   let i = start;
+>   while (i < end) yield i++;
+>   while (i > end) yield i--;
+> }
+> const iter = iterator(0, 100);
 > for (const val of iter) {
 >   console.log(val);
 > }
