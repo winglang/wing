@@ -52,8 +52,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
       process: {
         ...process,
         // override process.exit to throw an exception instead of exiting the process
-        exit: () => {
-            throw new Error("process.exit() was called");
+        exit: (code: number) => {
+            throw new Error("process.exit() was called with exit code " + code);
         }
       },
 

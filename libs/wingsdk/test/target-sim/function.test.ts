@@ -186,13 +186,13 @@ test("invoke function with process.exit(1)", async () => {
   // WHEN
   const PAYLOAD = { };
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-      "process.exit() was called"
+      "process.exit() was called with exit code 1"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
   expect(s.listTraces()[2].data.error).toMatchObject({
-    message: "process.exit() was called",
+    message: "process.exit() was called with exit code 1"
   });
   expect(app.snapshot()).toMatchSnapshot();
 });
