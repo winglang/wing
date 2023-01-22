@@ -402,11 +402,21 @@ Mixing `protected` and `internal` is not allowed.
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
-Re-assignment to class fields is allowed if field is marked with `readwrite`.
+Variables can be reassigned to by adding the `var` modifier:
+
+```ts
+// wing
+let var sum = 0;
+for item in [1,2,3] {
+  sum = sum + item;
+}
+```
+
+Re-assignment to class fields is allowed if field is marked with `var`.
 Examples in the class section below.
 
-`readwrite` is available in the body of class declarations.  
-Assigning `readwrite` to immutables of the same type is allowed. That is similar
+`var` is available in the body of class declarations.
+Assigning `var` to immutables of the same type is allowed. That is similar
 to assigning non `readonly`s to `readonly`s in TypeScript.
 
 [`▲ top`][top]
@@ -833,7 +843,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 `for..in` statement is used to iterate over a array or set.  
 Type annotation after an iteratee (left hand side of `in`) is optional.  
-The loop invariant in for loops is implicitly `readwrite` and re-assignable.
+The loop invariant in for loops is implicitly re-assignable (`var`).
 
 > ```TS
 > // Wing program:
@@ -1151,8 +1161,8 @@ resource Foo {
   field6: bool;
 
   // re-assignable class fields, read about them in the mutability section
-  readwrite field4: num;
-  readwrite field5: str;
+  var field4: num;
+  var field5: str;
 }
 ```
 
@@ -1513,7 +1523,7 @@ of the assignment (write) operation. `new` is always the same type as the type
 of the property itself.  
 
 Both preflight and inflight computed properties are allowed.  
-Keyword `readwrite` behind computed properties is not allowed.  
+Keyword `var` behind computed properties is not allowed.
 `inflight` computed properties are also allowed.
 
 ```TS
@@ -1524,8 +1534,8 @@ struct Vec2 {
 }
 
 class Rect {
-  readwrite size: Vec2;
-  readwrite origin: Vec2;
+  var size: Vec2;
+  var origin: Vec2;
 
   center: Vec2 {
     read {

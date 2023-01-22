@@ -1,5 +1,5 @@
 use crate::{
-	ast::{Phase, Symbol},
+	ast::{Phase, Symbol, VariableKind},
 	debug,
 	diagnostic::{CharacterLocation, WingSpan},
 	type_check::{self, symbol_env::SymbolEnv},
@@ -335,7 +335,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&name, &m.location_in_module),
-						SymbolKind::Variable(method_sig),
+						SymbolKind::Variable(method_sig, VariableKind::Let),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -364,7 +364,7 @@ impl<'a> JsiiImporter<'a> {
 				class_env
 					.define(
 						&Self::jsii_name_to_symbol(&camel_case_to_snake_case(&p.name), &p.location_in_module),
-						SymbolKind::Variable(wing_type),
+						SymbolKind::Variable(wing_type, VariableKind::Let),
 						StatementIdx::Top,
 					)
 					.expect(&format!(
@@ -533,7 +533,7 @@ impl<'a> JsiiImporter<'a> {
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
-				SymbolKind::Variable(method_sig),
+				SymbolKind::Variable(method_sig, VariableKind::Let),
 				StatementIdx::Top,
 			) {
 				panic!("Invalid JSII library, failed to define {}'s init: {}", type_name, e)

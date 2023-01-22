@@ -21,9 +21,32 @@
       const code = document.getElementById("code");
       const intermediateJS = document.getElementById("intermediateJS");
       const stdout = document.getElementById("stdout");
+      const stderr = document.getElementById("stderr");
       const example = document.getElementById("example");
+      const lineCounter = document.getElementById("lineCounter")
 
       code.addEventListener("input", () => sendCodeToWorker(code.value));
+
+      code.addEventListener("scroll", () => {
+          lineCounter.scrollTop = code.scrollTop;
+          lineCounter.scrollLeft = code.scrollLeft;
+      });
+
+      var lineCountCache = 0;
+      function line_counter() {
+            var lineCount = code.value.split("\n").length;
+            var outarr = new Array();
+            if (lineCountCache != lineCount) {
+              for (var x = 0; x < lineCount; x++) {
+                  outarr[x] = x + 1;
+              }
+              lineCounter.value = outarr.join("\n");
+            }
+            lineCountCache = lineCount;
+      }
+      code.addEventListener("input", () => {
+          line_counter();
+      });
 
       for (const path of Object.keys(examples)) {
         const option = document.createElement("option");
@@ -43,11 +66,20 @@
           sendCodeToWorker(code.value);
         } else if(e.data) {
           stdout.textContent = e.data.stdout;
+          stderr.textContent = e.data.stderr;
           intermediateJS.textContent = e.data.intermediateJS;
           hljs.highlightAll();
         } else {
           stdout.textContent = "";
+          stderr.textContent = "";
           intermediateJS.textContent = "";
+        }
+
+        // hide intermediateJS if it's empty
+        if (intermediateJS.textContent === "") {
+          intermediateJS.style.display = "none";
+        } else {
+          intermediateJS.style.display = "block";
         }
       });
 
@@ -59,15 +91,15 @@
     <select id="example"></select>
     <main>
       <section id="wing-side">
+        <textarea name="lineCount" id="lineCounter" wrap="off" readonly></textarea>
         <textarea id="code"></textarea>
       </section>
       <section id="js-side">
         <pre>
           <code class="language-javascript" id="intermediateJS"></code>
         </pre>
-        <pre>
-          <code id="stdout" class="no-highlight"></code>
-        </pre>
+          <pre id="stderr" class="stderr"></pre>
+          <pre id="stdout" class="stdout"></pre>
       </section>
     </main>
   </body>
@@ -86,6 +118,10 @@
       height: 100vh;
     }
 
+    #code {
+      white-space: nowrap;
+    }
+
     textarea {
       white-space: pre-wrap;
       width: 100%;
@@ -93,19 +129,39 @@
     }
 
     #wing-side {
+      display: inline-flex;
       flex-grow: 1;
-      padding: 2rem;
-      height: 80vh;
+      padding: 0.5rem;
     }
 
     #js-side {
       width: 60%;
-      height: 80vh;
       font-size: 12;
     }
 
-    #intermediateJS {
-      height: 98%;
+    #lineCounter {
+      border-color: transparent;
+      resize: none;
+      outline: none;
+      overflow-y: hidden;
+      text-align: right;
+      box-shadow: none;
+      width: 2.2em;
+    }
+
+    #js-side pre {
+      /* counters the adjustments made by highlight.js to line up with the wing side */
+      margin-top: -0.5em;
+    }
+
+    .stdout {
+      color: white;
+      background: black;
+    }
+
+    .stderr {
+      color: red;
+      background: black;
     }
   </style>
 </html>

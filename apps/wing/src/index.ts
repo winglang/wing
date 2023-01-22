@@ -1,13 +1,12 @@
 // for WebAssembly typings:
 /// <reference lib="dom" />
 
-import { compile, docs, upgrade } from "./commands";
-import { join, resolve } from "path";
+import { compile, docs, test, upgrade, run } from "./commands";
+import { join } from "path";
 import { satisfies } from 'compare-versions';
 
 import { Command } from "commander";
 import debug from "debug";
-import open = require("open");
 
 const PACKAGE_VERSION = require("../package.json").version as string;
 const SUPPORTED_NODE_VERSION = require("../package.json").engines.node as string;
@@ -30,12 +29,8 @@ async function main() {
     .command("run")
     .alias("it")
     .description("Runs a Wing simulator file in the Wing Console")
-    .argument("<simfile>", ".wsim simulator file")
-    .action(async (simfile: string) => {
-      simfile = resolve(simfile);
-      debug("calling wing console protocol with:" + simfile);
-      open("wing-console://" + simfile).catch(log);
-    });
+    .argument("[simfile]", ".wsim simulator file")
+    .action(run);
 
   program
     .command("compile")
@@ -54,6 +49,12 @@ async function main() {
     .action(compile);
 
   program
+    .command("test")
+    .description("Compiles a Wing program and runs all functions with the word 'test' or start with 'test:' in their resource identifiers")
+    .argument("<entrypoint...>", "all entrypoints to test")
+    .action(test);
+
+program
     .command("docs")
     .description("Open the Wing documentation")
     .action(docs);

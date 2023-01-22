@@ -22,6 +22,8 @@ Variable assignment
 let x: num = 1;
 x = 2;
 
+let var y = "hello";
+
 ---
 
 (source
@@ -33,6 +35,11 @@ x = 2;
     (variable_assignment_statement
         name: (reference (identifier))
         value: (number)
+    )
+    (variable_definition_statement
+        reassignable: (reassignable)
+        name: (identifier)
+        value: (string)
     )
 )
 
@@ -132,6 +139,7 @@ class A {
     init() {}
     inflight do_something() {}
     a_member: str;
+    var b_member: num;
 }
 
 ---
@@ -148,6 +156,11 @@ class A {
                 block: (block)
             )
             (class_member
+                name: (identifier)
+                type: (builtin_type)
+            )
+            (class_member
+                reassignable: (reassignable)
                 name: (identifier)
                 type: (builtin_type)
             )
