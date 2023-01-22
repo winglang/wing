@@ -96,14 +96,16 @@ async function wingcInvoke(instance, func, arg) {
   const bytes = new TextEncoder().encode(arg);
   const argPointer = exports.wingc_malloc(bytes.byteLength);
 
-  const argMemoryBuffer = new Uint8Array(
-    exports.memory.buffer,
-    argPointer,
-    bytes.byteLength
-  );
-  argMemoryBuffer.set(bytes);
-
-  exports[func](argPointer, bytes.byteLength);
-
-  exports.wingc_free(argPointer, bytes.byteLength);
+  try {
+    const argMemoryBuffer = new Uint8Array(
+      exports.memory.buffer,
+      argPointer,
+      bytes.byteLength
+    );
+    argMemoryBuffer.set(bytes);
+  
+    exports[func](argPointer, bytes.byteLength);
+  } finally {
+    exports.wingc_free(argPointer, bytes.byteLength);
+  }
 }
