@@ -27,18 +27,18 @@ $ wing <command> <options>
 You can use the `run` command (or `it`) when you want to interact with your Wing program in the
 [Wing Console](/getting-started/console).
 
-```
-$ wing run <ENTRYPOINT.w> | <PROGRAM.wsim>
-```
-
-Alternatively:
+Usage:
 
 ```
-$ wing it <ENTRYPOINT.w> | <PROGRAM.wsim>
+$ wing run|it [<ENTRYPOINT.w> | <PROGRAM.wsim>]
 ```
+
+The `run` command takes a single positional argument which can be one of:
 
 - `ENTRYPOINT.w` is an entrypoint for a Wing program (source code). In this case, Wing Console will
   *watch for changes* and will automatically recompile your program when the source code change.
+  The entrypoint is optional if there's a single `.w` file in the working directory (in which case you
+  can just type `wing it` and it will run this file).
 - `PROGRAM.wsim` is the output of `wing compile -t sim`
 
 ## Compile: `wing compile`
