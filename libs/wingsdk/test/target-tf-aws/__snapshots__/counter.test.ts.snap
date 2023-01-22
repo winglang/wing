@@ -293,16 +293,18 @@ exports[`function with a counter binding 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Bucket_8CDD903C\\": {}
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -377,13 +379,13 @@ Object {
                 "id": "Asset",
                 "path": "root/Function/Asset",
               },
-              "Bucket": Object {
+              "Code": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                   "version": "10.0.12",
                 },
-                "id": "Bucket",
-                "path": "root/Function/Bucket",
+                "id": "Code",
+                "path": "root/Function/Code",
               },
               "Default": Object {
                 "constructInfo": Object {
@@ -559,16 +561,18 @@ exports[`inc() policy statement 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Bucket_8CDD903C\\": {}
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -643,13 +647,13 @@ Object {
                 "id": "Asset",
                 "path": "root/Function/Asset",
               },
-              "Bucket": Object {
+              "Code": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                   "version": "10.0.12",
                 },
-                "id": "Bucket",
-                "path": "root/Function/Bucket",
+                "id": "Code",
+                "path": "root/Function/Code",
               },
               "Default": Object {
                 "constructInfo": Object {
@@ -825,16 +829,18 @@ exports[`peek() policy statement 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Bucket_8CDD903C\\": {}
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -909,13 +915,13 @@ Object {
                 "id": "Asset",
                 "path": "root/Function/Asset",
               },
-              "Bucket": Object {
+              "Code": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                   "version": "10.0.12",
                 },
-                "id": "Bucket",
-                "path": "root/Function/Bucket",
+                "id": "Code",
+                "path": "root/Function/Code",
               },
               "Default": Object {
                 "constructInfo": Object {

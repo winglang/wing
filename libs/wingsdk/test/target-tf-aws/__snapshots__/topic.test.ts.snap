@@ -337,7 +337,7 @@ exports[`topic with subscriber function 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_TopicOnMessagec5395e41_IamRole_9BB6BE88.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Bucket_279E6EB3.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Code_97E7E354.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_TopicOnMessagec5395e41_S3Object_D172367F.key}\\"
       }
     },
@@ -350,11 +350,13 @@ exports[`topic with subscriber function 2`] = `
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_TopicOnMessagec5395e41_Bucket_279E6EB3\\": {}
+      \\"root_TopicOnMessagec5395e41_Code_97E7E354\\": {
+        \\"bucket_prefix\\": \\"code-c8092503-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_TopicOnMessagec5395e41_S3Object_D172367F\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Bucket_279E6EB3.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_TopicOnMessagec5395e41_Code_97E7E354.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -487,13 +489,13 @@ Object {
                 "id": "Asset",
                 "path": "root/Topic-OnMessage-c5395e41/Asset",
               },
-              "Bucket": Object {
+              "Code": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                   "version": "10.0.12",
                 },
-                "id": "Bucket",
-                "path": "root/Topic-OnMessage-c5395e41/Bucket",
+                "id": "Code",
+                "path": "root/Topic-OnMessage-c5395e41/Code",
               },
               "Default": Object {
                 "constructInfo": Object {

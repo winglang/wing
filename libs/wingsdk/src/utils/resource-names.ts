@@ -10,57 +10,89 @@ export enum CaseConventions {
  */
 export interface NameOptions {
   /**
-   * Maximum name length must always be greater than the hash (>=8 characters)
+   * Maximum length for the generated name. The length must at least the length
+   * of the hash (8 characters).
+   * @default - no maximum length
    */
-  readonly maxLen: number;
+  readonly maxLen?: number;
+
   /**
-   * Regular expression that indicates which characters are valid
+   * Regular expression that indicates which characters are invalid. Each group
+   * of characters will be replaced with `sep`.
    */
-  readonly disallowedRegEx: RegExp;
+  readonly disallowedRegex: RegExp;
+
   /**
    * Word breaker
-   *
    * @default "-"
    */
   readonly sep?: string;
+
   /**
-   * Case-sensitive type
-   *
-   * @default undefined
+   * Convert the generated name to all uppercase or all lowercase.
+   * @default - apply no case conversion
    */
   readonly case?: CaseConventions;
+
   /**
-   * Predefined prefix of some resources
-   *
-   * @default undefined
+   * Apply a predefined prefix to the generated name
+   * @default - no prefix
    */
   readonly prefix?: string;
+
+  /**
+   * Apply a predefined suffix to the generated name
+   * @default - no suffix
+   */
+  readonly suffix?: string;
 }
 
 export class ResourceNames {
   public static generateName(resource: Construct, props: NameOptions): string {
     const sep = props.sep ?? "-";
+    const maxLen = props.maxLen;
 
-    if (props.maxLen < 8) {
+    if (maxLen && maxLen < 8) {
       throw new Error("maxLen must be at least 8");
     }
 
+    let name = resource.node.id;
+
+    name = applyCaseConversion(name, props.case);
+
+    if (props.prefix) {
+      name = `${props.prefix}${name}`;
+    }
+
     let hash = resource.node.addr.substring(0, 8);
-    let human = props.prefix
-      ? `${props.prefix}${resource.node.id}`
-      : resource.node.id;
+    let suffix = props.suffix ?? "";
 
-    if (props.case == CaseConventions.LOWERCASE) {
-      human = human.toLocaleLowerCase();
+    // TODO: allow customizing where we "trim" the name, e.g.
+    // 1. trim from the end
+    // 2. trim from the beginning
+    // 3. trim from the middle
+    if (maxLen) {
+      name = name
+        .replace(props.disallowedRegex, sep)
+        .substring(0, maxLen - hash.length - sep.length - suffix.length);
     }
-    if (props.case == CaseConventions.UPPERCASE) {
-      human = human.toLocaleUpperCase();
-    }
 
-    human = human
-      .replace(props.disallowedRegEx, sep)
-      .substring(0, props.maxLen - hash.length - sep.length);
+    name = `${name}${sep}${hash}${suffix}`;
 
-    return `${human}${sep}${hash}`;
+    // apply case conversion again in case the prefix, suffix, or hash is not
+    // case-conformant
+    name = applyCaseConversion(name, props.case);
+
+    return name;
   }
+}
+
+function applyCaseConversion(name: string, caseConventions?: CaseConventions) {
+  if (caseConventions === CaseConventions.LOWERCASE) {
+    return name.toLocaleLowerCase();
+  }
+  if (caseConventions === CaseConventions.UPPERCASE) {
+    return name.toLocaleUpperCase();
+  }
+  return name;
 }

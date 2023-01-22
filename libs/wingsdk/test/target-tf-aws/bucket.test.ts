@@ -36,7 +36,7 @@ test("bucket is public", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("bucket name valid", () => {
+test("bucket prefix valid", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = new cloud.Bucket(app, "the-uncanny.bucket");
@@ -45,14 +45,14 @@ test("bucket name valid", () => {
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
-      bucket: `the-uncanny.bucket-${bucket.node.addr.substring(0, 8)}`,
+      bucketPrefix: `the-uncanny-bucket-${bucket.node.addr.substring(0, 8)}-`,
     })
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("bucket name must be lowercase", () => {
+test("bucket prefix must be lowercase", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const bucket = new cloud.Bucket(app, "The-Uncanny.Bucket");
@@ -61,55 +61,29 @@ test("bucket name must be lowercase", () => {
   // THEN
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
-      bucket: `the-uncanny.bucket-${bucket.node.addr.substring(0, 8)}`,
+      bucketPrefix: `the-uncanny-bucket-${bucket.node.addr.substring(0, 8)}-`,
     })
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
-test("bucket name must not contain two adjacent dots", () => {
-  // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-  const bucket = new cloud.Bucket(app, "The-Uncanny..Bucket");
-  const output = app.synth();
-
-  // THEN
-  expect(
-    cdktf.Testing.toHaveResourceWithProperties(output, "aws_s3_bucket", {
-      bucket: `the-uncanny-bucket-${bucket.node.addr.substring(0, 8)}`,
-    })
-  ).toEqual(true);
-  expect(tfSanitize(output)).toMatchSnapshot();
-  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
-});
-
-test("bucket names must begin and end with alphanumeric character", () => {
+test("bucket prefix must begin with an alphanumeric character", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
   expect(() => new cloud.Bucket(app, "(%?#$The-Uncanny-Bucket.*!@¨)")).toThrow(
-    /Bucket names must begin and end with alphanumeric character and can not begin with 'xn--' or ending with '-s3alias'./
+    /AWS S3 bucket names must begin with a letter or number/
   );
 });
 
-test("bucket names can not begining with 'xn--'", () => {
+test("bucket prefix can not begining with 'xn--'", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
 
   // THEN
   expect(() => new cloud.Bucket(app, "xn--The-Uncanny-Bucket")).toThrow(
-    /Bucket names must begin and end with alphanumeric character and can not begin with 'xn--' or ending with '-s3alias'./
-  );
-});
-
-test("bucket names can not ending with '-s3alias'", () => {
-  // GIVEN
-  const app = new tfaws.App({ outdir: mkdtemp() });
-
-  // THEN
-  expect(() => new cloud.Bucket(app, "The-Uncanny-Bucket-s3alias")).toThrow(
-    /Bucket names must begin and end with alphanumeric character and can not begin with 'xn--' or ending with '-s3alias'./
+    /AWS S3 bucket names cannot begin with 'xn--'/
   );
 });

@@ -47,15 +47,17 @@ exports[`function with a bucket binding 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
       \\"root_Bucket_966015A6\\": {
-        \\"bucket\\": \\"bucket-c88fdc5f\\"
+        \\"bucket_prefix\\": \\"bucket-c88fdc5f-\\"
       },
-      \\"root_Function_Bucket_8CDD903C\\": {}
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      }
     },
     \\"aws_s3_bucket_public_access_block\\": {
       \\"root_Bucket_PublicAccessBlock_B0AF4CE5\\": {
@@ -80,7 +82,7 @@ exports[`function with a bucket binding 2`] = `
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -164,7 +166,7 @@ exports[`function with a function binding 3`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\"
       },
       \\"root_Function2_A135D90B\\": {
@@ -178,22 +180,26 @@ exports[`function with a function binding 3`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function1_Bucket_8268CF06\\": {},
-      \\"root_Function2_Bucket_EE4FCA23\\": {}
+      \\"root_Function1_Code_9E57A288\\": {
+        \\"bucket_prefix\\": \\"code-c89a4138-\\"
+      },
+      \\"root_Function2_Code_F5825D80\\": {
+        \\"bucket_prefix\\": \\"code-c8247f41-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_Function1_S3Object_AA76C357\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
       \\"root_Function2_S3Object_7E3557EA\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -282,7 +288,7 @@ exports[`function with a queue binding 3`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       },
       \\"root_QueueOnMessage5cb7e554_EEFD94BA\\": {
@@ -295,22 +301,26 @@ exports[`function with a queue binding 3`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_QueueOnMessage5cb7e554_IamRole_6907C7E4.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Bucket_31731D7F.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Code_8F59E986.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessage5cb7e554_S3Object_24400915.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function_Bucket_8CDD903C\\": {},
-      \\"root_QueueOnMessage5cb7e554_Bucket_31731D7F\\": {}
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
+      },
+      \\"root_QueueOnMessage5cb7e554_Code_8F59E986\\": {
+        \\"bucket_prefix\\": \\"code-c8fdf217-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_Function_S3Object_A62722D8\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Bucket_8CDD903C.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
       \\"root_QueueOnMessage5cb7e554_S3Object_24400915\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Bucket_31731D7F.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessage5cb7e554_Code_8F59E986.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -366,7 +376,7 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function1_IamRole_7017166A.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function1_S3Object_AA76C357.key}\\"
       },
       \\"root_Function2_A135D90B\\": {
@@ -379,22 +389,26 @@ exports[`two functions reusing the same IFunctionHandler 1`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_Function2_IamRole_1D1C491F.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_Function2_S3Object_7E3557EA.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_Function1_Bucket_8268CF06\\": {},
-      \\"root_Function2_Bucket_EE4FCA23\\": {}
+      \\"root_Function1_Code_9E57A288\\": {
+        \\"bucket_prefix\\": \\"code-c89a4138-\\"
+      },
+      \\"root_Function2_Code_F5825D80\\": {
+        \\"bucket_prefix\\": \\"code-c8247f41-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_Function1_S3Object_AA76C357\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function1_Bucket_8268CF06.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function1_Code_9E57A288.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       },
       \\"root_Function2_S3Object_7E3557EA\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_Function2_Bucket_EE4FCA23.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function2_Code_F5825D80.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }

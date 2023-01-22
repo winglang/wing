@@ -18,7 +18,7 @@ import { App } from "./app";
  */
 const RESOURCEGROUP_NAME_OPTS: NameOptions = {
   maxLen: 90,
-  disallowedRegEx: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
+  disallowedRegex: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
 };
 
 /**
@@ -28,7 +28,7 @@ const RESOURCEGROUP_NAME_OPTS: NameOptions = {
 const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
   maxLen: 24,
   case: CaseConventions.LOWERCASE,
-  disallowedRegEx: /([^a-z0-9]+)/g,
+  disallowedRegex: /([^a-z0-9]+)/g,
   sep: "",
 };
 
@@ -41,7 +41,7 @@ const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
 const BUCKET_NAME_OPTS: NameOptions = {
   maxLen: 63,
   case: CaseConventions.LOWERCASE,
-  disallowedRegEx: /([^a-z0-9\-]+)|(\-{2,})/g,
+  disallowedRegex: /([^a-z0-9\-]+)|(\-{2,})/g,
 };
 
 /**
@@ -50,7 +50,7 @@ const BUCKET_NAME_OPTS: NameOptions = {
  * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends cloud.BucketBase {
-  private readonly bucket: StorageContainer;
+  private readonly storageContainer: StorageContainer;
   private readonly storageAccount: StorageAccount;
   private readonly resourceGroup: ResourceGroup;
   private readonly public: boolean;
@@ -59,13 +59,6 @@ export class Bucket extends cloud.BucketBase {
     super(scope, id, props);
 
     this.public = props.public ?? false;
-
-    // names must begin and end with alphanumeric character
-    if (this.node.id.match(/(^\W{1,})|(\W{1,}$)/g)?.length) {
-      throw new Error(
-        "Bucket names must begin and end with alphanumeric character."
-      );
-    }
 
     const app = App.of(this);
 
@@ -82,13 +75,25 @@ export class Bucket extends cloud.BucketBase {
       accountReplicationType: "LRS",
     });
 
-    this.bucket = new StorageContainer(this, "Bucket", {
-      name: ResourceNames.generateName(this, BUCKET_NAME_OPTS),
+    const storageContainerName = ResourceNames.generateName(
+      this,
+      BUCKET_NAME_OPTS
+    );
+
+    // name must begin and end with alphanumeric character
+    if (storageContainerName.match(/(^\W{1,})|(\W{1,}$)/g)?.length) {
+      throw new Error(
+        "Bucket names must begin and end with alphanumeric character."
+      );
+    }
+
+    this.storageContainer = new StorageContainer(this, "Bucket", {
+      name: storageContainerName,
       storageAccountName: this.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
 
-    this.bucket;
+    this.storageContainer;
   }
 
   /** @internal */

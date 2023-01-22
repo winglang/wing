@@ -13,7 +13,7 @@ export const HASH_KEY = "id";
  */
 const NAME_OPTS: NameOptions = {
   maxLen: 255,
-  disallowedRegEx: /[^a-zA-Z0-9\_\.\-]+/g,
+  disallowedRegex: /[^a-zA-Z0-9\_\.\-]+/g,
   prefix: "wing-counter-",
 };
 

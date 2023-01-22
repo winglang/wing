@@ -234,16 +234,18 @@ exports[`queue with a consumer function 2`] = `
         \\"handler\\": \\"index.handler\\",
         \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Bucket_8FFFAA14.bucket}\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
         \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagec5395e41_S3Object_9BE0A142.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_QueueOnMessagec5395e41_Bucket_8FFFAA14\\": {}
+      \\"root_QueueOnMessagec5395e41_Code_F10D8CAB\\": {
+        \\"bucket_prefix\\": \\"code-c82147c7-\\"
+      }
     },
     \\"aws_s3_object\\": {
       \\"root_QueueOnMessagec5395e41_S3Object_9BE0A142\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Bucket_8FFFAA14.bucket}\\",
+        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -362,13 +364,13 @@ Object {
                 "id": "Asset",
                 "path": "root/Queue-OnMessage-c5395e41/Asset",
               },
-              "Bucket": Object {
+              "Code": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
                   "version": "10.0.12",
                 },
-                "id": "Bucket",
-                "path": "root/Queue-OnMessage-c5395e41/Bucket",
+                "id": "Code",
+                "path": "root/Queue-OnMessage-c5395e41/Code",
               },
               "Default": Object {
                 "constructInfo": Object {

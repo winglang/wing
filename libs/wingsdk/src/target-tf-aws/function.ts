@@ -12,14 +12,15 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import { NameOptions, ResourceNames } from "../utils/resource-names";
+import { BUCKET_PREFIX_OPTS } from "./bucket";
 
 /**
  * Function names are limited to 64 characters.
  * You can use alphanumeric characters, hyphens (-), and underscores (_).
  */
-const NAME_OPTS: NameOptions = {
+const FUNCTION_NAME_OPTS: NameOptions = {
   maxLen: 64,
-  disallowedRegEx: /[^a-zA-Z0-9\_\-]+/g,
+  disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
 };
 
 /**
@@ -58,7 +59,9 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Create unique S3 bucket for hosting Lambda code
-    const bucket = new S3Bucket(this, "Bucket");
+    const bucket = new S3Bucket(this, "Code");
+    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
+    bucket.bucketPrefix = bucketPrefix;
 
     // Choose an object name so that:
     // - whenever code changes, the object name changes
@@ -124,7 +127,7 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
-    const name = ResourceNames.generateName(this, NAME_OPTS);
+    const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
 
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
