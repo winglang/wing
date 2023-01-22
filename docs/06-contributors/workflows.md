@@ -40,7 +40,7 @@ sudo ./scripts/setup_wasi.sh
 
 ## Development iteration
 
-The `nx wing` command can be executed from anywhere in the repository in order to build and run the
+The `nx wing` command can be executed from the root of the repository in order to build and run the
 compiler, SDK and the Wing CLI. Nx is configured to make sure only the changed components are built
 every time.
 
