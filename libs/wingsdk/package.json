@@ -77,9 +77,9 @@
     "typescript": "^4.8.3"
   },
   "peerDependencies": {
-    "@cdktf/provider-aws": "^10.0.11",
-    "@cdktf/provider-azurerm": "3.0.16",
-    "cdktf": "0.13.2",
+    "@cdktf/provider-aws": "^12.0.1",
+    "@cdktf/provider-azurerm": "^5.0.1",
+    "cdktf": "~0.15.0",
     "constructs": "~10.0.25",
     "polycons": "^0.1.1"
   },
@@ -96,9 +96,9 @@
     "@azure/core-paging": "^1.4.0",
     "@azure/identity": "3.1.2",
     "@azure/storage-blob": "12.12.0",
-    "@cdktf/provider-aws": "^10.0.11",
-    "@cdktf/provider-azurerm": "3.0.16",
-    "cdktf": "0.13.2",
+    "@cdktf/provider-aws": "^12.0.1",
+    "@cdktf/provider-azurerm": "^5.0.1",
+    "cdktf": "~0.15.0",
     "constructs": "~10.0.25",
     "debug": "^4.3.4",
     "esbuild-wasm": "^0.15.15",
