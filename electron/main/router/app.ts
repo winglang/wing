@@ -37,6 +37,7 @@ export const createAppRouter = () => {
               console: z.boolean(),
               simulator: z.boolean(),
             }),
+            timestamp: z.number(),
           }),
         }),
       )
@@ -46,7 +47,8 @@ export const createAppRouter = () => {
           .filter(
             (entry) =>
               input.filters.level[entry.level] &&
-              input.filters.source[entry.source],
+              input.filters.source[entry.source] &&
+              entry.timestamp >= input.filters.timestamp,
           );
       }),
     "app.explorerTree": publicProcedure.query(async ({ ctx }) => {

@@ -171,6 +171,9 @@ export const ConsoleLogs = ({ logs }: ConsoleLogsProps) => {
             onMouseDownHandler={handleMouseDown}
           />
         ))}
+        {logs.length === 0 && (
+          <div className="text-slate-400 text-2xs">No logs</div>
+        )}
       </div>
     </>
   );

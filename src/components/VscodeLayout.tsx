@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
 import { Breadcrumbs } from "../design-system/Breadcrumbs.js";
+import { Button } from "../design-system/Button.js";
 import { Error } from "../design-system/Error.js";
 import { LeftResizableWidget } from "../design-system/LeftResizableWidget.js";
 import { Loader } from "../design-system/Loader.js";
@@ -93,6 +94,12 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
   const [selectedLogTypeFilters, setSelectedLogTypeFilters] = useState<
     LogLevel[]
   >(["info", "warn", "error"]);
+
+  const [logsTimeFilter, setLogsTimeFilter] = useState(0);
+  const clearLogs = () => {
+    setLogsTimeFilter(Date.now());
+  };
+
   const logs = trpc["app.logs"].useQuery({
     filters: {
       level: {
@@ -106,6 +113,7 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
         console: true,
         simulator: true,
       },
+      timestamp: logsTimeFilter,
     },
   });
   const logsRef = useRef<HTMLDivElement>(null);
@@ -279,10 +287,15 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
 
       <TopResizableWidget className="border-t bg-white min-h-[5rem] h-[12rem] pt-1.5">
         <div className="relative h-full flex flex-col gap-2">
-          <div className="flex px-4">
+          <div className="flex px-4 space-x-2">
             <LogsFilters
               selected={selectedLogTypeFilters}
               onChange={(types) => setSelectedLogTypeFilters(types)}
+            />
+            <Button
+              className="mt-1"
+              label="Clear"
+              onClick={() => clearLogs()}
             />
           </div>
 
