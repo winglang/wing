@@ -10,6 +10,7 @@ export class WebApp implements ISimulatorResourceInstance {
 
   constructor(props: WebAppSchema["props"], context: ISimulatorContext) {
     this.dist = props.dist;
+    context;
   }
 
   async init(): Promise<void> {
