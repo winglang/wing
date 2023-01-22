@@ -27,7 +27,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Topic/Default",
@@ -64,7 +64,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -72,7 +72,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -80,7 +80,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -88,7 +88,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",
@@ -124,7 +124,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/The%Spectacular@Topic/Default",
@@ -161,7 +161,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -169,7 +169,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -177,7 +177,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -185,7 +185,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",
@@ -221,7 +221,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/The-Spectacular_Topic-01/Default",
@@ -258,7 +258,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -266,7 +266,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -274,7 +274,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -282,7 +282,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",
@@ -423,7 +423,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.snsTopic.SnsTopic",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Topic/Default",
@@ -431,7 +431,7 @@ Object {
               "Topic-TopicInvokePermission-c5395e41": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.lambdaPermission.LambdaPermission",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Topic-TopicInvokePermission-c5395e41",
                 "path": "root/Topic/Topic-TopicInvokePermission-c5395e41",
@@ -439,7 +439,7 @@ Object {
               "Topic-TopicSubscription-c5395e41": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.snsTopicSubscription.SnsTopicSubscription",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Topic-TopicSubscription-c5395e41",
                 "path": "root/Topic/Topic-TopicSubscription-c5395e41",
@@ -484,7 +484,7 @@ Object {
               "Asset": Object {
                 "constructInfo": Object {
                   "fqn": "cdktf.TerraformAsset",
-                  "version": "0.15.0",
+                  "version": "0.13.2",
                 },
                 "id": "Asset",
                 "path": "root/Topic-OnMessage-c5395e41/Asset",
@@ -492,7 +492,7 @@ Object {
               "Code": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Code",
                 "path": "root/Topic-OnMessage-c5395e41/Code",
@@ -500,7 +500,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "Default",
                 "path": "root/Topic-OnMessage-c5395e41/Default",
@@ -508,7 +508,7 @@ Object {
               "IamRole": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRole.IamRole",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "IamRole",
                 "path": "root/Topic-OnMessage-c5395e41/IamRole",
@@ -516,7 +516,7 @@ Object {
               "IamRolePolicy": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicy",
                 "path": "root/Topic-OnMessage-c5395e41/IamRolePolicy",
@@ -524,7 +524,7 @@ Object {
               "IamRolePolicyAttachment": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "IamRolePolicyAttachment",
                 "path": "root/Topic-OnMessage-c5395e41/IamRolePolicyAttachment",
@@ -532,7 +532,7 @@ Object {
               "S3Object": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Object.S3Object",
-                  "version": "12.0.1",
+                  "version": "10.0.12",
                 },
                 "id": "S3Object",
                 "path": "root/Topic-OnMessage-c5395e41/S3Object",
@@ -588,7 +588,7 @@ Object {
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "12.0.1",
+              "version": "10.0.12",
             },
             "id": "aws",
             "path": "root/aws",
@@ -596,7 +596,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.13.2",
             },
             "id": "backend",
             "path": "root/backend",
@@ -604,7 +604,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.13.2",
         },
         "id": "root",
         "path": "root",
@@ -612,7 +612,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.13.2",
     },
     "id": "App",
     "path": "",
