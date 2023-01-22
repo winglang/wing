@@ -127,6 +127,7 @@ jobs:
         with:
           targets: "build"
           all: true
+          exclude: "wing-language-server,vscode-wing"
           args: "--configuration=release --output-style=stream --verbose"
 
       # wingc require wingsdk to be built first in order to run
