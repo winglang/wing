@@ -21,6 +21,7 @@
       const code = document.getElementById("code");
       const intermediateJS = document.getElementById("intermediateJS");
       const stdout = document.getElementById("stdout");
+      const stderr = document.getElementById("stderr");
       const example = document.getElementById("example");
       const lineCounter = document.getElementById("lineCounter")
 
@@ -65,11 +66,20 @@
           sendCodeToWorker(code.value);
         } else if(e.data) {
           stdout.textContent = e.data.stdout;
+          stderr.textContent = e.data.stderr;
           intermediateJS.textContent = e.data.intermediateJS;
           hljs.highlightAll();
         } else {
           stdout.textContent = "";
+          stderr.textContent = "";
           intermediateJS.textContent = "";
+        }
+
+        // hide intermediateJS if it's empty
+        if (intermediateJS.textContent === "") {
+          intermediateJS.style.display = "none";
+        } else {
+          intermediateJS.style.display = "block";
         }
       });
 
@@ -88,9 +98,8 @@
         <pre>
           <code class="language-javascript" id="intermediateJS"></code>
         </pre>
-        <pre>
-          <code id="stdout" class="no-highlight"></code>
-        </pre>
+          <pre id="stderr" class="stderr"></pre>
+          <pre id="stdout" class="stdout"></pre>
       </section>
     </main>
   </body>
@@ -143,6 +152,16 @@
     #js-side pre {
       /* counters the adjustments made by highlight.js to line up with the wing side */
       margin-top: -0.5em;
+    }
+
+    .stdout {
+      color: white;
+      background: black;
+    }
+
+    .stderr {
+      color: red;
+      background: black;
     }
   </style>
 </html>

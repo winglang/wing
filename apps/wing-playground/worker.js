@@ -46,6 +46,11 @@ self.onmessage = async (event) => {
     file.writeString(event.data);
 
     await wingcInvoke(instance, WINGC_COMPILE, "code.w");
+    const stderr = wasi.getStderrString();
+    if (stderr) {
+      throw stderr;
+    }
+
     const stdout = wasi.getStdoutString();
     let intermediateJS = "";
 
@@ -66,13 +71,15 @@ self.onmessage = async (event) => {
 
     self.postMessage({
       stdout,
+      stderr: wasi.getStderrString(),
       intermediateJS,
     });
   } catch (error) {
     console.error(error);
     self.postMessage({
+      stderr: error,
       stdout: wasi.getStdoutString(),
-      intermediateJS: wasi.getStderrString(),
+      intermediateJS: null,
     });
   } finally {
     try {
