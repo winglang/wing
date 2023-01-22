@@ -3,9 +3,9 @@ import { JsonFile, cdk, javascript } from "projen";
 const JSII_DEPS = [
   "constructs@~10.0.25",
   "polycons",
-  "cdktf",
-  "@cdktf/provider-aws",
-  "@cdktf/provider-azurerm@3.0.16",
+  "cdktf@~0.15.0",
+  "@cdktf/provider-aws@^12.0.1",
+  "@cdktf/provider-azurerm@^5.0.1",
 ];
 
 const project = new cdk.JsiiProject({

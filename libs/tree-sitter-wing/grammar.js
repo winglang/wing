@@ -157,7 +157,7 @@ module.exports = grammar({
     class_member: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
-        optional($.reassignable),
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation,
         ";"

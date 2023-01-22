@@ -252,15 +252,17 @@
     },
     {
       "name": "@cdktf/provider-aws",
+      "version": "^12.0.1",
       "type": "peer"
     },
     {
       "name": "@cdktf/provider-azurerm",
-      "version": "3.0.16",
+      "version": "^5.0.1",
       "type": "peer"
     },
     {
       "name": "cdktf",
+      "version": "~0.15.0",
       "type": "peer"
     },
     {
@@ -274,15 +276,17 @@
     },
     {
       "name": "@cdktf/provider-aws",
+      "version": "^12.0.1",
       "type": "runtime"
     },
     {
       "name": "@cdktf/provider-azurerm",
-      "version": "3.0.16",
+      "version": "^5.0.1",
       "type": "runtime"
     },
     {
       "name": "cdktf",
+      "version": "~0.15.0",
       "type": "runtime"
     },
     {
