@@ -3423,7 +3423,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "outputs": {},
   },
@@ -3508,14 +3508,14 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "test:get",
+            "WING_FUNCTION_NAME": "test-get-c8e58069",
           },
         },
-        "function_name": "test:get",
+        "function_name": "test-get-c8e58069",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_testget_IamRole_DD77F38A.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_testget_Bucket_D3AA6372.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_testget_Code_EC989716.bucket}",
         "s3_key": "\${aws_s3_object.root_testget_S3Object_071392B9.key}",
       },
       "root_testput_449428F9": {
@@ -3528,14 +3528,14 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
         "environment": {
           "variables": {
             "BUCKET_NAME_d755b447": "\${aws_s3_bucket.root_cloudBucket_4F3C4F53.bucket}",
-            "WING_FUNCTION_NAME": "test:put",
+            "WING_FUNCTION_NAME": "test-put-c899ce9b",
           },
         },
-        "function_name": "test:put",
+        "function_name": "test-put-c899ce9b",
         "handler": "index.handler",
         "role": "\${aws_iam_role.root_testput_IamRole_1BBF32A6.arn}",
         "runtime": "nodejs16.x",
-        "s3_bucket": "\${aws_s3_bucket.root_testput_Bucket_381B0511.bucket}",
+        "s3_bucket": "\${aws_s3_bucket.root_testput_Code_DE7653AD.bucket}",
         "s3_key": "\${aws_s3_object.root_testput_S3Object_30BF1DDD.key}",
       },
     },
@@ -3547,22 +3547,25 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
             "uniqueId": "root_cloudBucket_4F3C4F53",
           },
         },
+        "bucket_prefix": "cloud-bucket-c87175e7-",
       },
-      "root_testget_Bucket_D3AA6372": {
+      "root_testget_Code_EC989716": {
         "//": {
           "metadata": {
-            "path": "root/test:get/Bucket",
-            "uniqueId": "root_testget_Bucket_D3AA6372",
+            "path": "root/test:get/Code",
+            "uniqueId": "root_testget_Code_EC989716",
           },
         },
+        "bucket_prefix": "code-c8071909-",
       },
-      "root_testput_Bucket_381B0511": {
+      "root_testput_Code_DE7653AD": {
         "//": {
           "metadata": {
-            "path": "root/test:put/Bucket",
-            "uniqueId": "root_testput_Bucket_381B0511",
+            "path": "root/test:put/Code",
+            "uniqueId": "root_testput_Code_DE7653AD",
           },
         },
+        "bucket_prefix": "code-c8ab7128-",
       },
     },
     "aws_s3_bucket_public_access_block": {
@@ -3606,7 +3609,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
             "uniqueId": "root_testget_S3Object_071392B9",
           },
         },
-        "bucket": "\${aws_s3_bucket.root_testget_Bucket_D3AA6372.bucket}",
+        "bucket": "\${aws_s3_bucket.root_testget_Code_EC989716.bucket}",
         "key": "<ASSET_KEY>",
       },
     },
@@ -3641,7 +3644,7 @@ exports[`wing compile --target tf-aws test_bucket.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.13.2",
+  "version": "0.15.0",
 }
 `;
 
