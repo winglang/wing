@@ -5,6 +5,7 @@ import * as core from "../../src/core";
 import * as sim from "../../src/target-sim";
 import * as tfaws from "../../src/target-tf-aws";
 import * as tfazure from "../../src/target-tf-azure";
+import * as testing from "../../src/testing";
 
 class MyBucket extends core.Resource {
   public readonly stateful = true;
@@ -58,11 +59,28 @@ class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const my_bucket = new MyBucket(this, "MyBucket", "Hello, World!");
-    my_bucket;
+    new cloud.Bucket(this, "cloud.Bucket");
+    const queue = new cloud.Queue(this, "cloud.Queue");
+    const pusher = testing.Testing.makeHandler(
+      app,
+      "Pusher",
+      `async handle(event) {
+        console.log("Hello, world!");
+        await this.queue.push(event);
+      }`,
+      {
+        resources: {
+          queue: {
+            resource: queue,
+            ops: [cloud.QueueInflightMethods.PUSH],
+          },
+        },
+      }
+    );
+    new cloud.Function(this, "cloud.Function", pusher);
   }
 }
 
-const app = new tfazure.App({ outdir: __dirname, location: "East US" });
+const app = new tfaws.App({ outdir: __dirname });
 new HelloWorld(app, "HelloWorld");
 app.synth();
