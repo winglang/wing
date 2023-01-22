@@ -59,7 +59,7 @@ For example:
 npx nx wing -- test ../../examples/tests/valid/captures.w
 ```
 
-This runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
+This command runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
 
 ## Compiler
 
