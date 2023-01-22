@@ -27,6 +27,7 @@ jobs:
             examples
             build
             repo
+            playground
           types: |-
             feat
             fix
