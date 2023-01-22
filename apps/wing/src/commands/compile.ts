@@ -82,7 +82,7 @@ export async function compile(entrypoint: string, options: ICompileOptions) {
   log("instantiating wingc WASM module");
   const instance = await WebAssembly.instantiate(wasm, importObject);
   log("invoking wingc with importObject: %o", importObject);
-  wasi.start(instance);
+  wasi.initialize(instance);
 
   const arg = `${wingFile};${workDir}`;
   log(`invoking %s with: "%s"`, WINGC_COMPILE, arg);
