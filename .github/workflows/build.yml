@@ -130,11 +130,11 @@ jobs:
           args: "--configuration=release --output-style=stream --verbose"
 
       # wingc require wingsdk to be built first in order to run
-      - name: wingc Test
+      - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
-          projects: "wingc"
+          projects: "wingc,sdk"
           args: "--configuration=release --output-style=stream --verbose"
 
       - name: Create NPM packages
