@@ -153,6 +153,10 @@ function createWindowManager() {
       const notifyChange = () => {
         isError = false;
         log.verbose("notifyChange");
+
+        // Clear the logs.
+        consoleLogger.messages = [];
+
         // TODO: Use TRPC websockets.
         newWindow?.webContents.send("trpc.invalidate");
       };
