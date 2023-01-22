@@ -21,9 +21,9 @@ environment:
 Installation:
 
 ```sh
-$ git clone git@github.com:winglang/wing.git
-$ cd wing
-$ npm install
+git clone https://github.com/winglang/wing
+cd wing
+npm install
 ```
 
 This is required once:
@@ -41,7 +41,7 @@ sudo ./scripts/setup_wasi.sh
 
 ## Development iteration
 
-The `nx wing` command can be executed from the root of the repository in order to build and run the
+The `npx nx wing` command can be executed from the root of the repository in order to build and run the
 compiler, SDK and the Wing CLI. Nx is configured to make sure only the changed components are built
 every time.
 
