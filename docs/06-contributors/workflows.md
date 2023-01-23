@@ -11,12 +11,13 @@ This topic includes a description of common development workflows for the Wing p
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-* [Node.js] version 18.x (we recommend [volta]) (currently npm 9 is [not
-  supported](https://github.com/winglang/wing/issues/1103))
+* [Node.js] v18 and npm v8
+  * We recommend [volta] to manage node tools
 * [Rust]
-* [AWS CLI] (only needed for integration tests - make sure to do the setup part to create
-  credentials)
-* [Terraform CLI] (only needed for integration tests)
+* [AWS CLI]
+  * Only needed for integration tests - make sure to do the setup part to create credentials
+* [Terraform CLI]
+  * Only needed for integration tests
 
 Installation:
 
@@ -26,11 +27,14 @@ cd wing
 npm install
 ```
 
-This is required once:
+:::note
 
-```sh
-sudo ./scripts/setup_wasi.sh
-```
+The first time you run `npm install` you may be asked to enter your system password, this is because
+it's taking care of installing the [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you.
+
+If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`
+
+:::
 
 [Nx]: https://nx.dev/
 [Node.js]: https://nodejs.org/en/
