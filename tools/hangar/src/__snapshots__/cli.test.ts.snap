@@ -2581,6 +2581,513 @@ constructor() {
 new MyApp().synth();"
 `;
 
+exports[`wing compile --target tf-aws if.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.0",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_func_IamRole_EE572BCE": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRole",
+            "uniqueId": "root_func_IamRole_EE572BCE",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_func_IamRolePolicy_3AC5101F": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicy",
+            "uniqueId": "root_func_IamRolePolicy_3AC5101F",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_func_IamRolePolicyAttachment_AD2DD410": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicyAttachment",
+            "uniqueId": "root_func_IamRolePolicyAttachment_AD2DD410",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_func_0444AFD0": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Default",
+            "uniqueId": "root_func_0444AFD0",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "func-c8cf78f6",
+          },
+        },
+        "function_name": "func-c8cf78f6",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
+        "s3_key": "\${aws_s3_object.root_func_S3Object_F6163647.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_func_Code_58BA0E0E": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Code",
+            "uniqueId": "root_func_Code_58BA0E0E",
+          },
+        },
+        "bucket_prefix": "code-c80d7959-",
+      },
+    },
+    "aws_s3_object": {
+      "root_func_S3Object_F6163647": {
+        "//": {
+          "metadata": {
+            "path": "root/func/S3Object",
+            "uniqueId": "root_func_S3Object_F6163647",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws if.w > index.js 1`] = `
+"async handle(s) { const { x } = this; {
+  if ((x === 1)) {
+    {console.log(\\"x is 1\\")};
+  }
+} };"
+`;
+
+exports[`wing compile --target tf-aws if.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.15.0",
+}
+`;
+
+exports[`wing compile --target tf-aws if.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"if\\" });
+  
+  const x = 1;
+  if ((x === 2)) {
+    {console.log(\\"x is 2\\")};
+  }
+  new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.e44bba27979f6d5a1e830a306a1bdc6ae41ab9db74ac27ef1451b4671de950e4/index.js\\")),
+    bindings: {
+      
+      data: {
+        x: x,
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile --target tf-aws if_elif_else.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.0",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_func_IamRole_EE572BCE": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRole",
+            "uniqueId": "root_func_IamRole_EE572BCE",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_func_IamRolePolicy_3AC5101F": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicy",
+            "uniqueId": "root_func_IamRolePolicy_3AC5101F",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_func_IamRolePolicyAttachment_AD2DD410": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicyAttachment",
+            "uniqueId": "root_func_IamRolePolicyAttachment_AD2DD410",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_func_0444AFD0": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Default",
+            "uniqueId": "root_func_0444AFD0",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "func-c8cf78f6",
+          },
+        },
+        "function_name": "func-c8cf78f6",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
+        "s3_key": "\${aws_s3_object.root_func_S3Object_F6163647.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_func_Code_58BA0E0E": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Code",
+            "uniqueId": "root_func_Code_58BA0E0E",
+          },
+        },
+        "bucket_prefix": "code-c80d7959-",
+      },
+    },
+    "aws_s3_object": {
+      "root_func_S3Object_F6163647": {
+        "//": {
+          "metadata": {
+            "path": "root/func/S3Object",
+            "uniqueId": "root_func_S3Object_F6163647",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws if_elif_else.w > index.js 1`] = `
+"async handle(s) { const { x } = this; {
+  if ((x === 1)) {
+    {console.log(\\"x is 1\\")};
+  } else if ((x === 2)) {
+    {console.log(\\"x is 2\\")};
+  } else {
+    {console.log(\\"x is other number\\")};
+  }
+} };"
+`;
+
+exports[`wing compile --target tf-aws if_elif_else.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.15.0",
+}
+`;
+
+exports[`wing compile --target tf-aws if_elif_else.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"if_elif_else\\" });
+  
+  const x = 1;
+  if ((x === 2)) {
+    {console.log(\\"x is 2\\")};
+  } else if ((x === 1)) {
+    {console.log(\\"x is 1\\")};
+  } else {
+    {console.log(\\"x is some other number\\")};
+  }
+  new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.b164d4c13937f7a5cb890b1295cb35656a21679756524ba6fffe572db583e9e3/index.js\\")),
+    bindings: {
+      
+      data: {
+        x: x,
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
+exports[`wing compile --target tf-aws if_else.w > cdk.tf.json 1`] = `
+{
+  "//": {
+    "metadata": {
+      "backend": "local",
+      "stackName": "root",
+      "version": "0.15.0",
+    },
+    "outputs": {},
+  },
+  "provider": {
+    "aws": [
+      {},
+    ],
+  },
+  "resource": {
+    "aws_iam_role": {
+      "root_func_IamRole_EE572BCE": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRole",
+            "uniqueId": "root_func_IamRole_EE572BCE",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_func_IamRolePolicy_3AC5101F": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicy",
+            "uniqueId": "root_func_IamRolePolicy_3AC5101F",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_func_IamRolePolicyAttachment_AD2DD410": {
+        "//": {
+          "metadata": {
+            "path": "root/func/IamRolePolicyAttachment",
+            "uniqueId": "root_func_IamRolePolicyAttachment_AD2DD410",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_func_0444AFD0": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Default",
+            "uniqueId": "root_func_0444AFD0",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "func-c8cf78f6",
+          },
+        },
+        "function_name": "func-c8cf78f6",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_func_IamRole_EE572BCE.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
+        "s3_key": "\${aws_s3_object.root_func_S3Object_F6163647.key}",
+      },
+    },
+    "aws_s3_bucket": {
+      "root_func_Code_58BA0E0E": {
+        "//": {
+          "metadata": {
+            "path": "root/func/Code",
+            "uniqueId": "root_func_Code_58BA0E0E",
+          },
+        },
+        "bucket_prefix": "code-c80d7959-",
+      },
+    },
+    "aws_s3_object": {
+      "root_func_S3Object_F6163647": {
+        "//": {
+          "metadata": {
+            "path": "root/func/S3Object",
+            "uniqueId": "root_func_S3Object_F6163647",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_func_Code_58BA0E0E.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
+}
+`;
+
+exports[`wing compile --target tf-aws if_else.w > index.js 1`] = `
+"async handle(s) { const { x } = this; {
+  if ((x === 1)) {
+    {console.log(\\"x is 1\\")};
+  } else {
+    {console.log(\\"x is other number\\")};
+  }
+} };"
+`;
+
+exports[`wing compile --target tf-aws if_else.w > manifest.json 1`] = `
+{
+  "stacks": {
+    "root": {
+      "annotations": [],
+      "constructPath": "root",
+      "dependencies": [],
+      "name": "root",
+      "synthesizedStackPath": "stacks/root/cdk.tf.json",
+      "workingDirectory": "stacks/root",
+    },
+  },
+  "version": "0.15.0",
+}
+`;
+
+exports[`wing compile --target tf-aws if_else.w > preflight.js 1`] = `
+"const $stdlib = require('@winglang/sdk');
+const $outdir = process.env.WINGSDK_SYNTH_DIR ?? \\".\\";
+
+function __app(target) {
+	switch (target) {
+		case \\"sim\\":
+			return $stdlib.sim.App;
+		case \\"tfaws\\":
+		case \\"tf-aws\\":
+			return $stdlib.tfaws.App;
+    case \\"tf-azure\\":
+      return $stdlib.tfazure.App;
+		default:
+			throw new Error(\`Unknown WING_TARGET value: \\"\${process.env.WING_TARGET ?? \\"\\"}\\"\`);
+	}
+}
+const $App = __app(process.env.WING_TARGET);
+
+const cloud = require('@winglang/sdk').cloud;
+class MyApp extends $App {
+constructor() {
+  super({ outdir: $outdir, name: \\"if_else\\" });
+  
+  const x = 1;
+  if ((x === 2)) {
+    {console.log(\\"x is 2\\")};
+  } else {
+    {console.log(\\"x is other number\\")};
+  }
+  new cloud.Function(this,\\"func\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.1c6bea11c1fc239733e8a7c883ea2283702550ed1b268f71d6fd1c81f3b09928/index.js\\")),
+    bindings: {
+      
+      data: {
+        x: x,
+      },
+    }
+  }));
+}
+}
+new MyApp().synth();"
+`;
+
 exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = `
 {
   "//": {

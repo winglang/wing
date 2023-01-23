@@ -1286,6 +1286,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::If {
 				condition,
 				statements,
+				elif_statements,
 				else_statements,
 			} => {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx);
@@ -1300,6 +1301,21 @@ impl<'a> TypeChecker<'a> {
 					stmt.idx,
 				));
 				self.inner_scopes.push(statements);
+
+				if let Some(elif_scope) = elif_statements {
+					let cond_type = self.type_check_exp(&elif_scope.0, env, stmt.idx);
+					self.validate_type(cond_type, self.types.bool(), condition);
+
+					(&elif_scope.1).set_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						false,
+						env.flight,
+						stmt.idx,
+					));
+					self.inner_scopes.push(&elif_scope.1);
+				}
 
 				if let Some(else_scope) = else_statements {
 					else_scope.set_env(SymbolEnv::new(

@@ -199,14 +199,27 @@ impl Parser<'_> {
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+				let elif_block = if let Some(elif_block) = statement_node.child_by_field_name("elif_block") {
+					Some(self.build_scope(&elif_block))
+				} else {
+					None
+				};
 				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 					Some(self.build_scope(&else_block))
 				} else {
 					None
 				};
+
 				StmtKind::If {
 					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
 					statements: if_block,
+					elif_statements: match elif_block.is_some() {
+						true => Some((
+							self.build_expression(&statement_node.child_by_field_name("elif_condition").unwrap())?,
+							elif_block.unwrap(),
+						)),
+						false => None,
+					},
 					else_statements: else_block,
 				}
 			}

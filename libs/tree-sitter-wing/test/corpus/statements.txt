@@ -58,6 +58,41 @@ if false {}
     )
 )
 
+
+====================
+If Else
+====================
+
+if false {} else {}
+
+---
+
+(source
+    (if_statement
+        condition: (bool)
+        block: (block)
+        else_block: (block)
+    )
+)
+
+====================
+If Elif Else
+====================
+
+if false {} elif false {} else {}
+
+---
+
+(source
+    (if_statement
+        condition: (bool)
+        block: (block)
+        elif_condition: (bool)
+        elif_block: (block)
+        else_block: (block)
+    )
+)
+
 ====================
 Return
 ====================

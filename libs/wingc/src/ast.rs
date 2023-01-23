@@ -202,6 +202,7 @@ pub enum StmtKind {
 	If {
 		condition: Expr,
 		statements: Scope,
+		elif_statements: Option<(Expr, Scope)>,
 		else_statements: Option<Scope>,
 	},
 	Expression(Expr),

@@ -498,21 +498,34 @@ impl JSifier {
 			StmtKind::If {
 				condition,
 				statements,
+				elif_statements,
 				else_statements,
 			} => {
-				if let Some(else_scope) = else_statements {
+				if let (Some(elif_scope), Some(else_scope)) = (elif_statements, else_statements) {
 					format!(
-						"if ({}) {} else {}",
+						"if ({}) {} else if ({}) {} else {}",
 						self.jsify_expression(condition, phase),
 						self.jsify_scope(statements, phase),
+						self.jsify_expression(&elif_scope.0, phase),
+						self.jsify_scope(&elif_scope.1, phase),
 						self.jsify_scope(else_scope, phase)
 					)
 				} else {
-					format!(
-						"if ({}) {}",
-						self.jsify_expression(condition, phase),
-						self.jsify_scope(statements, phase)
-					)
+					if let Some(else_scope) = else_statements {
+						println!("else");
+						format!(
+							"if ({}) {} else {}",
+							self.jsify_expression(condition, phase),
+							self.jsify_scope(statements, phase),
+							self.jsify_scope(else_scope, phase)
+						)
+					} else {
+						format!(
+							"if ({}) {}",
+							self.jsify_expression(condition, phase),
+							self.jsify_scope(statements, phase)
+						)
+					}
 				}
 			}
 			StmtKind::Expression(e) => format!("{};", self.jsify_expression(e, phase)),
