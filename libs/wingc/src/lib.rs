@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Stmt, Symbol, UtilityFunctions, VariableKind};
+use ast::{Scope, Stmt, Symbol, UtilityFunctions};
 use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
 use type_check::symbol_env::StatementIdx;
@@ -130,7 +130,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	let env = SymbolEnv::new(None, types.void(), false, Phase::Preflight, 0);
+	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
 	scope.set_env(env);
 
 	add_builtin(
@@ -195,7 +195,7 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.unwrap()
 		.define(
 			&sym,
-			SymbolKind::Variable(types.add_type(typ), VariableKind::Let),
+			SymbolKind::make_variable(types.add_type(typ), false),
 			StatementIdx::Top,
 		)
 		.expect("Failed to add builtin");

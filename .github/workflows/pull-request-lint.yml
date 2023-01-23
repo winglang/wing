@@ -32,6 +32,7 @@ jobs:
           types: |-
             feat
             fix
+            docs
             chore
             rfc
           subjectPattern: ^[^A-Z]+[^.]$

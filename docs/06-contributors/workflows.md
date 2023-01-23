@@ -11,26 +11,30 @@ This topic includes a description of common development workflows for the Wing p
 Here is a list of minimal tools you should install to build the Wing repo in your development
 environment:
 
-* [Node.js] version 18.x (we recommend [volta]) (currently npm 9 is [not
-  supported](https://github.com/winglang/wing/issues/1103))
+* [Node.js] v18 and npm v8
+  * We recommend [volta] to manage node tools
 * [Rust]
-* [AWS CLI] (only needed for integration tests - make sure to do the setup part to create
-  credentials)
-* [Terraform CLI] (only needed for integration tests)
+* [AWS CLI]
+  * Only needed for integration tests - make sure to do the setup part to create credentials
+* [Terraform CLI]
+  * Only needed for integration tests
 
 Installation:
 
 ```sh
-$ git clone git@github.com:winglang/wing.git
-$ cd wing
-$ npm install
+git clone https://github.com/winglang/wing
+cd wing
+npm install
 ```
 
-This is required once:
+:::note
 
-```sh
-sudo ./scripts/setup_wasi.sh
-```
+The first time you run `npm install` you may be asked to enter your system password, this is because
+it's taking care of installing the [wasi-sdk](https://github.com/WebAssembly/wasi-sdk) for you.
+
+If you wish to install it manually, you may do so by running `scripts/setup_wasi.sh`
+
+:::
 
 [Nx]: https://nx.dev/
 [Node.js]: https://nodejs.org/en/
@@ -41,7 +45,7 @@ sudo ./scripts/setup_wasi.sh
 
 ## Development iteration
 
-The `nx wing` command can be executed from the root of the repository in order to build and run the
+The `npx nx wing` command can be executed from the root of the repository in order to build and run the
 compiler, SDK and the Wing CLI. Nx is configured to make sure only the changed components are built
 every time.
 
@@ -52,13 +56,14 @@ export NODE_OPTIONS=--stack-trace-limit=100
 export RUST_BACKTRACE=full
 ```
 
-Now, you can edit a source file anywhere across stack and run this:
+Now, you can edit a source file anywhere across the stack and run the compiler with arguments.
+For example:
 
 ```sh
-npx nx wing -- <wing cli arguments>
+npx nx wing -- test ../../examples/tests/valid/captures.w
 ```
 
-This runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
+This command runs the full Wing CLI with the given arguments. Nx will ensure the CLI build is updated.
 
 ## Compiler
 
@@ -70,8 +75,8 @@ cd libs/wingc
 npx nx test
 ```
 
-The following command runs `wingc` on a file. This do all compilation steps except running the
-generated intermediate generated preflight javascript.
+The following command runs `wingc` on a file. This performs all the compilation steps, except th last one: running the
+generated intermediate preflight javascript. For those familiar with the CDK, it doesn't run the synth command in the end.
 
 ```sh
 npx nx dev -- <path to .w file>

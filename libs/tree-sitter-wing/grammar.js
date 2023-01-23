@@ -157,7 +157,7 @@ module.exports = grammar({
     class_member: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
-        optional($.reassignable),
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation,
         ";"
@@ -373,7 +373,11 @@ module.exports = grammar({
     access_modifier: ($) => choice("public", "private", "protected"),
 
     parameter_definition: ($) =>
-      seq(field("name", $.identifier), $._type_annotation),
+      seq(
+        optional(field("reassignable", $.reassignable)),
+        field("name", $.identifier), 
+        $._type_annotation
+      ),
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
 

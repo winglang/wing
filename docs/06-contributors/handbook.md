@@ -168,6 +168,8 @@ changelog. To that end, pull request titles must follow this convention:
   * `docs`
   * `cli`
   * `examples`
+  * `playground`
+  * `vscode`
   * `build` - change related to development environment, build system, build tools, etc.
   * `repo` - change related to repository behavior (e.g. pull request templates, issue templates,
     etc).
