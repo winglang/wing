@@ -96,6 +96,12 @@ export class Bucket extends cloud.BucketBase {
     this.storageContainer;
   }
 
+  public addObject(key: string, body: string) {
+    key;
+    body;
+    throw new Error("Method not implemented on Azure (#12345).");
+  }
+
   /** @internal */
   public _bind(host: core.IInflightHost, ops: string[]): void {
     host;

@@ -35,6 +35,8 @@ export abstract class BucketBase extends Resource {
 
     props;
   }
+
+  public abstract addObject(key: string, body: string): void;
 }
 
 /**
@@ -50,6 +52,12 @@ export class Bucket extends BucketBase {
 
   /** @internal */
   public _toInflight(): Code {
+    throw new Error("Method not implemented.");
+  }
+
+  public addObject(key: string, body: string): void {
+    key;
+    body;
     throw new Error("Method not implemented.");
   }
 }

@@ -10,16 +10,17 @@ import { exists } from "./util";
 export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   private readonly fileDir: string;
   private readonly context: ISimulatorContext;
-  public constructor(
-    _props: BucketSchema["props"],
-    context: ISimulatorContext
-  ) {
+  private readonly initialObjects: Record<string, string>;
+  public constructor(props: BucketSchema["props"], context: ISimulatorContext) {
     this.fileDir = fs.mkdtempSync(join(os.tmpdir(), "wing-sim-"));
     this.context = context;
+    this.initialObjects = props.initialObjects ?? {};
   }
 
   public async init(): Promise<void> {
-    return;
+    for (const [key, value] of Object.entries(this.initialObjects)) {
+      await this.put(key, value);
+    }
   }
 
   public async cleanup(): Promise<void> {
