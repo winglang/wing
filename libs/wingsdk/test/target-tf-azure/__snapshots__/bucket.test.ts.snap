@@ -4,25 +4,25 @@ exports[`bucket is public 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_mybucket_ResourceGroup_C1D7AF27\\": {
+      \\"root_ResourceGroup_72A9AFB6\\": {
         \\"location\\": \\"East US\\",
-        \\"name\\": \\"my_bucket-c8045fcc\\"
+        \\"name\\": \\"root-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_mybucket_StorageAccount_A0150B8A\\": {
+      \\"root_StorageAccount_3B92EC74\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.location}\\",
-        \\"name\\": \\"mybucketc8045fcc\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.name}\\"
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"name\\": \\"rootc82bf964\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
       \\"root_mybucket_Bucket_10512A98\\": {
         \\"container_access_type\\": \\"public\\",
         \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     }
   }
@@ -144,25 +144,25 @@ exports[`bucket name valid 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_TheUncannyBucket_ResourceGroup_056902E8\\": {
+      \\"root_ResourceGroup_72A9AFB6\\": {
         \\"location\\": \\"East US\\",
-        \\"name\\": \\"The-Uncanny-Bucket-c8ac4720\\"
+        \\"name\\": \\"root-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_TheUncannyBucket_StorageAccount_A894AF8E\\": {
+      \\"root_StorageAccount_3B92EC74\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_TheUncannyBucket_ResourceGroup_056902E8.location}\\",
-        \\"name\\": \\"theuncannybucketc8ac4720\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_TheUncannyBucket_ResourceGroup_056902E8.name}\\"
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"name\\": \\"rootc82bf964\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
       \\"root_TheUncannyBucket_DDA021FB\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"the-uncanny-bucket-c8ac4720\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_TheUncannyBucket_StorageAccount_A894AF8E.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     }
   }
@@ -456,25 +456,25 @@ exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_mybucket_ResourceGroup_C1D7AF27\\": {
+      \\"root_ResourceGroup_72A9AFB6\\": {
         \\"location\\": \\"East US\\",
-        \\"name\\": \\"my_bucket-c8045fcc\\"
+        \\"name\\": \\"root-c82bf964\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_mybucket_StorageAccount_A0150B8A\\": {
+      \\"root_StorageAccount_3B92EC74\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.location}\\",
-        \\"name\\": \\"mybucketc8045fcc\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.name}\\"
+        \\"location\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.location}\\",
+        \\"name\\": \\"rootc82bf964\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_ResourceGroup_72A9AFB6.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
       \\"root_mybucket_Bucket_10512A98\\": {
         \\"container_access_type\\": \\"private\\",
         \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\"
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_StorageAccount_3B92EC74.name}\\"
       }
     }
   }

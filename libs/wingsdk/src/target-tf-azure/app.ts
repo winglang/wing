@@ -13,6 +13,27 @@ export interface AzureAppProps extends AppProps {
 }
 
 /**
+ * ResourceGroup names are limited to 90 characters.
+ * You can use alphanumeric characters, hyphens, and underscores,
+ * parentheses and periods.
+ */
+const RESOURCEGROUP_NAME_OPTS: NameOptions = {
+  maxLen: 90,
+  disallowedRegex: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
+};
+
+/**
+ * StorageAccount names are limited to 24 characters.
+ * You can only use alphanumeric characters.
+ */
+const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
+  maxLen: 24,
+  case: CaseConventions.LOWERCASE,
+  disallowedRegex: /([^a-z0-9]+)/g,
+  sep: "",
+};
+
+/**
  * An app that knows how to synthesize constructs into a Terraform configuration
  * for Azure resources.
  */
@@ -38,6 +59,8 @@ export class App extends CdktfApp implements IApp {
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
    * */
   public readonly location: string;
+  public readonly resourceGroup: ResourceGroup;
+  public readonly storageAccount: StorageAccount;
 
   constructor(props: AzureAppProps) {
     super({
@@ -59,6 +82,20 @@ export class App extends CdktfApp implements IApp {
       value: this,
       enumerable: false,
       writable: false,
+    });
+
+    // Create a resource group and storage account for all resources in this app
+    this.resourceGroup = new ResourceGroup(this, "ResourceGroup", {
+      location: this.location,
+      name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
+    });
+
+    this.storageAccount = new StorageAccount(this, "StorageAccount", {
+      name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
+      resourceGroupName: this.resourceGroup.name,
+      location: this.resourceGroup.location,
+      accountTier: "Standard",
+      accountReplicationType: "LRS",
     });
   }
 }

@@ -68,13 +68,15 @@ test("bucket name valid", () => {
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
   const bucket = new cloud.Bucket(app, "The-Uncanny-Bucket");
   const output = app.synth();
+  console.log(output);
+  console.log(bucket.node.addr.substring(0, 8));
 
   expect(
     cdktf.Testing.toHaveResourceWithProperties(
       output,
       "azurerm_resource_group",
       {
-        name: `The-Uncanny-Bucket-${bucket.node.addr.substring(0, 8)}`,
+        name: `root-${app.node.addr.substring(0, 8)}`,
       }
     )
   ).toEqual(true);
@@ -84,7 +86,7 @@ test("bucket name valid", () => {
       output,
       "azurerm_storage_account",
       {
-        name: `theuncannybucket${bucket.node.addr.substring(0, 8)}`,
+        name: `root${app.node.addr.substring(0, 8)}`,
       }
     )
   ).toEqual(true);

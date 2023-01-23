@@ -13,27 +13,6 @@ import {
 } from "../utils/resource-names";
 
 /**
- * ResourceGroup names are limited to 90 characters.
- * You can use alphanumeric characters, hyphens, and underscores,
- * parentheses and periods.
- */
-const RESOURCEGROUP_NAME_OPTS: NameOptions = {
-  maxLen: 90,
-  disallowedRegex: /([^a-zA-Z0-9\-\_\(\)\.]+)/g,
-};
-
-/**
- * StorageAccount names are limited to 24 characters.
- * You can only use alphanumeric characters.
- */
-const STORAGEACCOUNT_NAME_OPTS: NameOptions = {
-  maxLen: 24,
-  case: CaseConventions.LOWERCASE,
-  disallowedRegex: /([^a-z0-9]+)/g,
-  sep: "",
-};
-
-/**
  * Bucket names must be between 3 and 63 characters.
  *
  * You can use lowercase alphanumeric characters, dash (-)
@@ -52,8 +31,6 @@ const BUCKET_NAME_OPTS: NameOptions = {
  */
 export class Bucket extends cloud.BucketBase {
   private readonly storageContainer: StorageContainer;
-  private readonly storageAccount: StorageAccount;
-  private readonly resourceGroup: ResourceGroup;
   private readonly public: boolean;
 
   constructor(scope: Construct, id: string, props: cloud.BucketProps) {
@@ -62,19 +39,6 @@ export class Bucket extends cloud.BucketBase {
     this.public = props.public ?? false;
 
     const app = App.of(this);
-
-    this.resourceGroup = new ResourceGroup(this, "ResourceGroup", {
-      location: app.location,
-      name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
-    });
-
-    this.storageAccount = new StorageAccount(this, "StorageAccount", {
-      name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
-      resourceGroupName: this.resourceGroup.name,
-      location: this.resourceGroup.location,
-      accountTier: "Standard",
-      accountReplicationType: "LRS",
-    });
 
     const storageContainerName = ResourceNames.generateName(
       this,
@@ -90,7 +54,7 @@ export class Bucket extends cloud.BucketBase {
 
     this.storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
-      storageAccountName: this.storageAccount.name,
+      storageAccountName: app.storageAccount.name,
       containerAccessType: this.public ? "public" : "private",
     });
   }
