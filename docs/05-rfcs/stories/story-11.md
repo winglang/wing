@@ -107,7 +107,7 @@ resource TaskList {
 let tasks = new TaskList();
 
 let clear_tasks = new cloud.Function(inflight (s: str): str => {
-  for (id in tasks.list_task_ids()) {
+  for id in tasks.list_task_ids() {
     tasks.remove_tasks(id);
   }
 }) as "utility:clear tasks";
@@ -125,13 +125,13 @@ new cloud.Function(inflight (s: str): str => {
   tasks.add_task("clean the dishes");
   let result = tasks.find_tasks_with("clean the dishes");
   assert(result.len == 1);
-  assert("clean the dishes" == tasks.get_task(result.at(0));
+  assert("clean the dishes" == tasks.get_task(result.at(0)));
 }) as "test:get and find task";
 
 new cloud.Function(inflight (s: str): str => {
   clear_tasks.invoke("");
   add_tasks.invoke("");
-  tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0))
+  tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0));
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
 }) as "test:get, remove and find task";
