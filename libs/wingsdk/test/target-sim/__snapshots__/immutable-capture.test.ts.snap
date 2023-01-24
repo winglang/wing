@@ -42,7 +42,15 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_capture);
+        if (!(this.my_capture.length === 2)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.length === 2\\"\`);
+        }
+        if (!(this.my_capture[0] === \\"hello\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture[0] === \\"hello\\"\\"\`);
+        }
+        if (!(this.my_capture[1] === \\"dude\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture[1] === \\"dude\\"\\"\`);
+        }
       }
     };
   }())({
@@ -53,6 +61,219 @@ exports.handler = async function(event) {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Function": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.130",
+              },
+              "id": "Code",
+              "path": "root/Function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/Function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "foo": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "foo",
+          "path": "root/foo",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.130",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`array of buckets 1`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/B1",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/B2",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/Function",
+        "props": Object {
+          "environmentVariables": Object {
+            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "assets/Function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle() {
+        await this.my_buckets[0].put(\\"hello.txt\\", \\"world\\");
+        const objects = await this.my_buckets[0].list();
+        if (!(objects.length === 1)) {
+          throw new Error(\`assertion failed: \\"objects.length === 1\\"\`);
+        }
+        if (!(objects[0] === \\"hello.txt\\")) {
+          throw new Error(\`assertion failed: \\"objects[0] === \\"hello.txt\\"\\"\`);
+        }
+        await this.my_buckets[1].put(\\"foo\\", \\"bar\\");
+        if (!(await this.my_buckets[1].get(\\"foo\\") === \\"bar\\")) {
+          throw new Error(\`assertion failed: \\"await this.my_buckets[1].get(\\"foo\\") === \\"bar\\"\\"\`);
+        }
+      }
+    };
+  }())({
+    my_buckets: [function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_4fecd6d0\\"), function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_300e8055\\")]
+  }).handle(event);
+};
+",
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "B1": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B1",
+          "path": "root/B1",
+        },
+        "B2": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B2",
+          "path": "root/B2",
+        },
         "Function": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
@@ -182,7 +403,15 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_array[0].minutes + this.my_array[1].minutes);
+        if (!(this.my_array.length === 2)) {
+          throw new Error(\`assertion failed: \\"this.my_array.length === 2\\"\`);
+        }
+        if (!(this.my_array[0].minutes === 10)) {
+          throw new Error(\`assertion failed: \\"this.my_array[0].minutes === 10\\"\`);
+        }
+        if (!(this.my_array[1].minutes === 20)) {
+          throw new Error(\`assertion failed: \\"this.my_array[1].minutes === 20\\"\`);
+        }
       }
     };
   }())({
@@ -322,7 +551,12 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_array[0].get(\\"foo\\") + this.my_array[1].get(\\"bar\\"));
+        if (!(this.my_array[0].get(\\"foo\\") === 1)) {
+          throw new Error(\`assertion failed: \\"this.my_array[0].get('foo') === 1\\"\`);
+        }
+        if (!(this.my_array[1].get(\\"bar\\") === 4)) {
+          throw new Error(\`assertion failed: \\"this.my_array[1].get('bar') === 4\\"\`);
+        }
       }
     };
   }())({
@@ -462,7 +696,9 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_capture);
+        if (!(this.my_capture === false)) {
+          throw new Error(\`assertion failed: \\"this.my_capture === false\\"\`);
+        }
       }
     };
   }())({
@@ -602,7 +838,15 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify({ min: this.my_capture.minutes, sec: this.my_capture.seconds, hours: this.my_capture.hours });
+        if (!(this.my_capture.minutes === 120)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.minutes === 120\\"\`);
+        }
+        if (!(this.my_capture.seconds === 7200)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.seconds === 7200\\"\`);
+        }
+        if (!(this.my_capture.hours === 2)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.hours === 2\\"\`);
+        }
       }
     };
   }())({
@@ -742,7 +986,21 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify({ has_foo: this.my_capture.has(\\"foo\\"), size: this.my_capture.size, get_bar: this.my_capture.get(\\"bar\\") });
+        if (!this.my_capture.has(\\"foo\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"foo\\")\\"\`);
+        }
+        if (!this.my_capture.has(\\"bar\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"bar\\")\\"\`);
+        }
+        if (!(this.my_capture.size === 2)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.size === 2\\"\`);
+        }
+        if (!(this.my_capture.get(\\"foo\\") === 123)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.get(\\"foo\\") === 123\\"\`);
+        }
+        if (!(this.my_capture.get(\\"bar\\") === 456)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.get(\\"bar\\") === 456\\"\`);
+        }
       }
     };
   }())({
@@ -882,7 +1140,27 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_map.get(\\"foo\\")[0] + this.my_map.get(\\"bar\\")[1]);
+        if (!this.my_map.has(\\"foo\\")) {
+          throw new Error(\`assertion failed: \\"this.my_map.has(\\"foo\\")\\"\`);
+        }
+        if (!this.my_map.has(\\"bar\\")) {
+          throw new Error(\`assertion failed: \\"this.my_map.has(\\"bar\\")\\"\`);
+        }
+        if (!(this.my_map.size === 2)) {
+          throw new Error(\`assertion failed: \\"this.my_map.size === 2\\"\`);
+        }
+        if (!(this.my_map.get(\\"foo\\")[0] === 1)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get(\\"foo\\")[0] === 1\\"\`);
+        }
+        if (!(this.my_map.get(\\"foo\\")[1] === 2)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get(\\"foo\\")[1] === 2\\"\`);
+        }
+        if (!(this.my_map.get(\\"bar\\")[0] === 3)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get(\\"bar\\")[0] === 3\\"\`);
+        }
+        if (!(this.my_map.get(\\"bar\\")[1] === 4)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get(\\"bar\\")[1] === 4\\"\`);
+        }
       }
     };
   }())({
@@ -1022,7 +1300,18 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_map.get(\\"foo\\").at(0).minutes + this.my_map.get(\\"bar\\").at(1).minutes);
+        if (!(this.my_map.get(\\"foo\\")[0].minutes === 10)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get('foo')[0].minutes === 10\\"\`);
+        }
+        if (!(this.my_map.get(\\"foo\\")[1].seconds === 20 * 60)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get('foo')[1].seconds === 20 * 60\\"\`);
+        }
+        if (!(this.my_map.get(\\"bar\\")[0].minutes === 30)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get('bar')[0].minutes === 30\\"\`);
+        }
+        if (!(this.my_map.get(\\"bar\\")[1].seconds === 40 * 60)) {
+          throw new Error(\`assertion failed: \\"this.my_map.get('bar')[1].seconds === 40 * 60\\"\`);
+        }
       }
     };
   }())({
@@ -1033,6 +1322,212 @@ exports.handler = async function(event) {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Function": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.130",
+              },
+              "id": "Code",
+              "path": "root/Function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/Function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "foo": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "foo",
+          "path": "root/foo",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.130",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`map of buckets 1`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/B1",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/B2",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/Function",
+        "props": Object {
+          "environmentVariables": Object {
+            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "assets/Function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle() {
+        const foo = this.my_map.get(\\"foo\\");
+        await foo.put(\\"hello.txt\\", \\"world\\");
+        if (!(await foo.get(\\"hello.txt\\") === \\"world\\")) {
+          throw new Error(\`assertion failed: \\"await foo.get(\\"hello.txt\\") === \\"world\\"\\"\`);
+        }
+      }
+    };
+  }())({
+    my_map: /* @__PURE__ */ new Map([[\\"foo\\", function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_4fecd6d0\\")], [\\"bar\\", function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_300e8055\\")]])
+  }).handle(event);
+};
+",
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "B1": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B1",
+          "path": "root/B1",
+        },
+        "B2": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B2",
+          "path": "root/B2",
+        },
         "Function": Object {
           "attributes": Object {
             "wing:resource:connections": Array [
@@ -1162,7 +1657,9 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_capture + 20);
+        if (!(this.my_capture + 20 === 143)) {
+          throw new Error(\`assertion failed: \\"this.my_capture + 20 === 143\\"\`);
+        }
       }
     };
   }())({
@@ -1302,7 +1799,18 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify({ size: this.my_capture.size, has_bang: this.my_capture.has(\\"bang\\"), has_bim: this.my_capture.has(\\"bim\\") });
+        if (!this.my_capture.has(\\"boom\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"boom\\")\\"\`);
+        }
+        if (!this.my_capture.has(\\"bam\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"bam\\")\\"\`);
+        }
+        if (!this.my_capture.has(\\"bang\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.has(\\"bang\\")\\"\`);
+        }
+        if (!(this.my_capture.size === 3)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.size === 3\\"\`);
+        }
       }
     };
   }())({
@@ -1442,7 +1950,15 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(Array.from(this.my_set.values()));
+        if (!(Array.from(this.my_set)[0].minutes === 10)) {
+          throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].minutes === 10\\"\`);
+        }
+        if (!(Array.from(this.my_set)[0].hours === 0.16666666666666666)) {
+          throw new Error(\`assertion failed: \\"Array.from(this.my_set)[0].hours === 0.16666666666666666\\"\`);
+        }
+        if (!(Array.from(this.my_set)[1].seconds === 1200)) {
+          throw new Error(\`assertion failed: \\"Array.from(this.my_set)[1].seconds === 1200\\"\`);
+        }
       }
     };
   }())({
@@ -1582,7 +2098,12 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_capture);
+        if (!(this.my_capture.length === 11)) {
+          throw new Error(\`assertion failed: \\"this.my_capture.length === 11\\"\`);
+        }
+        if (!(this.my_capture === \\"bam bam bam\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture === \\"bam bam bam\\"\\"\`);
+        }
       }
     };
   }())({
@@ -1722,7 +2243,18 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify({ hello: this.my_capture.hello, world: this.my_capture.world, foo: this.my_capture.foo, len: Object.keys(this.my_capture).length });
+        if (!(this.my_capture.hello === \\"dude\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.hello === \\"dude\\"\\"\`);
+        }
+        if (!(this.my_capture.world === \\"cup\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.world === \\"cup\\"\\"\`);
+        }
+        if (!(this.my_capture.foo === \\"bar\\")) {
+          throw new Error(\`assertion failed: \\"this.my_capture.foo === \\"bar\\"\\"\`);
+        }
+        if (!(Object.keys(this.my_capture).length === 3)) {
+          throw new Error(\`assertion failed: \\"Object.keys(this.my_capture).length === 3\\"\`);
+        }
       }
     };
   }())({
@@ -1862,7 +2394,18 @@ exports.handler = async function(event) {
         }
       }
       async handle() {
-        return JSON.stringify(this.my_struct.foo.get(\\"foo\\") + this.my_struct.bar.get(\\"bar\\"));
+        if (!(this.my_struct.foo.get(\\"foo\\") === 1)) {
+          throw new Error(\`assertion failed: \\"this.my_struct.foo.get('foo') === 1\\"\`);
+        }
+        if (!(this.my_struct.foo.get(\\"bar\\") === 2)) {
+          throw new Error(\`assertion failed: \\"this.my_struct.foo.get('bar') === 2\\"\`);
+        }
+        if (!(this.my_struct.bar.get(\\"foo\\") === 3)) {
+          throw new Error(\`assertion failed: \\"this.my_struct.bar.get('foo') === 3\\"\`);
+        }
+        if (!(this.my_struct.bar.get(\\"bar\\") === 4)) {
+          throw new Error(\`assertion failed: \\"this.my_struct.bar.get('bar') === 4\\"\`);
+        }
       }
     };
   }())({
@@ -1873,6 +2416,314 @@ exports.handler = async function(event) {
   "tree.json": Object {
     "tree": Object {
       "children": Object {
+        "Function": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.0.130",
+              },
+              "id": "Code",
+              "path": "root/Function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "Function",
+          "path": "root/Function",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/Function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "foo": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "foo",
+          "path": "root/foo",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.0.130",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`struct with resources 1`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/B1",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/B2",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/B3",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/B4",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/B5",
+        "props": Object {
+          "public": false,
+        },
+        "type": "wingsdk.cloud.Bucket",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/Function",
+        "props": Object {
+          "environmentVariables": Object {
+            "BUCKET_HANDLE_0120daf4": "\${root/B3#attrs.handle}",
+            "BUCKET_HANDLE_1d7ab674": "\${root/B5#attrs.handle}",
+            "BUCKET_HANDLE_300e8055": "\${root/B2#attrs.handle}",
+            "BUCKET_HANDLE_4fecd6d0": "\${root/B1#attrs.handle}",
+            "BUCKET_HANDLE_ea7944ef": "\${root/B4#attrs.handle}",
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/Function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "assets/Function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle() {
+        const b = this.my_struct.bucky;
+        await b.put(\\"hello.txt\\", \\"world\\");
+        if (!(await b.get(\\"hello.txt\\") === \\"world\\")) {
+          throw new Error(\`assertion failed: \\"await b.get(\\"hello.txt\\") === \\"world\\"\\"\`);
+        }
+        const boom = this.my_struct.arry.boom[1];
+        if (!((await boom.list()).length === 0)) {
+          throw new Error(\`assertion failed: \\"(await boom.list()).length === 0\\"\`);
+        }
+        const bar = this.my_struct.mapy.get(\\"bar\\");
+        await bar.put(\\"foo\\", \\"bar\\");
+        if (!(await bar.get(\\"foo\\") === \\"bar\\")) {
+          throw new Error(\`assertion failed: \\"await bar.get(\\"foo\\") === \\"bar\\"\\"\`);
+        }
+      }
+    };
+  }())({
+    my_struct: { bucky: function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_4fecd6d0\\"), mapy: /* @__PURE__ */ new Map([[\\"foo\\", function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_300e8055\\")], [\\"bar\\", function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_0120daf4\\")]]), arry: { boom: [function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_ea7944ef\\"), function(env) {
+      let handle = process.env[env];
+      if (!handle) {
+        throw new Error(\\"Missing environment variable: \\" + env);
+      }
+      return $simulator.findInstance(handle);
+    }(\\"BUCKET_HANDLE_1d7ab674\\")] } }
+  }).handle(event);
+};
+",
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "B1": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B1",
+          "path": "root/B1",
+        },
+        "B2": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B2",
+          "path": "root/B2",
+        },
+        "B3": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B3",
+          "path": "root/B3",
+        },
+        "B4": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B4",
+          "path": "root/B4",
+        },
+        "B5": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.0.130",
+          },
+          "display": Object {
+            "description": "A cloud object store",
+            "title": "Bucket",
+          },
+          "id": "B5",
+          "path": "root/B5",
+        },
         "Function": Object {
           "attributes": Object {
             "wing:resource:connections": Array [

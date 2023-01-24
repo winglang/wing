@@ -64,12 +64,15 @@ ${Object.entries(clients)
   }
 
   // only annotate resource bindings because there's no binding to do for data
-  const annotation = Object.fromEntries(
-    Object.entries(bindings.resources ?? {}).map(([name, def]) => [
-      "this." + name,
-      { ops: def.ops },
-    ])
-  );
+  const annotation: Record<string, { ops: Array<string> }> = {};
+  for (const [k, v] of Object.entries(bindings.resources ?? {})) {
+    annotation["this." + k] = { ops: v.ops };
+  }
+
+  for (const k of Object.keys(bindings.data ?? {})) {
+    annotation["this." + k] = { ops: [] };
+  }
+
   Handler._annotateInflight("handle", annotation);
 
   return new Handler();
@@ -84,7 +87,7 @@ function serializeImmutableData(obj: any): string {
 
     case "object":
       if (Array.isArray(obj)) {
-        return `[${obj.map(serializeImmutableData).join(",")}]`;
+        return `[${obj.map((x) => serializeImmutableData(x)).join(",")}]`;
       }
 
       if (obj instanceof Duration) {
@@ -103,8 +106,14 @@ function serializeImmutableData(obj: any): string {
         return `new Map(${serializeImmutableData(Array.from(obj))})`;
       }
 
-      // structs are just objects
-      if (obj instanceof Object) {
+      // if the object is a resource (i.e. has a "_toInflight" method"), then we lift and add to the
+      // list of bindings.
+      if (typeof obj._toInflight === "function") {
+        return obj._toInflight().text;
+      }
+
+      // structs are just plain objects
+      if (obj.constructor.name === "Object") {
         const lines = [];
         lines.push("{");
         for (const [k, v] of Object.entries(obj)) {
