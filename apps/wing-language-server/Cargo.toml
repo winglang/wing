@@ -7,7 +7,7 @@ edition = "2021"
 ropey = "1.5.0"
 tree-sitter = "0.20.9"
 tokio = { version = "1.21.1", features = ["full"] }
-tower-lsp = { version = "0.17.0"}
+tower-lsp = { version = "0.18.0"}
 dashmap = "5.4.0"
 tree-sitter-traversal = "0.1.2"
 tree-sitter-wing = { path = "../../libs/tree-sitter-wing" }
