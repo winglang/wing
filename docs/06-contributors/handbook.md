@@ -80,10 +80,17 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 * Commit your changes and push them to your fork.
 * Open a pull request. A Wing maintainer will review it as soon as possible!
 
+## 🏠 How do I build Wing?
+
+Assuming you've [setup your environment](https://docs.winglang.io/contributors/workflows#environment-setup), including the `npm install` part,
+just run the following command from the root of the project:
+```
+npx nx wing
+```
+
 ## 🧪 How do I run E2E tests?
 
-Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build
-wing](#🔨-how-do-i-build-wing-locally).
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🏠-How-do-I-build-Wing).
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar
 project:
