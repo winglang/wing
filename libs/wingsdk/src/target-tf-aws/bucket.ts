@@ -105,7 +105,7 @@ export class Bucket extends cloud.BucketBase {
   }
 
   public addObject(key: string, body: string): void {
-    new S3Object(this, "S3Object", {
+    new S3Object(this, `S3Object-${key}`, {
       bucket: this.bucket.bucket,
       key,
       content: body,

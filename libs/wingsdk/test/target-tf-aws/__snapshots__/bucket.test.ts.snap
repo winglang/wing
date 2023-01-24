@@ -399,6 +399,165 @@ Object {
 }
 `;
 
+exports[`bucket with two preflight objects 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_s3_bucket\\": {
+      \\"root_mybucket_E5DAA363\\": {
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+      }
+    },
+    \\"aws_s3_bucket_policy\\": {
+      \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Principal\\\\\\":\\\\\\"*\\\\\\",\\\\\\"Action\\\\\\":[\\\\\\"s3:GetObject\\\\\\"],\\\\\\"Resource\\\\\\":[\\\\\\"\${aws_s3_bucket.root_mybucket_E5DAA363.arn}/*\\\\\\"]}]}\\"
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_mybucket_Encryption_AA43F7E8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_mybucket_S3Objectfile1txt_B3E3D89E\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"content\\": \\"hello world\\",
+        \\"key\\": \\"file1.txt\\"
+      },
+      \\"root_mybucket_S3Objectfile2txt_FC04216D\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_mybucket_E5DAA363.bucket}\\",
+        \\"content\\": \\"boom bam\\",
+        \\"key\\": \\"file2.txt\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket with two preflight objects 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+          "my_bucket": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.1",
+                },
+                "id": "Default",
+                "path": "root/my_bucket/Default",
+              },
+              "Encryption": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                  "version": "12.0.1",
+                },
+                "id": "Encryption",
+                "path": "root/my_bucket/Encryption",
+              },
+              "PublicPolicy": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
+                  "version": "12.0.1",
+                },
+                "id": "PublicPolicy",
+                "path": "root/my_bucket/PublicPolicy",
+              },
+              "S3Object-file1.txt": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                  "version": "12.0.1",
+                },
+                "id": "S3Object-file1.txt",
+                "path": "root/my_bucket/S3Object-file1.txt",
+              },
+              "S3Object-file2.txt": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                  "version": "12.0.1",
+                },
+                "id": "S3Object-file2.txt",
+                "path": "root/my_bucket/S3Object-file2.txt",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
+            },
+            "id": "my_bucket",
+            "path": "root/my_bucket",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
 exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
