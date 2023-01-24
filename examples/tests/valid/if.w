@@ -1,18 +1,18 @@
 bring cloud;
 
 let x = 1;
-let var ok = false;
-if x == 2 {
-  print("x is 2");
-  ok = true;
+let var preflight_ok = false;
+if x == 1 {
+  print("x is 1");
+  preflight_ok = true;
 }
-assert(ok);
+assert(preflight_ok);
 
 new cloud.Function(inflight (s: str): str => {
-  let var ok = false;
+  let var inflight_ok = false;
   if x == 1 {
     print("x is 1");
-    ok = true;
+    inflight_ok = true;
   }
-  assert(ok);
+  assert(inflight_ok);
 }) as "test";
