@@ -29,6 +29,7 @@ jobs:
         run: echo "HAS_TOKEN=${{ secrets.MUTATION_TOKEN && 'true' || 'false' }}" >> $GITHUB_OUTPUT
       - name: Token notice
         if: steps.token-check.outputs.HAS_TOKEN == 'false'
+        working-directory: ${{ github.workspace }}
         run: |
           echo "Add a MUTATION_TOKEN secret with a personal access token secret
            to this repository to enable self mutation. It requires read/write repo permissions." >> $GITHUB_STEP_SUMMARY
