@@ -1370,7 +1370,7 @@ impl<'a> TypeChecker<'a> {
 				}
 				self.validate_type(exp_type, var_info._type, value);
 			}
-			StmtKind::Use {
+			StmtKind::Bring {
 				module_name,
 				identifier,
 			} => {

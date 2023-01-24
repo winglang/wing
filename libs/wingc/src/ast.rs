@@ -180,7 +180,7 @@ impl Display for UtilityFunctions {
 
 #[derive(Debug)]
 pub enum StmtKind {
-	Use {
+	Bring {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},

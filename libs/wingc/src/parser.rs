@@ -167,7 +167,7 @@ impl Parser<'_> {
 
 	fn build_statement(&self, statement_node: &Node, idx: usize) -> DiagnosticResult<Stmt> {
 		let stmt_kind = match statement_node.kind() {
-			"short_import_statement" => StmtKind::Use {
+			"short_import_statement" => StmtKind::Bring {
 				module_name: self.node_symbol(&statement_node.child_by_field_name("module_name").unwrap())?,
 				identifier: if let Some(identifier) = statement_node.child_by_field_name("alias") {
 					Some(self.node_symbol(&identifier)?)

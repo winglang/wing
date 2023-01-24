@@ -450,7 +450,7 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 					res.extend(scan_captures_in_inflight_scope(&m.statements, diagnostics))
 				}
 			}
-			StmtKind::Use {
+			StmtKind::Bring {
 				module_name: _,
 				identifier: _,
 			} => {

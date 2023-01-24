@@ -83,7 +83,7 @@ impl JSifier {
 			if line.is_empty() {
 				continue;
 			}
-			if let StmtKind::Use {
+			if let StmtKind::Bring {
 				identifier: _,
 				module_name: _,
 			} = statement.kind
@@ -445,7 +445,7 @@ impl JSifier {
 
 	fn jsify_statement(&self, statement: &Stmt, phase: Phase) -> String {
 		match &statement.kind {
-			StmtKind::Use {
+			StmtKind::Bring {
 				module_name,
 				identifier,
 			} => {
