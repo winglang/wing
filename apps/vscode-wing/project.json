@@ -40,7 +40,6 @@
     "build": {
       "executor": "nx:run-script",
       "dependsOn": [
-        "^build",
         "copy"
       ],
       "options": {
