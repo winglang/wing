@@ -22,11 +22,4 @@ indexmap = "1.9.1"
 
 [lib]
 path = "src/lib.rs"
-
-[[bin]]
-name = "wingc"
-path = "src/bin.rs"
-
-[package.metadata]
-# Currently wasm-opt is not changing the size of the wasm file, so it's just adding unnecessary time to the build.
-wasm-opt = false
+crate-type = ["cdylib", "rlib"]

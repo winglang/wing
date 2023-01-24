@@ -27,7 +27,6 @@ const project = new typescript.TypeScriptProject({
   ],
   compileBeforeTest: true, // we need this for the CLI test
   releaseToNpm: true,
-  npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
   github: false,
   projenrcTs: true,
@@ -55,5 +54,10 @@ project.gitignore.exclude(".vscode/");
 project.tasks.addEnvironment("NODE_OPTIONS", "--max-old-space-size=7168");
 // Avoid a non JSII compatible package (see https://github.com/projen/projen/issues/2264)
 project.package.addPackageResolutions("@types/babel__traverse@7.18.2");
+
+// override default test timeout from 5s to 30s
+project.testTask.reset(
+  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
+);
 
 project.synth();

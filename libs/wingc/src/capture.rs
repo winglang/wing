@@ -108,11 +108,7 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 					}
 				}
 			}
-			StmtKind::VariableDef {
-				var_name: _,
-				initial_value,
-				type_: _,
-			} => {
+			StmtKind::VariableDef { initial_value, .. } => {
 				scan_for_inflights_in_expression(initial_value, diagnostics);
 			}
 			StmtKind::Expression(exp) => {
@@ -217,7 +213,8 @@ fn scan_captures_in_call(
 				Ok((prop_type, phase)) => (
 					prop_type
 						.as_variable()
-						.expect("Expected resource property to be a variable"),
+						.expect("Expected resource property to be a variable")
+						._type,
 					phase,
 				),
 				Err(type_error) => {
@@ -268,54 +265,70 @@ fn scan_captures_in_expression(
 		}
 		ExprKind::Reference(r) => match r {
 			Reference::Identifier(symbol) => {
-				println!("Looking up symbol {}", symbol.name);
-
 				// Lookup the symbol
-				let (t, f) = match env.lookup_ext(&symbol, Some(statement_idx)) {
-					Ok((var, phase)) => (var.as_variable().expect("Expected identifier to be a variable"), phase),
-					Err(type_error) => {
-						panic!("Type error: {}", type_error);
-					}
-				};
+				let x = env.lookup_ext(&symbol, Some(statement_idx));
 
-				// if the identifier represents a preflight object, then capture it
-				if f == Phase::Preflight {
-					println!("{} is preflight!", symbol.name);
-					// capture as a resource
-					if let Some(resource) = t.as_resource() {
-						println!("{} is a resource!", symbol.name);
-						// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
-						//   1. explicit capture definitions
-						//   2. analyzing inflight code and figuring out what methods are being used on the object
-						res.extend(
-							resource
-								.methods()
-								.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
-								.map(|(name, _)| Capture {
-									object: symbol.clone(),
-									kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
-								})
-								.collect::<Vec<Capture>>(),
-						);
-					} else if t.is_immutable_collection() || t.is_primitive() {
-						// capture as an immutable data type (primitive/collection)
-						res.push(Capture {
-							object: symbol.clone(),
-							kind: CaptureKind::ImmutableData,
-						});
-					} else {
-						// unsupported capture
+				// we ignore errors here because if the lookup symbol
+				// wasn't found, a error diagnostic is already emitted
+				// the type checker.
+
+				if x.is_ok() {
+					let (var, si) = x.unwrap();
+
+					if var.as_variable().is_none() {
 						diagnostics.push(Diagnostic {
 							level: DiagnosticLevel::Error,
-							message: format!(
-								"Cannot reference '{}' of type '{}' from an inflight context",
-								symbol.name, t
-							),
+							message: "Expected identifier to be a variable".to_string(),
 							span: Some(symbol.span.clone()),
 						});
+					} else {
+						let t = var.as_variable().unwrap()._type;
+
+						// if the identifier represents a preflight value, then capture it
+						if si.flight == Phase::Preflight {
+							if var.is_reassignable() {
+								diagnostics.push(Diagnostic {
+									level: DiagnosticLevel::Error,
+									message: format!("Cannot capture a reassignable variable \"{}\"", symbol.name),
+									span: Some(symbol.span.clone()),
+								});
+								return res;
+							}
+
+							// capture as a resource
+							if let Some(resource) = t.as_resource() {
+								// TODO: for now we add all resource client methods to the capture, in the future this should be done based on:
+								//   1. explicit capture definitions
+								//   2. analyzing inflight code and figuring out what methods are being used on the object
+								res.extend(
+									resource
+										.methods()
+										.filter(|(_, sig)| matches!(sig.as_function_sig().unwrap().flight, Phase::Inflight))
+										.map(|(name, _)| Capture {
+											object: symbol.clone(),
+											kind: CaptureKind::Resource(CaptureDef { method: name.clone() }),
+										})
+										.collect::<Vec<Capture>>(),
+								);
+							} else if t.is_immutable_collection() || t.is_primitive() {
+								// capture as an immutable data type (primitive/collection)
+								res.push(Capture {
+									object: symbol.clone(),
+									kind: CaptureKind::ImmutableData,
+								});
+							} else {
+								// unsupported capture
+								diagnostics.push(Diagnostic {
+									level: DiagnosticLevel::Error,
+									message: format!(
+										"Cannot reference '{}' of type '{}' from an inflight context",
+										symbol.name, t
+									),
+									span: Some(symbol.span.clone()),
+								});
+							}
+						}
 					}
-				} else {
-					println!("{} is {}", symbol.name, f);
 				}
 			}
 			Reference::NestedIdentifier { object, property: _ } => {
@@ -341,10 +354,30 @@ fn scan_captures_in_expression(
 		}
 		ExprKind::Unary { op: _, exp } => res.extend(scan_captures_in_expression(exp, env, statement_idx, diagnostics)),
 		ExprKind::Binary { op: _, lexp, rexp } => {
-			scan_captures_in_expression(lexp, env, statement_idx, diagnostics);
-			scan_captures_in_expression(rexp, env, statement_idx, diagnostics);
+			res.extend(scan_captures_in_expression(lexp, env, statement_idx, diagnostics));
+			res.extend(scan_captures_in_expression(rexp, env, statement_idx, diagnostics));
 		}
-		ExprKind::Literal(_) => {}
+		ExprKind::Literal(lit) => match lit {
+			Literal::String(_) => {}
+			Literal::InterpolatedString(interpolated_str) => {
+				res.extend(
+					interpolated_str
+						.parts
+						.iter()
+						.filter_map(|part| match part {
+							InterpolatedStringPart::Expr(expr) => {
+								Some(scan_captures_in_expression(expr, env, statement_idx, diagnostics))
+							}
+							InterpolatedStringPart::Static(_) => None,
+						})
+						.flatten()
+						.collect::<Vec<_>>(),
+				);
+			}
+			Literal::Number(_) => {}
+			Literal::Duration(_) => {}
+			Literal::Boolean(_) => {}
+		},
 		ExprKind::ArrayLiteral { items, .. } => {
 			for v in items {
 				res.extend(scan_captures_in_expression(&v, env, statement_idx, diagnostics));
@@ -391,11 +424,9 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 
 	for s in scope.statements.iter() {
 		match &s.kind {
-			StmtKind::VariableDef {
-				var_name: _,
-				initial_value,
-				type_: _,
-			} => res.extend(scan_captures_in_expression(initial_value, env, s.idx, diagnostics)),
+			StmtKind::VariableDef { initial_value, .. } => {
+				res.extend(scan_captures_in_expression(initial_value, env, s.idx, diagnostics))
+			}
 			StmtKind::ForLoop {
 				iterator: _,
 				iterable,

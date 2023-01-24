@@ -11,11 +11,22 @@ import { AssetType, Lazy, TerraformAsset } from "cdktf";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
+import { BUCKET_PREFIX_OPTS } from "./bucket";
+
+/**
+ * Function names are limited to 64 characters.
+ * You can use alphanumeric characters, hyphens (-), and underscores (_).
+ */
+const FUNCTION_NAME_OPTS: NameOptions = {
+  maxLen: 64,
+  disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
+};
 
 /**
  * AWS implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase {
   private readonly function: LambdaFunction;
@@ -48,7 +59,9 @@ export class Function extends cloud.FunctionBase {
     });
 
     // Create unique S3 bucket for hosting Lambda code
-    const bucket = new S3Bucket(this, "Bucket");
+    const bucket = new S3Bucket(this, "Code");
+    const bucketPrefix = ResourceNames.generateName(bucket, BUCKET_PREFIX_OPTS);
+    bucket.bucketPrefix = bucketPrefix;
 
     // Choose an object name so that:
     // - whenever code changes, the object name changes
@@ -114,9 +127,11 @@ export class Function extends cloud.FunctionBase {
       role: this.role.name,
     });
 
+    const name = ResourceNames.generateName(this, FUNCTION_NAME_OPTS);
+
     // Create Lambda function
     this.function = new LambdaFunction(this, "Default", {
-      functionName: this.sanitizeFunctionName(this.node.id),
+      functionName: name,
       s3Bucket: bucket.bucket,
       s3Key: lambdaArchive.key,
       handler: "index.handler",
@@ -130,17 +145,7 @@ export class Function extends cloud.FunctionBase {
     this.arn = this.function.arn;
 
     // terraform rejects templates with zero environment variables
-    this.addEnvironment("WING_FUNCTION_NAME", this.node.id);
-  }
-
-  /**
-   * Temporary work around to use node.id in function name.
-   * Valid lambda naming: https://docs.aws.amazon.com/lambda/latest/dg/API_CreateFunction.html#SSS-CreateFunction-request-FunctionName
-   *
-   * Should be deprecated by https://github.com/winglang/wing/discussions/861 (Name Generator)
-   */
-  private sanitizeFunctionName(name: string): string {
-    return name.replace(/[^a-zA-Z0-9\:\-]+/g, "_");
+    this.addEnvironment("WING_FUNCTION_NAME", name);
   }
 
   /** @internal */

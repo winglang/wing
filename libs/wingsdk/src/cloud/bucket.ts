@@ -25,6 +25,10 @@ export abstract class BucketBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: BucketProps) {
     super(scope, id);
+
+    this.display.title = "Bucket";
+    this.display.description = "A cloud object store";
+
     if (!scope) {
       return;
     }
@@ -36,7 +40,7 @@ export abstract class BucketBase extends Resource {
 /**
  * Represents a cloud object store.
  *
- * @inflight `@winglang/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends BucketBase {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {

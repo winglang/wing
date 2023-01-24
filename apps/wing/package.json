@@ -1,5 +1,5 @@
 {
-  "name": "@winglang/wing",
+  "name": "winglang",
   "version": "0.0.0",
   "description": "Wing Programming Language",
   "files": [
@@ -10,7 +10,9 @@
   "engines": {
     "node": ">=v18.0.0"
   },
-  "bin": "bin/wing",
+  "bin": {
+    "wing": "./bin/wing"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/winglang/wing.git"
@@ -18,13 +20,14 @@
   "scripts": {
     "copy-wingc-debug": "cp ../../target/wasm32-wasi/debug/wingc.wasm ./",
     "build": "tsc",
+    "watch": "tsc --watch",
     "test": "node --experimental-wasi-unstable-preview1 --no-warnings node_modules/.bin/jest --no-cache",
     "dev": "npm run build && ./bin/wing",
     "bump": "node version.js",
     "unbump": "node unversion.js"
   },
   "dependencies": {
-    "@winglang/wingsdk": "file:../../libs/wingsdk",
+    "@winglang/sdk": "file:../../libs/wingsdk",
     "chalk": "^4.1.2",
     "commander": "^9.4.1",
     "compare-versions": "^5.0.1",

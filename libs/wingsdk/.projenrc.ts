@@ -3,13 +3,13 @@ import { JsonFile, cdk, javascript } from "projen";
 const JSII_DEPS = [
   "constructs@~10.0.25",
   "polycons",
-  "cdktf",
-  "@cdktf/provider-aws",
-  "@cdktf/provider-azurerm@3.0.16",
+  "cdktf@~0.15.0",
+  "@cdktf/provider-aws@^12.0.1",
+  "@cdktf/provider-azurerm@^5.0.1",
 ];
 
 const project = new cdk.JsiiProject({
-  name: "@winglang/wingsdk",
+  name: "@winglang/sdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
@@ -55,7 +55,6 @@ const project = new cdk.JsiiProject({
   ],
   prettier: true,
   minNodeVersion: "16.16.0",
-  npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
@@ -224,5 +223,10 @@ docgen.reset();
 docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
+
+// override default test timeout from 5s to 30s
+project.testTask.reset(
+  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
+);
 
 project.synth();

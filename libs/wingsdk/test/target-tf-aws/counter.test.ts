@@ -1,3 +1,4 @@
+import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
@@ -84,6 +85,8 @@ test("inc() policy statement", () => {
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:UpdateItem");
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("peek() policy statement", () => {
@@ -109,4 +112,44 @@ test("peek() policy statement", () => {
   const output = app.synth();
 
   expect(tfSanitize(output)).toContain("dynamodb:GetItem");
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("counter name valid", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const counter = new cloud.Counter(app, "The.Amazing-Counter_01");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
+      name: `wing-counter-The.Amazing-Counter_01-${counter.node.addr.substring(
+        0,
+        8
+      )}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("replace invalid character from counter name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const counter = new cloud.Counter(app, "The*Amazing%Counter@01");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_dynamodb_table", {
+      name: `wing-counter-The-Amazing-Counter-01-${counter.node.addr.substring(
+        0,
+        8
+      )}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

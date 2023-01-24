@@ -20,7 +20,7 @@
       "type": "build"
     },
     {
-      "name": "@winglang/wingsdk",
+      "name": "@winglang/sdk",
       "version": "file:../../libs/wingsdk",
       "type": "build"
     },

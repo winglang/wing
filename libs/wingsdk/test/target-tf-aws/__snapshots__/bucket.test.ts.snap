@@ -4,7 +4,9 @@ exports[`bucket is public 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {}
+      \\"root_mybucket_E5DAA363\\": {
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+      }
     },
     \\"aws_s3_bucket_policy\\": {
       \\"root_mybucket_PublicPolicy_2A65F5BE\\": {
@@ -43,13 +45,18 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
             "id": "WingLogger",
             "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "version": "12.0.1",
             },
             "id": "aws",
             "path": "root/aws",
@@ -57,7 +64,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
+              "version": "0.15.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -71,7 +78,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
+                  "version": "12.0.1",
                 },
                 "id": "Default",
                 "path": "root/my_bucket/Default",
@@ -79,7 +86,7 @@ Object {
               "Encryption": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
+                  "version": "12.0.1",
                 },
                 "id": "Encryption",
                 "path": "root/my_bucket/Encryption",
@@ -87,7 +94,7 @@ Object {
               "PublicPolicy": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketPolicy.S3BucketPolicy",
-                  "version": "10.0.12",
+                  "version": "12.0.1",
                 },
                 "id": "PublicPolicy",
                 "path": "root/my_bucket/PublicPolicy",
@@ -97,13 +104,17 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
+            },
             "id": "my_bucket",
             "path": "root/my_bucket",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.15.0",
         },
         "id": "root",
         "path": "root",
@@ -111,7 +122,275 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.15.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket prefix must be lowercase 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_s3_bucket\\": {
+      \\"root_TheUncannyBucket_9FBBB2ED\\": {
+        \\"bucket_prefix\\": \\"the-uncanny-bucket-c88a0953-\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_TheUncannyBucket_PublicAccessBlock_FCE6031A\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_TheUncannyBucket_9FBBB2ED.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_TheUncannyBucket_Encryption_E43D3F83\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_TheUncannyBucket_9FBBB2ED.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket prefix must be lowercase 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "The-Uncanny.Bucket": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.1",
+                },
+                "id": "Default",
+                "path": "root/The-Uncanny.Bucket/Default",
+              },
+              "Encryption": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                  "version": "12.0.1",
+                },
+                "id": "Encryption",
+                "path": "root/The-Uncanny.Bucket/Encryption",
+              },
+              "PublicAccessBlock": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                  "version": "12.0.1",
+                },
+                "id": "PublicAccessBlock",
+                "path": "root/The-Uncanny.Bucket/PublicAccessBlock",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
+            },
+            "id": "The-Uncanny.Bucket",
+            "path": "root/The-Uncanny.Bucket",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket prefix valid 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_s3_bucket\\": {
+      \\"root_theuncannybucket_03A74E00\\": {
+        \\"bucket_prefix\\": \\"the-uncanny-bucket-c8e2755c-\\"
+      }
+    },
+    \\"aws_s3_bucket_public_access_block\\": {
+      \\"root_theuncannybucket_PublicAccessBlock_976A73D7\\": {
+        \\"block_public_acls\\": true,
+        \\"block_public_policy\\": true,
+        \\"bucket\\": \\"\${aws_s3_bucket.root_theuncannybucket_03A74E00.bucket}\\",
+        \\"ignore_public_acls\\": true,
+        \\"restrict_public_buckets\\": true
+      }
+    },
+    \\"aws_s3_bucket_server_side_encryption_configuration\\": {
+      \\"root_theuncannybucket_Encryption_1294028A\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_theuncannybucket_03A74E00.bucket}\\",
+        \\"rule\\": [
+          {
+            \\"apply_server_side_encryption_by_default\\": {
+              \\"sse_algorithm\\": \\"AES256\\"
+            }
+          }
+        ]
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket prefix valid 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+          "the-uncanny.bucket": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.1",
+                },
+                "id": "Default",
+                "path": "root/the-uncanny.bucket/Default",
+              },
+              "Encryption": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
+                  "version": "12.0.1",
+                },
+                "id": "Encryption",
+                "path": "root/the-uncanny.bucket/Encryption",
+              },
+              "PublicAccessBlock": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
+                  "version": "12.0.1",
+                },
+                "id": "PublicAccessBlock",
+                "path": "root/the-uncanny.bucket/PublicAccessBlock",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.0.130",
+            },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
+            },
+            "id": "the-uncanny.bucket",
+            "path": "root/the-uncanny.bucket",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.0",
     },
     "id": "App",
     "path": "",
@@ -124,7 +403,9 @@ exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
     \\"aws_s3_bucket\\": {
-      \\"root_mybucket_E5DAA363\\": {}
+      \\"root_mybucket_E5DAA363\\": {
+        \\"bucket_prefix\\": \\"my-bucket-c8045fcc-\\"
+      }
     },
     \\"aws_s3_bucket_public_access_block\\": {
       \\"root_mybucket_PublicAccessBlock_3EF88EB3\\": {
@@ -166,13 +447,18 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
             "id": "WingLogger",
             "path": "root/WingLogger",
           },
           "aws": Object {
             "constructInfo": Object {
               "fqn": "@cdktf/provider-aws.provider.AwsProvider",
-              "version": "10.0.12",
+              "version": "12.0.1",
             },
             "id": "aws",
             "path": "root/aws",
@@ -180,7 +466,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.13.2",
+              "version": "0.15.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -194,7 +480,7 @@ Object {
               "Default": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
-                  "version": "10.0.12",
+                  "version": "12.0.1",
                 },
                 "id": "Default",
                 "path": "root/my_bucket/Default",
@@ -202,7 +488,7 @@ Object {
               "Encryption": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketServerSideEncryptionConfiguration.S3BucketServerSideEncryptionConfigurationA",
-                  "version": "10.0.12",
+                  "version": "12.0.1",
                 },
                 "id": "Encryption",
                 "path": "root/my_bucket/Encryption",
@@ -210,7 +496,7 @@ Object {
               "PublicAccessBlock": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-aws.s3BucketPublicAccessBlock.S3BucketPublicAccessBlock",
-                  "version": "10.0.12",
+                  "version": "12.0.1",
                 },
                 "id": "PublicAccessBlock",
                 "path": "root/my_bucket/PublicAccessBlock",
@@ -220,13 +506,17 @@ Object {
               "fqn": "constructs.Construct",
               "version": "10.0.130",
             },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
+            },
             "id": "my_bucket",
             "path": "root/my_bucket",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.13.2",
+          "version": "0.15.0",
         },
         "id": "root",
         "path": "root",
@@ -234,7 +524,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.13.2",
+      "version": "0.15.0",
     },
     "id": "App",
     "path": "",

@@ -1,9 +1,9 @@
 {
-  "name": "wing",
+  "name": "winglang",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [
     "wingc",
-    "wingsdk"
+    "sdk"
   ],
   "targets": {
     "copy": {
@@ -42,7 +42,7 @@
         "parallel": false
       }
     },
-    "dev": {
+    "wing": {
       "dependsOn": ["build"],
       "executor": "nx:run-commands",
       "options": {
