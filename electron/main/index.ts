@@ -22,11 +22,13 @@ config();
 
 log.info("Application entrypoint");
 
-const segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY || "");
-segment.analytics.track({
-  anonymousId: segment.anonymousId,
-  event: "Application started",
-});
+if (process.env.SEGMENT_WRITE_KEY) {
+  const segment = new SegmentAnalytics(process.env.SEGMENT_WRITE_KEY);
+  segment.analytics.track({
+    anonymousId: segment.anonymousId,
+    event: "Application started",
+  });
+}
 
 class AppUpdater {
   constructor() {

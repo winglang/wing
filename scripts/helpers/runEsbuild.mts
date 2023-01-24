@@ -27,7 +27,7 @@ export const runEsbuild = ({ port, watch, minify }: RunEsbuildOptions) => {
         SSR: false,
       }),
       "process.env.SEGMENT_WRITE_KEY": JSON.stringify(
-        process.env.SEGMENT_WRITE_KEY,
+        process.env.SEGMENT_WRITE_KEY || "",
       ),
     },
     logLevel: "info",
