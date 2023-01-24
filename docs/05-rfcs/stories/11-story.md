@@ -69,7 +69,7 @@ resource TaskList {
     * @returns set of task id
     */
   inflight list_task_ids(): MutSet<str> {
-    let result = MutSet<str> {"remove me"}; // #1172
+    let result = MutSet<str> {}; // #1172
     for id in this._bucket.list() {
       result.add(id);
     }
@@ -85,7 +85,7 @@ resource TaskList {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
     print("found ${task_ids.size} tasks");
-    let output = MutSet<str>{"remove me"};// #1172
+    let output = MutSet<str>{};// #1172
     for id in task_ids {
       let title = this.get_task(id); // https://winglang.slack.com/archives/C047QFSUL5R/p1674549602212669
       if title.contains(term) { 
