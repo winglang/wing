@@ -60,13 +60,34 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			StmtKind::Scope(s) => scan_for_inflights_in_scope(s, diagnostics),
 			StmtKind::Class {
-				name: _,
-				members: _,
+				name,
+				members,
 				methods,
 				constructor,
 				parent: _,
-				is_resource: _,
+				is_resource,
 			} => {
+				// If this is a resource then we need to capture all its members
+				if *is_resource {
+					// Get the class type from our type system
+					let class_type = scope
+						.env
+						.borrow()
+						.unwrap()
+						.lookup(name, Some(s.idx))
+						.unwrap()
+						.as_type()
+						.unwrap()
+						.as_resource()
+						.unwrap();
+
+					for m in class_type.env.iter().map(|(s, k)| (s, k.as_variable().unwrap())) {
+						// Skip methods
+					}
+
+					for m in members.iter() {}
+				}
+
 				match constructor.signature.flight {
 					Phase::Inflight => {
 						// TODO: what do I do with these?

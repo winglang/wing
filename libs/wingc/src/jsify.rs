@@ -761,7 +761,8 @@ impl JSifier {
 		return format!("{}\n{}.prototype._bind = {}", name.name, resource_class, bind_method,);
 	}
 
-	fn jsify_bind_method(name: &Symbol, preflight_members: &[&ClassMember]) {
+	fn jsify_bind_method(&self, name: &Symbol, preflight_members: &[&ClassMember]) {
+		let lines = vec![];
 		for m in preflight_members {}
 	}
 

@@ -76,7 +76,7 @@ impl SymbolKind {
 		}
 	}
 
-	fn as_type(&self) -> Option<TypeRef> {
+	pub fn as_type(&self) -> Option<TypeRef> {
 		match &self {
 			SymbolKind::Type(t) => Some(t.clone()),
 			_ => None,
