@@ -110,6 +110,27 @@ obj.method();
 )
 
 ====================
+Method call in binary expression
+====================
+
+x == obj.method();
+
+---
+
+(source
+  (expression_statement
+    (binary_expression
+      left: (reference
+        (identifier))
+      right: (call
+        caller: (reference
+          (nested_identifier
+            object: (reference
+              (identifier))
+            property: (identifier)))
+        args: (argument_list)))))
+
+====================
 New expression
 ====================
 
@@ -358,12 +379,12 @@ let a = new MutMap<num>();
 
 (source
     (variable_definition_statement
-        (identifier)
-        (new_expression
-            (mutable_container_type
-                (builtin_type)
+        name: (identifier)
+        value: (new_expression
+            class: (mutable_container_type
+                type_parameter: (builtin_type)
             )
-            (argument_list)
+            args: (argument_list)
         )
     )
 )

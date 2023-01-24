@@ -23,6 +23,11 @@ let m4: Map<num> = Map<num> {"a":1, "b":2, "c":3};
 let m5 = {"a":bucket1, "b":bucket2, "c":bucket3};
 let m6: Map<cloud.Bucket> = {"a":bucket1, "b":bucket2, "c":bucket3};
 let m7: Map<num> = m1;
+assert(m1.size == 3);
+assert(m5.get("b") == bucket2);
+assert(m7.has("b"));
+assert(m4.has("boom") == false);
+
 // TODO: add map API tests
 
 //Set tests

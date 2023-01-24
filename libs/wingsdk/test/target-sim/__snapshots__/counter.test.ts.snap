@@ -31,7 +31,12 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -43,7 +48,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -51,7 +60,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -92,7 +101,12 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
           },
           "id": "WingLogger",
           "path": "root/WingLogger",
@@ -104,7 +118,11 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A distributed atomic counter",
+            "title": "Counter",
           },
           "id": "my_counter",
           "path": "root/my_counter",
@@ -112,7 +130,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",

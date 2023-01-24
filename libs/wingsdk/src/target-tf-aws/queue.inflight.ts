@@ -1,4 +1,9 @@
-import { SQSClient, SendMessageCommand } from "@aws-sdk/client-sqs";
+import {
+  SQSClient,
+  SendMessageCommand,
+  PurgeQueueCommand,
+  GetQueueAttributesCommand,
+} from "@aws-sdk/client-sqs";
 import { IQueueClient } from "../cloud";
 
 export class QueueClient implements IQueueClient {
@@ -13,5 +18,21 @@ export class QueueClient implements IQueueClient {
       MessageBody: message,
     });
     await this.client.send(command);
+  }
+
+  public async purge(): Promise<void> {
+    const command = new PurgeQueueCommand({
+      QueueUrl: this.queueUrl,
+    });
+    await this.client.send(command);
+  }
+
+  public async approxSize(): Promise<number> {
+    const command = new GetQueueAttributesCommand({
+      QueueUrl: this.queueUrl,
+      AttributeNames: ["ApproximateNumberOfMessages"],
+    });
+    const data = await this.client.send(command);
+    return Number.parseInt(data.Attributes?.ApproximateNumberOfMessages ?? "0");
   }
 }

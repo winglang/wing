@@ -7,7 +7,6 @@ use semantic_token::{semantic_token_from_ast, AbsoluteSemanticToken, LEGEND_TYPE
 use tower_lsp::jsonrpc::Result;
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
-use tree_sitter::Point;
 use wingc::diagnostic::DiagnosticLevel;
 
 pub mod completions;
@@ -59,7 +58,7 @@ impl LanguageServer for Backend {
 						static_registration_options: StaticRegistrationOptions::default(),
 					},
 				)),
-				hover_provider: Some(HoverProviderCapability::Simple(true)),
+				hover_provider: None,
 				..ServerCapabilities::default()
 			},
 		})
@@ -127,48 +126,6 @@ impl LanguageServer for Backend {
 		}
 
 		Ok(Some(CompletionResponse::Array(ret)))
-	}
-
-	async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
-		// TODO: This whole function is a silly debug thing
-		let uri = params.text_document_position_params.text_document.uri;
-		let position = params.text_document_position_params.position;
-		let point = Point::new(position.line as usize, position.character as usize);
-
-		let ast = self.ast_map.get(&uri.to_string());
-		if let Some(ast) = ast {
-			let root_node = ast.tree.root_node();
-
-			let node = root_node.descendant_for_point_range(point, point);
-			if node.is_none() {
-				return Ok(None);
-			}
-
-			let mut nodes = vec![];
-			let mut iter_node = node;
-			while let Some(iter_node_good) = iter_node {
-				nodes.push(iter_node_good);
-				iter_node = iter_node_good.parent();
-			}
-
-			// vec to string
-			let mut node_str = String::new();
-			let mut indent = 0;
-			for node in nodes.iter().rev() {
-				node_str.push_str(format!("{}- {:#?}\n", " ".repeat(indent), node).as_str());
-				indent += 2;
-			}
-
-			return Ok(Some(Hover {
-				contents: HoverContents::Markup(MarkupContent {
-					kind: MarkupKind::Markdown,
-					value: node_str,
-				}),
-				range: None,
-			}));
-		}
-
-		Ok(None)
 	}
 
 	async fn initialized(&self, _: InitializedParams) {

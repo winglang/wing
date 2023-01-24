@@ -2,14 +2,25 @@ import { DynamodbTable } from "@cdktf/provider-aws/lib/dynamodb-table";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import * as core from "../core";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 import { Function } from "./function";
 
 export const HASH_KEY = "id";
 
 /**
+ * Counter (Table) names must be between 3 and 255 characters.
+ * You can use alphanumeric characters, dot (.), dash (-), and underscores (_).
+ */
+const NAME_OPTS: NameOptions = {
+  maxLen: 255,
+  disallowedRegex: /[^a-zA-Z0-9\_\.\-]+/g,
+  prefix: "wing-counter-",
+};
+
+/**
  * AWS implementation of `cloud.Counter`.
  *
- * @inflight `@winglang/wingsdk.cloud.ICounterClient`
+ * @inflight `@winglang/sdk.cloud.ICounterClient`
  */
 export class Counter extends cloud.CounterBase {
   private readonly table: DynamodbTable;
@@ -18,7 +29,7 @@ export class Counter extends cloud.CounterBase {
     super(scope, id, props);
 
     this.table = new DynamodbTable(this, "Default", {
-      name: `wingsdk-counter-${this.node.addr}`,
+      name: ResourceNames.generateName(this, NAME_OPTS),
       attribute: [{ name: HASH_KEY, type: "S" }],
       hashKey: HASH_KEY,
       billingMode: "PAY_PER_REQUEST",

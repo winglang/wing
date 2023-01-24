@@ -121,21 +121,21 @@ Almost all types can be implicitly resolved by the compiler except for "any".
 > `Promise<T>` is only available to JSII imported modules.
 
 > ```TS
-> let z = {1, 2, 3};            // immutable set
-> let zm = new MutSet<num>();   // mutable set
-> let y = {"a": 1, "b": 2};     // immutable map
-> let ym = new MutMap<num>();   // mutable map
-> let x = [1, 2, 3];            // immutable array
-> let xm = new MutArray<num>(); // mutable array
-> let w = new SampleClass();    // class instance (mutability unknown)
+> let z = {1, 2, 3};               // immutable set, Set<Num> is inferred
+> let zm = MutSet<num>{};          // mutable set
+> let y = {"a": 1, "b": 2};        // immutable map, Map<num> is inferred
+> let ym = MutMap<num>{};          // mutable map
+> let x = [1, 2, 3];               // immutable array, Array<num> is inferred
+> let xm = MutArray<num>[];        // mutable array
+> let w = new SampleClass();       // class instance (mutability unknown)
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
 
 > ```TS
-> const z: Set = Object.freeze(new Set([1, 2, 3]));
+> const z: Set<number> = Object.freeze(new Set([1, 2, 3]));
 > const zm: Set = new Set();
-> const y: Map = Object.freeze(new Map([["a", 1], ["b", 2]]));
+> const y: Map<string, number> = Object.freeze(new Map([["a", 1], ["b", 2]]));
 > const ym: Map = new Map();
 > const x: number[] = Object.freeze([1, 2, 3]);
 > const xm: number[] = [];
@@ -402,12 +402,35 @@ Mixing `protected` and `internal` is not allowed.
 
 Re-assignment to variables that are defined with `let` is not allowed in Wing.
 
-Re-assignment to class fields is allowed if field is marked with `readwrite`.
+Variables can be reassigned to by adding the `var` modifier:
+
+```ts
+// wing
+let var sum = 0;
+for item in [1,2,3] {
+  sum = sum + item;
+}
+```
+
+Re-assignment to class fields is allowed if field is marked with `var`.
 Examples in the class section below.
 
-`readwrite` is available in the body of class declarations.  
-Assigning `readwrite` to immutables of the same type is allowed. That is similar
+`var` is available in the body of class declarations.
+Assigning `var` to immutables of the same type is allowed. That is similar
 to assigning non `readonly`s to `readonly`s in TypeScript.
+
+By default function closure arguments are non-reassignable. By prefixing `var`
+to an argument definition you can make a re-assignable function argument:
+
+```ts
+// wing
+let f = (arg1: num, var arg2: num) => {
+  if (arg2 > 100) {
+    // We can reassign a value to arg2 since it's marked `var`
+    args2 = 100;
+  }
+}
+```
 
 [`▲ top`][top]
 
@@ -462,8 +485,8 @@ type is inferred iff a default value is provided.
 > ```TS
 > let i = 5;
 > let m = i;
-> let arr_opt? = new MutArray<num>();
-> let arr: Array<num> = [];
+> let arr_opt? = MutArray<num>[];
+> let arr = Array<num>[];
 > let copy = arr;
 > let i1? = nil;
 > let i2: num? = i;
@@ -833,7 +856,7 @@ The `if` statement is optionally followed by `elif` and `else`.
 
 `for..in` statement is used to iterate over a array or set.  
 Type annotation after an iteratee (left hand side of `in`) is optional.  
-The loop invariant in for loops is implicitly `readwrite` and re-assignable.
+The loop invariant in for loops is implicitly re-assignable (`var`).
 
 > ```TS
 > // Wing program:
@@ -862,8 +885,12 @@ The loop invariant in for loops is implicitly `readwrite` and re-assignable.
 >   console.log(item);
 > }
 > // calling 0..100 does not allocate, just returns an iterator
-> function* iterator(lim) { let i = lim; while (i--) yield i; }
-> const iter = iterator(100);
+> function* iterator(start, end) {
+>   let i = start;
+>   while (i < end) yield i++;
+>   while (i > end) yield i--;
+> }
+> const iter = iterator(0, 100);
 > for (const val of iter) {
 >   console.log(val);
 > }
@@ -1147,8 +1174,8 @@ resource Foo {
   field6: bool;
 
   // re-assignable class fields, read about them in the mutability section
-  readwrite field4: num;
-  readwrite field5: str;
+  var field4: num;
+  var field5: str;
 }
 ```
 
@@ -1409,7 +1436,7 @@ Arrays are similar to dynamically sized arrays or vectors in other languages.
 > ```TS
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
-> let arr3 = Array<str>(arr2);
+> let arr3 = MutArray<str>["a1", "b2", "c3"];
 > let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
 > ```
 
@@ -1509,7 +1536,7 @@ of the assignment (write) operation. `new` is always the same type as the type
 of the property itself.  
 
 Both preflight and inflight computed properties are allowed.  
-Keyword `readwrite` behind computed properties is not allowed.  
+Keyword `var` behind computed properties is not allowed.
 `inflight` computed properties are also allowed.
 
 ```TS
@@ -1520,8 +1547,8 @@ struct Vec2 {
 }
 
 class Rect {
-  readwrite size: Vec2;
-  readwrite origin: Vec2;
+  var size: Vec2;
+  var origin: Vec2;
 
   center: Vec2 {
     read {
@@ -1860,7 +1887,7 @@ struct DenyListRule {
 }
 
 struct DenyListProps {
-  rules: MutArray<DenyListRule >;
+  rules: MutArray<DenyListRule>[];
 }
 
 resource DenyList {
@@ -1875,10 +1902,10 @@ resource DenyList {
     this._bucket.upload("${rules_dir}/*/**", prune: true, retain_on_delete: true);
   }
 
-  _write_to_file(list: MutArray<DenyListRule>,  filename: str): str {
+  _write_to_file(list: MutArray<DenyListRule>[],  filename: str): str {
     let tmpdir = fs.mkdtemp();
     let filepath = "${tmpdir}/${filename}";
-    let map = MutMap<DenyListRule>(); 
+    let map = MutMap<DenyListRule>{}; 
     for rule in list {
       let suffix = DenyList._maybe_suffix(rule.version);
       let path = "${rule.package_name}${suffix}";
@@ -1888,11 +1915,11 @@ resource DenyList {
     return tmpdir;
   }
 
-  inflight rules: MutMap<DenyListRule>?; 
+  inflight rules: MutMap<DenyListRule>{}?; 
 
   inflight init() {
     // this._bucket is already initialized by the capture mechanic!
-    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>(); 
+    this.rules = this._bucket.get(this._object_key) ?? MutMap<DenyListRule>{}; 
   }
 
   public inflight lookup(name: str, version: str): DenyListRule? {

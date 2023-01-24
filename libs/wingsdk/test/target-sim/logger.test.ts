@@ -1,6 +1,8 @@
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages } from "./util";
+import { listMessages, treeJsonOf } from "./util";
+
+jest.setTimeout(100_000); // 100 seconds
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -32,4 +34,45 @@ test("inflight uses a logger", async () => {
 
   expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("Logger has display hidden property set to true", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const logger = app.node.tryFindChild("WingLogger") as cloud.Logger;
+
+  // THEN
+  expect(logger.display.hidden).toEqual(true);
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    WingLogger: {
+      display: {
+        hidden: true,
+      },
+    },
+  });
+});
+
+test("Logger has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const logger = app.node.tryFindChild("WingLogger") as cloud.Logger;
+
+  // THEN
+  expect(logger.display.title).toBeDefined();
+  expect(logger.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    WingLogger: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
 });

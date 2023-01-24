@@ -1,0 +1,210 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`run all tests single test 1`] = `
+Array [
+  Object {
+    "error": undefined,
+    "pass": true,
+    "path": "root/test",
+    "traces": Array [
+      Object {
+        "data": Object {
+          "message": "wingsdk.cloud.Logger created.",
+        },
+        "sourcePath": "root/WingLogger",
+        "sourceType": "wingsdk.cloud.Logger",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+      Object {
+        "data": Object {
+          "message": "wingsdk.cloud.Function created.",
+        },
+        "sourcePath": "root/test",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+      Object {
+        "data": Object {
+          "message": "hi",
+        },
+        "sourcePath": "root/test",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "log",
+      },
+      Object {
+        "data": Object {
+          "message": "Invoke (payload=\\"\\"\\"\\").",
+          "result": undefined,
+          "status": "success",
+        },
+        "sourcePath": "root/test",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+      Object {
+        "data": Object {
+          "message": "wingsdk.cloud.Function deleted.",
+        },
+        "sourcePath": "root/test",
+        "sourceType": "wingsdk.cloud.Function",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+      Object {
+        "data": Object {
+          "message": "wingsdk.cloud.Logger deleted.",
+        },
+        "sourcePath": "root/WingLogger",
+        "sourceType": "wingsdk.cloud.Logger",
+        "timestamp": "<TIMESTAMP>",
+        "type": "resource",
+      },
+    ],
+  },
+]
+`;
+
+exports[`run single test happy path 1`] = `
+Object {
+  "error": undefined,
+  "pass": true,
+  "path": "root/test",
+  "traces": Array [
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Logger created.",
+      },
+      "sourcePath": "root/WingLogger",
+      "sourceType": "wingsdk.cloud.Logger",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Function created.",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "hi",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    Object {
+      "data": Object {
+        "message": "Invoke (payload=\\"\\"\\"\\").",
+        "result": undefined,
+        "status": "success",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Function deleted.",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Logger deleted.",
+      },
+      "sourcePath": "root/WingLogger",
+      "sourceType": "wingsdk.cloud.Logger",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
+}
+`;
+
+exports[`run single test test failure 1`] = `
+Object {
+  "error": "Error: test failed
+    at Handler.handle 
+    at Object.exports.handler 
+    at evalmachine.<anonymous>:27:9
+    at Script.runInContext 
+    at Object.runInContext 
+    at Object.activity 
+    at Object.withTrace 
+    at Function.invoke 
+    at Simulator.runTest ",
+  "pass": false,
+  "path": "root/test",
+  "traces": Array [
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Logger created.",
+      },
+      "sourcePath": "root/WingLogger",
+      "sourceType": "wingsdk.cloud.Logger",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Function created.",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "I am about to fail",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "log",
+    },
+    Object {
+      "data": Object {
+        "error": [Error: test failed],
+        "message": "Invoke (payload=\\"\\"\\"\\").",
+        "status": "failure",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Function deleted.",
+      },
+      "sourcePath": "root/test",
+      "sourceType": "wingsdk.cloud.Function",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+    Object {
+      "data": Object {
+        "message": "wingsdk.cloud.Logger deleted.",
+      },
+      "sourcePath": "root/WingLogger",
+      "sourceType": "wingsdk.cloud.Logger",
+      "timestamp": "<TIMESTAMP>",
+      "type": "resource",
+    },
+  ],
+}
+`;

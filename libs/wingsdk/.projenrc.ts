@@ -1,19 +1,20 @@
 import { JsonFile, cdk, javascript } from "projen";
 
 const JSII_DEPS = [
-  "constructs@~10.0.25",
+  "constructs@~10.1.228",
   "polycons",
-  "cdktf",
-  "@cdktf/provider-aws",
-  "@cdktf/provider-azurerm@3.0.16",
+  "cdktf@~0.15.0",
+  "@cdktf/provider-aws@^12.0.1",
+  "@cdktf/provider-azurerm@^5.0.1",
 ];
 
 const project = new cdk.JsiiProject({
-  name: "@winglang/wingsdk",
+  name: "@winglang/sdk",
   author: "Monada, Inc.",
   authorOrganization: true,
   authorAddress: "ping@monada.co",
-  repositoryUrl: "https://github.com/winglang/wingsdk.git",
+  repositoryUrl: "https://github.com/winglang/wing.git",
+  repositoryDirectory: "libs/wingsdk",
   stability: "experimental",
   defaultReleaseBranch: "main",
   peerDeps: [...JSII_DEPS],
@@ -26,18 +27,18 @@ const project = new cdk.JsiiProject({
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
-    "@aws-sdk/client-cloudwatch-logs@3.215.0",
-    "@aws-sdk/client-dynamodb@3.215.0",
-    "@aws-sdk/client-lambda@3.215.0",
-    "@aws-sdk/client-s3@3.215.0",
-    "@aws-sdk/client-sqs@3.215.0",
-    "@aws-sdk/client-sns@3.215.0",
-    "@aws-sdk/types@3.215.0",
-    "@aws-sdk/util-stream-node@3.215.0",
+    "@aws-sdk/client-cloudwatch-logs@3.256.0",
+    "@aws-sdk/client-dynamodb@3.256.0",
+    "@aws-sdk/client-lambda@3.256.0",
+    "@aws-sdk/client-s3@3.256.0",
+    "@aws-sdk/client-sqs@3.256.0",
+    "@aws-sdk/client-sns@3.256.0",
+    "@aws-sdk/types@3.254.0",
+    "@aws-sdk/util-stream-node@3.254.0",
     "@aws-sdk/util-utf8-node@3.208.0",
     // azure client dependencies
     "@azure/storage-blob@12.12.0",
-    "@azure/identity@3.1.2",
+    "@azure/identity@3.1.3",
     "@azure/core-paging",
     // simulator dependencies
     "tar",
@@ -55,7 +56,6 @@ const project = new cdk.JsiiProject({
   ],
   prettier: true,
   minNodeVersion: "16.16.0",
-  npmRegistryUrl: "https://npm.pkg.github.com",
   packageManager: javascript.NodePackageManager.NPM,
   codeCov: true,
   codeCovTokenSecret: "CODECOV_TOKEN",
@@ -224,5 +224,10 @@ docgen.reset();
 docgen.exec(`jsii-docgen -o API.md -l wing`);
 docgen.exec(`echo '${docsFrontMatter}' > ${docsPath}`);
 docgen.exec(`cat API.md >> ${docsPath}`);
+
+// override default test timeout from 5s to 30s
+project.testTask.reset(
+  "jest --passWithNoTests --all --updateSnapshot --coverageProvider=v8 --testTimeout=30000"
+);
 
 project.synth();

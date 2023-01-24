@@ -17,7 +17,7 @@ test("invoke - happy path", async () => {
   lambdaMock
     .on(InvokeCommand, {
       FunctionName: FUNCTION_NAME,
-      Payload: fromUtf8(PAYLOAD),
+      Payload: fromUtf8(JSON.stringify(PAYLOAD)),
     })
     .resolves({
       StatusCode: 200,
@@ -48,7 +48,7 @@ test("invoke - sad path", async () => {
   lambdaMock
     .on(InvokeCommand, {
       FunctionName: FUNCTION_NAME,
-      Payload: fromUtf8(PAYLOAD),
+      Payload: fromUtf8(JSON.stringify(PAYLOAD)),
     })
     .resolves({
       StatusCode: 200,

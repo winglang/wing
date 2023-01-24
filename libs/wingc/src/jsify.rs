@@ -13,7 +13,7 @@ use crate::{
 };
 
 const STDLIB: &str = "$stdlib";
-const STDLIB_MODULE: &str = "@winglang/wingsdk";
+const STDLIB_MODULE: &str = "@winglang/sdk";
 
 const TARGET_CODE: &str = r#"
 function __app(target) {
@@ -390,7 +390,6 @@ impl JSifier {
 				)
 			}
 			ExprKind::ArrayLiteral { items, .. } => {
-
 				let item_list = items
 					.iter()
 					.map(|expr| self.jsify_expression(expr, phase))
@@ -415,10 +414,10 @@ impl JSifier {
 			}
 			ExprKind::MapLiteral { fields, .. } => {
 				format!(
-					"Object.freeze({{{}}})",
+					"Object.freeze(new Map([{}]))",
 					fields
 						.iter()
-						.map(|(key, expr)| format!("\"{}\": {}", key, self.jsify_expression(expr, phase)))
+						.map(|(key, expr)| format!("[ \"{}\", {} ]", key, self.jsify_expression(expr, phase)))
 						.collect::<Vec<String>>()
 						.join(", ")
 				)
@@ -433,13 +432,13 @@ impl JSifier {
 				if is_mutable_collection(expression) {
 					format!("new Set([{}])", item_list)
 				} else {
-					format!("Object.freeze(new Set([{}]))",	item_list)
+					format!("Object.freeze(new Set([{}]))", item_list)
 				}
 			}
 			ExprKind::FunctionClosure(func_def) => match func_def.signature.flight {
 				Phase::Inflight => self.jsify_inflight_function(func_def),
 				Phase::Independent => unimplemented!(),
-				Phase::Preflight => self.jsify_function(None, &func_def.parameter_names, &func_def.statements, phase),
+				Phase::Preflight => self.jsify_function(None, &func_def.parameters, &func_def.statements, phase),
 			},
 		}
 	}
@@ -467,13 +466,17 @@ impl JSifier {
 				)
 			}
 			StmtKind::VariableDef {
+				reassignable,
 				var_name,
 				initial_value,
 				type_: _,
 			} => {
 				let initial_value = self.jsify_expression(initial_value, phase);
-				// TODO: decide on `const` vs `let` once we have mutables
-				format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
+				return if *reassignable {
+					format!("let {} = {};", self.jsify_symbol(var_name), initial_value)
+				} else {
+					format!("const {} = {};", self.jsify_symbol(var_name), initial_value)
+				};
 			}
 			StmtKind::ForLoop {
 				iterator,
@@ -565,7 +568,7 @@ impl JSifier {
 						.map(|(n, m)| format!(
 							"{} = {}",
 							n.name,
-							self.jsify_function(None, &m.parameter_names, &m.statements, phase)
+							self.jsify_function(None, &m.parameters, &m.statements, phase)
 						))
 						.collect::<Vec<String>>()
 						.join("\n")
@@ -621,8 +624,8 @@ impl JSifier {
 
 	fn jsify_inflight_function(&self, func_def: &FunctionDefinition) -> String {
 		let mut parameter_list = vec![];
-		for p in func_def.parameter_names.iter() {
-			parameter_list.push(p.name.clone());
+		for p in func_def.parameters.iter() {
+			parameter_list.push(p.0.name.clone());
 		}
 		let block = self.jsify_scope(&func_def.statements, Phase::Inflight);
 		let procid = base16ct::lower::encode_string(&Sha256::new().chain_update(&block).finalize());
@@ -673,12 +676,12 @@ impl JSifier {
 				"bindings: {}",
 				Self::render_block([
 					if !resource_bindings.is_empty() {
-						format!("resources: {}", Self::render_block(&resource_bindings))
+						format!("resources: {},", Self::render_block(&resource_bindings))
 					} else {
 						"".to_string()
 					},
 					if !data_bindings.is_empty() {
-						format!("data: {}", Self::render_block(&data_bindings))
+						format!("data: {},", Self::render_block(&data_bindings))
 					} else {
 						"".to_string()
 					},
@@ -694,10 +697,10 @@ impl JSifier {
 		)
 	}
 
-	fn jsify_function(&self, name: Option<&str>, parameters: &[Symbol], body: &Scope, phase: Phase) -> String {
+	fn jsify_function(&self, name: Option<&str>, parameters: &[(Symbol, bool)], body: &Scope, phase: Phase) -> String {
 		let mut parameter_list = vec![];
 		for p in parameters.iter() {
-			parameter_list.push(self.jsify_symbol(p));
+			parameter_list.push(self.jsify_symbol(&p.0));
 		}
 
 		let (name, arrow) = match name {
@@ -720,9 +723,9 @@ impl JSifier {
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
-    if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-			evaluated_type.is_mutable_collection()
-		} else {
-			false
-		}
+	if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+		evaluated_type.is_mutable_collection()
+	} else {
+		false
+	}
 }
