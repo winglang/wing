@@ -22,7 +22,7 @@ Without further ado, let's get started!
 There are many ways to contribute to Wing:
 
 * Reporting bugs through a [GitHub issue]
-* Adding [examples](#how-do-i-add-an-example)
+* Adding [examples](#%EF%B8%8F-how-do-i-add-an-example)
 * Writing [documentation and guides](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:documentation)
 * Submitting [pull requests] for new features
 * Fixing [a known bug](https://github.com/winglang/wing/issues?q=is:issue+is:open+sort:updated-desc+label:bug)
@@ -80,10 +80,17 @@ Adding a code example is a great way to contribute to Wing.  Here's how to do it
 * Commit your changes and push them to your fork.
 * Open a pull request. A Wing maintainer will review it as soon as possible!
 
+## 🏠 How do I build Wing?
+
+Assuming you've [setup your environment](https://docs.winglang.io/contributors/workflows#environment-setup), including the `npm install` part,
+just run the following command from the root of the project:
+```
+npx nx wing
+```
+
 ## 🧪 How do I run E2E tests?
 
-Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build
-wing](#🔨-how-do-i-build-wing-locally).
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🏠-How-do-I-build-Wing).
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar
 project:
@@ -103,7 +110,7 @@ npx nx run hangar:test
 An RFC is short for "request for comments". It's a document that describes a new feature or change
 to Wing. It's a way to propose, gather feedback, and reach consensus for a change from maintainers,
 contributors, and users before writing any code. For an example of an RFC, check out:
-https://github.com/winglang/wing/blob/main/rfcs/polycons.md
+https://github.com/winglang/wing/blob/main/docs/05-rfcs/2022-06-14-polycons.md
 
 Usually, an RFC is a common practice for major features or complex changes that require that extra
 vetting. However, the process is designed to be as lightweight as needed and can be used to request
@@ -113,7 +120,7 @@ weigh in.
 
 ## 🔬 What is the RFC process?
 
-See our dedicated [RFC process](https://github.com/winglang/wing/blob/main/rfcs/rfc-process.md)
+See our dedicated [RFC process](https://github.com/winglang/wing/blob/main/docs/05-rfcs/process.md)
 page.
 
 ## 🐞 How do I submit a bug report?
