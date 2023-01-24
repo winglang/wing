@@ -10,24 +10,30 @@ The examples in `proposed` are examples that may not yet work in the current ver
 
 _Add yours here!_
 
-## Cacheable function
+### Cacheable function
 
-**Source code:** [./proposed/cacheable-function.w](./proposed/cacheable-function.w)
-**Description:** A Wing resource where a FaaS is augmented to cache input/output pairs using a object storage bucket.
-**Author:** [@Chriscbr](https://github.com/Chriscbr)
+* **Source code:** [./proposed/cacheable-function.w](./proposed/cacheable-function.w)
+* **Description:** A Wing resource where a FaaS is augmented to cache input/output pairs using a object storage bucket.
+* **Author:** [@Chriscbr](https://github.com/Chriscbr)
 
-## In-memory search engine
+### In-memory search engine
 
-**Source code:** [./proposed/in-memory-search.w](./proposed/in-memory-search.w)
-**Description:** This is a concept for a Wing app where cloud functions are used to create a search engine where the entire search index exists in-memory, spread across many lambda functions.
-**Author:** [@Chriscbr](https://github.com/Chriscbr)
+* **Source code:** [./proposed/in-memory-search.w](./proposed/in-memory-search.w)
+* **Description:** This is a concept for a Wing app where cloud functions are used to create a search engine where the entire search index exists in-memory, spread across many lambda functions.
+* **Author:** [@Chriscbr](https://github.com/Chriscbr)
+
+### Lock
+
+* **Source code:** [./proposed/lock.w](./proposed/lock.w)
+* **Description:** A naive distributed lock implementation. This lock uses the atomicity of `Counter` internally to guarantee that it can only be acquired by a single inflight function at a time, even if they are on different machines.
+* **Author:** [@Chriscbr](https://github.com/Chriscbr)
 
 <!--
 
-## Tweet queue
+### Tweet queue
 
-**Source code:** [./tweet-queue.w](./tweet-queue.w)
-**Description:** This is a Wing app that lets you get a feed of Twitter search results into a queue. It works by periodically polling the freely available Twitter Standard Search API and sending all new tweets to the queue.
-**Author:** [@Octocat](https://github.com/octocat)
+* **Source code:** [./tweet-queue.w](./tweet-queue.w)
+* **Description:** This is a Wing app that lets you get a feed of Twitter search results into a queue. It works by periodically polling the freely available Twitter Standard Search API and sending all new tweets to the queue.
+* **Author:** [@Octocat](https://github.com/octocat)
 
 -->
