@@ -10,7 +10,7 @@
       },
       "configurations": {
         "release": {
-          "command": "cargo build --release"
+          "commands": ["cargo build --release", "cargo fmt -- --check"]
         }
       }
     },
