@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`can add object in preflight 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "Adding object from preflight (key=greeting.txt).",
+  "wingsdk.cloud.Bucket created.",
+  "Get (key=greeting.txt).",
+  "Get (key=greeting.txt).",
+  "List (prefix=null).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
 exports[`create a bucket 1`] = `
 Object {
   "app.wsim/simulator.json": Object {
@@ -14,6 +27,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -94,6 +108,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -175,6 +190,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -258,6 +274,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -339,6 +356,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -420,6 +438,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",

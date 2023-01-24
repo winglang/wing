@@ -19,7 +19,13 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
 
   public async init(): Promise<void> {
     for (const [key, value] of Object.entries(this.initialObjects)) {
-      await this.put(key, value);
+      await this.context.withTrace({
+        message: `Adding object from preflight (key=${key}).`,
+        activity: async () => {
+          const filename = join(this.fileDir, key);
+          await fs.promises.writeFile(filename, value);
+        },
+      });
     }
   }
 
