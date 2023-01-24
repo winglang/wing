@@ -16,13 +16,15 @@ The toolchain includes three tools:
 
 To install Wing, you will need the following setup:
 
-* [Node.js](https://nodejs.org/en/) version 18.x (we recommend [volta](https://volta.sh)).
-* [VSCode] (recommended).
+* [Node.js](https://nodejs.org/en/) (v18 or later)
+  * We recommend [volta](https://volta.sh) to manage node tools
+* [VSCode]
+  * Not required, but currently supported with an [extension](#wing-ide-extension)
 
 In order to deploy to AWS, you will also need:
 
-* [Terraform](https://terraform.io/downloads).
-* [AWS account] and the [AWS CLI] with [AWS credentials].
+* [Terraform](https://terraform.io/downloads)
+* [AWS account] and the [AWS CLI] with [AWS credentials]
 
 ## Wing CLI
 
