@@ -31,8 +31,8 @@ jobs:
         if: steps.token-check.outputs.HAS_TOKEN == 'false'
         working-directory: ${{ github.workspace }}
         run: |
-          echo "Add a MUTATION_TOKEN secret with a personal access token secret
-           to this repository to enable self mutation. It requires read/write repo permissions." >> $GITHUB_STEP_SUMMARY
+          echo "Add a MUTATION_TOKEN repository secret with a personal access token to enable self mutation.
+          It requires read/write repo permissions." >> $GITHUB_STEP_SUMMARY
       - name: Checkout
         if: steps.token-check.outputs.HAS_TOKEN == 'true'
         uses: actions/checkout@v3
