@@ -1,6 +1,6 @@
-# User Story 8 - Task List Resource
+# User Story 11 - Task List Resource
 
-> **Status**: Work in Progress
+> **Status**: Work in Progress (Expecting to be released on 2/2)
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
@@ -59,14 +59,10 @@ resource TaskList {
    * @throws Will throw an error if taks with id doesn't exist
    * @param id - the id of the task to be removed
    */
-  inflight remove_tasks(id: str) {
-    let content = this._bucket.get(id)
-    if !content {
-      throw("Task with id ${id} doesn't exist");
-    }
-    
+  inflight remove_tasks(id: str): str {
     print("removing task ${id}");
     this._bucket.delete(id);
+    return id;
   }
 
    /** 
@@ -74,7 +70,11 @@ resource TaskList {
     * @returns set of task id
     */
   inflight list_task_ids(): Set<str> {
-    return this._bucket.list();
+    let result = MutSet<str> {}; // #1172
+    for id in this._bucket.list() {
+      result.add(id);
+    }
+    return result.to_immut();
   }
 
    /** 
@@ -85,18 +85,18 @@ resource TaskList {
   inflight find_tasks_with(term: str): Set<str> {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
-    print("found ${task_ids} tasks");
-    let output = new MutSet<str>();
+    print("found ${task_ids.size} tasks");
+    let output = MutSet<str>{};// #1172
     for id in task_ids {
-      let title = this.get_task(id);
-      if title.contains(term) {
+      let title = this.get_task(id); // https://winglang.slack.com/archives/C047QFSUL5R/p1674549602212669
+      if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
         output.add(id);
       }
     }
     
-    print("found ${output.len} tasks which match term '${term}'");
-    return output.to_set();
+    print("found ${output.size} tasks which match term '${term}'");
+    return output.to_immut();
   }
 }
 
@@ -107,13 +107,8 @@ resource TaskList {
 let tasks = new TaskList();
 
 let clear_tasks = new cloud.Function(inflight (s: str): str => {
-  let results = tasks.list_task_ids();
-  let i = 0;
-  
-  // I hate this code, but wanted to use while here
-  while (i < results.len) {
-    tasks.remove_tasks(results.at(i));
-    i = i + 1;
+  for (id in tasks.list_task_ids()) {
+    tasks.remove_tasks(id);
   }
 }) as "utility:clear tasks";
 
@@ -127,10 +122,10 @@ let add_tasks = new cloud.Function(inflight (s: str): str => {
 
 new cloud.Function(inflight (s: str): str => {
   clear_tasks.invoke("");
-  add_tasks.invoke("");
-  let result = tasks.find_tasks_with("clean the dish");
+  tasks.add_task("clean the dishes");
+  let result = tasks.find_tasks_with("clean the dishes");
   assert(result.len == 1);
-  assert("clean the dishes".equals(tasks.get_task(result.at(0))));
+  assert("clean the dishes" == tasks.get_task(result.at(0));
 }) as "test:get and find task";
 
 new cloud.Function(inflight (s: str): str => {
@@ -139,19 +134,8 @@ new cloud.Function(inflight (s: str): str => {
   tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0))
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
-  assert("clean the dishes".equals(tasks.get_task()));
 }) as "test:get, remove and find task";
 
-new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke("");
-  try {
-    tasks.remove_tasks("fake-id"); // should throw an exception
-    assert(false); // this code should not be reachable 
-  } catch (e) {
-    assert(true); // redundant, keeping it here to show the intent of the code
-  }
-}) as "test: deleting an unexisting task should throw an exception";
-```
 
 ## Wing Console
 

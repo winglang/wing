@@ -2,7 +2,8 @@
   "name": "@winglang/sdk",
   "repository": {
     "type": "git",
-    "url": "https://github.com/winglang/wingsdk.git"
+    "url": "https://github.com/winglang/wing.git",
+    "directory": "libs/wingsdk"
   },
   "scripts": {
     "api-check": "npx projen api-check",
