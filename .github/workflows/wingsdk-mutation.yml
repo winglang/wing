@@ -50,7 +50,7 @@ jobs:
       - name: Push changes
         if: steps.self_mutation.outputs.self_mutation_happened
         run: |-
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "mutator"
+          git config user.email "mutator@winglang.io"
           git commit -s -m "chore: self mutation"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
