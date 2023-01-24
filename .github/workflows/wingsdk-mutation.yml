@@ -25,6 +25,7 @@ jobs:
     steps:
       - id: token-check
         name: Check if mutation token is set
+        working-directory: ${{ github.workspace }}
         run: echo "HAS_TOKEN=${{ secrets.MUTATION_TOKEN && 'true' || 'false' }}" >> $GITHUB_OUTPUT
       - name: Token notice
         if: steps.token-check.outputs.HAS_TOKEN == 'false'
