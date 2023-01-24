@@ -354,7 +354,7 @@ export class Display {
  * @param host The host to bind to
  * @param ops The set of operations that may access the object.
  */
-function bindObject(obj: any, host: IResource, ops?: string[]): void {
+function bindObject(obj: any, host: IResource, ops: string[] = ["?"]): void {
   switch (typeof obj) {
     case "string":
     case "boolean":
@@ -382,11 +382,11 @@ function bindObject(obj: any, host: IResource, ops?: string[]): void {
 
       // if the object is a resource (i.e. has a "_toInflight" method"), then we lift and add to the
       // list of bindings.
-      if (typeof obj._bind === "function") {
-        obj._bind(host, ops);
+      if (typeof (obj as IResource)._bind === "function") {
+        (obj as IResource)._bind(host, ops);
 
         // add connection metadata (use "?" to indicate that we don't know the operation)
-        for (const op of ops ?? ["?"]) {
+        for (const op of ops) {
           Resource.addConnection({
             from: host,
             to: obj,

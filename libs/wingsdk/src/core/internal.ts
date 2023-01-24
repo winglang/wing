@@ -1,7 +1,7 @@
 import { IConstruct } from "constructs";
 import { Duration } from "../std";
 import { InflightBindings, NodeJsCode } from "./inflight";
-import { DisplayProps, Resource } from "./resource";
+import { DisplayProps, IResource, Resource } from "./resource";
 
 export function makeHandler(
   scope: IConstruct,
@@ -108,8 +108,8 @@ function serializeImmutableData(obj: any): string {
 
       // if the object is a resource (i.e. has a "_toInflight" method"), then we lift and add to the
       // list of bindings.
-      if (typeof obj._toInflight === "function") {
-        return obj._toInflight().text;
+      if (typeof (obj as IResource)._toInflight === "function") {
+        return (obj as IResource)._toInflight().text;
       }
 
       // structs are just plain objects
