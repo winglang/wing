@@ -1,6 +1,6 @@
 # User Story 11 - Task List Resource
 
-> **Status**: Work in Progress
+> **Status**: Work in Progress (Expecting to be released on 2/2)
 
 It is an early morning in the heart of Tel Aviv, a CEO wakes up and heads out to WayCup, his favorite coffee shop.
 
