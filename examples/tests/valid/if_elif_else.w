@@ -12,9 +12,9 @@ if x == 2 {
 new cloud.Function(inflight (s: str): str => {
   if x == 1 {
     print("x is 1");
-    } elif x == 2 {
-      print("x is 2");
-    } else {
-      print("x is other number");
-    }
+  } elif x == 2 {
+    print("x is 2");
+  } else {
+    print("x is other number");
+  }
 }) as "func";
