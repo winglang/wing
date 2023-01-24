@@ -30,8 +30,7 @@ export class Bucket implements IBucketClient, ISimulatorResourceInstance {
   }
 
   public async cleanup(): Promise<void> {
-    // TODO: clean up file dir?
-    return;
+    await fs.promises.rm(this.fileDir, { recursive: true, force: true });
   }
 
   public async put(key: string, value: string): Promise<void> {
