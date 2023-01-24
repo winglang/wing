@@ -59,8 +59,8 @@ separately).
 
 ## 🔨 How do I build the VSCode extension?
 
-The VSCode extension is located in `apps/vscode`. Most of the logic is in the language server, which
-is located in `apps/wing-language-server`. Running `nx build` from `apps/vscode` will ensure the
+The VSCode extension is located in `apps/vscode-wing`. Most of the logic is in the language server, which
+is located in `apps/vscode-wing`. Running `npx nx build` from `apps/vscode-wing` will ensure the
 language server is built first and the binary is available. This creates an installable VSIX file.
 
 A VSCode launch configuration is available to open a VSCode with a development version of the
