@@ -6,7 +6,7 @@ exports[`wing compile --target tf-aws anon_function.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -30,7 +30,7 @@ exports[`wing compile --target tf-aws anon_function.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -77,7 +77,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -252,7 +252,7 @@ exports[`wing compile --target tf-aws asynchronous_model_implicit_await_in_funct
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -311,7 +311,7 @@ exports[`wing compile --target tf-aws capture_containers.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -429,7 +429,7 @@ exports[`wing compile --target tf-aws capture_containers.w > manifest.json 1`] =
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -485,7 +485,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -641,7 +641,7 @@ exports[`wing compile --target tf-aws capture_in_binary.w > manifest.json 1`] = 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -697,7 +697,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -820,7 +820,7 @@ exports[`wing compile --target tf-aws capture_primitives.w > manifest.json 1`] =
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -878,7 +878,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > cdk.tf.json 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -1036,7 +1036,7 @@ exports[`wing compile --target tf-aws capture_resource_and_data.w > manifest.jso
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -1097,7 +1097,7 @@ exports[`wing compile --target tf-aws captures.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -1464,7 +1464,7 @@ exports[`wing compile --target tf-aws captures.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -1533,7 +1533,7 @@ exports[`wing compile --target tf-aws container_types.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -1679,7 +1679,7 @@ exports[`wing compile --target tf-aws container_types.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -1748,7 +1748,7 @@ exports[`wing compile --target tf-aws enums.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -1772,7 +1772,7 @@ exports[`wing compile --target tf-aws enums.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -1818,7 +1818,7 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > cdk.tf.js
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -1842,7 +1842,7 @@ exports[`wing compile --target tf-aws expressions_binary_operators.w > manifest.
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -1887,7 +1887,7 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > cdk.t
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -1911,7 +1911,7 @@ exports[`wing compile --target tf-aws expressions_string_interpolation.w > manif
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -1956,7 +1956,7 @@ exports[`wing compile --target tf-aws file_counter.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -2145,7 +2145,7 @@ exports[`wing compile --target tf-aws file_counter.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -2204,7 +2204,7 @@ exports[`wing compile --target tf-aws forward_decl.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -2228,7 +2228,7 @@ exports[`wing compile --target tf-aws forward_decl.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -2284,7 +2284,7 @@ exports[`wing compile --target tf-aws hello.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -2452,7 +2452,7 @@ exports[`wing compile --target tf-aws hello.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -2506,7 +2506,7 @@ exports[`wing compile --target tf-aws identical_inflights.w > cdk.tf.json 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -2535,7 +2535,7 @@ exports[`wing compile --target tf-aws identical_inflights.w > manifest.json 1`] 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3094,7 +3094,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > cdk.tf.json 1`] = 
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3240,7 +3240,7 @@ exports[`wing compile --target tf-aws mut_container_types.w > manifest.json 1`] 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3309,7 +3309,7 @@ exports[`wing compile --target tf-aws primitive_methods.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3333,7 +3333,7 @@ exports[`wing compile --target tf-aws primitive_methods.w > manifest.json 1`] = 
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3377,7 +3377,7 @@ exports[`wing compile --target tf-aws print.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3530,7 +3530,7 @@ exports[`wing compile --target tf-aws print.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3578,7 +3578,7 @@ exports[`wing compile --target tf-aws reassignment.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3602,7 +3602,7 @@ exports[`wing compile --target tf-aws reassignment.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3668,7 +3668,7 @@ exports[`wing compile --target tf-aws resource.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3692,7 +3692,7 @@ exports[`wing compile --target tf-aws resource.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3740,7 +3740,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3764,7 +3764,7 @@ exports[`wing compile --target tf-aws statements_if.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3810,7 +3810,7 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > cdk.t
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3834,7 +3834,7 @@ exports[`wing compile --target tf-aws statements_variable_declarations.w > manif
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3874,7 +3874,7 @@ exports[`wing compile --target tf-aws std_containers.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -3905,7 +3905,7 @@ exports[`wing compile --target tf-aws std_containers.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -3954,7 +3954,7 @@ exports[`wing compile --target tf-aws test_bucket.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -4175,7 +4175,7 @@ exports[`wing compile --target tf-aws test_bucket.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -4239,7 +4239,7 @@ exports[`wing compile --target tf-aws while.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -4263,7 +4263,7 @@ exports[`wing compile --target tf-aws while.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 
@@ -4308,7 +4308,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > cdk.tf.json 1`] = `
     "metadata": {
       "backend": "local",
       "stackName": "root",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "outputs": {},
   },
@@ -4441,7 +4441,7 @@ exports[`wing compile --target tf-aws while_loop_await.w > manifest.json 1`] = `
       "workingDirectory": "stacks/root",
     },
   },
-  "version": "0.15.0",
+  "version": "0.15.1",
 }
 `;
 

@@ -35,7 +35,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A pub/sub notification topic",
@@ -51,7 +51,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -132,7 +132,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A pub/sub notification topic",
@@ -148,7 +148,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -229,7 +229,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A pub/sub notification topic",
@@ -245,7 +245,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -397,7 +397,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "An inflight resource",
@@ -447,7 +447,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A pub/sub notification topic",
@@ -540,7 +540,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud function (FaaS)",
@@ -556,7 +556,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "id": "Topic-OnMessageHandler-c5395e41",
             "path": "root/Topic-OnMessageHandler-c5395e41",
@@ -575,7 +575,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
