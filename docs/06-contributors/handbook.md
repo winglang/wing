@@ -90,7 +90,7 @@ npx nx wing
 
 ## 🧪 How do I run E2E tests?
 
-Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#🏠-How-do-I-build-Wing).
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#-how-do-i-build-wing).
 
 To run the tests (and update snapshots), run the following commands from the root of the Hangar
 project:
