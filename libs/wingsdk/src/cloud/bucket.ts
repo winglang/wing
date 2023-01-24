@@ -36,6 +36,9 @@ export abstract class BucketBase extends Resource {
     props;
   }
 
+  /**
+   * Add a file to the bucket that is uploaded when the app is deployed.
+   */
   public abstract addObject(key: string, body: string): void;
 }
 
