@@ -1348,11 +1348,11 @@ impl<'a> TypeChecker<'a> {
 				));
 				self.inner_scopes.push(statements);
 
-				if let Some(elif_scope) = elif_statements {
-					let cond_type = self.type_check_exp(&elif_scope.0, env, stmt.idx);
+				for elif_scope in elif_statements {
+					let cond_type = self.type_check_exp(&elif_scope.condition, env, stmt.idx);
 					self.validate_type(cond_type, self.types.bool(), condition);
 
-					(&elif_scope.1).set_env(SymbolEnv::new(
+					(&elif_scope.statements).set_env(SymbolEnv::new(
 						Some(env.get_ref()),
 						env.return_type,
 						false,
@@ -1360,7 +1360,7 @@ impl<'a> TypeChecker<'a> {
 						env.flight,
 						stmt.idx,
 					));
-					self.inner_scopes.push(&elif_scope.1);
+					self.inner_scopes.push(&elif_scope.statements);
 				}
 
 				if let Some(else_scope) = else_statements {

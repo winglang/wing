@@ -210,8 +210,15 @@ module.exports = grammar({
         "if",
         field("condition", $.expression),
         field("block", $.block),
-        optional(seq("elif", field("elif_condition", $.expression), field("elif_block", $.block))),
+        repeat(field("elif_block", $.elif_block)),
         optional(seq("else", field("else_block", $.block)))
+      ),
+
+    elif_block: ($) =>
+      seq(
+        "elif",
+        field("condition", $.expression),
+        field("block", $.block),
       ),
 
     expression: ($) =>

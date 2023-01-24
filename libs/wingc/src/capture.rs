@@ -55,8 +55,8 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 				else_statements,
 			} => {
 				scan_for_inflights_in_scope(statements, diagnostics);
-				if let Some(elif_statements) = elif_statements {
-					scan_for_inflights_in_scope(&elif_statements.1, diagnostics);
+				for elif in elif_statements {
+					scan_for_inflights_in_scope(&elif.statements, diagnostics);
 				}
 				if let Some(else_statements) = else_statements {
 					scan_for_inflights_in_scope(else_statements, diagnostics);
@@ -428,9 +428,15 @@ fn scan_captures_in_inflight_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			} => {
 				res.extend(scan_captures_in_expression(condition, env, s.idx, diagnostics));
 				res.extend(scan_captures_in_inflight_scope(statements, diagnostics));
-				if let Some(elif_statements) = elif_statements {
-					res.extend(scan_captures_in_expression(&elif_statements.0, env, s.idx, diagnostics));
-					res.extend(scan_captures_in_inflight_scope(&elif_statements.1, diagnostics));
+
+				for elif_block in elif_statements {
+					res.extend(scan_captures_in_expression(
+						&elif_block.condition,
+						env,
+						s.idx,
+						diagnostics,
+					));
+					res.extend(scan_captures_in_inflight_scope(&elif_block.statements, diagnostics));
 				}
 				if let Some(else_statements) = else_statements {
 					res.extend(scan_captures_in_inflight_scope(else_statements, diagnostics));

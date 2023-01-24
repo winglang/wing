@@ -7,7 +7,7 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
+	ArgList, BinaryOperator, ClassMember, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition, FunctionSignature,
 	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
 	UnaryOperator,
 };
@@ -199,11 +199,19 @@ impl Parser<'_> {
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
-				let elif_block = if let Some(elif_block) = statement_node.child_by_field_name("elif_block") {
-					Some(self.build_scope(&elif_block))
-				} else {
-					None
-				};
+
+				let mut elif_vec: Vec<ElifBlock> = Vec::new();
+				let mut cursor = statement_node.walk();
+				for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
+					let conditions = self.build_expression(&node.named_child(0).unwrap());
+					let statements = self.build_scope(&node.named_child(1).unwrap());
+					let elif = ElifBlock {
+						condition: conditions.unwrap(),
+						statements: statements,
+					};
+					elif_vec.push(elif);
+				}
+
 				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 					Some(self.build_scope(&else_block))
 				} else {
@@ -213,13 +221,7 @@ impl Parser<'_> {
 				StmtKind::If {
 					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
 					statements: if_block,
-					elif_statements: match elif_block.is_some() {
-						true => Some((
-							self.build_expression(&statement_node.child_by_field_name("elif_condition").unwrap())?,
-							elif_block.unwrap(),
-						)),
-						false => None,
-					},
+					elif_statements: elif_vec,
 					else_statements: else_block,
 				}
 			}
