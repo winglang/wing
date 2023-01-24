@@ -63,7 +63,6 @@ ${Object.entries(clients)
     }
   }
 
-  // only annotate resource bindings because there's no binding to do for data
   const annotation: Record<string, { ops: Array<string> }> = {};
   for (const [k, v] of Object.entries(bindings.resources ?? {})) {
     annotation["this." + k] = { ops: v.ops };
