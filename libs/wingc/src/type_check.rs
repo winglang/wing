@@ -12,7 +12,7 @@ use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use symbol_env::SymbolEnv;
 
 use self::symbol_env::StatementIdx;
@@ -1741,13 +1741,14 @@ impl<'a> TypeChecker<'a> {
 				root: true,
 				deps: false,
 			};
-			let jsii_manifest_path = self
-				.source_path
-				.parent()
-				.unwrap()
-				.join("node_modules")
-				.join(&module_name)
-				.join("package.json");
+			let jsii_manifest_path: PathBuf = [
+				self.source_path.parent().unwrap().to_str().unwrap(),
+				"node_modules",
+				&module_name,
+				"package.json",
+			]
+			.iter()
+			.collect();
 			let name = wingii_types
 				.load(jsii_manifest_path.to_str().unwrap(), Some(wingii_loader_options))
 				.unwrap();

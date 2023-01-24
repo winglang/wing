@@ -70,10 +70,10 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 	let args = ptr_to_string(ptr, len);
 
 	let split = args.split(";").collect::<Vec<&str>>();
-	let source_file = split[0];
-	let output_dir = split.get(1).map(|s| *s);
+	let source_file = PathBuf::from(split[0]);
+	let output_dir = split.get(1).map(|s| Path::new(s));
 
-	let results = compile(source_file, output_dir);
+	let results = compile(&source_file, output_dir);
 	if let Err(mut err) = results {
 		// Sort error messages by line number (ascending)
 		err.sort_by(|a, b| a.cmp(&b));
@@ -206,17 +206,36 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 		.expect("Failed to add builtin");
 }
 
-pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutput, Diagnostics> {
-	let source_path = Path::new(source_file);
+pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOutput, Diagnostics> {
+	assert!(source_path.is_file(), "Source path must be a file");
+	assert!(
+		source_path.extension().unwrap() == "w",
+		"Source file must have .w extension",
+	);
+	assert!(
+		out_dir.is_none() || out_dir.unwrap().is_dir(),
+		"Output directory must be a directory",
+	);
+
+	// canonicalize source_path if it is not an absolute path
+	let source_path = if source_path.is_absolute() {
+		source_path.to_path_buf()
+	} else {
+		fs::canonicalize(source_path).unwrap()
+	};
+
+	let file_name = source_path.file_name().unwrap().to_str().unwrap();
+	let default_out_dir = PathBuf::from(format!("{}.out", file_name));
+	let out_dir = out_dir.unwrap_or(default_out_dir.as_ref());
 
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
-	let (mut scope, parse_diagnostics) = parse(source_path);
+	let (mut scope, parse_diagnostics) = parse(&source_path);
 
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types, source_path)
+		type_check(&mut scope, &mut types, &source_path)
 	} else {
 		// empty scope, no type checking needed
 		Diagnostics::new()
@@ -226,7 +245,7 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	print_diagnostics(&parse_diagnostics);
 	print_diagnostics(&type_check_diagnostics);
 
-	// collect all diagnostics
+	// Collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
 
@@ -245,11 +264,10 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 		return Err(errors);
 	}
 
-	// prepare output directory for support inflight code
-	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
-	fs::create_dir_all(&out_dir).expect("create output dir");
+	// Prepare output directory for support inflight code
+	fs::create_dir_all(out_dir).expect("create output dir");
 
-	let app_name = Path::new(source_file).file_stem().unwrap().to_str().unwrap();
+	let app_name = source_path.file_stem().unwrap().to_str().unwrap();
 	let jsifier = JSifier::new(out_dir, app_name, true);
 	let intermediate_js = jsifier.jsify(&scope);
 	let intermediate_name = std::env::var("WINGC_PREFLIGHT").unwrap_or("preflight.js".to_string());
@@ -265,7 +283,10 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 #[cfg(test)]
 mod sanity {
 	use crate::compile;
-	use std::{fs, path::PathBuf};
+	use std::{
+		fs,
+		path::{Path, PathBuf},
+	};
 
 	fn get_wing_files(dir: &str) -> Vec<PathBuf> {
 		let mut files = Vec::new();
@@ -294,7 +315,7 @@ mod sanity {
 				fs::remove_dir_all(&out_dirbuf).expect("remove out dir");
 			}
 
-			let result = compile(test_file, Some(out_dir.as_str()));
+			let result = compile(Path::new(test_file), Some(Path::new(out_dir.as_str())));
 
 			if result.is_err() {
 				assert!(

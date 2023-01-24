@@ -1,5 +1,5 @@
 use itertools::Itertools;
-use std::{cell::RefCell, cmp::Ordering, fs, path::PathBuf};
+use std::{cell::RefCell, cmp::Ordering, fs, path::Path};
 
 use sha2::{Digest, Sha256};
 
@@ -35,15 +35,15 @@ const TARGET_APP: &str = "$App";
 
 const INFLIGHT_OBJ_PREFIX: &str = "$Inflight";
 
-pub struct JSifier {
-	pub out_dir: PathBuf,
+pub struct JSifier<'a> {
+	pub out_dir: &'a Path,
 	shim: bool,
 	app_name: String,
 	inflight_counter: RefCell<usize>,
 }
 
-impl JSifier {
-	pub fn new(out_dir: PathBuf, app_name: &str, shim: bool) -> Self {
+impl<'a> JSifier<'a> {
+	pub fn new(out_dir: &'a Path, app_name: &str, shim: bool) -> Self {
 		Self {
 			out_dir,
 			shim,
