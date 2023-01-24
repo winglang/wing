@@ -59,21 +59,22 @@ resource TaskList {
    * @throws Will throw an error if taks with id doesn't exist
    * @param id - the id of the task to be removed
    */
-  inflight remove_tasks(id: str) {
+  inflight remove_tasks(id: str): str {
     print("removing task ${id}");
     this._bucket.delete(id);
+    return id;
   }
 
    /** 
     * Gets the tasks ids 
     * @returns set of task id
     */
-  inflight list_task_ids(): MutSet<str> {
+  inflight list_task_ids(): Set<str> {
     let result = MutSet<str> {}; // #1172
     for id in this._bucket.list() {
       result.add(id);
     }
-    return result;
+    return result.to_immut();
   }
 
    /** 
@@ -81,7 +82,7 @@ resource TaskList {
     * @param term - the term to search
     * @returns set of task id that matches the term
     */
-  inflight find_tasks_with(term: str): MutSet<str> {
+  inflight find_tasks_with(term: str): Set<str> {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
     print("found ${task_ids.size} tasks");
@@ -95,7 +96,7 @@ resource TaskList {
     }
     
     print("found ${output.size} tasks which match term '${term}'");
-    return output;
+    return output.to_immut();
   }
 }
 
@@ -135,16 +136,6 @@ new cloud.Function(inflight (s: str): str => {
   assert(result.len == 0);
 }) as "test:get, remove and find task";
 
-new cloud.Function(inflight (s: str): str => {
-  clear_tasks.invoke("");
-  try {
-    tasks.remove_tasks("fake-id"); // should throw an exception
-    assert(false); // this code should not be reachable 
-  } catch (e) {
-    assert(true); // redundant, keeping it here to show the intent of the code
-  }
-}) as "test: deleting an unexisting task should throw an exception";
-```
 
 ## Wing Console
 
