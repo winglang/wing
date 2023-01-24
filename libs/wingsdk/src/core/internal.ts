@@ -86,7 +86,7 @@ function serializeImmutableData(obj: any): string {
 
     case "object":
       if (Array.isArray(obj)) {
-        return `[${obj.map((x) => serializeImmutableData(x)).join(",")}]`;
+        return `[${obj.map(serializeImmutableData).join(",")}]`;
       }
 
       if (obj instanceof Duration) {

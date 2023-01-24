@@ -158,7 +158,6 @@ export abstract class Resource
     // this is how resources will look:
     // resources = {
     //   "this.bucket": [ "put", "get" ],
-    //   "this.my_array[]": [ "list" ],
     //   "counter": [ "inc" ]
     // };
 
