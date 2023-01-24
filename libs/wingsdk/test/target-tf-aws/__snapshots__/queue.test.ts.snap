@@ -35,7 +35,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -51,7 +51,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -132,7 +132,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -148,7 +148,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -280,7 +280,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "An inflight resource",
@@ -322,7 +322,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -415,7 +415,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud function (FaaS)",
@@ -431,7 +431,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "id": "Queue-OnMessageHandler-c5395e41",
             "path": "root/Queue-OnMessageHandler-c5395e41",
@@ -450,7 +450,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -532,7 +532,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -548,7 +548,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -629,7 +629,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -645,7 +645,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
