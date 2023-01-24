@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "cdk-constants": "3.0.3"
+  }
+}

@@ -85,18 +85,18 @@ pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
 	}
 }
 
-pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
+pub fn parse(source_path: &Path) -> (Scope, Diagnostics) {
 	let language = tree_sitter_wing::language();
 	let mut parser = tree_sitter::Parser::new();
 	parser.set_language(language).unwrap();
 
-	let source = match fs::read(&source_file) {
+	let source = match fs::read(&source_path) {
 		Ok(source) => source,
 		Err(err) => {
 			let mut diagnostics = Diagnostics::new();
 
 			diagnostics.push(Diagnostic {
-				message: format!("Error reading source file: {}: {:?}", &source_file, err),
+				message: format!("Error reading source file: {}: {:?}", source_path.display(), err),
 				span: None,
 				level: DiagnosticLevel::Error,
 			});
@@ -113,13 +113,18 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let tree = match parser.parse(&source[..], None) {
 		Some(tree) => tree,
 		None => {
-			panic!("Failed parsing source file: {}", source_file);
+			panic!("Failed parsing source file: {}", source_path.display());
 		}
 	};
 
 	let wing_parser = Parser {
 		source: &source[..],
-		source_name: source_file.to_string(),
+		source_name: source_path
+			.file_name()
+			.expect("Not a valid source file")
+			.to_str()
+			.unwrap()
+			.to_string(),
 		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
 	};
@@ -129,7 +134,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	(scope, wing_parser.diagnostics.into_inner())
 }
 
-pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
+pub fn type_check(scope: &mut Scope, types: &mut Types, source_path: &Path) -> Diagnostics {
 	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
 	scope.set_env(env);
 
@@ -174,7 +179,7 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 		types,
 	);
 
-	let mut tc = TypeChecker::new(types);
+	let mut tc = TypeChecker::new(types, source_path);
 	tc.add_globals(scope);
 
 	tc.type_check_scope(scope);
@@ -202,14 +207,16 @@ fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutput, Diagnostics> {
+	let source_path = Path::new(source_file);
+
 	// Create universal types collection (need to keep this alive during entire compilation)
 	let mut types = Types::new();
 	// Build our AST
-	let (mut scope, parse_diagnostics) = parse(source_file);
+	let (mut scope, parse_diagnostics) = parse(source_path);
 
 	// Type check everything and build typed symbol environment
 	let type_check_diagnostics = if scope.statements.len() > 0 {
-		type_check(&mut scope, &mut types)
+		type_check(&mut scope, &mut types, source_path)
 	} else {
 		// empty scope, no type checking needed
 		Diagnostics::new()

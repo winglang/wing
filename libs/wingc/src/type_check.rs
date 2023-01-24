@@ -12,6 +12,7 @@ use jsii_importer::JsiiImporter;
 use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::{Debug, Display};
+use std::path::Path;
 use symbol_env::SymbolEnv;
 
 use self::symbol_env::StatementIdx;
@@ -593,21 +594,28 @@ pub struct TypeChecker<'a> {
 	// so all nodes implement some basic "tree" interface. For now this is good enough.
 	inner_scopes: Vec<*const Scope>,
 
+	/// The absolute path to the source file being type checked.
+	/// This is used to resolve relative paths in import statements.
+	source_path: &'a Path,
+
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
 impl<'a> TypeChecker<'a> {
-	pub fn new(types: &'a mut Types) -> Self {
+	pub fn new(types: &'a mut Types, source_path: &'a Path) -> Self {
+		// Assert that the source_path is absolute
+		assert!(source_path.is_absolute());
 		Self {
 			types: types,
 			inner_scopes: vec![],
+			source_path,
 			diagnostics: RefCell::new(Diagnostics::new()),
 		}
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
 		for m in [WINGSDK_STD_MODULE] {
-			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), 0);
+			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), None, 0);
 		}
 	}
 
@@ -1383,7 +1391,12 @@ impl<'a> TypeChecker<'a> {
 						return;
 					}
 
-					self.add_module_to_env(env, module_name.name.clone(), stmt.idx);
+					self.add_module_to_env(
+						env,
+						module_name.name.clone(),
+						identifier.as_ref().map(|id| id.name.clone()),
+						stmt.idx,
+					);
 				}
 			}
 			StmtKind::Scope(scope) => {
@@ -1698,7 +1711,13 @@ impl<'a> TypeChecker<'a> {
 		}
 	}
 
-	fn add_module_to_env(&mut self, env: &mut SymbolEnv, module_name: String, statement_idx: usize) {
+	fn add_module_to_env(
+		&mut self,
+		env: &mut SymbolEnv,
+		module_name: String,
+		alias: Option<String>,
+		statement_idx: usize,
+	) {
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
 		if module_name == "cloud" || module_name == "fs" || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
@@ -1710,6 +1729,27 @@ impl<'a> TypeChecker<'a> {
 			let wingsdk_manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
 			let name = wingii_types
 				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
+				.unwrap();
+			debug!("Loaded JSII assembly {}", name);
+			let assembly = wingii_types.find_assembly(&name).unwrap();
+
+			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
+			jsii_importer.import_to_env();
+		} else {
+			let mut wingii_types = wingii::type_system::TypeSystem::new();
+			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
+				root: true,
+				deps: false,
+			};
+			let jsii_manifest_path = self
+				.source_path
+				.parent()
+				.unwrap()
+				.join("node_modules")
+				.join(&module_name)
+				.join("package.json");
+			let name = wingii_types
+				.load(jsii_manifest_path.to_str().unwrap(), Some(wingii_loader_options))
 				.unwrap();
 			debug!("Loaded JSII assembly {}", name);
 			let assembly = wingii_types.find_assembly(&name).unwrap();
