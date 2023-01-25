@@ -60,6 +60,9 @@ add_object(key: str, body: str): void
 
 Add a file to the bucket that is uploaded when the app is deployed.
 
+TODO: In the future this will support uploading any `Blob` type or
+referencing a file from the local filesystem.
+
 ###### `key`<sup>Required</sup> <a name="key" id="@winglang/sdk.cloud.Bucket.addObject.parameter.key"></a>
 
 - *Type:* str
