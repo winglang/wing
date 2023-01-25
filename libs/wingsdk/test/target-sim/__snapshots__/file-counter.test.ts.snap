@@ -16,6 +16,7 @@ Object {
         "attrs": Object {},
         "path": "root/HelloWorld/Bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",

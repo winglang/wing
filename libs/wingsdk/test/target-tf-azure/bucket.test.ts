@@ -43,6 +43,26 @@ test("bucket is public", () => {
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
+test("bucket with two preflight objects", () => {
+  // GIVEN
+  const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });
+  const bucket = new cloud.Bucket(app, "my_bucket", { public: true });
+  bucket.addObject("file1.txt", "hello world");
+  bucket.addObject("file2.txt", "boom bam");
+  const output = app.synth();
+
+  // THEN
+  expect(tfResourcesOf(output)).toEqual([
+    "azurerm_resource_group",
+    "azurerm_storage_account",
+    "azurerm_storage_blob",
+    "azurerm_storage_container",
+  ]);
+  expect(tfResourcesOfCount(output, "azurerm_storage_blob")).toEqual(2);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
 test("bucket name valid", () => {
   // GIVEN
   const app = new tfazure.App({ outdir: mkdtemp(), location: "East US" });

@@ -35,6 +35,14 @@ export abstract class BucketBase extends Resource {
 
     props;
   }
+
+  /**
+   * Add a file to the bucket that is uploaded when the app is deployed.
+   *
+   * TODO: In the future this will support uploading any `Blob` type or
+   * referencing a file from the local filesystem.
+   */
+  public abstract addObject(key: string, body: string): void;
 }
 
 /**
@@ -50,6 +58,12 @@ export class Bucket extends BucketBase {
 
   /** @internal */
   public _toInflight(): Code {
+    throw new Error("Method not implemented.");
+  }
+
+  public addObject(key: string, body: string): void {
+    key;
+    body;
     throw new Error("Method not implemented.");
   }
 }

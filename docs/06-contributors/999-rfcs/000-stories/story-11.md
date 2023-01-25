@@ -82,20 +82,20 @@ resource TaskList {
     * @param term - the term to search
     * @returns set of task id that matches the term
     */
-  inflight find_tasks_with(term: str): Set<str> {
+  inflight find_tasks_with(term: str): Array<str> {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
     print("found ${task_ids.size} tasks");
-    let output = MutSet<str>{};// #1172
+    let output = MutArray<str>[];// #1172
     for id in task_ids {
       let title = this.get_task(id); // https://winglang.slack.com/archives/C047QFSUL5R/p1674549602212669
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
-        output.add(id);
+        output.push(id);
       }
     }
     
-    print("found ${output.size} tasks which match term '${term}'");
+    print("found ${output.len} tasks which match term '${term}'");
     return output.to_immut();
   }
 }
@@ -135,7 +135,7 @@ new cloud.Function(inflight (s: str): str => {
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
 }) as "test:get, remove and find task";
-
+```
 
 ## Wing Console
 
