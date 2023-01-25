@@ -82,9 +82,9 @@ Discussions](https://github.com/winglang/wing/discussions).
 
 ## Contributing
 
-We welcome and celebrate contributions from the community! Please see our
-[contribution guide](./CONTRIBUTING.md) for more information about setting up a
-development environment, what we are working on, where we need help and other
+We welcome and celebrate contributions from the community! Please see our [contribution
+guide](https://github.com/winglang/wing/blob/main/CONTRIBUTING.md) for more information about
+setting up a development environment, what we are working on, where we need help and other
 guidelines for contributing to the project.
 
 We are also actively tracking planned features in our roadmap:
