@@ -20,7 +20,7 @@ env:
   CI: "true"
 
 jobs:
-  mutate:
+  build:
     runs-on: ubuntu-latest
     steps:
       - id: token-check
