@@ -69,7 +69,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -93,7 +93,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -119,7 +119,7 @@ exports.handler = async function(event) {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.130",
+                "version": "10.1.228",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -127,7 +127,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -139,7 +139,7 @@ exports.handler = async function(event) {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -227,7 +227,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -251,7 +251,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -277,7 +277,7 @@ exports.handler = async function(event) {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.130",
+                "version": "10.1.228",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -285,7 +285,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -297,7 +297,7 @@ exports.handler = async function(event) {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -385,7 +385,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -409,7 +409,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -435,7 +435,7 @@ exports.handler = async function(event) {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.130",
+                "version": "10.1.228",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -443,7 +443,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -455,7 +455,7 @@ exports.handler = async function(event) {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -544,7 +544,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "An inflight resource",
@@ -568,7 +568,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -594,7 +594,7 @@ exports.handler = async function(event) {
             "Code": Object {
               "constructInfo": Object {
                 "fqn": "constructs.Construct",
-                "version": "10.0.130",
+                "version": "10.1.228",
               },
               "id": "Code",
               "path": "root/my_function/Code",
@@ -602,7 +602,7 @@ exports.handler = async function(event) {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud function (FaaS)",
@@ -614,7 +614,155 @@ exports.handler = async function(event) {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
+      },
+      "id": "root",
+      "path": "root",
+    },
+    "version": "tree-0.1",
+  },
+}
+`;
+
+exports[`invoke function with process.exit(1) 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "wingsdk.cloud.Function created.",
+  "Invoke (payload=\\"\\"{}\\"\\").",
+  "wingsdk.cloud.Function deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
+exports[`invoke function with process.exit(1) 2`] = `
+Object {
+  "app.wsim/simulator.json": Object {
+    "resources": Array [
+      Object {
+        "attrs": Object {},
+        "path": "root/WingLogger",
+        "props": Object {},
+        "type": "wingsdk.cloud.Logger",
+      },
+      Object {
+        "attrs": Object {},
+        "path": "root/my_function",
+        "props": Object {
+          "environmentVariables": Object {
+            "LOGGER_HANDLE_76f7e65b": "\${root/WingLogger#attrs.handle}",
+          },
+          "sourceCodeFile": "assets/my_function/index.js",
+          "sourceCodeLanguage": "javascript",
+        },
+        "type": "wingsdk.cloud.Function",
+      },
+    ],
+    "sdkVersion": "0.0.0",
+  },
+  "assets/my_function/index.js": "var $logger = function(env) {
+  let handle = process.env[env];
+  if (!handle) {
+    throw new Error(\\"Missing environment variable: \\" + env);
+  }
+  return $simulator.findInstance(handle);
+}(\\"LOGGER_HANDLE_76f7e65b\\");
+console.log = (...args) => $logger.print(...args);
+exports.handler = async function(event) {
+  return await new (function() {
+    return class Handler {
+      constructor(clients) {
+        for (const [name, client] of Object.entries(clients)) {
+          this[name] = client;
+        }
+      }
+      async handle() {
+        process.exit(1);
+      }
+    };
+  }())({}).handle(event);
+};
+",
+  "tree.json": Object {
+    "tree": Object {
+      "children": Object {
+        "Handler": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [],
+            "wing:resource:stateful": false,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "An inflight resource",
+            "hidden": true,
+            "title": "Inflight",
+          },
+          "id": "Handler",
+          "path": "root/Handler",
+        },
+        "WingLogger": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "inbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/my_function",
+              },
+            ],
+            "wing:resource:stateful": true,
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud logging facility",
+            "hidden": true,
+            "title": "Logger",
+          },
+          "id": "WingLogger",
+          "path": "root/WingLogger",
+        },
+        "my_function": Object {
+          "attributes": Object {
+            "wing:resource:connections": Array [
+              Object {
+                "direction": "outbound",
+                "implicit": true,
+                "relationship": "print",
+                "resource": "root/WingLogger",
+              },
+            ],
+            "wing:resource:stateful": false,
+          },
+          "children": Object {
+            "Code": Object {
+              "constructInfo": Object {
+                "fqn": "constructs.Construct",
+                "version": "10.1.228",
+              },
+              "id": "Code",
+              "path": "root/my_function/Code",
+            },
+          },
+          "constructInfo": Object {
+            "fqn": "constructs.Construct",
+            "version": "10.1.228",
+          },
+          "display": Object {
+            "description": "A cloud function (FaaS)",
+            "title": "Function",
+          },
+          "id": "my_function",
+          "path": "root/my_function",
+        },
+      },
+      "constructInfo": Object {
+        "fqn": "constructs.Construct",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",

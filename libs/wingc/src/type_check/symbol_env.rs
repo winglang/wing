@@ -5,15 +5,20 @@ use crate::{
 };
 use std::collections::{hash_map, HashMap, HashSet};
 
-use super::UnsafeRef;
+use super::{UnsafeRef, VariableInfo};
 
 pub type SymbolEnvRef = UnsafeRef<SymbolEnv>;
 
 pub struct SymbolEnv {
 	pub(crate) ident_map: HashMap<String, (StatementIdx, SymbolKind)>,
 	parent: Option<SymbolEnvRef>,
+
+	// TODO: This doesn't make much sense in the context of the "envrioment" but I needed a way to propagate the return type of a function
+	// down the scopes. Think of a nicer way to do this.
 	pub return_type: TypeRef,
+
 	is_class: bool,
+	pub is_init: bool,
 	pub flight: Phase,
 	statement_idx: usize,
 }
@@ -32,13 +37,20 @@ pub enum StatementIdx {
 
 // Possible results for a symbol lookup in the environment
 enum LookupResult<'a> {
-	// The type of the symbol and its flight phase
-	Found((&'a SymbolKind, Phase)),
+	// The kind of symbol and usefull metadata associated with its lookup
+	Found((&'a SymbolKind, SymbolInfo)),
 	// The symbol was not found in the environment
 	NotFound,
 	// The symbol exists in the environment but it's not defined yet (based on the statement
 	// index passed to the lookup)
 	DefinedLater,
+}
+
+pub struct SymbolInfo {
+	// The phase the symbol was defined in
+	pub flight: Phase,
+	// Whether the symbol was defined in an `init`'s environment
+	pub init: bool,
 }
 
 enum LookupMutResult<'a> {
@@ -56,6 +68,7 @@ impl SymbolEnv {
 		parent: Option<SymbolEnvRef>,
 		return_type: TypeRef,
 		is_class: bool,
+		is_init: bool,
 		flight: Phase,
 		statement_idx: usize,
 	) -> Self {
@@ -67,6 +80,7 @@ impl SymbolEnv {
 			parent,
 			return_type,
 			is_class,
+			is_init,
 			flight,
 			statement_idx,
 		}
@@ -94,12 +108,12 @@ impl SymbolEnv {
 		if let Some(_parent_env) = self.parent {
 			if let Some(parent_kind) = self.try_lookup(&symbol.name, None) {
 				// If we're a class we allow "symbol shadowing" for methods
-				let is_function = if let SymbolKind::Variable(t, _) = kind {
+				let is_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
 				};
-				let is_parent_function = if let SymbolKind::Variable(t, _) = *parent_kind {
+				let is_parent_function = if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *parent_kind {
 					matches!(*t, Type::Function(_))
 				} else {
 					false
@@ -140,7 +154,13 @@ impl SymbolEnv {
 					}
 				}
 			}
-			LookupResult::Found((kind.into(), self.flight))
+			LookupResult::Found((
+				kind.into(),
+				SymbolInfo {
+					flight: self.flight,
+					init: self.is_init,
+				},
+			))
 		} else if let Some(ref parent_env) = self.parent {
 			parent_env.try_lookup_ext(symbol_name, not_after_stmt_idx.map(|_| self.statement_idx))
 		} else {
@@ -174,11 +194,11 @@ impl SymbolEnv {
 		&self,
 		symbol: &Symbol,
 		not_after_stmt_idx: Option<usize>,
-	) -> Result<(&SymbolKind, Phase), TypeError> {
+	) -> Result<(&SymbolKind, SymbolInfo), TypeError> {
 		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
 
 		match lookup_result {
-			LookupResult::Found((kind, flight)) => Ok((kind, flight)),
+			LookupResult::Found((kind, symbol_info)) => Ok((kind, symbol_info)),
 			LookupResult::NotFound => Err(TypeError {
 				message: format!("Unknown symbol \"{}\"", &symbol.name),
 				span: symbol.span.clone(),
@@ -234,7 +254,7 @@ impl SymbolEnv {
 			// This is because we currently allow unknown stuff to be referenced under an anything which will
 			// be resolved only in runtime.
 			// TODO: do we still need this? Why?
-			if let SymbolKind::Variable(t, _) = *t {
+			if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *t {
 				if matches!(*t, Type::Anything) {
 					break;
 				}

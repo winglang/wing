@@ -17,6 +17,12 @@ async handle(event) {
   return JSON.stringify({ msg });
 }`;
 
+const INFLIGHT_PANIC = `
+async handle() {
+  process.exit(1);
+}`;
+
+
 test("create a function", async () => {
   // GIVEN
   const app = new SimApp();
@@ -168,4 +174,25 @@ test("function has display title and description properties", async () => {
       },
     },
   });
+});
+
+test("invoke function with process.exit(1)", async () => {
+  // GIVEN
+  const app = new SimApp();
+  const handler = Testing.makeHandler(app, "Handler", INFLIGHT_PANIC);
+  new cloud.Function(app, "my_function", handler);
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_function") as cloud.IFunctionClient;
+  // WHEN
+  const PAYLOAD = { };
+  await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
+      "process.exit() was called with exit code 1"
+  );
+  // THEN
+  await s.stop();
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()[2].data.error).toMatchObject({
+    message: "process.exit() was called with exit code 1"
+  });
+  expect(app.snapshot()).toMatchSnapshot();
 });

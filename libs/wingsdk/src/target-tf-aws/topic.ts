@@ -6,7 +6,17 @@ import { Construct } from "constructs";
 import * as cloud from "../cloud";
 import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 import { Function } from "./function";
+
+/**
+ * Topic names are limited to 256 characters.
+ * You can use alphanumeric characters, hyphens (-) and underscores (_).
+ */
+const NAME_OPTS: NameOptions = {
+  maxLen: 256,
+  disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
+};
 
 /**
  * AWS Implementation of `cloud.Topic`.
@@ -19,7 +29,9 @@ export class Topic extends cloud.TopicBase {
   constructor(scope: Construct, id: string, props: cloud.TopicProps = {}) {
     super(scope, id, props);
 
-    this.topic = new SnsTopic(this, "Default", {});
+    this.topic = new SnsTopic(this, "Default", {
+      name: ResourceNames.generateName(this, NAME_OPTS),
+    });
   }
 
   public onMessage(

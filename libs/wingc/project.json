@@ -10,7 +10,7 @@
       },
       "configurations": {
         "release": {
-          "command": "cargo build --release"
+          "commands": ["cargo build --release", "cargo fmt -- --check"]
         }
       }
     },
@@ -43,12 +43,12 @@
       "dependsOn": ["build-native"],
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo run",
+        "command": "cargo run --example compile",
         "cwd": "libs/wingc"
       },
       "configurations": {
         "release": {
-          "command": "cargo run --release"
+          "command": "cargo run --release --example compile"
         }
       }
     }

@@ -27,9 +27,12 @@ jobs:
             examples
             build
             repo
+            playground
+            vscode
           types: |-
             feat
             fix
+            docs
             chore
             rfc
           subjectPattern: ^[^A-Z]+[^.]$

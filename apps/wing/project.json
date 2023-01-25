@@ -42,7 +42,7 @@
         "parallel": false
       }
     },
-    "dev": {
+    "wing": {
       "dependsOn": ["build"],
       "executor": "nx:run-commands",
       "options": {
