@@ -379,8 +379,7 @@ function bindObject(obj: any, host: IResource, ops: string[] = ["?"]): void {
         return;
       }
 
-      // if the object is a resource (i.e. has a "_toInflight" method"), then we lift and add to the
-      // list of bindings.
+      // if the object is a resource (i.e. has a "_bind" method"), bind it to the host.
       if (typeof (obj as IResource)._bind === "function") {
         (obj as IResource)._bind(host, ops);
 

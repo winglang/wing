@@ -105,8 +105,8 @@ function serializeImmutableData(obj: any): string {
         return `new Map(${serializeImmutableData(Array.from(obj))})`;
       }
 
-      // if the object is a resource (i.e. has a "_toInflight" method"), then we lift and add to the
-      // list of bindings.
+      // if the object is a resource (i.e. has a "_toInflight" method"), we use it to serialize
+      // itself.
       if (typeof (obj as IResource)._toInflight === "function") {
         return (obj as IResource)._toInflight().text;
       }
