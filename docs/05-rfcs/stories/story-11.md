@@ -82,7 +82,7 @@ resource TaskList {
     * @param term - the term to search
     * @returns set of task id that matches the term
     */
-  inflight find_tasks_with(term: str): Set<str> {
+  inflight find_tasks_with(term: str): Array<str> {
     print("find_tasks_with: ${term}");
     let task_ids = this.list_task_ids();
     print("found ${task_ids.size} tasks");
@@ -124,7 +124,7 @@ new cloud.Function(inflight (s: str): str => {
   clear_tasks.invoke("");
   tasks.add_task("clean the dishes");
   let result = tasks.find_tasks_with("clean the dishes");
-  assert(result.len == 1);
+  assert(result.length() == 1);
   assert("clean the dishes" == tasks.get_task(result.at(0)));
 }) as "test:get and find task";
 
@@ -133,7 +133,7 @@ new cloud.Function(inflight (s: str): str => {
   add_tasks.invoke("");
   tasks.remove_tasks(tasks.find_tasks_with("clean the dish").at(0));
   let result = tasks.find_tasks_with("clean the dish");
-  assert(result.len == 0);
+  assert(result.length() == 0);
 }) as "test:get, remove and find task";
 
 
