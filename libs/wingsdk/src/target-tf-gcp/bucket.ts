@@ -1,7 +1,7 @@
 import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import { Resource, CaptureMetadata, Code } from "../core";
+import * as core from "../core";
 import { App } from "./app";
 
 export class Bucket extends cloud.BucketBase {
@@ -23,7 +23,11 @@ export class Bucket extends cloud.BucketBase {
     });
   }
 
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  public _bind(_inflightHost: core.IInflightHost, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+
+  public _toInflight(): core.Code {
     throw new Error("Method not implemented.");
   }
 }

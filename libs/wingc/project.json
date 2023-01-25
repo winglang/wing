@@ -5,21 +5,18 @@
     "build-native": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo build",
+        "commands": ["cargo build", "cargo fmt -- --check"],
         "cwd": "libs/wingc"
       },
       "configurations": {
         "release": {
-          "command": "cargo build --release"
+          "commands": ["cargo build --release", "cargo fmt -- --check"]
         }
       }
     },
     "test": {
       "executor": "nx:run-commands",
-      "inputs": [
-        "src",
-        "examples-tests"
-      ],
+      "inputs": ["src", "examples-tests"],
       "options": {
         "command": "cargo test",
         "cwd": "libs/wingc"
@@ -39,6 +36,19 @@
       "configurations": {
         "release": {
           "command": "cargo wasi build --release"
+        }
+      }
+    },
+    "dev": {
+      "dependsOn": ["build-native"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cargo run --example compile",
+        "cwd": "libs/wingc"
+      },
+      "configurations": {
+        "release": {
+          "command": "cargo run --release --example compile"
         }
       }
     }

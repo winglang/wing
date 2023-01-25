@@ -1,56 +1,11 @@
 import { createHash } from "crypto";
 import { mkdtempSync, readFileSync, writeFileSync } from "fs";
 import { tmpdir } from "os";
-import { basename, dirname, join, resolve } from "path";
-import { IConstruct } from "constructs";
-import * as esbuild from "esbuild-wasm";
-import { PREBUNDLE_SYMBOL } from "./internal";
-import { Resource } from "./resource";
-
-/**
- * Capture information. A capture is a reference from an Inflight to a
- * construction-time resource or value. Either the "resource" or "value" field
- * will be set, but not both.
- */
-export interface Capture extends CaptureMetadata {
-  /**
-   * A captured resource
-   */
-  readonly resource?: ICapturableConstruct;
-
-  /**
-   * A captured immutable value (like string, number, boolean, a struct, or null).
-   */
-  readonly value?: any;
-}
-
-/**
- * Extra metadata associated with a captured resource.
- */
-export interface CaptureMetadata {
-  /**
-   * Which methods are called on the captured resource.
-   */
-  readonly methods?: string[];
-}
-
-/**
- * Represents something that is capturable by an Inflight.
- */
-export interface ICapturable {
-  /**
-   * Captures the resource so that it can be referenced inside an Inflight
-   * executed in the given scope.
-   *
-   * @internal
-   */
-  _bind(captureScope: Resource, metadata: CaptureMetadata): Code;
-}
-
-/**
- * Represents a construct that is capturable by an Inflight.
- */
-export interface ICapturableConstruct extends ICapturable, IConstruct {}
+import { basename, dirname, join } from "path";
+import { Construct } from "constructs";
+import { makeHandler } from "./internal";
+import { Connection, Display, IInflightHost, IResource } from "./resource";
+import { TreeInspector } from "./tree";
 
 /**
  * Reference to a piece of code.
@@ -124,178 +79,98 @@ export class NodeJsCode extends Code {
 }
 
 /**
- * Options for `Inflight`.
+ * Props for `Inflight`.
  */
 export interface InflightProps {
   /**
-   * Reference to code containing the entrypoint function.
+   * Reference to the inflight code. Only JavaScript code is currently
+   * supported.
+   *
+   * The JavaScript code needs be in the form `async handle(event) { ... }`, and
+   * all references to resources must be made through `this.<resource>`.
    */
   readonly code: Code;
 
   /**
-   * Name of the exported function to run.
-   *
-   * @example "exports.handler"
+   * Data and resource binding information.
+   * @default - no bindings
    */
-  readonly entrypoint: string;
-
-  /**
-   * Capture information. During runtime, a map containing all captured values
-   * will be passed as the first argument of the entrypoint function.
-   *
-   * Each key here will be the key for the final value in the map.
-   * @default - No captures
-   */
-  readonly captures?: { [name: string]: Capture };
+  readonly bindings?: InflightBindings;
 }
 
 /**
  * Represents a unit of application code that can be executed by a cloud
- * resource.
+ * resource. In practice, it's a resource with one inflight method named
+ * "handle".
  */
-export class Inflight {
-  /**
-   * Reference to code containing the entrypoint function.
-   */
-  public readonly code: Code;
+export class Inflight extends Construct implements IResource {
+  /** @internal */
+  public _connections: Connection[] = []; // thrown away
 
   /**
-   * Name of the exported function which will be run.
+   * Information on how to display a resource in the UI.
    */
-  public readonly entrypoint: string;
+  public readonly display = new Display();
 
-  /**
-   * Capture information. During runtime, a map containing all captured values
-   * will be passed as the first argument of the entrypoint function.
-   *
-   * Each key here will be the key for the final value in the map.
-   */
-  public readonly captures: { [name: string]: Capture };
+  constructor(scope: Construct, id: string, props: InflightProps) {
+    super(null as any, ""); // thrown away
 
-  constructor(props: InflightProps) {
-    this.code = props.code;
-    this.entrypoint = props.entrypoint;
-    this.captures = props.captures ?? {};
-  }
+    this.display.hidden = true;
+    this.display.title = "Inflight";
+    this.display.description = "An inflight resource";
 
-  /**
-   * Bundle this inflight process so that it can be used in the given capture
-   * scope.
-   *
-   * Returns the path to a JavaScript file that has been rewritten to include
-   * all dependencies and captured values or clients. The file is isolated in
-   * its own directory so that it can be zipped up and uploaded to cloud
-   * providers.
-   *
-   * High level implementation:
-   * 1. Read the file (let's say its path is path/to/foo.js)
-   * 2. Create a new javascript file named path/to/foo.prebundle.js, including a
-   *    map of all capture clients, a new handler that calls the original
-   *    handler with the clients passed in, and a copy of the user's code from
-   *    path/to/foo.js.
-   * 3. Use esbuild to bundle all dependencies, outputting the result to
-   *    path/to/foo.js.bundle/index.js.
-   */
-  public bundle(options: InflightBundleOptions): Code {
-    const lines = new Array<string>();
-
-    const originalCode = this.code;
-
-    const absolutePath = resolve(originalCode.path);
-    const workdir = dirname(absolutePath);
-
-    lines.push("const $cap = {};");
-    for (const [name, client] of Object.entries(options.captureClients)) {
-      lines.push(`$cap["${name}"] = ${client.text};`);
-    }
-    lines.push();
-    lines.push(originalCode.text);
-    lines.push();
-    lines.push("exports.handler = async function(event) {");
-    lines.push(`  return await ${this.entrypoint}($cap, event);`);
-    lines.push("};");
-
-    const contents = lines.join("\n");
-
-    // expose the inflight code before esbuild inlines dependencies, for unit
-    // testing purposes... ugly
-    if (options.captureScope) {
-      (options.captureScope as any)[PREBUNDLE_SYMBOL] =
-        NodeJsCode.fromInline(contents);
+    if (props.code.language !== Language.NODE_JS) {
+      throw new Error("Only Node.js code is supported");
     }
 
-    const tempdir = mkdtemp("wingsdk.");
-    const outfile = join(tempdir, "index.js");
-
-    esbuild.buildSync({
-      bundle: true,
-      stdin: {
-        contents,
-        resolveDir: workdir,
-        sourcefile: "original.js",
-      },
-      target: "node16",
-      platform: "node",
-      absWorkingDir: workdir,
-      outfile,
-      minify: false,
-      external: options.external ?? [],
+    return makeHandler(scope, id, props.code.text, props.bindings ?? {}, {
+      hidden: this.display.hidden,
+      title: this.display.title,
+      description: this.display.description,
     });
-
-    return NodeJsCode.fromFile(outfile);
   }
-
-  /**
-   * Resolve this inflight's captured objects into a map of clients that be
-   * safely referenced at runtime.
-   */
-  public makeClients(captureScope: Resource): Record<string, Code> {
-    const clients: Record<string, Code> = {};
-    for (const [name, capture] of Object.entries(this.captures)) {
-      clients[name] = createClient(captureScope, name, capture);
-    }
-    return clients;
+  /** @internal */
+  public _bind(_host: IInflightHost, _ops: string[]): void {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
+  public _toInflight(): Code {
+    throw new Error("Method not implemented.");
+  }
+  /** @internal */
+  public _inspect(_inspector: TreeInspector): void {
+    throw new Error("Method not implemented.");
   }
 }
 
 /**
- * Options for `Inflight.bundle`.
+ * A resource binding.
  */
-export interface InflightBundleOptions {
+export interface InflightResourceBinding {
   /**
-   * Associate the inflight bundle with a given capture scope.
+   * The resource.
    */
-  readonly captureScope?: IConstruct;
+  readonly resource: IResource;
+
   /**
-   * A map of capture clients that can be bundled with the Inflight's code.
+   * The list of operations used on the resource.
    */
-  readonly captureClients: Record<string, Code>;
-  /**
-   * List of dependencies to exclude from the bundle.
-   */
-  readonly external?: string[];
+  readonly ops: string[];
 }
 
-function createClient(
-  captureScope: Resource,
-  captureName: string,
-  capture: Capture
-): Code {
-  if (capture.value !== undefined) {
-    return NodeJsCode.fromInline(JSON.stringify(capture.value));
-  }
+/**
+ * Inflight bindings.
+ */
+export interface InflightBindings {
+  /**
+   * Resources being referenced by the inflight (key is the symbol).
+   */
+  readonly resources?: Record<string, InflightResourceBinding>;
 
-  if (capture.resource !== undefined) {
-    return capture.resource._bind(captureScope, capture);
-  }
-
-  throw new Error(
-    `Unable to capture "${captureName}", no "value" or "resource" specified.`
-  );
-}
-
-function mkdtemp(prefix: string): string {
-  return mkdtempSync(join(tmpdir(), prefix));
+  /**
+   * Immutable data being referenced by the inflight (key is the symbol);
+   */
+  readonly data?: Record<string, any>;
 }
 
 /**

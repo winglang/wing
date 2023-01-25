@@ -23,10 +23,10 @@ const npxBin = path.join(hangarDir, "node_modules/.bin/npx");
 
 const targetWingTGZ =
   process.env.HANGAR_WING_TGZ ??
-  path.join(repoRoot, `apps/wing/winglang-wing-0.0.0.tgz`);
+  path.join(repoRoot, `apps/wing/winglang-0.0.0.tgz`);
 const targetWingSDKTGZ =
   process.env.HANGAR_WINGSDK_TGZ ??
-  path.join(repoRoot, `libs/wingsdk/winglang-wingsdk-0.0.0.tgz`);
+  path.join(repoRoot, `libs/wingsdk/winglang-sdk-0.0.0.tgz`);
 
 const validWingFiles = fs
   .readdirSync(validTestDir)
@@ -67,9 +67,9 @@ beforeAll(async () => {
     $.cwd = tmpDir;
     await $`cd ${tmpDir}`;
     await $`${yarnBin} init -y`;
-    await $`${yarnBin} add @winglang/wing --no-lockfile`;
+    await $`${yarnBin} add winglang --no-lockfile --ignore-engines`;
     let yarnOutput = await $`node_modules/.bin/wing --version`;
-    let npxOutput = await $`${npxBin} @winglang/wing --version`;
+    let npxOutput = await $`${npxBin} winglang --version`;
 
     expect(npxOutput.stdout).toMatch(/^(\d+\.)?(\d+\.)?(\*|\d+)(-.+)?/);
     expect(yarnOutput.stdout).toStrictEqual(npxOutput.stdout);
@@ -99,10 +99,43 @@ async function enterTestDir(testDir: string) {
   $.cwd = testDir;
 }
 
+enum InvocationType {
+	Direct,
+	NPX,
+}
+
+async function runWingCommand(type: InvocationType, command: string[], wingFile: string) {
+	const isError = path.dirname(wingFile).endsWith("error");
+
+  const cmd: string[] = [];
+
+  if (type === InvocationType.Direct) {
+    cmd.push(npxBin);
+    cmd.push("winglang");
+  } else {
+    cmd.push("../node_modules/.bin/wing");
+  }
+
+  cmd.push(...command);
+  cmd.push(wingFile);
+
+	const work = async () => {
+    const out = await $`${cmd}`;
+		return out.exitCode;
+	};
+
+	if (isError) {
+		await expect(work()).rejects.toThrow();
+	} else {
+		await expect(work()).resolves.toBe(0);
+	}
+}
+
 test.each(validWingFiles)(
-  "wing compile %s",
+  "wing compile --target tf-aws %s",
   async (wingFile) => {
     await within(async () => {
+      const command = ["compile", "--target", "tf-aws"];
       const test_dir = path.join(tmpDir, `${wingFile}_cdktf`);
       const targetDir = path.join(test_dir, "target");
       const tf_manifest = path.join(targetDir, "cdktf.out/manifest.json");
@@ -110,10 +143,7 @@ test.each(validWingFiles)(
 
       await enterTestDir(test_dir);
 
-      await $`${npxBin} @winglang/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCommand(InvocationType.NPX, command, path.join(validTestDir, wingFile));
       const npx_tfManifest = sanitize_json_paths(tf_manifest);
       const npx_tfJson = sanitize_json_paths(tf_json);
 
@@ -121,7 +151,7 @@ test.each(validWingFiles)(
       expect(npx_tfJson).toMatchSnapshot("cdk.tf.json");
 
       // get all files in .wing dir
-      const dotWingFiles = await walk.async(path.join(targetDir, ".wing"), {
+      const dotWingFiles = await walk.sync(path.join(targetDir, ".wing"), {
         return_object: true,
       });
       for (const irFile in dotWingFiles) {
@@ -132,10 +162,7 @@ test.each(validWingFiles)(
         }
       }
 
-      await $`../node_modules/.bin/wing compile ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCommand(InvocationType.Direct, command, path.join(validTestDir, wingFile));
 
       expect(sanitize_json_paths(tf_manifest)).toStrictEqual(npx_tfManifest);
       expect(sanitize_json_paths(tf_json)).toStrictEqual(npx_tfJson);
@@ -147,21 +174,15 @@ test.each(validWingFiles)(
 );
 
 test.each(validWingFiles)(
-  "wing compile --target sim %s",
+  "wing test %s (--target sim)",
   async (wingFile) => {
     await within(async () => {
+      const command = ["test"];
       const test_dir = path.join(tmpDir, `${wingFile}_sim`);
       await enterTestDir(test_dir);
 
-      await $`${npxBin} @winglang/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
-
-      await $`../node_modules/.bin/wing compile --target sim ${path.join(
-        validTestDir,
-        wingFile
-      )}`;
+      await runWingCommand(InvocationType.NPX, command, path.join(validTestDir, wingFile));
+      await runWingCommand(InvocationType.Direct, command, path.join(validTestDir, wingFile));
 
       // TODO snapshot .wsim contents
     });

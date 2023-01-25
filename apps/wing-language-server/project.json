@@ -5,12 +5,12 @@
     "build-native": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "cargo build",
+        "commands": ["cargo build", "cargo fmt -- --check"],
         "cwd": "apps/wing-language-server"
       },
       "configurations": {
         "release": {
-          "command": "cargo build --release"
+          "commands": ["cargo build --release", "cargo fmt -- --check"]
         }
       }
     },

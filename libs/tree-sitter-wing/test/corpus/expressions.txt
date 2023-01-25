@@ -74,7 +74,7 @@ hello(1,a);
 (source
     (expression_statement
         (call
-            call_name: (reference (identifier))
+            caller: (reference (identifier))
             args: (argument_list
                 (positional_argument
                     (number)
@@ -98,7 +98,7 @@ obj.method();
 (source
     (expression_statement
         (call
-            call_name: (reference
+            caller: (reference
                 (nested_identifier
                     object: (reference (identifier))
                     property: (identifier)
@@ -108,6 +108,27 @@ obj.method();
         )
     )
 )
+
+====================
+Method call in binary expression
+====================
+
+x == obj.method();
+
+---
+
+(source
+  (expression_statement
+    (binary_expression
+      left: (reference
+        (identifier))
+      right: (call
+        caller: (reference
+          (nested_identifier
+            object: (reference
+              (identifier))
+            property: (identifier)))
+        args: (argument_list)))))
 
 ====================
 New expression
@@ -149,7 +170,7 @@ new A() as "b" in c;
 preflight anonymous closure
 ================================
 
-(a: num): num -> { return a; };
+(a: num): num => { return a; };
 
 ---
 
@@ -178,7 +199,7 @@ preflight anonymous closure
 inflight anonymous closure
 ================================
 
-(): num ~> { return 1; };
+inflight (): num => { return 1; };
 
 ---
 
@@ -240,37 +261,26 @@ maybeVal ?? 2;
 Set Literal
 ================================
 
-{ 1, 2, 3 };
-
+{1, 2, 3};
+Set<num> { 1, 2, 3 };
 ---
 
 (source
     (expression_statement
         (set_literal
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
         )
     )
-)
-
-================================
-Typed Set Literal
-================================
-
-Set<num> { 1, 2, 3 };
-
----
-
-(source
     (expression_statement
         (set_literal
-            (immutable_container_type
-                (builtin_type)
+            type: (immutable_container_type
+                type_parameter: (builtin_type)
             )
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
         )
     )
 )
@@ -321,15 +331,22 @@ Array Literal
 ================================
 
 [1, 2, 3,];
-
+Array<str>[];
 ---
 
 (source
     (expression_statement
         (array_literal
-            (number)
-            (number)
-            (number)
+            element: (number)
+            element: (number)
+            element: (number)
+        )
+    )
+    (expression_statement
+       (array_literal
+            type: (immutable_container_type
+                type_parameter: (builtin_type)
+            )
         )
     )
 )
@@ -344,11 +361,11 @@ let a: Array<num> = [];
 
 (source
     (variable_definition_statement
-        (identifier)
-        (immutable_container_type
-            (builtin_type)
+        name: (identifier)
+        type: (immutable_container_type
+            type_parameter: (builtin_type)
         )
-        (array_literal)
+        value: (array_literal)
     )
 )
 
@@ -362,12 +379,12 @@ let a = new MutMap<num>();
 
 (source
     (variable_definition_statement
-        (identifier)
-        (new_expression
-            (mutable_container_type
-                (builtin_type)
+        name: (identifier)
+        value: (new_expression
+            class: (mutable_container_type
+                type_parameter: (builtin_type)
             )
-            (argument_list)
+            args: (argument_list)
         )
     )
 )

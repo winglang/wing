@@ -1,24 +1,36 @@
+import { join } from "path";
 import { LambdaEventSourceMapping } from "@cdktf/provider-aws/lib/lambda-event-source-mapping";
 import { SqsQueue } from "@cdktf/provider-aws/lib/sqs-queue";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
+import { convertBetweenHandlers } from "../convert";
 import * as core from "../core";
-import { Direction, Resource } from "../core";
+import { NameOptions, ResourceNames } from "../utils/resource-names";
 import { Function } from "./function";
-import { addBindConnections } from "./util";
+
+/**
+ * Queue names are limited to 80 characters.
+ * You can use alphanumeric characters, hyphens (-), and underscores (_).
+ */
+const NAME_OPTS: NameOptions = {
+  maxLen: 80,
+  disallowedRegex: /[^a-zA-Z0-9\_\-]+/g,
+};
 
 /**
  * AWS implementation of `cloud.Queue`.
  *
- * @inflight `@winglang/wingsdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends cloud.QueueBase {
   private readonly queue: SqsQueue;
+
   constructor(scope: Construct, id: string, props: cloud.QueueProps = {}) {
     super(scope, id, props);
 
     this.queue = new SqsQueue(this, "Default", {
       visibilityTimeoutSeconds: props.timeout?.seconds,
+      name: ResourceNames.generateName(this, NAME_OPTS),
     });
 
     if ((props.initialMessages ?? []).length) {
@@ -29,26 +41,22 @@ export class Queue extends cloud.QueueBase {
   }
 
   public onMessage(
-    inflight: core.Inflight,
+    inflight: core.Inflight, // cloud.IQueueOnMessageHandler
     props: cloud.QueueOnMessageProps = {}
   ): cloud.Function {
-    const code: string[] = [];
-    code.push(inflight.code.text);
-    code.push(`async function $sqsEventWrapper($cap, event) {`);
-    code.push(`  for (const record of event.Records ?? []) {`);
-    code.push(`    await ${inflight.entrypoint}($cap, record.body);`);
-    code.push(`  }`);
-    code.push(`}`);
-    const newInflight = new core.Inflight({
-      entrypoint: `$sqsEventWrapper`,
-      code: core.NodeJsCode.fromInline(code.join("\n")),
-      captures: inflight.captures,
-    });
+    const hash = inflight.node.addr.slice(-8);
+    const functionHandler = convertBetweenHandlers(
+      this.node.scope!, // ok since we're not a tree root
+      `${this.node.id}-OnMessageHandler-${hash}`,
+      inflight,
+      join(__dirname, "queue.onmessage.inflight.js"),
+      "QueueOnMessageHandlerClient"
+    );
 
     const fn = new cloud.Function(
       this.node.scope!, // ok since we're not a tree root
-      `${this.node.id}-OnMessage-${newInflight.code.hash.slice(0, 16)}`,
-      newInflight,
+      `${this.node.id}-OnMessage-${hash}`,
+      functionHandler,
       props
     );
 
@@ -75,54 +83,64 @@ export class Queue extends cloud.QueueBase {
       batchSize: props.batchSize ?? 1,
     });
 
-    this.addConnection({
-      direction: Direction.OUTBOUND,
+    core.Resource.addConnection({
+      from: this,
+      to: fn,
       relationship: "on_message",
-      resource: fn,
-    });
-    fn.addConnection({
-      direction: Direction.INBOUND,
-      relationship: "on_message",
-      resource: this,
     });
 
     return fn;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(
-    captureScope: Resource,
-    metadata: core.CaptureMetadata
-  ): core.Code {
-    if (!(captureScope instanceof Function)) {
-      throw new Error("queues can only be captured by tfaws.Function for now");
+  /** @internal */
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    if (!(host instanceof Function)) {
+      throw new Error("queues can only be bound by tfaws.Function for now");
     }
 
-    const env = `QUEUE_URL_${this.node.addr.slice(-8)}`;
+    const env = this.envName();
 
-    const methods = new Set(metadata.methods ?? []);
-    if (methods.has(cloud.QueueInflightMethods.PUSH)) {
-      captureScope.addPolicyStatements({
+    if (ops.includes(cloud.QueueInflightMethods.PUSH)) {
+      host.addPolicyStatements({
         effect: "Allow",
-        action: [
-          "sqs:SendMessage",
-          "sqs:GetQueueAttributes",
-          "sqs:GetQueueUrl",
-        ],
+        action: ["sqs:SendMessage"],
+        resource: this.queue.arn,
+      });
+    }
+    if (ops.includes(cloud.QueueInflightMethods.PURGE)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["sqs:PurgeQueue"],
+        resource: this.queue.arn,
+      });
+    }
+    if (ops.includes(cloud.QueueInflightMethods.APPROX_SIZE)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["sqs:GetQueueAttributes"],
         resource: this.queue.arn,
       });
     }
 
     // The queue url needs to be passed through an environment variable since
     // it may not be resolved until deployment time.
-    captureScope.addEnvironment(env, this.queue.url);
+    host.addEnvironment(env, this.queue.url);
 
-    addBindConnections(this, captureScope);
+    super._bind(host, ops);
+  }
 
+  /** @internal */
+  public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "QueueClient", [
-      `process.env["${env}"]`,
+      `process.env["${this.envName()}"]`,
     ]);
   }
+
+  private envName(): string {
+    return `QUEUE_URL_${this.node.addr.slice(-8)}`;
+  }
 }
+
+Queue._annotateInflight("push", {});
+Queue._annotateInflight("purge", {});
+Queue._annotateInflight("approx_size", {});

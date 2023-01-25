@@ -3,7 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [
     "wingc",
-    "wingsdk"
+    "sdk"
   ],
   "targets": {
     "copy": {
@@ -33,6 +33,17 @@
       "options": {
         "cwd": "apps/wing-playground",
         "script": "build"
+      }
+    },
+    "dev": {
+      "executor": "nx:run-script",
+      "dependsOn": [
+        "copy",
+        "^build"
+      ],
+      "options": {
+        "cwd": "apps/wing-playground",
+        "script": "dev"
       }
     }
   }

@@ -2,7 +2,8 @@
   "name": "vscode-wing",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [
-    "wing-language-server"
+    "wing-language-server",
+    "sdk"
   ],
   "targets": {
     "copy": {
@@ -14,13 +15,18 @@
         "{projectRoot}/resources/native/wing-language-server"
       ],
       "dependsOn": [
-        "^build-native"
+        "^build-native",
+        "^build"
       ],
       "options": {
         "commands": [
           "mkdir -p resources/native",
+          "mkdir -p resources/wingsdk",
           "rm -f resources/native/*",
-          "cp -v ../../target/debug/wing-language-server resources/native"
+          "rm -f resources/wingsdk/*",
+          "cp -v ../../target/debug/wing-language-server resources/native",
+          "cp -v node_modules/@winglang/sdk/package.json resources/wingsdk/package.json",
+          "cp -v node_modules/@winglang/sdk/.jsii resources/wingsdk/.jsii"
         ],
         "cwd": "apps/vscode-wing",
         "parallel": false
@@ -35,10 +41,7 @@
     },
     "build": {
       "executor": "nx:run-script",
-      "dependsOn": [
-        "^build",
-        "copy"
-      ],
+      "dependsOn": ["copy"],
       "options": {
         "cwd": "apps/vscode-wing",
         "script": "build"

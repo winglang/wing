@@ -1,3 +1,8 @@
+---
+title: SDK Architecture
+id: sdk-architecture
+keywords: [SDK architecture, sdk]
+---
 # SDK Architecture
 
 The Wing SDK is the standard library for the Wing language.
@@ -47,93 +52,74 @@ Each `App` class has an automatically registered polycon factory, but it's possi
 Inflights are Wing's distributed computing primitive.
 They are isolated code blocks which can be packaged and executed on compute platforms in the cloud (such as containers, CI/CD pipelines or FaaS).
 
-When a resource wants to use an inflight in an API, it is represented in the SDK using the `Inflight` class.
-An `Inflight` is modeled as an object containing:
+When a resource wants to use an inflight in an API, it is represented in the SDK through a resource with a single inflight method named `handle`.
 
-* a snippet of code (inline string or file)
-* an entrypoint (name of a function to call)
-* a map of "captured" data and resources
+Currently, the SDK provides a utility class named `Inflight` that can be used to quickly create an in-memory resource that implements the `handle` method.
 
 For example, given the following Wing code:
 
 ```wing
 let queue = new cloud.Queue();
-let greeting = "Hello, world!";
-new cloud.Function((event: str) ~> {
-    print(greeting);
+let counter = new cloud.Counter();
+new cloud.Function(inflight (event: str) => {
+    counter.inc();
     queue.push(event);
 });
 ```
 
-... the responsibility of the Wing compiler is to transform it into JavaScript like this:
+... the Wing compiler will transform it into JavaScript like this (this is not the exact code generated, but it's close enough):
 
 ```ts
 const queue = new sdk.cloud.Queue(this, "Queue");
-const handler = new sdk.core.Inflight({
+const counter = new sdk.cloud.Counter(this, "Counter");
+const handler = new sdk.core.Inflight(this, "Inflight", {
   code: sdk.core.NodeJsCode.fromInline(
-    `async function $proc($cap, event) {
-      await $cap.logger.print($cap.greeting);
-      await $cap.queue.push(event);
+    `async handle(event) {
+      await this.message_count.inc();
+      await this.my_queue.push(event);
     }`
   ),
-  entrypoint: "$proc",
-  captures: {
-    logger: {
-      resource: sdk.cloud.Logger.of(this),
-      methods: ["print"],
+  bindings: {
+    message_count: {
+      resource: counter,
+      ops: ["inc"],
     },
-    queue: {
+    my_queue: {
       resource: queue,
-      methods: ["push"],
+      ops: ["push"],
     },
-    greeting: {
-      value: "Hello, world!",
-    }
   },
 });
 new sdk.cloud.Function(this, "Function", handler);
 ```
 
-The inflight's `captures` field currently serve two purposes.
+Every resource added to the `bindings` field is implicitly added as a dependency of the inflight, and is made available to the inflight code through a field with the same name.
+(Hence the API calls to `this.message_count.print` and `this.my_queue.push` passed in the `code` field above.)
 
-The first purpose is to provide references to resources so that the CDK code can "glue" the resources together.
-This can include setting up permissions for the compute resource to perform operations on the referenced resource during runtime.
-The `methods` field associated with captured resources specifies what operations need to be used on the resource, so that least privilege permissions can be granted to the resource running the inflight code.
+The `bindings` field requires a `resource` field with a reference to the original resource object, and an `ops` field that specifies the operations that the inflight code will use on the resource.
 
-The second purpose is signal to the SDK that there is data that needs to be bundled with the user code.
-For example, when a `cloud.Queue` is captured by an inflight in an AWS application, the user's inflight code needs to be bundled with an inflight "client" that can perform `push()` by calling the AWS SDK.
+Under the hood, two main functions are performed by the SDK with this information:
 
-The next section explains how the `Inflight` class is used to produce a JavaScript bundle during the app's synthesis.
-This JavaScript bundle will inject the appropriate code for `$cap`, and the code bundle will be included as a Terraform asset when the app is synthesized.
+### 1. Resource binding
 
-## Bundling
+First, each referenced resource is "bound" to the inflight host through a `_bind` method that is defined on all resources.
+In the example above, `cloud.Function` is the host, and `cloud.Queue` is a referenced resource.
+The function would call `queue._bind(this, ["push"])` to bind the queue to the function host, providing information about the methods it expects to use on the queue.
 
-Currently, the SDK handles the process of bundling inflight user code with dependencies such as inflight resource clients and constants.
-For simplicity, this discussion will focus on the example of a `cloud.Function` accepting an inflight handler.
+The referenced resource can then perform any necessary setup to allow the host to referenced it during runtime, such as setting up least privilege permissions.
+For example, when compiling to AWS, the queue can create an IAM role that allows the function to execute `sqs:SendMessage` API calls on the queue.
 
-The bundling process starts in the constructor of the class implementing the `cloud.Function` polycon -- for example, `tfaws.Function`.
+In more complex resources, the `_bind` method will automatically call `_bind` on any sub-resources based on the operations that the host expects to use.
+For example, suppose the user defines a `TaskList` resource with a method named `add_task`, and `add_task` calls `put` on a `cloud.Bucket` (a child resource).
+Then whenever `TaskList` is bound to a host and `add_task` is one of the operations the inflight code expects to call, then the `cloud.Bucket` will automatically be bound to the host as well.
 
-The first step is that the function needs to obtain "clients" for all of the captured resources (modeled as `Record<string, Code>`).
-To do this, it iterates over each entry in `captures`.
-If the capture is a plain value or collection type, it just stringifies it.
-If the capture is a resource, it inverts the control back to the captured resource by calling the resource's `_bind` method.
+### 2. Inflight code bundling
 
-For example, if a `tfaws.Function` named `func` captures a `tfaws.Bucket` named `bucket`, it calls `bucket._bind(func, metadata)` where `metadata` is any extra information like the resource methods.
-`_bind` will update `func`'s AWS IAM policy so that it can perform operations on the bucket, and it will return a `Code` object that contains a `BucketClient` class with methods like `get` and `put`.
-After we repeat this process for all captures, we will have a map from capture names to `Code` objects.
+Second, the SDK will bundle the inflight code needed for each of the resources that it references.
+For example, to call `push` on a queue in a piece of inflight code, the SDK needs to bundle the inflight code of `cloud.Queue` with the user's code.
+The inflight host accomplishes this by calling the `_toInflight` method on each referenced resource, which returns a stringified JavaScript class with the code for performing the inflight operations and API calls.
+These classes are then bundled together with esbuild, and can be used by the inflight host as necessary for deploying to the target cloud.
 
-The second step is to call esbuild.
-Each `Inflight` has a `bundle` method that combines the user's code with the collection of "clients", in a template that looks something like:
+In the case of AWS for example, a `cloud.Function` will create an AWS Lambda function referencing a Terraform asset with a zipfile of the inflight code.
 
-```
-const $cap = {
-  <capture1>: <capture1-client>,
-  <capture2>: <capture2-client>,
-  ...
-};
-<user code with named entrypoint>
-exports.handler = function(event) { entrypoint($cap, event) };
-```
-
-Today the SDK currently expects the user code to always have an object containing captures as its first argument, and an event as a second argument, but this may change in the future.
-
+For the simulator, the inflight code is bundled into the `.wsim` file produced by the compiler.

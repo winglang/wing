@@ -5,6 +5,8 @@ import { SDK_VERSION } from "../constants";
 import { ISimulatorResourceInstance } from "../target-sim";
 // eslint-disable-next-line import/no-restricted-paths
 import { DefaultSimulatorFactory } from "../target-sim/factory.inflight";
+// eslint-disable-next-line import/no-restricted-paths
+import { Function } from "../target-sim/function.inflight";
 import { BaseResourceSchema, WingSimulatorSchema } from "../target-sim/schema";
 import { mkdtemp, readJsonSync } from "../util";
 
@@ -346,7 +348,7 @@ export class Simulator {
   }
 
   /**
-   * Get a list of all traces added during the most recent simulation run.
+   * Get a list of all traces from the most recent simulation run.
    */
   public listTraces(): Trace[] {
     return [...this._traces];
@@ -354,26 +356,49 @@ export class Simulator {
 
   /**
    * Get a simulated resource instance.
+   * @returns the resource
    */
   public getResource(path: string): any {
-    const handle = this.getResourceConfig(path).attrs.handle;
+    const handle = this.tryGetResource(path);
     if (!handle) {
-      throw new Error(`Resource ${path} does not have a handle.`);
+      throw new Error(`Resource "${path}" not found.`);
+    }
+    return handle;
+  }
+
+  /**
+   * Get a simulated resource instance.
+   * @returns The resource of undefined if not found
+   */
+  public tryGetResource(path: string): any | undefined {
+    const handle = this.tryGetResourceConfig(path)?.attrs.handle;
+    if (!handle) {
+      return undefined;
     }
     return this._handles.find(handle);
   }
 
   /**
    * Obtain a resource's configuration, including its type, props, and attrs.
+   * @returns The resource configuration or undefined if not found
    */
-  public getResourceConfig(path: string): BaseResourceSchema {
+  public tryGetResourceConfig(path: string): BaseResourceSchema | undefined {
     // shorthand - assume tree root is named "root" by default
     if (path.startsWith("/")) {
       path = `root${path}`;
     }
-    const config = this._config.resources.find((r) => r.path === path);
+    return this._config.resources.find((r) => r.path === path);
+  }
+
+  /**
+   * Obtain a resource's configuration, including its type, props, and attrs.
+   * @param path The resource path
+   * @returns The resource configuration
+   */
+  public getResourceConfig(path: string): BaseResourceSchema {
+    const config = this.tryGetResourceConfig(path);
     if (!config) {
-      throw new Error(`Resource ${path} not found.`);
+      throw new Error(`Resource "${path}" not found.`);
     }
     return config;
   }
@@ -384,6 +409,74 @@ export class Simulator {
    */
   public onTrace(subscriber: ITraceSubscriber) {
     this._traceSubscribers.push(subscriber);
+  }
+
+  /**
+   * Lists all resource with identifier "test" or that start with "test:*".
+   * @returns A list of resource paths
+   */
+  public listTests(): string[] {
+    const isTest = /(\/test$|\/test:([^\\/])+$)/;
+    const all = this.listResources();
+    return all.filter((f) => isTest.test(f));
+  }
+
+  /**
+   * Run all tests in the simulation tree.
+   *
+   * A test is a `cloud.Function` resource with an identifier that starts with "test." or is "test".
+   * @returns A list of test results.
+   */
+  public async runAllTests(): Promise<TestResult[]> {
+    const results = new Array<TestResult>();
+    const tests = this.listTests();
+
+    for (const path of tests) {
+      results.push(await this.runTest(path));
+    }
+
+    return results;
+  }
+
+  /**
+   * Runs a single test.
+   * @param path The path to a cloud.Function resource that repersents the test
+   * @returns The result of the test
+   */
+  public async runTest(path: string): Promise<TestResult> {
+    // create a new simulator instance to run this test in isolation
+    const isolated = new Simulator({ simfile: this._simfile });
+    await isolated.start();
+
+    // find the test function and verify it exists and indeed is a function
+    const fn: Function = isolated.tryGetResource(path);
+    if (!fn) {
+      const all = this.listResources();
+      throw new Error(`Resource "${path}" not found. Resources: ${all}`);
+    }
+    if (!("invoke" in fn)) {
+      throw new Error(
+        `Resource "${path}" is not a cloud.Function (expecting "invoke()").`
+      );
+    }
+
+    // run the test and capture any errors
+    let error = undefined;
+    try {
+      await fn.invoke("");
+    } catch (err) {
+      error = (err as any).stack;
+    }
+
+    // stop the simulator
+    await isolated.stop();
+
+    return {
+      path: path,
+      traces: isolated.listTraces(),
+      pass: !error,
+      error: error,
+    };
   }
 
   private _addTrace(event: Trace) {
@@ -506,4 +599,29 @@ class HandleManager {
     this.handles.clear();
     this.nextHandle = 0;
   }
+}
+
+/**
+ * A result of a single test.
+ */
+export interface TestResult {
+  /**
+   * The path to the test function.
+   */
+  readonly path: string;
+
+  /**
+   * Whether the test passed.
+   */
+  readonly pass: boolean;
+
+  /**
+   * The error message if the test failed.
+   */
+  readonly error?: string;
+
+  /**
+   * List of traces emitted during the test.
+   */
+  readonly traces: Trace[];
 }

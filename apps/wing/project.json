@@ -1,9 +1,9 @@
 {
-  "name": "wing",
+  "name": "winglang",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "implicitDependencies": [
     "wingc",
-    "wingsdk"
+    "sdk"
   ],
   "targets": {
     "copy": {
@@ -40,6 +40,14 @@
         "commands": ["npm run bump", "npm pack", "npm run unbump"],
         "cwd": "apps/wing",
         "parallel": false
+      }
+    },
+    "wing": {
+      "dependsOn": ["build"],
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "./bin/wing",
+        "cwd": "apps/wing"
       }
     }
   }

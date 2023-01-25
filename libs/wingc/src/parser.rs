@@ -1,8 +1,10 @@
+use indexmap::IndexSet;
 use phf::phf_map;
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::{str, vec};
 use tree_sitter::Node;
+use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
 	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
@@ -14,6 +16,7 @@ use crate::diagnostic::{Diagnostic, DiagnosticLevel, DiagnosticResult, Diagnosti
 pub struct Parser<'a> {
 	pub source: &'a [u8],
 	pub source_name: String,
+	pub error_nodes: RefCell<HashSet<usize>>,
 	pub diagnostics: RefCell<Diagnostics>,
 }
 
@@ -25,8 +28,6 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
-	"Set" => "see https://github.com/winglang/wing/issues/530",
-	"Array" => "see https://github.com/winglang/wing/issues/246",
 	"MutSet" => "see https://github.com/winglang/wing/issues/98",
 	"MutArray" => "see https://github.com/winglang/wing/issues/663",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
@@ -42,12 +43,16 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 
 impl Parser<'_> {
 	pub fn wingit(&self, root: &Node) -> Scope {
-		match root.kind() {
-			"source" => self.build_scope(root),
+		let scope = match root.kind() {
+			"source" => self.build_scope(&root),
 			other => {
 				panic!("Unexpected root node type {} at {}", other, self.node_span(root));
 			}
-		}
+		};
+
+		self.report_unhandled_errors(&root);
+
+		scope
 	}
 
 	fn add_error<T>(&self, message: String, node: &Node) -> Result<T, ()> {
@@ -58,6 +63,10 @@ impl Parser<'_> {
 		};
 		// TODO terrible to clone here to avoid move
 		self.diagnostics.borrow_mut().push(diag);
+
+		// Track that we have produced a diagnostic for this node
+		// (note: it may not necessarily refer to a tree-sitter "ERROR" node)
+		self.error_nodes.borrow_mut().insert(node.id());
 
 		// TODO: Seems to me like we should avoid using Rust's Result and `?` semantics here since we actually just want to "log"
 		// the error and continue parsing.
@@ -73,16 +82,13 @@ impl Parser<'_> {
 		if let Some(entry) = UNIMPLEMENTED_GRAMMARS.get(&grammar_element) {
 			self.add_error(
 				format!(
-					"{} '{}' is not yet supported {}",
+					"{} \"{}\" is not supported yet {}",
 					grammar_context, grammar_element, entry
 				),
 				node,
 			)?
 		} else {
-			self.add_error(
-				format!("Unexpected {} '{}' || {:#?}", grammar_context, grammar_element, node),
-				node,
-			)?
+			self.add_error(format!("Unexpected {} \"{}\"", grammar_context, grammar_element), node)?
 		}
 	}
 
@@ -91,7 +97,7 @@ impl Parser<'_> {
 	}
 
 	fn check_error<'a>(&'a self, node: Node<'a>, expected: &str) -> DiagnosticResult<Node> {
-		if node.is_error() {
+		if node.has_error() {
 			self.add_error(format!("Expected {}", expected), &node)
 		} else {
 			Ok(node)
@@ -178,6 +184,7 @@ impl Parser<'_> {
 				};
 
 				StmtKind::VariableDef {
+					reassignable: statement_node.child_by_field_name("reassignable").is_some(),
 					var_name: self.node_symbol(&statement_node.child_by_field_name("name").unwrap())?,
 					initial_value: self.build_expression(&statement_node.child_by_field_name("value").unwrap())?,
 					type_,
@@ -208,6 +215,10 @@ impl Parser<'_> {
 				iterable: self.build_expression(&statement_node.child_by_field_name("iterable").unwrap())?,
 				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
 			},
+			"while_statement" => StmtKind::While {
+				condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
+				statements: self.build_scope(&statement_node.child_by_field_name("block").unwrap()),
+			},
 			"return_statement" => StmtKind::Return(
 				if let Some(return_expression_node) = statement_node.child_by_field_name("expression") {
 					Some(self.build_expression(&return_expression_node)?)
@@ -217,6 +228,7 @@ impl Parser<'_> {
 			),
 			"class_definition" => self.build_class_statement(statement_node, false)?,
 			"resource_definition" => self.build_class_statement(statement_node, true)?,
+			"enum_definition" => self.build_enum_statement(statement_node)?,
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
@@ -225,6 +237,42 @@ impl Parser<'_> {
 			kind: stmt_kind,
 			span: self.node_span(statement_node),
 			idx,
+		})
+	}
+
+	fn build_enum_statement(&self, statement_node: &Node) -> DiagnosticResult<StmtKind> {
+		let name = self.node_symbol(&statement_node.child_by_field_name("enum_name").unwrap());
+		if name.is_err() {
+			self
+				.add_error::<Node>(String::from("Invalid enum name"), &statement_node)
+				.err();
+		}
+
+		let mut cursor = statement_node.walk();
+		let mut values = IndexSet::<Symbol>::new();
+		for node in statement_node.named_children(&mut cursor) {
+			if node.kind() != "enum_field" {
+				continue;
+			}
+
+			let diagnostic = self.node_symbol(&node);
+			if diagnostic.is_err() {
+				self.add_error::<Node>(String::from("Invalid enum value"), &node).err();
+				continue;
+			}
+
+			let symbol = diagnostic.unwrap();
+			let success = values.insert(symbol.clone());
+			if !success {
+				self
+					.add_error::<Node>(format!("Duplicated enum value {}", symbol.name), &node)
+					.err();
+			}
+		}
+
+		Ok(StmtKind::Enum {
+			name: name.unwrap(),
+			values,
 		})
 	}
 
@@ -239,6 +287,9 @@ impl Parser<'_> {
 			.unwrap()
 			.named_children(&mut cursor)
 		{
+			if class_element.is_extra() {
+				continue;
+			}
 			match (class_element.kind(), is_resource) {
 				("function_definition", true) => {
 					let method_name = self.node_symbol(&class_element.child_by_field_name("name").unwrap());
@@ -259,11 +310,13 @@ impl Parser<'_> {
 				("class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
+					reassignable: class_element.child_by_field_name("reassignable").is_some(),
 					flight: Phase::Preflight,
 				}),
 				("inflight_class_member", _) => members.push(ClassMember {
 					name: self.node_symbol(&class_element.child_by_field_name("name").unwrap())?,
 					member_type: self.build_type(&class_element.child_by_field_name("type").unwrap())?,
+					reassignable: class_element.child_by_field_name("reassignable").is_some(),
 					flight: Phase::Inflight,
 				}),
 				("constructor", _) => {
@@ -277,7 +330,7 @@ impl Parser<'_> {
 					}
 					let parameters = self.build_parameter_list(&class_element.child_by_field_name("parameter_list").unwrap())?;
 					constructor = Some(Constructor {
-						parameters: parameters.iter().map(|p| p.0.clone()).collect(),
+						parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 						statements: self.build_scope(&class_element.child_by_field_name("block").unwrap()),
 						signature: FunctionSignature {
 							parameters: parameters.iter().map(|p| p.1.clone()).collect(),
@@ -330,44 +383,45 @@ impl Parser<'_> {
 		})
 	}
 
-	fn build_anonymous_closure(&self, anon_closure_node: &Node) -> DiagnosticResult<FunctionDefinition> {
-		let mut cur = anon_closure_node.walk();
-		let block_node_idx = anon_closure_node
-			.children(&mut cur)
-			.position(|c| c.kind() == "block")
-			.unwrap();
-		let flight = match self.node_text(&anon_closure_node.child(block_node_idx - 1).unwrap()) {
-			"->" => Phase::Preflight,
-			"~>" => Phase::Inflight,
-			other => self.report_unimplemented_grammar(other, "closure phase specifier", anon_closure_node)?,
-		};
-
+	fn build_anonymous_closure(&self, anon_closure_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		self.build_function_definition(anon_closure_node, flight)
 	}
 
 	fn build_function_definition(&self, func_def_node: &Node, flight: Phase) -> DiagnosticResult<FunctionDefinition> {
 		let parameters = self.build_parameter_list(&func_def_node.child_by_field_name("parameter_list").unwrap())?;
 		Ok(FunctionDefinition {
-			parameter_names: parameters.iter().map(|p| p.0.clone()).collect(),
+			parameters: parameters.iter().map(|p| (p.0.clone(), p.2)).collect(),
 			statements: self.build_scope(&func_def_node.child_by_field_name("block").unwrap()),
 			signature: FunctionSignature {
 				parameters: parameters.iter().map(|p| p.1.clone()).collect(),
-				return_type: func_def_node
-					.child_by_field_name("type")
-					.map(|rt| Box::new(self.build_type(&rt).unwrap())),
+				return_type: if let Some(rt) = func_def_node.child_by_field_name("type") {
+					Some(Box::new(self.build_type(&rt)?))
+				} else {
+					None
+				},
 				flight,
 			},
 			captures: RefCell::new(None),
 		})
 	}
 
-	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type)>> {
+	/// Builds a vector of all parameters defined in `parameter_list_node`.
+	///
+	/// # Returns
+	/// A vector of tuples for each parameter in the list. The tuples are the name, type and a bool letting
+	/// us know whether the parameter is reassignable or not respectively.
+	fn build_parameter_list(&self, parameter_list_node: &Node) -> DiagnosticResult<Vec<(Symbol, Type, bool)>> {
 		let mut res = vec![];
 		let mut cursor = parameter_list_node.walk();
 		for parameter_definition_node in parameter_list_node.named_children(&mut cursor) {
+			if parameter_definition_node.is_extra() {
+				continue;
+			}
+
 			res.push((
 				self.node_symbol(&parameter_definition_node.child_by_field_name("name").unwrap())?,
 				self.build_type(&parameter_definition_node.child_by_field_name("type").unwrap())?,
+				parameter_definition_node.child_by_field_name("reassignable").is_some(),
 			))
 		}
 
@@ -414,8 +468,13 @@ impl Parser<'_> {
 				let element_type = type_node.child_by_field_name("type_parameter").unwrap();
 				match container_type {
 					"Map" => Ok(Type::Map(Box::new(self.build_type(&element_type)?))),
+					"MutMap" => Ok(Type::MutMap(Box::new(self.build_type(&element_type)?))),
+					"Array" => Ok(Type::Array(Box::new(self.build_type(&element_type)?))),
+					"MutArray" => Ok(Type::MutArray(Box::new(self.build_type(&element_type)?))),
+					"Set" => Ok(Type::Set(Box::new(self.build_type(&element_type)?))),
+					"MutSet" => Ok(Type::MutSet(Box::new(self.build_type(&element_type)?))),
 					"ERROR" => self.add_error(format!("Expected builtin container type"), type_node)?,
-					other => self.report_unimplemented_grammar(other, "bultin container type", type_node),
+					other => self.report_unimplemented_grammar(other, "builtin container type", type_node),
 				}
 			}
 			"ERROR" => self.add_error(format!("Expected type"), type_node),
@@ -424,6 +483,9 @@ impl Parser<'_> {
 	}
 
 	fn build_nested_identifier(&self, nested_node: &Node) -> DiagnosticResult<Reference> {
+		if nested_node.has_error() {
+			return self.add_error(format!("Syntax error"), &nested_node);
+		}
 		Ok(Reference::NestedIdentifier {
 			object: Box::new(self.build_expression(&nested_node.child_by_field_name("object").unwrap())?),
 			property: self.node_symbol(&nested_node.child_by_field_name("property").unwrap())?,
@@ -458,6 +520,9 @@ impl Parser<'_> {
 		let mut cursor = arg_list_node.walk();
 		let mut seen_keyword_args = false;
 		for child in arg_list_node.named_children(&mut cursor) {
+			if child.is_extra() {
+				continue;
+			}
 			match child.kind() {
 				"positional_argument" => {
 					if seen_keyword_args {
@@ -567,16 +632,25 @@ impl Parser<'_> {
 
 					// Skip first and last quote
 					let end = expression_node.end_byte() - 1;
-					let mut last_start = expression_node.start_byte() + 1;
+					let start = expression_node.start_byte() + 1;
+					let mut last_start = start;
 					let mut last_end = end;
+					let mut start_from = last_end;
 
 					for interpolation_node in expression_node.named_children(&mut cursor) {
+						if interpolation_node.is_extra() {
+							continue;
+						}
 						let interpolation_start = interpolation_node.start_byte();
 						let interpolation_end = interpolation_node.end_byte();
 
+						if start == last_start && interpolation_start < last_end {
+							start_from = last_start;
+						}
+
 						if interpolation_start != last_start {
 							parts.push(InterpolatedStringPart::Static(
-								str::from_utf8(&self.source[last_start..interpolation_start])
+								str::from_utf8(&self.source[start_from..interpolation_start])
 									.unwrap()
 									.into(),
 							));
@@ -588,6 +662,7 @@ impl Parser<'_> {
 
 						last_start = interpolation_start;
 						last_end = interpolation_end;
+						start_from = last_end;
 					}
 
 					if last_end != end {
@@ -630,24 +705,45 @@ impl Parser<'_> {
 			"keyword_argument_value" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"call" => Ok(Expr::new(
 				ExprKind::Call {
-					function: self.build_reference(&expression_node.child_by_field_name("call_name").unwrap())?,
+					function: self.build_reference(&expression_node.child_by_field_name("caller").unwrap())?,
 					args: self.build_arg_list(&expression_node.child_by_field_name("args").unwrap())?,
 				},
 				expression_span,
 			)),
 			"parenthesized_expression" => self.build_expression(&expression_node.named_child(0).unwrap()),
 			"preflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Preflight)?),
 				expression_span,
 			)),
 			"inflight_closure" => Ok(Expr::new(
-				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node)?),
+				ExprKind::FunctionClosure(self.build_anonymous_closure(&expression_node, Phase::Inflight)?),
 				expression_span,
 			)),
 			"pure_closure" => self.add_error(
 				format!("Pure phased anonymous closures not implemented yet"),
 				expression_node,
 			),
+			"array_literal" => {
+				let array_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut items = Vec::new();
+				let mut cursor = expression_node.walk();
+				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+					items.push(self.build_expression(&element_node)?);
+				}
+
+				Ok(Expr::new(
+					ExprKind::ArrayLiteral {
+						items,
+						type_: array_type,
+					},
+					expression_span,
+				))
+			}
 			"map_literal" => {
 				let map_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
 					Some(self.build_type(&type_node)?)
@@ -655,9 +751,12 @@ impl Parser<'_> {
 					None
 				};
 
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field_node in expression_node.children_by_field_name("member", &mut cursor) {
+					if field_node.is_extra() {
+						continue;
+					}
 					let key_node = field_node.named_child(0).unwrap();
 					let key = match key_node.kind() {
 						"string" => {
@@ -684,12 +783,30 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
+			"set_literal" => {
+				let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+					Some(self.build_type(&type_node)?)
+				} else {
+					None
+				};
+
+				let mut items = Vec::new();
+				let mut cursor = expression_node.walk();
+				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+					items.push(self.build_expression(&element_node)?);
+				}
+
+				Ok(Expr::new(
+					ExprKind::SetLiteral { items, type_: set_type },
+					expression_span,
+				))
+			}
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
-				let mut fields = HashMap::new();
+				let mut fields = BTreeMap::new();
 				let mut cursor = expression_node.walk();
 				for field in expression_node.children_by_field_name("fields", &mut cursor) {
-					if !field.is_named() {
+					if !field.is_named() || field.is_extra() {
 						continue;
 					}
 					let field_name = self.node_symbol(&field.named_child(0).unwrap());
@@ -709,12 +826,15 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
-			other => {
-				if expression_node.has_error() {
-					self.add_error(format!("Expected expression"), expression_node)
-				} else {
-					panic!("Unexpected expression {} || {:#?}", other, expression_node);
-				}
+			other => self.report_unimplemented_grammar(other, "expression", expression_node),
+		}
+	}
+
+	fn report_unhandled_errors(&self, root: &Node) {
+		let iter = traverse(root.walk(), Order::Pre);
+		for node in iter {
+			if node.is_error() && !self.error_nodes.borrow().contains(&node.id()) {
+				_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
 			}
 		}
 	}

@@ -1,4 +1,5 @@
-name: pull-request-lint
+name: Pull Request Lint
+
 on:
   pull_request_target:
     types:
@@ -8,6 +9,7 @@ on:
       - reopened
       - ready_for_review
       - edited
+
 jobs:
   validate:
     name: Validate PR title
@@ -25,9 +27,12 @@ jobs:
             examples
             build
             repo
+            playground
+            vscode
           types: |-
             feat
             fix
+            docs
             chore
             rfc
           subjectPattern: ^[^A-Z]+[^.]$

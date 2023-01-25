@@ -1,6 +1,7 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Duration, Inflight, Resource } from "../core";
+import { Code, IResource, Inflight, Resource } from "../core";
+import { Duration } from "../std";
 import { Function, FunctionProps } from "./function";
 
 /**
@@ -32,6 +33,10 @@ export abstract class QueueBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(scope, id);
+
+    this.display.title = "Queue";
+    this.display.description = "A distributed message queue";
+
     if (!scope) {
       return;
     }
@@ -60,21 +65,14 @@ export interface QueueOnMessageProps extends FunctionProps {
 }
 
 /**
- * Represents a serverless queue.
+ * Represents a queue.
  *
- * @inflight `@winglang/wingsdk.cloud.IQueueClient`
+ * @inflight `@winglang/sdk.cloud.IQueueClient`
  */
 export class Queue extends QueueBase {
   constructor(scope: Construct, id: string, props: QueueProps = {}) {
     super(null as any, id, props);
     return Polycons.newInstance(QUEUE_TYPE, scope, id, props) as Queue;
-  }
-
-  /**
-   * @internal
-   */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
-    throw new Error("Method not implemented.");
   }
 
   public onMessage(
@@ -83,6 +81,11 @@ export class Queue extends QueueBase {
   ): Function {
     inflight;
     props;
+    throw new Error("Method not implemented.");
+  }
+
+  /** @internal */
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
 }
@@ -94,14 +97,51 @@ export interface IQueueClient {
   /**
    * Push a message to the queue.
    * @param message Payload to send to the queue.
+   * @inflight
    */
   push(message: string): Promise<void>;
+
+  /**
+   * Purge all of the messages in the queue.
+   * @inflight
+   */
+  purge(): Promise<void>;
+
+  /**
+   * Retrieve the approximate number of messages in the queue.
+   * @inflight
+   */
+  approxSize(): Promise<number>;
+}
+
+/**
+ * Represents a resource with an inflight "handle" method that can be passed to
+ * `Queue.on_message`.
+ *
+ * @inflight `wingsdk.cloud.IQueueOnMessageHandlerClient`
+ */
+export interface IQueueOnMessageHandler extends IResource {}
+
+/**
+ * Inflight client for `IQueueOnMessageHandler`.
+ */
+export interface IQueueOnMessageHandlerClient {
+  /**
+   * Function that will be called when a message is received from the queue.
+   * @inflight
+   */
+  handle(message: string): Promise<void>;
 }
 
 /**
  * List of inflight operations available for `Queue`.
+ * @internal
  */
 export enum QueueInflightMethods {
   /** `Queue.push` */
   PUSH = "push",
+  /** `Queue.purge` */
+  PURGE = "purge",
+  /** `Queue.approxSize` */
+  APPROX_SIZE = "approx_size",
 }

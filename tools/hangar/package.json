@@ -14,9 +14,9 @@
   "devDependencies": {
     "dotenv": "^16.0.3",
     "npm": "^8.19.3",
-    "verdaccio": "^5.16.3",
+    "verdaccio": "^5.19.1",
     "verdaccio-memory": "^10.3.0",
-    "vitest": "^0.24.4",
+    "vitest": "^0.28.1",
     "walkdir": "^0.4.1",
     "yarn": "^1.22.19",
     "zx": "^7.1.1"

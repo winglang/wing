@@ -11,6 +11,7 @@ const PREC = {
   MULTIPLY: 10,
   UNARY: 11,
   NIL_COALESCING: 12,
+  MEMBER: 13,
 };
 
 module.exports = grammar({
@@ -43,8 +44,7 @@ module.exports = grammar({
 
     // Identifiers
     reference: ($) =>
-//      prec.right(choice($.identifier, $.nested_identifier)),
-      choice($.identifier, $.nested_identifier),
+     choice($.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
@@ -55,13 +55,13 @@ module.exports = grammar({
       ),
     
     nested_identifier: ($) =>
-      seq(
+      prec(PREC.MEMBER, seq(
         field("object", $.expression),
         choice(".", "?."),
         field("property", $.identifier)
-      ),
+      )),
 
-    _inflight_specifier: ($) => choice("inflight", "~"),
+    _inflight_specifier: ($) => "inflight",
 
     _statement: ($) =>
       choice(
@@ -73,8 +73,10 @@ module.exports = grammar({
         $.class_definition,
         $.resource_definition,
         $.for_in_loop,
+        $.while_statement,
         $.if_statement,
         $.struct_definition,
+        $.enum_definition,
       ),
 
     short_import_statement: ($) =>
@@ -97,6 +99,16 @@ module.exports = grammar({
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
 
+    
+    enum_definition: ($) => 
+      seq(
+        "enum", 
+        field("enum_name", $.identifier), 
+        "{",
+        commaSep(alias($.identifier, $.enum_field)),
+        "}"
+      ),
+
     return_statement: ($) =>
       seq("return", optional(field("expression", $.expression)), ";"),
 
@@ -105,9 +117,12 @@ module.exports = grammar({
 
     expression_statement: ($) => seq($.expression, ";"),
 
+    reassignable: ($) => "var",
+
     variable_definition_statement: ($) =>
       seq(
         "let",
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         optional($._type_annotation),
         "=",
@@ -142,6 +157,7 @@ module.exports = grammar({
     class_member: ($) =>
       seq(
         optional(field("access_modifier", $.access_modifier)),
+        optional(field("reassignable", $.reassignable)),
         field("name", $.identifier),
         $._type_annotation,
         ";"
@@ -186,6 +202,9 @@ module.exports = grammar({
         field("block", $.block)
       ),
 
+    while_statement: ($) =>
+      seq("while", field("condition", $.expression), field("block", $.block)),
+
     if_statement: ($) =>
       seq(
         "if",
@@ -204,7 +223,6 @@ module.exports = grammar({
         $.call,
         $.preflight_closure,
         $.inflight_closure,
-        $.pure_closure,
         $.await_expression,
         $._collection_literal,
         $.parenthesized_expression,
@@ -216,8 +234,10 @@ module.exports = grammar({
     // Primitives
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
-    // TODO: Handle leading zeros
-    number: ($) => /\d+/,
+    number: ($) => choice($._integer, $._decimal),
+    _integer: ($) => choice( "0", /[1-9]\d*/),
+    _decimal: ($) => choice( /0\.\d+/, /[1-9]\d*\.\d+/),
+
 
     bool: ($) => choice("true", "false"),
 
@@ -256,7 +276,7 @@ module.exports = grammar({
       ),
 
     call: ($) =>
-      seq(field("call_name", $.reference), field("args", $.argument_list)),
+      seq(field("caller", $.reference), field("args", $.argument_list)),
 
     argument_list: ($) =>
       seq(
@@ -353,7 +373,11 @@ module.exports = grammar({
     access_modifier: ($) => choice("public", "private", "protected"),
 
     parameter_definition: ($) =>
-      seq(field("name", $.identifier), $._type_annotation),
+      seq(
+        optional(field("reassignable", $.reassignable)),
+        field("name", $.identifier), 
+        $._type_annotation
+      ),
 
     parameter_list: ($) => seq("(", commaSep($.parameter_definition), ")"),
 
@@ -396,7 +420,7 @@ module.exports = grammar({
         ["+", PREC.UNARY],
         ["-", PREC.UNARY],
         ["!", PREC.UNARY],
-        //['~', PREC.UNARY],
+        ['~', PREC.UNARY],
       ];
 
       return choice(
@@ -448,19 +472,33 @@ module.exports = grammar({
       );
     },
 
-    preflight_closure: ($) => anonymousClosure($, "->"),
-    inflight_closure: ($) => anonymousClosure($, "~>"),
-    pure_closure: ($) => anonymousClosure($, "=>"),
+    preflight_closure: ($) => seq(
+      field("parameter_list", $.parameter_list),
+      optional(field("return_type", $._type_annotation)),
+      "=>",
+      field("block", $.block)
+    ),
+    
+    inflight_closure: ($) => seq(
+      "inflight",
+      field("parameter_list", $.parameter_list),
+      optional(field("return_type", $._type_annotation)),
+      "=>",
+      field("block", $.block)
+    ),
 
     await_expression: ($) => prec.right(seq("await", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
 
     _collection_literal: ($) =>
       choice($.array_literal, $.set_literal, $.map_literal),
-    array_literal: ($) => seq("[", commaSep($.expression), "]"),
+    array_literal: ($) => seq(
+      optional(field("type", $._builtin_container_type)),
+      "[", commaSep(field("element", $.expression)), "]"
+    ),
     set_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
-      "{", commaSep($.expression), "}"
+      "{", commaSep(field("element", $.expression)), "}"
     ),
     map_literal: ($) => seq(
       optional(field("type", $._builtin_container_type)),
@@ -476,20 +514,6 @@ module.exports = grammar({
       prec.right(seq($.expression, "[", $.expression, "]")),
   },
 });
-
-/**
- * @param {GrammarSymbols<"parameter_list" | "_type_annotation" | "block">} $
- * @param {string} arrow
- */
- function anonymousClosure($, arrow) {
-  return seq(
-    optional("async"),
-    field("parameter_list", $.parameter_list),
-    optional(field("return_type", $._type_annotation)),
-    arrow,
-    field("block", $.block)
-  );
-}
 
 /**
  * @param {Rule} rule

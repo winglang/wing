@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
-import { SimApp, TraceType } from "../../src/testing";
+import { SimApp, Testing, TraceType } from "../../src/testing";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -12,47 +11,36 @@ test("pushing messages through a queue", async () => {
       super(scope, id);
 
       const queue = new cloud.Queue(this, "Queue");
-      const pusher = new core.Inflight({
-        code: core.NodeJsCode.fromInline(
-          `async function $proc($cap, event) {
-            await $cap.logger.print("Hello, world!");
-            await $cap.queue.push(event);
-          }`
-        ),
-        entrypoint: "$proc",
-        captures: {
-          logger: {
-            resource: cloud.Logger.of(this),
-            methods: [cloud.LoggerInflightMethods.PRINT],
+      const pusher = Testing.makeHandler(
+        app,
+        "Pusher",
+        `async handle(event) {
+          console.log("Hello, world!");
+          await this.queue.push(event);
+        }`,
+        {
+          resources: {
+            queue: {
+              resource: queue,
+              ops: [cloud.QueueInflightMethods.PUSH],
+            },
           },
-          queue: {
-            resource: queue,
-            methods: [cloud.QueueInflightMethods.PUSH],
-          },
-        },
-      });
+        }
+      );
       new cloud.Function(this, "Function", pusher);
 
-      const processor = new core.Inflight({
-        code: core.NodeJsCode.fromInline(
-          `async function $proc($cap, event) {
-            await $cap.logger.print("Received " + event);
-          }`
-        ),
-        captures: {
-          logger: {
-            resource: cloud.Logger.of(this),
-            methods: [cloud.LoggerInflightMethods.PRINT],
-          },
-        },
-        entrypoint: "$proc",
-      });
+      const processor = Testing.makeHandler(
+        app,
+        "Processor",
+        `async handle(event) {
+          console.log("Received " + event);
+        }`
+      );
       queue.onMessage(processor);
     }
   }
 
   const app = new SimApp();
-  cloud.Logger.register(app);
   new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();
@@ -75,7 +63,7 @@ test("pushing messages through a queue", async () => {
     },
     {
       data: { message: "Received foo" },
-      sourcePath: "root/HelloWorld/Queue-OnMessage-004546ee82d97e73",
+      sourcePath: "root/HelloWorld/Queue-OnMessage-13c4eaf1",
       sourceType: "wingsdk.cloud.Function",
       timestamp: expect.any(String),
       type: "log",

@@ -5,17 +5,16 @@
       "type": "build"
     },
     {
+      "name": "@types/debug",
+      "type": "build"
+    },
+    {
       "name": "@types/fs-extra",
       "type": "build"
     },
     {
       "name": "@types/jest",
       "version": "^27",
-      "type": "build"
-    },
-    {
-      "name": "@types/minipass",
-      "version": "3.1.2",
       "type": "build"
     },
     {
@@ -39,6 +38,7 @@
     },
     {
       "name": "@winglang/jsii-docgen",
+      "version": "file:../../apps/jsii-docgen",
       "type": "build"
     },
     {
@@ -48,6 +48,10 @@
     },
     {
       "name": "aws-sdk-client-mock",
+      "type": "build"
+    },
+    {
+      "name": "aws-sdk-client-mock-jest",
       "type": "build"
     },
     {
@@ -110,13 +114,8 @@
       "type": "build"
     },
     {
-      "name": "minipass",
-      "version": "3.1.6",
-      "type": "build"
-    },
-    {
       "name": "npm-check-updates",
-      "version": "^15",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -155,42 +154,65 @@
     },
     {
       "name": "@aws-sdk/client-cloudwatch-logs",
-      "version": "3.215.0",
+      "version": "3.256.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-dynamodb",
-      "version": "3.215.0",
+      "version": "3.256.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-lambda",
-      "version": "3.215.0",
+      "version": "3.256.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-s3",
-      "version": "3.215.0",
+      "version": "3.256.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@aws-sdk/client-sns",
+      "version": "3.256.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/client-sqs",
-      "version": "3.215.0",
+      "version": "3.256.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/types",
-      "version": "3.215.0",
+      "version": "3.254.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-stream-node",
-      "version": "3.215.0",
+      "version": "3.254.0",
       "type": "bundled"
     },
     {
       "name": "@aws-sdk/util-utf8-node",
       "version": "3.208.0",
+      "type": "bundled"
+    },
+    {
+      "name": "@azure/core-paging",
+      "type": "bundled"
+    },
+    {
+      "name": "@azure/identity",
+      "version": "3.1.3",
+      "type": "bundled"
+    },
+    {
+      "name": "@azure/storage-blob",
+      "version": "12.12.0",
+      "type": "bundled"
+    },
+    {
+      "name": "debug",
       "type": "bundled"
     },
     {
@@ -206,20 +228,38 @@
       "type": "bundled"
     },
     {
+      "name": "@types/babel__traverse",
+      "version": "7.18.2",
+      "type": "override"
+    },
+    {
+      "name": "@types/prettier",
+      "version": "2.6.0",
+      "type": "override"
+    },
+    {
       "name": "@cdktf/provider-aws",
+      "version": "^12.0.1",
+      "type": "peer"
+    },
+    {
+      "name": "@cdktf/provider-azurerm",
+      "version": "^5.0.1",
       "type": "peer"
     },
     {
       "name": "@cdktf/provider-google",
+      "version": "^5.0.2",
       "type": "peer"
     },
     {
       "name": "cdktf",
+      "version": "~0.15.0",
       "type": "peer"
     },
     {
       "name": "constructs",
-      "version": "~10.0.25",
+      "version": "~10.1.228",
       "type": "peer"
     },
     {
@@ -228,19 +268,27 @@
     },
     {
       "name": "@cdktf/provider-aws",
+      "version": "^12.0.1",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/provider-azurerm",
+      "version": "^5.0.1",
       "type": "runtime"
     },
     {
       "name": "@cdktf/provider-google",
+      "version": "^5.0.2",
       "type": "runtime"
     },
     {
       "name": "cdktf",
+      "version": "~0.15.0",
       "type": "runtime"
     },
     {
       "name": "constructs",
-      "version": "~10.0.25",
+      "version": "~10.1.228",
       "type": "runtime"
     },
     {

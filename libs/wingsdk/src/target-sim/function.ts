@@ -1,18 +1,12 @@
+import { readFileSync } from "fs";
 import { Construct } from "constructs";
 import * as cloud from "../cloud";
-import {
-  Code,
-  Language,
-  NodeJsCode,
-  Inflight,
-  CaptureMetadata,
-  Resource,
-} from "../core";
+import * as core from "../core";
 import { TextFile } from "../fs";
 import { ISimulatorResource } from "./resource";
 import { BaseResourceSchema } from "./schema";
 import { FunctionSchema } from "./schema-resources";
-import { bindSimulatorResource } from "./util";
+import { bindSimulatorResource, makeSimulatorJsClient } from "./util";
 
 export const ENV_WING_SIM_INFLIGHT_RESOURCE_PATH =
   "WING_SIM_INFLIGHT_RESOURCE_PATH";
@@ -22,43 +16,24 @@ export const ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE =
 /**
  * Simulator implementation of `cloud.Function`.
  *
- * @inflight `@winglang/wingsdk.cloud.IFunctionClient`
+ * @inflight `@winglang/sdk.cloud.IFunctionClient`
  */
 export class Function extends cloud.FunctionBase implements ISimulatorResource {
-  private readonly env: Record<string, string> = {};
-  private readonly code: Code;
+  private readonly code: core.Code;
 
   constructor(
     scope: Construct,
     id: string,
-    inflight: Inflight,
+    inflight: cloud.IFunctionHandler,
     props: cloud.FunctionProps
   ) {
     super(scope, id, inflight, props);
 
-    if (inflight.code.language !== Language.NODE_JS) {
-      throw new Error("Only Node.js code is currently supported.");
-    }
-
-    const captureClients = inflight.makeClients(this);
-    const bundledCode = inflight.bundle({ captureScope: this, captureClients });
-
     const assetPath = `assets/${this.node.id}/index.js`;
     new TextFile(this, "Code", assetPath, {
-      lines: [bundledCode.text],
+      lines: [readFileSync(this.assetPath, "utf-8")],
     });
-    this.code = NodeJsCode.fromFile(assetPath);
-
-    for (const [name, value] of Object.entries(props.env ?? {})) {
-      this.addEnvironment(name, value);
-    }
-  }
-
-  public addEnvironment(name: string, value: string) {
-    if (this.env[name] !== undefined) {
-      throw new Error(`Environment variable "${name}" already set.`);
-    }
-    this.env[name] = value;
+    this.code = core.NodeJsCode.fromFile(assetPath);
   }
 
   public toSimulator(): BaseResourceSchema {
@@ -76,7 +51,15 @@ export class Function extends cloud.FunctionBase implements ISimulatorResource {
   }
 
   /** @internal */
-  public _bind(captureScope: Resource, _metadata: CaptureMetadata): Code {
-    return bindSimulatorResource("function", this, captureScope);
+  public _bind(host: core.IInflightHost, ops: string[]): void {
+    bindSimulatorResource("function", this, host);
+    super._bind(host, ops);
+  }
+
+  /** @internal */
+  public _toInflight(): core.Code {
+    return makeSimulatorJsClient("function", this);
   }
 }
+
+Function._annotateInflight("invoke", {});

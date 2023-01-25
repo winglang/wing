@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
-import { CaptureMetadata, Code, Resource } from "../core";
+import { Code, Resource } from "../core";
 
 /**
  * Global identifier for `Bucket`.
@@ -25,6 +25,10 @@ export abstract class BucketBase extends Resource {
   public readonly stateful = true;
   constructor(scope: Construct, id: string, props: BucketProps) {
     super(scope, id);
+
+    this.display.title = "Bucket";
+    this.display.description = "A cloud object store";
+
     if (!scope) {
       return;
     }
@@ -36,7 +40,7 @@ export abstract class BucketBase extends Resource {
 /**
  * Represents a cloud object store.
  *
- * @inflight `@winglang/wingsdk.cloud.IBucketClient`
+ * @inflight `@winglang/sdk.cloud.IBucketClient`
  */
 export class Bucket extends BucketBase {
   constructor(scope: Construct, id: string, props: BucketProps = {}) {
@@ -44,12 +48,20 @@ export class Bucket extends BucketBase {
     return Polycons.newInstance(BUCKET_TYPE, scope, id, props) as Bucket;
   }
 
-  /**
-   * @internal
-   */
-  public _bind(_captureScope: Resource, _metadata: CaptureMetadata): Code {
+  /** @internal */
+  public _toInflight(): Code {
     throw new Error("Method not implemented.");
   }
+}
+
+/** Interface for delete method inside `Bucket` */
+export interface BucketDeleteOptions {
+  /**
+   * Check failures on the method and retrieve errors if any
+   * @Throws if this is `true`, an error is thrown if the file is not found (or any error case).
+   * @default false
+   */
+  readonly mustExist?: boolean;
 }
 
 /**
@@ -58,26 +70,41 @@ export class Bucket extends BucketBase {
 export interface IBucketClient {
   /**
    * Put an object in the bucket.
+   * @param key Key of the object.
+   * @param body Content of the object we want to store into the bucket.
+   * @inflight
    */
   put(key: string, body: string): Promise<void>;
 
   /**
    * Retrieve an object from the bucket.
+   * @param key Key of the object.
    * @Throws if no object with the given key exists.
    * @Returns the object's body.
+   * @inflight
    */
   get(key: string): Promise<string>;
 
   /**
    * Retrieve existing objects keys from the bucket.
-   * @param prefix Limits the response to keys that begin with the specified prefix
+   * @param prefix Limits the response to keys that begin with the specified prefix.
    * @returns a list of keys or an empty array if the bucket is empty.
+   * @inflight
    */
   list(prefix?: string): Promise<string[]>;
+
+  /**
+   * Delete an existing object using a key from the bucket
+   * @param key Key of the object.
+   * @param opts Options available for delete an item from a bucket.
+   * @inflight
+   */
+  delete(key: string, opts?: BucketDeleteOptions): Promise<void>;
 }
 
 /**
  * List of inflight operations available for `Bucket`.
+ * @internal
  */
 export enum BucketInflightMethods {
   /** `Bucket.put` */
@@ -86,4 +113,6 @@ export enum BucketInflightMethods {
   GET = "get",
   /** `Bucket.list` */
   LIST = "list",
+  /** `Bucket.delete` */
+  DELETE = "delete",
 }

@@ -1,20 +1,21 @@
 #[macro_use]
 extern crate lazy_static;
 
-use ast::{Scope, Symbol};
-use diagnostic::{print_diagnostics, CharacterLocation, DiagnosticLevel, Diagnostics, WingSpan};
+use ast::{Scope, Stmt, Symbol, UtilityFunctions};
+use diagnostic::{print_diagnostics, Diagnostic, DiagnosticLevel, Diagnostics, WingSpan};
 use jsify::JSifier;
-use type_check::type_env::StatementIdx;
-use type_check::{FunctionSignature, Type};
+use type_check::symbol_env::StatementIdx;
+use type_check::{FunctionSignature, SymbolKind, Type};
 
 use crate::parser::Parser;
 use std::cell::RefCell;
+use std::collections::HashSet;
 use std::fs;
 use std::path::{Path, PathBuf};
 
 use crate::ast::Phase;
 use crate::capture::scan_for_inflights_in_scope;
-use crate::type_check::type_env::TypeEnv;
+use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::{TypeChecker, Types};
 
 pub mod ast;
@@ -26,10 +27,62 @@ pub mod parser;
 pub mod type_check;
 pub mod utilities;
 
+const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
+
+const WINGSDK_DURATION: &'static str = "std.Duration";
+const WINGSDK_MAP: &'static str = "std.ImmutableMap";
+const WINGSDK_MUT_MAP: &'static str = "std.MutableMap";
+const WINGSDK_ARRAY: &'static str = "std.ImmutableArray";
+const WINGSDK_MUT_ARRAY: &'static str = "std.MutableArray";
+const WINGSDK_SET: &'static str = "std.ImmutableSet";
+const WINGSDK_MUT_SET: &'static str = "std.MutableSet";
+const WINGSDK_STRING: &'static str = "std.String";
+const WINGSDK_RESOURCE: &'static str = "core.Resource";
+const WINGSDK_INFLIGHT: &'static str = "core.Inflight";
+
+const CONSTRUCT_BASE: &'static str = "constructs.Construct";
+
 pub struct CompilerOutput {
 	pub preflight: String,
 	// pub inflights: BTreeMap<String, String>,
 	pub diagnostics: Diagnostics,
+}
+
+unsafe fn ptr_to_string(ptr: u32, len: u32) -> String {
+	let slice = std::slice::from_raw_parts(ptr as *const u8, len as usize);
+	String::from_utf8_unchecked(slice.to_vec())
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_malloc(size: u32) -> *mut u8 {
+	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
+	std::alloc::alloc(layout)
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_free(ptr: u32, size: u32) {
+	let layout = core::alloc::Layout::from_size_align_unchecked(size as usize, 0);
+	std::alloc::dealloc(ptr as *mut u8, layout);
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn wingc_compile(ptr: u32, len: u32) {
+	let args = ptr_to_string(ptr, len);
+
+	let split = args.split(";").collect::<Vec<&str>>();
+	let source_file = split[0];
+	let output_dir = split.get(1).map(|s| *s);
+
+	let results = compile(source_file, output_dir);
+	if let Err(mut err) = results {
+		// Sort error messages by line number (ascending)
+		err.sort_by(|a, b| a.cmp(&b));
+		eprintln!(
+			"Compilation failed with {} errors\n{}",
+			err.len(),
+			err.iter().map(|d| format!("{}", d)).collect::<Vec<_>>().join("\n")
+		);
+	}
 }
 
 pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
@@ -40,7 +93,20 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let source = match fs::read(&source_file) {
 		Ok(source) => source,
 		Err(err) => {
-			panic!("Error reading source file: {}: {:?}", &source_file, err);
+			let mut diagnostics = Diagnostics::new();
+
+			diagnostics.push(Diagnostic {
+				message: format!("Error reading source file: {}: {:?}", &source_file, err),
+				span: None,
+				level: DiagnosticLevel::Error,
+			});
+
+			// Set up a dummy scope to return
+			let empty_scope = Scope {
+				statements: Vec::<Stmt>::new(),
+				env: RefCell::new(None),
+			};
+			return (empty_scope, diagnostics);
 		}
 	};
 
@@ -54,6 +120,7 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 	let wing_parser = Parser {
 		source: &source[..],
 		source_name: source_file.to_string(),
+		error_nodes: RefCell::new(HashSet::new()),
 		diagnostics: RefCell::new(Diagnostics::new()),
 	};
 
@@ -63,13 +130,44 @@ pub fn parse(source_file: &str) -> (Scope, Diagnostics) {
 }
 
 pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
-	scope.set_env(TypeEnv::new(None, None, false, Phase::Preflight, 0));
+	let env = SymbolEnv::new(None, types.void(), false, false, Phase::Preflight, 0);
+	scope.set_env(env);
 
 	add_builtin(
-		"print",
+		UtilityFunctions::Print.to_string().as_str(),
 		Type::Function(FunctionSignature {
 			args: vec![types.string()],
-			return_type: None,
+			return_type: types.void(),
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Assert.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.bool()],
+			return_type: types.void(),
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Throw.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: types.void(),
+			flight: Phase::Independent,
+		}),
+		scope,
+		types,
+	);
+	add_builtin(
+		UtilityFunctions::Panic.to_string().as_str(),
+		Type::Function(FunctionSignature {
+			args: vec![types.string()],
+			return_type: types.void(),
 			flight: Phase::Independent,
 		}),
 		scope,
@@ -77,6 +175,8 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 	);
 
 	let mut tc = TypeChecker::new(types);
+	tc.add_globals(scope);
+
 	tc.type_check_scope(scope);
 
 	tc.diagnostics.into_inner()
@@ -86,20 +186,19 @@ pub fn type_check(scope: &mut Scope, types: &mut Types) -> Diagnostics {
 fn add_builtin(name: &str, typ: Type, scope: &mut Scope, types: &mut Types) {
 	let sym = Symbol {
 		name: name.to_string(),
-		span: WingSpan {
-			start: CharacterLocation { row: 0, column: 0 },
-			end: CharacterLocation { row: 0, column: 0 },
-			start_byte: 0,
-			end_byte: 0,
-			file_id: "".into(),
-		},
+		span: WingSpan::global(),
 	};
 	scope
 		.env
 		.borrow_mut()
 		.as_mut()
 		.unwrap()
-		.define(&sym, types.add_type(typ), StatementIdx::Top);
+		.define(
+			&sym,
+			SymbolKind::make_variable(types.add_type(typ), false),
+			StatementIdx::Top,
+		)
+		.expect("Failed to add builtin");
 }
 
 pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutput, Diagnostics> {
@@ -109,7 +208,12 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	let (mut scope, parse_diagnostics) = parse(source_file);
 
 	// Type check everything and build typed symbol environment
-	let type_check_diagnostics = type_check(&mut scope, &mut types);
+	let type_check_diagnostics = if scope.statements.len() > 0 {
+		type_check(&mut scope, &mut types)
+	} else {
+		// empty scope, no type checking needed
+		Diagnostics::new()
+	};
 
 	// Print diagnostics
 	print_diagnostics(&parse_diagnostics);
@@ -118,6 +222,11 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	// collect all diagnostics
 	let mut diagnostics = parse_diagnostics;
 	diagnostics.extend(type_check_diagnostics);
+
+	// Analyze inflight captures
+	let mut capture_diagnostics = Diagnostics::new();
+	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
+	diagnostics.extend(capture_diagnostics);
 
 	let errors = diagnostics
 		.iter()
@@ -128,9 +237,6 @@ pub fn compile(source_file: &str, out_dir: Option<&str>) -> Result<CompilerOutpu
 	if errors.len() > 0 {
 		return Err(errors);
 	}
-
-	// Analyze inflight captures
-	scan_for_inflights_in_scope(&scope);
 
 	// prepare output directory for support inflight code
 	let out_dir = PathBuf::from(&out_dir.unwrap_or(format!("{}.out", source_file).as_str()));
@@ -184,7 +290,11 @@ mod sanity {
 			let result = compile(test_file, Some(out_dir.as_str()));
 
 			if result.is_err() {
-				assert!(expect_failure, "Expected compilation success, but failed");
+				assert!(
+					expect_failure,
+					"Expected compilation success, but failed: {:#?}",
+					result.err().unwrap()
+				);
 			} else {
 				assert!(!expect_failure, "Expected compilation failure, but succeeded");
 			}
@@ -194,6 +304,11 @@ mod sanity {
 	#[test]
 	fn can_compile_valid_files() {
 		compile_test("../../examples/tests/valid", false);
+	}
+
+	#[test]
+	fn can_compile_error_files() {
+		compile_test("../../examples/tests/error", false);
 	}
 
 	#[test]

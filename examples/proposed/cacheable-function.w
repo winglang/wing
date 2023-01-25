@@ -4,12 +4,12 @@ resource CachableFunction extends cloud.Function {
     _func: cloud.Function;
     _cache: cloud.Bucket;
 
-    init(inflight: (event: any) ~> any, props: cloud.FunctionProps) {
+    init(inflight: inflight (event: any) => any, props: cloud.FunctionProps) {
         super(inflight, props);
         this._cache = new cloud.Bucket();
     }
 
-    public override ~invoke(event: any) {
+    public override inflight invoke(event: any): any {
         let key = hashof(event);
         let cached = this._cache.try_get(key);
         if cached {
@@ -21,7 +21,7 @@ resource CachableFunction extends cloud.Function {
     }
 }
 
-let handler = (arg1: num): num ~> {
+let handler = inflight (arg1: num): num => {
     // do expensive computations
     return arg1 * 2;
 };

@@ -1,18 +1,15 @@
 import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
 import * as tfaws from "../../src/target-tf-aws";
+import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
+const INFLIGHT_CODE = `async handle(name) { console.log("Hello, " + name); }`;
+
 test("basic function", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `exports.greeter = async (name) => { console.log("Hello, " + name); } `
-    ),
-    entrypoint: "exports.greeter",
-  });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "Function", inflight);
   const output = app.synth();
 
@@ -30,12 +27,7 @@ test("basic function", () => {
 
 test("basic function with environment variables", () => {
   const app = new tfaws.App({ outdir: mkdtemp() });
-  const inflight = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `exports.greeter = async (name) => { console.log("Hello, " + name); } `
-    ),
-    entrypoint: "exports.greeter",
-  });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
   new cloud.Function(app, "Function", inflight, {
     env: {
       FOO: "BAR",
@@ -52,6 +44,38 @@ test("basic function with environment variables", () => {
           FOO: "BAR",
         },
       },
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("function name valid", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const func = new cloud.Function(app, "The-Mighty_Function-01", inflight);
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      function_name: `The-Mighty_Function-01-${func.node.addr.substring(0, 8)}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("replace invalid character from function name", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  const func = new cloud.Function(app, "The%Mighty$Function", inflight);
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      function_name: `The-Mighty-Function-${func.node.addr.substring(0, 8)}`,
     })
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();

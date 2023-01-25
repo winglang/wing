@@ -1,13 +1,14 @@
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::fmt::{Debug, Display};
 use std::hash::{Hash, Hasher};
 
 use derivative::Derivative;
+use indexmap::IndexSet;
 
 use crate::capture::Captures;
 use crate::diagnostic::WingSpan;
-use crate::type_check::type_env::TypeEnv;
+use crate::type_check::symbol_env::SymbolEnv;
 use crate::type_check::TypeRef;
 
 #[derive(Debug, Eq, Clone)]
@@ -47,7 +48,7 @@ impl PartialEq for Symbol {
 
 impl std::fmt::Display for Symbol {
 	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-		write!(f, "{} {}", self.name, self.span)
+		write!(f, "{} (at {})", self.name, self.span)
 	}
 }
 
@@ -75,9 +76,52 @@ pub enum Type {
 	Bool,
 	Duration,
 	Optional(Box<Type>),
+	Array(Box<Type>),
+	MutArray(Box<Type>),
 	Map(Box<Type>),
+	MutMap(Box<Type>),
+	Set(Box<Type>),
+	MutSet(Box<Type>),
 	FunctionSignature(FunctionSignature),
 	CustomType { root: Symbol, fields: Vec<Symbol> },
+}
+
+impl Display for Type {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			Type::Number => write!(f, "num"),
+			Type::String => write!(f, "str"),
+			Type::Bool => write!(f, "bool"),
+			Type::Duration => write!(f, "duration"),
+			Type::Optional(t) => write!(f, "{}?", t),
+			Type::Array(t) => write!(f, "Array<{}>", t),
+			Type::MutArray(t) => write!(f, "MutArray<{}>", t),
+			Type::Map(t) => write!(f, "Map<{}>", t),
+			Type::MutMap(t) => write!(f, "MutMap<{}>", t),
+			Type::Set(t) => write!(f, "Set<{}>", t),
+			Type::MutSet(t) => write!(f, "MutSet<{}>", t),
+			Type::FunctionSignature(sig) => {
+				write!(
+					f,
+					"fn({}): {}",
+					sig
+						.parameters
+						.iter()
+						.map(|a| format!("{}", a))
+						.collect::<Vec<String>>()
+						.join(", "),
+					if let Some(ret_val) = &sig.return_type {
+						format!("{}", ret_val)
+					} else {
+						"void".to_string()
+					}
+				)
+			}
+			Type::CustomType { root, fields: _ } => {
+				write!(f, "{}", root)
+			}
+		}
+	}
 }
 
 #[derive(Debug, Clone)]
@@ -90,7 +134,9 @@ pub struct FunctionSignature {
 #[derive(Derivative)]
 #[derivative(Debug)]
 pub struct FunctionDefinition {
-	pub parameter_names: Vec<Symbol>, // TODO: move into FunctionSignature and make optional
+	// List of names of function parameters and whether they are reassignable (`var`) or not.
+	pub parameters: Vec<(Symbol, bool)>, // TODO: move into FunctionSignature and make optional
+
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 	#[derivative(Debug = "ignore")]
@@ -99,7 +145,9 @@ pub struct FunctionDefinition {
 
 #[derive(Debug)]
 pub struct Constructor {
-	pub parameters: Vec<Symbol>,
+	// List of names of constructor parameters and whether they are reassignable (`var`) or not.
+	pub parameters: Vec<(Symbol, bool)>,
+
 	pub statements: Scope,
 	pub signature: FunctionSignature,
 }
@@ -112,12 +160,32 @@ pub struct Stmt {
 }
 
 #[derive(Debug)]
+pub enum UtilityFunctions {
+	Print,
+	Panic,
+	Throw,
+	Assert,
+}
+
+impl Display for UtilityFunctions {
+	fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+		match self {
+			UtilityFunctions::Print => write!(f, "print"),
+			UtilityFunctions::Panic => write!(f, "panic"),
+			UtilityFunctions::Throw => write!(f, "throw"),
+			UtilityFunctions::Assert => write!(f, "assert"),
+		}
+	}
+}
+
+#[derive(Debug)]
 pub enum StmtKind {
 	Use {
 		module_name: Symbol, // Reference?
 		identifier: Option<Symbol>,
 	},
 	VariableDef {
+		reassignable: bool,
 		var_name: Symbol,
 		initial_value: Expr,
 		type_: Option<Type>,
@@ -125,6 +193,10 @@ pub enum StmtKind {
 	ForLoop {
 		iterator: Symbol,
 		iterable: Expr,
+		statements: Scope,
+	},
+	While {
+		condition: Expr,
 		statements: Scope,
 	},
 	If {
@@ -152,12 +224,17 @@ pub enum StmtKind {
 		extends: Vec<Symbol>,
 		members: Vec<ClassMember>,
 	},
+	Enum {
+		name: Symbol,
+		values: IndexSet<Symbol>,
+	},
 }
 
 #[derive(Debug)]
 pub struct ClassMember {
 	pub name: Symbol,
 	pub member_type: Type,
+	pub reassignable: bool,
 	pub flight: Phase,
 }
 
@@ -186,13 +263,23 @@ pub enum ExprKind {
 		lexp: Box<Expr>,
 		rexp: Box<Expr>,
 	},
+	ArrayLiteral {
+		type_: Option<Type>,
+		items: Vec<Expr>,
+	},
 	StructLiteral {
 		type_: Type,
-		fields: HashMap<Symbol, Expr>,
+		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: BTreeMap<Symbol, Expr>,
 	},
 	MapLiteral {
 		type_: Option<Type>,
-		fields: HashMap<String, Expr>,
+		// We're using an ordered map implementation to guarantee deterministic compiler output. See discussion: https://github.com/winglang/wing/discussions/887.
+		fields: BTreeMap<String, Expr>,
+	},
+	SetLiteral {
+		type_: Option<Type>,
+		items: Vec<Expr>,
 	},
 	FunctionClosure(FunctionDefinition),
 }
@@ -254,11 +341,11 @@ pub enum InterpolatedStringPart {
 pub struct Scope {
 	pub statements: Vec<Stmt>,
 	#[derivative(Debug = "ignore")]
-	pub env: RefCell<Option<TypeEnv>>, // None after parsing, set to Some during type checking phase
+	pub env: RefCell<Option<SymbolEnv>>, // None after parsing, set to Some during type checking phase
 }
 
 impl Scope {
-	pub fn set_env(&self, new_env: TypeEnv) {
+	pub fn set_env(&self, new_env: SymbolEnv) {
 		let mut env = self.env.borrow_mut();
 		assert!((*env).is_none());
 		*env = Some(new_env);

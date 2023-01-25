@@ -4,7 +4,13 @@ exports[`default queue behavior 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
+<<<<<<< HEAD
       \\"cdktfstack_wingapp_Queue_8A990187\\": {}
+=======
+      \\"root_Queue_7193B145\\": {
+        \\"name\\": \\"Queue-c822c726\\"
+      }
+>>>>>>> main
     }
   }
 }"
@@ -26,10 +32,17 @@ Object {
           },
           "wing-app": Object {
             "children": Object {
+<<<<<<< HEAD
               "Queue": Object {
                 "attributes": Object {
                   "wing:resource:connections": Array [],
                   "wing:resource:stateful": true,
+=======
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "12.0.1",
+>>>>>>> main
                 },
                 "children": Object {
                   "Default": Object {
@@ -59,15 +72,61 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.1.228",
             },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
+<<<<<<< HEAD
             "id": "wing-app",
             "path": "cdktf-stack/wing-app",
+=======
+            "id": "Queue",
+            "path": "root/Queue",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+>>>>>>> main
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
+<<<<<<< HEAD
           "version": "0.14.1",
+=======
+          "version": "0.15.0",
+>>>>>>> main
         },
         "id": "cdktf-stack",
         "path": "cdktf-stack",
@@ -75,7 +134,11 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
+<<<<<<< HEAD
       "version": "0.14.1",
+=======
+      "version": "0.15.0",
+>>>>>>> main
     },
     "id": "App",
     "path": "",
@@ -84,30 +147,119 @@ Object {
 }
 `;
 
-exports[`queue with a consumer function 1`] = `
-"const $cap = {};
-async function $proc($cap, event) {
-          console.log(\\"Received \\" + event.name);
-        }
-async function $sqsEventWrapper($cap, event) {
-  for (const record of event.Records ?? []) {
-    await $proc($cap, record.body);
+exports[`queue name valid 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_sqs_queue\\": {
+      \\"root_TheIncredibleQueue01_032AFBF2\\": {
+        \\"name\\": \\"The-Incredible_Queue-01-c8d1a14d\\"
+      }
+    }
   }
-}
-exports.handler = async function(event) {
-  return await $sqsEventWrapper($cap, event);
-};"
+}"
 `;
+
+exports[`queue name valid 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "The-Incredible_Queue-01": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "12.0.1",
+                },
+                "id": "Default",
+                "path": "root/The-Incredible_Queue-01/Default",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
+            "id": "The-Incredible_Queue-01",
+            "path": "root/The-Incredible_Queue-01",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_68e3f3ae\\"])"`;
 
 exports[`queue with a consumer function 2`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
+<<<<<<< HEAD
       \\"cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_IamRole_A620432D\\": {
+=======
+      \\"root_QueueOnMessagec5395e41_IamRole_800EDB96\\": {
+>>>>>>> main
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
+<<<<<<< HEAD
       \\"cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_IamRolePolicy_DAC94381\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.cdktfstack_wingapp_Queue_8A990187.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
         \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_IamRole_A620432D.name}\\"
@@ -117,24 +269,45 @@ exports[`queue with a consumer function 2`] = `
       \\"cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_IamRolePolicyAttachment_E4CDA806\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
         \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_IamRole_A620432D.name}\\"
+=======
+      \\"root_QueueOnMessagec5395e41_IamRolePolicy_2E9AE0BB\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.name}\\"
+      }
+    },
+    \\"aws_iam_role_policy_attachment\\": {
+      \\"root_QueueOnMessagec5395e41_IamRolePolicyAttachment_90B64365\\": {
+        \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.name}\\"
+>>>>>>> main
       }
     },
     \\"aws_lambda_event_source_mapping\\": {
       \\"cdktfstack_wingapp_Queue_EventSourceMapping_C8D98616\\": {
         \\"batch_size\\": 1,
+<<<<<<< HEAD
         \\"event_source_arn\\": \\"\${aws_sqs_queue.cdktfstack_wingapp_Queue_8A990187.arn}\\",
         \\"function_name\\": \\"\${aws_lambda_function.cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_8AC09379.function_name}\\"
       }
     },
     \\"aws_lambda_function\\": {
       \\"cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_8AC09379\\": {
+=======
+        \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_QueueOnMessagec5395e41_BFDF10CF.function_name}\\"
+      }
+    },
+    \\"aws_lambda_function\\": {
+      \\"root_QueueOnMessagec5395e41_BFDF10CF\\": {
+>>>>>>> main
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-cbf6dee05a035c28\\"
+            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-c5395e41-c87b8107\\"
           }
         },
-        \\"function_name\\": \\"Queue-OnMessage-cbf6dee05a035c28\\",
+        \\"function_name\\": \\"Queue-OnMessage-c5395e41-c87b8107\\",
         \\"handler\\": \\"index.handler\\",
+<<<<<<< HEAD
         \\"role\\": \\"\${aws_iam_role.cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_IamRole_A620432D.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_Bucket_262299A5.bucket}\\",
@@ -147,12 +320,33 @@ exports[`queue with a consumer function 2`] = `
     \\"aws_s3_object\\": {
       \\"cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_S3Object_2BDBEE88\\": {
         \\"bucket\\": \\"\${aws_s3_bucket.cdktfstack_wingapp_QueueOnMessagecbf6dee05a035c28_Bucket_262299A5.bucket}\\",
+=======
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.arn}\\",
+        \\"runtime\\": \\"nodejs16.x\\",
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagec5395e41_S3Object_9BE0A142.key}\\"
+      }
+    },
+    \\"aws_s3_bucket\\": {
+      \\"root_QueueOnMessagec5395e41_Code_F10D8CAB\\": {
+        \\"bucket_prefix\\": \\"code-c82147c7-\\"
+      }
+    },
+    \\"aws_s3_object\\": {
+      \\"root_QueueOnMessagec5395e41_S3Object_9BE0A142\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
+>>>>>>> main
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sqs_queue\\": {
+<<<<<<< HEAD
       \\"cdktfstack_wingapp_Queue_8A990187\\": {
+=======
+      \\"root_Queue_7193B145\\": {
+        \\"name\\": \\"Queue-c822c726\\",
+>>>>>>> main
         \\"visibility_timeout_seconds\\": 30
       }
     }
@@ -166,10 +360,219 @@ Object {
     "children": Object {
       "cdktf-stack": Object {
         "children": Object {
+<<<<<<< HEAD
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
               "version": "0.14.1",
+=======
+          "Handler": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "implicit": false,
+                  "relationship": "handle",
+                  "resource": "root/Queue-OnMessage-c5395e41",
+                },
+              ],
+              "wing:resource:stateful": false,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "An inflight resource",
+              "hidden": true,
+              "title": "Inflight",
+            },
+            "id": "Handler",
+            "path": "root/Handler",
+          },
+          "Queue": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "outbound",
+                  "implicit": false,
+                  "relationship": "on_message",
+                  "resource": "root/Queue-OnMessage-c5395e41",
+                },
+              ],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "12.0.1",
+                },
+                "id": "Default",
+                "path": "root/Queue/Default",
+              },
+              "EventSourceMapping": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.lambdaEventSourceMapping.LambdaEventSourceMapping",
+                  "version": "12.0.1",
+                },
+                "id": "EventSourceMapping",
+                "path": "root/Queue/EventSourceMapping",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
+            "id": "Queue",
+            "path": "root/Queue",
+          },
+          "Queue-OnMessage-c5395e41": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "outbound",
+                  "implicit": false,
+                  "relationship": "handle",
+                  "resource": "root/Handler",
+                },
+                Object {
+                  "direction": "outbound",
+                  "implicit": true,
+                  "relationship": "print",
+                  "resource": "root/WingLogger",
+                },
+                Object {
+                  "direction": "inbound",
+                  "implicit": false,
+                  "relationship": "on_message",
+                  "resource": "root/Queue",
+                },
+              ],
+              "wing:resource:stateful": false,
+            },
+            "children": Object {
+              "Asset": Object {
+                "constructInfo": Object {
+                  "fqn": "cdktf.TerraformAsset",
+                  "version": "0.15.0",
+                },
+                "id": "Asset",
+                "path": "root/Queue-OnMessage-c5395e41/Asset",
+              },
+              "Code": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Bucket.S3Bucket",
+                  "version": "12.0.1",
+                },
+                "id": "Code",
+                "path": "root/Queue-OnMessage-c5395e41/Code",
+              },
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.lambdaFunction.LambdaFunction",
+                  "version": "12.0.1",
+                },
+                "id": "Default",
+                "path": "root/Queue-OnMessage-c5395e41/Default",
+              },
+              "IamRole": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.iamRole.IamRole",
+                  "version": "12.0.1",
+                },
+                "id": "IamRole",
+                "path": "root/Queue-OnMessage-c5395e41/IamRole",
+              },
+              "IamRolePolicy": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.iamRolePolicy.IamRolePolicy",
+                  "version": "12.0.1",
+                },
+                "id": "IamRolePolicy",
+                "path": "root/Queue-OnMessage-c5395e41/IamRolePolicy",
+              },
+              "IamRolePolicyAttachment": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.iamRolePolicyAttachment.IamRolePolicyAttachment",
+                  "version": "12.0.1",
+                },
+                "id": "IamRolePolicyAttachment",
+                "path": "root/Queue-OnMessage-c5395e41/IamRolePolicyAttachment",
+              },
+              "S3Object": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.s3Object.S3Object",
+                  "version": "12.0.1",
+                },
+                "id": "S3Object",
+                "path": "root/Queue-OnMessage-c5395e41/S3Object",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud function (FaaS)",
+              "title": "Function",
+            },
+            "id": "Queue-OnMessage-c5395e41",
+            "path": "root/Queue-OnMessage-c5395e41",
+          },
+          "Queue-OnMessageHandler-c5395e41": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": false,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "Queue-OnMessageHandler-c5395e41",
+            "path": "root/Queue-OnMessageHandler-c5395e41",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [
+                Object {
+                  "direction": "inbound",
+                  "implicit": true,
+                  "relationship": "print",
+                  "resource": "root/Queue-OnMessage-c5395e41",
+                },
+              ],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+>>>>>>> main
             },
             "id": "backend",
             "path": "cdktf-stack/backend",
@@ -307,7 +710,11 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
+<<<<<<< HEAD
           "version": "0.14.1",
+=======
+          "version": "0.15.0",
+>>>>>>> main
         },
         "id": "cdktf-stack",
         "path": "cdktf-stack",
@@ -315,7 +722,11 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
+<<<<<<< HEAD
       "version": "0.14.1",
+=======
+      "version": "0.15.0",
+>>>>>>> main
     },
     "id": "App",
     "path": "",
@@ -328,7 +739,12 @@ exports[`queue with custom timeout 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
+<<<<<<< HEAD
       \\"cdktfstack_wingapp_Queue_8A990187\\": {
+=======
+      \\"root_Queue_7193B145\\": {
+        \\"name\\": \\"Queue-c822c726\\",
+>>>>>>> main
         \\"visibility_timeout_seconds\\": 30
       }
     }
@@ -352,10 +768,17 @@ Object {
           },
           "wing-app": Object {
             "children": Object {
+<<<<<<< HEAD
               "Queue": Object {
                 "attributes": Object {
                   "wing:resource:connections": Array [],
                   "wing:resource:stateful": true,
+=======
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "12.0.1",
+>>>>>>> main
                 },
                 "children": Object {
                   "Default": Object {
@@ -385,15 +808,61 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.25",
+              "version": "10.1.228",
             },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
+<<<<<<< HEAD
             "id": "wing-app",
             "path": "cdktf-stack/wing-app",
+=======
+            "id": "Queue",
+            "path": "root/Queue",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+>>>>>>> main
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
+<<<<<<< HEAD
           "version": "0.14.1",
+=======
+          "version": "0.15.0",
+>>>>>>> main
         },
         "id": "cdktf-stack",
         "path": "cdktf-stack",
@@ -401,7 +870,108 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
+<<<<<<< HEAD
       "version": "0.14.1",
+=======
+      "version": "0.15.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`replace invalid character from queue name 1`] = `
+"{
+  \\"resource\\": {
+    \\"aws_sqs_queue\\": {
+      \\"root_TheIncredibleQueue_453F8E34\\": {
+        \\"name\\": \\"The-Incredible-Queue-c8305287\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`replace invalid character from queue name 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "The*Incredible$Queue": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Default": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-aws.sqsQueue.SqsQueue",
+                  "version": "12.0.1",
+                },
+                "id": "Default",
+                "path": "root/The*Incredible$Queue/Default",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A distributed message queue",
+              "title": "Queue",
+            },
+            "id": "The*Incredible$Queue",
+            "path": "root/The*Incredible$Queue",
+          },
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "aws": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-aws.provider.AwsProvider",
+              "version": "12.0.1",
+            },
+            "id": "aws",
+            "path": "root/aws",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.0",
+>>>>>>> main
     },
     "id": "App",
     "path": "",

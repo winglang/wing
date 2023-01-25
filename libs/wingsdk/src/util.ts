@@ -1,14 +1,16 @@
-import {
-  existsSync,
-  mkdtempSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-} from "fs";
+import { mkdtempSync, readdirSync, readFileSync, statSync } from "fs";
 import { tmpdir } from "os";
 import { extname, join } from "path";
+import { debug } from "debug";
 import * as tar from "tar";
-import { SIMULATOR_FILE_PATH } from "./target-sim/app";
+import { Code } from "./core";
+
+/**
+ * Path of the simulator configuration file in every .wsim tarball.
+ */
+export const SIMULATOR_FILE_PATH = "simulator.json";
+
+export const log = debug("wing:sdk");
 
 export function mkdtemp() {
   return mkdtempSync(join(tmpdir(), "wingsdk."));
@@ -80,42 +82,67 @@ export function sanitizeValue(obj: any, options: SanitizeOptions = {}): any {
   return newObj;
 }
 
-export function directorySnapshot(root: string) {
+export function directorySnapshot(initialRoot: string) {
   const snapshot: Record<string, any> = {};
 
-  const visit = (subdir: string) => {
+  const visit = (root: string, subdir: string, prefix = "") => {
     const files = readdirSync(join(root, subdir));
     for (const f of files) {
       const relpath = join(subdir, f);
       const abspath = join(root, relpath);
+      const key = prefix + relpath;
       if (statSync(abspath).isDirectory()) {
-        visit(relpath);
+        visit(root, relpath);
       } else {
-        if (extname(f) === ".json") {
-          const data = readFileSync(abspath, "utf-8");
-          snapshot[relpath] = JSON.parse(data);
-        } else if (extname(f) === ".wsim") {
-          const workdir = mkdtemp();
-          tar.extract({
-            cwd: workdir,
-            sync: true,
-            file: abspath,
-          });
-          const simJson = join(workdir, SIMULATOR_FILE_PATH);
-          if (!existsSync(simJson)) {
-            throw new Error(
-              `Invalid simulator file (${f}) - simulator.json not found.`
-            );
-          }
-          snapshot[relpath] = JSON.parse(readFileSync(simJson, "utf-8"));
-        } else {
-          snapshot[relpath] = readFileSync(abspath, "utf-8");
+        switch (extname(f)) {
+          case ".json":
+            const data = readFileSync(abspath, "utf-8");
+            snapshot[key] = JSON.parse(data);
+            break;
+
+          case ".js":
+            const code = readFileSync(abspath, "utf-8");
+            snapshot[key] = sanitizeCodeText(code);
+            break;
+
+          case ".wsim":
+            const workdir = mkdtemp();
+
+            tar.extract({
+              cwd: workdir,
+              sync: true,
+              file: abspath,
+            });
+
+            visit(workdir, ".", key + "/");
+            break;
+
+          default:
+            snapshot[key] = readFileSync(abspath, "utf-8");
         }
       }
     }
   };
 
-  visit(".");
+  visit(initialRoot, ".");
 
   return snapshot;
+}
+
+/**
+ * Santize the text of a code bundle to remove path references that are system-specific.
+ */
+export function sanitizeCodeText(code: string): string {
+  function removeAbsolutePaths(text: string) {
+    const regex = /".+\/libs\/wingsdk\/(.+)"/g;
+
+    // replace first group with static text
+    return text.replace(regex, '"[REDACTED]/wingsdk/$1"');
+  }
+
+  return removeAbsolutePaths(code);
+}
+
+export function sanitizeCode(code: Code): string {
+  return sanitizeCodeText(code.text);
 }

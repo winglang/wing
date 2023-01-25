@@ -1,5 +1,6 @@
 import * as cloud from "../../src/cloud";
-import { SimApp, Simulator } from "../../src/testing";
+import { SimApp } from "../../src/testing";
+import { listMessages, treeJsonOf } from "./util";
 
 test("create a bucket", async () => {
   // GIVEN
@@ -42,12 +43,7 @@ test("put and get objects from bucket", async () => {
   await s.stop();
 
   expect(response).toEqual(VALUE);
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    "Put (key=greeting.txt).",
-    "Get (key=greeting.txt).",
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -76,14 +72,7 @@ test("put multiple objects and list all from bucket", async () => {
   await s.stop();
 
   expect(response).toEqual([KEY1, KEY2, KEY3]);
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    "Put (key=greeting1.txt).",
-    "Put (key=greeting2.txt).",
-    "Put (key=greeting3.txt).",
-    "List (prefix=null).",
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
+  expect(listMessages(s)).toMatchSnapshot();
   expect(app.snapshot()).toMatchSnapshot();
 });
 
@@ -100,15 +89,142 @@ test("get invalid object throws an error", async () => {
   await expect(() => client.get("unknown.txt")).rejects.toThrowError();
   await s.stop();
 
-  expect(listMessages(s)).toEqual([
-    "wingsdk.cloud.Bucket created.",
-    "Get (key=unknown.txt).",
-    "wingsdk.cloud.Bucket deleted.",
-  ]);
-  expect(s.listTraces()[1].data.status).toEqual("failure");
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(s.listTraces()[2].data.status).toEqual("failure");
   expect(app.snapshot()).toMatchSnapshot();
 });
 
-function listMessages(s: Simulator) {
-  return s.listTraces().map((event) => event.data.message);
-}
+test("remove object from a bucket with mustExist as option", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+
+  // create file
+  await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
+
+  // delete file
+  const response = await client.delete(fileName, { mustExist: true });
+
+  await s.stop();
+
+  expect(response).toEqual(undefined);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("remove object from a bucket", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+
+  // create file
+  await client.put(fileName, JSON.stringify({ msg: "Hello world!" }));
+
+  // delete file
+  const response = await client.delete(fileName);
+
+  await s.stop();
+
+  expect(response).toEqual(undefined);
+  expect(listMessages(s)).toMatchSnapshot();
+  expect(app.snapshot()).toMatchSnapshot();
+});
+
+test("remove non-existent object from a bucket", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+  const response = await client.delete(fileName, { mustExist: false });
+  await s.stop();
+
+  expect(response).toEqual(undefined);
+});
+
+test("remove non-existent object from a bucket with mustExist option", async () => {
+  const bucketName = "my_bucket";
+  const fileName = "unknown.txt";
+
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, bucketName);
+
+  const s = await app.startSimulator();
+
+  const client = s.getResource(`/${bucketName}`) as cloud.IBucketClient;
+
+  // THEN
+  await s.stop();
+
+  await expect(async () =>
+    client.delete(fileName, { mustExist: true })
+  ).rejects.toThrowError();
+});
+
+test("bucket has no display hidden property", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  const treeJson = treeJsonOf(app.synth());
+  const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
+
+  // THEN
+  expect(bucket.display.hidden).toBeUndefined();
+  expect(treeJson.tree.children).toBeDefined();
+  expect(treeJson.tree.children).not.toMatchObject({
+    my_bucket: {
+      display: {
+        hidden: expect.any(Boolean),
+      },
+    },
+  });
+});
+
+test("bucket has display title and description properties", async () => {
+  // GIVEN
+  const app = new SimApp();
+  new cloud.Bucket(app, "my_bucket");
+
+  // WHEN
+  const treeJson = treeJsonOf(app.synth());
+  const bucket = app.node.tryFindChild("my_bucket") as cloud.Bucket;
+
+  // THEN
+  expect(bucket.display.title).toBeDefined();
+  expect(bucket.display.description).toBeDefined();
+  expect(treeJson.tree.children).toMatchObject({
+    my_bucket: {
+      display: {
+        title: expect.any(String),
+        description: expect.any(String),
+      },
+    },
+  });
+});

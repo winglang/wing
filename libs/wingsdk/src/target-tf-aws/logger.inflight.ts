@@ -1,10 +1,12 @@
+import * as util from "util";
 import { ILoggerClient } from "../cloud";
 
 export class LoggerClient implements ILoggerClient {
   constructor() {}
 
-  public async print(message: string): Promise<void> {
+  public print(message: string): void {
     // anything console.log'd in a lambda will be logged to cloudwatch
-    console.log(message);
+    message;
+    process.stdout.write(util.format.apply(this, arguments as any) + "\n");
   }
 }

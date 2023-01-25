@@ -1,6 +1,6 @@
 # Wing Examples
 
-This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](../../CONTRIBUTING.md#how-do-i-add-an-example) for a guide on on how to add your own example.
+This directory contains a collection of Wing examples of the kinds of apps you can build in Wing! Check out the [Wing Contributor's Handbook](../docs/06-contributors/handbook.md#%EF%B8%8F-how-do-i-add-an-example) for a guide on on how to add your own example.
 
 The examples in the `tests` directory are examples specifically used for testing the compiler. `tests/valid` are examples that should compile successfully, and `tests/invalid` are examples that should fail.
 
@@ -9,6 +9,18 @@ The examples in `proposed` are examples that may not yet work in the current ver
 ## Examples
 
 _Add yours here!_
+
+## Cacheable function
+
+**Source code:** [./proposed/cacheable-function.w](./proposed/cacheable-function.w)
+**Description:** A Wing resource where a FaaS is augmented to cache input/output pairs using a object storage bucket.
+**Author:** [@Chriscbr](https://github.com/Chriscbr)
+
+## In-memory search engine
+
+**Source code:** [./proposed/in-memory-search.w](./proposed/in-memory-search.w)
+**Description:** This is a concept for a Wing app where cloud functions are used to create a search engine where the entire search index exists in-memory, spread across many lambda functions.
+**Author:** [@Chriscbr](https://github.com/Chriscbr)
 
 <!--
 

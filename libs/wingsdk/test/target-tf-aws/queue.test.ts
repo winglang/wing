@@ -1,7 +1,9 @@
+import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
+import * as std from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
-import { mkdtemp } from "../../src/util";
+import { Testing } from "../../src/testing";
+import { mkdtemp, sanitizeCode } from "../../src/util";
 import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("default queue behavior", () => {
@@ -20,7 +22,7 @@ test("queue with custom timeout", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   new cloud.Queue(app, "Queue", {
-    timeout: core.Duration.fromSeconds(30),
+    timeout: std.Duration.fromSeconds(30),
   });
   const output = app.synth();
 
@@ -34,23 +36,20 @@ test("queue with a consumer function", () => {
   // GIVEN
   const app = new tfaws.App({ outdir: mkdtemp() });
   const queue = new cloud.Queue(app, "Queue", {
-    timeout: core.Duration.fromSeconds(30),
+    timeout: std.Duration.fromSeconds(30),
   });
-  const processor = new core.Inflight({
-    code: core.NodeJsCode.fromInline(
-      `async function $proc($cap, event) {
-          console.log("Received " + event.name);
-        }`
-    ),
-    entrypoint: "$proc",
-  });
+  const processor = Testing.makeHandler(
+    app,
+    "Handler",
+    `async handle(event) {
+  cconsole.log("Received " + event.name);
+}`
+  );
   const processorFn = queue.onMessage(processor);
   const output = app.synth();
 
   // THEN
-  expect(
-    core.Testing.inspectPrebundledCode(processorFn).text
-  ).toMatchSnapshot();
+  expect(sanitizeCode(processorFn._toInflight())).toMatchSnapshot();
 
   expect(tfResourcesOf(output)).toEqual([
     "aws_iam_role", // role for function
@@ -62,6 +61,38 @@ test("queue with a consumer function", () => {
     "aws_s3_object", // S3 object for code
     "aws_sqs_queue", // main queue
   ]);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("queue name valid", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const queue = new cloud.Queue(app, "The-Incredible_Queue-01");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_sqs_queue", {
+      name: `The-Incredible_Queue-01-${queue.node.addr.substring(0, 8)}`,
+    })
+  );
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("replace invalid character from queue name", () => {
+  // GIVEN
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const queue = new cloud.Queue(app, "The*Incredible$Queue");
+  const output = app.synth();
+
+  // THEN
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_sqs_queue", {
+      name: `The-Incredible-Queue-${queue.node.addr.substring(0, 8)}`,
+    })
+  );
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });

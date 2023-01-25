@@ -12,7 +12,7 @@ export interface AppProps extends CdktfAppProps {
   /**
    * The Google Cloud project ID.
    */
-  readonly projectId?: string;
+  readonly projectId: string;
 }
 
 /**

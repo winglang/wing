@@ -16,6 +16,15 @@
       "type": "build"
     },
     {
+      "name": "@vscode/vsce",
+      "type": "build"
+    },
+    {
+      "name": "@winglang/sdk",
+      "version": "file:../../libs/wingsdk",
+      "type": "build"
+    },
+    {
       "name": "esbuild",
       "type": "build"
     },
@@ -50,7 +59,7 @@
     },
     {
       "name": "npm-check-updates",
-      "version": "^15",
+      "version": "^16",
       "type": "build"
     },
     {
@@ -70,20 +79,8 @@
       "type": "build"
     },
     {
-      "name": "vsce",
-      "type": "build"
-    },
-    {
       "name": "@types/vscode",
       "version": "^1.70.0",
-      "type": "runtime"
-    },
-    {
-      "name": "node-fetch",
-      "type": "runtime"
-    },
-    {
-      "name": "octokit",
       "type": "runtime"
     },
     {

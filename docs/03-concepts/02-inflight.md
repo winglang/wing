@@ -2,6 +2,7 @@
 id: inflights
 title: Inflights
 description: Inflight functions are code blocks that are executed on the cloud
+keywords: [Inflights, Inflight functions]
 ---
 
 Inflights (or "inflight functions") are Wing's distributed computing primitive.
@@ -16,13 +17,12 @@ and puts an object inside a bucket:
 
 ```js
 bring cloud;
+
 let bucket = new cloud.Bucket();
 
-inflight my_inflight(_: str): str {
+new cloud.Function(inflight (_: str): str => {
   bucket.put("hello.txt", "world");
-}
-
-new cloud.Function(my_inflight);
+});
 ```
 
 But before we explain what inflight functions are (we also call them

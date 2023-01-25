@@ -40,13 +40,13 @@ const project = new TypeScriptAppProject({
     },
   },
 
-  deps: [
-    `@types/vscode@^${VSCODE_BASE_VERSION}`,
-    "octokit",
-    "node-fetch",
-    "vscode-languageclient",
+  deps: [`@types/vscode@^${VSCODE_BASE_VERSION}`, "vscode-languageclient"],
+  devDeps: [
+    "@types/node",
+    "esbuild",
+    "@vscode/vsce",
+    "@winglang/sdk@file:../../libs/wingsdk",
   ],
-  devDeps: ["@types/node", "esbuild", "vsce"],
 });
 
 project.addGitIgnore("*.vsix");
@@ -65,6 +65,8 @@ vscodeIgnore.addPatterns(
   "!language-configuration.json",
   "!LICENSE"
 );
+project.addGitIgnore("resources/wingsdk/");
+project.addGitIgnore("resources/native/");
 
 const contributes: VSCodeExtensionContributions = {
   languages: [
@@ -95,27 +97,6 @@ const contributes: VSCodeExtensionContributions = {
       },
     },
   ],
-  configuration: {
-    title: "Wing",
-    properties: {
-      "wing.updates.githubToken": {
-        type: "string",
-        default: "",
-        description:
-          "PAT to check for and download new versions of this extension from the winglang repo. Leave empty to disable automatic updates.\nNOTE: PAT must have private repo permission.",
-      },
-    },
-  },
-  commands: [
-    {
-      command: "wing.checkUpdates",
-      title: "[Wing] Check for updates",
-    },
-    {
-      command: "wing.addToken",
-      title: "[Wing] Set update token",
-    },
-  ],
 };
 
 project.addFields({
@@ -128,16 +109,12 @@ project.addFields({
     vscode: `^${VSCODE_BASE_VERSION}`,
   },
   categories: ["Programming Languages"],
-  activationEvents: [
-    "onLanguage:wing",
-    "onCommand:wing.addToken",
-    "onCommand:wing.checkUpdates",
-  ],
+  activationEvents: ["onLanguage:wing"],
   contributes,
 });
 
 const esbuildComment =
-  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --format=cjs --platform=node --bundle";
+  "esbuild src/extension.ts --outfile=lib/index.js --external:node-gyp --external:vscode --external:@winglang/sdk --format=cjs --platform=node --bundle";
 project.compileTask.reset();
 project.compileTask.exec(esbuildComment);
 project.watchTask.reset(`${esbuildComment} --watch`);

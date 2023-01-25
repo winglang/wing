@@ -1,7 +1,6 @@
 import { Construct } from "constructs";
 import * as cloud from "../../src/cloud";
-import * as core from "../../src/core";
-import { SimApp } from "../../src/testing";
+import { SimApp, Testing } from "../../src/testing";
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
@@ -16,32 +15,32 @@ test("can create sequential files in a bucket", async () => {
       });
       const bucket = new cloud.Bucket(this, "Bucket");
       const queue = new cloud.Queue(this, "Queue");
-      const processor = new core.Inflight({
-        code: core.NodeJsCode.fromInline(
-          `async function $proc($cap, body) {
-            let next = await $cap.counter.inc();
+      const processor = Testing.makeHandler(
+        this,
+        "Processor",
+        `async handle(event) {
+          let next = await this.counter.inc();
             let key = "file-" + next + ".txt";
-            await $cap.bucket.put(key, body);
-          }`
-        ),
-        entrypoint: "$proc",
-        captures: {
-          counter: {
-            resource: counter,
-            methods: [cloud.CounterInflightMethods.INC],
+            await this.bucket.put(key, event);
+        }`,
+        {
+          resources: {
+            counter: {
+              resource: counter,
+              ops: [cloud.CounterInflightMethods.INC],
+            },
+            bucket: {
+              resource: bucket,
+              ops: [cloud.BucketInflightMethods.PUT],
+            },
           },
-          bucket: {
-            resource: bucket,
-            methods: [cloud.BucketInflightMethods.PUT],
-          },
-        },
-      });
+        }
+      );
       queue.onMessage(processor);
     }
   }
 
   const app = new SimApp();
-  cloud.Logger.register(app);
   new HelloWorld(app, "HelloWorld");
 
   const s = await app.startSimulator();

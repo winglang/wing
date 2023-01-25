@@ -10,11 +10,11 @@ The actual provider is determined at synth time by setting a target.
 One of the supported targets is `sim` and can be used to run a cloud application locally, without an internet connection, iterate extremely fast and run tests that include cloud resources without needing to mock them.
 
 The SDK is released as a private npm module named
-[`@winglang/wingsdk`](https://github.com/winglang/wingsdk/packages/1519521).
+[`@winglang/sdk`](https://github.com/winglang/wingsdk/packages/1519521).
 
 ## ⛺ Installation
 ```shell
-npm i @winglang/wingsdk
+npm i @winglang/sdk
 ```
 
 ## 📝 Usage
@@ -28,7 +28,7 @@ bring cloud;
 
 let queue = new cloud.Queue();
 
-queue.on_message((message) ~> {
+queue.on_message(inflight (message) => {
   print("Hello, ${message}!");
 });
 ```
@@ -41,7 +41,7 @@ The Wing SDK can be used just like ordinary [CDK for TF Constructs](https://gith
 
 ```ts
 import { Construct } from "constructs";
-import * as sdk from "@winglang/wingsdk";
+import * as sdk from "@winglang/sdk";
 
 class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
