@@ -284,9 +284,15 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 #[cfg(test)]
 mod sanity {
 	use crate::compile;
-	use std::{fs, path::PathBuf};
+	use std::{
+		fs,
+		path::{Path, PathBuf},
+	};
 
-	fn get_wing_files(dir: &str) -> impl Iterator<Item = PathBuf> {
+	fn get_wing_files<P>(dir: P) -> impl Iterator<Item = PathBuf>
+	where
+		P: AsRef<Path>,
+	{
 		fs::read_dir(dir)
 			.unwrap()
 			.map(|entry| entry.unwrap().path())
