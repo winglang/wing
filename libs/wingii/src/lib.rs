@@ -71,7 +71,7 @@ pub mod spec {
 }
 
 pub mod type_system {
-	type SchemaName = String;
+	type AssemblyName = String;
 
 	use crate::jsii;
 	use crate::jsii::Assembly;
@@ -140,7 +140,7 @@ pub mod type_system {
 			self.find_type(fqn, "enum")
 		}
 
-		pub fn load(&mut self, file_or_directory: &str, opts: Option<AssemblyLoadOptions>) -> Result<SchemaName> {
+		pub fn load(&mut self, file_or_directory: &str, opts: Option<AssemblyLoadOptions>) -> Result<AssemblyName> {
 			let opts = opts.unwrap_or(AssemblyLoadOptions { deps: true, root: true });
 			if Path::new(file_or_directory).is_dir() {
 				self.load_module(file_or_directory, &opts)
@@ -161,7 +161,7 @@ pub mod type_system {
 			Ok(())
 		}
 
-		fn add_assembly(&mut self, assembly: Assembly, is_root: bool) -> Result<SchemaName> {
+		fn add_assembly(&mut self, assembly: Assembly, is_root: bool) -> Result<AssemblyName> {
 			if !self.assemblies.contains_key(&assembly.name) {
 				self.assemblies.insert(assembly.name.clone(), assembly.clone());
 			}
@@ -171,12 +171,12 @@ pub mod type_system {
 			Ok(assembly.name)
 		}
 
-		fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<SchemaName> {
+		fn load_file(&mut self, file: &str, is_root: Option<bool>) -> Result<AssemblyName> {
 			let assembly = spec::load_assembly_from_path(file)?;
 			self.add_assembly(assembly, is_root.unwrap_or(false))
 		}
 
-		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> Result<SchemaName> {
+		fn load_module(&mut self, module_directory: &str, opts: &AssemblyLoadOptions) -> Result<AssemblyName> {
 			let is_root = opts.root;
 			let file_path = std::path::Path::new(module_directory).join("package.json");
 			let package_json = std::fs::read_to_string(file_path)?;

@@ -11,7 +11,7 @@ use crate::{
 };
 use colored::Colorize;
 use serde_json::Value;
-use wingii::jsii::{self, Assembly};
+use wingii::jsii;
 
 use super::Namespace;
 
@@ -41,8 +41,9 @@ impl JsiiInterface for jsii::InterfaceType {
 pub struct JsiiImporter<'a> {
 	/// An interface to access the types in the JSII library loaded with wingii.
 	jsii_types: &'a wingii::type_system::TypeSystem,
-	/// The assembly to import from the JSII library.
-	assembly: &'a Assembly,
+	/// The assembly to import from the JSII library. This is typically the name
+	/// of the NPM package.
+	assembly_name: &'a str,
 	/// The wing module name to load. This is a namespace filter on the imported JSII assembly
 	/// for example "cloud" will only (publicly) import types prefixed with `cloud.` from the
 	/// assembly. Note that other types might be implicitly imported into hidden namespaces
@@ -63,7 +64,7 @@ pub struct JsiiImporter<'a> {
 impl<'a> JsiiImporter<'a> {
 	pub fn new(
 		jsii_types: &'a wingii::type_system::TypeSystem,
-		assembly: &'a Assembly,
+		assembly_name: &'a str,
 		module_name: &'a str,
 		wing_types: &'a mut Types,
 		import_statement_idx: usize,
@@ -71,7 +72,7 @@ impl<'a> JsiiImporter<'a> {
 	) -> Self {
 		Self {
 			jsii_types,
-			assembly,
+			assembly_name,
 			module_name,
 			wing_types,
 			import_statement_idx,
@@ -166,7 +167,7 @@ impl<'a> JsiiImporter<'a> {
 			"Expected type fqn to be assembly.module.type, got {}",
 			type_fqn
 		);
-		assert!(parts[0] == self.assembly.name);
+		assert!(parts[0] == self.assembly_name);
 		let namespace_name = parts[1];
 		let type_name = parts[2];
 
@@ -478,7 +479,7 @@ impl<'a> JsiiImporter<'a> {
 					Some(
 						args
 							.iter()
-							.map(|a| self.lookup_or_create_type(&format!("{}.{}.{}", self.assembly.name, namespace_name, a)))
+							.map(|a| self.lookup_or_create_type(&format!("{}.{}.{}", self.assembly_name, namespace_name, a)))
 							.collect::<Vec<_>>(),
 					)
 				})
@@ -604,8 +605,9 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	pub fn import_to_env(&mut self) {
-		let prefix = format!("{}.{}.", self.assembly.name, self.module_name);
-		for type_fqn in self.assembly.types.as_ref().unwrap().keys() {
+		let prefix = format!("{}.{}.", self.assembly_name, self.module_name);
+		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
+		for type_fqn in assembly.types.as_ref().unwrap().keys() {
 			// Skip types outside the imported namespace
 			if !type_fqn.starts_with(&prefix) {
 				continue;

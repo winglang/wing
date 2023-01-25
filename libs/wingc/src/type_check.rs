@@ -1716,47 +1716,39 @@ impl<'a> TypeChecker<'a> {
 		statement_idx: usize,
 	) {
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-		if module_name == WINGSDK_CLOUD_MODULE || module_name == WINGSDK_FS_MODULE || module_name == WINGSDK_STD_MODULE {
-			let mut wingii_types = wingii::type_system::TypeSystem::new();
-			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
-				root: true,
-				deps: false,
+		let jsii_manifest_path =
+			if module_name == WINGSDK_CLOUD_MODULE || module_name == WINGSDK_FS_MODULE || module_name == WINGSDK_STD_MODULE {
+				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+				std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string())
+			} else if module_name.starts_with('"') && module_name.ends_with('"') {
+				let mut path = PathBuf::new();
+				path.push(self.source_path.parent().unwrap().to_str().unwrap());
+				path.push("node_modules");
+				path.push(&module_name[1..module_name.len() - 1]);
+				path.to_str().unwrap().to_string()
+			} else {
+				return;
 			};
-			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-			let wingsdk_manifest_root = std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string());
-			let name = wingii_types
-				.load(wingsdk_manifest_root.as_str(), Some(wingii_loader_options))
-				.unwrap();
-			debug!("Loaded JSII assembly {}", name);
-			let assembly = wingii_types.find_assembly(&name).unwrap();
 
-			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
-			jsii_importer.import_to_env();
-		} else if module_name.starts_with('"') && module_name.ends_with('"') {
-			// trim off quotes from module name
-			let module_name_trimmed = module_name.trim_matches('"').to_string();
-			let mut wingii_types = wingii::type_system::TypeSystem::new();
-			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
-				root: true,
-				deps: false,
-			};
-			let jsii_manifest_path: PathBuf = [
-				self.source_path.parent().unwrap().to_str().unwrap(),
-				"node_modules",
-				&module_name_trimmed,
-				"package.json",
-			]
-			.iter()
-			.collect();
-			let name = wingii_types
-				.load(jsii_manifest_path.to_str().unwrap(), Some(wingii_loader_options))
-				.unwrap();
-			debug!("Loaded JSII assembly {}", name);
-			let assembly = wingii_types.find_assembly(&name).unwrap();
+		let mut wingii_types = wingii::type_system::TypeSystem::new();
+		let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
+			root: true,
+			deps: false,
+		};
+		let assembly_name = wingii_types
+			.load(jsii_manifest_path.as_str(), Some(wingii_loader_options))
+			.unwrap();
+		debug!("Loaded JSII assembly {}", assembly_name);
 
-			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
-			jsii_importer.import_to_env();
-		}
+		let mut jsii_importer = JsiiImporter::new(
+			&wingii_types,
+			&assembly_name,
+			&module_name,
+			self.types,
+			statement_idx,
+			env,
+		);
+		jsii_importer.import_to_env();
 	}
 
 	/// Add function arguments to the function's environment
