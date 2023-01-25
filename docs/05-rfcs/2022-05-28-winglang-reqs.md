@@ -1,11 +1,12 @@
 ---
-title: (Complete) Language Requirements
+title: (Approved) Language Requirements
 description: The original requirements documents for the wing language experience
 ---
 
 - **Author(s):**: @eladb
 - **Submission Date**: {2022-05-28}
-- **Stage**: Complete (see [Language Specification](https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md))
+- **Stage**: Approved
+- **Implementation**: [Language Specification](https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md)
 
 ## About this Document
 
