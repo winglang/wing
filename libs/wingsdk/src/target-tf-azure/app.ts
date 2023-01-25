@@ -59,8 +59,8 @@ export class App extends CdktfApp implements IApp {
    * @link https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group#location
    * */
   public readonly location: string;
-  public readonly resourceGroup: ResourceGroup;
-  public readonly storageAccount: StorageAccount;
+  private _resourceGroup: ResourceGroup;
+  private _storageAccount: StorageAccount;
 
   constructor(props: AzureAppProps) {
     super({
@@ -84,18 +84,48 @@ export class App extends CdktfApp implements IApp {
       writable: false,
     });
 
-    // Create a resource group and storage account for all resources in this app
-    this.resourceGroup = new ResourceGroup(this, "ResourceGroup", {
-      location: this.location,
-      name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
+    // At runtime the resolved app class is an instance of InnerApp which means that all the methods
+    // declared in this class are tossed out. This is a workaround to attach the getters to InnerApp class
+    // at runtime.
+    this._resourceGroup = undefined as any;
+    Object.defineProperty(this, "resourceGroup", {
+      // lazy initialization
+      get() {
+        if (this._resourceGroup === undefined) {
+          this._resourceGroup = new ResourceGroup(this, "ResourceGroup", {
+            location: this.location,
+            name: ResourceNames.generateName(this, RESOURCEGROUP_NAME_OPTS),
+          });
+        }
+        return this._resourceGroup;
+      }
     });
 
-    this.storageAccount = new StorageAccount(this, "StorageAccount", {
-      name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
-      resourceGroupName: this.resourceGroup.name,
-      location: this.resourceGroup.location,
-      accountTier: "Standard",
-      accountReplicationType: "LRS",
+    this._storageAccount = undefined as any;
+    Object.defineProperty(this, "storageAccount", {
+      // lazy initialization
+      get() {
+        if (this._storageAccount === undefined) {
+          this._storageAccount = new StorageAccount(this, "StorageAccount", {
+            name: ResourceNames.generateName(this, STORAGEACCOUNT_NAME_OPTS),
+            resourceGroupName: this.resourceGroup.name,
+            location: this.resourceGroup.location,
+            accountTier: "Standard",
+            accountReplicationType: "LRS",
+          });
+        }
+        return this._storageAccount;
+      }
     });
   }
+
+  /**
+   * This is a stub getter that is tossed out during runtime
+   */
+  public get storageAccount() { return this._storageAccount; };
+
+  /**
+   * This is a stub getter that is tossed out during runtime
+   */
+  public get resourceGroup() { return this._resourceGroup; };
 }

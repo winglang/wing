@@ -52,6 +52,7 @@ export class Bucket extends cloud.BucketBase {
       );
     }
 
+
     this.storageContainer = new StorageContainer(this, "Bucket", {
       name: storageContainerName,
       storageAccountName: app.storageAccount.name,
