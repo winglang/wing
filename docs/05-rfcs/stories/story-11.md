@@ -91,11 +91,11 @@ resource TaskList {
       let title = this.get_task(id); // https://winglang.slack.com/archives/C047QFSUL5R/p1674549602212669
       if title.contains(term) { 
         print("found task ${id} with title \"${title}\" with term \"${term}\"");
-        output.add(id);
+        output.push(id);
       }
     }
     
-    print("found ${output.size} tasks which match term '${term}'");
+    print("found ${output.len} tasks which match term '${term}'");
     return output.to_immut();
   }
 }
