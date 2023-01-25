@@ -5,7 +5,7 @@ slug: /
 hide_title: true
 ---
 
-# Howdy, and welcome! :wave: 
+# Welcome Wingnuts! :wave: 
 
 :::caution This is Alpha
 
