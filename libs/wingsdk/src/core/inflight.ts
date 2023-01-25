@@ -102,9 +102,6 @@ export interface InflightProps {
  * Represents a unit of application code that can be executed by a cloud
  * resource. In practice, it's a resource with one inflight method named
  * "handle".
- *
- * @deprecated use an interface modeling the specific inflight behavior
- * such as `cloud.IFunctionHandler`
  */
 export class Inflight extends Construct implements IResource {
   /** @internal */
