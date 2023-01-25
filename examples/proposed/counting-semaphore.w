@@ -8,7 +8,8 @@ resource CountingSemaphore {
   public limit: num;
   _counter: cloud.Counter;
 
-  // wish: ttl
+  // need some ttl solution here,
+  // probably in-house once replaced with a key-value store
   init(props: CountingSemaphoreProps) {
     // pseudocode: input validation
     this.limit = props.availableResources;
@@ -17,7 +18,7 @@ resource CountingSemaphore {
 
   // some stable unique instance id is wanted in the inflight context
   // so that a reousce instance can be properly claimed and later released
-  // when used in conjunction with a key-value store =
+  // when used in conjunction with a key-value store
   public inflight try_acquire(): bool {
     if this.is_at_capacity() {
       return false;
