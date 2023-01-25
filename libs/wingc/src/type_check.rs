@@ -3,8 +3,8 @@ pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
-	debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
-	WINGSDK_SET, WINGSDK_STRING,
+	debug, WINGSDK_ARRAY, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
+	WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -128,7 +128,6 @@ pub enum Type {
 }
 
 const WING_CONSTRUCTOR_NAME: &'static str = "init";
-const WINGSDK_STD_MODULE: &'static str = "std";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -1382,22 +1381,20 @@ impl<'a> TypeChecker<'a> {
 				module_name,
 				identifier,
 			} => {
-				_ = {
-					// If provided use alias identifier as the namespace name
-					let namespace_name = identifier.as_ref().unwrap_or(module_name);
+				// If provided use alias identifier as the namespace name
+				let namespace_name = identifier.as_ref().unwrap_or(module_name);
 
-					if namespace_name.name == WINGSDK_STD_MODULE {
-						self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
-						return;
-					}
-
-					self.add_module_to_env(
-						env,
-						module_name.name.clone(),
-						identifier.as_ref().map(|id| id.name.clone()),
-						stmt.idx,
-					);
+				if namespace_name.name == WINGSDK_STD_MODULE {
+					self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
+					return;
 				}
+
+				self.add_module_to_env(
+					env,
+					module_name.name.clone(),
+					identifier.as_ref().map(|id| id.name.clone()),
+					stmt.idx,
+				);
 			}
 			StmtKind::Scope(scope) => {
 				scope.set_env(SymbolEnv::new(
@@ -1715,11 +1712,11 @@ impl<'a> TypeChecker<'a> {
 		&mut self,
 		env: &mut SymbolEnv,
 		module_name: String,
-		alias: Option<String>,
+		_alias: Option<String>,
 		statement_idx: usize,
 	) {
 		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-		if module_name == "cloud" || module_name == "fs" || module_name == WINGSDK_STD_MODULE {
+		if module_name == WINGSDK_CLOUD_MODULE || module_name == WINGSDK_FS_MODULE || module_name == WINGSDK_STD_MODULE {
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
@@ -1735,7 +1732,9 @@ impl<'a> TypeChecker<'a> {
 
 			let mut jsii_importer = JsiiImporter::new(&wingii_types, assembly, &module_name, self.types, statement_idx, env);
 			jsii_importer.import_to_env();
-		} else {
+		} else if module_name.starts_with('"') && module_name.ends_with('"') {
+			// trim off quotes from module name
+			let module_name_trimmed = module_name.trim_matches('"').to_string();
 			let mut wingii_types = wingii::type_system::TypeSystem::new();
 			let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
 				root: true,
@@ -1744,7 +1743,7 @@ impl<'a> TypeChecker<'a> {
 			let jsii_manifest_path: PathBuf = [
 				self.source_path.parent().unwrap().to_str().unwrap(),
 				"node_modules",
-				&module_name,
+				&module_name_trimmed,
 				"package.json",
 			]
 			.iter()

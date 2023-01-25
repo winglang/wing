@@ -39,24 +39,24 @@ impl JsiiInterface for jsii::InterfaceType {
 }
 
 pub struct JsiiImporter<'a> {
-	// An interface to access the types in the JSII library loaded with wingii
+	/// An interface to access the types in the JSII library loaded with wingii.
 	jsii_types: &'a wingii::type_system::TypeSystem,
-	// The assembly to import from the JSII library
+	/// The assembly to import from the JSII library.
 	assembly: &'a Assembly,
-	// The wing module name to load. This is a namespace filter on the imported JSII assembly
-	// for example "cloud" will only (publicly) import types prefixed with `cloud.` from the
-	// assembly. Note that other types might be implicitly imported into hidden namespaces
-	// if they are referenced from a type in the specified `module_name`.
+	/// The wing module name to load. This is a namespace filter on the imported JSII assembly
+	/// for example "cloud" will only (publicly) import types prefixed with `cloud.` from the
+	/// assembly. Note that other types might be implicitly imported into hidden namespaces
+	/// if they are referenced from a type in the specified `module_name`.
 	module_name: &'a str,
-	// The wing type system: all imported types are added to `wing_types`.
+	/// The wing type system: all imported types are added to `wing_types`.
 	wing_types: &'a mut Types,
-	// The index of the import statement that triggered this import. This is required so we'll know
-	// later on if types defined by this import come before or after other statements in the code.
-	// If type definitions in wing are always location agnostic this doesn't really matter and we
-	// might be able to remove this.
+	/// The index of the import statement that triggered this import. This is required so we'll know
+	/// later on if types defined by this import come before or after other statements in the code.
+	/// If type definitions in wing are always location agnostic this doesn't really matter and we
+	/// might be able to remove this.
 	import_statement_idx: usize,
-	// The symbol environment to add imported symbols to. Note that all symbols will be added to
-	// some `Namespace` under this `env`.
+	/// The symbol environment to add imported symbols to. Note that all symbols will be added to
+	/// some `Namespace` under this `env`.
 	env: &'a mut SymbolEnv,
 }
 

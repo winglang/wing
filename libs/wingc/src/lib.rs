@@ -29,6 +29,10 @@ pub mod utilities;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
 
+const WINGSDK_STD_MODULE: &'static str = "std";
+const WINGSDK_FS_MODULE: &'static str = "fs";
+const WINGSDK_CLOUD_MODULE: &'static str = "cloud";
+
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.ImmutableMap";
 const WINGSDK_MUT_MAP: &'static str = "std.MutableMap";
@@ -212,10 +216,6 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 		source_path.extension().unwrap() == "w",
 		"Source file must have .w extension",
 	);
-	assert!(
-		out_dir.is_none() || out_dir.unwrap().is_dir(),
-		"Output directory must be a directory",
-	);
 
 	// canonicalize source_path if it is not an absolute path
 	let source_path = if source_path.is_absolute() {
@@ -254,6 +254,7 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 	scan_for_inflights_in_scope(&scope, &mut capture_diagnostics);
 	diagnostics.extend(capture_diagnostics);
 
+	// Filter diagnostics to only errors
 	let errors = diagnostics
 		.iter()
 		.filter(|d| matches!(d.level, DiagnosticLevel::Error))
@@ -283,39 +284,28 @@ pub fn compile(source_path: &Path, out_dir: Option<&Path>) -> Result<CompilerOut
 #[cfg(test)]
 mod sanity {
 	use crate::compile;
-	use std::{
-		fs,
-		path::{Path, PathBuf},
-	};
+	use std::{fs, path::PathBuf};
 
-	fn get_wing_files(dir: &str) -> Vec<PathBuf> {
-		let mut files = Vec::new();
-		for entry in fs::read_dir(dir).unwrap() {
-			let entry = entry.unwrap();
-			let path = entry.path();
-			if let Some(ext) = path.extension() {
-				if ext == "w" {
-					files.push(path);
-				}
-			}
-		}
-		files
+	fn get_wing_files(dir: &str) -> impl Iterator<Item = PathBuf> {
+		fs::read_dir(dir)
+			.unwrap()
+			.map(|entry| entry.unwrap().path())
+			.filter(|path| path.extension().map(|ext| ext == "w").unwrap_or(false))
 	}
 
 	fn compile_test(test_dir: &str, expect_failure: bool) {
-		for test_pathbuf in get_wing_files(test_dir) {
-			let test_file = test_pathbuf.to_str().unwrap();
-			println!("\n=== {} ===\n", test_file);
+		for test_file in get_wing_files(test_dir) {
+			println!("\n=== {} ===\n", test_file.display());
 
-			let out_dir = format!("{}.out", test_file);
+			let mut out_dir = PathBuf::from(test_dir).canonicalize().unwrap();
+			out_dir.push(format!("{}.out", test_file.file_name().unwrap().to_str().unwrap()));
 
 			// reset out_dir
-			let out_dirbuf = PathBuf::from(&out_dir);
-			if out_dirbuf.exists() {
-				fs::remove_dir_all(&out_dirbuf).expect("remove out dir");
+			if out_dir.exists() {
+				fs::remove_dir_all(&out_dir).expect("remove out dir");
 			}
 
-			let result = compile(Path::new(test_file), Some(Path::new(out_dir.as_str())));
+			let result = compile(&test_file, Some(&out_dir));
 
 			if result.is_err() {
 				assert!(
