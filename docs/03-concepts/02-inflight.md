@@ -75,6 +75,9 @@ Lambda](https://aws.amazon.com/lambda/), [Azure
 Functions](https://azure.microsoft.com/en-us/products/functions/), on [Cloudflare Edge
 Workers](https://workers.cloudflare.com/) or on any other cloud compute platform.
 
+While inflights are typically compiled into machine code (like JavaScript), Wing may also be able to
+compile them into state machines, orchestrated workflows, and other formats in the future
+
 Our canonic example is a function that wants to put an object inside a bucket:
 
 ```js
