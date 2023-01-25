@@ -1,3 +1,5 @@
+use std::fmt::{Display, Formatter};
+
 /// Represents a fully-qualified name (FQN) of a type in a JSII library.
 /// For example, `@aws-cdk/aws-ec2.Vpc` is a FQN.
 /// The FQN is used to uniquely identify a type in a JSII library.
@@ -5,10 +7,10 @@
 /// The FQN typically looks like:
 /// `assembly_name.namespace1.namespace2...namespaceN.type_name`
 /// where there may be zero or more namespaces.
-pub struct FQN(String);
+pub struct FQN<'a>(&'a str);
 
-impl FQN {
-	pub fn new(fqn: String) -> Self {
+impl<'a> FQN<'a> {
+	pub fn from(fqn: &'a str) -> Self {
 		if fqn.split('.').count() < 2 {
 			panic!("Invalid FQN: {}", fqn);
 		}
@@ -16,10 +18,10 @@ impl FQN {
 	}
 
 	pub fn as_str(&self) -> &str {
-		self.0.as_str()
+		self.0
 	}
 
-	pub fn assembly_name(&self) -> &str {
+	pub fn assembly(&self) -> &str {
 		self.0.split('.').next().unwrap()
 	}
 
@@ -35,6 +37,12 @@ impl FQN {
 	}
 }
 
+impl Display for FQN<'_> {
+	fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+		write!(f, "{}", self.0)
+	}
+}
+
 // unit tests
 #[cfg(test)]
 mod tests {
@@ -42,24 +50,24 @@ mod tests {
 
 	#[test]
 	fn test_fqn1() {
-		let fqn = FQN("@aws-cdk/aws-ec2.Vpc".to_string());
-		assert_eq!(fqn.assembly_name(), "@aws-cdk/aws-ec2");
+		let fqn = FQN("@aws-cdk/aws-ec2.Vpc");
+		assert_eq!(fqn.assembly(), "@aws-cdk/aws-ec2");
 		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec![] as Vec<&str>);
 		assert_eq!(fqn.type_name(), "Vpc");
 	}
 
 	#[test]
 	fn test_fqn2() {
-		let fqn = FQN("@winglang/sdk.cloud.Bucket".to_string());
-		assert_eq!(fqn.assembly_name(), "@winglang/sdk");
+		let fqn = FQN("@winglang/sdk.cloud.Bucket");
+		assert_eq!(fqn.assembly(), "@winglang/sdk");
 		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["cloud"]);
 		assert_eq!(fqn.type_name(), "Bucket");
 	}
 
 	#[test]
 	fn test_fqn3() {
-		let fqn = FQN("my_lib.ns1.ns2.MyResource".to_string());
-		assert_eq!(fqn.assembly_name(), "my_lib");
+		let fqn = FQN("my_lib.ns1.ns2.MyResource");
+		assert_eq!(fqn.assembly(), "my_lib");
 		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["ns1", "ns2"]);
 		assert_eq!(fqn.type_name(), "MyResource");
 	}

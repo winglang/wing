@@ -102,7 +102,7 @@ impl<'a> JsiiImporter<'a> {
 					// TODO: this should be a special type that represents "any resource" https://github.com/winglang/wing/issues/261
 					self.wing_types.anything()
 				} else {
-					self.lookup_or_create_type(type_fqn)
+					self.lookup_or_create_type(&FQN::from(type_fqn))
 				}
 			} else if let Some(Value::Object(_)) = obj.get("collection") {
 				// TODO: handle JSII to Wing collection type conversion, for now return any
@@ -118,8 +118,8 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn lookup_or_create_type(&mut self, type_fqn: &str) -> TypeRef {
-		let type_name = Self::strip_assembly_from_fqn(type_fqn);
+	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
+		let type_name = Self::strip_assembly_from_fqn(type_fqn.as_str());
 		// Check if this type is already define in this module's namespace
 		if let Ok(t) = self.env.lookup_nested_str(&type_name, true, None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_name));
@@ -153,22 +153,22 @@ impl<'a> JsiiImporter<'a> {
 			.to_string()
 	}
 
-	fn import_type(&mut self, type_fqn: &str) {
+	fn import_type(&mut self, type_fqn: &FQN) {
 		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
-		if Self::is_fqn_construct_base(type_fqn) {
+		if Self::is_fqn_construct_base(type_fqn.as_str()) {
 			return;
 		}
 
-		// Always expect assembly.module.type
-		let parts = type_fqn.split('.').collect::<Vec<_>>();
+		// Always expect assembly.module.type fqn
 		assert!(
-			parts.len() == 3,
+			type_fqn.namespaces().count() == 1,
 			"Expected type fqn to be assembly.module.type, got {}",
 			type_fqn
 		);
-		assert!(parts[0] == self.assembly_name);
-		let namespace_name = parts[1];
-		let type_name = parts[2];
+		assert!(type_fqn.assembly() == self.assembly_name);
+
+		let namespace_name = type_fqn.namespaces().next().unwrap();
+		let type_name = type_fqn.type_name();
 
 		// Create namespace and add it to env if it doesn't exist yet
 		if let Some(symb) = self.env.try_lookup_mut(namespace_name, None) {
@@ -203,12 +203,12 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Check if this is a JSII interface and import it if it is
-		let jsii_interface = self.jsii_types.find_interface(&type_fqn);
+		let jsii_interface = self.jsii_types.find_interface(type_fqn.as_str());
 		if let Some(jsii_interface) = jsii_interface {
 			self.import_interface(jsii_interface, namespace_name);
 		} else {
 			// Check if this is a JSII class and import it if it is
-			let jsii_class = self.jsii_types.find_class(&type_fqn);
+			let jsii_class = self.jsii_types.find_class(type_fqn.as_str());
 			if let Some(jsii_class) = jsii_class {
 				self.import_class(jsii_class, namespace_name);
 			} else {
@@ -236,7 +236,7 @@ impl<'a> JsiiImporter<'a> {
 		let extends = if let Some(interfaces) = &jsii_interface.interfaces {
 			interfaces
 				.iter()
-				.map(|fqn| self.lookup_or_create_type(fqn))
+				.map(|fqn| self.lookup_or_create_type(&FQN::from(fqn)))
 				.collect::<Vec<_>>()
 		} else {
 			vec![]
@@ -428,7 +428,7 @@ impl<'a> JsiiImporter<'a> {
 						.expect("Base class name found but it's not a type")
 				} else {
 					// If the base class isn't defined yet then define it first (recursive call)
-					self.import_type(base_class_fqn);
+					self.import_type(&FQN::from(base_class_fqn));
 					self
 						.env
 						.lookup_nested_str(&base_class_name, true, None)
@@ -478,7 +478,9 @@ impl<'a> JsiiImporter<'a> {
 					Some(
 						args
 							.iter()
-							.map(|a| self.lookup_or_create_type(&format!("{}.{}.{}", self.assembly_name, namespace_name, a)))
+							.map(|a| {
+								self.lookup_or_create_type(&FQN::from(&format!("{}.{}.{}", self.assembly_name, namespace_name, a)))
+							})
 							.collect::<Vec<_>>(),
 					)
 				})
@@ -604,13 +606,13 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	pub fn import_to_env(&mut self) {
-		let prefix = format!("{}.{}.", self.assembly_name, self.module_name);
 		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
 		for type_fqn in assembly.types.as_ref().unwrap().keys() {
-			let type_fqn = FQN::new(type_fqn.clone());
+			let type_fqn = FQN::from(type_fqn);
 
 			// Skip types outside the imported namespace
-			if type_fqn.namespaces().next() == Some(&prefix) {
+			let namespaces = type_fqn.namespaces().collect::<Vec<_>>();
+			if namespaces.len() != 1 || namespaces[0] != self.module_name {
 				continue;
 			}
 
@@ -625,7 +627,7 @@ impl<'a> JsiiImporter<'a> {
 			}
 
 			// Import type
-			self.import_type(type_fqn.as_str());
+			self.import_type(&type_fqn);
 		}
 	}
 }
