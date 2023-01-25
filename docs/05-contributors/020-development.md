@@ -1,6 +1,6 @@
 ---
 title: Development
-id: workflows
+id: development
 keywords: [Wing contributors, contributors, workflows]
 ---
 
