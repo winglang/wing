@@ -20,7 +20,7 @@ env:
   CI: "true"
 
 jobs:
-  build:
+  mutate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
