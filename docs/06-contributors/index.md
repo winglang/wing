@@ -1,6 +1,6 @@
 ---
-title: Contributor's Handbook
-id: handbook
+title: Contributing to Wing
+id: index
 keywords: [Wing contributors, contributors]
 ---
 
