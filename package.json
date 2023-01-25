@@ -56,7 +56,7 @@
     "@vitest/coverage-c8": "^0.27.0",
     "@winglang/polycons": "^0.0.107",
     "@winglang/projen": "^0.0.37",
-    "@winglang/wingsdk": "^0.4.70",
+    "@winglang/sdk": "^0.4.129",
     "analytics-node": "^6.2.0",
     "autoprefixer": "^10.4.13",
     "c8": "^7.12.0",

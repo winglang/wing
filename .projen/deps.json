@@ -110,7 +110,7 @@
       "type": "build"
     },
     {
-      "name": "@winglang/wingsdk",
+      "name": "@winglang/sdk",
       "type": "build"
     },
     {

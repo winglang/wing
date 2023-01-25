@@ -1,4 +1,4 @@
-import { Simulator } from "@winglang/wingsdk/lib/testing";
+import { Simulator } from "@winglang/sdk/lib/testing";
 
 import { ConsoleLogger } from "../consoleLogger.js";
 

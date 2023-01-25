@@ -1,7 +1,7 @@
 import * as fs from "node:fs/promises";
 import * as path from "node:path";
 
-import { Simulator, SimulatorProps } from "@winglang/wingsdk/lib/testing";
+import { Simulator, SimulatorProps } from "@winglang/sdk/lib/testing";
 
 import { NodeDisplay } from "./constructTreeNodeMap.js";
 

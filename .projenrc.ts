@@ -12,7 +12,7 @@ const project = new TypeScriptProject({
     "@types/cors",
     "get-port",
     "electron-log",
-    "@winglang/wingsdk",
+    "@winglang/sdk",
     "@winglang/polycons",
     "constructs",
     "@winglang/projen",
