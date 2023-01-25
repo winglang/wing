@@ -1,5 +1,5 @@
 ---
-title: Development Workflows
+title: Development
 id: workflows
 keywords: [Wing contributors, contributors, workflows]
 ---
@@ -46,6 +46,22 @@ If you wish to install it manually, you may do so by running `scripts/setup_wasi
 [volta]: https://volta.sh
 [Docker]: https://docs.docker.com/get-docker/
 [emscripten]: https://emscripten.org/docs/getting_started/downloads.html
+
+## How is the repository structured?
+
+The Wing repository is structured as a monorepo, which means that it contains multiple packages.
+Packages that are primarily meant to be run by users are in the `apps` directory, while packages
+that are primarily meant to be consumed as libraries are in the `libs` directory. Some packages are
+written in Rust, while others are written in TypeScript. Each has a README explaining what it does
+and how to use it. (If you see one missing, please open an issue and let us know!)
+
+The Wing monorepo uses [Nx] to run commands across all code packages in the `libs` and `apps`
+folders. This means it includes packages that form the entire toolchain (compiler, SDK, IDE
+extension, etc), and the build and release bind them all together.
+
+Nx will be installed alongside the rest of the project's dependencies after you run `npm install`
+from the root directory, and can be accessed with `npx nx`. (It does not need to be installed
+separately).
 
 ## Development iteration
 
@@ -117,3 +133,41 @@ npx tree-sitter-cli playground
 ```
 
 Make sure to also run `build-wasm` before each time the grammar changes
+
+
+## 🔨 How do I build the VSCode extension?
+
+The VSCode extension is located in `apps/vscode-wing`. Most of the logic is in the language server, which
+is located in `apps/vscode-wing`. Running `npx nx build` from `apps/vscode-wing` will ensure the
+language server is built first and the binary is available. This creates an installable VSIX file.
+
+A VSCode launch configuration is available to open a VSCode with a development version of the
+extension.
+
+To modify the package.json, please edit `.projenrc.ts` and run `npx projen`.
+
+
+## 🏠 How do I build Wing?
+
+Assuming you've [setup your environment](https://docs.winglang.io/contributors/workflows#environment-setup), including the `npm install` part,
+just run the following command from the root of the project:
+```
+npx nx wing
+```
+
+## 🧪 How do I run E2E tests?
+
+Our end-to-end tests are hosted under `./tools/hangar`. To get started, first ensure you can [build wing](#-how-do-i-build-wing).
+
+To run the tests (and update snapshots), run the following commands from the root of the Hangar
+project:
+
+```sh
+npm test
+```
+
+Or, you can run the following command from the root of the monorepo:
+
+```sh
+npx nx run hangar:test
+```
