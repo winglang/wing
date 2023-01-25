@@ -1,13 +1,11 @@
 ---
-title: The Wing Programming Language - Requirements
+title: (Complete) Language Requirements
 description: The original requirements documents for the wing language experience
 ---
 
-# The Wing Programming Language - Requirements
-
 - **Author(s):**: @eladb
 - **Submission Date**: {2022-05-28}
-- **Stage**: Draft
+- **Stage**: Complete (see [Language Specification](https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md))
 
 ## About this Document
 
