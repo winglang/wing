@@ -351,7 +351,8 @@ export class Display {
  *
  * @param obj The object to bind.
  * @param host The host to bind to
- * @param ops The set of operations that may access the object.
+ * @param ops The set of operations that may access the object (use "?" to indicate that we don't
+ * know the operation)
  */
 function bindObject(obj: any, host: IResource, ops: string[] = ["?"]): void {
   switch (typeof obj) {
@@ -383,7 +384,7 @@ function bindObject(obj: any, host: IResource, ops: string[] = ["?"]): void {
       if (typeof (obj as IResource)._bind === "function") {
         (obj as IResource)._bind(host, ops);
 
-        // add connection metadata (use "?" to indicate that we don't know the operation)
+        // add connection metadata
         for (const op of ops) {
           Resource.addConnection({
             from: host,
