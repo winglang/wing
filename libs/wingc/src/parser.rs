@@ -200,11 +200,11 @@ impl Parser<'_> {
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
 
-				let mut elif_vec: Vec<ElifBlock> = Vec::new();
+				let mut elif_vec = vec![];
 				let mut cursor = statement_node.walk();
 				for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
-					let conditions = self.build_expression(&node.named_child(0).unwrap());
-					let statements = self.build_scope(&node.named_child(1).unwrap());
+					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap());
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap());
 					let elif = ElifBlock {
 						condition: conditions.unwrap(),
 						statements: statements,
