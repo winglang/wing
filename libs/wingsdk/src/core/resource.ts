@@ -1,4 +1,5 @@
 import { Construct, IConstruct } from "constructs";
+import { Duration } from "../std";
 import { log } from "../util";
 import {
   WING_ATTRIBUTE_RESOURCE_CONNECTIONS,
@@ -164,26 +165,13 @@ export abstract class Resource
       if (field.startsWith("this.")) {
         const key = field.substring(5);
         const obj: Resource = (this as any)[key];
-        if (!obj) {
+        if (obj === undefined) {
           throw new Error(
             `Resource ${this.node.path} does not have field ${key}`
           );
         }
-        if (!("_bind" in obj)) {
-          throw new Error(
-            `Resource ${this.node.path} field ${key} does not have a bind method`
-          );
-        }
-        obj._bind(host, resources[field]);
 
-        // add connection metadata
-        for (const op of resources[field]) {
-          Resource.addConnection({
-            from: host,
-            to: obj,
-            relationship: op,
-          });
-        }
+        bindObject(obj, host, resources[field]);
       } else {
         log(`Skipped binding ${field} since it should be bound already.`);
       }
@@ -352,4 +340,70 @@ export class Display {
     this.description = props?.description;
     this.hidden = props?.hidden;
   }
+}
+
+/**
+ * Binds an object (either data or resource) to a host.
+ *
+ * - Primitives and Duration objects are ignored.
+ * - Arrays, sets and maps and structs (Objects) are recursively bound.
+ * - Resources are bound to the host by calling their _bind() method.
+ *
+ * @param obj The object to bind.
+ * @param host The host to bind to
+ * @param ops The set of operations that may access the object (use "?" to indicate that we don't
+ * know the operation)
+ */
+function bindObject(obj: any, host: IResource, ops: string[] = ["?"]): void {
+  switch (typeof obj) {
+    case "string":
+    case "boolean":
+    case "number":
+      return;
+
+    case "object":
+      if (Array.isArray(obj)) {
+        obj.forEach((item) => bindObject(item, host, ops));
+        return;
+      }
+
+      if (obj instanceof Duration) {
+        return;
+      }
+
+      if (obj instanceof Set) {
+        return Array.from(obj).forEach((item) => bindObject(item, host, ops));
+      }
+
+      if (obj instanceof Map) {
+        Array.from(obj.values()).forEach((item) => bindObject(item, host, ops));
+        return;
+      }
+
+      // if the object is a resource (i.e. has a "_bind" method"), bind it to the host.
+      if (typeof (obj as IResource)._bind === "function") {
+        (obj as IResource)._bind(host, ops);
+
+        // add connection metadata
+        for (const op of ops) {
+          Resource.addConnection({
+            from: host,
+            to: obj,
+            relationship: op,
+          });
+        }
+
+        return;
+      }
+
+      // structs are just plain objects
+      if (obj.constructor.name === "Object") {
+        Object.values(obj).forEach((item) => bindObject(item, host, ops));
+        return;
+      }
+  }
+
+  throw new Error(
+    `unable to serialize immutable data object of type ${obj.constructor?.name}`
+  );
 }
