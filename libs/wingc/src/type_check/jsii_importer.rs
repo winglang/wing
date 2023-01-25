@@ -13,7 +13,7 @@ use colored::Colorize;
 use serde_json::Value;
 use wingii::jsii;
 
-use super::Namespace;
+use super::{fqn::FQN, Namespace};
 
 trait JsiiInterface {
 	fn methods<'a>(&'a self) -> &'a Option<Vec<jsii::Method>>;
@@ -118,17 +118,17 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn lookup_or_create_type(&mut self, type_fqn: &String) -> TypeRef {
-		let type_name = &self.strip_assembly_from_fqn(type_fqn);
+	fn lookup_or_create_type(&mut self, type_fqn: &str) -> TypeRef {
+		let type_name = Self::strip_assembly_from_fqn(type_fqn);
 		// Check if this type is already define in this module's namespace
-		if let Ok(t) = self.env.lookup_nested_str(type_name, true, None) {
+		if let Ok(t) = self.env.lookup_nested_str(&type_name, true, None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_name));
 		}
 		// Define new type and return it
 		self.import_type(type_fqn);
 		self
 			.env
-			.lookup_nested_str(type_name, true, None)
+			.lookup_nested_str(&type_name, true, None)
 			.expect(&format!("Expected {} to be defined", type_name))
 			.as_type()
 			.unwrap()
@@ -144,7 +144,7 @@ impl<'a> JsiiImporter<'a> {
 			.to_string()
 	}
 
-	fn strip_assembly_from_fqn(&self, fqn: &str) -> String {
+	fn strip_assembly_from_fqn(fqn: &str) -> String {
 		let parts = fqn.split('.').collect::<Vec<&str>>();
 		let assembly_name = parts[0];
 		fqn
@@ -421,7 +421,7 @@ impl<'a> JsiiImporter<'a> {
 				is_resource = true;
 				None
 			} else {
-				let base_class_name = self.strip_assembly_from_fqn(base_class_fqn);
+				let base_class_name = Self::strip_assembly_from_fqn(base_class_fqn);
 				let base_class_type = if let Ok(base_class_type) = self.env.lookup_nested_str(&base_class_name, true, None) {
 					base_class_type
 						.as_type()
@@ -607,8 +607,10 @@ impl<'a> JsiiImporter<'a> {
 		let prefix = format!("{}.{}.", self.assembly_name, self.module_name);
 		let assembly = self.jsii_types.find_assembly(self.assembly_name).unwrap();
 		for type_fqn in assembly.types.as_ref().unwrap().keys() {
+			let type_fqn = FQN::new(type_fqn.clone());
+
 			// Skip types outside the imported namespace
-			if !type_fqn.starts_with(&prefix) {
+			if type_fqn.namespaces().next() == Some(&prefix) {
 				continue;
 			}
 
@@ -616,14 +618,14 @@ impl<'a> JsiiImporter<'a> {
 			// and might have already defined the current type internally
 			if self
 				.env
-				.lookup_nested_str(&self.strip_assembly_from_fqn(type_fqn), true, None)
+				.lookup_nested_str(&Self::strip_assembly_from_fqn(type_fqn.as_str()), true, None)
 				.is_ok()
 			{
 				continue;
 			}
 
 			// Import type
-			self.import_type(type_fqn);
+			self.import_type(type_fqn.as_str());
 		}
 	}
 }

@@ -8,6 +8,17 @@
 pub struct FQN(String);
 
 impl FQN {
+	pub fn new(fqn: String) -> Self {
+		if fqn.split('.').count() < 2 {
+			panic!("Invalid FQN: {}", fqn);
+		}
+		FQN(fqn)
+	}
+
+	pub fn as_str(&self) -> &str {
+		self.0.as_str()
+	}
+
 	pub fn assembly_name(&self) -> &str {
 		self.0.split('.').next().unwrap()
 	}
@@ -16,11 +27,11 @@ impl FQN {
 		self.0.split('.').last().unwrap()
 	}
 
-	pub fn namespaces(&self) -> Vec<&str> {
+	pub fn namespaces(&self) -> impl Iterator<Item = &str> {
 		let mut parts = self.0.split('.');
 		parts.next();
 		parts.next_back().unwrap();
-		parts.collect::<Vec<&str>>()
+		parts
 	}
 }
 
@@ -33,7 +44,7 @@ mod tests {
 	fn test_fqn1() {
 		let fqn = FQN("@aws-cdk/aws-ec2.Vpc".to_string());
 		assert_eq!(fqn.assembly_name(), "@aws-cdk/aws-ec2");
-		assert_eq!(fqn.namespaces(), vec![] as Vec<&str>);
+		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec![] as Vec<&str>);
 		assert_eq!(fqn.type_name(), "Vpc");
 	}
 
@@ -41,7 +52,7 @@ mod tests {
 	fn test_fqn2() {
 		let fqn = FQN("@winglang/sdk.cloud.Bucket".to_string());
 		assert_eq!(fqn.assembly_name(), "@winglang/sdk");
-		assert_eq!(fqn.namespaces(), vec!["cloud"]);
+		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["cloud"]);
 		assert_eq!(fqn.type_name(), "Bucket");
 	}
 
@@ -49,7 +60,7 @@ mod tests {
 	fn test_fqn3() {
 		let fqn = FQN("my_lib.ns1.ns2.MyResource".to_string());
 		assert_eq!(fqn.assembly_name(), "my_lib");
-		assert_eq!(fqn.namespaces(), vec!["ns1", "ns2"]);
+		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["ns1", "ns2"]);
 		assert_eq!(fqn.type_name(), "MyResource");
 	}
 }
