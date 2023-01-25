@@ -16,6 +16,7 @@ test("create a bucket", async () => {
     path: "root/my_bucket",
     props: {
       public: false,
+      initialObjects: {},
     },
     type: "wingsdk.cloud.Bucket",
   });
@@ -227,4 +228,29 @@ test("bucket has display title and description properties", async () => {
       },
     },
   });
+});
+
+test("can add object in preflight", async () => {
+  // GIVEN
+  const KEY = "greeting.txt";
+  const VALUE = "Hello world!";
+
+  const app = new SimApp();
+  const bucket = new cloud.Bucket(app, "my_bucket");
+  bucket.addObject(KEY, VALUE);
+
+  const s = await app.startSimulator();
+  const client = s.getResource("/my_bucket") as cloud.IBucketClient;
+
+  // WHEN
+  await client.get(KEY);
+  const getResponse = await client.get("greeting.txt");
+  const listResponse = await client.list();
+
+  // THEN
+  await s.stop();
+
+  expect(getResponse).toEqual(VALUE);
+  expect(listResponse).toEqual([KEY]);
+  expect(listMessages(s)).toMatchSnapshot();
 });

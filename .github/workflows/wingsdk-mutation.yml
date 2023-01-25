@@ -23,34 +23,52 @@ jobs:
   mutate:
     runs-on: ubuntu-latest
     steps:
+      - id: token-check
+        name: Check if mutation token is set
+        working-directory: ${{ github.workspace }}
+        run: echo "HAS_TOKEN=${{ secrets.MUTATION_TOKEN && 'true' || 'false' }}" >> $GITHUB_OUTPUT
+      - name: Token notice
+        if: steps.token-check.outputs.HAS_TOKEN == 'false'
+        working-directory: ${{ github.workspace }}
+        run: |
+          echo "Add a MUTATION_TOKEN repository secret with a personal access token to enable self mutation.
+          It requires read/write repo permissions." >> $GITHUB_STEP_SUMMARY
       - name: Checkout
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+          token: ${{ secrets.MUTATION_TOKEN }}
       - name: Setup Node
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
         uses: actions/setup-node@v3
         with:
           node-version: ${{ env.NODEJS_VERSION }}
       - name: Build transitive dependency (wing-api-checker)
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npm ci && npm run build
         working-directory: apps/wing-api-checker
       - name: Build transitive dependency (jsii-docgen)
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npm ci && npm run build
         working-directory: apps/jsii-docgen
       - name: Install dependencies
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npm ci
       - name: build
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
         run: npx projen build
       - id: self_mutation
+        if: steps.token-check.outputs.HAS_TOKEN == 'true'
         name: Find mutations
         run: |-
           git add .
           git diff --staged --patch --exit-code > /dev/null || echo "::set-output name=self_mutation_happened::true"
       - name: Push changes
-        if: steps.self_mutation.outputs.self_mutation_happened
+        if: steps.token-check.outputs.HAS_TOKEN == 'true' && steps.self_mutation.outputs.self_mutation_happened
         run: |-
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
+          git config user.name "mutator"
+          git config user.email "mutator@winglang.io"
           git commit -s -m "chore: self mutation"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}

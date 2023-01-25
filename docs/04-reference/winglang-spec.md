@@ -1,14 +1,14 @@
 ---
-title: Language
+title: Language Spec
 id: spec
 description: The Wing Language Specification
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
-:::tip Feedback?
+:::caution Not fully implemented yet
 
-📝 You're more than welcome to [open a new discussion][disco] or just go ahead
-and submit a PR against [this document][this].
+This document is a *specification* of the programming language, and many features
+are still not implemented (see [project board](https://github.com/orgs/winglang/projects/1)).
  
 :::
 
@@ -16,10 +16,10 @@ and submit a PR against [this document][this].
 
 ### 0.1 Motivation
 
-The wing programming language (aka winglang[<sup>RFC</sup>][rfc]) is a general
+The Wing Programming Language (aka winglang[<sup>RFC</sup>](/contributors/rfcs/2022-05-28-winglang-reqs)) is a general
 purpose programming language designed for building applications for the cloud.
 
-What makes wing special? Traditional programming languages are designed around
+What makes Wing special? Traditional programming languages are designed around
 the premise of telling a single machine what to do. The output of the compiler
 is a program that can be executed on that machine. But cloud applications are
 distributed systems that consist of code running across multiple machines and
@@ -562,7 +562,7 @@ Wing recommends the following formatting and naming conventions:
 - Class, struct, interface, and resource names should be TitleCased
 - Members of classes, interfaces, and resources cannot share the same TitleCased
   representation as the declaring expression itself.
-- Parentheses are optional in expressions. Any wing expression can be surrounded
+- Parentheses are optional in expressions. Any Wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
   an if/for/while statement may be surrounded by parentheses.
 
@@ -608,7 +608,7 @@ the entrypoint of the program. Root block scope is considered special and
 compiler generates special instructions to properly assign all resources to
 their respective scopes recursively down the constructs tree based on entry.
 
-Entrypoint is always a wing source with an extension of `.w`. Within this entry
+Entrypoint is always a Wing source with an extension of `.w`. Within this entry
 point, a root resource is made available for all subsequent resources that are
 initialized and instantiated. Type of the root resource is determined by the
 target being used by the compiler. The root resource might be of type `App` in
@@ -2000,6 +2000,5 @@ Inspiration:
 - <https://github.com/vlang/v>
 
 [top]: #0-preface
-[rfc]: https://github.com/winglang/wing/blob/main/docs/05-rfcs/winglang-reqs.md
-[this]: https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md
-[disco]: https://github.com/winglang/wing/discussions/new
+
+
