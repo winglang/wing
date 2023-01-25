@@ -134,16 +134,6 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 	}
 
-	fn fqn_to_type_name(&self, fqn: &str) -> String {
-		let parts = fqn.split('.').collect::<Vec<&str>>();
-		let assembly_name = parts[0];
-		let namespace_name = parts[1];
-		fqn
-			.strip_prefix(format!("{}.{}.", assembly_name, namespace_name).as_str())
-			.unwrap()
-			.to_string()
-	}
-
 	fn strip_assembly_from_fqn(fqn: &str) -> String {
 		let parts = fqn.split('.').collect::<Vec<&str>>();
 		let assembly_name = parts[0];
@@ -218,7 +208,8 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn import_interface(&mut self, jsii_interface: wingii::jsii::InterfaceType, namespace_name: &str) {
-		let type_name = self.fqn_to_type_name(&jsii_interface.fqn);
+		let jsii_interface_fqn = FQN::from(&jsii_interface.fqn);
+		let type_name = jsii_interface_fqn.type_name();
 		match jsii_interface.datatype {
 			Some(true) => {
 				// If this datatype has methods something is unexpected in this JSII type definition, skip it.
@@ -412,7 +403,8 @@ impl<'a> JsiiImporter<'a> {
 
 	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType, namespace_name: &str) {
 		let mut is_resource = false;
-		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
+		let jsii_class_fqn = FQN::from(&jsii_class.fqn);
+		let type_name = jsii_class_fqn.type_name();
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
