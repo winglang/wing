@@ -20,6 +20,8 @@ export interface FunctionSchema extends BaseResourceSchema {
     readonly sourceCodeLanguage: string;
     /** A map of environment variables to run the function with. */
     readonly environmentVariables: Record<string, string>;
+    /** The maximum amount of time the function can run, in milliseconds. */
+    readonly timeout: number;
   };
 }
 
@@ -60,7 +62,12 @@ export interface TopicSubscriber {
 /** Schema for cloud.Bucket */
 export interface BucketSchema extends BaseResourceSchema {
   readonly type: typeof BUCKET_TYPE;
-  readonly props: {};
+  readonly props: {
+    /** Whether the bucket should be publicly accessible. */
+    readonly public: boolean;
+    /** The initial objects uploaded to the bucket. */
+    readonly initialObjects: Record<string, string>;
+  };
 }
 
 /** Schema for cloud.Logger */
