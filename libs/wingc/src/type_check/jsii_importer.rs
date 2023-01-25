@@ -7,7 +7,7 @@ use crate::{
 		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
+	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -413,6 +413,11 @@ impl<'a> JsiiImporter<'a> {
 	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType, namespace_name: &str) {
 		let mut is_resource = false;
 		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
+		let phase = if jsii_class.assembly == WINGSDK_ASSEMBLY_NAME && namespace_name == WINGSDK_STD_MODULE {
+			Phase::Independent
+		} else {
+			Phase::Preflight
+		};
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
@@ -543,7 +548,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Add methods and properties to the class environment
-		self.add_members_to_class_env(&jsii_class, is_resource, Phase::Preflight, &mut class_env, new_type);
+		self.add_members_to_class_env(&jsii_class, is_resource, phase, &mut class_env, new_type);
 		if is_resource {
 			// Look for a client interface for this resource
 			let client_interface = jsii_class
