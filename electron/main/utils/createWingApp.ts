@@ -1,4 +1,5 @@
 import { ConsoleLogger } from "../consoleLogger.js";
+import { Status } from "../types.js";
 
 import { createSimulator } from "./createSimulator.js";
 import { runCompile } from "./runCompile.js";
@@ -6,14 +7,14 @@ import { runCompile } from "./runCompile.js";
 export interface CreateWingAppProps {
   inputFile: string;
   consoleLogger: ConsoleLogger;
-  onLoading: (loading: boolean) => void;
-  onError: (error: unknown) => void;
+  onSimulatorStatusChange: (status: Status, data?: unknown) => void;
+  onCompilerStatusChange: (status: Status, data?: unknown) => void;
 }
 
 export const createWingApp = async ({
   inputFile,
-  onLoading,
-  onError,
+  onSimulatorStatusChange,
+  onCompilerStatusChange,
   consoleLogger,
 }: CreateWingAppProps): Promise<ReturnType<typeof createSimulator>> => {
   return new Promise<ReturnType<typeof createSimulator>>(
@@ -22,33 +23,29 @@ export const createWingApp = async ({
       if (inputFile.endsWith(".w")) {
         runCompile({
           wingSrcFile: inputFile,
-          onLoading,
-          onError,
-          consoleLogger,
-          onSuccess: (simFileName) => {
-            if (simulator) {
-              return;
+          onCompilerStatusChange: (status, data) => {
+            onCompilerStatusChange(status, data);
+            if (status === "loading") {
+              onSimulatorStatusChange("loading");
             }
-            simulator = createSimulator({
-              simulator: { simfile: simFileName },
-              onError(error) {
-                consoleLogger.error(error);
-                onError(error);
-              },
-              onLoading,
-            });
-            resolve(simulator);
+            if (status === "success") {
+              if (simulator) {
+                return;
+              }
+              simulator = createSimulator({
+                simulatorProps: { simfile: data as string },
+                onSimulatorStatusChange,
+              });
+              resolve(simulator);
+            }
           },
+          consoleLogger,
         });
       } else {
         resolve(
           createSimulator({
-            simulator: { simfile: inputFile },
-            onError(error) {
-              consoleLogger.error(error);
-              onError(error);
-            },
-            onLoading,
+            simulatorProps: { simfile: inputFile },
+            onSimulatorStatusChange,
           }),
         );
       }

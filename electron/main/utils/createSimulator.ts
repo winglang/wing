@@ -3,6 +3,8 @@ import * as path from "node:path";
 
 import { Simulator, SimulatorProps } from "@winglang/sdk/lib/testing";
 
+import { Status } from "../types.js";
+
 import { NodeDisplay } from "./constructTreeNodeMap.js";
 
 const TREE_FILE_PATH = "tree.json";
@@ -47,31 +49,32 @@ export interface ConstructInfo {
 }
 
 export interface CreateSimulatorProps {
-  simulator: SimulatorProps;
-  onError: (error: unknown) => void;
-  onLoading: (isLoading: boolean) => void;
+  simulatorProps: SimulatorProps;
+  onSimulatorStatusChange: (status: Status, data?: unknown) => void;
 }
 
 // Creates a helper around the simulator that only returns the simulator instance
 // when it's ready. The simulator is not ready to be used if it's starting,
 // stopping or reloading.
-export function createSimulator(props: CreateSimulatorProps) {
+export function createSimulator({
+  simulatorProps,
+  onSimulatorStatusChange,
+}: CreateSimulatorProps) {
   const reportPromise = <T>(callback: () => Promise<T>) => {
     return async () => {
       try {
-        props.onLoading(true);
+        onSimulatorStatusChange("loading");
         const res = await callback();
-        props.onLoading(false);
+        onSimulatorStatusChange("success");
         return res;
       } catch (error) {
-        props.onError?.(error);
-        props.onLoading(false);
+        onSimulatorStatusChange("error", error);
         throw error;
       }
     };
   };
 
-  const simulator = new Simulator(props.simulator);
+  const simulator = new Simulator(simulatorProps);
   let currentProcess: Promise<void> | undefined;
   const start = reportPromise(async () => {
     await currentProcess;
@@ -96,11 +99,11 @@ export function createSimulator(props: CreateSimulatorProps) {
     return simulator;
   };
   const getSimFile = () => {
-    return props.simulator.simfile;
+    return simulatorProps.simfile;
   };
 
   const treeJsonFilename = path.resolve(
-    path.dirname(props.simulator.simfile),
+    path.dirname(simulatorProps.simfile),
     TREE_FILE_PATH,
   );
   const tree = async () => {

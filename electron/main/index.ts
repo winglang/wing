@@ -15,6 +15,7 @@ import { ConsoleLogger, LogEntry } from "./consoleLogger.js";
 import { WING_PROTOCOL_SCHEME } from "./protocol.js";
 import { mergeAppRouters } from "./router/index.js";
 import { SegmentAnalytics } from "./segmentAnalytics.js";
+import { Status } from "./types.js";
 import { createWingApp } from "./utils/createWingApp.js";
 import { watchSimulatorFile } from "./utils/watchSimulatorFile.js";
 
@@ -96,8 +97,8 @@ function createWindowManager() {
       }
 
       let newWindow: BrowserWindow | undefined;
-      let isLoading = false;
-      let isError = false;
+      let simulatorStatus: Status = "idle";
+      let compilerStatus: Status = "idle";
 
       const consoleLogger: ConsoleLogger = {
         messages: new Array<LogEntry>(),
@@ -137,23 +138,21 @@ function createWindowManager() {
         },
       };
 
-      const onLoading = (loading: boolean) => {
-        isError = false;
-        isLoading = loading;
-        log.verbose("onLoading", loading);
-        // TODO: Use TRPC websockets.
-        newWindow?.webContents.send("app.isLoading", loading);
+      const onSimulatorStatusChange = (status: Status) => {
+        simulatorStatus = status;
+        log.verbose("simulatorStatus", { status });
+        // TODO: user TRPC websockets.
+        newWindow?.webContents.send("app.simulatorStatusChange", status);
       };
 
-      const onError = (error: unknown) => {
-        isError = true;
-        log.verbose("onError", { error });
-        // TODO: Use TRPC websockets.
-        newWindow?.webContents.send("app.isError", true);
+      const onCompilerStatusChange = (status: Status) => {
+        compilerStatus = status;
+        log.verbose("compilerStatus", { status });
+        // TODO: user TRPC websockets.
+        newWindow?.webContents.send("app.compilerStatusChange", status);
       };
 
-      const notifyChange = () => {
-        isError = false;
+      const onSimulatorReloaded = () => {
         log.verbose("notifyChange");
 
         // Clear the logs.
@@ -165,8 +164,8 @@ function createWindowManager() {
 
       const simulatorPromise = createWingApp({
         inputFile: simfile,
-        onLoading,
-        onError,
+        onSimulatorStatusChange,
+        onCompilerStatusChange,
         consoleLogger,
       });
 
@@ -193,8 +192,8 @@ function createWindowManager() {
             },
             appStatus() {
               return {
-                isLoading,
-                isError,
+                simulatorStatus,
+                compilerStatus,
               };
             },
           };
@@ -252,10 +251,13 @@ function createWindowManager() {
       const simulatorFileWatcher = watchSimulatorFile({
         simulator: simulatorInstance,
         simulatorFile: simulatorPromiseResolved.getSimFile(),
-        onError,
-        onLoading,
+        onSimulatorStatusChange,
         consoleLogger,
-        notifyChange,
+        onSimulatorReloaded,
+        compilationStatus: () => {
+          log.info("Compilation status " + compilerStatus, "simulator");
+          return compilerStatus;
+        },
       });
 
       // The renderer process will send a message asking

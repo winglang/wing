@@ -4,6 +4,7 @@ import * as os from "node:os";
 import path from "node:path";
 
 import { ConsoleLogger } from "../consoleLogger.js";
+import { Status } from "../types.js";
 
 import { compile } from "./compile.js";
 
@@ -13,16 +14,12 @@ const chokidar = require("chokidar");
 
 export interface CreateCompileRunnerProps {
   wingSrcFile: string;
-  onLoading: (loading: boolean) => void;
-  onError: (error: unknown) => void;
-  onSuccess: (simFileName: string) => void;
+  onCompilerStatusChange: (status: Status, data?: unknown) => void;
   consoleLogger: ConsoleLogger;
 }
 export const runCompile = ({
   wingSrcFile,
-  onLoading,
-  onError,
-  onSuccess,
+  onCompilerStatusChange,
   consoleLogger,
 }: CreateCompileRunnerProps) => {
   const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "wing-app-target-dir-"));
@@ -32,14 +29,14 @@ export const runCompile = ({
 
   const runCompile = async () => {
     try {
-      onLoading(true);
+      onCompilerStatusChange("loading");
       const status = await compile({
         wingSrcFile,
         outDir: tmpDir,
         consoleLogger,
       });
       if (status === "error") {
-        onError("Compilation failed");
+        onCompilerStatusChange("error", "Compilation failed");
       } else {
         try {
           await access(compiledSimFile);
@@ -50,10 +47,10 @@ export const runCompile = ({
             }`,
             "compiler",
           );
-          onError("Compilation failed");
+          onCompilerStatusChange("error", "Compilation failed");
           return;
         }
-        onSuccess(compiledSimFile);
+        onCompilerStatusChange("success", compiledSimFile);
       }
     } catch (error) {
       consoleLogger.error(
@@ -62,7 +59,7 @@ export const runCompile = ({
         }`,
         "compiler",
       );
-      onError("Compilation failed");
+      onCompilerStatusChange("error", "Compilation failed");
     }
   };
 
@@ -88,7 +85,10 @@ export const runCompile = ({
         `Wing application src directory has been deleted ${wingSrcDir}`,
         "compiler",
       );
-      onError("Wing application src directory has been deleted");
+      onCompilerStatusChange(
+        "error",
+        "Wing application src directory has been deleted",
+      );
       // todo [sa] what should we do here?
     });
 };

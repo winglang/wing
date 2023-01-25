@@ -1,6 +1,7 @@
 import { initTRPC } from "@trpc/server";
 
 import { LogEntry } from "../consoleLogger.js";
+import { Status } from "../types.js";
 import { Simulator } from "../wingsdk.js";
 
 import { ConstructTree } from "./createSimulator.js";
@@ -10,8 +11,8 @@ export interface RouterContext {
   tree: () => Promise<ConstructTree>;
   logs: () => LogEntry[];
   appStatus: () => {
-    isLoading: boolean;
-    isError: boolean;
+    simulatorStatus: Status;
+    compilerStatus: Status;
   };
 }
 

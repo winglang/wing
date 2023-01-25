@@ -9,8 +9,12 @@ import { useIpcEventListener } from "./utils/useIpcEventListener.js";
 export interface AppProps {}
 
 export const App = ({}: AppProps) => {
-  const [isLoading, setIsLoading] = useState<boolean>();
-  const [isError, setIsError] = useState<boolean>();
+  const [simulatorStatus, setSimulatorStatus] = useState<
+    "loading" | "error" | "success" | "idle"
+  >("idle");
+  const [compilerStatus, setCompilerStatus] = useState<
+    "loading" | "error" | "success" | "idle"
+  >("idle");
   const trpcContext = trpc.useContext();
 
   trpc["app.invalidateQueries"].useSubscription(undefined, {
@@ -23,8 +27,8 @@ export const App = ({}: AppProps) => {
     trpcContext.client["app.status"]
       .query()
       .then((data) => {
-        setIsLoading(isLoading ?? data.isLoading);
-        setIsError(isError ?? data.isError);
+        setSimulatorStatus(data.simulatorStatus);
+        setCompilerStatus(data.compilerStatus);
       })
       .catch((error) => console.log(error));
   }, []);
@@ -46,25 +50,27 @@ export const App = ({}: AppProps) => {
   );
 
   // TODO: Use TRPC directly.
-  useIpcEventListener("app.isError", (e: IpcRendererEvent, error) => {
-    setIsError(true);
-    setIsLoading(false);
-  });
+  useIpcEventListener(
+    "app.compilerStatusChange",
+    (e: IpcRendererEvent, data) => {
+      setCompilerStatus(data);
+    },
+  );
 
   // TODO: Use TRPC directly.
   useIpcEventListener(
-    "app.isLoading",
-    (e: IpcRendererEvent, isLoading: boolean) => {
-      if (isLoading) {
-        setIsError(false);
-      }
-      setIsLoading(isLoading);
+    "app.simulatorStatusChange",
+    (e: IpcRendererEvent, data) => {
+      setSimulatorStatus(data);
     },
   );
 
   return (
     <NotificationsProvider>
-      <VscodeLayout isLoading={isLoading} isError={isError} />
+      <VscodeLayout
+        simulatorStatus={simulatorStatus}
+        compilerStatus={compilerStatus}
+      />
     </NotificationsProvider>
   );
 };

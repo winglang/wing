@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { LogLevel } from "../../electron/main/consoleLogger.js";
 import { ExplorerItem } from "../../electron/main/router/app.js";
@@ -28,13 +28,16 @@ import { EmptyConstructView } from "./resource-views/EmptyConstructView.jsx";
 import { ResourceView } from "./resource-views/ResourceView.js";
 
 export interface VscodeLayoutProps {
-  isLoading?: boolean;
-  isError?: boolean;
+  simulatorStatus: "loading" | "error" | "success" | "idle";
+  compilerStatus: "loading" | "error" | "success" | "idle";
 }
 
 const NewIssueUrl = "https://github.com/winglang/wing/issues/new/choose";
 
-export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
+export const VscodeLayout = ({
+  simulatorStatus,
+  compilerStatus,
+}: VscodeLayoutProps) => {
   const [showBanner, setShowBanner] = useState(true);
   const treeMenu = useTreeMenuItems();
 
@@ -133,6 +136,22 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
     },
   );
 
+  const isLoading = useMemo(() => {
+    return (
+      simulatorStatus === "loading" ||
+      compilerStatus === "loading" ||
+      explorerTree.isLoading
+    );
+  }, [simulatorStatus, compilerStatus, explorerTree]);
+
+  const isError = useMemo(() => {
+    return (
+      simulatorStatus === "error" ||
+      compilerStatus === "error" ||
+      explorerTree.isError
+    );
+  }, [simulatorStatus, compilerStatus, explorerTree]);
+
   return (
     <div className="h-full flex flex-col bg-slate-50 select-none">
       {showBanner && (
@@ -147,12 +166,8 @@ export const VscodeLayout = ({ isError, isLoading }: VscodeLayoutProps) => {
       )}
 
       <div className="flex-1 flex relative">
-        {(isLoading || explorerTree.isLoading) && !isError && (
-          <Loader text={"Compiling..."} />
-        )}
-        {(isError || explorerTree.isError) && (
-          <Error text={"Oooops :( Compiler error..."} />
-        )}
+        {isLoading && !isError && <Loader text={"Compiling..."} />}
+        {isError && <Error text={"Oooops :( Compiler error..."} />}
         <RightResizableWidget className="h-full flex flex-col w-80 min-w-[10rem] min-h-[15rem] border-r border-slate-200">
           <TreeMenu
             title="Explorer"
