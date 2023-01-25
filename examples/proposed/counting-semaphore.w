@@ -18,7 +18,7 @@ resource CountingSemaphore {
   // some stable unique instance id is wanted in the inflight context
   // so that a reousce instance can be properly claimed and later released
   // when used in conjunction with a key-value store =
-  inflight try_acquire(): bool {
+  public inflight try_acquire(): bool {
     if this.is_at_capacity() {
       return false;
     }
@@ -34,7 +34,7 @@ resource CountingSemaphore {
   // probably key-value store is wanted,
   // so that a specific resource instance can be released
   // rather than naively releasing a count
-  inflight release() {
+  public inflight release() {
     if this._counter.peek() <= 0 {
       return;
     }
@@ -42,7 +42,33 @@ resource CountingSemaphore {
     this._counter.dec();
   }
 
-  inflight is_at_capacity(): bool {
+  public inflight is_at_capacity(): bool {
     return this._counter.peek() >= this.limit;
   }
 }
+
+let resource_1 = new CountingSemaphore({ availableResources: 2 });
+let resource_2 = new CountingSemaphore({ availableResources: 3 });
+
+let queue = new cloud.Queue();
+/**
+ * An example handler to work with two shared resources.
+ */
+queue.on_message(inflight (message: str) => {
+  let is_resource_1_acquired = resource_1.try_acquire();
+  if !is_resource_1_acquired {
+    // brutally error out to re-enqueue
+    throw("Failed to acquire resource 1");
+  }
+  let is_resource_2_acquired = resource_2.try_acquire();
+  if !is_resource_2_acquired {
+    // brutally error out to re-enqueue
+    throw("Failed to acquire resource 2");
+  }
+
+  // real work
+  print("all resources are acquired, processing message: ${message}");
+
+  resource_1.release();
+  resource_2.release();
+});
