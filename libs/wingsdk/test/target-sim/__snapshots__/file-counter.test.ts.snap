@@ -38,6 +38,7 @@ Object {
           },
           "sourceCodeFile": "assets/Queue-OnMessage-401ee792/index.js",
           "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
         },
         "type": "wingsdk.cloud.Function",
       },
