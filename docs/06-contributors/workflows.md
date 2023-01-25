@@ -18,6 +18,8 @@ environment:
   * Only needed for integration tests - make sure to do the setup part to create credentials
 * [Terraform CLI]
   * Only needed for integration tests
+* [Docker] or [emscripten]
+  * Only needed for to build the grammar as WASM for the web-based playground
 
 Installation:
 
@@ -42,6 +44,8 @@ If you wish to install it manually, you may do so by running `scripts/setup_wasi
 [AWS CLI]: https://aws.amazon.com/cli/
 [Terraform CLI]: https://learn.hashicorp.com/terraform/getting-started/install.html
 [volta]: https://volta.sh
+[Docker]: https://docs.docker.com/get-docker/
+[emscripten]: https://emscripten.org/docs/getting_started/downloads.html
 
 ## Development iteration
 
@@ -67,7 +71,7 @@ This command runs the full Wing CLI with the given arguments. Nx will ensure the
 
 ## Compiler
 
-The following command runs the cargo tests, currently just ensure the valid examples compile and the
+The following command runs the cargo tests, currently just ensures the valid examples compile and the
 invalid ones do not.
 
 ```sh
@@ -75,38 +79,41 @@ cd libs/wingc
 npx nx test
 ```
 
-The following command runs `wingc` on a file. This performs all the compilation steps, except th last one: running the
-generated intermediate preflight javascript. For those familiar with the CDK, it doesn't run the synth command in the end.
+The following command runs `wingc` on a file. This performs all the compilation steps. Run from the root.
 
 ```sh
-npx nx dev -- <path to .w file>
+npx nx wing -- compile <path to a .w file (full path, or relative to the location of the apps/wing folder)>
 ```
 
+You can find the compilation artifacts in the apps/wing/targets folder
+
 ## Grammar
+
+After making changes to grammar.js, run:
 
 ```sh
 cd libs/tree-sitter-wing
 npx tree-sitter-cli generate
 ```
 
-After making changes to grammar.js
+To run the grammar tests (that are located in the `test` folder):
 
 ```sh
 npx tree-sitter-cli test
 ```
 
-To run the grammar tests (in the `test` folder)
+To build the grammar as WASM for the web-based playground. Leave off `--docker` if you have emscripten
+setup locally:
 
 ```sh
 npx tree-sitter-cli build-wasm --docker
 ```
 
-Builds the grammar as WASM for the web-based playground. Leave off `--docker` if you have emscripten
-setup locally.
+To use the wasm grammar to run a web-based playground where you can explore the AST and test out
+highlight queries, run:
 
 ```sh
 npx tree-sitter-cli playground
 ```
 
-Uses the wasm grammar to run a web-based playground where you can explore the AST and test out
-highlight queries. Make sure to also run `build-wasm` before each time the grammar changes.
+Make sure to also run `build-wasm` before each time the grammar changes
