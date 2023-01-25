@@ -1,7 +1,6 @@
 import { DataGoogleClientConfig } from "@cdktf/provider-google/lib/data-google-client-config";
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
 import { IConstruct } from "constructs";
-import { Polycons } from "polycons";
 import { AppProps as CdktfAppProps, CdktfApp, IApp } from "../core";
 import { PolyconFactory } from "./factory";
 
@@ -39,8 +38,10 @@ export class App extends CdktfApp implements IApp {
   private readonly clientConfig: DataGoogleClientConfig;
 
   constructor(props: AppProps) {
-    super(props);
-    Polycons.register(this, props.customFactory ?? new PolyconFactory());
+    super({
+      ...props,
+      customFactory: props.customFactory ?? new PolyconFactory(),
+    });
 
     const projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
     if (!projectId) {

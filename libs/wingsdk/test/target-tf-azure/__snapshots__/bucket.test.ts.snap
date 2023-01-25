@@ -4,25 +4,25 @@ exports[`bucket is public 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_mybucket_ResourceGroup_C1D7AF27\\": {
+      \\"cdktfstack_wingapp_mybucket_ResourceGroup_4BB391A5\\": {
         \\"location\\": \\"East US\\",
-        \\"name\\": \\"my_bucket-c8045fcc\\"
+        \\"name\\": \\"my_bucket-c870ab9d\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_mybucket_StorageAccount_A0150B8A\\": {
+      \\"cdktfstack_wingapp_mybucket_StorageAccount_D784A3B3\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.location}\\",
-        \\"name\\": \\"mybucketc8045fcc\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.name}\\"
+        \\"location\\": \\"\${azurerm_resource_group.cdktfstack_wingapp_mybucket_ResourceGroup_4BB391A5.location}\\",
+        \\"name\\": \\"mybucketc870ab9d\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.cdktfstack_wingapp_mybucket_ResourceGroup_4BB391A5.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_mybucket_Bucket_10512A98\\": {
+      \\"cdktfstack_wingapp_mybucket_Bucket_BFFD834B\\": {
         \\"container_access_type\\": \\"public\\",
-        \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\"
+        \\"name\\": \\"my-bucket-c870ab9d\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.cdktfstack_wingapp_mybucket_StorageAccount_D784A3B3.name}\\"
       }
     }
   }
@@ -33,95 +33,105 @@ exports[`bucket is public 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "root": Object {
+      "cdktf-stack": Object {
         "children": Object {
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "azure": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-              "version": "5.0.1",
-            },
-            "id": "azure",
-            "path": "root/azure",
-          },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.1",
             },
             "id": "backend",
-            "path": "root/backend",
+            "path": "cdktf-stack/backend",
           },
-          "my_bucket": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
+          "wing-app": Object {
             "children": Object {
-              "Bucket": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                  "version": "5.0.1",
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
                 },
-                "id": "Bucket",
-                "path": "root/my_bucket/Bucket",
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "cdktf-stack/wing-app/WingLogger",
               },
-              "ResourceGroup": Object {
+              "azure": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
                   "version": "5.0.1",
                 },
-                "id": "ResourceGroup",
-                "path": "root/my_bucket/ResourceGroup",
+                "id": "azure",
+                "path": "cdktf-stack/wing-app/azure",
               },
-              "StorageAccount": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.1",
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
                 },
-                "id": "StorageAccount",
-                "path": "root/my_bucket/StorageAccount",
+                "children": Object {
+                  "Bucket": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
+                      "version": "5.0.1",
+                    },
+                    "id": "Bucket",
+                    "path": "cdktf-stack/wing-app/my_bucket/Bucket",
+                  },
+                  "ResourceGroup": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                      "version": "5.0.1",
+                    },
+                    "id": "ResourceGroup",
+                    "path": "cdktf-stack/wing-app/my_bucket/ResourceGroup",
+                  },
+                  "StorageAccount": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
+                      "version": "5.0.1",
+                    },
+                    "id": "StorageAccount",
+                    "path": "cdktf-stack/wing-app/my_bucket/StorageAccount",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "cdktf-stack/wing-app/my_bucket",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "display": Object {
-              "description": "A cloud object store",
-              "title": "Bucket",
-            },
-            "id": "my_bucket",
-            "path": "root/my_bucket",
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.1",
         },
-        "id": "root",
-        "path": "root",
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
       },
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "id": "App",
     "path": "",
@@ -134,25 +144,25 @@ exports[`bucket name valid 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_TheUncannyBucket_ResourceGroup_056902E8\\": {
+      \\"cdktfstack_wingapp_TheUncannyBucket_ResourceGroup_DF5E7978\\": {
         \\"location\\": \\"East US\\",
-        \\"name\\": \\"The-Uncanny-Bucket-c8ac4720\\"
+        \\"name\\": \\"The-Uncanny-Bucket-c850c9f6\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_TheUncannyBucket_StorageAccount_A894AF8E\\": {
+      \\"cdktfstack_wingapp_TheUncannyBucket_StorageAccount_8D375857\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_TheUncannyBucket_ResourceGroup_056902E8.location}\\",
-        \\"name\\": \\"theuncannybucketc8ac4720\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_TheUncannyBucket_ResourceGroup_056902E8.name}\\"
+        \\"location\\": \\"\${azurerm_resource_group.cdktfstack_wingapp_TheUncannyBucket_ResourceGroup_DF5E7978.location}\\",
+        \\"name\\": \\"theuncannybucketc850c9f6\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.cdktfstack_wingapp_TheUncannyBucket_ResourceGroup_DF5E7978.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_TheUncannyBucket_DDA021FB\\": {
+      \\"cdktfstack_wingapp_TheUncannyBucket_4A90C2DF\\": {
         \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"the-uncanny-bucket-c8ac4720\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_TheUncannyBucket_StorageAccount_A894AF8E.name}\\"
+        \\"name\\": \\"the-uncanny-bucket-c850c9f6\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.cdktfstack_wingapp_TheUncannyBucket_StorageAccount_8D375857.name}\\"
       }
     }
   }
@@ -163,95 +173,105 @@ exports[`bucket name valid 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "root": Object {
+      "cdktf-stack": Object {
         "children": Object {
-          "The-Uncanny-Bucket": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "children": Object {
-              "Bucket": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                  "version": "5.0.1",
-                },
-                "id": "Bucket",
-                "path": "root/The-Uncanny-Bucket/Bucket",
-              },
-              "ResourceGroup": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
-                  "version": "5.0.1",
-                },
-                "id": "ResourceGroup",
-                "path": "root/The-Uncanny-Bucket/ResourceGroup",
-              },
-              "StorageAccount": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.1",
-                },
-                "id": "StorageAccount",
-                "path": "root/The-Uncanny-Bucket/StorageAccount",
-              },
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud object store",
-              "title": "Bucket",
-            },
-            "id": "The-Uncanny-Bucket",
-            "path": "root/The-Uncanny-Bucket",
-          },
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "azure": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-              "version": "5.0.1",
-            },
-            "id": "azure",
-            "path": "root/azure",
-          },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.1",
             },
             "id": "backend",
-            "path": "root/backend",
+            "path": "cdktf-stack/backend",
+          },
+          "wing-app": Object {
+            "children": Object {
+              "The-Uncanny-Bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Bucket": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
+                      "version": "5.0.1",
+                    },
+                    "id": "Bucket",
+                    "path": "cdktf-stack/wing-app/The-Uncanny-Bucket/Bucket",
+                  },
+                  "ResourceGroup": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                      "version": "5.0.1",
+                    },
+                    "id": "ResourceGroup",
+                    "path": "cdktf-stack/wing-app/The-Uncanny-Bucket/ResourceGroup",
+                  },
+                  "StorageAccount": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
+                      "version": "5.0.1",
+                    },
+                    "id": "StorageAccount",
+                    "path": "cdktf-stack/wing-app/The-Uncanny-Bucket/StorageAccount",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "The-Uncanny-Bucket",
+                "path": "cdktf-stack/wing-app/The-Uncanny-Bucket",
+              },
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "cdktf-stack/wing-app/WingLogger",
+              },
+              "azure": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
+                  "version": "5.0.1",
+                },
+                "id": "azure",
+                "path": "cdktf-stack/wing-app/azure",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.1",
         },
-        "id": "root",
-        "path": "root",
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
       },
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "id": "App",
     "path": "",
@@ -264,25 +284,25 @@ exports[`create a bucket 1`] = `
 "{
   \\"resource\\": {
     \\"azurerm_resource_group\\": {
-      \\"root_mybucket_ResourceGroup_C1D7AF27\\": {
+      \\"cdktfstack_wingapp_mybucket_ResourceGroup_4BB391A5\\": {
         \\"location\\": \\"East US\\",
-        \\"name\\": \\"my_bucket-c8045fcc\\"
+        \\"name\\": \\"my_bucket-c870ab9d\\"
       }
     },
     \\"azurerm_storage_account\\": {
-      \\"root_mybucket_StorageAccount_A0150B8A\\": {
+      \\"cdktfstack_wingapp_mybucket_StorageAccount_D784A3B3\\": {
         \\"account_replication_type\\": \\"LRS\\",
         \\"account_tier\\": \\"Standard\\",
-        \\"location\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.location}\\",
-        \\"name\\": \\"mybucketc8045fcc\\",
-        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.name}\\"
+        \\"location\\": \\"\${azurerm_resource_group.cdktfstack_wingapp_mybucket_ResourceGroup_4BB391A5.location}\\",
+        \\"name\\": \\"mybucketc870ab9d\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.cdktfstack_wingapp_mybucket_ResourceGroup_4BB391A5.name}\\"
       }
     },
     \\"azurerm_storage_container\\": {
-      \\"root_mybucket_Bucket_10512A98\\": {
+      \\"cdktfstack_wingapp_mybucket_Bucket_BFFD834B\\": {
         \\"container_access_type\\": \\"private\\",
-        \\"name\\": \\"my-bucket-c8045fcc\\",
-        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\"
+        \\"name\\": \\"my-bucket-c870ab9d\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.cdktfstack_wingapp_mybucket_StorageAccount_D784A3B3.name}\\"
       }
     }
   }
@@ -293,95 +313,105 @@ exports[`create a bucket 2`] = `
 Object {
   "tree": Object {
     "children": Object {
-      "root": Object {
+      "cdktf-stack": Object {
         "children": Object {
-          "WingLogger": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
-            "constructInfo": Object {
-              "fqn": "constructs.Construct",
-              "version": "10.1.228",
-            },
-            "display": Object {
-              "description": "A cloud logging facility",
-              "hidden": true,
-              "title": "Logger",
-            },
-            "id": "WingLogger",
-            "path": "root/WingLogger",
-          },
-          "azure": Object {
-            "constructInfo": Object {
-              "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
-              "version": "5.0.1",
-            },
-            "id": "azure",
-            "path": "root/azure",
-          },
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.0",
+              "version": "0.15.1",
             },
             "id": "backend",
-            "path": "root/backend",
+            "path": "cdktf-stack/backend",
           },
-          "my_bucket": Object {
-            "attributes": Object {
-              "wing:resource:connections": Array [],
-              "wing:resource:stateful": true,
-            },
+          "wing-app": Object {
             "children": Object {
-              "Bucket": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
-                  "version": "5.0.1",
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
                 },
-                "id": "Bucket",
-                "path": "root/my_bucket/Bucket",
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "cdktf-stack/wing-app/WingLogger",
               },
-              "ResourceGroup": Object {
+              "azure": Object {
                 "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                  "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
                   "version": "5.0.1",
                 },
-                "id": "ResourceGroup",
-                "path": "root/my_bucket/ResourceGroup",
+                "id": "azure",
+                "path": "cdktf-stack/wing-app/azure",
               },
-              "StorageAccount": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
-                  "version": "5.0.1",
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
                 },
-                "id": "StorageAccount",
-                "path": "root/my_bucket/StorageAccount",
+                "children": Object {
+                  "Bucket": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
+                      "version": "5.0.1",
+                    },
+                    "id": "Bucket",
+                    "path": "cdktf-stack/wing-app/my_bucket/Bucket",
+                  },
+                  "ResourceGroup": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                      "version": "5.0.1",
+                    },
+                    "id": "ResourceGroup",
+                    "path": "cdktf-stack/wing-app/my_bucket/ResourceGroup",
+                  },
+                  "StorageAccount": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
+                      "version": "5.0.1",
+                    },
+                    "id": "StorageAccount",
+                    "path": "cdktf-stack/wing-app/my_bucket/StorageAccount",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "cdktf-stack/wing-app/my_bucket",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "display": Object {
-              "description": "A cloud object store",
-              "title": "Bucket",
-            },
-            "id": "my_bucket",
-            "path": "root/my_bucket",
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
           },
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.0",
+          "version": "0.15.1",
         },
-        "id": "root",
-        "path": "root",
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
       },
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.0",
+      "version": "0.15.1",
     },
     "id": "App",
     "path": "",

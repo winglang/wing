@@ -1,10 +1,11 @@
 import { join } from "path";
 import * as cdktf from "cdktf";
 import { Construct, IConstruct } from "constructs";
-import { IPolyconFactory } from "polycons";
+import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
 import { Files } from "./files";
 import { synthesizeTree } from "./tree";
+import { Logger } from "../cloud";
 
 /**
  * A Wing application.
@@ -64,10 +65,17 @@ export class CdktfApp extends Construct implements IApp {
   private readonly cdktfStack: cdktf.TerraformStack;
   private readonly files: Files;
 
-  constructor(props: AppProps = {}) {
+  constructor(props: AppProps) {
     const outdir = props.outdir ?? ".";
     const cdktfApp = new cdktf.App({ outdir: join(outdir, "cdktf.out") });
     const cdktfStack = new cdktf.TerraformStack(cdktfApp, "cdktf-stack");
+
+    if (!props.customFactory) {
+      throw new Error(
+        "A custom factory must be passed to the base CdktfApp class."
+      );
+    }
+    Polycons.register(cdktfStack, props.customFactory);
 
     super(cdktfStack, "wing-app");
 
@@ -79,6 +87,9 @@ export class CdktfApp extends Construct implements IApp {
       app: this,
       stateFile: props.stateFile,
     });
+
+    // register a logger for this app.
+    Logger.register(this);
   }
 
   /**
