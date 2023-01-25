@@ -555,6 +555,7 @@ exports[`wing compile --target tf-aws capture_containers_of_resources.w > cdk.tf
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 60,
       },
     },
     "aws_s3_bucket": {
