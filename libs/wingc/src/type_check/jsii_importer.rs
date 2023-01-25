@@ -41,8 +41,7 @@ impl JsiiInterface for jsii::InterfaceType {
 pub struct JsiiImporter<'a> {
 	/// An interface to access the types in the JSII library loaded with wingii.
 	jsii_types: &'a wingii::type_system::TypeSystem,
-	/// The assembly to import from the JSII library. This is typically the name
-	/// of the NPM package.
+	/// The assembly to import from the JSII library. This is typically the name of the NPM package.
 	assembly_name: &'a str,
 	/// The wing module name to load. This is a namespace filter on the imported JSII assembly
 	/// for example "cloud" will only (publicly) import types prefixed with `cloud.` from the

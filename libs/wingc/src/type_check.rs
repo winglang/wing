@@ -1,5 +1,7 @@
+mod fqn;
 mod jsii_importer;
 pub mod symbol_env;
+
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
@@ -1715,8 +1717,8 @@ impl<'a> TypeChecker<'a> {
 		_alias: Option<String>,
 		statement_idx: usize,
 	) {
-		// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
 		let jsii_manifest_path =
+			// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
 			if module_name == WINGSDK_CLOUD_MODULE || module_name == WINGSDK_FS_MODULE || module_name == WINGSDK_STD_MODULE {
 				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
 				std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string())
