@@ -135,7 +135,7 @@ new cloud.Function(inflight (s: str): str => {
   let result = tasks.find_tasks_with("clean the dish");
   assert(result.len == 0);
 }) as "test:get, remove and find task";
-
+```
 
 ## Wing Console
 
