@@ -406,7 +406,7 @@ Variables can be reassigned to by adding the `var` modifier:
 
 ```ts
 // wing
-let var sum = 0;
+var sum = 0;
 for item in [1,2,3] {
   sum = sum + item;
 }
