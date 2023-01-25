@@ -98,3 +98,8 @@ To re-run individual tests, you can directly use the `jest` command -- for examp
 ```sh
 npx jest test/tf-aws/bucket.test.ts
 ```
+
+## 🧪 How do I set up my PRs to update snapshots?
+
+When PR checks run they may mutate the PR branch with updates to the snapshots or other things you may have missed.
+This behavior has to be enabled manually on forks. Create a repository secret called `MUTATION_TOKEN` with a personal access token that is able to read/write your repo.
