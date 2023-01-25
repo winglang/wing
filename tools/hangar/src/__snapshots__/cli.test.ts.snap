@@ -3565,6 +3565,7 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
         "runtime": "nodejs16.x",
         "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
         "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 60,
       },
     },
     "aws_s3_bucket": {
