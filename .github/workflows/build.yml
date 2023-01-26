@@ -136,7 +136,15 @@ jobs:
           targets: "test"
           all: true
           # Exclude E2E testing and native-dependent projects
-          args: "--exclude=hangar,wing-language-server,vscode-wing --configuration=release --output-style=stream --verbose"
+          args: "--exclude=hangar,wing-language-server,vscode-wing,winglang --configuration=release --output-style=stream --verbose"
+
+      # Separated to avoid memory issues
+      - name: Test wing CLI
+        uses: MansaGroup/nrwl-nx-action@v2
+        with:
+          targets: "test"
+          projects: "winglang"
+          args: "--configuration=release --output-style=stream --verbose"
 
       - name: Create NPM packages
         uses: MansaGroup/nrwl-nx-action@v2
