@@ -12,9 +12,12 @@ try {
   if (err.code === "MODULE_NOT_FOUND") {
     const { spawnSync } = require("child_process");
     const { env, execPath, execArgv, argv } = process;
-    env.NODE_OPTIONS = `${
-      env.NODE_OPTIONS || ""
-    } --experimental-wasi-unstable-preview1 --no-warnings`;
+    env.NODE_OPTIONS = [
+      ...new Set((env.NODE_OPTIONS ?? "").split(" "))
+        .add("--experimental-wasi-unstable-preview1")
+        .add("--no-warnings"),
+    ].join(" ");
+
     const { status } = spawnSync(execPath, execArgv.concat(argv.slice(1)), {
       env,
       stdio: "inherit",
