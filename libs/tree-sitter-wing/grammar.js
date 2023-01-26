@@ -425,10 +425,10 @@ module.exports = grammar({
     unary_expression: ($) => {
       /** @type {Array<[RuleOrLiteral, number]>} */
       const table = [
-        ["+", PREC.UNARY],
+        // -- is invalid but we'll let the compiler catch it to not mistake it for multiple `-`s
+        ["--", PREC.UNARY],
         ["-", PREC.UNARY],
         ["!", PREC.UNARY],
-        ['~', PREC.UNARY],
       ];
 
       return choice(

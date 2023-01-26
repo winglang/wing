@@ -361,7 +361,6 @@ impl Scope {
 
 #[derive(Debug)]
 pub enum UnaryOperator {
-	Plus,
 	Minus,
 	Not,
 }
