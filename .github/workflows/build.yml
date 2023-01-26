@@ -17,7 +17,7 @@ concurrency:
 env:
   NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
-  NODE_OPTIONS: "--max-old-space-size=6144"
+  NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
   RUST_VERSION: "1.66.0"
 
@@ -109,6 +109,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ env.RUST_VERSION }}
+          components: rustfmt
           override: true
 
       - name: Setup Cargo Cache
@@ -211,6 +212,7 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: ${{ env.RUST_VERSION }}
+          components: rustfmt
           override: true
 
       - name: Setup Cargo Cache
