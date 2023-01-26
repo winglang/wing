@@ -728,7 +728,7 @@ impl<'a> TypeChecker<'a> {
 
 				match op {
 					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
-					UnaryOperator::Minus | UnaryOperator::Plus => self.validate_type(_type, self.types.number(), unary_exp),
+					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
 				};
 
 				_type

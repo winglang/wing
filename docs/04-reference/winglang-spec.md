@@ -1772,7 +1772,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| +x, -x               | Unary plus, Unary minus                           |
+| -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
 | ==, !=, >, >=, <, <= | Comparisons, Identity, operators                  |
