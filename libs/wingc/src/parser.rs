@@ -789,6 +789,14 @@ impl Parser<'_> {
 					}
 				}
 
+				// Special case: empty {} (which is detected as map by tree-sitter) -
+				// if it is annotated as a set we should treat it as a set literal
+				if let Some(Type::Set(_)) = map_type {
+					if fields.is_empty() {
+						return self.build_set_literal(expression_node);
+					}
+				}
+
 				Ok(Expr::new(
 					ExprKind::MapLiteral {
 						fields,
@@ -797,24 +805,7 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
-			"set_literal" => {
-				let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
-				} else {
-					None
-				};
-
-				let mut items = Vec::new();
-				let mut cursor = expression_node.walk();
-				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
-					items.push(self.build_expression(&element_node)?);
-				}
-
-				Ok(Expr::new(
-					ExprKind::SetLiteral { items, type_: set_type },
-					expression_span,
-				))
-			}
+			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
 				let mut fields = BTreeMap::new();
@@ -842,6 +833,24 @@ impl Parser<'_> {
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
+	}
+
+	fn build_set_literal(&self, expression_node: &Node) -> Result<Expr, ()> {
+		let expression_span = self.node_span(expression_node);
+		let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+			Some(self.build_type(&type_node)?)
+		} else {
+			None
+		};
+		let mut items = Vec::new();
+		let mut cursor = expression_node.walk();
+		for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+			items.push(self.build_expression(&element_node)?);
+		}
+		Ok(Expr::new(
+			ExprKind::SetLiteral { items, type_: set_type },
+			expression_span,
+		))
 	}
 
 	fn report_unhandled_errors(&self, root: &Node) {
