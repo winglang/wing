@@ -5,7 +5,6 @@
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
       "options": {
         "commands": ["cargo build", "cargo fmt -- --check"],
         "cwd": "libs/wingc"
@@ -32,7 +31,6 @@
     },
     "build-wasm": {
       "executor": "nx:run-commands",
-      "dependsOn": ["^build"],
       "options": {
         "command": "cargo wasi build",
         "cwd": "libs/wingc"
