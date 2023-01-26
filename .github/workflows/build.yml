@@ -17,7 +17,7 @@ concurrency:
 env:
   NODEJS_VERSION: "18.x"
   # Testing runs out of memory without this
-  NODE_OPTIONS: "--max-old-space-size=4096"
+  NODE_OPTIONS: "--max-old-space-size=6144"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
 
 jobs:
