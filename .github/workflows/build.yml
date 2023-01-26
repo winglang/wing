@@ -19,7 +19,6 @@ env:
   # Testing runs out of memory without this
   NODE_OPTIONS: "--max-old-space-size=4096"
   PROJEN_BUMP_VERSION: "0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}"
-  RUST_VERSION: "1.66.0"
 
 jobs:
   prepare:
@@ -107,10 +106,6 @@ jobs:
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          components: rustfmt
-          override: true
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
@@ -210,10 +205,6 @@ jobs:
 
       - name: Install Rust
         uses: actions-rs/toolchain@v1
-        with:
-          toolchain: ${{ env.RUST_VERSION }}
-          components: rustfmt
-          override: true
 
       - name: Setup Cargo Cache
         uses: Swatinem/rust-cache@v2
