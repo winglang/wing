@@ -16,6 +16,7 @@ Object {
         "attrs": Object {},
         "path": "root/HelloWorld/Bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -37,6 +38,7 @@ Object {
           },
           "sourceCodeFile": "assets/Queue-OnMessage-401ee792/index.js",
           "sourceCodeLanguage": "javascript",
+          "timeout": 60000,
         },
         "type": "wingsdk.cloud.Function",
       },

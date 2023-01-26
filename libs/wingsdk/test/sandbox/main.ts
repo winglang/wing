@@ -12,7 +12,8 @@ class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const queue = new cloud.Queue(this, "cloud.Queue");
+    const bucket = new cloud.Bucket(this, "Bucket");
+    bucket.addObject("hello.txt", "Hello, world!");
   }
 }
 
