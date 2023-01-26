@@ -1975,6 +1975,7 @@ constructor() {
   const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
   const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
   const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const empty_array = Object.freeze([]);
   const arr1 = Object.freeze([1, 2, 3]);
   const arr2 = Object.freeze([\\"1\\", \\"2\\", \\"3\\"]);
   const arr3 = Object.freeze([1, 2, 3]);
@@ -1984,6 +1985,7 @@ constructor() {
   const arr7 = arr4;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr1.length === 3)'\`)})((arr1.length === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr2.at(1)) === \\"2\\")'\`)})(((arr2.at(1)) === \\"2\\"))};
+  const empty_map = Object.freeze(new Map([]));
   const m1 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
   const m2 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
   const m3 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
@@ -1995,6 +1997,7 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m5.get(\\"b\\")) === bucket2)'\`)})(((m5.get(\\"b\\")) === bucket2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7.has(\\"b\\"))'\`)})((m7.has(\\"b\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4.has(\\"boom\\")) === false)'\`)})(((m4.has(\\"boom\\")) === false))};
+  const empty_set = Object.freeze(new Set([]));
   const s2 = Object.freeze(new Set([1, 2, 3]));
   const s3 = Object.freeze(new Set([1, 2, 3]));
   const s4 = Object.freeze(new Set([1, 2, 3]));
