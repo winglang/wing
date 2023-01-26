@@ -5,6 +5,7 @@ let bucket2 = new cloud.Bucket() as "bucket2";
 let bucket3 = new cloud.Bucket() as "bucket3";
 
 //Array tests
+let empty_array = Array<num>[];
 let arr1 = [1, 2, 3];
 let arr2: Array<str> = ["1", "2", "3"];
 let arr3 = Array<num>[1, 2, 3];
@@ -16,6 +17,7 @@ assert(arr1.length == 3);
 assert(arr2.at(1) == "2");
 
 //Map tests
+let empty_map = Map<num>{};
 let m1 = {"a":1, "b":2, "c":3};
 let m2: Map<num> = {"a":1, "b":2, "c":3};
 let m3 = Map<num> {"a":1, "b":2, "c":3};
@@ -31,6 +33,7 @@ assert(m4.has("boom") == false);
 // TODO: add map API tests
 
 //Set tests
+let empty_set = Set<num>{};
 let s2: Set<num> = {1, 2, 3};
 let s3 = Set<num> {1, 2, 3};
 let s4: Set<num> = Set<num> {1, 2, 3};
