@@ -1,5 +1,6 @@
 import { StorageBlob } from "@cdktf/provider-azurerm/lib/storage-blob";
 import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container";
+// import { DataAzurermSubscription } from "@cdktf/provider-azurerm/lib/data-azurerm-subscription";
 import { Construct } from "constructs";
 import { App } from "./app";
 import * as cloud from "../cloud";
@@ -9,6 +10,7 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
+import { Function } from "./function";
 
 /**
  * Bucket names must be between 3 and 63 characters.
@@ -79,14 +81,21 @@ export class Bucket extends cloud.BucketBase {
   public _bind(host: core.IInflightHost, ops: string[]): void {
     host;
     ops;
-    // TODO: support functions once tfazure functions are implemented
-    // throw new Error("Azure buckets have can not be bound by anything for now");
+    if (!(host instanceof Function)) {
+      throw new Error("buckets can only be bound by tfazure.Function for now")
+    }
+    
+    // TODO: apply more fine grained permissions
+    if (ops.includes(cloud.BucketInflightMethods.PUT)) {
+      host.addPermission(`${this.app.storageAccount.id}`, "Storage Blob Data Contributor");
+    }
   }
 
   /** @internal */
   public _toInflight(): core.Code {
     return core.InflightClient.for(__filename, "BucketClient", [
-      `process.env["meh"]`,
+      `process.env["BUCKET"]`,
+      `process.env["STORAGE_ACCOUNT"]`,
     ]);
   }
 }

@@ -42,6 +42,7 @@
   "devDependencies": {
     "@types/aws-lambda": "^8.10.109",
     "@types/debug": "^4.1.7",
+    "@types/file-saver": "^2.0.5",
     "@types/fs-extra": "^11.0.1",
     "@types/jest": "^27",
     "@types/node": "^16",
@@ -106,6 +107,8 @@
     "constructs": "~10.1.228",
     "debug": "^4.3.4",
     "esbuild-wasm": "^0.17.4",
+    "file-saver": "^2.0.5",
+    "jszip": "^3.10.1",
     "polycons": "^0.1.8",
     "safe-stable-stringify": "*",
     "tar": "^6.1.13"
@@ -125,6 +128,8 @@
     "@azure/storage-blob",
     "debug",
     "esbuild-wasm",
+    "file-saver",
+    "jszip",
     "safe-stable-stringify",
     "tar"
   ],

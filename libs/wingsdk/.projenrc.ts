@@ -26,6 +26,8 @@ const project = new cdk.JsiiProject({
     "debug",
     "esbuild-wasm",
     "safe-stable-stringify",
+    "jszip",
+    "file-saver",
     // aws client dependencies
     // (note: these should always be updated together, otherwise they will
     // conflict with each other)
@@ -55,6 +57,7 @@ const project = new cdk.JsiiProject({
     "aws-sdk-client-mock-jest",
     "eslint-plugin-sort-exports",
     "patch-package",
+    "@types/file-saver",
   ],
   prettier: true,
   minNodeVersion: "16.16.0",
