@@ -127,15 +127,16 @@ jobs:
         with:
           targets: "build"
           all: true
+          # Exclude native-dependent projects
           args: "--exclude=wing-language-server,vscode-wing --configuration=release --output-style=stream --verbose"
 
-      # wingc require wingsdk to be built first in order to run
       - name: Test
         uses: MansaGroup/nrwl-nx-action@v2
         with:
           targets: "test"
           all: true
-          args: "--exclude=hangar --configuration=release --output-style=stream --verbose"
+          # Exclude E2E testing and native-dependent projects
+          args: "--exclude=hangar,wing-language-server,vscode-wing --configuration=release --output-style=stream --verbose"
 
       - name: Create NPM packages
         uses: MansaGroup/nrwl-nx-action@v2
