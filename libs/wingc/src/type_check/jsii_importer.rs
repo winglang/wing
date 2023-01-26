@@ -7,7 +7,7 @@ use crate::{
 		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE, WINGSDK_STD_MODULE,
+	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -413,11 +413,6 @@ impl<'a> JsiiImporter<'a> {
 	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType, namespace_name: &str) {
 		let mut is_resource = false;
 		let type_name = &self.fqn_to_type_name(&jsii_class.fqn);
-		let phase = if jsii_class.assembly == WINGSDK_ASSEMBLY_NAME && namespace_name == WINGSDK_STD_MODULE {
-			Phase::Independent
-		} else {
-			Phase::Preflight
-		};
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
@@ -467,8 +462,14 @@ impl<'a> JsiiImporter<'a> {
 			None
 		};
 
+		let phase = if is_resource {
+			self.env.flight
+		} else {
+			Phase::Independent
+		};
+
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), true, false, self.env.flight, 0);
+		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), true, false, phase, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -511,7 +512,7 @@ impl<'a> JsiiImporter<'a> {
 			.define(&new_type_symbol, SymbolKind::Type(new_type), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), true, false, self.env.flight, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), true, false, phase, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -536,7 +537,7 @@ impl<'a> JsiiImporter<'a> {
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
 				args: arg_types,
 				return_type: new_type,
-				flight: class_env.flight,
+				flight: phase,
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
