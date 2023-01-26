@@ -360,7 +360,6 @@ impl JSifier {
 			}
 			ExprKind::Unary { op, exp } => {
 				let op = match op {
-					UnaryOperator::Plus => "+",
 					UnaryOperator::Minus => "-",
 					UnaryOperator::Not => "!",
 				};

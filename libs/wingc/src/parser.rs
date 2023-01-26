@@ -639,7 +639,6 @@ impl Parser<'_> {
 			"unary_expression" => Ok(Expr::new(
 				ExprKind::Unary {
 					op: match self.node_text(&expression_node.child_by_field_name("op").unwrap()) {
-						"+" => UnaryOperator::Plus,
 						"-" => UnaryOperator::Minus,
 						"!" => UnaryOperator::Not,
 						"ERROR" => self.add_error::<UnaryOperator>(format!("Expected unary operator"), expression_node)?,

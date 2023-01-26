@@ -1065,7 +1065,8 @@ exports[`wing compile --target tf-aws capture_primitives.w > index.js 1`] = `
   const min = my_dur.minutes;
   const sec = my_dur.seconds;
   const hr = my_dur.hours;
-  {console.log(\`min=\${min} sec=\${sec} hr=\${hr}\`)};
+  const split = (await \`min=\${min} sec=\${sec} hr=\${hr}\`.split(\\" \\"));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(split.length === 3)'\`)})((split.length === 3))};
 } };"
 `;
 
@@ -1115,7 +1116,7 @@ constructor() {
   const my_second_bool = false;
   const my_dur = $stdlib.std.Duration.fromSeconds(600);
   const handler = new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
-    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.d955931de8c38b474195db3e46aee7a5b8ebcec2ff30a9220867c6c410d901fa/index.js\\")),
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.275873c041545c7a2de55149fb73b77f5b75da61d16914ceadd71c3445173d97/index.js\\")),
     bindings: {
       
       data: {
@@ -3696,6 +3697,7 @@ constructor() {
   
   if (true) {
     const x = 2;
+    const f = false;
     if ((true && ((x + 2) === 4))) {
       if ((true && ((x + 3) === 4))) {
         {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
@@ -3703,6 +3705,8 @@ constructor() {
         {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
       } else if ((false || ((x + 3) === 5))) {
         {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+      } else if ((!f)) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: '(!(!(!f)))'\`)})((!(!(!f))))};
       } else {
         {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
       }

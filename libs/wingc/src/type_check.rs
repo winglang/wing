@@ -4,7 +4,7 @@ use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
 	debug, WINGSDK_ARRAY, WINGSDK_DURATION, WINGSDK_MAP, WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET,
-	WINGSDK_SET, WINGSDK_STRING,
+	WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -127,7 +127,6 @@ pub enum Type {
 }
 
 const WING_CONSTRUCTOR_NAME: &'static str = "init";
-const WINGSDK_STD_MODULE: &'static str = "std";
 
 #[derive(Derivative)]
 #[derivative(Debug)]
@@ -723,10 +722,14 @@ impl<'a> TypeChecker<'a> {
 					ltype
 				}
 			}
-			ExprKind::Unary { op: _, exp: unary_exp } => {
+			ExprKind::Unary { op, exp: unary_exp } => {
 				let _type = self.type_check_exp(unary_exp, env, statement_idx);
-				// Add bool vs num support here (! => bool, +- => num)
-				self.validate_type(_type, self.types.number(), unary_exp);
+
+				match op {
+					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
+					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
+				};
+
 				_type
 			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx)._type,
