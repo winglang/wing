@@ -723,10 +723,14 @@ impl<'a> TypeChecker<'a> {
 					ltype
 				}
 			}
-			ExprKind::Unary { op: _, exp: unary_exp } => {
+			ExprKind::Unary { op, exp: unary_exp } => {
 				let _type = self.type_check_exp(unary_exp, env, statement_idx);
-				// Add bool vs num support here (! => bool, +- => num)
-				self.validate_type(_type, self.types.number(), unary_exp);
+
+				match op {
+					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
+					UnaryOperator::Minus | UnaryOperator::Plus => self.validate_type(_type, self.types.number(), unary_exp),
+				};
+
 				_type
 			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx)._type,

@@ -428,7 +428,6 @@ module.exports = grammar({
         ["+", PREC.UNARY],
         ["-", PREC.UNARY],
         ["!", PREC.UNARY],
-        ['~', PREC.UNARY],
       ];
 
       return choice(
