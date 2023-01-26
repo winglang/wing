@@ -7,7 +7,7 @@ use tree_sitter::Node;
 use tree_sitter_traversal::{traverse, Order};
 
 use crate::ast::{
-	ArgList, BinaryOperator, ClassMember, Constructor, Expr, ExprKind, FunctionDefinition, FunctionSignature,
+	ArgList, BinaryOperator, ClassMember, Constructor, ElifBlock, Expr, ExprKind, FunctionDefinition, FunctionSignature,
 	InterpolatedString, InterpolatedStringPart, Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type,
 	UnaryOperator,
 };
@@ -199,14 +199,29 @@ impl Parser<'_> {
 			"block" => StmtKind::Scope(self.build_scope(statement_node)),
 			"if_statement" => {
 				let if_block = self.build_scope(&statement_node.child_by_field_name("block").unwrap());
+
+				let mut elif_vec = vec![];
+				let mut cursor = statement_node.walk();
+				for node in statement_node.children_by_field_name("elif_block", &mut cursor) {
+					let conditions = self.build_expression(&node.child_by_field_name("condition").unwrap());
+					let statements = self.build_scope(&node.child_by_field_name("block").unwrap());
+					let elif = ElifBlock {
+						condition: conditions.unwrap(),
+						statements: statements,
+					};
+					elif_vec.push(elif);
+				}
+
 				let else_block = if let Some(else_block) = statement_node.child_by_field_name("else_block") {
 					Some(self.build_scope(&else_block))
 				} else {
 					None
 				};
+
 				StmtKind::If {
 					condition: self.build_expression(&statement_node.child_by_field_name("condition").unwrap())?,
 					statements: if_block,
+					elif_statements: elif_vec,
 					else_statements: else_block,
 				}
 			}
@@ -775,6 +790,14 @@ impl Parser<'_> {
 					}
 				}
 
+				// Special case: empty {} (which is detected as map by tree-sitter) -
+				// if it is annotated as a set we should treat it as a set literal
+				if let Some(Type::Set(_)) = map_type {
+					if fields.is_empty() {
+						return self.build_set_literal(expression_node);
+					}
+				}
+
 				Ok(Expr::new(
 					ExprKind::MapLiteral {
 						fields,
@@ -783,24 +806,7 @@ impl Parser<'_> {
 					expression_span,
 				))
 			}
-			"set_literal" => {
-				let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
-					Some(self.build_type(&type_node)?)
-				} else {
-					None
-				};
-
-				let mut items = Vec::new();
-				let mut cursor = expression_node.walk();
-				for element_node in expression_node.children_by_field_name("element", &mut cursor) {
-					items.push(self.build_expression(&element_node)?);
-				}
-
-				Ok(Expr::new(
-					ExprKind::SetLiteral { items, type_: set_type },
-					expression_span,
-				))
-			}
+			"set_literal" => self.build_set_literal(expression_node),
 			"struct_literal" => {
 				let type_ = self.build_type(&expression_node.child_by_field_name("type").unwrap());
 				let mut fields = BTreeMap::new();
@@ -828,6 +834,24 @@ impl Parser<'_> {
 			}
 			other => self.report_unimplemented_grammar(other, "expression", expression_node),
 		}
+	}
+
+	fn build_set_literal(&self, expression_node: &Node) -> Result<Expr, ()> {
+		let expression_span = self.node_span(expression_node);
+		let set_type = if let Some(type_node) = expression_node.child_by_field_name("type") {
+			Some(self.build_type(&type_node)?)
+		} else {
+			None
+		};
+		let mut items = Vec::new();
+		let mut cursor = expression_node.walk();
+		for element_node in expression_node.children_by_field_name("element", &mut cursor) {
+			items.push(self.build_expression(&element_node)?);
+		}
+		Ok(Expr::new(
+			ExprKind::SetLiteral { items, type_: set_type },
+			expression_span,
+		))
 	}
 
 	fn report_unhandled_errors(&self, root: &Node) {

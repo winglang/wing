@@ -1975,33 +1975,71 @@ constructor() {
   const bucket1 = new cloud.Bucket(this,\\"bucket1\\");
   const bucket2 = new cloud.Bucket(this,\\"bucket2\\");
   const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
+  const empty_array = Object.freeze([]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_array.length === 0)'\`)})((empty_array.length === 0))};
   const arr1 = Object.freeze([1, 2, 3]);
-  const arr2 = Object.freeze([\\"1\\", \\"2\\", \\"3\\"]);
-  const arr3 = Object.freeze([1, 2, 3]);
-  const arr4 = Object.freeze([1, 2, 3]);
-  const arr5 = Object.freeze([bucket1, bucket2, bucket3]);
-  const arr6 = Object.freeze([bucket1, bucket2, bucket3]);
-  const arr7 = arr4;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr1.length === 3)'\`)})((arr1.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr1.at(1)) === 2)'\`)})(((arr1.at(1)) === 2))};
+  const arr2 = Object.freeze([\\"1\\", \\"2\\", \\"3\\"]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr2.length === 3)'\`)})((arr2.length === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr2.at(1)) === \\"2\\")'\`)})(((arr2.at(1)) === \\"2\\"))};
+  const arr3 = Object.freeze([1, 2, 3]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr3.length === 3)'\`)})((arr3.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr3.at(1)) === 2)'\`)})(((arr3.at(1)) === 2))};
+  const arr4 = Object.freeze([1, 2, 3]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr4.length === 3)'\`)})((arr4.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr4.at(1)) === 2)'\`)})(((arr4.at(1)) === 2))};
+  const arr5 = Object.freeze([bucket1, bucket2, bucket3]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr5.length === 3)'\`)})((arr5.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr5.at(1)) === bucket2)'\`)})(((arr5.at(1)) === bucket2))};
+  const arr6 = Object.freeze([bucket1, bucket2, bucket3]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr6.length === 3)'\`)})((arr6.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr6.at(1)) === bucket2)'\`)})(((arr6.at(1)) === bucket2))};
+  const arr7 = arr4;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr7.length === 3)'\`)})((arr7.length === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr7.at(1)) === 2)'\`)})(((arr7.at(1)) === 2))};
+  const empty_map = Object.freeze(new Map([]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_map.size === 0)'\`)})((empty_map.size === 0))};
   const m1 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  const m2 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  const m3 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  const m4 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
-  const m5 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
-  const m6 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
-  const m7 = m1;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1.size === 3)'\`)})((m1.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m1.get(\\"b\\")) === 2)'\`)})(((m1.get(\\"b\\")) === 2))};
+  const m2 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m2.size === 3)'\`)})((m2.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m2.get(\\"b\\")) === 2)'\`)})(((m2.get(\\"b\\")) === 2))};
+  const m3 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m3.size === 3)'\`)})((m3.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m3.get(\\"b\\")) === 2)'\`)})(((m3.get(\\"b\\")) === 2))};
+  const m4 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m4.size === 3)'\`)})((m4.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4.get(\\"b\\")) === 2)'\`)})(((m4.get(\\"b\\")) === 2))};
+  const m5 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m5.size === 3)'\`)})((m5.size === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m5.get(\\"b\\")) === bucket2)'\`)})(((m5.get(\\"b\\")) === bucket2))};
+  const m6 = Object.freeze(new Map([[ \\"a\\", bucket1 ], [ \\"b\\", bucket2 ], [ \\"c\\", bucket3 ]]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m6.size === 3)'\`)})((m6.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m6.get(\\"b\\")) === bucket2)'\`)})(((m6.get(\\"b\\")) === bucket2))};
+  const m7 = m1;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7.size === 3)'\`)})((m7.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m7.get(\\"b\\")) === 2)'\`)})(((m7.get(\\"b\\")) === 2))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7.has(\\"b\\"))'\`)})((m7.has(\\"b\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4.has(\\"boom\\")) === false)'\`)})(((m4.has(\\"boom\\")) === false))};
+  const empty_set = Object.freeze(new Set([]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_array.length === 0)'\`)})((empty_array.length === 0))};
   const s2 = Object.freeze(new Set([1, 2, 3]));
-  const s3 = Object.freeze(new Set([1, 2, 3]));
-  const s4 = Object.freeze(new Set([1, 2, 3]));
-  const s6 = Object.freeze(new Set([bucket1, bucket2, bucket3]));
-  const s7 = s2;
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.size === 3)'\`)})((s2.size === 3))};
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.has(2))'\`)})((s3.has(2)))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(1))'\`)})((s2.has(1)))};
+  const s3 = Object.freeze(new Set([1, 2, 3]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.size === 3)'\`)})((s3.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s3.has(1))'\`)})((s3.has(1)))};
+  const s4 = Object.freeze(new Set([1, 2, 3]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s4.size === 3)'\`)})((s4.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s4.has(1))'\`)})((s4.has(1)))};
+  const s6 = Object.freeze(new Set([bucket1, bucket2, bucket3]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s6.size === 3)'\`)})((s6.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s6.has(bucket2))'\`)})((s6.has(bucket2)))};
+  const s7 = s2;
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s7.size === 3)'\`)})((s7.size === 3))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s7.has(1))'\`)})((s7.has(1)))};
 }
 }
 new MyApp().synth();"
@@ -3510,7 +3548,110 @@ exports[`wing compile --target tf-aws statements_if.w > cdk.tf.json 1`] = `
       {},
     ],
   },
+  "resource": {
+    "aws_iam_role": {
+      "root_test_IamRole_6CDC2D16": {
+        "//": {
+          "metadata": {
+            "path": "root/test/IamRole",
+            "uniqueId": "root_test_IamRole_6CDC2D16",
+          },
+        },
+        "assume_role_policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Action\\":\\"sts:AssumeRole\\",\\"Principal\\":{\\"Service\\":\\"lambda.amazonaws.com\\"},\\"Effect\\":\\"Allow\\"}]}",
+      },
+    },
+    "aws_iam_role_policy": {
+      "root_test_IamRolePolicy_474A6820": {
+        "//": {
+          "metadata": {
+            "path": "root/test/IamRolePolicy",
+            "uniqueId": "root_test_IamRolePolicy_474A6820",
+          },
+        },
+        "policy": "{\\"Version\\":\\"2012-10-17\\",\\"Statement\\":[{\\"Effect\\":\\"Allow\\",\\"Action\\":\\"none:null\\",\\"Resource\\":\\"*\\"}]}",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_iam_role_policy_attachment": {
+      "root_test_IamRolePolicyAttachment_1102A28A": {
+        "//": {
+          "metadata": {
+            "path": "root/test/IamRolePolicyAttachment",
+            "uniqueId": "root_test_IamRolePolicyAttachment_1102A28A",
+          },
+        },
+        "policy_arn": "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.name}",
+      },
+    },
+    "aws_lambda_function": {
+      "root_test_AAE85061": {
+        "//": {
+          "metadata": {
+            "path": "root/test/Default",
+            "uniqueId": "root_test_AAE85061",
+          },
+        },
+        "environment": {
+          "variables": {
+            "WING_FUNCTION_NAME": "test-c8b6eece",
+          },
+        },
+        "function_name": "test-c8b6eece",
+        "handler": "index.handler",
+        "role": "\${aws_iam_role.root_test_IamRole_6CDC2D16.arn}",
+        "runtime": "nodejs16.x",
+        "s3_bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "s3_key": "\${aws_s3_object.root_test_S3Object_A16CD789.key}",
+        "timeout": 60,
+      },
+    },
+    "aws_s3_bucket": {
+      "root_test_Code_2D131EC2": {
+        "//": {
+          "metadata": {
+            "path": "root/test/Code",
+            "uniqueId": "root_test_Code_2D131EC2",
+          },
+        },
+        "bucket_prefix": "code-c883c33b-",
+      },
+    },
+    "aws_s3_object": {
+      "root_test_S3Object_A16CD789": {
+        "//": {
+          "metadata": {
+            "path": "root/test/S3Object",
+            "uniqueId": "root_test_S3Object_A16CD789",
+          },
+        },
+        "bucket": "\${aws_s3_bucket.root_test_Code_2D131EC2.bucket}",
+        "key": "<ASSET_KEY>",
+      },
+    },
+  },
 }
+`;
+
+exports[`wing compile --target tf-aws statements_if.w > index.js 1`] = `
+"async handle(s) { const {  } = this; {
+  if (true) {
+    const x = 2;
+    if ((true && ((x + 2) === 4))) {
+      if ((true && ((x + 3) === 4))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((true && ((x + 3) === 6))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((false || ((x + 3) === 5))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+      } else {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      }
+    } else {
+      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+    }
+  }
+} };"
 `;
 
 exports[`wing compile --target tf-aws statements_if.w > manifest.json 1`] = `
@@ -3548,6 +3689,7 @@ function __app(target) {
 }
 const $App = __app(process.env.WING_TARGET);
 
+const cloud = require('@winglang/sdk').cloud;
 class MyApp extends $App {
 constructor() {
   super({ outdir: $outdir, name: \\"statements_if\\" });
@@ -3555,11 +3697,26 @@ constructor() {
   if (true) {
     const x = 2;
     if ((true && ((x + 2) === 4))) {
-      {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+      if ((true && ((x + 3) === 4))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((true && ((x + 3) === 6))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      } else if ((false || ((x + 3) === 5))) {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'true'\`)})(true)};
+      } else {
+        {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
+      }
     } else {
       {((cond) => {if (!cond) throw new Error(\`assertion failed: 'false'\`)})(false)};
     }
   }
+  new cloud.Function(this,\\"test\\",new $stdlib.core.Inflight(this, \\"$Inflight1\\", {
+    code: $stdlib.core.NodeJsCode.fromFile(require('path').resolve(__dirname, \\"proc.09c5e24751d9ba1246f91518f2f7f5c5d1102a09d0b1acff479ae27ad134090f/index.js\\")),
+    bindings: {
+      
+      
+    }
+  }));
 }
 }
 new MyApp().synth();"
