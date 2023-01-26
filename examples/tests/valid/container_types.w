@@ -18,6 +18,8 @@ assert(arr2.at(1) == "2");
 
 //Map tests
 let empty_map = Map<num>{};
+let implicit_empty_map = {};
+assert(implicit_empty_map.size == 0);
 let m1 = {"a":1, "b":2, "c":3};
 let m2: Map<num> = {"a":1, "b":2, "c":3};
 let m3 = Map<num> {"a":1, "b":2, "c":3};
