@@ -26,7 +26,7 @@ jobs:
     name: "Prepare"
     runs-on: ubuntu-latest
     outputs:
-      latest-tag: ${{ steps.info.outputs.latest-tag }}
+      latest-tag: ${{ steps.latest-tag.outputs.tag }}
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
@@ -41,7 +41,7 @@ jobs:
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: |
           git fetch --unshallow --tags
-          echo "latest-tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_OUTPUT
+          echo "tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
