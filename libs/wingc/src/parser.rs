@@ -154,13 +154,6 @@ impl Parser<'_> {
 	fn build_scope<'a>(&self, scope_node: &Node) -> Scope {
 		let mut cursor = scope_node.walk();
 
-		// check if the last child is a missing closing brace
-		if let Some(last_child) = scope_node.children(&mut cursor).last() {
-			if last_child.kind() == "}" && last_child.is_missing() {
-				_ = self.add_error::<Node>(format!("'}}' expected."), &last_child);
-			}
-		}
-
 		Scope {
 			statements: scope_node
 				.named_children(&mut cursor)
@@ -254,14 +247,6 @@ impl Parser<'_> {
 			"ERROR" => return self.add_error(format!("Expected statement"), statement_node),
 			other => return self.report_unimplemented_grammar(other, "statement", statement_node),
 		};
-
-		// check if the last child is a missing semicolon
-		let mut cursor = statement_node.walk();
-		if let Some(last_child) = statement_node.children(&mut cursor).last() {
-			if last_child.kind() == ";" && last_child.is_missing() {
-				self.add_error::<Node>(format!("';' expected."), &last_child)?;
-			}
-		}
 
 		Ok(Stmt {
 			kind: stmt_kind,
@@ -581,7 +566,7 @@ impl Parser<'_> {
 	}
 
 	fn build_expression(&self, exp_node: &Node) -> DiagnosticResult<Expr> {
-		let expression_node = &self.check_error(*exp_node, "Expression")?;
+		let expression_node = &self.check_error(*exp_node, "expression")?;
 		let expression_span = self.node_span(expression_node);
 		match expression_node.kind() {
 			"new_expression" => {
@@ -871,8 +856,12 @@ impl Parser<'_> {
 	fn report_unhandled_errors(&self, root: &Node) {
 		let iter = traverse(root.walk(), Order::Pre);
 		for node in iter {
-			if (node.is_error() || node.is_missing()) && !self.error_nodes.borrow().contains(&node.id()) {
-				_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+			if !self.error_nodes.borrow().contains(&node.id()) {
+				if node.is_error() {
+					_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+				} else if node.is_missing() {
+					_ = self.add_error::<()>(format!("'{}' expected.", node.kind()), &node);
+				}
 			}
 		}
 	}
