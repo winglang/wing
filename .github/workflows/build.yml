@@ -120,15 +120,6 @@ jobs:
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
-        with:
-          install-command: npm ci --ignore-scripts
-          working-directory: |
-            apps/vscode-wing
-            apps/wing-api-checker
-            apps/jsii-docgen
-            apps/wing-playground
-            apps/wing
-            libs/wingsdk
 
       - name: Lint Nx
         run: npx nx workspace-lint
