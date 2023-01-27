@@ -30,9 +30,7 @@ export class Bucket extends cloud.BucketBase {
     }
   }
 
-  public addObject(key: string, body: string): void {
-    key;
-    body;
+  public addObject(_key: string, _body: string): void {
     throw new Error("Method not implemented.");
   }
 
