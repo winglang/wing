@@ -232,6 +232,7 @@ module.exports = grammar({
         $.preflight_closure,
         $.inflight_closure,
         $.await_expression,
+        $.defer_expression,
         $._collection_literal,
         $.parenthesized_expression,
         $.structured_access_expression,
@@ -496,6 +497,7 @@ module.exports = grammar({
     ),
 
     await_expression: ($) => prec.right(seq("await", $.expression)),
+    defer_expression: ($) => prec.right(seq("defer", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
 
     _collection_literal: ($) =>
