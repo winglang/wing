@@ -16,7 +16,7 @@ export class CounterClient implements ICounterClient {
     private readonly tableName: string,
     private readonly initial: number = 0,
     private readonly client = new DynamoDBClient({})
-  ) {}
+  ) { }
 
   public async inc(amount = 1): Promise<number> {
     const command = new UpdateItemCommand({
@@ -38,6 +38,28 @@ export class CounterClient implements ICounterClient {
 
     // return the old value
     return parseInt(newValue) - amount;
+  }
+
+  public async dec(amount = 1): Promise<number> {
+    const command = new UpdateItemCommand({
+      TableName: this.tableName,
+      Key: { [HASH_KEY]: { S: COUNTER_ID } },
+      UpdateExpression: `SET ${VALUE_ATTRIBUTE} = if_not_exists(${VALUE_ATTRIBUTE}, :${INITIAL_VALUE_TOKEN}) - :${AMOUNT_TOKEN}`,
+      ExpressionAttributeValues: {
+        [`:${AMOUNT_TOKEN}`]: { N: `${amount}` },
+        [`:${INITIAL_VALUE_TOKEN}`]: { N: `${this.initial}` },
+      },
+      ReturnValues: "UPDATED_NEW",
+    });
+
+    const result = await this.client.send(command);
+    let newValue = result.Attributes?.[VALUE_ATTRIBUTE].N;
+    if (!newValue) {
+      throw new Error(`${VALUE_ATTRIBUTE} attribute not found on table.`);
+    }
+
+    // return the old value
+    return parseInt(newValue) + amount;
   }
 
   public async peek(): Promise<number> {

@@ -73,6 +73,15 @@ export interface ICounterClient {
    */
   inc(amount?: number): Promise<number>;
 
+
+  /**
+   * Decrement the counter, returning the previous value.
+   * @param amount amount to decrement (default is 1).
+   * @returns the previous value of the counter.
+   * @inflight
+   */
+  dec(amount?: number): Promise<number>;
+
   /**
    * Get the current value of the counter.
    * Using this API may introduce race conditions since the value can change between
@@ -90,6 +99,8 @@ export interface ICounterClient {
 export enum CounterInflightMethods {
   /** `Counter.inc` */
   INC = "inc",
+  /** `Counter.dec` */
+  DEC = "dec",
   /** `Counter.peek` */
   PEEK = "peek",
 }

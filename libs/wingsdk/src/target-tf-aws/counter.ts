@@ -50,6 +50,14 @@ export class Counter extends cloud.CounterBase {
       });
     }
 
+    if (ops.includes(cloud.CounterInflightMethods.DEC)) {
+      host.addPolicyStatements({
+        effect: "Allow",
+        action: ["dynamodb:UpdateItem"],
+        resource: this.table.arn,
+      });
+    }
+
     if (ops.includes(cloud.CounterInflightMethods.PEEK)) {
       host.addPolicyStatements({
         effect: "Allow",
@@ -77,4 +85,5 @@ export class Counter extends cloud.CounterBase {
 }
 
 Counter._annotateInflight("inc", {});
+Counter._annotateInflight("dec", {});
 Counter._annotateInflight("peek", {});
