@@ -7,6 +7,8 @@ let bucket3 = new cloud.Bucket() as "bucket3";
 //Array tests
 let empty_array = Array<num>[];
 assert(empty_array.length == 0);
+let empty_array2 = MutArray<num>[];
+assert(empty_array2.length == 0);
 let arr1 = [1, 2, 3];
 assert(arr1.length == 3);
 assert(arr1.at(1) == 2);
@@ -32,6 +34,8 @@ assert(arr7.at(1) == 2);
 //Map tests
 let empty_map = Map<num>{};
 assert(empty_map.size == 0);
+let empty_map2 = MutMap<num>{};
+assert(empty_map2.size == 0);
 let m1 = {"a":1, "b":2, "c":3};
 assert(m1.size == 3);
 assert(m1.get("b") == 2);
@@ -60,7 +64,9 @@ assert(m4.has("boom") == false);
 
 //Set tests
 let empty_set = Set<num>{};
-assert(empty_array.length == 0);
+assert(empty_set.size == 0);
+let empty_set2 = MutSet<num>{};
+assert(empty_set2.size == 0);
 let s2: Set<num> = {1, 2, 3};
 assert(s2.size == 3);
 assert(s2.has(1));
