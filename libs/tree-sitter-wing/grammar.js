@@ -30,7 +30,7 @@ module.exports = grammar({
   supertypes: ($) => [$.expression, $._literal],
 
   conflicts: $ => [
-     [$.reference, $.custom_type],
+    [$.reference, $.custom_type],
   ],
 
   rules: {
@@ -44,16 +44,16 @@ module.exports = grammar({
 
     // Identifiers
     reference: ($) =>
-     choice($.nested_identifier, $.identifier),
+      choice($.nested_identifier, $.identifier),
 
     identifier: ($) => /([A-Za-z_$][A-Za-z_$0-9]*|[A-Z][A-Z0-9_]*)/,
 
-    custom_type: ($) => 
+    custom_type: ($) =>
       seq(
         field("object", $.identifier),
         repeat(seq(".", field("fields", $.identifier)))
       ),
-    
+
     nested_identifier: ($) =>
       prec(PREC.MEMBER, seq(
         field("object", $.expression),
@@ -99,11 +99,11 @@ module.exports = grammar({
     struct_field: ($) =>
       seq(field("name", $.identifier), $._type_annotation, ";"),
 
-    
-    enum_definition: ($) => 
+
+    enum_definition: ($) =>
       seq(
-        "enum", 
-        field("enum_name", $.identifier), 
+        "enum",
+        field("enum_name", $.identifier),
         "{",
         commaSep(alias($.identifier, $.enum_field)),
         "}"
@@ -210,7 +210,15 @@ module.exports = grammar({
         "if",
         field("condition", $.expression),
         field("block", $.block),
+        repeat(field("elif_block", $.elif_block)),
         optional(seq("else", field("else_block", $.block)))
+      ),
+
+    elif_block: ($) =>
+      seq(
+        "elif",
+        field("condition", $.expression),
+        field("block", $.block),
       ),
 
     expression: ($) =>
@@ -224,6 +232,7 @@ module.exports = grammar({
         $.preflight_closure,
         $.inflight_closure,
         $.await_expression,
+        $.defer_expression,
         $._collection_literal,
         $.parenthesized_expression,
         $.structured_access_expression,
@@ -235,8 +244,8 @@ module.exports = grammar({
     _literal: ($) => choice($.string, $.number, $.bool, $.duration),
 
     number: ($) => choice($._integer, $._decimal),
-    _integer: ($) => choice( "0", /[1-9]\d*/),
-    _decimal: ($) => choice( /0\.\d+/, /[1-9]\d*\.\d+/),
+    _integer: ($) => choice("0", /[1-9]\d*/),
+    _decimal: ($) => choice(/0\.\d+/, /[1-9]\d*\.\d+/),
 
 
     bool: ($) => choice("true", "false"),
@@ -375,7 +384,7 @@ module.exports = grammar({
     parameter_definition: ($) =>
       seq(
         optional(field("reassignable", $.reassignable)),
-        field("name", $.identifier), 
+        field("name", $.identifier),
         $._type_annotation
       ),
 
@@ -390,7 +399,7 @@ module.exports = grammar({
             "Set",
             "Map",
             "Promise",
-            ),
+          ),
         ),
         $._container_value_type
       ),
@@ -417,10 +426,10 @@ module.exports = grammar({
     unary_expression: ($) => {
       /** @type {Array<[RuleOrLiteral, number]>} */
       const table = [
-        ["+", PREC.UNARY],
+        // -- is invalid but we'll let the compiler catch it to not mistake it for multiple `-`s
+        ["--", PREC.UNARY],
         ["-", PREC.UNARY],
         ["!", PREC.UNARY],
-        ['~', PREC.UNARY],
       ];
 
       return choice(
@@ -478,7 +487,7 @@ module.exports = grammar({
       "=>",
       field("block", $.block)
     ),
-    
+
     inflight_closure: ($) => seq(
       "inflight",
       field("parameter_list", $.parameter_list),
@@ -488,6 +497,7 @@ module.exports = grammar({
     ),
 
     await_expression: ($) => prec.right(seq("await", $.expression)),
+    defer_expression: ($) => prec.right(seq("defer", $.expression)),
     parenthesized_expression: ($) => seq("(", $.expression, ")"),
 
     _collection_literal: ($) =>

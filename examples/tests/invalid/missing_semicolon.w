@@ -11,3 +11,9 @@ q1.on_message(inflight (m:str): str => {
 q2.on_message(inflight (m:str): str => {
   b.put("2.txt", "Hello, ${m}"); 
 });
+
+let x = 5
+//       ^ ';' expected
+
+if (x > 10) {
+//           ^ '}' expected

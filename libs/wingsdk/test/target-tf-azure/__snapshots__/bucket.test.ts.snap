@@ -42,7 +42,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -101,7 +101,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud object store",
@@ -198,7 +198,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud object store",
@@ -214,7 +214,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -239,6 +239,168 @@ Object {
             },
             "id": "backend",
             "path": "root/backend",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.0",
+        },
+        "id": "root",
+        "path": "root",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.0",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`bucket with two preflight objects 1`] = `
+"{
+  \\"resource\\": {
+    \\"azurerm_resource_group\\": {
+      \\"root_mybucket_ResourceGroup_C1D7AF27\\": {
+        \\"location\\": \\"East US\\",
+        \\"name\\": \\"my_bucket-c8045fcc\\"
+      }
+    },
+    \\"azurerm_storage_account\\": {
+      \\"root_mybucket_StorageAccount_A0150B8A\\": {
+        \\"account_replication_type\\": \\"LRS\\",
+        \\"account_tier\\": \\"Standard\\",
+        \\"location\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.location}\\",
+        \\"name\\": \\"mybucketc8045fcc\\",
+        \\"resource_group_name\\": \\"\${azurerm_resource_group.root_mybucket_ResourceGroup_C1D7AF27.name}\\"
+      }
+    },
+    \\"azurerm_storage_blob\\": {
+      \\"root_mybucket_Blobfile1txt_5100BBF1\\": {
+        \\"name\\": \\"file1.txt\\",
+        \\"source_content\\": \\"hello world\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\",
+        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_mybucket_Bucket_10512A98.name}\\",
+        \\"type\\": \\"Block\\"
+      },
+      \\"root_mybucket_Blobfile2txt_D2544996\\": {
+        \\"name\\": \\"file2.txt\\",
+        \\"source_content\\": \\"boom bam\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\",
+        \\"storage_container_name\\": \\"\${azurerm_storage_container.root_mybucket_Bucket_10512A98.name}\\",
+        \\"type\\": \\"Block\\"
+      }
+    },
+    \\"azurerm_storage_container\\": {
+      \\"root_mybucket_Bucket_10512A98\\": {
+        \\"container_access_type\\": \\"public\\",
+        \\"name\\": \\"my-bucket-c8045fcc\\",
+        \\"storage_account_name\\": \\"\${azurerm_storage_account.root_mybucket_StorageAccount_A0150B8A.name}\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket with two preflight objects 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "root": Object {
+        "children": Object {
+          "WingLogger": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud logging facility",
+              "hidden": true,
+              "title": "Logger",
+            },
+            "id": "WingLogger",
+            "path": "root/WingLogger",
+          },
+          "azure": Object {
+            "constructInfo": Object {
+              "fqn": "@cdktf/provider-azurerm.provider.AzurermProvider",
+              "version": "5.0.1",
+            },
+            "id": "azure",
+            "path": "root/azure",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.0",
+            },
+            "id": "backend",
+            "path": "root/backend",
+          },
+          "my_bucket": Object {
+            "attributes": Object {
+              "wing:resource:connections": Array [],
+              "wing:resource:stateful": true,
+            },
+            "children": Object {
+              "Blob-file1.txt": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
+                  "version": "5.0.1",
+                },
+                "id": "Blob-file1.txt",
+                "path": "root/my_bucket/Blob-file1.txt",
+              },
+              "Blob-file2.txt": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.storageBlob.StorageBlob",
+                  "version": "5.0.1",
+                },
+                "id": "Blob-file2.txt",
+                "path": "root/my_bucket/Blob-file2.txt",
+              },
+              "Bucket": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.storageContainer.StorageContainer",
+                  "version": "5.0.1",
+                },
+                "id": "Bucket",
+                "path": "root/my_bucket/Bucket",
+              },
+              "ResourceGroup": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.resourceGroup.ResourceGroup",
+                  "version": "5.0.1",
+                },
+                "id": "ResourceGroup",
+                "path": "root/my_bucket/ResourceGroup",
+              },
+              "StorageAccount": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-azurerm.storageAccount.StorageAccount",
+                  "version": "5.0.1",
+                },
+                "id": "StorageAccount",
+                "path": "root/my_bucket/StorageAccount",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "display": Object {
+              "description": "A cloud object store",
+              "title": "Bucket",
+            },
+            "id": "my_bucket",
+            "path": "root/my_bucket",
           },
         },
         "constructInfo": Object {
@@ -302,7 +464,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -361,7 +523,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud object store",

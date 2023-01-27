@@ -1,19 +1,31 @@
 ---
-title: RFC Process
-description: How to create and ship a "Request For Comments"
+title: Overview
+id: overview
+keywords: [rfcs, rfc, overview, process]
 ---
 
-# RFC Process
+An RFC is short for "request for comments". It's a document that describes a new feature or change
+to Wing. It's a way to propose, gather feedback, and reach consensus for a change from maintainers,
+contributors, and users before writing any code. For an example of an RFC, check out:
+https://github.com/winglang/wing/blob/main/docs/05-rfcs/2022-06-14-polycons.md
+
+Usually, an RFC is a common practice for major features or complex changes that require that extra
+vetting. However, the process is designed to be as lightweight as needed and can be used to request
+feedback on any change. Quite often, even changes that seem obvious and simple at first sight can be
+significantly improved once a wider group of interested and experienced people have a chance to
+weigh in.
+
+## RFC Process
 
 For more information about what is an RFC, see [CONTRIBUTING.md](../06-contributors/handbook.md#what-is-an-rfc).
 
-## 1. Kick-off
+### 1. Kick-off
 
 Before diving into writing the RFC, it is highly recommended to organize a
 kick-off meeting that includes any stakeholders that might be interested in this RFC or can contribute ideas and direction. The goal of the meeting is to discuss the feature, its scope and general direction for
 implementation.
 
-## 2. RFC Document
+### 2. RFC Document
 
 The next step is to write the first revision of the RFC document itself.
 
@@ -24,7 +36,7 @@ ambiguity and risk and get approval for public-facing interfaces (APIs), which a
 
 In many cases, it is useful to develop a **prototype** or even start coding the actual implementation while you are writing the RFC document. Take into account that you may need to throw your code away or refactor it substantially, but our experience shows that good RFCs are the ones who dive into the details. A prototype is great way to make sure your design "holds water".
 
-## 3. Feedback
+### 3. Feedback
 
 Once you have an initial version of your RFC document (it is completely fine to submit an unfinished RFC to get initial feedback), submit it as a pull request against this repo and start collecting feedback.
 
@@ -39,7 +51,7 @@ A few tips:
 - Be patient: it sometimes takes time for an RFC to converge. Our experience shows that some ideas need to "bake" and solutions oftentimes emerge via a healthy debate. We've had RFCs that took months to resolve.
 - Not everything must be resolved in the first revision. It is okay to leave some things to resolve later. Make sure to capture them clearly and have an agreement about that. We oftentimes update an RFC doc a few times during the implementation.
 
-## 4. Final Comments Period
+### 4. Final Comments Period
 
 At some point, you've reached consensus about most issues that were brought up during the review period, and you are ready to merge. To allow "last call" on feedback, the author can announce that the RFC enters "final comments period", which means that within a ~week, if no major concerns are raised, the RFC will be approved and merged.
 
@@ -47,7 +59,7 @@ Add a comment on the RFC pull request, and slack/email where relevant, that the 
 
 Once the final comments period is over, seek an approval of one of the core team members, and you can merge your PR to the main branch. This will move your RFC to the "approved" state.
 
-## 5. Implementation
+### 5. Implementation
 
 For large changes, we highly recommend creating an implementation plan which lists all the tasks required. In many cases, large implementation  should be broken down and released via multiple iterations. Devising a concrete plan to break down the break can be very helpful.
 

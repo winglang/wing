@@ -1,6 +1,6 @@
 ---
 title: Troubleshooting
-id: Troubleshooting
+id: troubleshooting
 keywords: [Wing contributors, contributors, Troubleshooting]
 ---
 

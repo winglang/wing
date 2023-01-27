@@ -459,8 +459,14 @@ impl<'a> JsiiImporter<'a> {
 			None
 		};
 
+		let phase = if is_resource {
+			self.env.flight
+		} else {
+			Phase::Independent
+		};
+
 		// Create environment representing this class, for now it'll be empty just so we can support referencing ourselves from the class definition.
-		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), true, false, self.env.flight, 0);
+		let dummy_env = SymbolEnv::new(None, self.wing_types.void(), true, false, phase, 0);
 		let new_type_symbol = Self::jsii_name_to_symbol(type_name, &jsii_class.location_in_module);
 		// Create the new resource/class type and add it to the current environment.
 		// When adding the class methods below we'll be able to reference this type.
@@ -503,7 +509,7 @@ impl<'a> JsiiImporter<'a> {
 			.define(&new_type_symbol, SymbolKind::Type(new_type), StatementIdx::Top)
 			.expect(&format!("Invalid JSII library: failed to define class {}", type_name));
 		// Create class's actual environment before we add properties and methods to it
-		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), true, false, self.env.flight, 0);
+		let mut class_env = SymbolEnv::new(base_class_env, self.wing_types.void(), true, false, phase, 0);
 
 		// Add constructor to the class environment
 		let jsii_initializer = jsii_class.initializer.as_ref();
@@ -528,7 +534,7 @@ impl<'a> JsiiImporter<'a> {
 			let method_sig = self.wing_types.add_type(Type::Function(FunctionSignature {
 				args: arg_types,
 				return_type: new_type,
-				flight: class_env.flight,
+				flight: phase,
 			}));
 			if let Err(e) = class_env.define(
 				&Self::jsii_name_to_symbol(WING_CONSTRUCTOR_NAME, &initializer.location_in_module),
@@ -540,7 +546,7 @@ impl<'a> JsiiImporter<'a> {
 		}
 
 		// Add methods and properties to the class environment
-		self.add_members_to_class_env(&jsii_class, is_resource, Phase::Preflight, &mut class_env, new_type);
+		self.add_members_to_class_env(&jsii_class, is_resource, phase, &mut class_env, new_type);
 		if is_resource {
 			// Look for a client interface for this resource
 			let client_interface = jsii_class

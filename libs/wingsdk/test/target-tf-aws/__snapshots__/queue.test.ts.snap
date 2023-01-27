@@ -35,7 +35,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -51,7 +51,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -132,7 +132,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -148,7 +148,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -235,7 +235,8 @@ exports[`queue with a consumer function 2`] = `
         \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
         \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagec5395e41_S3Object_9BE0A142.key}\\"
+        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagec5395e41_S3Object_9BE0A142.key}\\",
+        \\"timeout\\": 60
       }
     },
     \\"aws_s3_bucket\\": {
@@ -280,7 +281,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "An inflight resource",
@@ -322,7 +323,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -415,7 +416,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud function (FaaS)",
@@ -431,7 +432,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "id": "Queue-OnMessageHandler-c5395e41",
             "path": "root/Queue-OnMessageHandler-c5395e41",
@@ -450,7 +451,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -532,7 +533,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -548,7 +549,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",
@@ -629,7 +630,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A distributed message queue",
@@ -645,7 +646,7 @@ Object {
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
-              "version": "10.0.130",
+              "version": "10.1.228",
             },
             "display": Object {
               "description": "A cloud logging facility",

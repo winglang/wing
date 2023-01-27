@@ -28,7 +28,7 @@ pub mod type_check;
 pub mod utilities;
 
 const WINGSDK_ASSEMBLY_NAME: &'static str = "@winglang/sdk";
-
+const WINGSDK_STD_MODULE: &'static str = "std";
 const WINGSDK_DURATION: &'static str = "std.Duration";
 const WINGSDK_MAP: &'static str = "std.ImmutableMap";
 const WINGSDK_MUT_MAP: &'static str = "std.MutableMap";

@@ -1,6 +1,7 @@
 {
   "name": "wingc",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "implicitDependencies": ["sdk"],
   "targets": {
     "build-native": {
       "executor": "nx:run-commands",
@@ -10,12 +11,13 @@
       },
       "configurations": {
         "release": {
-          "command": "cargo build --release"
+          "commands": ["cargo build --release", "cargo fmt -- --check"]
         }
       }
     },
     "test": {
       "executor": "nx:run-commands",
+      "dependsOn": ["^build"],
       "inputs": ["src", "examples-tests"],
       "options": {
         "command": "cargo test",
@@ -40,7 +42,7 @@
       }
     },
     "dev": {
-      "dependsOn": ["build-native"],
+      "dependsOn": ["^build", "build-native"],
       "executor": "nx:run-commands",
       "options": {
         "command": "cargo run --example compile",

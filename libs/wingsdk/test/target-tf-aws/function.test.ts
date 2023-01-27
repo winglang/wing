@@ -1,5 +1,6 @@
 import * as cdktf from "cdktf";
 import * as cloud from "../../src/cloud";
+import { Duration } from "../../src/std";
 import * as tfaws from "../../src/target-tf-aws";
 import { Testing } from "../../src/testing";
 import { mkdtemp } from "../../src/util";
@@ -76,6 +77,23 @@ test("replace invalid character from function name", () => {
   expect(
     cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
       function_name: `The-Mighty-Function-${func.node.addr.substring(0, 8)}`,
+    })
+  ).toEqual(true);
+  expect(tfSanitize(output)).toMatchSnapshot();
+  expect(treeJsonOf(app.outdir)).toMatchSnapshot();
+});
+
+test("basic function with timeout explicitly set", () => {
+  const app = new tfaws.App({ outdir: mkdtemp() });
+  const inflight = Testing.makeHandler(app, "Handler", INFLIGHT_CODE);
+  new cloud.Function(app, "Function", inflight, {
+    timeout: Duration.fromSeconds(30),
+  });
+  const output = app.synth();
+
+  expect(
+    cdktf.Testing.toHaveResourceWithProperties(output, "aws_lambda_function", {
+      timeout: 30,
     })
   ).toEqual(true);
   expect(tfSanitize(output)).toMatchSnapshot();
