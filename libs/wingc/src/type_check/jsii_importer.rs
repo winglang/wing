@@ -148,6 +148,7 @@ impl<'a> JsiiImporter<'a> {
 		);
 		assert!(type_fqn.assembly() == self.assembly_name);
 
+		// TODO: support nested namespaces
 		let namespace_name = type_fqn.namespaces().next().unwrap();
 		let type_name = type_fqn.type_name();
 

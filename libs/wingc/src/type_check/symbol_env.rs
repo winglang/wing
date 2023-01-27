@@ -26,40 +26,41 @@ pub struct SymbolEnv {
 // TODO See TypeRef for why this is necessary
 unsafe impl Send for SymbolEnv {}
 
-// The index (position) of the statement where a certain symbol was defined
-// this is useful to determine if a symbol can be used in a certain
-// expression or whether it is being used before it's defined.
+/// The index (position) of the statement where a certain symbol was defined
+/// this is useful to determine if a symbol can be used in a certain
+/// expression or whether it is being used before it's defined.
 #[derive(Debug)]
 pub enum StatementIdx {
 	Index(usize),
-	Top, // Special value meaning the symbol should be treated as if it was defined at the top of the scope
+	/// Special value meaning the symbol should be treated as if it was defined at the top of the scope
+	Top,
 }
 
-// Possible results for a symbol lookup in the environment
+/// Possible results for a symbol lookup in the environment
 enum LookupResult<'a> {
-	// The kind of symbol and usefull metadata associated with its lookup
+	/// The kind of symbol and usefull metadata associated with its lookup
 	Found((&'a SymbolKind, SymbolInfo)),
-	// The symbol was not found in the environment
+	/// The symbol was not found in the environment
 	NotFound,
-	// The symbol exists in the environment but it's not defined yet (based on the statement
-	// index passed to the lookup)
+	/// The symbol exists in the environment but it's not defined yet (based on the statement
+	/// index passed to the lookup)
 	DefinedLater,
 }
 
 pub struct SymbolInfo {
-	// The phase the symbol was defined in
+	/// The phase the symbol was defined in
 	pub flight: Phase,
-	// Whether the symbol was defined in an `init`'s environment
+	/// Whether the symbol was defined in an `init`'s environment
 	pub init: bool,
 }
 
 enum LookupMutResult<'a> {
-	// The type of the symbol and its flight phase
+	/// The type of the symbol and its flight phase
 	Found((&'a mut SymbolKind, Phase)),
-	// The symbol was not found in the environment
+	/// The symbol was not found in the environment
 	NotFound,
-	// The symbol exists in the environment but it's not defined yet (based on the statement
-	// index passed to the lookup)
+	/// The symbol exists in the environment but it's not defined yet (based on the statement
+	/// index passed to the lookup)
 	DefinedLater,
 }
 
@@ -86,8 +87,8 @@ impl SymbolEnv {
 		}
 	}
 
-	// Used to get an unsafe reference to this symbol environment so it be referenced by
-	// other types or environments (e.g. as a parent class or parent scope)
+	/// Used to get an unsafe reference to this symbol environment so it be referenced by
+	/// other types or environments (e.g. as a parent class or parent scope)
 	pub fn get_ref(&self) -> SymbolEnvRef {
 		UnsafeRef::<Self>(self)
 	}
@@ -168,7 +169,7 @@ impl SymbolEnv {
 		}
 	}
 
-	// Baahh. Find a nice way to reuse the non-mut code and remove LookupMutResult
+	// TODO: Baahh. Find a nice way to reuse the non-mut code and remove LookupMutResult
 	fn try_lookup_mut_ext(&mut self, symbol_name: &str, not_after_stmt_idx: Option<usize>) -> LookupMutResult {
 		if let Some((definition_idx, kind)) = self.ident_map.get_mut(symbol_name) {
 			if let Some(not_after_stmt_idx) = not_after_stmt_idx {
@@ -230,7 +231,7 @@ impl SymbolEnv {
 		)
 	}
 
-	// Pass `ignore_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
+	/// Pass `ignore_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
 	pub fn lookup_nested(
 		&self,
 		nested_vec: &[&Symbol],

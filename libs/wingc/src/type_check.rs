@@ -586,13 +586,14 @@ impl Types {
 pub struct TypeChecker<'a> {
 	types: &'a mut Types,
 
-	// Scratchpad for storing inner scopes so we can do breadth first traversal of the AST tree during type checking
-	// TODO: this is a list of unsafe pointers to the statement's inner scopes. We use
-	// unsafe because we can't return a mutable reference to the inner scopes since this method
-	// already uses references to the statement that contains the scopes. Using unsafe here just
-	// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
-	// to iterate over the inner scopes given the outer scope. For this we need to model our AST
-	// so all nodes implement some basic "tree" interface. For now this is good enough.
+	/// Scratchpad for storing inner scopes so we can do breadth first traversal of the AST tree during type checking
+	///
+	/// TODO: this is a list of unsafe pointers to the statement's inner scopes. We use
+	/// unsafe because we can't return a mutable reference to the inner scopes since this method
+	/// already uses references to the statement that contains the scopes. Using unsafe here just
+	/// makes it a lot simpler. Ideally we should avoid returning anything here and have some way
+	/// to iterate over the inner scopes given the outer scope. For this we need to model our AST
+	/// so all nodes implement some basic "tree" interface. For now this is good enough.
 	inner_scopes: Vec<*const Scope>,
 
 	/// The absolute path to the source file being type checked.
