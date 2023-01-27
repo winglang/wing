@@ -26,11 +26,11 @@ jobs:
     name: "Prepare"
     runs-on: ubuntu-latest
     outputs:
-      last-version: ${{ steps.tags.outputs.last-version }}
+      last-version: ${{ steps.tags.outputs.last-version || steps.pr_info.outputs.version }}
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        # if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref }}
@@ -38,7 +38,7 @@ jobs:
 
       - name: Get tags
         id: tags
-        if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        # if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: |
           git fetch --unshallow --tags
           LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
@@ -70,6 +70,7 @@ jobs:
         id: pr_info
         if: github.event_name != 'push' || github.repository != 'winglang/wing'
         run: |
+          echo "last-version=0.0.0" >> $GITHUB_OUTPUT
           echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
           echo "Pull Request" > CHANGELOG.md
           cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
