@@ -259,7 +259,7 @@
     },
     {
       "name": "cdktf",
-      "version": "~0.15.0",
+      "version": "0.15.2",
       "type": "peer"
     },
     {
@@ -293,7 +293,7 @@
     },
     {
       "name": "cdktf",
-      "version": "~0.15.0",
+      "version": "0.15.2",
       "type": "runtime"
     },
     {

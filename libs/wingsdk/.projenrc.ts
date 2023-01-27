@@ -3,7 +3,7 @@ import { JsonFile, cdk, javascript } from "projen";
 const JSII_DEPS = [
   "constructs@~10.1.228",
   "polycons",
-  "cdktf@~0.15.0",
+  "cdktf@0.15.2",
   "@cdktf/provider-random@^5.0.0",
   "@cdktf/provider-aws@^12.0.1",
   "@cdktf/provider-azurerm@^5.0.1",
