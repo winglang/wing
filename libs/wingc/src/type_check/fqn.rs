@@ -25,7 +25,7 @@ impl<'a> FQN<'a> {
 
 	pub fn as_str_without_assembly(&self) -> &str {
 		let index = self.0.find('.').unwrap();
-		&self.0[index..]
+		&self.0[(index + 1)..]
 	}
 
 	pub fn assembly(&self) -> &str {
