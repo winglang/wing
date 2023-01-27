@@ -579,26 +579,7 @@ Wing and is garbage collected (relying on JSII target GC for the meantime).
 
 ---
 
-### 1.12 Documentation Style
-
-Wing currently leverages @JSDoc style comments in its format called the "runway"
-comment format. "Runway" refers to what the left hand side of the comment block
-represents. It vaguely resembles an airport runway!
-
-> ```TS
-> /*\
-> |*|  Document your code with meaningful comments.
-> |*|
-> |*|  You can use Markdown for formatting.
-> |*|  Compiler can generate documentation for you from jsdoc tags.
-> \*/
-> ```
-
-[`▲ top`][top]
-
----
-
-### 1.13 Execution Model
+### 1.12 Execution Model
 
 Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
@@ -640,7 +621,7 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
-### 1.14 Asynchronous Model
+### 1.13 Asynchronous Model
 
 Wing builds upon the asynchronous model of JavaScript currently and expands upon
 it with new keywords and concepts. The `async` keyword of JavaScript is replaced
@@ -1416,7 +1397,7 @@ arguments is accessible with the `args` key like a normal array instance.
 
 ```TS
 let f = (x: num, ...args: Array<num>) => {
-  print(x + y + sizeof(args));
+  print(x + y + args.len);
 }
 // last arguments are expanded into their struct
 f(1, 2, 3, 4, 5, 6, 34..100);
@@ -1429,15 +1410,14 @@ f(1, 2, 3, 4, 5, 6, 34..100);
 ### 3.7 Arrays
 
 Arrays are dynamically sized in Wing and are defined with the `[]` syntax.  
-Individual array items are also accessed with the `[]` syntax. You can call
-`sizeof` to get the size of the array.  
+Individual array items are also accessed with the `[]` syntax.  
 Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 > ```TS
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
 > let arr3 = MutArray<str>["a1", "b2", "c3"];
-> let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
+> let l = arr1.len + arr2.len + arr3.len + arr1[0];
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
@@ -1665,7 +1645,6 @@ supported languages.
 
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
-You can call `sizeof` to get the length of the string.
 
 [`▲ top`][top]
 
@@ -1682,7 +1661,7 @@ Processing unicode escape sequences happens in these strings.
 > ```TS
 > let name = "World";
 > let s = "Hello, ${name}!";
-> let l = sizeof(s);
+> let l = s.len;
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
@@ -1793,7 +1772,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| +x, -x               | Unary plus, Unary minus                           |
+| -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
 | ==, !=, >, >=, <, <= | Comparisons, Identity, operators                  |

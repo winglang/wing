@@ -28,7 +28,7 @@ assert(r.f == 2);
 let f = (var arg: num):num => {
   arg = 0;
   return arg;
-}
+};
 
 let y = 1;
 assert(f(y) == 0);
