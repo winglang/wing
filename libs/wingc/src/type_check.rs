@@ -5,8 +5,8 @@ pub mod symbol_env;
 use crate::ast::{Type as AstType, *};
 use crate::diagnostic::{Diagnostic, DiagnosticLevel, Diagnostics, TypeError, WingSpan};
 use crate::{
-	debug, WINGSDK_ARRAY, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_MAP, WINGSDK_MUT_ARRAY,
-	WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
+	debug, WINGSDK_ARRAY, WINGSDK_ASSEMBLY_NAME, WINGSDK_CLOUD_MODULE, WINGSDK_DURATION, WINGSDK_FS_MODULE, WINGSDK_MAP,
+	WINGSDK_MUT_ARRAY, WINGSDK_MUT_MAP, WINGSDK_MUT_SET, WINGSDK_SET, WINGSDK_STD_MODULE, WINGSDK_STRING,
 };
 use derivative::Derivative;
 use indexmap::IndexSet;
@@ -616,9 +616,13 @@ impl<'a> TypeChecker<'a> {
 	}
 
 	pub fn add_globals(&mut self, scope: &Scope) {
-		for m in [WINGSDK_STD_MODULE] {
-			self.add_module_to_env(scope.env.borrow_mut().as_mut().unwrap(), m.to_string(), None, 0);
-		}
+		self.add_module_to_env(
+			scope.env.borrow_mut().as_mut().unwrap(),
+			String::from("@winglang/sdk"),
+			vec![WINGSDK_STD_MODULE.to_string()],
+			WINGSDK_STD_MODULE.to_string(),
+			0,
+		);
 	}
 
 	// TODO: All calls to this should be removed and we should make sure type checks are done
@@ -1404,20 +1408,53 @@ impl<'a> TypeChecker<'a> {
 				module_name,
 				identifier,
 			} => {
-				// If provided use alias identifier as the namespace name
-				let namespace_name = identifier.as_ref().unwrap_or(module_name);
+				// library_name is the name of the library we are importing from the JSII world
+				let library_name: String;
+				// namespace_filter is the path to the namespace we are importing from the library, if any
+				let namespace_filter: Vec<String>;
+				// alias is the name we are giving to the imported library or namespace
+				let alias: String;
 
-				if namespace_name.name == WINGSDK_STD_MODULE {
-					self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
-					return;
-				}
+				if module_name.name.starts_with('"') && module_name.name.ends_with('"') {
+					// case 1: bring "library_name" as identifier;
+					if identifier.is_none() {
+						self.stmt_error(
+							stmt,
+							format!("bring \"{}\" must be assigned to an identifier", module_name.name),
+						);
+						return;
+					}
+					// We assume we have a jsii library and we use the `module_name` as the library name, and set no
+					// namespace filter (we only support importing the root library at the moment)
+					library_name = module_name.name[1..module_name.name.len() - 1].to_string();
+					namespace_filter = vec![];
+					alias = identifier.as_ref().unwrap().name.clone();
+				} else {
+					// case 2: bring module_name;
+					// case 3: bring module_name as identifier;
+					match module_name.name.as_str() {
+						// If the module name is a built-in module, then we use @winglang/sdk as the library name,
+						// and import the module as a namespace. If the user doesn't specify an identifier, then
+						// we use the module name as the identifier.
+						// For example, `bring fs` will import the `fs` namespace from @winglang/sdk and assign it
+						// to an identifier named `fs`.
+						WINGSDK_CLOUD_MODULE | WINGSDK_FS_MODULE => {
+							library_name = WINGSDK_ASSEMBLY_NAME.to_string();
+							namespace_filter = vec![module_name.name.clone()];
+							alias = identifier.as_ref().unwrap_or(&module_name.clone()).name.clone();
+						}
+						WINGSDK_STD_MODULE => {
+							self.stmt_error(stmt, format!("Redundant import of \"{}\"", WINGSDK_STD_MODULE));
+							return;
+						}
+						_ => {
+							self.stmt_error(stmt, format!("\"{}\" is not a built-in module", module_name.name));
+							return;
+						}
+					}
+				};
 
-				self.add_module_to_env(
-					env,
-					module_name.name.clone(),
-					identifier.as_ref().map(|id| id.name.clone()),
-					stmt.idx,
-				);
+				self.add_module_to_env(env, library_name, namespace_filter, alias, stmt.idx);
 			}
 			StmtKind::Scope(scope) => {
 				scope.set_env(SymbolEnv::new(
@@ -1734,24 +1771,23 @@ impl<'a> TypeChecker<'a> {
 	fn add_module_to_env(
 		&mut self,
 		env: &mut SymbolEnv,
-		module_name: String,
-		_alias: Option<String>,
+		library_name: String,
+		namespace_filter: Vec<String>,
+		identifier: String,
 		statement_idx: usize,
 	) {
-		let jsii_manifest_path =
-			// TODO Hack: treat "cloud" or "std" as "_ in wingsdk" until I figure out the path issue
-			if module_name == WINGSDK_CLOUD_MODULE || module_name == WINGSDK_FS_MODULE || module_name == WINGSDK_STD_MODULE {
-				// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
-				std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string())
-			} else if module_name.starts_with('"') && module_name.ends_with('"') {
-				let mut path = PathBuf::new();
-				path.push(self.source_path.parent().unwrap().to_str().unwrap());
-				path.push("node_modules");
-				path.push(&module_name[1..module_name.len() - 1]);
-				path.to_str().unwrap().to_string()
-			} else {
-				return;
-			};
+		let jsii_manifest_path = if library_name == WINGSDK_ASSEMBLY_NAME {
+			// in runtime, if "WINGSDK_MANIFEST_ROOT" env var is set, read it. otherwise set to "../wingsdk" for dev
+			std::env::var("WINGSDK_MANIFEST_ROOT").unwrap_or_else(|_| "../wingsdk".to_string())
+		} else if library_name.starts_with('"') && library_name.ends_with('"') {
+			let mut path = PathBuf::new();
+			path.push(self.source_path.parent().unwrap().to_str().unwrap());
+			path.push("node_modules");
+			path.push(&library_name);
+			path.to_str().unwrap().to_string()
+		} else {
+			return;
+		};
 
 		let mut wingii_types = wingii::type_system::TypeSystem::new();
 		let wingii_loader_options = wingii::type_system::AssemblyLoadOptions {
@@ -1766,7 +1802,8 @@ impl<'a> TypeChecker<'a> {
 		let mut jsii_importer = JsiiImporter::new(
 			&wingii_types,
 			&assembly_name,
-			&module_name,
+			&namespace_filter,
+			&identifier,
 			self.types,
 			statement_idx,
 			env,

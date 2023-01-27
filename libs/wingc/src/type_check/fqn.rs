@@ -9,6 +9,7 @@ use crate::{CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE};
 /// The FQN typically looks like:
 /// `assembly_name.namespace1.namespace2...namespaceN.type_name`
 /// where there may be zero or more namespaces.
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub struct FQN<'a>(&'a str);
 
 impl<'a> FQN<'a> {
@@ -51,6 +52,14 @@ impl<'a> FQN<'a> {
 		// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
 		self.0 == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || self.0 == CONSTRUCT_BASE
 	}
+
+	pub fn is_in_namespace<T: AsRef<str>>(&self, namespace_filter: &[T]) -> bool {
+		self.namespaces().count() >= namespace_filter.len()
+			&& self
+				.namespaces()
+				.zip(namespace_filter.iter())
+				.all(|(ns, filter)| ns == filter.as_ref())
+	}
 }
 
 impl Display for FQN<'_> {
@@ -86,5 +95,36 @@ mod tests {
 		assert_eq!(fqn.assembly(), "my_lib");
 		assert_eq!(fqn.namespaces().collect::<Vec<_>>(), vec!["ns1", "ns2"]);
 		assert_eq!(fqn.type_name(), "MyResource");
+	}
+
+	#[test]
+	fn test_fqn_is_in_namespace() {
+		let fqn = FQN("my_lib.ns1.ns2.MyResource");
+
+		assert_eq!(fqn.is_in_namespace::<&str>(&vec![]), true);
+		assert_eq!(fqn.is_in_namespace(&vec!["ns1"]), true);
+		assert_eq!(fqn.is_in_namespace(&vec!["ns1", "ns2"]), true);
+
+		assert_eq!(fqn.is_in_namespace(&vec!["blah"]), false);
+		assert_eq!(fqn.is_in_namespace(&vec!["ns1", "blah"]), false);
+		assert_eq!(fqn.is_in_namespace(&vec!["ns1", "ns2", "ns3"]), false);
+	}
+
+	#[test]
+	fn test_fqn_is_in_namespace2() {
+		let fqn = FQN("@winglang/sdk.cloud.Bucket");
+
+		assert_eq!(fqn.is_in_namespace(&vec!["std"]), false);
+		assert_eq!(fqn.is_in_namespace(&vec![String::from("std")]), false);
+	}
+
+	#[test]
+	fn test_fqn_is_construct_base() {
+		assert_eq!(FQN(CONSTRUCT_BASE).is_construct_base(), true);
+		assert_eq!(
+			FQN(&format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE)).is_construct_base(),
+			true
+		);
+		assert_eq!(FQN("@winglang/sdk.cloud.Bucket").is_construct_base(), false);
 	}
 }

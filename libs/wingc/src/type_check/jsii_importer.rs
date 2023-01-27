@@ -43,11 +43,16 @@ pub struct JsiiImporter<'a> {
 	jsii_types: &'a wingii::type_system::TypeSystem,
 	/// The assembly to import from the JSII library. This is typically the name of the NPM package.
 	assembly_name: &'a str,
-	/// The wing module name to load. This is a namespace filter on the imported JSII assembly
-	/// for example "cloud" will only (publicly) import types prefixed with `cloud.` from the
-	/// assembly. Note that other types might be implicitly imported into hidden namespaces
+	/// This is a namespace filter on the imported JSII assembly.
+	/// For example:
+	/// - ["cloud"] will only (publicly) import types prefixed with `cloud.` from the assembly
+	/// - ["ns1", "ns2"] will only import types prefixed with `ns1.ns2` from the assembly
+	/// - [] will import all types from the assembly
+	/// Note that other types might be implicitly imported into hidden namespaces
 	/// if they are referenced from a type in the specified `module_name`.
-	module_name: &'a str,
+	namespace_filter: &'a [String],
+	/// The name to assign to the module in the Wing type system.
+	identifier: &'a str,
 	/// The wing type system: all imported types are added to `wing_types`.
 	wing_types: &'a mut Types,
 	/// The index of the import statement that triggered this import. This is required so we'll know
@@ -64,7 +69,8 @@ impl<'a> JsiiImporter<'a> {
 	pub fn new(
 		jsii_types: &'a wingii::type_system::TypeSystem,
 		assembly_name: &'a str,
-		module_name: &'a str,
+		namespace_filter: &'a [String],
+		identifier: &'a str,
 		wing_types: &'a mut Types,
 		import_statement_idx: usize,
 		env: &'a mut SymbolEnv,
@@ -72,7 +78,8 @@ impl<'a> JsiiImporter<'a> {
 		Self {
 			jsii_types,
 			assembly_name,
-			module_name,
+			namespace_filter,
+			identifier,
 			wing_types,
 			import_statement_idx,
 			env,
@@ -156,7 +163,7 @@ impl<'a> JsiiImporter<'a> {
 		if let Some(symb) = self.env.try_lookup_mut(namespace_name, None) {
 			if let SymbolKind::Namespace(ns) = symb {
 				// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
-				if ns.hidden && namespace_name == self.module_name {
+				if ns.hidden && namespace_name == self.namespace_filter[0] {
 					ns.hidden = false;
 				}
 			} else {
@@ -176,7 +183,7 @@ impl<'a> JsiiImporter<'a> {
 					},
 					SymbolKind::Namespace(Namespace {
 						name: namespace_name.to_string(),
-						hidden: namespace_name != self.module_name,
+						hidden: namespace_name != self.namespace_filter[0],
 						env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
 					}),
 					StatementIdx::Top,
@@ -593,7 +600,7 @@ impl<'a> JsiiImporter<'a> {
 			let type_fqn = FQN::from(type_fqn);
 
 			// Skip types outside the imported namespace
-			if type_fqn.namespaces().next() != Some(self.module_name) {
+			if !type_fqn.is_in_namespace(self.namespace_filter) {
 				continue;
 			}
 
