@@ -365,13 +365,16 @@ jobs:
         with:
           node-version: ${{ env.NODEJS_VERSION }}
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - name: Check latest tag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        id: previous-tag
         with:
-          node-version: ${{ env.NODEJS_VERSION }}
+          fallback: "v0.0.0"
+          prefix: "v"
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
+        if: ${{ steps.previous-tag.outputs.tag != needs.prepare.outputs.version }}
         with:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.prepare.outputs.version }}"
