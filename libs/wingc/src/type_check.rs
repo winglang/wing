@@ -732,10 +732,14 @@ impl<'a> TypeChecker<'a> {
 					ltype
 				}
 			}
-			ExprKind::Unary { op: _, exp: unary_exp } => {
+			ExprKind::Unary { op, exp: unary_exp } => {
 				let _type = self.type_check_exp(unary_exp, env, statement_idx);
-				// Add bool vs num support here (! => bool, +- => num)
-				self.validate_type(_type, self.types.number(), unary_exp);
+
+				match op {
+					UnaryOperator::Not => self.validate_type(_type, self.types.bool(), unary_exp),
+					UnaryOperator::Minus => self.validate_type(_type, self.types.number(), unary_exp),
+				};
+
 				_type
 			}
 			ExprKind::Reference(_ref) => self.resolve_reference(_ref, env, statement_idx)._type,
@@ -1341,6 +1345,7 @@ impl<'a> TypeChecker<'a> {
 			StmtKind::If {
 				condition,
 				statements,
+				elif_statements,
 				else_statements,
 			} => {
 				let cond_type = self.type_check_exp(condition, env, stmt.idx);
@@ -1355,6 +1360,21 @@ impl<'a> TypeChecker<'a> {
 					stmt.idx,
 				));
 				self.inner_scopes.push(statements);
+
+				for elif_scope in elif_statements {
+					let cond_type = self.type_check_exp(&elif_scope.condition, env, stmt.idx);
+					self.validate_type(cond_type, self.types.bool(), condition);
+
+					(&elif_scope.statements).set_env(SymbolEnv::new(
+						Some(env.get_ref()),
+						env.return_type,
+						false,
+						false,
+						env.flight,
+						stmt.idx,
+					));
+					self.inner_scopes.push(&elif_scope.statements);
+				}
 
 				if let Some(else_scope) = else_statements {
 					else_scope.set_env(SymbolEnv::new(

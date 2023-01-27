@@ -6,6 +6,7 @@ import { Polycons } from "polycons";
 import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
 import { mkdtemp } from "../util";
 import { Logger } from "./logger";
+import { Duration } from "../std";
 
 /**
  * Global identifier for `Function`.
@@ -23,6 +24,12 @@ export interface FunctionProps {
    * @default - No environment variables.
    */
   readonly env?: { [key: string]: string };
+
+  /**
+   * The maximum amount of time the function can run.
+   * @default 1m
+   */
+  readonly timeout?: Duration;
 }
 
 /**

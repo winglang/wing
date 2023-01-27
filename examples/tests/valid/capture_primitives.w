@@ -23,7 +23,8 @@ let handler = inflight (s: str): str => {
   let min = my_dur.minutes;
   let sec = my_dur.seconds;
   let hr  = my_dur.hours;
-  print("min=${min} sec=${sec} hr=${hr}");
+  let split = "min=${min} sec=${sec} hr=${hr}".split(" ");
+  assert(split.length == 3);
 };
 
 new cloud.Function(handler);

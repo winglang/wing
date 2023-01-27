@@ -1,5 +1,18 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`can add object in preflight 1`] = `
+Array [
+  "wingsdk.cloud.Logger created.",
+  "Adding object from preflight (key=greeting.txt).",
+  "wingsdk.cloud.Bucket created.",
+  "Get (key=greeting.txt).",
+  "Get (key=greeting.txt).",
+  "List (prefix=null).",
+  "wingsdk.cloud.Bucket deleted.",
+  "wingsdk.cloud.Logger deleted.",
+]
+`;
+
 exports[`create a bucket 1`] = `
 Object {
   "app.wsim/simulator.json": Object {
@@ -14,6 +27,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -31,7 +45,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -48,7 +62,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -60,7 +74,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -94,6 +108,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -111,7 +126,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -128,7 +143,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -140,7 +155,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -175,6 +190,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -192,7 +208,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -209,7 +225,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -221,7 +237,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -258,6 +274,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -275,7 +292,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -292,7 +309,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -304,7 +321,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -339,6 +356,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -356,7 +374,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -373,7 +391,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -385,7 +403,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
@@ -420,6 +438,7 @@ Object {
         "attrs": Object {},
         "path": "root/my_bucket",
         "props": Object {
+          "initialObjects": Object {},
           "public": false,
         },
         "type": "wingsdk.cloud.Bucket",
@@ -437,7 +456,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud logging facility",
@@ -454,7 +473,7 @@ Object {
           },
           "constructInfo": Object {
             "fqn": "constructs.Construct",
-            "version": "10.0.130",
+            "version": "10.1.228",
           },
           "display": Object {
             "description": "A cloud object store",
@@ -466,7 +485,7 @@ Object {
       },
       "constructInfo": Object {
         "fqn": "constructs.Construct",
-        "version": "10.0.130",
+        "version": "10.1.228",
       },
       "id": "root",
       "path": "root",
