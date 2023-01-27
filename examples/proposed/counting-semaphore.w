@@ -17,7 +17,7 @@ resource CountingSemaphore {
   }
 
   // some stable unique instance id is wanted in the inflight context
-  // so that a reousce instance can be properly claimed and later released
+  // so that a resource instance can be properly claimed and later released
   // when used in conjunction with a key-value store
   public inflight try_acquire(): bool {
     if this.is_at_capacity() {
@@ -63,6 +63,7 @@ queue.on_message(inflight (message: str) => {
   }
   let is_resource_2_acquired = resource_2.try_acquire();
   if !is_resource_2_acquired {
+    resource_1.release();
     // brutally error out to re-enqueue
     throw("Failed to acquire resource 2");
   }
