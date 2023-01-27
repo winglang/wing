@@ -4,45 +4,45 @@ exports[`basic function 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_wingapp_Function_IamRole_DC08657F\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_wingapp_Function_IamRolePolicy_F7F78D73\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_Function_IamRole_DC08657F.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_wingapp_Function_IamRolePolicyAttachment_F735FD96\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_Function_IamRole_DC08657F.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_wingapp_Function_147C5E15\\": {
+      \\"root_Function_9F694E40\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Function-c83ae89f\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
-        \\"function_name\\": \\"Function-c83ae89f\\",
+        \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_Function_IamRole_DC08657F.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_wingapp_Function_Code_B4C30096.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_wingapp_Function_S3Object_259A2570.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_wingapp_Function_Code_B4C30096\\": {
-        \\"bucket_prefix\\": \\"code-c85197bd-\\"
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_wingapp_Function_S3Object_259A2570\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_wingapp_Function_Code_B4C30096.bucket}\\",
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -57,15 +57,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "Function": Object {
                 "attributes": Object {
@@ -74,7 +66,7 @@ Object {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/WingLogger",
+                      "resource": "root/Default/WingLogger",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -86,7 +78,7 @@ Object {
                       "version": "0.15.1",
                     },
                     "id": "Asset",
-                    "path": "root/wing-app/Function/Asset",
+                    "path": "root/Default/Function/Asset",
                   },
                   "Code": Object {
                     "constructInfo": Object {
@@ -94,7 +86,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Code",
-                    "path": "root/wing-app/Function/Code",
+                    "path": "root/Default/Function/Code",
                   },
                   "Default": Object {
                     "constructInfo": Object {
@@ -102,7 +94,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/Function/Default",
+                    "path": "root/Default/Function/Default",
                   },
                   "IamRole": Object {
                     "constructInfo": Object {
@@ -110,7 +102,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRole",
-                    "path": "root/wing-app/Function/IamRole",
+                    "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
@@ -118,7 +110,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/wing-app/Function/IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
@@ -126,7 +118,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/wing-app/Function/IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": Object {
                     "constructInfo": Object {
@@ -134,7 +126,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "S3Object",
-                    "path": "root/wing-app/Function/S3Object",
+                    "path": "root/Default/Function/S3Object",
                   },
                 },
                 "constructInfo": Object {
@@ -146,7 +138,7 @@ Object {
                   "title": "Function",
                 },
                 "id": "Function",
-                "path": "root/wing-app/Function",
+                "path": "root/Default/Function",
               },
               "Handler": Object {
                 "attributes": Object {
@@ -163,7 +155,7 @@ Object {
                   "title": "Inflight",
                 },
                 "id": "Handler",
-                "path": "root/wing-app/Handler",
+                "path": "root/Default/Handler",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -172,7 +164,7 @@ Object {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/Function",
+                      "resource": "root/Default/Function",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -187,7 +179,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -195,15 +187,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -229,47 +229,47 @@ exports[`basic function with environment variables 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_wingapp_Function_IamRole_DC08657F\\": {
+      \\"root_Function_IamRole_88AD864C\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_wingapp_Function_IamRolePolicy_F7F78D73\\": {
+      \\"root_Function_IamRolePolicy_8C4F8AF5\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_Function_IamRole_DC08657F.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_wingapp_Function_IamRolePolicyAttachment_F735FD96\\": {
+      \\"root_Function_IamRolePolicyAttachment_AF131EC2\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_Function_IamRole_DC08657F.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_wingapp_Function_147C5E15\\": {
+      \\"root_Function_9F694E40\\": {
         \\"environment\\": {
           \\"variables\\": {
             \\"BOOM\\": \\"BAM\\",
             \\"FOO\\": \\"BAR\\",
-            \\"WING_FUNCTION_NAME\\": \\"Function-c83ae89f\\"
+            \\"WING_FUNCTION_NAME\\": \\"Function-c852aba6\\"
           }
         },
-        \\"function_name\\": \\"Function-c83ae89f\\",
+        \\"function_name\\": \\"Function-c852aba6\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_Function_IamRole_DC08657F.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_Function_IamRole_88AD864C.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_wingapp_Function_Code_B4C30096.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_wingapp_Function_S3Object_259A2570.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_Function_S3Object_A62722D8.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_wingapp_Function_Code_B4C30096\\": {
-        \\"bucket_prefix\\": \\"code-c85197bd-\\"
+      \\"root_Function_Code_794C2A8A\\": {
+        \\"bucket_prefix\\": \\"code-c87cd513-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_wingapp_Function_S3Object_259A2570\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_wingapp_Function_Code_B4C30096.bucket}\\",
+      \\"root_Function_S3Object_A62722D8\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_Function_Code_794C2A8A.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -284,15 +284,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "Function": Object {
                 "attributes": Object {
@@ -301,7 +293,7 @@ Object {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/WingLogger",
+                      "resource": "root/Default/WingLogger",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -313,7 +305,7 @@ Object {
                       "version": "0.15.1",
                     },
                     "id": "Asset",
-                    "path": "root/wing-app/Function/Asset",
+                    "path": "root/Default/Function/Asset",
                   },
                   "Code": Object {
                     "constructInfo": Object {
@@ -321,7 +313,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Code",
-                    "path": "root/wing-app/Function/Code",
+                    "path": "root/Default/Function/Code",
                   },
                   "Default": Object {
                     "constructInfo": Object {
@@ -329,7 +321,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/Function/Default",
+                    "path": "root/Default/Function/Default",
                   },
                   "IamRole": Object {
                     "constructInfo": Object {
@@ -337,7 +329,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRole",
-                    "path": "root/wing-app/Function/IamRole",
+                    "path": "root/Default/Function/IamRole",
                   },
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
@@ -345,7 +337,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/wing-app/Function/IamRolePolicy",
+                    "path": "root/Default/Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
@@ -353,7 +345,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/wing-app/Function/IamRolePolicyAttachment",
+                    "path": "root/Default/Function/IamRolePolicyAttachment",
                   },
                   "S3Object": Object {
                     "constructInfo": Object {
@@ -361,7 +353,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "S3Object",
-                    "path": "root/wing-app/Function/S3Object",
+                    "path": "root/Default/Function/S3Object",
                   },
                 },
                 "constructInfo": Object {
@@ -373,7 +365,7 @@ Object {
                   "title": "Function",
                 },
                 "id": "Function",
-                "path": "root/wing-app/Function",
+                "path": "root/Default/Function",
               },
               "Handler": Object {
                 "attributes": Object {
@@ -390,7 +382,7 @@ Object {
                   "title": "Inflight",
                 },
                 "id": "Handler",
-                "path": "root/wing-app/Handler",
+                "path": "root/Default/Handler",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -399,7 +391,7 @@ Object {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/Function",
+                      "resource": "root/Default/Function",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -414,7 +406,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -422,15 +414,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -456,45 +456,45 @@ exports[`function name valid 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_wingapp_TheMightyFunction01_IamRole_3F623222\\": {
+      \\"root_TheMightyFunction01_IamRole_34EB69E9\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_wingapp_TheMightyFunction01_IamRolePolicy_2A0A9598\\": {
+      \\"root_TheMightyFunction01_IamRolePolicy_366404CE\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_TheMightyFunction01_IamRole_3F623222.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction01_IamRole_34EB69E9.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_wingapp_TheMightyFunction01_IamRolePolicyAttachment_4C903493\\": {
+      \\"root_TheMightyFunction01_IamRolePolicyAttachment_4F1EB129\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_TheMightyFunction01_IamRole_3F623222.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction01_IamRole_34EB69E9.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_wingapp_TheMightyFunction01_5110257A\\": {
+      \\"root_TheMightyFunction01_F0DB42C1\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"The-Mighty_Function-01-c8262d76\\"
+            \\"WING_FUNCTION_NAME\\": \\"The-Mighty_Function-01-c86057f3\\"
           }
         },
-        \\"function_name\\": \\"The-Mighty_Function-01-c8262d76\\",
+        \\"function_name\\": \\"The-Mighty_Function-01-c86057f3\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_TheMightyFunction01_IamRole_3F623222.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction01_IamRole_34EB69E9.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_wingapp_TheMightyFunction01_Code_0EEE72C4.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_wingapp_TheMightyFunction01_S3Object_443D54BD.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TheMightyFunction01_Code_019941EA.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_TheMightyFunction01_S3Object_6949E35F.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_wingapp_TheMightyFunction01_Code_0EEE72C4\\": {
-        \\"bucket_prefix\\": \\"code-c8e4b05e-\\"
+      \\"root_TheMightyFunction01_Code_019941EA\\": {
+        \\"bucket_prefix\\": \\"code-c825ce49-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_wingapp_TheMightyFunction01_S3Object_443D54BD\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_wingapp_TheMightyFunction01_Code_0EEE72C4.bucket}\\",
+      \\"root_TheMightyFunction01_S3Object_6949E35F\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_TheMightyFunction01_Code_019941EA.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -509,15 +509,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "Handler": Object {
                 "attributes": Object {
@@ -534,7 +526,7 @@ Object {
                   "title": "Inflight",
                 },
                 "id": "Handler",
-                "path": "root/wing-app/Handler",
+                "path": "root/Default/Handler",
               },
               "The-Mighty_Function-01": Object {
                 "attributes": Object {
@@ -543,7 +535,7 @@ Object {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/WingLogger",
+                      "resource": "root/Default/WingLogger",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -555,7 +547,7 @@ Object {
                       "version": "0.15.1",
                     },
                     "id": "Asset",
-                    "path": "root/wing-app/The-Mighty_Function-01/Asset",
+                    "path": "root/Default/The-Mighty_Function-01/Asset",
                   },
                   "Code": Object {
                     "constructInfo": Object {
@@ -563,7 +555,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Code",
-                    "path": "root/wing-app/The-Mighty_Function-01/Code",
+                    "path": "root/Default/The-Mighty_Function-01/Code",
                   },
                   "Default": Object {
                     "constructInfo": Object {
@@ -571,7 +563,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/The-Mighty_Function-01/Default",
+                    "path": "root/Default/The-Mighty_Function-01/Default",
                   },
                   "IamRole": Object {
                     "constructInfo": Object {
@@ -579,7 +571,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRole",
-                    "path": "root/wing-app/The-Mighty_Function-01/IamRole",
+                    "path": "root/Default/The-Mighty_Function-01/IamRole",
                   },
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
@@ -587,7 +579,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/wing-app/The-Mighty_Function-01/IamRolePolicy",
+                    "path": "root/Default/The-Mighty_Function-01/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
@@ -595,7 +587,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/wing-app/The-Mighty_Function-01/IamRolePolicyAttachment",
+                    "path": "root/Default/The-Mighty_Function-01/IamRolePolicyAttachment",
                   },
                   "S3Object": Object {
                     "constructInfo": Object {
@@ -603,7 +595,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "S3Object",
-                    "path": "root/wing-app/The-Mighty_Function-01/S3Object",
+                    "path": "root/Default/The-Mighty_Function-01/S3Object",
                   },
                 },
                 "constructInfo": Object {
@@ -615,7 +607,7 @@ Object {
                   "title": "Function",
                 },
                 "id": "The-Mighty_Function-01",
-                "path": "root/wing-app/The-Mighty_Function-01",
+                "path": "root/Default/The-Mighty_Function-01",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -624,7 +616,7 @@ Object {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/The-Mighty_Function-01",
+                      "resource": "root/Default/The-Mighty_Function-01",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -639,7 +631,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -647,15 +639,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -681,45 +681,45 @@ exports[`replace invalid character from function name 1`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_wingapp_TheMightyFunction_IamRole_3C039BDD\\": {
+      \\"root_TheMightyFunction_IamRole_DF8277B4\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_wingapp_TheMightyFunction_IamRolePolicy_023233A9\\": {
+      \\"root_TheMightyFunction_IamRolePolicy_8379B0E6\\": {
         \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\",\\\\\\"Action\\\\\\":\\\\\\"none:null\\\\\\",\\\\\\"Resource\\\\\\":\\\\\\"*\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_TheMightyFunction_IamRole_3C039BDD.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction_IamRole_DF8277B4.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_wingapp_TheMightyFunction_IamRolePolicyAttachment_CB941F33\\": {
+      \\"root_TheMightyFunction_IamRolePolicyAttachment_BC72ACBA\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_TheMightyFunction_IamRole_3C039BDD.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction_IamRole_DF8277B4.name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_wingapp_TheMightyFunction_9E01F68F\\": {
+      \\"root_TheMightyFunction_E909CD7D\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"The-Mighty-Function-c8d5f361\\"
+            \\"WING_FUNCTION_NAME\\": \\"The-Mighty-Function-c86ccf73\\"
           }
         },
-        \\"function_name\\": \\"The-Mighty-Function-c8d5f361\\",
+        \\"function_name\\": \\"The-Mighty-Function-c86ccf73\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_TheMightyFunction_IamRole_3C039BDD.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_TheMightyFunction_IamRole_DF8277B4.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_wingapp_TheMightyFunction_Code_4F5C6BB8.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_wingapp_TheMightyFunction_S3Object_5C090C37.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_TheMightyFunction_Code_28F77D89.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_TheMightyFunction_S3Object_D0A75871.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_wingapp_TheMightyFunction_Code_4F5C6BB8\\": {
-        \\"bucket_prefix\\": \\"code-c8527f66-\\"
+      \\"root_TheMightyFunction_Code_28F77D89\\": {
+        \\"bucket_prefix\\": \\"code-c8cf0523-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_wingapp_TheMightyFunction_S3Object_5C090C37\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_wingapp_TheMightyFunction_Code_4F5C6BB8.bucket}\\",
+      \\"root_TheMightyFunction_S3Object_D0A75871\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_TheMightyFunction_Code_28F77D89.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
@@ -734,15 +734,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "Handler": Object {
                 "attributes": Object {
@@ -759,7 +751,7 @@ Object {
                   "title": "Inflight",
                 },
                 "id": "Handler",
-                "path": "root/wing-app/Handler",
+                "path": "root/Default/Handler",
               },
               "The%Mighty$Function": Object {
                 "attributes": Object {
@@ -768,7 +760,7 @@ Object {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/WingLogger",
+                      "resource": "root/Default/WingLogger",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -780,7 +772,7 @@ Object {
                       "version": "0.15.1",
                     },
                     "id": "Asset",
-                    "path": "root/wing-app/The%Mighty$Function/Asset",
+                    "path": "root/Default/The%Mighty$Function/Asset",
                   },
                   "Code": Object {
                     "constructInfo": Object {
@@ -788,7 +780,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Code",
-                    "path": "root/wing-app/The%Mighty$Function/Code",
+                    "path": "root/Default/The%Mighty$Function/Code",
                   },
                   "Default": Object {
                     "constructInfo": Object {
@@ -796,7 +788,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/The%Mighty$Function/Default",
+                    "path": "root/Default/The%Mighty$Function/Default",
                   },
                   "IamRole": Object {
                     "constructInfo": Object {
@@ -804,7 +796,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRole",
-                    "path": "root/wing-app/The%Mighty$Function/IamRole",
+                    "path": "root/Default/The%Mighty$Function/IamRole",
                   },
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
@@ -812,7 +804,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/wing-app/The%Mighty$Function/IamRolePolicy",
+                    "path": "root/Default/The%Mighty$Function/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
@@ -820,7 +812,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/wing-app/The%Mighty$Function/IamRolePolicyAttachment",
+                    "path": "root/Default/The%Mighty$Function/IamRolePolicyAttachment",
                   },
                   "S3Object": Object {
                     "constructInfo": Object {
@@ -828,7 +820,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "S3Object",
-                    "path": "root/wing-app/The%Mighty$Function/S3Object",
+                    "path": "root/Default/The%Mighty$Function/S3Object",
                   },
                 },
                 "constructInfo": Object {
@@ -840,7 +832,7 @@ Object {
                   "title": "Function",
                 },
                 "id": "The%Mighty$Function",
-                "path": "root/wing-app/The%Mighty$Function",
+                "path": "root/Default/The%Mighty$Function",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -849,7 +841,7 @@ Object {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/The%Mighty$Function",
+                      "resource": "root/Default/The%Mighty$Function",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -864,7 +856,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -872,15 +864,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {

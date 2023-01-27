@@ -77,7 +77,7 @@ export class CdktfApp extends Construct implements IApp {
     }
     Polycons.register(cdktfStack, props.customFactory);
 
-    super(cdktfStack, "wing-app");
+    super(cdktfStack, "Default");
 
     this.outdir = outdir;
     this.cdktfApp = cdktfApp;

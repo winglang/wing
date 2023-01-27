@@ -4,20 +4,20 @@ exports[`bucket is public 1`] = `
 "{
   \\"data\\": {
     \\"google_client_config\\": {
-      \\"root_wingapp_config_C33BD6F8\\": {}
+      \\"root_config_E62FD7A7\\": {}
     }
   },
   \\"resource\\": {
     \\"google_storage_bucket\\": {
-      \\"root_wingapp_mybucket_4494AD48\\": {
-        \\"location\\": \\"\${data.google_client_config.root_wingapp_config_C33BD6F8.region}\\",
-        \\"name\\": \\"c8c86ad58bb4f77a82400197b6429c7a8cf445b12c\\",
+      \\"root_mybucket_E5DAA363\\": {
+        \\"location\\": \\"\${data.google_client_config.root_config_E62FD7A7.region}\\",
+        \\"name\\": \\"c8045fccc85a7ef42d5391d87958e5ce36c53a401a\\",
         \\"public_access_prevention\\": \\"enforced\\"
       }
     },
     \\"google_storage_bucket_iam_member\\": {
-      \\"root_wingapp_mybucket_PublicAccessIamMember_C49912B5\\": {
-        \\"bucket\\": \\"\${google_storage_bucket.root_wingapp_mybucket_4494AD48.name}\\",
+      \\"root_mybucket_PublicAccessIamMember_53C8A9DA\\": {
+        \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.name}\\",
         \\"member\\": \\"allUsers\\",
         \\"role\\": \\"roles/storage.objectViewer\\"
       }
@@ -32,15 +32,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "WingLogger": Object {
                 "attributes": Object {
@@ -57,7 +49,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "config": Object {
                 "constructInfo": Object {
@@ -65,7 +57,7 @@ Object {
                   "version": "5.0.2",
                 },
                 "id": "config",
-                "path": "root/wing-app/config",
+                "path": "root/Default/config",
               },
               "google": Object {
                 "constructInfo": Object {
@@ -73,7 +65,7 @@ Object {
                   "version": "5.0.2",
                 },
                 "id": "google",
-                "path": "root/wing-app/google",
+                "path": "root/Default/google",
               },
               "my_bucket": Object {
                 "attributes": Object {
@@ -87,7 +79,7 @@ Object {
                       "version": "5.0.2",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/my_bucket/Default",
+                    "path": "root/Default/my_bucket/Default",
                   },
                   "PublicAccessIamMember": Object {
                     "constructInfo": Object {
@@ -95,7 +87,7 @@ Object {
                       "version": "5.0.2",
                     },
                     "id": "PublicAccessIamMember",
-                    "path": "root/wing-app/my_bucket/PublicAccessIamMember",
+                    "path": "root/Default/my_bucket/PublicAccessIamMember",
                   },
                 },
                 "constructInfo": Object {
@@ -107,15 +99,23 @@ Object {
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
-                "path": "root/wing-app/my_bucket",
+                "path": "root/Default/my_bucket",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -141,14 +141,14 @@ exports[`create a bucket 1`] = `
 "{
   \\"data\\": {
     \\"google_client_config\\": {
-      \\"root_wingapp_config_C33BD6F8\\": {}
+      \\"root_config_E62FD7A7\\": {}
     }
   },
   \\"resource\\": {
     \\"google_storage_bucket\\": {
-      \\"root_wingapp_mybucket_4494AD48\\": {
-        \\"location\\": \\"\${data.google_client_config.root_wingapp_config_C33BD6F8.region}\\",
-        \\"name\\": \\"c8c86ad58bb4f77a82400197b6429c7a8cf445b12c\\"
+      \\"root_mybucket_E5DAA363\\": {
+        \\"location\\": \\"\${data.google_client_config.root_config_E62FD7A7.region}\\",
+        \\"name\\": \\"c8045fccc85a7ef42d5391d87958e5ce36c53a401a\\"
       }
     }
   }
@@ -161,15 +161,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "WingLogger": Object {
                 "attributes": Object {
@@ -186,7 +178,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "config": Object {
                 "constructInfo": Object {
@@ -194,7 +186,7 @@ Object {
                   "version": "5.0.2",
                 },
                 "id": "config",
-                "path": "root/wing-app/config",
+                "path": "root/Default/config",
               },
               "google": Object {
                 "constructInfo": Object {
@@ -202,7 +194,7 @@ Object {
                   "version": "5.0.2",
                 },
                 "id": "google",
-                "path": "root/wing-app/google",
+                "path": "root/Default/google",
               },
               "my_bucket": Object {
                 "attributes": Object {
@@ -216,7 +208,7 @@ Object {
                       "version": "5.0.2",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/my_bucket/Default",
+                    "path": "root/Default/my_bucket/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -228,15 +220,23 @@ Object {
                   "title": "Bucket",
                 },
                 "id": "my_bucket",
-                "path": "root/wing-app/my_bucket",
+                "path": "root/Default/my_bucket",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {

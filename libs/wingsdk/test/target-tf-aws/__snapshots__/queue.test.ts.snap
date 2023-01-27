@@ -4,8 +4,8 @@ exports[`default queue behavior 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_wingapp_Queue_01757426\\": {
-        \\"name\\": \\"Queue-c87360b2\\"
+      \\"root_Queue_7193B145\\": {
+        \\"name\\": \\"Queue-c822c726\\"
       }
     }
   }
@@ -18,15 +18,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "Queue": Object {
                 "attributes": Object {
@@ -40,7 +32,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/Queue/Default",
+                    "path": "root/Default/Queue/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -52,7 +44,7 @@ Object {
                   "title": "Queue",
                 },
                 "id": "Queue",
-                "path": "root/wing-app/Queue",
+                "path": "root/Default/Queue",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -69,7 +61,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -77,15 +69,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -111,8 +111,8 @@ exports[`queue name valid 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_wingapp_TheIncredibleQueue01_1F85EC62\\": {
-        \\"name\\": \\"The-Incredible_Queue-01-c84ec4c0\\"
+      \\"root_TheIncredibleQueue01_032AFBF2\\": {
+        \\"name\\": \\"The-Incredible_Queue-01-c8d1a14d\\"
       }
     }
   }
@@ -125,15 +125,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "The-Incredible_Queue-01": Object {
                 "attributes": Object {
@@ -147,7 +139,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/The-Incredible_Queue-01/Default",
+                    "path": "root/Default/The-Incredible_Queue-01/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -159,7 +151,7 @@ Object {
                   "title": "Queue",
                 },
                 "id": "The-Incredible_Queue-01",
-                "path": "root/wing-app/The-Incredible_Queue-01",
+                "path": "root/Default/The-Incredible_Queue-01",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -176,7 +168,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -184,15 +176,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -214,65 +214,65 @@ Object {
 }
 `;
 
-exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_b2840415\\"])"`;
+exports[`queue with a consumer function 1`] = `"new (require(\\"[REDACTED]/wingsdk/src/target-tf-aws/function.inflight.ts\\")).FunctionClient(process.env[\\"FUNCTION_NAME_68e3f3ae\\"])"`;
 
 exports[`queue with a consumer function 2`] = `
 "{
   \\"resource\\": {
     \\"aws_iam_role\\": {
-      \\"root_wingapp_QueueOnMessage8f4ea749_IamRole_824C2372\\": {
+      \\"root_QueueOnMessagec5395e41_IamRole_800EDB96\\": {
         \\"assume_role_policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":\\\\\\"sts:AssumeRole\\\\\\",\\\\\\"Principal\\\\\\":{\\\\\\"Service\\\\\\":\\\\\\"lambda.amazonaws.com\\\\\\"},\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\"
       }
     },
     \\"aws_iam_role_policy\\": {
-      \\"root_wingapp_QueueOnMessage8f4ea749_IamRolePolicy_4B2B0EA0\\": {
-        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_wingapp_Queue_01757426.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_QueueOnMessage8f4ea749_IamRole_824C2372.name}\\"
+      \\"root_QueueOnMessagec5395e41_IamRolePolicy_2E9AE0BB\\": {
+        \\"policy\\": \\"{\\\\\\"Version\\\\\\":\\\\\\"2012-10-17\\\\\\",\\\\\\"Statement\\\\\\":[{\\\\\\"Action\\\\\\":[\\\\\\"sqs:ReceiveMessage\\\\\\",\\\\\\"sqs:ChangeMessageVisibility\\\\\\",\\\\\\"sqs:GetQueueUrl\\\\\\",\\\\\\"sqs:DeleteMessage\\\\\\",\\\\\\"sqs:GetQueueAttributes\\\\\\"],\\\\\\"Resource\\\\\\":\\\\\\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\\\\\",\\\\\\"Effect\\\\\\":\\\\\\"Allow\\\\\\"}]}\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.name}\\"
       }
     },
     \\"aws_iam_role_policy_attachment\\": {
-      \\"root_wingapp_QueueOnMessage8f4ea749_IamRolePolicyAttachment_0EA770CF\\": {
+      \\"root_QueueOnMessagec5395e41_IamRolePolicyAttachment_90B64365\\": {
         \\"policy_arn\\": \\"arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_QueueOnMessage8f4ea749_IamRole_824C2372.name}\\"
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.name}\\"
       }
     },
     \\"aws_lambda_event_source_mapping\\": {
-      \\"root_wingapp_Queue_EventSourceMapping_9FB95FB2\\": {
+      \\"root_Queue_EventSourceMapping_A20C741D\\": {
         \\"batch_size\\": 1,
-        \\"event_source_arn\\": \\"\${aws_sqs_queue.root_wingapp_Queue_01757426.arn}\\",
-        \\"function_name\\": \\"\${aws_lambda_function.root_wingapp_QueueOnMessage8f4ea749_3FCC0019.function_name}\\"
+        \\"event_source_arn\\": \\"\${aws_sqs_queue.root_Queue_7193B145.arn}\\",
+        \\"function_name\\": \\"\${aws_lambda_function.root_QueueOnMessagec5395e41_BFDF10CF.function_name}\\"
       }
     },
     \\"aws_lambda_function\\": {
-      \\"root_wingapp_QueueOnMessage8f4ea749_3FCC0019\\": {
+      \\"root_QueueOnMessagec5395e41_BFDF10CF\\": {
         \\"environment\\": {
           \\"variables\\": {
-            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-8f4ea749-c87f9874\\"
+            \\"WING_FUNCTION_NAME\\": \\"Queue-OnMessage-c5395e41-c87b8107\\"
           }
         },
-        \\"function_name\\": \\"Queue-OnMessage-8f4ea749-c87f9874\\",
+        \\"function_name\\": \\"Queue-OnMessage-c5395e41-c87b8107\\",
         \\"handler\\": \\"index.handler\\",
-        \\"role\\": \\"\${aws_iam_role.root_wingapp_QueueOnMessage8f4ea749_IamRole_824C2372.arn}\\",
+        \\"role\\": \\"\${aws_iam_role.root_QueueOnMessagec5395e41_IamRole_800EDB96.arn}\\",
         \\"runtime\\": \\"nodejs16.x\\",
-        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_wingapp_QueueOnMessage8f4ea749_Code_AB0EA9F3.bucket}\\",
-        \\"s3_key\\": \\"\${aws_s3_object.root_wingapp_QueueOnMessage8f4ea749_S3Object_B0CCFF61.key}\\"
+        \\"s3_bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
+        \\"s3_key\\": \\"\${aws_s3_object.root_QueueOnMessagec5395e41_S3Object_9BE0A142.key}\\"
       }
     },
     \\"aws_s3_bucket\\": {
-      \\"root_wingapp_QueueOnMessage8f4ea749_Code_AB0EA9F3\\": {
-        \\"bucket_prefix\\": \\"code-c8c504cc-\\"
+      \\"root_QueueOnMessagec5395e41_Code_F10D8CAB\\": {
+        \\"bucket_prefix\\": \\"code-c82147c7-\\"
       }
     },
     \\"aws_s3_object\\": {
-      \\"root_wingapp_QueueOnMessage8f4ea749_S3Object_B0CCFF61\\": {
-        \\"bucket\\": \\"\${aws_s3_bucket.root_wingapp_QueueOnMessage8f4ea749_Code_AB0EA9F3.bucket}\\",
+      \\"root_QueueOnMessagec5395e41_S3Object_9BE0A142\\": {
+        \\"bucket\\": \\"\${aws_s3_bucket.root_QueueOnMessagec5395e41_Code_F10D8CAB.bucket}\\",
         \\"key\\": \\"<key>\\",
         \\"source\\": \\"<source>\\"
       }
     },
     \\"aws_sqs_queue\\": {
-      \\"root_wingapp_Queue_01757426\\": {
-        \\"name\\": \\"Queue-c87360b2\\",
+      \\"root_Queue_7193B145\\": {
+        \\"name\\": \\"Queue-c822c726\\",
         \\"visibility_timeout_seconds\\": 30
       }
     }
@@ -286,15 +286,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "Handler": Object {
                 "attributes": Object {
@@ -303,7 +295,7 @@ Object {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/wing-app/Queue-OnMessage-8f4ea749",
+                      "resource": "root/Default/Queue-OnMessage-c5395e41",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -318,7 +310,7 @@ Object {
                   "title": "Inflight",
                 },
                 "id": "Handler",
-                "path": "root/wing-app/Handler",
+                "path": "root/Default/Handler",
               },
               "Queue": Object {
                 "attributes": Object {
@@ -327,7 +319,7 @@ Object {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "on_message",
-                      "resource": "root/wing-app/Queue-OnMessage-8f4ea749",
+                      "resource": "root/Default/Queue-OnMessage-c5395e41",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -339,7 +331,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/Queue/Default",
+                    "path": "root/Default/Queue/Default",
                   },
                   "EventSourceMapping": Object {
                     "constructInfo": Object {
@@ -347,7 +339,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "EventSourceMapping",
-                    "path": "root/wing-app/Queue/EventSourceMapping",
+                    "path": "root/Default/Queue/EventSourceMapping",
                   },
                 },
                 "constructInfo": Object {
@@ -359,28 +351,28 @@ Object {
                   "title": "Queue",
                 },
                 "id": "Queue",
-                "path": "root/wing-app/Queue",
+                "path": "root/Default/Queue",
               },
-              "Queue-OnMessage-8f4ea749": Object {
+              "Queue-OnMessage-c5395e41": Object {
                 "attributes": Object {
                   "wing:resource:connections": Array [
                     Object {
                       "direction": "outbound",
                       "implicit": false,
                       "relationship": "handle",
-                      "resource": "root/wing-app/Handler",
+                      "resource": "root/Default/Handler",
                     },
                     Object {
                       "direction": "outbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/WingLogger",
+                      "resource": "root/Default/WingLogger",
                     },
                     Object {
                       "direction": "inbound",
                       "implicit": false,
                       "relationship": "on_message",
-                      "resource": "root/wing-app/Queue",
+                      "resource": "root/Default/Queue",
                     },
                   ],
                   "wing:resource:stateful": false,
@@ -392,7 +384,7 @@ Object {
                       "version": "0.15.1",
                     },
                     "id": "Asset",
-                    "path": "root/wing-app/Queue-OnMessage-8f4ea749/Asset",
+                    "path": "root/Default/Queue-OnMessage-c5395e41/Asset",
                   },
                   "Code": Object {
                     "constructInfo": Object {
@@ -400,7 +392,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Code",
-                    "path": "root/wing-app/Queue-OnMessage-8f4ea749/Code",
+                    "path": "root/Default/Queue-OnMessage-c5395e41/Code",
                   },
                   "Default": Object {
                     "constructInfo": Object {
@@ -408,7 +400,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/Queue-OnMessage-8f4ea749/Default",
+                    "path": "root/Default/Queue-OnMessage-c5395e41/Default",
                   },
                   "IamRole": Object {
                     "constructInfo": Object {
@@ -416,7 +408,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRole",
-                    "path": "root/wing-app/Queue-OnMessage-8f4ea749/IamRole",
+                    "path": "root/Default/Queue-OnMessage-c5395e41/IamRole",
                   },
                   "IamRolePolicy": Object {
                     "constructInfo": Object {
@@ -424,7 +416,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicy",
-                    "path": "root/wing-app/Queue-OnMessage-8f4ea749/IamRolePolicy",
+                    "path": "root/Default/Queue-OnMessage-c5395e41/IamRolePolicy",
                   },
                   "IamRolePolicyAttachment": Object {
                     "constructInfo": Object {
@@ -432,7 +424,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "IamRolePolicyAttachment",
-                    "path": "root/wing-app/Queue-OnMessage-8f4ea749/IamRolePolicyAttachment",
+                    "path": "root/Default/Queue-OnMessage-c5395e41/IamRolePolicyAttachment",
                   },
                   "S3Object": Object {
                     "constructInfo": Object {
@@ -440,7 +432,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "S3Object",
-                    "path": "root/wing-app/Queue-OnMessage-8f4ea749/S3Object",
+                    "path": "root/Default/Queue-OnMessage-c5395e41/S3Object",
                   },
                 },
                 "constructInfo": Object {
@@ -451,10 +443,10 @@ Object {
                   "description": "A cloud function (FaaS)",
                   "title": "Function",
                 },
-                "id": "Queue-OnMessage-8f4ea749",
-                "path": "root/wing-app/Queue-OnMessage-8f4ea749",
+                "id": "Queue-OnMessage-c5395e41",
+                "path": "root/Default/Queue-OnMessage-c5395e41",
               },
-              "Queue-OnMessageHandler-8f4ea749": Object {
+              "Queue-OnMessageHandler-c5395e41": Object {
                 "attributes": Object {
                   "wing:resource:connections": Array [],
                   "wing:resource:stateful": false,
@@ -463,8 +455,8 @@ Object {
                   "fqn": "constructs.Construct",
                   "version": "10.1.228",
                 },
-                "id": "Queue-OnMessageHandler-8f4ea749",
-                "path": "root/wing-app/Queue-OnMessageHandler-8f4ea749",
+                "id": "Queue-OnMessageHandler-c5395e41",
+                "path": "root/Default/Queue-OnMessageHandler-c5395e41",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -473,7 +465,7 @@ Object {
                       "direction": "inbound",
                       "implicit": true,
                       "relationship": "print",
-                      "resource": "root/wing-app/Queue-OnMessage-8f4ea749",
+                      "resource": "root/Default/Queue-OnMessage-c5395e41",
                     },
                   ],
                   "wing:resource:stateful": true,
@@ -488,7 +480,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -496,15 +488,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -530,8 +530,8 @@ exports[`queue with custom timeout 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_wingapp_Queue_01757426\\": {
-        \\"name\\": \\"Queue-c87360b2\\",
+      \\"root_Queue_7193B145\\": {
+        \\"name\\": \\"Queue-c822c726\\",
         \\"visibility_timeout_seconds\\": 30
       }
     }
@@ -545,15 +545,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "Queue": Object {
                 "attributes": Object {
@@ -567,7 +559,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/Queue/Default",
+                    "path": "root/Default/Queue/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -579,7 +571,7 @@ Object {
                   "title": "Queue",
                 },
                 "id": "Queue",
-                "path": "root/wing-app/Queue",
+                "path": "root/Default/Queue",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -596,7 +588,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -604,15 +596,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
@@ -638,8 +638,8 @@ exports[`replace invalid character from queue name 1`] = `
 "{
   \\"resource\\": {
     \\"aws_sqs_queue\\": {
-      \\"root_wingapp_TheIncredibleQueue_84B434C8\\": {
-        \\"name\\": \\"The-Incredible-Queue-c8ce1bd4\\"
+      \\"root_TheIncredibleQueue_453F8E34\\": {
+        \\"name\\": \\"The-Incredible-Queue-c8305287\\"
       }
     }
   }
@@ -652,15 +652,7 @@ Object {
     "children": Object {
       "root": Object {
         "children": Object {
-          "backend": Object {
-            "constructInfo": Object {
-              "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
-            },
-            "id": "backend",
-            "path": "root/backend",
-          },
-          "wing-app": Object {
+          "Default": Object {
             "children": Object {
               "The*Incredible$Queue": Object {
                 "attributes": Object {
@@ -674,7 +666,7 @@ Object {
                       "version": "12.0.1",
                     },
                     "id": "Default",
-                    "path": "root/wing-app/The*Incredible$Queue/Default",
+                    "path": "root/Default/The*Incredible$Queue/Default",
                   },
                 },
                 "constructInfo": Object {
@@ -686,7 +678,7 @@ Object {
                   "title": "Queue",
                 },
                 "id": "The*Incredible$Queue",
-                "path": "root/wing-app/The*Incredible$Queue",
+                "path": "root/Default/The*Incredible$Queue",
               },
               "WingLogger": Object {
                 "attributes": Object {
@@ -703,7 +695,7 @@ Object {
                   "title": "Logger",
                 },
                 "id": "WingLogger",
-                "path": "root/wing-app/WingLogger",
+                "path": "root/Default/WingLogger",
               },
               "aws": Object {
                 "constructInfo": Object {
@@ -711,15 +703,23 @@ Object {
                   "version": "12.0.1",
                 },
                 "id": "aws",
-                "path": "root/wing-app/aws",
+                "path": "root/Default/aws",
               },
             },
             "constructInfo": Object {
               "fqn": "constructs.Construct",
               "version": "10.1.228",
             },
-            "id": "wing-app",
-            "path": "root/wing-app",
+            "id": "Default",
+            "path": "root/Default",
+          },
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "root/backend",
           },
         },
         "constructInfo": Object {
