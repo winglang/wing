@@ -1978,6 +1978,8 @@ constructor() {
   const bucket3 = new cloud.Bucket(this,\\"bucket3\\");
   const empty_array = Object.freeze([]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_array.length === 0)'\`)})((empty_array.length === 0))};
+  const empty_array2 = [];
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_array2.length === 0)'\`)})((empty_array2.length === 0))};
   const arr1 = Object.freeze([1, 2, 3]);
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(arr1.length === 3)'\`)})((arr1.length === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr1.at(1)) === 2)'\`)})(((arr1.at(1)) === 2))};
@@ -2001,6 +2003,8 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((arr7.at(1)) === 2)'\`)})(((arr7.at(1)) === 2))};
   const empty_map = Object.freeze(new Map([]));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_map.size === 0)'\`)})((empty_map.size === 0))};
+  const empty_map2 = Object.freeze(new Map([]));
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_map2.size === 0)'\`)})((empty_map2.size === 0))};
   const m1 = Object.freeze(new Map([[ \\"a\\", 1 ], [ \\"b\\", 2 ], [ \\"c\\", 3 ]]));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m1.size === 3)'\`)})((m1.size === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m1.get(\\"b\\")) === 2)'\`)})(((m1.get(\\"b\\")) === 2))};
@@ -2025,7 +2029,9 @@ constructor() {
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(m7.has(\\"b\\"))'\`)})((m7.has(\\"b\\")))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '((m4.has(\\"boom\\")) === false)'\`)})(((m4.has(\\"boom\\")) === false))};
   const empty_set = Object.freeze(new Set([]));
-  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_array.length === 0)'\`)})((empty_array.length === 0))};
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_set.size === 0)'\`)})((empty_set.size === 0))};
+  const empty_set2 = new Set([]);
+  {((cond) => {if (!cond) throw new Error(\`assertion failed: '(empty_set2.size === 0)'\`)})((empty_set2.size === 0))};
   const s2 = Object.freeze(new Set([1, 2, 3]));
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.size === 3)'\`)})((s2.size === 3))};
   {((cond) => {if (!cond) throw new Error(\`assertion failed: '(s2.has(1))'\`)})((s2.has(1)))};
