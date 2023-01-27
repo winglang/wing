@@ -24,7 +24,6 @@ impl<'a> FQN<'a> {
 	}
 
 	pub fn as_str_without_assembly(&self) -> &str {
-		// SAFETY: The FQN is validated in the `from` method, so there must be a dot.
 		let index = self.0.find('.').unwrap();
 		&self.0[index..]
 	}
