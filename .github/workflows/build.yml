@@ -30,7 +30,7 @@ jobs:
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
-        # if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         uses: actions/checkout@v3
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref }}
@@ -38,7 +38,7 @@ jobs:
 
       - name: Get tags
         id: tags
-        # if: github.event_name == 'push' && github.repository == 'winglang/wing'
+        if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: |
           git fetch --unshallow --tags
           LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
