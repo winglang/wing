@@ -26,7 +26,7 @@ jobs:
     name: "Prepare"
     runs-on: ubuntu-latest
     outputs:
-      latest-tag: ${{ steps.latest-tag.outputs.tag }}
+      last-version: ${{ steps.tags.outputs.last-version }}
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
@@ -37,11 +37,11 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Get tags
-        id: latest-tag
+        id: tags
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: |
           git fetch --unshallow --tags
-          echo "tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_OUTPUT
+          echo "last-version=${$(git describe --tags `git rev-list --tags --max-count=1`):1}" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
@@ -371,14 +371,14 @@ jobs:
 
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
-        if: ${{ needs.prepare.outputs.latest-tag != needs.prepare.outputs.version }}
+        if: ${{ needs.prepare.outputs.last-version != needs.prepare.outputs.version }}
         with:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.prepare.outputs.version }}"
 
       - name: Check published VSCode Version
         id: vscode-version
-        run: echo "version=v$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
+        run: echo "version=$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
 
       - name: Publish Extension to Visual Studio Marketplace
         if: ${{ steps.vscode-version.outputs.version != needs.prepare.outputs.version }}
@@ -393,7 +393,7 @@ jobs:
 
       - name: Check published Wing version
         id: wing-version
-        run: echo "version=v$(npm view winglang version)" >> $GITHUB_OUTPUT
+        run: echo "version=$(npm view winglang version)" >> $GITHUB_OUTPUT
 
       - name: Publish Wing
         if: ${{ steps.wing-version.outputs.version != needs.prepare.outputs.version }}
@@ -402,7 +402,7 @@ jobs:
 
       - name: Check published WingSDK version
         id: wingsdk-version
-        run: echo "version=v$(npm view @winglang/sdk version)" >> $GITHUB_OUTPUT
+        run: echo "version=$(npm view @winglang/sdk version)" >> $GITHUB_OUTPUT
 
       - name: Publish Wing SDK
         if: ${{ steps.wingsdk-version.outputs.version != needs.prepare.outputs.version }}
