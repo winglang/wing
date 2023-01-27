@@ -40,7 +40,7 @@ export class PolyconFactory implements IPolyconFactory {
       case TOPIC_TYPE:
         return new Topic(scope, id, args[0]);
       default:
-        throw new Error(`Type ${type} not implemented.`);
+        throw new Error(`Type ${type} not implemented for tf-aws target.`);
     }
   }
 }
