@@ -5,19 +5,27 @@ import { tfResourcesOf, tfSanitize, treeJsonOf } from "../util";
 
 test("create a bucket", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), projectId: "my-project" });
+  const app = new tfgcp.App({
+    outdir: mkdtemp(),
+    projectId: "my-project",
+    storageLocation: "US",
+  });
   new cloud.Bucket(app, "my_bucket");
   const output = app.synth();
 
   // THEN
-  expect(tfResourcesOf(output)).toEqual(["google_storage_bucket"]);
+  expect(tfResourcesOf(output)).toEqual(["google_storage_bucket", "random_id"]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();
 });
 
 test("bucket is public", () => {
   // GIVEN
-  const app = new tfgcp.App({ outdir: mkdtemp(), projectId: "my-project" });
+  const app = new tfgcp.App({
+    outdir: mkdtemp(),
+    projectId: "my-project",
+    storageLocation: "US",
+  });
   new cloud.Bucket(app, "my_bucket", { public: true });
   const output = app.synth();
 
@@ -25,6 +33,7 @@ test("bucket is public", () => {
   expect(tfResourcesOf(output)).toEqual([
     "google_storage_bucket",
     "google_storage_bucket_iam_member",
+    "random_id",
   ]);
   expect(tfSanitize(output)).toMatchSnapshot();
   expect(treeJsonOf(app.outdir)).toMatchSnapshot();

@@ -13,11 +13,15 @@ class HelloWorld extends Construct {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const bucket = new cloud.Bucket(this, "Bucket");
-    bucket.addObject("hello.txt", "Hello, world!");
+    const bucket = new cloud.Bucket(this, "Bucket", { public: false });
+    bucket.addObject("test.txt", "yoyoyo");
   }
 }
 
-const app = new tfgcp.App({ outdir: __dirname, projectId: "my-project" });
+const app = new tfgcp.App({
+  outdir: __dirname,
+  projectId: "wing-demo-368223",
+  storageLocation: "US",
+});
 new HelloWorld(app, "HelloWorld");
 app.synth();

@@ -1,5 +1,5 @@
-import { DataGoogleClientConfig } from "@cdktf/provider-google/lib/data-google-client-config";
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
+import { RandomProvider } from "@cdktf/provider-random/lib/provider";
 import { IConstruct } from "constructs";
 import { PolyconFactory } from "./factory";
 import { AppProps as CdktfAppProps, CdktfApp, IApp } from "../core";
@@ -12,6 +12,12 @@ export interface AppProps extends CdktfAppProps {
    * The Google Cloud project ID.
    */
   readonly projectId: string;
+
+  /**
+   * The Google Cloud storage location, used for all storage resources.
+   * @see https://cloud.google.com/storage/docs/locations
+   */
+  readonly storageLocation: string;
 }
 
 /**
@@ -35,12 +41,15 @@ export class App extends CdktfApp implements IApp {
     return App.of(parent);
   }
 
-  private readonly clientConfig: DataGoogleClientConfig;
-
   /**
    * The Google Cloud project ID.
    */
   public readonly projectId: string;
+
+  /**
+   * The Google Cloud storage location, used for all storage resources.
+   */
+  public readonly storageLocation: string;
 
   constructor(props: AppProps) {
     super({
@@ -57,17 +66,19 @@ export class App extends CdktfApp implements IApp {
       );
     }
 
+    this.storageLocation =
+      props.storageLocation ?? process.env.GOOGLE_STORAGE_LOCATION;
+    // Using env variable for location is work around until we are
+    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
+    if (this.storageLocation === undefined) {
+      throw new Error(
+        "A Google Cloud storage location must be specified through the GOOGLE_STORAGE_LOCATION environment variable."
+      );
+    }
+
     new GoogleProvider(this, "google", {
       project: this.projectId,
     });
-
-    this.clientConfig = new DataGoogleClientConfig(this, "config", {});
-  }
-
-  /**
-   * The application's default region for new resources.
-   */
-  public get region(): string {
-    return this.clientConfig.region;
+    new RandomProvider(this, "random");
   }
 }

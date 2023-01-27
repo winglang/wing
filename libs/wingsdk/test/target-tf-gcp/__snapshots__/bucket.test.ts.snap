@@ -2,17 +2,13 @@
 
 exports[`bucket is public 1`] = `
 "{
-  \\"data\\": {
-    \\"google_client_config\\": {
-      \\"root_config_E62FD7A7\\": {}
-    }
-  },
   \\"resource\\": {
     \\"google_storage_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"location\\": \\"\${data.google_client_config.root_config_E62FD7A7.region}\\",
-        \\"name\\": \\"c8045fccc85a7ef42d5391d87958e5ce36c53a401a\\",
-        \\"public_access_prevention\\": \\"enforced\\"
+        \\"location\\": \\"US\\",
+        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
+        \\"public_access_prevention\\": \\"inherited\\",
+        \\"uniform_bucket_level_access\\": true
       }
     },
     \\"google_storage_bucket_iam_member\\": {
@@ -20,6 +16,11 @@ exports[`bucket is public 1`] = `
         \\"bucket\\": \\"\${google_storage_bucket.root_mybucket_E5DAA363.name}\\",
         \\"member\\": \\"allUsers\\",
         \\"role\\": \\"roles/storage.objectViewer\\"
+      }
+    },
+    \\"random_id\\": {
+      \\"root_mybucket_Id_7C344B74\\": {
+        \\"byte_length\\": 4
       }
     }
   }
@@ -51,14 +52,6 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "config": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-google.dataGoogleClientConfig.DataGoogleClientConfig",
-                  "version": "5.0.2",
-                },
-                "id": "config",
-                "path": "root/Default/config",
-              },
               "google": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
@@ -81,6 +74,14 @@ Object {
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
+                  "Id": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-random.id.Id",
+                      "version": "5.0.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
                   "PublicAccessIamMember": Object {
                     "constructInfo": Object {
                       "fqn": "@cdktf/provider-google.storageBucketIamMember.StorageBucketIamMember",
@@ -100,6 +101,14 @@ Object {
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
+              },
+              "random": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-random.provider.RandomProvider",
+                  "version": "5.0.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
               },
             },
             "constructInfo": Object {
@@ -139,16 +148,18 @@ Object {
 
 exports[`create a bucket 1`] = `
 "{
-  \\"data\\": {
-    \\"google_client_config\\": {
-      \\"root_config_E62FD7A7\\": {}
-    }
-  },
   \\"resource\\": {
     \\"google_storage_bucket\\": {
       \\"root_mybucket_E5DAA363\\": {
-        \\"location\\": \\"\${data.google_client_config.root_config_E62FD7A7.region}\\",
-        \\"name\\": \\"c8045fccc85a7ef42d5391d87958e5ce36c53a401a\\"
+        \\"location\\": \\"US\\",
+        \\"name\\": \\"my_bucket-\${random_id.root_mybucket_Id_7C344B74.hex}\\",
+        \\"public_access_prevention\\": \\"enforced\\",
+        \\"uniform_bucket_level_access\\": true
+      }
+    },
+    \\"random_id\\": {
+      \\"root_mybucket_Id_7C344B74\\": {
+        \\"byte_length\\": 4
       }
     }
   }
@@ -180,14 +191,6 @@ Object {
                 "id": "WingLogger",
                 "path": "root/Default/WingLogger",
               },
-              "config": Object {
-                "constructInfo": Object {
-                  "fqn": "@cdktf/provider-google.dataGoogleClientConfig.DataGoogleClientConfig",
-                  "version": "5.0.2",
-                },
-                "id": "config",
-                "path": "root/Default/config",
-              },
               "google": Object {
                 "constructInfo": Object {
                   "fqn": "@cdktf/provider-google.provider.GoogleProvider",
@@ -210,6 +213,14 @@ Object {
                     "id": "Default",
                     "path": "root/Default/my_bucket/Default",
                   },
+                  "Id": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-random.id.Id",
+                      "version": "5.0.0",
+                    },
+                    "id": "Id",
+                    "path": "root/Default/my_bucket/Id",
+                  },
                 },
                 "constructInfo": Object {
                   "fqn": "constructs.Construct",
@@ -221,6 +232,14 @@ Object {
                 },
                 "id": "my_bucket",
                 "path": "root/Default/my_bucket",
+              },
+              "random": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-random.provider.RandomProvider",
+                  "version": "5.0.0",
+                },
+                "id": "random",
+                "path": "root/Default/random",
               },
             },
             "constructInfo": Object {

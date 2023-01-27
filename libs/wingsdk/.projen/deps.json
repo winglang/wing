@@ -253,6 +253,11 @@
       "type": "peer"
     },
     {
+      "name": "@cdktf/provider-random",
+      "version": "^5.0.0",
+      "type": "peer"
+    },
+    {
       "name": "cdktf",
       "version": "~0.15.0",
       "type": "peer"
@@ -279,6 +284,11 @@
     {
       "name": "@cdktf/provider-google",
       "version": "^5.0.2",
+      "type": "runtime"
+    },
+    {
+      "name": "@cdktf/provider-random",
+      "version": "^5.0.0",
       "type": "runtime"
     },
     {
