@@ -26,6 +26,7 @@ jobs:
     name: "Prepare"
     runs-on: ubuntu-latest
     outputs:
+      latest-tag: ${{ steps.info.outputs.latest-tag }}
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
@@ -36,8 +37,11 @@ jobs:
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Get tags
+        id: latest-tag
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
-        run: git fetch --unshallow --tags
+        run: |
+          git fetch --unshallow --tags
+          echo "latest-tag=$(git describe --tags `git rev-list --tags --max-count=1`)" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
@@ -365,16 +369,9 @@ jobs:
         with:
           node-version: ${{ env.NODEJS_VERSION }}
 
-      - name: Check latest tag
-        uses: WyriHaximus/github-action-get-previous-tag@v1
-        id: previous-tag
-        with:
-          fallback: "v0.0.0"
-          prefix: "v"
-
       - name: Tag commit
         uses: tvdias/github-tagger@v0.0.1
-        if: ${{ steps.previous-tag.outputs.tag != needs.prepare.outputs.version }}
+        if: ${{ needs.prepare.outputs.latest-tag != needs.prepare.outputs.version }}
         with:
           repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
           tag: "v${{ needs.prepare.outputs.version }}"
