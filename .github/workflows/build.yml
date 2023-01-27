@@ -26,7 +26,7 @@ jobs:
     name: "Prepare"
     runs-on: ubuntu-latest
     outputs:
-      last-version: ${{ steps.tags.outputs.last-version }}
+      last-version: ${{ steps.tags.outputs.last-version || steps.pr_info.outputs.version }}
       version: ${{ steps.info.outputs.version || steps.pr_info.outputs.version }}
     steps:
       - name: Checkout
@@ -41,7 +41,8 @@ jobs:
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
         run: |
           git fetch --unshallow --tags
-          echo "last-version=${$(git describe --tags `git rev-list --tags --max-count=1`):1}" >> $GITHUB_OUTPUT
+          LAST_VERSION="$(git describe --tags `git rev-list --tags --max-count=1`)"
+          echo "last-version=${LAST_VERSION#?}" >> $GITHUB_OUTPUT
 
       - name: Install Dependencies
         if: github.event_name == 'push' && github.repository == 'winglang/wing'
@@ -69,6 +70,7 @@ jobs:
         id: pr_info
         if: github.event_name != 'push' || github.repository != 'winglang/wing'
         run: |
+          echo "last-version=0.0.0" >> $GITHUB_OUTPUT
           echo "version=0.0.0-dev.${{ github.run_id }}.${{ github.run_attempt }}" >> $GITHUB_OUTPUT
           echo "Pull Request" > CHANGELOG.md
           cat CHANGELOG.md >> $GITHUB_STEP_SUMMARY
