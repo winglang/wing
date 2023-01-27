@@ -120,6 +120,8 @@ jobs:
 
       - name: Install Dependencies
         uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm run ci:all --ignore-scripts
 
       - name: Lint Nx
         run: npx nx workspace-lint

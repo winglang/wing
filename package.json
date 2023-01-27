@@ -17,8 +17,10 @@
     "contributors:add": "all-contributors add",
     "contributors:generate": "all-contributors generate",
     "contributors:check": "all-contributors check",
-    "postinstall": "run-p install:*",
+    "postinstall": "npm run install:all",
     "docs": "./scripts/docsite.sh",
+    "ci:all": "run-p ci:*",
+    "install:all": "run-p install:*",
     "install:wasi": "if [ \"$CI\" != \"true\" ]; then bash scripts/setup_wasi.sh; fi",
     "install:vscode-wing": "npm --prefix apps/vscode-wing install",
     "install:wing-api-checker": "npm --prefix apps/wing-api-checker install",
@@ -26,7 +28,15 @@
     "install:wing-playground": "npm --prefix apps/wing-playground install",
     "install:winglang": "npm --prefix apps/wing install",
     "install:sdk": "npm --prefix libs/wingsdk install",
-    "install:hangar": "npm --prefix tools/hangar install"
+    "install:hangar": "npm --prefix tools/hangar install",
+    "ci:root": "npm ci",
+    "ci:vscode-wing": "npm --prefix apps/vscode-wing ci",
+    "ci:wing-api-checker": "npm --prefix apps/wing-api-checker ci",
+    "ci:jsii-docgen": "npm --prefix apps/jsii-docgen ci",
+    "ci:wing-playground": "npm --prefix apps/wing-playground ci",
+    "ci:winglang": "npm --prefix apps/wing ci",
+    "ci:sdk": "npm --prefix libs/wingsdk ci",
+    "ci:hangar": "npm --prefix tools/hangar ci"
   },
   "volta": {
     "node": "18.12.1",
