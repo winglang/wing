@@ -1,14 +1,14 @@
 ---
-title: Language
+title: Language Spec
 id: spec
 description: The Wing Language Specification
 keywords: [Wing reference, Wing language, language, Wing language spec, Wing programming language]
 ---
 
-:::tip Feedback?
+:::caution Not fully implemented yet
 
-📝 You're more than welcome to [open a new discussion][disco] or just go ahead
-and submit a PR against [this document][this].
+This document is a *specification* of the programming language, and many features
+are still not implemented (see [project board](https://github.com/orgs/winglang/projects/1)).
  
 :::
 
@@ -16,10 +16,10 @@ and submit a PR against [this document][this].
 
 ### 0.1 Motivation
 
-The wing programming language (aka winglang[<sup>RFC</sup>][rfc]) is a general
+The Wing Programming Language (aka winglang[<sup>RFC</sup>](/contributors/rfcs/2022-05-28-winglang-reqs)) is a general
 purpose programming language designed for building applications for the cloud.
 
-What makes wing special? Traditional programming languages are designed around
+What makes Wing special? Traditional programming languages are designed around
 the premise of telling a single machine what to do. The output of the compiler
 is a program that can be executed on that machine. But cloud applications are
 distributed systems that consist of code running across multiple machines and
@@ -562,7 +562,7 @@ Wing recommends the following formatting and naming conventions:
 - Class, struct, interface, and resource names should be TitleCased
 - Members of classes, interfaces, and resources cannot share the same TitleCased
   representation as the declaring expression itself.
-- Parentheses are optional in expressions. Any wing expression can be surrounded
+- Parentheses are optional in expressions. Any Wing expression can be surrounded
   by parentheses to enforce precedence, which implies that the expression inside
   an if/for/while statement may be surrounded by parentheses.
 
@@ -579,26 +579,7 @@ Wing and is garbage collected (relying on JSII target GC for the meantime).
 
 ---
 
-### 1.12 Documentation Style
-
-Wing currently leverages @JSDoc style comments in its format called the "runway"
-comment format. "Runway" refers to what the left hand side of the comment block
-represents. It vaguely resembles an airport runway!
-
-> ```TS
-> /*\
-> |*|  Document your code with meaningful comments.
-> |*|
-> |*|  You can use Markdown for formatting.
-> |*|  Compiler can generate documentation for you from jsdoc tags.
-> \*/
-> ```
-
-[`▲ top`][top]
-
----
-
-### 1.13 Execution Model
+### 1.12 Execution Model
 
 Execution model currently is delegated to the JSII target. This means if you are
 targeting JSII with Node, Wing will use the event based loop that Node offers.
@@ -608,7 +589,7 @@ the entrypoint of the program. Root block scope is considered special and
 compiler generates special instructions to properly assign all resources to
 their respective scopes recursively down the constructs tree based on entry.
 
-Entrypoint is always a wing source with an extension of `.w`. Within this entry
+Entrypoint is always a Wing source with an extension of `.w`. Within this entry
 point, a root resource is made available for all subsequent resources that are
 initialized and instantiated. Type of the root resource is determined by the
 target being used by the compiler. The root resource might be of type `App` in
@@ -640,7 +621,7 @@ AWS CDK or `TerraformApp` in case of CDK for Terraform target.
 
 ---
 
-### 1.14 Asynchronous Model
+### 1.13 Asynchronous Model
 
 Wing builds upon the asynchronous model of JavaScript currently and expands upon
 it with new keywords and concepts. The `async` keyword of JavaScript is replaced
@@ -1416,7 +1397,7 @@ arguments is accessible with the `args` key like a normal array instance.
 
 ```TS
 let f = (x: num, ...args: Array<num>) => {
-  print(x + y + sizeof(args));
+  print(x + y + args.len);
 }
 // last arguments are expanded into their struct
 f(1, 2, 3, 4, 5, 6, 34..100);
@@ -1429,15 +1410,14 @@ f(1, 2, 3, 4, 5, 6, 34..100);
 ### 3.7 Arrays
 
 Arrays are dynamically sized in Wing and are defined with the `[]` syntax.  
-Individual array items are also accessed with the `[]` syntax. You can call
-`sizeof` to get the size of the array.  
+Individual array items are also accessed with the `[]` syntax.  
 Arrays are similar to dynamically sized arrays or vectors in other languages.
 
 > ```TS
 > let arr1 = [1, 2, 3];
 > let arr2 = ["a", "b", "c"];
 > let arr3 = MutArray<str>["a1", "b2", "c3"];
-> let l = sizeof(arr1) + sizeof(arr2) + sizeof(arr3) + arr1[0];
+> let l = arr1.len + arr2.len + arr3.len + arr1[0];
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
@@ -1665,7 +1645,6 @@ supported languages.
 
 Type of string is UTF-16 internally.  
 All string declaration variants are multi-line.  
-You can call `sizeof` to get the length of the string.
 
 [`▲ top`][top]
 
@@ -1682,7 +1661,7 @@ Processing unicode escape sequences happens in these strings.
 > ```TS
 > let name = "World";
 > let s = "Hello, ${name}!";
-> let l = sizeof(s);
+> let l = s.len;
 > ```
 
 <details><summary>Equivalent TypeScript Code</summary>
@@ -1793,7 +1772,7 @@ Ternary or conditional operators are not supported.
 | Operator             | Notes                                             |
 | -------------------- | ------------------------------------------------- |
 | ()                   | Parentheses                                       |
-| +x, -x               | Unary plus, Unary minus                           |
+| -x                   | Unary minus                                       |
 | \*, /, \\, %         | Multiplication, Division, Floor division, Modulus |
 | +, -                 | Addition, Subtraction                             |
 | ==, !=, >, >=, <, <= | Comparisons, Identity, operators                  |
@@ -2000,6 +1979,5 @@ Inspiration:
 - <https://github.com/vlang/v>
 
 [top]: #0-preface
-[rfc]: https://github.com/winglang/wing/blob/main/docs/05-rfcs/winglang-reqs.md
-[this]: https://github.com/winglang/wing/blob/main/docs/04-reference/winglang-spec.md
-[disco]: https://github.com/winglang/wing/discussions/new
+
+
