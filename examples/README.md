@@ -22,6 +22,12 @@ _Add yours here!_
 **Description:** This is a concept for a Wing app where cloud functions are used to create a search engine where the entire search index exists in-memory, spread across many lambda functions.
 **Author:** [@Chriscbr](https://github.com/Chriscbr)
 
+## Counting semaphore
+
+**Source code:** [./proposed/counting-semaphore.w](./proposed/counting-semaphore.w)
+**Description:** A Wing resource that helps access control for a common resource in a cloud environment.
+**Author:** [@flyingImer](https://github.com/flyingImer)
+
 <!--
 
 ## Tweet queue
