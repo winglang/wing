@@ -20,7 +20,7 @@ class HelloWorld extends Construct {
 
 const app = new tfgcp.App({
   outdir: __dirname,
-  projectId: "wing-demo-368223",
+  projectId: "my-project",
   storageLocation: "US",
 });
 new HelloWorld(app, "HelloWorld");
