@@ -365,7 +365,26 @@ jobs:
         with:
           node-version: ${{ env.NODEJS_VERSION }}
 
+      - name: Check latest tag
+        uses: WyriHaximus/github-action-get-previous-tag@v1
+        id: previous-tag
+        with:
+          fallback: "v0.0.0"
+          prefix: "v"
+
+      - name: Tag commit
+        uses: tvdias/github-tagger@v0.0.1
+        if: ${{ steps.previous-tag.outputs.tag != needs.prepare.outputs.version }}
+        with:
+          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
+          tag: "v${{ needs.prepare.outputs.version }}"
+
+      - name: Check published VSCode Version
+        id: vscode-version
+        run: echo "version=v$(npx -y vsce show Monada.vscode-wing --json | jq '.versions[0].version' -r)" >> $GITHUB_OUTPUT
+
       - name: Publish Extension to Visual Studio Marketplace
+        if: ${{ steps.vscode-version.outputs.version != needs.prepare.outputs.version }}
         uses: "HaaLeo/publish-vscode-extension@v1"
         with:
           pat: ${{ secrets.VS_MARKETPLACE_TOKEN }}
@@ -375,11 +394,21 @@ jobs:
       - name: Login to Private NPM registry
         run: npm set //registry.npmjs.org/:_authToken ${{ secrets.NPM_PUBLISH_TOKEN }}
 
+      - name: Check published Wing version
+        id: wing-version
+        run: echo "version=v$(npm view winglang version)" >> $GITHUB_OUTPUT
+
       - name: Publish Wing
+        if: ${{ steps.wing-version.outputs.version != needs.prepare.outputs.version }}
         working-directory: wing
         run: npm publish *.tgz --access public
 
+      - name: Check published WingSDK version
+        id: wingsdk-version
+        run: echo "version=v$(npm view @winglang/sdk version)" >> $GITHUB_OUTPUT
+
       - name: Publish Wing SDK
+        if: ${{ steps.wingsdk-version.outputs.version != needs.prepare.outputs.version }}
         working-directory: wingsdk
         run: npm publish *.tgz --access public
 
@@ -400,12 +429,6 @@ jobs:
           sha1sum --binary * >> ../CHANGELOG.md
           echo '```' >> ../CHANGELOG.md
           cat ../CHANGELOG.md
-
-      - name: Tag commit
-        uses: tvdias/github-tagger@v0.0.1
-        with:
-          repo-token: "${{ secrets.PROJEN_GITHUB_TOKEN }}"
-          tag: "v${{ needs.prepare.outputs.version }}"
 
       - name: Cut Development Release
         uses: softprops/action-gh-release@v1
