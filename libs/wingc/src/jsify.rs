@@ -9,6 +9,7 @@ use crate::{
 		Literal, Phase, Reference, Scope, Stmt, StmtKind, Symbol, Type, UnaryOperator, UtilityFunctions,
 	},
 	capture::CaptureKind,
+	type_check::{symbol_env::SymbolEnv, Class, TypeRef},
 	utilities::snake_case_to_camel_case,
 	WINGSDK_RESOURCE,
 };
@@ -80,7 +81,7 @@ impl JSifier {
 			(_, StmtKind::Class { .. }) => Ordering::Greater,
 			_ => Ordering::Equal,
 		}) {
-			let line = self.jsify_statement(statement, Phase::Preflight); // top level statements are always preflight
+			let line = self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, Phase::Preflight); // top level statements are always preflight
 			if line.is_empty() {
 				continue;
 			}
@@ -127,7 +128,10 @@ impl JSifier {
 		lines.push("{".to_string());
 
 		for statement in scope.statements.iter() {
-			let statement_str = format!("{}", self.jsify_statement(statement, phase));
+			let statement_str = format!(
+				"{}",
+				self.jsify_statement(scope.env.borrow().as_ref().unwrap(), statement, phase)
+			);
 			let result = statement_str.split("\n");
 			for l in result {
 				lines.push(format!("  {}", l));
@@ -444,7 +448,7 @@ impl JSifier {
 		}
 	}
 
-	fn jsify_statement(&self, statement: &Stmt, phase: Phase) -> String {
+	fn jsify_statement(&self, env: &SymbolEnv, statement: &Stmt, phase: Phase) -> String {
 		match &statement.kind {
 			StmtKind::Use {
 				module_name,
@@ -540,6 +544,7 @@ impl JSifier {
 				constructor,
 				is_resource,
 			} => self.jsify_class(
+				env,
 				name,
 				is_resource,
 				phase,
@@ -697,6 +702,7 @@ impl JSifier {
 
 	fn jsify_resource(
 		&self,
+		env: &SymbolEnv,
 		name: &Symbol,
 		phase: Phase,
 		parent: &Option<Type>,
@@ -717,33 +723,32 @@ impl JSifier {
 			parent.clone()
 		};
 
-		// Jsify inflight client
-		self.jsify_resource_client(
-			name,
-			phase,
-			&parent,
-			constructor,
-			&members
-				.iter()
-				.filter(|m| m.flight == Phase::Inflight)
-				.map(|m| *m)
-				.collect::<Vec<_>>(),
-			&methods
-				.iter()
-				.filter(|(_, m)| m.signature.flight == Phase::Inflight)
-				.map(|t| *t)
-				.collect::<Vec<_>>(),
-		);
+		// Lookup the resource type
+		let resource_type = env.lookup(name, None).unwrap().as_type().unwrap();
 
-		// TODO...
-		// Jsify client
-		// Add bind method
-
+		// Get all preflight members (which are potentially captured)
 		let preflight_members = members
 			.iter()
 			.filter(|m| m.flight != Phase::Inflight)
 			.map(|m| *m)
 			.collect::<Vec<_>>();
+
+		// Get fields to be captured by resource's client
+		let captured_fields = self.get_captures(&preflight_members, resource_type.as_resource().unwrap());
+
+		// Jsify inflight client
+		self.jsify_resource_client(
+			name,
+			&captured_fields,
+			&methods
+				.iter()
+				.filter(|(_, m)| m.signature.flight == Phase::Inflight)
+				.map(|t| *t)
+				.collect::<Vec<_>>(),
+			parent.as_ref().unwrap(),
+		);
+
+		// Get all preflight methods to be jsified to the preflight class
 		let preflight_methods = methods
 			.iter()
 			.filter(|(_, m)| m.signature.flight != Phase::Inflight)
@@ -752,6 +757,7 @@ impl JSifier {
 
 		// Jsify class
 		let resource_class = self.jsify_class(
+			env,
 			name,
 			&false,
 			phase,
@@ -760,44 +766,94 @@ impl JSifier {
 			&preflight_members,
 			&preflight_methods,
 		);
-		let bind_method = self.jsify_bind_method(name, preflight_members);
 
-		return format!("{}\n{}.prototype._bind = {}", name.name, resource_class, bind_method,);
+		let bind_method = self.jsify_bind_method(name, &captured_fields);
+
+		return format!("{}\n{}.prototype._bind = {}", resource_class, name.name, bind_method);
 	}
 
-	fn jsify_bind_method(&self, name: &Symbol, preflight_members: &[&ClassMember]) {
-		let lines = vec![];
-		for m in preflight_members {}
+	fn jsify_bind_method(&self, resource_name: &Symbol, captured_fields: &[(Symbol, TypeRef, Vec<String>)]) -> String {
+		let inner_clients = captured_fields
+			.iter()
+			.map(|(inner_member_name, _, used_methods)| {
+				format!(
+					"const {}_client = this.{}._bind(host, [{}]);",
+					inner_member_name.name,
+					inner_member_name.name,
+					used_methods
+						.iter()
+						.map(|s| format!("\"{}\"", s))
+						.collect_vec()
+						.join(", ")
+				)
+			})
+			.collect::<Vec<_>>();
+
+		format!(
+			"function(host, ops) {{\n{}\nreturn `(new require('./{}.inflight.js')).{}_inflight({{{}}})`;\n}}",
+			inner_clients.join("\n"),
+			resource_name.name,
+			resource_name.name,
+			captured_fields
+				.iter()
+				.map(|(inner_member_name, _, _)| format!("{}: {}_client", inner_member_name.name, inner_member_name.name))
+				.join(", ")
+		)
 	}
 
+	// Write a client class for a file for the given resource
 	fn jsify_resource_client(
 		&self,
 		name: &Symbol,
-		phase: Phase,
-		parent: &Option<Type>,
-		constructor: &Constructor,
-		members: &[&ClassMember],
-		methods: &[&(Symbol, FunctionDefinition)],
+		captured_fields: &[(Symbol, TypeRef, Vec<String>)],
+		inflight_methods: &[&(Symbol, FunctionDefinition)],
+		parent: &Type,
 	) {
-		methods.iter().for_each(|(n, m)| {
-			let captures = m.captures.borrow();
-			println!("Inflight method: {} captures: {:?}", n, captures.as_ref().unwrap());
-		});
-		// let constructor_content = format!(
-		// 	"constructor({}) {{\n{}\n}}",
-		// 	,
-		// 	self.jsify_scope(&constructor.body, phase)
-		// );
+		// TODO handle parent class: Need to call super and pass its captured fields (we assume the parent client is already written)
+		// TDOD jsify inflight fields
 
-		// let content = format!(
-		// 	"class {}_Inflight {}\n{{\n{}\n{}\n{}\n}}",
-		// 	self.jsify_symbol(name),
-		// 	constructor_content
-		// );
+		let client_constructor = format!(
+			"constructor({{ {} }}) {{\n{}\n}}",
+			captured_fields
+				.iter()
+				.map(|(name, _, _)| { name.name.clone() })
+				.collect_vec()
+				.join(", "),
+			captured_fields
+				.iter()
+				.map(|(name, _, _)| { format!("this.{} = {};", name.name, name.name) })
+				.collect_vec()
+				.join("\n")
+		);
+
+		let client_methods = inflight_methods
+			.iter()
+			.map(|(name, def)| {
+				format!(
+					"async {}",
+					self.jsify_function(Some(&name.name), &def.parameters, &def.statements, def.signature.flight)
+				)
+			})
+			.collect_vec();
+
+		let client_source = format!(
+			"class {}_inflight extends {}_inflight {{\n{}\n{}}}",
+			name.name,
+			self.jsify_type(parent),
+			client_constructor,
+			client_methods.join("\n")
+		);
+
+		let clients_dir = format!("{}/clients", self.out_dir.to_string_lossy());
+		fs::create_dir_all(&clients_dir).expect("Creating inflight clients");
+		let client_file_name = format!("{}.inflight.js", name.name);
+		let relative_file_path = format!("{}/{}", clients_dir, client_file_name);
+		fs::write(&relative_file_path, client_source).expect("Writing client inflight source");
 	}
 
 	fn jsify_class(
 		&self,
+		env: &SymbolEnv,
 		name: &Symbol,
 		is_resource: &bool,
 		phase: Phase,
@@ -807,7 +863,7 @@ impl JSifier {
 		methods: &[&(Symbol, FunctionDefinition)],
 	) -> String {
 		if *is_resource {
-			return self.jsify_resource(name, phase, parent, constructor, members, methods);
+			return self.jsify_resource(env, name, phase, parent, constructor, members, methods);
 		}
 
 		format!(
@@ -834,18 +890,47 @@ impl JSifier {
 				.map(|(n, m)| format!(
 					"{} = {}",
 					n.name,
-					self.jsify_function(None, &m.parameter_names, &m.statements, phase)
+					self.jsify_function(None, &m.parameters, &m.statements, phase)
 				))
 				.collect::<Vec<String>>()
 				.join("\n")
 		)
 	}
+
+	// Get the list type and capture info for members that are captured in the client of a the given resource
+	fn get_captures(
+		&self,
+		preflight_members: &[&ClassMember],
+		resource_type: &Class,
+	) -> Vec<(Symbol, TypeRef, Vec<String>)> {
+		let preflight_members = preflight_members.iter().filter_map(|m| {
+			let member_type = resource_type.env.lookup(&m.name, None).unwrap().as_variable().unwrap();
+			if !member_type.reassignable {
+				// TODO: currently we only collect resources need to also handle immutable variables
+				if let Some(resource_type) = member_type._type.as_resource() {
+					// TODO: currently we collect all inflight methods as being required for this resource (this should be mapped per inflight method and analyzed during the capture phase)
+					let used_methods = resource_type
+						.methods()
+						.filter_map(|(name, sig)| {
+							if sig.as_function_sig().unwrap().flight == Phase::Inflight {
+								return Some(name);
+							}
+							None
+						})
+						.collect::<Vec<_>>();
+					return Some((m.name.clone(), member_type._type, used_methods));
+				}
+			}
+			None
+		});
+		preflight_members.collect_vec()
+	}
 }
 
 fn is_mutable_collection(expression: &Expr) -> bool {
-    if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
-			evaluated_type.is_mutable_collection()
-		} else {
-			false
-		}
+	if let Some(evaluated_type) = expression.evaluated_type.borrow().as_ref() {
+		evaluated_type.is_mutable_collection()
+	} else {
+		false
+	}
 }

@@ -162,8 +162,8 @@ impl Class {
 		self
 			.env
 			.iter()
-			.filter(|(_, t)| t.as_variable().unwrap()._type.as_function_sig().is_some())
-			.map(|(s, t)| (s.clone(), t.as_variable().unwrap()._type.clone()))
+			.filter(|(_, t, _)| t.as_variable().unwrap()._type.as_function_sig().is_some())
+			.map(|(s, t, _)| (s.clone(), t.as_variable().unwrap()._type.clone()))
 	}
 }
 
@@ -1106,7 +1106,7 @@ impl<'a> TypeChecker<'a> {
 		}
 
 		// Verify that all non-optional fields are present and are of the right type
-		for (k, v) in expected_struct.env.iter().map(|(k, v)| {
+		for (k, v) in expected_struct.env.iter().map(|(k, v, _)| {
 			(
 				k,
 				v.as_variable()
@@ -1801,7 +1801,7 @@ impl<'a> TypeChecker<'a> {
 		// Note: this is currently limited to top-level function signatures and fields
 		for (type_index, original_type_param) in original_type_params.iter().enumerate() {
 			let new_type_arg = type_params[type_index];
-			for (name, symbol) in original_type_class.env.iter() {
+			for (name, symbol, _) in original_type_class.env.iter() {
 				match symbol {
 					SymbolKind::Variable(VariableInfo { _type: v, .. }) => {
 						// Replace type params in function signatures
@@ -2075,7 +2075,7 @@ fn add_parent_members_to_struct_env(
 			});
 		};
 		// Add each member of current parent to the struct's environment (if it wasn't already added by a previous parent)
-		for (parent_member_name, parent_member) in parent_struct.env.iter() {
+		for (parent_member_name, parent_member, _) in parent_struct.env.iter() {
 			let member_type = parent_member
 				.as_variable()
 				.expect("Expected struct member to be a variable")

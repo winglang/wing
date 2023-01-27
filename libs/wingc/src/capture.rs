@@ -60,8 +60,8 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			}
 			StmtKind::Scope(s) => scan_for_inflights_in_scope(s, diagnostics),
 			StmtKind::Class {
-				name,
-				members,
+				name: _,
+				members: _,
 				methods,
 				constructor,
 				parent: _,
@@ -69,23 +69,7 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 			} => {
 				// If this is a resource then we need to capture all its members
 				if *is_resource {
-					// Get the class type from our type system
-					let class_type = scope
-						.env
-						.borrow()
-						.unwrap()
-						.lookup(name, Some(s.idx))
-						.unwrap()
-						.as_type()
-						.unwrap()
-						.as_resource()
-						.unwrap();
-
-					for m in class_type.env.iter().map(|(s, k)| (s, k.as_variable().unwrap())) {
-						// Skip methods
-					}
-
-					for m in members.iter() {}
+					// TODO: what do I do with these?
 				}
 
 				match constructor.signature.flight {
@@ -96,11 +80,10 @@ pub fn scan_for_inflights_in_scope(scope: &Scope, diagnostics: &mut Diagnostics)
 					Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
 					Phase::Preflight => scan_for_inflights_in_scope(&constructor.statements, diagnostics),
 				}
-				for (n, method_def) in methods.iter() {
+				for (_, method_def) in methods.iter() {
 					match method_def.signature.flight {
 						Phase::Inflight => {
 							// TODO: what do I do with these?
-							println!("Inflight method: {}", n);
 							scan_captures_in_inflight_scope(&method_def.statements, diagnostics);
 						}
 						Phase::Independent => scan_for_inflights_in_scope(&constructor.statements, diagnostics),

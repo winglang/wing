@@ -38,7 +38,7 @@ pub enum StatementIdx {
 // Possible results for a symbol lookup in the environment
 enum LookupResult<'a> {
 	// The kind of symbol and usefull metadata associated with its lookup
-	Found((&'a SymbolKind, SymbolInfo)),
+	Found((&'a SymbolKind, SymbolLookupInfo)),
 	// The symbol was not found in the environment
 	NotFound,
 	// The symbol exists in the environment but it's not defined yet (based on the statement
@@ -46,7 +46,7 @@ enum LookupResult<'a> {
 	DefinedLater,
 }
 
-pub struct SymbolInfo {
+pub struct SymbolLookupInfo {
 	// The phase the symbol was defined in
 	pub flight: Phase,
 	// Whether the symbol was defined in an `init`'s environment
@@ -156,7 +156,7 @@ impl SymbolEnv {
 			}
 			LookupResult::Found((
 				kind.into(),
-				SymbolInfo {
+				SymbolLookupInfo {
 					flight: self.flight,
 					init: self.is_init,
 				},
@@ -194,7 +194,7 @@ impl SymbolEnv {
 		&self,
 		symbol: &Symbol,
 		not_after_stmt_idx: Option<usize>,
-	) -> Result<(&SymbolKind, SymbolInfo), TypeError> {
+	) -> Result<(&SymbolKind, SymbolLookupInfo), TypeError> {
 		let lookup_result = self.try_lookup_ext(&symbol.name, not_after_stmt_idx);
 
 		match lookup_result {
@@ -309,7 +309,7 @@ impl<'a> TypeEnvIter<'a> {
 }
 
 impl<'a> Iterator for TypeEnvIter<'a> {
-	type Item = (String, &'a SymbolKind);
+	type Item = (String, &'a SymbolKind, SymbolLookupInfo);
 
 	fn next(&mut self) -> Option<Self::Item> {
 		if let Some((name, (_, kind))) = self.curr_pos.next() {
@@ -317,7 +317,14 @@ impl<'a> Iterator for TypeEnvIter<'a> {
 				self.next()
 			} else {
 				self.seen_keys.insert(name.clone());
-				Some((name.clone(), kind.into()))
+				Some((
+					name.clone(),
+					kind,
+					SymbolLookupInfo {
+						flight: self.curr_env.flight,
+						init: self.curr_env.is_init,
+					},
+				))
 			}
 		} else if let Some(ref parent_env) = self.curr_env.parent {
 			self.curr_env = parent_env;
