@@ -7,7 +7,7 @@ use crate::{
 		symbol_env::StatementIdx, Class, FunctionSignature, Struct, SymbolKind, Type, TypeRef, Types, WING_CONSTRUCTOR_NAME,
 	},
 	utilities::camel_case_to_snake_case,
-	CONSTRUCT_BASE, WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT, WINGSDK_RESOURCE,
+	WINGSDK_ASSEMBLY_NAME, WINGSDK_DURATION, WINGSDK_INFLIGHT,
 };
 use colored::Colorize;
 use serde_json::Value;
@@ -119,7 +119,7 @@ impl<'a> JsiiImporter<'a> {
 	}
 
 	fn lookup_or_create_type(&mut self, type_fqn: &FQN) -> TypeRef {
-		let type_name = Self::strip_assembly_from_fqn(type_fqn.as_str());
+		let type_name = type_fqn.as_str_without_assembly();
 		// Check if this type is already define in this module's namespace
 		if let Ok(t) = self.env.lookup_nested_str(&type_name, true, None) {
 			return t.as_type().expect(&format!("Expected {} to be a type", type_name));
@@ -134,18 +134,9 @@ impl<'a> JsiiImporter<'a> {
 			.unwrap()
 	}
 
-	fn strip_assembly_from_fqn(fqn: &str) -> String {
-		let parts = fqn.split('.').collect::<Vec<&str>>();
-		let assembly_name = parts[0];
-		fqn
-			.strip_prefix(format!("{}.", assembly_name).as_str())
-			.unwrap()
-			.to_string()
-	}
-
 	fn import_type(&mut self, type_fqn: &FQN) {
 		// Hack: if the class name is a construct base then we treat this class as a resource and don't need to define it
-		if Self::is_fqn_construct_base(type_fqn.as_str()) {
+		if type_fqn.is_construct_base() {
 			return;
 		}
 
@@ -392,15 +383,6 @@ impl<'a> JsiiImporter<'a> {
 		}
 	}
 
-	fn is_fqn_construct_base(fqn: &str) -> bool {
-		// We treat both CONSTRUCT_BASE and WINGSDK_RESOURCE, as base constructs because in wingsdk we currently have stuff directly derived
-		// from `construct.Construct` and stuff derived `cloud.Resource` (which itself is derived from `constructs.Construct`).
-		// But since we don't support interfaces yet we can't import `core.Resource` so we just treat it as a base class.
-		// I'm also not sure we should ever import `core.Resource` because we might want to keep its internals hidden to the user:
-		// after all it's an abstract class representing our `resource` primitive. See https://github.com/winglang/wing/issues/261.
-		return fqn == &format!("{}.{}", WINGSDK_ASSEMBLY_NAME, WINGSDK_RESOURCE) || fqn == CONSTRUCT_BASE;
-	}
-
 	fn import_class(&mut self, jsii_class: wingii::jsii::ClassType, namespace_name: &str) {
 		let mut is_resource = false;
 		let jsii_class_fqn = FQN::from(&jsii_class.fqn);
@@ -408,19 +390,20 @@ impl<'a> JsiiImporter<'a> {
 
 		// Get the base class of the JSII class, define it via recursive call if it's not define yet
 		let base_class_type = if let Some(base_class_fqn) = &jsii_class.base {
+			let base_class_fqn = FQN::from(base_class_fqn);
 			// Hack: if the base class name is a resource base then we treat this class as a resource and don't need to define its parent.
-			if Self::is_fqn_construct_base(base_class_fqn) {
+			if base_class_fqn.is_construct_base() {
 				is_resource = true;
 				None
 			} else {
-				let base_class_name = Self::strip_assembly_from_fqn(base_class_fqn);
+				let base_class_name = base_class_fqn.as_str_without_assembly();
 				let base_class_type = if let Ok(base_class_type) = self.env.lookup_nested_str(&base_class_name, true, None) {
 					base_class_type
 						.as_type()
 						.expect("Base class name found but it's not a type")
 				} else {
 					// If the base class isn't defined yet then define it first (recursive call)
-					self.import_type(&FQN::from(base_class_fqn));
+					self.import_type(&base_class_fqn);
 					self
 						.env
 						.lookup_nested_str(&base_class_name, true, None)
@@ -618,7 +601,7 @@ impl<'a> JsiiImporter<'a> {
 			// and might have already defined the current type internally
 			if self
 				.env
-				.lookup_nested_str(&Self::strip_assembly_from_fqn(type_fqn.as_str()), true, None)
+				.lookup_nested_str(type_fqn.as_str_without_assembly(), true, None)
 				.is_ok()
 			{
 				continue;
