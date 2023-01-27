@@ -566,7 +566,7 @@ impl Parser<'_> {
 	}
 
 	fn build_expression(&self, exp_node: &Node) -> DiagnosticResult<Expr> {
-		let expression_node = &self.check_error(*exp_node, "Expression")?;
+		let expression_node = &self.check_error(*exp_node, "expression")?;
 		let expression_span = self.node_span(expression_node);
 		match expression_node.kind() {
 			"new_expression" => {
@@ -856,8 +856,12 @@ impl Parser<'_> {
 	fn report_unhandled_errors(&self, root: &Node) {
 		let iter = traverse(root.walk(), Order::Pre);
 		for node in iter {
-			if node.is_error() && !self.error_nodes.borrow().contains(&node.id()) {
-				_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+			if !self.error_nodes.borrow().contains(&node.id()) {
+				if node.is_error() {
+					_ = self.add_error::<()>(String::from("Unknown parser error."), &node);
+				} else if node.is_missing() {
+					_ = self.add_error::<()>(format!("'{}' expected.", node.kind()), &node);
+				}
 			}
 		}
 	}
