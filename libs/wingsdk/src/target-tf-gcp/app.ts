@@ -1,11 +1,11 @@
 import { DataGoogleClientConfig } from "@cdktf/provider-google/lib/data-google-client-config";
 import { GoogleProvider } from "@cdktf/provider-google/lib/provider";
 import { IConstruct } from "constructs";
-import { AppProps as CdktfAppProps, CdktfApp, IApp } from "../core";
 import { PolyconFactory } from "./factory";
+import { AppProps as CdktfAppProps, CdktfApp, IApp } from "../core";
 
 /**
- * Props for {@link App}.
+ * GCP App props.
  */
 export interface AppProps extends CdktfAppProps {
   /**
@@ -37,21 +37,28 @@ export class App extends CdktfApp implements IApp {
 
   private readonly clientConfig: DataGoogleClientConfig;
 
+  /**
+   * The Google Cloud project ID.
+   */
+  public readonly projectId: string;
+
   constructor(props: AppProps) {
     super({
       ...props,
       customFactory: props.customFactory ?? new PolyconFactory(),
     });
 
-    const projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
-    if (!projectId) {
+    this.projectId = props.projectId ?? process.env.GOOGLE_PROJECT_ID;
+    // Using env variable for location is work around until we are
+    // able to implement https://github.com/winglang/wing/issues/493 (policy as infrastructure)
+    if (this.projectId === undefined) {
       throw new Error(
         "A Google Cloud project ID must be specified through the GOOGLE_PROJECT_ID environment variable."
       );
     }
 
     new GoogleProvider(this, "google", {
-      project: projectId,
+      project: this.projectId,
     });
 
     this.clientConfig = new DataGoogleClientConfig(this, "config", {});

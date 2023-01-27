@@ -1,6 +1,6 @@
 import { AwsProvider } from "@cdktf/provider-aws/lib/provider";
-import { IApp, CdktfApp, AppProps } from "../core";
 import { PolyconFactory } from "./factory";
+import { IApp, CdktfApp, AppProps } from "../core";
 
 /**
  * An app that knows how to synthesize constructs into a Terraform configuration

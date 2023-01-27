@@ -1,32 +1,38 @@
 import { StorageBucket } from "@cdktf/provider-google/lib/storage-bucket";
+import { StorageBucketIamMember } from "@cdktf/provider-google/lib/storage-bucket-iam-member";
 import { Construct } from "constructs";
+import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
-import { App } from "./app";
 
 export class Bucket extends cloud.BucketBase {
   constructor(scope: Construct, id: string, props: cloud.BucketProps = {}) {
     super(scope, id, props);
 
-    if (props.public) {
-      throw new Error("Only private buckets are supported");
-    }
-
     // TODO: generate random string with terraform?
-    new StorageBucket(this, "Default", {
+    const bucket = new StorageBucket(this, "Default", {
       name: this.node.addr,
       location: App.of(this).region,
-      lifecycle: {
-        // TODO: disable for test apps?
-        preventDestroy: true,
-      },
+      publicAccessPrevention: props.public ? "enforced" : undefined,
     });
+
+    if (props.public) {
+      // https://cloud.google.com/storage/docs/access-control/making-data-public#terraform
+      new StorageBucketIamMember(this, "PublicAccessIamMember", {
+        bucket: bucket.name,
+        role: "roles/storage.objectViewer",
+        member: "allUsers",
+      });
+    }
   }
 
+  /** @internal */
   public _bind(_inflightHost: core.IInflightHost, _ops: string[]): void {
+    // TODO: support functions once tfgcp functions are implemented
     throw new Error("Method not implemented.");
   }
 
+  /** @internal */
   public _toInflight(): core.Code {
     throw new Error("Method not implemented.");
   }

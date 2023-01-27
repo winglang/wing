@@ -1,0 +1,24 @@
+import * as tfgcp from "../../src/target-tf-gcp";
+import { mkdtemp } from "../../src/util";
+
+test("throw error when no projectId provided", () => {
+  // GIVEN
+  const props = { outdir: mkdtemp(), projectId: undefined as any };
+
+  // THEN
+  expect(() => new tfgcp.App(props)).toThrow(
+    /A Google Cloud project ID must be specified/
+  );
+});
+
+test("can read projectId from environment variable", () => {
+  // GIVEN
+  const props = { outdir: mkdtemp(), projectId: undefined as any };
+  const projectId = "my-project";
+  process.env.GOOGLE_PROJECT_ID = projectId;
+  let app: tfgcp.App;
+
+  // THEN
+  expect(() => (app = new tfgcp.App(props))).not.toThrow();
+  expect(app!.projectId).toEqual(projectId);
+});

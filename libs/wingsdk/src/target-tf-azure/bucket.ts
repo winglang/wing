@@ -2,6 +2,7 @@ import { ResourceGroup } from "@cdktf/provider-azurerm/lib/resource-group";
 import { StorageAccount } from "@cdktf/provider-azurerm/lib/storage-account";
 import { StorageContainer } from "@cdktf/provider-azurerm/lib/storage-container";
 import { Construct } from "constructs";
+import { App } from "./app";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -9,7 +10,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { App } from "./app";
 
 /**
  * ResourceGroup names are limited to 90 characters.

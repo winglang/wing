@@ -1,0 +1,259 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`bucket is public 1`] = `
+"{
+  \\"data\\": {
+    \\"google_client_config\\": {
+      \\"cdktfstack_wingapp_config_365A42E8\\": {}
+    }
+  },
+  \\"resource\\": {
+    \\"google_storage_bucket\\": {
+      \\"cdktfstack_wingapp_mybucket_5FF05DA9\\": {
+        \\"location\\": \\"\${data.google_client_config.cdktfstack_wingapp_config_365A42E8.region}\\",
+        \\"name\\": \\"c870ab9d2751057358439944afdc1c3aa5de387e08\\",
+        \\"public_access_prevention\\": \\"enforced\\"
+      }
+    },
+    \\"google_storage_bucket_iam_member\\": {
+      \\"cdktfstack_wingapp_mybucket_PublicAccessIamMember_73075DE1\\": {
+        \\"bucket\\": \\"\${google_storage_bucket.cdktfstack_wingapp_mybucket_5FF05DA9.name}\\",
+        \\"member\\": \\"allUsers\\",
+        \\"role\\": \\"roles/storage.objectViewer\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`bucket is public 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "cdktf-stack": Object {
+        "children": Object {
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "cdktf-stack/backend",
+          },
+          "wing-app": Object {
+            "children": Object {
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "cdktf-stack/wing-app/WingLogger",
+              },
+              "config": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.dataGoogleClientConfig.DataGoogleClientConfig",
+                  "version": "5.0.2",
+                },
+                "id": "config",
+                "path": "cdktf-stack/wing-app/config",
+              },
+              "google": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+                  "version": "5.0.2",
+                },
+                "id": "google",
+                "path": "cdktf-stack/wing-app/google",
+              },
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "5.0.2",
+                    },
+                    "id": "Default",
+                    "path": "cdktf-stack/wing-app/my_bucket/Default",
+                  },
+                  "PublicAccessIamMember": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucketIamMember.StorageBucketIamMember",
+                      "version": "5.0.2",
+                    },
+                    "id": "PublicAccessIamMember",
+                    "path": "cdktf-stack/wing-app/my_bucket/PublicAccessIamMember",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "cdktf-stack/wing-app/my_bucket",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.1",
+        },
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.1",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
+
+exports[`create a bucket 1`] = `
+"{
+  \\"data\\": {
+    \\"google_client_config\\": {
+      \\"cdktfstack_wingapp_config_365A42E8\\": {}
+    }
+  },
+  \\"resource\\": {
+    \\"google_storage_bucket\\": {
+      \\"cdktfstack_wingapp_mybucket_5FF05DA9\\": {
+        \\"location\\": \\"\${data.google_client_config.cdktfstack_wingapp_config_365A42E8.region}\\",
+        \\"name\\": \\"c870ab9d2751057358439944afdc1c3aa5de387e08\\"
+      }
+    }
+  }
+}"
+`;
+
+exports[`create a bucket 2`] = `
+Object {
+  "tree": Object {
+    "children": Object {
+      "cdktf-stack": Object {
+        "children": Object {
+          "backend": Object {
+            "constructInfo": Object {
+              "fqn": "cdktf.LocalBackend",
+              "version": "0.15.1",
+            },
+            "id": "backend",
+            "path": "cdktf-stack/backend",
+          },
+          "wing-app": Object {
+            "children": Object {
+              "WingLogger": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud logging facility",
+                  "hidden": true,
+                  "title": "Logger",
+                },
+                "id": "WingLogger",
+                "path": "cdktf-stack/wing-app/WingLogger",
+              },
+              "config": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.dataGoogleClientConfig.DataGoogleClientConfig",
+                  "version": "5.0.2",
+                },
+                "id": "config",
+                "path": "cdktf-stack/wing-app/config",
+              },
+              "google": Object {
+                "constructInfo": Object {
+                  "fqn": "@cdktf/provider-google.provider.GoogleProvider",
+                  "version": "5.0.2",
+                },
+                "id": "google",
+                "path": "cdktf-stack/wing-app/google",
+              },
+              "my_bucket": Object {
+                "attributes": Object {
+                  "wing:resource:connections": Array [],
+                  "wing:resource:stateful": true,
+                },
+                "children": Object {
+                  "Default": Object {
+                    "constructInfo": Object {
+                      "fqn": "@cdktf/provider-google.storageBucket.StorageBucket",
+                      "version": "5.0.2",
+                    },
+                    "id": "Default",
+                    "path": "cdktf-stack/wing-app/my_bucket/Default",
+                  },
+                },
+                "constructInfo": Object {
+                  "fqn": "constructs.Construct",
+                  "version": "10.1.228",
+                },
+                "display": Object {
+                  "description": "A cloud object store",
+                  "title": "Bucket",
+                },
+                "id": "my_bucket",
+                "path": "cdktf-stack/wing-app/my_bucket",
+              },
+            },
+            "constructInfo": Object {
+              "fqn": "constructs.Construct",
+              "version": "10.1.228",
+            },
+            "id": "wing-app",
+            "path": "cdktf-stack/wing-app",
+          },
+        },
+        "constructInfo": Object {
+          "fqn": "cdktf.TerraformStack",
+          "version": "0.15.1",
+        },
+        "id": "cdktf-stack",
+        "path": "cdktf-stack",
+      },
+    },
+    "constructInfo": Object {
+      "fqn": "cdktf.App",
+      "version": "0.15.1",
+    },
+    "id": "App",
+    "path": "",
+  },
+  "version": "tree-0.1",
+}
+`;
