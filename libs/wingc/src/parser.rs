@@ -790,8 +790,8 @@ impl Parser<'_> {
 				}
 
 				// Special case: empty {} (which is detected as map by tree-sitter) -
-				// if it is annotated as a set we should treat it as a set literal
-				if let Some(Type::Set(_)) = map_type {
+				// if it is annotated as a Set/MutSet we should treat it as a set literal
+				if let Some(Type::Set(_)) | Some(Type::MutSet(_)) = map_type {
 					if fields.is_empty() {
 						return self.build_set_literal(expression_node);
 					}
