@@ -1,6 +1,6 @@
+import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages, treeJsonOf } from "./util";
 
 const INFLIGHT_CODE = `
 async handle(event) {
@@ -21,7 +21,6 @@ const INFLIGHT_PANIC = `
 async handle() {
   process.exit(1);
 }`;
-
 
 test("create a function", async () => {
   // GIVEN
@@ -184,15 +183,15 @@ test("invoke function with process.exit(1)", async () => {
   const s = await app.startSimulator();
   const client = s.getResource("/my_function") as cloud.IFunctionClient;
   // WHEN
-  const PAYLOAD = { };
+  const PAYLOAD = {};
   await expect(client.invoke(JSON.stringify(PAYLOAD))).rejects.toThrow(
-      "process.exit() was called with exit code 1"
+    "process.exit() was called with exit code 1"
   );
   // THEN
   await s.stop();
   expect(listMessages(s)).toMatchSnapshot();
   expect(s.listTraces()[2].data.error).toMatchObject({
-    message: "process.exit() was called with exit code 1"
+    message: "process.exit() was called with exit code 1",
   });
   expect(app.snapshot()).toMatchSnapshot();
 });

@@ -3,9 +3,9 @@ import { join } from "path";
 import { Construct } from "constructs";
 import * as esbuild from "esbuild-wasm";
 import { Polycons } from "polycons";
+import { Logger } from "./logger";
 import { Code, IInflightHost, IResource, Inflight, Resource } from "../core";
 import { mkdtemp } from "../util";
-import { Logger } from "./logger";
 
 /**
  * Global identifier for `Function`.

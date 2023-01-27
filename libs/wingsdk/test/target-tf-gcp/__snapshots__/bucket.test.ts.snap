@@ -112,7 +112,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
+              "version": "0.15.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -120,7 +120,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.1",
+          "version": "0.15.0",
         },
         "id": "root",
         "path": "root",
@@ -128,7 +128,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.1",
+      "version": "0.15.0",
     },
     "id": "App",
     "path": "",
@@ -233,7 +233,7 @@ Object {
           "backend": Object {
             "constructInfo": Object {
               "fqn": "cdktf.LocalBackend",
-              "version": "0.15.1",
+              "version": "0.15.0",
             },
             "id": "backend",
             "path": "root/backend",
@@ -241,7 +241,7 @@ Object {
         },
         "constructInfo": Object {
           "fqn": "cdktf.TerraformStack",
-          "version": "0.15.1",
+          "version": "0.15.0",
         },
         "id": "root",
         "path": "root",
@@ -249,7 +249,7 @@ Object {
     },
     "constructInfo": Object {
       "fqn": "cdktf.App",
-      "version": "0.15.1",
+      "version": "0.15.0",
     },
     "id": "App",
     "path": "",

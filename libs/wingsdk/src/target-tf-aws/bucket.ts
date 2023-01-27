@@ -3,6 +3,7 @@ import { S3BucketPolicy } from "@cdktf/provider-aws/lib/s3-bucket-policy";
 import { S3BucketPublicAccessBlock } from "@cdktf/provider-aws/lib/s3-bucket-public-access-block";
 import { S3BucketServerSideEncryptionConfigurationA } from "@cdktf/provider-aws/lib/s3-bucket-server-side-encryption-configuration";
 import { Construct } from "constructs";
+import { Function } from "./function";
 import * as cloud from "../cloud";
 import * as core from "../core";
 import {
@@ -10,7 +11,6 @@ import {
   NameOptions,
   ResourceNames,
 } from "../utils/resource-names";
-import { Function } from "./function";
 
 /**
  * Bucket prefix provided to Terraform must be between 3 and 37 characters.

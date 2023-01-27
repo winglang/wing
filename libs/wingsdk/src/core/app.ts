@@ -5,7 +5,7 @@ import { IPolyconFactory, Polycons } from "polycons";
 import stringify from "safe-stable-stringify";
 import { Files } from "./files";
 import { synthesizeTree } from "./tree";
-import { Logger } from "../cloud";
+import { Logger } from "../cloud/logger";
 
 /**
  * A Wing application.

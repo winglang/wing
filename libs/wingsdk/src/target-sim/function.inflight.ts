@@ -2,14 +2,14 @@ import * as fs from "fs";
 import * as path_ from "path";
 import * as process from "process";
 import * as vm from "vm";
-import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
-import { ISimulatorContext } from "../testing/simulator";
 import {
   ENV_WING_SIM_INFLIGHT_RESOURCE_PATH,
   ENV_WING_SIM_INFLIGHT_RESOURCE_TYPE,
 } from "./function";
 import { ISimulatorResourceInstance } from "./resource";
 import { FunctionSchema } from "./schema-resources";
+import { FUNCTION_TYPE, IFunctionClient } from "../cloud";
+import { ISimulatorContext } from "../testing/simulator";
 
 export class Function implements IFunctionClient, ISimulatorResourceInstance {
   private readonly filename: string;
@@ -53,8 +53,8 @@ export class Function implements IFunctionClient, ISimulatorResourceInstance {
         ...process,
         // override process.exit to throw an exception instead of exiting the process
         exit: (code: number) => {
-            throw new Error("process.exit() was called with exit code " + code);
-        }
+          throw new Error("process.exit() was called with exit code " + code);
+        },
       },
 
       // explicitly DO NOT propagate `console` because inflight

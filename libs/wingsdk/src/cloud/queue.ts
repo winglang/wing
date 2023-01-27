@@ -1,8 +1,8 @@
 import { Construct } from "constructs";
 import { Polycons } from "polycons";
+import { Function, FunctionProps } from "./function";
 import { Code, IResource, Inflight, Resource } from "../core";
 import { Duration } from "../std";
-import { Function, FunctionProps } from "./function";
 
 /**
  * Global identifier for `Queue`.

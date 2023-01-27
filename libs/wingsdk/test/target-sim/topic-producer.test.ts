@@ -1,7 +1,7 @@
 import { Construct } from "constructs";
+import { listMessages } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages } from "./util";
 
 test("publishing messages to topic", async () => {
   // GIVEN

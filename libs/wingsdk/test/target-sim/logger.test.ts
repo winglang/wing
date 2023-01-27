@@ -1,6 +1,6 @@
+import { listMessages, treeJsonOf } from "./util";
 import * as cloud from "../../src/cloud";
 import { SimApp, Testing } from "../../src/testing";
-import { listMessages, treeJsonOf } from "./util";
 
 jest.setTimeout(100_000); // 100 seconds
 
