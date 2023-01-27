@@ -592,8 +592,7 @@ impl<'a> JsiiImporter<'a> {
 			let type_fqn = FQN::from(type_fqn);
 
 			// Skip types outside the imported namespace
-			let namespaces = type_fqn.namespaces().collect::<Vec<_>>();
-			if namespaces.len() != 1 || namespaces[0] != self.module_name {
+			if type_fqn.namespaces().next() != Some(self.module_name) {
 				continue;
 			}
 

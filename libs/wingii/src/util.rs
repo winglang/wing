@@ -68,13 +68,6 @@ pub mod package_json {
 		})
 	}
 
-	/// Finds the path of a dependency's package.json from a given entry point.
-	/// Returns None if the package.json cannot be found.
-	/// Returns Some(path) if the package.json can be found.
-	/// # Example
-	/// ```ignore
-	/// let dep_pkg_json_path = find_package_json_up("dependency_name", PathBuf::from(entrypoint));
-	/// ```
 	pub fn find_dependency_directory(dependency_name: &str, search_start: &str) -> Option<String> {
 		let entrypoint = resolve_from(dependency_name, PathBuf::from(search_start));
 		let entrypoint = entrypoint.ok()?;
