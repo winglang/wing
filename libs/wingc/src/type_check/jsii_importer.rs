@@ -157,39 +157,8 @@ impl<'a> JsiiImporter<'a> {
 
 		// TODO: support nested namespaces
 		let namespace_name = type_fqn.namespaces().next().unwrap();
-		let type_name = type_fqn.type_name();
 
-		// Create namespace and add it to env if it doesn't exist yet
-		if let Some(symb) = self.env.try_lookup_mut(namespace_name, None) {
-			if let SymbolKind::Namespace(ns) = symb {
-				// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
-				if ns.hidden && namespace_name == self.namespace_filter[0] {
-					ns.hidden = false;
-				}
-			} else {
-				// TODO: make this a proper error
-				panic!(
-					"Tried importing {} but {} already defined as a {}",
-					type_name, namespace_name, symb
-				);
-			}
-		} else {
-			self
-				.env
-				.define(
-					&Symbol {
-						name: namespace_name.to_string(),
-						span: WingSpan::global(),
-					},
-					SymbolKind::Namespace(Namespace {
-						name: namespace_name.to_string(),
-						hidden: namespace_name != self.namespace_filter[0],
-						env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
-					}),
-					StatementIdx::Top,
-				)
-				.unwrap();
-		}
+		self.create_minimum_namespaces_for(&type_fqn);
 
 		// Check if this is a JSII interface and import it if it is
 		let jsii_interface = self.jsii_types.find_interface(type_fqn.as_str());
@@ -202,6 +171,100 @@ impl<'a> JsiiImporter<'a> {
 				self.import_class(jsii_class, namespace_name);
 			} else {
 				debug!("Type {} is unsupported, skipping", type_fqn);
+			}
+		}
+	}
+
+	fn create_minimum_namespaces_for(&mut self, type_name: &FQN) {
+		// First, ensure there is a namespace for the assembly
+		// If we are importing a type from the root of the assembly, then we need to make sure the assembly namespace is visible
+		// (Note that we never want to hide a namespace that has already been made visible)
+		let assembly_should_be_visible = type_name.namespaces().count() == 0;
+		if let Some(symb) = self.env.try_lookup_mut(self.assembly_name, None) {
+			if let SymbolKind::Namespace(ns) = symb {
+				// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
+				if ns.hidden && assembly_should_be_visible {
+					ns.hidden = false;
+				}
+			} else {
+				// TODO: make this a proper error
+				panic!(
+					"Tried importing {} but {} already defined as a {}",
+					type_name, self.assembly_name, symb
+				)
+			}
+		} else {
+			let ns = Namespace {
+				name: self.assembly_name.to_string(),
+				hidden: !assembly_should_be_visible,
+				env: SymbolEnv::new(None, self.wing_types.void(), false, false, self.env.flight, 0),
+			};
+			self
+				.env
+				.define(
+					&Symbol {
+						name: self.assembly_name.to_string(),
+						span: WingSpan::global(),
+					},
+					SymbolKind::Namespace(ns),
+					StatementIdx::Top,
+				)
+				.unwrap();
+		};
+
+		let flight = self.env.flight;
+
+		// Next, ensure there is a namespace for each of the namespaces in the type name
+		for (ns_idx, namespace_name) in type_name.namespaces().enumerate() {
+			let mut lookup_str = vec![self.assembly_name];
+			lookup_str.extend(type_name.namespaces().take(ns_idx));
+			let lookup_str = lookup_str.join(".");
+
+			let parent_ns = self
+				.env
+				.lookup_nested_mut_str(&lookup_str, false, None)
+				.unwrap()
+				.as_mut_namespace()
+				.unwrap();
+
+			let namespace_should_be_visible = ns_idx + 1 == type_name.namespaces().count();
+			if let Some(symb) = parent_ns.env.try_lookup_mut(namespace_name, None) {
+				if let SymbolKind::Namespace(ns) = symb {
+					// If this namespace is already imported but hidden then unhide it if it's being explicitly imported
+					if ns.hidden && namespace_should_be_visible {
+						ns.hidden = false;
+					}
+				} else {
+					// TODO: make this a proper error
+					panic!(
+						"Tried importing {} but {} already defined as a {}",
+						type_name, namespace_name, symb
+					)
+				}
+			} else {
+				let ns = Namespace {
+					name: namespace_name.to_string(),
+					hidden: !namespace_should_be_visible,
+					env: SymbolEnv::new(
+						Some(parent_ns.env.get_ref()),
+						self.wing_types.void(),
+						false,
+						false,
+						flight,
+						0,
+					),
+				};
+				parent_ns
+					.env
+					.define(
+						&Symbol {
+							name: namespace_name.to_string(),
+							span: WingSpan::global(),
+						},
+						SymbolKind::Namespace(ns),
+						StatementIdx::Top,
+					)
+					.unwrap();
 			}
 		}
 	}
@@ -489,7 +552,7 @@ impl<'a> JsiiImporter<'a> {
 		});
 		let ns = self
 			.env
-			.try_lookup_mut(namespace_name, None)
+			.try_lookup_mut(self.identifier, None)
 			.unwrap()
 			.as_mut_namespace()
 			.unwrap();

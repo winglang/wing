@@ -111,14 +111,6 @@ mod tests {
 	}
 
 	#[test]
-	fn test_fqn_is_in_namespace2() {
-		let fqn = FQN("@winglang/sdk.cloud.Bucket");
-
-		assert_eq!(fqn.is_in_namespace(&vec!["std"]), false);
-		assert_eq!(fqn.is_in_namespace(&vec![String::from("std")]), false);
-	}
-
-	#[test]
 	fn test_fqn_is_construct_base() {
 		assert_eq!(FQN(CONSTRUCT_BASE).is_construct_base(), true);
 		assert_eq!(

@@ -231,6 +231,26 @@ impl SymbolEnv {
 		)
 	}
 
+	pub fn lookup_nested_mut_str(
+		&mut self,
+		nested_str: &str,
+		ignore_hidden: bool,
+		statement_idx: Option<usize>,
+	) -> Result<&mut SymbolKind, TypeError> {
+		let nested_vec = nested_str
+			.split('.')
+			.map(|s| Symbol {
+				name: s.to_string(),
+				span: WingSpan::global(),
+			})
+			.collect::<Vec<Symbol>>();
+		self.lookup_nested_mut(
+			&nested_vec.iter().collect::<Vec<&Symbol>>(),
+			ignore_hidden,
+			statement_idx,
+		)
+	}
+
 	/// Pass `ignore_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
 	pub fn lookup_nested(
 		&self,
@@ -276,6 +296,67 @@ impl SymbolEnv {
 			};
 
 			let lookup_result = ns.env.try_lookup(&(*next_symb).name, statement_idx);
+
+			if let Some(type_ref) = lookup_result {
+				t = type_ref;
+			} else {
+				return Err(TypeError {
+					message: format!("Unknown symbol \"{}\" in namespace \"{}\"", next_symb.name, ns.name),
+					span: next_symb.span.clone(),
+				});
+			}
+
+			symb = *next_symb;
+		}
+		Ok(t)
+	}
+
+	/// Pass `ignore_hidden: true` if it's OK to return types that have only been imported implicitly (such as through an inheritance chain), and false otherwise
+	fn lookup_nested_mut(
+		&mut self,
+		nested_vec: &[&Symbol],
+		ignore_hidden: bool,
+		statement_idx: Option<usize>,
+	) -> Result<&mut SymbolKind, TypeError> {
+		let mut it = nested_vec.iter();
+
+		let mut symb = *it.next().unwrap();
+		let mut t = if let Some(type_ref) = self.try_lookup_mut(&symb.name, statement_idx) {
+			type_ref
+		} else {
+			return Err(TypeError {
+				message: format!("Unknown symbol \"{}\"", symb.name),
+				span: symb.span.clone(),
+			});
+		};
+
+		while let Some(next_symb) = it.next() {
+			// Hack: if we reach an anything symbol we just return it and don't bother if there are more nested symbols.
+			// This is because we currently allow unknown stuff to be referenced under an anything which will
+			// be resolved only in runtime.
+			// TODO: do we still need this? Why?
+			if let SymbolKind::Variable(VariableInfo { _type: t, .. }) = *t {
+				if matches!(*t, Type::Anything) {
+					break;
+				}
+			}
+
+			let ns = if let Some(ns) = t.as_mut_namespace() {
+				if ns.hidden && !ignore_hidden {
+					return Err(TypeError {
+						message: format!("\"{}\" was not brought", symb.name),
+						span: symb.span.clone(),
+					});
+				}
+				ns
+			} else {
+				return Err(TypeError {
+					message: format!("Symbol \"{}\" is not a namespace", symb.name),
+					span: symb.span.clone(),
+				});
+			};
+
+			let lookup_result = ns.env.try_lookup_mut(&(*next_symb).name, statement_idx);
 
 			if let Some(type_ref) = lookup_result {
 				t = type_ref;
