@@ -28,8 +28,6 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"any" => "see https://github.com/winglang/wing/issues/434",
 	"void" => "see https://github.com/winglang/wing/issues/432",
 	"nil" => "see https://github.com/winglang/wing/issues/433",
-	"MutSet" => "see https://github.com/winglang/wing/issues/98",
-	"MutArray" => "see https://github.com/winglang/wing/issues/663",
 	"Promise" => "see https://github.com/winglang/wing/issues/529",
 	"preflight_closure" => "see https://github.com/winglang/wing/issues/474",
 	"inflight_closure" => "see https://github.com/winglang/wing/issues/474",
@@ -37,6 +35,7 @@ static UNIMPLEMENTED_GRAMMARS: phf::Map<&'static str, &'static str> = phf_map! {
 	"storage_modifier" => "see https://github.com/winglang/wing/issues/107",
 	"access_modifier" => "see https://github.com/winglang/wing/issues/108",
 	"await_expression" => "see https://github.com/winglang/wing/issues/116",
+	"defer_expression" => "see https://github.com/winglang/wing/issues/116",
 	"for_in_loop" => "see https://github.com/winglang/wing/issues/118",
 	"=>" => "see https://github.com/winglang/wing/issues/474",
 };
